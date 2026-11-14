@@ -22,7 +22,7 @@ const SOFT = 'rgb(245, 245, 247)';
 const EMOJI = /\p{Extended_Pictographic}/u;
 const STATS = /胜率|Elo|样本|分段|aoestats/i;
 
-const civByEn = new Map((JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string; zh: string }[]).map((civ) => [civ.en, civ.zh]));
+const civByEn = new Map((JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string; zh: string }[]).map((civ) => [civ.en, civ.zh]));
 
 function watch(page: Page) {
   const caught: string[] = [];

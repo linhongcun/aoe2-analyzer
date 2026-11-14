@@ -1,8 +1,8 @@
 /** Issue 224: building capacity, entry compatibility and a documented projectile model. Coverage: ./garrisonCoverage.ts. */
-import raw from '../data/garrison_general.json';
+import raw from '../../data/game/garrison_general.json';
 import { freeGarrisonTechs, GARRISON_TECH_DATA, implicitShapeTechs } from './garrisonTechs';
 import { DATA_PATCH_BUILD } from '../data/meta';
-import hostIds from '../data/garrison_hosts.json';
+import hostIds from '../../data/game/garrison_hosts.json';
 import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';

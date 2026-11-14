@@ -1,5 +1,5 @@
 /** Issue 228: a source viewer only. These selections never enter a simulator. */
-import raw from '../data/team_bonuses.json';
+import raw from '../../data/game/team_bonuses.json';
 import validateTeamBonuses from '../content/schema/compiled/team-bonuses.mjs';
 import { readValidatedJson } from '../data/validatedJson';
 import civsRaw from '../data/raw/civs';

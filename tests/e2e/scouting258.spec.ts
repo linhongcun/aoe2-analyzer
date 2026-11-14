@@ -357,7 +357,7 @@ for (const width of [360, 375, 390, 1280])
     });
 
 test('#269 信号来源显示来源标题，页面不出现内部来源 id', async ({ page }) => {
-  const content = (await import('../../src/content/scouting.json', { with: { type: 'json' } })).default as {
+  const content = (await import('../../data/content/scouting.json', { with: { type: 'json' } })).default as {
     sources: { id: string; title: string; url: string }[];
     scenarios: { id: string; stage: string; signals: { sourceIds: string[] }[] }[];
   };

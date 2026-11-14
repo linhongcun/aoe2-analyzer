@@ -51,7 +51,7 @@ describe('#437 建筑历史展示的 CI 影响范围', () => {
     },
   );
 
-  it.each(['src/data/patchHistory.ts', 'src/data/patches/81058.json', 'scripts/history_inputs/81058.json', 'scripts/history_build.py'])(
+  it.each(['src/data/patchHistory.ts', 'data/game/patches/81058.json', 'data/sources/history_inputs/81058.json', 'scripts/history_build.py'])(
     'keeps history data and generation changes full with data validation: %s',
     (path) => {
       expect(planChanges([change(history), change(path)])).toMatchObject({ scope: 'full', full: true, data: true });

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
-import civs from '../../src/data/civs.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
+import civs from '../../data/game/civs.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simSupport as simSupportFn } from '../../src/domain/simSupport';
 import type { BuildOrder } from '../../src/domain/buildOrder';

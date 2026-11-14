@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-const pins = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
+const pins = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
 
 const SIDES = 'a=569.Franks.4.f.&b=359.Japanese.4.f.';
 const MODES = [

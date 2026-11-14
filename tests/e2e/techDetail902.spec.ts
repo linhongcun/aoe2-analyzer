@@ -1,8 +1,8 @@
 // #902 科技详情。只覆盖规格点名的行为和有限代表页，不是全站验收，也不证明未上传的结构图。
 import { expect, test, type Page } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
-import civs from '../../src/data/civs.json' with { type: 'json' };
-import techs from '../../src/data/techs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
+import techs from '../../data/game/techs.json' with { type: 'json' };
 
 const shots = '/opt/cursor/artifacts/tech-902';
 

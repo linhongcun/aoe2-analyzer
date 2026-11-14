@@ -1,6 +1,6 @@
 /** 效果目标集审计：期望值逐条引用 AoE2 Fandom Wiki 科技页正文 */
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/buildings.json';
+import raw from '../../data/game/buildings.json';
 import { techAffects } from '../../src/domain/affects';
 import { buildingType } from '../../src/domain/buildings';
 import type { Building } from '../../src/domain/types';

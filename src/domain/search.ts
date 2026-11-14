@@ -1,5 +1,5 @@
 /** 全局搜索：文明/单位/科技/建筑/加成/页面统一索引与打分（纯函数） */
-import extraPy from '../data/search-py.json';
+import extraPy from '../../data/game/search-py.json';
 import { PAGES } from '../shared/nav/pageRegistry';
 
 export interface SearchItem {

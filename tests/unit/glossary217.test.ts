@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import units from '../../src/data/units.json';
-import buildings from '../../src/data/buildings.json';
+import units from '../../data/game/units.json';
+import buildings from '../../data/game/buildings.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { findTerms, glossary, glossarySearchItems, termById } from '../../src/domain/glossary';
 import { search, type SearchItem } from '../../src/domain/search';

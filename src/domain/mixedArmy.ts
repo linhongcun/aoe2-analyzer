@@ -1,6 +1,6 @@
 /** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
-import editorial from '../content/mixed-army.json';
-import rules from '../content/mixed-army-rules.json';
+import editorial from '../../data/content/mixed-army.json';
+import rules from '../../data/content/mixed-army-rules.json';
 import units from '../data/raw/units';
 import techs from '../data/raw/techs';
 import buildings from '../data/raw/buildings';

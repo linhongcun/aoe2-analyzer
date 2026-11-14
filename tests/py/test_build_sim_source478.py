@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import build_sim_source as source  # noqa: E402
 
-EXAMPLE = ROOT / 'docs/design/mayans197-source-summary.json'
+EXAMPLE = ROOT / 'data/evidence/mayans197-source-summary.json'
 HISTORICAL_PIN = {
     'repo': 'SiegeEngineers/auto-mods',
     'commit': '0c38027504532826c9922e4db77e2c1d33554291',
@@ -81,7 +81,7 @@ class BuildSimSource478(unittest.TestCase):
     def test_new_or_changed_large_report_is_rejected_but_exact_history_is_retained(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            path = root / 'docs/design/mayans197-source.json'
+            path = root / 'data/evidence/mayans197-source.json'
             path.parent.mkdir(parents=True)
             content = b' ' * (source.MAX_REPORT_BYTES + 1)
             path.write_bytes(content)
@@ -105,7 +105,7 @@ class BuildSimSource478(unittest.TestCase):
     def test_raw_output_cannot_be_written_outside_ignored_cache(self):
         result = subprocess.run([sys.executable, str(ROOT / 'scripts/build_sim_source.py'),
                                  '--civ', 'Mayans', '--output', 'unused.json',
-                                 '--raw-output', str(ROOT / 'docs/design/full-dump.json')],
+                                 '--raw-output', str(ROOT / 'data/evidence/full-dump.json')],
                                 text=True, capture_output=True, check=False)
         self.assertEqual(result.returncode, 2)
         self.assertIn('inside ignored scripts/.cache', result.stderr)

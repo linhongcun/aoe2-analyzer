@@ -21,20 +21,20 @@ import {
  * - 复现：#/market，展开「计算规则与数据来源」，点「关于数据」，页面文字能搜到完整哈希。
  * - 文物收入页不再显示 .dat SHA256，改成和市场页同一句话并链接到「关于数据」，链接能打开。
  * - 除「关于数据」外，全站页面正文找不到 64 位十六进制，也找不到任何已知 sha256 的 16 位以上片段。
- * 真值：scripts/data_sources.json（构建时注入「关于数据」页）与 src/data、src/content 各数据文件里记录的 sha256。
+ * 真值：data/sources/data_sources.json（构建时注入「关于数据」页）与 src/data、src/content 各数据文件里记录的 sha256。
  */
 guardPage();
 
 type Pins = { sources: Record<string, { sha256?: string }> };
-const PINS = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as Pins;
+const PINS = JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as Pins;
 const DAT_SOURCES = Object.entries(PINS.sources).filter(([, s]) => s.sha256) as [string, { sha256: string }][];
 /** 全部已知 sha256：固定版本文件 + 各数据文件里出现的任何 64 位十六进制值 */
 const KNOWN = new Set<string>(DAT_SOURCES.map(([, s]) => s.sha256.toLowerCase()));
-for (const dir of ['src/data', 'src/content'])
+for (const dir of ['data/game', 'data/content'])
   for (const f of readdirSync(dir).filter((x) => x.endsWith('.json')))
     for (const m of readFileSync(`${dir}/${f}`, 'utf8').matchAll(/"\w*sha256\w*"\s*:\s*"([0-9a-fA-F]{64})"/gi)) KNOWN.add(m[1]!.toLowerCase());
-const MARKET = (JSON.parse(readFileSync('src/data/market.json', 'utf8')) as { meta: { datSha256: string } }).meta.datSha256;
-const RELIC = (JSON.parse(readFileSync('src/data/relic_income.json', 'utf8')) as { meta: { datSha256: string } }).meta.datSha256;
+const MARKET = (JSON.parse(readFileSync('data/game/market.json', 'utf8')) as { meta: { datSha256: string } }).meta.datSha256;
+const RELIC = (JSON.parse(readFileSync('data/game/relic_income.json', 'utf8')) as { meta: { datSha256: string } }).meta.datSha256;
 
 /** 文字里的哈希：64 位十六进制，或与任一已知 sha256 开头 16 位相同的 16 位以上十六进制片段 */
 function hashesIn(text: string): string[] {
@@ -281,8 +281,8 @@ test.describe('#338 文物收入页不再显示 .dat SHA256', () => {
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
     });
 });
-// 全站页面：取 src/data/page-metadata.json 的全部静态页（与 scripts/static_pages.mjs、sitemap 同一份清单），去掉「关于数据」
-const PAGES = Object.entries(JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
+// 全站页面：取 data/game/page-metadata.json 的全部静态页（与 scripts/static_pages.mjs、sitemap 同一份清单），去掉「关于数据」
+const PAGES = Object.entries(JSON.parse(readFileSync('data/game/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
   .map(([key, meta]) => meta.route ?? key)
   .filter((r) => r !== '/about-data');
 const RECORD_TABLES = !!process.env.V0300_RECORD;
@@ -330,10 +330,10 @@ test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
 // ---------- 守卫：#338 只改「关于数据」来源表，其他页面的表格计算样式与 main ead4c34 相同（Steve 2026-10-22 00:38） ----------
 // 录制（在 main ead4c34 或同等表格样式的构建上，单 worker；fixture 于 5c9326f 录制，#339→ead4c34 未改表格 CSS）：
 //   V0300_RECORD=1 BASE_URL=… npx playwright test tests/e2e/v0300-338.spec.ts -g '其他页面表格' --workers=1
-const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
-const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
-const LADDER_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-ladder.json';
-const TEAM_FIT_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-team-fit.json';
+const TABLES_FIXTURE = 'data/fixtures/e2e/fixtures/v0300-338-tables.json';
+const PATCH_TABLES_FIXTURE = 'data/fixtures/e2e/fixtures/v0300-338-tables-188329.json';
+const LADDER_TABLES_FIXTURE = 'data/fixtures/e2e/fixtures/v0300-338-tables-ladder.json';
+const TEAM_FIT_TABLES_FIXTURE = 'data/fixtures/e2e/fixtures/v0300-338-tables-team-fit.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const recordedTables: Record<string, TableStyle[]> = {};
 const recordedVisits = new Set<string>();

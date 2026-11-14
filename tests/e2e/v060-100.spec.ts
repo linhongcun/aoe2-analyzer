@@ -53,7 +53,7 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
     await expect(page.locator('[data-t=be-n]')).toHaveText('16');
   });
   // 城堡时代「满科技」= 该文明城堡时代及以前能研究的科技全算，帝王科技不算（Steve 10/13）。
-  // 推导（基础值 src/data/units.json，来自 .dat；科技效果为 .dat 数值；文明可研究性见 src/data/techs.json 的 civs）：
+  // 推导（基础值 data/game/units.json，来自 .dat；科技效果为 .dat 数值；文明可研究性见 data/game/techs.json 的 civs）：
   //   法兰克骑士(38)：HP 100、攻 10、甲 2/2、费用 60 食 75 金
   //     锻造 Forging(封建) +1 攻、铸铁 Iron Casting(城堡) +1 攻 得 12
   //     鳞甲 Scale Barding(封建) +1/+1、链甲 Chain Barding(城堡) +1/+1 得 4/4

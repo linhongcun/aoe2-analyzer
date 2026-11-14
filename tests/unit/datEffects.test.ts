@@ -1,6 +1,6 @@
-/** 生成效果（scripts/effects_build.py → src/data/effects.json）的已知值断言；来源：HSZemi/aoe2dat（DE 147949）EffectCommands + 当前补丁文本 */
+/** 生成效果（scripts/effects_build.py → data/game/effects.json）的已知值断言；来源：HSZemi/aoe2dat（DE 147949）EffectCommands + 当前补丁文本 */
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 import { DAT } from '../../src/domain/datEffects';
 import { BONUS_SRC, TEAM_BONUSES, TECH_SRC, bonusCoverage } from '../../src/domain/effects';
 import { simulate } from '../../src/domain/simulator';

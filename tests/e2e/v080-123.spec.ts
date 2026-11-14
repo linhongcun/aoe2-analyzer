@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-/** #123 搜索支持拼音。例子都来自 src/data/*.json，读音见 /workspace/v080-specs-123.md */
+/** #123 搜索支持拼音。例子都来自 data/game/*.json，读音见 /workspace/v080-specs-123.md */
 async function palette(page: Page, q: string) {
   await page.goto('./');
   await page.locator('#home').waitFor();

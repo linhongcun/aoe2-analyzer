@@ -15,25 +15,25 @@ const sha = (() => {
   }
 })();
 const dat = (
-  JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { meta: { sources: { id: string; commit: string; patch: string }[] } }
+  JSON.parse(readFileSync('data/game/effects.json', 'utf8')) as { meta: { sources: { id: string; commit: string; patch: string }[] } }
 ).meta.sources.find((s) => s.id === 'DAT');
 
 const appVersion = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
-const pins = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as unknown;
-const notes = readdirSync('docs/PATCH-NOTES')
+const pins = JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as unknown;
+const notes = readdirSync('data/patch-notes')
   .filter((f) => f.endsWith('.md'))
   .map((f) => f.replace(/\.md$/, ''))
   .sort((a, b) => +b - +a);
 
 // #14：首页单位数在构建时从数据算出（首页不加载 units.json），口径与列表页同一个函数
-const units = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as Unit[];
+const units = JSON.parse(readFileSync('data/game/units.json', 'utf8')) as Unit[];
 const UNIT_COUNT = unitCount(units, buildFamilies(units, Object.fromEntries(units.map((u) => [u.id, u]))));
 const CATALOG_COUNTS = {
   units: UNIT_COUNT,
-  techs: (JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as unknown[]).length,
-  buildings: (JSON.parse(readFileSync('src/data/buildings.json', 'utf8')) as unknown[]).length,
-  builds: readdirSync('src/data/build-orders').filter((f) => f.endsWith('.json')).length,
-  patches: readdirSync('src/data/patches').filter((f) => f.endsWith('.json')).length,
+  techs: (JSON.parse(readFileSync('data/game/techs.json', 'utf8')) as unknown[]).length,
+  buildings: (JSON.parse(readFileSync('data/game/buildings.json', 'utf8')) as unknown[]).length,
+  builds: readdirSync('data/game/build-orders').filter((f) => f.endsWith('.json')).length,
+  patches: readdirSync('data/game/patches').filter((f) => f.endsWith('.json')).length,
 };
 
 // base './'：GitHub Pages 子路径 /aoe2-analyzer/ 与本地预览都可用（配合 HashRouter）

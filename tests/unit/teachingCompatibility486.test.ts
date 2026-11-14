@@ -1,9 +1,9 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import pins from '../../scripts/data_sources.json';
-import guideContent from '../../src/content/game-guide.json';
-import planContent from '../../src/content/team-plan.json';
+import pins from '../../data/sources/data_sources.json';
+import guideContent from '../../data/content/game-guide.json';
+import planContent from '../../data/content/team-plan.json';
 import { civs, loadCore, loadTrees } from '../../src/data';
 import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 as review } from '../../src/data/teachingCompatibility188329';
 import { GAME_GUIDE_CARDS, GAME_GUIDE_CATALOG, gameGuideCatalogErrors } from '../../src/domain/gameGuide';
@@ -29,9 +29,9 @@ beforeAll(async () => {
 });
 afterEach(() => {
   vi.doUnmock('../../src/data/meta');
-  vi.doUnmock('../../src/content/game-guide.json');
-  vi.doUnmock('../../src/content/team-plan.json');
-  vi.doUnmock('../../scripts/data_sources.json');
+  vi.doUnmock('../../data/content/game-guide.json');
+  vi.doUnmock('../../data/content/team-plan.json');
+  vi.doUnmock('../../data/sources/data_sources.json');
   vi.resetModules();
 });
 
@@ -74,7 +74,7 @@ describe('#486 fixed 188329 teaching compatibility', () => {
   });
 
   it('locks every referenced generated fact and its unchanged prerequisite/tree/effect projections to the audited baseline', () => {
-    const read = (name: string) => JSON.parse(readFileSync(`src/data/${name}.json`, 'utf8'));
+    const read = (name: string) => JSON.parse(readFileSync(`data/game/${name}.json`, 'utf8'));
     const withoutMeta = (data: Record<string, unknown>) => {
       const payload = { ...data };
       delete payload.meta;
@@ -195,8 +195,8 @@ describe('#486 fixed 188329 teaching compatibility', () => {
     changedGuide.cards[0]!.answer += 'changed';
     const changedPlan = structuredClone(planContent);
     changedPlan.example.phases[0]!.players[0]!.completedBuildings = [];
-    vi.doMock('../../src/content/game-guide.json', () => ({ default: changedGuide }));
-    vi.doMock('../../src/content/team-plan.json', () => ({ default: changedPlan }));
+    vi.doMock('../../data/content/game-guide.json', () => ({ default: changedGuide }));
+    vi.doMock('../../data/content/team-plan.json', () => ({ default: changedPlan }));
     vi.resetModules();
     const guideModule = await import('../../src/domain/gameGuide');
     const planModule = await import('../../src/domain/teamPlan');
@@ -211,7 +211,7 @@ describe('#486 fixed 188329 teaching compatibility', () => {
   it('leaves the imported catalogues historical if the source pin differs', async () => {
     const changed = structuredClone(pins);
     changed.sources.dat.commit = '0'.repeat(40);
-    vi.doMock('../../scripts/data_sources.json', () => ({ default: changed }));
+    vi.doMock('../../data/sources/data_sources.json', () => ({ default: changed }));
     vi.resetModules();
     const guideModule = await import('../../src/domain/gameGuide');
     const planModule = await import('../../src/domain/teamPlan');

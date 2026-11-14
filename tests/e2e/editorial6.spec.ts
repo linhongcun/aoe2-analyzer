@@ -8,7 +8,7 @@ const THEMES = ['light', 'dark'] as const;
 type Theme = (typeof THEMES)[number];
 const STORAGE_KEY = 'aoe2-theme';
 type UnitStats = { id: number; hp: number; atk: number; up: [Record<string, number>, number] | null };
-const UNITS = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as UnitStats[];
+const UNITS = JSON.parse(readFileSync('data/game/units.json', 'utf8')) as UnitStats[];
 const BASE = UNITS.find((unit) => unit.id === 281)!;
 const ELITE = UNITS.find((unit) => unit.id === 531)!;
 const PAGES = [

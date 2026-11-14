@@ -36,5 +36,5 @@ for t in techs.values():
         im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Tech/{t['pic']}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
     except Exception: miss.append(t['en'])
 L=sorted(techs.values(),key=lambda t:(t['type']!='UniqueTech',t['b'],t['age'],t['id']))
-json.dump(L,open('src/data/techs.json','w'),ensure_ascii=False)
+json.dump(L,open('data/game/techs.json','w'),ensure_ascii=False)
 print(len(L),'unique',sum(t['type']=='UniqueTech' for t in L),'missing',miss)

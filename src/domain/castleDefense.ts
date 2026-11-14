@@ -1,5 +1,5 @@
 /** Issue 242: conditional reading aids, never a battlefield or civilization simulator. */
-import content from '../content/castle-defense.json';
+import content from '../../data/content/castle-defense.json';
 
 export const CASTLE_OBSERVATIONS = ['stone', 'construction', 'completed'] as const;
 export type CastleObservation = (typeof CASTLE_OBSERVATIONS)[number];

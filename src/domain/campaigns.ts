@@ -1,4 +1,4 @@
-import raw from '../content/campaigns.json';
+import raw from '../../data/content/campaigns.json';
 
 export type CampaignKind = 'tutorial' | 'campaign' | 'historical-battle';
 export type CampaignRegion = 'europe' | 'asia' | 'africa' | 'americas';

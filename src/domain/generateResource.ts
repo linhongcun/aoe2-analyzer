@@ -18,7 +18,7 @@
  *
  * 数值来自 scripts/generate_resource_build.py（固定 .dat，四舍五入到 6 位小数）。
  */
-import raw from '../data/generate_resource.json';
+import raw from '../../data/game/generate_resource.json';
 
 const VG_IDS = new Set([2703, 2704]);
 

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 class GenerateResource383(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = json.loads((ROOT / 'src/data/generate_resource.json').read_text())
+        cls.d = json.loads((ROOT / 'data/game/generate_resource.json').read_text())
 
     def test_varangian_task_and_default_multiplier(self):
         elite = self.d['units']['2704']

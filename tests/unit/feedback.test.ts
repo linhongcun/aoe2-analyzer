@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 import { entityOf, feedbackUrl, ISSUES_NEW, siegeFeedbackText } from '../../src/shared/utils/feedback';
 
 describe('feedback link', () => {

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import raw from '../../src/data/techs.json';
+import raw from '../../data/game/techs.json';
 import { loadCore } from '../../src/data';
 import { DLCS } from '../../src/domain/dlc';
 import { techDlc, techReleaseMatches, techUpdate } from '../../src/domain/introductions';
@@ -19,7 +19,7 @@ interface Entry {
   evidence: string;
   status: string;
 }
-const audit = JSON.parse(readFileSync('scripts/catalog_introductions.json', 'utf8')) as {
+const audit = JSON.parse(readFileSync('data/sources/catalog_introductions.json', 'utf8')) as {
   releases: string[];
   techs: Entry[];
   units: Entry[];
@@ -114,9 +114,10 @@ describe('#195 生成器拒绝未重新核对的数据', () => {
     const dir = mkdtempSync(join(tmpdir(), 'aoe2-195-'));
     try {
       mkdirSync(join(dir, 'scripts'));
-      mkdirSync(join(dir, 'src/data'), { recursive: true });
+      mkdirSync(join(dir, 'data/game'), { recursive: true });
+      mkdirSync(join(dir, 'data/sources'), { recursive: true });
       copyFileSync('scripts/catalog_introductions.mjs', join(dir, 'scripts/catalog_introductions.mjs'));
-      for (const kind of ['units', 'buildings', 'techs']) copyFileSync(`src/data/${kind}.json`, join(dir, `src/data/${kind}.json`));
+      for (const kind of ['units', 'buildings', 'techs']) copyFileSync(`data/game/${kind}.json`, join(dir, `data/game/${kind}.json`));
       const invalid = structuredClone(audit);
       const row = invalid.techs[0]!;
       if (fault === 'missing') invalid.techs.pop();
@@ -133,7 +134,7 @@ describe('#195 生成器拒绝未重新核对的数据', () => {
       if (fault === 'release-and-update') Object.assign(row, { status: 'verified', release: 8, update: '81058' });
       if (fault === 'unverified-update') Object.assign(row, { status: 'unverified', release: null, update: '81058' });
       if (fault === 'unit-update') Object.assign(invalid.units[0]!, { status: 'verified', release: null, update: '81058' });
-      writeFileSync(join(dir, 'scripts/catalog_introductions.json'), JSON.stringify(invalid));
+      writeFileSync(join(dir, 'data/sources/catalog_introductions.json'), JSON.stringify(invalid));
       expect(() => execFileSync(process.execPath, [join(dir, 'scripts/catalog_introductions.mjs')], { stdio: 'pipe' })).toThrow();
     } finally {
       rmSync(dir, { recursive: true, force: true });

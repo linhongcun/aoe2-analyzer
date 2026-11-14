@@ -1,4 +1,4 @@
-# 建筑：aoe2techtree data.json（属性）+ 每文明 trees（可用性、生产/研究项目、说明 id、图标）→ src/data/buildings.json
+# 建筑：aoe2techtree data.json（属性）+ 每文明 trees（可用性、生产/研究项目、说明 id、图标）→ data/game/buildings.json
 import json,glob,os,re,io,urllib.request
 T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'))
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
@@ -31,7 +31,7 @@ for bid,o in info.items():
       bt=s['TrainTime'],gar=s['GarrisonCapacity'],atk=s['Attack'],rng=s['Range'],minr=s['MinRange'],rof=s['ReloadTime'],los=s['LineOfSight'],
       pop=(lambda m:int(m.group(1)) if m else 0)(re.search(r'[Pp]rovides\s+\+?(\d+)\s+population',e.get(str(o['hid']-79000),''))),desc=clean(z.get(str(o['hid']-79000),'')),descEn=clean(e.get(str(o['hid']-79000),'')),civs=sorted(o['civs']),units=sorted(o['u']),techs=sorted(o['t'])))
 L.sort(key=lambda x:(x['age'],x['id']))
-json.dump(L,open('src/data/buildings.json','w'),ensure_ascii=False)
+json.dump(L,open('data/game/buildings.json','w'),ensure_ascii=False)
 os.makedirs('public/img/buildings',exist_ok=True)
 from PIL import Image
 for b in L:

@@ -1,5 +1,5 @@
 /** Issue 229: one already-garrisoned unit, static building healing only. */
-import raw from '../data/garrison_healing.json';
+import raw from '../../data/game/garrison_healing.json';
 import validateHealing from '../content/schema/compiled/garrison-healing.mjs';
 import { readValidatedJson } from '../data/validatedJson';
 import { DATA_PATCH_BUILD } from '../data/meta';

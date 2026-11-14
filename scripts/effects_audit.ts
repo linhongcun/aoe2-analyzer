@@ -1,15 +1,15 @@
 /**
- * 生成 docs/EFFECTS-AUDIT.md：.dat 生成效果 vs 历史手工规则的逐条差异。
+ * 生成 data/reports/EFFECTS-AUDIT.md：.dat 生成效果 vs 历史手工规则的逐条差异。
  * 运行：npx vite-node scripts/effects_audit.ts   （需先 python3 scripts/effects_build.py）
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { format } from 'prettier';
-import unitsRaw from '../src/data/units.json';
-import bldRaw from '../src/data/buildings.json';
-import civsRaw from '../src/data/civs.json';
-import techsRaw from '../src/data/techs.json';
-import treesRaw from '../src/data/trees.json';
-import pins from './data_sources.json';
+import unitsRaw from '../data/game/units.json';
+import bldRaw from '../data/game/buildings.json';
+import civsRaw from '../data/game/civs.json';
+import techsRaw from '../data/game/techs.json';
+import treesRaw from '../data/game/trees.json';
+import pins from '../data/sources/data_sources.json';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS } from '../src/domain/buildingEffects.manual';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES } from '../src/domain/effects.manual';
 import { DAT, toEffects, type DatEntry, type DatRule } from '../src/domain/datEffects';
@@ -393,7 +393,7 @@ function stripSections(text: string, prefixes: readonly string[]): string {
   return out.join('\n');
 }
 
-const TARGET = 'docs/EFFECTS-AUDIT.md';
+const TARGET = 'data/reports/EFFECTS-AUDIT.md';
 const audit = buildAudit();
 const formatted = await format(audit.text, { parser: 'markdown' });
 if (process.argv.includes('--check')) {

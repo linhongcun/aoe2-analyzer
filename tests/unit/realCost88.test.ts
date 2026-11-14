@@ -3,9 +3,9 @@
 import { describe, expect, it } from 'vitest';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import civs from '../../src/data/civs.json';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import civs from '../../data/game/civs.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
 import type { Unit } from '../../src/domain/types';

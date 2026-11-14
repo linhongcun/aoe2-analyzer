@@ -8,8 +8,8 @@
 // 对照：从该文明的 tree 行里去掉这些效果，按全部开局方案重跑开局模拟；结果变了 ⇒ 结论必须是「已计入」，没变 ⇒ 必须是「未计入」。
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { civs } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';

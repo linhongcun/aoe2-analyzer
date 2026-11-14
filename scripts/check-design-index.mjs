@@ -12,14 +12,14 @@ import { pathToFileURL } from 'node:url';
 export const REQUIRED_ENTRIES = Object.freeze([
   'DESIGN-SYSTEM.md',
   '../ARCHITECTURE.md',
-  '../data/BUILD-SIM-SOURCES.md',
+  '../BUILD-SIM-SOURCES.md',
   '../../role/experience-design.md',
 ]);
 export const FORBIDDEN_PHRASES = Object.freeze(['实现未做', '仍 OPEN', '不关 #584', '尚未出新稿']);
 
 const isExternal = (target) => /^(https?:|mailto:|#)/i.test(target);
 const isInlinePath = (value) =>
-  (value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') || value.startsWith('mockups/')) &&
+  (value.startsWith('data/') || value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') || value.startsWith('mockups/')) &&
   !value.includes('<') &&
   !value.includes('*') &&
   !value.includes(' ') &&
@@ -55,7 +55,7 @@ export function checkDesignIndex(options = {}) {
   for (const match of readme.matchAll(/`([^`]+)`/g)) {
     const value = (match[1] ?? '').trim();
     if (!value || !isInlinePath(value)) continue;
-    const inlineBase = value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') ? root : base;
+    const inlineBase = value.startsWith('data/') || value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') ? root : base;
     if (!existsSync(resolve(inlineBase, value))) problems.push(`内联路径不存在: ${value}`);
   }
 

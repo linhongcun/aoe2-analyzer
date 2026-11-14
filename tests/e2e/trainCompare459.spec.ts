@@ -7,7 +7,7 @@ const rows = (page: Page) => page.getByTestId('train-compare-row');
 const row = (page: Page, civ: string) => page.locator(`[data-testid="train-compare-row"][data-civ="${civ}"]`);
 const copy = (page: Page) => page.getByRole('button', { name: '复制对照链接', exact: true });
 const query = (page: Page) => new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
-const pins = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number; date: string } };
+const pins = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number; date: string } };
 const errors = new WeakMap<Page, { page: string[]; console: { text: string; url: string }[]; expectedFailures: Set<string> }>();
 
 test.beforeEach(({ page }) => {

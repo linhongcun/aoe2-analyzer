@@ -1,7 +1,7 @@
 /** #197 Slavic farm disclosure follows actual current task assignments. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { civs } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';

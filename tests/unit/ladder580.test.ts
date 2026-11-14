@@ -5,9 +5,9 @@ import { friendliness, TIER_LABEL, type BeginnerNotes, type LadderSnapshot } fro
 
 type CivFile = { en: string; bon: string[] };
 
-const notes = JSON.parse(readFileSync('src/data/ladder-beginner.json', 'utf8')) as BeginnerNotes;
-const civs = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as CivFile[];
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const notes = JSON.parse(readFileSync('data/game/ladder-beginner.json', 'utf8')) as BeginnerNotes;
+const civs = JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as CivFile[];
+const snapshot = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const FILLED = new Set(['easy', 'mid', 'advanced']);
 const KEPT_NOTE = '新手友好度是站内编辑口径，不由胜率推导。未列出的文明显示为待补；胜率仍只读天梯快照。';
 

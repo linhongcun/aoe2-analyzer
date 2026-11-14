@@ -1,13 +1,13 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
-import historicalPins from '../../scripts/patch_inputs/185872.json';
-import construction from '../../src/data/construction.json';
-import garrison from '../../src/data/garrison_general.json';
-import garrisonTechs from '../../src/data/garrison_techs.json';
-import units from '../../src/data/units.json';
-import buildings from '../../src/data/buildings.json';
+import pins from '../../data/sources/data_sources.json';
+import historicalPins from '../../data/sources/patch_inputs/185872.json';
+import construction from '../../data/game/construction.json';
+import garrison from '../../data/game/garrison_general.json';
+import garrisonTechs from '../../data/game/garrison_techs.json';
+import units from '../../data/game/units.json';
+import buildings from '../../data/game/buildings.json';
 
 function canonical(value: unknown): string {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
@@ -28,7 +28,7 @@ const datSource = (dat: { repo: string; commit: string; path: string }) => `${da
 
 describe('#282 compact calculation inputs', () => {
   it('deduplicates construction inputs instead of repeating all objects per civilization', () => {
-    expect(readFileSync('src/data/construction.json').length).toBeLessThan(60_000);
+    expect(readFileSync('data/game/construction.json').length).toBeLessThan(60_000);
   });
   it('keeps every expanded construction payload from main cca7e56 unchanged under historical provenance', async () => {
     const { CONSTRUCTION_DATA } = await import('../../src/domain/construction');

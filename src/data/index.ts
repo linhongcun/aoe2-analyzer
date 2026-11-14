@@ -2,7 +2,7 @@
  * 类型化数据加载器。civs 体积小、首页即需要，随主包加载；
  * units/techs（~340KB）与 trees（~175KB）通过 dynamic import 按路由懒加载。
  */
-import civsRaw from './civs.json';
+import civsRaw from '../../data/game/civs.json';
 import type { Building, Civ, Tech, Trees, Unit } from '../domain/types';
 import { buildingType } from '../domain/buildings';
 import { civDlc } from '../domain/dlc';
@@ -26,7 +26,7 @@ export interface Core {
 let corePromise: Promise<Core> | null = null;
 export let coreCache: Core | null = null;
 export function loadCore(): Promise<Core> {
-  corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json'), import('../domain/introductions')])
+  corePromise ??= Promise.all([import('../../data/game/units.json'), import('../../data/game/techs.json'), import('../../data/game/buildings.json'), import('../domain/introductions')])
     .then(([u, t, b, { unitDlc, buildingDlc, techDlc, techUpdate }]) => {
       const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: unitDlc(x) }));
       const techs = (t.default as unknown as Tech[]).map((x) => ({ ...x, dlc: techDlc(x), introducedUpdate: techUpdate(x) }));
@@ -64,7 +64,7 @@ export function loadCore(): Promise<Core> {
 let treesPromise: Promise<Trees> | null = null;
 export let treesCache: Trees | null = null;
 export function loadTrees(): Promise<Trees> {
-  treesPromise ??= import('./trees.json')
+  treesPromise ??= import('../../data/game/trees.json')
     .then((m) => (treesCache = m.default as unknown as Trees))
     .catch((error: unknown) => {
       treesPromise = null;

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
+const PINS = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../data/sources/data_sources.json');
 
 const KNIGHT = '38.Byzantines.3..';
 const PIKEMAN = '358.Byzantines.3..';

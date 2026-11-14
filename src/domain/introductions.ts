@@ -1,4 +1,4 @@
-import releases from '../data/catalog-introductions.json';
+import releases from '../../data/game/catalog-introductions.json';
 import { dlcMatch } from './dlc';
 import type { Tech } from './types';
 

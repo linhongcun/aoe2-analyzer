@@ -21,7 +21,7 @@
 // 不改 #554 的搜索预填，不测窄屏。视口 1280×900。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 const ISSUES_NEW = 'https://github.com/linhongcun/aoe2-analyzer/issues/new';
 const CAPPED_RAM_ID = 422;
@@ -32,7 +32,7 @@ const SIEGE_UNIT_IDS = [1258, 422, 548, 331, 280, 550, 588, 36];
 const cappedRam = units.find((unit) => unit.id === CAPPED_RAM_ID);
 const siegeUnits = SIEGE_UNIT_IDS.map((id) => units.find((unit) => unit.id === id));
 
-const effects = JSON.parse(readFileSync(new URL('../../src/data/effects.json', import.meta.url), 'utf8')) as {
+const effects = JSON.parse(readFileSync(new URL('../../data/game/effects.json', import.meta.url), 'utf8')) as {
   meta: { sources: { id: string; commit: string; patch: string }[] };
 };
 const dat = effects.meta.sources.find((source) => source.id === 'DAT');

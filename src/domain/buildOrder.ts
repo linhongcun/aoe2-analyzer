@@ -1,6 +1,6 @@
 /**
  * 开局流程（build order）数据模型与校验。
- * 数据文件：src/data/build-orders/*.json（每个文件一个 BuildOrder）。
+ * 数据文件：data/game/build-orders/*.json（每个文件一个 BuildOrder）。
  * 步骤以「当前村民数」为主键（与社区写法一致：6 → 羊、+3 → 木……），可选时代事件标记。
  */
 import { AGE_BY_TECH, HOUSE_ID } from './gameIds';

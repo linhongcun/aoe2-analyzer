@@ -8,8 +8,8 @@ import { smokeFeatures } from '../../scripts/deployment-smoke.mjs';
 const change = (path: string, before: string | null = '', after: string | null = '') => ({ path, before, after });
 const emptyBaseline = 'export const LEGACY_SOURCE_BASELINE = Object.freeze([]);';
 const existingBaseline = 'export const LEGACY_SOURCE_BASELINE = Object.freeze([{ file: "old-source" }]);';
-const buildPath = 'src/content/schema/data-build-order.json';
-const guidePath = 'src/content/schema/content-game-guide.json';
+const buildPath = 'data/schemas/data-build-order.json';
+const guidePath = 'data/schemas/content-game-guide.json';
 
 describe('#442 bounded source-presentation CI plan', () => {
   it('a full fallback retains the changed source pages in the deployment smoke', () => {
@@ -66,7 +66,7 @@ describe('#442 bounded source-presentation CI plan', () => {
     ]) {
       const bad = JSON.parse(before);
       mutate(bad);
-      expect(planChanges([change(path, before, JSON.stringify(bad))])).toMatchObject({ scope: 'full', full: true, data: false });
+      expect(planChanges([change(path, before, JSON.stringify(bad))])).toMatchObject({ scope: 'full', full: true, data: true });
     }
     expect(sourceSchemaOnly(path, before, '{invalid')).toBe(false);
   });
@@ -76,16 +76,16 @@ describe('#442 bounded source-presentation CI plan', () => {
       'scripts/content-schema.mjs',
       'scripts/content-schema-catalog.mjs',
       'scripts/compile-json-validators.mjs',
-      'src/content/schema/common.defs.json',
       'src/content/schema/policy.mjs',
       'src/content/schema/compiled/scouting.mjs',
-      'src/content/schema/data-other.json',
       'src/domain/sourcePresentationOther.mjs',
       'scripts/check-source-presentation-extra.mjs',
       'src/domain/buildSim.ts',
     ])
       expect(planChanges([change(path)])).toMatchObject({ scope: 'full', full: true, data: false });
-    expect(planChanges([change('src/data/build-orders/scouts-18.json')])).toMatchObject({ scope: 'full', data: true });
+    for (const path of ['data/schemas/common.defs.json', 'data/schemas/data-other.json'])
+      expect(planChanges([change(path)])).toMatchObject({ scope: 'full', full: true, data: true });
+    expect(planChanges([change('data/game/build-orders/scouts-18.json')])).toMatchObject({ scope: 'full', data: true });
     expect(planChanges([change('package.json', '{"version":"0.40.0"}', '{"version":"0.40.1","dependencies":{"other":"1"}}')])).toMatchObject({
       scope: 'full',
       data: true,

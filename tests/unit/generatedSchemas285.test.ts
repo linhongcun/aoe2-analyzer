@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { validateDocument } from '../../scripts/content-schema.mjs';
 
 type Mutation = { file: string; path: (string | number)[]; value: unknown };
-const load = (file: string): unknown => JSON.parse(readFileSync(`src/data/${file}.json`, 'utf8'));
+const load = (file: string): unknown => JSON.parse(readFileSync(`data/game/${file}.json`, 'utf8'));
 function rewrite(data: unknown, path: readonly (string | number)[], value: unknown): unknown {
   const copy: unknown = structuredClone(data);
   let target = copy;
@@ -16,7 +16,7 @@ function rewrite(data: unknown, path: readonly (string | number)[], value: unkno
   (target as Record<string, unknown>)[last] = value;
   return copy;
 }
-const validate = (file: string, data: unknown) => validateDocument(`src/data/${file}.json`, data);
+const validate = (file: string, data: unknown) => validateDocument(`data/game/${file}.json`, data);
 
 // Changes exercise the producer's closed unions, compact tuples, raw dataclasses,
 // and dictionary values. Every fixture passes before its one-field mutation.

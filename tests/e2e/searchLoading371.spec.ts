@@ -3,8 +3,8 @@ import { expect, test, type Page, type Route } from '@playwright/test';
 
 // #371：网络闸门确认请求实际被扣住，加载外壳与异步单位索引分别验证。
 // 完成条件采用真实结果出现；产品没有 aria-busy，本项不增加产品属性。
-const buildName = JSON.parse(readFileSync(new URL('../../src/data/build-orders/drush-fc.json', import.meta.url), 'utf8')).name.zh as string;
-const unitName = (JSON.parse(readFileSync(new URL('../../src/data/units.json', import.meta.url), 'utf8')) as { id: number; zh: string }[]).find(
+const buildName = JSON.parse(readFileSync(new URL('../../data/game/build-orders/drush-fc.json', import.meta.url), 'utf8')).name.zh as string;
+const unitName = (JSON.parse(readFileSync(new URL('../../data/game/units.json', import.meta.url), 'utf8')) as { id: number; zh: string }[]).find(
   (unit) => unit.id === 125,
 )!.zh;
 

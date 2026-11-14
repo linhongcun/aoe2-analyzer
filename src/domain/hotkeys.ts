@@ -1,4 +1,4 @@
-import content from '../content/hotkeys.json';
+import content from '../../data/content/hotkeys.json';
 import { hasExactKeys as exactKeys, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export interface HotkeySource {

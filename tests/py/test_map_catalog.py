@@ -126,9 +126,9 @@ class CatalogJoin(unittest.TestCase):
 
 class PinnedCorpus(unittest.TestCase):
     def test_only_shoals_and_wade_have_source_qualified_display_names(self):
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())['assetSources']
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text())['assetSources']
         chinese = read_snapshot(pins['mapCatalog']['snapshots']['zh-hans'])
-        catalog = json.loads((ROOT / 'src/data/mapCatalog.json').read_text())['maps']
+        catalog = json.loads((ROOT / 'data/game/mapCatalog.json').read_text())['maps']
         changed = {row['id'] for row in catalog if row['name'] != chinese[f'rm_{row["id"]}']['mapName']}
         self.assertEqual(changed, {'shoals', 'wade'})
         by_id = {row['id']: row for row in catalog}
@@ -137,11 +137,11 @@ class PinnedCorpus(unittest.TestCase):
         self.assertEqual((by_id['shoals']['en'], by_id['wade']['en']), ('Shoals', 'Wade'))
 
     def test_corpus_has_unique_map_ids_and_required_common_maps(self):
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())['assetSources']
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text())['assetSources']
         zh = read_snapshot(pins['mapCatalog']['snapshots']['zh-hans'])
         en = read_snapshot(pins['mapCatalog']['snapshots']['en'])
         self.assertEqual(set(zh), set(en))
-        catalog = json.loads((ROOT / 'src/data/mapCatalog.json').read_text())['maps']
+        catalog = json.loads((ROOT / 'data/game/mapCatalog.json').read_text())['maps']
         ids = [row['id'] for row in catalog]
         self.assertEqual(len(ids), len(set(ids)))
         self.assertEqual(set(ids), set(pins['mapPreviews']['assets']))
@@ -149,8 +149,8 @@ class PinnedCorpus(unittest.TestCase):
         self.assertFalse(any(identity.startswith('ctr_') for identity in ids))
 
     def test_non_square_atacama_keeps_verified_dimensions(self):
-        pin = json.loads((ROOT / 'scripts/data_sources.json').read_text())['assetSources']['mapPreviews']['assets']['atacama']
-        preview = json.loads((ROOT / 'src/data/mapPreviews.json').read_text())['atacama']
+        pin = json.loads((ROOT / 'data/sources/data_sources.json').read_text())['assetSources']['mapPreviews']['assets']['atacama']
+        preview = json.loads((ROOT / 'data/game/mapPreviews.json').read_text())['atacama']
         self.assertEqual((pin['width'], pin['height']), (423, 420))
         self.assertEqual((preview['width'], preview['height']), (423, 420))
 

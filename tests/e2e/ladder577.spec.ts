@@ -2,7 +2,7 @@
 // 分层边界：S≥52，A≥51 且 <52，B≥50 且 <51，C≥48 且 <50，D<48。线上 52→S，51→A，50→B，48→C。
 // 分布：胜率≥50 算强，出场率≥当前可见中位数算常见。象限只有强且少见/强且常见/弱且少见/弱且常见。
 // A 只做表时分层/分布 disabled，点击不改地址和筛选；A+B 合入后必须可点。无序列写「无走势」且无折线。
-// 无参数才是默认切片。?mode=arabia1v1 走旧快照。只带 elo 进入阿拉伯。快照认 src/data/ladder-*.json。
+// 无参数才是默认切片。?mode=arabia1v1 走旧快照。只带 elo 进入阿拉伯。快照认 data/game/ladder-*.json。
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
@@ -110,14 +110,14 @@ function readCivs(record: Json): CivStat[] {
   return [...civs.values()];
 }
 function ladderFiles(): string[] {
-  return readdirSync('src/data')
+  return readdirSync('data/game')
     .filter((name) => /^ladder-.*\.json$/.test(name) && name !== 'ladder-beginner.json')
     .sort();
 }
 function loadArabia(): { file: string; fetchedAt: string; civs: Map<string, CivStat> } {
   const name = ladderFiles().find((file) => file.includes('arabia'));
-  if (!name) throw new Error('找不到 src/data/ladder-arabia-*.json，无法验收切回路径');
-  const record = asRecord(JSON.parse(readFileSync(join('src/data', name), 'utf8')));
+  if (!name) throw new Error('找不到 data/game/ladder-arabia-*.json，无法验收切回路径');
+  const record = asRecord(JSON.parse(readFileSync(join('data/game', name), 'utf8')));
   if (!record) throw new Error(`${name} 不是对象`);
   const civs = new Map(readCivs(record).map((civ) => [civ.en, civ]));
   if (!civs.has('Franks') || !civs.has('Romans')) throw new Error(`${name} 缺少 Franks 或 Romans`);
@@ -126,7 +126,7 @@ function loadArabia(): { file: string; fetchedAt: string; civs: Map<string, CivS
 function loadDefaultSlice(): SliceSnapshot | null {
   const found: SliceSnapshot[] = [];
   for (const file of ladderFiles()) {
-    const record = asRecord(JSON.parse(readFileSync(join('src/data', file), 'utf8')));
+    const record = asRecord(JSON.parse(readFileSync(join('data/game', file), 'utf8')));
     if (!record || !matchesDefaultSlice(record)) continue;
     const civs = readCivs(record);
     if (civs.length === 0) continue;
@@ -344,7 +344,7 @@ test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，
   const trends = page.locator('[data-testid^="ladder-trend-"]');
   const rowCount = await rows.count();
   const trendCount = await trends.count();
-  soon(slice, 'src/data/ladder-*.json 没有 4v4 RM · Elo 1200–1400 · 约 90 天 · 全图的快照。阿拉伯 1v1 文件不能充当趋势来源。').not.toBeNull();
+  soon(slice, 'data/game/ladder-*.json 没有 4v4 RM · Elo 1200–1400 · 约 90 天 · 全图的快照。阿拉伯 1v1 文件不能充当趋势来源。').not.toBeNull();
   soon(rowCount, '默认切片应有文明表，空态不算趋势已完成').toBeGreaterThan(0);
   if (!slice || !slice.trendReady) {
     soon(trendCount, '没有可画序列时不输出走势列，也不写整列「无走势」').toBe(0);

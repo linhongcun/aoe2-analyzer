@@ -11,7 +11,7 @@ import subprocess
 
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat, load
 
-OUT = ROOT / 'src/data/garrison_healing.json'
+OUT = ROOT / 'data/game/garrison_healing.json'
 ORGANIC_CLASSES = {0, 4, 6, 12, 18, 23, 36, 43, 44, 47, 59}
 DUMP = r'''
 import json,sys
@@ -30,7 +30,7 @@ json.dump({'units':base,'overrides':overrides},open(sys.argv[3],'w'))
 
 
 def raw_data():
-    ids = sorted(int(i) for i in json.loads((ROOT / 'src/data/garrison_general.json').read_text())['units'])
+    ids = sorted(int(i) for i in json.loads((ROOT / 'data/game/garrison_general.json').read_text())['units'])
     path = fetch_dat()
     key = hashlib.sha256((DUMP + json.dumps(ids)).encode()).hexdigest()[:12]
     stem = 'garrison-healing.%s.%s' % (hashlib.sha256(path.read_bytes()).hexdigest()[:12], key)
@@ -51,7 +51,7 @@ def eligibility(unit, uid):
 
 
 def generate(d, raw):
-    general = json.loads((ROOT / 'src/data/garrison_general.json').read_text())
+    general = json.loads((ROOT / 'data/game/garrison_general.json').read_text())
     units = raw['units']
     if any(raw['overrides'].values()):
         raise ValueError('New civilization base healing/HP override requires a model audit')
@@ -94,7 +94,7 @@ def generate(d, raw):
         'rateTechs': effects,
         'organicClasses': sorted(ORGANIC_CLASSES),
         'hostIds': sorted(int(k) for k in general['buildings']
-                          if int(k) in json.loads((ROOT / 'src/data/garrison_hosts.json').read_text())),
+                          if int(k) in json.loads((ROOT / 'data/game/garrison_hosts.json').read_text())),
     }
 
 

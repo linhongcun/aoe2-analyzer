@@ -7,7 +7,7 @@ import { extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const civilizations: { en: string; zh: string; fl: number; pk: number }[] = JSON.parse(
-  readFileSync(new URL('../../src/data/civs.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../data/game/civs.json', import.meta.url), 'utf8'),
 );
 const runtimeErrors = new WeakMap<Page, string[]>();
 const prefix = '/aoe2-analyzer/';

@@ -22,7 +22,7 @@ import {
 } from '../../src/domain/ladder';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const snapshot = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 
 function row(stat: LadderSnapshot['brackets'][number]['civs'][number], nameKey = stat.en): SortableCiv {
   return { ...stat, nameKey, tierRank: 3 };

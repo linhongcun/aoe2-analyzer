@@ -123,13 +123,13 @@ def main():
     parser.add_argument('--check', action='store_true', help='只核对目录，不改生成文件')
     args = parser.parse_args()
     try:
-        sources = json.loads((ROOT / 'scripts/data_sources.json').read_text(encoding='utf-8'))['assetSources']
+        sources = json.loads((ROOT / 'data/sources/data_sources.json').read_text(encoding='utf-8'))['assetSources']
         source, pin = sources['mapPreviews'], sources['mapCatalog']
         snapshots = pin['snapshots']
         chinese = read_snapshot(snapshots['zh-hans'])
         english = read_snapshot(snapshots['en'])
-        previews = json.loads((ROOT / 'src/data/mapPreviews.json').read_text(encoding='utf-8'))
-        metadata_file = ROOT / 'scripts/map_catalog_meta.json'
+        previews = json.loads((ROOT / 'data/game/mapPreviews.json').read_text(encoding='utf-8'))
+        metadata_file = ROOT / 'data/sources/map_catalog_meta.json'
         metadata = json.loads(metadata_file.read_text(encoding='utf-8')) if metadata_file.exists() else {}
         for identity, details in metadata.items():
             if not isinstance(details, dict) or 'source' not in details or 'checkedAt' not in details:
@@ -143,7 +143,7 @@ def main():
             },
             'maps': build_maps(source, previews, chinese, english, metadata, require_provenance=True),
         }
-        target = ROOT / 'src/data/mapCatalog.json'
+        target = ROOT / 'data/game/mapCatalog.json'
         generated = (json.dumps(catalog, ensure_ascii=False, indent=2) + '\n').encode()
         if args.check:
             check_output(target, generated, 'python3 scripts/map_catalog_build.py')

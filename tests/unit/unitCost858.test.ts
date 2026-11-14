@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import ecoRaw from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import ecoRaw from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { loadCore, loadTrees } from '../../src/data';
 import type { BuildOrder } from '../../src/domain/buildOrder';

@@ -1,4 +1,4 @@
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 
 /** 当前固定来源的唯一读取入口（issue 801）；历史 review 记录仍保留自己的冻结 pin。 */
 export type DataSources = typeof pins;
@@ -12,4 +12,4 @@ export const DATA_UPDATED = pins.updated;
 
 export const sourceCommitUrl = (pin: SourcePin): string => `https://github.com/${pin.repo}/tree/${pin.commit}/${pin.path}`;
 
-export const sourcePatchNoteUrl = (build: string | number): string => `https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/PATCH-NOTES/${build}.md`;
+export const sourcePatchNoteUrl = (build: string | number): string => `https://github.com/linhongcun/aoe2-analyzer/blob/main/data/patch-notes/${build}.md`;

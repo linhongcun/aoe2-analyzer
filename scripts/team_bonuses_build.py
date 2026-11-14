@@ -10,7 +10,7 @@ import json
 from dat_source import DAT, ROOT, load, pins
 from effects_build import CIV_DAT
 
-OUT = ROOT / 'src/data/team_bonuses.json'
+OUT = ROOT / 'data/game/team_bonuses.json'
 AGE_TECHS = {101: 2, 102: 3, 103: 4}
 RESOURCE_NAMES = {0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold'}
 # Exact raw operands, not a name/text classifier. A future data update must audit
@@ -78,7 +78,7 @@ def building_aliases(data, buildings):
 
 def build(data=None, civs=None, units=None, buildings=None, techs=None):
     data = data if data is not None else load()
-    read = lambda name: json.loads((ROOT / 'src/data' / (name + '.json')).read_text())
+    read = lambda name: json.loads((ROOT / 'data/game' / (name + '.json')).read_text())
     civs = civs if civs is not None else read('civs')
     units = units if units is not None else read('units')
     buildings = buildings if buildings is not None else read('buildings')

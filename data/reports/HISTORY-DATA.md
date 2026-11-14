@@ -1,6 +1,6 @@
 # 历史补丁收录与证据
 
-<!-- 由 scripts/history_build.py 生成；手工校对输入见 scripts/history_inputs/。 -->
+<!-- 由 scripts/history_build.py 生成；手工校对输入见 data/sources/history_inputs/。 -->
 
 本批仅收录下表列出的 DE 正式版平衡栏目。版本号之间的其他补丁、同页后续热修、原版/征服者/HD 历史尚未补齐；不能把无记录理解为从未改动。
 

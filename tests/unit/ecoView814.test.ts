@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ECO } from '../../src/data/eco';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 
 const FEATURE_FILES = [
   'src/features/builds/BuildTimelineView.tsx',

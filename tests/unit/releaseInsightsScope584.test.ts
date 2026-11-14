@@ -29,7 +29,7 @@ describe('#584 insight presentation CI scope', () => {
     const mixed = plan('src/domain/insights.ts', 'src/domain/realCost.ts');
     expect(mixed).toMatchObject({ scope: 'full', full: true, data: false });
     expect(mixed.browser).toBe('full');
-    expect(plan('src/domain/insights.ts', 'src/data/units.json')).toMatchObject({ scope: 'full', full: true, data: true });
+    expect(plan('src/domain/insights.ts', 'data/game/units.json')).toMatchObject({ scope: 'full', full: true, data: true });
   });
 
   it('#659 CI policy or a global guard edit cannot reduce its own verification', () => {

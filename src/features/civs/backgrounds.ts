@@ -1,4 +1,4 @@
-import manifest from './backgrounds.json';
+import manifest from '../../../data/reference/civs/backgrounds.json';
 
 const images = import.meta.glob('./assets/backgrounds/*.webp', { eager: true, query: '?url&no-inline', import: 'default' }) as Record<string, string>;
 type BackgroundAsset = (typeof manifest.assets)[keyof typeof manifest.assets];

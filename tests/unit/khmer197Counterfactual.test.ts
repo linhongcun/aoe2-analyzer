@@ -1,7 +1,7 @@
 /** Whole654 removal retains physical supply without advertising no-return-walk. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civSimNotes, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 const E = eco as unknown as EcoData;

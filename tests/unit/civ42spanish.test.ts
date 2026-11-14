@@ -2,8 +2,8 @@
 // 依据：#42 issuecomment-6106638881（已打开核对的 wiki 原文 + .dat），断言改自 Kent 草稿 issuecomment-6106620214 / 6106634330。
 // 金额 20 与「完成时到账」来自 wiki（已核实）；res 269 = 300 如何换算成 20 金：未核实。
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simSupport as simSupportFn } from '../../src/domain/simSupport';
 import { classifyCivEffect, simScope, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';

@@ -1,4 +1,4 @@
-import entries from './history.json';
+import entries from '../../../data/content/civs/history.json';
 
 /** 本站依据逐页核对的官方介绍撰写的摘要；出处与核对日期随每条保留。 */
 export interface CivHistoryEntry {

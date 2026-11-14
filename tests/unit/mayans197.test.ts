@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
@@ -63,7 +63,7 @@ const stockResource = (task: Task) => (task === 'wood' ? 'wood' : task === 'gold
 
 describe('#197 玛雅完整资源与工作率配对', () => {
   it('固定原始任务各自读取一个生产率资源，保留真正系数和起始事件', () => {
-    const raw = JSON.parse(readFileSync(new URL('../../docs/design/mayans197-source.json', import.meta.url), 'utf8'));
+    const raw = JSON.parse(readFileSync(new URL('../../data/evidence/mayans197-source.json', import.meta.url), 'utf8'));
     expect(raw.datSource.sha256).toBe('4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa');
     expect(raw.civTechs).toHaveLength(9);
     expect(Object.keys(raw.techClosure)).toHaveLength(133);

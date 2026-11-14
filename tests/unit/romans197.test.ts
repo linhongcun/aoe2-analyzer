@@ -1,7 +1,7 @@
 /** #197 Roman worker and independent supplier regressions against fixed DE188329. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 import { gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';

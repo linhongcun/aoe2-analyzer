@@ -27,7 +27,7 @@ function caseGroups(ids: readonly string[]): string[][] {
 
 function archiveCivIds(): string[] {
   const ids: string[] = [];
-  const dir = join(root, 'src/data/patches');
+  const dir = join(root, 'data/game/patches');
   for (const name of readdirSync(dir).filter((file) => file.endsWith('.json'))) {
     const patch = JSON.parse(readFileSync(join(dir, name), 'utf8')) as {
       archivedTargets?: { targetType?: string; targetId?: string | number; nameEn?: string }[];
@@ -97,7 +97,7 @@ describe('#974 文明路由只差大小写时对齐到目录英文名', () => {
 
   it('目录、文明史和补丁档案没有只差大小写的文明身份', () => {
     const catalog = civs.map((civ) => civ.en);
-    const history = Object.keys(JSON.parse(readFileSync(join(root, 'src/features/civs/history.json'), 'utf8')) as Record<string, unknown>);
+    const history = Object.keys(JSON.parse(readFileSync(join(root, 'data/content/civs/history.json'), 'utf8')) as Record<string, unknown>);
     const archives = archiveCivIds();
     expect(caseGroups(catalog)).toEqual([]);
     expect(caseGroups(history)).toEqual([]);

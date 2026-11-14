@@ -1,4 +1,4 @@
-import raw from '../data/charge_attack.json';
+import raw from '../../data/game/charge_attack.json';
 import validate from '../content/schema/compiled/charge-attack.mjs';
 import { readValidatedJson } from '../data/validatedJson';
 import { civStatus } from './civStatus';

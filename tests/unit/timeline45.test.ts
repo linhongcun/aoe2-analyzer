@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import eco from '../../src/data/eco.json';
+import eco from '../../data/game/eco.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData } from '../../src/domain/buildSim';
 import { followupHint, stepEntities, villagerGroups } from '../../src/features/builds/timelineFollowups';

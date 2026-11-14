@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import eco from '../../src/data/eco.json' with { type: 'json' };
+import eco from '../../data/game/eco.json' with { type: 'json' };
 
 const examples = ['wood', 'farm', 'gold', 'stone', 'berries'] as const;
 const region = (page: Page) => page.getByRole('region', { name: '基准采集', exact: true });

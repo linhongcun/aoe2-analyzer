@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 async function chooseCiv(page: Page, en: string) {
   await page.locator('#uciv').click();

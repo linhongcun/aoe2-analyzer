@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import unitsRaw from '../../src/data/units.json';
+import unitsRaw from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { ECO } from '../../src/data/eco';
 import { simulateBuild, type UpgradeData } from '../../src/domain/buildSim';
 import { chineseModel } from '../../src/domain/chineseEconomy';
 import { khmerModel } from '../../src/domain/khmerEconomy';
-import fixture from './__fixtures__/civContractEquivalence.json';
+import fixture from '../../data/fixtures/unit/__fixtures__/civContractEquivalence.json';
 
 const units = unitsRaw as unknown as { id: number; up?: unknown }[];
 const upgrades = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;

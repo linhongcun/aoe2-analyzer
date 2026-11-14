@@ -6,7 +6,7 @@ import { chromium, type Page } from '@playwright/test';
 import { expect, it } from 'vitest';
 import { assertCompleteRecord, createTableFixtureWriter, staticPageFailures, staticSweepPlan, tableStyles } from '../e2e/staticSweep338';
 
-const routes = Object.entries(JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
+const routes = Object.entries(JSON.parse(readFileSync('data/game/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
   .map(([key, metadata]) => metadata.route ?? key)
   .filter((route) => route !== '/about-data');
 

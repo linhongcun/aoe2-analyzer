@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
-import beginnerNotes from '../../data/ladder-beginner.json';
-import snapshotJson from '../../data/ladder-arabia-p185872.json';
+import beginnerNotes from '../../../data/game/ladder-beginner.json';
+import snapshotJson from '../../../data/game/ladder-arabia-p185872.json';
 import {
   finiteTrendRates,
   firstSortDir,

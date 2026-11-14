@@ -1,6 +1,6 @@
 /** P0 批次回归：#15 #26 #27 #18 #22 #28（文案为 Jony 锁定稿，逐字断言） */
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import type { Civ } from '../../src/domain/types';
 import { EMPTY_COUNTERS_COPY, filterCounterUnits } from '../../src/domain/ratings';
 import { DPS_UNAVAILABLE_REASON, duel, fighterFrom, oneWay } from '../../src/domain/duel';

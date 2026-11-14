@@ -43,7 +43,7 @@ def read_json(path: Path) -> Any:
 def catalog_identities(root: Path = ROOT) -> dict[str, dict[int | str, str]]:
     files = {'unit': 'units', 'tech': 'techs', 'building': 'buildings', 'civ': 'civs'}
     return {
-        typ: {row['en' if typ == 'civ' else 'id']: row['zh'] for row in read_json(root / f'src/data/{filename}.json')}
+        typ: {row['en' if typ == 'civ' else 'id']: row['zh'] for row in read_json(root / f'data/game/{filename}.json')}
         for typ, filename in files.items()
     }
 
@@ -136,8 +136,8 @@ def generate(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[dict[str, An
     identities = catalog_identities(root)
     patches, coverages = [], []
     for ident in PATCHES:
-        patch = read_json(root / f'scripts/history_inputs/{ident}.json')
-        coverage = read_json(root / f'scripts/history_inputs/{ident}-coverage.json')
+        patch = read_json(root / f'data/sources/history_inputs/{ident}.json')
+        coverage = read_json(root / f'data/sources/history_inputs/{ident}-coverage.json')
         validate_patch(patch, coverage, identities)
         patches.append(patch)
         coverages.append(coverage)
@@ -147,7 +147,7 @@ def generate(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[dict[str, An
 def coverage_report(patches: list[dict[str, Any]], coverages: list[dict[str, Any]]) -> str:
     lines = [
         '# 历史补丁收录与证据', '',
-        '<!-- 由 scripts/history_build.py 生成；手工校对输入见 scripts/history_inputs/。 -->', '',
+        '<!-- 由 scripts/history_build.py 生成；手工校对输入见 data/sources/history_inputs/。 -->', '',
         '本批仅收录下表列出的 DE 正式版平衡栏目。版本号之间的其他补丁、同页后续热修、原版/征服者/HD 历史尚未补齐；不能把无记录理解为从未改动。', '',
         '| 正式版 | 官方发行日 | 公告当地日 | 公告公开（北京时间） | 官方项目 | 已映射 | 明确排除 | 实体记录 |',
         '| --- | --- | --- | --- | ---: | ---: | ---: | ---: |',
@@ -194,8 +194,8 @@ def main() -> None:
     parser.add_argument('--check', action='store_true', help='校验已提交输出与已核实输入一致，不写文件')
     args = parser.parse_args()
     patches, coverages = generate()
-    outputs = {ROOT / f'src/data/patches/{patch["id"]}.json': json.dumps(patch, ensure_ascii=False, indent=2) + '\n' for patch in patches}
-    outputs[ROOT / 'docs/HISTORY-DATA.md'] = coverage_report(patches, coverages)
+    outputs = {ROOT / f'data/game/patches/{patch["id"]}.json': json.dumps(patch, ensure_ascii=False, indent=2) + '\n' for patch in patches}
+    outputs[ROOT / 'data/reports/HISTORY-DATA.md'] = coverage_report(patches, coverages)
     for path, content in outputs.items():
         if args.check:
             assert path.read_text(encoding='utf-8') == content, f'{path.relative_to(ROOT)} 需要重新生成'

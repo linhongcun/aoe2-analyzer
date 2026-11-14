@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-const units = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as { id: number; civs: string[] }[];
+const units = JSON.parse(readFileSync('data/game/units.json', 'utf8')) as { id: number; civs: string[] }[];
 const cases = [
   ['Armenians', '需研究科技，未建模'],
   ['Bohemians', '需研究科技，未建模'],

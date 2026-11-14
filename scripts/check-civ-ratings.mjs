@@ -2,7 +2,7 @@
 /**
  * 校验手工维护的文明主观评分文件。
  *
- * 只读；不生成 src/data/civs.json，不联网。默认 static CI 通过 `npm run lint`
+ * 只读；不生成 data/game/civs.json，不联网。默认 static CI 通过 `npm run lint`
  * 调用，Vitest 负例复用同一纯函数。
  */
 import { readFileSync } from 'node:fs';
@@ -226,19 +226,19 @@ function main(argv = process.argv.slice(2)) {
   }
 
   try {
-    const ratings = readJson(join(root, 'scripts/civ_ratings.json'));
-    const civs = readJson(join(root, 'src/data/civs.json'));
+    const ratings = readJson(join(root, 'data/sources/civ_ratings.json'));
+    const civs = readJson(join(root, 'data/game/civs.json'));
     const names = civs.map((civ) => civ.en);
     const problems = validateCivRatings(ratings, names);
     if (problems.length) {
-      console.error(`civ_ratings.json 校验失败（${problems.length} 项）：`);
+      console.error(`data/sources/civ_ratings.json 校验失败（${problems.length} 项）：`);
       for (const problem of problems) console.error(`- ${problem}`);
       return 1;
     }
-    console.log(`civ_ratings.json：${names.length} 个文明，结构校验通过`);
+    console.log(`data/sources/civ_ratings.json：${names.length} 个文明，结构校验通过`);
     return 0;
   } catch (error) {
-    console.error(`civ_ratings.json 校验失败：${error instanceof Error ? error.message : String(error)}`);
+    console.error(`data/sources/civ_ratings.json 校验失败：${error instanceof Error ? error.message : String(error)}`);
     return 1;
   }
 }

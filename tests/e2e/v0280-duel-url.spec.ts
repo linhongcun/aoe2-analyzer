@@ -1,8 +1,8 @@
 import { expect, test, type Locator, type Page, type TestInfo } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { expectedSide657, expectedDuel657, expectedShareUrl657 } from './champi657Expected';
-import golden from './fixtures/v0280-golden.json' with { type: 'json' };
-import duelUrl from './fixtures/v0280-duel-url.json' with { type: 'json' };
+import golden from '../../data/fixtures/e2e/fixtures/v0280-golden.json' with { type: 'json' };
+import duelUrl from '../../data/fixtures/e2e/fixtures/v0280-duel-url.json' with { type: 'json' };
 import { PK, capturePage, type Captured } from './v0280-golden-cases';
 import { DUEL_URL } from './v0280-duel-url-cases';
 

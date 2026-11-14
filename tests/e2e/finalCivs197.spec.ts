@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import civs from '../../src/data/civs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
 
 const CIVS = [
   { en: 'Poles', zh: '波兰', note: '未指定农田与大庄园的邻接' },

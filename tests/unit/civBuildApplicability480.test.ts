@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
+import civs from '../../data/game/civs.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 import { openingBuildIds } from '../../src/domain/civOpening';

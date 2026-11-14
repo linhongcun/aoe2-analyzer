@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 
-const civs = JSON.parse(readFileSync(new URL('../../src/data/civs.json', import.meta.url), 'utf8')) as {
+const civs = JSON.parse(readFileSync(new URL('../../data/game/civs.json', import.meta.url), 'utf8')) as {
   en: string;
   zh: string;
   s: number[];
 }[];
-const ratings = JSON.parse(readFileSync(new URL('../../scripts/civ_ratings.json', import.meta.url), 'utf8')) as {
+const ratings = JSON.parse(readFileSync(new URL('../../data/sources/civ_ratings.json', import.meta.url), 'utf8')) as {
   verifiedAt: string;
   basis: { axisGap: string; axes: string[]; highlight: string; positions: { source: string } };
 };

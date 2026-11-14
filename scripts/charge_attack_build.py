@@ -8,7 +8,7 @@ import subprocess
 
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 
-OUT = ROOT / 'src/data/charge_attack.json'
+OUT = ROOT / 'data/game/charge_attack.json'
 FIELDS = {59: 'max_charge', 60: 'recharge_rate', 61: 'charge_event', 62: 'charge_type'}
 AUDITED_TARGETS = {38, 74, 75, 77, 283, 473, 567, 569, 1790, 1792, 1793, 1813}
 EXAMPLES = (283, 1792, 1793)
@@ -135,7 +135,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    data = build(raw_data(), json.loads((ROOT / 'src/data/units.json').read_text()), json.loads((ROOT / 'src/data/trees.json').read_text()), json.loads((ROOT / 'src/data/techs.json').read_text()))
+    data = build(raw_data(), json.loads((ROOT / 'data/game/units.json').read_text()), json.loads((ROOT / 'data/game/trees.json').read_text()), json.loads((ROOT / 'data/game/techs.json').read_text()))
     rendered = render(data)
     if args.check:
         if not OUT.exists() or OUT.read_text() != rendered:

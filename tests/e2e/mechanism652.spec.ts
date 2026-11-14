@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { DEFAULT_SCENE } from '../../src/domain/startGameInputs';
-const techNames = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as { id: number; zh: string }[];
+const techNames = JSON.parse(readFileSync('data/game/techs.json', 'utf8')) as { id: number; zh: string }[];
 test('#652方案 @1280 同预算可选择合法低固定费方案', async ({ page }, info) => {
   await select(page, '边路', false);
   await page.getByText('调整场景与投入', { exact: true }).click();

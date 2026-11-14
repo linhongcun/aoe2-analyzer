@@ -19,13 +19,13 @@ class VietnamEconomy393(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temp.cleanup)
         root = Path(cls.temp.name)
-        (root / 'src/data').mkdir(parents=True)
-        (root / 'docs').mkdir()
+        (root / 'data/game').mkdir(parents=True)
+        (root / 'data/reports').mkdir(parents=True)
         for name in ('units', 'techs', 'buildings', 'civs', 'effects'):
-            shutil.copyfile(eco_build.ROOT / f'src/data/{name}.json', root / f'src/data/{name}.json')
+            shutil.copyfile(eco_build.ROOT / f'data/game/{name}.json', root / f'data/game/{name}.json')
         with patch.object(eco_build, 'ROOT', root), contextlib.redirect_stdout(io.StringIO()):
             eco_build.main()
-        cls.generated = json.loads((root / 'src/data/eco.json').read_text())
+        cls.generated = json.loads((root / 'data/game/eco.json').read_text())
 
     def effects(self, civ):
         return [e for row in self.generated['civEco'][civ] if row['source'] == 'tree' for e in row['effects']]
@@ -65,4 +65,3 @@ class VietnamEconomy393(unittest.TestCase):
         automatic = {'kind': 'techTime', 'tech': 322, 'techName': 'Murder Holes', 'op': 'set', 'v': 0}
         stone = {'kind': 'techCost', 'tech': 322, 'techName': 'Murder Holes', 'res': 'Stone', 'op': 'set', 'v': 0}
         self.assertEqual(eco_build.split_tree_effects([wood, automatic, stone, time]), ([wood, time], ['Murder Holes']))
-

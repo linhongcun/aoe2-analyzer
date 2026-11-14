@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { BUILD_ALIAS_ROWS } from '../../src/data/aliases';
 
-const zh = (id: string) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${id}.json`, import.meta.url), 'utf8')).name.zh as string;
+const zh = (id: string) => JSON.parse(readFileSync(new URL(`../../data/game/build-orders/${id}.json`, import.meta.url), 'utf8')).name.zh as string;
 
 async function open(page: import('@playwright/test').Page, q: string) {
   await page.goto('./');

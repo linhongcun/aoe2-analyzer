@@ -2,10 +2,10 @@ import { expect, test } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 
-const pins = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
-const orders = readdirSync(new URL('../../src/data/build-orders/', import.meta.url))
+const pins = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
+const orders = readdirSync(new URL('../../data/game/build-orders/', import.meta.url))
   .filter((file) => file.endsWith('.json'))
-  .map((file) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
+  .map((file) => JSON.parse(readFileSync(new URL(`../../data/game/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
 
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark']) {

@@ -22,7 +22,7 @@ import {
  */
 
 // ---------- #264 加固教堂（1806）存放圣物加箭 ----------
-// 依据：src/data/buildings.json 1806 "Villagers and Relics provide additional projectiles"；
+// 依据：data/game/buildings.json 1806 "Villagers and Relics provide additional projectiles"；
 // https://ageofempires.fandom.com/wiki/Fortified_Church 。每个圣物 +1，与村民合计，总数上限 5。
 const FORTIFIED_CHURCH = 1806;
 const MONASTERY = 104;

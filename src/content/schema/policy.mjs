@@ -47,7 +47,7 @@ export function isPublicSourceUrl(value) {
 // Versions such as DE185872 and dates are not commit hashes. Public URL pins
 // use public-url instead of this text format, so their hashes remain valid.
 const internalSourceText =
-  /\b(?:sha(?:-?(?:1|256|512))?|csv|commit)\b|提交号|提交(?:哈希)?\s*[:：]?\s*[0-9a-f]{7,40}\b|\b[0-9a-f]{40}(?:[0-9a-f]{24})?\b|\b(?:main|master)\s*@\s*[0-9a-f]{7,40}\b|[^\s/@]+\/[^\s/@]+@[0-9a-f]{7,40}\b|(?:^|[\s「（(])(?:src|scripts|tests)\/[^\s]+/iu;
+  /\b(?:sha(?:-?(?:1|256|512))?|csv|commit)\b|提交号|提交(?:哈希)?\s*[:：]?\s*[0-9a-f]{7,40}\b|\b[0-9a-f]{40}(?:[0-9a-f]{24})?\b|\b(?:main|master)\s*@\s*[0-9a-f]{7,40}\b|[^\s/@]+\/[^\s/@]+@[0-9a-f]{7,40}\b|(?:^|[\s「（(])(?:data|src|scripts|tests)\/[^\s]+/iu;
 const mixedShortHash = /(?:^|[^a-z0-9])(?=[0-9a-f]{7,40}(?:$|[^a-z0-9]))(?=[0-9a-f]*[a-f])(?=[0-9a-f]*[0-9])[0-9a-f]{7,40}(?:$|[^a-z0-9])/iu;
 export function isPublicSourceText(value) {
   if (typeof value !== 'string') return false;

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import civs from '../../src/data/civs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
 
 const franks = (civs as { en: string; zh: string; bon: string[]; bonEn: string[] }[]).find((civ) => civ.en === 'Franks')!;
 

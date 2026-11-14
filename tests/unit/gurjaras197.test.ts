@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { Action, BuildOrder } from '../../src/domain/buildOrder';
 import { simulateBuild, simSupport, gatherRate, type EcoData, type EffectRow, type UpgradeData } from '../../src/domain/buildSim';

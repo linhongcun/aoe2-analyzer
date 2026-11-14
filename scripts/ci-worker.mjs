@@ -33,7 +33,7 @@ export async function executeWorker({ stage, frozen, job, budget, folder, env = 
   const buildFolder = join(env.RUNNER_TEMP || 'work', 'ci-build');
   if (stage === 'build') {
     await budget.run('npm', ['run', 'build']);
-    await budget.run('git', ['diff', '--exit-code', '--', 'src/data/page-metadata.json']);
+    await budget.run('git', ['diff', '--exit-code', '--', 'data/game/page-metadata.json']);
     createArtifactManifest({
       ...manifestOptions(current, 'dist', frozen.plan),
       gate_ref: frozen.gate_ref,

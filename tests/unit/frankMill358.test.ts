@@ -1,7 +1,7 @@
 // #358：法兰克「磨坊科技免费」。开局会研究马轭时不扣 75 食物 / 75 木，效果也不与「到达时代自动生效」叠两次。
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { civs } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses } from '../../src/domain/civBonus';

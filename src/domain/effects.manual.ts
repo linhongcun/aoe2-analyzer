@@ -1,7 +1,7 @@
 /**
  * 手工编码的效果表（历史版本，依据游戏内说明与 AoE2 Fandom Wiki）。
- * 现在只作为「回退」：.dat 生成的 src/data/effects.json 无战斗数据（2025-06 之后的新科技/新文明）
- * 或与当前补丁文本不一致时才使用；差异逐条见 docs/EFFECTS-AUDIT.md。
+ * 现在只作为「回退」：.dat 生成的 data/game/effects.json 无战斗数据（2025-06 之后的新科技/新文明）
+ * 或与当前补丁文本不一致时才使用；差异逐条见 data/reports/EFFECTS-AUDIT.md。
  */
 import type { Effect, Unit, UnitPred } from './types';
 import { hasCls, isArrow, isCA, isCamel, isFootArcher, isGun, isInf, isKnightLine, isMelee, isMilitiaLine, isMounted, isArcher, isSkirm } from './unitClass';

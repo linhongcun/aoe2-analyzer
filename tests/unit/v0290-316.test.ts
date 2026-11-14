@@ -4,7 +4,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import scoutingContent from '../../src/content/scouting.json';
+import scoutingContent from '../../data/content/scouting.json';
 import { analyseScouting, defaultScoutingConfig, SCOUTING_AREAS, withScenario, type ScoutingArea, type ScoutingConfig } from '../../src/domain/scouting';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 import { ALL } from '../../src/shared/nav/sections';

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
@@ -85,7 +85,7 @@ describe('#197 马里交仓黄金与建筑木费', () => {
     ]);
   });
   it('建筑类别与同一固定dat审计记录一致，农田49与建筑/木墙类别区分', () => {
-    const source = JSON.parse(readFileSync(new URL('../../docs/design/malians197-source.json', import.meta.url), 'utf8')) as {
+    const source = JSON.parse(readFileSync(new URL('../../data/evidence/malians197-source.json', import.meta.url), 'utf8')) as {
       trackedUnits: Record<string, { classId: number }>;
     };
     for (const id of [12, 45, 50, 68, 70, 72, 84, 87, 101, 103, 109, 562, 584])

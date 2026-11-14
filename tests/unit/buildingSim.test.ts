@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/buildings.json';
+import raw from '../../data/game/buildings.json';
 import { buildingBase, buildingSimTechs, simulateBuilding } from '../../src/domain/buildingSim';
 import { formatHp } from '../../src/domain/hpFormat';
 import { buildingType } from '../../src/domain/buildings';

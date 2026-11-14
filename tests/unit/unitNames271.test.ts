@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, type Core } from '../../src/data';
-import MIXED from '../../src/content/mixed-army.json';
+import MIXED from '../../data/content/mixed-army.json';
 import { unitOptionLabel } from '../../src/features/teamPlan/TeamPlan';
 import { TEAM_PLAN_UNIT_IDS } from '../../src/domain/teamPlan';
 import { civs } from '../../src/data';

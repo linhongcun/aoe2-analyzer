@@ -11,7 +11,7 @@ HISTORICAL_SHA256 = '94b5ae8e67dbb19382162a9a5d2f7d935ef82f7858b92af681d4397505c
 
 
 def historical_input():
-    path = ROOT / 'scripts/patch_inputs/185872.json'
+    path = ROOT / 'data/sources/patch_inputs/185872.json'
     raw = path.read_bytes()
     assert hashlib.sha256(raw).hexdigest() == HISTORICAL_SHA256, '185872 历史来源指纹变化，须独立重新核对'
     return json.loads(raw)
@@ -177,7 +177,7 @@ if __name__=='__main__':
     args = parser.parse_args()
     for build in [args.build] if args.build else ['185872', '188329']:
         result=generate(build)
-        target=ROOT/f'src/data/patches/{build}.json'
+        target=ROOT/f'data/game/patches/{build}.json'
         content=json.dumps(result,ensure_ascii=False,indent=2)+'\n'
         if args.check:
             assert target.read_text()==content, f'{build} 补丁 JSON 需要重新生成'

@@ -20,20 +20,20 @@ class Chinese197Export(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data = eco_build.load()
-        cls.checked = json.loads((eco_build.ROOT / 'src/data/eco.json').read_text())
+        cls.checked = json.loads((eco_build.ROOT / 'data/game/eco.json').read_text())
         cls.generated = cls.export(cls.data)
 
     @staticmethod
     def export(data):
         with tempfile.TemporaryDirectory(prefix='chinese197-export-') as directory:
             root = Path(directory)
-            (root / 'src/data').mkdir(parents=True)
-            (root / 'docs').mkdir()
+            (root / 'data/game').mkdir(parents=True)
+            (root / 'data/reports').mkdir(parents=True)
             for name in ('units', 'techs', 'buildings', 'civs', 'effects'):
-                shutil.copyfile(eco_build.ROOT / f'src/data/{name}.json', root / f'src/data/{name}.json')
+                shutil.copyfile(eco_build.ROOT / f'data/game/{name}.json', root / f'data/game/{name}.json')
             with patch.object(eco_build, 'ROOT', root), patch.object(eco_build, 'load', return_value=data), contextlib.redirect_stdout(io.StringIO()):
                 eco_build.main()
-            return json.loads((root / 'src/data/eco.json').read_text())
+            return json.loads((root / 'data/game/eco.json').read_text())
 
     @staticmethod
     def rows(data):
@@ -65,7 +65,7 @@ class Chinese197Export(unittest.TestCase):
         self.assertEqual(self.generated, self.checked)
 
     def test_physical_record_distinguishes_storage_and_age_type_without_claiming_engine_test(self):
-        physical = json.loads((eco_build.ROOT / 'docs/design/chinese197-source-physical.json').read_text())
+        physical = json.loads((eco_build.ROOT / 'data/evidence/chinese197-source-physical.json').read_text())
         self.assertEqual(physical['source']['sha256'], eco_build.DAT['sha256'])
         self.assertFalse(physical['engineVerifiedInPinnedBuild'])
         for label in ('base', 'Chinese'):

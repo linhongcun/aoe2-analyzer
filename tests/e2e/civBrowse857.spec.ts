@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import civs from '../../src/data/civs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
 
 const errors = new WeakMap<Page, string[]>();
 

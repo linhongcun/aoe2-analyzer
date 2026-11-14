@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
-import historicalPins from '../../scripts/patch_inputs/185872.json';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import pins from '../../data/sources/data_sources.json';
+import historicalPins from '../../data/sources/patch_inputs/185872.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { CONSTRUCTION_DATA } from '../../src/data/construction';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';
@@ -20,7 +20,7 @@ const without = (e: EcoData, tech: number): EcoData => ({
 const constructionNote = '按实际施工形态计入城镇中心、城堡和防御工事加成';
 const farmNote = '农田升级额外储量、耗尽和续种未模拟';
 const multiplier = (e: EcoData, target: string) => rowOf(e, 770).effects.find((x) => x.target === target)!.v!;
-const raw = JSON.parse(readFileSync(new URL('../../docs/design/sicilians197-source.json', import.meta.url), 'utf8'));
+const raw = JSON.parse(readFileSync(new URL('../../data/evidence/sicilians197-source.json', import.meta.url), 'utf8'));
 const probe = (building = 72, builders = 1): BuildOrder => ({
   id: 'sicilians-construction-probe',
   name: { zh: '西西里施工核对', en: 'Sicilian construction probe' },

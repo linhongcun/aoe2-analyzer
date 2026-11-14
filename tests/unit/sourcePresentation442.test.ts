@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { buildOrders } from '../../src/data/buildOrders';
 import { visibleSources } from '../../src/features/builds/sources';
-import guide from '../../src/content/game-guide.json';
+import guide from '../../data/content/game-guide.json';
 import type { Source } from '../../src/domain/buildOrder';
 import { publicBuildLicense, publicBuildPresentation, publicBuildSources, publicGameGuideSources } from '../../src/domain/sourcePresentation.mjs';
 import { checkSourcePresentation, validateSourcePresentation } from '../../scripts/check-source-presentation.mjs';
@@ -13,8 +13,8 @@ import { createSchemaCompiler, SCHEMA_ID_BASE } from '../../scripts/content-sche
 
 const rawGuide = () => structuredClone(guide);
 const rawBuild = (id = 'scouts-18') => structuredClone(buildOrders.find((build) => build.id === id)!);
-const buildFile = (id: string) => `src/data/build-orders/${id}.json`;
-const GUIDE_FILE = 'src/content/game-guide.json';
+const buildFile = (id: string) => `data/game/build-orders/${id}.json`;
+const GUIDE_FILE = 'data/content/game-guide.json';
 
 describe('#442 公开开局来源与原始证据分离', () => {
   it.each(buildOrders)('$id 的公开来源不带内部 ref/path，保留链接、作者与日期', (order) => {
@@ -177,8 +177,8 @@ describe('#442 公开开局来源与原始证据分离', () => {
 
   it('独立checker发现新增文件并在真实CLI中阻断合法raw内的公开泄露', () => {
     const root = mkdtempSync(join(tmpdir(), 'source-presentation-442-'));
-    mkdirSync(join(root, 'src/data/build-orders'), { recursive: true });
-    mkdirSync(join(root, 'src/content'), { recursive: true });
+    mkdirSync(join(root, 'data/game/build-orders'), { recursive: true });
+    mkdirSync(join(root, 'data/content'), { recursive: true });
     writeFileSync(join(root, GUIDE_FILE), JSON.stringify(guide));
     writeFileSync(join(root, buildFile('scouts-18')), JSON.stringify(rawBuild()));
     const run = () => spawnSync(process.execPath, [resolve('scripts/check-source-presentation.mjs'), '--root', root], { encoding: 'utf8' });

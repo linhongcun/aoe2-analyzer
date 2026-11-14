@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import { CIV_DLC, DLCS, dlcMatch } from '../../src/domain/dlc';
 import { buildLinker, findUniqueTech, linkify } from '../../src/domain/linker';
 import { strengths } from '../../src/domain/ratings';

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees } from '../../src/data';
-import ecoRaw from '../../src/data/eco.json';
+import ecoRaw from '../../data/game/eco.json';
 import { DAT } from '../../src/domain/datEffects';
 import { gatherModel } from '../../src/domain/realCost';
 import {

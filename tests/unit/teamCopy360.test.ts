@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees, type Core } from '../../src/data';
-import TEAM from '../../src/data/team_bonuses.json';
+import TEAM from '../../data/game/team_bonuses.json';
 import { calculateConstruction, DEFAULT_CONSTRUCTION, type ConstructionConfig } from '../../src/domain/construction';
 import { playerTeamNote, teamPrereqLabel } from '../../src/features/teamBonuses/TeamBonuses';
 

@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
 const campaignSources = (
-  JSON.parse(readFileSync(new URL('../../src/content/campaigns.json', import.meta.url), 'utf8')) as { sources: Record<string, { url?: string }> }
+  JSON.parse(readFileSync(new URL('../../data/content/campaigns.json', import.meta.url), 'utf8')) as { sources: Record<string, { url?: string }> }
 ).sources;
 
 const internalTerms = /string \d+|CSV|§|issue ?\d+|[0-9a-f]{7,40}|SHA-?256|Site editorial classification|Existing historical release table/i;

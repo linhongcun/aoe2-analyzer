@@ -15,7 +15,7 @@ function files(dir: string): string[] {
     return statSync(p).isDirectory() ? files(p) : /\.tsx$/.test(f) ? [p] : [];
   });
 }
-const meta = JSON.parse(read('src/data/page-metadata.json')) as Record<string, { title: string }>;
+const meta = JSON.parse(read('data/game/page-metadata.json')) as Record<string, { title: string }>;
 const TITLE = meta['/relic-income']!.title;
 /** f856c9e CHANGELOG.md 里提到圣物功能名的历史行（第 48 行，v0.2x #238） */
 const OLD_CHANGELOG = ['- 新增圣物资源收入预览，按固定数据核对文明与队伍来源，解释收益和目标金耗缺口（#238）。'];
@@ -69,6 +69,6 @@ describe('#273 对照：可复现入口保留在工程数据更新文档', () =>
     expect(updateGuide).toMatch(/relic_income\.json/);
     expect(updateGuide).toMatch(/--check/);
     expect(existsSync('scripts/relic_income_build.py')).toBe(true);
-    expect(existsSync('src/data/relic_income.json')).toBe(true);
+    expect(existsSync('data/game/relic_income.json')).toBe(true);
   });
 });

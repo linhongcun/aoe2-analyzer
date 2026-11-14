@@ -62,5 +62,5 @@ for u in units.values():
         im=Image.open(io.BytesIO(raw)).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
     except Exception: miss.append(u['en'])
 L=sorted(units.values(),key=lambda u:(u['type']!='UniqueUnit',u['b'],u['age'],u['id']))
-json.dump(L,open('src/data/units.json','w'),ensure_ascii=False)
+json.dump(L,open('data/game/units.json','w'),ensure_ascii=False)
 print(len(L),'unique',sum(u['type']=='UniqueUnit' for u in L),'missing img',miss)

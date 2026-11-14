@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
+import eco from '../../data/game/eco.json';
 import { civs } from '../../src/data';
 import { bonusUsage } from '../../src/domain/bonusUsage';
 import { civBonuses } from '../../src/domain/civBonus';

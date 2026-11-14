@@ -14,11 +14,11 @@ class CivTextCorrections(unittest.TestCase):
     def generate(self, stale=False, name='来源名称', description='来源说明。'):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'scripts').mkdir()
-            (root / 'src/data').mkdir(parents=True)
+            (root / 'data/sources').mkdir(parents=True)
+            (root / 'data/game').mkdir(parents=True)
             cache = root / 'cache'
             cache.mkdir()
-            corrections = json.loads((ROOT / 'scripts/civ_text_corrections.json').read_text())
+            corrections = json.loads((ROOT / 'data/sources/civ_text_corrections.json').read_text())
             rule = corrections['Mapuche']['ct']
             original = rule['original'] + ('上游已修订' if stale else '')
             zh = {'1': f'文明说明<br>\n<b>独特单位：</b>单位<br>\n<b>独特科技：</b><br>\n• {original}<br>\n• 另一科技<br>\n<b>团队加成：</b>团队说明',
@@ -29,11 +29,11 @@ class CivTextCorrections(unittest.TestCase):
             for filename, value in [('data.json', data), ('zh.json', zh), ('en.json', en)]:
                 (cache / filename).write_text(json.dumps(value, ensure_ascii=False))
             for filename in ['civ_ratings.json', 'civ_text_corrections.json']:
-                (root / 'scripts' / filename).write_bytes((ROOT / 'scripts' / filename).read_bytes())
+                (root / 'data/sources' / filename).write_bytes((ROOT / 'data/sources' / filename).read_bytes())
             result = subprocess.run([sys.executable, str(ROOT / 'scripts/civs_build.py')],
                                     cwd=root, env={**os.environ, 'AOE_CACHE': str(cache)},
                                     capture_output=True, text=True, check=False)
-            output = root / 'src/data/civs.json'
+            output = root / 'data/game/civs.json'
             return result, json.loads(output.read_text()) if output.exists() else None
 
     def test_uses_referenced_strings_and_preserves_other_tech(self):

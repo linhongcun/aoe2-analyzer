@@ -236,7 +236,7 @@ jobs:
             scripts/.cache/dat.*.json
             scripts/.cache/venv
             scripts/.cache/aoe2techtree-*
-          key: data-${{ hashFiles('scripts/data_sources.json') }}-py312
+          key: data-${{ hashFiles('data/sources/data_sources.json') }}-py312
       - run: node scripts/ci-budget.mjs --run -- python3 -m pip install Pillow==12.3.0
       - name: Execute data phase
         id: phase

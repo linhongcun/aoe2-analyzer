@@ -14,11 +14,11 @@ DAT_SHA256 = 'd0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f'
 
 def generate(root):
     from dat_source import DAT, load
-    pins = json.loads((root / 'scripts/data_sources.json').read_text())
+    pins = json.loads((root / 'data/sources/data_sources.json').read_text())
     assert pins['patch']['build'] == 188329, '188329 档案必须使用本补丁的固定来源'
     assert {key: value['commit'] for key, value in pins['sources'].items()} == FIXED_COMMITS, '188329 固定来源身份变化'
     assert pins['sources']['dat']['sha256'] == DAT['sha256'] == DAT_SHA256, '188329 DAT 来源身份变化'
-    units = {row['id']: row for row in json.loads((root / 'src/data/units.json').read_text())}
+    units = {row['id']: row for row in json.loads((root / 'data/game/units.json').read_text())}
     dat = load()
     raw = dat['Civs'][0]['Units']
     entries = []

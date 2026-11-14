@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
-import techs from '../../src/data/techs.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
+import techs from '../../data/game/techs.json' with { type: 'json' };
 
 const guard = units.find((unit) => unit.id === 1959)!;
 const magazine = techs.find((tech) => tech.id === 1069)!;

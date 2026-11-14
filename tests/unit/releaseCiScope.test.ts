@@ -55,14 +55,14 @@ describe('#427 按实际变更选择验证范围', () => {
 
   it.each([
     'src/domain/buildSim.ts',
-    'src/data/civs.json',
+    'data/game/civs.json',
     'scripts/build_data.py',
-    'scripts/data_sources.json',
+    'data/sources/data_sources.json',
     'public/img/dlc/0.webp',
     'src/shared/ui/widgets.tsx',
     'src/shared/nav/pageRegistry.ts',
     'src/shared/styles/tokens.css',
-    'docs/PATCH-NOTES/185872.md',
+    'data/patch-notes/185872.md',
     'vite.config.ts',
   ])('%s 变化即使用完整验证，不因同时含文明 UI 或工作流而跳过', (path) => {
     expect(classifyChanges([change('src/features/civs/components/CivList.tsx'), change('.github/workflows/ci.yml'), change(path)])).toBe('full');

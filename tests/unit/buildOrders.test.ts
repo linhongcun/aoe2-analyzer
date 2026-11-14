@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import units from '../../src/data/units.json';
-import techs from '../../src/data/techs.json';
-import buildings from '../../src/data/buildings.json';
-import civs from '../../src/data/civs.json';
-import eco from '../../src/data/eco.json';
+import units from '../../data/game/units.json';
+import techs from '../../data/game/techs.json';
+import buildings from '../../data/game/buildings.json';
+import civs from '../../data/game/civs.json';
+import eco from '../../data/game/eco.json';
 import { buildOrders, refData } from '../../src/data/buildOrders';
 import { checkSemantics, checkShape, splitOf, validateBuildOrder, type BuildOrder } from '../../src/domain/buildOrder';
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { upgradeLine } from '../../src/domain/units';
 import { civStatus } from '../../src/domain/simulator';
 import type { Trees, Unit } from '../../src/domain/types';
-import treesJson from '../../src/data/trees.json';
+import treesJson from '../../data/game/trees.json';
 import { units } from './helpers';
 
 const trees = treesJson as unknown as Trees;

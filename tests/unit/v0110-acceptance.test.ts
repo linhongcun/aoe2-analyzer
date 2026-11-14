@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import civs from '../../src/data/civs.json';
+import civs from '../../data/game/civs.json';
 import { gatherModel } from '../../src/domain/realCost';
 import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, score, TIER, type SearchItem } from '../../src/domain/search';

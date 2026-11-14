@@ -8,7 +8,7 @@ import { realCost } from './realCost';
 import { neutralGatherModel } from './scenarioBudget';
 import { reviewPayload, SCENE_ECO, type SceneContext } from './positionScenarios';
 import { sceneSignature } from './positionScenarioMath';
-import review from './routeReview.json';
+import review from '../../data/reference/domain/routeReview.json';
 import { AGE_BY_TECH } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 

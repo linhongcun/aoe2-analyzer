@@ -13,7 +13,7 @@ import data_update_coverage as coverage  # noqa: E402
 
 
 def load():
-    return json.loads((ROOT / 'scripts/data_update_coverage.json').read_text(encoding='utf-8'))
+    return json.loads((ROOT / 'data/sources/data_update_coverage.json').read_text(encoding='utf-8'))
 
 
 class CoveragePasses(unittest.TestCase):
@@ -114,9 +114,9 @@ class CostPolicy(unittest.TestCase):
 
 class PatchHistory(unittest.TestCase):
     def test_moved_pin_reports_lock_without_claiming_a_new_archive(self):
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text(encoding='utf-8'))
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text(encoding='utf-8'))
         pins['patch']['build'] = 999999
-        errors = coverage.check(ROOT, sources={'scripts/data_sources.json': json.dumps(pins)})
+        errors = coverage.check(ROOT, sources={'data/sources/data_sources.json': json.dumps(pins)})
         joined = '\n'.join(errors)
         self.assertIn('999999', joined)
         self.assertIn('不要改写', joined)
@@ -125,11 +125,11 @@ class PatchHistory(unittest.TestCase):
         self.assertNotIn('请新增', joined)
 
     def test_editing_pin_build_is_does_not_require_a_new_archive(self):
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text(encoding='utf-8'))
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text(encoding='utf-8'))
         pins['patch']['build'] = 999999
         manifest = load()
         manifest['patchHistory']['pinBuildIs'] = 999999
-        errors = coverage.check(ROOT, manifest=manifest, sources={'scripts/data_sources.json': json.dumps(pins)})
+        errors = coverage.check(ROOT, manifest=manifest, sources={'data/sources/data_sources.json': json.dumps(pins)})
         self.assertFalse(any('pinBuildIs' in error or '请新增' in error for error in errors), errors)
 
 

@@ -6,18 +6,18 @@
     "npm": "npm run data:update",
     "status": "npm run data:status",
     "force": "npm run data:update -- --force",
-    "checklist": "scripts/data_update_coverage.json",
+    "checklist": "data/sources/data_update_coverage.json",
     "checkCommand": "python3 scripts/data_update_coverage.py",
-    "pins": "scripts/data_sources.json",
+    "pins": "data/sources/data_sources.json",
     "doNotHandEdit": [
-      "src/data/civs.json",
-      "src/data/units.json",
-      "src/data/techs.json",
-      "src/data/buildings.json",
-      "src/data/trees.json",
-      "src/data/effects.json",
-      "src/data/eco.json",
-      "src/data/search-py.json"
+      "data/game/civs.json",
+      "data/game/units.json",
+      "data/game/techs.json",
+      "data/game/buildings.json",
+      "data/game/trees.json",
+      "data/game/effects.json",
+      "data/game/eco.json",
+      "data/game/search-py.json"
     ]
   },
   "conditions": {
@@ -143,12 +143,12 @@
     { "script": "scripts/icons_hires.py" },
     { "script": "scripts/catalog_introductions.mjs" }
   ],
-  "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 scripts/catalog_introductions.json。",
+  "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 data/sources/catalog_introductions.json。",
   "intentionalSkips": [
     {
       "id": "patches",
       "script": "scripts/patches_build.py",
-      "reason": "补丁档案按历史身份锁定。data_update 不重写 src/data/patches。",
+      "reason": "补丁档案按历史身份锁定。data_update 不重写 data/game/patches。",
       "owner": "无单独具名负责人。185872 由 patches_build.py 的 HISTORICAL_SHA256 封存；188329 由 patches_188329.py 的 FIXED_COMMITS 与 DAT_SHA256 锁定。",
       "evidenceFile": "scripts/patches_build.py",
       "ownerEvidence": "185872 使用封存来源；188329 使用当前固定 DAT。",
@@ -176,7 +176,7 @@
       "id": "map-catalog",
       "script": "scripts/map_catalog_build.py",
       "reason": "地图目录和编辑文案不在数据更新编排里。",
-      "owner": "无单独具名负责人。编辑文案在 scripts/map_catalog_meta.json。",
+      "owner": "无单独具名负责人。编辑文案在 data/sources/map_catalog_meta.json。",
       "evidenceFile": "scripts/map_catalog_build.py",
       "ownerEvidence": "从固定双语 API 快照、图标清单及人工分类生成地图目录。",
       "command": "python3 scripts/map_catalog_build.py"
@@ -185,7 +185,7 @@
   "humanItems": [
     {
       "id": "civ-ratings",
-      "path": "scripts/civ_ratings.json",
+      "path": "data/sources/civ_ratings.json",
       "owner": "维护者",
       "ownerEvidence": "由维护者主观判断",
       "touch": "主观评分 ty、s、fl、pk、op。不要把分数写进生成的 civs.json。"
@@ -213,14 +213,14 @@
     },
     {
       "id": "effects-links",
-      "path": "scripts/effects_links.json",
+      "path": "data/sources/effects_links.json",
       "owner": "无单独具名负责人",
       "ownerEvidence": "仅校正自动关联的「归属」",
       "touch": "只校正加成文本属于哪一条。数值仍来自 .dat。"
     },
     {
       "id": "catalog-introductions",
-      "path": "scripts/catalog_introductions.json",
+      "path": "data/sources/catalog_introductions.json",
       "evidenceFile": "scripts/catalog_introductions.mjs",
       "owner": "无单独具名负责人",
       "ownerEvidence": "将人工核对的首发版本清单编译为运行时查表",
@@ -228,15 +228,15 @@
     },
     {
       "id": "build-orders",
-      "path": "src/data/build-orders",
-      "evidenceFile": "src/data/build-orders/scouts-18.json",
+      "path": "data/game/build-orders",
+      "evidenceFile": "data/game/build-orders/scouts-18.json",
       "owner": "各开局文件自己的 sources[].author 与 review.by。清单不另指定一个人。",
       "ownerEvidence": "中文步骤说明为本项目原创表述",
       "touch": "开局步骤。每个 JSON 必须有非空 sources[].author 和 review.by。"
     },
     {
       "id": "map-editorial",
-      "path": "scripts/map_catalog_meta.json",
+      "path": "data/sources/map_catalog_meta.json",
       "evidenceFile": "scripts/map_catalog_build.py",
       "owner": "无单独具名负责人",
       "ownerEvidence": "编辑文案来源必须是 editorial、civs.json 或有效 https URL",
@@ -244,7 +244,7 @@
     },
     {
       "id": "civ-text-corrections",
-      "path": "scripts/civ_text_corrections.json",
+      "path": "data/sources/civ_text_corrections.json",
       "evidenceFile": "scripts/civs_build.py",
       "owner": "无单独具名负责人",
       "ownerEvidence": "不能静默覆盖新文本",
@@ -252,10 +252,10 @@
     },
     {
       "id": "stats-allowlist",
-      "path": "scripts/stats_allowlist.json",
+      "path": "data/sources/stats_allowlist.json",
       "evidenceFile": "scripts/stats_crosscheck.py",
       "owner": "无单独具名负责人",
-      "ownerEvidence": "允许差异清单：scripts/stats_allowlist.json（每条须写 reason）",
+      "ownerEvidence": "允许差异清单：data/sources/stats_allowlist.json（每条须写 reason）",
       "touch": "数值对账的例外。每条必须有 reason。空数组是当前事实，不是省略检查。"
     }
   ],
@@ -364,13 +364,13 @@
   },
   "patchHistory": {
     "pinBuildIs": 188329,
-    "notesDir": "docs/PATCH-NOTES",
-    "archiveDir": "src/data/patches",
+    "notesDir": "data/patch-notes",
+    "archiveDir": "data/game/patches",
     "locked": [
       {
         "build": "188329",
         "module": "scripts/patches_188329.py",
-        "output": "src/data/patches/188329.json",
+        "output": "data/game/patches/188329.json",
         "assertText": "pins['patch']['build'] == 188329",
         "identity": {
           "dat": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
@@ -384,13 +384,13 @@
         "module": "scripts/patches_build.py",
         "constant": "HISTORICAL_SHA256",
         "sha256": "94b5ae8e67dbb19382162a9a5d2f7d935ef82f7858b92af681d4397505cb2a42",
-        "output": "src/data/patches/185872.json"
+        "output": "data/game/patches/185872.json"
       }
     ],
     "historyBuilds": ["66692", "81058", "125283"],
     "historyScript": "scripts/history_build.py",
-    "historyOutputs": ["src/data/patches/66692.json", "src/data/patches/81058.json", "src/data/patches/125283.json"],
-    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只写 docs/PATCH-NOTES，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
+    "historyOutputs": ["data/game/patches/66692.json", "data/game/patches/81058.json", "data/game/patches/125283.json"],
+    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只写 data/patch-notes，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
   },
   "failFast": {
     "stopMessage": "数据更新覆盖清单未通过，已停止，未运行生成器",

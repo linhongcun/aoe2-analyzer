@@ -1,12 +1,12 @@
 # 补丁数据更新流程
 
-开局模拟来源摘要、历史 pin 和 64 KiB 限额见[可复现来源说明](data/BUILD-SIM-SOURCES.md)。
+开局模拟来源摘要、历史 pin 和 64 KiB 限额见[可复现来源说明](BUILD-SIM-SOURCES.md)。
 
-单一入口是本地脚本。只改 `scripts/data_sources.json` 的 pin，不要手改生成 JSON。覆盖清单是 `scripts/data_update_coverage.json`，检查命令是 `python3 scripts/data_update_coverage.py`。检查只读源码，不跑生成器，不下载 `.dat`，不更新 pin。
+单一入口是本地脚本。只改 `data/sources/data_sources.json` 的 pin，不要手改生成 JSON。覆盖清单是 `data/sources/data_update_coverage.json`，检查命令是 `python3 scripts/data_update_coverage.py`。检查只读源码，不跑生成器，不下载 `.dat`，不更新 pin。
 
 ## 独立数据生产器
 
-建造模型数据由 `scripts/construction_build.py` 生成，`python3 scripts/construction_build.py --check` 校验固定来源与 `src/data/construction.json` 可复现；圣物收益由 `scripts/relic_income_build.py` 生成，`python3 scripts/relic_income_build.py --check` 校验 `src/data/relic_income.json`。两者读取 `scripts/data_sources.json` 的固定 DE `.dat` 来源，不运行游戏客户端；源数据元信息中的引擎验证状态仍以 `engineVerifiedInPinnedBuild` 为准。
+建造模型数据由 `scripts/construction_build.py` 生成，`python3 scripts/construction_build.py --check` 校验固定来源与 `data/game/construction.json` 可复现；圣物收益由 `scripts/relic_income_build.py` 生成，`python3 scripts/relic_income_build.py --check` 校验 `data/game/relic_income.json`。两者读取 `data/sources/data_sources.json` 的固定 DE `.dat` 来源，不运行游戏客户端；源数据元信息中的引擎验证状态仍以 `engineVerifiedInPinnedBuild` 为准。
 
 ```bash
 python3 scripts/data_update.py          # 与 npm run data:update 相同
@@ -19,7 +19,7 @@ GITHUB_TOKEN=... npm run data:update    # 可选，提高 GitHub API 限额
 
 `package.json` 里 `data:update` 是 `python3 scripts/data_update.py`，`data:status` 是 `python3 scripts/data_update.py --check`。本说明不改 `.github/workflows`；默认 PR CI 不执行这份完整数据管线；实际路径计划与只读防漂移检查（#865）以工作流及 [TESTING](TESTING.md) 为准。
 
-## 固定版本：`scripts/data_sources.json`
+## 固定版本：`data/sources/data_sources.json`
 
 唯一记录上游版本的文件：
 
@@ -33,11 +33,11 @@ GITHUB_TOKEN=... npm run data:update    # 可选，提高 GitHub API 限额
 
 构建时 `vite.config.ts` 读入该文件，站点页头/页脚显示「数据版本：DE 188329（2026-10-28）」，并在 `#/about-data` 列出来源、提交、sha256 和补丁说明链接。
 
-不要手改这些生成文件：`src/data/civs.json`、`src/data/units.json`、`src/data/techs.json`、`src/data/buildings.json`、`src/data/trees.json`、`src/data/effects.json`、`src/data/eco.json`、`src/data/search-py.json`。
+不要手改这些生成文件：`data/game/civs.json`、`data/game/units.json`、`data/game/techs.json`、`data/game/buildings.json`、`data/game/trees.json`、`data/game/effects.json`、`data/game/eco.json`、`data/game/search-py.json`。
 
 ## 当前事实：编排会跑什么
 
-`scripts/data_update.py` 在覆盖清单通过之后才查询上游。生成器非零退出会立刻停止后续步骤。当前事实是 pin 在生成前写回 `scripts/data_sources.json`，失败时不会自动回滚已经写完的那一部分 JSON。脚本不提交。
+`scripts/data_update.py` 在覆盖清单通过之后才查询上游。生成器非零退出会立刻停止后续步骤。当前事实是 pin 在生成前写回 `data/sources/data_sources.json`，失败时不会自动回滚已经写完的那一部分 JSON。脚本不提交。
 
 dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
@@ -63,11 +63,11 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 17. `scripts/effects_audit.ts`
 18. `scripts/stats_crosscheck.py`
 
-差异摘要写到 `docs/PATCH-NOTES/<补丁号>.md`。这是本次差异说明，不是补丁档案。
+差异摘要写到 `data/patch-notes/<补丁号>.md`。这是本次差异说明，不是补丁档案。
 
 `scripts/build_data.py` 内部还会按顺序调用：`scripts/civs_build.py`、`scripts/units_build.py`、`scripts/techs_build.py`、`scripts/trees_build.py`、`scripts/buildings_build.py`、`scripts/ages_build.py`、`scripts/icons_hires.py`、`scripts/catalog_introductions.mjs`。这些调用都带 `check=True`。
 
-当前事实：锁 SHA 的 issue 正文写编排不跑 introductions。`scripts/data_update.py` 确实没有单独一步。编译器是 `scripts/build_data.py` 的最后一条嵌套命令，所以只有 dat、aoe2techtree 变更或 `--force` 才会编译首发版本查表。人工源仍是 `scripts/catalog_introductions.json`。`npm run introductions:check` 只在手动 full 里出现，不在默认 PR CI。
+当前事实：锁 SHA 的 issue 正文写编排不跑 introductions。`scripts/data_update.py` 确实没有单独一步。编译器是 `scripts/build_data.py` 的最后一条嵌套命令，所以只有 dat、aoe2techtree 变更或 `--force` 才会编译首发版本查表。人工源仍是 `data/sources/catalog_introductions.json`。`npm run introductions:check` 只在手动 full 里出现，不在默认 PR CI。
 
 `scripts/stats_crosscheck.py` 的文件头仍写着对账 185872。这是过期注释。函数体通过 `dat_source` 读取当前 pin。过期文件头不能作为已经完成对账的证据；新的来源核验须按实际 pin 与上游输入单独记录。
 
@@ -80,7 +80,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 | `scripts/patches_build.py`     | 补丁档案按历史身份锁定                       | 无单独具名负责人。185872 看 `HISTORICAL_SHA256`；188329 看 `scripts/patches_188329.py` 的锁定常量 |
 | `scripts/history_build.py`     | 旧公告只校验实体身份，不用今天的数值覆盖历史 | 无单独具名负责人。主人是该文件里的 `PATCHES` 表                                                   |
 | `scripts/map_previews.py`      | 地图预览是独立素材                           | 无单独具名负责人。pin 在 `assetSources.mapPreviews`                                               |
-| `scripts/map_catalog_build.py` | 地图目录和编辑文案不跟游戏 pin 一起重生成    | 无单独具名负责人。编辑文案在 `scripts/map_catalog_meta.json`                                      |
+| `scripts/map_catalog_build.py` | 地图目录和编辑文案不跟游戏 pin 一起重生成    | 无单独具名负责人。编辑文案在 `data/sources/map_catalog_meta.json`                                      |
 
 需要时单独运行：`python3 scripts/patches_build.py`、`python3 scripts/history_build.py`、`python3 scripts/map_previews.py`、`python3 scripts/map_catalog_build.py`。
 
@@ -88,16 +88,16 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 | 项           | 文件                                 | 主人                                                                                                                    |
 | ------------ | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 主观评分     | `scripts/civ_ratings.json`           | 维护者。文件写明由维护者主观判断。`basis` 只记口径；`verifiedAt` 不是补丁对齐日，对齐补丁必须留空                       |
+| 主观评分     | `data/sources/civ_ratings.json`           | 维护者。文件写明由维护者主观判断。`basis` 只记口径；`verifiedAt` 不是补丁对齐日，对齐补丁必须留空                       |
 | 搜索别名     | `src/data/aliases.ts`                | Reid 整理、Steve 审                                                                                                     |
 | 易混淆对照   | `src/data/confusables.ts`            | Reid 维护、Steve 签字                                                                                                   |
 | 拼音多音字   | `scripts/pinyin_build.mjs` 的 `FIX`  | Steve。生成器在编排里，人工只改这张表                                                                                   |
-| 文本关联     | `scripts/effects_links.json`         | 无单独具名负责人。只改归属，不改数值                                                                                    |
-| 图鉴首发     | `scripts/catalog_introductions.json` | 无单独具名负责人。编译器是 `scripts/catalog_introductions.mjs`                                                          |
-| 开局步骤     | `src/data/build-orders`              | 各文件自己的 `sources[].author` 与 `review.by`。清单不另指定一个人。主人证据抽自 `src/data/build-orders/scouts-18.json` |
-| 地图编辑文案 | `scripts/map_catalog_meta.json`      | 无单独具名负责人。`source` 为 editorial 的句子是人工文案                                                                |
-| 译名校正     | `scripts/civ_text_corrections.json`  | 无单独具名负责人。对不上就改这张表或确认上游                                                                            |
-| 对账例外     | `scripts/stats_allowlist.json`       | 无单独具名负责人。每条必须有 reason。当前是空数组                                                                       |
+| 文本关联     | `data/sources/effects_links.json`         | 无单独具名负责人。只改归属，不改数值                                                                                    |
+| 图鉴首发     | `data/sources/catalog_introductions.json` | 无单独具名负责人。编译器是 `scripts/catalog_introductions.mjs`                                                          |
+| 开局步骤     | `data/game/build-orders`             | 各文件自己的 `sources[].author` 与 `review.by`。清单不另指定一个人。主人证据抽自 `data/game/build-orders/scouts-18.json` |
+| 地图编辑文案 | `data/sources/map_catalog_meta.json`      | 无单独具名负责人。`source` 为 editorial 的句子是人工文案                                                                |
+| 译名校正     | `data/sources/civ_text_corrections.json`  | 无单独具名负责人。对不上就改这张表或确认上游                                                                            |
+| 对账例外     | `data/sources/stats_allowlist.json`       | 无单独具名负责人。每条必须有 reason。当前是空数组                                                                       |
 
 `src/domain/effects.manual.ts` 和 `src/domain/buildingEffects.manual.ts` 只是回退。`.dat` 已经有战斗规则时不要改它们。`src/domain/effects.ts` 在 `datCombat` 为真时直接返回，改了也不会进运行时。
 
@@ -105,15 +105,15 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 `scripts/data_update.py` 的 `run` 使用 `subprocess.run(..., check=True)`，外面没有 `try`。覆盖清单失败时退出文案是「数据更新覆盖清单未通过，已停止，未运行生成器」。
 
-`scripts/civs_build.py` 读 `scripts/civ_text_corrections.json`。特色科技原文、名称或括号对不上就 `raise`，不能改成静默跳过或静默覆盖新文本。
+`scripts/civs_build.py` 读 `data/sources/civ_text_corrections.json`。特色科技原文、名称或括号对不上就 `raise`，不能改成静默跳过或静默覆盖新文本。
 
 ## 补丁历史
 
-当前 pin 是 188329。档案目录是 `src/data/patches`。
+当前 pin 是 188329。档案目录是 `data/game/patches`。
 
-- `src/data/patches/188329.json` 由 `scripts/patches_188329.py` 锁定到这份 pin 的提交和 sha256。模块断言 pin 必须仍是 188329。
-- `src/data/patches/185872.json` 由 `scripts/patches_build.py` 的 `HISTORICAL_SHA256` 封存。
-- `src/data/patches/66692.json`、`src/data/patches/81058.json`、`src/data/patches/125283.json` 由 `scripts/history_build.py` 生成。它不收编 185872 或 188329。
+- `data/game/patches/188329.json` 由 `scripts/patches_188329.py` 锁定到这份 pin 的提交和 sha256。模块断言 pin 必须仍是 188329。
+- `data/game/patches/185872.json` 由 `scripts/patches_build.py` 的 `HISTORICAL_SHA256` 封存。
+- `data/game/patches/66692.json`、`data/game/patches/81058.json`、`data/game/patches/125283.json` 由 `scripts/history_build.py` 生成。它不收编 185872 或 188329。
 
 不要改写 188329 或更早档案的锁定身份，也不要让 `scripts/data_update.py` 去调用上述生成器。pin 与清单里的 `pinBuildIs` 不一致时，检查只报告这份锁定，不检查新补丁档案是否已经建立。只把 `pinBuildIs` 改成新号，并不能证明新档案存在。新档案要另建，且不得改写 188329 的 `FIXED_COMMITS` / `DAT_SHA256`。
 
@@ -151,7 +151,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 ### 单位、建筑与科技首发目录
 
-人工来源清单是 [`scripts/catalog_introductions.json`](../scripts/catalog_introductions.json)，生成结果是 [`src/data/catalog-introductions.json`](../src/data/catalog-introductions.json)。运行 `npm run introductions` 生成，`npm run introductions:check` 检查源清单、目录身份、证据与输出；生成 JSON 不手改。
+人工来源清单是 [`data/sources/catalog_introductions.json`](../data/sources/catalog_introductions.json)，生成结果是 [`data/game/catalog-introductions.json`](../data/game/catalog-introductions.json)。运行 `npm run introductions` 生成，`npm run introductions:check` 检查源清单、目录身份、证据与输出；生成 JSON 不手改。
 
 首发记录按英文具名身份核对，普通与精锐形态分别判断，不从文明首发、内部 ID、同兵系或生产渠道推断。资料片发行时期和独立免费更新分别记录；独立更新使用 `update` 而非猜一个 `release`，两种来源不可混用。无法证实的项保留 `status: unverified`、`release: null` 且不填猜测的更新号。来源冲突应记录冲突与依据，优先具名内容的正式发布/更新证据；不得以现行数值、搜索摘要或邻近条目替代证据。版本标签表示首发来源，不代表现时购买限制。
 
@@ -161,7 +161,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 ### 内容购买目录（`contentCatalog`）
 
-[`src/content/contentCatalog.json`](../src/content/contentCatalog.json) 是独立维护的 Steam 产品/内容快照，不是 `scripts/catalog_introductions.json` 的别名，也不是 `.dat` 生成数据；其结构由 [`src/content/schema/content-contentCatalog.json`](../src/content/schema/content-contentCatalog.json) 约束。使用 `npm run content:validators -- --check` 检查预编译校验器，使用 `npm run content:check -- --strict` 做严格内容校验。
+[`data/content/contentCatalog.json`](../data/content/contentCatalog.json) 是独立维护的 Steam 产品/内容快照，不是 `data/sources/catalog_introductions.json` 的别名，也不是 `.dat` 生成数据；其结构由 [`data/schemas/content-contentCatalog.json`](../data/schemas/content-contentCatalog.json) 约束。使用 `npm run content:validators -- --check` 检查预编译校验器，使用 `npm run content:check -- --strict` 做严格内容校验。
 
 `id` 与 `steamAppId` 标识产品和 Steam 应用。每个产品的 `acquisition.sourceIds`、`prerequisites.sourceIds` 及每项 `contents[].sourceIds` 都应对应该产品 `sources[].id`；来源记录保留官方 URL（如适用）、状态、说明和实际 `verifiedAt`。`verifiedAt` 是核验日期，不等同来源的 `publishedAt` 或商品 `releaseDate`；不得用版权年份代替。缺失、过期、冲突或 `unverified` 证据不能支撑确定的购买方式、前置条件或内容包含断言。
 
@@ -169,13 +169,13 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 ### 驻军与团队加成导出
 
-驻军数据由 [`scripts/garrison_general_build.py`](../scripts/garrison_general_build.py) 从 [`scripts/data_sources.json`](../scripts/data_sources.json) 固定的 `.dat` 读取，生成 [`src/data/garrison_general.json`](../src/data/garrison_general.json)、[`src/data/garrison_hosts.json`](../src/data/garrison_hosts.json) 与 [`src/data/garrison_techs.json`](../src/data/garrison_techs.json)；`python3 scripts/garrison_general_build.py --check` 比较可复现输出。入口轻量清单和完整计算数据是不同产物。当前驻军任务来自原始 `unit.bird.tasks`；不能按对象类别、结构标记或文案推断任务、目标或数值。未解释字段与未知目标保持未知；`produces` 表示站内科技树收录的生产关系，不保证任意文明/时代/前置下均可生产。固定 `.dat` 的导出元数据明确 `engineVerifiedInPinnedBuild: false`：可复现解析不等于游戏客户端实测。
+驻军数据由 [`scripts/garrison_general_build.py`](../scripts/garrison_general_build.py) 从 [`data/sources/data_sources.json`](../data/sources/data_sources.json) 固定的 `.dat` 读取，生成 [`data/game/garrison_general.json`](../data/game/garrison_general.json)、[`data/game/garrison_hosts.json`](../data/game/garrison_hosts.json) 与 [`data/game/garrison_techs.json`](../data/game/garrison_techs.json)；`python3 scripts/garrison_general_build.py --check` 比较可复现输出。入口轻量清单和完整计算数据是不同产物。当前驻军任务来自原始 `unit.bird.tasks`；不能按对象类别、结构标记或文案推断任务、目标或数值。未解释字段与未知目标保持未知；`produces` 表示站内科技树收录的生产关系，不保证任意文明/时代/前置下均可生产。固定 `.dat` 的导出元数据明确 `engineVerifiedInPinnedBuild: false`：可复现解析不等于游戏客户端实测。
 
-团队加成由 [`scripts/team_bonuses_build.py`](../scripts/team_bonuses_build.py) 读取相同固定 pin，生成 [`src/data/team_bonuses.json`](../src/data/team_bonuses.json)；`python3 scripts/team_bonuses_build.py --check` 做复现检查。代码与测试区分启用、研究和研究时间修改，不把启用科技说成已研究，也不合成队伍倍率。`engineVerifiedInPinnedBuild` 为 `false`；单位/类别目标与生产目录是静态关联，`targetCoverage` 可能为 partial/unknown。未知资源、引擎函数、科技修改和目录外对象不从说明文案推断适用目标，不能声称完整客户端验证。回归位于 `tests/py/test_garrison_general224.py`、`tests/py/test_team_bonuses228.py` 与对应 unit tests；历史专例见清理前不可变的 [驻军说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/garrison-general224.md) 与[团队加成说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/team-bonuses228.md)。
+团队加成由 [`scripts/team_bonuses_build.py`](../scripts/team_bonuses_build.py) 读取相同固定 pin，生成 [`data/game/team_bonuses.json`](../data/game/team_bonuses.json)；`python3 scripts/team_bonuses_build.py --check` 做复现检查。代码与测试区分启用、研究和研究时间修改，不把启用科技说成已研究，也不合成队伍倍率。`engineVerifiedInPinnedBuild` 为 `false`；单位/类别目标与生产目录是静态关联，`targetCoverage` 可能为 partial/unknown。未知资源、引擎函数、科技修改和目录外对象不从说明文案推断适用目标，不能声称完整客户端验证。回归位于 `tests/py/test_garrison_general224.py`、`tests/py/test_team_bonuses228.py` 与对应 unit tests；历史专例见清理前不可变的 [驻军说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/garrison-general224.md) 与[团队加成说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/team-bonuses228.md)。
 
 ### 天梯静态快照解释边界
 
-提交的 [`src/data/ladder-arabia-p185872.json`](../src/data/ladder-arabia-p185872.json) 与 [`src/data/ladder-4v4-rm-e1200-1400-90d.json`](../src/data/ladder-4v4-rm-e1200-1400-90d.json) 是既有快照，不由 `data:update` 自动刷新。快照和旧说明中的时间/样本解释是历史记录，本次没有重新访问上游验证。
+提交的 [`data/game/ladder-arabia-p185872.json`](../data/game/ladder-arabia-p185872.json) 与 [`data/game/ladder-4v4-rm-e1200-1400-90d.json`](../data/game/ladder-4v4-rm-e1200-1400-90d.json) 是既有快照，不由 `data:update` 自动刷新。快照和旧说明中的时间/样本解释是历史记录，本次没有重新访问上游验证。
 
 清理前的快照说明记录了以下采样事实（本次未重新访问上游验证）：阿拉伯快照的开放 `temporalCoverage` 区间从 2026-09-22 开始，终点由来源 `modifieddate`（2026-11-01）推断，并非已知的真实采集截止；`fetchedAt` 也是 2026-11-01。4v4 快照覆盖 2026-08-02 至 2026-10-30 的 90 日窗口，抓取日期为 2026-11-01。两份快照的 `games` 统计单位均是玩家出现次数，不是完整对局数；4v4 月度趋势是自然月数据，不能替代这段 90 日窗口的趋势。来源版本注记不足以证明与目标游戏补丁对齐。保留这些边界，不从快照补造真实截止、完整对局数或补丁归属。
 

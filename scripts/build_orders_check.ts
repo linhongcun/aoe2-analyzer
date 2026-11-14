@@ -1,11 +1,11 @@
 /** 开局数据校验：npm run bo:check —— 结构 + 引用 id + 村民分配/时代顺序（与 tests/unit/buildOrders.test.ts 同一校验器） */
-import units from '../src/data/units.json';
-import techs from '../src/data/techs.json';
-import buildings from '../src/data/buildings.json';
-import civs from '../src/data/civs.json';
+import units from '../data/game/units.json';
+import techs from '../data/game/techs.json';
+import buildings from '../data/game/buildings.json';
+import civs from '../data/game/civs.json';
 import { buildOrders, refData } from '../src/data/buildOrders';
 import { checkSemantics, splitOf, validateBuildOrder } from '../src/domain/buildOrder';
-import eco from '../src/data/eco.json';
+import eco from '../data/game/eco.json';
 import { unknownCivEffects, type EcoData } from '../src/domain/buildSim';
 
 const ref = refData(units, techs, buildings, civs);

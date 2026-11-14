@@ -2,9 +2,9 @@
 // 这里放共用的组合与逐条检查（原样从 formatTime.test.ts 搬来，断言与循环一条不少）。
 // 不是 .test.ts，vitest 不会单独收集它。
 import { expect } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
-import civs from '../../src/data/civs.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
+import civs from '../../data/game/civs.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';

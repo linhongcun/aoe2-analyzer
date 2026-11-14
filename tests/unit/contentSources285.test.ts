@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { validateDocument } from '../../scripts/content-schema.mjs';
 
-const directory = 'src/content/';
+const directory = 'data/content/';
 const contentNames = [
   'campaigns',
   'castle-defense',
@@ -40,7 +40,7 @@ describe('#285 可见来源与隐藏证据具有明确边界', () => {
   it.each([
     { name: 'campaigns', path: ['sources', 'fe-campaigns', 'title'], value: 'SHA256: internal digest' },
     { name: 'castle-defense', path: ['sources', 0, 'scope'], value: 'main @ 075ead2' },
-    { name: 'contentCatalog', path: ['products', 0, 'sources', 0, 'note'], value: '参见 src/data/units.json' },
+    { name: 'contentCatalog', path: ['products', 0, 'sources', 0, 'note'], value: '参见 data/game/units.json' },
     { name: 'game-guide', path: ['sources', 'official-start', 'version'], value: 'repo @ abcdef12' },
     { name: 'glossary', path: [0, 'sources', 0, 'title'], value: 'CSV 行号记录' },
     { name: 'hotkeys', path: ['sources', 0, 'note'], value: '来自 scripts/keys.py' },

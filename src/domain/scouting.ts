@@ -1,4 +1,4 @@
-import rawContent from '../content/scouting.json';
+import rawContent from '../../data/content/scouting.json';
 import validateScouting from '../content/schema/compiled/scouting.mjs';
 import { readValidatedJson } from '../data/validatedJson';
 import { hasExactKeys as exactKeys, isClockText, isRecord as record, textCharacterProblem, textLength } from './validate';

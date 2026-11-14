@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import buildingsRaw from '../../src/data/buildings.json';
+import buildingsRaw from '../../data/game/buildings.json';
 import { unit, tech } from './helpers';
 import type { Building } from '../../src/domain/types';
 import { calculateSiege, decodeSiege, encodeSiege, SIEGE_MAX_COUNT } from '../../src/domain/siege';

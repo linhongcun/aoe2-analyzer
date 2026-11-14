@@ -2,7 +2,7 @@
 /**
  * issue 820 数据族索引静态检查。
  *
- * 只读：读取 scripts/data-families.json、src/data/*.json、scripts/data_sources.json，
+ * 只读：读取 data/sources/data-families.json、data/game/*.json、data/sources/data_sources.json，
  * 校验「文件 → 生成器 → pin → 复现命令 → 测试 → 审计状态」完整且无未登记文件。
  * 用法：node scripts/check-data-families.mjs [--root <dir>]
  */
@@ -33,7 +33,7 @@ function metaFacts(meta = {}) {
 
 function checkEntry(root, entry, pins, ciCommands, errors) {
   const label = entry.file;
-  if (typeof entry.file !== 'string' || !entry.file.startsWith('src/data/')) errors.push(`${label}: file 必须是 src/data/ 下的路径`);
+  if (typeof entry.file !== 'string' || !entry.file.startsWith('data/game/')) errors.push(`${label}: file 必须是 data/game/ 下的路径`);
   else if (!exists(root, entry.file)) errors.push(`${label}: 文件不存在`);
   if (typeof entry.generator !== 'string' && entry.generator !== null) errors.push(`${label}: generator 必须是路径或 null`);
   if (typeof entry.generator === 'string' && !exists(root, entry.generator)) errors.push(`${label}: generator 不存在：${entry.generator}`);
@@ -77,8 +77,8 @@ function checkEntry(root, entry, pins, ciCommands, errors) {
 
 export function checkDataFamilies(root = process.cwd()) {
   const errors = [];
-  const registry = readJson(root, 'scripts/data-families.json');
-  const pins = readJson(root, 'scripts/data_sources.json');
+  const registry = readJson(root, 'data/sources/data-families.json');
+  const pins = readJson(root, 'data/sources/data_sources.json');
   const ciCommands = new Set(DATA_CHECKS.map(([, command, args]) => [command, ...args].join(' ')));
   if (!Array.isArray(registry.families) || registry.families.length === 0) return { files: [], errors: ['families 不能为空'] };
   const seen = new Set();
@@ -91,11 +91,11 @@ export function checkDataFamilies(root = process.cwd()) {
     seen.add(entry.file);
     checkEntry(root, entry, pins, ciCommands, errors);
   }
-  if (!seen.has('src/data/garrison_hosts.json')) errors.push('缺少手工输入登记：src/data/garrison_hosts.json');
-  const dataDir = join(root, 'src/data');
+  if (!seen.has('data/game/garrison_hosts.json')) errors.push('缺少手工输入登记：data/game/garrison_hosts.json');
+  const dataDir = join(root, 'data/game');
   const files = readdirSync(dataDir).filter((file) => file.endsWith('.json'));
   for (const file of files) {
-    const rel = `src/data/${file}`;
+    const rel = `data/game/${file}`;
     const data = readJson(root, rel);
     const generatedBy = data?.meta?.generatedBy ?? data?.meta?.generated_by;
     if (generatedBy && !seen.has(rel)) errors.push(`${rel}: 带生成器但未登记（${generatedBy}）`);

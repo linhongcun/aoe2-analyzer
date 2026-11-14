@@ -74,7 +74,7 @@ interface CatalogMap {
   preview: { image: string; width: number; height: number };
 }
 
-const catalog = JSON.parse(readFileSync('src/data/mapCatalog.json', 'utf8')) as { maps: CatalogMap[] };
+const catalog = JSON.parse(readFileSync('data/game/mapCatalog.json', 'utf8')) as { maps: CatalogMap[] };
 const errors = new WeakMap<Page, string[]>();
 const choices = (page: Page) => page.getByRole('navigation', { name: '选择地图' }).locator('button[aria-controls="map-details"]');
 

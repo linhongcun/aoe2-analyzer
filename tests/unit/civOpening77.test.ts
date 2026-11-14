@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import units from '../../src/data/units.json';
+import units from '../../data/game/units.json';
 import { openingBuildIds, openingText } from '../../src/domain/civOpening';
 
 describe('文明推荐开局', () => {

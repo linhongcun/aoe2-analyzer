@@ -430,10 +430,14 @@ const sourcePresentationFiles = new Map([
   ['src/domain/gameGuide.ts', ['gameGuide']],
   ['scripts/check-source-presentation.mjs', ['builds', 'gameGuide']],
   ['scripts/check-source-presentation.d.mts', ['builds', 'gameGuide']],
-  ['src/content/schema/public-build-sources.json', ['builds']],
-  ['src/content/schema/public-game-guide-sources.json', ['gameGuide']],
+  ['data/schemas/public-build-sources.json', ['builds']],
+  ['data/schemas/public-game-guide-sources.json', ['gameGuide']],
 ]);
 const rawSourceSchemas = new Map([
+  ['data/schemas/data-build-order.json', 'builds'],
+  ['data/schemas/content-game-guide.json', 'gameGuide'],
+]);
+const legacyRawSourceSchemas = new Map([
   ['src/content/schema/data-build-order.json', 'builds'],
   ['src/content/schema/content-game-guide.json', 'gameGuide'],
 ]);
@@ -446,11 +450,16 @@ export function removesSourceBaseline(before, after) {
 
 /** Only citation subtrees may use the source UI plan; step/card structures stay conservative. */
 export function sourceSchemaOnly(path, before, after) {
-  if (!rawSourceSchemas.has(path) || typeof before !== 'string' || typeof after !== 'string') return false;
+  const schemaPath = rawSourceSchemas.has(path)
+    ? path
+    : legacyRawSourceSchemas.has(path)
+      ? path.replace('src/content/schema/', 'data/schemas/')
+      : null;
+  if (!schemaPath || typeof before !== 'string' || typeof after !== 'string') return false;
   const normalize = (text) => {
     const schema = JSON.parse(text);
     if (!schema || typeof schema !== 'object' || !schema.properties || !schema.$defs) throw new Error('Missing raw schema shape');
-    if (path === 'src/content/schema/data-build-order.json') {
+    if (schemaPath === 'data/schemas/data-build-order.json') {
       if (schema.allOf !== undefined) {
         const pattern = schema.properties.license?.anyOf?.[1]?.pattern;
         if (typeof pattern !== 'string') throw new Error('Unknown source condition');
@@ -701,15 +710,25 @@ export function planChanges(changes) {
       // Audited runtime loader, not a generation input. Keep full consumer validation.
       // Never clear data=true from another changed input. Unknown data files stay conservative.
       full = true;
-    } else if (path === 'src/data/page-metadata.json') {
+    } else if (path === 'data/game/page-metadata.json') {
       // Exact generated route/share metadata only; game data paths and mixed changes remain full + data.
       full = true;
-    } else if (path === '.npmrc' || path.startsWith('src/data/') || path.startsWith('public/img/') || path.startsWith('docs/PATCH-NOTES/')) {
+    } else if (path === 'src/content/schema/data-build-order.json' || path === 'src/content/schema/content-game-guide.json') {
+      // Frozen CI snapshots retain these old paths and their original full/data semantics.
+      if (sourceSchemaOnly(path, before, after)) features.add(legacyRawSourceSchemas.get(path));
+      else full = true;
+    } else if (
+      path === '.npmrc' ||
+      (path.startsWith('data/') && !path.startsWith('data/schemas/')) ||
+      path.startsWith('src/data/') ||
+      path.startsWith('docs/PATCH-NOTES/') ||
+      path.startsWith('public/img/')
+    ) {
       full = data = true;
     } else if (path.startsWith('.github/') || maintenanceFiles.has(path) || /^tests\/unit\/(?:release[^/]*|ci[A-Z0-9][^/]*)\.test\.ts$/.test(path)) {
       // The policy deciding validation cannot certify itself with its former reduced profile.
       full = true;
-    } else if ((path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
+    } else if (path.startsWith('docs/') || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
       // Ordinary documentation does not change product logic or generated data.
     } else if (shellFiles.has(path)) {
       full = true;
@@ -720,7 +739,9 @@ export function planChanges(changes) {
       for (const feature of sourcePresentationFiles.get(path)) features.add(feature);
     } else if (rawSourceSchemas.has(path)) {
       if (sourceSchemaOnly(path, before, after)) features.add(rawSourceSchemas.get(path));
-      else full = true;
+      else full = data = true;
+    } else if (path.startsWith('data/schemas/')) {
+      full = data = true;
     } else if (path === 'scripts/content-baseline.mjs') {
       if (removesSourceBaseline(before, after)) {
         features.add('builds');
@@ -760,8 +781,8 @@ export function planChanges(changes) {
     } else if (path === 'src/domain/patches.ts') {
       features.add('patches');
     } else if (
-      path === 'src/features/civs/backgrounds.source.json' ||
-      path === 'src/features/civs/backgrounds.json' ||
+      path === 'data/reference/civs/backgrounds.source.json' ||
+      path === 'data/reference/civs/backgrounds.json' ||
       path === 'src/features/civs/import_backgrounds.py' ||
       path.startsWith('src/features/civs/assets/backgrounds/')
     ) {

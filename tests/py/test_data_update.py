@@ -3,6 +3,7 @@ import sys, unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+FIXTURES = HERE.parents[1] / 'data/fixtures/py/fixtures'
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
 from data_diff import detect_patch, load_dir, summarize  # noqa: E402
 from dat_source import check_markers, markers_of  # noqa: E402
@@ -69,7 +70,7 @@ class DetectPatch(unittest.TestCase):
 
 class Summarize(unittest.TestCase):
     def setUp(self):
-        self.md = summarize(load_dir(HERE / 'fixtures/old'), load_dir(HERE / 'fixtures/new'), 'T')
+        self.md = summarize(load_dir(FIXTURES / 'old'), load_dir(FIXTURES / 'new'), 'T')
 
     def test_units(self):
         self.assertIn('## 单位（新增 1 / 移除 0 / 变更 1）', self.md)
@@ -84,7 +85,7 @@ class Summarize(unittest.TestCase):
         self.assertIn('#382 `C-Bonus, +1 Archer range` 数值变化', self.md)
 
     def test_no_change(self):
-        d = load_dir(HERE / 'fixtures/new')
+        d = load_dir(FIXTURES / 'new')
         self.assertIn('无数据变化', summarize(d, d))
 
 

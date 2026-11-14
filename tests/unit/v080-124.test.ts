@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import units from '../../src/data/units.json';
+import units from '../../data/game/units.json';
 // 草案：#124 需要的纯函数（模块尚不存在，实现时由 Linus 落地；名字可改）
 import { substituteFor } from '../../src/features/duel/logic/substitute';
 

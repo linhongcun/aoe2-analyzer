@@ -558,12 +558,12 @@
       "snapshots": {
         "zh-hans": {
           "url": "https://data.aoe2companion.com/api/maps?language=zh-hans",
-          "path": "scripts/map_catalog_source/zh-hans.json",
+          "path": "data/sources/map_catalog_source/zh-hans.json",
           "sha256": "bafd82f835582897369bef9b62c041de6b604a1a407a21662dfeb23b43712bb5"
         },
         "en": {
           "url": "https://data.aoe2companion.com/api/maps?language=en",
-          "path": "scripts/map_catalog_source/en.json",
+          "path": "data/sources/map_catalog_source/en.json",
           "sha256": "1a7b644c19315b7af64e277d9a0e8ed650da508e8c541b42ade5b93c028fc107"
         }
       }

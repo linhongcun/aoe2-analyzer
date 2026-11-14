@@ -1,8 +1,8 @@
-# 从 aoe2techtree 的游戏文本生成 src/data/civs.json；主观评分/开局来自 scripts/civ_ratings.json
+# 从 aoe2techtree 的游戏文本生成 data/game/civs.json；主观评分/开局来自 data/sources/civ_ratings.json
 import json,re,os
 T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'))
-R=json.load(open('scripts/civ_ratings.json'))
-CORRECTIONS=json.load(open('scripts/civ_text_corrections.json'))
+R=json.load(open('data/sources/civ_ratings.json'))
+CORRECTIONS=json.load(open('data/sources/civ_text_corrections.json'))
 def strip(s): return re.sub(r'<[^>]+>','',s).strip()
 def parse(h):
     h=h.replace('<br>\n','\n').replace('<br>','\n');p=re.split(r'<b>[^<]*</b>',h)
@@ -38,4 +38,4 @@ for k,v in d['civs'].items():
                 text=name+' ('+strip(help_text).removesuffix('。')+')'
         return text+'｜'+ez[2][i].split(' (')[0]
     out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=zz[3],bonEn=ez[3],tb=zz[4],tbEn=ez[4],s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
-json.dump(out,open('src/data/civs.json','w'),ensure_ascii=False);print('civs',len(out))
+json.dump(out,open('data/game/civs.json','w'),ensure_ascii=False);print('civs',len(out))

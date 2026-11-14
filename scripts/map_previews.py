@@ -15,7 +15,7 @@ import sys
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES_FILE = ROOT / 'scripts/data_sources.json'
+SOURCES_FILE = ROOT / 'data/sources/data_sources.json'
 
 
 def verify_source(data, expected_sha256, name):
@@ -75,7 +75,7 @@ def check_output(path, generated, command='python3 scripts/map_previews.py'):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--check', action='store_true', help='核对地图预览及 src/data/mapPreviews.json，不写入生成文件')
+    parser.add_argument('--check', action='store_true', help='核对地图预览及 data/game/mapPreviews.json，不写入生成文件')
     args = parser.parse_args()
     source = json.loads(SOURCES_FILE.read_text(encoding='utf-8'))['assetSources']['mapPreviews']
     cache = ROOT / 'scripts/.cache' / f'map-previews-{source["commit"]}'
@@ -84,7 +84,7 @@ def main():
         jobs = [(source, name, asset, cache, directory, args.check) for name, asset in source['assets'].items()]
         with ThreadPoolExecutor(max_workers=8) as executor:
             manifest = dict(executor.map(generate_preview, jobs))
-        manifest_path = ROOT / 'src/data/mapPreviews.json'
+        manifest_path = ROOT / 'data/game/mapPreviews.json'
         manifest_data = (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode()
         if args.check:
             check_output(manifest_path, manifest_data)

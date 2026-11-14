@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/buildings.json';
+import raw from '../../data/game/buildings.json';
 import { civBonuses, bonusExample } from '../../src/domain/civBonus';
 import { buildingType } from '../../src/domain/buildings';
 import { formatHp } from '../../src/domain/hpFormat';
 import { fmtStat } from '../../src/shared/utils/simFormat';
 import { simulate } from '../../src/domain/simulator';
 import type { Building, Civ } from '../../src/domain/types';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import { ctx, unit, units } from './helpers';
 
 const civs = civsRaw as unknown as Civ[];

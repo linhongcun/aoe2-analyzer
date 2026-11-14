@@ -202,7 +202,7 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 
 ### JSON 结构与公开来源（#285）
 
-`npm run content:check` 从文件系统发现 `src/content`、`src/data` 中的全部 JSON（排除 schema 目录），按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；#442 清理完全部 22 处旧来源展示后，CI 使用 `--strict`，当前 46 份原始输入必须零告警、零错误。
+`npm run content:check` 从文件系统发现 `data/content`、`data/game` 中的全部 JSON，按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；#442 清理完全部 22 处旧来源展示后，CI 使用 `--strict`，当前 52 份原始输入必须零告警、零错误。
 
 `scripts/content-baseline.mjs` 现在仅导出空冻结清单，不能再新增迁移豁免；兼容的 `--ratchet` 与严格模式具有相同阻断效果。开局与入门的原始来源证据保留，页面读取共享公开投影；独立 `node scripts/check-source-presentation.mjs` 再验证这 9 份输入对应的公开 DTO，拒绝内部定位、伪造或不一致的 pin、未知字段和坏链接。原编译器、登记表、公开格式 policy 与五个运行时边界保持不变。历史边界与初始迁移记录见[来源规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/source-presentation-442.md)和[#285 原始规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue285-json-validation.md)。
 

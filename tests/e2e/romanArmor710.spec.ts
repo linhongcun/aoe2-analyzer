@@ -1,8 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-const units: { id: number; zh: string }[] = JSON.parse(readFileSync('src/data/units.json', 'utf8'));
-const techs: { id: number; zh: string }[] = JSON.parse(readFileSync('src/data/techs.json', 'utf8'));
+const units: { id: number; zh: string }[] = JSON.parse(readFileSync('data/game/units.json', 'utf8'));
+const techs: { id: number; zh: string }[] = JSON.parse(readFileSync('data/game/techs.json', 'utf8'));
 const region = (page: import('@playwright/test').Page) => page.getByRole('region', { name: '步兵护甲科技对照', exact: true });
 async function numbersStay(target: import('@playwright/test').Locator) {
   const tokens = await target.evaluate((root) => {

@@ -1,7 +1,7 @@
 /** #197 Slavic steady farm regression; exact first-red draft is archived with its evidence. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';

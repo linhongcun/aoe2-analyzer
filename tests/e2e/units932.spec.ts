@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 const militia = units.find((unit) => unit.id === 74)!;
 const ram = units.find((unit) => unit.id === 1258)!;

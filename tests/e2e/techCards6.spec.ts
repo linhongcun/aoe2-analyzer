@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import techs from '../../src/data/techs.json' with { type: 'json' };
+import techs from '../../data/game/techs.json' with { type: 'json' };
 
 const tech = (en: string) => techs.find((entry) => entry.en === en)!;
 

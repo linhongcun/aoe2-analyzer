@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""基础数值对账：src/data/units.json / buildings.json（aoe2techtree）vs 原版 .dat（dat_source，185872）。
+"""基础数值对账：data/game/units.json / buildings.json（aoe2techtree）vs 原版 .dat（dat_source，185872）。
 用法：python3 scripts/stats_crosscheck.py [--json out.json]   不修改任何数据文件。
 双射程（#22）：带远程蓄力攻击的单位（火焰弓箭手、楼船…），.dat 的 Range 是对建筑射程，
 对单位射程为 DisplayedRange（= Range − 蓄力射程差）。站点 rng 比对单位射程，rng + rngBd（差值，#38）比对建筑射程。
-允许差异清单：scripts/stats_allowlist.json（每条须写 reason）；清单外差异 → 退出码 1。"""
+允许差异清单：data/sources/stats_allowlist.json（每条须写 reason）；清单外差异 → 退出码 1。"""
 import json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -23,7 +23,7 @@ def building_range(u):
     return u['Range']
 
 
-def load_allowlist(path=ROOT / 'scripts/stats_allowlist.json'):
+def load_allowlist(path=ROOT / 'data/sources/stats_allowlist.json'):
     if not path.exists(): return {}
     items = json.load(open(path))
     for it in items:
@@ -42,8 +42,8 @@ def dat_stats(u, main):
 
 def main(units=None, blds=None, d=None):
     d = d or load(); U = d['Civs'][1]['Units']
-    units = units if units is not None else json.load(open(ROOT / 'src/data/units.json'))
-    blds = blds if blds is not None else json.load(open(ROOT / 'src/data/buildings.json'))
+    units = units if units is not None else json.load(open(ROOT / 'data/game/units.json'))
+    blds = blds if blds is not None else json.load(open(ROOT / 'data/game/buildings.json'))
     diffs = []
     for o, isb in [(x, False) for x in units] + [(x, True) for x in blds]:
         u = U[o['id']] if o['id'] < len(U) else None

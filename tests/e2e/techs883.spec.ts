@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import civs from '../../src/data/civs.json' with { type: 'json' };
-import releases from '../../src/data/catalog-introductions.json' with { type: 'json' };
-import techs from '../../src/data/techs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
+import releases from '../../data/game/catalog-introductions.json' with { type: 'json' };
+import techs from '../../data/game/techs.json' with { type: 'json' };
 
 const total = techs.length;
 const unique = techs.filter((t) => t.type === 'UniqueTech').length;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { civs } from '../../src/data';
-import raw81058 from '../../src/data/patches/81058.json';
+import raw81058 from '../../data/game/patches/81058.json';
 import { historyFor, resolveHistoryIdentity, type PatchArchive } from '../../src/domain/patchHistory';
 import { civSelection, filterPatch, groupTreeChanges, parseObjectParam, partitionByStatedCiv, searchObjects, type PatchEntry } from '../../src/domain/patches';
 

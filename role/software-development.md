@@ -26,13 +26,13 @@ npm run lint:layers -- --strict
 
 不带 `--strict` 时脚本只报告，退出码仍是 0。默认 CI 的 `static` 阶段带 `--strict`。
 
-数据流可以收成一条：固定上游 → `scripts/` 生成并提交 `src/data/*.json` 与 `public/img/` → 加载器做索引 → `domain/` 纯函数计算 → `features/` 和 `shared/ui` 渲染。计算放 `src/domain/`，并在 `tests/unit/` 配 Vitest。页面状态能放进 URL 的，就放进 URL。
+数据流可以收成一条：固定上游 → `scripts/` 生成并提交 `data/game/*.json` 与 `public/img/` → `src/data/` 加载器做索引 → `domain/` 纯函数计算 → `features/` 和 `shared/ui` 渲染。计算放 `src/domain/`，并在 `tests/unit/` 配 Vitest。页面状态能放进 URL 的，就放进 URL。
 
 维护约定（写在 CONTRIBUTING，不是编译器规则）：站点由维护者自己使用，旧布局、旧入口、旧链接协议可以有理由换掉，不为旧行为再加兼容层。需求、产品范围、完成态设计图、授权、代码和上线证据始终记录在同一 Issue 正文；每次体验设计交付都必须有覆盖主要界面和重要状态、可直接查看的正文设计图，且由产品确认后才能转软件开发。只有纯 docs/data 且无 UI 时可记录 UX 不适用。设计通过和阶段标签都不等于可以改代码；转入软件开发前必须有针对该事项的维护者实现授权。持续发布授权也不自动认领所有开放 Issue。详见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
 
 ## 2. 游戏数据版本和可核来源
 
-当前补丁钉在 `scripts/data_sources.json`：
+当前补丁钉在 `data/sources/data_sources.json`：
 
 | 项             | 当前值                                                                                               |
 | -------------- | ---------------------------------------------------------------------------------------------------- |
@@ -44,7 +44,7 @@ npm run lint:layers -- --strict
 
 页头「数据版本」链到 `#/about-data`。页脚同时显示 `package.json` 版本和构建短 SHA。短 SHA 由 `vite.config.ts` 取 `git rev-parse HEAD` 的前 7 位；取不到时是 `dev`。
 
-生成文件在仓库里，但只由脚本改。不要手改 `src/data/*.json` 和 `public/img/`。`.dat` 与 `scripts/.cache/` 不提交。
+生成文件在仓库里，但只由脚本改。不要手改 `data/game/*.json` 和 `public/img/`。`.dat` 与 `scripts/.cache/` 不提交。
 
 | 要更新什么                                           | 命令                   | 脚本                                                         |
 | ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------ |
@@ -59,7 +59,7 @@ npm run lint:layers -- --strict
 
 2026-11-13 数过当前 JSON 长度：文明 56、单位 248、科技 199、建筑 38。科技和建筑与 README 的个数一致。单位 JSON 是 248 条；README 仍写 163。首页单位数用 `src/domain/family.ts` 的 `unitCount` 做家族折叠，和 JSON 条数不是同一个数。写界面或文档时现算，不要抄 README 的 163。`data_sources.json` 里 `.dat` 标记 `civs: 63` 是补丁标记，也不是页面上的 56 个文明。
 
-主观评分在 `scripts/civ_ratings.json`。社区攻略、别名只收 2020 年以后的；没核对的标「未核实」。
+主观评分在 `data/sources/civ_ratings.json`。社区攻略、别名只收 2020 年以后的；没核对的标「未核实」。
 
 ## 3. 训练价、研究费、适用和不完整结果
 

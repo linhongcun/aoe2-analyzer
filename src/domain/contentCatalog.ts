@@ -1,4 +1,4 @@
-import raw from '../content/contentCatalog.json';
+import raw from '../../data/content/contentCatalog.json';
 
 export const CONTENT_MODES = {
   all: '全部模式',

@@ -234,14 +234,14 @@ it('#652 重新加载受支持的generic数值能改变封建侦骑属性', asyn
     .fx.find((e) => e.s === 'spd')!;
   effect.v += 0.1;
   vi.resetModules();
-  vi.doMock('../../src/data/effects.json', () => ({ default: changed }));
+  vi.doMock('../../data/game/effects.json', () => ({ default: changed }));
   try {
     const rebuilt = await import('../../src/domain/ageRoutes');
     const r = rebuilt.ageRoute(ctx, 'Huns', 'pocket', DEFAULT_ROUTE) as AgeRoute;
     expect(r.ok).toBe(true);
     expect(r.feudal.stats.spd).toBeCloseTo(row('Huns', 'pocket').feudal.stats.spd + 0.1);
   } finally {
-    vi.doUnmock('../../src/data/effects.json');
+    vi.doUnmock('../../data/game/effects.json');
     vi.resetModules();
   }
 });

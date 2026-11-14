@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 import { ECO, ECO_PATCH_BUILD } from '../../src/data/eco';
 
 describe('#796 eco 类型化入口', () => {

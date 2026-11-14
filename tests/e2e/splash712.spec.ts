@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-const buildings: { id: number; zh: string }[] = JSON.parse(readFileSync('src/data/buildings.json', 'utf8'));
+const buildings: { id: number; zh: string }[] = JSON.parse(readFileSync('data/game/buildings.json', 'utf8'));
 const region = (page: import('@playwright/test').Page) => page.getByRole('region', { name: '溅射与最小射程', exact: true });
 async function numbersStay(scope: Locator) {
   const tokens = await scope.evaluate((root) => {

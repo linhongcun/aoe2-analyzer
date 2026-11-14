@@ -3,8 +3,8 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const dataBuild = JSON.parse(readFileSync(path.join(root, 'scripts/data_sources.json'), 'utf8')).patch.build;
-const read = (name) => JSON.parse(readFileSync(path.join(root, 'src/data', name + '.json'), 'utf8'));
+const dataBuild = JSON.parse(readFileSync(path.join(root, 'data/sources/data_sources.json'), 'utf8')).patch.build;
+const read = (name) => JSON.parse(readFileSync(path.join(root, 'data/game', name + '.json'), 'utf8'));
 const pages = {};
 const add = (route, title, description, extra = {}) => (pages[route] = { title, description, ...extra });
 
@@ -31,7 +31,7 @@ function staticPagesFromRegistry() {
   return found;
 }
 for (const [route, [title, description]] of Object.entries(staticPagesFromRegistry())) add(route, title, description);
-for (const term of JSON.parse(readFileSync(path.join(root, 'src/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
+for (const term of JSON.parse(readFileSync(path.join(root, 'data/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
 for (const [file, type] of [
   ['units', 'unit'],
   ['techs', 'tech'],
@@ -83,7 +83,7 @@ for (const c of read('civs')) {
   c.bon.forEach((text, i) => add(`/civ/${c.en}/bonus/${i}`, `${c.zh}加成 ${i + 1}`, text));
   add(`/civ/${c.en}/bonus/team`, `${c.zh}团队加成`, c.tb);
 }
-for (const f of readdirSync(path.join(root, 'src/data/build-orders')).filter((f) => f.endsWith('.json'))) {
+for (const f of readdirSync(path.join(root, 'data/game/build-orders')).filter((f) => f.endsWith('.json'))) {
   const b = read('build-orders/' + f.slice(0, -5));
   add(`/builds/${b.id}`, b.name.zh, b.summary, {
     route: `/builds?bo=${encodeURIComponent(b.id)}`,
@@ -97,7 +97,7 @@ for (const f of readdirSync(path.join(root, 'src/data/build-orders')).filter((f)
   });
 }
 try {
-  for (const f of readdirSync(path.join(root, 'src/data/patches')).filter((f) => f.endsWith('.json'))) {
+  for (const f of readdirSync(path.join(root, 'data/game/patches')).filter((f) => f.endsWith('.json'))) {
     const p = read('patches/' + f.slice(0, -5));
     add(`/patches/${p.id}`, `DE Update ${p.id}`, `查看 ${p.id} 的平衡调整、新内容和文明改动。`);
     for (const target of p.archivedTargets ?? []) {
@@ -118,7 +118,7 @@ try {
 } catch (error) {
   if (error.code !== 'ENOENT') throw error;
 }
-const target = path.join(root, 'src/data/page-metadata.json');
+const target = path.join(root, 'data/game/page-metadata.json');
 // 已有键保持原顺序，避免只因登记表遍历顺序变化而重写整份 JSON。
 const previous = JSON.parse(readFileSync(target, 'utf8'));
 const ordered = {};

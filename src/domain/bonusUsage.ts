@@ -31,7 +31,7 @@ import type { CivBonusEnt } from './civBonus';
 import { bonusDiscountCounted } from './costPolicy';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
-import relicRaw from '../data/relic_income.json';
+import relicRaw from '../../data/game/relic_income.json';
 import { simSupport } from './simSupport';
 import { jurchenContext, JURCHEN_DECAY_NOTE, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { WEI_SPAWN_NOTE } from './weiEconomy';

@@ -8,7 +8,7 @@
 
 首页与导航的四个任务组由 [SECTION_GROUPS](../src/shared/nav/pageRegistry.ts) 定义：**新手入门**、**对局计划**、**经济计算**和**资料**。前者帮助理解游戏并开始练习；计划组支持开局、侦察、搭配、团队协作和复盘；经济组比较资源、供给与投入收益；资料组提供文明、单位、科技和建筑目录。
 
-主要代码边界：应用与路由在 [src/app](../src/app/)；各页面在 [src/features](../src/features/)；共享组件与样式在 [src/shared](../src/shared/)；纯领域规则在 [src/domain](../src/domain/)；运行时数据入口在 [src/data](../src/data/)；生成流程在 [scripts](../scripts/)。
+主要代码边界：应用与路由在 [src/app](../src/app/)；各页面在 [src/features](../src/features/)；共享组件与样式在 [src/shared](../src/shared/)；纯领域规则在 [src/domain](../src/domain/)；运行时数据适配器在 [src/data](../src/data/)，跟踪的数据载荷集中在 [data](../data/README.md)；生成流程在 [scripts](../scripts/)。
 
 ## 构建与部署
 
@@ -46,7 +46,7 @@ flowchart LR
 
 可执行边界由 [scripts/check-layers.mjs](../scripts/check-layers.mjs) 检查：功能页不能跨引用其它功能页；shared 层不能依赖 features 或 app；domain 不依赖 React、页面、应用壳或 shared/ui。纯领域函数易于隔离验证，避免 UI 状态和游戏计算相互渗透。
 
-核心 JSON 的直接读取只允许通过检查器的 `LOADERS` 集合中的七个文件：
+核心 `data/game/{civs,units,techs,buildings,trees,eco,effects}.json` 的直接读取只允许通过检查器 `LOADERS` 集合中的七个 TypeScript 适配器：
 [src/data/index.ts](../src/data/index.ts)、
 [src/data/raw/civs.ts](../src/data/raw/civs.ts)、
 [src/data/raw/units.ts](../src/data/raw/units.ts)、
@@ -66,7 +66,7 @@ flowchart LR
 
 文明目录随主包导入；[src/data/index.ts](../src/data/index.ts) 的 `loadCore()` 懒加载单位、科技、建筑及介绍数据并建立索引，失败时清除缓存 Promise 允许重试；科技树另行懒加载。raw 层的登记入口原样转出数据，带派生字段的数据由类型化入口构造。
 
-[scripts/data_sources.json](../scripts/data_sources.json) 固定上游数据身份；[DATA-UPDATE.md](DATA-UPDATE.md) 说明更新流程。[scripts/build_data.py](../scripts/build_data.py)、[scripts/effects_build.py](../scripts/effects_build.py)、[scripts/eco_build.py](../scripts/eco_build.py) 等脚本生成站点数据。[src/data/effects.json](../src/data/effects.json) 是从 DAT 提取的效果数据；[src/domain/effects.ts](../src/domain/effects.ts) 将 DAT 结果与显式手工回退表合成运行时注册。`TECH_EFFECTS` 是该合成层的登记结果，不是生成文件：不要把它当作来源编辑；DAT 提取见 [scripts/effects_build.py](../scripts/effects_build.py)，手工回退见 [effects.manual.ts](../src/domain/effects.manual.ts) 与 [buildingEffects.manual.ts](../src/domain/buildingEffects.manual.ts)。固定来源只证明输入身份，不意味着所有游戏机制均已建模或验证。开局模拟的复现方式与未知边界见[来源说明](data/BUILD-SIM-SOURCES.md)。
+[data/sources/data_sources.json](../data/sources/data_sources.json) 固定上游数据身份；[DATA-UPDATE.md](DATA-UPDATE.md) 说明更新流程。[scripts/build_data.py](../scripts/build_data.py)、[scripts/effects_build.py](../scripts/effects_build.py)、[scripts/eco_build.py](../scripts/eco_build.py) 等脚本生成站点数据。[data/game/effects.json](../data/game/effects.json) 是从 DAT 提取的效果数据；[src/domain/effects.ts](../src/domain/effects.ts) 将 DAT 结果与显式手工回退表合成运行时注册。`TECH_EFFECTS` 是该合成层的登记结果，不是生成文件：不要把它当作来源编辑；DAT 提取见 [scripts/effects_build.py](../scripts/effects_build.py)，手工回退见 [effects.manual.ts](../src/domain/effects.manual.ts) 与 [buildingEffects.manual.ts](../src/domain/buildingEffects.manual.ts)。固定来源只证明输入身份，不意味着所有游戏机制均已建模或验证。开局模拟的复现方式与未知边界见[来源说明](BUILD-SIM-SOURCES.md)。
 
 可分享的页面状态写入功能自己的 hash 路由查询参数；仅用户设备偏好或适合本地恢复的草稿使用 `localStorage`。主题偏好保存在本地，支持 `light`、`dark`、`system`，并由 [src/app/theme](../src/app/theme/) 按系统偏好解析。各功能定义自己的状态恢复语义，不假设有全局持久化状态库。
 

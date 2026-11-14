@@ -3,4 +3,4 @@
  * 核心 JSON 只能经 LOADERS 里的文件读取：同步读原始数据从 src/data/raw/ 取；
  * 异步拆包与带派生字段（dlc 等）的数据走 src/data/index.ts。
  */
-export { default } from '../buildings.json';
+export { default } from '../../../data/game/buildings.json';

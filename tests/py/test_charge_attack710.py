@@ -16,7 +16,7 @@ class Charge710(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.raw = m.raw_data()
-        cls.catalogs = [json.loads((ROOT / ('src/data/' + name + '.json')).read_text()) for name in ('units', 'trees', 'techs')]
+        cls.catalogs = [json.loads((ROOT / ('data/game/' + name + '.json')).read_text()) for name in ('units', 'trees', 'techs')]
 
     def build(self, raw=None, catalogs=None):
         return m.build(self.raw if raw is None else raw, *(self.catalogs if catalogs is None else catalogs))
@@ -25,7 +25,7 @@ class Charge710(unittest.TestCase):
         snapshot = copy.deepcopy((self.raw, self.catalogs))
         result = self.build()
         self.assertEqual((self.raw, self.catalogs), snapshot)
-        self.assertEqual(m.render(result), (ROOT / 'src/data/charge_attack.json').read_text())
+        self.assertEqual(m.render(result), (ROOT / 'data/game/charge_attack.json').read_text())
         self.assertEqual(result['rawTargets'], [38,74,75,77,283,473,567,569,1790,1792,1793,1813])
         self.assertEqual(result['legalTargets'], [38,74,75,77,283,1790,1792,1793])
         self.assertEqual([e['unitId'] for e in result['examples']], [283,1792,1793])

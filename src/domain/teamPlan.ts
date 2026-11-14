@@ -1,5 +1,5 @@
 /** Issue 243: explicit shared agreements, never a team score or automatic readiness claim. */
-import content from '../content/team-plan.json';
+import content from '../../data/content/team-plan.json';
 import { DATA_SOURCES } from '../data/sources';
 import { GARRISON_TECH_DATA } from './garrisonTechs';
 import { civs } from '../data';

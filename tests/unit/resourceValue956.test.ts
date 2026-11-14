@@ -88,9 +88,9 @@ const VERIFIED_185872_COSTS = {
 } as const;
 
 function loadEntries() {
-  return readdirSync('src/data/patches')
+  return readdirSync('data/game/patches')
     .filter((name) => name.endsWith('.json'))
-    .flatMap((name) => (JSON.parse(readFileSync(`src/data/patches/${name}`, 'utf8')) as { entries: PatchEntry[] }).entries);
+    .flatMap((name) => (JSON.parse(readFileSync(`data/game/patches/${name}`, 'utf8')) as { entries: PatchEntry[] }).entries);
 }
 
 function entry(id: string) {

@@ -23,7 +23,7 @@
 帝国时代 II 决定版（AoE2 DE）的中文资料站和计算工具：文明、单位、科技、建筑、科技树、文明加成百科，加上文明对比、对局助手、科技模拟器、单位 PK 等工具。
 
 - 线上：https://linhongcun.github.io/aoe2-analyzer/（GitHub Pages，push 到 `main` 才部署）
-- 数据版本：DE Update 188329，所有上游固定版本见 `scripts/data_sources.json`
+- 数据版本：DE Update 188329，所有上游固定版本见 `data/sources/data_sources.json`
 - 界面文字全部是简体中文
 
 ## 技术栈
@@ -37,7 +37,8 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 | 路径                   | 内容                                                                                                                                                                                                                                                                                                             |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/app/`             | 路由 `routes.tsx`、布局 `Layout.tsx`（页眉/导航/页脚）、`nav/`                                                                                                                                                                                                                                                   |
-| `src/data/`            | 数据层：生成的 `civs.json` `units.json` `techs.json` `buildings.json` `trees.json` `effects.json` `eco.json` `search-py.json`（**生成文件，不要手改**）；`index.ts`（异步入口）`hooks.ts` 读取接口，`raw/*.ts`（核心 JSON 唯一的同步入口）；`aliases.ts` `confusables.ts` 手工别名；`build-orders/*.json` 开局库 |
+| `data/`                | 跟踪的数据载荷；按游戏数据、内容、schema、参考、证据、来源、测试 fixture、报告和补丁说明分类，归属与校验入口见 [`data/README.md`](data/README.md) |
+| `src/data/`            | TypeScript 数据适配器和别名代码：`index.ts`（异步入口）、`hooks.ts`、`raw/*.ts`（核心 JSON 唯一同步入口）、`aliases.ts`、`confusables.ts`；JSON 载荷位于 `data/` |
 | `src/domain/`          | 领域逻辑，纯函数、不依赖 React，必须配 Vitest 单测（`duel.ts` 战斗、`realCost.ts` 等采集时间、`search.ts` 搜索、`simulator.ts`、`buildSim.ts` 等）                                                                                                                                                               |
 | `src/features/<模块>/` | 各页面：`civs` `units` `techs` `buildings` `tree` `bonuses` `dlc` `compare` `matchup` `simulator` `duel` `builds` `search` `home` `about` `feedback`                                                                                                                                                             |
 | `src/shared/ui/`       | 通用组件；图标登记在 `Icon.tsx` 的 `ICONS` 表                                                                                                                                                                                                                                                                    |
@@ -49,15 +50,15 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 | `docs/`                | 当前架构、数据更新与来源、测试/发布流程、设计原则和维护规则；产品规格留在原 Issue                                                                                                                                                                                                                                |
 | `public/img/`          | 游戏图标（生成）                                                                                                                                                                                                                                                                                                 |
 
-分层边界（#281，CI 用 `npm run lint:layers -- --strict` 检查，有任何违规即失败；不带 `--strict` 只报告、总以 0 退出）：`features/X` 不 import `features/Y`（要共享的挪到 `shared/` 或 `domain/`）；`shared/` 不 import `features/`、`app/`；`domain/` 不 import react、`features/`、`app/`、`shared/ui`；核心数据 JSON `src/data/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由 `scripts/check-layers.mjs` 的 `LOADERS` 里逐个登记的 7 个文件直接 import，src 下其他任何文件（含 `shared/`、`app/`、`data/` 其他文件）都要经它们读取：`src/data/index.ts`（异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包）、`src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts`（唯一的同步入口，原样转出）、`src/domain/datEffects.ts`（特例：effects.json 的类型与转换）。新增入口要登记进 `LOADERS` 并同步更新本段和 `docs/ARCHITECTURE.md`。`import type` 和动态 `import()` 同样计入。
+分层边界（#281，CI 用 `npm run lint:layers -- --strict` 检查，有任何违规即失败；不带 `--strict` 只报告、总以 0 退出）：`features/X` 不 import `features/Y`（要共享的挪到 `shared/` 或 `domain/`）；`shared/` 不 import `features/`、`app/`；`domain/` 不 import react、`features/`、`app/`、`shared/ui`；核心数据 JSON `data/game/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由 `scripts/check-layers.mjs` 的 `LOADERS` 里逐个登记的 7 个文件直接 import，src 下其他任何文件（含 `shared/`、`app/`、`data/` 其他文件）都要经它们读取：`src/data/index.ts`（异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包）、`src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts`（唯一的同步入口，原样转出）、`src/domain/datEffects.ts`（特例：effects.json 的类型与转换）。新增入口要登记进 `LOADERS` 并同步更新本段和 `docs/ARCHITECTURE.md`。`import type` 和动态 `import()` 同样计入。
 
 ## 数据来源规则（最重要）
 
-- **游戏数字只从数据里读，不要凭记忆写。** 来源：`src/data/civs.json` 等生成文件（派生自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) 固定提交）和由 DE 原版 `.dat` 派生的 `effects.json` / `eco.json`。issue、设计稿、测试里写的数字和数据不一致时，以数据为准，并在 issue 里说明。
-- 生成的 `src/data/*.json` 和 `public/img/*` **是提交在仓库里的**，但只能由脚本生成（`npm run data`、`npm run effects`、`npm run eco`），不要手改；CI 会校验 `effects.json`、`eco.json` 可由固定 `.dat` 原样复现。
+- **游戏数字只从数据里读，不要凭记忆写。** 来源：`data/game/civs.json` 等生成文件（派生自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) 固定提交）和由 DE 原版 `.dat` 派生的 `effects.json` / `eco.json`。issue、设计稿、测试里写的数字和数据不一致时，以数据为准，并在 issue 里说明。
+- 生成的 `data/game/*.json` 和 `public/img/*` **是提交在仓库里的**，但只能由脚本生成（`npm run data`、`npm run effects`、`npm run eco`），不要手改；CI 会校验 `effects.json`、`eco.json` 可由固定 `.dat` 原样复现。
 - **`.dat`（© Microsoft）和下载缓存 `scripts/.cache/` 绝不提交**（已 gitignore），只在构建时下载。
-- 开局模拟来源证据使用 `scripts/build_sim_source.py` 的有界摘要，完整中间输出留在忽略缓存；`*197*source*.json` 每份限 64 KiB，历史原件仅按固定指纹保留，不追加豁免。命令、固定来源与审阅边界见 [来源证据流程](docs/data/BUILD-SIM-SOURCES.md)。
-- 主观评分改 `scripts/civ_ratings.json`。社区来源（攻略、别名、俗称）只收 2020 年以后的；没能核对的标「未核实」。
+- 开局模拟来源证据使用 `scripts/build_sim_source.py` 的有界摘要，完整中间输出留在忽略缓存；`data/evidence/*197*source*.json` 每份限 64 KiB，历史原件仅按固定指纹保留，不追加豁免。命令、固定来源与审阅边界见 [来源证据流程](docs/BUILD-SIM-SOURCES.md)。
+- 主观评分改 `data/sources/civ_ratings.json`。社区来源（攻略、别名、俗称）只收 2020 年以后的；没能核对的标「未核实」。
 
 ## 命令（均已在仓库核对）
 

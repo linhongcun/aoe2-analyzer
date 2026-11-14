@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
-import units from '../../src/data/units.json';
-import buildings from '../../src/data/buildings.json';
-import techs from '../../src/data/techs.json';
+import civs from '../../data/game/civs.json';
+import units from '../../data/game/units.json';
+import buildings from '../../data/game/buildings.json';
+import techs from '../../data/game/techs.json';
 import { gatherModel } from '../../src/domain/realCost';
 import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, pyMatch, PY_RESERVE, TIER, score, type SearchItem } from '../../src/domain/search';

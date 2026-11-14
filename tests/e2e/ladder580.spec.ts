@@ -6,19 +6,19 @@
 // 合入本 PR 不关闭 #580。
 //
 // #580 正文按 v0.73.2 走查写「48 家 / 待补约 32」。
-// 当前快照 src/data/ladder-arabia-p185872.json 的「全部」是 56 家，且没有低于 300 的低样本行。
+// 当前快照 data/game/ladder-arabia-p185872.json 的「全部」是 56 家，且没有低于 300 的低样本行。
 // 数字以这份快照为准：已写档必须等于全部段行数，待补必须是 0。不把 48 写成会把多出来的文明留成待补的上限。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { formatPercent, type LadderSnapshot } from '../../src/domain/ladder';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const snapshot = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const all = snapshot.brackets.find((bracket) => bracket.key === 'all');
 if (!all || all.civs.length < 16) throw new Error('全部段文明不足，无法对照 #580');
 const winByEn = new Map(all.civs.map((civ) => [civ.en, civ.winRate]));
 
 type BeginnerEntry = { en?: string; tier?: string; reason?: string; bonusIdx?: number[] };
-const notes = JSON.parse(readFileSync('src/data/ladder-beginner.json', 'utf8')) as { entries?: BeginnerEntry[] };
+const notes = JSON.parse(readFileSync('data/game/ladder-beginner.json', 'utf8')) as { entries?: BeginnerEntry[] };
 const WRITTEN = new Set(['easy', 'mid', 'advanced']);
 const FILLED = ['易上手', '中等', '进阶'] as const;
 const filledTier = new Set<string>(FILLED);

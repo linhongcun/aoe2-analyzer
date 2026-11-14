@@ -11,7 +11,7 @@ import subprocess
 
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 
-OUTPUT = ROOT / 'docs/design/gurjaras197-source-physical.json'
+OUTPUT = ROOT / 'data/evidence/gurjaras197-source-physical.json'
 DUMP = r'''
 import dataclasses,json,sys
 from genieutils.datfile import DatFile

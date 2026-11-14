@@ -16,16 +16,16 @@ class TeamBonuses228Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.raw = load()
-        cls.export = json.loads((ROOT / 'src/data/team_bonuses.json').read_text())
+        cls.export = json.loads((ROOT / 'data/game/team_bonuses.json').read_text())
         cls.permanent = {x['civ']: x for x in cls.export['permanent']}
         cls.technologies = {x['id']: x for x in cls.export['technologies']}
-        cls.civs = json.loads((ROOT / 'src/data/civs.json').read_text())
-        cls.units = json.loads((ROOT / 'src/data/units.json').read_text())
-        cls.buildings = json.loads((ROOT / 'src/data/buildings.json').read_text())
-        cls.techs = json.loads((ROOT / 'src/data/techs.json').read_text())
+        cls.civs = json.loads((ROOT / 'data/game/civs.json').read_text())
+        cls.units = json.loads((ROOT / 'data/game/units.json').read_text())
+        cls.buildings = json.loads((ROOT / 'data/game/buildings.json').read_text())
+        cls.techs = json.loads((ROOT / 'data/game/techs.json').read_text())
 
     def test_pinned_metadata_and_every_catalogue_civilization(self):
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text())
         self.assertEqual(self.export['meta']['patch'], pins['patch']['build'])
         self.assertEqual(self.export['meta']['dat']['commit'], pins['sources']['dat']['commit'])
         self.assertEqual(self.export['meta']['dat']['sha256'], pins['sources']['dat']['sha256'])

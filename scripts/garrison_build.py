@@ -15,7 +15,7 @@ from dat_source import CACHE, DAT, _venv_python, fetch_dat, load
 from effects_build import CIV_DAT
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / 'src/data/garrison.json'
+OUT = ROOT / 'data/game/garrison.json'
 IDS = (83, 293, 109, 79, 234, 235)
 ATTRS = {2: 'capacity', 9: 'attack', 10: 'reload', 102: 'total', 107: 'max', 130: 'firepower'}
 # Technologies that influence the supported buildings or villager firepower.
@@ -63,7 +63,7 @@ def decode(commands, units):
 
 
 def generate(d, raw):
-    civs = json.loads((ROOT / 'src/data/civs.json').read_text())
+    civs = json.loads((ROOT / 'data/game/civs.json').read_text())
     techs = d['Techs']
     names = {CIV_DAT.get(c['Name'], c['Name']): (i, c) for i, c in enumerate(d['Civs'])}
     baseline = raw[names[civs[0]['en']][1]['Name']]
@@ -80,7 +80,7 @@ def generate(d, raw):
 
     # A newly added researchable modifier must not silently disappear from the
     # preview just because its ID was omitted from the supported technology set.
-    catalog = json.loads((ROOT / 'src/data/techs.json').read_text())
+    catalog = json.loads((ROOT / 'data/game/techs.json').read_text())
     missing = [t['id'] for t in catalog if effects(techs[t['id']]['EffectID']) and t['id'] not in TECHS]
     if missing:
         raise ValueError('Researchable garrison modifiers need explicit support: ' + ', '.join(map(str, missing)))

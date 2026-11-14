@@ -1,10 +1,10 @@
 // v0.7.0 #42 第二批：匈奴 + 哥特（Kent 草稿 #120 issuecomment-6193649914）
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
-import baseline from './fixtures/whitelist-v070.json';
-import currentFinalCivs from './fixtures/final-civs197-v0700.json';
+import baseline from '../../data/fixtures/unit/fixtures/whitelist-v070.json';
+import currentFinalCivs from '../../data/fixtures/unit/fixtures/final-civs197-v0700.json';
 import {
   animalFood,
   civNoHouses,

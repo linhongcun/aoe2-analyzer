@@ -15,7 +15,7 @@ EXTRA = {'techs': {33: 'assets/techs/UniqueTechCastle.png', 107: 'assets/techs/U
 jobs = []
 for kind in ('units', 'techs', 'buildings'):
     pics = {}
-    for o in json.load(open(f'src/data/{kind}.json')): pics.setdefault(o['pic'], []).append(o['en'])
+    for o in json.load(open(f'data/game/{kind}.json')): pics.setdefault(o['pic'], []).append(o['en'])
     for pic, names in pics.items():
         p = EXTRA.get(kind, {}).get(pic)
         for n in names:

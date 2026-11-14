@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import mixedArmy from '../../src/content/mixed-army.json';
+import mixedArmy from '../../data/content/mixed-army.json';
 import { CASTLE_OBSERVATIONS } from '../../src/domain/castleDefense';
 import { SCOUTING_SCENARIOS } from '../../src/domain/scouting';
 import { PAGES } from '../../src/shared/nav/pageRegistry';

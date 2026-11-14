@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-const units: { id: number; zh: string }[] = JSON.parse(readFileSync('src/data/units.json', 'utf8'));
+const units: { id: number; zh: string }[] = JSON.parse(readFileSync('data/game/units.json', 'utf8'));
 const region = (page: import('@playwright/test').Page) => page.getByRole('region', { name: '攻击类蓄力参数', exact: true });
 async function numbersStay(target: Locator) {
   const tokens = await target.evaluate((root) => {

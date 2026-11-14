@@ -1,4 +1,4 @@
-import raw from './construction.json';
+import raw from '../../data/game/construction.json';
 import validateConstruction from '../content/schema/compiled/construction.mjs';
 import { constructionReferenceProblems } from '../content/schema/policy.mjs';
 import { readValidatedJson } from './validatedJson';

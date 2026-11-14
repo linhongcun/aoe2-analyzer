@@ -8,7 +8,7 @@ import { unitCost } from './unitCost';
 import { realCost } from './realCost';
 import { neutralGatherModel } from './scenarioBudget';
 import { buildingAge } from './availabilityAge';
-import review from './routeReview.json';
+import review from '../../data/reference/domain/routeReview.json';
 import { AGE_BY_TECH } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 

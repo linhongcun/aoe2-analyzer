@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Step } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type BuildTimeline, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
@@ -44,7 +44,7 @@ interface BonusEvent {
 type Row = EcoData['civEco'][string][number] & { spawn?: Spawn };
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
-const source = JSON.parse(readFileSync(new URL('../../docs/design/wei197-source.json', import.meta.url), 'utf8')) as {
+const source = JSON.parse(readFileSync(new URL('../../data/evidence/wei197-source.json', import.meta.url), 'utf8')) as {
   techClosure: Record<string, RawTech>;
   civTechs: RawTech[];
 };
@@ -517,23 +517,23 @@ describe('#197 魏完整family、未知命令与schema守护', () => {
     expect(civSimNotes(e, 'Wei').join(' ')).not.toContain('经济研究完成时赠送村民');
   });
   it('strict eco schema accepts complete projected metadata and rejects extra/missing/wrong primitive fields', () => {
-    expect(validateDocument('src/data/eco.json', projected()).valid).toBe(true);
+    expect(validateDocument('data/game/eco.json', projected()).valid).toBe(true);
     for (const field of ['effectId', 'requiredCount', 'researchLocation', 'researchAt', 'researchTime', 'cost', 'commands']) {
       const e = projected();
       delete (row(e).spawn as unknown as Record<string, unknown>)[field];
-      expect(validateDocument('src/data/eco.json', e).valid, field).toBe(false);
+      expect(validateDocument('data/game/eco.json', e).valid, field).toBe(false);
     }
     const e = projected();
     (row(e).spawn as unknown as Record<string, unknown>).inventedDefault = true;
-    expect(validateDocument('src/data/eco.json', e).valid).toBe(false);
+    expect(validateDocument('data/game/eco.json', e).valid).toBe(false);
     const wrong = projected();
     (row(wrong).spawn!.commands[0] as unknown as Record<string, unknown>).Type = '1';
-    expect(validateDocument('src/data/eco.json', wrong).valid).toBe(false);
+    expect(validateDocument('data/game/eco.json', wrong).valid).toBe(false);
   });
   it('unknown raw commands remain structurally preserved for runtime rejection', () => {
     const e = projected();
     row(e).spawn!.commands.push({ Type: 999, A: -1, B: -1, C: -1, D: 1 });
-    expect(validateDocument('src/data/eco.json', e).valid).toBe(true);
+    expect(validateDocument('data/game/eco.json', e).valid).toBe(true);
     expect(simSupport(e, 'Wei', buildOrders).supported).toBe(false);
   });
 });

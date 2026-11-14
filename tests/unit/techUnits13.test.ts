@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { techAffects } from '../../src/domain/affects';
 import { affectedUnits, buildFamilies } from '../../src/domain/family';
 import type { Building, Unit } from '../../src/domain/types';
-import buildingsJson from '../../src/data/buildings.json';
+import buildingsJson from '../../data/game/buildings.json';
 import { tech, units } from './helpers';
 
 const buildings = buildingsJson as unknown as Building[];

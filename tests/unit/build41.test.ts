@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
+import eco from '../../data/game/eco.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData } from '../../src/domain/buildSim';
 const water = buildOrders.find((b) => b.id === 'hybrid-fish-18')!;

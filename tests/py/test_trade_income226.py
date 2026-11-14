@@ -13,7 +13,7 @@ spec.loader.exec_module(trade)
 
 class TradeIncome226Test(unittest.TestCase):
     def test_provenance_and_population_templates(self):
-        data = json.loads((ROOT / 'src/data/trade_income.json').read_text())
+        data = json.loads((ROOT / 'data/game/trade_income.json').read_text())
         self.assertEqual(data['meta']['datSha256'], trade.DAT['sha256'])
         self.assertFalse(data['meta']['engineVerifiedInPinnedBuild'])
         self.assertEqual(data, trade.build(data['units']))

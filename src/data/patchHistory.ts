@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { PatchArchive } from '../domain/patchHistory';
 
 // Loaded only when a history tab or patch page is opened; current entity data stays independent.
-const sources = import.meta.glob('./patches/*.json', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const sources = import.meta.glob('../../data/game/patches/*.json', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 let pending: Promise<PatchArchive[]> | undefined;
 
 export function loadPatchArchives(): Promise<PatchArchive[]> {

@@ -17,8 +17,8 @@ class JurchensTechName(unittest.TestCase):
     def generate(self, original=ORIGINAL, name='强化<br>\n堡垒'):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'scripts').mkdir()
-            (root / 'src/data').mkdir(parents=True)
+            (root / 'data/sources').mkdir(parents=True)
+            (root / 'data/game').mkdir(parents=True)
             cache = root / 'cache'
             cache.mkdir()
             zh = {
@@ -36,11 +36,11 @@ class JurchensTechName(unittest.TestCase):
             for filename, value in [('data.json', data), ('zh.json', zh), ('en.json', en)]:
                 (cache / filename).write_text(json.dumps(value, ensure_ascii=False), encoding='utf-8')
             for filename in ['civ_ratings.json', 'civ_text_corrections.json']:
-                (root / 'scripts' / filename).write_bytes((ROOT / 'scripts' / filename).read_bytes())
+                (root / 'data/sources' / filename).write_bytes((ROOT / 'data/sources' / filename).read_bytes())
             result = subprocess.run([sys.executable, str(ROOT / 'scripts/civs_build.py')],
                                     cwd=root, env={**os.environ, 'AOE_CACHE': str(cache)},
                                     capture_output=True, text=True, check=False)
-            output = root / 'src/data/civs.json'
+            output = root / 'data/game/civs.json'
             return result, json.loads(output.read_text(encoding='utf-8')) if output.exists() else None
 
     def test_normalizes_reference_name_without_replacing_description_or_other_tech(self):

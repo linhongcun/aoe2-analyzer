@@ -16,18 +16,18 @@ spec.loader.exec_module(module)
 class GarrisonHealing229Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = json.loads((ROOT / 'src/data/garrison_healing.json').read_text())
+        cls.data = json.loads((ROOT / 'data/game/garrison_healing.json').read_text())
 
     def test_pin_and_model_claim_are_explicit(self):
-        pin = json.loads((ROOT / 'scripts/data_sources.json').read_text())['sources']['dat']
+        pin = json.loads((ROOT / 'data/sources/data_sources.json').read_text())['sources']['dat']
         self.assertEqual(self.data['meta']['sha256'], pin['sha256'])
         self.assertEqual(self.data['meta']['commit'], pin['commit'])
         self.assertFalse(self.data['meta']['engineVerifiedInPinnedBuild'])
 
     def test_all_garrison_objects_have_a_healing_policy(self):
-        general = json.loads((ROOT / 'src/data/garrison_general.json').read_text())
+        general = json.loads((ROOT / 'data/game/garrison_general.json').read_text())
         self.assertEqual(set(self.data['units']), set(general['units']))
-        self.assertEqual(self.data['hostIds'], json.loads((ROOT / 'src/data/garrison_hosts.json').read_text()))
+        self.assertEqual(self.data['hostIds'], json.loads((ROOT / 'data/game/garrison_hosts.json').read_text()))
         self.assertEqual(len(self.data['hostIds']), 20)
 
     def test_static_rates_keep_original_float_precision(self):

@@ -1,5 +1,5 @@
 /** Issue 218: villager garrison arrows, pinned .dat inputs + documented Genie rule. Coverage: ./garrisonCoverage.ts. */
-import raw from '../data/garrison.json';
+import raw from '../../data/game/garrison.json';
 import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';

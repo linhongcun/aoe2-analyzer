@@ -4,7 +4,7 @@ import { PENDING_UNIT_ALIASES, UNIT_ALIAS_ROWS, UNIT_ALIASES } from '../../src/d
 import { CONFUSABLES, confusablesOf } from '../../src/data/confusables';
 import { civNote, dupIdsIn, dupNameGroups, dupPeers, nameKey } from '../../src/domain/dupNames';
 import { buildFamilies, collapse } from '../../src/domain/family';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import { units } from './helpers';
 
 const byId = Object.fromEntries(units.map((u) => [u.id, u]));

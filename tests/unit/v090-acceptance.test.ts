@@ -5,10 +5,10 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 // @ts-expect-error no types for scripts/*.mjs
 import { findReleaseCommit } from '../../scripts/release.mjs';
-import civs from '../../src/data/civs.json';
-import units from '../../src/data/units.json';
-import techs from '../../src/data/techs.json';
-import buildings from '../../src/data/buildings.json';
+import civs from '../../data/game/civs.json';
+import units from '../../data/game/units.json';
+import techs from '../../data/game/techs.json';
+import buildings from '../../data/game/buildings.json';
 import { pyMatch, score, search, TIER, type SearchItem } from '../../src/domain/search';
 import { gatherModel } from '../../src/domain/realCost';
 

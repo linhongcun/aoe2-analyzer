@@ -1,6 +1,6 @@
 /**
  * #88 真实费用 / 等采集时间（纯函数）。口径：issue 120 Steve 定稿 + Kent 用例草稿（评论 6157773161）。
- * - 数值全部来自 src/data/eco.json（.dat 导出）：villager.tasks、ecoTechs、civEco，不写死速度。
+ * - 数值全部来自 data/game/eco.json（.dat 导出）：villager.tasks、ecoTechs、civEco，不写死速度。
  * - 采集速度按所选时代，该时代及以前的经济科技（ecoTechs）全算；选了文明再叠加文明加成。
  * - 每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度；有效速度 = 携带量 ÷ 每趟；单价耗时 = 价格 ÷ 有效速度。
  * - 金、木、石离放置点 3 格（往返 6 格）；食物按农田，贴着磨坊（往返 0 格，有效速度 = workRate）。

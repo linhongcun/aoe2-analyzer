@@ -1,8 +1,8 @@
 /** Independent canonical source fixture; only existing public APIs are imported before implementation. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
-import raw from './fixtures/jurchens197-source.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
+import raw from '../../data/fixtures/unit/fixtures/jurchens197-source.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 import {

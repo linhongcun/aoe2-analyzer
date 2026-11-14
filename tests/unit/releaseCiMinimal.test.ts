@@ -18,11 +18,11 @@ describe('minimal CI optimization coverage', () => {
     expect(applyBrowserPolicy(p, { GITHUB_EVENT_NAME: 'pull_request' })).toMatchObject({ full: true, browser: 'full' });
   });
   it.each([
-    'src/data/civs.json',
+    'data/game/civs.json',
     'src/data/raw/units.ts',
     'src/data/unknown.ts',
     'scripts/build_data.py',
-    'scripts/data_sources.json',
+    'data/sources/data_sources.json',
     'scripts/pinyin_build.mjs',
     'package-lock.json',
     '.npmrc',

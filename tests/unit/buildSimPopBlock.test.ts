@@ -1,7 +1,7 @@
 /** Kent 在 #39 的回归草稿：house=0 时卡人口不能报成超时（main 上失败，本 PR 修复 buildSim 后通过） */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 

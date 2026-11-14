@@ -11,8 +11,8 @@ import { AXES } from '../../src/domain/ratings';
 type Ratings = Record<string, unknown>;
 type Row = Record<string, unknown>;
 
-const ratings = JSON.parse(readFileSync('scripts/civ_ratings.json', 'utf8')) as Ratings;
-const civNames = (JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en);
+const ratings = JSON.parse(readFileSync('data/sources/civ_ratings.json', 'utf8')) as Ratings;
+const civNames = (JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en);
 const clone = () => JSON.parse(JSON.stringify(ratings)) as Ratings;
 const row = (data: Ratings, civ: string) => data[civ] as Row;
 
@@ -40,7 +40,7 @@ describe('civ_ratings 结构校验', () => {
     expect(RATING_BASIS.positions.independentOfAxes).toBe(true);
     expect(RATING_FILE_VERIFIED_AT).toBe(ratings.verifiedAt);
     expect(JSON.stringify(RATING_BASIS)).not.toContain('188329');
-    const civRows = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string; s: number[]; fl: number; pk: number }[];
+    const civRows = JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string; s: number[]; fl: number; pk: number }[];
     for (const civ of civRows) {
       const source = ratings[civ.en] as { s: number[]; fl: number; pk: number };
       expect(civ.s, civ.en).toEqual(source.s);
@@ -120,11 +120,12 @@ describe('civ_ratings 结构校验', () => {
     const root = mkdtempSync(join(tmpdir(), 'civ-ratings-'));
     try {
       mkdirSync(join(root, 'scripts'));
-      mkdirSync(join(root, 'src/data'), { recursive: true });
+      mkdirSync(join(root, 'data/game'), { recursive: true });
+      mkdirSync(join(root, 'data/sources'), { recursive: true });
       const broken = clone();
       delete broken.Armenians;
-      writeFileSync(join(root, 'scripts/civ_ratings.json'), JSON.stringify(broken));
-      writeFileSync(join(root, 'src/data/civs.json'), JSON.stringify(civNames.map((en) => ({ en }))));
+      writeFileSync(join(root, 'data/sources/civ_ratings.json'), JSON.stringify(broken));
+      writeFileSync(join(root, 'data/game/civs.json'), JSON.stringify(civNames.map((en) => ({ en }))));
       const result = spawnSync(process.execPath, ['scripts/check-civ-ratings.mjs', '--root', root], {
         cwd: process.cwd(),
         encoding: 'utf8',

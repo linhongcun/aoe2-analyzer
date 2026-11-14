@@ -4,8 +4,8 @@ import { expect, test, type Page } from '@playwright/test';
 import { formatGames, formatPercent, medianOf, type LadderCivStat, type LadderSnapshot } from '../../src/domain/ladder';
 
 test.use({ hasTouch: true });
-const snapshot = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
-const catalog = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string; zh: string }[];
+const snapshot = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const catalog = JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string; zh: string }[];
 const shown = snapshot.brackets
   .find((item) => item.key === '1200-1400')!
   .civs.filter((row) => row.playRate != null && row.games >= (snapshot.lowSampleGames ?? 300));

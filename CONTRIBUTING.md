@@ -199,7 +199,7 @@ OpenAI Codex 在启用 git attribution 时使用这一行，见源码 [`codex-rs
 - 样式：颜色和间距只用 `src/shared/styles/tokens.css` 中的设计令牌（CSS 变量），由 `npm run lint:colors` 检查，规范见 `docs/design/DESIGN-SYSTEM.md`。
 - 按本次改动影响检查必要视口（无横向滚动、无页面报错）和浅色与深色，对比度满足 WCAG AA。不固定四宽。
 - 领域逻辑（`src/domain`）必须是纯函数、无 React 依赖，并配 Vitest 单测。
-- 数据：`npm run data` 重新生成 `src/data/*.json` 与 `public/img/*`，不要手改生成的 JSON；主观评分改 `scripts/civ_ratings.json`。
+- 数据：`npm run data` 重新生成 `data/game/*.json` 与 `public/img/*`，不要手改生成的 JSON；主观评分改 `data/sources/civ_ratings.json`。
 
 ## 本地检查
 

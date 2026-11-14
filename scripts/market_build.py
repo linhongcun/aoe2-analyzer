@@ -44,10 +44,10 @@ def main():
     cache = CACHE / ('market.v1.%s.json' % DAT['sha256'][:12])
     if not cache.exists():
         subprocess.check_call([str(_venv_python()), '-c', DUMP, str(path), str(cache)])
-    result = build(json.loads(cache.read_text()), json.loads((ROOT / 'src/data/techs.json').read_text()),
-                   json.loads((ROOT / 'scripts/market_rules.json').read_text()))
+    result = build(json.loads(cache.read_text()), json.loads((ROOT / 'data/game/techs.json').read_text()),
+                   json.loads((ROOT / 'data/sources/market_rules.json').read_text()))
     content = json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n'
-    target = ROOT / 'src/data/market.json'
+    target = ROOT / 'data/game/market.json'
     if '--check' in sys.argv:
         if target.read_text() != content:
             raise SystemExit('market.json is stale; run python3 scripts/market_build.py')

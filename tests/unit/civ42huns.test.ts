@@ -1,8 +1,8 @@
-// #42 匈奴：不需要房子（Tech tree res 4 +2000）+ 开局 −100 木（tech 225 res 92）。数值全部来自 src/data/eco.json（.dat 导出）。
+// #42 匈奴：不需要房子（Tech tree res 4 +2000）+ 开局 −100 木（tech 225 res 92）。数值全部来自 data/game/eco.json（.dat 导出）。
 // v0.4.0 仍置灰（缺第二条 2020 年后的独立出处）：simSupport('Huns') 为 false；逻辑用 ignoreSourceGate 强制打开测试。
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simSupport as simSupportFn, simSupportReasons } from '../../src/domain/simSupport';
 import {
