@@ -71,20 +71,6 @@
         "type": "integer"
       }
     },
-    "unitUpgradeTechs": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "integer"
-        }
-      },
-      "propertyNames": {
-        "type": "string",
-        "minLength": 1,
-        "pattern": "^(0|[1-9][0-9]*)$"
-      }
-    },
     "buildings": {
       "type": "object",
       "additionalProperties": {
@@ -201,20 +187,7 @@
       }
     }
   },
-  "required": [
-    "meta",
-    "units",
-    "rosterIds",
-    "herdableIds",
-    "specialOccupantIds",
-    "relicIds",
-    "unitUpgradeTechs",
-    "buildings",
-    "techs",
-    "ageRules",
-    "conditional",
-    "civs"
-  ],
+  "required": ["meta", "units", "rosterIds", "herdableIds", "specialOccupantIds", "relicIds", "buildings", "techs", "ageRules", "conditional", "civs"],
   "additionalProperties": false,
   "$defs": {
     "unit": {
@@ -401,7 +374,6 @@
         "chargeEvent",
         "chargeProjectile",
         "specialAbility",
-        "catalog",
         "garrisonTasks",
         "specialTasks",
         "trainLocations"

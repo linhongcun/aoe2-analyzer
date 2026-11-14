@@ -15,7 +15,7 @@ import {
 import eco from '../../src/data/eco.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData } from '../../src/domain/buildSim';
-import { GENERAL_GARRISON_DATA } from '../../src/domain/garrisonGeneral';
+import { GARRISON_TECH_DATA } from '../../src/domain/garrisonTechs';
 import { gatherModel } from '../../src/domain/realCost';
 let ctx: ConstructionContext;
 beforeAll(async () => {
@@ -84,7 +84,7 @@ describe('#227 construction', () => {
     for (const b of ctx.core.buildings) {
       if (b.id === 199) continue;
       for (const civ of b.civs) {
-        const techs = b.id === 236 ? [64] : (GENERAL_GARRISON_DATA.unitUpgradeTechs?.[b.id] ?? []);
+        const techs = b.id === 236 ? [64] : (GARRISON_TECH_DATA.unitUpgradeTechs?.[b.id] ?? []);
         const r = calc({ civ, age: 4, buildingId: b.id, techs: [...techs] });
         expect(r.errors, `${civ}/${b.id}`).toEqual([]);
         expect(r.target!.seconds).toBeGreaterThan(0);

@@ -117,6 +117,7 @@ export interface GeneralGarrisonData {
   buildings: Record<string, { eraForms: number[]; aliases: number[]; predecessors: number[]; produces: number[] }>;
   techs: Record<string, GeneralGarrisonRule>;
   ageRules: Record<string, GeneralGarrisonRule>;
+  /** Custom input override only; generated data uses GARRISON_TECH_DATA. */
   unitUpgradeTechs?: Record<string, number[]>;
   conditional: GeneralGarrisonRule[];
   civs: Record<
@@ -131,6 +132,7 @@ export interface GeneralGarrisonData {
   >;
 }
 export const GENERAL_GARRISON_DATA = raw as unknown as GeneralGarrisonData;
+const technologyData = (data: GeneralGarrisonData) => (data === GENERAL_GARRISON_DATA ? GARRISON_TECH_DATA : data);
 export const GENERAL_GARRISON_LIMIT = 32;
 // buildings.json: "Villagers and Relics provide additional projectiles".
 const FORTIFIED_CHURCH_IDS = new Set([1806]);
@@ -226,7 +228,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
   const productionLocations: Record<number, number[]> = {};
   const known = new Set([104]);
   const disabled = new Set(civ?.disabled ?? []);
-  const implied = implicitShapeTechs(ctx, b, config, data);
+  const implied = implicitShapeTechs(ctx, b, config, technologyData(data));
   for (const tid of implied) known.add(tid);
   // Exact tower shape means the line upgrade has already been researched.
   if (b.id === 234 || b.id === 235) known.add(140);
@@ -373,7 +375,7 @@ export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, confi
     const unit = data.units[id];
     if (unit?.secondaryProjectile && unit.secondaryProjectile >= 0) targets.add(unit.secondaryProjectile);
   }
-  const upgradeData = data === GENERAL_GARRISON_DATA ? GARRISON_TECH_DATA : data;
+  const upgradeData = technologyData(data);
   const shapeUpgrades = new Set(Object.values(upgradeData.unitUpgradeTechs ?? {}).flat());
   return availableTechs(ctx, config, data).filter(
     (t) =>
@@ -383,7 +385,7 @@ export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, confi
 }
 
 export function getFreeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data = GENERAL_GARRISON_DATA): number[] {
-  return freeGarrisonTechs(ctx, b, config, data);
+  return freeGarrisonTechs(ctx, b, config, technologyData(data));
 }
 
 export function toggleGeneralGarrisonTech(

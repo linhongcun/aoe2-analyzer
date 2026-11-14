@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees } from '../../src/data';
-import rawShapes from '../../src/data/garrison_general.json';
+import rawShapes from '../../src/data/garrison_techs.json';
 import { productionBuildings, type ProductionContext } from '../../src/domain/production';
 import {
   PLAN_JSON_BYTES,

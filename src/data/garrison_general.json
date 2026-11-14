@@ -21502,477 +21502,6 @@
       "trainingLocations": []
     }
   },
-  "unitUpgradeTechs": {
-    "10": [
-      102
-    ],
-    "1003": [
-      563
-    ],
-    "1006": [
-      597
-    ],
-    "1009": [
-      565
-    ],
-    "1012": [
-      599
-    ],
-    "1015": [
-      567
-    ],
-    "1018": [
-      569
-    ],
-    "105": [
-      101
-    ],
-    "1122": [
-      615
-    ],
-    "1125": [
-      617
-    ],
-    "1128": [
-      619
-    ],
-    "1131": [
-      621
-    ],
-    "1134": [
-      631
-    ],
-    "1155": [
-      655
-    ],
-    "116": [
-      102
-    ],
-    "1189": [
-      624
-    ],
-    "1227": [
-      678
-    ],
-    "1230": [
-      680
-    ],
-    "1233": [
-      682
-    ],
-    "1236": [
-      684
-    ],
-    "1255": [
-      678
-    ],
-    "129": [
-      101
-    ],
-    "130": [
-      102
-    ],
-    "1302": [
-      1010
-    ],
-    "131": [
-      103
-    ],
-    "132": [
-      102
-    ],
-    "133": [
-      101
-    ],
-    "137": [
-      103
-    ],
-    "1372": [
-      715
-    ],
-    "14": [
-      103
-    ],
-    "141": [
-      102
-    ],
-    "142": [
-      103
-    ],
-    "153": [
-      103
-    ],
-    "155": [
-      194
-    ],
-    "1657": [
-      751
-    ],
-    "1659": [
-      753
-    ],
-    "1661": [
-      753
-    ],
-    "1703": [
-      779
-    ],
-    "1706": [
-      781
-    ],
-    "1707": [
-      786
-    ],
-    "1709": [
-      787
-    ],
-    "1737": [
-      826
-    ],
-    "1743": [
-      830
-    ],
-    "1746": [
-      838
-    ],
-    "1749": [
-      840
-    ],
-    "1753": [
-      843
-    ],
-    "1761": [
-      828
-    ],
-    "1787": [
-      197
-    ],
-    "1788": [
-      429
-    ],
-    "1792": [
-      882
-    ],
-    "1793": [
-      885
-    ],
-    "18": [
-      102
-    ],
-    "1802": [
-      918
-    ],
-    "1805": [
-      920
-    ],
-    "1813": [
-      526
-    ],
-    "19": [
-      103
-    ],
-    "1903": [
-      982
-    ],
-    "1907": [
-      980
-    ],
-    "1910": [
-      991
-    ],
-    "1922": [
-      1002
-    ],
-    "1946": [
-      1033
-    ],
-    "1951": [
-      1036
-    ],
-    "1961": [
-      1064
-    ],
-    "1970": [
-      1074
-    ],
-    "20": [
-      103
-    ],
-    "207": [
-      521
-    ],
-    "21": [
-      34
-    ],
-    "210": [
-      103
-    ],
-    "234": [
-      140
-    ],
-    "235": [
-      63
-    ],
-    "24": [
-      100
-    ],
-    "2552": [
-      1351
-    ],
-    "2554": [
-      1352
-    ],
-    "2564": [
-      1364
-    ],
-    "2568": [
-      1376
-    ],
-    "2571": [
-      1378
-    ],
-    "2581": [
-      1389
-    ],
-    "2584": [
-      1391
-    ],
-    "2587": [
-      1401
-    ],
-    "2588": [
-      1402
-    ],
-    "2627": [
-      34
-    ],
-    "2701": [
-      1451
-    ],
-    "2704": [
-      1454
-    ],
-    "2706": [
-      1462
-    ],
-    "2707": [
-      1462
-    ],
-    "2709": [
-      1472
-    ],
-    "2712": [
-      1482
-    ],
-    "283": [
-      209
-    ],
-    "30": [
-      101
-    ],
-    "31": [
-      102
-    ],
-    "32": [
-      103
-    ],
-    "330": [
-      236
-    ],
-    "358": [
-      197
-    ],
-    "359": [
-      429
-    ],
-    "422": [
-      96
-    ],
-    "441": [
-      428
-    ],
-    "463": [
-      101
-    ],
-    "464": [
-      102
-    ],
-    "465": [
-      103
-    ],
-    "47": [
-      102
-    ],
-    "473": [
-      217
-    ],
-    "474": [
-      218
-    ],
-    "492": [
-      237
-    ],
-    "498": [
-      101
-    ],
-    "51": [
-      103
-    ],
-    "527": [
-      905
-    ],
-    "528": [
-      244
-    ],
-    "529": [
-      34
-    ],
-    "530": [
-      360
-    ],
-    "531": [
-      363
-    ],
-    "533": [
-      372
-    ],
-    "534": [
-      370
-    ],
-    "542": [
-      239
-    ],
-    "546": [
-      254
-    ],
-    "548": [
-      255
-    ],
-    "550": [
-      257
-    ],
-    "553": [
-      361
-    ],
-    "554": [
-      364
-    ],
-    "555": [
-      365
-    ],
-    "556": [
-      368
-    ],
-    "557": [
-      369
-    ],
-    "558": [
-      367
-    ],
-    "559": [
-      362
-    ],
-    "560": [
-      366
-    ],
-    "561": [
-      371
-    ],
-    "563": [
-      101
-    ],
-    "564": [
-      102
-    ],
-    "565": [
-      103
-    ],
-    "567": [
-      264,
-      1174
-    ],
-    "569": [
-      265
-    ],
-    "585": [
-      101
-    ],
-    "586": [
-      102
-    ],
-    "587": [
-      103
-    ],
-    "588": [
-      320
-    ],
-    "6": [
-      98
-    ],
-    "691": [
-      376
-    ],
-    "694": [
-      398
-    ],
-    "71": [
-      101
-    ],
-    "726": [
-      432
-    ],
-    "75": [
-      222
-    ],
-    "752": [
-      434
-    ],
-    "753": [
-      384
-    ],
-    "757": [
-      2
-    ],
-    "761": [
-      365
-    ],
-    "765": [
-      27
-    ],
-    "77": [
-      207
-    ],
-    "773": [
-      60
-    ],
-    "829": [
-      450
-    ],
-    "832": [
-      448
-    ],
-    "86": [
-      102
-    ],
-    "868": [
-      468
-    ],
-    "871": [
-      472
-    ],
-    "875": [
-      481
-    ],
-    "878": [
-      504
-    ],
-    "881": [
-      509
-    ],
-    "887": [
-      2
-    ]
-  },
   "units": {
     "10": {
       "attack": 0,
@@ -22075,13 +21604,6 @@
     "1001": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Portuguese"
-        ],
-        "pic": 190
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22123,13 +21645,6 @@
     "1003": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Portuguese"
-        ],
-        "pic": 496
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22171,13 +21686,6 @@
     "1004": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Portuguese"
-        ],
-        "pic": 198
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22214,13 +21722,6 @@
     "1006": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Portuguese"
-        ],
-        "pic": 497
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22257,13 +21758,6 @@
     "1007": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Berbers"
-        ],
-        "pic": 191
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22309,13 +21803,6 @@
     "1009": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers"
-        ],
-        "pic": 498
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22361,62 +21848,6 @@
     "101": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 23
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22453,13 +21884,6 @@
     "1010": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Berbers"
-        ],
-        "pic": 201
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22505,13 +21929,6 @@
     "1012": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers"
-        ],
-        "pic": 499
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22557,13 +21974,6 @@
     "1013": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Malians"
-        ],
-        "pic": 197
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22613,13 +22023,6 @@
     "1015": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Malians"
-        ],
-        "pic": 500
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22669,13 +22072,6 @@
     "1016": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Ethiopians"
-        ],
-        "pic": 195
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22725,13 +22121,6 @@
     "1018": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Ethiopians"
-        ],
-        "pic": 501
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22781,13 +22170,6 @@
     "1021": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Portuguese"
-        ],
-        "pic": 53
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22824,68 +22206,6 @@
     "103": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 4
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -22922,66 +22242,6 @@
     "104": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 10
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23116,11 +22376,6 @@
     "1055": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23152,11 +22407,6 @@
     "1057": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23188,11 +22438,6 @@
     "1060": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23238,68 +22483,6 @@
     "109": {
       "attack": 5,
       "capacity": 15,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 28
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23331,13 +22514,6 @@
     "11": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Mongols"
-        ],
-        "pic": 42
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23383,68 +22559,6 @@
     "1103": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 203
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2629,
       "chargeType": 0,
@@ -23481,62 +22595,6 @@
     "1104": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Romans",
-          "Saracens",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Vietnamese",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 202
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23573,68 +22631,6 @@
     "1105": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 212
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23676,11 +22672,6 @@
     "1119": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23712,13 +22703,6 @@
     "1120": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Khmer"
-        ],
-        "pic": 231
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23764,13 +22748,6 @@
     "1122": {
       "attack": 10,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Khmer"
-        ],
-        "pic": 502
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23816,13 +22793,6 @@
     "1123": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Malay"
-        ],
-        "pic": 233
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23872,13 +22842,6 @@
     "1125": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Malay"
-        ],
-        "pic": 503
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23928,13 +22891,6 @@
     "1126": {
       "attack": 12,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Burmese"
-        ],
-        "pic": 230
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -23980,13 +22936,6 @@
     "1128": {
       "attack": 14,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Burmese"
-        ],
-        "pic": 504
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24032,13 +22981,6 @@
     "1129": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Vietnamese"
-        ],
-        "pic": 232
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24088,13 +23030,6 @@
     "1131": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Vietnamese"
-        ],
-        "pic": 505
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24144,18 +23079,6 @@
     "1132": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bengalis",
-          "Burmese",
-          "Dravidians",
-          "Khmer",
-          "Malay",
-          "Vietnamese"
-        ],
-        "pic": 228
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24201,17 +23124,6 @@
     "1134": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Burmese",
-          "Khmer",
-          "Malay",
-          "Vietnamese"
-        ],
-        "pic": 246
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24257,11 +23169,6 @@
     "1142": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24307,13 +23214,6 @@
     "1155": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Vietnamese"
-        ],
-        "pic": 229
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24461,11 +23361,6 @@
     "1167": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24497,11 +23392,6 @@
     "1169": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24533,66 +23423,6 @@
     "117": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 31
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24629,13 +23459,6 @@
     "1189": {
       "attack": 3,
       "capacity": 10,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Malay"
-        ],
-        "pic": 56
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24672,68 +23495,6 @@
     "12": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 2
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24770,13 +23531,6 @@
     "1225": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bulgarians"
-        ],
-        "pic": 249
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24826,13 +23580,6 @@
     "1227": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bulgarians"
-        ],
-        "pic": 506
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24882,13 +23629,6 @@
     "1228": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Tatars"
-        ],
-        "pic": 251
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24934,13 +23674,6 @@
     "1230": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Tatars"
-        ],
-        "pic": 507
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -24986,13 +23719,6 @@
     "1231": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Cumans"
-        ],
-        "pic": 252
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25038,13 +23764,6 @@
     "1233": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Cumans"
-        ],
-        "pic": 508
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25090,13 +23809,6 @@
     "1234": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Lithuanians"
-        ],
-        "pic": 253
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25142,13 +23854,6 @@
     "1236": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Lithuanians"
-        ],
-        "pic": 509
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25194,11 +23899,6 @@
     "1243": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25244,11 +23944,6 @@
     "1245": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25294,68 +23989,6 @@
     "125": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 292
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25408,13 +24041,6 @@
     "1251": {
       "attack": 10,
       "capacity": 20,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bulgarians"
-        ],
-        "pic": 55
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25451,13 +24077,6 @@
     "1254": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bulgarians"
-        ],
-        "pic": 249
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25503,13 +24122,6 @@
     "1255": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bulgarians"
-        ],
-        "pic": 506
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25555,64 +24167,6 @@
     "1258": {
       "attack": 0,
       "capacity": 6,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 74
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25654,13 +24208,6 @@
     "1260": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Cumans"
-        ],
-        "pic": 508
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25706,13 +24253,6 @@
     "1263": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Tatars"
-        ],
-        "pic": 270
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25758,68 +24298,6 @@
     "128": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 34
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -25954,68 +24432,6 @@
     "13": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 24
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -26150,13 +24566,6 @@
     "1302": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Chinese"
-        ],
-        "pic": 178
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2629,
       "chargeType": 0,
@@ -26580,17 +24989,6 @@
     "1370": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Cumans",
-          "Jurchens",
-          "Khitans",
-          "Mongols",
-          "Tatars"
-        ],
-        "pic": 273
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -26636,17 +25034,6 @@
     "1372": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Cumans",
-          "Jurchens",
-          "Khitans",
-          "Mongols",
-          "Tatars"
-        ],
-        "pic": 274
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27068,11 +25455,6 @@
     "1548": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27104,55 +25486,6 @@
     "155": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Gurjaras",
-          "Hindustanis",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei"
-        ],
-        "pic": 32
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27189,11 +25522,6 @@
     "1596": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27239,11 +25567,6 @@
     "1598": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27289,11 +25612,6 @@
     "1600": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27339,13 +25657,6 @@
     "1655": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Burgundians"
-        ],
-        "pic": 355
-      },
       "chargeEvent": 1,
       "chargeProjectile": -1,
       "chargeType": 1,
@@ -27391,13 +25702,6 @@
     "1657": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Burgundians"
-        ],
-        "pic": 511
-      },
       "chargeEvent": 1,
       "chargeProjectile": -1,
       "chargeType": 1,
@@ -27443,13 +25747,6 @@
     "1658": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 356
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27503,13 +25800,6 @@
     "1659": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 512
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27563,13 +25853,6 @@
     "1660": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 356
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27619,13 +25902,6 @@
     "1661": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 512
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27675,13 +25951,6 @@
     "1665": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 84
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27718,13 +25987,6 @@
     "1699": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Burgundians"
-        ],
-        "pic": 354
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27774,68 +26036,6 @@
     "17": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 23
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27872,13 +26072,6 @@
     "1701": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Poles"
-        ],
-        "pic": 369
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27928,13 +26121,6 @@
     "1703": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Poles"
-        ],
-        "pic": 513
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -27984,13 +26170,6 @@
     "1704": {
       "attack": 10,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bohemians"
-        ],
-        "pic": 370
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28032,13 +26211,6 @@
     "1706": {
       "attack": 13,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bohemians"
-        ],
-        "pic": 514
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28080,14 +26252,6 @@
     "1707": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Lithuanians",
-          "Poles"
-        ],
-        "pic": 371
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28133,13 +26297,6 @@
     "1709": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bohemians"
-        ],
-        "pic": 372
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28181,11 +26338,6 @@
     "1733": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28217,13 +26369,6 @@
     "1734": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Poles"
-        ],
-        "pic": 86
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28260,13 +26405,6 @@
     "1735": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Dravidians"
-        ],
-        "pic": 386
-      },
       "chargeEvent": 1,
       "chargeProjectile": -1,
       "chargeType": 3,
@@ -28316,13 +26454,6 @@
     "1737": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Dravidians"
-        ],
-        "pic": 515
-      },
       "chargeEvent": 1,
       "chargeProjectile": -1,
       "chargeType": 3,
@@ -28372,13 +26503,6 @@
     "1741": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Gurjaras"
-        ],
-        "pic": 390
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28428,13 +26552,6 @@
     "1743": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Gurjaras"
-        ],
-        "pic": 517
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28484,16 +26601,6 @@
     "1744": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bengalis",
-          "Dravidians",
-          "Gurjaras",
-          "Hindustanis"
-        ],
-        "pic": 394
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28539,16 +26646,6 @@
     "1746": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Dravidians",
-          "Gurjaras",
-          "Hindustanis"
-        ],
-        "pic": 395
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28594,13 +26691,6 @@
     "1747": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Hindustanis"
-        ],
-        "pic": 385
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28650,13 +26740,6 @@
     "1749": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Hindustanis"
-        ],
-        "pic": 518
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28706,13 +26789,6 @@
     "1750": {
       "attack": 10,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Dravidians"
-        ],
-        "pic": 387
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28749,13 +26825,6 @@
     "1751": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Gurjaras"
-        ],
-        "pic": 391
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 4,
@@ -28801,13 +26870,6 @@
     "1753": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Gurjaras"
-        ],
-        "pic": 519
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 4,
@@ -28853,14 +26915,6 @@
     "1754": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Hindustanis",
-          "Persians"
-        ],
-        "pic": 87
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28897,13 +26951,6 @@
     "1755": {
       "attack": 0,
       "capacity": 1,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Gurjaras"
-        ],
-        "pic": 392
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28949,11 +26996,6 @@
     "1756": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -28985,13 +27027,6 @@
     "1759": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bengalis"
-        ],
-        "pic": 389
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29037,13 +27072,6 @@
     "1761": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis"
-        ],
-        "pic": 520
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29089,11 +27117,6 @@
     "1779": {
       "attack": 1,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29125,11 +27148,6 @@
     "1781": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29161,11 +27179,6 @@
     "1783": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29197,13 +27210,6 @@
     "1786": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 31
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29253,13 +27259,6 @@
     "1787": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 11
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29309,13 +27308,6 @@
     "1788": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Sicilians"
-        ],
-        "pic": 104
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29365,11 +27357,6 @@
     "1789": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29401,13 +27388,6 @@
     "1790": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Romans"
-        ],
-        "pic": 405
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29453,13 +27433,6 @@
     "1792": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Romans"
-        ],
-        "pic": 521
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29505,13 +27478,6 @@
     "1793": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Romans"
-        ],
-        "pic": 139
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29561,17 +27527,6 @@
     "1795": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Byzantines",
-          "Goths",
-          "Huns",
-          "Romans"
-        ],
-        "pic": 406
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29706,13 +27661,6 @@
     "1800": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians"
-        ],
-        "pic": 407
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29762,13 +27710,6 @@
     "1802": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians"
-        ],
-        "pic": 522
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29818,13 +27759,6 @@
     "1803": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Georgians"
-        ],
-        "pic": 408
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29870,13 +27804,6 @@
     "1805": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Georgians"
-        ],
-        "pic": 523
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29922,14 +27849,6 @@
     "1806": {
       "attack": 5,
       "capacity": 10,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Georgians"
-        ],
-        "pic": 88
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -29966,14 +27885,6 @@
     "1808": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Georgians"
-        ],
-        "pic": 89
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30019,13 +27930,6 @@
     "1811": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians"
-        ],
-        "pic": 409
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30082,13 +27986,6 @@
     "1813": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Persians"
-        ],
-        "pic": 410
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30134,16 +28031,6 @@
     "185": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 143
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30193,11 +28080,6 @@
     "187": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30229,13 +28111,6 @@
     "1889": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Khitans"
-        ],
-        "pic": 96
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30370,17 +28245,6 @@
     "1901": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Chinese",
-          "Jurchens",
-          "Khitans",
-          "Koreans",
-          "Vietnamese"
-        ],
-        "pic": 457
-      },
       "chargeEvent": 4,
       "chargeProjectile": 1925,
       "chargeType": 6,
@@ -30430,17 +28294,6 @@
     "1903": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Chinese",
-          "Jurchens",
-          "Khitans",
-          "Koreans",
-          "Vietnamese"
-        ],
-        "pic": 458
-      },
       "chargeEvent": 5,
       "chargeProjectile": 1925,
       "chargeType": 6,
@@ -30490,16 +28343,6 @@
     "1904": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Chinese",
-          "Jurchens",
-          "Khitans",
-          "Koreans"
-        ],
-        "pic": 459
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30541,11 +28384,6 @@
     "1906": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30577,16 +28415,6 @@
     "1907": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Chinese",
-          "Jurchens",
-          "Khitans",
-          "Koreans"
-        ],
-        "pic": 460
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30628,13 +28456,6 @@
     "1908": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Jurchens"
-        ],
-        "pic": 461
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 5,
@@ -30680,13 +28501,6 @@
     "1910": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Jurchens"
-        ],
-        "pic": 524
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 5,
@@ -30732,13 +28546,6 @@
     "1911": {
       "attack": 12,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Jurchens"
-        ],
-        "pic": 462
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30788,11 +28595,6 @@
     "1913": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30824,13 +28626,6 @@
     "1920": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Khitans"
-        ],
-        "pic": 463
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30880,13 +28675,6 @@
     "1922": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Khitans"
-        ],
-        "pic": 525
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30936,13 +28724,6 @@
     "1923": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Khitans"
-        ],
-        "pic": 464
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -30984,11 +28765,6 @@
     "1925": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31020,11 +28796,6 @@
     "1926": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31056,11 +28827,6 @@
     "1930": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31092,11 +28858,6 @@
     "1932": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31128,11 +28889,6 @@
     "1934": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31164,11 +28920,6 @@
     "1936": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31200,11 +28951,6 @@
     "1938": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31236,15 +28982,6 @@
     "1942": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Shu",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 428
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31286,15 +29023,6 @@
     "1944": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Shu",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 429
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31340,15 +29068,6 @@
     "1946": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Shu",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 430
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31394,17 +29113,6 @@
     "1948": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Chinese",
-          "Jurchens",
-          "Shu",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 431
-      },
       "chargeEvent": -3,
       "chargeProjectile": 1936,
       "chargeType": 6,
@@ -31441,13 +29149,6 @@
     "1949": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Wei"
-        ],
-        "pic": 432
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31493,13 +29194,6 @@
     "1951": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Wei"
-        ],
-        "pic": 526
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31545,13 +29239,6 @@
     "1952": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Wei"
-        ],
-        "pic": 433
-      },
       "chargeEvent": 0,
       "chargeProjectile": 1982,
       "chargeType": 7,
@@ -31597,13 +29284,6 @@
     "1954": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Wei"
-        ],
-        "pic": 465
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31649,13 +29329,6 @@
     "1959": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Shu"
-        ],
-        "pic": 434
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31705,13 +29378,6 @@
     "1961": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Shu"
-        ],
-        "pic": 527
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31761,13 +29427,6 @@
     "1962": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Shu"
-        ],
-        "pic": 435
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31813,11 +29472,6 @@
     "1963": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31863,11 +29517,6 @@
     "1964": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31899,13 +29548,6 @@
     "1966": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Shu"
-        ],
-        "pic": 466
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -31955,13 +29597,6 @@
     "1968": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Wu"
-        ],
-        "pic": 436
-      },
       "chargeEvent": -4,
       "chargeProjectile": 1971,
       "chargeType": 6,
@@ -32011,13 +29646,6 @@
     "1970": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Wu"
-        ],
-        "pic": 528
-      },
       "chargeEvent": -4,
       "chargeProjectile": 1971,
       "chargeType": 6,
@@ -32067,11 +29695,6 @@
     "1971": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32103,13 +29726,6 @@
     "1974": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Wu"
-        ],
-        "pic": 437
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32159,13 +29775,6 @@
     "1978": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Wu"
-        ],
-        "pic": 467
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32211,11 +29820,6 @@
     "1982": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32247,11 +29851,6 @@
     "1983": {
       "attack": 1,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32283,68 +29882,6 @@
     "199": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 41
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32479,13 +30016,6 @@
     "207": {
       "attack": 0,
       "capacity": 1,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Hindustanis"
-        ],
-        "pic": 185
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32531,11 +30061,6 @@
     "2083": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32581,11 +30106,6 @@
     "2085": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32631,11 +30151,6 @@
     "2087": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32681,68 +30196,6 @@
     "209": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 33
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32779,68 +30232,6 @@
     "21": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 25
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -32975,13 +30366,6 @@
     "232": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Celts"
-        ],
-        "pic": 47
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33031,63 +30415,6 @@
     "234": {
       "attack": 7,
       "capacity": 5,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Gurjaras",
-          "Hindustanis",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 27
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33124,49 +30451,6 @@
     "235": {
       "attack": 8,
       "capacity": 5,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Georgians",
-          "Gurjaras",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Muisca",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Spanish",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Vietnamese",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 26
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33203,30 +30487,6 @@
     "236": {
       "attack": 120,
       "capacity": 5,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Bohemians",
-          "Burgundians",
-          "Byzantines",
-          "Chinese",
-          "Dravidians",
-          "Italians",
-          "Koreans",
-          "Lithuanians",
-          "Malay",
-          "Mapuche",
-          "Poles",
-          "Portuguese",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Vietnamese"
-        ],
-        "pic": 42
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33263,13 +30523,6 @@
     "239": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Persians"
-        ],
-        "pic": 43
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33315,66 +30568,6 @@
     "24": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 18
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33424,13 +30617,6 @@
     "25": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Teutons"
-        ],
-        "pic": 45
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33480,16 +30666,6 @@
     "250": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Danes",
-          "Saxons",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 40
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33526,16 +30702,6 @@
     "2550": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 540
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33585,16 +30751,6 @@
     "2552": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 541
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33644,16 +30800,6 @@
     "2554": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 542
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33703,16 +30849,6 @@
     "2556": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 98
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33749,13 +30885,6 @@
     "2562": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Muisca"
-        ],
-        "pic": 543
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33805,13 +30934,6 @@
     "2564": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Muisca"
-        ],
-        "pic": 544
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33861,13 +30983,6 @@
     "2566": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Mapuche"
-        ],
-        "pic": 545
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33913,13 +31028,6 @@
     "2568": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Mapuche"
-        ],
-        "pic": 546
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -33965,13 +31073,6 @@
     "2569": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Mapuche"
-        ],
-        "pic": 547
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2574,
       "chargeType": 6,
@@ -34017,13 +31118,6 @@
     "2571": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Mapuche"
-        ],
-        "pic": 548
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2575,
       "chargeType": 6,
@@ -34069,11 +31163,6 @@
     "2572": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34105,11 +31194,6 @@
     "2573": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34141,11 +31225,6 @@
     "2574": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34177,11 +31256,6 @@
     "2575": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34213,13 +31287,6 @@
     "2579": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Tupi"
-        ],
-        "pic": 549
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34269,13 +31336,6 @@
     "2581": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Tupi"
-        ],
-        "pic": 550
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34325,13 +31385,6 @@
     "2582": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Tupi"
-        ],
-        "pic": 551
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34381,13 +31434,6 @@
     "2584": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Tupi"
-        ],
-        "pic": 552
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34437,13 +31483,6 @@
     "2586": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Muisca"
-        ],
-        "pic": 553
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34497,13 +31536,6 @@
     "2587": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Muisca"
-        ],
-        "pic": 554
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34557,16 +31589,6 @@
     "2588": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Incas",
-          "Mapuche",
-          "Muisca",
-          "Tupi"
-        ],
-        "pic": 555
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34616,11 +31638,6 @@
     "2590": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34666,11 +31683,6 @@
     "2608": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34702,11 +31714,6 @@
     "2609": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34738,68 +31745,6 @@
     "2626": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 566
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34836,68 +31781,6 @@
     "2627": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 565
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -34934,60 +31817,6 @@
     "2628": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 567
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35024,11 +31853,6 @@
     "2629": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35060,11 +31884,6 @@
     "2631": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35096,23 +31915,6 @@
     "2633": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Aztecs",
-          "Cumans",
-          "Danes",
-          "Incas",
-          "Mapuche",
-          "Mayans",
-          "Muisca",
-          "Saxons",
-          "Tupi",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 591
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35149,11 +31951,6 @@
     "2636": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35185,27 +31982,6 @@
     "2700": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bohemians",
-          "Britons",
-          "Burgundians",
-          "Celts",
-          "Danes",
-          "Franks",
-          "Italians",
-          "Poles",
-          "Portuguese",
-          "Saxons",
-          "Sicilians",
-          "Spanish",
-          "Teutons",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 900
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35251,22 +32027,6 @@
     "2701": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Britons",
-          "Celts",
-          "Danes",
-          "Franks",
-          "Poles",
-          "Saxons",
-          "Sicilians",
-          "Spanish",
-          "Teutons",
-          "Varangians"
-        ],
-        "pic": 901
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35312,11 +32072,6 @@
     "2702": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35348,17 +32103,6 @@
     "2703": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Byzantines",
-          "Danes",
-          "Saxons",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 902
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35408,17 +32152,6 @@
     "2704": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Byzantines",
-          "Danes",
-          "Saxons",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 903
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35468,13 +32201,6 @@
     "2705": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Saxons"
-        ],
-        "pic": 904
-      },
       "chargeEvent": 6,
       "chargeProjectile": 2702,
       "chargeType": 6,
@@ -35524,13 +32250,6 @@
     "2706": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Saxons"
-        ],
-        "pic": 905
-      },
       "chargeEvent": 6,
       "chargeProjectile": 2707,
       "chargeType": 6,
@@ -35580,11 +32299,6 @@
     "2707": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35616,13 +32330,6 @@
     "2708": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Varangians"
-        ],
-        "pic": 906
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35668,13 +32375,6 @@
     "2709": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Varangians"
-        ],
-        "pic": 907
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35720,13 +32420,6 @@
     "2711": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Danes"
-        ],
-        "pic": 908
-      },
       "chargeEvent": 3,
       "chargeProjectile": 2713,
       "chargeType": 6,
@@ -35776,13 +32469,6 @@
     "2712": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Danes"
-        ],
-        "pic": 909
-      },
       "chargeEvent": 3,
       "chargeProjectile": 2713,
       "chargeType": 6,
@@ -35832,11 +32518,6 @@
     "2713": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35868,11 +32549,6 @@
     "2719": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35904,11 +32580,6 @@
     "2720": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -35940,68 +32611,6 @@
     "276": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 37
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36038,67 +32647,6 @@
     "279": {
       "attack": 11,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 80
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36140,64 +32688,6 @@
     "280": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 27
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36239,13 +32729,6 @@
     "281": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Franks"
-        ],
-        "pic": 46
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36295,13 +32778,6 @@
     "282": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Saracens"
-        ],
-        "pic": 37
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36347,51 +32823,6 @@
     "283": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saxons",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings"
-        ],
-        "pic": 49
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36437,11 +32868,6 @@
     "285": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36473,11 +32899,6 @@
     "286": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -36525,13 +32946,6 @@
     "291": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Japanese"
-        ],
-        "pic": 44
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 1,
@@ -36783,11 +33197,6 @@
     "305": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37025,25 +33434,6 @@
     "329": {
       "attack": 0,
       "capacity": 1,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Berbers",
-          "Byzantines",
-          "Cumans",
-          "Ethiopians",
-          "Gurjaras",
-          "Hindustanis",
-          "Khitans",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Saracens",
-          "Tatars",
-          "Turks"
-        ],
-        "pic": 78
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37089,24 +33479,6 @@
     "330": {
       "attack": 0,
       "capacity": 1,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers",
-          "Byzantines",
-          "Ethiopians",
-          "Gurjaras",
-          "Hindustanis",
-          "Khitans",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Saracens",
-          "Tatars",
-          "Turks"
-        ],
-        "pic": 79
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37152,65 +33524,6 @@
     "331": {
       "attack": 200,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings"
-        ],
-        "pic": 29
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37252,66 +33565,6 @@
     "358": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 11
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37365,55 +33618,6 @@
     "359": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Huns",
-          "Incas",
-          "Japanese",
-          "Jurchens",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Mapuche",
-          "Mayans",
-          "Persians",
-          "Portuguese",
-          "Romans",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Varangians",
-          "Vietnamese",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 104
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37467,37 +33671,6 @@
     "36": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers",
-          "Bohemians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Italians",
-          "Jurchens",
-          "Koreans",
-          "Lithuanians",
-          "Malay",
-          "Malians",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Spanish",
-          "Teutons",
-          "Turks",
-          "Vietnamese"
-        ],
-        "pic": 30
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37539,11 +33712,6 @@
     "363": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37575,11 +33743,6 @@
     "364": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37611,11 +33774,6 @@
     "365": {
       "attack": 1,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37647,11 +33805,6 @@
     "366": {
       "attack": 1,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37683,11 +33836,6 @@
     "367": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37719,11 +33867,6 @@
     "368": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37755,11 +33898,6 @@
     "369": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37791,11 +33929,6 @@
     "372": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37827,11 +33960,6 @@
     "373": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37863,11 +33991,6 @@
     "374": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37899,53 +34022,6 @@
     "38": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings"
-        ],
-        "pic": 1
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -37991,11 +34067,6 @@
     "380": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38027,43 +34098,6 @@
     "39": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Berbers",
-          "Bulgarians",
-          "Burmese",
-          "Byzantines",
-          "Chinese",
-          "Cumans",
-          "Ethiopians",
-          "Georgians",
-          "Goths",
-          "Hindustanis",
-          "Huns",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Romans",
-          "Saracens",
-          "Shu",
-          "Slavs",
-          "Tatars",
-          "Turks",
-          "Vietnamese",
-          "Wu"
-        ],
-        "pic": 19
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38109,68 +34143,6 @@
     "4": {
       "attack": 4,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 17
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38220,13 +34192,6 @@
     "40": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Byzantines"
-        ],
-        "pic": 35
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38272,13 +34237,6 @@
     "41": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Goths"
-        ],
-        "pic": 50
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38328,47 +34286,6 @@
     "420": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Celts",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Gurjaras",
-          "Hindustanis",
-          "Italians",
-          "Japanese",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Vietnamese"
-        ],
-        "pic": 55
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38405,63 +34322,6 @@
     "422": {
       "attack": 0,
       "capacity": 6,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei"
-        ],
-        "pic": 63
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38503,11 +34363,6 @@
     "434": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38548,68 +34403,6 @@
     "440": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 113
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38659,42 +34452,6 @@
     "441": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Cumans",
-          "Ethiopians",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Magyars",
-          "Mongols",
-          "Persians",
-          "Saracens",
-          "Saxons",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Turks",
-          "Varangians",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 103
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38740,65 +34497,6 @@
     "442": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 60
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38835,62 +34533,6 @@
     "448": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 64
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -38936,68 +34578,6 @@
     "45": {
       "attack": 3,
       "capacity": 5,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 13
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39034,13 +34614,6 @@
     "46": {
       "attack": 17,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Turks"
-        ],
-        "pic": 39
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39479,61 +35052,6 @@
     "473": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 12
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39583,39 +35101,6 @@
     "474": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers",
-          "Bulgarians",
-          "Burmese",
-          "Byzantines",
-          "Cumans",
-          "Ethiopians",
-          "Georgians",
-          "Goths",
-          "Hindustanis",
-          "Huns",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Romans",
-          "Saracens",
-          "Shu",
-          "Slavs",
-          "Tatars",
-          "Turks",
-          "Vietnamese"
-        ],
-        "pic": 71
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39661,11 +35146,6 @@
     "477": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39697,11 +35177,6 @@
     "478": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39733,66 +35208,6 @@
     "487": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 36
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39829,68 +35244,6 @@
     "49": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 22
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -39927,42 +35280,6 @@
     "492": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Bohemians",
-          "Britons",
-          "Byzantines",
-          "Chinese",
-          "Dravidians",
-          "Ethiopians",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Koreans",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Tupi",
-          "Vietnamese",
-          "Vikings",
-          "Wu"
-        ],
-        "pic": 90
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40110,35 +35427,6 @@
     "5": {
       "attack": 17,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Berbers",
-          "Bohemians",
-          "Burgundians",
-          "Byzantines",
-          "Dravidians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Malians",
-          "Persians",
-          "Portuguese",
-          "Saracens",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks"
-        ],
-        "pic": 22
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40188,63 +35476,6 @@
     "50": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 35
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40281,11 +35512,6 @@
     "503": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40317,11 +35543,6 @@
     "504": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40353,11 +35574,6 @@
     "505": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40389,11 +35605,6 @@
     "506": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40425,11 +35636,6 @@
     "507": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40461,11 +35667,6 @@
     "508": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40595,11 +35796,6 @@
     "510": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40631,11 +35827,6 @@
     "511": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40667,11 +35858,6 @@
     "512": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40703,11 +35889,6 @@
     "515": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40739,62 +35920,6 @@
     "527": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Romans",
-          "Saracens",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Vietnamese",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 84
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40831,37 +35956,6 @@
     "528": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Berbers",
-          "Britons",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Dravidians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Huns",
-          "Jurchens",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Saracens",
-          "Shu",
-          "Sicilians",
-          "Spanish",
-          "Teutons",
-          "Turks",
-          "Vietnamese",
-          "Wu"
-        ],
-        "pic": 83
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -40898,68 +35992,6 @@
     "529": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 86
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2629,
       "chargeType": 0,
@@ -40996,13 +36028,6 @@
     "530": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Britons"
-        ],
-        "pic": 472
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41052,13 +36077,6 @@
     "531": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Franks"
-        ],
-        "pic": 473
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41108,49 +36126,6 @@
     "532": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Britons",
-          "Burgundians",
-          "Byzantines",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Romans",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Varangians",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 85
-      },
       "chargeEvent": 0,
       "chargeProjectile": 2629,
       "chargeType": 0,
@@ -41187,16 +36162,6 @@
     "533": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Danes",
-          "Saxons",
-          "Varangians",
-          "Vikings"
-        ],
-        "pic": 474
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41233,13 +36198,6 @@
     "534": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Celts"
-        ],
-        "pic": 475
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41289,68 +36247,6 @@
     "539": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 87
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41387,11 +36283,6 @@
     "54": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41423,51 +36314,6 @@
     "542": {
       "attack": 14,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burmese",
-          "Celts",
-          "Chinese",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Incas",
-          "Japanese",
-          "Jurchens",
-          "Khmer",
-          "Magyars",
-          "Malay",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Romans",
-          "Saxons",
-          "Sicilians",
-          "Slavs",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 89
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41509,68 +36355,6 @@
     "545": {
       "attack": 0,
       "capacity": 20,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 95
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41607,61 +36391,6 @@
     "546": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 91
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41707,44 +36436,6 @@
     "548": {
       "attack": 0,
       "capacity": 6,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bulgarians",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Ethiopians",
-          "Georgians",
-          "Huns",
-          "Incas",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vikings",
-          "Wei"
-        ],
-        "pic": 73
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41786,62 +36477,6 @@
     "550": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 101
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41883,13 +36518,6 @@
     "553": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Byzantines"
-        ],
-        "pic": 476
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41935,13 +36563,6 @@
     "554": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Teutons"
-        ],
-        "pic": 477
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -41991,13 +36612,6 @@
     "555": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Goths"
-        ],
-        "pic": 478
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42047,13 +36661,6 @@
     "556": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Saracens"
-        ],
-        "pic": 479
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42099,13 +36706,6 @@
     "557": {
       "attack": 22,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Turks"
-        ],
-        "pic": 480
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42155,13 +36755,6 @@
     "558": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Persians"
-        ],
-        "pic": 481
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42207,13 +36800,6 @@
     "559": {
       "attack": 10,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Chinese"
-        ],
-        "pic": 482
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42263,13 +36849,6 @@
     "560": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Japanese"
-        ],
-        "pic": 483
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 1,
@@ -42319,13 +36898,6 @@
     "561": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Mongols"
-        ],
-        "pic": 484
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42371,62 +36943,6 @@
     "562": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 40
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42739,51 +37255,6 @@
     "567": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Hindustanis",
-          "Italians",
-          "Japanese",
-          "Khitans",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malians",
-          "Mongols",
-          "Poles",
-          "Portuguese",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Teutons",
-          "Turks",
-          "Vietnamese",
-          "Vikings",
-          "Wu"
-        ],
-        "pic": 72
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42833,22 +37304,6 @@
     "569": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Burgundians",
-          "Byzantines",
-          "Celts",
-          "Cumans",
-          "Franks",
-          "Huns",
-          "Lithuanians",
-          "Magyars",
-          "Spanish",
-          "Teutons"
-        ],
-        "pic": 2
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -42894,62 +37349,6 @@
     "584": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 39
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43262,27 +37661,6 @@
     "588": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Aztecs",
-          "Bulgarians",
-          "Celts",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Georgians",
-          "Malians",
-          "Mongols",
-          "Muisca",
-          "Saracens",
-          "Sicilians",
-          "Slavs",
-          "Teutons"
-        ],
-        "pic": 102
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43324,11 +37702,6 @@
     "594": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43374,68 +37747,6 @@
     "598": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 38
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43472,67 +37783,6 @@
     "6": {
       "attack": 3,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 21
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43582,11 +37832,6 @@
     "627": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43618,11 +37863,6 @@
     "656": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43654,11 +37894,6 @@
     "676": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43690,63 +37925,6 @@
     "68": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 19
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43783,32 +37961,6 @@
     "691": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Burgundians",
-          "Burmese",
-          "Dravidians",
-          "Hindustanis",
-          "Italians",
-          "Japanese",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Malay",
-          "Persians",
-          "Portuguese",
-          "Saracens",
-          "Spanish",
-          "Tatars",
-          "Turks",
-          "Vietnamese"
-        ],
-        "pic": 298
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43845,13 +37997,6 @@
     "692": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Vikings"
-        ],
-        "pic": 38
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43901,13 +38046,6 @@
     "694": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Vikings"
-        ],
-        "pic": 485
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -43957,68 +38095,6 @@
     "7": {
       "attack": 2,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 20
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44068,67 +38144,6 @@
     "70": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 34
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44165,11 +38180,6 @@
     "705": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44308,68 +38318,6 @@
     "72": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 30
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44406,13 +38354,6 @@
     "725": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Aztecs"
-        ],
-        "pic": 110
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44462,13 +38403,6 @@
     "726": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Aztecs"
-        ],
-        "pic": 486
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44518,13 +38452,6 @@
     "73": {
       "attack": 8,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Chinese"
-        ],
-        "pic": 36
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44574,11 +38501,6 @@
     "736": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44610,64 +38532,6 @@
     "74": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 8
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44717,11 +38581,6 @@
     "746": {
       "attack": 11,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44753,64 +38612,6 @@
     "75": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 10
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44860,14 +38661,6 @@
     "751": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Aztecs",
-          "Mayans"
-        ],
-        "pic": 109
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44917,14 +38710,6 @@
     "752": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Aztecs",
-          "Mayans"
-        ],
-        "pic": 149
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -44974,14 +38759,6 @@
     "753": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Aztecs",
-          "Mayans"
-        ],
-        "pic": 148
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45031,13 +38808,6 @@
     "755": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Huns"
-        ],
-        "pic": 105
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45083,13 +38853,6 @@
     "757": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Huns"
-        ],
-        "pic": 487
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45135,13 +38898,6 @@
     "759": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Goths"
-        ],
-        "pic": 50
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45195,13 +38951,6 @@
     "761": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Goths"
-        ],
-        "pic": 478
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45255,13 +39004,6 @@
     "763": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Mayans"
-        ],
-        "pic": 108
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45311,13 +39053,6 @@
     "765": {
       "attack": 5,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Mayans"
-        ],
-        "pic": 488
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45367,11 +39102,6 @@
     "767": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45403,63 +39133,6 @@
     "77": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Italians",
-          "Japanese",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mayans",
-          "Mongols",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 13
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45509,13 +39182,6 @@
     "771": {
       "attack": 16,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Spanish"
-        ],
-        "pic": 106
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45561,13 +39227,6 @@
     "773": {
       "attack": 19,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Spanish"
-        ],
-        "pic": 489
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45613,13 +39272,6 @@
     "775": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Spanish"
-        ],
-        "pic": 107
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45672,11 +39324,6 @@
     "786": {
       "attack": 10,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45708,67 +39355,6 @@
     "79": {
       "attack": 5,
       "capacity": 5,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 25
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45805,68 +39391,6 @@
     "792": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 44
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45903,13 +39427,6 @@
     "8": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Britons"
-        ],
-        "pic": 41
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -45959,68 +39476,6 @@
     "82": {
       "attack": 11,
       "capacity": 20,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 7
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46057,13 +39512,6 @@
     "827": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Koreans"
-        ],
-        "pic": 117
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46109,13 +39557,6 @@
     "829": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Koreans"
-        ],
-        "pic": 490
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46161,68 +39602,6 @@
     "83": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 15
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46272,13 +39651,6 @@
     "831": {
       "attack": 9,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Koreans"
-        ],
-        "pic": 116
-      },
       "chargeEvent": 0,
       "chargeProjectile": 767,
       "chargeType": 7,
@@ -46315,13 +39687,6 @@
     "832": {
       "attack": 13,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Koreans"
-        ],
-        "pic": 491
-      },
       "chargeEvent": 0,
       "chargeProjectile": 767,
       "chargeType": 7,
@@ -46358,11 +39723,6 @@
     "833": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [],
-        "pic": null
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46408,68 +39768,6 @@
     "84": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 16
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46598,13 +39896,6 @@
     "866": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Italians"
-        ],
-        "pic": 133
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46654,13 +39945,6 @@
     "868": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Italians"
-        ],
-        "pic": 492
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46710,13 +39994,6 @@
     "869": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Magyars"
-        ],
-        "pic": 99
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46762,68 +40039,6 @@
     "87": {
       "attack": 0,
       "capacity": 10,
-      "catalog": {
-        "age": 2,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 0
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46860,13 +40075,6 @@
     "871": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Magyars"
-        ],
-        "pic": 493
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46912,15 +40120,6 @@
     "873": {
       "attack": 6,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Bengalis",
-          "Dravidians",
-          "Gurjaras"
-        ],
-        "pic": 393
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -46966,15 +40165,6 @@
     "875": {
       "attack": 7,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Bengalis",
-          "Dravidians",
-          "Gurjaras"
-        ],
-        "pic": 93
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47020,13 +40210,6 @@
     "876": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Slavs"
-        ],
-        "pic": 114
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47072,13 +40255,6 @@
     "878": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Slavs"
-        ],
-        "pic": 494
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47124,13 +40300,6 @@
     "879": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Incas"
-        ],
-        "pic": 97
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47180,13 +40349,6 @@
     "881": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Incas"
-        ],
-        "pic": 495
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47236,13 +40398,6 @@
     "882": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Italians"
-        ],
-        "pic": 134
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47292,13 +40447,6 @@
     "886": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 3,
-        "civs": [
-          "Huns"
-        ],
-        "pic": 105
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47348,13 +40496,6 @@
     "887": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 4,
-        "civs": [
-          "Huns"
-        ],
-        "pic": 487
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,
@@ -47404,68 +40545,6 @@
     "93": {
       "attack": 0,
       "capacity": 0,
-      "catalog": {
-        "age": 1,
-        "civs": [
-          "Armenians",
-          "Aztecs",
-          "Bengalis",
-          "Berbers",
-          "Bohemians",
-          "Britons",
-          "Bulgarians",
-          "Burgundians",
-          "Burmese",
-          "Byzantines",
-          "Celts",
-          "Chinese",
-          "Cumans",
-          "Danes",
-          "Dravidians",
-          "Ethiopians",
-          "Franks",
-          "Georgians",
-          "Goths",
-          "Gurjaras",
-          "Hindustanis",
-          "Huns",
-          "Incas",
-          "Italians",
-          "Japanese",
-          "Jurchens",
-          "Khitans",
-          "Khmer",
-          "Koreans",
-          "Lithuanians",
-          "Magyars",
-          "Malay",
-          "Malians",
-          "Mapuche",
-          "Mayans",
-          "Mongols",
-          "Muisca",
-          "Persians",
-          "Poles",
-          "Portuguese",
-          "Romans",
-          "Saracens",
-          "Saxons",
-          "Shu",
-          "Sicilians",
-          "Slavs",
-          "Spanish",
-          "Tatars",
-          "Teutons",
-          "Tupi",
-          "Turks",
-          "Varangians",
-          "Vietnamese",
-          "Vikings",
-          "Wei",
-          "Wu"
-        ],
-        "pic": 31
-      },
       "chargeEvent": 0,
       "chargeProjectile": -1,
       "chargeType": 0,

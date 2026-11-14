@@ -3,6 +3,7 @@ import importlib.util
 import json
 import sys
 import unittest
+from copy import deepcopy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -17,6 +18,38 @@ class GarrisonGeneral224Test(unittest.TestCase):
     def setUpClass(cls):
         cls.data = json.loads((ROOT / 'src/data/garrison_general.json').read_text())
         cls.hosts = json.loads((ROOT / 'src/data/garrison_hosts.json').read_text())
+        cls.techs = json.loads((ROOT / 'src/data/garrison_techs.json').read_text())
+        cls.catalog = {str(unit['id']): unit for name in ('units', 'buildings')
+                       for unit in json.loads((ROOT / ('src/data/%s.json' % name)).read_text())}
+
+    def test_general_export_removes_only_recoverable_copies_without_mutating_tech_input(self):
+        source = {field: self.catalog['4'][field] for field in ('age', 'pic', 'civs')}
+        building = {field: self.catalog['109'][field] for field in ('age', 'pic', 'civs')}
+        placeholder = {'age': 1, 'pic': None, 'civs': []}
+        cases = [('4', source, False), ('109', building, False), ('999999', placeholder, False),
+                 ('999999', source, True)]
+        cases += [('4', {**source, field: value}, True)
+                  for field, value in [('age', source['age'] + 1), ('pic', 'different'), ('civs', [])]]
+        for key, fallback, retained in cases:
+            with self.subTest(key=key, catalog=fallback):
+                data = {'units': {key: {'id': int(key), 'catalog': fallback}},
+                        'unitUpgradeTechs': {'24': [100]}}
+                original = deepcopy(data)
+                exported = module.general_data(data)
+                self.assertEqual('catalog' in exported['units'][key], retained)
+                if retained:
+                    self.assertEqual(exported['units'][key]['catalog'], fallback)
+                self.assertNotIn('unitUpgradeTechs', exported)
+                self.assertEqual(data, original)
+
+    def test_generated_general_keeps_only_nonredundant_catalogs_and_no_upgrade_index(self):
+        self.assertNotIn('unitUpgradeTechs', self.data)
+        for key, unit in self.data['units'].items():
+            if 'catalog' in unit:
+                self.assertNotEqual(unit['catalog'], {'age': 1, 'pic': None, 'civs': []})
+                if key in self.catalog:
+                    self.assertNotEqual(unit['catalog'], {field: self.catalog[key][field]
+                                                         for field in ('age', 'pic', 'civs')})
 
     def test_attack_multiplier_decodes_class_and_percentage(self):
         commands = [{'Type': 5, 'A': 4, 'B': -1, 'C': 9, 'D': 858}]
@@ -111,8 +144,8 @@ class GarrisonGeneral224Test(unittest.TestCase):
     def test_extra_train_location_uses_selected_slot(self):
         self.assertEqual(self.data['techs']['16']['trainingLocations'],
                          [{'unit': 41, 'slot': 1, 'location': 12}, {'unit': 555, 'slot': 1, 'location': 12}])
-        self.assertEqual(self.data['unitUpgradeTechs']['24'], [100])
-        self.assertEqual(self.data['unitUpgradeTechs']['234'], [140])
+        self.assertEqual(self.techs['unitUpgradeTechs']['24'], [100])
+        self.assertEqual(self.techs['unitUpgradeTechs']['234'], [140])
 
     def test_relic_deposit_and_transformed_monastery_stay_separate(self):
         tasks = self.data['units']['286']['specialTasks']
@@ -142,7 +175,7 @@ class GarrisonGeneral224Test(unittest.TestCase):
                 self.assertIn(str(record['startingScoutId']), self.data['units'])
         # Starting units may exist before their normal training age. Exporting
         # the starting rule must not rewrite the normal unit catalog age.
-        self.assertEqual(self.data['units']['751']['catalog']['age'], 2)
+        self.assertEqual(self.data['units']['751'].get('catalog', self.catalog['751'])['age'], 2)
 
 
 if __name__ == '__main__':

@@ -5,6 +5,9 @@ import pins from '../../scripts/data_sources.json';
 import historicalPins from '../../scripts/patch_inputs/185872.json';
 import construction from '../../src/data/construction.json';
 import garrison from '../../src/data/garrison_general.json';
+import garrisonTechs from '../../src/data/garrison_techs.json';
+import units from '../../src/data/units.json';
+import buildings from '../../src/data/buildings.json';
 
 function canonical(value: unknown): string {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
@@ -45,16 +48,21 @@ describe('#282 compact calculation inputs', () => {
   it('ships only consumed garrison unit/catalog fields', () => {
     for (const unit of Object.values(garrison.units)) {
       for (const key of ['name', 'languageId', 'minRange', 'resourceCapacity']) expect(unit).not.toHaveProperty(key);
-      expect(unit.catalog).not.toHaveProperty('en');
-      expect(unit.catalog).not.toHaveProperty('zh');
+      if ('catalog' in unit) {
+        expect(unit.catalog).not.toHaveProperty('en');
+        expect(unit.catalog).not.toHaveProperty('zh');
+      }
     }
   });
   it('preserves every runtime garrison payload from main cca7e56 under historical provenance', () => {
     const projected = JSON.parse(JSON.stringify(garrison));
-    for (const unit of Object.values(projected.units) as Record<string, unknown>[]) {
+    const catalog = new Map([...units, ...buildings].map(({ id, age, pic, civs }) => [id, { age, pic, civs }]));
+    for (const [id, unit] of Object.entries(projected.units) as [string, Record<string, unknown>][]) {
+      unit.catalog ??= catalog.get(Number(id)) ?? { age: 1, pic: null, civs: [] };
       for (const key of ['name', 'languageId', 'minRange', 'resourceCapacity']) delete unit[key];
       for (const key of ['en', 'zh']) delete (unit.catalog as Record<string, unknown>)[key];
     }
+    projected.unitUpgradeTechs = garrisonTechs.unitUpgradeTechs;
     for (const building of Object.values(projected.buildings) as Record<string, unknown>[]) delete building.civs;
     delete projected.unitUnlockTechs;
     projected.meta = {
