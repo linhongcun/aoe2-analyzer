@@ -25,7 +25,7 @@ python3 scripts/build_sim_source.py --civ Mayans --tech 554 \
 python3 scripts/build_sim_source.py --check-budget
 ```
 
-[scripts/build_sim_source.py](../../scripts/build_sim_source.py) 的 `--pin-from` 校验原 repo/commit/path/SHA-256、DAT 补丁标记与规范化版本；`--check` 必须使用与生成时相同的文明、科技和 pin。不要用当前来源为历史记录重新贴标签。
+[scripts/build_sim_source.py](../../scripts/build_sim_source.py) 的 `--pin-from` 要求摘要记录 repo、完整 commit、path 与 SHA-256，并按该来源取回或读取 DAT 后核对字节 SHA-256。仅当摘要记录 `markers` 时才逐项验证补丁标记；未记录 markers 的历史摘要（如 Mayans 固定摘要）只执行 [scripts/dat_source.py](../../scripts/dat_source.py) 的文明、科技和效果数量下限检查。`normalizedVersion` 始终与解析出的 DAT 版本比较。`--check` 必须使用与生成时相同的文明、科技和 pin。不要用当前来源为历史记录重新贴标签。
 
 摘要使用 `build-sim-source/1`，包含来源身份、文明 raw ID、tree/team 命令、选择的完整科技记录、专属科技指纹及已知引用闭包。脚本要求 `--raw-output` 位于忽略目录 `scripts/.cache/` 中；完整导出不得写入或提交到跟踪目录。
 
