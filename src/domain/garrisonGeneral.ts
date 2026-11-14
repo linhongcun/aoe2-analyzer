@@ -373,7 +373,8 @@ export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, confi
     const unit = data.units[id];
     if (unit?.secondaryProjectile && unit.secondaryProjectile >= 0) targets.add(unit.secondaryProjectile);
   }
-  const shapeUpgrades = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
+  const upgradeData = data === GENERAL_GARRISON_DATA ? GARRISON_TECH_DATA : data;
+  const shapeUpgrades = new Set(Object.values(upgradeData.unitUpgradeTechs ?? {}).flat());
   return availableTechs(ctx, config, data).filter(
     (t) =>
       !shapeUpgrades.has(t.id) &&

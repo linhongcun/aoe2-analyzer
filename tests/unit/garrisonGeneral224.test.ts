@@ -263,6 +263,13 @@ describe('#224 general garrison model', () => {
     expect(getGarrisonTechs(ctx, b, config({ civ: 'Turks' })).some((t) => t.id === 47)).toBe(true);
     expect(getFreeGarrisonTechs(ctx, b, config({ civ: 'Turks' }))).toContain(47);
   });
+  it('keeps custom upgrade filtering aligned with the supplied garrison data', () => {
+    const b = ctx.core.buildingById[109]!;
+    const c = config({ civ: 'Turks' });
+    const data = { ...GENERAL_GARRISON_DATA, unitUpgradeTechs: { [b.id]: [47] } };
+    expect(getGarrisonTechs(ctx, b, c).map((t) => t.id)).toContain(47);
+    expect(getGarrisonTechs(ctx, b, c, data).map((t) => t.id)).not.toContain(47);
+  });
   it('does not mutate generated data, input rows or selected technologies', () => {
     const before = JSON.stringify(GENERAL_GARRISON_DATA),
       c = config({ rows: [row(83)], techs: [] });
