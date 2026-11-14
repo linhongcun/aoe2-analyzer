@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
-import units from '../../src/data/units.json';
-import techs from '../../src/data/techs.json';
-import buildings from '../../src/data/buildings.json';
+import civs from '../../data/game/civs.json';
+import units from '../../data/game/units.json';
+import techs from '../../data/game/techs.json';
+import buildings from '../../data/game/buildings.json';
 import { search, type SearchItem } from '../../src/domain/search';
 import { civMatches } from '../../src/shared/ui/CivPicker';
 
@@ -11,7 +11,7 @@ import { civMatches } from '../../src/shared/ui/CivPicker';
  * #123 搜索支持拼音（全拼和首字母）。
  * #123 原始范围：civs、units、techs、buildings；#162 B 扩展的加成和页面见 search-pinyin162.test.ts。
  * 草案字段名：每条数据加 py（全拼，无声调，小写，无空格）和 pyi（每个字的首字母）。字段名 Linus 可改，改了这里跟着改。
- * 所有例子取自 src/data/*.json 的真实中文名；多音字按游戏内词义定读音（见 /workspace/v080-specs-123.md）。
+ * 所有例子取自 data/game/*.json 的真实中文名；多音字按游戏内词义定读音（见 /workspace/v080-specs-123.md）。
  */
 type Row = { zh: string; en: string; id?: number; py?: unknown; pyi?: unknown };
 const DATA = { civs, units, techs, buildings } as unknown as Record<string, Row[]>;

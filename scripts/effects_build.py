@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从 .dat 原始效果表生成 src/data/effects.json（科技 / 文明加成 / 团队加成的结构化效果）。
+"""从 .dat 原始效果表生成 data/game/effects.json（科技 / 文明加成 / 团队加成的结构化效果）。
 
 数据源：DE 原版 empires2_x2_p1.dat（SiegeEngineers/auto-mods@0c38027，DE Update 185872，sha256 固定），
   由 scripts/dat_source.py 在构建时下载、校验（sha256 + 补丁标记）并用 genieutils-py 解析；.dat © Microsoft，不提交、不发布。
@@ -114,10 +114,10 @@ def tech_cost_what(b):
 def main():
     A = load_dat()
     pc = fetch(SRC_C); lhc_src = pc.read_text() if pc else ''
-    units = json.load(open(ROOT / 'src/data/units.json'))
-    blds = json.load(open(ROOT / 'src/data/buildings.json'))
-    techs = json.load(open(ROOT / 'src/data/techs.json'))
-    civs = json.load(open(ROOT / 'src/data/civs.json'))
+    units = json.load(open(ROOT / 'data/game/units.json'))
+    blds = json.load(open(ROOT / 'data/game/buildings.json'))
+    techs = json.load(open(ROOT / 'data/game/techs.json'))
+    civs = json.load(open(ROOT / 'data/game/civs.json'))
     ours = {u['id']: u for u in units}
     ours.update({b['id']: dict(b, _b=1) for b in blds})
     forms = building_age_forms(A, [b['id'] for b in blds])
@@ -338,7 +338,7 @@ def main():
         out['civs'][en] = {'dat': ai is not None, 'bonus': entries, 'team': {'combat': ai is not None, 'rules': trules, 'eco': teco}}
 
     # ---- 关联 ----
-    links = json.load(open(ROOT / 'scripts/effects_links.json')) if (ROOT / 'scripts/effects_links.json').exists() else {}
+    links = json.load(open(ROOT / 'data/sources/effects_links.json')) if (ROOT / 'data/sources/effects_links.json').exists() else {}
     CLASSW = ['Infantry', 'Cavalry', 'Mounted', 'Archer', 'Ship', 'Monk', 'Villager', 'Siege', 'Gunpowder', 'Camel', 'Elephant', 'Town Center', 'Castle', 'Scout', 'Galley', 'Knight', 'Spearman', 'Skirmisher', 'Tower', 'Dock', 'Farm', 'Building']
     for c in civs:
         ent = out['civs'][c['en']]
@@ -373,14 +373,14 @@ def main():
     U0 = AC[0]['Units']
     out['meta']['newIds'] = sorted(i for i in ours if i >= len(U0) or U0[i] is None)
     out['meta']['unmatchedCivs'] = [c['en'] for c in civs if c['en'] not in adat]
-    (ROOT / 'src/data/effects.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')))
+    (ROOT / 'data/game/effects.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')))
     n = sum(len(v['bonus']) for v in out['civs'].values())
-    print('techs', len(out['techs']), 'civ bonus techs', n, 'size', (ROOT / 'src/data/effects.json').stat().st_size)
+    print('techs', len(out['techs']), 'civ bonus techs', n, 'size', (ROOT / 'data/game/effects.json').stat().st_size)
 
 
 
 # ---------------- 关联：dat 加成科技 → civs.json 加成文本序号 ----------------
-# 自动打分（科技内部名/作用单位/属性 与英文加成文本的词汇重合），scripts/effects_links.json 人工校正关联（只校正「属于哪条」，不改数值）。
+# 自动打分（科技内部名/作用单位/属性 与英文加成文本的词汇重合），data/sources/effects_links.json 人工校正关联（只校正「属于哪条」，不改数值）。
 STAT_WORDS = {'hp': ['hp'], 'spd': ['move', 'faster'], 'rof': ['attack', 'faster', 'fire'], 'los': ['line of sight'], 'rng': ['range'], 'ma': ['armor'], 'pa': ['armor'],
               'atk': ['attack'], 'bonus': ['attack vs', 'bonus damage', 'damage'], 'bt': ['train', 'built', 'faster', 'work'], 'gar': ['garrison'], 'acc': ['accura'], 'minr': ['minimum range']}
 ECO_WORDS = {100: ['cost'], 103: ['cost', 'food'], 104: ['cost', 'wood'], 105: ['cost', 'gold'], 106: ['cost', 'stone'], 13: ['work', 'faster'], 14: ['carry'], 109: ['regenerat'], 24: ['bonus damage'],

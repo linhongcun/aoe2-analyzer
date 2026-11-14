@@ -3,7 +3,7 @@
 
 用法：python3 scripts/data_update_coverage.py
 npm run data:update / data:status 会在接触网络和生成器之前调用 check()。
-清单：scripts/data_update_coverage.json。说明：docs/DATA-UPDATE.md。
+清单：data/sources/data_update_coverage.json。说明：docs/DATA-UPDATE.md。
 """
 from __future__ import annotations
 
@@ -14,10 +14,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MANIFEST_PATH = 'scripts/data_update_coverage.json'
+MANIFEST_PATH = 'data/sources/data_update_coverage.json'
 DOC_PATH = 'docs/DATA-UPDATE.md'
 RUNNERS = {'node', 'npx', 'vite-node'}
-PATH_PREFIXES = ('scripts/', 'src/', 'docs/', 'tests/', '.github/')
+PATH_PREFIXES = ('data/', 'scripts/', 'src/', 'docs/', 'tests/', '.github/')
 
 
 def read_text(root: Path, rel: str, sources: dict[str, str] | None) -> str:
@@ -361,11 +361,11 @@ def check(
     for required in ('scripts/patches_build.py', 'scripts/history_build.py', 'scripts/map_previews.py', 'scripts/map_catalog_build.py'):
         if required not in skip_scripts:
             errors.append(f'漏登记：{required} 必须列入故意不跑')
-    for basename in ('patches_build.py', 'history_build.py', 'map_previews.py', 'map_catalog_build.py', 'src/data/patches'):
+    for basename in ('patches_build.py', 'history_build.py', 'map_previews.py', 'map_catalog_build.py', 'data/game/patches'):
         if basename in data_update:
             errors.append(f'补丁历史：data_update.py 不得写入或调用 {basename}')
-    if 'PATCH-NOTES' not in data_update:
-        errors.append('编排漂移：data_update.py 不再写 docs/PATCH-NOTES')
+    if 'data/patch-notes' not in data_update:
+        errors.append('编排漂移：data_update.py 不再写 data/patch-notes')
     stop_message = data.get('failFast', {}).get('stopMessage', '')
     try:
         if not run_fails_closed(data_update):
@@ -509,7 +509,7 @@ def check(
                 errors.append(f'编排漂移：{site["file"]} 不再说明现行费用策略（{phrase}）')
 
     try:
-        pins = json.loads(text('scripts/data_sources.json'))
+        pins = json.loads(text('data/sources/data_sources.json'))
     except json.JSONDecodeError as exc:
         pins = {}
         errors.append(f'补丁历史：无法解析 data_sources.json：{exc}')
@@ -519,7 +519,7 @@ def check(
         errors.append(
             f'补丁历史：当前 pin 是 {pin_build}，覆盖清单 pinBuildIs 仍是 {history["pinBuildIs"]}。'
             '本检查只拒绝改写已锁定档案的身份常量，不检查新补丁档案是否已经建立。'
-            '不要改写 src/data/patches/188329.json 或 patches_188329.py 的 FIXED_COMMITS / DAT_SHA256。'
+            '不要改写 data/game/patches/188329.json 或 patches_188329.py 的 FIXED_COMMITS / DAT_SHA256。'
             '只把清单里的 pinBuildIs 改成新号，并不能证明新档案存在。'
         )
     asset_sources = pins.get('assetSources') or {}

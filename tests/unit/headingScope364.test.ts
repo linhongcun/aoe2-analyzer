@@ -161,7 +161,7 @@ describe('#364 bounded Duel presentation plan', () => {
       'vite.config.ts',
     ])
       expect(planChanges([change(path, '', 'body {display:none}')]), path).toMatchObject({ full: true, data: false });
-    for (const path of ['src/data/units.json', 'public/img/unit.png', 'scripts/build_data.py'])
+    for (const path of ['data/game/units.json', 'public/img/unit.png', 'scripts/build_data.py'])
       expect(planChanges([change(path)]), path).toMatchObject({ full: true, data: true });
     expect(planChanges([change('package.json', '{"version":"0.40.1"}', '{"version":"0.40.2","scripts":{"build":"other"}}')])).toMatchObject({
       full: true,

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page, type Request } from '@playwright/test';
 
-const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
+const PINS = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../data/sources/data_sources.json');
 
 const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 const PKG_VERSION = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
@@ -484,7 +484,7 @@ test('data version badge links to about-data page with pins and patch notes', as
   await expect(page.locator('[data-t="src-dat"]')).toContainText(`${PINS.sources.dat.repo}@${PINS.sources.dat.commit.slice(0, 7)}`);
   await expect(page.locator('[data-t="src-dat"]')).toContainText('sha256');
   await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText(`@${PINS.sources.aoe2techtree.commit.slice(0, 7)}`);
-  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', new RegExp(`PATCH-NOTES/${PINS.patch.build}\\.md$`));
+  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', new RegExp(`data/patch-notes/${PINS.patch.build}\\.md$`));
 });
 
 test('build orders read-only list renders all entries with sources', async ({ page }) => {

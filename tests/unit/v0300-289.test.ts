@@ -14,11 +14,11 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import baseline from './__fixtures__/v0300-289-baseline.json' with { type: 'json' };
+import baseline from '../../data/fixtures/unit/__fixtures__/v0300-289-baseline.json' with { type: 'json' };
 
 const DIR = 'tests/unit';
 const read = (f: string) => readFileSync(`${DIR}/${f}`, 'utf8');

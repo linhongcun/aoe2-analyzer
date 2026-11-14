@@ -14,8 +14,8 @@ import {
 } from '../../src/domain/ladder';
 import { canonicalLadderSearch, resolveLadderLocation } from '../../src/domain/ladderQuery';
 
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
-const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const team = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
 
 describe('天梯默认切片地址与平衡口径 #577', () => {
   it('补丁号缺失时不算当前平衡，即使 isPatchMismatch 为 false', () => {

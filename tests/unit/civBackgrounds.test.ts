@@ -4,8 +4,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import civs from '../../src/data/raw/civs';
-import manifest from '../../src/features/civs/backgrounds.json';
-import source from '../../src/features/civs/backgrounds.source.json';
+import manifest from '../../data/reference/civs/backgrounds.json';
+import source from '../../data/reference/civs/backgrounds.source.json';
 import { civBackground } from '../../src/features/civs/backgrounds';
 import { CivBackground } from '../../src/features/civs/components/CivBackground';
 

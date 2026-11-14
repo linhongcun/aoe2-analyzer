@@ -10,7 +10,7 @@ import subprocess
 
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 
-OUT = ROOT / 'src/data/trade_income.json'
+OUT = ROOT / 'data/game/trade_income.json'
 DUMP = r'''
 import json,sys
 from genieutils.datfile import DatFile

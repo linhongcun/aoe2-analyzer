@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import trees from '../../src/data/trees.json';
+import trees from '../../data/game/trees.json';
 import { civStatus } from '../../src/domain/simulator';
 import type { Trees } from '../../src/domain/types';
 import { tech } from './helpers';

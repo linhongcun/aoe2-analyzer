@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/relic_income.json';
-import civs from '../../src/data/civs.json';
+import raw from '../../data/game/relic_income.json';
+import civs from '../../data/game/civs.json';
 import {
   calculateRelicIncome,
   decodeRelicIncome,

@@ -1,4 +1,4 @@
-import raw from '../content/glossary.json';
+import raw from '../../data/content/glossary.json';
 import { search, withSearchPy, type SearchItem } from './search';
 
 export interface GlossaryTerm {

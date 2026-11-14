@@ -12,7 +12,7 @@ import subprocess
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat, load
 from effects_build import CIV_DAT, TEAM_TECHS
 
-OUT = ROOT / 'src/data/construction.json'
+OUT = ROOT / 'data/game/construction.json'
 DUMP = r'''
 import json,sys
 from genieutils.datfile import DatFile
@@ -45,9 +45,9 @@ def raw_units(buildings):
 
 
 def build(d, units):
-    buildings = json.loads((ROOT / 'src/data/buildings.json').read_text())
-    civs = json.loads((ROOT / 'src/data/civs.json').read_text())
-    catalog_techs = {t['id'] for t in json.loads((ROOT / 'src/data/techs.json').read_text())}
+    buildings = json.loads((ROOT / 'data/game/buildings.json').read_text())
+    civs = json.loads((ROOT / 'data/game/civs.json').read_text())
+    catalog_techs = {t['id'] for t in json.loads((ROOT / 'data/game/techs.json').read_text())}
     relevant_ids = {int(i) for objects in units['units'].values() for i in objects}
     classes = {r['class'] for objects in units['units'].values() for r in objects.values()}
 
@@ -115,7 +115,7 @@ def expand(data):
 
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
-    buildings = [b['id'] for b in json.loads((ROOT / 'src/data/buildings.json').read_text())]
+    buildings = [b['id'] for b in json.loads((ROOT / 'data/game/buildings.json').read_text())]
     result = json.dumps(compact(build(load(), raw_units(buildings))), ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'
     if args.check:
         if not OUT.exists() or OUT.read_text() != result: raise SystemExit('construction.json is not reproducible')

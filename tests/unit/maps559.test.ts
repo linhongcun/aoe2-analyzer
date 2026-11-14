@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { mapPositions } from '../../src/features/maps/positions';
 
-const civs = new Set((JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en));
+const civs = new Set((JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en));
 const BANNED = /胜率|Elo|样本|分段|aoestats|#\/ladder/i;
 const WIRE = [
   '步弓射程长，适合边路对射。',

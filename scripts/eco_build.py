@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从固定版本 .dat 导出开局/经济模拟所需数据 → src/data/eco.json，并与 aoe2techtree 对账 → docs/ECO-DATA.md
+"""从固定版本 .dat 导出开局/经济模拟所需数据 → data/game/eco.json，并与 aoe2techtree 对账 → data/reports/ECO-DATA.md
 
 导出：
 - 单位训练时间/训练地点/费用；建筑建造时间/费用；科技研究时间/地点/费用（含时代升级）
@@ -160,9 +160,9 @@ def split_tree_effects(effects):
 
 def main():
     d = load(); U = d['Civs'][1]['Units']; T = d['Techs']
-    units = json.load(open(ROOT / 'src/data/units.json')); techs = json.load(open(ROOT / 'src/data/techs.json'))
-    blds = json.load(open(ROOT / 'src/data/buildings.json')); civs = json.load(open(ROOT / 'src/data/civs.json'))
-    fx = json.load(open(ROOT / 'src/data/effects.json'))
+    units = json.load(open(ROOT / 'data/game/units.json')); techs = json.load(open(ROOT / 'data/game/techs.json'))
+    blds = json.load(open(ROOT / 'data/game/buildings.json')); civs = json.load(open(ROOT / 'data/game/civs.json'))
+    fx = json.load(open(ROOT / 'data/game/effects.json'))
     out = {'meta': {'generated_by': 'scripts/eco_build.py', 'source': '%s@%s %s' % (DAT['repo'], DAT['commit'][:7], DAT['path']), 'patch': DAT['patch'],
                     'units': '训练时间为秒（不含文明/科技加成）', 'tasks': '采集速率为 .dat work_rate（资源/秒，纯采集，不含往返行走与放下资源）'},
            'units': {}, 'buildings': {}, 'techs': {}}
@@ -319,7 +319,7 @@ def main():
     # 节点：{n: 需满足的子项个数, of: [...]}；叶子：{b: [建筑 id], zh: 名称} / {civ: [文明]}；无法在开局中满足的叶子（由效果触发的 Port built 等）略去。
     BT = {}
     for u, tid in d.get('BuildTech', {}).items(): BT.setdefault(tid, []).append(int(u))
-    BZH = {b['id']: b['zh'] for b in json.load(open(ROOT / 'src/data/buildings.json'))}
+    BZH = {b['id']: b['zh'] for b in json.load(open(ROOT / 'data/game/buildings.json'))}
     civ_en = {k: c['en'] for c in civs for k in [dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))] if k is not None}
     def req(i, depth=0):
         t = T[i]; kids = [r for r in t['RequiredTechs'] if r >= 0]
@@ -338,9 +338,9 @@ def main():
         pre = [r for r in T[i]['RequiredTechs'] if r >= 0 and r not in (101, 102, 103, 104)]
         out['ageReq'][str(a)] = {'tech': i, 'req': req(pre[0]) if pre else None}
     # 键序排序：与 units.json 的排序解耦，输出确定
-    (ROOT / 'src/data/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':'), sort_keys=True))
+    (ROOT / 'data/game/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':'), sort_keys=True))
 
-    md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `src/data/eco.json`。' % (out['meta']['source'], DAT['patch']), '',
+    md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `data/game/eco.json`。' % (out['meta']['source'], DAT['patch']), '',
           '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
     for k, v in out['villager']['tasks'].items(): md.append('| %s | %d | %s | %s |' % (k, v['unit'], v['workRate'], v['carry']))
     md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，携带 %s。' % (out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'], out['fishingShip']['workRate'], out['fishingShip']['carry']),
@@ -353,7 +353,7 @@ def main():
     md += ['| %s | %s | %s | %s | %s | %s |' % x for x in real] or ['| — | | | | | |']
     miss = [x for x in diffs if x[3] == '.dat 中不存在']
     if miss: md += ['', '.dat 中不存在的 ID：' + '、'.join('%s %s' % (x[1], x[2]) for x in miss)]
-    (ROOT / 'docs/ECO-DATA.md').write_text('\n'.join(md) + '\n')
+    (ROOT / 'data/reports/ECO-DATA.md').write_text('\n'.join(md) + '\n')
     print('eco.json units %d buildings %d techs %d ecoTechs %d civs %d；对账差异 %d' % (len(out['units']), len(out['buildings']), len(out['techs']), len(out['ecoTechs']), len(out['civEco']), len(real)))
     for x in real: print('  diff', x)
 

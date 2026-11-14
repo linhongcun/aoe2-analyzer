@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-const glossary: unknown[] = JSON.parse(readFileSync('src/content/glossary.json', 'utf8'));
+const glossary: unknown[] = JSON.parse(readFileSync('data/content/glossary.json', 'utf8'));
 
 const messages = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {

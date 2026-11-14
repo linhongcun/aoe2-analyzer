@@ -19,7 +19,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
         bl.append([bid,b['row'],len(b['grid'][0]),cells])
     bl.sort(key=lambda x:(ORDER.index(x[0]) if x[0] in ORDER else 99,x[0]))
     out[civ]=bl
-json.dump({'b':B,'t':out},open('src/data/trees.json','w'),ensure_ascii=False,separators=(',',':'))
+json.dump({'b':B,'t':out},open('data/game/trees.json','w'),ensure_ascii=False,separators=(',',':'))
 os.makedirs('public/img/buildings',exist_ok=True)
 from PIL import Image
 for bid,v in B.items():
@@ -27,4 +27,4 @@ for bid,v in B.items():
     if not os.path.exists(p):
         im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/{os.environ.get('AOE_TT_REF','master')}/img/Building/{v[2]}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
 print({k:v[1] for k,v in B.items()})
-print(os.path.getsize('src/data/trees.json'))
+print(os.path.getsize('data/game/trees.json'))

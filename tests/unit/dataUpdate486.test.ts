@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 import { ctx, unit, units } from './helpers';
 
@@ -53,7 +53,7 @@ describe('#486 current DE188329 data', () => {
   it.each(['eco', 'market', 'garrison', 'garrison_general', 'garrison_healing', 'trade_income', 'construction', 'relic_income', 'generate_resource'])(
     '%s export records the current DAT provenance',
     (name) => {
-      const data = JSON.parse(readFileSync(`src/data/${name}.json`, 'utf8')) as { meta?: { patch?: string; datSha256?: string; sha256?: string } };
+      const data = JSON.parse(readFileSync(`data/game/${name}.json`, 'utf8')) as { meta?: { patch?: string; datSha256?: string; sha256?: string } };
       expect(data.meta?.patch).toBe('DE Update 188329 (2026-10-28)');
       if (data.meta?.datSha256 !== undefined) expect(data.meta.datSha256).toBe(datSha);
       if (data.meta?.sha256 !== undefined) expect(data.meta.sha256).toBe(datSha);
@@ -61,14 +61,14 @@ describe('#486 current DE188329 data', () => {
   );
 
   it('records the same reviewed DAT in effects and team-source exports', () => {
-    const effects = JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as {
+    const effects = JSON.parse(readFileSync('data/game/effects.json', 'utf8')) as {
       meta: { sources: { id: string; commit: string; sha256?: string; patch: string }[] };
     };
     const source = effects.meta.sources.find((entry) => entry.id === 'DAT');
     expect(source?.commit).toBe('e293dc1');
     expect(source?.sha256).toBe(datSha);
     expect(source?.patch).toBe('DE Update 188329 (2026-10-28)');
-    const teams = JSON.parse(readFileSync('src/data/team_bonuses.json', 'utf8')) as {
+    const teams = JSON.parse(readFileSync('data/game/team_bonuses.json', 'utf8')) as {
       meta: { patch: number; dat: { commit: string; sha256: string } };
     };
     expect(teams.meta.patch).toBe(188329);
@@ -77,7 +77,7 @@ describe('#486 current DE188329 data', () => {
   });
 
   it('documents either the cold-cache placeholder or a zero hot diff', () => {
-    expect(readFileSync('docs/EFFECTS-AUDIT.md', 'utf8')).toMatch(/未取得更新前快照|小计：科技 0 个/);
+    expect(readFileSync('data/reports/EFFECTS-AUDIT.md', 'utf8')).toMatch(/未取得更新前快照|小计：科技 0 个/);
   });
 
   it('EFFECTS-AUDIT --check is reproducible with a cold cache', () => {

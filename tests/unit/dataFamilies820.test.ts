@@ -1,4 +1,5 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -22,15 +23,16 @@ describe('#820 数据族索引', () => {
   it('未登记的生成文件会失败', () => {
     const root = tempRoot();
     mkdirSync(join(root, 'scripts'), { recursive: true });
-    mkdirSync(join(root, 'src/data'), { recursive: true });
+    mkdirSync(join(root, 'data/sources'), { recursive: true });
+    mkdirSync(join(root, 'data/game'), { recursive: true });
     mkdirSync(join(root, 'tests/unit'), { recursive: true });
     writeFileSync(join(root, 'tests/unit/guard.test.ts'), '// fixture');
     writeFileSync(
-      join(root, 'scripts/data-families.json'),
+      join(root, 'data/sources/data-families.json'),
       JSON.stringify({
         families: [
           {
-            file: 'src/data/garrison_hosts.json',
+            file: 'data/game/garrison_hosts.json',
             generator: null,
             pin: 'manual',
             check: [],
@@ -40,29 +42,30 @@ describe('#820 数据族索引', () => {
         ],
       }),
     );
-    writeFileSync(join(root, 'scripts/data_sources.json'), readFileSync('scripts/data_sources.json'));
-    writeFileSync(join(root, 'src/data/garrison_hosts.json'), '[]');
-    writeFileSync(join(root, 'src/data/extra.json'), JSON.stringify({ meta: { generatedBy: 'scripts/extra_build.py', patch: 'DE Update 188329' } }));
+    writeFileSync(join(root, 'data/sources/data_sources.json'), readFileSync('data/sources/data_sources.json'));
+    writeFileSync(join(root, 'data/game/garrison_hosts.json'), '[]');
+    writeFileSync(join(root, 'data/game/extra.json'), JSON.stringify({ meta: { generatedBy: 'scripts/extra_build.py', patch: 'DE Update 188329' } }));
     const result = checkDataFamilies(root);
-    expect(result.errors.some((error) => error.includes('src/data/extra.json') && error.includes('未登记'))).toBe(true);
+    expect(result.errors.some((error) => error.includes('data/game/extra.json') && error.includes('未登记'))).toBe(true);
   });
 
   it('错误审计状态、缺失测试与非 manual 生成器都会失败', () => {
     const root = tempRoot();
     mkdirSync(join(root, 'scripts'), { recursive: true });
-    mkdirSync(join(root, 'src/data'), { recursive: true });
+    mkdirSync(join(root, 'data/sources'), { recursive: true });
+    mkdirSync(join(root, 'data/game'), { recursive: true });
     mkdirSync(join(root, 'tests/unit'), { recursive: true });
     writeFileSync(join(root, 'tests/unit/guard.test.ts'), '// fixture');
-    writeFileSync(join(root, 'scripts/data_sources.json'), readFileSync('scripts/data_sources.json'));
-    writeFileSync(join(root, 'src/data/garrison_hosts.json'), '[]');
-    const registryPath = join(root, 'scripts/data-families.json');
+    writeFileSync(join(root, 'data/sources/data_sources.json'), readFileSync('data/sources/data_sources.json'));
+    writeFileSync(join(root, 'data/game/garrison_hosts.json'), '[]');
+    const registryPath = join(root, 'data/sources/data-families.json');
     const write = (overrides: Record<string, unknown>) =>
       writeFileSync(
         registryPath,
         JSON.stringify({
           families: [
             {
-              file: 'src/data/garrison_hosts.json',
+              file: 'data/game/garrison_hosts.json',
               generator: null,
               pin: 'manual',
               check: [],
@@ -79,5 +82,23 @@ describe('#820 数据族索引', () => {
     expect(checkDataFamilies(root).errors.some((error) => error.includes('测试不存在'))).toBe(true);
     write({ generator: 'scripts/extra_build.py' });
     expect(checkDataFamilies(root).errors.some((error) => error.includes('generator 必须为 null'))).toBe(true);
+  });
+
+  it('keeps tracked payload JSON out of legacy code, docs, test, and tool directories', () => {
+    const tracked = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+    const misplaced = tracked.filter((path) => {
+      if (!path.endsWith('.json')) return false;
+      return (
+        path.startsWith('src/data/') ||
+        (path.startsWith('src/content/') && !path.startsWith('src/content/schema/compiled/')) ||
+        path.startsWith('src/domain/') ||
+        path.startsWith('src/features/') ||
+        path.startsWith('docs/data/') ||
+        path.startsWith('docs/design/') ||
+        path.startsWith('tests/') ||
+        (path.startsWith('scripts/') && path !== 'scripts/ci-browser-weights.json')
+      );
+    });
+    expect(misplaced).toEqual([]);
   });
 });

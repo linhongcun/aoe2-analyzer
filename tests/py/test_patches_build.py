@@ -16,24 +16,24 @@ import patches_build as patches  # noqa: E402
 class PatchArchives(unittest.TestCase):
     def test_185872_archive_bytes_remain_frozen(self):
         # #955 给 14 条已核对费用补了资源名。历史输入指纹仍由另一条测试锁定。
-        original = (ROOT / 'src/data/patches/185872.json').read_bytes()
+        original = (ROOT / 'data/game/patches/185872.json').read_bytes()
         self.assertEqual(hashlib.sha256(original).hexdigest(),
                          '87b8c73086e832faeefba8c15654d2568eb5f8e3fd5efb3d366cb4f62cdb895d')
 
     def test_185872_reproduces_without_current_data_or_dat(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            shutil.copytree(ROOT / 'scripts/patch_inputs', root / 'scripts/patch_inputs')
+            shutil.copytree(ROOT / 'data/sources/patch_inputs', root / 'data/sources/patch_inputs')
             with mock.patch.object(patches, 'ROOT', root):
                 actual = patches.generate('185872')
         content = json.dumps(actual, ensure_ascii=False, indent=2) + '\n'
-        self.assertEqual(content, (ROOT / 'src/data/patches/185872.json').read_text())
+        self.assertEqual(content, (ROOT / 'data/game/patches/185872.json').read_text())
 
     def test_historical_source_facts_cannot_change_unnoticed(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            shutil.copytree(ROOT / 'scripts/patch_inputs', root / 'scripts/patch_inputs')
-            source = root / 'scripts/patch_inputs/185872.json'
+            shutil.copytree(ROOT / 'data/sources/patch_inputs', root / 'data/sources/patch_inputs')
+            source = root / 'data/sources/patch_inputs/185872.json'
             evidence = json.loads(source.read_text())
             evidence['data']['units'][0]['zh'] = 'tampered historical fact'
             source.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + '\n')
@@ -47,15 +47,15 @@ class PatchArchives(unittest.TestCase):
         self.assertEqual(patch['sourcePublishedAt'], '2026-10-27T10:04:41-07:00')
         self.assertEqual(patch['publishedAt'], '2026-10-28')
         self.assertNotIn('date', patch)
-        self.assertEqual(json.loads((ROOT / 'src/data/patches/188329.json').read_text()), patch)
+        self.assertEqual(json.loads((ROOT / 'data/game/patches/188329.json').read_text()), patch)
 
     def test_188329_rejects_another_source_even_if_build_number_is_unchanged(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'scripts').mkdir()
-            pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())
+            (root / 'data/sources').mkdir(parents=True)
+            pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text())
             pins['sources']['dat']['commit'] = 'f' * 40
-            (root / 'scripts/data_sources.json').write_text(json.dumps(pins))
+            (root / 'data/sources/data_sources.json').write_text(json.dumps(pins))
             with mock.patch.object(patches, 'ROOT', root):
                 with self.assertRaisesRegex(AssertionError, '固定来源身份'):
                     patches.generate('188329')

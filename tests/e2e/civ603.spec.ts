@@ -23,8 +23,8 @@ import { openingText } from '../../src/domain/civOpening';
 import { AXES, strengths } from '../../src/domain/ratings';
 import type { Civ } from '../../src/domain/types';
 import { selectOpeningBuilds } from '../../src/features/civs/openingBuildChoices';
-import civRows from '../../src/data/civs.json' with { type: 'json' };
-import units from '../../src/data/units.json' with { type: 'json' };
+import civRows from '../../data/game/civs.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 const ARROW = `\u2192`;
 const CARDS = [
@@ -41,7 +41,7 @@ const GENERIC_NOTE = '暂无资料标注适用的流程，请结合文明加成�
 
 type CivRow = (typeof civRows)[number];
 
-const ordersDir = fileURLToPath(new URL('../../src/data/build-orders/', import.meta.url));
+const ordersDir = fileURLToPath(new URL('../../data/game/build-orders/', import.meta.url));
 const buildOrders = readdirSync(ordersDir)
   .filter((name) => name.endsWith('.json'))
   .map((name) => JSON.parse(readFileSync(join(ordersDir, name), 'utf8')) as BuildOrder);

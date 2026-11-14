@@ -7,7 +7,7 @@ import { CORE_JSON_LOADERS, ROOT, classify, layerViolations, parseImports, type 
  * 1. features/X 不能 import features/Y
  * 2. shared/ 不能 import features/、app/
  * 3. domain/ 不能 import react、features/、app/、shared/ui
- * 4. src/{domain,features} 不能直接 import src/data/{civs,units,techs,buildings,trees,eco,effects}.json（src/data/index.ts 和专门的 loader 除外）。
+ * 4. src/{domain,features} 不能直接 import data/game/{civs,units,techs,buildings,trees,eco,effects}.json（src/data/index.ts 和专门的 loader 除外）。
  *    验收口径收紧到整个 src：只有 importGraph.ts 里 CORE_JSON_LOADERS 登记的 7 个文件能直接 import（不按目录豁免）。
  * `import type` 和动态 `import()` 也算（分层依赖与是否打包无关）。
  *
@@ -32,11 +32,11 @@ describe('#281 分层规则', () => {
     expect(classify(e('src/domain/x.ts', null, 'react-router-dom'))).toBeNull();
     expect(classify(e('src/domain/x.ts', 'src/shared/ui/Icon.tsx'))).toBe('domain-upward');
     expect(classify(e('src/domain/x.ts', 'src/shared/lib/y.ts'))).toBeNull();
-    expect(classify(e('src/domain/x.ts', 'src/data/eco.json'))).toBe('core-json-direct');
-    expect(classify(e('src/features/a/A.tsx', 'src/data/units.json'))).toBe('core-json-direct');
+    expect(classify(e('src/domain/x.ts', 'data/game/eco.json'))).toBe('core-json-direct');
+    expect(classify(e('src/features/a/A.tsx', 'data/game/units.json'))).toBe('core-json-direct');
     expect(classify(e('src/features/a/A.tsx', 'src/data/index.ts'))).toBeNull();
-    expect(classify(e('src/data/index.ts', 'src/data/units.json'))).toBeNull();
-    expect(classify(e('src/domain/datEffects.ts', 'src/data/effects.json'))).toBeNull();
+    expect(classify(e('src/data/index.ts', 'data/game/units.json'))).toBeNull();
+    expect(classify(e('src/domain/datEffects.ts', 'data/game/effects.json'))).toBeNull();
     expect(classify(e('src/app/Layout.tsx', 'src/features/search/components/CommandPalette.tsx'))).toBeNull();
   });
 
@@ -74,33 +74,33 @@ describe('#281 分层规则', () => {
   it('守卫：eager glob 支持字面路径、通配、数组与排除；非 eager 不计', () => {
     const at = `${ROOT}/src/features/z/Z.tsx`;
     const tos = (code: string) => parseImports(at, code).map((x) => x.to);
-    expect(tos("const m = import.meta.glob('../../data/units.json', { eager: true });")).toEqual(['src/data/units.json']);
-    const many = tos("const m = import.meta.glob('../../data/*.json', { eager: true });");
-    expect(many).toEqual(expect.arrayContaining(['src/data/units.json', 'src/data/eco.json']));
-    expect(many.every((t) => /^src\/data\/[^/]+\.json$/.test(t!))).toBe(true);
-    expect(tos("const m = import.meta.glob(['../../data/{units,techs}.json'], { eager: true });")).toEqual(['src/data/techs.json', 'src/data/units.json']);
-    const excl = tos("const m = import.meta.glob(['../../data/*.json', '!../../data/{civs,techs}.json'], { eager: true });");
-    expect(excl).toContain('src/data/units.json');
-    expect(excl).not.toContain('src/data/techs.json');
-    expect(tos("const m = import.meta.glob('/src/data/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
-    expect(tos("const m = import.meta.glob('../../data/units.json');")).toEqual([]);
-    expect(() => tos("const m = import.meta.glob('../../data/nope.json', { eager: true });")).toThrow(/不存在/);
+    expect(tos("const m = import.meta.glob('../../../data/game/units.json', { eager: true });")).toEqual(['data/game/units.json']);
+    const many = tos("const m = import.meta.glob('../../../data/game/*.json', { eager: true });");
+    expect(many).toEqual(expect.arrayContaining(['data/game/units.json', 'data/game/eco.json']));
+    expect(many.every((t) => /^data\/game\/[^/]+\.json$/.test(t!))).toBe(true);
+    expect(tos("const m = import.meta.glob(['../../../data/game/{units,techs}.json'], { eager: true });")).toEqual(['data/game/techs.json', 'data/game/units.json']);
+    const excl = tos("const m = import.meta.glob(['../../../data/game/*.json', '!../../../data/game/{civs,techs}.json'], { eager: true });");
+    expect(excl).toContain('data/game/units.json');
+    expect(excl).not.toContain('data/game/techs.json');
+    expect(tos("const m = import.meta.glob('/data/game/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
+    expect(tos("const m = import.meta.glob('../../../data/game/units.json');")).toEqual([]);
+    expect(() => tos("const m = import.meta.glob('../../../data/game/nope.json', { eager: true });")).toThrow(/不存在/);
     // 空数组、变量、数组里放变量都报错，不静默算 0
     expect(() => tos('const m = import.meta.glob([], { eager: true });')).toThrow(/字面量/);
-    expect(() => tos("const p = '../../data/units.json'; const m = import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
-    expect(() => tos("const p = '../../data/units.json'; const m = import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
-    expect(classify(parseImports(at, "const m = import.meta.glob('../../data/units.json', { eager: true });")[0]!)).toBe('core-json-direct');
+    expect(() => tos("const p = '../../../data/game/units.json'; const m = import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
+    expect(() => tos("const p = '../../../data/game/units.json'; const m = import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
+    expect(classify(parseImports(at, "const m = import.meta.glob('../../../data/game/units.json', { eager: true });")[0]!)).toBe('core-json-direct');
   });
 
   it('守卫：核心 JSON 规则覆盖整个 src，只放行登记的 7 个 loader（内存中的假文件，不写 src）', () => {
-    // 假文件放在真实目录下，import 按真实路径解析到 src/data/civs.json；源码只在内存里
+    // 假文件放在真实目录下，import 按真实路径解析到 data/game/civs.json；源码只在内存里
     const civsFrom = (file: string) => {
-      const spec = posix.relative(posix.dirname(file), 'src/data/civs.json').replace(/^(?!\.)/, './');
+    const spec = posix.relative(posix.dirname(file), 'data/game/civs.json').replace(/^(?!\.)/, './');
       const edges = parseImports(`${ROOT}/${file}`, `import c from '${spec}';\nexport default c;`);
       expect(
         edges.map((x) => x.to),
         file,
-      ).toEqual(['src/data/civs.json']);
+      ).toEqual(['data/game/civs.json']);
       return classify(edges[0]!);
     };
     for (const f of [

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import toolUsed from './fixtures/v0290-317-tool-used.json' with { type: 'json' };
+import toolUsed from '../../data/fixtures/e2e/fixtures/v0290-317-tool-used.json' with { type: 'json' };
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 
 /**

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error CI scripts are plain Node modules.
 import { PROFILES, applyBrowserPolicy, planChanges, prCappedExcludes } from '../../scripts/ci-scope.mjs';
-import baseline from './fixtures/ci-scope-659-baseline.json';
+import baseline from '../../data/fixtures/unit/fixtures/ci-scope-659-baseline.json';
 
 const pr = { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' };
 const main = { GITHUB_EVENT_NAME: 'push', CI_E2E_FULL: 'true' };
@@ -286,7 +286,7 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
       }
     }
   });
-  it.each(['src/data/charge_attack.json', 'scripts/charge_attack_build.py'])('%s keeps real data reproduction', (path) => {
+  it.each(['data/game/charge_attack.json', 'scripts/charge_attack_build.py'])('%s keeps real data reproduction', (path) => {
     for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: true, browser: 'full' });
   });
 
@@ -332,12 +332,33 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
   });
 
   it.each([
-    'src/features/civs/backgrounds.source.json',
-    'src/features/civs/backgrounds.json',
+    'data/reference/civs/backgrounds.source.json',
+    'data/reference/civs/backgrounds.json',
     'src/features/civs/import_backgrounds.py',
     'src/features/civs/assets/backgrounds/chinese.webp',
   ])('%s requires actual generation verification', (path) => {
     expect(planChanges([change(path)])).toMatchObject({ full: true, data: true });
+  });
+
+  it.each([
+    'data/game/effects.json',
+    'data/content/game-guide.json',
+    'data/schemas/content-game-guide.json',
+    'data/reference/domain/routeReview.json',
+    'data/evidence/bengalis197-source.json',
+    'data/sources/data_sources.json',
+    'data/fixtures/unit/fixtures/ci-scope-659-baseline.json',
+    'data/reports/ECO-DATA.md',
+    'data/patch-notes/185872.md',
+  ])('%s selects the full data validation phase', (path) => {
+    expect(browser([change(path)])).toMatchObject({ full: true, data: true });
+  });
+
+  it('keeps specialized and historical paths covered', () => {
+    expect(browser([change('data/game/page-metadata.json')])).toMatchObject({ full: true, data: false });
+    expect(browser([change('src/data/index.ts')])).toMatchObject({ full: true, data: false });
+    expect(browser([change('data/game/units.json')])).toMatchObject({ full: true, data: true });
+    expect(browser([change('docs/PATCH-NOTES/185872.md')])).toMatchObject({ full: true, data: true });
   });
 });
 

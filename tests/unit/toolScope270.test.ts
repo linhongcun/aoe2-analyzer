@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import contentCatalog from '../../src/content/contentCatalog.json';
-import matchReview from '../../src/content/match-review.json';
+import contentCatalog from '../../data/content/contentCatalog.json';
+import matchReview from '../../data/content/match-review.json';
 
 const SHARED = new Set(['base-package', 'gift-announcement']);
 

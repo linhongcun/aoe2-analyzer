@@ -35,27 +35,27 @@ describe('#558 exact feature profile without routing/domain exemptions', () => {
     expect(testCommand(browser, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   });
   it('keeps exact derived page metadata full without regenerating unchanged game data', () => {
-    expect(planChanges([change('src/data/page-metadata.json')])).toMatchObject({ full: true, data: false });
-    const plan = planChanges([change('src/data/page-metadata.json'), change('src/shared/nav/pageRegistry.ts'), change('src/features/teamFit/TeamFit.tsx')]);
+    expect(planChanges([change('data/game/page-metadata.json')])).toMatchObject({ full: true, data: false });
+    const plan = planChanges([change('data/game/page-metadata.json'), change('src/shared/nav/pageRegistry.ts'), change('src/features/teamFit/TeamFit.tsx')]);
     expect(plan).toMatchObject({ full: true, data: false });
     expect(applyBrowserPolicy(plan, { GITHUB_EVENT_NAME: 'pull_request' }).browser).toBe('full');
   });
   it.each([
-    'src/data/page-metadata-extra.json',
-    'src/data/page_metadata.json',
-    'src/data/meta/page-metadata.json',
-    'src/data/page-metadata.json/subpath',
-    'src/data/units.json',
+    'data/game/page-metadata-extra.json',
+    'data/game/page_metadata.json',
+    'data/game/meta/page-metadata.json',
+    'data/game/page-metadata.json/subpath',
+    'data/game/units.json',
     'scripts/pinyin_build.mjs',
     'scripts/build_data.py',
-    'scripts/data_sources.json',
+    'data/sources/data_sources.json',
   ])('metadata does not exempt %s or reset mixed data validation', (path) => {
     for (const paths of [
-      ['src/data/page-metadata.json', path],
-      [path, 'src/data/page-metadata.json'],
+      ['data/game/page-metadata.json', path],
+      [path, 'data/game/page-metadata.json'],
     ])
       expect(planChanges(paths.map(change))).toMatchObject({ full: true, data: true });
   });
   it('never exempts generated game data', () =>
-    expect(planChanges([change('src/features/teamFit/TeamFit.tsx'), change('src/data/units.json')])).toMatchObject({ full: true, data: true }));
+    expect(planChanges([change('src/features/teamFit/TeamFit.tsx'), change('data/game/units.json')])).toMatchObject({ full: true, data: true }));
 });

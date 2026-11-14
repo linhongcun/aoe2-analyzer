@@ -60,7 +60,7 @@ exports[`#335 对照：不在范围的日期不变 > 开局库 review.date / acc
 }
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/campaigns.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/campaigns.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".schemaVersion=1",
   ".verifiedAt="2026-10-20"",
@@ -711,7 +711,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/contentCatalog.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/contentCatalog.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".schemaVersion=1",
   ".platform="steam"",
@@ -1608,7 +1608,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/game-guide.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/game-guide.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".schemaVersion=1",
   ".checkedAt="2026-10-20"",
@@ -1771,7 +1771,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/glossary.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/glossary.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   "[0].id="maa"",
   "[0].zh="MAA：武士"",
@@ -2173,7 +2173,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/mixed-army.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/mixed-army.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".schemaVersion=1",
   ".build=185872",
@@ -2280,7 +2280,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/content/team-plan.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/content/team-plan.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".checked="2026-10-20"",
   ".patch=185872",
@@ -2561,7 +2561,7 @@ exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文�
 ]
 `;
 
-exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > src/data/patches/185872.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
+exports[`#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变 > data/game/patches/185872.json：除 #335 日期外的叶子值与 f856c9e 相同 1`] = `
 [
   ".id="185872"",
   ".source="https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/"",

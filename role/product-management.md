@@ -95,9 +95,9 @@
 
 ### 天梯快照和主观评分
 
-文明对比的雷达是维护者整理的 1–10 主观整数，不是胜率，也不是精确战力。资料行不由这些分数推导。限制写在常显的「评分性质」里。见 [Compare.tsx](../src/features/compare/components/Compare.tsx)。分数来自 [civ_ratings.json](../scripts/civ_ratings.json)。[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭。上午在 `471c136` 上确认这段限制是可见的，这是正向设计，不要再报成「没写口径」。轴名要展开才列全，不要据此宣称旧验收句已经逐字满足，也不要重开。
+文明对比的雷达是维护者整理的 1–10 主观整数，不是胜率，也不是精确战力。资料行不由这些分数推导。限制写在常显的「评分性质」里。见 [Compare.tsx](../src/features/compare/components/Compare.tsx)。分数来自 [civ_ratings.json](../data/sources/civ_ratings.json)。[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭。上午在 `471c136` 上确认这段限制是可见的，这是正向设计，不要再报成「没写口径」。轴名要展开才列全，不要据此宣称旧验收句已经逐字满足，也不要重开。
 
-天梯是静态快照。页面写明不实时抓取、不推算缺失分段；胜率不是平衡建议。快照自己的补丁、截止和样本单位，以那一页的说明为准，可以和本站钉住的数据版本不同。见 [LadderTeam.tsx](../src/features/ladder/LadderTeam.tsx)。本站钉扎看 [data_sources.json](../scripts/data_sources.json) 和页脚「数据版本」。写本文时这份钉扎仍是 DE Update 188329。不要把天梯页上的另一个补丁号抄进百科，当成当前单位数据。
+天梯是静态快照。页面写明不实时抓取、不推算缺失分段；胜率不是平衡建议。快照自己的补丁、截止和样本单位，以那一页的说明为准，可以和本站钉住的数据版本不同。见 [LadderTeam.tsx](../src/features/ladder/LadderTeam.tsx)。本站钉扎看 [data_sources.json](../data/sources/data_sources.json) 和页脚「数据版本」。写本文时这份钉扎仍是 DE Update 188329。不要把天梯页上的另一个补丁号抄进百科，当成当前单位数据。
 
 ### 从文明页往外走，文明还在不在
 
@@ -253,7 +253,7 @@
 
 - `471c136` 的应用号是 `v0.77.81`。训练总价在这次构建上已部署。[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) 已关闭。
 - `0db9c309` 的应用号是 `v0.77.92`。生产页登记仍只有「持续生产」。文明页兵种行仍不带文明。对照仍锁城堡，并仍提供游侠。科技树格子的源码链接带 `?civ=`。
-- 数据钉扎在写本文时仍是 DE Update 188329，见 [data_sources.json](../scripts/data_sources.json)。
+- 数据钉扎在写本文时仍是 DE Update 188329，见 [data_sources.json](../data/sources/data_sources.json)。
 - 上午桌面走查覆盖了搜索、文明页到单位、三种生产里的若干单例、模拟器一笔锻造、文明对比的评分性质、天梯和更新历史的部分说明。那不是全站验收，也不是公式认证。
 
 **待核，不要写成已经知道：**

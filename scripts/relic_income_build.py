@@ -11,7 +11,7 @@ import subprocess
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 from effects_build import CIV_DAT
 
-OUT = ROOT / 'src/data/relic_income.json'
+OUT = ROOT / 'data/game/relic_income.json'
 RESOURCE_IDS = {'Gold': 191, 'Food': 225, 'Wood': 264, 'Stone': 265}
 SEMANTICS = {
     'resources': 'https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md',
@@ -67,8 +67,8 @@ def build(raw):
     assert all(c['resources'] == base for c in raw['civs']), 'Civilization-specific base rate requires audit'
     assert set(base) == {'7', '191', '225', '264', '265'}
     assert all(isinstance(v, (int, float)) and math.isfinite(v) and v >= 0 for v in base.values())
-    civs = json.loads((ROOT / 'src/data/civs.json').read_text())
-    catalog = {u['id']: u for u in json.loads((ROOT / 'src/data/units.json').read_text())}
+    civs = json.loads((ROOT / 'data/game/civs.json').read_text())
+    catalog = {u['id']: u for u in json.loads((ROOT / 'data/game/units.json').read_text())}
     by_name = {CIV_DAT.get(c['name'], c['name']): c for c in raw['civs']}
     assert all(c['en'] in by_name for c in civs)
     fx, techs = raw['effects'], raw['techs']

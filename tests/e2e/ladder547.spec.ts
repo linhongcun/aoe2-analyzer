@@ -7,7 +7,7 @@ import { snapshotPatchBuild } from '../../src/domain/ladder';
 
 const BASELINE_DATE = '2026-07-12';
 const BASELINE_PATCH = 162286;
-const DATA_DIR = 'src/data';
+const DATA_DIR = 'data/game';
 
 type ArabiaFile = { fetchedAt?: string; patchNote?: string };
 type SnapshotFact = { name: string; fetchedAt: string; patch: string | null };
@@ -71,7 +71,7 @@ test('#547 阿拉伯 1v1 快照的日期和补丁号都要新于 p162286', async
     newerFiles.length > 0 || pageNewer,
     [
       `需要一份 fetchedAt 晚于 ${BASELINE_DATE}、且补丁号大于 ${BASELINE_PATCH} 的阿拉伯 1v1 快照。`,
-      '来源条反映更新后的快照，或 src/data/ladder-arabia-*.json 里已经有这样一份，二者居一即可。只写刷新文档不算。',
+      '来源条反映更新后的快照，或 data/game/ladder-arabia-*.json 里已经有这样一份，二者居一即可。只写刷新文档不算。',
       `来源条现在是 ${describeFact(shown)}。`,
       `文件：${files.map(describeFact).join('；') || '（没有 ladder-arabia-*.json）'}`,
     ].join('\n'),

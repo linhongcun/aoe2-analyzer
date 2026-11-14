@@ -5,7 +5,7 @@
  *   feature-to-feature  features/X 不能 import features/Y（需要共享的挪到 shared/ 或 domain/）
  *   shared-upward       shared/ 不能 import features/、app/
  *   domain-upward       domain/ 不能 import react、features/、app/、shared/ui
- *   core-json-direct    src/data/{civs,units,techs,buildings,trees,eco,effects}.json 只能由 LOADERS 里逐个登记的
+ *   core-json-direct    data/game/{civs,units,techs,buildings,trees,eco,effects}.json 只能由 LOADERS 里逐个登记的
  *                       7 个文件直接 import；src 下其他任何文件（含 shared/、app/、data/ 其他文件）都不行
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
@@ -30,7 +30,7 @@ export const RULES = {
   'domain-upward': 'domain/ 不能 import react、features/、app/、shared/ui',
   'core-json-direct': '核心数据 JSON 只能经 LOADERS 登记的文件读取',
 };
-export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `src/data/${n}.json`);
+export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `data/game/${n}.json`);
 /**
  * 核心数据 JSON 的读取入口白名单（逐个列名，不用通配）。src 下除这 7 个文件外，任何文件
  * （domain、features、shared、app、data 层其他文件）直接 import 核心 JSON 都报 core-json-direct。

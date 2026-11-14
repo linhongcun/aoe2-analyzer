@@ -8,8 +8,8 @@
  * 同种建筑两座只算一种（DISTINCT=true，「任两个」指两种不同建筑）。
  */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 

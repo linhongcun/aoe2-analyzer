@@ -21,7 +21,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ## 1. 产品主题（是什么 / 不是什么）
 
-**是什么**：帝国时代 II 决定版（AoE2 DE）的**中文资料站 + 计算工具**——文明/单位/科技/建筑百科、科技树与加成，以及对比、对局助手、模拟器、单位 PK、开局、市场预算等可分享的计算页。线上：https://linhongcun.github.io/aoe2-analyzer/。界面文字全部简体中文。数据版本以页脚与 `scripts/data_sources.json` 为准。
+**是什么**：帝国时代 II 决定版（AoE2 DE）的**中文资料站 + 计算工具**——文明/单位/科技/建筑百科、科技树与加成，以及对比、对局助手、模拟器、单位 PK、开局、市场预算等可分享的计算页。线上：https://linhongcun.github.io/aoe2-analyzer/。界面文字全部简体中文。数据版本以页脚与 `data/sources/data_sources.json` 为准。
 
 **不是什么**：
 

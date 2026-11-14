@@ -1,4 +1,4 @@
-import catalog from '../../data/mapCatalog.json';
+import catalog from '../../../data/game/mapCatalog.json';
 
 /** 地图目录里 Arabia 的中文名。开局 `map` 只做资料展示，不作为筛选。 */
 const ARABIA_ZH = catalog.maps.find((map) => map.en === 'Arabia')?.name;

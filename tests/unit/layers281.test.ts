@@ -31,10 +31,10 @@ describe('#281 分层边界检查脚本', () => {
     expect(rule(e('src/domain/x.ts', null, 'react-router-dom'))).toBeNull();
     expect(rule(e('src/domain/x.ts', 'src/shared/ui/Icon.tsx'))).toBe('domain-upward');
     expect(rule(e('src/domain/x.ts', 'src/shared/utils/unitCountLabel.ts'))).toBeNull();
-    expect(rule(e('src/domain/x.ts', 'src/data/eco.json'))).toBe('core-json-direct');
-    expect(rule(e('src/features/a/A.tsx', 'src/data/units.json'))).toBe('core-json-direct');
+    expect(rule(e('src/domain/x.ts', 'data/game/eco.json'))).toBe('core-json-direct');
+    expect(rule(e('src/features/a/A.tsx', 'data/game/units.json'))).toBe('core-json-direct');
     expect(rule(e('src/features/a/A.tsx', 'src/data/index.ts'))).toBeNull();
-    expect(rule(e('src/domain/datEffects.ts', 'src/data/effects.json'))).toBeNull();
+    expect(rule(e('src/domain/datEffects.ts', 'data/game/effects.json'))).toBeNull();
     expect(rule(e('src/app/Layout.tsx', 'src/features/search/components/CommandPalette.tsx'))).toBeNull();
   });
 
@@ -52,21 +52,21 @@ describe('#281 分层边界检查脚本', () => {
     // 逐个列名、不用通配：每个登记项都是真实存在的文件
     for (const f of loaders) expect(readFileSync(`${ROOT}/${f}`, 'utf8').length).toBeGreaterThan(0);
     // 白名单文件不报（静态与动态）
-    expect(rule(e('src/data/index.ts', 'src/data/civs.json'))).toBeNull();
-    expect(rule(e('src/data/index.ts', 'src/data/units.json', './units.json', true))).toBeNull();
-    expect(rule(e('src/data/raw/eco.ts', 'src/data/eco.json'))).toBeNull();
-    expect(rule(e('src/domain/datEffects.ts', 'src/data/effects.json'))).toBeNull();
+    expect(rule(e('src/data/index.ts', 'data/game/civs.json'))).toBeNull();
+    expect(rule(e('src/data/index.ts', 'data/game/units.json', './units.json', true))).toBeNull();
+    expect(rule(e('src/data/raw/eco.ts', 'data/game/eco.json'))).toBeNull();
+    expect(rule(e('src/domain/datEffects.ts', 'data/game/effects.json'))).toBeNull();
     // 违规探针：domain、data 层其他文件、shared、app 各一条
-    expect(rule(e('src/domain/x.ts', 'src/data/eco.json'))).toBe('core-json-direct');
-    expect(rule(e('src/data/hooks.ts', 'src/data/civs.json'))).toBe('core-json-direct');
-    expect(rule(e('src/data/raw/extra.ts', 'src/data/trees.json', './trees.json', true))).toBe('core-json-direct');
-    expect(rule(e('src/shared/ui/X.tsx', 'src/data/units.json'))).toBe('core-json-direct');
-    expect(rule(e('src/app/Layout.tsx', 'src/data/effects.json'))).toBe('core-json-direct');
+    expect(rule(e('src/domain/x.ts', 'data/game/eco.json'))).toBe('core-json-direct');
+    expect(rule(e('src/data/hooks.ts', 'data/game/civs.json'))).toBe('core-json-direct');
+    expect(rule(e('src/data/raw/extra.ts', 'data/game/trees.json', './trees.json', true))).toBe('core-json-direct');
+    expect(rule(e('src/shared/ui/X.tsx', 'data/game/units.json'))).toBe('core-json-direct');
+    expect(rule(e('src/app/Layout.tsx', 'data/game/effects.json'))).toBe('core-json-direct');
     // 非核心 JSON 不受限
-    expect(rule(e('src/data/hooks.ts', 'src/data/search-py.json'))).toBeNull();
+    expect(rule(e('src/data/hooks.ts', 'data/game/search-py.json'))).toBeNull();
     // 真实解析：未登记文件里的直接 import 会被扫出来，经登记入口读取不报
     const parse = parseImports as (f: string, t: string) => Edge[];
-    const edges = parse(`${ROOT}/src/data/hooks.ts`, "import c from './civs.json';\nconst t = () => import('./trees.json');\nimport r from './raw/civs';");
+    const edges = parse(`${ROOT}/src/data/hooks.ts`, "import c from '../../data/game/civs.json';\nconst t = () => import('../../data/game/trees.json');\nimport r from './raw/civs';");
     expect(edges.map((x) => rule(x))).toEqual(['core-json-direct', 'core-json-direct', null]);
   });
 
@@ -89,13 +89,19 @@ describe('#281 分层边界检查脚本', () => {
 
   it('eager 的 import.meta.glob 按匹配到的每个文件计边，非 eager 不计', () => {
     const parse = parseImports as (f: string, t: string) => Edge[];
-    const eager = parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('./build-orders/*.json', { eager: true });");
+    const eager = parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('../../data/game/build-orders/*.json', { eager: true });");
     expect(eager.length).toBeGreaterThan(0);
-    expect(eager.every((x) => x.to?.startsWith('src/data/build-orders/') && x.to.endsWith('.json') && !x.dynamic && !x.typeOnly)).toBe(true);
-    expect(parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('./build-orders/*.json');")).toEqual([]);
+    expect(eager.every((x) => x.to?.startsWith('data/game/build-orders/') && x.to.endsWith('.json') && !x.dynamic && !x.typeOnly)).toBe(true);
+    expect(parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('../../data/game/build-orders/*.json');")).toEqual([]);
     // 真实文件：只有 src/data/buildOrders.ts 用到，它不在 domain/features 下，不改变违规口径
     const real = parse(`${ROOT}/src/data/buildOrders.ts`, readFileSync(`${ROOT}/src/data/buildOrders.ts`, 'utf8'));
-    expect(real.filter((x) => x.spec === './build-orders/*.json').length).toBe(eager.length);
+    expect(real.filter((x) => x.spec === '../../data/game/build-orders/*.json').length).toBe(eager.length);
+    const patches = parse(`${ROOT}/src/data/patchHistory.ts`, readFileSync(`${ROOT}/src/data/patchHistory.ts`, 'utf8'));
+    expect(patches.some((x) => x.spec === '../../data/game/patches/*.json' && x.to?.startsWith('data/game/patches/'))).toBe(true);
+    const core = parse(`${ROOT}/src/data/index.ts`, readFileSync(`${ROOT}/src/data/index.ts`, 'utf8'));
+    expect(core.map((edge) => edge.to)).toEqual(
+      expect.arrayContaining(['data/game/civs.json', 'data/game/units.json', 'data/game/techs.json', 'data/game/buildings.json', 'data/game/trees.json']),
+    );
     expect(real.map((x) => rule(x)).filter(Boolean)).toEqual([]);
   });
 
@@ -103,32 +109,32 @@ describe('#281 分层边界检查脚本', () => {
     const parse = parseImports as (f: string, t: string) => Edge[];
     const at = `${ROOT}/src/features/z/Z.tsx`;
     const tos = (code: string) => parse(at, code).map((x) => x.to);
-    expect(tos("import.meta.glob(['../../data/units.json'], { eager: true });")).toEqual(['src/data/units.json']);
-    expect(tos("import.meta.glob(['../../data/{units,techs}.json', '../../data/eco.json'], { eager: true });")).toEqual([
-      'src/data/eco.json',
-      'src/data/techs.json',
-      'src/data/units.json',
+    expect(tos("import.meta.glob(['../../../data/game/units.json'], { eager: true });")).toEqual(['data/game/units.json']);
+    expect(tos("import.meta.glob(['../../../data/game/{units,techs}.json', '../../../data/game/eco.json'], { eager: true });")).toEqual([
+      'data/game/eco.json',
+      'data/game/techs.json',
+      'data/game/units.json',
     ]);
-    const excl = tos("import.meta.glob(['../../data/*.json', '!../../data/{civs,techs}.json'], { eager: true });");
-    expect(excl).toContain('src/data/units.json');
-    expect(excl).not.toContain('src/data/civs.json');
-    expect(excl).not.toContain('src/data/techs.json');
-    expect(tos("import.meta.glob('/src/data/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
+    const excl = tos("import.meta.glob(['../../../data/game/*.json', '!../../../data/game/{civs,techs}.json'], { eager: true });");
+    expect(excl).toContain('data/game/units.json');
+    expect(excl).not.toContain('data/game/civs.json');
+    expect(excl).not.toContain('data/game/techs.json');
+    expect(tos("import.meta.glob('/data/game/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
     // 数组写法照样落进规则：features 直接 eager glob 核心 JSON 算 core-json-direct
-    const edges = parse(at, "import.meta.glob(['../../data/units.json', '../../data/eco.json'], { eager: true });");
+    const edges = parse(at, "import.meta.glob(['../../../data/game/units.json', '../../../data/game/eco.json'], { eager: true });");
     expect(edges.map((x) => rule(x))).toEqual(['core-json-direct', 'core-json-direct']);
     // 非 eager 的数组也不计（同动态 import 口径）
-    expect(tos("import.meta.glob(['../../data/units.json']);")).toEqual([]);
+    expect(tos("import.meta.glob(['../../../data/game/units.json']);")).toEqual([]);
   });
 
   it('eager glob 的参数不是字面量就报错，不静默跳过', () => {
     const parse = parseImports as (f: string, t: string) => Edge[];
     const at = `${ROOT}/src/features/z/Z.tsx`;
-    expect(() => parse(at, "const p = '../../data/units.json'; import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
-    expect(() => parse(at, "const p = 'units'; import.meta.glob(['../../data/eco.json', `../../data/${p}.json`], { eager: true });")).toThrow(/字面量/);
-    expect(() => parse(at, "const p = '../../data/units.json'; import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = '../../../data/game/units.json'; import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = 'units'; import.meta.glob(['../../../data/game/eco.json', `../../../data/game/${p}.json`], { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = '../../../data/game/units.json'; import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
     expect(() => parse(at, 'import.meta.glob([], { eager: true });')).toThrow(/字面量/);
-    expect(() => parse(at, "import.meta.glob('../../data/nope.json', { eager: true });")).toThrow(/不存在/);
+    expect(() => parse(at, "import.meta.glob('../../../data/game/nope.json', { eager: true });")).toThrow(/不存在/);
   });
 
   it('require() 与 import x = require() 直接报错，不静默漏扫', () => {

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import pins from '../../scripts/data_sources.json';
+import pins from '../../data/sources/data_sources.json';
 import { SCOUTING_CONTENT, scoutingVersionParts } from '../../src/domain/scouting';
 import { commitUrl, versionLabel, type DataSources } from '../../src/shared/utils/dataInfo';
 

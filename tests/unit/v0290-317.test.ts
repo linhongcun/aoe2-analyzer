@@ -4,12 +4,12 @@
  * - #317 罗马「是否计入」标签：真值由工具本身算出（真实成本 gatherModel / 等资源 discountedCost），清单存 fixtures 供 e2e 逐页核对。
  */
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import { civBonuses } from '../../src/domain/civBonus';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { gatherModel } from '../../src/domain/realCost';
 import type { Civ } from '../../src/domain/types';
-import toolUsed from '../e2e/fixtures/v0290-317-tool-used.json';
+import toolUsed from '../../data/fixtures/e2e/fixtures/v0290-317-tool-used.json';
 import { units } from './helpers';
 
 const civs = civsRaw as unknown as Civ[];

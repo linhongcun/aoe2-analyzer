@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { civs } from '../../src/data';
-import raw from '../../src/data/patches/185872.json';
-import units from '../../src/data/units.json';
+import raw from '../../data/game/patches/185872.json';
+import units from '../../data/game/units.json';
 import { filterPatch, patchTarget, statedCivIds, type PatchEntry } from '../../src/domain/patches';
 const entries = raw.entries as PatchEntry[];
 const known = civs.map((civ) => civ.en);

@@ -1,6 +1,6 @@
 /**
  * 建筑科技模拟器：复用 simulator.ts 的效果引擎（applyEffects / civStatus / totalCost / prereq）。
- * 效果数值来自 .dat 生成的 src/data/effects.json（经 effects.ts 合成，手工表仅作回退）。
+ * 效果数值来自 .dat 生成的 data/game/effects.json（经 effects.ts 合成，手工表仅作回退）。
  */
 import type { Building, StatSet } from './types';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';

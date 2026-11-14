@@ -3,11 +3,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const root = new URL('../', import.meta.url);
 const read = (path) => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
-const audit = read('scripts/catalog_introductions.json');
+const audit = read('data/sources/catalog_introductions.json');
 if (audit.schemaVersion !== 2 || !Array.isArray(audit.releases)) throw new Error('不支持的引入版本清单格式');
 const compiled = { techUpdates: {} };
 for (const kind of ['units', 'buildings', 'techs']) {
-  const data = read(`src/data/${kind}.json`);
+  const data = read(`data/game/${kind}.json`);
   const rows = audit[kind];
   if (!Array.isArray(rows) || rows.length !== data.length) throw new Error(`${kind}：核对清单未覆盖当前全部资料`);
   const identities = new Map(data.map((entry) => [entry.id, entry.en]));
@@ -31,7 +31,7 @@ for (const kind of ['units', 'buildings', 'techs']) {
     if (hasUpdate) compiled.techUpdates[row.id] = row.update;
   }
 }
-const output = new URL('src/data/catalog-introductions.json', root);
+const output = new URL('data/game/catalog-introductions.json', root);
 const text = JSON.stringify(compiled, null, 2) + '\n';
 if (process.argv.includes('--check')) {
   if (readFileSync(output, 'utf8') !== text) throw new Error('首发版本查表过期，请运行 npm run introductions');

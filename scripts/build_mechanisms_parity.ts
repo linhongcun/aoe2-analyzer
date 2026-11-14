@@ -10,9 +10,9 @@ const output = process.env.PARITY_OUTPUT;
 if (!output) throw new Error('Set PARITY_OUTPUT to an untracked JSON file; optionally set PARITY_BASELINE to compare.');
 const sim = await import(root + '/src/domain/buildSim.ts');
 const { buildOrders } = await import(root + '/src/data/buildOrders.ts');
-const eco = JSON.parse(readFileSync(root + '/src/data/eco.json', 'utf8'));
-const units = JSON.parse(readFileSync(root + '/src/data/units.json', 'utf8'));
-const civs = JSON.parse(readFileSync(root + '/src/data/civs.json', 'utf8')).map((c: { en: string }) => c.en);
+const eco = JSON.parse(readFileSync(root + '/data/game/eco.json', 'utf8'));
+const units = JSON.parse(readFileSync(root + '/data/game/units.json', 'utf8'));
+const civs = JSON.parse(readFileSync(root + '/data/game/civs.json', 'utf8')).map((c: { en: string }) => c.en);
 const upgrades = Object.fromEntries(units.filter((u: { up?: unknown }) => u.up).map((u: { id: number; up: unknown }) => [u.id, u.up]));
 const special = sim.CIV_MECHANISM_KEYS.filter((civ: string) => !Object.hasOwn(PARITY_EXCLUDED, civ));
 const serialize = (value: unknown) =>
@@ -113,7 +113,7 @@ for (const civ of special) {
     );
   }
 }
-const sourceFiles = execFileSync('git', ['-C', root, 'ls-files', '--cached', '--others', '--exclude-standard', '-z', '--', 'src/domain', 'src/data'], {
+const sourceFiles = execFileSync('git', ['-C', root, 'ls-files', '--cached', '--others', '--exclude-standard', '-z', '--', 'src/domain', 'src/data', 'data/game', 'data/reference/domain'], {
   encoding: 'utf8',
 })
   .split('\0')

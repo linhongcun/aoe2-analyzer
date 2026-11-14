@@ -14,7 +14,7 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 
 // #486：仅把「当时当前版本」的输入封存；旧日期、数字、内容叶子快照仍按原验收锁定。
-const HISTORICAL_INPUT_RAW = readFileSync('scripts/patch_inputs/185872.json', 'utf8');
+const HISTORICAL_INPUT_RAW = readFileSync('data/sources/patch_inputs/185872.json', 'utf8');
 const HISTORICAL_INPUT = JSON.parse(HISTORICAL_INPUT_RAW) as {
   patch: { build: number; date: string; detectedFrom: string };
   sources: Record<string, { repo: string; commit: string; date: string }>;
@@ -149,12 +149,12 @@ const UPDATED = new Set(['updatedAt']);
 type Entry = { file: string; path: string; field: 'published' | 'updated'; date: string; url: string };
 function collect(): Entry[] {
   const files = [
-    ...readdirSync('src/content')
+    ...readdirSync('data/content')
       .filter((f) => f.endsWith('.json'))
-      .map((f) => `src/content/${f}`),
-    ...readdirSync('src/data/patches')
+      .map((f) => `data/content/${f}`),
+    ...readdirSync('data/game/patches')
       .filter((f) => f.endsWith('.json'))
-      .map((f) => `src/data/patches/${f}`),
+      .map((f) => `data/game/patches/${f}`),
   ];
   const out: Entry[] = [];
   const walk = (o: unknown, path: string, file: string) => {
@@ -190,19 +190,19 @@ describe('#335 来源日期 = 来源公开时间戳换算成北京时间的日�
 
   // #335 表格里要改的条目（f856c9e 上应为红）
   const MUST_CHANGE: [string, string, string][] = [
-    ['src/content/contentCatalog.json', '.products[1].sources[2].publishedAt', '2024-11-15'],
-    ['src/content/contentCatalog.json', '.products[2].sources[2].publishedAt', '2024-11-15'],
-    ['src/content/contentCatalog.json', '.products[3].sources[2].publishedAt', '2024-11-15'],
-    ['src/content/contentCatalog.json', '.products[4].sources[2].publishedAt', '2023-12-21'],
-    ['src/content/contentCatalog.json', '.products[7].sources[3].publishedAt', '2025-10-11'],
-    ['src/content/contentCatalog.json', '.products[8].sources[3].publishedAt', '2025-10-11'],
-    ['src/content/game-guide.json', '.sources.official-185872.publishedAt', '2026-09-23'],
-    ['src/content/mixed-army.json', '.sources[5].publishedAt', '2026-09-23'],
-    ['src/data/patches/185872.json', '.date', '2026-09-23'],
-    ['src/content/team-plan.json', '.sources[0].published', '2021-03-31'],
-    ['src/content/campaigns.json', '.sources.guide-civs-2024.publishedAt', '2021-01-28'],
-    ['src/content/glossary.json', '[5].sources[0].date', '2021-04-19'],
-    ['src/content/glossary.json', '[8].sources[0].date', '2025-08-18'],
+    ['data/content/contentCatalog.json', '.products[1].sources[2].publishedAt', '2024-11-15'],
+    ['data/content/contentCatalog.json', '.products[2].sources[2].publishedAt', '2024-11-15'],
+    ['data/content/contentCatalog.json', '.products[3].sources[2].publishedAt', '2024-11-15'],
+    ['data/content/contentCatalog.json', '.products[4].sources[2].publishedAt', '2023-12-21'],
+    ['data/content/contentCatalog.json', '.products[7].sources[3].publishedAt', '2025-10-11'],
+    ['data/content/contentCatalog.json', '.products[8].sources[3].publishedAt', '2025-10-11'],
+    ['data/content/game-guide.json', '.sources.official-185872.publishedAt', '2026-09-23'],
+    ['data/content/mixed-army.json', '.sources[5].publishedAt', '2026-09-23'],
+    ['data/game/patches/185872.json', '.date', '2026-09-23'],
+    ['data/content/team-plan.json', '.sources[0].published', '2021-03-31'],
+    ['data/content/campaigns.json', '.sources.guide-civs-2024.publishedAt', '2021-01-28'],
+    ['data/content/glossary.json', '[5].sources[0].date', '2021-04-19'],
+    ['data/content/glossary.json', '[8].sources[0].date', '2025-08-18'],
   ];
   for (const [file, path, want] of MUST_CHANGE)
     it(`要改：${file}${path} 是北京时间 ${want}`, () => {
@@ -221,23 +221,23 @@ describe('#335 来源日期 = 来源公开时间戳换算成北京时间的日�
 
   // 对照：本来就对的条目，日期不能被顺手改动（f856c9e 上为绿）
   const KEEP: [string, string, string][] = [
-    ['src/content/campaigns.json', '.sources.guide-civs-2024.updatedAt', '2024-05-12'],
-    ['src/content/campaigns.json', '.sources.ign-conquerors-2000.publishedAt', '2000-08-25'],
-    ['src/content/castle-defense.json', '.sources[2].date', '2024-09-30'],
-    ['src/content/castle-defense.json', '.sources[3].date', '2020-05-26'],
-    ['src/content/contentCatalog.json', '.products[4].sources[3].publishedAt', '2023-05-11'],
-    ['src/content/contentCatalog.json', '.products[7].sources[2].publishedAt', '2024-11-05'],
-    ['src/content/contentCatalog.json', '.products[8].sources[2].publishedAt', '2024-11-05'],
-    ['src/content/glossary.json', '[7].sources[0].date', '2025-03-16'],
-    ['src/content/mixed-army.json', '.sources[0].publishedAt', '2022-04-18'],
-    ['src/content/mixed-army.json', '.sources[1].publishedAt', '2024-07-06'],
-    ['src/content/mixed-army.json', '.sources[2].publishedAt', '2023-02-22'],
-    ['src/content/mixed-army.json', '.sources[3].publishedAt', '2024-09-30'],
-    ['src/content/mixed-army.json', '.sources[4].publishedAt', '2023-01-20'],
-    ['src/content/scouting.json', '.sources[1].publishedAt', '2020-05-26'],
-    ['src/content/scouting.json', '.sources[2].publishedAt', '2026-08-15'],
-    ['src/content/team-plan.json', '.sources[1].published', '2020-06-11'],
-    ['src/content/team-plan.json', '.sources[2].published', '2021-01-03'],
+    ['data/content/campaigns.json', '.sources.guide-civs-2024.updatedAt', '2024-05-12'],
+    ['data/content/campaigns.json', '.sources.ign-conquerors-2000.publishedAt', '2000-08-25'],
+    ['data/content/castle-defense.json', '.sources[2].date', '2024-09-30'],
+    ['data/content/castle-defense.json', '.sources[3].date', '2020-05-26'],
+    ['data/content/contentCatalog.json', '.products[4].sources[3].publishedAt', '2023-05-11'],
+    ['data/content/contentCatalog.json', '.products[7].sources[2].publishedAt', '2024-11-05'],
+    ['data/content/contentCatalog.json', '.products[8].sources[2].publishedAt', '2024-11-05'],
+    ['data/content/glossary.json', '[7].sources[0].date', '2025-03-16'],
+    ['data/content/mixed-army.json', '.sources[0].publishedAt', '2022-04-18'],
+    ['data/content/mixed-army.json', '.sources[1].publishedAt', '2024-07-06'],
+    ['data/content/mixed-army.json', '.sources[2].publishedAt', '2023-02-22'],
+    ['data/content/mixed-army.json', '.sources[3].publishedAt', '2024-09-30'],
+    ['data/content/mixed-army.json', '.sources[4].publishedAt', '2023-01-20'],
+    ['data/content/scouting.json', '.sources[1].publishedAt', '2020-05-26'],
+    ['data/content/scouting.json', '.sources[2].publishedAt', '2026-08-15'],
+    ['data/content/team-plan.json', '.sources[1].published', '2020-06-11'],
+    ['data/content/team-plan.json', '.sources[2].published', '2021-01-03'],
   ];
   it('对照：已经是北京时间的 17 处日期不变', () => {
     expect(KEEP.map(([f, p]) => ENTRIES.find((x) => x.file === f && x.path === p)?.date)).toEqual(KEEP.map(([, , d]) => d));
@@ -276,12 +276,12 @@ describe('#335 来源日期 = 来源公开时间戳换算成北京时间的日�
 
 // 不在范围的日期不动：产品 releaseDate、build-order 的 accessed / review.date（f856c9e 原值）
 describe('#335 对照：不在范围的日期不变', () => {
-  const cat = JSON.parse(readFileSync('src/content/contentCatalog.json', 'utf8')) as { products: { id: string; releaseDate?: string }[] };
+  const cat = JSON.parse(readFileSync('data/content/contentCatalog.json', 'utf8')) as { products: { id: string; releaseDate?: string }[] };
   it('contentCatalog 各产品 releaseDate 与 f856c9e 相同', () => {
     expect(Object.fromEntries(cat.products.map((p) => [p.id, p.releaseDate ?? null]))).toMatchSnapshot();
   });
   it('开局库 review.date / accessed 与 f856c9e 相同', () => {
-    const dir = 'src/data/build-orders';
+    const dir = 'data/game/build-orders';
     const got: Record<string, unknown> = {};
     for (const f of readdirSync(dir)
       .filter((x) => x.endsWith('.json'))
@@ -303,32 +303,32 @@ describe('#335 对照：不在范围的日期不变', () => {
 const MASKED = new Set(MUST_CHANGE_KEYS());
 function MUST_CHANGE_KEYS(): string[] {
   return [
-    'src/content/contentCatalog.json.products[1].sources[2].publishedAt',
-    'src/content/contentCatalog.json.products[2].sources[2].publishedAt',
-    'src/content/contentCatalog.json.products[3].sources[2].publishedAt',
-    'src/content/contentCatalog.json.products[4].sources[2].publishedAt',
-    'src/content/contentCatalog.json.products[7].sources[3].publishedAt',
-    'src/content/contentCatalog.json.products[8].sources[3].publishedAt',
-    'src/content/game-guide.json.sources.official-185872.publishedAt',
-    'src/content/mixed-army.json.sources[5].publishedAt',
-    'src/data/patches/185872.json.date',
-    'src/content/team-plan.json.sources[0].published',
-    'src/content/campaigns.json.sources.guide-civs-2024.publishedAt',
-    'src/content/glossary.json[5].sources[0].date',
-    'src/content/glossary.json[8].sources[0].date',
+    'data/content/contentCatalog.json.products[1].sources[2].publishedAt',
+    'data/content/contentCatalog.json.products[2].sources[2].publishedAt',
+    'data/content/contentCatalog.json.products[3].sources[2].publishedAt',
+    'data/content/contentCatalog.json.products[4].sources[2].publishedAt',
+    'data/content/contentCatalog.json.products[7].sources[3].publishedAt',
+    'data/content/contentCatalog.json.products[8].sources[3].publishedAt',
+    'data/content/game-guide.json.sources.official-185872.publishedAt',
+    'data/content/mixed-army.json.sources[5].publishedAt',
+    'data/game/patches/185872.json.date',
+    'data/content/team-plan.json.sources[0].published',
+    'data/content/campaigns.json.sources.guide-civs-2024.publishedAt',
+    'data/content/glossary.json[5].sources[0].date',
+    'data/content/glossary.json[8].sources[0].date',
   ];
 }
 // #270 给内容指南的战役/剧本补了中文名（zh），叶子快照因此多出这些名字；日期仍按上面的表锁定。
 // #955 更新了 185872 里 14 条已核实费用的叶子（资源名、官方原文、分节锚点）。日期掩码仍是这 13 处。
 describe('#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变', () => {
   for (const f of [
-    'src/content/contentCatalog.json',
-    'src/content/game-guide.json',
-    'src/content/mixed-army.json',
-    'src/data/patches/185872.json',
-    'src/content/team-plan.json',
-    'src/content/campaigns.json',
-    'src/content/glossary.json',
+    'data/content/contentCatalog.json',
+    'data/content/game-guide.json',
+    'data/content/mixed-army.json',
+    'data/game/patches/185872.json',
+    'data/content/team-plan.json',
+    'data/content/campaigns.json',
+    'data/content/glossary.json',
   ])
     it(`${f}：除 #335 日期外的叶子值与 f856c9e 相同`, () => {
       const onlyDigits = f.endsWith('mixed-army.json');
@@ -373,9 +373,9 @@ describe('#335 历史 data_sources 的上游固定提交日期 = 提交时间的
   });
 });
 
-// Steve 2026-10-22 追加 (b)：docs/PATCH-NOTES/185872.md（关于数据页链接的补丁差异摘要）末尾「上游：」行的提交日期也按北京时间。
-describe('#335 docs/PATCH-NOTES/185872.md「上游：」行的提交日期 = 北京时间日期', () => {
-  const lines = readFileSync('docs/PATCH-NOTES/185872.md', 'utf8')
+// Steve 2026-10-22 追加 (b)：data/patch-notes/185872.md（关于数据页链接的补丁差异摘要）末尾「上游：」行的提交日期也按北京时间。
+describe('#335 data/patch-notes/185872.md「上游：」行的提交日期 = 北京时间日期', () => {
+  const lines = readFileSync('data/patch-notes/185872.md', 'utf8')
     .split('\n')
     .filter((l) => l.startsWith('上游：'));
   it('恰好一行「上游：」', () => {

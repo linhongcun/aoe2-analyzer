@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import unitsRaw from '../../src/data/units.json' with { type: 'json' };
+import unitsRaw from '../../data/game/units.json' with { type: 'json' };
 
 const units = unitsRaw as unknown as { id: number; en: string; zh: string; py: string; cost: Record<string, number> }[];
 const byId = Object.fromEntries(units.map((unit) => [unit.id, unit]));

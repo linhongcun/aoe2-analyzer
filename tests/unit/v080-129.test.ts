@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import units from '../../src/data/units.json';
+import units from '../../data/game/units.json';
 import { discountedCost } from '../../src/domain/costDiscount';
 
 const by = Object.fromEntries((units as unknown as { id: number; cost: Record<string, number> }[]).map((u) => [u.id, u]));

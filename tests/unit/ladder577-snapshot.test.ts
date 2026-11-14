@@ -27,8 +27,8 @@ interface Snapshot {
   brackets: { key: string; games: number; civs: Civ[] }[];
 }
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as Snapshot;
-const civNames = new Set((JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en));
+const snapshot = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as Snapshot;
+const civNames = new Set((JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string }[]).map((civ) => civ.en));
 
 describe('4v4 静态快照 #577', () => {
   const bracket = snapshot.brackets[0];

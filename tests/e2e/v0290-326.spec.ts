@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import civs from '../../src/data/civs.json' with { type: 'json' };
+import civs from '../../data/game/civs.json' with { type: 'json' };
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 
 /**

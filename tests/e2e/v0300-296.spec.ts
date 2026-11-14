@@ -6,7 +6,7 @@
 // Steve 2026-10-22：h1 不必逐字等于页面元数据标题，但要含同一个核心词（/builds「开局」、/duel「PK」），并直白说出页面做什么。
 // 「直白说出页面做什么」机器只能粗查：核心词之外还要有别的字（不能只写「开局」「PK」）。
 import { expect, test, type Page } from '@playwright/test';
-import meta from '../../src/data/page-metadata.json' with { type: 'json' };
+import meta from '../../data/game/page-metadata.json' with { type: 'json' };
 
 const WIDTHS = [360, 375, 390, 1280] as const;
 const TITLE = meta as Record<string, { title: string }>;

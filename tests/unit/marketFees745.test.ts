@@ -134,7 +134,7 @@ describe('issue 745 市场交易费与进贡税', () => {
     expect(market).toContain('https://ugc.aoe2.rocks/general/resources/resources/');
     expect(market).not.toContain('<table');
     expect(renderFees(12)).not.toContain('data-t="market-fees"');
-    expect(readFileSync('src/data/effects.json', 'utf8')).toContain('"v":0.15');
+    expect(readFileSync('data/game/effects.json', 'utf8')).toContain('"v":0.15');
     expect(readFileSync('src/features/buildings/components/MarketFees.tsx', 'utf8')).not.toMatch(/#745|#748/);
   });
 

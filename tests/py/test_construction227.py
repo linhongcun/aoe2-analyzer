@@ -12,14 +12,14 @@ from construction_build import expand
 class Construction227Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = expand(json.loads((ROOT / 'src/data/construction.json').read_text()))
+        cls.data = expand(json.loads((ROOT / 'data/game/construction.json').read_text()))
 
     def test_support_matrix_and_provenance(self):
         self.assertEqual(len(self.data['buildings']), 38)
         self.assertEqual(sum(b['supported'] for b in self.data['buildings'].values()), 37)
         self.assertEqual(len(self.data['civs']), 56)
         self.assertFalse(self.data['meta']['engineVerifiedInPinnedBuild'])
-        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())
+        pins = json.loads((ROOT / 'data/sources/data_sources.json').read_text())
         self.assertEqual(self.data['meta']['patch'], '%s (%s)' % (pins['patch']['name'], pins['patch']['date']))
         self.assertEqual(self.data['meta']['sha256'], pins['sources']['dat']['sha256'])
 

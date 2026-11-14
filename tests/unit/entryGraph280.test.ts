@@ -59,7 +59,7 @@ describe('#280 首页入口静态依赖', () => {
     expect(graph.has(join(ROOT, 'src/shared/nav/sections.ts'))).toBe(true);
   });
 
-  for (const json of ['src/data/effects.json', 'src/data/search-py.json', 'src/content/glossary.json']) {
+  for (const json of ['data/game/effects.json', 'data/game/search-py.json', 'data/content/glossary.json']) {
     it(`入口不同步引入 ${json}`, () => {
       const chain = graph.get(join(ROOT, json));
       expect(chain?.map(rel).join(' > ') ?? null).toBeNull();

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import techs from '../../src/data/techs.json' with { type: 'json' };
+import techs from '../../data/game/techs.json' with { type: 'json' };
 
 const total = techs.length;
 const BASIS = '费用为目录基础值，未计入文明折扣。时代按目录字段精确匹配，不代表当前仍可研究。';

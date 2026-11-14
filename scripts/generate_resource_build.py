@@ -29,7 +29,7 @@ import subprocess
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 from effects_build import CIV_DAT
 
-OUT = ROOT / 'src/data/generate_resource.json'
+OUT = ROOT / 'data/game/generate_resource.json'
 # 与 dat_source.TASK_UNITS 里 action 151 的那一批一致。
 UNIT_IDS = (82, 1228, 1230, 2418, 2562, 2564, 2703, 2704)
 RES_IDS = (213, 287, 297, 521)

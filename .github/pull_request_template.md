@@ -39,7 +39,7 @@ Relates #
 - [ ] PR 标题符合 Conventional Commits（`类型(#issue): 描述`）
 - [ ] `Co-authored-by` 只列出实际参与的 coding agent；认不出执行工具时留空，未填成 DeepSeek Harness
 - [ ] 已 rebase 到目标分支最新提交，且在本版冻结范围内
-- [ ] 游戏数字来自数据文件，没有手改生成的 `src/data/*.json`
+- [ ] 游戏数字来自数据文件，没有手改生成的 `data/game/*.json`
 - [ ] 未用删断言掩盖计算或数据错误。有意替换旧布局、入口、链接或重复功能时，可按 TESTING 更新对应用例
 - [ ] 涉及界面：不要求四宽截图；测试报告已区分实际执行、CI 范围和未验证项
 - [ ] 图标用 Lucide，颜色用设计令牌

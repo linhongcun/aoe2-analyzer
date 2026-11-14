@@ -1,6 +1,6 @@
 /** Issue 226 measured trade supply. Income is user evidence, never an inferred route formula. */
 import { civs } from '../data';
-import populationRaw from '../data/trade_income.json';
+import populationRaw from '../../data/game/trade_income.json';
 import { discountedCost } from './costDiscount';
 import { calculateProduction, decodeProduction, encodeProduction, productionBuildings, type ProductionConfig, type ProductionContext } from './production';
 import type { Cost, Unit } from './types';

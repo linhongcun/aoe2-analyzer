@@ -1,4 +1,4 @@
-import content from '../content/match-review.json';
+import content from '../../data/content/match-review.json';
 import { hasExactKeys as exactKeys, isClockText, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export const MATCH_REVIEW_STORAGE_KEY = 'aoe2-match-review-v1';

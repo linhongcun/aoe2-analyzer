@@ -3,7 +3,7 @@ import io, json, os, urllib.request
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PIN = json.load(open(os.path.join(ROOT, 'scripts', 'data_sources.json')))['sources']['aoe2techtree']
+PIN = json.load(open(os.path.join(ROOT, 'data', 'sources', 'data_sources.json')))['sources']['aoe2techtree']
 REF = os.environ.get('AOE_TT_REF', PIN['commit'])
 AGES = ((1, 'dark'), (2, 'feudal'), (3, 'castle'), (4, 'imperial'))
 os.makedirs(os.path.join(ROOT, 'public/img/ages'), exist_ok=True)

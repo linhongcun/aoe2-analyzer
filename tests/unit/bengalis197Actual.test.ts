@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData, type BuildTimeline, type TimelineStep } from '../../src/domain/buildSim';
 
@@ -15,7 +15,7 @@ interface Case {
   preFirstSnapshots: Pick<TimelineStep, 'index' | 'startAt' | 'stock' | 'pop' | 'villagers'>[];
   preFirstPaid: BuildTimeline['villagerEvents'];
 }
-const quantified = JSON.parse(readFileSync(new URL('../../docs/design/bengalis197-runtime-quantified.json', import.meta.url), 'utf8')) as { cases: Case[] };
+const quantified = JSON.parse(readFileSync(new URL('../../data/evidence/bengalis197-runtime-quantified.json', import.meta.url), 'utf8')) as { cases: Case[] };
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((unit) => unit.up).map((unit) => [unit.id, unit.up])) as UpgradeData;
 const pick = <T, K extends keyof T>(value: T, keys: K[]): Pick<T, K> => Object.fromEntries(keys.map((key) => [key, value[key]])) as Pick<T, K>;

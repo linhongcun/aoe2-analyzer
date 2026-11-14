@@ -2,14 +2,14 @@
 // 当前 main 应红：模式芯片能切表，但来源条不写模式和 Elo；Elo 仍是只读 pill；
 // 无快照的组合会 toast 后继续展示另一档胜率。实现折入 #571 后应收绿，不要放宽断言，也不要单独合并这条红 PR。
 // 自有切片只有两份：4v4 × 1200–1400，阿拉伯 1v1 × 全部。不画 2v2 / 3v3 / 帝国战争，不做地图多图快照。
-// PC 1280。数字只从 src/data/ladder-*.json 读。不改 tests/**/v0*-acceptance*。
+// PC 1280。数字只从 data/game/ladder-*.json 读。不改 tests/**/v0*-acceptance*。
 // #545 在「单份快照只有一档」时锁了只读 pill。本文件把两份快照里有文明的 Elo 当成可切换筛选；实现 PR 再对齐 #545，这里不动它。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { formatGames, formatPercent, snapshotCutoff, type LadderCivStat, type LadderSnapshot } from '../../src/domain/ladder';
 
-const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const team = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const ELO_1200_1400 = /1200\s*(?:–|-)\s*1400/;
 const LIVE_HOST = /aoestats\.io|ageofnotes\.com|aoe2scout\.com|web\.archive\.org/i;
 const WIN_RATE = /\d+\.\d{2}%/;

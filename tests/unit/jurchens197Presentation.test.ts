@@ -1,7 +1,7 @@
 /** Explicit omission is shared by current opening, share and source-usage presentation. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { civs } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { bonusTechs, bonusUsage } from '../../src/domain/bonusUsage';
@@ -10,7 +10,7 @@ import { civSimNotes, simulateBuild, type EcoData, type UpgradeData } from '../.
 import { simSupport } from '../../src/domain/simSupport';
 import { buildShareCard, type ShareInput } from '../../src/features/builds/shareCard';
 import { validateDocument } from '../../scripts/content-schema.mjs';
-import source from './fixtures/jurchens197-source.json';
+import source from '../../data/fixtures/unit/fixtures/jurchens197-source.json';
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const NOTE = '按资源不耗尽估算，尸体腐烂与耗尽未模拟，不腐烂收益未计入';
@@ -79,7 +79,7 @@ describe('Jurchens current model and honest disclosures', () => {
       const r = e.civEco.Jurchens.find((r) => r.tech === id)! as unknown as Record<string, unknown>;
       r.jurchenTech = structuredClone(source[String(id) as '993' | '995']);
     }
-    expect(validateDocument('src/data/eco.json', e).valid).toBe(true);
+    expect(validateDocument('data/game/eco.json', e).valid).toBe(true);
   });
   it('Generic share fallback and other civilizations cannot inherit Jurchen caveats', () => {
     const i = { ...input('scouts-18'), civEn: 'Generic', civZh: '通用' };

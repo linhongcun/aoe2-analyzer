@@ -1,6 +1,6 @@
-import unitsRaw from '../../src/data/units.json';
-import techsRaw from '../../src/data/techs.json';
-import treesRaw from '../../src/data/trees.json';
+import unitsRaw from '../../data/game/units.json';
+import techsRaw from '../../data/game/techs.json';
+import treesRaw from '../../data/game/trees.json';
 import type { Tech, Trees, Unit } from '../../src/domain/types';
 import { techDlc, techUpdate, unitDlc } from '../../src/domain/introductions';
 import { makeSimContext } from '../../src/domain/simulator';

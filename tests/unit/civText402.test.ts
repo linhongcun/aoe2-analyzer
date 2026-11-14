@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
-import techs from '../../src/data/techs.json';
-import units from '../../src/data/units.json';
+import civs from '../../data/game/civs.json';
+import techs from '../../data/game/techs.json';
+import units from '../../data/game/units.json';
 
 describe('#402 文明介绍的固定版本文字', () => {
   it('所有展示字段没有重复“可可”或残留条目圆点', () => {

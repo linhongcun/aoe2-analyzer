@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
-import snapshotJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
+import snapshotJson from '../../../data/game/ladder-4v4-rm-e1200-1400-90d.json';
 import {
   LOW_SAMPLE,
   firstSortDir,

@@ -2,8 +2,8 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-const pages = JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8'));
-const dataBuild = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')).patch.build;
+const pages = JSON.parse(readFileSync('data/game/page-metadata.json', 'utf8'));
+const dataBuild = JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')).patch.build;
 const template = readFileSync('dist/index.html', 'utf8');
 const site = new URL(process.env.SITE_URL ?? 'https://linhongcun.github.io/aoe2-analyzer/');
 if (!site.pathname.endsWith('/')) site.pathname += '/';

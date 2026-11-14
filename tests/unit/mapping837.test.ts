@@ -16,8 +16,8 @@ interface Building {
   en: string;
 }
 
-const units = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as Unit[];
-const buildings = JSON.parse(readFileSync('src/data/buildings.json', 'utf8')) as Building[];
+const units = JSON.parse(readFileSync('data/game/units.json', 'utf8')) as Unit[];
+const buildings = JSON.parse(readFileSync('data/game/buildings.json', 'utf8')) as Building[];
 const unitIds = new Set(units.map((unit) => unit.id));
 
 describe('反制、提前解锁与建筑类型映射（issue 837）', () => {

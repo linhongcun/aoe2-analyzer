@@ -117,12 +117,12 @@ describe('#431 affected feature plans', () => {
 
   it('data generation is required only for actual data/generator/dependency changes, even in mixed ranges', () => {
     for (const path of [
-      'src/data/civs.json',
+      'data/game/civs.json',
       'public/img/civs/Franks.webp',
       'scripts/build_data.py',
-      'scripts/data_sources.json',
+      'data/sources/data_sources.json',
       'scripts/pinyin_build.mjs',
-      'docs/PATCH-NOTES/185872.md',
+      'data/patch-notes/185872.md',
       '.npmrc',
     ]) {
       expect(planChanges([change('src/features/units/components/UnitList.tsx'), change(path)])).toMatchObject({ scope: 'full', data: true });
@@ -253,7 +253,7 @@ it('#431 real multi-commit Git ranges preserve earlier data changes and CLI forc
     return git('rev-parse', 'HEAD');
   };
   const first = commit('docs/guide.md', 'guide');
-  const data = commit('src/data/civs.json', 'changed generated data');
+  const data = commit('data/game/civs.json', 'changed generated data');
   const head = commit('src/features/patches/Patches.tsx', 'changed UI');
   const entry = join(process.cwd(), 'scripts/ci-scope.mjs');
   const inspect = (base: string) =>

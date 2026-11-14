@@ -52,5 +52,6 @@ describe('#285 可见来源格式与内部证据的边界', () => {
     '内部 CSV 行',
     '提交 f09ed56',
     'src/content/build-orders/scouts.yaml',
+    'data/game/units.json',
   ])('拒绝内部来源文案 %s', (value) => expect(isPublicSourceText(value)).toBe(false));
 });

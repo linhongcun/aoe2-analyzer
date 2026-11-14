@@ -9,15 +9,15 @@ import { capturePage, type Captured, type PageCase } from './v0280-golden-cases'
  *   V0290_RECORD=1 BASE_URL=… npx playwright test tests/e2e/v0290-322-golden.spec.ts --workers=1
  * 只取 #duel / 工具主区，不含页脚（页脚有版本号和构建号）。
  */
-const FIXTURE = 'tests/e2e/fixtures/v0290-322-golden.json';
+const FIXTURE = 'data/fixtures/e2e/fixtures/v0290-322-golden.json';
 // #197: 2026-10-30维护者批准唯一Roman BO迁移；原v0.28金标准仍逐字保留。
 const ROMAN_CASE = 'bo:archers-19-romans';
-const romanCurrent = JSON.parse(readFileSync('tests/e2e/fixtures/v0700-romans197-current.json', 'utf8')) as {
+const romanCurrent = JSON.parse(readFileSync('data/fixtures/e2e/fixtures/v0700-romans197-current.json', 'utf8')) as {
   version: string;
   datBuild: number;
   cases: Record<string, Captured>;
 };
-const CURRENT_BUILD = (JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } }).patch
+const CURRENT_BUILD = (JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } }).patch
   .build;
 const duel = (id: string, q: string): PageCase => ({ id: `pk:${id}`, url: `./#/duel?${q}`, sel: '#duel' });
 const construction = (civ: string, task: string, building = 70): PageCase => ({

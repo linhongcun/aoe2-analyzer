@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { DISPLAY_BRACKETS, isDrawableTrend, omittedMonthlyTrend, trendFootnote, type LadderSnapshot } from '../../src/domain/ladder';
 import { canonicalLadderSearch, eloFilterOptions, renderedEloOptions, resolveLadderLocation, sliceFacts } from '../../src/domain/ladderQuery';
 
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
-const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const team = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
 const legalGaps = [...DISPLAY_BRACKETS.map((band) => band.key).filter((key) => key !== 'all'), '1200-1400'];
 
 describe('天梯首屏与合法缺档 #947', () => {

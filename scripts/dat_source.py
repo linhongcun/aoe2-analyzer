@@ -3,7 +3,7 @@
 
 来源：SiegeEngineers/auto-mods 仓库 dat/empires2_x2_p1.dat（该项目为每个新补丁重新生成 mod 所用的原版 .dat）。
 .dat 版权归 Microsoft 所有：仅在构建时下载到 scripts/.cache/（已 gitignore），从不提交或随站点发布；
-站点只发布由它派生的数值（src/data/*.json）。
+站点只发布由它派生的数值（data/game/*.json）。
 
 解析：genieutils-py（SiegeEngineers，LGPL-3.0）。首次运行会在 scripts/.cache/venv 建立隔离环境安装固定版本。
 
@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
-SOURCES_FILE = ROOT / 'scripts' / 'data_sources.json'
+SOURCES_FILE = ROOT / 'data/sources/data_sources.json'
 
 
 def pins():

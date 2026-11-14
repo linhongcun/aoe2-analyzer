@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 const unit = units.find((entry) => entry.id === 281)!;
 

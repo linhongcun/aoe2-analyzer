@@ -7,14 +7,14 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
+import civsRaw from '../../data/game/civs.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForBudget } from '../../src/domain/duel';
 import { countForTime, gatherModel, realCost } from '../../src/domain/realCost';
 import { units } from './helpers';
 
 // ---------- #322 ----------
-const FIXTURE = 'tests/unit/fixtures/v0290-322-golden.json';
+const FIXTURE = 'data/fixtures/unit/fixtures/v0290-322-golden.json';
 /** 覆盖：步兵 / 弓 / 骑 / 攻城 / 僧侣 / 海军 / 村民，含文明费用折扣和采集加成会作用到的单位 */
 const UNIT_IDS = [83, 74, 4, 7, 93, 448, 38, 329, 279, 39, 553, 280, 125, 5, 6, 492, 569, 474, 1258, 331, 542, 36, 21, 1795, 13, 527];
 const TIME = [

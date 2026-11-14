@@ -12,7 +12,7 @@
 //   不改未核实计算，不要求登录 GitHub。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import units from '../../src/data/units.json' with { type: 'json' };
+import units from '../../data/game/units.json' with { type: 'json' };
 
 const ISSUES_NEW = 'https://github.com/linhongcun/aoe2-analyzer/issues/new';
 const BATTERING_RAM_ID = 1258;
@@ -49,7 +49,7 @@ function ramLineFrom(rootId: number) {
 
 const RAM_LINE = ramLineFrom(BATTERING_RAM_ID);
 
-const effects = JSON.parse(readFileSync(new URL('../../src/data/effects.json', import.meta.url), 'utf8')) as {
+const effects = JSON.parse(readFileSync(new URL('../../data/game/effects.json', import.meta.url), 'utf8')) as {
   meta: { sources: { id: string; commit: string; patch: string }[] };
 };
 const dat = effects.meta.sources.find((source) => source.id === 'DAT');

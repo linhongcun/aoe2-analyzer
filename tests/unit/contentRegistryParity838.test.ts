@@ -5,10 +5,10 @@ import { MIXED_ARMY_ENEMIES, MIXED_ARMY_SCENARIOS } from '../../src/domain/mixed
 import { PLAN_AGES, PLAN_EXAMPLES, PLAN_OPENNESSES, POSITION_NAMES, SUPPLY_NAMES, TASK_KINDS } from '../../src/domain/teamPlan';
 import { CONTENT_ACQUISITIONS, CONTENT_EVIDENCE_STATUSES, CONTENT_KINDS, CONTENT_MODES } from '../../src/domain/contentCatalog';
 import { GLOSSARY_CATEGORIES } from '../../src/domain/glossary';
-import mixedContent from '../../src/content/mixed-army.json';
+import mixedContent from '../../data/content/mixed-army.json';
 
 type Schema = Record<string, unknown>;
-const schema = (name: string): Schema => JSON.parse(readFileSync(`src/content/schema/${name}.json`, 'utf8')) as Schema;
+const schema = (name: string): Schema => JSON.parse(readFileSync(`data/schemas/${name}.json`, 'utf8')) as Schema;
 const at = (value: unknown, path: string): unknown => path.split('.').reduce<unknown>((node, key) => (node as Record<string, unknown>)[key], value);
 const values = (value: unknown, path: string): unknown[] => at(value, path) as unknown[];
 const sorted = (values: readonly unknown[]) => [...values].sort();

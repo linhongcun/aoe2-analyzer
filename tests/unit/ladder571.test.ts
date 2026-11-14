@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { DISPLAY_BRACKETS, type LadderSnapshot } from '../../src/domain/ladder';
 import { canonicalLadderSearch, eloFilterOptions, resolveLadderLocation, sliceBracket, sliceFacts } from '../../src/domain/ladderQuery';
 
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
-const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const team = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
 
 function franks(snapshot: LadderSnapshot) {
   for (const bracket of snapshot.brackets) {

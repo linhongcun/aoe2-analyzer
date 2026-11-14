@@ -1,5 +1,5 @@
 /** Technology eligibility shared by construction and garrison previews. */
-import raw from '../data/garrison_techs.json';
+import raw from '../../data/game/garrison_techs.json';
 import type { Core } from '../data';
 import type { Building, Trees } from './types';
 import { civStatus } from './simulator';

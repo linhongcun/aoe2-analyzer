@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import type contentSchema from '../../src/content/team-plan.json';
+import type contentSchema from '../../data/content/team-plan.json';
 
-const content: typeof contentSchema = JSON.parse(readFileSync(new URL('../../src/content/team-plan.json', import.meta.url), 'utf8'));
+const content: typeof contentSchema = JSON.parse(readFileSync(new URL('../../data/content/team-plan.json', import.meta.url), 'utf8'));
 
 for (const width of [360, 375, 390, 1280]) {
   test(`#486 reviewed teaching views, example sharing and historical rejection at ${width}px`, async ({ page }, testInfo) => {

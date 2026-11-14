@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-const units = JSON.parse(readFileSync(new URL('../../src/data/units.json', import.meta.url), 'utf8')) as {
+const units = JSON.parse(readFileSync(new URL('../../data/game/units.json', import.meta.url), 'utf8')) as {
   id: number;
   armc: [string, number][];
 }[];

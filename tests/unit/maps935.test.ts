@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
-import catalog from '../../src/data/mapCatalog.json';
+import catalog from '../../data/game/mapCatalog.json';
 import Maps from '../../src/features/maps/Maps';
 import { mapMatchesQuery, selectMap } from '../../src/features/maps/mapSelection';
 import { PAGES } from '../../src/shared/nav/pageRegistry';

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import unitsRaw from '../../src/data/units.json';
-import buildingsRaw from '../../src/data/buildings.json';
+import unitsRaw from '../../data/game/units.json';
+import buildingsRaw from '../../data/game/buildings.json';
 import { loadCore } from '../../src/data';
 import { DLCS } from '../../src/domain/dlc';
 import { buildingDlc, unitDlc } from '../../src/domain/introductions';
@@ -17,8 +17,8 @@ interface AuditEntry {
 }
 type Catalog = Record<'units' | 'buildings', AuditEntry[]>;
 type Generated = Record<'units' | 'buildings', Record<string, number | null>>;
-const audit = JSON.parse(readFileSync('scripts/catalog_introductions.json', 'utf8')) as Catalog & { releases: string[] };
-const generated = JSON.parse(readFileSync('src/data/catalog-introductions.json', 'utf8')) as Generated;
+const audit = JSON.parse(readFileSync('data/sources/catalog_introductions.json', 'utf8')) as Catalog & { releases: string[] };
+const generated = JSON.parse(readFileSync('data/game/catalog-introductions.json', 'utf8')) as Generated;
 const catalogs = { units: unitsRaw, buildings: buildingsRaw };
 
 describe('#190 单位的首次引入版本', () => {

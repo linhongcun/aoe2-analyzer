@@ -17,7 +17,7 @@ import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH } from '../../../domain/ratings';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import type { Tech, Unit } from '../../../domain/types';
-import garrisonHosts from '../../../data/garrison_hosts.json';
+import garrisonHosts from '../../../../data/game/garrison_hosts.json';
 import { AgeImg, BuildingIcon, CivChip, CostView, DlcBadgeL } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';

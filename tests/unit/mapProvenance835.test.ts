@@ -4,8 +4,8 @@ import { validateDocument } from '../../scripts/content-schema.mjs';
 import { mapGuides } from '../../src/domain/mapGuides';
 import { mapPositions } from '../../src/domain/mapPositions';
 
-const meta = JSON.parse(readFileSync('scripts/map_catalog_meta.json', 'utf8')) as Record<string, { source?: string; checkedAt?: string }>;
-const catalog = JSON.parse(readFileSync('src/data/mapCatalog.json', 'utf8')) as {
+const meta = JSON.parse(readFileSync('data/sources/map_catalog_meta.json', 'utf8')) as Record<string, { source?: string; checkedAt?: string }>;
+const catalog = JSON.parse(readFileSync('data/game/mapCatalog.json', 'utf8')) as {
   maps: { id: string; source: string; checkedAt: string }[];
 };
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -25,7 +25,7 @@ describe('地图编辑内容 provenance（issue 835）', () => {
   });
 
   it('schema 要求 source/checkedAt，缺失或非法值失败', () => {
-    const file = 'src/data/mapCatalog.json';
+    const file = 'data/game/mapCatalog.json';
     expect(validateDocument(file, catalog).valid).toBe(true);
     const copy = () => JSON.parse(JSON.stringify(catalog)) as { maps: Record<string, unknown>[] };
     const noSource = copy();

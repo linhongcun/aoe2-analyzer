@@ -1,5 +1,5 @@
 /** Ordered market budgets. Fees come from pinned .dat; engine assumptions are audited separately. */
-import raw from '../data/market.json';
+import raw from '../../data/game/market.json';
 import { civs } from '../data';
 import { RES_ZH } from './ratings';
 

@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 
-const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
+const PINS = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../data/sources/data_sources.json');
 
 const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 

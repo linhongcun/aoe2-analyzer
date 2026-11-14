@@ -6,7 +6,7 @@
 //   - 数值结果不变（现有单元测试全部通过；这里另守页面上的收入数值）
 //   - 360/375/390/1280、浅色与深色主题下数字不折行、无横向滚动
 import { expect, test, type Page } from '@playwright/test';
-import civsRaw from '../../src/data/civs.json' with { type: 'json' };
+import civsRaw from '../../data/game/civs.json' with { type: 'json' };
 
 const WIDTHS = [360, 375, 390, 1280] as const;
 const NAMES = ['圣物收入', '圣物收益', '圣物资源收入预览'];
@@ -165,7 +165,7 @@ test.describe('#273 四个宽度、浅色与深色：数字不折行、无横向
 
 // Steve 2026-10-22 定稿：前置写回来。具名科技写「需先研究 X」（玩家看得到的中文名），时代写「需先进入 X 时代」；
 // 前置是科技树里看不到的内部科技时写玩家怎么触发它（如「队伍中有 X 文明时自动生效」），写不出就写「需先满足游戏内部条件（科技树里看不到）」，都不写编号。
-// 数据（src/data/team_bonuses.json chain）：599 = 标枪骑兵→精锐标枪骑兵（靶场研究），前置 103 帝王时代 + 601；
+// 数据（data/game/team_bonuses.json chain）：599 = 标枪骑兵→精锐标枪骑兵（靶场研究），前置 103 帝王时代 + 601；
 // 601 = 启用标枪骑兵，前置 102 城堡时代（柏柏尔团队加成，队伍里有柏柏尔就生效）；730 = 印加团队加成，前置 639、307 都是内部科技，库里没有触发方式。
 test.describe('#273 队伍加成：关联科技的前置写回来（Steve 10-22 定稿）', () => {
   const ROUTE = '/team-bonuses?tv=1&players=Berbers,Incas,Franks,Britons&age=4&target=all&unit=&researched=';

@@ -20,20 +20,20 @@ class Slavs197Export(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data = eco_build.load()
-        cls.checked = json.loads((eco_build.ROOT / 'src/data/eco.json').read_text())
+        cls.checked = json.loads((eco_build.ROOT / 'data/game/eco.json').read_text())
         cls.generated = cls.export(cls.data)
 
     @staticmethod
     def export(data):
         with tempfile.TemporaryDirectory(prefix='slavs197-export-') as directory:
             root = Path(directory)
-            (root / 'src/data').mkdir(parents=True)
-            (root / 'docs').mkdir()
+            (root / 'data/game').mkdir(parents=True)
+            (root / 'data/reports').mkdir(parents=True)
             for name in ('units', 'techs', 'buildings', 'civs', 'effects'):
-                shutil.copyfile(eco_build.ROOT / f'src/data/{name}.json', root / f'src/data/{name}.json')
+                shutil.copyfile(eco_build.ROOT / f'data/game/{name}.json', root / f'data/game/{name}.json')
             with patch.object(eco_build, 'ROOT', root), patch.object(eco_build, 'load', return_value=data), contextlib.redirect_stdout(io.StringIO()):
                 eco_build.main()
-            return json.loads((root / 'src/data/eco.json').read_text())
+            return json.loads((root / 'data/game/eco.json').read_text())
 
     @staticmethod
     def raw_tech(data, tech):

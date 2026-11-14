@@ -84,7 +84,7 @@ function walkFiles(dir: string, out: string[] = []): string[] {
 
 /**
  * eager 的 import.meta.glob 匹配到的仓库内文件（相对仓库根，已排序）。
- * 支持字面路径（如 '../../data/units.json'）、* ** ? {a,b}、数组和 '!' 排除；'/' 开头从仓库根算。
+ * 支持字面路径（如 '../../../data/game/units.json'）、* ** ? {a,b}、数组和 '!' 排除；'/' 开头从仓库根算。
  */
 function globEager(fromFile: string, patterns: string | string[]): string[] {
   const list = Array.isArray(patterns) ? patterns : [patterns];
@@ -226,7 +226,7 @@ export interface Violation extends ImportEdge {
  * #281 规则 4 的核心 JSON。原文是「src/{domain,features} 不能直接 import，src/data/index.ts 和专门的 loader 除外」；
  * 验收口径收紧到整个 src：只有 CORE_JSON_LOADERS 里的文件能直接 import，src/data 下其他文件、shared、app 一样报。
  */
-export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `src/data/${n}.json`);
+export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `data/game/${n}.json`);
 /**
  * 唯一允许直接 import 核心 JSON 的 7 个文件（逐个登记，不按目录豁免）：
  * - src/data/index.ts：异步/加工后的读取接口

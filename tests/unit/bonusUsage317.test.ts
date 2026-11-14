@@ -8,8 +8,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { civs, loadCore, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
@@ -38,7 +38,7 @@ const firstChanged = (b: CivBonusEnt, bos = buildOrders): string | null => {
 };
 /** 需要开局模拟对照的加成：支持的文明、有 .dat 正 tech 号 */
 const SIM_CHECKED = ECO.filter((b) => simSupport(b.civ) && techsOf(b).length > 0);
-const SNAP_URL = new URL('./fixtures/bonusUsage317-sim.json', import.meta.url);
+const SNAP_URL = new URL('../../data/fixtures/unit/fixtures/bonusUsage317-sim.json', import.meta.url);
 const sha = (...xs: string[]) => createHash('sha256').update(xs.join('\n')).digest('hex');
 const inputsHash = () =>
   sha(
@@ -74,7 +74,8 @@ const inputsHash = () =>
       'khmerSource.ts',
       'khmerPrerequisiteSource.ts',
     ].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
-    ...['construction.json', 'construction.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/data/${f}`, import.meta.url)), 'utf8')),
+    readFileSync(fileURLToPath(new URL('../../data/game/construction.json', import.meta.url)), 'utf8'),
+    readFileSync(fileURLToPath(new URL('../../src/data/construction.ts', import.meta.url)), 'utf8'),
     readFileSync(fileURLToPath(new URL('../../src/content/schema/compiled/wei-spawn.mjs', import.meta.url)), 'utf8'),
   );
 type Snap = { inputs: string; firstChanged: Record<string, string | null> };

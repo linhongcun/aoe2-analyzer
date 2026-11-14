@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import buildings from '../../src/data/buildings.json';
+import buildings from '../../data/game/buildings.json';
 import {
   applyCatalogView,
   buildingCiv,

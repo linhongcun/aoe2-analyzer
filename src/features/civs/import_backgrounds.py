@@ -70,7 +70,7 @@ def main():
     parser.add_argument('--check', action='store_true', help='验证固定来源和已提交输出，不改文件')
     args = parser.parse_args()
     try:
-        source = json.loads((HERE / 'backgrounds.source.json').read_text(encoding='utf-8'))
+        source = json.loads((HERE / '../../../data/reference/civs/backgrounds.source.json').read_text(encoding='utf-8'))
         encoding = source['encoding']
         if PIL.__version__ != encoding['pillowVersion'] or features.version('webp') != encoding['libwebpVersion']:
             raise ValueError('Pillow/libwebp版本与固定编码器不符')
@@ -82,7 +82,7 @@ def main():
         manifest = {key: source[key] for key in ['repo', 'commit']}
         manifest['assets'] = assets
         data = (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode()
-        write_or_check(HERE / 'backgrounds.json', data, args.check)
+        write_or_check(HERE / '../../../data/reference/civs/backgrounds.json', data, args.check)
         print(f'文明背景：{len(assets)}项，' + ('核验通过' if args.check else '已生成'))
     except (OSError, ValueError) as error:
         print(error, file=sys.stderr)

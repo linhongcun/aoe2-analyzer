@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/buildings.json';
+import raw from '../../data/game/buildings.json';
 import { buildingDlc, buildingType } from '../../src/domain/buildings';
 import { buildLinker, linkify } from '../../src/domain/linker';
 import type { Building } from '../../src/domain/types';

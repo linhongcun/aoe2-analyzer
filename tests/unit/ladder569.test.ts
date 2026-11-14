@@ -14,8 +14,8 @@ import {
   type LadderSnapshot,
 } from '../../src/domain/ladder';
 
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
-const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('data/game/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
+const team = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
 const FORBIDDEN = /实时|秒前|分钟前|刚刚|自动更新|今日更新|最新排名|近实时/;
 
 describe('天梯相对新鲜度与样本量 #569', () => {

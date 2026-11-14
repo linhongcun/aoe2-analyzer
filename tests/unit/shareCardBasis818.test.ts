@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
-import units from '../../src/data/units.json';
-import eco from '../../src/data/eco.json';
+import civs from '../../data/game/civs.json';
+import units from '../../data/game/units.json';
+import eco from '../../data/game/eco.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { buildView } from '../../src/features/builds/timelineModel';
 import { buildShareCard } from '../../src/features/builds/shareCard';
-import baseline from './__fixtures__/shareCardBasis818.json';
+import baseline from '../../data/fixtures/unit/__fixtures__/shareCardBasis818.json';
 
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const AGE = ['', '', 'feudal', 'castle', 'imperial'] as const;

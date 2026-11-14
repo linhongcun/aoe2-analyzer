@@ -5,8 +5,8 @@ import { expect, it } from 'vitest';
 import { formatGames, formatPercent, type LadderSnapshot } from '../../src/domain/ladder';
 import { LadderMeta, type BandCiv } from '../../src/features/ladder/LadderBands';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
-const catalog = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string; zh: string }[];
+const snapshot = JSON.parse(readFileSync('data/game/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
+const catalog = JSON.parse(readFileSync('data/game/civs.json', 'utf8')) as { en: string; zh: string }[];
 const rows: BandCiv[] = snapshot.brackets[0]!.civs.filter((row) => row.playRate != null).map((row) => ({
   ...row,
   playRate: row.playRate!,

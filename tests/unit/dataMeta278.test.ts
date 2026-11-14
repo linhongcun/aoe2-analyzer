@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import sources from '../../scripts/data_sources.json';
+import sources from '../../data/sources/data_sources.json';
 import { defaultTeamPlan, encodeTeamPlan, exampleTeamPlan } from '../../src/domain/teamPlan';
 
 afterEach(() => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import buildingsRaw from '../../src/data/buildings.json';
+import buildingsRaw from '../../data/game/buildings.json';
 import { UNIT_ALIASES } from '../../src/data/aliases';
 import type { Building } from '../../src/domain/types';
 import {

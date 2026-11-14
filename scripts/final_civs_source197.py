@@ -11,7 +11,7 @@ import subprocess
 
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat, load
 
-OUTPUT = ROOT / 'docs/design/final-civs197-source-physical.json'
+OUTPUT = ROOT / 'data/evidence/final-civs197-source-physical.json'
 DUMP = r'''
 import dataclasses,json,sys
 from genieutils.datfile import DatFile

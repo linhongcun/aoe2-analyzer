@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import raw from '../../src/data/patches/185872.json';
+import raw from '../../data/game/patches/185872.json';
 import { groupTreeChanges, patchTarget, type PatchEntry } from '../../src/domain/patches';
 
 it('#417 从固定补丁记录提取全部科技树得失，保持来源与目标', () => {

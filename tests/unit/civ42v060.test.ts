@@ -1,8 +1,8 @@
 // v0.6.0 #42 失败用例 — Kent（Steve 10/13 定的放开清单 + 白名单）
 // 绿 = 已实现，保留防回退（注明「守护」）；红 = 本版要实现。
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import * as sim from '../../src/domain/buildSim';
 import type { EcoData, UpgradeData } from '../../src/domain/buildSim';

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -8,7 +8,7 @@ import { publicFormats, constructionReferenceProblems } from '../src/content/sch
 import { LEGACY_SOURCE_BASELINE } from './content-baseline.mjs';
 import { schemaFileFor } from './content-schema-catalog.mjs';
 
-export const SCHEMA_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '../src/content/schema');
+export const SCHEMA_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '../data/schemas');
 export const SCHEMA_ID_BASE = 'https://linhongcun.github.io/aoe2-analyzer/schema/';
 export { LEGACY_SOURCE_BASELINE, schemaFileFor };
 
@@ -69,7 +69,7 @@ export function validateDocument(file, data) {
         message: error.message ?? 'JSON 结构无效',
         ...(error.keyword === 'format' && error.params.format === 'source-text' ? { valueSha256: fingerprint(pathValue(data, error.instancePath)) } : {}),
       }));
-  if (valid && file === 'src/data/construction.json')
+  if (valid && file === 'data/game/construction.json')
     problems.push(...constructionReferenceProblems(data).map((entry) => problem(file, 'reference', entry.message, entry.path)));
   return { valid: problems.length === 0, problems };
 }
@@ -98,18 +98,12 @@ export function checkDirectory(root = process.cwd()) {
     for (const entry of readdirSync(directory, { withFileTypes: true })) {
       const path = join(directory, entry.name);
       const file = relative(root, path).split(sep).join('/');
-      if (file === 'src/content/schema') continue;
       if (entry.isDirectory()) walk(path);
       else if (file.endsWith('.json')) visit(path, file, entry.isSymbolicLink());
     }
   };
-  for (const directory of ['src/content', 'src/data']) walk(join(root, directory));
-  // 少数手工内容仍留在 features；只登记精确文件，不能把整个 features 目录纳入扫描。
-  for (const file of ['src/features/civs/history.json']) {
-    const path = join(root, file);
-    if (existsSync(path)) visit(path, file, lstatSync(path).isSymbolicLink());
-  }
-  if (!files.length) problems.push(problem('src/content + src/data', 'coverage', '未发现任何 JSON 输入'));
+  for (const directory of ['data/content', 'data/game']) walk(join(root, directory));
+  if (!files.length) problems.push(problem('data/content + data/game', 'coverage', '未发现任何 JSON 输入'));
   return { files: files.sort(), problems };
 }
 

@@ -2,9 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { readdirSync, readFileSync } from 'node:fs';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 
-const orders = readdirSync(new URL('../../src/data/build-orders/', import.meta.url))
+const orders = readdirSync(new URL('../../data/game/build-orders/', import.meta.url))
   .filter((file) => file.endsWith('.json'))
-  .map((file) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder)
+  .map((file) => JSON.parse(readFileSync(new URL(`../../data/game/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder)
   .sort((a, b) => a.target.age - b.target.age || a.target.vils - b.target.vils || a.id.localeCompare(b.id));
 
 const hashQuery = (page: Page) => new URLSearchParams(new URL(page.url()).hash.split('?')[1] ?? '');

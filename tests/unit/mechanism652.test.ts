@@ -328,7 +328,7 @@ it.each([0, -1])('#652 完备解释：真实射程优势变为%s后不再按文�
   expect(effect.v).toBe(1);
   effect.v = value;
   vi.resetModules();
-  vi.doMock('../../src/data/effects.json', () => ({ default: changed }));
+  vi.doMock('../../data/game/effects.json', () => ({ default: changed }));
   let view: import('react-test-renderer').ReactTestRenderer | undefined;
   let unmount: (() => Promise<void>) | undefined;
   try {
@@ -378,7 +378,7 @@ it.each([0, -1])('#652 完备解释：真实射程优势变为%s后不再按文�
     expect(rendered).not.toContain('射程更远');
   } finally {
     await unmount?.();
-    vi.doUnmock('../../src/data/effects.json');
+    vi.doUnmock('../../data/game/effects.json');
     vi.resetModules();
   }
 });
@@ -390,7 +390,7 @@ it('#652 已支持文明射程效果重载后传播到解释与建议', async ()
     .find((f) => f.s === 'rng')!;
   fx.v += 1;
   vi.resetModules();
-  vi.doMock('../../src/data/effects.json', () => ({ default: changed }));
+  vi.doMock('../../data/game/effects.json', () => ({ default: changed }));
   try {
     const rebuilt = await import('../../src/domain/positionScenarios');
     const result = rebuilt.scenarioRows(base, 'flank', DEFAULT_FLANK_SCENE).find((r) => r.civ === 'Britons')!;
@@ -398,7 +398,7 @@ it('#652 已支持文明射程效果重载后传播到解释与建议', async ()
     expect(result.opening!.window).toBeGreaterThan(row(base).opening!.window);
     expect(result.signature).not.toBe(row(base).signature);
   } finally {
-    vi.doUnmock('../../src/data/effects.json');
+    vi.doUnmock('../../data/game/effects.json');
     vi.resetModules();
   }
 });

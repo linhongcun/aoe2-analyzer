@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import eco from '../../src/data/eco.json';
-import civs from '../../src/data/civs.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import civs from '../../data/game/civs.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { formatClock } from '../../src/domain/formatTime';

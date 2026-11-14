@@ -4,8 +4,8 @@ import { roundHalfPrice } from '../../src/domain/roundHalfPrice';
 
 type U = { id: number; en: string; age: number; civs: string[]; cost: Record<string, number> };
 type G = { units: number[]; res: string[]; tiers: Record<string, number> };
-const UNITS = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as U[];
-const CD = (JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { costDiscounts: Record<string, { ok: boolean; groups: G[] }[]> }).costDiscounts;
+const UNITS = JSON.parse(readFileSync('data/game/units.json', 'utf8')) as U[];
+const CD = (JSON.parse(readFileSync('data/game/effects.json', 'utf8')) as { costDiscounts: Record<string, { ok: boolean; groups: G[] }[]> }).costDiscounts;
 /** 独立扫描折后价恰为 .5 的 单位 × 文明 × 时代（整数算术），用于逐个核对页面 */
 const HALVES: [U, string, number][] = [];
 Object.entries(CD).forEach(([civ, list]) =>

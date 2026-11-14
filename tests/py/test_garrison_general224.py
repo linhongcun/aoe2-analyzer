@@ -16,11 +16,11 @@ spec.loader.exec_module(module)
 class GarrisonGeneral224Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = json.loads((ROOT / 'src/data/garrison_general.json').read_text())
-        cls.hosts = json.loads((ROOT / 'src/data/garrison_hosts.json').read_text())
-        cls.techs = json.loads((ROOT / 'src/data/garrison_techs.json').read_text())
+        cls.data = json.loads((ROOT / 'data/game/garrison_general.json').read_text())
+        cls.hosts = json.loads((ROOT / 'data/game/garrison_hosts.json').read_text())
+        cls.techs = json.loads((ROOT / 'data/game/garrison_techs.json').read_text())
         cls.catalog = {str(unit['id']): unit for name in ('units', 'buildings')
-                       for unit in json.loads((ROOT / ('src/data/%s.json' % name)).read_text())}
+                       for unit in json.loads((ROOT / ('data/game/%s.json' % name)).read_text())}
 
     def test_general_export_removes_only_recoverable_copies_without_mutating_tech_input(self):
         source = {field: self.catalog['4'][field] for field in ('age', 'pic', 'civs')}
@@ -159,7 +159,7 @@ class GarrisonGeneral224Test(unittest.TestCase):
             self.assertRegex(self.data['units'][str(unit)]['zh'], '[\u4e00-\u9fff]')
 
     def test_all_civilizations_and_source_pin_are_explicit(self):
-        civs = json.loads((ROOT / 'src/data/civs.json').read_text())
+        civs = json.loads((ROOT / 'data/game/civs.json').read_text())
         self.assertEqual(set(self.data['civs']), {c['en'] for c in civs})
         self.assertEqual(self.data['meta']['sha256'], module.DAT['sha256'])
         self.assertFalse(self.data['meta']['engineVerifiedInPinnedBuild'])

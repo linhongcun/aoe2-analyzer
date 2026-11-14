@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { UNIT_ALIAS_ROWS } from '../../src/data/aliases';
 
-const UNITS = JSON.parse(readFileSync(new URL('../../src/data/units.json', import.meta.url), 'utf8')) as { id: number; zh: string }[];
+const UNITS = JSON.parse(readFileSync(new URL('../../data/game/units.json', import.meta.url), 'utf8')) as { id: number; zh: string }[];
 
 const rel = (page: Page) => page.locator('#unit [data-t="rel-first"]');
 

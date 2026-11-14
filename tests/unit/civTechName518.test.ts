@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
-import civs from '../../src/data/civs.json';
-import techs from '../../src/data/techs.json';
+import civs from '../../data/game/civs.json';
+import techs from '../../data/game/techs.json';
 
 it('#518 女真城堡科技与科技详情统一译名，保留文明介绍与帝王科技原文', () => {
   const civ = civs.find((item) => item.en === 'Jurchens')!;

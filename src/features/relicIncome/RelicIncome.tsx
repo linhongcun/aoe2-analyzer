@@ -47,7 +47,7 @@ export default function RelicIncome() {
   const [retry, setRetry] = useState(0);
   useEffect(() => {
     let active = true;
-    import('../../data/relic_income.json')
+    import('../../../data/game/relic_income.json')
       .then((module) => {
         const data: unknown = module.default;
         if (!validRelicIncomeData(data)) throw new Error('Invalid relic data');

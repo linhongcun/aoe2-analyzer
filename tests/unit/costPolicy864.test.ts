@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { discountedCost } from '../../src/domain/costDiscount';
 import { DAT, type DatCostDiscount, type DatCostGroup } from '../../src/domain/datEffects';

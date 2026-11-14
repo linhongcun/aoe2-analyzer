@@ -1,6 +1,6 @@
 /**
  * 手工编码的建筑效果（历史版本，依据 Fandom Wiki 科技页与游戏内文明说明）。
- * 现在只作为回退：.dat 生成数据缺失或与当前补丁文本不一致时使用；差异见 docs/EFFECTS-AUDIT.md。
+ * 现在只作为回退：.dat 生成数据缺失或与当前补丁文本不一致时使用；差异见 data/reports/EFFECTS-AUDIT.md。
  */
 import type { Building, Effect } from './types';
 

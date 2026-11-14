@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/buildings.json';
+import raw from '../../data/game/buildings.json';
 import { buildingDlc, buildingType, isUniqueBuilding } from '../../src/domain/buildings';
 import { DLCS } from '../../src/domain/dlc';
 import type { Building } from '../../src/domain/types';

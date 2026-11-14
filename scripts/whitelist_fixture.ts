@@ -1,7 +1,7 @@
-// #127 守护基线：在 origin/release/v0.7.0（706e257）的 worktree 里运行 `npx vite-node scripts/whitelist_fixture.ts > tests/unit/fixtures/whitelist-v070.json` 生成；
+// #127 守护基线：在 origin/release/v0.7.0（706e257）的 worktree 里运行 `npx vite-node scripts/whitelist_fixture.ts > data/fixtures/unit/fixtures/whitelist-v070.json` 生成；
 // 记录 19 个白名单文明 × 全部开局直接调 simulateBuild 的每步 doneAt/库存 与升时代时间。本脚本在本分支上跑出的结果应与基线逐字相同。
-import eco from '../src/data/eco.json';
-import units from '../src/data/units.json';
+import eco from '../data/game/eco.json';
+import units from '../data/game/units.json';
 import { buildOrders } from '../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../src/domain/buildSim';
 const W = [

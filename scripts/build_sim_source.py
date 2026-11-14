@@ -15,7 +15,7 @@ from dat_source import CACHE, DAT, ROOT, check_markers, fetch_dat, load, parse
 
 SCHEMA = 'build-sim-source/1'
 MAX_REPORT_BYTES = 64 * 1024
-HISTORY = ROOT / 'scripts/build_sim_source_history.json'
+HISTORY = ROOT / 'data/sources/build_sim_source_history.json'
 # Raw DAT names differ from the public civilization names in these five cases.
 CIV_ALIASES = {'Britons': 'British', 'Franks': 'French', 'Byzantines': 'Byzantine',
                'Mayans': 'Mayan', 'Hindustanis': 'Indians'}
@@ -142,7 +142,7 @@ def check_budget(root=ROOT, historical=None):
         path = root / relative
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             failures.append('%s: historical source bytes changed or missing' % relative)
-    for path in sorted((root / 'docs/design').rglob('*197*source*.json')):
+    for path in sorted((root / 'data/evidence').rglob('*197*source*.json')):
         content = path.read_bytes()
         relative = path.relative_to(root).as_posix()
         if relative in historical:

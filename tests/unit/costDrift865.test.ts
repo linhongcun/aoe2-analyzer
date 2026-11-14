@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import buildings from '../../src/data/buildings.json';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import buildings from '../../data/game/buildings.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { baseDrifts, discountDrifts, type EcoSlice } from '../../scripts/check-cost-drift';
 
 const catalog = units as unknown as { id: number; zh?: string; age: number; civs: string[]; cost?: Record<string, number>; tt?: number }[];

@@ -140,9 +140,9 @@ export function discountDrifts(catalog: CatalogUnit[], eco: EcoSlice): string[] 
 function main() {
   const root = fileURLToPath(new URL('..', import.meta.url));
   const read = (path: string) => JSON.parse(readFileSync(resolve(root, path), 'utf8')) as unknown;
-  const catalog = read('src/data/units.json') as CatalogUnit[];
-  const buildings = read('src/data/buildings.json') as { id: number; zh?: string; cost?: Cost }[];
-  const eco = read('src/data/eco.json') as EcoSlice;
+  const catalog = read('data/game/units.json') as CatalogUnit[];
+  const buildings = read('data/game/buildings.json') as { id: number; zh?: string; cost?: Cost }[];
+  const eco = read('data/game/eco.json') as EcoSlice;
   const problems = [...baseDrifts(catalog, eco.units, buildings, eco.buildings), ...discountDrifts(catalog, eco)];
   if (problems.length) {
     for (const line of problems.slice(0, 30)) console.error(line);

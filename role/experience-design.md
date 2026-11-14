@@ -2,7 +2,7 @@
 
 核查日期：2026-11-13。
 
-基线：`main` `0db9c30924dc5a2acaa66d3924d2f655fc17a6c2`（`style(#1002)`，2026-11-13 13:44 UTC）。该提交的 `package.json` 版本是 `0.77.92`。游戏数据版本以 [`scripts/data_sources.json`](../scripts/data_sources.json) 为准，当前为 DE Update 188329。下文「本基线」指这次读到的源码。本次没有打开线上 Pages，也没有把页脚构建号核成这个 SHA。
+基线：`main` `0db9c30924dc5a2acaa66d3924d2f655fc17a6c2`（`style(#1002)`，2026-11-13 13:44 UTC）。该提交的 `package.json` 版本是 `0.77.92`。游戏数据版本以 [`data/sources/data_sources.json`](../data/sources/data_sources.json) 为准，当前为 DE Update 188329。下文「本基线」指这次读到的源码。本次没有打开线上 Pages，也没有把页脚构建号核成这个 SHA。
 
 文中四类信息分开写：
 
@@ -35,7 +35,7 @@
 | 顶栏、焦点、窄屏抽屉                   | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css)                                                                          |
 | 对象更新历史                           | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches`                                                                                                      |
 | 可复用设计原则                         | [体验设计系统](../docs/design/DESIGN-SYSTEM.md)，具体需求和完成态设计图以原 Issue 为准                                                                                                                      |
-| 游戏数字从哪来                         | 生成数据与 [`scripts/data_sources.json`](../scripts/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                                    |
+| 游戏数字从哪来                         | 生成数据与 [`data/sources/data_sources.json`](../data/sources/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                                    |
 
 历史页面复核见 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003) 及[基线规格原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/support-tools-ui-20261113.md)；它记录当时的持续生产、施工和驻军治疗布局，不作为当前通用组件规范。
 

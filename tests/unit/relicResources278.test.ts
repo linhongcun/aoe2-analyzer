@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../src/data/relic_income.json';
+import raw from '../../data/game/relic_income.json';
 import { calculateRelicIncome, newRelicIncomeConfig, validRelicIncomeData, type RelicIncomeData } from '../../src/domain/relicIncome';
 
 const resourceIds = { Gold: 191, Food: 225, Wood: 264, Stone: 265 };

@@ -2,7 +2,7 @@
 // 文案按 Steve 2026-10-22 设计审（PR #360 第 2、9–12 条）。
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, type Core } from '../../src/data';
-import TEAM from '../../src/data/team_bonuses.json';
+import TEAM from '../../data/game/team_bonuses.json';
 import { playerTeamNote } from '../../src/features/teamBonuses/TeamBonuses';
 
 let core: Core;

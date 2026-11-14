@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
-import techs from '../../src/data/techs.json';
-import buildings from '../../src/data/buildings.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
+import techs from '../../data/game/techs.json';
+import buildings from '../../data/game/buildings.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { practiceAction, practiceProgress, practiceSteps, type PracticeNames } from '../../src/domain/buildPractice';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';

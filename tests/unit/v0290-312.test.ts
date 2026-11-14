@@ -2,7 +2,7 @@
  * v0.29.0 验收（#329）A 组 #312 部分：取自 Kent Beck test/v0290-acceptance @ 2b917c0 tests/unit/v0290-A.test.ts，断言原样未改。
  */
 import { describe, expect, it } from 'vitest';
-import scouting from '../../src/content/scouting.json';
+import scouting from '../../data/content/scouting.json';
 
 // ---------- #312 ----------
 // 公开来源：https://aoecoach.com/en/resources/buildings/town-center/ 「Castle Age Boom: Upon reaching Castle Age, immediately build 2-3 additional Town Centers」

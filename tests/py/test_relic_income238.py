@@ -15,7 +15,7 @@ spec.loader.exec_module(relic)
 class RelicIncome238Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = json.loads((ROOT / 'src/data/relic_income.json').read_text())
+        cls.data = json.loads((ROOT / 'data/game/relic_income.json').read_text())
 
     def fixture(self):
         """Reconstruct the small audited fields to exercise rejection, without .dat/cache/network."""

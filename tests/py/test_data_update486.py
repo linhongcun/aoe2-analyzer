@@ -13,7 +13,7 @@ class Update188329(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.raw = load()['Civs'][1]['Units']
-        cls.units = {u['id']: u for u in json.loads((ROOT / 'src/data/units.json').read_text())}
+        cls.units = {u['id']: u for u in json.loads((ROOT / 'data/game/units.json').read_text())}
 
     def test_elephant_archer_cost_and_hp_from_dat(self):
         for uid, hp in ((873, 220), (875, 270)):

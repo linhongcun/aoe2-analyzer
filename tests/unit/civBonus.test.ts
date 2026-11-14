@@ -3,8 +3,8 @@
  * （https://ageofempires.fandom.com/wiki/<Civ>_(Age_of_Empires_II) 的 "Civilization bonuses" 一节）。
  */
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
-import raw from '../../src/data/buildings.json';
+import civsRaw from '../../data/game/civs.json';
+import raw from '../../data/game/buildings.json';
 import { allCivBonuses, bonusAffects, bonusExample, civBonuses, classify, parseAges } from '../../src/domain/civBonus';
 import { formatHp } from '../../src/domain/hpFormat';
 import { BUILDING_CIV_BONUSES } from '../../src/domain/buildingSim';

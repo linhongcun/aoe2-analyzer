@@ -81,10 +81,10 @@ const CURRENT_MODEL_SOURCE: ModelSource = {
 };
 const EVIDENCE_MODEL_SOURCE = (evidence: string): ModelSource => ({ status: 'evidence-pinned', patch: 185872, evidence });
 const MODEL_SOURCE_BY_CIV: Readonly<Record<string, ModelSource>> = {
-  Armenians: EVIDENCE_MODEL_SOURCE('docs/design/armenians197-source.json'),
-  Georgians: EVIDENCE_MODEL_SOURCE('docs/design/georgians197-source.json'),
-  Khmer: EVIDENCE_MODEL_SOURCE('docs/design/khmer197-source.json'),
-  Slavs: EVIDENCE_MODEL_SOURCE('docs/design/slavs197-source.json'),
+  Armenians: EVIDENCE_MODEL_SOURCE('data/evidence/armenians197-source.json'),
+  Georgians: EVIDENCE_MODEL_SOURCE('data/evidence/georgians197-source.json'),
+  Khmer: EVIDENCE_MODEL_SOURCE('data/evidence/khmer197-source.json'),
+  Slavs: EVIDENCE_MODEL_SOURCE('data/evidence/slavs197-source.json'),
 };
 interface CivMechanism {
   source: ModelSource;

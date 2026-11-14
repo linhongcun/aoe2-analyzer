@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
+import eco from '../../data/game/eco.json';
 import { weiRewardFamily, weiRewardsForCompletedResearch } from '../../src/domain/weiEconomy';
 import validateSpawn from '../../src/content/schema/compiled/wei-spawn.mjs';
 import { validateDocument } from '../../scripts/content-schema.mjs';
@@ -41,12 +41,12 @@ describe('#197 魏有界纯奖励入口与实际compiled schema', () => {
       const e = structuredClone(eco);
       mutate(e.civEco.Wei[0]!.spawn as unknown as Record<string, unknown>);
       expect(validateSpawn(e.civEco.Wei[0]!.spawn)).toBe(false);
-      expect(validateDocument('src/data/eco.json', e).valid).toBe(false);
+      expect(validateDocument('data/game/eco.json', e).valid).toBe(false);
     }
     const e = structuredClone(eco);
     e.civEco.Wei[0]!.spawn!.commands.push({ Type: 999, A: -1, B: -1, C: -1, D: 1 });
     expect(validateSpawn(e.civEco.Wei[0]!.spawn)).toBe(true);
-    expect(validateDocument('src/data/eco.json', e).valid).toBe(true);
+    expect(validateDocument('data/game/eco.json', e).valid).toBe(true);
     expect(weiRewardFamily(e.civEco.Wei)).toBeNull();
   });
 });

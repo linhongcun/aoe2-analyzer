@@ -12,7 +12,7 @@ import {
   type ConstructionConfig,
   type ConstructionContext,
 } from '../../src/domain/construction';
-import eco from '../../src/data/eco.json';
+import eco from '../../data/game/eco.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData } from '../../src/domain/buildSim';
 import { GARRISON_TECH_DATA } from '../../src/domain/garrisonTechs';

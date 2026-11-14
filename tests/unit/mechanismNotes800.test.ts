@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import baseline from './__fixtures__/notes-baseline.json';
+import baseline from '../../data/fixtures/unit/__fixtures__/notes-baseline.json';
 import { SIM_NOTE_LIST, SIM_NOTES, type SimNote } from '../../src/domain/mechanismNotes';
 
 describe('#800 备注注册表 SimNote', () => {

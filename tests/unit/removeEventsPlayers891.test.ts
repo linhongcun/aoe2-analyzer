@@ -56,8 +56,8 @@ describe('移除赛事公告与职业选手（#891）', () => {
     expect(civ).not.toContain('职业资料');
     expect(civ).toContain('历史与更新');
     for (const file of [
-      'src/content/events.json',
-      'src/content/players.json',
+      'data/content/events.json',
+      'data/content/players.json',
       'src/data/events.ts',
       'src/data/players.ts',
       'src/domain/eventCatalog.mjs',
@@ -66,9 +66,9 @@ describe('移除赛事公告与职业选手（#891）', () => {
       'src/features/players/Players.tsx',
     ])
       expect(existsSync(file), file).toBe(false);
-    expect(schemaFileFor('src/content/events.json')).toBeNull();
-    expect(schemaFileFor('src/content/players.json')).toBeNull();
-    expect(schemaFileFor('src/content/glossary.json')).toBe('content-glossary.json');
-    expect(schemaFileFor('src/content/game-guide.json')).toBe('content-game-guide.json');
+    expect(schemaFileFor('data/content/events.json')).toBeNull();
+    expect(schemaFileFor('data/content/players.json')).toBeNull();
+    expect(schemaFileFor('data/content/glossary.json')).toBe('content-glossary.json');
+    expect(schemaFileFor('data/content/game-guide.json')).toBe('content-game-guide.json');
   });
 });

@@ -15,9 +15,9 @@ from pathlib import Path
 from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat, load, pins
 from effects_build import CIV_DAT
 
-OUT = ROOT / 'src/data/garrison_general.json'
-HOSTS = ROOT / 'src/data/garrison_hosts.json'
-TECHS = ROOT / 'src/data/garrison_techs.json'
+OUT = ROOT / 'data/game/garrison_general.json'
+HOSTS = ROOT / 'data/game/garrison_hosts.json'
+TECHS = ROOT / 'data/game/garrison_techs.json'
 ATTRS = {2: 'capacity', 9: 'attack', 10: 'reload', 16: 'projectile', 30: 'garrisonType',
          54: 'trait', 63: 'combatAbility', 65: 'secondaryProjectile', 102: 'total',
          107: 'max', 130: 'firepower', 163: 'sizeClass'}
@@ -77,8 +77,8 @@ json.dump({'units':{str(i):rec(base(i)) for i in sorted(ids)},
 
 
 def raw_data():
-    buildings = json.loads((ROOT / 'src/data/buildings.json').read_text())
-    units = json.loads((ROOT / 'src/data/units.json').read_text())
+    buildings = json.loads((ROOT / 'data/game/buildings.json').read_text())
+    units = json.loads((ROOT / 'data/game/units.json').read_text())
     manifest = {'ids': sorted({u['id'] for u in units + buildings} | {285, 286, 293, 434}),
                 'buildings': [b['id'] for b in buildings]}
     path = fetch_dat()
@@ -181,10 +181,10 @@ def extra_label(unit):
 
 
 def generate(d, raw):
-    buildings = json.loads((ROOT / 'src/data/buildings.json').read_text())
-    roster = json.loads((ROOT / 'src/data/units.json').read_text())
-    civs = json.loads((ROOT / 'src/data/civs.json').read_text())
-    catalog = json.loads((ROOT / 'src/data/techs.json').read_text())
+    buildings = json.loads((ROOT / 'data/game/buildings.json').read_text())
+    roster = json.loads((ROOT / 'data/game/units.json').read_text())
+    civs = json.loads((ROOT / 'data/game/civs.json').read_text())
+    catalog = json.loads((ROOT / 'data/game/techs.json').read_text())
     by_id = {x['id']: x for x in roster + buildings}
     units = raw['units']
     names = {CIV_DAT.get(c['Name'], c['Name']): (i, c) for i, c in enumerate(d['Civs'])}
@@ -322,7 +322,7 @@ def general_data(data):
     """Omit only catalog fallbacks and upgrade indexes available elsewhere."""
     catalog = {str(unit['id']): {field: unit.get(field) for field in ('age', 'pic', 'civs')}
                for name in ('units', 'buildings')
-               for unit in json.loads((ROOT / ('src/data/%s.json' % name)).read_text())}
+               for unit in json.loads((ROOT / ('data/game/%s.json' % name)).read_text())}
     result = {key: value for key, value in data.items() if key != 'unitUpgradeTechs'}
     result['units'] = {}
     for key, unit in data['units'].items():

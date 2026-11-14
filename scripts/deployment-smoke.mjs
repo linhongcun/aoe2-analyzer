@@ -80,7 +80,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
       await check(repositoryLink).toHaveAttribute('target', '_blank');
       await check(repositoryLink).toHaveAttribute('rel', 'noopener noreferrer');
     }
-    const metadata = JSON.parse(readFileSync(new URL('../src/data/page-metadata.json', import.meta.url), 'utf8'));
+    const metadata = JSON.parse(readFileSync(new URL('../data/game/page-metadata.json', import.meta.url), 'utf8'));
     const internalSourceText =
       /\b(?:sha(?:-?[0-9]+)?|csv|commit)\b|提交(?:号|哈希)?\s*[0-9a-f]{7,40}|\b(?:main|master)\s+[0-9a-f]{7,40}\b|src\/(?:content|data)\/|themkdemiiir\/aoe2-guide@/iu;
     if (needsBuildsSmoke(features)) {
@@ -115,7 +115,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
       await check(picker.locator('[data-civ="Chinese"]')).not.toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=drush-fc&civ=Portuguese&step=6');
-      const eco = JSON.parse(readFileSync(new URL('../src/data/eco.json', import.meta.url), 'utf8'));
+      const eco = JSON.parse(readFileSync(new URL('../data/game/eco.json', import.meta.url), 'utf8'));
       const goldMultiplier = eco.civEco.Portuguese.find((row) => row.tech === 559).effects.find(
         (effect) => effect.target === 'class:' + eco.units['74'].class,
       ).v;
@@ -591,7 +591,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
     for (const feature of smokeFeatures(features)) {
       diagnostics.phase('feature-assertions', { feature });
       if (feature === 'builds') {
-        const order = JSON.parse(readFileSync(new URL('../src/data/build-orders/scouts-18.json', import.meta.url), 'utf8'));
+        const order = JSON.parse(readFileSync(new URL('../data/game/build-orders/scouts-18.json', import.meta.url), 'utf8'));
         for (const view of ['practice', 'print']) {
           await goto(`/builds?bo=scouts-18&view=${view}`);
           const sources = page.getByRole('region', { name: '开局来源与估算限制', exact: true });
@@ -611,7 +611,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
         }
         console.log('Verified public build sources: practice, print, public links, dates and complete MIT attribution');
       } else if (feature === 'gameGuide') {
-        const guide = JSON.parse(readFileSync(new URL('../src/content/game-guide.json', import.meta.url), 'utf8'));
+        const guide = JSON.parse(readFileSync(new URL('../data/content/game-guide.json', import.meta.url), 'utf8'));
         const pinned = guide.sources['pinned-techs'];
         const version = pinned.version.match(/\bDE[0-9]+\b/u)?.[0];
         assert.ok(version, 'Fixed technology citation must retain its game version');

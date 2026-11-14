@@ -2,8 +2,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { GlossaryTerm } from '../../src/domain/glossary';
-const glossary: GlossaryTerm[] = JSON.parse(readFileSync('src/content/glossary.json', 'utf8'));
-const pinyin: Record<string, { py: string }> = JSON.parse(readFileSync('src/data/search-py.json', 'utf8'));
+const glossary: GlossaryTerm[] = JSON.parse(readFileSync('data/content/glossary.json', 'utf8'));
+const pinyin: Record<string, { py: string }> = JSON.parse(readFileSync('data/game/search-py.json', 'utf8'));
 
 const added = glossary.filter((term) => term.checkedAt === '2026-10-24');
 const errors = new WeakMap<Page, string[]>();

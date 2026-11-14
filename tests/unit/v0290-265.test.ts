@@ -2,7 +2,7 @@
  * v0.29.0 验收（#329）A 组 #265 部分：取自 Kent Beck test/v0290-acceptance @ 04c4123 tests/unit/v0290-A.test.ts，断言原样未改。
  */
 import { describe, expect, it } from 'vitest';
-import catalog from '../../src/content/contentCatalog.json';
+import catalog from '../../data/content/contentCatalog.json';
 
 // ---------- #265 ----------
 // 公开接口 https://support.ageofempires.com/api/v2/help_center/en-us/articles/<id>.json（2026-10-21 18:16 北京时间读取）：

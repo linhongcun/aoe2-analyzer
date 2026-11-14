@@ -1,6 +1,6 @@
 /**
  * #24 PK 等资源 · 文明训练费用加成。
- * 数值来源：src/data/effects.json 的 costDiscounts（scripts/effects_build.py 由 DE 185872 .dat 的费用效果导出）。
+ * 数值来源：data/game/effects.json 的 costDiscounts（scripts/effects_build.py 由 DE 185872 .dat 的费用效果导出）。
  * 场景数字：Reid #24 comment 6114992360（61/42、66/22、49/66、37/66、蒙古 30、22/30），本文件独立重算后一致。
  * 取整：四舍五入（hongcun 游戏内实测拜占庭散兵 19 食物 / 26 木头，#24 comment 6106912488）。
  */

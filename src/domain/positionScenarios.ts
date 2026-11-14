@@ -7,7 +7,7 @@ import type { Cost, SimStats, Trees } from './types';
 import type { Lane, StartChoice } from './startGame';
 import { firstStrike, retreatContact, sceneSignature, supportArrival, SCENE_EPS } from './positionScenarioMath';
 import { affordableCount } from './scenarioBudget';
-import reviewed from './positionScenarioReview.json';
+import reviewed from '../../data/reference/domain/positionScenarioReview.json';
 import { castleScenarioProfile, type CastleProfile, type CastleResult } from './castleScenarioProfile';
 import { isSceneTechPlan, sceneTechPlans, type SceneTechPlan } from './startGameInputs';
 

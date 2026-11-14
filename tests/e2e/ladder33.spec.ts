@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-const SNAPSHOT_PATH = 'src/data/ladder-arabia-p185872.json';
+const SNAPSHOT_PATH = 'data/game/ladder-arabia-p185872.json';
 /** 锚点抄自 Age of Notes 页上的 data-wr / data-pr / data-games，不是编出来的。 */
 const FETCHED_AT = '2026-11-01';
 const CUTOFF = '2026-11-01';
@@ -252,7 +252,7 @@ test('#33 来源条披露 Age of Notes 与截止日期，补丁提示条只在�
   await expect(footer).toContainText('不自建统计');
   await expect(footer).toContainText('胜率不是平衡建议');
   await expect(footer).toContainText('不是官方推荐');
-  const sitePatch = String((JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build);
+  const sitePatch = String((JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build);
   const note = page.getByTestId('ladder-patch-note');
   const cutoff = page.getByTestId('ladder-cutoff');
   if (sitePatch === PATCH_BUILD) {

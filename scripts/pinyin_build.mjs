@@ -33,7 +33,7 @@ export function toPy(zh) {
 const check = process.argv.includes('--check');
 let stale = 0;
 for (const f of ['civs', 'units', 'techs', 'buildings']) {
-  const p = `src/data/${f}.json`;
+  const p = `data/game/${f}.json`;
   const raw = fs.readFileSync(p, 'utf8');
   const rows = JSON.parse(raw).map((r) => ({ ...r, ...toPy(r.zh) }));
   const out = JSON.stringify(rows, null, raw.includes('\n  ') ? 2 : undefined) + (raw.endsWith('\n') ? '\n' : '');
@@ -56,10 +56,10 @@ function labels(node) {
   ts.forEachChild(node, labels);
 }
 labels(sections);
-for (const term of JSON.parse(fs.readFileSync('src/content/glossary.json', 'utf8'))) names.push(term.zh);
-for (const c of JSON.parse(fs.readFileSync('src/data/civs.json', 'utf8'))) names.push(...c.bon, c.tb);
+for (const term of JSON.parse(fs.readFileSync('data/content/glossary.json', 'utf8'))) names.push(term.zh);
+for (const c of JSON.parse(fs.readFileSync('data/game/civs.json', 'utf8'))) names.push(...c.bon, c.tb);
 const extra = Object.fromEntries([...new Set(names)].sort().map((zh) => [zh, toPy(zh)]));
-const path = 'src/data/search-py.json';
+const path = 'data/game/search-py.json';
 const out = JSON.stringify(extra, null, 2) + '\n';
 const raw = fs.existsSync(path) ? fs.readFileSync(path, 'utf8') : '';
 if (out !== raw) {

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Step } from '../../src/domain/buildOrder';
 import { civSimNotes, simSupport, simulateBuild, type BuildTimeline, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
@@ -43,7 +43,7 @@ interface BonusEvent {
 type Row = EcoData['civEco'][string][number] & { ageSpawn?: Spawn };
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
-const source = JSON.parse(readFileSync(new URL('../../docs/design/bengalis197-source.json', import.meta.url), 'utf8')) as {
+const source = JSON.parse(readFileSync(new URL('../../data/evidence/bengalis197-source.json', import.meta.url), 'utf8')) as {
   techClosure: Record<string, RawTech>;
 };
 const ids = [847, 848, 849, 873];
@@ -130,7 +130,7 @@ describe('#197 孟加拉实际到达时代赠村', () => {
       });
   });
   it('the existing shared structural schema accepts actual projected ageSpawn input', () => {
-    expect(validateDocument('src/data/eco.json', projected()).valid).toBe(true);
+    expect(validateDocument('data/game/eco.json', projected()).valid).toBe(true);
   });
   it('complete projected family supports only Bengalis without globally allowing resource234', () => {
     expect(simSupport(projected(), 'Bengalis', buildOrders)).toEqual({ supported: true, reasons: [] });

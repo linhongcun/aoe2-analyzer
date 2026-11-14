@@ -1,10 +1,10 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import type contentSchema from '../../src/content/team-plan.json';
+import type contentSchema from '../../data/content/team-plan.json';
 import { TEACHING_COMPATIBILITY_188329 } from '../../src/data/teachingCompatibility188329';
 
-const content: typeof contentSchema = JSON.parse(readFileSync(new URL('../../src/content/team-plan.json', import.meta.url), 'utf8'));
+const content: typeof contentSchema = JSON.parse(readFileSync(new URL('../../data/content/team-plan.json', import.meta.url), 'utf8'));
 
 const panel = (page: Page) => page.getByTestId('team-plan-page');
 // Current-version cases use the explicitly reviewed example qualification.

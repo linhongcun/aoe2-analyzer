@@ -1,6 +1,6 @@
 /** Every game/content JSON has one explicit format; only like-shaped families share. */
 export const SCHEMA_CATALOG = {
-  'src/features/civs/history.json': 'content-civ-history.json',
+  'data/content/civs/history.json': 'content-civ-history.json',
   ...Object.fromEntries(
     [
       'campaigns',
@@ -14,7 +14,7 @@ export const SCHEMA_CATALOG = {
       'mixed-army',
       'scouting',
       'team-plan',
-    ].map((name) => [`src/content/${name}.json`, `content-${name}.json`]),
+    ].map((name) => [`data/content/${name}.json`, `content-${name}.json`]),
   ),
   ...Object.fromEntries(
     [
@@ -43,15 +43,15 @@ export const SCHEMA_CATALOG = {
       ['page-metadata', 'page-metadata'],
       ['team_bonuses', 'team-bonuses'],
       ['ladder-beginner', 'ladder-beginner'],
-    ].map(([file, schema]) => [`src/data/${file}.json`, `data-${schema}.json`]),
+    ].map(([file, schema]) => [`data/game/${file}.json`, `data-${schema}.json`]),
   ),
 };
 
 export function schemaFileFor(file) {
   if (Object.hasOwn(SCHEMA_CATALOG, file)) return SCHEMA_CATALOG[file];
-  if (/^src\/data\/build-orders\/[a-z0-9-]+\.json$/u.test(file)) return 'data-build-order.json';
-  if (/^src\/data\/patches\/[0-9]+\.json$/u.test(file)) return 'data-patch.json';
-  if (/^src\/data\/ladder-arabia-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-arabia.json';
-  if (/^src\/data\/ladder-4v4-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-4v4.json';
+  if (/^data\/game\/build-orders\/[a-z0-9-]+\.json$/u.test(file)) return 'data-build-order.json';
+  if (/^data\/game\/patches\/[0-9]+\.json$/u.test(file)) return 'data-patch.json';
+  if (/^data\/game\/ladder-arabia-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-arabia.json';
+  if (/^data\/game\/ladder-4v4-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-4v4.json';
   return null;
 }

@@ -37,7 +37,7 @@ function countOf(value: unknown): number | null {
 }
 
 function defaultSlice(): Slice {
-  const files = readdirSync('src/data')
+  const files = readdirSync('data/game')
     .filter((name) => /^ladder-.*\.json$/.test(name) && !name.includes('beginner'))
     .sort();
   const hits = files.flatMap((name) => {

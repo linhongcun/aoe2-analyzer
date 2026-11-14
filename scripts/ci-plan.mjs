@@ -82,8 +82,8 @@ export async function readToolchain(budget) {
     package_lock: hash(readFileSync('package-lock.json')),
     playwright: JSON.parse(readFileSync('node_modules/playwright-core/package.json', 'utf8')).version,
     browsers: hash(readFileSync('node_modules/playwright-core/browsers.json')),
-    data_sources: hash(readFileSync('scripts/data_sources.json')),
-    background_sources: hash(readFileSync('src/features/civs/backgrounds.source.json')),
+    data_sources: hash(readFileSync('data/sources/data_sources.json')),
+    background_sources: hash(readFileSync('data/reference/civs/backgrounds.source.json')),
     pillow: '12.3.0',
   };
 }

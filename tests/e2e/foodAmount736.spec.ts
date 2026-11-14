@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import eco from '../../src/data/eco.json' with { type: 'json' };
+import eco from '../../data/game/eco.json' with { type: 'json' };
 import { tableStyles } from './staticSweep338';
 
-const tableGolden = JSON.parse(readFileSync('tests/e2e/fixtures/v0300-338-tables.json', 'utf8')) as Record<string, unknown[]>;
+const tableGolden = JSON.parse(readFileSync('data/fixtures/e2e/fixtures/v0300-338-tables.json', 'utf8')) as Record<string, unknown[]>;
 
 const farmRegion = (page: Page) => page.getByRole('region', { name: '食物总量', exact: true });
 

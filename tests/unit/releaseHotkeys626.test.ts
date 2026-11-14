@@ -37,7 +37,7 @@ describe('#626 快捷键页面的精确验证范围', () => {
   });
 
   it('游戏数据变化仍触发完整数据验证', () => {
-    const plan = planChanges([change('src/features/hotkeys/Hotkeys.tsx'), change('src/data/units.json')]);
+    const plan = planChanges([change('src/features/hotkeys/Hotkeys.tsx'), change('data/game/units.json')]);
     expect(plan.full).toBe(true);
     expect(plan.data).toBe(true);
   });

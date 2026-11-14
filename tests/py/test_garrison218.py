@@ -14,7 +14,7 @@ spec.loader.exec_module(module)
 
 class Garrison218Test(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT / 'src/data/garrison.json').read_text())
+        self.data = json.loads((ROOT / 'data/game/garrison.json').read_text())
 
     def test_villager_class_target_preserves_raw_flat_dps_change(self):
         effects = module.decode([{'Type': 4, 'A': -1, 'B': 4, 'C': 130, 'D': -0.5}], self.data['units'])
@@ -49,7 +49,7 @@ class Garrison218Test(unittest.TestCase):
         self.assertEqual(rules[611]['requires'], [608, 63, 775])
 
     def test_all_site_civilizations_have_audited_rules(self):
-        civs = json.loads((ROOT / 'src/data/civs.json').read_text())
+        civs = json.loads((ROOT / 'data/game/civs.json').read_text())
         self.assertEqual(set(self.data['civs']), {c['en'] for c in civs})
         self.assertEqual(self.data['civs']['Turks']['free'], [47])
         self.assertEqual(self.data['meta']['sha256'], module.DAT['sha256'])

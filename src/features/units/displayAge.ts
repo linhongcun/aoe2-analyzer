@@ -4,7 +4,7 @@ import type { Unit } from '../../domain/types';
 /**
  * Catalog display only. The pinned trees put Spearman in Feudal for the common
  * case and Dark Age for Armenians; the generated record retains the latter.
- * Source: docs/design/spearman-display-age-475-sources.json. Never use this
+ * Source: data/evidence/spearman-display-age-475-sources.json. Never use this
  * projection for production, costs, combat or the build simulator.
  */
 export function unitDisplayAge(unit: Pick<Unit, 'id' | 'age'>, civ = ''): number {

@@ -3,9 +3,9 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 
-const orders = readdirSync(new URL('../../src/data/build-orders/', import.meta.url))
+const orders = readdirSync(new URL('../../data/game/build-orders/', import.meta.url))
   .filter((file) => file.endsWith('.json'))
-  .map((file) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
+  .map((file) => JSON.parse(readFileSync(new URL(`../../data/game/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
 const order = (id: string) => orders.find((entry) => entry.id === id)!;
 const opening = (page: Page) => page.getByRole('region', { name: '开局建议', exact: true });
 const applicability = (page: Page) => page.getByRole('region', { name: '开局适用文明', exact: true });

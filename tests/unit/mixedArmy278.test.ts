@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import rules from '../../src/content/mixed-army-rules.json';
+import rules from '../../data/content/mixed-army-rules.json';
 import { loadCore, loadTrees } from '../../src/data';
 import { productionTechAge, type ProductionContext } from '../../src/domain/production';
 import {
@@ -77,7 +77,7 @@ describe('#278 finite mixed-army content policies', () => {
     card.strategy = 'anti-cavalry-screen';
     const scenario = changedRules.scenarios.find((row) => row.observationProfile === 'archer-cover')!;
     scenario.confirmationFormIds = [550, 546];
-    vi.doMock('../../src/content/mixed-army-rules.json', () => ({ default: changedRules }));
+    vi.doMock('../../data/content/mixed-army-rules.json', () => ({ default: changedRules }));
     vi.resetModules();
     try {
       const changed = await import('../../src/domain/mixedArmy');
@@ -88,7 +88,7 @@ describe('#278 finite mixed-army content policies', () => {
       expect(changed.MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === scenario.id)!.confirmationFormIds).toEqual([550, 546]);
       expect(changed.MIXED_ARMY_CONTENT.cards.map((row) => row.id)).toEqual(originalContent.cards.map((row) => row.id));
     } finally {
-      vi.doUnmock('../../src/content/mixed-army-rules.json');
+      vi.doUnmock('../../data/content/mixed-army-rules.json');
       vi.resetModules();
     }
   });

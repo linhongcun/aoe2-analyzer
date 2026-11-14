@@ -2,9 +2,9 @@
 """补丁数据更新：npm run data:update [-- --check | --force]
 
 1. 检查上游：auto-mods 的 dat 最新提交、aoe2techtree data/ 最新提交、halfon 最新提交；从提交信息识别补丁号。
-2. 若有更新：下载新 .dat 并计算 sha256、记录特征标记 → 更新 scripts/data_sources.json；
-   重新生成全部 JSON（npm run data 等价流程）、effects.json、docs/EFFECTS-AUDIT.md，运行基础数值对账；
-   把差异摘要写入 docs/PATCH-NOTES/<patch>.md 并打印。
+2. 若有更新：下载新 .dat 并计算 sha256、记录特征标记 → 更新 data/sources/data_sources.json；
+   重新生成全部 JSON（npm run data 等价流程）、effects.json、data/reports/EFFECTS-AUDIT.md，运行基础数值对账；
+   把差异摘要写入 data/patch-notes/<patch>.md 并打印。
 3. 永不自动提交：请自行检查 git diff 后提交。
 开始前先跑覆盖清单（scripts/data_update_coverage.py）。清单失败则退出，不查询上游，不跑生成器，不改 pin。
 审阅后冻结来源：重复传入 --source-ref dat=<完整SHA>、aoe2techtree=<完整SHA>、halfon=<完整SHA>，三项必须齐全。
@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from data_diff import detect_patch, load_dir, summarize  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / 'scripts' / 'data_sources.json'
+SRC = ROOT / 'data/sources/data_sources.json'
 CACHE = ROOT / 'scripts' / '.cache'
 PATHS = {'dat': 'dat/empires2_x2_p1.dat', 'aoe2techtree': 'data/data.json', 'halfon': 'data/units_buildings_techs.de.json'}
 
@@ -106,7 +106,7 @@ def main():
         print('⚠ .dat 有新提交但未识别到新补丁号（可能是热修复）；仍按新文件更新，补丁号沿用 %s。' % patch)
     # 快照旧数据
     prev = CACHE / 'prev-data'; shutil.rmtree(prev, ignore_errors=True); prev.mkdir(parents=True)
-    for p in (ROOT / 'src/data').glob('*.json'): shutil.copy(p, prev / p.name)
+    for p in (ROOT / 'data/game').glob('*.json'): shutil.copy(p, prev / p.name)
     old_patch = pins['patch']['build']
     # 更新固定版本
     for k in changed:
@@ -139,9 +139,9 @@ def main():
     run('npx', 'vite-node', 'scripts/effects_audit.ts')
     run(sys.executable, 'scripts/stats_crosscheck.py')
     # 差异摘要
-    md = summarize(load_dir(prev), load_dir(ROOT / 'src/data'), 'DE Update %s 数据变化（相对 %s）' % (patch, old_patch))
+    md = summarize(load_dir(prev), load_dir(ROOT / 'data/game'), 'DE Update %s 数据变化（相对 %s）' % (patch, old_patch))
     md += '\n---\n上游：' + '；'.join('%s@%s（%s）' % (S[k]['repo'], S[k]['commit'][:7], S[k]['date']) for k in S) + '\n'
-    out = ROOT / 'docs' / 'PATCH-NOTES' / ('%s.md' % patch)
+    out = ROOT / 'data' / 'patch-notes' / ('%s.md' % patch)
     out.parent.mkdir(parents=True, exist_ok=True); out.write_text(md)
     print(md)
     print('\n✓ 已写入 %s。请检查 git diff 后自行提交（本脚本不会提交）。' % out.relative_to(ROOT))

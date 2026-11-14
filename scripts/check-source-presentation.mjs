@@ -9,8 +9,8 @@ let compiler;
 const problem = (file, code, message, path = '') => ({ file, path, code, keyword: code, message });
 
 export function validateSourcePresentation(file, data) {
-  const build = /^src\/data\/build-orders\/[a-z0-9-]+\.json$/u.test(file);
-  if (!build && file !== 'src/content/game-guide.json') return { valid: false, problems: [problem(file, 'coverage', '不属于来源展示输入')] };
+  const build = /^data\/game\/build-orders\/[a-z0-9-]+\.json$/u.test(file);
+  if (!build && file !== 'data/content/game-guide.json') return { valid: false, problems: [problem(file, 'coverage', '不属于来源展示输入')] };
   const raw = validateDocument(file, data);
   if (!raw.valid) return raw;
   const presentation = build ? publicBuildPresentation(data) : publicGameGuideSources(data.sources);
@@ -50,7 +50,7 @@ export function checkSourcePresentation(root = process.cwd()) {
     }
     problems.push(...validateSourcePresentation(file, data).problems);
   };
-  const buildDirectory = join(root, 'src/data/build-orders');
+  const buildDirectory = join(root, 'data/game/build-orders');
   const walk = (directory) => {
     if (lstatSync(directory).isSymbolicLink()) {
       problems.push(problem(relative(root, directory), 'file', '来源目录不能使用符号链接'));
@@ -63,10 +63,10 @@ export function checkSourcePresentation(root = process.cwd()) {
     }
   };
   if (existsSync(buildDirectory)) walk(buildDirectory);
-  if (!files.length) problems.push(problem('src/data/build-orders', 'coverage', '缺少开局来源输入'));
-  const guide = join(root, 'src/content/game-guide.json');
+  if (!files.length) problems.push(problem('data/game/build-orders', 'coverage', '缺少开局来源输入'));
+  const guide = join(root, 'data/content/game-guide.json');
   if (existsSync(guide)) read(guide);
-  else problems.push(problem('src/content/game-guide.json', 'coverage', '缺少入门来源输入'));
+  else problems.push(problem('data/content/game-guide.json', 'coverage', '缺少入门来源输入'));
   return { files: files.sort(), problems };
 }
 

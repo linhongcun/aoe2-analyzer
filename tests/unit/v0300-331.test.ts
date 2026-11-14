@@ -8,8 +8,8 @@
 // 真实成本去掉同样的行后重算采集模型；训练费用看 DAT.costDiscounts 有没有团队条目。标「已计入」的必须真的变，标「未计入」的必须不变。
 // f856c9e 实测：这 22 条在开局模拟（默认不计团队）、真实成本（跳过团队行）、施工工具（team 命令只改建筑工作速率，不改建造者和工期）里去掉后结果都不变。
 import { beforeAll, describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import units from '../../data/game/units.json';
 import { CONSTRUCTION_DATA as constructionJson } from '../../src/data/construction';
 import { civs, loadCore, loadTrees, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
@@ -20,7 +20,7 @@ import { simSupport } from '../../src/domain/simSupport';
 import { gatherModel } from '../../src/domain/realCost';
 import { DAT } from '../../src/domain/datEffects';
 import { calculateConstruction, constructionBuildings, DEFAULT_CONSTRUCTION, type ConstructionContext } from '../../src/domain/construction';
-import relicJson from '../../src/data/relic_income.json';
+import relicJson from '../../data/game/relic_income.json';
 import { calculateRelicIncome, newRelicIncomeConfig, type RelicIncomeData } from '../../src/domain/relicIncome';
 
 const E = eco as unknown as EcoData;

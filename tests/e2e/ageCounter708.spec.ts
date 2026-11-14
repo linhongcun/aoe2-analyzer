@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-const catalog: { id: number; zh: string }[] = JSON.parse(readFileSync('src/data/units.json', 'utf8'));
+const catalog: { id: number; zh: string }[] = JSON.parse(readFileSync('data/game/units.json', 'utf8'));
 const names = new Map(catalog.map((unit) => [unit.id, unit.zh]));
 
 const region = (page: import('@playwright/test').Page) => page.getByRole('region', { name: '按时代类别加成对照', exact: true });

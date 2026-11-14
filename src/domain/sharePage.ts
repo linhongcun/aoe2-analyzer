@@ -1,4 +1,4 @@
-import raw from '../data/page-metadata.json';
+import raw from '../../data/game/page-metadata.json';
 import validateMetadata from '../content/schema/compiled/page-metadata.mjs';
 import { readValidatedJson } from '../data/validatedJson';
 export interface PageMeta {

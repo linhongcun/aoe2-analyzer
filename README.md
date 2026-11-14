@@ -44,17 +44,19 @@
 
 | 数据                                                                                       | 来源                                                                                                                                                                  | 脚本                                                                              |
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，188329）                                       | `npm run data`（`scripts/build_data.py`）                                         |
-| 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定                | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
-| 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`src/data/eco.json`） | 同上                                                                                                                                                                  | `npm run eco`（`scripts/eco_build.py`，对账见 `docs/ECO-DATA.md`）                |
-| 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`src/data/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue218-spec.md) | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
-| 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（[数据](src/data/build-orders/)；[验证](tests/unit/buildOrders.test.ts)）                                                                  | `npm run bo:check`                                                                |
+| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `data/sources/data_sources.json`，188329）                                       | `npm run data`（`scripts/build_data.py`）                                         |
+| 科技/文明加成/团队加成的结构化效果（`data/game/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定                | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
+| 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`data/game/eco.json`） | 同上                                                                                                                                                                  | `npm run eco`（`scripts/eco_build.py`，对账见 `data/reports/ECO-DATA.md`）                |
+| 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`data/game/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue218-spec.md) | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
+| 开局库（`data/game/build-orders/*.json`）                                                  | 社区开局转写，逐个注明出处（[数据](data/game/build-orders/)；[验证](tests/unit/buildOrders.test.ts)）                                                                  | `npm run bo:check`                                                                |
 | 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                                  | `npm run stats:check`                                                             |
 
-- 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 188329（2026-10-28）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
+数据目录归属与运行时边界见 [`data/README.md`](data/README.md)。
+
+- 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`data/sources/data_sources.json`**；站点页头徽章「数据版本：DE 188329（2026-10-28）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
 - `.dat` 仅在构建时下载到 `scripts/.cache/`（已 gitignore），校验 **sha256 + 补丁标记**（标记由 `data:update` 从新文件计算并记录：文明/科技/效果数量、最新文明；另有最小常识检查）：`npm run dat:check`。用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py) 解析（首次运行自动建立 `scripts/.cache/venv`）。
 - **.dat © Microsoft Corporation：本仓库与站点均不包含、不分发该文件**，只发布由它派生的数值。
-- 效果差异与覆盖率见 [docs/EFFECTS-AUDIT.md](docs/EFFECTS-AUDIT.md)；新补丁：`npm run data:update`（检查上游 → 更新固定版本 → 重新生成全部数据、审计、对账 → 写 `docs/PATCH-NOTES/<补丁号>.md`，**不自动提交**），详见 [docs/DATA-UPDATE.md](docs/DATA-UPDATE.md)。
+- 效果差异与覆盖率见 [data/reports/EFFECTS-AUDIT.md](data/reports/EFFECTS-AUDIT.md)；新补丁：`npm run data:update`（检查上游 → 更新固定版本 → 重新生成全部数据、审计、对账 → 写 `data/patch-notes/<补丁号>.md`，**不自动提交**），详见 [docs/DATA-UPDATE.md](docs/DATA-UPDATE.md)。
 
 ## 开发 / Development
 
@@ -67,13 +69,13 @@ npm run build        # tsc 严格检查 + Vite 构建到 dist/
 npm test             # Vitest 单元测试（domain 逻辑与生成数据）
 npm run e2e          # Playwright 冒烟测试（需 npx playwright install chromium）；BASE_URL=<线上地址> 可测线上
 npm run lint         # ESLint；npm run format 用 Prettier 格式化
-npm run data         # 从 aoe2techtree 重新生成 src/data/*.json 与 public/img/*
+npm run data         # 从 aoe2techtree 重新生成 data/game/*.json 与 public/img/*
 python3 scripts/map_previews.py          # 生成地图预览及 mapPreviews.json（依赖 Pillow==12.3.0）
 python3 scripts/map_previews.py --check  # 核对固定原图哈希、生成预览及来源清单
 python3 scripts/map_catalog_build.py          # 从固定双语快照和人工分类生成地图目录
 python3 scripts/map_catalog_build.py --check  # 核对目录与名称、说明和预览来源一致
 npm run dat:check    # 下载并校验 .dat（sha256 + 补丁标记）
-npm run effects      # 由 .dat 生成 effects.json 并重写 docs/EFFECTS-AUDIT.md
+npm run effects      # 由 .dat 生成 effects.json 并重写 data/reports/EFFECTS-AUDIT.md
 npm run stats:check  # 基础数值与 .dat 对账
 npm run data:status  # 只检查上游是否有新补丁（有更新退出码 10）
 npm run data:update  # 补丁数据更新全流程（见 docs/DATA-UPDATE.md）
@@ -96,14 +98,14 @@ GitHub Actions 根据 `.github/workflows/ci.yml` 中的计划选择验证阶段�
 
 - 界面图标：[Lucide](https://lucide.dev)（ISC License），经 lucide-react 本地打包（不使用 CDN）
 - DLC/资料片列表与图标（`public/img/dlc/`，缩放为 64px WebP）：来自 [seicing.com 文明发售列表](https://seicing.com/html/aoe2/index-aoe2.html)，并与 ageofempires.com 官方公告核对
-- 时代图标（`public/img/ages/`，64px WebP）：来自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) `img/Ages/base_{dark,feudal,castle,imperial}_age.png`，固定提交见 `scripts/data_sources.json`（游戏图像 © Microsoft）
-- 科技/文明加成/团队加成数值效果（`src/data/effects.json`，`scripts/effects_build.py`）：全部取自 DE 原版游戏数据文件 `empires2_x2_p1.dat`（DE Update 188329），文件来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `e293dc1`，构建时下载并校验 sha256 与补丁标记（`npm run dat:check`），用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py)（LGPL-3.0）解析。**.dat © Microsoft Corporation，本仓库与站点均不包含、不再分发该文件**，只发布由它派生的数值。基础数值仍取自 aoe2techtree，并与 .dat 对账（`npm run stats:check`）。参考对账：[linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2)。差异见 `docs/EFFECTS-AUDIT.md`
+- 时代图标（`public/img/ages/`，64px WebP）：来自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) `img/Ages/base_{dark,feudal,castle,imperial}_age.png`，固定提交见 `data/sources/data_sources.json`（游戏图像 © Microsoft）
+- 科技/文明加成/团队加成数值效果（`data/game/effects.json`，`scripts/effects_build.py`）：全部取自 DE 原版游戏数据文件 `empires2_x2_p1.dat`（DE Update 188329），文件来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `e293dc1`，构建时下载并校验 sha256 与补丁标记（`npm run dat:check`），用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py)（LGPL-3.0）解析。**.dat © Microsoft Corporation，本仓库与站点均不包含、不再分发该文件**，只发布由它派生的数值。基础数值仍取自 aoe2techtree，并与 .dat 对账（`npm run stats:check`）。参考对账：[linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2)。差异见 `data/reports/EFFECTS-AUDIT.md`
 - 文明数据：[SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)
 - 单位/科技数据与图标（`public/img/units/`、`img/techs/`）：高清版取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion) 的 256px DE 图标（缩放为 128px WebP，`scripts/icons_hires.py`），未覆盖的少数图标回退到 aoe2techtree 48px 原图（游戏图像 © Microsoft）
 - 属性/资源图标（`public/img/stats/`，40px WebP）：来自 [Age of Empires Fandom Wiki](https://ageofempires.fandom.com/)（如 Hpicon_aoe2de.png、Attack_cur.png、Armoricon_aoe2de.png、AoE2DE_icon_*.png、Aoe2de_food.png 等；Wiki 内容 CC BY-SA，游戏图像 © Microsoft）
 - 文明图标（`public/img/civs/`）：取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion)（`assets/civilizations/de/`），缩放为 96px WebP。原始素材 © Microsoft Corporation。
 - 文明详情背景插画（`src/features/civs/assets/backgrounds/`）：按 [AoE2 Companion 固定提交 `d9e9ef6` 的文明映射](https://github.com/denniske/aoe2companion/blob/d9e9ef68c761b3bd5304f704629662d41bee2d96/src/helper/civs.ts) 选择 `assets/history/civs/` 与 `civs2/` 中的对应素材，覆盖当前56文明（54份不同原图，沿用上游共图关系）。`src/features/civs/backgrounds.source.json` 保留原图/输出指纹和尺寸；运行 `python3 src/features/civs/import_backgrounds.py [--check]` 可导入或核验。使用 Pillow 12.3.0 / libwebp 1.6.0 无损转换WebP，不缩放，保留透明度；原始游戏美术 © Microsoft，依 Microsoft Game Content Usage Rules 使用，不在本项目MIT许可范围。素材由Vite本地打包，每次只请求当前文明插画，无运行时GitHub/CDN依赖。
-- 地图目录与预览（`src/data/mapCatalog.json`、`public/img/maps/`）：中英名称和地图说明来自 [AoE2 Companion 简中](https://data.aoe2companion.com/api/maps?language=zh-hans)及[英文接口](https://data.aoe2companion.com/api/maps?language=en)的 2026-10-25 归档快照（`scripts/map_catalog_source/`，以解析后的 normalized JSON 保存并校验 SHA256）；图像取自 [denniske/aoe2companion 固定提交 `155d645`](https://github.com/denniske/aoe2companion/tree/155d64511a22570ff49b47edb73355464063e428/app/assets/maps)（2023-05-19）。`scripts/map_previews.py` 逐张校验原图 SHA256 和已核实尺寸，保持原比例生成本地 WebP；`scripts/map_catalog_build.py` 联合双语来源、预览清单和 `scripts/map_catalog_meta.json` 的本站分类及提示生成目录。仅收录两种来源都可核实的 83 张具名标准随机地图，排除模式选项，不声称覆盖当前全部地图或实时天梯池；常见优先是编辑排序。大部分原图为 420×420，阿塔卡马为 423×420，不裁剪地形。原始游戏美术和游戏内地图说明 © Microsoft Corporation，依 Microsoft Game Content Usage Rules 使用，不属于本项目 MIT 许可。图片与目录随站点发布，无运行时 CDN/API 请求。
+- 地图目录与预览（`data/game/mapCatalog.json`、`public/img/maps/`）：中英名称和地图说明来自 [AoE2 Companion 简中](https://data.aoe2companion.com/api/maps?language=zh-hans)及[英文接口](https://data.aoe2companion.com/api/maps?language=en)的 2026-10-25 归档快照（`data/sources/map_catalog_source/`，以解析后的 normalized JSON 保存并校验 SHA256）；图像取自 [denniske/aoe2companion 固定提交 `155d645`](https://github.com/denniske/aoe2companion/tree/155d64511a22570ff49b47edb73355464063e428/app/assets/maps)（2023-05-19）。`scripts/map_previews.py` 逐张校验原图 SHA256 和已核实尺寸，保持原比例生成本地 WebP；`scripts/map_catalog_build.py` 联合双语来源、预览清单和 `data/sources/map_catalog_meta.json` 的本站分类及提示生成目录。仅收录两种来源都可核实的 83 张具名标准随机地图，排除模式选项，不声称覆盖当前全部地图或实时天梯池；常见优先是编辑排序。大部分原图为 420×420，阿塔卡马为 423×420，不裁剪地形。原始游戏美术和游戏内地图说明 © Microsoft Corporation，依 Microsoft Game Content Usage Rules 使用，不属于本项目 MIT 许可。图片与目录随站点发布，无运行时 CDN/API 请求。
 
 Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game Content Usage Rules](https://www.xbox.com/en-us/developers/rules) 使用游戏素材，为非商业粉丝项目，未获 Microsoft 认可或赞助。
 

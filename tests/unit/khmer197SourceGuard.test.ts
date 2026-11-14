@@ -1,8 +1,8 @@
 /** Complete Khmer raw families are guarded independently from physical supply. */
 import { describe, expect, it } from 'vitest';
-import eco from '../../src/data/eco.json';
-import sourceFixture from './fixtures/khmer197-source.json';
-import units from '../../src/data/units.json';
+import eco from '../../data/game/eco.json';
+import sourceFixture from '../../data/fixtures/unit/fixtures/khmer197-source.json';
+import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 type Cmd = { Type: number; A: number; B: number; C: number; D: number };

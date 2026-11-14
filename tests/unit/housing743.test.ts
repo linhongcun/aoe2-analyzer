@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
-import buildings from '../../src/data/buildings.json' with { type: 'json' };
+import buildings from '../../data/game/buildings.json' with { type: 'json' };
 import {
   HOUSING_GUIDE_HREF as BUILDING_GUIDE_HREF,
   HousingGuideLink,

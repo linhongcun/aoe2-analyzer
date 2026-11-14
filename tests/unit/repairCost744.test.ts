@@ -59,7 +59,7 @@ describe('issue 744 修复费用', () => {
     expect(facts.otherRepairEffects).toBe(false);
     expect(facts.georgians).toEqual({ res: BUILDING_REPAIR_RES, op: 'mul', v: 0.75, text: '×0.75' });
     expect(facts.patch).toContain('188329');
-    expect(readFileSync('src/data/effects.json', 'utf8')).toContain('"res":271,"name":"资源271","op":"mul","v":0.75');
+    expect(readFileSync('data/game/effects.json', 'utf8')).toContain('"res":271,"name":"资源271","op":"mul","v":0.75');
     expect(readFileSync('src/features/buildings/components/RepairCosts.tsx', 'utf8')).not.toMatch(/0\.75|#744|#748/);
     expect(readFileSync('src/features/civs/components/BonusRows.tsx', 'utf8')).not.toMatch(/0\.75|#744|#748/);
     expect(readFileSync('src/features/units/components/VillagerGather.tsx', 'utf8')).not.toMatch(/0\.75|#744|#748/);

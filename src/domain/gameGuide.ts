@@ -1,4 +1,4 @@
-import raw from '../content/game-guide.json';
+import raw from '../../data/content/game-guide.json';
 import { DATA_SOURCES } from '../data/sources';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';

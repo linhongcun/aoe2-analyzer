@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
-const civs = JSON.parse(readFileSync(new URL('../../src/data/civs.json', import.meta.url), 'utf8')) as {
+const civs = JSON.parse(readFileSync(new URL('../../data/game/civs.json', import.meta.url), 'utf8')) as {
   en: string;
   zh: string;
   s: number[];

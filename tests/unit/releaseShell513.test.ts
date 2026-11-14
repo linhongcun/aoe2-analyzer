@@ -48,7 +48,7 @@ it.each([
   expect(planChanges([...shellPaths, path].map(change))).toMatchObject({ scope: 'full', full: true, data: false });
 });
 
-it.each(['src/data/civs.json', 'scripts/build_data.py', 'scripts/data_sources.json', 'package.json', 'package-lock.json'])(
+it.each(['data/game/civs.json', 'scripts/build_data.py', 'data/sources/data_sources.json', 'package.json', 'package-lock.json'])(
   '#513 shell mixed with data/dependency changes in %s retains full+data',
   (path) => expect(planChanges([...shellPaths, path].map(change))).toMatchObject({ scope: 'full', full: true, data: true }),
 );
