@@ -17,7 +17,7 @@ python3 scripts/data_update_coverage.py # 只查清单，不生成
 GITHUB_TOKEN=... npm run data:update    # 可选，提高 GitHub API 限额
 ```
 
-`package.json` 里 `data:update` 是 `python3 scripts/data_update.py`，`data:status` 是 `python3 scripts/data_update.py --check`。本单不新增 npm script，也不改 `.github/workflows`。默认 PR CI 不跑这份清单，也不恢复 full data。默认 CI 上的只读防漂移是 #865。
+`package.json` 里 `data:update` 是 `python3 scripts/data_update.py`，`data:status` 是 `python3 scripts/data_update.py --check`。本说明不改 `.github/workflows`；默认 PR CI 不执行这份完整数据管线；实际路径计划与只读防漂移检查（#865）以工作流及 [TESTING](TESTING.md) 为准。
 
 ## 固定版本：`scripts/data_sources.json`
 
@@ -69,7 +69,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 当前事实：锁 SHA 的 issue 正文写编排不跑 introductions。`scripts/data_update.py` 确实没有单独一步。编译器是 `scripts/build_data.py` 的最后一条嵌套命令，所以只有 dat、aoe2techtree 变更或 `--force` 才会编译首发版本查表。人工源仍是 `scripts/catalog_introductions.json`。`npm run introductions:check` 只在手动 full 里出现，不在默认 PR CI。
 
-`scripts/stats_crosscheck.py` 的文件头仍写着对账 185872。这是过期注释。函数体通过 `dat_source` 读取当前 pin。本单不改该脚本，也没有跑它，不能把过期注释当成已经完成对账。
+`scripts/stats_crosscheck.py` 的文件头仍写着对账 185872。这是过期注释。函数体通过 `dat_source` 读取当前 pin。过期文件头不能作为已经完成对账的证据；新的来源核验须按实际 pin 与上游输入单独记录。
 
 ## 故意不跑，以及主人
 
@@ -125,9 +125,9 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 - `scripts/eco_build.py` 的 `*_CONTEXT_TECHS`。新常量必须写进覆盖清单的别名，并且该文明已经在 `CIV_MECHANISMS`
 - `src/domain/buildSimCoverage.ts` 的 `classifyCivEffect`
 - `src/domain/specialIncome.ts` 的 `SPECIAL_INCOME`
-- `src/domain` 里已有的 `*Economy.ts` 必须被 `buildSimMechanisms.ts` import。本单不重写这些实现
+- `src/domain` 里已有的 `*Economy.ts` 必须被 `buildSimMechanisms.ts` import。本说明只记录机制登记入口；具体实现以这些代码为准
 
-已有检查仍在，本单不改它们：`scripts/check-registries.mjs`、`tests/unit/buildSim815.test.ts`、`tests/unit/sources801.test.ts`、`tests/unit/deriveLists821.test.ts`。
+当前回归检查包括：`scripts/check-registries.mjs`、`tests/unit/buildSim815.test.ts`、`tests/unit/sources801.test.ts`、`tests/unit/deriveLists821.test.ts`。
 
 费用计入的当前事实是统一策略，已经由 #864 合入 `src/domain/costPolicy.ts`。本清单只登记现行调用，不重写费用实现。
 
@@ -136,14 +136,50 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 - `costOf`（`src/domain/buildSim.ts`）用 `civDiscountFactors` 与 `alignAggregatedFactor`，与 PK 共用 costPolicy
 - `unitCost`（`src/domain/unitCost.ts`）调用 `discountedCost` 和 `priceFromRawFactor`
 - `src/domain/bonusUsage.ts` 用 `bonusDiscountCounted`
-- `scripts/check-cost-drift.ts` 是 #865 已合入的只读检查，本单不改它
+- `scripts/check-cost-drift.ts` 是 #865 已合入的只读检查，该检查只读，不应被绕过或弱化
 
-## 不在本单
+## 不属于数据更新编排的范围
 
 - #865：`cost:check` 已在 lint 里。这里不改 workflow，也不把本覆盖清单加进默认门禁。
 - #869：四套科技可用性仍各自独立，不收成一个布尔。问题、消费者和手写例外在 `src/domain/techAvailability.ts`，检查是 `npm run availability:check`（已接入 `npm run lint`）。数据更新编排不跑这份检查，也不做全科技×全文明矩阵。
 - 不新建服务，不把主观评分、开局 JSON 或已放弃的天梯数据并进 `effects.json`。
 - full data 仍是手动的再生 diff，不是每个 PR 的门禁。
+
+## 可复用目录、来源与静态快照维护
+
+以下规则归纳现有源码、schema、生成器与已提交快照说明；这次文档清理没有重新核验外部来源，也不增加机制支持。更新应先检查实际来源与固定 pin，不把历史审核结论当作新的验证。
+
+### 单位、建筑与科技首发目录
+
+人工来源清单是 [`scripts/catalog_introductions.json`](../scripts/catalog_introductions.json)，生成结果是 [`src/data/catalog-introductions.json`](../src/data/catalog-introductions.json)。运行 `npm run introductions` 生成，`npm run introductions:check` 检查源清单、目录身份、证据与输出；生成 JSON 不手改。
+
+首发记录按英文具名身份核对，普通与精锐形态分别判断，不从文明首发、内部 ID、同兵系或生产渠道推断。资料片发行时期和独立免费更新分别记录；独立更新使用 `update` 而非猜一个 `release`，两种来源不可混用。无法证实的项保留 `status: unverified`、`release: null` 且不填猜测的更新号。来源冲突应记录冲突与依据，优先具名内容的正式发布/更新证据；不得以现行数值、搜索摘要或邻近条目替代证据。版本标签表示首发来源，不代表现时购买限制。
+
+目录身份样例和历史冲突说明仍可从现有 JSON 证据及不可变清理前记录查看：[单位/建筑首发审核记录](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/catalog-introductions-audit.md)、[科技首发审核记录](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/tech-introductions-audit.md)。可编辑来源仍是上述脚本 JSON；清理未改变其内容。
+
+<a id="content-catalog"></a>
+
+### 内容购买目录（`contentCatalog`）
+
+[`src/content/contentCatalog.json`](../src/content/contentCatalog.json) 是独立维护的 Steam 产品/内容快照，不是 `scripts/catalog_introductions.json` 的别名，也不是 `.dat` 生成数据；其结构由 [`src/content/schema/content-contentCatalog.json`](../src/content/schema/content-contentCatalog.json) 约束。使用 `npm run content:validators -- --check` 检查预编译校验器，使用 `npm run content:check -- --strict` 做严格内容校验。
+
+`id` 与 `steamAppId` 标识产品和 Steam 应用。每个产品的 `acquisition.sourceIds`、`prerequisites.sourceIds` 及每项 `contents[].sourceIds` 都应对应该产品 `sources[].id`；来源记录保留官方 URL（如适用）、状态、说明和实际 `verifiedAt`。`verifiedAt` 是核验日期，不等同来源的 `publishedAt` 或商品 `releaseDate`；不得用版权年份代替。缺失、过期、冲突或 `unverified` 证据不能支撑确定的购买方式、前置条件或内容包含断言。
+
+`region` 与 `scope` 说明这份静态快照的范围，不代表特定账号的 entitlement、实时价格或地区覆盖完整性。运行时搜索和 URL 行为以代码与测试为准，不在此复制 UI 手册。
+
+### 驻军与团队加成导出
+
+驻军数据由 [`scripts/garrison_general_build.py`](../scripts/garrison_general_build.py) 从 [`scripts/data_sources.json`](../scripts/data_sources.json) 固定的 `.dat` 读取，生成 [`src/data/garrison_general.json`](../src/data/garrison_general.json)、[`src/data/garrison_hosts.json`](../src/data/garrison_hosts.json) 与 [`src/data/garrison_techs.json`](../src/data/garrison_techs.json)；`python3 scripts/garrison_general_build.py --check` 比较可复现输出。入口轻量清单和完整计算数据是不同产物。当前驻军任务来自原始 `unit.bird.tasks`；不能按对象类别、结构标记或文案推断任务、目标或数值。未解释字段与未知目标保持未知；`produces` 表示站内科技树收录的生产关系，不保证任意文明/时代/前置下均可生产。固定 `.dat` 的导出元数据明确 `engineVerifiedInPinnedBuild: false`：可复现解析不等于游戏客户端实测。
+
+团队加成由 [`scripts/team_bonuses_build.py`](../scripts/team_bonuses_build.py) 读取相同固定 pin，生成 [`src/data/team_bonuses.json`](../src/data/team_bonuses.json)；`python3 scripts/team_bonuses_build.py --check` 做离线复现检查。代码与测试区分启用、研究和研究时间修改，不把启用科技说成已研究，也不合成队伍倍率。`engineVerifiedInPinnedBuild` 为 `false`；单位/类别目标与生产目录是静态关联，`targetCoverage` 可能为 partial/unknown。未知资源、引擎函数、科技修改和目录外对象不从说明文案推断适用目标，不能声称完整客户端验证。回归位于 `tests/py/test_garrison_general224.py`、`tests/py/test_team_bonuses228.py` 与对应 unit tests；历史专例见清理前不可变的 [驻军说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/garrison-general224.md) 与[团队加成说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/team-bonuses228.md)。
+
+### 天梯静态快照解释边界
+
+提交的 [`src/data/ladder-arabia-p185872.json`](../src/data/ladder-arabia-p185872.json) 与 [`src/data/ladder-4v4-rm-e1200-1400-90d.json`](../src/data/ladder-4v4-rm-e1200-1400-90d.json) 是既有快照，不由 `data:update` 自动刷新。快照和旧说明中的时间/样本解释是历史记录，本次没有重新访问上游验证。
+
+清理前的快照说明记录了以下采样事实（本次未重新访问上游验证）：阿拉伯快照的开放 `temporalCoverage` 区间从 2026-09-22 开始，终点由来源 `modifieddate`（2026-11-01）推断，并非已知的真实采集截止；`fetchedAt` 也是 2026-11-01。4v4 快照覆盖 2026-08-02 至 2026-10-30 的 90 日窗口，抓取日期为 2026-11-01。两份快照的 `games` 统计单位均是玩家出现次数，不是完整对局数；4v4 月度趋势是自然月数据，不能替代这段 90 日窗口的趋势。来源版本注记不足以证明与目标游戏补丁对齐。保留这些边界，不从快照补造真实截止、完整对局数或补丁归属。
+
+历史采集细节与解释原件见清理前不可变的[阿拉伯快照说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/ladder-arabia-p185872.md)、[4v4 快照说明](https://github.com/linhongcun/aoe2-analyzer/blob/80f856ae3924ebce9d9d3b44211d6accad74c9b2/docs/data/ladder-4v4-rm-e1200-1400-90d.md)。原始 JSON 保持为现有证据，不在此复制大表或变更采集口径。
 
 ## 提交前
 
