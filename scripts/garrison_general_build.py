@@ -318,12 +318,27 @@ def tech_data(data):
                      for name, civ in data['civs'].items()}}
 
 
+def general_data(data):
+    """Omit only catalog fallbacks and upgrade indexes available elsewhere."""
+    catalog = {str(unit['id']): {field: unit.get(field) for field in ('age', 'pic', 'civs')}
+               for name in ('units', 'buildings')
+               for unit in json.loads((ROOT / ('src/data/%s.json' % name)).read_text())}
+    result = {key: value for key, value in data.items() if key != 'unitUpgradeTechs'}
+    result['units'] = {}
+    for key, unit in data['units'].items():
+        fallback = unit.get('catalog')
+        redundant = fallback == catalog.get(key) or fallback == {'age': 1, 'pic': None, 'civs': []}
+        result['units'][key] = {field: value for field, value in unit.items()
+                                if field != 'catalog' or not redundant}
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     data, hosts = generate(load(), raw_data())
-    for path, value in ((OUT, data), (HOSTS, hosts), (TECHS, tech_data(data))):
+    for path, value in ((OUT, general_data(data)), (HOSTS, hosts), (TECHS, tech_data(data))):
         text = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + '\n'
         if args.check:
             if not path.exists() or path.read_text() != text:

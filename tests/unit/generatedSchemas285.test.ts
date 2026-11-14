@@ -88,6 +88,16 @@ describe('#285 生成数据保留各领域的精确结构', () => {
     expect(validate(file, rewrite(original, ['civs', 'Khmer', 'baseOverrides', '70', 'privateOverride'], 1)).valid).toBe(false);
   });
 
+  it('#1028 目录回退可省略，但残留 catalog 必须完整且不能重新加入升级副本', () => {
+    const file = 'garrison_general';
+    const original = load(file);
+    expect(validate(file, original).valid).toBe(true);
+    expect(validate(file, rewrite(original, ['unitUpgradeTechs'], {})).valid).toBe(false);
+    expect(validate(file, rewrite(original, ['units', '4', 'catalog'], { age: 2, pic: null, civs: [] })).valid).toBe(true);
+    expect(validate(file, rewrite(original, ['units', '4', 'catalog'], { age: 2, civs: [] })).valid).toBe(false);
+    expect(validate(file, rewrite(original, ['units', '4', 'catalog'], { age: '2', pic: null, civs: [] })).valid).toBe(false);
+  });
+
   it('经济时代前置要求不能接收未定义的递归节点', () => {
     const file = 'eco';
     expect(validate(file, rewrite(load(file), ['ageReq', '2', 'req'], { n: 1, of: [{ privateRequirement: 12 }] })).valid).toBe(false);

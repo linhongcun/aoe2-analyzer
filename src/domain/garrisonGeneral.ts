@@ -117,6 +117,7 @@ export interface GeneralGarrisonData {
   buildings: Record<string, { eraForms: number[]; aliases: number[]; predecessors: number[]; produces: number[] }>;
   techs: Record<string, GeneralGarrisonRule>;
   ageRules: Record<string, GeneralGarrisonRule>;
+  /** Custom input override only; generated data uses GARRISON_TECH_DATA. */
   unitUpgradeTechs?: Record<string, number[]>;
   conditional: GeneralGarrisonRule[];
   civs: Record<
