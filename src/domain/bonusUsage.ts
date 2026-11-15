@@ -23,7 +23,7 @@ import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
  */
 import { ECO as eco } from '../data/eco';
 import { CONSTRUCTION_DATA as construction } from '../data/construction';
-import unitsRaw from '../data/raw/units';
+import { CORE } from '../data/core';
 import { buildOrders } from '../data/buildOrders';
 import { CIV_MECHANISM_KEYS, classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk } from './buildSim';
 import { BONUS_USAGE_EXCLUDED } from './mechanismExclusions';
@@ -42,7 +42,6 @@ import { slavicContext, SLAVIC_FARM_NOTE } from './slavicEconomy';
 import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerEconomy';
 
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
-const UNIT_IDS = new Set((unitsRaw as unknown as { id: number }[]).map((u) => u.id));
 /** 从机制注册表派生；排除项集中在 mechanismExclusions.ts。 */
 export const BONUS_USAGE_CIVS = Object.freeze(CIV_MECHANISM_KEYS.filter((civ) => !Object.hasOwn(BONUS_USAGE_EXCLUDED, civ)));
 type Cmd = { C: number; A: number; B: number };
@@ -317,7 +316,7 @@ function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
   if (sim) out.push(sim);
   const g = gatherLines(b);
   if (g.length) out.push({ tool: 'gather', name: USAGE_TOOL_ZH.gather, on: true, note: `采集速度已计入（${g.map((l) => l.label).join('、')}）` });
-  const listed = (DAT.costDiscounts?.[b.civ] ?? []).some((x) => x.idx === idx && x.groups.some((g) => g.units.some((id) => UNIT_IDS.has(id))));
+  const listed = (DAT.costDiscounts?.[b.civ] ?? []).some((x) => x.idx === idx && x.groups.some((g) => g.units.some((id) => CORE.unitById[id] !== undefined)));
   const counted = bonusDiscountCounted(b.civ, idx);
   if (listed || counted)
     out.push(

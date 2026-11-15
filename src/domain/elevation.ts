@@ -2,7 +2,7 @@
  * issue 734 高地伤害乘子。资源增量只读 eco.json。1.25 与 0.75 是 UGC 公式里的基数，经济数据不存这一对基数。
  * 悬崖没有专用字段，文案保持待确认，不补写乘子。
  */
-import civsRaw from '../data/raw/civs';
+import { civs as catalogCivs } from '../data';
 import { ECO } from '../data/eco';
 import type { EcoRow } from './ecoTypes';
 
@@ -134,7 +134,7 @@ function notable(civ: ElevationCiv): boolean {
   return odd(civ.higherAdd) || odd(civ.lowerAdd);
 }
 
-export function elevationFacts(eco: ElevationEco = ECO, civs: readonly ElevationCivRow[] = civsRaw as ElevationCivRow[]): ElevationFacts {
+export function elevationFacts(eco: ElevationEco = ECO, civs: readonly ElevationCivRow[] = catalogCivs): ElevationFacts {
   const patch = eco.meta?.patch ?? '';
   const civEco = eco.civEco ?? {};
   const zero: ResourceAdd = { state: 'value', value: 0 };

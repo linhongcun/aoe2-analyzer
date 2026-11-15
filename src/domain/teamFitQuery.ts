@@ -1,5 +1,5 @@
 /** Lightweight URL state: no model, raw units or cross-tool imports. */
-import civs from '../data/raw/civs';
+import { civs } from '../data';
 export interface TeamFitConfig {
   candidate: string;
   mates: string[];

@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * #281 分层边界检查。用 TypeScript 语法树读 src/ 下每个文件的 import / export ... from / import()，
- * 按 #281 验收标准的四条规则报告越层引用：
+ * 按 #281 验收标准的四条规则和 #1029 的 raw-direct 报告越层引用：
  *   feature-to-feature  features/X 不能 import features/Y（需要共享的挪到 shared/ 或 domain/）
  *   shared-upward       shared/ 不能 import features/、app/
  *   domain-upward       domain/ 不能 import react、features/、app/、shared/ui
  *   core-json-direct    data/game/{civs,units,techs,buildings,trees,eco,effects}.json 只能由 LOADERS 里逐个登记的
  *                       7 个文件直接 import；src 下其他任何文件（含 shared/、app/、data/ 其他文件）都不行
+ *   raw-direct          src/data/raw/* 只能由 src/data/** 内的文件 import；其他层同步读 src/data/core 的 CORE 或 src/data 的 civs
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
  * 用法：
@@ -29,6 +30,7 @@ export const RULES = {
   'shared-upward': 'shared/ 不能 import features/、app/',
   'domain-upward': 'domain/ 不能 import react、features/、app/、shared/ui',
   'core-json-direct': '核心数据 JSON 只能经 LOADERS 登记的文件读取',
+  'raw-direct': 'src/data/raw/* 只能由 src/data/** import',
 };
 export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `data/game/${n}.json`);
 /**
@@ -37,8 +39,8 @@ export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco',
  * 新增入口要在这里登记、同步更新 AGENTS.md 与 docs/ARCHITECTURE.md，并在 PR 里说明理由。
  */
 export const LOADERS = new Set([
-  'src/data/index.ts', // 异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包
-  'src/data/raw/civs.ts', // src/data/raw/：同步、原样转出的唯一入口
+  'src/data/index.ts', // trees 动态 import 拆包（civs 经 raw/civs；units/techs/buildings 经 ./core）
+  'src/data/raw/civs.ts', // src/data/raw/：原样转出，只给 src/data/** 内部用（raw-direct）
   'src/data/raw/units.ts',
   'src/data/raw/techs.ts',
   'src/data/raw/buildings.ts',
@@ -212,6 +214,7 @@ export function classify(e) {
     if (react || upward) return 'domain-upward';
   }
   if (to && CORE_JSON.includes(to) && !LOADERS.has(from)) return 'core-json-direct';
+  if (to && to.startsWith('src/data/raw/') && !from.startsWith('src/data/')) return 'raw-direct';
   return null;
 }
 

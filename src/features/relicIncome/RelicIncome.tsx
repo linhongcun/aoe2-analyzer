@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import civs from '../../data/raw/civs';
+import { civs } from '../../data';
 import {
   ATHEISM_STATES,
   calculateRelicIncome,

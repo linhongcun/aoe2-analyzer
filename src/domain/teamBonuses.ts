@@ -2,8 +2,8 @@
 import raw from '../../data/game/team_bonuses.json';
 import validateTeamBonuses from '../content/schema/compiled/team-bonuses.mjs';
 import { readValidatedJson } from '../data/validatedJson';
-import civsRaw from '../data/raw/civs';
-import unitsRaw from '../data/raw/units';
+import { civs } from '../data';
+import { CORE } from '../data/core';
 import type { Cost } from './types';
 
 export type TeamEffectKind = 'attributes' | 'production' | 'unlock' | 'economy' | 'research' | 'other';
@@ -98,8 +98,8 @@ export interface TeamTechnologyRow {
   providers: TeamProvider[];
 }
 export type TeamResearchStatus = 'unavailable' | 'unresearched' | 'researched';
-const knownCivs = new Set(civsRaw.map((civ) => civ.en));
-const knownUnits = new Set(unitsRaw.map((unit) => unit.id));
+const knownCivs = new Set(civs.map((civ) => civ.en));
+const knownUnits = new Set(CORE.units.map((unit) => unit.id));
 const integer = /^(0|[1-9]\d*)$/;
 const keys = ['tv', 'players', 'age', 'target', 'unit', 'researched'];
 

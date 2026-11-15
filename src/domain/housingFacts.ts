@@ -3,7 +3,7 @@
  * UGC 资源 4 / 11 / 32 只说明剩余空间、当前人口和额外上限，没有各建筑的提供人口；哥特资源 32 的 +10 在经济数据里，
  * 但那是文明加成，不是建筑住房，本页不写。经济数据里标了名称、建筑资料却没有条目的编号保持待确认。
  */
-import buildingsRaw from '../data/raw/buildings';
+import { CORE } from '../data/core';
 import { ECO } from '../data/eco';
 
 export const HOUSING_ANCHOR = 'housing';
@@ -118,7 +118,7 @@ export function housingPatch(patch: unknown): { patchBuild: string | null; patch
   };
 }
 
-export function housingFacts(buildings: readonly HousingSource[] = buildingsRaw as HousingSource[], eco: EcoAge = ECO): HousingFacts {
+export function housingFacts(buildings: readonly HousingSource[] = CORE.buildings, eco: EcoAge = ECO): HousingFacts {
   const rows = housingRows(buildings);
   const patch = housingPatch(eco.meta?.patch);
   return { rows, gaps: catalogGaps(eco.ageReq, rows), patchBuild: patch.patchBuild, patchDate: patch.patchDate };

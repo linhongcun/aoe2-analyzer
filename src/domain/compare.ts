@@ -1,4 +1,4 @@
-import civs from '../data/raw/civs';
+import { civs } from '../data';
 
 const DEFAULT_PAIR = { a: 'Franks', b: 'Britons' } as const;
 const CIVILIZATIONS = civs.map((civilization) => civilization.en);

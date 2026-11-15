@@ -4,8 +4,8 @@
  * 资源 196 / 198 只报告效果导出里的原规则；没有规则就待确认，不把 UGC 页面上的附加时间写进来。
  * 按地图尺寸的基础秒数没有站内 DE 导出，baseSeconds 保持 null。
  */
-import civsRaw from '../data/raw/civs';
-import techsRaw from '../data/raw/techs';
+import { civs as catalogCivs } from '../data';
+import { CORE } from '../data/core';
 import { DAT } from './datEffects';
 
 export const ATHEISM_ID = 21;
@@ -116,9 +116,9 @@ function flagRule(effects: StandardEffects): ResourceRule {
 }
 
 export function standardVictoryFacts(
-  techs: readonly CatalogTech[] = techsRaw as CatalogTech[],
+  techs: readonly CatalogTech[] = CORE.techs,
   effects: StandardEffects = DAT,
-  civs: readonly CatalogCiv[] = civsRaw as CatalogCiv[],
+  civs: readonly CatalogCiv[] = catalogCivs,
 ): StandardVictoryFacts {
   const tech = techs.find((item) => item.id === ATHEISM_ID && item.en === 'Atheism');
   const patch = effects.meta?.sources?.find((source) => source.id === 'DAT')?.patch ?? effects.meta?.sources?.[0]?.patch ?? '';

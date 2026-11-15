@@ -1,9 +1,7 @@
 /** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
 import editorial from '../../data/content/mixed-army.json';
 import rules from '../../data/content/mixed-army-rules.json';
-import units from '../data/raw/units';
-import techs from '../data/raw/techs';
-import buildings from '../data/raw/buildings';
+import { CORE } from '../data/core';
 import { civs } from '../data';
 import { GARRISON_TECH_DATA } from './garrisonTechs';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';
@@ -102,9 +100,9 @@ export interface MixedArmyPlan {
   cards: MixedCardResult[];
 }
 const knownCivs = new Set(civs.map((civ) => civ.en));
-const knownUnits = new Set(units.map((unit) => unit.id));
-const knownTechs = new Set(techs.map((tech) => tech.id));
-const knownBuildings = new Set(buildings.map((building) => building.id));
+const knownUnits = new Set(CORE.units.map((unit) => unit.id));
+const knownTechs = new Set(CORE.techs.map((tech) => tech.id));
+const knownBuildings = new Set(CORE.buildings.map((building) => building.id));
 const supportedUnits = new Set(content.prerequisiteUnitIds);
 const has = (values: readonly string[], value: unknown): value is string => typeof value === 'string' && values.includes(value);
 const integer = /^(0|[1-9]\d*)$/;
