@@ -41,7 +41,7 @@ function defaultSlice(): Slice {
     .filter((name) => /^ladder-.*\.json$/.test(name) && !name.includes('beginner'))
     .sort();
   const hits = files.flatMap((name) => {
-    const json = JSON.parse(readFileSync(`src/data/${name}`, 'utf8')) as SnapshotFile;
+    const json = JSON.parse(readFileSync(`data/game/${name}`, 'utf8')) as SnapshotFile;
     const mode = textOf(json.mode);
     const map = textOf(json.map);
     if (!/4v4/i.test(mode) || /1v1|arabia/i.test(`${mode} ${map}`)) return [];

@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import type { LadderCivStat, LadderSnapshot } from '../../src/domain/ladder';
 
-const snapshot = (file: string) => JSON.parse(readFileSync(`src/data/${file}`, 'utf8')) as LadderSnapshot;
+const snapshot = (file: string) => JSON.parse(readFileSync(`data/game/${file}`, 'utf8')) as LadderSnapshot;
 const slices = [
   { key: 'team', url: './#/ladder', data: snapshot('ladder-4v4-rm-e1200-1400-90d.json'), interval: true },
   { key: 'arabia', url: './#/ladder?mode=arabia1v1', data: snapshot('ladder-arabia-p185872.json'), interval: false },
