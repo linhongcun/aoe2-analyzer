@@ -75,7 +75,7 @@
   grid-template-columns: minmax(180px, 260px) minmax(120px, 160px) auto;
   align-items: end;
   justify-content: start;
-  gap: var(--space-3);
+  gap: var(--space-2);
   margin-top: var(--space-4);
 }
 
@@ -315,8 +315,12 @@
   font-size: var(--fs-sm);
 }
 
-.ud-reverse-pk-era span {
-  display: block;
+.ud-reverse-pk-era {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .ud-reverse-pk-retained-note {
@@ -344,6 +348,10 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   margin-top: var(--space-3);
+}
+
+.ud-reverse-pk-actions .ud-btn {
+  border-radius: var(--radius-md);
 }
 
 .ud-reverse .ud-reverse-pk-actions > a.ud-reverse-primary[href]:not([aria-disabled='true']),

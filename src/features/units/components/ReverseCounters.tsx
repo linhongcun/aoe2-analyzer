@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { civs, type Core } from '../../../data';
 import {
@@ -16,6 +16,7 @@ import { useReverseCounterSession, writeReverseCounterSession, type ReverseCount
 import { AGE_ZH } from './ReverseCounterAvailability';
 import { ReverseCounterEmptyState } from './ReverseCounterEmptyState';
 import { getPkUnavailableReason, PkSummary, RetainedPkSummary, selectPkSummaryMode } from './ReverseCounterPkSummary';
+import { clearRestoreNote, invalidateRestoreNote, replaceRestoreNote, restoreNoteForRecord, scheduleRestoreNote } from './reverseCounterRestoreNote';
 import './reverse-counters.css';
 
 interface Props {
@@ -228,12 +229,14 @@ export function ReverseCounters({
   const [expandedRows, setExpandedRows] = useState<string[]>(stored?.expandedRows ?? []);
   const [openPk, setOpenPk] = useState<{ category: string; id: number } | null>(stored?.openPk ?? null);
   const [originButton, setOriginButton] = useState('');
-  const [restoreNote, setRestoreNote] = useState('');
+  const [restoreNoteState, setRestoreNoteState] = useState({ generation: 0, note: '' });
+  const restoreNote = restoreNoteState.note;
   const [defaultGroupsReady, setDefaultGroupsReady] = useState(!!stored);
   const [activeSessionIdentity, setActiveSessionIdentity] = useState(currentSession.identity);
   const sessionStateReady = activeSessionIdentity === currentSession.identity;
   if (!sessionStateReady) {
     const next = currentSession.record;
+    clearRestoreNote(setRestoreNoteState);
     setFilter({
       civ: next?.filters.civ && civNames.includes(next.filters.civ) ? next.filters.civ : '',
       age: next?.filters.age ?? null,
@@ -242,7 +245,6 @@ export function ReverseCounters({
     setExpandedRows(next?.expandedRows ?? []);
     setOpenPk(next?.openPk ?? null);
     setOriginButton('');
-    setRestoreNote('');
     setDefaultGroupsReady(!!next);
     setActiveSessionIdentity(currentSession.identity);
   }
@@ -297,7 +299,7 @@ export function ReverseCounters({
   if (sessionStateReady && openPk && !corePending && !coreError && !filteredPkRow && !basePkRow) {
     setOpenPk(null);
     setOriginButton('');
-    setRestoreNote('所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
+    replaceRestoreNote(setRestoreNoteState, '所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
   }
 
   const saveSession = useCallback(
@@ -342,10 +344,8 @@ export function ReverseCounters({
     const exact = record.anchor ? document.getElementById(record.anchor) : null;
     const fallback = record.fallbackAnchor ? document.getElementById(record.fallbackAnchor) : null;
     const destination = record.anchor || record.fallbackAnchor ? (exact ?? fallback ?? document.getElementById('unit-reverse-counters')) : null;
-    let note = exact ? '已恢复上次筛选与阅读位置。' : '已恢复本单位、敌方筛选与阅读位置；原结果行已变化，已定位到本类或查询区。';
-    if (!record.anchor && !record.fallbackAnchor) note = '已恢复上次筛选与展开状态；保持当前阅读位置。';
-    if (record.openPk && !basePkRow) note = '所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。';
-    if (restoreNote !== note) return startTransition(() => setRestoreNote(note));
+    const note = restoreNoteForRecord(record, !!exact, !!basePkRow);
+    if (restoreNoteState.note !== note) return scheduleRestoreNote(restoreNoteState, setRestoreNoteState, note);
     const frame = requestAnimationFrame(() => {
       if (destination) window.scrollTo({ top: window.scrollY + destination.getBoundingClientRect().top - record.offset, behavior: 'auto' });
       const focus =
@@ -356,7 +356,7 @@ export function ReverseCounters({
       markRestored();
     });
     return () => cancelAnimationFrame(frame);
-  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, restoreNote, markRestored]);
+  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, restoreNoteState, markRestored]);
 
   useEffect(() => {
     if (sessionStateReady && !currentSession.restorePending) saveSession();
@@ -366,14 +366,15 @@ export function ReverseCounters({
     setCollapsed((current) => (current.includes(category) ? current.filter((item) => item !== category) : [...current, category]));
   };
   const changeFilter = (next: ReverseCounterFilter) => {
+    clearRestoreNote(setRestoreNoteState);
     markRestored();
     setFilter(next);
     setOpenPk(null);
-    setRestoreNote('');
     setDefaultGroupsReady(false);
     setCollapsed([]);
   };
   const closePk = (focusId = originButton || (openPk ? pkButtonId(openPk.category, openPk.id) : '')) => {
+    invalidateRestoreNote(restoreNoteState, setRestoreNoteState);
     markRestored();
     setOpenPk(null);
     requestAnimationFrame(() => {
