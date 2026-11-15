@@ -104,7 +104,7 @@ if (s.includes('check-runs') && process.env.FAKE_CHECKS) {
   process.stdout.write(JSON.stringify({ total_count: check_runs.length, check_runs }));
 } else if (/check-runs|run list|run view|\\bstatus\\b|checks/.test(s)) {
   const conclusion = ci, state = ci === 'success' ? 'success' : 'failure';
-  process.stdout.write(JSON.stringify({ state, total_count: 1, check_runs: [{ name: 'test', status: 'completed', conclusion }], statuses: [{ state }], workflow_runs: [{ status: 'completed', conclusion }] }));
+  process.stdout.write(JSON.stringify({ state, total_count: 1, check_runs: [{ name: 'check', status: 'completed', conclusion }], statuses: [{ state }], workflow_runs: [{ status: 'completed', conclusion }] }));
   if (/run list/.test(s)) process.stdout.write('');
 }
 if (/release (view)/.test(s)) process.exit(1);
@@ -212,8 +212,8 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     ['只有成功的 release', [{ name: 'release', status: 'completed', conclusion: 'success' }]],
     ['只有成功的无关检查', [{ name: 'lint', status: 'completed', conclusion: 'success' }]],
     ['只有成功的 deploy', [{ name: 'deploy', status: 'completed', conclusion: 'success' }]],
-    ['test 被跳过', [{ name: 'test', status: 'completed', conclusion: 'skipped' }]],
-    ['test 为 neutral', [{ name: 'test', status: 'completed', conclusion: 'neutral' }]],
+    ['check 被跳过', [{ name: 'check', status: 'completed', conclusion: 'skipped' }]],
+    ['check 为 neutral', [{ name: 'check', status: 'completed', conclusion: 'neutral' }]],
   ] as const)('#394 %s 不能代替实际成功的 test，也不能产生发版副作用', async (label, checks) => {
     const before = snapshot();
     const r = await run(['v0.6.0', ...opts()], { FAKE_CHECKS: JSON.stringify(checks) });
@@ -228,7 +228,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     const before = snapshot();
     const r = await run(['v0.6.0', '--dry-run', ...opts()], {
       FAKE_CHECKS: JSON.stringify([
-        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'check', status: 'completed', conclusion: 'success' },
         { name: 'release', status: 'in_progress', conclusion: null },
       ]),
     });
@@ -244,7 +244,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
   ] as const)('绿的 test/deploy 加上%s的 release check 仍算 CI 绿', async (label, status, conclusion) => {
     const r = await run(['v0.6.0', '--dry-run', ...opts()], {
       FAKE_CHECKS: JSON.stringify([
-        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'check', status: 'completed', conclusion: 'success' },
         { name: 'deploy', status: 'completed', conclusion: 'success' },
         { name: 'release', status, conclusion },
       ]),
@@ -256,27 +256,27 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
 
   it.each([
     [
-      'test 进行中',
+      'check 进行中',
       [
-        { name: 'test', status: 'in_progress', conclusion: null },
+        { name: 'check', status: 'in_progress', conclusion: null },
         { name: 'deploy', status: 'completed', conclusion: 'success' },
         { name: 'release', status: 'in_progress', conclusion: null },
       ],
-      'test=in_progress',
+      'check=in_progress',
     ],
     [
-      'test 失败',
+      'check 失败',
       [
-        { name: 'test', status: 'completed', conclusion: 'failure' },
+        { name: 'check', status: 'completed', conclusion: 'failure' },
         { name: 'deploy', status: 'completed', conclusion: 'success' },
         { name: 'release', status: 'completed', conclusion: 'failure' },
       ],
-      'test=failure',
+      'check=failure',
     ],
     [
       'deploy 进行中',
       [
-        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'check', status: 'completed', conclusion: 'success' },
         { name: 'deploy', status: 'in_progress', conclusion: null },
         { name: 'release', status: 'completed', conclusion: 'failure' },
       ],
@@ -285,7 +285,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     [
       '名字不是 release',
       [
-        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'check', status: 'completed', conclusion: 'success' },
         { name: 'deploy', status: 'completed', conclusion: 'success' },
         { name: 'pre-release', status: 'in_progress', conclusion: null },
       ],

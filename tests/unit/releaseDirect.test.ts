@@ -31,7 +31,10 @@ it('#431 release dry-run works without manufacturing a release branch or changin
     git('push', '-q', 'origin', 'main');
     const original = git('rev-parse', 'HEAD');
     mkdirSync(bin);
-    writeFileSync(join(bin, 'gh'), '#!/usr/bin/env node\nconsole.log(JSON.stringify({check_runs:[{name:"test",status:"completed",conclusion:"success"}]}));\n');
+    writeFileSync(
+      join(bin, 'gh'),
+      '#!/usr/bin/env node\nconsole.log(JSON.stringify({check_runs:[{name:"check",status:"completed",conclusion:"success"}]}));\n',
+    );
     chmodSync(join(bin, 'gh'), 0o755);
     const result = spawnSync(process.execPath, [resolve('scripts/release.mjs'), 'v0.34.1', '--dry-run'], {
       cwd: work,
