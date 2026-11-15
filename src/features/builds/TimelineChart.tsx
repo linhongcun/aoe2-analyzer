@@ -9,9 +9,9 @@ import { TimelineSegment } from './TimelineSegment';
 
 const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'tc', zh: '城镇中心' },
-  { key: 'food', zh: '食物' },
-  { key: 'wood', zh: '木头' },
-  { key: 'gold', zh: '金子' },
+  { key: 'food', zh: RES_ZH.food },
+  { key: 'wood', zh: RES_ZH.wood },
+  { key: 'gold', zh: RES_ZH.gold },
   { key: 'military', zh: '军事' },
 ];
 

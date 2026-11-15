@@ -27,11 +27,11 @@ async function cardMatchesSummary(page: Page) {
 }
 
 test.describe('#19 分享卡', () => {
-  test('卡在木头：卡上数字与页面摘要逐字一致；可下载 PNG', async ({ page }) => {
+  test('卡在木材：卡上数字与页面摘要逐字一致；可下载 PNG', async ({ page }) => {
     await open(page, 'bo=fast-castle-boom&civ=Franks');
     const dlg = await cardMatchesSummary(page);
     await expect(dlg.locator('[data-t="card-cell-0"] .s')).toHaveText(/^误差 \d+:\d\d–\d+:\d\d$/);
-    await expect(dlg.locator('[data-t="card-title"]')).toHaveText(/^法兰克·速升城堡暴经济，约 \d+:\d\d 到城堡，卡在木头$/);
+    await expect(dlg.locator('[data-t="card-title"]')).toHaveText(/^法兰克·速升城堡暴经济，约 \d+:\d\d 到城堡，卡在木材$/);
     await expect(dlg.locator('[data-t="card-url"]')).toHaveText(/\/builds\/fast-castle-boom\/\?civ=Franks$/);
     // 游戏版本取自 data/sources/data_sources.json 的 patch.build（构建时注入），不硬编码
     const build = (JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build;

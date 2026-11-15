@@ -64,7 +64,7 @@ describe('timelineModel', () => {
       expect(summaryText(top, '封建')).toEqual({ main: '卡人口 约 11:09 起', sub: '第 13 步' });
     });
     it('规则 2：没有卡人口时按同类合计取最长，显示合计时长', () => {
-      // 木头三段合计 362 秒（6:02），比单段最长的闲置 200 秒长；黄金不同资源不并入木头
+      // 木材三段合计 362 秒（6:02），比单段最长的闲置 200 秒长；黄金不同资源不并入木材
       const list = [
         B('idle_tc', 50, 200, 1),
         B('resource_short', 300, 120, 4, 'wood'),
@@ -74,7 +74,7 @@ describe('timelineModel', () => {
       ];
       const top = pickSummaryBottleneck(list)!;
       expect(top).toMatchObject({ type: 'resource_short', resource: 'wood', step: 4, total: 362.5 });
-      expect(summaryText(top, '城堡')).toEqual({ main: '卡在木头 约 6:02', sub: '第 5 步' });
+      expect(summaryText(top, '城堡')).toEqual({ main: '卡在木材 约 6:02', sub: '第 5 步' });
     });
     it('规则 3：合计相同取最先出现的一类', () => {
       const top = pickSummaryBottleneck([B('prereq_wait', 400, 30, 9), B('idle_tc', 100, 10, 3), B('idle_tc', 200, 20, 5)])!;
@@ -93,7 +93,7 @@ describe('timelineModel', () => {
     const B = (type: Anomaly['type'], from: number, sec: number, step: number, resource?: 'wood') =>
       ({ type, from, to: from + sec, sec, label: '', reasonZh: '', step, ...(resource ? { resource } : {}) }) as never;
     expect(summaryParts(B('pop_block', 669, 20, 12), '封建')).toEqual({ reason: '卡人口', time: '约 11:09 起' });
-    expect(summaryParts(B('resource_short', 300, 362, 4, 'wood'), '城堡')).toEqual({ reason: '卡在木头', time: '约 6:02' });
+    expect(summaryParts(B('resource_short', 300, 362, 4, 'wood'), '城堡')).toEqual({ reason: '卡在木材', time: '约 6:02' });
     expect(summaryParts(B('timeout', 3600, 0, 4), '封建')).toEqual({ reason: '60 分钟内到不了封建', time: null });
     expect(summaryParts(null, '封建')).toEqual({ reason: '没有卡点', time: null });
     for (const b of [B('pop_block', 669, 20, 12), B('resource_short', 300, 362, 4, 'wood'), B('idle_tc', 100, 30, 3)]) {

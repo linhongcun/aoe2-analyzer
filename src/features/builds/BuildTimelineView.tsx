@@ -7,6 +7,7 @@ import { ECO as eco } from '../../data/eco';
 import { CORE } from '../../data/core';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn } from '../../data';
+import { AGE_SHORT_ZH } from '../../domain/ratings';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { armenianBuildOrder } from '../../domain/armenianEconomy';
 import { georgianBuildOrder } from '../../domain/georgianEconomy';
@@ -33,7 +34,6 @@ import { buildsFocusState } from './buildsFocus';
 import { UPS } from './upgrades';
 
 const UNIT_ZH = Object.fromEntries(CORE.units.map((u) => [String(u.id), u.zh]));
-const AGE_ZH = ['', '黑暗', '封建', '城堡', '帝王'];
 /** #/builds?bo=…：开局时间线；布局与控件保留原状态和DOM。 */
 export default function BuildTimelineView({ orders = buildOrders }: { orders?: BuildOrder[] }) {
   const { sp, q, bo, patch, set, warnOff, hideWarning, hintOff, hideHint, showAssume, setShowAssume, drawer, setDrawer, setBtn, sheet, close } =
@@ -74,7 +74,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     return () => clearTimeout(timer);
   }, [copied, resetShare]);
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
-  const targetZh = AGE_ZH[bo.target.age]!;
+  const targetZh = AGE_SHORT_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
   const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco, simCiv, bo.id) : []), [simCiv, bo.id]);
   const sel = q.step !== null ? tl.steps[q.step] : undefined;

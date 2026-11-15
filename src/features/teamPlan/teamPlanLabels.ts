@@ -1,8 +1,9 @@
 import { civByEn } from '../../data';
+import { AGE_SHORT_ZH } from '../../domain/ratings';
 import type { ProductionContext } from '../../domain/production';
 import type { PlanAge, PlanPlayer } from '../../domain/teamPlan';
 
-export const AGE_NAMES: Record<PlanAge, string> = { 2: '封建', 3: '城堡', 4: '帝王' };
+export const AGE_NAMES: Record<PlanAge, string> = { 2: AGE_SHORT_ZH[2]!, 3: AGE_SHORT_ZH[3]!, 4: AGE_SHORT_ZH[4]! };
 export const OPEN_NAMES = { unspecified: '未指定', open: '开放陆地', closed: '封闭陆地', 'mixed-land': '混合陆地条件' } as const;
 export const unique = (values: number[]) => [...new Set(values)];
 export const playerLabel = (player: PlanPlayer) => player.name || player.id.toUpperCase();

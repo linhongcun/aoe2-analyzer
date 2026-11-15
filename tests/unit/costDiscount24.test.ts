@@ -2,7 +2,7 @@
  * #24 PK 等资源 · 文明训练费用加成。
  * 数值来源：data/game/effects.json 的 costDiscounts（scripts/effects_build.py 由 DE 185872 .dat 的费用效果导出）。
  * 场景数字：Reid #24 comment 6114992360（61/42、66/22、49/66、37/66、蒙古 30、22/30），本文件独立重算后一致。
- * 取整：四舍五入（hongcun 游戏内实测拜占庭散兵 19 食物 / 26 木头，#24 comment 6106912488）。
+ * 取整：四舍五入（hongcun 游戏内实测拜占庭散兵 19 食物 / 26 木材，#24 comment 6106912488）。
  */
 import { describe, expect, it } from 'vitest';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
@@ -21,7 +21,7 @@ describe('手算金标准', () => {
     expect(d.cost).toEqual({ Food: 26, Wood: 19 });
     expect(N('Halberdier', 'Byzantines', 4)).toBe(66);
   });
-  it('拜占庭精锐掷矛手显示 19 食物 / 26 木头（hongcun 游戏内实测）', () => {
+  it('拜占庭精锐掷矛手显示 19 食物 / 26 木材（hongcun 游戏内实测）', () => {
     expect(D('Elite Skirmisher', 'Byzantines', 4).cost).toEqual({ Food: 19, Wood: 26 });
   });
   it('柏柏尔骆驼兵城堡时代：55×0.85=46.75得47，60×0.85=51，合计 98 得 30 个（v3 稿的 32 是帝王档，稿子错）', () => {

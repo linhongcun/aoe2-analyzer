@@ -4,6 +4,7 @@
  */
 import { floorSec, formatClock } from '../../domain/formatTime';
 import { TC_BUSY_ZH } from '../../domain/buildSim';
+import { AGE_SHORT_ZH, RES_ZH as RESOURCE_NAMES } from '../../domain/ratings';
 import { villagerGroups } from './timelineFollowups';
 import type { Anomaly, BuildTimeline, ErrBand, Res } from '../../domain/buildSim';
 
@@ -51,8 +52,8 @@ export interface TimelineView {
   tcIdleTotal: number;
 }
 
-export const AGE_ZH = { feudal: '封建', castle: '城堡', imperial: '帝王' } as const;
-export const RES_ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
+export const AGE_ZH = { feudal: AGE_SHORT_ZH[2]!, castle: AGE_SHORT_ZH[3]!, imperial: AGE_SHORT_ZH[4]! } as const;
+export const RES_ZH: Record<Res, string> = { food: RESOURCE_NAMES.Food!, wood: RESOURCE_NAMES.Wood!, gold: RESOURCE_NAMES.Gold!, stone: RESOURCE_NAMES.Stone! };
 /** 原因优先级（摘要与步骤行共用）：卡人口 > 等前置建筑 > 超时 > 城镇中心闲置 > 缺资源（#3 Steve 定） */
 const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, prereq_wait: 1, timeout: 2, idle_tc: 3, resource_short: 4, tc_busy: 5 };
 const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to - a.from;
@@ -371,6 +372,6 @@ export function noteParts(note: string, houseText: readonly string[] | undefined
 export function noHouseCompareText(c: { earlierSec: number; startWoodDelta: number; woodNet: number }, ageZh: string): string {
   const t = c.earlierSec >= 0 ? `早 ${mmss(c.earlierSec)}` : `晚 ${mmss(-c.earlierSec)}`;
   const w = c.woodNet >= 0 ? `省 ${Math.round(c.woodNet)}` : `多花 ${Math.round(-c.woodNet)}`;
-  const start = c.startWoodDelta < 0 ? `起始少 ${-c.startWoodDelta} 木` : c.startWoodDelta > 0 ? `起始多 ${c.startWoodDelta} 木` : '起始木头相同';
-  return `比通用：到达${ageZh} ${t} · 木头按净值${w}（${start}）`;
+  const start = c.startWoodDelta < 0 ? `起始少 ${-c.startWoodDelta} 木` : c.startWoodDelta > 0 ? `起始多 ${c.startWoodDelta} 木` : '起始木材相同';
+  return `比通用：到达${ageZh} ${t} · 木材按净值${w}（${start}）`;
 }

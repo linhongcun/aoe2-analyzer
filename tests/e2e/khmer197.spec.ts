@@ -73,7 +73,7 @@ for (const width of [360, 375, 390, 1280])
         await supported(page, true);
         const detail = page.getByRole('region', { name: '步骤详情', exact: true });
         await expect(detail.getByRole('link', { name: '农田', exact: true })).toHaveAttribute('href', '#/building/50');
-        await expect(detail.locator('[data-t="step-cost"]')).toContainText(/木头\s+[1-9]\d*/);
+        await expect(detail.locator('[data-t="step-cost"]')).toContainText(/木材\s+[1-9]\d*/);
         await expect(page.locator('[data-t="house-skip"]')).toHaveCount(0);
         await assumptions(page, true);
         await overflow(page);
@@ -102,9 +102,9 @@ for (const width of [360, 375, 390, 1280])
       await supported(page, false);
       const first = page.getByRole('region', { name: '步骤详情', exact: true });
       await expect(first).toContainText(/食物\s+200/);
-      await expect(first).toContainText(/木头\s+200/);
+      await expect(first).toContainText(/木材\s+200/);
       await expect(first).toContainText(/黄金\s+100/);
-      await expect(first).toContainText(/石头\s+200/);
+      await expect(first).toContainText(/石料\s+200/);
       await expect(first).toContainText(/人口\s+4\/5/);
       await expect(page.locator('[data-t="house-skip"]')).toHaveCount(0);
       await assumptions(page, false);

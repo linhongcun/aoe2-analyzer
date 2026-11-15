@@ -165,7 +165,7 @@ describe('#197 葡萄牙采果兼产木材', () => {
     expect(civSimNotes(E, 'Portuguese').join('')).toContain('采果兼产木材');
     expect(civSimNotes(E, 'Portuguese').join('')).toContain('连续收入估算');
     for (const age of [1, 2, 3, 4]) {
-      expect(gatherModel(age, 'Portuguese').unsupported.map((x) => x.label)).toEqual(['采浆果同时产木头']);
+      expect(gatherModel(age, 'Portuguese').unsupported.map((x) => x.label)).toEqual(['采浆果同时产木材']);
       expect(gatherModel(age, 'Portuguese').rate).toEqual(gatherModel(age).rate);
     }
   });

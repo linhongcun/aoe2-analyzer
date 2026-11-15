@@ -21,7 +21,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText('不模拟客户端逐笔到账');
       await page.getByRole('button', { name: '估算', exact: true }).click();
       await page.locator('[data-step="0"]').locator('button').first().click();
-      await expect(page.locator('[data-t="step-cost"]')).toContainText('木头 50');
+      await expect(page.locator('[data-t="step-cost"]')).toContainText('木材 50');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await expect(page.locator('[data-t="share-card"]')).toContainText('按瓦兰吉人计');
       await expect(page.locator('[data-t="card-url"]')).toContainText('civ=Varangians');

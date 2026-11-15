@@ -12,6 +12,7 @@ export const TYPE_ZH: Record<CivType, string> = {
   eco: '经济',
 };
 export const AGE_ZH: Record<number, string> = { 1: '黑暗时代', 2: '封建时代', 3: '城堡时代', 4: '帝王时代' };
+export const AGE_SHORT_ZH = { 1: '黑暗', 2: '封建', 3: '城堡', 4: '帝王' } as const satisfies Record<number, string>;
 export const RES_ZH: Record<string, string> = { Food: '食物', Wood: '木材', Gold: '黄金', Stone: '石料' };
 
 /** 前三项优势与后三项弱项，仅为评分的相对排序，不代表兵种可用性。 */

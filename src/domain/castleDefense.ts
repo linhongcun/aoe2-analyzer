@@ -45,7 +45,6 @@ export interface CastleDefensePlan {
 }
 export const CASTLE_DEFENSE_SOURCES = content.sources;
 export const CASTLE_DEFENSE_REVIEWED_AT = content.reviewedAt;
-export const CASTLE_AGE_ZH: Record<number, string> = { 1: '黑暗时代', 2: '封建时代', 3: '城堡时代', 4: '帝王时代' };
 export function defaultCastleDefense(): CastleDefenseConfig {
   return { observation: 'stone', age: 2, escort: 'unknown', path: 'unknown', resources: 'unknown' };
 }

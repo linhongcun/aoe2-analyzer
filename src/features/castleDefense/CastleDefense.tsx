@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolExample, ToolGrid } from '../../shared/ui/ToolShell';
 import { sharePageUrl } from '../../domain/sharePage';
+import { AGE_ZH } from '../../domain/ratings';
 import {
-  CASTLE_AGE_ZH,
   CASTLE_DEFENSE_REVIEWED_AT,
   CASTLE_DEFENSE_SOURCES,
   CASTLE_ESCORTS,
@@ -160,7 +160,7 @@ export default function CastleDefense() {
               <select aria-label="我的当前时代" value={config.age} onChange={(event) => change({ age: Number(event.currentTarget.value) })}>
                 {[1, 2, 3, 4].map((age) => (
                   <option key={age} value={age}>
-                    {CASTLE_AGE_ZH[age]}
+                    {AGE_ZH[age]}
                   </option>
                 ))}
               </select>
@@ -227,7 +227,7 @@ export default function CastleDefense() {
               <p className="castle-defense-kicker">现在的重点</p>
               <h2 id="castle-defense-plan-title">{plan.title}</h2>
               <p>{plan.summary}</p>
-              <p className="castle-defense-note">当前按{CASTLE_AGE_ZH[config.age]}整理；具体单位、科技和建筑资格仍需查看本方科技树。</p>
+              <p className="castle-defense-note">当前按{AGE_ZH[config.age]}整理；具体单位、科技和建筑资格仍需查看本方科技树。</p>
               {plan.notices.length > 0 && (
                 <ul className="castle-defense-notices">
                   {plan.notices.map((notice) => (

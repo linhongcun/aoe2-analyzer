@@ -81,9 +81,9 @@ test.describe('#3 开局时间线', () => {
     await expect(page.locator('.tl-steps li.is-bad').filter({ hasText: '卡人口' }).first()).toBeVisible();
   });
 
-  test('5. 资源不足组合：步骤行显示「木头差 N」类缺口，轴上有红色区间', async ({ page }) => {
+  test('5. 资源不足组合：步骤行显示「木材差 N」类缺口，轴上有红色区间', async ({ page }) => {
     await openBuild(page, FIX.resource_short);
-    await expect(page.getByText(/(食物|木头|黄金|石头)差 \d+/).first()).toBeVisible();
+    await expect(page.getByText(/(食物|木材|黄金|石料)差 \d+/).first()).toBeVisible();
     await expect(page.locator('[data-short-range]').first()).toBeAttached();
     await expect(page.locator('[data-anomaly~="idle_tc"], [data-anomaly~="pop_block"]')).toHaveCount(0);
   });
@@ -114,21 +114,21 @@ test.describe('#3 开局时间线', () => {
     await expect(row.getByRole('region', { name: /步骤详情/ })).toBeVisible();
   });
 
-  test('7b. 没有卡人口：摘要主要卡点取同类等待合计最长的一类，写「卡在木头 约 m:ss」（合计时长）', async ({ page }) => {
+  test('7b. 没有卡人口：摘要主要卡点取同类等待合计最长的一类，写「卡在木材 约 m:ss」（合计时长）', async ({ page }) => {
     await openBuild(page, 'bo=fast-castle-boom');
     const cell = page.locator('[data-t="sum-bottleneck"]');
-    await expect(cell).toContainText(/卡在木头\s*约 \d+:\d{2}/);
+    await expect(cell).toContainText(/卡在木材\s*约 \d+:\d{2}/);
     await expect(cell).toContainText('第 5 步');
     await expect(cell).not.toContainText('起');
   });
 
-  test('8. 默认不显示资源数字；点步骤才显示食/木/黄金/石头和人口；再点收起', async ({ page }) => {
+  test('8. 默认不显示资源数字；点步骤才显示食/木/黄金/石料和人口；再点收起', async ({ page }) => {
     await openBuild(page, 'bo=scouts-18&civ=Franks');
     const detail = page.getByRole('region', { name: /步骤详情/ });
     await expect(detail).toHaveCount(0);
     await steps(page).nth(2).getByRole('button').click();
     await expect(page).toHaveURL(/[?&]step=3(&|$)/);
-    for (const k of ['食物', '木头', '黄金', '石头', '人口']) await expect(detail.getByText(k).first()).toBeVisible();
+    for (const k of ['食物', '木材', '黄金', '石料', '人口']) await expect(detail.getByText(k).first()).toBeVisible();
     await steps(page).nth(2).getByRole('button').click();
     await expect(detail).toHaveCount(0);
   });

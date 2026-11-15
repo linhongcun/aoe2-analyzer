@@ -28,7 +28,7 @@ const paren = (s: string) => s.slice(s.lastIndexOf('（') + 1, -1);
 const A_CASES = [
   { en: 'Malians', zh: '马里', labels: ['采金加成'], bon: ['村民存放的黄金额外 +10%'], noTech: true },
   { en: 'Poles', zh: '波兰', labels: ['波兰庄园农田加成', '波兰采石换金'], bon: ['大庄园替代磨坊', '石矿工不仅能产生石料，还能产生黄金'], noTech: false },
-  { en: 'Portuguese', zh: '葡萄牙', labels: ['采浆果同时产木头'], bon: ['采果工不仅能产生食物，还能产生木材'], noTech: true },
+  { en: 'Portuguese', zh: '葡萄牙', labels: ['采浆果同时产木材'], bon: ['采果工不仅能产生食物，还能产生木材'], noTech: true },
   { en: 'Shu', zh: '蜀', labels: ['伐木同时产食物'], bon: ['伐木工不仅能产生木材，还能产生食物'], noTech: true },
   { en: 'Sicilians', zh: '西西里', labels: ['农田食物储量'], bon: ['农田升级提供的食物 +125%'], noTech: false },
   { en: 'Khmer', zh: '高棉', labels: ['农田采集 −5%'], bon: ['农民不需要磨坊或城镇中心就可以存放食物'], noTech: true },

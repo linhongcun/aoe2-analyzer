@@ -38,7 +38,7 @@ for (const width of [360, 375, 390, 1280])
       await supported(page);
       const detail = page.getByRole('region', { name: '步骤详情', exact: true });
       await expect(detail).toContainText(/食物\s+200/);
-      await expect(detail).toContainText(/木头\s+200/);
+      await expect(detail).toContainText(/木材\s+200/);
       await expect(detail).toContainText(/人口\s+4\/5/);
       await layout(page);
       await page.screenshot({ path: info.outputPath(`gurjaras-timeline-${width}-${theme}.png`), fullPage: true });

@@ -15,6 +15,7 @@ import { applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './bu
 import { trainingCycle } from './trainingCycle';
 import { hasUniqueMayanTree } from './buildSimCivRules';
 import { SPECIAL_INCOME, type SpecialRes } from './specialIncome';
+import { RES_ZH } from './ratings';
 
 const VARANGIAN_INCOME = SPECIAL_INCOME.find((rule) => rule.flag === 'varangianGold');
 import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
@@ -240,7 +241,7 @@ export const ASSUMPTIONS = [
   '羊、野猪/鹿、浆果、农田按「近」距离计；木、金、石按所选走路距离计。',
   '资源点不会耗尽；不计引猪、推鹿、找羊、放置建筑的微操时间；「hunt」（城镇中心下的肉类）按牧羊速率计。',
   '建造时间：n 个村民同建一座建筑用时 = 建造时间 × 3 ÷ (n + 2)；没有指定建造者时借 1 名村民建造，建完回原任务。',
-  '自动补房：人口余量 ≤ 2 且没有在建房子时，借 1 名村民（优先伐木者）盖房，木头够 25 才盖（开局文字只写「按需盖房」的部分）。',
+  '自动补房：人口余量 ≤ 2 且没有在建房子时，借 1 名村民（优先伐木者）盖房，木材够 25 才盖（开局文字只写「按需盖房」的部分）。',
   '升级时代须先建完前置建筑（.dat 时代科技前置：封建/城堡/帝王各需前一时代任两种建筑，或城堡/营垒），没建完就等待并记为卡点；第二、三座城镇中心建成后不额外产村民。',
   '文明加成只计采集速率、携带量、移速、费用、训练/研究/建造时间、起始资源、免费科技；团队加成默认不计。',
   '误差带：同一开局分别用近（2 格）和远（7 格）走路距离再跑两次，取早晚差值，前后不对称。',
@@ -249,7 +250,7 @@ export const ASSUMPTIONS = [
 const TICK = 0.1;
 const MAX_T = 3600;
 const RES_OF: Record<string, Res> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
-const ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
+const ZH: Record<Res, string> = { food: RES_ZH.Food!, wood: RES_ZH.Wood!, gold: RES_ZH.Gold!, stone: RES_ZH.Stone! };
 const FOOD: Task[] = ['sheep', 'boar', 'deer', 'hunt', 'berries', 'farm', 'fish'];
 const RES_TASK: Record<Task, Res | null> = {
   sheep: 'food',
