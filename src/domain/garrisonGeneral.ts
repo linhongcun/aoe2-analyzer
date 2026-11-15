@@ -2,7 +2,7 @@
 import raw from '../../data/game/garrison_general.json';
 import { freeGarrisonTechs, GARRISON_TECH_DATA, implicitShapeTechs } from './garrisonTechs';
 import { DATA_PATCH_BUILD } from '../data/meta';
-import hostIds from '../../data/game/garrison_hosts.json';
+import { GARRISON_HOST_IDS as hostIds } from '../data/garrisonHosts';
 import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';

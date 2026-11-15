@@ -8,6 +8,7 @@
  *   core-json-direct    data/game/{civs,units,techs,buildings,trees,eco,effects}.json 只能由 LOADERS 里逐个登记的
  *                       7 个文件直接 import；src 下其他任何文件（含 shared/、app/、data/ 其他文件）都不行
  *   raw-direct          src/data/raw/* 只能由 src/data/** 内的文件 import；其他层同步读 src/data/core 的 CORE 或 src/data 的 civs
+ *   ui-data-json        features/、shared/、app/ 不直接 import src/data/ 或 data/game/ 下的 JSON
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
  * 用法：
@@ -31,6 +32,7 @@ export const RULES = {
   'domain-upward': 'domain/ 不能 import react、features/、app/、shared/ui',
   'core-json-direct': '核心数据 JSON 只能经 LOADERS 登记的文件读取',
   'raw-direct': 'src/data/raw/* 只能由 src/data/** import',
+  'ui-data-json': '界面层只能经类型化入口读取 src/data/ 与 data/game/ 的 JSON',
 };
 export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `data/game/${n}.json`);
 /**
@@ -215,6 +217,7 @@ export function classify(e) {
   }
   if (to && CORE_JSON.includes(to) && !LOADERS.has(from)) return 'core-json-direct';
   if (to && to.startsWith('src/data/raw/') && !from.startsWith('src/data/')) return 'raw-direct';
+  if (/^src\/(features|shared|app)\//.test(from) && to && /^(src\/data|data\/game)\/.*\.json$/.test(to)) return 'ui-data-json';
   return null;
 }
 

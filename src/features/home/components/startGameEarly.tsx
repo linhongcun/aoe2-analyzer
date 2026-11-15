@@ -47,8 +47,8 @@ let mapCache: MapEntry[] | null = null;
 /** 地图目录不进首页主包。点到地图步之前就开始读，避免主包超过入口预算。 */
 export function loadMaps(): Promise<MapEntry[]> {
   if (mapCache) return Promise.resolve(mapCache);
-  return import('../../../../data/game/mapCatalog.json').then((mod) => {
-    mapCache = mod.default.maps;
+  return import('../../../data/mapCatalog').then((mod) => {
+    mapCache = mod.MAP_CATALOG.maps;
     return mapCache;
   });
 }

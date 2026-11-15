@@ -11,7 +11,7 @@ for (const width of WIDTHS)
     let requests = 0;
     let expansion: Promise<void> | undefined;
     const held = new Promise<void>((resolve) => (release = resolve));
-    await page.route(/\/assets\/relic_income-[^/]+\.js(?:\?.*)?$/, async (route) => {
+    await page.route(/\/assets\/relicIncome-[^/]+\.js(?:\?.*)?$/, async (route) => {
       requests++;
       await held;
       await route.continue();

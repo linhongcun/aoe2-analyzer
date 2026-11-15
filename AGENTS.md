@@ -54,6 +54,8 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 
 ## 数据来源规则（最重要）
 
+专题数据也经类型化入口读取（#1031）：`src/data/garrisonHosts.ts` 导出只读 `GARRISON_HOST_IDS`；`ladder.ts` 导出 `ARABIA_SNAPSHOT`、`TEAM_SNAPSHOT`、`BEGINNER_NOTES`；`mapCatalog.ts` 导出 `MAP_CATALOG`；`relicIncome.ts` 导出 `RELIC_INCOME_RAW: unknown`，由调用方继续校验。`ui-data-json` 禁止 `features/`、`shared/`、`app/` 静态或动态 import `src/data/**/*.json` 和现位于 `data/game/**/*.json` 的载荷；功能自带 JSON 及已迁出的 `data/content/`、`data/reference/` 内容不受此规则限制。原按需读取地图/圣物的代码仍须动态 import 对应 TS 入口，保留失败重试。
+
 - **游戏数字只从数据里读，不要凭记忆写。** 来源：`data/game/civs.json` 等生成文件（派生自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) 固定提交）和由 DE 原版 `.dat` 派生的 `effects.json` / `eco.json`。issue、设计稿、测试里写的数字和数据不一致时，以数据为准，并在 issue 里说明。
 - 生成的 `data/game/*.json` 和 `public/img/*` **是提交在仓库里的**，但只能由脚本生成（`npm run data`、`npm run effects`、`npm run eco`），不要手改；CI 会校验 `effects.json`、`eco.json` 可由固定 `.dat` 原样复现。
 - **`.dat`（© Microsoft）和下载缓存 `scripts/.cache/` 绝不提交**（已 gitignore），只在构建时下载。
