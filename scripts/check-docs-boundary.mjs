@@ -25,6 +25,8 @@ export const READERS = Object.freeze({
   'scripts/check-design-index.mjs': '检查 docs/design/README.md 自身的死链和必需条目',
   'scripts/check-docs-boundary.mjs': '本检查',
   'scripts/effects_audit.ts': '--check 把重新排版的结果与 docs/reports/EFFECTS-AUDIT.md 整份比对',
+  'scripts/history_build.py': '--check 把重新排版的结果与 docs/reports/HISTORY-DATA.md 整份比对',
+  'scripts/patch_notes.py': '--check 把重新排版的结果与 docs/patch-notes/<补丁号>.md 比对',
   'tests/unit/docsBoundary1077.test.ts': '本检查的测试样例',
 });
 

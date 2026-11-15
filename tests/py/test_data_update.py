@@ -126,6 +126,17 @@ class PatchNotes(unittest.TestCase):
             self.assertEqual(patch_notes.check(root, fix=True), [])
             self.assertEqual(patch_notes.check(root), [])
 
+    def test_handwritten_note_keeps_its_upstream_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            note = dict(self.note(), changes=None)
+            view = patch_notes.write(dict(note, changes=diff({}, {})), root)
+            (root / 'data/patch-notes/200000.json').write_text(patch_notes.dump(note), encoding='utf-8')
+            view.write_text('# 手写说明\n\n' + patch_notes.upstream_line(note) + '\n', encoding='utf-8')
+            self.assertEqual(patch_notes.check(root), [])
+            view.write_text('# 手写说明\n\n上游：o/dat@0000000（2026-01-02）\n', encoding='utf-8')
+            self.assertEqual(patch_notes.check(root), ['docs/patch-notes/200000.md 的「上游：」行与记录不一致'])
+
     def test_committed_notes_match_their_records(self):
         self.assertEqual(patch_notes.check(ROOT), [])
 

@@ -51,6 +51,8 @@ def check(root=ROOT, fix=False):
         target = root / VIEWS / ('%s.md' % path.stem)
         if note['changes'] is None:
             if not target.is_file(): errors.append('%s/%s.md 缺失（手写说明）' % (VIEWS, path.stem))
+            elif upstream_line(note) not in target.read_text(encoding='utf-8').splitlines():
+                errors.append('%s/%s.md 的「上游：」行与记录不一致' % (VIEWS, path.stem))
         elif fix:
             write(note, root)
         elif not target.is_file() or target.read_text(encoding='utf-8') != view(note):

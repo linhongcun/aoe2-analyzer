@@ -773,7 +773,6 @@ export function planChanges(changes) {
     } else if (
       path === 'data/reference/civs/backgrounds.source.json' ||
       path === 'data/reference/civs/backgrounds.json' ||
-      path === 'src/features/civs/import_backgrounds.py' ||
       path === 'scripts/import_backgrounds.py' ||
       path.startsWith('src/features/civs/assets/backgrounds/')
     ) {
