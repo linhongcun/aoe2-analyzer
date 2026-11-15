@@ -111,7 +111,7 @@
   overflow: hidden;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
-  background: var(--color-surface-2);
+  background: var(--color-surface);
 }
 
 .ud-reverse-group-toggle {
@@ -124,7 +124,7 @@
   padding: var(--space-3) var(--space-4);
   border: 0;
   color: var(--color-text);
-  background: transparent;
+  background: var(--color-surface-2);
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -218,6 +218,33 @@
   background: var(--color-surface-2);
 }
 
+.ud-reverse-empty-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  text-align: center;
+}
+
+.ud-reverse-empty-panel h3,
+.ud-reverse-empty-panel p {
+  margin: 0;
+}
+
+.ud-reverse-empty-panel p {
+  max-width: 60ch;
+  color: var(--color-muted);
+}
+
+.ud-reverse-empty-panel .ud-btn {
+  min-height: 44px;
+}
+
 .ud-reverse-warning {
   border-left: 3px solid var(--color-warn);
 }
@@ -237,7 +264,7 @@
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
 }
 
 .ud-reverse-pk-sides {
@@ -255,7 +282,7 @@
   padding: var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface-2);
+  background: var(--color-surface);
 }
 
 .ud-reverse-pk-link {
@@ -319,7 +346,9 @@
   margin-top: var(--space-3);
 }
 
-.ud-reverse-primary {
+.ud-reverse .ud-reverse-pk-actions > a.ud-reverse-primary[href]:not([aria-disabled='true']),
+.ud-reverse .ud-reverse-group button.ud-reverse-pk-button[aria-expanded='true']:not(:disabled) {
+  border-color: var(--color-accent);
   color: var(--color-on-accent);
   background: var(--color-accent);
 }

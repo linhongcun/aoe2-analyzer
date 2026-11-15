@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { reverseCounterSessionKey } from '../../src/features/units/reverseCounterSession';
 import { treesWithoutBohemianHandCannoneer } from './reverseCounterTreeFixture';
+import './reverseCounters1053LocationAndDesign';
 import './reverseCounters1053RestoreCancellation';
+
+const reverseSessionKey = (targetId: number, civ: string, pathname: string, search = '', hash = '') =>
+  reverseCounterSessionKey(targetId, civ, { pathname, search, hash })!;
 
 async function selectCiv(page: import('@playwright/test').Page, id: string, civ: string) {
   await page.locator(id).click();
@@ -31,7 +36,7 @@ test('反向列表筛选到真实形态后，PK 链接保留双方文明与时�
 
   const row = panel.locator('[data-reverse-row]').filter({ hasText: '火枪手' }).first();
   await expect(row).toBeVisible();
-  await expect(panel.getByText('当前筛选下没有正贡献类别匹配。可清除筛选查看基础目录。')).toHaveCount(0);
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
   await row.locator('[data-t="reverse-counter-pk"]').click();
   const duel = row.locator('[data-t="reverse-counter-open-duel"]');
   await expect(duel).toHaveAttribute('href', '#/duel?a=93.Franks.3..&b=5.Bohemians.3..&m=1');
@@ -121,17 +126,19 @@ test('默认无目标文明的目录会用 none 会话键恢复，且缺失行�
   await targetLink.click();
   await expect(page).toHaveURL(/#\/unit\/279$/);
 
-  const saved = await page.evaluate(() => {
-    const key = 'unit-reverse-counters:v1:761:none';
-    const value = JSON.parse(sessionStorage.getItem(key) ?? 'null');
-    if (value) {
-      value.anchor = 'removed-reverse-row';
-      value.fallbackAnchor = 'removed-reverse-group';
-      value.focus = null;
-      sessionStorage.setItem(key, JSON.stringify(value));
-    }
-    return value;
-  });
+  const saved = await page.evaluate(
+    (key) => {
+      const value = JSON.parse(sessionStorage.getItem(key) ?? 'null');
+      if (value) {
+        value.anchor = 'removed-reverse-row';
+        value.fallbackAnchor = 'removed-reverse-group';
+        value.focus = null;
+        sessionStorage.setItem(key, JSON.stringify(value));
+      }
+      return value;
+    },
+    reverseSessionKey(761, '', '/unit/761', '?tab=sim&keep=1'),
+  );
   expect(saved?.location.pathname).toBe('/unit/761');
   expect(saved?.location.search).toBe('?tab=sim&keep=1');
   await page.goBack();
@@ -157,7 +164,7 @@ test('默认无目标文明的目录会用 none 会话键恢复，且缺失行�
 
 test('761 Goths 的空白新会话在科技树加载更新后不显示恢复提示', async ({ page }) => {
   await page.goto('./#/');
-  const existingSessions = await page.evaluate(() => Object.keys(sessionStorage).filter((key) => key.startsWith('unit-reverse-counters:v1:761:')));
+  const existingSessions = await page.evaluate(() => Object.keys(sessionStorage).filter((key) => key.startsWith('unit-reverse-counters:')));
   expect(existingSessions).toEqual([]);
 
   let announceRequest!: () => void;
@@ -178,6 +185,7 @@ test('761 Goths 的空白新会话在科技树加载更新后不显示恢复提�
   await expect(panel.locator('#reverse-counter-age')).toHaveValue('');
   await expect(panel.locator('.ud-reverse-restore')).toHaveCount(0);
   await expect(panel.getByRole('status').filter({ hasText: '已恢复' })).toHaveCount(0);
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
 
   releaseRequest();
   await navigation;
@@ -186,7 +194,11 @@ test('761 Goths 的空白新会话在科技树加载更新后不显示恢复提�
   await expect(panel.locator('#reverse-counter-age')).toHaveValue('');
   await expect(panel.locator('.ud-reverse-restore')).toHaveCount(0);
   await expect(panel.getByRole('status').filter({ hasText: '已恢复' })).toHaveCount(0);
-  const ownSavedSession = await page.evaluate(() => JSON.parse(sessionStorage.getItem('unit-reverse-counters:v1:761:Goths') ?? 'null'));
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
+  const ownSavedSession = await page.evaluate(
+    (key) => JSON.parse(sessionStorage.getItem(key) ?? 'null'),
+    reverseSessionKey(761, 'Goths', '/unit/761', '?civ=Goths'),
+  );
   expect(ownSavedSession).not.toBeNull();
   expect(ownSavedSession.filters).toEqual({ civ: '', age: null });
   expect(ownSavedSession.openPk).toBeNull();
@@ -310,10 +322,12 @@ test('40 的城堡时代 PK、83 基础空结果与 Britons 黑暗时代筛选�
 
   await page.goto('./#/unit/83');
   const villagerPanel = page.locator('#unit-reverse-counters');
-  await expect(villagerPanel.getByText('基础目录未找到正贡献类别匹配；这不表示该单位没有反制方式。')).toBeVisible();
+  await expect(villagerPanel.locator('[data-t="reverse-counter-empty"] h3')).toHaveText('基础目录未找到正贡献类别匹配');
+  await expect(villagerPanel.locator('[data-reverse-group]')).toHaveCount(0);
   await selectCiv(page, '#reverse-counter-civ', 'Britons');
   await page.locator('#reverse-counter-age').selectOption('1');
-  await expect(villagerPanel.getByText('当前筛选下没有正贡献类别匹配。可清除筛选查看基础目录。')).toBeVisible();
+  await expect(villagerPanel.locator('[data-t="reverse-counter-empty"] h3')).toHaveText('当前筛选下无正贡献匹配');
+  await expect(villagerPanel.locator('[data-reverse-group]')).toHaveCount(0);
 });
 
 test('科技树网络失败可重试，保留筛选并恢复可用目录', async ({ page }) => {
@@ -342,11 +356,13 @@ test('科技树网络失败可重试，保留筛选并恢复可用目录', async
   const panel = page.locator('#unit-reverse-counters');
   await expect(panel).toBeVisible();
   await expect(panel).toHaveAttribute('aria-busy', 'true');
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
   releaseRequest();
   await navigation;
   await selectCiv(page, '#reverse-counter-civ', 'Mayans');
   await page.locator('#reverse-counter-age').selectOption('3');
   await expect(panel.getByRole('button', { name: '重试目录资料' }).first()).toBeVisible();
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
   expect(blockedRequests).toBeGreaterThan(0);
   allowRetry = true;
   await panel.getByRole('button', { name: '重试目录资料' }).first().click();
@@ -363,10 +379,13 @@ test('真实科技树延迟期间恢复所选 PK 摘要，加载后只恢复原�
   const { panel } = await openBohemiansPk(page);
   await expect
     .poll(() =>
-      page.evaluate(() => {
-        const value = JSON.parse(sessionStorage.getItem('unit-reverse-counters:v1:93:Franks') ?? 'null');
-        return value?.openPk?.id ?? null;
-      }),
+      page.evaluate(
+        (key) => {
+          const value = JSON.parse(sessionStorage.getItem(key) ?? 'null');
+          return value?.openPk?.id ?? null;
+        },
+        reverseSessionKey(93, 'Franks', '/unit/93/Franks/3'),
+      ),
     )
     .toBe(5);
 
@@ -398,7 +417,7 @@ test('真实科技树延迟期间恢复所选 PK 摘要，加载后只恢复原�
 
 test('科技树变更排除原形态时保留原形态并明确禁用 PK', async ({ page }) => {
   const { panel } = await openBohemiansPk(page);
-  const saved = await page.evaluate(() => JSON.parse(sessionStorage.getItem('unit-reverse-counters:v1:93:Franks') ?? 'null'));
+  const saved = await page.evaluate((key) => JSON.parse(sessionStorage.getItem(key) ?? 'null'), reverseSessionKey(93, 'Franks', '/unit/93/Franks/3'));
   expect(saved.openPk.id).toBe(5);
 
   const changedTrees = treesWithoutBohemianHandCannoneer();
@@ -421,19 +440,21 @@ test('科技树变更排除原形态时保留原形态并明确禁用 PK', async
 
 test('恢复记录中的形态 ID 若不在当前 Core 正贡献结果中，不显示可信 PK 摘要', async ({ page }) => {
   const { panel } = await openBohemiansPk(page);
-  const corruptedId = await page.evaluate(() => {
-    const key = 'unit-reverse-counters:v1:93:Franks';
-    const saved = JSON.parse(sessionStorage.getItem(key) ?? 'null');
-    if (saved) {
-      saved.openPk.id = 999999;
-      sessionStorage.setItem(key, JSON.stringify(saved));
-      const write = sessionStorage.setItem.bind(sessionStorage);
-      sessionStorage.setItem = (name, value) => {
-        if (name !== key) write(name, value);
-      };
-    }
-    return saved?.openPk.id;
-  });
+  const corruptedId = await page.evaluate(
+    (key) => {
+      const saved = JSON.parse(sessionStorage.getItem(key) ?? 'null');
+      if (saved) {
+        saved.openPk.id = 999999;
+        sessionStorage.setItem(key, JSON.stringify(saved));
+        const write = sessionStorage.setItem.bind(sessionStorage);
+        sessionStorage.setItem = (name, value) => {
+          if (name !== key) write(name, value);
+        };
+      }
+      return saved?.openPk.id;
+    },
+    reverseSessionKey(93, 'Franks', '/unit/93/Franks/3'),
+  );
   expect(corruptedId).toBe(999999);
 
   let announceRequest!: () => void;
@@ -538,12 +559,13 @@ test('成功载入但结构损坏的科技树重验后仍保持未知', async ({
   await page.goto('./#/unit/359/Franks/4');
   const panel = page.locator('#unit-reverse-counters');
   await expect(panel.getByRole('alert').getByText('科技树结构无法解析，暂时不能判断筛选结果。')).toBeVisible();
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
   await selectCiv(page, '#reverse-counter-civ', 'Mayans');
   await page.locator('#reverse-counter-age').selectOption('3');
   await expect(panel.getByRole('button', { name: '重试目录资料' }).first()).toBeVisible();
   await panel.getByRole('button', { name: '重试目录资料' }).first().click();
   await expect(panel.getByRole('alert').getByText('科技树结构无法解析，暂时不能判断筛选结果。')).toBeVisible();
-  await expect(panel.getByText('当前筛选下没有正贡献类别匹配。可清除筛选查看基础目录。')).toHaveCount(0);
+  await expect(panel.locator('[data-t="reverse-counter-empty"]')).toHaveCount(0);
   await expect(panel.locator('#reverse-counter-civ')).toContainText('Mayans');
   await expect(panel.locator('#reverse-counter-age')).toHaveValue('3');
   expect(malformedCacheInjected).toBe(true);
@@ -554,7 +576,7 @@ test('没有实际阅读目录时会话不把模拟器位置滚到反向查询',
   await page.goto('./#/unit/761?tab=sim&keep=1');
   await page.waitForFunction(() => !!document.querySelector('#unit-reverse-counters'));
   await expect(page.locator('#unit-sim')).toBeVisible();
-  const key = 'unit-reverse-counters:v1:761:none';
+  const key = reverseSessionKey(761, '', '/unit/761', '?tab=sim&keep=1');
   await expect.poll(() => page.evaluate((sessionKey) => sessionStorage.getItem(sessionKey), key)).not.toBeNull();
   const saved = await page.evaluate((sessionKey) => JSON.parse(sessionStorage.getItem(sessionKey) ?? 'null'), key);
   expect(saved.anchor).toBeNull();

@@ -25,9 +25,10 @@ const isStringList = (value: unknown): value is string[] =>
   Array.isArray(value) && value.length <= 100 && value.every((item) => typeof item === 'string' && item.length <= 160);
 const sameLocation = (a: ReverseCounterLocation, b: ReverseCounterLocation) => a.pathname === b.pathname && a.search === b.search && a.hash === b.hash;
 
-export function reverseCounterSessionKey(targetId: number | null, civ: string): string | null {
+export function reverseCounterSessionKey(targetId: number | null, civ: string, location: ReverseCounterLocation): string | null {
   if (targetId === null || !Number.isSafeInteger(targetId) || targetId <= 0) return null;
-  return `unit-reverse-counters:v1:${targetId}:${civ.trim() ? civ : 'none'}`;
+  const locationScope = encodeURIComponent(JSON.stringify([civ.trim() ? civ : 'none', location.pathname, location.search, location.hash]));
+  return `unit-reverse-counters:v2:${targetId}:${locationScope}`;
 }
 
 export function decodeReverseCounterSession(raw: string | null, location: ReverseCounterLocation): ReverseCounterSession | null {
@@ -115,9 +116,8 @@ export function writeReverseCounterSession(
 }
 
 export function useReverseCounterSession(targetId: number | null, civ: string, location: ReverseCounterLocation) {
-  const key = reverseCounterSessionKey(targetId, civ);
-  const locationKey = `${location.pathname}\n${location.search}\n${location.hash}`;
-  const handledKey = `${key ?? 'none'}\n${locationKey}`;
+  const key = reverseCounterSessionKey(targetId, civ, location);
+  const handledKey = JSON.stringify([key, location.pathname, location.search, location.hash]);
   const [snapshot, setSnapshot] = useState(() => ({
     identity: handledKey,
     lifecycle: 1,

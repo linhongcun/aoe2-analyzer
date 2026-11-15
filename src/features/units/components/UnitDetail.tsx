@@ -70,7 +70,7 @@ export default function UnitDetail() {
   const rawTarget = core && rt ? core.unitById[rt.id] : undefined;
   const targetProjection = rawTarget ? projectUnitForDetail(rawTarget) : null;
   const u = targetProjection?.unit;
-  const savedReverseSession = readReverseCounterSession(reverseCounterSessionKey(rt?.id ?? null, context?.en ?? ''), loc);
+  const savedReverseSession = readReverseCounterSession(reverseCounterSessionKey(rt?.id ?? null, context?.en ?? '', loc), loc);
   const hasSavedReverseReaderLocation = !!(savedReverseSession?.anchor || savedReverseSession?.fallbackAnchor);
   const workspace = rt ? unitWorkspaceOpen(rt, loc.search) : false;
   const setHistory = (open: boolean) => {

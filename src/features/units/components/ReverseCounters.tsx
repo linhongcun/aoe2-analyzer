@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { startTransition, useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { civs, type Core } from '../../../data';
 import {
@@ -14,6 +14,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { useReverseCounterSession, writeReverseCounterSession, type ReverseCounterLocation, type ReverseCounterSession } from '../reverseCounterSession';
 import { AGE_ZH } from './ReverseCounterAvailability';
+import { ReverseCounterEmptyState } from './ReverseCounterEmptyState';
 import { getPkUnavailableReason, PkSummary, RetainedPkSummary, selectPkSummaryMode } from './ReverseCounterPkSummary';
 import './reverse-counters.css';
 
@@ -59,6 +60,7 @@ function CounterGroup({
   pkAllowed,
   pkUnavailableReason,
   filterActive,
+  showNoRows,
   returnFocus,
 }: {
   group: ReverseCounterGroup;
@@ -80,6 +82,7 @@ function CounterGroup({
   pkAllowed: boolean;
   pkUnavailableReason: string;
   filterActive: boolean;
+  showNoRows: boolean;
   returnFocus: (id: string) => void;
 }) {
   const visibleRows = expanded ? group.rows : group.rows.slice(0, 5);
@@ -187,7 +190,7 @@ function CounterGroup({
               )}
             </button>
           )}
-          {!group.rows.length && (
+          {!group.rows.length && showNoRows && (
             <p className="ud-reverse-no-row">{filterActive ? '当前筛选下没有该类别的正贡献匹配。' : '基础目录未找到该类别的正贡献匹配。'}</p>
           )}
         </div>
@@ -336,25 +339,24 @@ export function ReverseCounters({
   useEffect(() => {
     if (!sessionStateReady || !restorePending || !sessionRecord || treesPending || corePending || coreError) return;
     const record = sessionRecord;
+    const exact = record.anchor ? document.getElementById(record.anchor) : null;
+    const fallback = record.fallbackAnchor ? document.getElementById(record.fallbackAnchor) : null;
+    const destination = record.anchor || record.fallbackAnchor ? (exact ?? fallback ?? document.getElementById('unit-reverse-counters')) : null;
+    let note = exact ? '已恢复上次筛选与阅读位置。' : '已恢复本单位、敌方筛选与阅读位置；原结果行已变化，已定位到本类或查询区。';
+    if (!record.anchor && !record.fallbackAnchor) note = '已恢复上次筛选与展开状态；保持当前阅读位置。';
+    if (record.openPk && !basePkRow) note = '所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。';
+    if (restoreNote !== note) return startTransition(() => setRestoreNote(note));
     const frame = requestAnimationFrame(() => {
-      const exact = record.anchor ? document.getElementById(record.anchor) : null;
-      const fallback = record.fallbackAnchor ? document.getElementById(record.fallbackAnchor) : null;
-      const hasReaderLocation = !!(record.anchor || record.fallbackAnchor);
-      const destination = hasReaderLocation ? (exact ?? fallback ?? document.getElementById('unit-reverse-counters')) : null;
       if (destination) window.scrollTo({ top: window.scrollY + destination.getBoundingClientRect().top - record.offset, behavior: 'auto' });
       const focus =
         (record.focus ? document.getElementById(record.focus) : null) ??
         (record.openPk ? document.getElementById(pkButtonId(record.openPk.category, record.openPk.id)) : null);
       if (record.focus || (record.openPk && destination)) (focus ?? destination)?.focus({ preventScroll: true });
-      if (record.openPk && !basePkRow) setRestoreNote('所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
-      else if (!hasReaderLocation) setRestoreNote('已恢复上次筛选与展开状态；保持当前阅读位置。');
-      else if (!exact) setRestoreNote('已恢复本单位、敌方筛选与阅读位置；原结果行已变化，已定位到本类或查询区。');
-      else setRestoreNote('已恢复上次筛选与阅读位置。');
       if (record.openPk) setOriginButton(pkButtonId(record.openPk.category, record.openPk.id));
       markRestored();
     });
     return () => cancelAnimationFrame(frame);
-  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, markRestored]);
+  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, restoreNote, markRestored]);
 
   useEffect(() => {
     if (sessionStateReady && !currentSession.restorePending) saveSession();
@@ -403,12 +405,11 @@ export function ReverseCounters({
     saveSession(row?.id ?? group?.id, group?.id, rowOffset, focus);
   };
 
-  const emptyText =
-    queryCount === 0 && result.state === 'ready'
-      ? filterActive
-        ? '当前筛选下没有正贡献类别匹配。可清除筛选查看基础目录。'
-        : '基础目录未找到正贡献类别匹配；这不表示该单位没有反制方式。'
-      : '';
+  const dataIsResolved = !corePending && !coreError && !treesPending && !treesError;
+  const readyResults = result.state === 'ready' && dataIsResolved && targetIssues.length === 0;
+  const emptyPanelKind = queryCount === 0 && readyResults ? (filterActive ? 'filtered' : 'base') : null;
+  const partialEmpty = queryCount === 0 && result.state === 'partial' && dataIsResolved;
+  const visibleGroups = emptyPanelKind || (queryCount === 0 && !readyResults) ? [] : result.groups;
 
   return (
     <section
@@ -539,15 +540,12 @@ export function ReverseCounters({
           ))}
         </div>
       )}
-      {emptyText && (
-        <p className="ud-reverse-empty" role="status">
-          {emptyText}
-        </p>
-      )}
-      {result.state === 'partial' && queryCount === 0 && !corePending && !coreError && (
-        <p className="ud-reverse-empty">部分目录资料无法解析，暂时不能确认类别贡献；这不是零匹配。</p>
-      )}
-      {result.groups.map((group) => (
+      {emptyPanelKind === 'base' ? <ReverseCounterEmptyState kind="base" /> : null}
+      {emptyPanelKind === 'filtered' ? (
+        <ReverseCounterEmptyState kind="filtered" targetName={target.zh} onClear={() => changeFilter({ civ: '', age: null })} />
+      ) : null}
+      {!emptyPanelKind && partialEmpty ? <ReverseCounterEmptyState kind="partial" /> : null}
+      {visibleGroups.map((group) => (
         <CounterGroup
           key={group.category}
           group={group}
@@ -571,6 +569,7 @@ export function ReverseCounters({
           pkAllowed={pkAllowed}
           pkUnavailableReason={pkUnavailableReason}
           filterActive={filterActive}
+          showNoRows={readyResults}
           returnFocus={closePk}
         />
       ))}
