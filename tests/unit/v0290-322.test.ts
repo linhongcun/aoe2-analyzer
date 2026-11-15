@@ -2,7 +2,8 @@
  * v0.29.0 验收（#329）C 组：#322 纯重构金标准。Kent 写；从 test/v0290-acceptance@3e181f1 的 v0290-C.test.ts 搬入。
  * #328 已并入 main（tests/unit/v0290-328.test.ts）。
  * 期望值在 main @ bb2235a（v0.28.0 发布提交）上一次性录下，存在 fixtures/v0290-322-golden.json，
- * 这里只比对（现在就应通过，重构后也必须通过）。如确需重录，须在 PR 里说明并由 Kent 重录。
+ * #1046 审计：#864/#871 已批准改用 .dat 原始乘数，6048 行中仅 126 行变化（德罗毗荼24、哥特6、印加38、高丽40、玛雅6、维京12），
+ * 全部采集速率及其余5922行不变；逐行核过原始乘数、取整、村民秒和派出数后更新，详见 #1046 软件开发记录。
  * 录制命令：V0290_RECORD=1 npx vitest run tests/unit/v0290-322.test.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -51,7 +52,7 @@ function compute(): Record<string, Row> {
   return out;
 }
 
-describe('#322 纯重构：真实成本与 PK 派出数量的金标准（bb2235a 录制）', () => {
+describe('#322 真实成本与 PK 派出数量金标准（bb2235a，#864 原始乘数审计更新）', () => {
   const got = compute();
   if (process.env.V0290_RECORD) writeFileSync(FIXTURE, JSON.stringify(got) + '\n');
   const want = JSON.parse(readFileSync(FIXTURE, 'utf8')) as Record<string, Row>;
@@ -59,7 +60,7 @@ describe('#322 纯重构：真实成本与 PK 派出数量的金标准（bb2235a
     expect(Object.keys(got).sort()).toEqual(Object.keys(want).sort());
     expect(Object.keys(want)).toHaveLength((civsRaw as unknown[]).length * (UNIT_IDS.length + 1) * 4);
   });
-  it('每组的折后价、采集时间和派出数量与 v0.28.0 完全一致', () => {
+  it('每组的折后价、采集时间和派出数量与已审计金标准完全一致', () => {
     const diff = Object.keys(want).filter((k) => JSON.stringify(got[k]) !== JSON.stringify(want[k]));
     expect(diff.slice(0, 20), `${diff.length} 组不一致`).toEqual([]);
   });
@@ -83,12 +84,18 @@ describe('#322 纯重构：真实成本与 PK 派出数量的金标准（bb2235a
   });
 });
 
-// 金标准本身对照公开来源（不只是现状输出）：aoe2techtree.net data.json 基础造价 + Fandom 文明页的折扣文字
+// 金标准抽查不调用计算函数：固定目录基价 × 已审核 .dat 原始乘数，不再用文字百分比代替乘数。
 describe('#322 金标准抽查对照公开数据', () => {
   const want = JSON.parse(readFileSync(FIXTURE, 'utf8')) as Record<string, Row>;
   it.each([
     // [key, 期望 exact, 依据]
-    ['74|Goths|4', { Food: 35, Gold: 14 }, '民兵 50 食 20 金；哥特帝王时代步兵 -30%'],
+    ['74|Goths|4', { Food: 50 * 0.700367, Gold: 20 * 0.700367 }, '民兵 50 食 20 金；哥特帝王 .dat 原始乘数 0.700367，显示仍为35食14金'],
+    ['280|Dravidians|3', { Gold: 135, Wood: 160 * 0.666667 }, '德罗毗荼攻城器木材原始乘数 0.666667'],
+    ['6|Incas|3', { Food: 25 * 0.748425, Wood: 35 }, '印加城堡时代军事单位食物原始乘数 0.748425'],
+    ['4|Koreans|2', { Gold: 45, Wood: 25 * 0.5 }, '高丽步弓木材乘数 0.5'],
+    ['21|Koreans|2', { Gold: 30, Wood: 90 * 0.8 }, '高丽战船已审计跨句木材乘数 0.8'],
+    ['492|Mayans|4', { Gold: 45 * 0.70488, Wood: 25 * 0.70488 }, '玛雅劲弩手帝王原始乘数 0.70488'],
+    ['21|Vikings|2', { Gold: 30 * 0.847053, Wood: 90 * 0.847053 }, '维京封建战船原始乘数 0.847053'],
     ['93|Byzantines|2', { Food: 26.25, Wood: 18.75 }, '长矛兵 35 食 25 木；拜占庭长矛兵系 -25%'],
     ['279|Romans|3', { Gold: 37.5, Wood: 75 }, '蝎式弩 75 木 75 金；罗马黄金 -50%'],
     ['38|Portuguese|3', { Food: 60, Gold: 60 }, '骑士 60 食 75 金；葡萄牙所有单位黄金 -20%'],

@@ -186,7 +186,7 @@ describe('开一局步骤 #592', () => {
     expect(panel.kind).toBe('side');
     if (panel.kind !== 'side') return;
     expect(panel.side).toBe('pocket');
-    expect(panel.tips[0]).toEqual({ civ: 'Franks', reason: frank });
+    expect(panel.tips[0]).toEqual({ civ: 'Franks', reason: frank, source: 'civs.json', checkedAt: '2026-11-09' });
     const flank = civPanels(chooseLane(configured, 'flank'));
     expect(flank.kind === 'side' && flank.tips[0]?.civ).toBe('Britons');
     const picked = pickCiv(chooseLane(configured, 'pocket'), 'Franks');

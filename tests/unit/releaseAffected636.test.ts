@@ -39,13 +39,15 @@ describe('PR 专项浏览器覆盖 #636', () => {
     expect(selected).toContain('tests/e2e/smoke.spec.ts');
     expect(selected).not.toContain('tests/e2e/v0300-338.spec.ts');
     const family = path.includes('ladder') ? 'ladder' : 'startGame';
-    const expected = [
-      'tests/e2e/smoke.spec.ts',
-      ...readdirSync('tests/e2e')
-        .filter((name) => name.startsWith(family) && name.endsWith('.spec.ts'))
-        .map((name) => `tests/e2e/${name}`),
-    ];
-    if (family === 'startGame') expected.push('tests/e2e/editorial6.spec.ts', 'tests/e2e/mechanism652.spec.ts', 'tests/e2e/routes652.spec.ts');
+    const expected =
+      family === 'startGame'
+        ? ['smoke', 'editorial6', 'startGame592', 'startGame632', 'mechanism652', 'routes652'].map((name) => `tests/e2e/${name}.spec.ts`)
+        : [
+            'tests/e2e/smoke.spec.ts',
+            ...readdirSync('tests/e2e')
+              .filter((name) => name.startsWith('ladder') && name.endsWith('.spec.ts'))
+              .map((name) => `tests/e2e/${name}`),
+          ];
     expect(selected).toEqual(expected.sort());
   });
 

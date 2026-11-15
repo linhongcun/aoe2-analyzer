@@ -57,18 +57,19 @@ describe('#585 战车真实单位页训练造价', () => {
 
   it.each([1759, 1761])('单位 %i 在真实造价分区明确训练不消耗食物', (id) => {
     const html = renderDetail(id);
-    const cost = section(html, '造价与生产');
+    const cost = section(html, '目录基础属性与造价');
     expect(cost).toMatch(/alt="木材"[^>]*>60</);
     expect(cost).toMatch(/alt="黄金"[^>]*>60</);
     expect(cost).not.toContain('alt="食物"');
-    expect(html).toContain('data-testid="insight-empty">暂无</p>');
+    expect(html).not.toContain('data-testid="insight-empty"');
     expect(cost).toContain(trainingNote);
-    expect(cost.indexOf(trainingNote)).toBeGreaterThan(cost.indexOf('</dl>'));
-    expect(cost.indexOf(trainingNote)).toBeLessThan(cost.indexOf('class="rc-uline"'));
+    expect(cost).toContain('data-t="catalog-cost"');
+    expect(cost.indexOf(trainingNote)).toBeGreaterThan(cost.indexOf('data-t="catalog-cost"'));
+    expect(cost).not.toContain('精锐升级研究');
   });
 
   it.each([38, 1962, 39])('真实单位 %i 不按名字或全部无粮成本误显示提示', (id) => {
-    const cost = section(renderDetail(id), '造价与生产');
+    const cost = section(renderDetail(id), '目录基础属性与造价');
     expect(cost).not.toContain(trainingNote);
   });
 
@@ -76,7 +77,7 @@ describe('#585 战车真实单位页训练造价', () => {
     const original = fixedCore.unitById[id]!;
     const originalCost = JSON.stringify(original.cost);
     const replacement: Unit = { ...original, cost: { ...original.cost, Food: 1 } };
-    const cost = section(renderDetail(id, replacement), '造价与生产');
+    const cost = section(renderDetail(id, replacement), '目录基础属性与造价');
     expect(cost).toMatch(/alt="食物"[^>]*>1</);
     expect(cost).toMatch(/alt="木材"[^>]*>60</);
     expect(cost).toMatch(/alt="黄金"[^>]*>60</);
@@ -86,10 +87,10 @@ describe('#585 战车真实单位页训练造价', () => {
   });
 
   it('训练无粮不抹去真实精锐升级的800食物、800木材和45秒', () => {
-    const upgrade = section(renderDetail(1761), '精锐升级');
+    const upgrade = section(renderDetail(1761), '如何获得与升级');
     expect(upgrade).toMatch(/alt="食物"[^>]*>800</);
     expect(upgrade).toMatch(/alt="木材"[^>]*>800</);
-    expect(upgrade).toContain('45s');
+    expect(upgrade).toContain('45秒');
     expect(upgrade).not.toContain(trainingNote);
   });
 });

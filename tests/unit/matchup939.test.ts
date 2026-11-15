@@ -19,7 +19,7 @@ describe('#939 对局助手主页信息层级', () => {
     expect(page).toContain('请补选对手文明后查看跟对阵走的入口。');
     expect(page).toContain('当前我方暂无可用的类型对照单位');
     expect(page).toContain('选定双方文明后，会按对手登记类型取出通用对照表，再只列出我方能造的单位。这里不生成针对某个对手的专属分析。');
-    expect(page).toContain('三份指南仍在原路由，内容不并进本页，也不新增情境。');
+    expect(page).toContain('三个独立战术工具；不会自动带入上方文明，请在工具内填写本局观察。');
     expect(page).toContain('to="/matchup/scouting"');
     expect(page).toContain('to="/match-review"');
     expect(page).toContain('to="/team-plan"');
