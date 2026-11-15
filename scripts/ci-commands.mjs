@@ -1,4 +1,7 @@
-/** Stable command IDs are recorded only after the corresponding command exits successfully. */
+/** Single source of truth for the deterministic check groups run by .github/workflows/ci.yml and full.yml. */
+import { execFileSync } from 'node:child_process';
+import { GATE_NARROW_SMOKE, BUILD_IDENTITY_TITLE } from './ci-scope.mjs';
+
 export const STATIC_CHECKS = [
   ['lint', 'npm', ['run', 'lint']],
   ['typecheck', 'npx', ['tsc', '-p', '.', '--noEmit']],
@@ -7,12 +10,14 @@ export const STATIC_CHECKS = [
   ['validators', 'npm', ['run', 'content:validators', '--', '--check']],
   ['layers', 'npm', ['run', 'lint:layers', '--', '--strict']],
 ];
-export function mainChecks(plan) {
-  return [
-    ['unused', 'npm', ['run', 'unused:check']],
-    ['contrast', 'python3', ['docs/design/contrast.py']],
-    ...(plan.full ? [['introductions', 'npm', ['run', 'introductions:check']]] : []),
-  ];
+export const MAIN_CHECKS = [
+  ['unused', 'npm', ['run', 'unused:check']],
+  ['contrast', 'python3', ['docs/design/contrast.py']],
+  ['introductions', 'npm', ['run', 'introductions:check']],
+];
+/** Kept for callers that still pass the old plan object. */
+export function mainChecks() {
+  return MAIN_CHECKS;
 }
 const python = (id, script, ...args) => [id, 'python3', [script, ...args]];
 const diff = (id, ...paths) => [id, 'git', ['diff', '--exit-code', '--', ...paths]];
@@ -48,37 +53,41 @@ export const DATA_CHECKS = [
   python('civ-backgrounds', 'src/features/civs/import_backgrounds.py', '--check'),
   ['build-orders', 'npm', ['run', 'bo:check']],
 ];
-export async function executeChecks(commands, budget, options = {}) {
-  const completed = [];
+const escape = (title) => title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export const SMOKE_CHECKS = [
+  [
+    'smoke',
+    'npx',
+    [
+      'playwright',
+      'test',
+      'tests/e2e/smoke.spec.ts',
+      'tests/e2e/ciBuild659.spec.ts',
+      '--reporter=line',
+      '--grep',
+      `(${[...GATE_NARROW_SMOKE.map((entry) => entry.title), BUILD_IDENTITY_TITLE].map(escape).join('|')})$`,
+    ],
+  ],
+];
+export const CHECK_GROUPS = { static: STATIC_CHECKS, main: MAIN_CHECKS, data: DATA_CHECKS, smoke: SMOKE_CHECKS };
+
+export function runChecks(commands, { run = execFileSync } = {}) {
   for (const [id, command, args] of commands) {
     console.log(`CI check: ${id}`);
-    await budget.run(command, args, options);
-    completed.push(id);
+    run(command, args, { stdio: 'inherit' });
   }
-  budget.assertRemaining('completed checks');
-  return completed;
 }
-export async function installBrowser(budget) {
-  await budget.run('bash', [
-    '-e',
-    '-c',
-    `
-for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
-  if [ -f "$source_file" ]; then
-    sudo sed -i 's|azure\\.archive\\.ubuntu\\.com|archive.ubuntu.com|g' "$source_file"
-  fi
-done
-# Keep apt-mirrors.txt unchanged. Rewriting azure.archive.ubuntu.com there makes
-# priority 1 and 2 the same host, so a DNS failure has no distinct fallback.
-if [ -f /etc/apt/apt-mirrors.txt ]; then
-  echo 'Ubuntu apt mirror candidates:'
-  grep -E '^[^#[:space:]]' /etc/apt/apt-mirrors.txt || true
-fi
-if command -v apt-config >/dev/null 2>&1; then
-  echo 'apt acquire timeout settings:'
-  apt-config dump Acquire::Retries Acquire::http::Timeout Acquire::https::Timeout || true
-fi
-`,
-  ]);
-  await budget.run('npx', ['playwright', 'install', '--with-deps', 'chromium']);
+
+if (process.argv[1] && import.meta.url === new URL(process.argv[1], 'file://').href) {
+  const group = CHECK_GROUPS[process.argv[2]];
+  if (!group) {
+    console.error(`Usage: node scripts/ci-commands.mjs <${Object.keys(CHECK_GROUPS).join('|')}>`);
+    process.exit(2);
+  }
+  try {
+    runChecks(group);
+  } catch (error) {
+    console.error(`CI check failed: ${error.message}`);
+    process.exit(1);
+  }
 }

@@ -59,7 +59,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 复核、测试、合并、部署与关闭以 [CONTRIBUTING](../CONTRIBUTING.md)、[TESTING](TESTING.md) 和 [RELEASING](RELEASING.md) 为准：
 
 - 实现者之外的独立代理复核范围、验收、代码/数据来源与相关测试；PR 记录实际验证的 SHA、复核结论和未解决事项。不得伪造他人结论或把未解决问题写成通过。
-- 按 TESTING 对本次改动选择必要冒烟和直接相关测试；CI 计划、证据复用、手动 full 与部署条件不在此重复。纯文档/样式且不动逻辑和测试时，适用 CONTRIBUTING 的 CI 绿轻量规则。
+- 按 TESTING 对本次改动选择必要冒烟和直接相关测试；CI 范围、CI full 与部署条件不在此重复。纯文档/样式且不动逻辑和测试时，适用 CONTRIBUTING 的 CI 绿轻量规则。
 - 网站实现 PR 使用 `Relates #N`，待真实部署、线上核对和正式 Release 后关闭；`Fixes #N` 仅用于合并即完成的事项。已合并不等于已部署或已正式发布。
 - 不通过删除断言、跳过必要测试、伪造复核或扩大旧授权来消除阻塞；产品范围与 Hold 由维护者在原 Issue 决定。
 
@@ -110,7 +110,7 @@ UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计�
 
 ## 7. 测试规则
 
-每次改动的适用测试、默认 CI、手动 full 和验证报告要求，以 [TESTING](TESTING.md) 为准；不把历史检查矩阵或固定视口要求当作每 PR 门禁。数据正确性按本次改动针对性核验。发布、部署、线上与正式 Release 的流程见 [RELEASING](RELEASING.md)；本文件不复制工作流、证据复用或预算细节。
+每次改动的适用测试、默认 CI、CI full 和验证报告要求，以 [TESTING](TESTING.md) 为准；不把历史检查矩阵或固定视口要求当作每 PR 门禁。数据正确性按本次改动针对性核验。发布、部署、线上与正式 Release 的流程见 [RELEASING](RELEASING.md)；本文件不复制工作流、证据复用或预算细节。
 
 ## 8. 选 issue 流程（checklist）
 

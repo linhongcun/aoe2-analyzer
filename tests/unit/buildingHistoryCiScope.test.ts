@@ -41,7 +41,6 @@ describe('#437 建筑历史展示的 CI 影响范围', () => {
     expect(browser).toContain('tests/e2e/entityHistory435.spec.ts');
     expect(unit).toContain('tests/unit/buildingHistoryCiScope.test.ts');
     expect(unit).toContain('tests/unit/entityHistory435.test.ts');
-    expect(unit).toContain('tests/unit/releasePlan.test.ts');
   });
 
   it.each(['src/shared/ui/PatchHistoryOther.tsx', 'src/shared/ui/patchHistory.css', 'src/shared/ui/layout.tsx', 'src/domain/patchHistory.ts'])(

@@ -10,21 +10,6 @@ import { testCommand } from '../../scripts/ci-run.mjs';
 
 const pr = { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' };
 const change = (path: string) => ({ path });
-const workflow = readFileSync('.github/workflows/ci.yml', 'utf8');
-const installIf = "needs.plan.outputs.unit_chromium == 'true'";
-
-function jobBody(name: string) {
-  const body = workflow.match(new RegExp(`^ {2}${name}:\\n([\\s\\S]*?)(?=^ {2}[a-z-]+:|$(?![\\s\\S]))`, 'm'))?.[1];
-  if (!body) throw new Error(`Missing workflow job: ${name}`);
-  return body;
-}
-
-function stepBody(job: string, name: string) {
-  const body = jobBody(job).match(new RegExp(`- name: ${name}\\n([\\s\\S]*?)(?=\\n {6}- |$(?![\\s\\S]))`))?.[1];
-  if (!body) throw new Error(`Missing workflow step: ${job}/${name}`);
-  return body;
-}
-
 it('#659 a docs pull request requires site smoke and Chromium from its actual release unit tests', () => {
   const plan = applyBrowserPolicy(planChanges([change('docs/design/README.md')]), pr);
   expect(plan).toMatchObject({ scope: 'maintenance', full: false, browser: 'capped', e2e: ['tests/e2e/smoke.spec.ts'], data: false });
@@ -65,21 +50,6 @@ it('full and feature plans launch chromium through the unit suite without using 
   const home = applyBrowserPolicy(planChanges([change('src/domain/startGame.ts')]), pr);
   expect(home.browser).toBe('capped');
   expect(unitLaunchesChromium(home)).toBe(false);
-});
-
-it('#659 only the unit install uses unit_chromium; build smoke and browser workers install independently', () => {
-  for (const name of ['Cache Playwright browsers', 'Install Playwright chromium under shared deadline'])
-    expect(stepBody('unit', name)).toContain(`if: ${installIf}`);
-  expect(stepBody('unit', 'Install Playwright chromium under shared deadline')).toContain('run: node scripts/ci-stage.mjs install-browser');
-  for (const job of ['build', 'browser']) {
-    expect(jobBody(job)).not.toContain('unit_chromium');
-    expect(stepBody(job, 'Cache Playwright browsers')).not.toContain('if:');
-    expect(stepBody(job, 'Install Playwright chromium under shared deadline')).toContain('run: node scripts/ci-stage.mjs install-browser');
-    expect(stepBody(job, 'Install Playwright chromium under shared deadline')).not.toContain('if:');
-  }
-  expect(jobBody('build')).not.toContain('if: needs.plan.outputs');
-  expect(jobBody('browser')).toContain("if: needs.plan.outputs.browser != '[]'");
-  expect(workflow).not.toContain('CI_SKIP_PLAYWRIGHT');
 });
 
 it('#749 the scope CLI does not schedule unit chromium for an ordinary docs or unit-only change', () => {

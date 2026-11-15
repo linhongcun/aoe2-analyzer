@@ -178,7 +178,7 @@ describe('#281 分层边界检查脚本', () => {
 
   it('CI 以 --strict 运行分层检查（#281 ⑤）', () => {
     const ci = readFileSync(`${ROOT}/.github/workflows/ci.yml`, 'utf8');
-    expect(ci).toContain('run: node scripts/ci-stage.mjs run static');
+    expect(ci).toContain('run: node scripts/ci-commands.mjs static');
     expect(STATIC_CHECKS).toContainEqual(['layers', 'npm', ['run', 'lint:layers', '--', '--strict']]);
     expect(ci).not.toMatch(/warn only/i);
   });
