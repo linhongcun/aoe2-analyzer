@@ -70,7 +70,7 @@ function fixture(annotated = false, featureChanges = true) {
     [`${prefix}/git/ref/heads/main`]: { object: { sha: head } },
     [`${prefix}/actions/runs/777`]: run,
     [`${prefix}/actions/runs/777/jobs?filter=latest&per_page=100`]: [
-      { jobs: ['test', 'deploy'].map((name) => ({ name, status: 'completed', conclusion: 'success' })) },
+      { jobs: ['check', 'deploy'].map((name) => ({ name, status: 'completed', conclusion: 'success' })) },
     ],
     [`${prefix}/actions/workflows/ci.yml/runs?branch=main&event=push&status=success&head_sha=${head}&per_page=100`]: [{ workflow_runs: [run] }],
     [`${prefix}/releases/latest`]: formal(),
