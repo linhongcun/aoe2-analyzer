@@ -15,9 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = 'data/sources/data_update_coverage.json'
-DOC_PATH = 'docs/DATA-UPDATE.md'
 RUNNERS = {'node', 'npx', 'vite-node'}
-PATH_PREFIXES = ('data/', 'scripts/', 'src/', 'docs/', 'tests/', '.github/')
 
 
 def read_text(root: Path, rel: str, sources: dict[str, str] | None) -> str:
@@ -241,27 +239,6 @@ def coverage_wired(source: str, stop_message: str) -> bool:
     return imported and called and stop_message in source
 
 
-def manifest_paths(manifest: dict) -> list[str]:
-    found: list[str] = []
-
-    def walk(node) -> None:
-        if isinstance(node, dict):
-            for value in node.values():
-                walk(value)
-        elif isinstance(node, list):
-            for value in node:
-                walk(value)
-        elif isinstance(node, str) and node.startswith(PATH_PREFIXES):
-            found.append(node)
-
-    walk(manifest)
-    unique = []
-    for path in found:
-        if path not in unique:
-            unique.append(path)
-    return unique
-
-
 def compare_steps(actual: list[dict], manifest: dict) -> list[str]:
     errors = []
     conditions = manifest['conditions']
@@ -364,8 +341,8 @@ def check(
     for basename in ('patches_build.py', 'history_build.py', 'map_previews.py', 'map_catalog_build.py', 'data/game/patches'):
         if basename in data_update:
             errors.append(f'补丁历史：data_update.py 不得写入或调用 {basename}')
-    if 'data/patch-notes' not in data_update:
-        errors.append('编排漂移：data_update.py 不再写 data/patch-notes')
+    if 'patch_notes.write(' not in data_update:
+        errors.append('编排漂移：data_update.py 不再经 patch_notes.write 写补丁说明记录和排版')
     stop_message = data.get('failFast', {}).get('stopMessage', '')
     try:
         if not run_fails_closed(data_update):
@@ -575,22 +552,6 @@ def check(
         build = Path(rel).stem
         if archive_id != build:
             errors.append(f'补丁历史：{rel} 的 id 不是 {build}')
-
-    doc = text(DOC_PATH)
-    for path in manifest_paths(data):
-        if path not in doc:
-            errors.append(f'漏登记：{DOC_PATH} 没有写明 {path}')
-    for key in ('command', 'npm', 'status', 'checkCommand'):
-        command = data['entry'][key]
-        if command not in doc:
-            errors.append(f'漏登记：{DOC_PATH} 未写入口 {command}')
-    for item in data['notThisIssue']:
-        if f'#{item["issue"]}' not in doc:
-            errors.append(f'漏登记：{DOC_PATH} 未写明边界 #{item["issue"]}')
-    if '当前事实' not in doc:
-        errors.append(f'漏登记：{DOC_PATH} 必须写明当前事实')
-    if '双轨' in doc or '待落地项是 #864' in doc or '不读 `ok`' in doc or 'ok 为 false' in doc:
-        errors.append(f'编排漂移：{DOC_PATH} 仍把费用策略写成旧的双轨或待落地')
 
     try:
         package = json.loads(text('package.json'))

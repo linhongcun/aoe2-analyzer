@@ -484,7 +484,7 @@ test('data version badge links to about-data page with pins and patch notes', as
   await expect(page.locator('[data-t="src-dat"]')).toContainText(`${PINS.sources.dat.repo}@${PINS.sources.dat.commit.slice(0, 7)}`);
   await expect(page.locator('[data-t="src-dat"]')).toContainText('sha256');
   await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText(`@${PINS.sources.aoe2techtree.commit.slice(0, 7)}`);
-  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', new RegExp(`data/patch-notes/${PINS.patch.build}\\.md$`));
+  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', new RegExp(`docs/patch-notes/${PINS.patch.build}\\.md$`));
 });
 
 test('build orders read-only list renders all entries with sources', async ({ page }) => {

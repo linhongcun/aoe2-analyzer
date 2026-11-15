@@ -3,8 +3,8 @@
 
 1. 检查上游：auto-mods 的 dat 最新提交、aoe2techtree data/ 最新提交、halfon 最新提交；从提交信息识别补丁号。
 2. 若有更新：下载新 .dat 并计算 sha256、记录特征标记 → 更新 data/sources/data_sources.json；
-   重新生成全部 JSON（npm run data 等价流程）、effects.json、data/reports/EFFECTS-AUDIT.md，运行基础数值对账；
-   把差异摘要写入 data/patch-notes/<patch>.md 并打印。
+   重新生成全部 JSON（npm run data 等价流程）、effects.json、效果审计（data/reports/effects-audit.json 及其排版），运行基础数值对账；
+   把差异写入 data/patch-notes/<patch>.json，排版写入 docs/patch-notes/<patch>.md 并打印。
 3. 永不自动提交：请自行检查 git diff 后提交。
 开始前先跑覆盖清单（scripts/data_update_coverage.py）。清单失败则退出，不查询上游，不跑生成器，不改 pin。
 审阅后冻结来源：重复传入 --source-ref dat=<完整SHA>、aoe2techtree=<完整SHA>、halfon=<完整SHA>，三项必须齐全。
@@ -14,7 +14,8 @@ import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys, urlli
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from data_diff import detect_patch, load_dir, summarize  # noqa: E402
+from data_diff import detect_patch, diff, load_dir  # noqa: E402
+import patch_notes  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / 'data/sources/data_sources.json'
@@ -138,12 +139,10 @@ def main():
     run('npx', 'vite-node', 'scripts/build_orders_check.ts')
     run('npx', 'vite-node', 'scripts/effects_audit.ts')
     run(sys.executable, 'scripts/stats_crosscheck.py')
-    # 差异摘要
-    md = summarize(load_dir(prev), load_dir(ROOT / 'data/game'), 'DE Update %s 数据变化（相对 %s）' % (patch, old_patch))
-    md += '\n---\n上游：' + '；'.join('%s@%s（%s）' % (S[k]['repo'], S[k]['commit'][:7], S[k]['date']) for k in S) + '\n'
-    out = ROOT / 'data' / 'patch-notes' / ('%s.md' % patch)
-    out.parent.mkdir(parents=True, exist_ok=True); out.write_text(md)
-    print(md)
+    # 差异记录（data/patch-notes）与排版（docs/patch-notes）
+    note = patch_notes.record(patch, old_patch, S, diff(load_dir(prev), load_dir(ROOT / 'data/game')))
+    out = patch_notes.write(note, ROOT)
+    print(patch_notes.view(note))
     print('\n✓ 已写入 %s。请检查 git diff 后自行提交（本脚本不会提交）。' % out.relative_to(ROOT))
 
 

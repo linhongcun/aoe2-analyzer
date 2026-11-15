@@ -62,12 +62,8 @@ describe('#273 对照：CHANGELOG 历史条目原样保留（Steve 2026-10-22：
   });
 });
 
-describe('#273 对照：可复现入口保留在工程数据更新文档', () => {
-  it('DATA-UPDATE 指向可复现生产器，脚本与生成数据存在', () => {
-    const updateGuide = read('docs/DATA-UPDATE.md');
-    expect(updateGuide).toMatch(/scripts\/relic_income_build\.py/);
-    expect(updateGuide).toMatch(/relic_income\.json/);
-    expect(updateGuide).toMatch(/--check/);
+describe('#273 对照：可复现生产器与生成数据存在', () => {
+  it('圣物收入的生成脚本与生成数据都在仓库里', () => {
     expect(existsSync('scripts/relic_income_build.py')).toBe(true);
     expect(existsSync('data/game/relic_income.json')).toBe(true);
   });

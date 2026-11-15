@@ -63,7 +63,7 @@
 
 **实际实现。** `body` 已设 `font-variant-numeric: tabular-nums`。`.nw` 在 [`src/shared/styles/base.css`](../src/shared/styles/base.css) 里是 `white-space: nowrap`。`.num` 的 tabular 规则散落在各页样式，没有一条全局 `.num`。数值和「数字+单位」仍要用 `.nw` 包住，避免 360 宽折成两行。
 
-**实际实现。** 颜色只写在 `tokens.css`。[`scripts/check-colors.mjs`](../scripts/check-colors.mjs) 禁止源码里另写十六进制和 `rgb()` / `hsl()`。[`docs/design/contrast.py`](../docs/design/contrast.py) 检查的是脚本内写死的色对，文件说明对应设计规范草案：正文阈值 4.5，大字和 UI 图形 3.0。本基线里，深色 `--color-bad` 在 `tokens.css` 是 `#ff6961`，`contrast.py` 仍是 `#ff6b5e`；深色 `--color-bad-soft` 分别是 `#452323` 和 `#3a1714`。写稿和验收以 `tokens.css` 为准。`contrast.py` 通过只说明它自己的色对过了阈值。
+**实际实现。** 颜色只写在 `tokens.css`。[`scripts/check-colors.mjs`](../scripts/check-colors.mjs) 禁止源码里另写十六进制和 `rgb()` / `hsl()`。[`scripts/contrast.py`](../scripts/contrast.py) 检查的是脚本内写死的色对，文件说明对应设计规范草案：正文阈值 4.5，大字和 UI 图形 3.0。本基线里，深色 `--color-bad` 在 `tokens.css` 是 `#ff6961`，`contrast.py` 仍是 `#ff6b5e`；深色 `--color-bad-soft` 分别是 `#452323` 和 `#3a1714`。写稿和验收以 `tokens.css` 为准。`contrast.py` 通过只说明它自己的色对过了阈值。
 
 ## 协作顺序
 

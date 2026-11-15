@@ -62,7 +62,8 @@ describe('#427 按实际变更选择验证范围', () => {
     'src/shared/ui/widgets.tsx',
     'src/shared/nav/pageRegistry.ts',
     'src/shared/styles/tokens.css',
-    'data/patch-notes/185872.md',
+    'data/patch-notes/185872.json',
+    'docs/patch-notes/185872.md',
     'vite.config.ts',
   ])('%s 变化即使用完整验证，不因同时含文明 UI 或工作流而跳过', (path) => {
     expect(classifyChanges([change('src/features/civs/components/CivList.tsx'), change('.github/workflows/ci.yml'), change(path)])).toBe('full');

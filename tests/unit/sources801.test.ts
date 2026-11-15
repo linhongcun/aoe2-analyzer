@@ -12,7 +12,7 @@ describe('#801 来源 pin 访问器', () => {
     expect(ASSET_SOURCE_PINS).toEqual(pins.assetSources);
     expect(DATA_UPDATED).toBe(pins.updated);
     expect(sourceCommitUrl(SOURCE_PINS.dat)).toBe(`https://github.com/${SOURCE_PINS.dat.repo}/tree/${SOURCE_PINS.dat.commit}/${SOURCE_PINS.dat.path}`);
-    expect(sourcePatchNoteUrl(DATA_PATCH.build)).toBe(`https://github.com/linhongcun/aoe2-analyzer/blob/main/data/patch-notes/${DATA_PATCH.build}.md`);
+    expect(sourcePatchNoteUrl(DATA_PATCH.build)).toBe(`https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/patch-notes/${DATA_PATCH.build}.md`);
   });
 
   it('每个机制都有 MODEL_SOURCE，evidence-pinned 带证据', () => {

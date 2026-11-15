@@ -24,7 +24,6 @@ class HistoryBuild(unittest.TestCase):
         for patch in self.patches:
             path = ROOT / f'data/game/patches/{patch["id"]}.json'
             self.assertEqual(json.loads(path.read_text()), patch)
-        self.assertEqual((ROOT / 'data/reports/HISTORY-DATA.md').read_text(), history.coverage_report(self.patches, self.coverages))
 
     def test_missing_mapping_is_rejected(self):
         patch, coverage = self.patch('66692')

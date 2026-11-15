@@ -1,0 +1,277 @@
+{
+  "build": 188329,
+  "base": 185872,
+  "title": "DE Update 188329 数据变化（相对 185872）",
+  "upstream": [
+    {
+      "key": "dat",
+      "repo": "SiegeEngineers/auto-mods",
+      "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+      "date": "2026-10-28"
+    },
+    {
+      "key": "aoe2techtree",
+      "repo": "SiegeEngineers/aoe2techtree",
+      "commit": "e56728e76b7d08301fba7b18d5f16bc8554c109a",
+      "date": "2026-10-28"
+    },
+    {
+      "key": "halfon",
+      "repo": "SiegeEngineers/halfon",
+      "commit": "7f96c37fc5f63c7141ec7d88e91c627beb375b28",
+      "date": "2026-10-28"
+    }
+  ],
+  "changes": {
+    "units": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "id": 2708,
+          "zh": "首领",
+          "en": "Jarl",
+          "fields": [
+            {
+              "key": "armc",
+              "old": [
+                [
+                  "骑兵",
+                  0
+                ],
+                [
+                  "独特单位",
+                  0
+                ],
+                [
+                  "特殊近战",
+                  0
+                ],
+                [
+                  "英雄/国王",
+                  0
+                ]
+              ],
+              "new": [
+                [
+                  "骑兵",
+                  0
+                ],
+                [
+                  "独特单位",
+                  0
+                ],
+                [
+                  "特殊近战",
+                  0
+                ]
+              ]
+            },
+            {
+              "key": "cls",
+              "old": [
+                3,
+                4,
+                8,
+                19,
+                31,
+                36
+              ],
+              "new": [
+                3,
+                4,
+                8,
+                19,
+                31
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2709,
+          "zh": "精锐首领",
+          "en": "Elite Jarl",
+          "fields": [
+            {
+              "key": "armc",
+              "old": [
+                [
+                  "骑兵",
+                  0
+                ],
+                [
+                  "独特单位",
+                  0
+                ],
+                [
+                  "特殊近战",
+                  0
+                ],
+                [
+                  "英雄/国王",
+                  0
+                ]
+              ],
+              "new": [
+                [
+                  "骑兵",
+                  0
+                ],
+                [
+                  "独特单位",
+                  0
+                ],
+                [
+                  "特殊近战",
+                  0
+                ]
+              ]
+            },
+            {
+              "key": "cls",
+              "old": [
+                3,
+                4,
+                8,
+                19,
+                31,
+                36
+              ],
+              "new": [
+                3,
+                4,
+                8,
+                19,
+                31
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2569,
+          "zh": "掷石绳骑兵",
+          "en": "Bolas Rider",
+          "fields": [
+            {
+              "key": "spd",
+              "old": 1.5,
+              "new": 1.45
+            }
+          ]
+        },
+        {
+          "id": 2550,
+          "zh": "蔷琵斥候",
+          "en": "Champi Scout",
+          "fields": [
+            {
+              "key": "atks",
+              "old": [
+                [
+                  "冲击步兵",
+                  3
+                ],
+                [
+                  "近战",
+                  3
+                ],
+                [
+                  "骑兵",
+                  1
+                ],
+                [
+                  "骆驼",
+                  1
+                ],
+                [
+                  "攻城武器",
+                  2
+                ]
+              ],
+              "new": [
+                [
+                  "冲击步兵",
+                  3
+                ],
+                [
+                  "近战",
+                  3
+                ],
+                [
+                  "骑兵",
+                  2
+                ],
+                [
+                  "骆驼",
+                  2
+                ],
+                [
+                  "攻城武器",
+                  2
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": 873,
+          "zh": "骑象射手",
+          "en": "Elephant Archer",
+          "fields": [
+            {
+              "key": "hp",
+              "old": 230,
+              "new": 220
+            },
+            {
+              "key": "cost",
+              "old": {
+                "Food": 60,
+                "Gold": 80
+              },
+              "new": {
+                "Food": 70,
+                "Gold": 80
+              }
+            }
+          ]
+        },
+        {
+          "id": 875,
+          "zh": "精锐骑象射手",
+          "en": "Elite Elephant Archer",
+          "fields": [
+            {
+              "key": "hp",
+              "old": 280,
+              "new": 270
+            },
+            {
+              "key": "cost",
+              "old": {
+                "Food": 60,
+                "Gold": 80
+              },
+              "new": {
+                "Food": 70,
+                "Gold": 80
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "buildings": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "techs": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "techEffects": [],
+    "civBonuses": []
+  }
+}

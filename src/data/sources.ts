@@ -12,4 +12,4 @@ export const DATA_UPDATED = pins.updated;
 
 export const sourceCommitUrl = (pin: SourcePin): string => `https://github.com/${pin.repo}/tree/${pin.commit}/${pin.path}`;
 
-export const sourcePatchNoteUrl = (build: string | number): string => `https://github.com/linhongcun/aoe2-analyzer/blob/main/data/patch-notes/${build}.md`;
+export const sourcePatchNoteUrl = (build: string | number): string => `https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/patch-notes/${build}.md`;

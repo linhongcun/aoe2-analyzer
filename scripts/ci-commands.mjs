@@ -12,7 +12,7 @@ export const STATIC_CHECKS = [
 ];
 export const MAIN_CHECKS = [
   ['unused', 'npm', ['run', 'unused:check']],
-  ['contrast', 'python3', ['docs/design/contrast.py']],
+  ['contrast', 'python3', ['scripts/contrast.py']],
   ['introductions', 'npm', ['run', 'introductions:check']],
 ];
 /** Kept for callers that still pass the old plan object. */
@@ -35,7 +35,7 @@ export const DATA_CHECKS = [
   diff('effects-diff', 'data/game/effects.json'),
   ['effects-audit', 'npx', ['vite-node', 'scripts/effects_audit.ts', '--check']],
   python('eco', 'scripts/eco_build.py'),
-  diff('eco-diff', 'data/game/eco.json', 'data/reports/ECO-DATA.md'),
+  diff('eco-diff', 'data/game/eco.json', 'data/reports/eco-data.json', 'docs/reports/ECO-DATA.md'),
   ...[
     'market',
     'garrison',
@@ -50,7 +50,8 @@ export const DATA_CHECKS = [
   ].map((name) => python(name, `scripts/${name}_build.py`, '--check')),
   python('patches', 'scripts/patches_build.py', '--check'),
   python('history', 'scripts/history_build.py', '--check'),
-  python('civ-backgrounds', 'src/features/civs/import_backgrounds.py', '--check'),
+  python('patch-notes', 'scripts/patch_notes.py', '--check'),
+  python('civ-backgrounds', 'scripts/import_backgrounds.py', '--check'),
   ['build-orders', 'npm', ['run', 'bo:check']],
 ];
 const escape = (title) => title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

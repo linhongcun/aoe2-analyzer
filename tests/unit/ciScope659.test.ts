@@ -334,7 +334,7 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
   it.each([
     'data/reference/civs/backgrounds.source.json',
     'data/reference/civs/backgrounds.json',
-    'src/features/civs/import_backgrounds.py',
+    'scripts/import_backgrounds.py',
     'src/features/civs/assets/backgrounds/chinese.webp',
   ])('%s requires actual generation verification', (path) => {
     expect(planChanges([change(path)])).toMatchObject({ full: true, data: true });
@@ -348,8 +348,10 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     'data/evidence/bengalis197-source.json',
     'data/sources/data_sources.json',
     'data/fixtures/unit/fixtures/ci-scope-659-baseline.json',
-    'data/reports/ECO-DATA.md',
-    'data/patch-notes/185872.md',
+    'data/reports/eco-data.json',
+    'data/patch-notes/185872.json',
+    'docs/reports/ECO-DATA.md',
+    'docs/patch-notes/185872.md',
   ])('%s selects the full data validation phase', (path) => {
     expect(browser([change(path)])).toMatchObject({ full: true, data: true });
   });

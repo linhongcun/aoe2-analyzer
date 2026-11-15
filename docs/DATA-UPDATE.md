@@ -63,7 +63,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 17. `scripts/effects_audit.ts`
 18. `scripts/stats_crosscheck.py`
 
-差异摘要写到 `data/patch-notes/<补丁号>.md`。这是本次差异说明，不是补丁档案。
+差异记录写到 `data/patch-notes/<补丁号>.json`，并由 `scripts/patch_notes.py` 排成 `docs/patch-notes/<补丁号>.md`。这是本次差异说明，不是补丁档案。改了记录后运行 `python3 scripts/patch_notes.py` 重排，`--check` 只核对。
 
 `scripts/build_data.py` 内部还会按顺序调用：`scripts/civs_build.py`、`scripts/units_build.py`、`scripts/techs_build.py`、`scripts/trees_build.py`、`scripts/buildings_build.py`、`scripts/ages_build.py`、`scripts/icons_hires.py`、`scripts/catalog_introductions.mjs`。这些调用都带 `check=True`。
 
@@ -80,24 +80,24 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 | `scripts/patches_build.py`     | 补丁档案按历史身份锁定                       | 无单独具名负责人。185872 看 `HISTORICAL_SHA256`；188329 看 `scripts/patches_188329.py` 的锁定常量 |
 | `scripts/history_build.py`     | 旧公告只校验实体身份，不用今天的数值覆盖历史 | 无单独具名负责人。主人是该文件里的 `PATCHES` 表                                                   |
 | `scripts/map_previews.py`      | 地图预览是独立素材                           | 无单独具名负责人。pin 在 `assetSources.mapPreviews`                                               |
-| `scripts/map_catalog_build.py` | 地图目录和编辑文案不跟游戏 pin 一起重生成    | 无单独具名负责人。编辑文案在 `data/sources/map_catalog_meta.json`                                      |
+| `scripts/map_catalog_build.py` | 地图目录和编辑文案不跟游戏 pin 一起重生成    | 无单独具名负责人。编辑文案在 `data/sources/map_catalog_meta.json`                                 |
 
 需要时单独运行：`python3 scripts/patches_build.py`、`python3 scripts/history_build.py`、`python3 scripts/map_previews.py`、`python3 scripts/map_catalog_build.py`。
 
 ## 人工可以改什么
 
-| 项           | 文件                                 | 主人                                                                                                                    |
-| ------------ | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 主观评分     | `data/sources/civ_ratings.json`           | 维护者。文件写明由维护者主观判断。`basis` 只记口径；`verifiedAt` 不是补丁对齐日，对齐补丁必须留空                       |
-| 搜索别名     | `src/data/aliases.ts`                | Reid 整理、Steve 审                                                                                                     |
-| 易混淆对照   | `src/data/confusables.ts`            | Reid 维护、Steve 签字                                                                                                   |
-| 拼音多音字   | `scripts/pinyin_build.mjs` 的 `FIX`  | Steve。生成器在编排里，人工只改这张表                                                                                   |
-| 文本关联     | `data/sources/effects_links.json`         | 无单独具名负责人。只改归属，不改数值                                                                                    |
-| 图鉴首发     | `data/sources/catalog_introductions.json` | 无单独具名负责人。编译器是 `scripts/catalog_introductions.mjs`                                                          |
-| 开局步骤     | `data/game/build-orders`             | 各文件自己的 `sources[].author` 与 `review.by`。清单不另指定一个人。主人证据抽自 `data/game/build-orders/scouts-18.json` |
-| 地图编辑文案 | `data/sources/map_catalog_meta.json`      | 无单独具名负责人。`source` 为 editorial 的句子是人工文案                                                                |
-| 译名校正     | `data/sources/civ_text_corrections.json`  | 无单独具名负责人。对不上就改这张表或确认上游                                                                            |
-| 对账例外     | `data/sources/stats_allowlist.json`       | 无单独具名负责人。每条必须有 reason。当前是空数组                                                                       |
+| 项           | 文件                                      | 主人                                                                                                                     |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 主观评分     | `data/sources/civ_ratings.json`           | 维护者。文件写明由维护者主观判断。`basis` 只记口径；`verifiedAt` 不是补丁对齐日，对齐补丁必须留空                        |
+| 搜索别名     | `src/data/aliases.ts`                     | Reid 整理、Steve 审                                                                                                      |
+| 易混淆对照   | `src/data/confusables.ts`                 | Reid 维护、Steve 签字                                                                                                    |
+| 拼音多音字   | `scripts/pinyin_build.mjs` 的 `FIX`       | Steve。生成器在编排里，人工只改这张表                                                                                    |
+| 文本关联     | `data/sources/effects_links.json`         | 无单独具名负责人。只改归属，不改数值                                                                                     |
+| 图鉴首发     | `data/sources/catalog_introductions.json` | 无单独具名负责人。编译器是 `scripts/catalog_introductions.mjs`                                                           |
+| 开局步骤     | `data/game/build-orders`                  | 各文件自己的 `sources[].author` 与 `review.by`。清单不另指定一个人。主人证据抽自 `data/game/build-orders/scouts-18.json` |
+| 地图编辑文案 | `data/sources/map_catalog_meta.json`      | 无单独具名负责人。`source` 为 editorial 的句子是人工文案                                                                 |
+| 译名校正     | `data/sources/civ_text_corrections.json`  | 无单独具名负责人。对不上就改这张表或确认上游                                                                             |
+| 对账例外     | `data/sources/stats_allowlist.json`       | 无单独具名负责人。每条必须有 reason。当前是空数组                                                                        |
 
 `src/domain/effects.manual.ts` 和 `src/domain/buildingEffects.manual.ts` 只是回退。`.dat` 已经有战斗规则时不要改它们。`src/domain/effects.ts` 在 `datCombat` 为真时直接返回，改了也不会进运行时。
 

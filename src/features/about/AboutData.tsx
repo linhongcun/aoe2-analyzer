@@ -65,7 +65,7 @@ export default function AboutData() {
           </li>
         ))}
         <li>
-          <a href={`${REPO}/blob/main/data/reports/EFFECTS-AUDIT.md`} target="_blank" rel="noopener noreferrer">
+          <a href={`${REPO}/blob/main/docs/reports/EFFECTS-AUDIT.md`} target="_blank" rel="noopener noreferrer">
             效果审计（.dat vs 手工规则）
           </a>
         </li>

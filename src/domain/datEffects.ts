@@ -1,6 +1,6 @@
 /**
  * .dat 原始效果表（scripts/effects_build.py 生成的 data/game/effects.json）的类型与转换。
- * 数据源与新鲜度见 effects.json 的 meta.sources 与 data/reports/EFFECTS-AUDIT.md。
+ * 数据源与新鲜度见 effects.json 的 meta.sources 与 docs/reports/EFFECTS-AUDIT.md。
  */
 import raw from '../../data/game/effects.json';
 import type { Effect } from './types';

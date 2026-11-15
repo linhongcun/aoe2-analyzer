@@ -147,7 +147,7 @@ def generate(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[dict[str, An
 def coverage_report(patches: list[dict[str, Any]], coverages: list[dict[str, Any]]) -> str:
     lines = [
         '# 历史补丁收录与证据', '',
-        '<!-- 由 scripts/history_build.py 生成；手工校对输入见 data/sources/history_inputs/。 -->', '',
+        '<!-- 由 scripts/history_build.py 生成；手工校对输入见 data/sources/history_inputs/，流程见 docs/HISTORY-INPUTS.md。 -->', '',
         '本批仅收录下表列出的 DE 正式版平衡栏目。版本号之间的其他补丁、同页后续热修、原版/征服者/HD 历史尚未补齐；不能把无记录理解为从未改动。', '',
         '| 正式版 | 官方发行日 | 公告当地日 | 公告公开（北京时间） | 官方项目 | 已映射 | 明确排除 | 实体记录 |',
         '| --- | --- | --- | --- | ---: | ---: | ---: | ---: |',
@@ -195,7 +195,7 @@ def main() -> None:
     args = parser.parse_args()
     patches, coverages = generate()
     outputs = {ROOT / f'data/game/patches/{patch["id"]}.json': json.dumps(patch, ensure_ascii=False, indent=2) + '\n' for patch in patches}
-    outputs[ROOT / 'data/reports/HISTORY-DATA.md'] = coverage_report(patches, coverages)
+    outputs[ROOT / 'docs/reports/HISTORY-DATA.md'] = coverage_report(patches, coverages)
     for path, content in outputs.items():
         if args.check:
             assert path.read_text(encoding='utf-8') == content, f'{path.relative_to(ROOT)} 需要重新生成'

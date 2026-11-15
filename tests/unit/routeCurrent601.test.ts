@@ -14,7 +14,7 @@ function token(css: string, name: string): string {
   return value.toLowerCase();
 }
 
-/** 与 docs/design/contrast.py 相同的 WCAG 相对亮度。 */
+/** 与 scripts/contrast.py 相同的 WCAG 相对亮度。 */
 function channel(value: number): number {
   const encoded = value / 255;
   return encoded <= 0.03928 ? encoded / 12.92 : ((encoded + 0.055) / 1.055) ** 2.4;

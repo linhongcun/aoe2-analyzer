@@ -1,5 +1,9 @@
 dist
 node_modules
-src/data/*.json
+data/game
+data/patch-notes
+data/reports
 public
 scripts/.cache
+docs/patch-notes
+docs/reports

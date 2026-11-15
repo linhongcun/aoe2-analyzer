@@ -1,5 +1,6 @@
 /**
- * 生成 data/reports/EFFECTS-AUDIT.md：.dat 生成效果 vs 历史手工规则的逐条差异。
+ * 效果审计：.dat 生成效果 vs 历史手工规则的逐条差异。
+ * 计数与结论写入 data/reports/effects-audit.json（测试和 CI 读它）；逐条明细排成 docs/reports/EFFECTS-AUDIT.md，只给人看。
  * 运行：npx vite-node scripts/effects_audit.ts   （需先 python3 scripts/effects_build.py）
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -66,6 +67,9 @@ export function buildAudit() {
   const out: string[] = [];
   const P = (s = '') => out.push(s);
   const mm = { tech: 0, civ: 0, team: 0 };
+  let previousSnapshot: { techsChanged: number; bonusesChanged: number } | null = null;
+  let lhcSnapshot: { comparable: number; consistent: number } | null = null;
+  let textMismatches = 0;
   const currentBuild = pins.patch.build;
   const datPin = pins.sources.dat;
 
@@ -73,7 +77,9 @@ export function buildAudit() {
   const cov = bonusCoverage();
   P(`# 效果审计：DE ${currentBuild} 原版 .dat 效果 vs 上一版数据源 vs 历史手工规则`);
   P();
-  P('> 本文件由 `scripts/effects_audit.ts` 生成（`npx vite-node scripts/effects_audit.ts`），请勿手改。');
+  P(
+    '> 本文件由 `scripts/effects_audit.ts` 生成（`npx vite-node scripts/effects_audit.ts`），请勿手改。计数与结论另存 `data/reports/effects-audit.json`，测试和 CI 只读那份记录。',
+  );
   P('> 冷缓存说明：零、五两节依赖 `scripts/.cache` 外部快照；`--check` 冷缓存时会明确跳过这两节，其余内容仍逐字校验。');
   P();
   P('## 数据源与新鲜度');
@@ -140,6 +146,7 @@ export function buildAudit() {
     P();
     P(`小计：科技 ${nt} 个、加成 ${nb} 条有数值变化（前后均比较固定 .dat 规则，不按文本一致性提示丢弃旧规则；历史手工规则 vs 当前 .dat 见第一~三节）。`);
     P();
+    previousSnapshot = { techsChanged: nt, bonusesChanged: nb };
   } else P('（未取得更新前快照；不声称已完成前后版本差分。请由 data_update.py 保留更新前数据。）');
   P('## 覆盖率');
   P();
@@ -304,6 +311,7 @@ export function buildAudit() {
   civs.forEach((c) =>
     Object.entries(DAT.civs[c.en]?.fresh ?? {}).forEach(([k, f]) => {
       if (f.ok !== false) return;
+      textMismatches++;
       P(`| ${c.zh} | ${k === 'team' ? '团队' : '#' + k} | ${k === 'team' ? c.tbEn : c.bonEn[+k]} | ${JSON.stringify(f.dat)} | ${BONUS_SRC[c.en]?.[k]} |`);
     }),
   );
@@ -358,6 +366,7 @@ export function buildAudit() {
     P('| 科技 | 差异 |');
     P('|---|---|');
     rows.forEach((r) => P(r));
+    lhcSnapshot = { comparable: n, consistent: ok };
   } else P('（未取得 lhc-aoe2 数据：私有仓库需 GITHUB_TOKEN；跳过对账）');
   P();
 
@@ -380,7 +389,20 @@ export function buildAudit() {
   P();
   P(`---`);
   P(`差异小计：科技 ${mm.tech} 组、文明加成 ${mm.civ} 条、团队加成 ${mm.team} 条。`);
-  return { text: out.join('\n') + '\n', lines: out.length, mm, cov };
+  const summary = {
+    generatedBy: 'scripts/effects_audit.ts',
+    build: currentBuild,
+    dat: { repo: datPin.repo, commit: datPin.commit },
+    missingObjects: NEW_IDS.size,
+    coverage: cov,
+    encodedTechs: { total: Object.keys(TECH_SRC).length, dat: datTechs },
+    genericHiddenTechs: new Set(GENERIC_FX.map((g) => g.tech)).size,
+    manualMismatches: { techGroups: mm.tech, civBonuses: mm.civ, teamBonuses: mm.team },
+    textMismatches,
+    previousSnapshot,
+    lhcSnapshot,
+  };
+  return { text: out.join('\n') + '\n', lines: out.length, mm, cov, summary };
 }
 
 function stripSections(text: string, prefixes: readonly string[]): string {
@@ -393,16 +415,30 @@ function stripSections(text: string, prefixes: readonly string[]): string {
   return out.join('\n');
 }
 
-const TARGET = 'data/reports/EFFECTS-AUDIT.md';
+const SUMMARY = 'data/reports/effects-audit.json';
+const TARGET = 'docs/reports/EFFECTS-AUDIT.md';
+/** 依赖 scripts/.cache 外部快照的内容：排版里的小节前缀，以及记录里的字段。 */
+const SNAPSHOT_PARTS = [
+  { path: previousPath, section: '## 零、', field: 'previousSnapshot' },
+  { path: LHC_PATH, section: '## 五、', field: 'lhcSnapshot' },
+] as const;
 const audit = buildAudit();
 const formatted = await format(audit.text, { parser: 'markdown' });
+const summaryText = (value: object) => JSON.stringify(value, null, 2) + '\n';
 if (process.argv.includes('--check')) {
   const committed = readFileSync(TARGET, 'utf8');
-  const hasPrevious = existsSync(previousPath);
-  const hasLhc = existsSync(LHC_PATH);
-  const skipped = [...(!hasPrevious ? ['## 零、'] : []), ...(!hasLhc ? ['## 五、'] : [])];
+  const missing = SNAPSHOT_PARTS.filter((part) => !existsSync(part.path));
+  const skipped = missing.map((part) => part.section);
   const cold = skipped.length > 0;
   const skippedNames = skipped.map((prefix) => prefix.replace('## ', '').replace('、', '')).join('、');
+  const committedSummary = JSON.parse(readFileSync(SUMMARY, 'utf8')) as Record<string, unknown>;
+  const expectedSummary = { ...audit.summary, ...Object.fromEntries(missing.map((part) => [part.field, committedSummary[part.field] ?? null])) };
+  if (summaryText(expectedSummary) !== summaryText(committedSummary)) {
+    console.error(`✗ ${SUMMARY} 与生成结果不一致`);
+    console.error('生成：', summaryText(expectedSummary));
+    console.error('现有：', summaryText(committedSummary));
+    process.exit(1);
+  }
   const generated = cold ? stripSections(formatted, skipped) : formatted;
   const expected = cold ? stripSections(committed, skipped) : committed;
   if (generated !== expected) {
@@ -415,8 +451,10 @@ if (process.argv.includes('--check')) {
     console.error('现有：', b.slice(Math.max(0, line - 2), line + 3).join('\n'));
     process.exit(1);
   }
-  console.log(`EFFECTS-AUDIT.md 可复现${cold ? `（冷缓存：跳过 ${skippedNames}；previous=${hasPrevious} lhc=${hasLhc}）` : '（含外部快照）'}`);
+  const state = Object.fromEntries(SNAPSHOT_PARTS.map((part) => [part.field, !missing.includes(part)]));
+  console.log(`效果审计可复现${cold ? `（冷缓存：跳过 ${skippedNames}；previous=${state.previousSnapshot} lhc=${state.lhcSnapshot}）` : '（含外部快照）'}`);
 } else {
+  writeFileSync(SUMMARY, summaryText(audit.summary));
   writeFileSync(TARGET, formatted);
   console.log('written', audit.lines, 'lines', audit.mm, audit.cov);
 }

@@ -709,6 +709,9 @@ export function planChanges(changes) {
       (path.startsWith('data/') && !path.startsWith('data/schemas/')) ||
       path.startsWith('src/data/') ||
       path.startsWith('docs/PATCH-NOTES/') ||
+      // Generated views of data/patch-notes and data/reports records; only the data checks can tell whether they still match.
+      path.startsWith('docs/patch-notes/') ||
+      path.startsWith('docs/reports/') ||
       path.startsWith('public/img/')
     ) {
       full = data = true;
@@ -771,6 +774,7 @@ export function planChanges(changes) {
       path === 'data/reference/civs/backgrounds.source.json' ||
       path === 'data/reference/civs/backgrounds.json' ||
       path === 'src/features/civs/import_backgrounds.py' ||
+      path === 'scripts/import_backgrounds.py' ||
       path.startsWith('src/features/civs/assets/backgrounds/')
     ) {
       full = data = true;

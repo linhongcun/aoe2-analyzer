@@ -13,7 +13,7 @@
       "file": "data/game/eco.json",
       "generator": "scripts/eco_build.py",
       "pin": "dat",
-      "check": ["python3 scripts/eco_build.py", "git diff --exit-code -- data/game/eco.json data/reports/ECO-DATA.md"],
+      "check": ["python3 scripts/eco_build.py", "git diff --exit-code -- data/game/eco.json data/reports/eco-data.json docs/reports/ECO-DATA.md"],
       "tests": ["tests/py/test_data_update486.py", "tests/unit/dataUpdate486.test.ts", "tests/unit/ecoView796.test.ts", "tests/unit/ecoPayoff214.test.ts"],
       "auditStatus": "reproduced-by-check"
     },
