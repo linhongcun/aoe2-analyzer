@@ -22,14 +22,14 @@ jobs:
         run: node scripts/check-pr-title.mjs
       - name: Static checks
         run: node scripts/ci-commands.mjs static
-      - name: Build the checked-out commit
-        run: npm run build
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium || (sleep 30 && npx playwright install --with-deps chromium)
+      - name: Build the checked-out commit
+        run: npm run build
       - name: Narrow browser smoke against this build
         run: node scripts/ci-commands.mjs smoke
       - uses: actions/upload-artifact@v4
