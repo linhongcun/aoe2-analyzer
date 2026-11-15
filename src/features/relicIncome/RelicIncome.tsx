@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import {
   ATHEISM_STATES,
   calculateRelicIncome,
@@ -96,7 +96,7 @@ export default function RelicIncome() {
   const selectCiv = (value: string, change: (civ: string) => void, label: string, optional = false) => (
     <select aria-label={label} value={value} onChange={(e) => change(e.target.value)}>
       {optional && <option value="">未提供相关来源</option>}
-      {value && !civs.some((civilization) => civilization.en === value) && <option value={value}>无效文明：{value}</option>}
+      {value && civByEn(value) === undefined && <option value={value}>无效文明：{value}</option>}
       {civs.map((civilization) => (
         <option key={civilization.en} value={civilization.en}>
           {civilization.zh}

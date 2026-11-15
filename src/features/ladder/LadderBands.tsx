@@ -51,13 +51,13 @@ export function LadderTiers({ civs }: { civs: readonly BandCiv[] }) {
   );
 }
 
-export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sampleUnit: '人次' | '局' }) {
+export function LadderMeta({ civs: rows, sampleUnit }: { civs: readonly BandCiv[]; sampleUnit: '人次' | '局' }) {
   const [selectedEn, setSelectedEn] = useState<string | null>(null);
   const detailId = useId();
-  const selected = civs.find((civ) => civ.en === selectedEn);
+  const selected = rows.find((civ) => civ.en === selectedEn);
   // 随当前可见集合调整选择，避免 effect 再触发一轮级联渲染。
   if (selectedEn && !selected) setSelectedEn(null);
-  if (!civs.length) {
+  if (!rows.length) {
     return (
       <div data-testid="ladder-meta-map">
         <p className="ladder-meta-detail" data-testid="ladder-meta-detail" role="status">
@@ -66,14 +66,14 @@ export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sam
       </div>
     );
   }
-  const rates = civs.map((civ) => civ.playRate);
+  const rates = rows.map((civ) => civ.playRate);
   const median = medianOf(rates);
   const xMax = Math.max(...rates, 1);
-  const wins = civs.map((civ) => civ.winRate);
+  const wins = rows.map((civ) => civ.winRate);
   const yMin = Math.min(...wins, 45);
   const yMax = Math.max(...wins, 55);
   const ySpan = yMax - yMin || 1;
-  const games = civs.map((civ) => civ.games);
+  const games = rows.map((civ) => civ.games);
   const gMin = Math.min(...games);
   const gMax = Math.max(...games);
   const sampleLabel = sampleUnit === '人次' ? '出场人次' : '样本局数';
@@ -93,7 +93,7 @@ export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sam
           <option value="" disabled>
             请选择文明
           </option>
-          {civs.map((civ) => (
+          {rows.map((civ) => (
             <option key={civ.en} value={civ.en}>
               {civ.zh}
             </option>
@@ -132,7 +132,7 @@ export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sam
             />
           )}
           {median != null &&
-            civs.map((civ) => {
+            rows.map((civ) => {
               const size = bubbleSize(civ.games, gMin, gMax);
               const active = selected?.en === civ.en;
               return (

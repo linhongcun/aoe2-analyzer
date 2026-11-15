@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { encodeProduction, type ProductionContext } from '../../domain/production';
@@ -186,7 +186,7 @@ function TradeIncomeBody({
               <label>
                 文明
                 <select aria-label="贸易文明" value={c.civ} onChange={(e) => update({ ...c, civ: e.target.value })}>
-                  {!civs.some((v) => v.en === c.civ) && <option value={c.civ}>无效文明</option>}
+                  {civByEn(c.civ) === undefined && <option value={c.civ}>无效文明</option>}
                   {civs.map((v) => (
                     <option key={v.en} value={v.en}>
                       {v.zh}
@@ -237,7 +237,7 @@ function TradeIncomeBody({
                 {r.production ? (
                   <div className="trade-income-production">
                     <p>
-                      {civs.find((v) => v.en === r.production!.civ)?.zh} · {AGE_ZH[r.production.age]} ·{' '}
+                      {civByEn(r.production!.civ)?.zh} · {AGE_ZH[r.production.age]} ·{' '}
                       <span className="trade-income-number">{r.production.rows.length} 条生产需求</span>
                     </p>
                     <Link className="ulink" to={'/production?' + encodeProduction(r.production)}>

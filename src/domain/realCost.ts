@@ -10,7 +10,7 @@
  *   其余（含 eco.json 读得出但没有来源的）一律记「未计入」，按通用速度。
  */
 import { ECO as eco } from '../data/eco';
-import { civs } from '../data';
+import { civByEn } from '../data';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
@@ -140,7 +140,7 @@ export function gatherModel(age: number, civ = '', options: { techIds?: Readonly
     const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
     if (s !== undefined && c.exact) {
       push(key, 'mul', c.m.mul);
-      applied.push({ label, techs: c.techs, source: civs.find((c) => c.en === civ)?.bon[s.bonus] ?? '' });
+      applied.push({ label, techs: c.techs, source: civByEn(civ)?.bon[s.bonus] ?? '' });
     } else unsupported.push({ label, techs: c.techs });
   }
 

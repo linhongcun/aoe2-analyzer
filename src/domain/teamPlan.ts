@@ -2,7 +2,7 @@
 import content from '../../data/content/team-plan.json';
 import { DATA_SOURCES } from '../data/sources';
 import { GARRISON_TECH_DATA } from './garrisonTechs';
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';
 import { civStatus } from './simulator';
@@ -354,7 +354,7 @@ export function checkPlanForce(ctx: ProductionContext, player: PlanPlayer, phase
   const stop = (status: ForceStatus, reason: string) => ({ ...result, status, reasons: [reason] });
   if (!force) return result;
   const unit = ctx.core.unitById[force.unitId];
-  if (!unit || !ctx.core.buildingById[force.buildingId] || !civs.some((c) => c.en === player.civ))
+  if (!unit || !ctx.core.buildingById[force.buildingId] || civByEn(player.civ) === undefined)
     return stop('invalid', '文明、单位或生产建筑不存在，请重新选择。');
   if (!TEAM_PLAN_UNIT_IDS.includes(unit.id) || (!content.baseFormIds.includes(unit.id) && !shapeIndex[unit.id]?.length))
     return stop('unsupported', '本版仅核对39个常规陆战形态；特色、队友授予或特殊生产路线暂未支持，不替换为近似单位。');
@@ -382,8 +382,7 @@ export function checkPlanForce(ctx: ProductionContext, player: PlanPlayer, phase
 export function teamPlanErrors(plan: TeamPlan, ctx: ProductionContext): string[] {
   const errors: string[] = [];
   // 空文明是「未选择」的初始状态，不是损坏引用；只有非空却查不到的文明才提示重选。
-  for (const player of plan.players)
-    if (player.civ && !civs.some((c) => c.en === player.civ)) errors.push(`${player.id}：未知文明 ${player.civ}，请重新选择。`);
+  for (const player of plan.players) if (player.civ && civByEn(player.civ) === undefined) errors.push(`${player.id}：未知文明 ${player.civ}，请重新选择。`);
   for (const phase of plan.phases) {
     for (const row of phase.players) {
       const player = plan.players.find((p) => p.id === row.playerId)!;

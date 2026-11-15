@@ -1,6 +1,6 @@
 /** Ordered market budgets. Fees come from pinned .dat; engine assumptions are audited separately. */
 import raw from '../../data/game/market.json';
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { RES_ZH } from './ratings';
 
 export const MARKET_RESOURCES = ['Food', 'Wood', 'Stone'] as const;
@@ -102,7 +102,7 @@ const integer = (value: unknown, min: number, max: number): value is string =>
 
 export function marketErrors(plan: MarketPlan): string[] {
   const errors: string[] = [];
-  if (!civs.some((c) => c.en === plan.civ)) errors.push('请选择有效文明。');
+  if (civByEn(plan.civ) === undefined) errors.push('请选择有效文明。');
   if (plan.guilds && !marketHasGuilds(plan.civ)) errors.push('该文明没有行会，请取消已研究状态。');
   if (plan.unique && !MARKET_DATA.uniqueFees[plan.civ]) errors.push('该文明没有改变手续费的特色科技。');
   if (typeof plan.guilds !== 'boolean' || typeof plan.unique !== 'boolean') errors.push('科技状态无效。');

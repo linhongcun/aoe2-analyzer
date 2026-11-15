@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import { PRODUCTION_LIMIT, productionUnits, type ProductionContext } from '../../domain/production';
 import { defaultTrainUnit, evaluateTrainTotal, type TrainTotalConfig, type TrainTotalTechChoice } from '../../domain/trainTotal';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
@@ -78,7 +78,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
     share.reset();
   };
   const blocked = result.blocked.length > 0;
-  const civName = civs.find((item) => item.en === config.civ)?.zh;
+  const civName = civByEn(config.civ)?.zh;
   const options =
     config.age == null || !civName ? [] : productionUnits(context, { civ: config.civ, age: config.age, techs: config.techs, walk: 0, farm: 0, rows: [] });
   const unlocks = result.techs.filter((tech) => tech.panel === 'unlock');

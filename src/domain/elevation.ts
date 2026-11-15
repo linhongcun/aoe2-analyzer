@@ -2,7 +2,7 @@
  * issue 734 高地伤害乘子。资源增量只读 eco.json。1.25 与 0.75 是 UGC 公式里的基数，经济数据不存这一对基数。
  * 悬崖没有专用字段，文案保持待确认，不补写乘子。
  */
-import { civs as catalogCivs } from '../data';
+import { civByEn, civs as catalogCivs } from '../data';
 import { ECO } from '../data/eco';
 import type { EcoRow } from './ecoTypes';
 
@@ -105,8 +105,8 @@ function catalogMatches(bonus: string | null, add: ResourceAdd): boolean {
   return percent !== null && bonus.includes(`${percent}%`);
 }
 
-function describeCiv(en: string, rows: readonly ElevationEcoRow[] | undefined, civs: readonly ElevationCivRow[]): ElevationCiv {
-  const civ = civs.find((item) => item.en === en);
+function describeCiv(en: string, rows: readonly ElevationEcoRow[] | undefined, civPool: readonly ElevationCivRow[]): ElevationCiv {
+  const civ = Object.is(civPool, catalogCivs) ? civByEn(en) : civPool.find((item) => item.en === en);
   const bonusIndex = (civ?.bonEn ?? []).findIndex((line) => /higher elevation/i.test(line));
   const higherAdd = resourceAdd(rows, ELEVATION_HIGHER_RES);
   const lowerAdd = resourceAdd(rows, ELEVATION_LOWER_RES);
@@ -134,13 +134,13 @@ function notable(civ: ElevationCiv): boolean {
   return odd(civ.higherAdd) || odd(civ.lowerAdd);
 }
 
-export function elevationFacts(eco: ElevationEco = ECO, civs: readonly ElevationCivRow[] = catalogCivs): ElevationFacts {
+export function elevationFacts(eco: ElevationEco = ECO, civPool: readonly ElevationCivRow[] = catalogCivs): ElevationFacts {
   const patch = eco.meta?.patch ?? '';
   const civEco = eco.civEco ?? {};
   const zero: ResourceAdd = { state: 'value', value: 0 };
   const others = Object.keys(civEco)
     .filter((en) => en !== TATARS_EN)
-    .map((en) => describeCiv(en, civEco[en], civs))
+    .map((en) => describeCiv(en, civEco[en], civPool))
     .filter(notable);
   return {
     patchBuild: /DE Update (\d+)/.exec(patch)?.[1] ?? null,
@@ -149,7 +149,7 @@ export function elevationFacts(eco: ElevationEco = ECO, civs: readonly Elevation
     defaultLowerAdd: formatElevationNumber(0),
     defaultHigher: multiplied(HIGHER_BASE, zero),
     defaultLower: multiplied(LOWER_BASE, zero),
-    tatars: describeCiv(TATARS_EN, civEco[TATARS_EN], civs),
+    tatars: describeCiv(TATARS_EN, civEco[TATARS_EN], civPool),
     others,
   };
 }

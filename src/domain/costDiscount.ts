@@ -6,7 +6,7 @@
  *  3. 对不上任何费用句子的组显示「折扣未计入」，该组不乘，不出估算值。
  * 取整与开局相同：priceFromRawFactor，再走到 roundHalfPrice（issue 129）。恰好落在半数的直接显示半数。
  */
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { matchCostGroup, priceFromRawFactor } from './costPolicy';
 import { DAT, type DatCostDiscount } from './datEffects';
 import type { Cost } from './types';
@@ -45,7 +45,7 @@ export interface CostDiscount {
 
 const stripPct = (s: string) => s.replace(/\s*[-−]\s*[\d/]+%\s*(黄金|金)?\s*$/, '').trim();
 function lineOf(civEn: string, d: { idx: number | null; techs: number[] }): CostBonusLine {
-  const text = d.idx !== null && d.idx >= 0 ? (civs.find((c) => c.en === civEn)?.bon[d.idx] ?? '') : '';
+  const text = d.idx !== null && d.idx >= 0 ? (civByEn(civEn)?.bon[d.idx] ?? '') : '';
   return { idx: d.idx, text, label: stripPct(text) || text, techs: d.techs };
 }
 export { roundHalfPrice };

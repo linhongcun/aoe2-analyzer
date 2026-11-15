@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import { RES_ZH } from '../../domain/ratings';
 import {
   MARKET_DATA,
@@ -131,7 +131,7 @@ export default function Market() {
                 {results.map((result, index) => (
                   <div className="market-summary" key={index} data-testid={`market-summary-${index}`}>
                     <h3>方案 {index === 0 ? 'A' : 'B'}</h3>
-                    <p className="note">{civs.find((civ) => civ.en === config.plans[index]!.civ)?.zh ?? '文明无效'}</p>
+                    <p className="note">{civByEn(config.plans[index]!.civ)?.zh ?? '文明无效'}</p>
                     {result.errors.length ? (
                       <p className="market-invalid">输入无效，暂停计算</p>
                     ) : (

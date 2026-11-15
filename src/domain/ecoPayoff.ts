@@ -1,6 +1,6 @@
 /** issue 214：固定人口的单项经济科技收益；游戏数值只从固定导出读取。 */
 import { ECO as eco } from '../data/eco';
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { DAT } from './datEffects';
 import { freeProductionTechs, productionTechAge, type ProductionContext } from './production';
 import { gatherModel, type GatherRes } from './realCost';
@@ -141,7 +141,7 @@ export function calculateEcoPayoff(ctx: ProductionContext, config: EcoPayoffConf
     allowed = new Set(available.map((t) => t.id));
   const free = new Set([...freeProductionTechs(ctx, config)].filter((id) => PAYOFF_BASELINE.includes(id)));
   const known = new Set([...config.known, ...free]);
-  if (!civs.some((c) => c.en === config.civ)) errors.push('文明不存在，请重新选择。');
+  if (civByEn(config.civ) === undefined) errors.push('文明不存在，请重新选择。');
   if (![1, 2, 3, 4].includes(config.age)) errors.push('时代无效。');
   if (!PAYOFF_TARGETS.some((id) => id === config.target) || !target) errors.push('请选择伐木、采金或采石科技作为目标。');
   else if (!allowed.has(config.target)) errors.push(`${target.zh}在当前文明或时代不可用。`);
