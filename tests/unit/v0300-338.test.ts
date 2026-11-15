@@ -7,7 +7,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const pins = JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as { sources: Record<string, { sha256?: string; path?: string }> };
-const dat = Object.values(pins.sources).flatMap((s) => (s.sha256 ? [s.sha256] : []));
+const dat = [pins.sources.dat!.sha256!];
+const datHashes = (text: string) => [...text.matchAll(/"(datSha256|sha256)"\s*:\s*"([0-9a-fA-F]{64})"/g)];
 
 describe('#338 数据文件里的 .dat sha256 与「关于数据」的固定版本一致', () => {
   it('固定版本文件里有 .dat 来源，sha256 是 64 位小写十六进制', () => {
@@ -15,8 +16,12 @@ describe('#338 数据文件里的 .dat sha256 与「关于数据」的固定版�
     for (const h of dat) expect(h).toMatch(/^[0-9a-f]{64}$/);
   });
   const files = readdirSync('data/game').filter((f) => f.endsWith('.json'));
+  it('第三方快照的 sourceSha256 不冒充 .dat 身份，仍保留嵌套 .dat 指纹核验', () => {
+    expect(datHashes(JSON.stringify({ sourceSha256: 'a'.repeat(64), meta: { datSha256: dat[0] } })).map((hit) => hit[2])).toEqual(dat);
+    expect(datHashes(JSON.stringify({ sha256: 'b'.repeat(64) }))[0]?.[2]).not.toBe(dat[0]);
+  });
   for (const f of files) {
-    const hits = [...readFileSync(`data/game/${f}`, 'utf8').matchAll(/"(\w*sha256\w*)"\s*:\s*"([0-9a-fA-F]{64})"/gi)];
+    const hits = datHashes(readFileSync(`data/game/${f}`, 'utf8'));
     if (!hits.length) continue;
     it(`data/game/${f} 记录的 ${hits.map((m) => m[1]).join('、')} 都是固定版本里的 .dat`, () => {
       for (const m of hits) expect(dat).toContain(m[2]!.toLowerCase());

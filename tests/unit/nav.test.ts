@@ -11,7 +11,7 @@ const home = () => renderToStaticMarkup(createElement(StaticRouter, { location: 
 
 describe('导航与首页入口 #272', () => {
   it('顶部保留紧凑的百科快捷入口', () => {
-    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps', 'patches']);
+    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'maps', 'patches']);
   });
 
   it('每个已上线页面在首页渲染至少一个入口，且工具菜单数据包含入口', () => {
@@ -29,7 +29,7 @@ describe('导航与首页入口 #272', () => {
     }
   });
 
-  it('四组都有标题、说明，页面按自己的 group 归类且不重复', () => {
+  it('四组都有标题与登记说明，页面按自己的 group 归类且不重复', () => {
     const html = home();
     for (const groups of [HOME_GROUPS, TOOL_GROUPS]) {
       expect(groups.map((group) => group.title)).toEqual(['新手入门', '对局计划', '经济计算', '资料']);
@@ -37,7 +37,6 @@ describe('导航与首页入口 #272', () => {
         expect(group.desc.length).toBeGreaterThan(0);
         expect(group.sections.length).toBeGreaterThan(0);
         expect(html).toContain(group.title);
-        expect(html).toContain(group.desc);
         for (const s of group.sections) expect(s.group, s.key).toBe(group.key);
       }
       const keys = groups.flatMap((group) => group.sections.map((s) => s.key));

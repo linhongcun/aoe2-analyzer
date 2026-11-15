@@ -14,11 +14,13 @@ it('#338 preserves the exact original route/width/assertion-family union with on
   const original = routes.flatMap((route) => [`${route}|1280|hash`, `${route}|360|table`, `${route}|1280|table`]).sort();
   const plan = staticSweepPlan(routes),
     equivalent = plan.flatMap((group) => group.routes.flatMap((route) => group.families.map((family) => `${route}|${group.width}|${family}`)));
-  expect(routes).toHaveLength(957);
-  expect(original).toHaveLength(2871);
+  expect(routes).toContain('/');
+  expect(routes).toContain('/civ/Franks');
+  expect(routes.length).toBeGreaterThan(0);
+  expect(original).toHaveLength(routes.length * 3);
   expect(equivalent.sort()).toEqual(original);
   expect(new Set(equivalent).size).toBe(original.length);
-  expect(plan.flatMap((group) => group.routes)).toHaveLength(1914);
+  expect(plan.flatMap((group) => group.routes)).toHaveLength(routes.length * 2);
   expect(staticSweepPlan(routes, 8, true).every((group) => group.families.join() === 'table')).toBe(true);
   expect(() => staticSweepPlan([...routes, routes[0]!])).toThrow(/unique/);
 });

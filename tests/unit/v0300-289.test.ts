@@ -14,6 +14,7 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import ts from 'typescript';
 import eco from '../../data/game/eco.json';
 import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
@@ -47,7 +48,19 @@ function loops(src: string): string[] {
       if (s[k] === '(') depth++;
       else if (s[k] === ')' && --depth === 0) break;
     }
-    out.push(s.slice(m.index!, k + 1));
+    const header = s.slice(m.index!, k + 1);
+    if (header.startsWith('it.each([')) {
+      const file = ts.createSourceFile('cases.ts', header, ts.ScriptTarget.Latest);
+      const statement = file.statements[0];
+      if (statement && ts.isExpressionStatement(statement) && ts.isCallExpression(statement.expression)) {
+        const table = statement.expression.arguments[0];
+        if (table && ts.isArrayLiteralExpression(table)) {
+          out.push(...table.elements.map((row) => `it.each.row(${canon(row.getText(file))})`));
+          continue;
+        }
+      }
+    }
+    out.push(header);
   }
   return out;
 }
@@ -121,14 +134,20 @@ describe('#289 对照：不改变任何断言', () => {
         .map(([file, statement]) => `${file}: ${statement}`),
     ).toEqual([]);
   });
-  it('f856c9e 的循环头 for(...) / it.each(...) 都还在（不缩小开局 × 文明 × 建房 × 距离的覆盖面）', () => {
+  it('f856c9e 的循环头与 it.each 每行都还在（允许增加用例，不缩小开局 × 文明 × 建房 × 距离覆盖）', () => {
     const helpers = helperFiles().map((p) => readFileSync(p, 'utf8'));
     const all = Object.values(SRC).flatMap(loops);
     expect(all.length, '防空转').toBeGreaterThanOrEqual(5);
     const retained = Object.entries(SRC).flatMap(([file, src]) => loops(protectedSource(file, src)));
-    const retainedNow = [...formatFiles().map(read), beforeMigratedC(read('civ42v070.test.ts')), ...helpers].map(canon).join('\n');
+    const retainedNow = new Set([...formatFiles().map(read), beforeMigratedC(read('civ42v070.test.ts')), ...helpers].flatMap(loops));
     expect(retained.length).toBeGreaterThanOrEqual(5);
-    expect(retained.filter((loop) => !retainedNow.includes(loop))).toEqual([]);
+    expect(retained.filter((loop) => !retainedNow.has(loop))).toEqual([]);
+  });
+  it('覆盖自检：it.each 增加行允许，删除原行仍被发现', () => {
+    const original = loops('it.each([[1, "a"], [2, "b"]])');
+    expect(loops('it.each([[0, "new"], [1, "a"], [2, "b"]])')).toEqual(expect.arrayContaining(original));
+    const reduced = loops('it.each([[0, "new"], [2, "b"]])');
+    expect(original.filter((row) => !reduced.includes(row))).toEqual(['it.each.row([1,"a"])']);
   });
   it('对照自检：注释掉的断言不算数', () => {
     expect(canon("// expect(a).toBe(1);\nexpect(b).toBe('3 人');")).toBe("expect(b).toBe('3 人');");

@@ -29,7 +29,7 @@
 | 数值编码（进模拟器/对比/作用对象）        | 66（51 条文明加成 + 15 条团队加成） | 97（84 + 手工回退 13）               | **103**（.dat 103 + 手工回退 0） |
 | 仅经济/费用类 .dat 结构化效果（文本展示） | 0                                   | 117                                  | 134                              |
 | 仅文本                                    | 215                                 | 67                                   | 44                               |
-| 数值编码的科技                            | 32                                  | 98                                   | **104**（.dat 104 + 手工 0）     |
+| 数值编码的科技                            | 32                                  | 98                                   | **105**（.dat 105 + 手工 0）     |
 | 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 13                               |
 
 （手工 CivBonus 条目 45 个，按加成文本序号去重后 51 条。）
@@ -156,7 +156,7 @@
 
 ### 由 .dat 新增数值编码的科技（之前仅文本或未编码）
 
-Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsveigar、Caciques、Caravan、Careening、Carvel Hull、Chatras、Chieftains、Cilician Fleet、Circumnavigation、Citadels、Clerical Recruitment、Clinker Construction、Comitatenses、Counterweights、Cranequins、Crenellations、Drill、Dry Dock、Eupseong、Fabric Shields、Farimba、Fereters、Fervor、Frontier Guards、Furor Celtica、Garland Wars、Great Wall、Greek Fire、Hand Cart、Hauberk、Herbalism、Hill Forts、Holcans、Howdah、Huaracas、Inquisition、Ironclad、Kataparuto、Loom、Manipur Cavalry、Ming-Kuang Armor、Northmen's Fury、Paiks、Pirotechnia、Recurve Bow、Rocketry、Sanctity、Sappers、Shatagni、Shinkichon、Shipwright、Siege Engineers、Silk Armor、Sipahi、Steppe Husbandry、Stirrups、Stronghold、Supremacy、Svan Towers、Timurid Siegecraft、Tower Shields、Tusk Swords、Wagenburg Tactics、Warwolf、Wheelbarrow、Yeomen
+Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsveigar、Caciques、Caravan、Careening、Carvel Hull、Chatras、Chieftains、Cilician Fleet、Circumnavigation、Citadels、Clerical Recruitment、Clinker Construction、Comitatenses、Counterweights、Cranequins、Crenellations、Drill、Dry Dock、Eupseong、Fabric Shields、Farimba、Fereters、Fervor、Frontier Guards、Furor Celtica、Garland Wars、Great Wall、Greek Fire、Hand Cart、Hauberk、Herbalism、Hill Forts、Holcans、Howdah、Huaracas、Inquisition、Ironclad、Kataparuto、Loom、Manipur Cavalry、Ming-Kuang Armor、Northmen's Fury、Paiks、Pirotechnia、Recurve Bow、Rocketry、Royal Heirs、Sanctity、Sappers、Shatagni、Shinkichon、Shipwright、Siege Engineers、Silk Armor、Sipahi、Steppe Husbandry、Stirrups、Stronghold、Supremacy、Svan Towers、Timurid Siegecraft、Tower Shields、Tusk Swords、Wagenburg Tactics、Warwolf、Wheelbarrow、Yeomen
 
 ## 二、文明加成：手工规则 vs .dat
 

@@ -92,10 +92,16 @@ it('#520 query wins over sticky, picker writes both keys and a bare return remem
   expect(view.root.findAllByType('p').some((p) => p.children.includes('链接中的文明无效，已用上次选择'))).toBe(true);
 });
 
-it('#520 duel keeps a bare return after automatic repair of a bad pack, then responds to new valid packs', async () => {
+it('#520 duel follows the canonical pair after automatic repair, then responds to new valid packs', async () => {
   await mount(h(Duel), '/duel?a=bad.Mongols.2..&b=74.Chinese.2..');
   expect(currentSearch).toContain('a=569.Franks'); // 既有 PK 自动修复仍工作。
-  expect(links()).toEqual(['/matchup', '/civ/Chinese', '/builds?civ=Chinese&from=duel']);
+  expect(links()).toEqual([
+    '/matchup?me=Franks&opp=Chinese',
+    '/civ/Franks',
+    '/civ/Chinese',
+    '/builds?civ=Franks&from=duel',
+    '/builds?civ=Chinese&from=duel',
+  ]);
   await act(async () => navigate('/duel?a=4.Mongols.2..&b=74.Chinese.2..'));
   expect(links()).toEqual([
     '/matchup?me=Mongols&opp=Chinese',
@@ -105,7 +111,13 @@ it('#520 duel keeps a bare return after automatic repair of a bad pack, then res
     '/builds?civ=Chinese&from=duel',
   ]);
   await act(async () => navigate('/duel'));
-  expect(links()).toEqual(['/matchup']);
+  expect(links()).toEqual([
+    '/matchup?me=Franks&opp=Japanese',
+    '/civ/Franks',
+    '/civ/Japanese',
+    '/builds?civ=Franks&from=duel',
+    '/builds?civ=Japanese&from=duel',
+  ]);
 });
 
 it('#520 opponent builds shows the original pair, civ page and full list retaining civ', async () => {
