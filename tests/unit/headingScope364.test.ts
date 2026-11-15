@@ -79,7 +79,7 @@ describe('#364 bounded Duel presentation plan', () => {
         'src/features/units/components/UnitDetail.tsx',
         'src/shared/ui/sim/Simulator.tsx',
       ],
-      'src/shared/ui/RealCost.tsx': ['src/features/duel/components/DuelSelection.tsx', 'src/features/units/components/UnitDetail.tsx'],
+      'src/shared/ui/RealCost.tsx': ['src/features/duel/components/DuelSelection.tsx', 'src/features/units/components/unitDetailParts.tsx'],
     };
     const consumers = Object.fromEntries(Object.keys(expected).map((path) => [path, new Set<string>()]));
     const config = ts.readConfigFile('tsconfig.json', ts.sys.readFile);

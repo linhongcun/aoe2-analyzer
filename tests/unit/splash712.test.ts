@@ -26,7 +26,12 @@ const field = (html: string, name: string) => {
   expect(found).toBeDefined();
   return visible(found ?? '');
 };
-const desc = (html: string) => (html.match(/<p class="desc">([\s\S]*?)<\/p>/)?.[1] ?? '').replace(/<br\s*\/?\s*>/g, '\n').replace(/<[^>]*>/g, '');
+const descriptionHtml = (html: string) => {
+  const found = html.match(/<p class="ud-desc">([\s\S]*?)<\/p>/)?.[1];
+  expect(found, '真实单位页应有来源说明').toBeDefined();
+  return found!;
+};
+const desc = (html: string) => descriptionHtml(html).replace(/<br\s*\/?\s*>/g, '\n').replace(/<[^>]*>/g, '');
 function changed(id: number, patch: Record<string, unknown>, check: (html: string) => void) {
   const original = state.core!;
   const map = { ...original.unitById, [id]: { ...original.unitById[id]!, ...patch } };
@@ -63,7 +68,7 @@ describe('#712 半径语义与局部说明', () => {
     for (const name of ['大学', '修道院', ...(id === 588 ? [] : ['攻城武器厂'])]) {
       expect(description).toContain(`(${name})`);
       const building = state.core!.buildings.find((b) => b.zh === name)!;
-      expect(html.match(/<p class="desc">([\s\S]*?)<\/p>/)?.[1]).toContain(`href="/building/${building.id}"`);
+      expect(descriptionHtml(html)).toContain(`href="/building/${building.id}"`);
     }
   });
   it('两个字段扰动随输入变化且不改来源', () =>

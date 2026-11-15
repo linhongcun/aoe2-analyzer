@@ -84,6 +84,23 @@ describe('#486 fixed 188329 teaching compatibility', () => {
     const units = read('units') as { id: number }[];
     const techs = read('techs') as { id: number }[];
     const eco = read('eco');
+    const garrison = read('garrison_general');
+    const catalog = new Map([...units, ...read('buildings')].map(({ id, age, pic, civs }) => [id, { age, pic, civs }]));
+    for (const [id, unit] of Object.entries(garrison.units) as [string, Record<string, unknown>][]) {
+      unit.catalog ??= catalog.get(Number(id)) ?? { age: 1, pic: null, civs: [] };
+    }
+    garrison.unitUpgradeTechs = read('garrison_techs').unitUpgradeTechs;
+    const sorted = (value: unknown): unknown => {
+      if (Array.isArray(value)) return value.map(sorted);
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(
+          Object.entries(value)
+            .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+            .map(([key, child]) => [key, sorted(child)]),
+        );
+      }
+      return value;
+    };
     const projections = {
       units: ids.map((id) => units.find((unit) => unit.id === id)),
       techs: [47, 101, 102, 103].map((id) => techs.find((tech) => tech.id === id)),
@@ -91,7 +108,7 @@ describe('#486 fixed 188329 teaching compatibility', () => {
       trees: read('trees'),
       eco: { units: ids.map((id) => [id, eco.units[id]]), ageReq: eco.ageReq, ecoTechs: eco.ecoTechs, civEco: eco.civEco },
       effects: withoutMeta(read('effects')),
-      garrison: withoutMeta(read('garrison_general')),
+      garrison: sorted(withoutMeta(garrison)),
       exampleCivs: (read('civs') as { en: string }[]).filter((civ) => ['Britons', 'Franks', 'Huns', 'Ethiopians'].includes(civ.en)),
     };
     for (const name of Object.keys(projections) as (keyof typeof projections)[]) {

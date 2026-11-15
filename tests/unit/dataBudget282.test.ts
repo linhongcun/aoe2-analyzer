@@ -100,6 +100,7 @@ describe('#282 compact calculation inputs', () => {
     const src = readFileSync('src/domain/realCost.ts', 'utf8');
     expect(src).toContain("from './unhandledRes'");
     expect(src).not.toContain('buildSimCoverage');
-    expect(src).toMatch(/import type \{ EcoData \} from '\.\/buildSim'/);
+    expect(src).toContain("from './gatherRate'");
+    expect(src).not.toMatch(/from ['"]\.\/buildSim(?:Types)?['"]/);
   });
 });

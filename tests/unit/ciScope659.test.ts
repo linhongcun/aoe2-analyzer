@@ -366,18 +366,14 @@ describe('#659 source-evidenced CSS ownership, not directory-name guessing', () 
   it.each([
     'src/features/civs/components/civ-background.css',
     'src/features/civs/components/civ-history.css',
-    'src/features/civs/components/civOverview.css',
     'src/features/civs/components/civRelatedTools.css',
     'src/features/civs/components/civ-list-links.css',
     'src/features/civs/components/civ-browse.css',
-    'src/features/civs/components/civ-professional-view.css',
     'src/features/civs/components/civ-not-found.css',
     'src/features/civs/components/civ-regional-units.css',
     'src/features/civs/components/civ-regional-buildings.css',
     'src/features/civs/components/civ-unique-buildings.css',
     'src/features/civs/openingBuildChoices.css',
-    'src/features/home/home.css',
-    'src/features/home/start-game.css',
     'src/features/ladder/ladder.css',
     'src/features/ladder/ladderMeta.css',
     'src/features/ladder/stat-methods.css',
@@ -387,6 +383,15 @@ describe('#659 source-evidenced CSS ownership, not directory-name guessing', () 
     expect(planChanges([change(path, before, before + '\nbody { display: none; }')]).full).toBe(true);
     expect(planChanges([change(path, before + '\nbody { display: none; }', before)]).full).toBe(true);
   });
+
+  it.each(['src/features/civs/components/civOverview.css', 'src/features/home/home.css', 'src/features/home/start-game.css'])(
+    '%s has outgrown its original local selector audit and stays conservative',
+    (path) => {
+      const source = readFileSync(path, 'utf8');
+      expect(planChanges([change(path, source, source + '\n/* unchanged declarations */')]).full).toBe(true);
+      expect(planChanges([change(path, source, source + '\nbody { display: none; }')]).full).toBe(true);
+    },
+  );
 
   it.each([
     'body { display:none }',

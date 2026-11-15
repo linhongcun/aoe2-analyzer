@@ -96,6 +96,22 @@
     "costDiscount": false
   },
   {
+    "civ": "Koreans",
+    "idx": 1,
+    "src": "eco",
+    "zh": "远程士兵和步兵的木材费用 -50%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Koreans",
+    "idx": 3,
+    "src": "text",
+    "zh": "战船的木材费用 -20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
     "civ": "Magyars",
     "idx": 1,
     "src": "eco",
