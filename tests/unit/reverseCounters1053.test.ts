@@ -77,6 +77,15 @@ describe('单位详情反向类别加成（#1053）', () => {
     expect(reverseCounterDuelHref(malformedSelf, malformedSelf, core, trees, 'Japanese', 'Japanese', 3)).toBeNull();
   });
 
+  it('不把前置形态缺失的正贡献候选作为完整目录结果', () => {
+    const incomplete = { ...core.unitById[1658]!, id: 3_000_020, from_: 3_000_021 };
+    const localCore = { ...core, unitById: { ...core.unitById, [incomplete.id]: incomplete } };
+    const result = reverseCounters(target('冲击步兵'), [incomplete], localCore, civNames, null, { civ: '', age: null });
+
+    expect(result.state).toBe('partial');
+    expect(result.groups.flatMap((group) => group.rows).map((row) => row.unit.id)).toContain(incomplete.id);
+  });
+
   it('只有完整基础字段相同且来自不同训练建筑时才合并；1658 与 1660 保持独立', () => {
     const base = core.unitById[1658]!;
     const clone = { ...base, id: 3_000_000, b: base.b + 10_000, bz: '另一训练建筑', ben: 'Another building' };

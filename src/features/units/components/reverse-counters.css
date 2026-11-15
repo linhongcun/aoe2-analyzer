@@ -20,8 +20,9 @@
 
 .ud-reverse-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-3);
 }
 
@@ -42,7 +43,6 @@
 }
 
 .ud-reverse-intro,
-.ud-reverse-model,
 .ud-reverse-boundary,
 .ud-reverse-age-note,
 .ud-reverse-footer,
@@ -50,10 +50,31 @@
   margin-block: var(--space-2);
 }
 
+.ud-reverse-source {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.ud-reverse-model {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.ud-reverse-pk-note {
+  margin-block: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
 .ud-reverse-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.55fr) auto;
+  grid-template-columns: minmax(180px, 260px) minmax(120px, 160px) auto;
   align-items: end;
+  justify-content: start;
   gap: var(--space-3);
   margin-top: var(--space-4);
 }
@@ -175,7 +196,7 @@
 }
 
 .ud-reverse-damage {
-  color: var(--color-good);
+  color: var(--color-accent);
 }
 
 .ud-reverse-mobile-label {
@@ -227,17 +248,37 @@
 }
 
 .ud-reverse-pk-side {
-  display: flex;
+  display: grid;
   min-width: 0;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.ud-reverse-pk-link {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 44px;
   min-height: 44px;
   align-items: center;
   gap: var(--space-2);
-  flex-wrap: wrap;
+  color: var(--color-link);
+  text-decoration: none;
 }
 
-.ud-reverse-pk-side .uico {
+.ud-reverse-pk-link .uico {
   width: 32px;
   height: 32px;
+  flex: 0 0 auto;
+}
+
+.ud-reverse-pk-link > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .ud-reverse-pk-side > span:first-child,
@@ -249,6 +290,14 @@
 
 .ud-reverse-pk-era span {
   display: block;
+}
+
+.ud-reverse-pk-retained-note {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-warn);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
 }
 
 .ud-reverse-pk-warning,

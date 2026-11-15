@@ -118,10 +118,30 @@ export function useReverseCounterSession(targetId: number | null, civ: string, l
   const key = reverseCounterSessionKey(targetId, civ);
   const locationKey = `${location.pathname}\n${location.search}\n${location.hash}`;
   const handledKey = `${key ?? 'none'}\n${locationKey}`;
-  const record = readReverseCounterSession(key, location);
-  const [restoredKey, setRestoredKey] = useState('');
-  const restoreHandled = restoredKey === handledKey;
-  const restorePending = !!record && !restoreHandled;
-  const markRestored = useCallback(() => setRestoredKey(handledKey), [handledKey]);
-  return { key, record, restorePending, restoreHandled, markRestored };
+  const [snapshot, setSnapshot] = useState(() => ({
+    identity: handledKey,
+    lifecycle: 1,
+    record: readReverseCounterSession(key, location),
+  }));
+  let captured = snapshot;
+  if (snapshot.identity !== handledKey) {
+    captured = {
+      identity: handledKey,
+      lifecycle: snapshot.lifecycle + 1,
+      record: readReverseCounterSession(key, location),
+    };
+    setSnapshot(captured);
+  }
+  const [restoredSnapshot, setRestoredSnapshot] = useState<typeof snapshot | null>(null);
+  const restoreHandled = restoredSnapshot === captured;
+  const restorePending = !!captured.record && !restoreHandled;
+  const markRestored = useCallback(() => setRestoredSnapshot(captured), [captured]);
+  return {
+    key,
+    identity: captured,
+    record: captured.record,
+    restorePending,
+    restoreHandled,
+    markRestored,
+  };
 }

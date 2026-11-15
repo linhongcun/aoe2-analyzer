@@ -16,6 +16,7 @@ export function PkAvailability({
   treesPending,
   treesError,
   retryTrees,
+  showReady = true,
 }: {
   target: Unit;
   counter: Unit;
@@ -27,6 +28,7 @@ export function PkAvailability({
   treesPending: boolean;
   treesError: boolean;
   retryTrees: () => void;
+  showReady?: boolean;
 }) {
   if (!targetCiv || !counterCiv) {
     return (
@@ -102,7 +104,7 @@ export function PkAvailability({
       </p>
     );
   }
-  return <p className="ud-reverse-pk-ready">双方形态在所选时代可用。仅传入下列明确设置，不带入科技模拟工作区。</p>;
+  return showReady ? <p className="ud-reverse-pk-ready">双方形态在所选时代可用。仅传入下列明确设置，不带入科技模拟工作区。</p> : null;
 }
 
 function focusPicker(id: string) {

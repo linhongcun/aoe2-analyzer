@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { civByEn, civs, type Core } from '../../../data';
+import { civs, type Core } from '../../../data';
 import {
   hasValidCombatPairs,
   reverseCounterDuelHref,
@@ -13,7 +13,8 @@ import { UnitIcon } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { useReverseCounterSession, writeReverseCounterSession, type ReverseCounterLocation, type ReverseCounterSession } from '../reverseCounterSession';
-import { AGE_ZH, PkAvailability } from './ReverseCounterAvailability';
+import { AGE_ZH } from './ReverseCounterAvailability';
+import { getPkUnavailableReason, PkSummary, RetainedPkSummary, selectPkSummaryMode } from './ReverseCounterPkSummary';
 import './reverse-counters.css';
 
 interface Props {
@@ -108,9 +109,12 @@ function CounterGroup({
             const buttonId = pkButtonId(group.category, row.unit.id);
             const counterCombatValid = hasValidCombatPairs(row.unit);
             const rowPkAllowed = pkAllowed && counterCombatValid;
+            const selectedMember = row.members.find((member) => member.id === openPk) ?? null;
+            const selectedRow = selectedMember ? { ...row, unit: selectedMember } : null;
+            const selectedPkAllowed = rowPkAllowed && !!selectedMember && hasValidCombatPairs(selectedMember);
             const duelHref =
-              rowPkAllowed && trees && !treesError && !treesPending && targetCiv && enemyCiv
-                ? reverseCounterDuelHref(target, row.unit, core, trees, targetCiv, enemyCiv, age ?? 4)
+              selectedMember && selectedPkAllowed && trees && !treesError && !treesPending && targetCiv && enemyCiv
+                ? reverseCounterDuelHref(target, selectedMember, core, trees, targetCiv, enemyCiv, age ?? 4)
                 : null;
             return (
               <div className="ud-reverse-row-wrap" data-reverse-row="" id={id} key={row.unit.id} tabIndex={-1}>
@@ -140,7 +144,7 @@ function CounterGroup({
                     className="ud-btn ud-reverse-pk-button"
                     data-t="reverse-counter-pk"
                     disabled={!rowPkAllowed}
-                    aria-expanded={openPk === row.unit.id}
+                    aria-expanded={!!selectedMember}
                     onClick={() => onOpenPk(row.unit.id, buttonId)}
                   >
                     核对 PK
@@ -151,62 +155,23 @@ function CounterGroup({
                     {counterCombatValid ? pkUnavailableReason : `敌方单位${row.unit.zh}的攻击、护甲或护甲类别资料异常，不能生成 PK。`}
                   </p>
                 )}
-                {openPk === row.unit.id && (
-                  <div className="ud-reverse-pk" role="region" aria-label="核对单位 PK">
-                    <h3 tabIndex={-1} id={`reverse-counter-pk-title-${row.unit.id}`}>
-                      核对单位 PK
-                    </h3>
-                    <div className="ud-reverse-pk-sides">
-                      <div className="ud-reverse-pk-side">
-                        <span>A · 本单位</span>
-                        <UnitIcon u={target} />
-                        <Link id={`${id}-target-link`} to={`/unit/${target.id}`}>
-                          {target.zh}
-                        </Link>
-                        <span>{civByEn(targetCiv)?.zh ?? '未选择本单位文明'}</span>
-                      </div>
-                      <div className="ud-reverse-pk-side">
-                        <span>B · 敌方单位</span>
-                        <UnitIcon u={row.unit} />
-                        <Link id={`${id}-counter-link`} to={`/unit/${row.unit.id}`}>
-                          {row.unit.zh}
-                        </Link>
-                        <span>{civByEn(enemyCiv)?.zh ?? '未选择敌方文明'}</span>
-                      </div>
-                    </div>
-                    <p className="ud-reverse-pk-era">
-                      双方时代：{age === null ? `${AGE_ZH[4]}（时代不限时用于核对）` : AGE_ZH[age]}
-                      <span>自选科技：无 · 团队科技：无</span>
-                    </p>
-                    <PkAvailability
-                      target={target}
-                      counter={row.unit}
-                      targetCiv={targetCiv}
-                      counterCiv={enemyCiv}
-                      age={age ?? 4}
-                      core={core}
-                      trees={trees}
-                      treesPending={treesPending}
-                      treesError={treesError}
-                      retryTrees={retryTrees}
-                    />
-                    <p className="ud-reverse-pk-note">PK 会按双方文明效果及现有模型计算，结果与基础目录类别贡献口径不同。</p>
-                    <div className="ud-reverse-pk-actions">
-                      {duelHref && (
-                        <Link id={`${id}-duel-link`} className="ud-btn ud-reverse-primary" to={duelHref} data-t="reverse-counter-open-duel">
-                          打开单位 PK
-                        </Link>
-                      )}
-                      {!duelHref && (
-                        <button type="button" className="ud-btn ud-reverse-primary" data-t="reverse-counter-open-duel" disabled>
-                          打开单位 PK（暂不可用）
-                        </button>
-                      )}
-                      <button type="button" className="ud-btn" onClick={() => returnFocus(buttonId)}>
-                        取消
-                      </button>
-                    </div>
-                  </div>
+                {selectedRow && (
+                  <PkSummary
+                    id={id}
+                    row={selectedRow}
+                    buttonId={buttonId}
+                    target={target}
+                    targetCiv={targetCiv}
+                    enemyCiv={enemyCiv}
+                    age={age}
+                    core={core}
+                    trees={trees}
+                    treesPending={treesPending}
+                    treesError={treesError}
+                    retryTrees={retryTrees}
+                    duelHref={duelHref}
+                    returnFocus={returnFocus}
+                  />
                 )}
               </div>
             );
@@ -261,34 +226,10 @@ export function ReverseCounters({
   const [openPk, setOpenPk] = useState<{ category: string; id: number } | null>(stored?.openPk ?? null);
   const [originButton, setOriginButton] = useState('');
   const [restoreNote, setRestoreNote] = useState('');
-  const defaultGroupsReady = useRef(!!stored);
-  const activeSessionKey = useRef(currentSession.key);
-  const queryTrees = treesError || treesPending ? null : trees;
-  const rawResult = useMemo(() => reverseCounters(rawTarget, core.units, core, civNames, queryTrees, filter), [rawTarget, core, queryTrees, filter]);
-  const result = useMemo(() => {
-    const targetDataWarning = targetIssues.some((field) => ['atks', 'armc', 'arms'].includes(field));
-    if ((targetDataWarning || corePending || coreError) && rawResult.state === 'ready') return { ...rawResult, state: 'partial' as const };
-    return rawResult;
-  }, [rawResult, targetIssues, corePending, coreError]);
-  const targetDataWarning = targetIssues.some((field) => ['atks', 'armc', 'arms'].includes(field));
-  const filterActive = !!filter.civ || filter.age !== null;
-  const queryCount = result.groups.reduce((sum, group) => sum + group.rows.length, 0);
-  const pkAllowed = result.state === 'ready' && targetIssues.length === 0 && !corePending && !coreError;
-  const pkUnavailableReason = targetDataWarning
-    ? `本单位${target.zh}的攻击或护甲类别资料不完整，不能生成 PK。`
-    : corePending
-      ? '正在重新核验目录资料，暂不能生成 PK。'
-      : coreError
-        ? '目录资料重试失败，暂不能核实 PK。'
-        : result.state === 'availability-unknown'
-          ? '科技树可用性尚未核实，暂不能生成 PK。'
-          : result.state === 'unreadable'
-            ? '本次类别数据无法核实，暂不能生成 PK。'
-            : '目录中有部分异常数据，暂不能安全生成 PK。';
-
-  useEffect(() => {
-    if (activeSessionKey.current === currentSession.key) return;
-    activeSessionKey.current = currentSession.key;
+  const [defaultGroupsReady, setDefaultGroupsReady] = useState(!!stored);
+  const [activeSessionIdentity, setActiveSessionIdentity] = useState(currentSession.identity);
+  const sessionStateReady = activeSessionIdentity === currentSession.identity;
+  if (!sessionStateReady) {
     const next = currentSession.record;
     setFilter({
       civ: next?.filters.civ && civNames.includes(next.filters.civ) ? next.filters.civ : '',
@@ -297,15 +238,64 @@ export function ReverseCounters({
     setCollapsed(next?.collapsed ?? []);
     setExpandedRows(next?.expandedRows ?? []);
     setOpenPk(next?.openPk ?? null);
-    defaultGroupsReady.current = !!next;
-  }, [currentSession.key, currentSession.record]);
+    setOriginButton('');
+    setRestoreNote('');
+    setDefaultGroupsReady(!!next);
+    setActiveSessionIdentity(currentSession.identity);
+  }
+  const queryTrees = treesError || treesPending ? null : trees;
+  const rawResult = useMemo(() => reverseCounters(rawTarget, core.units, core, civNames, queryTrees, filter), [rawTarget, core, queryTrees, filter]);
+  const baseResult = useMemo(() => reverseCounters(rawTarget, core.units, core, civNames, null, { civ: '', age: null }), [rawTarget, core]);
+  const result = useMemo(() => {
+    const targetDataWarning = targetIssues.some((field) => ['atks', 'armc', 'arms'].includes(field));
+    if ((targetDataWarning || corePending || coreError) && rawResult.state === 'ready') return { ...rawResult, state: 'partial' as const };
+    return rawResult;
+  }, [rawResult, targetIssues, corePending, coreError]);
+  const targetDataWarning = targetIssues.some((field) => ['atks', 'armc', 'arms'].includes(field));
+  const filterActive = !!filter.civ || filter.age !== null;
+  const queryCount = result.groups.reduce((sum, group) => sum + group.rows.length, 0);
+  const treeAvailabilityUnresolved = result.state === 'availability-unknown';
+  const basePkRow = useMemo(() => {
+    if (
+      !sessionStateReady ||
+      !openPk ||
+      corePending ||
+      coreError ||
+      baseResult.state !== 'ready' ||
+      targetIssues.length > 0 ||
+      !hasValidCombatPairs(rawTarget)
+    ) {
+      return null;
+    }
+    const group = baseResult.groups.find((item) => item.category === openPk.category);
+    const row = group?.rows.find((item) => item.damage > 0 && item.members.some((member) => member.id === openPk.id));
+    const member = row?.members.find((item) => item.id === openPk.id);
+    const currentUnit = core.unitById[openPk.id];
+    return row && member && currentUnit && member === currentUnit && hasValidCombatPairs(currentUnit) ? { ...row, unit: currentUnit } : null;
+  }, [sessionStateReady, openPk, corePending, coreError, targetIssues, rawTarget, baseResult, core]);
+  const filteredPkRow = useMemo(() => {
+    if (!sessionStateReady || !openPk || corePending || coreError || result.state !== 'ready') return null;
+    const group = result.groups.find((item) => item.category === openPk.category);
+    const row = group?.rows.find((item) => item.damage > 0 && item.members.some((member) => member.id === openPk.id));
+    const member = row?.members.find((item) => item.id === openPk.id);
+    const currentUnit = core.unitById[openPk.id];
+    return row && member && currentUnit && member === currentUnit && hasValidCombatPairs(currentUnit) ? { ...row, unit: currentUnit } : null;
+  }, [sessionStateReady, openPk, corePending, coreError, result, core]);
+  const pkSummaryMode = selectPkSummaryMode(sessionStateReady && !!openPk, result.state, !!filteredPkRow, !!basePkRow);
+  const pkAllowed = result.state === 'ready' && targetIssues.length === 0 && !corePending && !coreError;
+  const pkUnavailableReason = getPkUnavailableReason(target.zh, targetDataWarning, corePending, coreError, result.state);
 
-  useEffect(() => {
-    if (defaultGroupsReady.current || !result.groups.some((group) => group.rows.length)) return;
+  if (sessionStateReady && !defaultGroupsReady && result.groups.some((group) => group.rows.length)) {
     const first = result.groups.find((group) => group.rows.length)?.category;
     setCollapsed(result.groups.filter((group) => group.category !== first).map((group) => group.category));
-    defaultGroupsReady.current = true;
-  }, [result.groups]);
+    setDefaultGroupsReady(true);
+  }
+
+  if (sessionStateReady && openPk && !corePending && !coreError && !filteredPkRow && !basePkRow) {
+    setOpenPk(null);
+    setOriginButton('');
+    setRestoreNote('所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
+  }
 
   const saveSession = useCallback(
     (anchor?: string, fallbackAnchor?: string, top?: number, focus?: string | null) => {
@@ -344,7 +334,7 @@ export function ReverseCounters({
   }, [saveSession]);
 
   useEffect(() => {
-    if (!restorePending || !sessionRecord || treesPending) return;
+    if (!sessionStateReady || !restorePending || !sessionRecord || treesPending || corePending || coreError) return;
     const record = sessionRecord;
     const frame = requestAnimationFrame(() => {
       const exact = record.anchor ? document.getElementById(record.anchor) : null;
@@ -356,33 +346,41 @@ export function ReverseCounters({
         (record.focus ? document.getElementById(record.focus) : null) ??
         (record.openPk ? document.getElementById(pkButtonId(record.openPk.category, record.openPk.id)) : null);
       if (record.focus || (record.openPk && destination)) (focus ?? destination)?.focus({ preventScroll: true });
-      if (!hasReaderLocation) setRestoreNote('已恢复上次筛选与展开状态；保持当前阅读位置。');
+      if (record.openPk && !basePkRow) setRestoreNote('所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
+      else if (!hasReaderLocation) setRestoreNote('已恢复上次筛选与展开状态；保持当前阅读位置。');
       else if (!exact) setRestoreNote('已恢复本单位、敌方筛选与阅读位置；原结果行已变化，已定位到本类或查询区。');
       else setRestoreNote('已恢复上次筛选与阅读位置。');
       if (record.openPk) setOriginButton(pkButtonId(record.openPk.category, record.openPk.id));
       markRestored();
     });
     return () => cancelAnimationFrame(frame);
-  }, [restorePending, sessionRecord, treesPending, markRestored]);
+  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, markRestored]);
 
   useEffect(() => {
-    if (!currentSession.restorePending) saveSession();
-  }, [currentSession.restorePending, saveSession]);
+    if (sessionStateReady && !currentSession.restorePending) saveSession();
+  }, [sessionStateReady, currentSession.restorePending, saveSession]);
 
   const toggleGroup = (category: string) => {
     setCollapsed((current) => (current.includes(category) ? current.filter((item) => item !== category) : [...current, category]));
   };
   const changeFilter = (next: ReverseCounterFilter) => {
+    markRestored();
     setFilter(next);
     setOpenPk(null);
-    setOriginButton('');
     setRestoreNote('');
-    defaultGroupsReady.current = false;
+    setDefaultGroupsReady(false);
     setCollapsed([]);
   };
   const closePk = (focusId = originButton || (openPk ? pkButtonId(openPk.category, openPk.id) : '')) => {
+    markRestored();
     setOpenPk(null);
-    if (focusId) requestAnimationFrame(() => document.getElementById(focusId)?.focus());
+    requestAnimationFrame(() => {
+      const focus =
+        (focusId ? document.getElementById(focusId) : null) ??
+        document.getElementById('unit-reverse-title') ??
+        document.getElementById('unit-reverse-counters');
+      focus?.focus();
+    });
   };
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Escape' && openPk) {
@@ -423,7 +421,9 @@ export function ReverseCounters({
       onClickCapture={captureNavigation}
     >
       <div className="ud-reverse-heading">
-        <h2 id="unit-reverse-title">对本单位有类别加成的单位</h2>
+        <h2 id="unit-reverse-title" tabIndex={-1}>
+          对本单位有类别加成的单位
+        </h2>
         <span className="ud-reverse-source">基础目录</span>
       </div>
       <p className="ud-reverse-intro">按本单位的护甲类别查找，只列扣除该类护甲后贡献为正的形态。</p>
@@ -558,7 +558,7 @@ export function ReverseCounters({
             setExpandedRows((current) => (current.includes(group.category) ? current.filter((item) => item !== group.category) : [...current, group.category]))
           }
           onOpenPk={(id, buttonId) => openPkForRow(group.category, id, buttonId)}
-          openPk={openPk?.category === group.category ? openPk.id : null}
+          openPk={pkSummaryMode === 'filtered' && openPk?.category === group.category ? openPk.id : null}
           target={target}
           targetCiv={targetCiv}
           enemyCiv={filter.civ}
@@ -574,6 +574,24 @@ export function ReverseCounters({
           returnFocus={closePk}
         />
       ))}
+      {pkSummaryMode === 'retained' && openPk && basePkRow && (
+        <RetainedPkSummary
+          id={rowId(openPk.category, openPk.id)}
+          row={basePkRow}
+          buttonId={pkButtonId(openPk.category, openPk.id)}
+          target={target}
+          targetCiv={targetCiv}
+          enemyCiv={filter.civ}
+          age={filter.age}
+          core={core}
+          trees={trees}
+          treesPending={treesPending}
+          treesError={treesError}
+          retryTrees={retryTrees}
+          unresolved={treeAvailabilityUnresolved}
+          returnFocus={closePk}
+        />
+      )}
       <p className="ud-reverse-footer">
         基础目录来源：DE <span className="num nw">{DATA_SOURCES.patch?.build ?? '待确认'}</span>
       </p>
