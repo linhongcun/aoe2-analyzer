@@ -15,14 +15,11 @@
  * 取整仍是 roundHalfPrice（issue 129 游戏内实测的是 0.75 这种原始乘数和整数百分比相同的价）。
  * 原始乘数与整数百分比取整后差 0.5 或 1 时，采用原始乘数。那一跳没有游戏内实测。
  */
-import civsRaw from '../data/raw/civs';
-import unitsRaw from '../data/raw/units';
+import { civs } from '../data';
+import { CORE } from '../data/core';
 import { DAT, type DatCostDiscount, type DatCostGroup } from './datEffects';
 import { roundHalfPrice } from './roundHalfPrice';
-import type { Cost } from './types';
 
-const civs = civsRaw as { en: string; bon: string[]; bonEn: string[] }[];
-const units = unitsRaw as unknown as { id: number; age: number; civs: string[]; cost: Cost }[];
 const AGE_N: Record<string, number> = { Dark: 1, Feudal: 2, Castle: 3, Imperial: 4 };
 const RES_WORDS: [string, string][] = [
   ['wood', 'Wood'],
@@ -186,7 +183,7 @@ export function alignAggregatedFactor(aggregated: number, decision: ResourceDeci
 
 /** 加成百科：这条句子是否有单位在帝王时代（或不早于其可用时代）被实际计入。 */
 export function bonusDiscountCounted(civEn: string, idx: number): boolean {
-  for (const unit of units) {
+  for (const unit of CORE.units) {
     if (!unit.civs.includes(civEn)) continue;
     const age = Math.max(4, unit.age);
     for (const entry of DAT.costDiscounts?.[civEn] ?? []) {

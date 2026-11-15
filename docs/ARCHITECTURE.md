@@ -56,6 +56,14 @@ flowchart LR
 [src/domain/datEffects.ts](../src/domain/datEffects.ts)。
 新增入口须同步更新分层检查与本说明；页面不能任意直接导入核心 JSON。
 
+`src/data/raw/*` 只做原样转出，并且只能由 `src/data/**` 内的文件 import（检查器规则 `raw-direct`，#1029）。数据层之外读到的是类型化形态：
+
+- 单位、科技、建筑：[src/data/core.ts](../src/data/core.ts) 的 `buildCore()` 派生 `dlc`、`type`、`introducedUpdate`，并建 `unitById`、`techById`、`buildingById`、`linker`、`fam`；同一模块导出同步的 `CORE`。[src/data/index.ts](../src/data/index.ts) 的 `loadCore()` 动态 import 这个模块并返回同一个 `CORE` 对象，所以同步与异步两条通道拿到的是同一份类型和索引，目录数据仍不进主包。
+- 文明：`src/data` 导出的 `civs`（已带 `dlc`），随主包。
+- 经济数据：[src/data/eco.ts](../src/data/eco.ts) 的 `ECO`。
+
+静态 import `CORE` 的模块会和目录数据落在同一条懒加载链上；随主包加载的代码用 `loadCore()` / `useCore()`。
+
 ## 路由、导航与元数据
 
 [src/app/App.tsx](../src/app/App.tsx) 使用 React Router 的 `HashRouter`，地址使用 hash 路径以适配静态托管并支持可复制链接。[src/shared/nav/pageRegistry.ts](../src/shared/nav/pageRegistry.ts) 的 `PAGES` 登记路由、分组和页面说明；同一文件中的 `SECTION_GROUPS` 定义任务导航。[src/shared/nav/sections.ts](../src/shared/nav/sections.ts) 从登记派生导航、首页分组等列表；[src/app/pageRegistry.tsx](../src/app/pageRegistry.tsx) 将登记项映射到懒加载组件；[src/app/routes.tsx](../src/app/routes.tsx) 从该注册生成路由并渲染 PageMeta。分享与静态页元数据使用同一登记来源，避免平行清单漂移。新增页面应扩展登记、组件映射及相关验证。

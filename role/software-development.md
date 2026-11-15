@@ -12,11 +12,13 @@
 
 分层边界在 `scripts/check-layers.mjs`。`features/X` 不引用 `features/Y`；`shared/` 不引用 `features/` 和 `app/`；`domain/` 不引用 React、`features/`、`app/`、`shared/ui`。核心 JSON 只能由 `LOADERS` 里这 7 个文件直接 import：
 
-| 文件                                                                                 | 作用                                                         |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| `src/data/index.ts`                                                                  | 异步入口。`civs` 随主包；单位、科技、建筑、科技树动态 import |
-| `src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts` | 同步原样转出                                                 |
-| `src/domain/datEffects.ts`                                                           | `effects.json` 的类型和转换                                  |
+| 文件                                                                                 | 作用                                                                          |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `src/data/index.ts`                                                                  | `civs` 随主包；科技树动态 import；`loadCore()` 动态 import `src/data/core.ts` |
+| `src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts` | 原样转出，只给 `src/data/**` 内部用                                           |
+| `src/domain/datEffects.ts`                                                           | `effects.json` 的类型和转换                                                   |
+
+`src/data/raw/*` 只能由 `src/data/**` import（规则 `raw-direct`，#1029）。其他层要同步读单位、科技、建筑，用 `src/data/core.ts` 的 `CORE`：它和 `loadCore()` / `useCore()` 返回的是同一个对象，已带 `dlc`、`type`、`introducedUpdate` 和 `unitById`、`techById`、`buildingById`、`linker`、`fam`。文明用 `src/data` 的 `civs`，经济数据用 `src/data/eco.ts`。不要再写 `as unknown as { ... }[]` 的局部类型或自建 id 索引。静态 import `CORE` 会把目录数据带进所在 chunk，随主包加载的模块只用 `loadCore()` / `useCore()`。
 
 本地严格检查：
 

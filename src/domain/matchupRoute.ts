@@ -1,5 +1,5 @@
 /** S1 对阵路径：me/opp 始终指原对阵双方，civ 指当前页面所属文明。 */
-import civs from '../data/raw/civs';
+import { civs } from '../data';
 import { parseSide, type SideSpec } from './duelState';
 
 const knownCiv = (en: string | null | undefined) => (civs.some((c) => c.en === en) ? en! : undefined);

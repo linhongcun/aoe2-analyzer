@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboa
 import { Link } from 'react-router-dom';
 import { Check, Download, TriangleAlert as Warn, Link2, Settings2, Share2, X } from 'lucide-react';
 import { ECO as eco } from '../../data/eco';
-import units from '../../data/raw/units';
+import { CORE } from '../../data/core';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
@@ -20,7 +20,7 @@ import { TimelineSettings } from './TimelineSettings';
 import { TimelineChart } from './TimelineChart';
 import { TimelineSteps } from './TimelineSteps';
 import { TimelineSummary } from './TimelineSummary';
-import { civSimNotes, noHouseCompare, simulateBuild, WALK, type UpgradeData } from '../../domain/buildSim';
+import { civSimNotes, noHouseCompare, simulateBuild, WALK } from '../../domain/buildSim';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
@@ -30,9 +30,9 @@ import BuildPracticeView, { buildPracticeUrl } from './BuildPracticeView';
 import { buildView, rowTime, mmss, rangeLabel, summaryText, isLongBottleneck, noHouseCompareText } from './timelineModel';
 import { BuildApplicability } from './BuildApplicability';
 import { buildsFocusState } from './buildsFocus';
+import { UPS } from './upgrades';
 
-const UPS = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
-const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((u) => [String(u.id), u.zh]));
+const UNIT_ZH = Object.fromEntries(CORE.units.map((u) => [String(u.id), u.zh]));
 const AGE_ZH = ['', '黑暗', '封建', '城堡', '帝王'];
 /** #/builds?bo=…：开局时间线；布局与控件保留原状态和DOM。 */
 export default function BuildTimelineView({ orders = buildOrders }: { orders?: BuildOrder[] }) {

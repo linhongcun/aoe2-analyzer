@@ -10,7 +10,7 @@
  *   其余（含 eco.json 读得出但没有来源的）一律记「未计入」，按通用速度。
  */
 import { ECO as eco } from '../data/eco';
-import civs from '../data/raw/civs';
+import { civs } from '../data';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
