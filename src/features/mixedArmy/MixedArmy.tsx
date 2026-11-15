@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs, coreCache, treesCache, loadCore, loadTrees } from '../../data';
+import { civs, civByEn, coreCache, treesCache, loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import {
   MIXED_ARMY_CONTENT,
@@ -353,7 +353,7 @@ export default function MixedArmy() {
               <label className="mixed-field">
                 我的文明
                 <select aria-label="我的文明" value={config.civ} onChange={(event) => change({ civ: event.target.value })}>
-                  {!civs.some((civ) => civ.en === config.civ) && <option value={config.civ}>无效文明：{config.civ}</option>}
+                  {civByEn(config.civ) === undefined && <option value={config.civ}>无效文明：{config.civ}</option>}
                   {civs.map((civ) => (
                     <option key={civ.en} value={civ.en}>
                       {civ.zh}

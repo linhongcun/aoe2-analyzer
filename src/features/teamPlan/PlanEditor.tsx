@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { encodeTeamBonuses } from '../../domain/teamBonuses';
 import {
@@ -150,7 +150,7 @@ export function PlanEditor({
                   {player.id.toUpperCase()} 文明
                   <select value={player.civ} onChange={(e) => changePlayer({ ...player, civ: e.target.value })}>
                     <option value="">未选择</option>
-                    {!!player.civ && !civs.some((c) => c.en === player.civ) && <option value={player.civ}>未知文明：{player.civ}</option>}
+                    {!!player.civ && civByEn(player.civ) === undefined && <option value={player.civ}>未知文明：{player.civ}</option>}
                     {civs.map((c) => (
                       <option key={c.en} value={c.en}>
                         {c.zh}

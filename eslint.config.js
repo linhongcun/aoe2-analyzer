@@ -22,6 +22,23 @@ const maxNewFileLines = {
   },
 };
 
+const iconRestrictions = [
+  {
+    selector: 'Literal[value=/[\\u2190-\\u21FF\\u2600-\\u27BF\\u2B00-\\u2BFF]|[\\uD83C-\\uDBFF][\\uDC00-\\uDFFF]/u]',
+    message: 'UI 图标请使用 Lucide <Icon />，不要使用 emoji/Unicode 符号',
+  },
+  {
+    selector: 'JSXText[value=/[\\u2190-\\u21FF\\u2600-\\u27BF\\u2B00-\\u2BFF]|[\\uD83C-\\uDBFF][\\uDC00-\\uDFFF]/u]',
+    message: 'UI 图标请使用 Lucide <Icon />，不要使用 emoji/Unicode 符号',
+  },
+];
+
+const civLookupRestriction = {
+  selector:
+    "CallExpression[callee.object.name='civs'][callee.property.name=/^(find|some)$/] > ArrowFunctionExpression > BinaryExpression[operator='==='] > MemberExpression.left[property.name='en']",
+  message: '按英文名查文明请用 civByEn',
+};
+
 export default tseslint.config(
   { ignores: ['dist', 'node_modules', 'scripts', 'test-results', 'playwright-report', 'src/content/schema/compiled'] },
   js.configs.recommended,
@@ -37,17 +54,13 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 'off',
       'no-irregular-whitespace': ['error', { skipJSXText: true, skipStrings: true }],
       // 禁止 emoji / 装饰性 Unicode 符号作为界面图标（见 CONTRIBUTING.md）
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: 'Literal[value=/[\\u2190-\\u21FF\\u2600-\\u27BF\\u2B00-\\u2BFF]|[\\uD83C-\\uDBFF][\\uDC00-\\uDFFF]/u]',
-          message: 'UI 图标请使用 Lucide <Icon />，不要使用 emoji/Unicode 符号',
-        },
-        {
-          selector: 'JSXText[value=/[\\u2190-\\u21FF\\u2600-\\u27BF\\u2B00-\\u2BFF]|[\\uD83C-\\uDBFF][\\uDC00-\\uDFFF]/u]',
-          message: 'UI 图标请使用 Lucide <Icon />，不要使用 emoji/Unicode 符号',
-        },
-      ],
+      'no-restricted-syntax': ['error', ...iconRestrictions],
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': ['error', ...iconRestrictions, civLookupRestriction],
     },
   },
   {

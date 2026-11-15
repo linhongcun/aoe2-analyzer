@@ -1,4 +1,4 @@
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 
 export const TRAIN_COMPARE_UNITS = [38, 283, 569] as const;
 export const TRAIN_COMPARE_ENTRY = '/production?mode=train-compare&v=1&unit=38&age=3&n=10';
@@ -15,7 +15,7 @@ export function trainCompareErrors(config: TrainCompareConfig): string[] {
   if (!(TRAIN_COMPARE_UNITS as readonly number[]).includes(config.unit)) errors.push('本轮仅支持骑士、重装骑士和游侠形态，其它单位不支持。');
   if (config.age !== 3) errors.push('本轮仅支持城堡时代。');
   if (!Number.isSafeInteger(config.n) || config.n < 1 || config.n > 1000) errors.push('目标数量须为 1–1000 的整数。');
-  if (config.civs?.some((name) => !civs.some((civ) => civ.en === name))) errors.push('文明集合含未知文明。');
+  if (config.civs?.some((name) => civByEn(name) === undefined)) errors.push('文明集合含未知文明。');
   return errors;
 }
 export function decodeTrainCompare(search: string): { config: TrainCompareConfig | null; errors: string[] } {

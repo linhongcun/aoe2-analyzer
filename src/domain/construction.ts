@@ -1,8 +1,7 @@
 /** Issue 227: audited ordinary-villager construction, independent of historical opening simulations. */
 import { CONSTRUCTION_DATA } from '../data/construction';
 import type { ConstructionData } from '../data/construction';
-import type { Core } from '../data';
-import { civs } from '../data';
+import { civByEn, type Core } from '../data';
 import type { Trees } from './types';
 import { civStatus } from './simulator';
 import { gatherModel, type GatherModel } from './realCost';
@@ -152,7 +151,7 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   const b = ctx.core.buildingById[config.buildingId],
     cd = CONSTRUCTION_DATA.civs[config.civ],
     bd = CONSTRUCTION_DATA.buildings[config.buildingId];
-  if (!cd || !civs.some((c) => c.en === config.civ)) errors.push('文明不存在。');
+  if (!cd || civByEn(config.civ) === undefined) errors.push('文明不存在。');
   if (![1, 2, 3, 4].includes(config.age)) errors.push('时代须为黑暗至帝王时代。');
   if (!b || !bd) errors.push('建筑不存在。');
   else {

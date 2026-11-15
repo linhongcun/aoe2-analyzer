@@ -3,7 +3,7 @@
  * 单价只走 unitCost（内部先 discountedCost）；能否训练沿用 productionUnits。
  * 不把研究费、升级费或示意数量写进结果。
  */
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { priceAge } from './costDiscount';
 import { applicableTrainingTechs, type TrainingCostTech } from './duelTrainingCost';
 import {
@@ -94,10 +94,10 @@ function shell(civ: string, age: number, techs: number[]): ProductionConfig {
   return { civ, age, techs, walk: 0, farm: 0, rows: [] };
 }
 function civLegal(civ: string) {
-  return civs.some((item) => item.en === civ);
+  return civByEn(civ) !== undefined;
 }
 function civZh(civ: string) {
-  return civs.find((item) => item.en === civ)?.zh ?? civ;
+  return civByEn(civ)?.zh ?? civ;
 }
 function asInput(tech: Tech): UnitCostTech {
   return { id: tech.id, en: tech.en, zh: tech.zh };

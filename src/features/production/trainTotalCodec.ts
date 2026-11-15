@@ -1,4 +1,4 @@
-import { civs } from '../../data';
+import { civByEn } from '../../data';
 import { DEFAULT_PRODUCTION, PRODUCTION_LIMIT } from '../../domain/production';
 import { TRAIN_TOTAL_DEFAULT_AGE, emptyTrainTotal, type TrainTotalConfig, type TrainTotalRow } from '../../domain/trainTotal';
 
@@ -10,7 +10,7 @@ export function trainTotalHrefFrom(search: string): string {
   const query = new URLSearchParams();
   query.set('mode', 'train-total');
   const civ = params.get('civ');
-  query.set('civ', civ && civs.some((item) => item.en === civ) ? civ : DEFAULT_PRODUCTION.civ);
+  query.set('civ', civ && civByEn(civ) !== undefined ? civ : DEFAULT_PRODUCTION.civ);
   const age = params.get('age');
   query.set('age', age != null && ['1', '2', '3', '4'].includes(age) ? age : String(TRAIN_TOTAL_DEFAULT_AGE));
   return '/production?' + query.toString();
@@ -20,7 +20,7 @@ export function legacyHrefFromTotal(search: string): string {
   const params = new URLSearchParams(search);
   const query = new URLSearchParams();
   const civ = params.get('civ');
-  if (civ && civs.some((item) => item.en === civ)) query.set('civ', civ);
+  if (civ && civByEn(civ) !== undefined) query.set('civ', civ);
   const age = params.get('age');
   if (age != null && ['1', '2', '3', '4'].includes(age)) query.set('age', age);
   const text = query.toString();
@@ -32,7 +32,7 @@ export function decodeTrainTotal(search: string): { config: TrainTotalConfig; wa
   const warnings: string[] = [];
   const config = emptyTrainTotal();
   const civ = params.get('civ');
-  if (civ != null && civ !== '') config.civ = civs.some((item) => item.en === civ) ? civ : civ;
+  if (civ != null && civ !== '') config.civ = civByEn(civ) !== undefined ? civ : civ;
   if (params.has('age')) {
     const raw = params.get('age') ?? '';
     if (['1', '2', '3', '4'].includes(raw)) config.age = Number(raw);

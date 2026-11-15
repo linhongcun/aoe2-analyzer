@@ -4,7 +4,7 @@
  * 资源 196 / 198 只报告效果导出里的原规则；没有规则就待确认，不把 UGC 页面上的附加时间写进来。
  * 按地图尺寸的基础秒数没有站内 DE 导出，baseSeconds 保持 null。
  */
-import { civs as catalogCivs } from '../data';
+import { civByEn, civs as catalogCivs } from '../data';
 import { CORE } from '../data/core';
 import { DAT } from './datEffects';
 
@@ -118,15 +118,16 @@ function flagRule(effects: StandardEffects): ResourceRule {
 export function standardVictoryFacts(
   techs: readonly CatalogTech[] = CORE.techs,
   effects: StandardEffects = DAT,
-  civs: readonly CatalogCiv[] = catalogCivs,
+  civPool: readonly CatalogCiv[] = catalogCivs,
 ): StandardVictoryFacts {
   const tech = techs.find((item) => item.id === ATHEISM_ID && item.en === 'Atheism');
   const patch = effects.meta?.sources?.find((source) => source.id === 'DAT')?.patch ?? effects.meta?.sources?.[0]?.patch ?? '';
   const civEn = tech?.civs?.[0];
+  const civ = Object.is(civPool, catalogCivs) ? (civEn === undefined ? undefined : civByEn(civEn)) : civPool.find((civ) => civ.en === civEn);
   return {
     techId: tech ? tech.id : null,
     techZh: tech?.zh ?? null,
-    civZh: civs.find((civ) => civ.en === civEn)?.zh ?? null,
+    civZh: civ?.zh ?? null,
     years: tech ? agreedCount(tech.desc, tech.descEn, YEAR_ZH, YEAR_EN) : null,
     relicCutPercent: tech ? agreedCount(tech.desc, tech.descEn, CUT_ZH, CUT_EN) : null,
     flag: flagRule(effects),

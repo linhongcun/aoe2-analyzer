@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { civs } from '../../../data';
+import { civs, civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { TYPE_ZH } from '../../../domain/ratings';
@@ -51,7 +51,7 @@ export default function CivList() {
   const active = Boolean(filters.q.trim() || filters.ty || filters.dlc || conditions.length);
   const resolved = context ? resolveRequirements(conditions, context) : [];
   const selected = new Set(conditions.map((item) => item.token));
-  const detail = detailEn ? civs.find((civ) => civ.en === detailEn) : undefined;
+  const detail = detailEn ? civByEn(detailEn) : undefined;
   const optionTrim = optionQuery.trim();
   const optionMatches = context && optionTrim ? searchRequirements(context, optionTrim, 'all') : [];
   const options = !context ? [] : optionTrim ? optionMatches.slice(0, 14) : suggestedRequirements(context);

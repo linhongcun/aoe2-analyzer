@@ -15,7 +15,7 @@
  * 取整仍是 roundHalfPrice（issue 129 游戏内实测的是 0.75 这种原始乘数和整数百分比相同的价）。
  * 原始乘数与整数百分比取整后差 0.5 或 1 时，采用原始乘数。那一跳没有游戏内实测。
  */
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { CORE } from '../data/core';
 import { DAT, type DatCostDiscount, type DatCostGroup } from './datEffects';
 import { roundHalfPrice } from './roundHalfPrice';
@@ -125,7 +125,7 @@ function reviewedSplit(civEn: string, entry: DatCostDiscount, group: DatCostGrou
       item.res.every((res) => group.res.includes(res)),
   );
   if (!row) return null;
-  const line = civs.find((c) => c.en === civEn)?.bonEn[row.sentence];
+  const line = civByEn(civEn)?.bonEn[row.sentence];
   const sentence = line ? unitCostSentence(line, age) : null;
   if (!sentence || sentence.pct !== pct || sentence.res.length !== row.res.length || !sentence.res.every((res) => row.res.includes(res))) return null;
   return { idx: row.sentence, pct, raw: tier, via: 'other' };

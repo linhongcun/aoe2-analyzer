@@ -1,5 +1,5 @@
 /** Issue 238 fixed-state relic estimate. Data fields and documented engine semantics are separate evidence. */
-import { civs } from '../data';
+import { civs, civByEn } from '../data';
 
 export const RELIC_RESOURCES = ['Gold', 'Food', 'Wood', 'Stone'] as const;
 export type RelicResource = (typeof RELIC_RESOURCES)[number];
@@ -58,11 +58,11 @@ export const newRelicIncomeConfig = (): RelicIncomeConfig => ({
   grandTrunkRoad: false,
   atheism: 'none',
 });
-const knownCiv = (civ: string) => civs.some((c) => c.en === civ);
+const knownCiv = (civ: string) => civByEn(civ) !== undefined;
 const numeric = (s: string, whole = false) =>
   typeof s === 'string' && s.length <= 32 && (whole ? /^\d+$/ : /^\d+(?:\.\d+)?$/).test(s) && Number.isFinite(+s) && +s >= 0 && +s <= RELIC_INPUT_MAX;
 const atheismValid = (s: string): s is RelicAtheism => (ATHEISM_STATES as readonly string[]).includes(s);
-const textOfCiv = (name: string) => civs.find((c) => c.en === name)?.zh ?? name;
+const textOfCiv = (name: string) => civByEn(name)?.zh ?? name;
 
 export function validateRelicIncomeConfig(c: RelicIncomeConfig): string[] {
   const errors: string[] = [];

@@ -3,7 +3,7 @@ import RushDefense, { RushReference } from './RushDefense';
 import './matchup-pair.css';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { civs } from '../../../data';
+import { civs, civByEn } from '../../../data';
 import { TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
 import { unitPath } from '../../../domain/simRoute';
 import { UnitIcon } from '../../../shared/ui/art';
@@ -32,8 +32,8 @@ export default function Matchup() {
     [ie, setE] = useSticky('mu.e', 5);
   const [params, setParams] = useSearchParams();
   const pair = readMatchupPair(params, { me: (civs[ia] ?? civs[16]!).en, opp: (civs[ie] ?? civs[5]!).en });
-  const a = civs.find((c) => c.en === pair.me),
-    e = civs.find((c) => c.en === pair.opp);
+  const a = pair.me === null ? undefined : civByEn(pair.me),
+    e = pair.opp === null ? undefined : civByEn(pair.opp);
   // Query 先于 sticky；同步后，从其它页面回到无 query 的助手仍保留这对阵。
   useEffect(() => {
     if (!a || !e) return;

@@ -1,4 +1,4 @@
-import { civs } from '../../../data';
+import { civs, civByEn } from '../../../data';
 import { useTrees } from '../../../data/hooks';
 import { civStatus } from '../../../domain/civStatus';
 import { ARMC_CLASS_NOTE } from '../../../domain/affects';
@@ -102,7 +102,7 @@ export default function TechAffects({
   );
   const shown = filter.kind === 'all' || filter.kind === 'narrowed' ? filter.entries : [];
   const count = listedGroupCount(shown, units, unitById, fam);
-  const waiting = !!selected && !trees && civs.some((civ) => civ.en === selected) && tech.civs.includes(selected);
+  const waiting = !!selected && !trees && civByEn(selected) !== undefined && tech.civs.includes(selected);
   return (
     <section id="affects" className="td-section" aria-label="作用对象">
       <h2>作用对象</h2>

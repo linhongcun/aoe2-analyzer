@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { civs } from '../../../data';
+import { civs, civByEn } from '../../../data';
 import { preloadGlobalSearch, requestGlobalSearch } from '../../../shared/search/globalSearch';
 import { HOME_GROUPS, WIKI, type Section } from '../../../shared/nav/sections';
 import { img } from '../../../shared/ui/art';
@@ -47,7 +47,7 @@ export default function Home() {
     sections: group.sections.filter((section) => !featured.has(section.key)),
   })).filter((group) => group.sections.length > 0);
   const emblems = HOME_EMBLEM_CIVS.flatMap((en) => {
-    const found = civs.find((item) => item.en === en);
+    const found = civByEn(en);
     return found ? [found.en.toLowerCase()] : [];
   });
   // 四张资料卡同级排列，右上角的数量都从当前数据算出。

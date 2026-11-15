@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
@@ -157,7 +157,7 @@ function EcoPayoffBody({
               <label>
                 文明
                 <select aria-label="收益文明" value={config.civ} onChange={(e) => update({ ...config, civ: e.target.value })}>
-                  {!civs.some((c) => c.en === config.civ) && <option value={config.civ}>无效文明：{config.civ}</option>}
+                  {civByEn(config.civ) === undefined && <option value={config.civ}>无效文明：{config.civ}</option>}
                   {civs.map((c) => (
                     <option key={c.en} value={c.en}>
                       {c.zh}

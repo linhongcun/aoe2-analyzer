@@ -1,8 +1,8 @@
 /** S1 对阵路径：me/opp 始终指原对阵双方，civ 指当前页面所属文明。 */
-import { civs } from '../data';
+import { civByEn } from '../data';
 import { parseSide, type SideSpec } from './duelState';
 
-const knownCiv = (en: string | null | undefined) => (civs.some((c) => c.en === en) ? en! : undefined);
+const knownCiv = (en: string | null | undefined) => (typeof en === 'string' && civByEn(en) !== undefined ? en : undefined);
 
 export function readMatchupPair(params: URLSearchParams, sticky: { me: string; opp: string }) {
   if (params.has('pair')) {

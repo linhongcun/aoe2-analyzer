@@ -1,5 +1,5 @@
 /** Issue 226 measured trade supply. Income is user evidence, never an inferred route formula. */
-import { civs } from '../data';
+import { civByEn } from '../data';
 import populationRaw from '../../data/game/trade_income.json';
 import { discountedCost } from './costDiscount';
 import { calculateProduction, decodeProduction, encodeProduction, productionBuildings, type ProductionConfig, type ProductionContext } from './production';
@@ -123,7 +123,7 @@ export function calculateTradeIncome(ctx: ProductionContext, c: TradeIncomeConfi
     warnings: string[] = [],
     costNotes: string[] = [];
   const unit = ctx.core.unitById[c.unit];
-  if (!civs.some((v) => v.en === c.civ)) errors.push('文明不存在，请重新选择。');
+  if (civByEn(c.civ) === undefined) errors.push('文明不存在，请重新选择。');
   if (![1, 2, 3, 4].includes(c.age)) errors.push('时代无效。');
   if (!tradeIncomeUnits(ctx, c).some((u) => u.id === c.unit)) errors.push('当前文明和时代不能训练所选贸易单位，请重新选择。');
   if (!within(c.gold)) errors.push('每次交金量须为 0–1000000 的有限数。');
@@ -250,7 +250,7 @@ export function decodeTradeIncome(search: string): { config: TradeIncomeConfig; 
     if (integer.test(p.get(key) ?? '') && Number.isSafeInteger(+p.get(key)!)) c[key] = +p.get(key)!;
     else errors.push(`链接参数 ${key} 不是有效整数。`);
   }
-  if (!civs.some((v) => v.en === c.civ) || ![1, 2, 3, 4].includes(c.age) || !(TRADE_INCOME_UNITS as readonly number[]).includes(c.unit))
+  if (civByEn(c.civ) === undefined || ![1, 2, 3, 4].includes(c.age) || !(TRADE_INCOME_UNITS as readonly number[]).includes(c.unit))
     errors.push('链接中的文明、时代或贸易单位无效。');
   const mode = p.get('mode'),
     price = p.get('price');

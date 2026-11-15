@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { civs } from '../../data';
+import { civs, civByEn } from '../../data';
 import { useCore } from '../../data/hooks';
 import { withSearchPy, type SearchItem } from '../../domain/search';
 import { ALL } from '../../shared/nav/sections';
@@ -56,7 +56,7 @@ export function useSearchIndex(): SearchItem[] {
           py: u.py,
           pyi: u.pyi,
           altPy: elite ? [{ py: elite.py, pyi: elite.pyi }] : undefined,
-          civNote: dup.has(u.id) ? civNote(u, (en) => civs.find((c) => c.en === en)?.zh) : undefined,
+          civNote: dup.has(u.id) ? civNote(u, (en) => civByEn(en)?.zh) : undefined,
         }),
       );
     core?.techs.forEach((t) =>
@@ -93,9 +93,9 @@ export function useSearchIndex(): SearchItem[] {
         zh: b.zh,
         en: b.en,
         href: `/civ/${b.civ}/bonus/${b.idx}`,
-        sub: `${civs.find((c) => c.en === b.civ)!.zh} · ${b.team ? '团队加成' : '文明加成'}`,
+        sub: `${civByEn(b.civ)!.zh} · ${b.team ? '团队加成' : '文明加成'}`,
         img: `civs/${b.civ.toLowerCase()}.webp`,
-        alt: [civs.find((c) => c.en === b.civ)!.zh + b.zh],
+        alt: [civByEn(b.civ)!.zh + b.zh],
       }),
     );
     buildOrders.forEach((b) =>

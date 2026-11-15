@@ -1,6 +1,6 @@
 /** issue 204 稳态连续训练。游戏数值只读固定 eco / effects；不修改旧真实费用默认口径。 */
 import { ECO as eco } from '../data/eco';
-import { civs, type Core } from '../data';
+import { civByEn, type Core } from '../data';
 import { DAT, type DatEco } from './datEffects';
 import { unitCost } from './unitCost';
 import { gatherModel, type GatherRes } from './realCost';
@@ -196,7 +196,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     applied: string[] = [],
     lines: ProductionLine[] = [];
   const sel = effectiveProductionTechs(ctx, config);
-  if (!civs.some((c) => c.en === config.civ)) errors.push('文明不存在，请重新选择。');
+  if (civByEn(config.civ) === undefined) errors.push('文明不存在，请重新选择。');
   if (![1, 2, 3, 4].includes(config.age)) errors.push('时代无效。');
   if (![config.walk, config.farm].every((n) => Number.isFinite(n) && n >= 0 && n <= 10)) errors.push('采集距离须在 0–10 格之间。');
   if (config.rows.length > PRODUCTION_LIMIT) errors.push(`最多添加 ${PRODUCTION_LIMIT} 条需求。`);
@@ -206,7 +206,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
   warnings.push(...gather.unsupported.map((x) => `${x.label}：采集加成未计入，使用已支持的基础采集模型。`));
   applied.push(...gather.applied.map((x) => x.label));
   // .dat 还有存放收益等资源指令，不能只扫描旧真实费用支持的属性号而静默漏掉。
-  const civ = civs.find((c) => c.en === config.civ);
+  const civ = civByEn(config.civ);
   const economicText = (s: string) => /采集|农民|农田|伐木|采金|采石|矿工|携带|存放/.test(s) && !/免费|费用|成本/.test(s);
   for (const text of civ?.bon ?? [])
     if (economicText(text) && !gather.applied.some((x) => x.source === text)) warnings.push(`${text}：该文明经济机制未计入（已单独列明的基础属性加成除外）。`);
@@ -313,7 +313,7 @@ export function decodeProduction(search: string): { config: ProductionConfig; er
   if (!search || search === '?') return { config, errors };
   const civ = p.get('civ');
   if (civ !== null) {
-    if (civs.some((c) => c.en === civ)) config.civ = civ;
+    if (civByEn(civ) !== undefined) config.civ = civ;
     else errors.push('链接中的文明无效，已使用法兰克。');
   }
   for (const key of ['age', 'walk', 'farm'] as const) {

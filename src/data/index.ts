@@ -9,7 +9,8 @@ import { civDlc } from '../domain/dlc';
 
 export const civs: Civ[] = (civsRaw as Omit<Civ, 'dlc'>[]).map((c) => ({ ...c, ty: c.ty, dlc: civDlc(c.en) }) as Civ);
 export const civIndex = (en: string) => civs.findIndex((c) => c.en === en);
-export const civByEn = (en: string): Civ | undefined => civs.find((c) => c.en === en);
+const civByEnMap = new Map<string, Civ>(civs.map((civ) => [civ.en, civ] as const));
+export const civByEn = (en: string): Civ | undefined => civByEnMap.get(en);
 
 export type { Core } from './core';
 let corePromise: Promise<Core> | null = null;
