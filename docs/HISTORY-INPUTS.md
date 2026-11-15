@@ -1,6 +1,6 @@
 # 历史补丁的人工核对输入
 
-本目录保存按官方主版本平衡栏目核实的结构化输入。运行 `python3 scripts/history_build.py` 生成 `data/game/patches/*.json` 和 `data/reports/HISTORY-DATA.md`；不要直接改生成文件。
+`data/sources/history_inputs/` 保存按官方主版本平衡栏目核实的结构化输入。运行 `python3 scripts/history_build.py` 生成 `data/game/patches/*.json`，并把收录情况排成 [`docs/reports/HISTORY-DATA.md`](reports/HISTORY-DATA.md)；不要直接改生成文件。
 
 增加或纠正历史记录时：
 

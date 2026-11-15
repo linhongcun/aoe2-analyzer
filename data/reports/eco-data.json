@@ -1,0 +1,12 @@
+{
+  "generatedBy": "scripts/eco_build.py",
+  "source": "SiegeEngineers/auto-mods@e293dc1 dat/empires2_x2_p1.dat",
+  "patch": "DE Update 188329 (2026-10-28)",
+  "compared": {
+    "units": 248,
+    "buildings": 38,
+    "techs": 199
+  },
+  "differences": [],
+  "missingInDat": []
+}

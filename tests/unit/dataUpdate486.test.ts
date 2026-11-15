@@ -77,12 +77,15 @@ describe('#486 current DE188329 data', () => {
   });
 
   it('documents either the cold-cache placeholder or a zero hot diff', () => {
-    expect(readFileSync('data/reports/EFFECTS-AUDIT.md', 'utf8')).toMatch(/未取得更新前快照|小计：科技 0 个/);
+    const audit = JSON.parse(readFileSync('data/reports/effects-audit.json', 'utf8')) as {
+      previousSnapshot: { techsChanged: number; bonusesChanged: number } | null;
+    };
+    expect(audit.previousSnapshot ?? { techsChanged: 0, bonusesChanged: 0 }).toEqual({ techsChanged: 0, bonusesChanged: 0 });
   });
 
-  it('EFFECTS-AUDIT --check is reproducible with a cold cache', () => {
+  it('effects audit --check is reproducible with a cold cache', () => {
     const result = spawnSync('npx', ['vite-node', 'scripts/effects_audit.ts', '--check'], { encoding: 'utf8', timeout: 120000 });
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain('EFFECTS-AUDIT.md 可复现');
+    expect(result.stdout).toContain('效果审计可复现');
   });
 });

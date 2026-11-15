@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从固定版本 .dat 导出开局/经济模拟所需数据 → data/game/eco.json，并与 aoe2techtree 对账 → data/reports/ECO-DATA.md
+"""从固定版本 .dat 导出开局/经济模拟所需数据 → data/game/eco.json，并与 aoe2techtree 对账 → data/reports/eco-data.json（排版：docs/reports/ECO-DATA.md）
 
 导出：
 - 单位训练时间/训练地点/费用；建筑建造时间/费用；科技研究时间/地点/费用（含时代升级）
@@ -16,6 +16,8 @@ from effects_build import CIV_DAT  # noqa: E402
 from res_names import RES_ZH as RES_LABEL  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
+REPORT = 'data/reports/eco-data.json'
+REPORT_VIEW = 'docs/reports/ECO-DATA.md'
 RES = {0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold'}
 # 村民任务单位（男/女）→ 任务名
 TASKS = {'build': (118, 212), 'sheep': (592, 590), 'hunt': (122, 216), 'berries': (120, 354), 'farm': (259, 214),
@@ -156,6 +158,23 @@ def split_tree_effects(effects):
                                       and x['op'] == 'set' and x['v'] == 0)]
     free = sorted({x['techName'] for x in effects if x.get('tech') in free_ids})
     return tree, free
+
+
+def report_view(out, report):
+    """把 eco.json 的村民原始值和对账记录（data/reports/eco-data.json）排成给人看的 Markdown。"""
+    md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `data/game/eco.json`；对账记录在 `%s`，本页是它的排版。' % (report['source'], report['patch'], REPORT), '',
+          '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
+    for k, v in out['villager']['tasks'].items(): md.append('| %s | %d | %s | %s |' % (k, v['unit'], v['workRate'], v['carry']))
+    md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，携带 %s。' % (out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'], out['fishingShip']['workRate'], out['fishingShip']['carry']),
+           '', '猎物/家畜食物：' + '，'.join('%s（unit %d）%s' % (k, v['unit'], v['food']) for k, v in out['animals'].items()) + '。',
+           '', '> work_rate 是纯采集速率；实际每分钟收入还取决于往返距离、放下资源时间等，模拟时需另建模型。', '',
+           '## 与 aoe2techtree 对账（训练/建造/研究时间、费用）', '']
+    compared, real, miss = report['compared'], report['differences'], report['missingInDat']
+    md.append('共比较 单位 %d / 建筑 %d / 科技 %d；差异 %d 项：' % (compared['units'], compared['buildings'], compared['techs'], len(real)))
+    md += ['', '| 类型 | ID | 名称 | 字段 | aoe2techtree | .dat |', '| --- | --- | --- | --- | --- | --- |']
+    md += ['| %s | %s | %s | %s | %s | %s |' % (x['kind'], x['id'], x['name'], x['field'], x['techtree'], x['dat']) for x in real] or ['| — | | | | | |']
+    if miss: md += ['', '.dat 中不存在的 ID：' + '、'.join('%s %s' % (x['id'], x['name']) for x in miss)]
+    return '\n'.join(md) + '\n'
 
 
 def main():
@@ -340,20 +359,16 @@ def main():
     # 键序排序：与 units.json 的排序解耦，输出确定
     (ROOT / 'data/game/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':'), sort_keys=True))
 
-    md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `data/game/eco.json`。' % (out['meta']['source'], DAT['patch']), '',
-          '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
-    for k, v in out['villager']['tasks'].items(): md.append('| %s | %d | %s | %s |' % (k, v['unit'], v['workRate'], v['carry']))
-    md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，携带 %s。' % (out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'], out['fishingShip']['workRate'], out['fishingShip']['carry']),
-           '', '猎物/家畜食物：' + '，'.join('%s（unit %d）%s' % (k, v['unit'], v['food']) for k, v in out['animals'].items()) + '。',
-           '', '> work_rate 是纯采集速率；实际每分钟收入还取决于往返距离、放下资源时间等，模拟时需另建模型。', '',
-           '## 与 aoe2techtree 对账（训练/建造/研究时间、费用）', '']
     real = [x for x in diffs if x[3] != '.dat 中不存在']
-    md.append('共比较 单位 %d / 建筑 %d / 科技 %d；差异 %d 项：' % (len(units), len(blds), len(techs), len(real)))
-    md += ['', '| 类型 | ID | 名称 | 字段 | aoe2techtree | .dat |', '| --- | --- | --- | --- | --- | --- |']
-    md += ['| %s | %s | %s | %s | %s | %s |' % x for x in real] or ['| — | | | | | |']
-    miss = [x for x in diffs if x[3] == '.dat 中不存在']
-    if miss: md += ['', '.dat 中不存在的 ID：' + '、'.join('%s %s' % (x[1], x[2]) for x in miss)]
-    (ROOT / 'data/reports/ECO-DATA.md').write_text('\n'.join(md) + '\n')
+    report = {
+        'generatedBy': 'scripts/eco_build.py', 'source': out['meta']['source'], 'patch': DAT['patch'],
+        'compared': {'units': len(units), 'buildings': len(blds), 'techs': len(techs)},
+        'differences': [{'kind': x[0], 'id': x[1], 'name': x[2], 'field': x[3], 'techtree': x[4], 'dat': x[5]} for x in real],
+        'missingInDat': [{'kind': x[0], 'id': x[1], 'name': x[2]} for x in diffs if x[3] == '.dat 中不存在'],
+    }
+    (ROOT / REPORT).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+    (ROOT / REPORT_VIEW).parent.mkdir(parents=True, exist_ok=True)
+    (ROOT / REPORT_VIEW).write_text(report_view(out, report))
     print('eco.json units %d buildings %d techs %d ecoTechs %d civs %d；对账差异 %d' % (len(out['units']), len(out['buildings']), len(out['techs']), len(out['ecoTechs']), len(out['civEco']), len(real)))
     for x in real: print('  diff', x)
 

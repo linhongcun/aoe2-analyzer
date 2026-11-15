@@ -373,26 +373,24 @@ describe('#335 历史 data_sources 的上游固定提交日期 = 提交时间的
   });
 });
 
-// Steve 2026-10-22 追加 (b)：data/patch-notes/185872.md（关于数据页链接的补丁差异摘要）末尾「上游：」行的提交日期也按北京时间。
-describe('#335 data/patch-notes/185872.md「上游：」行的提交日期 = 北京时间日期', () => {
-  const lines = readFileSync('data/patch-notes/185872.md', 'utf8')
-    .split('\n')
-    .filter((l) => l.startsWith('上游：'));
-  it('恰好一行「上游：」', () => {
-    expect(lines.length).toBe(1);
-  });
-  const upstream: [string, string][] = [
-    ['SiegeEngineers/aoe2techtree@3bb43b1', '2026-09-23'],
-    ['SiegeEngineers/halfon@abb48fd', '2026-09-23'],
-    ['SiegeEngineers/auto-mods@0c38027', '2026-10-07'], // 对照
+// Steve 2026-10-22 追加 (b)：185872 补丁说明记录（data/patch-notes/185872.json，关于数据页链接的说明由它排版）里的上游提交日期也按北京时间。
+describe('#335 data/patch-notes/185872.json 的上游提交日期 = 北京时间日期', () => {
+  const note = JSON.parse(readFileSync('data/patch-notes/185872.json', 'utf8')) as { upstream: { key: string; repo: string; commit: string; date: string }[] };
+  const dateOf = (repo: string) => note.upstream.filter((u) => u.repo === repo).map((u) => `${u.commit.slice(0, 7)} ${u.date}`);
+  const upstream: [string, string, string][] = [
+    ['SiegeEngineers/aoe2techtree', '3bb43b1', '2026-09-23'],
+    ['SiegeEngineers/halfon', 'abb48fd', '2026-09-23'],
+    ['SiegeEngineers/auto-mods', '0c38027', '2026-10-07'], // 对照
   ];
-  for (const [ref, want] of upstream)
-    it(`${ref}（${want}）`, () => {
-      expect(lines[0]).toContain(`${ref}（${want}）`);
+  for (const [repo, commit, want] of upstream)
+    it(`${repo}@${commit}（${want}）`, () => {
+      expect(dateOf(repo)).toEqual([`${commit} ${want}`]);
     });
-  it('「上游：」行不再有 2026-09-22，且与历史 data_sources 的固定日期一致', () => {
-    expect(lines[0]).not.toContain('2026-09-22');
+  it('没有 2026-09-22，且与历史 data_sources 的固定提交和日期一致', () => {
+    expect(note.upstream.map((u) => u.date)).not.toContain('2026-09-22');
     const ds = HISTORICAL_INPUT;
-    for (const s of Object.values(ds.sources)) expect(lines[0]).toContain(`${s.repo}@${s.commit.slice(0, 7)}（${s.date}）`);
+    expect(Object.fromEntries(note.upstream.map((u) => [u.key, { repo: u.repo, commit: u.commit, date: u.date }]))).toEqual(
+      Object.fromEntries(Object.entries(ds.sources).map(([key, s]) => [key, { repo: s.repo, commit: s.commit, date: s.date }])),
+    );
   });
 });

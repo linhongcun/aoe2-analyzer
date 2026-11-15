@@ -8,7 +8,7 @@
 
 首页与导航的四个任务组由 [SECTION_GROUPS](../src/shared/nav/pageRegistry.ts) 定义：**新手入门**、**对局计划**、**经济计算**和**资料**。前者帮助理解游戏并开始练习；计划组支持开局、侦察、搭配、团队协作和复盘；经济组比较资源、供给与投入收益；资料组提供文明、单位、科技和建筑目录。
 
-主要代码边界：应用与路由在 [src/app](../src/app/)；各页面在 [src/features](../src/features/)；共享组件与样式在 [src/shared](../src/shared/)；纯领域规则在 [src/domain](../src/domain/)；运行时数据适配器在 [src/data](../src/data/)，跟踪的数据载荷集中在 [data](../data/README.md)；生成流程在 [scripts](../scripts/)。
+主要代码边界：应用与路由在 [src/app](../src/app/)；各页面在 [src/features](../src/features/)；共享组件与样式在 [src/shared](../src/shared/)；纯领域规则在 [src/domain](../src/domain/)；运行时数据适配器在 [src/data](../src/data/)，跟踪的数据载荷集中在 [data](DATA-LAYOUT.md)（只放 JSON；Markdown 只放 `docs/`，代码不读它的正文）；生成流程在 [scripts](../scripts/)。
 
 ## 构建与部署
 

@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
-from data_diff import summarize  # noqa: E402
+from data_diff import diff  # noqa: E402
 
 
 class UnitArmourDiff(unittest.TestCase):
@@ -27,12 +27,12 @@ class UnitArmourDiff(unittest.TestCase):
 
     def test_real_188329_jarl_armour_removal_reports_both_units(self):
         old, new = self.jarls()
-        md = summarize({'units': old}, {'units': new})
-        self.assertIn('## 单位（新增 0 / 移除 0 / 变更 2）', md)
-        for name in ['首领（Jarl）', '精锐首领（Elite Jarl）']:
-            self.assertIn(name, md)
-        self.assertIn('cls [3, 4, 8, 19, 31, 36] → [3, 4, 8, 19, 31]', md)
-        self.assertIn('["英雄/国王", 0]', md)
+        units = diff({'units': old}, {'units': new})['units']
+        self.assertEqual((units['added'], units['removed']), ([], []))
+        self.assertEqual([(u['zh'], u['en']) for u in units['changed']], [('首领', 'Jarl'), ('精锐首领', 'Elite Jarl')])
+        for unit in units['changed']:
+            fields = {f['key']: (f['old'], f['new']) for f in unit['fields']}
+            self.assertEqual(fields, {'cls': (self.OLD_CLASSES, self.NEW_CLASSES), 'armc': (self.OLD_ARMOUR, self.NEW_ARMOUR)})
 
     def test_each_normalized_armour_field_is_reported_independently(self):
         for key in ['cls', 'armc']:
@@ -40,10 +40,8 @@ class UnitArmourDiff(unittest.TestCase):
                 old, changed = self.jarls()
                 new = copy.deepcopy(old[:1])
                 new[0][key] = changed[0][key]
-                md = summarize({'units': old[:1]}, {'units': new})
-                self.assertIn('变更 1', md)
-                self.assertIn(key + ' ', md)
-                self.assertNotIn('无数据变化', md)
+                units = diff({'units': old[:1]}, {'units': new})['units']
+                self.assertEqual([[f['key'] for f in u['fields']] for u in units['changed']], [[key]])
 
 
 if __name__ == '__main__':

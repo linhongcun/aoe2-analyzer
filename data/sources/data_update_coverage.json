@@ -365,6 +365,7 @@
   "patchHistory": {
     "pinBuildIs": 188329,
     "notesDir": "data/patch-notes",
+    "notesViewDir": "docs/patch-notes",
     "archiveDir": "data/game/patches",
     "locked": [
       {
@@ -390,7 +391,7 @@
     "historyBuilds": ["66692", "81058", "125283"],
     "historyScript": "scripts/history_build.py",
     "historyOutputs": ["data/game/patches/66692.json", "data/game/patches/81058.json", "data/game/patches/125283.json"],
-    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只写 data/patch-notes，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
+    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只经 scripts/patch_notes.py 写 data/patch-notes 记录和 docs/patch-notes 排版，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
   },
   "failFast": {
     "stopMessage": "数据更新覆盖清单未通过，已停止，未运行生成器",

@@ -13,6 +13,7 @@ from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
+import data_diff  # noqa: E402
 import data_update  # noqa: E402
 
 
@@ -192,7 +193,7 @@ def run_main_frozen(instant):
         with mock.patch.object(data_update, 'ROOT', tmp), mock.patch.object(data_update, 'SRC', src), \
                 mock.patch.object(data_update, 'CACHE', tmp / 'cache'), mock.patch.object(data_update, 'latest', fake_latest), \
                 mock.patch.object(data_update, 'run', lambda *c: None), mock.patch.object(data_update, 'load_dir', lambda d: {}), \
-                mock.patch.object(data_update, 'summarize', lambda *a: 'T'), mock.patch.object(data_update, 'datetime', fdt), \
+                mock.patch.object(data_update, 'diff', lambda *a: data_diff.diff({}, {})), mock.patch.object(data_update, 'datetime', fdt), \
                 mock.patch('time.time', lambda: instant.timestamp()), mock.patch.object(sys, 'argv', ['data_update.py']), \
                 mock.patch('builtins.print'):
             data_update.main()

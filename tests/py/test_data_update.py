@@ -1,11 +1,13 @@
-"""数据更新流程的纯函数测试：补丁号识别、差异摘要、.dat 标记校验（fixtures）。运行：npm run test:py"""
-import sys, unittest
+"""数据更新流程的纯函数测试：补丁号识别、结构化差异与补丁说明记录、.dat 标记校验（fixtures）。运行：npm run test:py"""
+import json, sys, tempfile, unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
 FIXTURES = HERE.parents[1] / 'data/fixtures/py/fixtures'
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
-from data_diff import detect_patch, load_dir, summarize  # noqa: E402
+from data_diff import detect_patch, diff, load_dir  # noqa: E402
+import patch_notes  # noqa: E402
 from dat_source import check_markers, markers_of  # noqa: E402
 from data_update import beijing_date, beijing_today, frozen, parse_args  # noqa: E402
 from unittest.mock import patch
@@ -68,25 +70,75 @@ class DetectPatch(unittest.TestCase):
         self.assertIsNone(detect_patch(['Build and publish mods with GitHub Pages']))
 
 
-class Summarize(unittest.TestCase):
+class Diff(unittest.TestCase):
     def setUp(self):
-        self.md = summarize(load_dir(FIXTURES / 'old'), load_dir(FIXTURES / 'new'), 'T')
+        self.changes = diff(load_dir(FIXTURES / 'old'), load_dir(FIXTURES / 'new'))
 
     def test_units(self):
-        self.assertIn('## 单位（新增 1 / 移除 0 / 变更 1）', self.md)
-        self.assertIn('中型投石车（Onager）：atk 50 → 55；pa 7 → 8', self.md)
-        self.assertIn('新增：骑马弩兵（Mounted Crossbowman）', self.md)
+        units = self.changes['units']
+        self.assertEqual([len(units[k]) for k in ('added', 'removed', 'changed')], [1, 0, 1])
+        self.assertEqual(units['added'][0]['en'], 'Mounted Crossbowman')
+        self.assertEqual(units['added'][0]['zh'], '骑马弩兵')
+        onager = units['changed'][0]
+        self.assertEqual(onager['en'], 'Onager')
+        self.assertEqual(onager['fields'], [{'key': 'atk', 'old': 50, 'new': 55}, {'key': 'pa', 'old': 7, 'new': 8}])
 
     def test_effects_and_bonuses(self):
-        self.assertIn('- Dry Dock', self.md)
-        self.assertIn('- Cranequins（新）', self.md)
-        self.assertIn('新文明：丹麦（Danes）', self.md)
-        self.assertIn('不列颠 加成 #1 文本', self.md)
-        self.assertIn('#382 `C-Bonus, +1 Archer range` 数值变化', self.md)
+        self.assertIn({'name': 'Dry Dock', 'added': False}, self.changes['techEffects'])
+        self.assertIn({'name': 'Cranequins', 'added': True}, self.changes['techEffects'])
+        bonuses = self.changes['civBonuses']
+        self.assertIn({'kind': 'newCiv', 'zh': '丹麦', 'en': 'Danes'}, bonuses)
+        self.assertTrue(any(b['kind'] == 'bonusText' and b['en'] == 'Britons' and b['index'] == 1 for b in bonuses), bonuses)
+        self.assertTrue(any(b['kind'] == 'datBonusChanged' and b['tech'] == 382 and b['name'] == 'C-Bonus, +1 Archer range' for b in bonuses), bonuses)
 
     def test_no_change(self):
         d = load_dir(FIXTURES / 'new')
-        self.assertIn('无数据变化', summarize(d, d))
+        changes = diff(d, d)
+        self.assertEqual(changes['techEffects'] + changes['civBonuses'], [])
+        for kind in ('units', 'buildings', 'techs'):
+            self.assertEqual(changes[kind], {'added': [], 'removed': [], 'changed': []})
+
+    def test_changes_survive_a_json_round_trip(self):
+        self.assertEqual(json.loads(json.dumps(self.changes, ensure_ascii=False)), self.changes)
+
+
+class PatchNotes(unittest.TestCase):
+    SOURCES = {'dat': {'repo': 'o/dat', 'commit': 'a' * 40, 'date': '2026-01-02', 'sha256': 'x'}, 'halfon': {'repo': 'o/halfon', 'commit': 'b' * 40, 'date': '2026-01-03'}}
+
+    def note(self):
+        return patch_notes.record(200000, 188329, self.SOURCES, diff(load_dir(FIXTURES / 'old'), load_dir(FIXTURES / 'new')))
+
+    def test_record_keeps_full_upstream_identity(self):
+        note = self.note()
+        self.assertEqual((note['build'], note['base']), (200000, 188329))
+        self.assertEqual(note['upstream'], [{'key': 'dat', 'repo': 'o/dat', 'commit': 'a' * 40, 'date': '2026-01-02'},
+                                            {'key': 'halfon', 'repo': 'o/halfon', 'commit': 'b' * 40, 'date': '2026-01-03'}])
+
+    def test_write_then_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            view = patch_notes.write(self.note(), root)
+            self.assertEqual(view, root / 'docs/patch-notes/200000.md')
+            self.assertEqual(json.loads((root / 'data/patch-notes/200000.json').read_text(encoding='utf-8')), self.note())
+            self.assertEqual(patch_notes.check(root), [])
+            view.unlink()
+            self.assertEqual(len(patch_notes.check(root)), 1)
+            self.assertEqual(patch_notes.check(root, fix=True), [])
+            self.assertEqual(patch_notes.check(root), [])
+
+    def test_handwritten_note_keeps_its_upstream_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            note = dict(self.note(), changes=None)
+            view = patch_notes.write(dict(note, changes=diff({}, {})), root)
+            (root / 'data/patch-notes/200000.json').write_text(patch_notes.dump(note), encoding='utf-8')
+            view.write_text('# 手写说明\n\n' + patch_notes.upstream_line(note) + '\n', encoding='utf-8')
+            self.assertEqual(patch_notes.check(root), [])
+            view.write_text('# 手写说明\n\n上游：o/dat@0000000（2026-01-02）\n', encoding='utf-8')
+            self.assertEqual(patch_notes.check(root), ['docs/patch-notes/200000.md 的「上游：」行与记录不一致'])
+
+    def test_committed_notes_match_their_records(self):
+        self.assertEqual(patch_notes.check(ROOT), [])
 
 
 class Markers(unittest.TestCase):

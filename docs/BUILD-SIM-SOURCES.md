@@ -4,7 +4,7 @@
 
 ## 固定来源与可复现记录
 
-[data/sources/data_sources.json](../data/sources/data_sources.json) 与 [scripts/dat_source.py](../../scripts/dat_source.py) 给出当前 DAT 的 repo、commit、路径、SHA-256 和补丁标记。DAT 仅在受控生成时下载到忽略目录 `scripts/.cache/`，校验实际字节和版本后解析；DAT 与完整中间导出不提交、不发布。
+[data/sources/data_sources.json](../data/sources/data_sources.json) 与 [scripts/dat_source.py](../scripts/dat_source.py) 给出当前 DAT 的 repo、commit、路径、SHA-256 和补丁标记。DAT 仅在受控生成时下载到忽略目录 `scripts/.cache/`，校验实际字节和版本后解析；DAT 与完整中间导出不提交、不发布。
 
 新记录默认从当前固定来源生成到忽略缓存，再用相同输入复核：
 
@@ -25,7 +25,7 @@ python3 scripts/build_sim_source.py --civ Mayans --tech 554 \
 python3 scripts/build_sim_source.py --check-budget
 ```
 
-[scripts/build_sim_source.py](../../scripts/build_sim_source.py) 的 `--pin-from` 要求摘要记录 repo、完整 commit、path 与 SHA-256，并按该来源取回或读取 DAT 后核对字节 SHA-256。仅当摘要记录 `markers` 时才逐项验证补丁标记；未记录 markers 的历史摘要（如 Mayans 固定摘要）只执行 [scripts/dat_source.py](../../scripts/dat_source.py) 的文明、科技和效果数量下限检查。`normalizedVersion` 始终与解析出的 DAT 版本比较。`--check` 必须使用与生成时相同的文明、科技和 pin。不要用当前来源为历史记录重新贴标签。
+[scripts/build_sim_source.py](../scripts/build_sim_source.py) 的 `--pin-from` 要求摘要记录 repo、完整 commit、path 与 SHA-256，并按该来源取回或读取 DAT 后核对字节 SHA-256。仅当摘要记录 `markers` 时才逐项验证补丁标记；未记录 markers 的历史摘要（如 Mayans 固定摘要）只执行 [scripts/dat_source.py](../scripts/dat_source.py) 的文明、科技和效果数量下限检查。`normalizedVersion` 始终与解析出的 DAT 版本比较。`--check` 必须使用与生成时相同的文明、科技和 pin。不要用当前来源为历史记录重新贴标签。
 
 摘要使用 `build-sim-source/1`，包含来源身份、文明 raw ID、tree/team 命令、选择的完整科技记录、专属科技指纹及已知引用闭包。脚本要求 `--raw-output` 位于忽略目录 `scripts/.cache/` 中；完整导出不得写入或提交到跟踪目录。
 
@@ -39,10 +39,10 @@ python3 scripts/build_sim_source.py --check-budget
 
 ## 模型注册点
 
-- [src/domain/buildSimMechanisms.ts](../../src/domain/buildSimMechanisms.ts)：`CIV_MECHANISMS`、`APPLICATION_RULES`。
-- [src/domain/buildSimEffects.ts](../../src/domain/buildSimEffects.ts)：效果与资源应用通道。
-- [src/domain/buildSimCivRules.ts](../../src/domain/buildSimCivRules.ts)：来源身份、对象类别和配对校验。
-- [src/domain/buildSimCoverage.ts](../../src/domain/buildSimCoverage.ts)：效果分类、支持范围与拒绝理由。
-- [src/domain/buildSimNotes.ts](../../src/domain/buildSimNotes.ts)：按既有顺序输出的模型说明。
+- [src/domain/buildSimMechanisms.ts](../src/domain/buildSimMechanisms.ts)：`CIV_MECHANISMS`、`APPLICATION_RULES`。
+- [src/domain/buildSimEffects.ts](../src/domain/buildSimEffects.ts)：效果与资源应用通道。
+- [src/domain/buildSimCivRules.ts](../src/domain/buildSimCivRules.ts)：来源身份、对象类别和配对校验。
+- [src/domain/buildSimCoverage.ts](../src/domain/buildSimCoverage.ts)：效果分类、支持范围与拒绝理由。
+- [src/domain/buildSimNotes.ts](../src/domain/buildSimNotes.ts)：按既有顺序输出的模型说明。
 
 新增行为应沿现有 hook 和实际数据输入增加针对性用例；未知、损坏或来源不完整的输入继续拒绝应用。任何现有模型假设或未验证机制，以原 Issue 和代码测试为准，不以本页推断。

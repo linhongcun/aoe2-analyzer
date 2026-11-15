@@ -21,8 +21,8 @@ const dat = (
 const appVersion = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
 const pins = JSON.parse(readFileSync('data/sources/data_sources.json', 'utf8')) as unknown;
 const notes = readdirSync('data/patch-notes')
-  .filter((f) => f.endsWith('.md'))
-  .map((f) => f.replace(/\.md$/, ''))
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => f.replace(/\.json$/, ''))
   .sort((a, b) => +b - +a);
 
 // #14：首页单位数在构建时从数据算出（首页不加载 units.json），口径与列表页同一个函数

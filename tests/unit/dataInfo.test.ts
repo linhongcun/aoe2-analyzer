@@ -1,24 +1,12 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import pins from '../../data/sources/data_sources.json';
 import { SCOUTING_CONTENT, scoutingVersionParts } from '../../src/domain/scouting';
 import { commitUrl, versionLabel, type DataSources } from '../../src/shared/utils/dataInfo';
 
-const root = resolve(__dirname, '../..');
-const read = (file: string) => readFileSync(resolve(root, file), 'utf8');
-
 describe('data version info', () => {
   const p = pins as unknown as DataSources;
   it('label from pinned sources', () => {
     expect(versionLabel(p)).toBe(`DE ${p.patch.build}（${p.patch.date}）`);
-  });
-  it('README and AGENTS advertise the pinned current version, not the old snapshot', () => {
-    for (const file of ['README.md', 'AGENTS.md']) {
-      const body = read(file);
-      expect(body).toMatch(new RegExp(`DE (?:Update )?${p.patch.build}`));
-      expect(body).not.toMatch(/DE Update 185872|DE 185872|DE185872/);
-    }
   });
   it('scouting separates the frozen content base from the current data version', () => {
     expect(SCOUTING_CONTENT.dataVersion).toBe('DE185872');

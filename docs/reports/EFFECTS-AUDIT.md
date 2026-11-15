@@ -1,6 +1,6 @@
 # 效果审计：DE 188329 原版 .dat 效果 vs 上一版数据源 vs 历史手工规则
 
-> 本文件由 `scripts/effects_audit.ts` 生成（`npx vite-node scripts/effects_audit.ts`），请勿手改。
+> 本文件由 `scripts/effects_audit.ts` 生成（`npx vite-node scripts/effects_audit.ts`），请勿手改。计数与结论另存 `data/reports/effects-audit.json`，测试和 CI 只读那份记录。
 > 冷缓存说明：零、五两节依赖 `scripts/.cache` 外部快照；`--check` 冷缓存时会明确跳过这两节，其余内容仍逐字校验。
 
 ## 数据源与新鲜度

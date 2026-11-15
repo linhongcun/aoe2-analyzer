@@ -18,6 +18,22 @@
 
 ## [Unreleased]
 
+## [0.77.106] - 2026-11-15
+
+### 更新说明
+
+「关于数据」页的补丁说明和效果审计链接改到新的文档位置，列出的补丁和页面内容不变。
+
+### 变更
+
+- Markdown 只放 `docs/` 并只给人看：审计、对账和补丁差异的结果另存为 `data/reports/*.json`、`data/patch-notes/<补丁号>.json`，原有 Markdown 迁到 `docs/reports/`、`docs/patch-notes/` 作为这些记录的排版；构建、测试和 CI 改读 JSON，不再读 Markdown 正文（#1077）。
+- `npm run lint` 增加文档与数据边界检查：拦下放错位置的 Markdown、`data/` 里的非 JSON 文件和代码里的 Markdown 读取（#1077）。
+- `contrast.py`、`import_backgrounds.py` 移到 `scripts/`；`data/README.md` 改为 `docs/DATA-LAYOUT.md`（#1077）。
+
+### 修复
+
+- 修正 `docs/BUILD-SIM-SOURCES.md` 的 8 个失效链接和 README 里文明背景来源清单的路径（#1077）。
+
 ## [0.77.105] - 2026-11-15
 
 ### 更新说明

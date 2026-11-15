@@ -3,7 +3,7 @@
  *   1. .dat 原始效果表 → data/game/effects.json（scripts/effects_build.py 生成）——优先；
  *   2. 手工表 effects.manual.ts / buildingEffects.manual.ts ——仅在 .dat 无战斗数据（2025-06 之后的新科技/新文明），
  *      或 .dat 数值与当前补丁的游戏内加成文本不一致（新鲜度检查失败）时回退。
- * 每条科技/加成的来源记录在 TECH_SRC / BONUS_SRC，页面据此标注；差异清单见 data/reports/EFFECTS-AUDIT.md。
+ * 每条科技/加成的来源记录在 TECH_SRC / BONUS_SRC，页面据此标注；差异清单见 docs/reports/EFFECTS-AUDIT.md。
  */
 import { civs } from '../data';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, type BPred } from './buildingEffects.manual';

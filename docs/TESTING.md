@@ -75,7 +75,7 @@ const violations = (await new AxeBuilder({ page }).include('[data-testid="castle
 expect(violations).toEqual([]);
 ```
 
-设计令牌对比度脚本是 `python3 docs/design/contrast.py`。文字不小于 12px、可点区域不小于 44×44 属于设计规范，不因普通 PR 默认重跑，也不做成每 PR 的宽度矩阵。
+设计令牌对比度脚本是 `python3 scripts/contrast.py`。文字不小于 12px、可点区域不小于 44×44 属于设计规范，不因普通 PR 默认重跑，也不做成每 PR 的宽度矩阵。
 
 ## 5. 功能是否正常
 

@@ -56,11 +56,6 @@ class CoverageDrift(unittest.TestCase):
         errors = coverage.check(ROOT, extra_economy=['ghostEconomy.ts'])
         self.assertTrue(any('ghostEconomy.ts' in error for error in errors), errors)
 
-    def test_doc_missing_a_path_is_rejected(self):
-        document = (ROOT / 'docs/DATA-UPDATE.md').read_text(encoding='utf-8').replace('scripts/effects_build.py', 'scripts/effects_build_REMOVED.py')
-        errors = coverage.check(ROOT, sources={'docs/DATA-UPDATE.md': document})
-        self.assertTrue(any('DATA-UPDATE.md' in error and 'effects_build.py' in error for error in errors), errors)
-
 
 class FailClosed(unittest.TestCase):
     def test_run_stops_on_nonzero_exit(self):

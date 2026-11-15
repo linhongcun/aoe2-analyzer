@@ -1,0 +1,29 @@
+{
+  "generatedBy": "scripts/effects_audit.ts",
+  "build": 188329,
+  "dat": {
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b"
+  },
+  "missingObjects": 0,
+  "coverage": {
+    "total": 281,
+    "dat": 103,
+    "manual": 0,
+    "eco": 134,
+    "text": 44
+  },
+  "encodedTechs": {
+    "total": 105,
+    "dat": 105
+  },
+  "genericHiddenTechs": 13,
+  "manualMismatches": {
+    "techGroups": 55,
+    "civBonuses": 15,
+    "teamBonuses": 11
+  },
+  "textMismatches": 6,
+  "previousSnapshot": null,
+  "lhcSnapshot": null
+}

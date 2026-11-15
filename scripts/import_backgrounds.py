@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """按固定来源导入文明详情装饰插画，不涉及游戏数据或图标管线。
 
-python3 src/features/civs/import_backgrounds.py [--check]
+python3 scripts/import_backgrounds.py [--check]
 依赖 Pillow 12.3.0 / libwebp 1.6.0；游戏美术 © Microsoft。
 """
 import argparse
@@ -13,8 +13,9 @@ from pathlib import Path
 import sys
 import urllib.request
 
-HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = Path(__file__).resolve().parent.parent
+ASSETS = ROOT / 'src/features/civs/assets/backgrounds'
+REFERENCE = ROOT / 'data/reference/civs'
 
 
 def verified(data, expected, label):
@@ -58,7 +59,7 @@ def generate(job):
         data = verified(output.getvalue(), asset['outputSha256'], civ)
         if len(data) != asset['outputBytes'] or len(data) > 300 * 1024:
             raise ValueError(f'{civ}: 输出字节数不符或超出300KiB')
-    write_or_check(HERE / 'assets/backgrounds' / asset['file'], data, check)
+    write_or_check(ASSETS / asset['file'], data, check)
     return civ, {key: asset[key] for key in ['file', 'width', 'height', 'sourcePath']}
 
 
@@ -70,7 +71,7 @@ def main():
     parser.add_argument('--check', action='store_true', help='验证固定来源和已提交输出，不改文件')
     args = parser.parse_args()
     try:
-        source = json.loads((HERE / '../../../data/reference/civs/backgrounds.source.json').read_text(encoding='utf-8'))
+        source = json.loads((REFERENCE / 'backgrounds.source.json').read_text(encoding='utf-8'))
         encoding = source['encoding']
         if PIL.__version__ != encoding['pillowVersion'] or features.version('webp') != encoding['libwebpVersion']:
             raise ValueError('Pillow/libwebp版本与固定编码器不符')
@@ -82,7 +83,7 @@ def main():
         manifest = {key: source[key] for key in ['repo', 'commit']}
         manifest['assets'] = assets
         data = (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode()
-        write_or_check(HERE / '../../../data/reference/civs/backgrounds.json', data, args.check)
+        write_or_check(REFERENCE / 'backgrounds.json', data, args.check)
         print(f'文明背景：{len(assets)}项，' + ('核验通过' if args.check else '已生成'))
     except (OSError, ValueError) as error:
         print(error, file=sys.stderr)
