@@ -65,6 +65,8 @@
 
 两类要分开写：前者补进文档，后者才提需求；不把自己没找到入口写成功能缺失，也不因为可以手算就不反馈。
 
+本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。阵容等游戏经验写进[文明阵容经验](game-strategy.md)。
+
 ## 单据状态
 
 历史上曾把流程写成需求、设计、产品评审后另建实施 Issue；训练总价案例中，设计通过后没有实施 Issue，当时开放 Issue 为零而需求未交付。这是历史交接缺口的记录，不是现行流程。现在由同一 Issue 正文按五个阶段继续更新，具体规范见 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)；本段旧状态词不作为阶段标签。
