@@ -72,7 +72,7 @@
 
 .ud-reverse-controls {
   display: grid;
-  grid-template-columns: minmax(180px, 260px) minmax(120px, 160px) auto;
+  grid-template-columns: max-content minmax(120px, 160px) auto;
   align-items: end;
   justify-content: start;
   gap: var(--space-2);
