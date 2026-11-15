@@ -12,4 +12,4 @@
 
 范围和授权仍以仓库根目录的 [CONTRIBUTING.md](../CONTRIBUTING.md#角色) 为准。全站文档路径见 [docs/README.md](../docs/README.md)，当前设计原则见 [docs/design/DESIGN-SYSTEM.md](../docs/design/DESIGN-SYSTEM.md)。
 
-所有角色按同一 Issue 正文单向依序交接：UX 完成直接进入软件开发，不设返回 PM 的设计确认阶段；进入软件开发即获既定范围内的开发授权，无需维护者再次批准，符合阶段与认领协议的事项允许自动认领。阶段、正文结构、授权、认领和终态以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一流程规范。不同 Issue 的分支并行处理/开发及合并发布顺序见 [MAINTENANCE「按事项并行、合并发布串行」](../docs/MAINTENANCE.md#按事项并行合并发布串行)。角色文档提供可复用的职责知识，不作为单个 Issue 的状态记录。
+所有角色按同一 Issue 正文单向依序交接：UX 完成直接进入软件开发，不设返回 PM 的设计确认阶段；进入软件开发即获既定范围内的开发授权，无需维护者再次批准，符合阶段与认领协议的事项允许自动认领。五个阶段分别产出 BRD、PRD、UI/UX 设计稿、TRD 与上线证据/复盘，都写在同一 Issue 正文对应小节。阶段、正文结构、授权、认领和终态以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一流程规范。不同 Issue 的分支并行处理/开发及合并发布顺序见 [MAINTENANCE「按事项并行、合并发布串行」](../docs/MAINTENANCE.md#按事项并行合并发布串行)。角色文档提供可复用的职责知识，不作为单个 Issue 的状态记录。

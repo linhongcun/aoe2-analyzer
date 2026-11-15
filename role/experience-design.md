@@ -35,7 +35,7 @@
 | 顶栏、焦点、窄屏抽屉                   | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css)                                                                          |
 | 对象更新历史                           | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches`                                                                                                      |
 | 可复用设计原则                         | [体验设计系统](../docs/design/DESIGN-SYSTEM.md)，具体需求和完成态设计图以原 Issue 为准                                                                                                                      |
-| 游戏数字从哪来                         | 生成数据与 [`data/sources/data_sources.json`](../data/sources/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                                    |
+| 游戏数字从哪来                         | 生成数据与 [`data/sources/data_sources.json`](../data/sources/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                          |
 
 历史页面复核见 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003) 及[基线规格原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/support-tools-ui-20261113.md)；它记录当时的持续生产、施工和驻军治疗布局，不作为当前通用组件规范。
 
@@ -98,7 +98,7 @@
 
 状态只覆盖这一次会碰到的：默认、选中、空结果、未知、错误、不可用、恢复、URL 和返回。空、未知和 0 用不同句子。训练总价在没有已计入行时不展示资源卡，见 [`trainTotalCopy.ts`](../src/features/production/trainTotalCopy.ts)。驻军治疗规格写明零秒不是未知，见 [`support-tools-ui-20261113.md`](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/support-tools-ui-20261113.md)。没有这次的功能就不要为了状态表造一个。
 
-同一 Issue 正文应能读懂当前目标、产品范围、照此实现的界面规格、非目标和验收标准；不依赖打开本地包。每次实际 UX 交付的完成态设计图须以 Markdown 图片或可显示的图片附件直接嵌入正文，并确认可从 Issue 查看；不得以文字、规格、线框、外链、未上传的本地文件或 ZIP 代替，也不得声称本地文件已附上。复杂/可复用规格可链接补充，但不得替代正文中的图、当前决定和可执行规格。
+同一 Issue 正文应能读懂当前目标、产品范围、照此实现的界面规格、非目标和验收标准；不依赖打开本地包。每次实际 UX 交付的完成态设计图须以 Markdown 图片或可显示的图片附件直接嵌入正文，并确认可从 Issue 查看；不得以文字、规格、线框、外链、未上传的本地文件或 ZIP 代替，也不得声称本地文件已附上。复杂/可复用规格可链接补充，但不得替代正文中的图、当前决定和可执行规格。交接前在「体验设计」节写设计评审记录：评审人、日期、结论、遗留问题，由设计者按产品评审范围自查，不设 PM 往返确认。
 
 ## 这次要检查什么
 
