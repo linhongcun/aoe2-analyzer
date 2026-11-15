@@ -8,6 +8,7 @@
 - 开工前核验原 Issue 的最新范围、验收标准、非目标、阶段和状态标签、当前认领/负责人、关联 PR 与 Hold/依赖。进入软件开发即获得该 Issue 既定范围内的开发授权，无需维护者另行批准；符合阶段与认领协议的事项允许自动认领，不批量认领或扩大范围。
 - 关闭的 Issue 不重开、不重复实施；只有维护者在原 Issue 记录新的明确授权后例外。不得自行解除、绕过或清除 Hold。
 - 实际 UX 工作须在同一 Issue 正文直接嵌入覆盖主要界面和重要状态的完成态设计图。只有纯 docs/data 且无 UI 时，产品经理可在同一 Issue 记录 UX 不适用及理由；细则见 [Issue 生命周期](CONTRIBUTING.md#issue-lifecycle)。
+- 完成阶段交接后，按 [CONTRIBUTING「经验回写」](CONTRIBUTING.md#experience-writeback) 把跨 Issue 可复用且已核实的经验写回本角色的 [role/](role/README.md) 指南；没有就不写。
 - 独立复核、按风险选择的 CI、持续合并/发布/关闭授权，以 [CONTRIBUTING.md](CONTRIBUTING.md)、[TESTING](docs/TESTING.md) 与 [RELEASING](docs/RELEASING.md) 为准。本文件和维护说明不另授产品范围或发布权限。
 
 ### 数字不换行（`.num` / `.nw`）
