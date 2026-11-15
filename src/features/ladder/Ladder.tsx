@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import arabiaJson from '../../../data/game/ladder-arabia-p185872.json';
-import teamJson from '../../../data/game/ladder-4v4-rm-e1200-1400-90d.json';
-import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey, type LadderSnapshot } from '../../domain/ladder';
+import { ARABIA_SNAPSHOT as arabiaSnapshot, TEAM_SNAPSHOT as teamSnapshot } from '../../data/ladder';
+import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey } from '../../domain/ladder';
 import { canonicalLadderSearch, resolveLadderLocation, sliceFacts, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderArabia } from './LadderArabia';
@@ -13,8 +12,6 @@ import { Icon } from '../../shared/ui/Icon';
 import { DATA_SOURCES } from '../../shared/utils/dataInfo';
 import './ladder.css';
 
-const arabiaSnapshot = arabiaJson as LadderSnapshot;
-const teamSnapshot = teamJson as LadderSnapshot;
 const SITE_BUILD = DATA_SOURCES.patch?.build ?? 0;
 
 export default function Ladder() {

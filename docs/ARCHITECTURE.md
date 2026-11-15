@@ -64,6 +64,10 @@ flowchart LR
 
 静态 import `CORE` 的模块会和目录数据落在同一条懒加载链上；随主包加载的代码用 `loadCore()` / `useCore()`。
 
+专题数据入口（#1031）只做 import、类型与导出：`src/data/garrisonHosts.ts` 的 `GARRISON_HOST_IDS: readonly number[]`，`ladder.ts` 的 `ARABIA_SNAPSHOT` / `TEAM_SNAPSHOT`（`LadderSnapshot`）和 `BEGINNER_NOTES`（`BeginnerNotes`），`mapCatalog.ts` 的 `MAP_CATALOG`（保留 JSON 推导类型），以及 `relicIncome.ts` 的 `RELIC_INCOME_RAW: unknown`（调用方继续用 `validRelicIncomeData` 校验）。原按需读地图与圣物的消费方动态 import TS 入口，保留加载失败与重试行为。
+
+检查器 `ui-data-json` 禁止 `src/features/`、`src/shared/`、`src/app/` 直接 import `src/data/**/*.json` 或现位于 `data/game/**/*.json` 的载荷，静态、动态与 type import 同样计入。功能目录自带 JSON，以及迁出的 `data/content/`、`data/reference/` 内容不受该规则限制；domain 对非核心专题 JSON 的读取也不因此扩大限制。
+
 ## 路由、导航与元数据
 
 [src/app/App.tsx](../src/app/App.tsx) 使用 React Router 的 `HashRouter`，地址使用 hash 路径以适配静态托管并支持可复制链接。[src/shared/nav/pageRegistry.ts](../src/shared/nav/pageRegistry.ts) 的 `PAGES` 登记路由、分组和页面说明；同一文件中的 `SECTION_GROUPS` 定义任务导航。[src/shared/nav/sections.ts](../src/shared/nav/sections.ts) 从登记派生导航、首页分组等列表；[src/app/pageRegistry.tsx](../src/app/pageRegistry.tsx) 将登记项映射到懒加载组件；[src/app/routes.tsx](../src/app/routes.tsx) 从该注册生成路由并渲染 PageMeta。分享与静态页元数据使用同一登记来源，避免平行清单漂移。新增页面应扩展登记、组件映射及相关验证。

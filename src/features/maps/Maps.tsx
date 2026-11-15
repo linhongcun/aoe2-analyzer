@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { buildOrders } from '../../data/buildOrders';
-import catalog from '../../../data/game/mapCatalog.json';
+import { MAP_CATALOG as catalog } from '../../data/mapCatalog';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';

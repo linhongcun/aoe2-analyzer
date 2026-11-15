@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
-import snapshotJson from '../../../data/game/ladder-4v4-rm-e1200-1400-90d.json';
+import { TEAM_SNAPSHOT as snapshot } from '../../data/ladder';
 import {
   LOW_SAMPLE,
   firstSortDir,
@@ -19,7 +19,6 @@ import {
   viewBracket,
   visibleSourceLabel,
   type LadderCivStat,
-  type LadderSnapshot,
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
@@ -36,7 +35,6 @@ import { Icon, type IconName } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { DATA_SOURCES } from '../../shared/utils/dataInfo';
 
-const snapshot = snapshotJson as LadderSnapshot;
 const SITE_BUILD = DATA_SOURCES.patch?.build ?? 0;
 
 type TeamSort = Exclude<SortKey, 'tier'>;

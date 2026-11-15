@@ -31,7 +31,7 @@ import type { CivBonusEnt } from './civBonus';
 import { bonusDiscountCounted } from './costPolicy';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
-import relicRaw from '../../data/game/relic_income.json';
+import { RELIC_INCOME_RAW as relicRaw } from '../data/relicIncome';
 import { simSupport } from './simSupport';
 import { jurchenContext, JURCHEN_DECAY_NOTE, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { WEI_SPAWN_NOTE } from './weiEconomy';
@@ -45,7 +45,7 @@ import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerE
 /** 从机制注册表派生；排除项集中在 mechanismExclusions.ts。 */
 export const BONUS_USAGE_CIVS = Object.freeze(CIV_MECHANISM_KEYS.filter((civ) => !Object.hasOwn(BONUS_USAGE_EXCLUDED, civ)));
 type Cmd = { C: number; A: number; B: number };
-const relicMods = Object.values((relicRaw as unknown as { modifiers: Record<string, { civ: string; scope: string }> }).modifiers);
+const relicMods = Object.values((relicRaw as { modifiers: Record<string, { civ: string; scope: string }> }).modifiers);
 
 export type UsageTool = 'sim' | 'gather' | 'cost' | 'construction' | 'relic' | 'repair';
 export interface BonusUsageLine {

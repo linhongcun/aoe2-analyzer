@@ -1,8 +1,7 @@
 import { Fragment, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
-import beginnerNotes from '../../../data/game/ladder-beginner.json';
-import snapshotJson from '../../../data/game/ladder-arabia-p185872.json';
+import { ARABIA_SNAPSHOT as snapshot, BEGINNER_NOTES as beginner } from '../../data/ladder';
 import {
   finiteTrendRates,
   firstSortDir,
@@ -23,9 +22,7 @@ import {
   trendFootnote,
   viewBracket,
   visibleSourceLabel,
-  type BeginnerNotes,
   type BracketKey,
-  type LadderSnapshot,
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
@@ -42,8 +39,6 @@ import { useShareLink } from '../../shared/ui/useShareLink';
 import { DATA_SOURCES } from '../../shared/utils/dataInfo';
 import './ladder.css';
 
-const snapshot = snapshotJson as LadderSnapshot;
-const beginner = beginnerNotes as BeginnerNotes;
 const SITE_BUILD = DATA_SOURCES.patch?.build ?? 0;
 
 function useWideTable() {

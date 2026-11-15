@@ -274,7 +274,7 @@ test('#238 剪贴板失败展示完整链接并清除外层无关查询', async 
 });
 
 test('#238 数据块加载错误明确暂停，不采用普通文明默认结果', async ({ page }) => {
-  await page.route(/relic_income(?:[-.]|\.json)/, (route) => route.abort('failed'));
+  await page.route(/relic(?:_income|Income)(?:[-.]|\.json)/, (route) => route.abort('failed'));
   await page.goto('./#/relic-income');
   await expect(page.getByTestId('relic-income-page')).toBeVisible();
   await expect(page.getByRole('alert')).toContainText('固定圣物数据加载失败');

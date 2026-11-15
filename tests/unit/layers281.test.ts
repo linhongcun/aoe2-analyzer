@@ -20,7 +20,7 @@ const rule = (edge: Edge) => (classify as (x: Edge) => string | null)(edge);
 /** #281 ①：分层规则脚本本身的行为。违规清零的断言在 ⑤ 改为 --strict 时由 CI 负责。 */
 describe('#281 分层边界检查脚本', () => {
   it('四条规则按 #281 验收标准分类', () => {
-    expect(Object.keys(RULES)).toEqual(['feature-to-feature', 'shared-upward', 'domain-upward', 'core-json-direct', 'raw-direct']);
+    expect(Object.keys(RULES)).toEqual(['feature-to-feature', 'shared-upward', 'domain-upward', 'core-json-direct', 'raw-direct', 'ui-data-json']);
     expect(rule(e('src/features/a/A.tsx', 'src/features/b/B.tsx'))).toBe('feature-to-feature');
     expect(rule(e('src/features/a/A.tsx', 'src/features/a/x/Y.ts'))).toBeNull();
     expect(rule(e('src/features/a/A.tsx', 'src/features/b/B.tsx', './B', true))).toBe('feature-to-feature');
@@ -36,6 +36,31 @@ describe('#281 分层边界检查脚本', () => {
     expect(rule(e('src/features/a/A.tsx', 'src/data/index.ts'))).toBeNull();
     expect(rule(e('src/domain/datEffects.ts', 'data/game/effects.json'))).toBeNull();
     expect(rule(e('src/app/Layout.tsx', 'src/features/search/components/CommandPalette.tsx'))).toBeNull();
+  });
+
+  it('#1031 ui-data-json：界面层经类型化入口读取专题 JSON，功能自带内容不受限', () => {
+    for (const from of ['src/features/a/A.tsx', 'src/shared/ui/X.tsx', 'src/app/Layout.tsx']) {
+      for (const to of ['src/data/mapCatalog.json', 'src/data/nested/topic.json', 'data/game/mapCatalog.json']) {
+        expect(rule(e(from, to))).toBe('ui-data-json');
+        expect(rule(e(from, to, './topic.json', true))).toBe('ui-data-json');
+        expect(rule({ ...e(from, to), typeOnly: true })).toBe('ui-data-json');
+      }
+      expect(rule(e(from, 'src/data/mapCatalog.ts'))).toBeNull();
+      // 历史正文和背景已从功能目录迁到 content/reference，仍不属于游戏数据入口。
+      expect(rule(e(from, 'data/content/civs/history.json'))).toBeNull();
+      expect(rule(e(from, 'data/reference/civs/backgrounds.json'))).toBeNull();
+    }
+    expect(rule(e('src/features/civs/Civ.tsx', 'src/features/civs/history.json'))).toBeNull();
+    expect(rule(e('src/data/mapCatalog.ts', 'data/game/mapCatalog.json'))).toBeNull();
+    expect(rule(e('src/domain/garrison.ts', 'data/game/garrison.json'))).toBeNull();
+    expect(rule(e('src/domain/topic.ts', 'src/data/topic.json'))).toBeNull();
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    const edges = parse(
+      `${ROOT}/src/features/maps/Maps.tsx`,
+      "import c from '../../../data/game/mapCatalog.json';\nconst load = () => import('../../../data/game/mapCatalog.json');\nexport { MAP_CATALOG } from '../../data/mapCatalog';",
+    );
+    expect(edges.map(rule)).toEqual(['ui-data-json', 'ui-data-json', null]);
+    expect(edges.map((edge) => edge.dynamic)).toEqual([false, true, false]);
   });
 
   it('核心 JSON 只能由 LOADERS 逐个登记的 7 个文件直接 import，src 下其他文件一律报错', () => {

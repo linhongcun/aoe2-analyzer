@@ -20,6 +20,8 @@
 
 `src/data/raw/*` 只能由 `src/data/**` import（规则 `raw-direct`，#1029）。其他层要同步读单位、科技、建筑，用 `src/data/core.ts` 的 `CORE`：它和 `loadCore()` / `useCore()` 返回的是同一个对象，已带 `dlc`、`type`、`introducedUpdate` 和 `unitById`、`techById`、`buildingById`、`linker`、`fam`。文明用 `src/data` 的 `civs`，经济数据用 `src/data/eco.ts`。不要再写 `as unknown as { ... }[]` 的局部类型或自建 id 索引。静态 import `CORE` 会把目录数据带进所在 chunk，随主包加载的模块只用 `loadCore()` / `useCore()`。
 
+专题数据统一从 `src/data/garrisonHosts.ts`（只读 `GARRISON_HOST_IDS`）、`ladder.ts`（`ARABIA_SNAPSHOT`、`TEAM_SNAPSHOT`、`BEGINNER_NOTES`）、`mapCatalog.ts`（`MAP_CATALOG`）、`relicIncome.ts`（`RELIC_INCOME_RAW: unknown`，调用方校验）读取。`ui-data-json`（#1031）禁止界面三层直接 import `src/data/**/*.json` 和现位于 `data/game/**/*.json` 的载荷；功能自带 JSON 及 `data/content/`、`data/reference/` 不受限。原来动态加载的地图和圣物仍动态 import 对应 TS 入口，别把它们带进首页主包或删掉失败重试。
+
 本地严格检查：
 
 ```bash
