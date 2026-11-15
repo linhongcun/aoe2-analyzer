@@ -181,7 +181,11 @@ export function Side({
           headingLevel={2}
           embedded={`duel-${k}`}
           civs={u.civs}
-          minAge={u.age}
+          minAge={
+            side.earlyAgeMarker?.unitId === u.id && side.earlyAgeMarker.civ === side.civ && side.earlyAgeMarker.age === side.age
+              ? side.earlyAgeMarker.age
+              : u.age
+          }
           civ={side.civ}
           age={side.age}
           sel={side.sel}

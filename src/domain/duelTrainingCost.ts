@@ -37,6 +37,25 @@ export interface TrainingQuote {
   deltas: TrainingDelta[];
 }
 
+export interface TrainingAgeMarker {
+  unitId: number;
+  civ: string;
+  age: number;
+}
+
+function trainingPriceAge(unit: Unit, civ: string, age: number, marker?: TrainingAgeMarker): number {
+  return marker &&
+    marker.unitId === unit.id &&
+    marker.civ === civ &&
+    marker.age === age &&
+    Number.isInteger(marker.age) &&
+    marker.age >= 1 &&
+    marker.age <= 4 &&
+    marker.age < unit.age
+    ? marker.age
+    : priceAge(unit.age, age);
+}
+
 function targetsUnit(tech: Tech, unitId: number) {
   return (DAT.techs[tech.en]?.eco ?? []).some((effect) => effect.a !== undefined && COST_ATTRS.has(effect.a) && effect.t?.includes(unitId));
 }
@@ -46,8 +65,8 @@ function asInput(tech: Tech): UnitCostTech {
 }
 
 /** 当前文明、时代、单位下，效果目标打到这名单位的费用科技。不含写死的科技名单。 */
-export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string, age: number): TrainingCostTech[] {
-  const tier = priceAge(unit.age, age);
+export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string, age: number, marker?: TrainingAgeMarker): TrainingCostTech[] {
+  const tier = trainingPriceAge(unit, civ, age, marker);
   const lit = civStatus(ctx.trees, civ);
   const found: TrainingCostTech[] = [];
   for (const tech of ctx.techs) {
@@ -86,8 +105,9 @@ export function quoteTraining(
   sel: ReadonlySet<number>,
   costs: readonly TrainingCostTech[],
   techIds?: ReadonlySet<number>,
+  marker?: TrainingAgeMarker,
 ): TrainingQuote {
-  const tier = priceAge(unit.age, age);
+  const tier = trainingPriceAge(unit, civ, age, marker);
   const opts = techIds ? { techIds } : {};
   const chosen = costs.filter((item) => sel.has(item.tech.id));
   const price = unitCost(

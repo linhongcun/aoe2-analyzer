@@ -25,7 +25,6 @@ import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import { Linked, Loading } from '../../../shared/ui/widgets';
 import { minus } from '../../../shared/utils/minus';
-import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
 import { unitDisplayAge } from '../displayAge';
 import { unitSiegeHref } from '../siegeEntry';
 import { AccuracyBoundaryNote } from './AccuracyBoundaryNote';
@@ -38,6 +37,9 @@ import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
 import { VillagerGather } from './VillagerGather';
 import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
+import { ReverseCounters } from './ReverseCounters';
+import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafety';
+import { readReverseCounterSession, reverseCounterSessionKey } from '../reverseCounterSession';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -47,14 +49,15 @@ const JUMPS = [
   ['unit-related', '相关'],
   ['unit-sim', '模拟器'],
   ['unit-history', '更新历史'],
+  ['unit-reverse-counters', '反向查询'],
 ] as const;
 
 export default function UnitDetail() {
   const loc = useLocation();
   const nav = useNavigate();
-  const resources = useCoreTrees();
-  const core = resources.core.data;
-  const trees = resources.trees.data;
+  const resources = useUnitDetailResources();
+  const core = resources.core;
+  const trees = resources.trees;
   const rt = parseUnitPath(loc.pathname);
   const params = new URLSearchParams(loc.search);
   const tab = params.get('tab');
@@ -64,7 +67,11 @@ export default function UnitDetail() {
   const context = pathToken ? pathCiv : queryCiv;
   const me = civByEn(params.get('me') ?? '');
   const opp = civByEn(params.get('opp') ?? '');
-  const u = core && rt ? core.unitById[rt.id] : undefined;
+  const rawTarget = core && rt ? core.unitById[rt.id] : undefined;
+  const targetProjection = rawTarget ? projectUnitForDetail(rawTarget) : null;
+  const u = targetProjection?.unit;
+  const savedReverseSession = readReverseCounterSession(reverseCounterSessionKey(rt?.id ?? null, context?.en ?? ''), loc);
+  const hasSavedReverseReaderLocation = !!(savedReverseSession?.anchor || savedReverseSession?.fallbackAnchor);
   const workspace = rt ? unitWorkspaceOpen(rt, loc.search) : false;
   const setHistory = (open: boolean) => {
     const next = new URLSearchParams(loc.search);
@@ -75,20 +82,21 @@ export default function UnitDetail() {
   };
 
   useEffect(() => {
+    if (hasSavedReverseReaderLocation) return;
     if (workspace) document.getElementById('unit-sim')?.scrollIntoView({ block: 'start' });
     else if (tab === 'rel') document.getElementById('unit-related')?.scrollIntoView({ block: 'start' });
     else if (tab === 'history') document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
     else scrollTo(0, 0);
-  }, [u?.id, workspace, tab]);
+  }, [u?.id, workspace, tab, hasSavedReverseReaderLocation]);
 
   if (!core)
     return (
       <section className="pane">
-        {resources.core.error ? (
+        {resources.coreError ? (
           <p role="alert">
-            单位资料加载失败，当前地址保留。
-            <button type="button" className="ud-btn" onClick={resources.core.retry}>
-              重试资料
+            {resources.rawCore ? '单位资料结构无法解析，当前地址保留。' : '单位资料加载失败，当前地址保留。'}
+            <button type="button" className="ud-btn" onClick={resources.retryCore} disabled={resources.corePending}>
+              {resources.corePending ? '正在重试…' : '重试资料'}
             </button>
           </p>
         ) : (
@@ -124,7 +132,8 @@ export default function UnitDetail() {
   const armorClasses = u.armc.filter(([name]) => !/^类别\d+$/.test(name));
   const building = core.buildingById[u.b];
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
-  const showEngine = workspace && (!context || canTrain);
+  const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
+  const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
   const simulatorRoute = routeWithQueryCiv(rt, context && canTrain ? context.en : undefined, u.civs);
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   const setCiv = (en: string) => {
@@ -150,15 +159,17 @@ export default function UnitDetail() {
   const cz = (en: string) => civByEn(en)?.zh;
   const showEliteResearch = !!(elite?.up && (u.id === elite.id || u.id === base.id));
   const showPrior = !!(u.up && u.id !== elite?.id);
-  const treeWaiting = resources.trees.error ? (
+  const treeWaiting = resources.treesError ? (
     <p role="alert">
-      科技树资料加载失败，目录资料仍可查看。
-      <button type="button" className="ud-btn" onClick={resources.trees.retry}>
-        重试科技树
+      {resources.rawTrees ? '科技树结构无法解析，目录资料仍可查看。' : '科技树资料加载失败，目录资料仍可查看。'}
+      <button type="button" className="ud-btn" onClick={resources.retryTrees} disabled={resources.treesPending}>
+        {resources.treesPending ? '正在重试…' : '重试科技树'}
       </button>
     </p>
-  ) : (
+  ) : resources.treesPending ? (
     <p className="ud-kicker">科技树资料加载中，目录资料仍可查看。</p>
+  ) : (
+    <p role="alert">科技树资料尚不可用，目录资料仍可查看。</p>
   );
 
   return (
@@ -334,7 +345,7 @@ export default function UnitDetail() {
         <h2>适用加成、护甲与说明</h2>
         {u.id === 331 && <p className="ud-kicker">下列攻击加成按已核同的展开攻击字段列出。</p>}
         <div className="ud-combat">
-          {Object.keys(bonuses).length > 0 && <BonusTable B={bonuses} headingLevel={3} />}
+          {Object.keys(bonuses).length > 0 && <BonusTable B={bonuses} headingLevel={3} title="本单位对其他单位的攻击加成" />}
           {(u.arms.length > 0 || armorClasses.length > 0) && (
             <div className="ud-armor">
               {u.arms.length > 0 && (
@@ -361,7 +372,19 @@ export default function UnitDetail() {
               )}
             </div>
           )}
+          <button
+            type="button"
+            className="ud-reverse-jump"
+            onClick={() => document.getElementById('unit-reverse-counters')?.scrollIntoView({ block: 'start' })}
+          >
+            查看对本单位有类别加成的单位
+          </button>
         </div>
+        {!!targetProjection?.invalidFields.length && (
+          <p className="ud-kicker" role="status" data-t="unit-category-warning">
+            本单位类别资料部分无法解析；已跳过异常值，不会补成 0。
+          </p>
+        )}
         <p>
           准确度 <span className="num nw">{u.acc}%</span>
         </p>
@@ -378,6 +401,24 @@ export default function UnitDetail() {
         </p>
         <DetailSource note={null} />
       </section>
+
+      <ReverseCounters
+        key={`${u.id}:${context?.en ?? ''}`}
+        target={u}
+        rawTarget={rawTarget!}
+        targetIssues={targetProjection?.invalidFields ?? []}
+        core={core}
+        corePending={resources.corePending}
+        coreError={resources.coreError}
+        retryCore={resources.retryCore}
+        trees={trees}
+        rawTrees={resources.rawTrees}
+        treesPending={resources.treesPending}
+        treesError={resources.treesError}
+        retryTrees={resources.retryTrees}
+        targetCiv={context?.en ?? ''}
+        location={loc}
+      />
 
       {trees && isChampiUnit(u.id) ? <ChampiReferences core={core} trees={trees} variant="unit" /> : null}
       <TrebuchetStates unit={u} />
@@ -447,7 +488,15 @@ export default function UnitDetail() {
         </div>
         {workspace && (
           <div className="ud-workspace" data-t="workspace-open">
-            {showEngine ? <Simulator key={u.id} u={u} route={simulatorRoute} /> : <p>该文明无法训练本单位，因此不给出该文明的近似模拟值。</p>}
+            {showEngine ? (
+              <Simulator key={u.id} u={u} route={simulatorRoute} />
+            ) : invalidCombatProjection ? (
+              <p role="alert" data-t="workspace-invalid-target">
+                本单位攻击或护甲类别资料异常，已停用模拟器；不会用清理后的零值代替原始数据。
+              </p>
+            ) : (
+              <p>该文明无法训练本单位，因此不给出该文明的近似模拟值。</p>
+            )}
           </div>
         )}
       </section>

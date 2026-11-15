@@ -85,12 +85,14 @@ export function BonusTable({
   C,
   cmpLabel,
   headingLevel,
+  title,
 }: {
   B: Record<string, number>;
   S?: Record<string, number>;
   C?: Record<string, number> | null;
   cmpLabel?: string;
   headingLevel?: 3 | 4;
+  title?: string;
 }) {
   const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const cur = S ?? B;
@@ -99,7 +101,7 @@ export function BonusTable({
   return (
     <div className="bonusbox">
       <Heading className={headingLevel === undefined ? undefined : 'sim-bonus-title'}>
-        <Icon name="crosshair" /> 克制加成 / Bonus damage
+        <Icon name="crosshair" /> {title ?? '克制加成 / Bonus damage'}
       </Heading>
       <p className="note">{BONUS_NOTE}</p>
       {hasNegative && (
