@@ -164,7 +164,7 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 5. PR 标题要能通过 `scripts/check-pr-title.mjs`：`类型(范围): 描述`，范围可以省略。类型含 `docs`、`feat`、`fix` 等。仓库约定 squash 合并，PR 标题会成为 `main` 上的提交说明。涉及网站的实现 PR 写 `Relates #N`，避免一合并就把还没上线的 issue 关掉。纯文档、合入即完成的事项才用 `Fixes #N`。
 6. 看 CI 时以最终 head 为准。PR 检查的是合并结果，不是分支上某次更早的绿。准备再推或改历史之前，先看这个 PR 是否已经 merged、`main` 是否已经有对应提交。维护者可能已经 squash 合入；合入后的新工作从新的 `main` 另开分支。
 7. squash 之后，`main` 上的 SHA 不是 PR 分支尖。例如 #979 的分支尖是 `484798c3`，合入 `main` 的是 `471c1368`。部署、页脚和 tag 都对 `main` 这个 SHA。
-8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `test` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
+8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `check` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
 9. 正式 Release 还要再看。`release.yml` 在 `main` 的成功 push 型 CI 之后接续。生成 draft 不等于发布完成。当前公开的 `v0.77.92` 不是 draft，annotated tag 指向 `0db9c309`。发版步骤见 [docs/RELEASING.md](../docs/RELEASING.md)。
 10. 网站事项仍在原 Issue 更新上线证据，并在范围已上线、正式 Release 核实后转 `阶段:已上线`，加 `已部署` 并关闭。`Relates` 不会在合并时自动关。纯仓库文档事项在原 Issue 记录“仓库交付，无网站发布”，不标 `已部署`；驳回/重复事项写理由关闭，不伪标上线。
 
