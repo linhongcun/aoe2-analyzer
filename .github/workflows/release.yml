@@ -15,7 +15,7 @@ concurrency: { group: release, cancel-in-progress: false }
 jobs:
   release:
     if: >-
-      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
       (github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main' &&
@@ -71,7 +71,7 @@ jobs:
           notes="变更内容见 https://github.com/${GITHUB_REPOSITORY}/blob/${{ steps.source.outputs.sha }}/CHANGELOG.md"
           if gh release view "$version" >/dev/null 2>&1; then
             gh release upload "$version" "aoe2-analyzer-site-$version.zip" SHA256SUMS.txt --clobber
-            gh release edit "$version" --draft=false --notes "$notes"
+            gh release edit "$version" --draft=false --target "${{ steps.source.outputs.sha }}" --notes "$notes"
           else
             gh release create "$version" "aoe2-analyzer-site-$version.zip" SHA256SUMS.txt \
               --target "${{ steps.source.outputs.sha }}" --title "$version" --notes "$notes"

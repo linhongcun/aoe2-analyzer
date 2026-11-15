@@ -240,7 +240,7 @@ describe('#558 cumulative release feature smoke from a real formal baseline', ()
     f.api[`${f.prefix}/actions/runs/777/jobs?filter=latest&per_page=100`] = [
       {
         jobs: [
-          { name: 'test', status: 'completed', conclusion: 'success' },
+          { name: 'check', status: 'completed', conclusion: 'success' },
           { name: 'deploy', status: 'completed', conclusion: 'skipped' },
         ],
       },

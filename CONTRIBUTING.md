@@ -120,8 +120,8 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 ### 3. 发版
 
-- **默认流程**：实现 PR 完成独立复核和适用验证 → 合入 main → main 核实可复用证据或执行当前必要验证，构建真实 SHA 并做短烟测 → `test` 与 Pages `deploy` 实际成功 → Release 核对线上版本/构建与本次功能、创建 annotated tag、打包同一已部署产物并正式发布 → 核对 issue 已完成。多项 release 分支集成仍可使用同一流程，但不因经过该分支额外重跑相同验证。
-- **成功含义**：当前 run 的真实 `test` 检查可以依据经核验的成功证据完成，日志和产物须写明原执行范围、来源及复用关系。空 statuses、只有 PR 绿灯或代码祖先关系不能代表已部署成功；main 的真实 `test`、`deploy` 和实际线上结果仍须确认。
+- **默认流程**：实现 PR 完成独立复核和适用验证 → 合入 main → main 的 `check` 实跑 static、构建真实 SHA 并做窄冒烟 → `deploy` 用同一份 `dist` 发布 Pages 并上传 `site` 产物 → Release 核对来源 run、版本与 tag，打包同一已部署产物并正式发布 → 核对 issue 已完成。多项 release 分支集成仍可使用同一流程。
+- **成功含义**：只有 main 上该提交的 `check` 与 `deploy` 实际成功才算已部署。PR 绿灯、代码祖先关系或他人口头结论都不能代表 main 已部署成功；需要时核对实际线上页脚的版本与构建号。
 - **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）保留 `--dry-run`、`--site-url`、`--footer-timeout`，无需为普通更新创建 release 分支。若使用 release 分支，则继续检查其集成关系；普通更新以已部署 main 为发布源。已有 tag 指向不符时退出，不覆盖 tag。
 - **产物复用**：main 的 `check` 成功后，同一份 dist 既发布到 Pages，也上传为 `site` 产物。Release 只下载经 GitHub API 核实的同仓库 main 成功 push 型 CI / Deploy run 的该产物，核对版本与 tag 后生成 ZIP 和 SHA256SUMS；缺少或不符时明确失败，不回退为再构建一份未经部署的 ZIP，也不回退为整站线上回归。
 - **重跑与失败**：每一步看远端仓库、部署和产物的真实状态；修复原因后可以同版本恢复，已完成且一致的步骤幂等跳过。页面部署、draft Release 和正式发布是不同状态。不要用本地站点代替真实线上核对，也不要用管道吞掉失败退出码。

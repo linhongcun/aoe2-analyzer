@@ -34,13 +34,19 @@ jobs:
       - name: Static checks
         run: node scripts/ci-commands.mjs static
       - name: Extra static checks (unused exports, contrast, introductions)
+        if: ${{ !cancelled() }}
         run: node scripts/ci-commands.mjs main
       - name: Unit tests
+        if: ${{ !cancelled() }}
         run: npx vitest run
       - name: Data pipeline reproducibility
+        if: ${{ !cancelled() }}
         run: node scripts/ci-commands.mjs data
-      - run: npm run build
+      - name: Build
+        if: ${{ !cancelled() }}
+        run: npm run build
       - name: Full browser regression
+        if: ${{ !cancelled() }}
         run: npx playwright test --reporter=line
       - uses: actions/upload-artifact@v4
         if: failure()
