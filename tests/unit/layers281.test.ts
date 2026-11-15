@@ -66,7 +66,10 @@ describe('#281 分层边界检查脚本', () => {
     expect(rule(e('src/data/hooks.ts', 'data/game/search-py.json'))).toBeNull();
     // 真实解析：未登记文件里的直接 import 会被扫出来，经登记入口读取不报
     const parse = parseImports as (f: string, t: string) => Edge[];
-    const edges = parse(`${ROOT}/src/data/hooks.ts`, "import c from '../../data/game/civs.json';\nconst t = () => import('../../data/game/trees.json');\nimport r from './raw/civs';");
+    const edges = parse(
+      `${ROOT}/src/data/hooks.ts`,
+      "import c from '../../data/game/civs.json';\nconst t = () => import('../../data/game/trees.json');\nimport r from './raw/civs';",
+    );
     expect(edges.map((x) => rule(x))).toEqual(['core-json-direct', 'core-json-direct', null]);
   });
 
@@ -131,7 +134,9 @@ describe('#281 分层边界检查脚本', () => {
     const parse = parseImports as (f: string, t: string) => Edge[];
     const at = `${ROOT}/src/features/z/Z.tsx`;
     expect(() => parse(at, "const p = '../../../data/game/units.json'; import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
-    expect(() => parse(at, "const p = 'units'; import.meta.glob(['../../../data/game/eco.json', `../../../data/game/${p}.json`], { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = 'units'; import.meta.glob(['../../../data/game/eco.json', `../../../data/game/${p}.json`], { eager: true });")).toThrow(
+      /字面量/,
+    );
     expect(() => parse(at, "const p = '../../../data/game/units.json'; import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
     expect(() => parse(at, 'import.meta.glob([], { eager: true });')).toThrow(/字面量/);
     expect(() => parse(at, "import.meta.glob('../../../data/game/nope.json', { eager: true });")).toThrow(/不存在/);
@@ -146,7 +151,7 @@ describe('#281 分层边界检查脚本', () => {
 
   it('CI 以 --strict 运行分层检查（#281 ⑤）', () => {
     const ci = readFileSync(`${ROOT}/.github/workflows/ci.yml`, 'utf8');
-    expect(ci).toContain('run: node scripts/ci-stage.mjs run static');
+    expect(ci).toContain('run: node scripts/ci-commands.mjs static');
     expect(STATIC_CHECKS).toContainEqual(['layers', 'npm', ['run', 'lint:layers', '--', '--strict']]);
     expect(ci).not.toMatch(/warn only/i);
   });

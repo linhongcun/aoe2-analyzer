@@ -64,7 +64,7 @@ export function validateSuccessfulDeployment(run, jobs, { repository, sha }) {
     ref: 'refs/heads/main',
   });
   if (source.deployedSha !== sha) throw new Error('CI run does not cover the deployed source');
-  for (const name of ['test', 'deploy']) {
+  for (const name of ['check', 'deploy']) {
     const matching = jobs.filter((job) => job.name === name);
     if (!matching.length || matching.some((job) => job.status !== 'completed' || job.conclusion !== 'success'))
       throw new Error(`Required ${name} job did not succeed`);

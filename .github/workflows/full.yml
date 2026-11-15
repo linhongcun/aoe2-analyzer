@@ -1,0 +1,53 @@
+name: CI full
+on:
+  schedule:
+    - cron: '30 18 * * *' # 北京时间每日 02:30
+  workflow_dispatch:
+permissions: { contents: read }
+concurrency: { group: ci-full, cancel-in-progress: true }
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20.19.5', cache: npm }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            scripts/.cache/empires2_x2_p1.*.dat
+            scripts/.cache/dat.*.json
+            scripts/.cache/venv
+            scripts/.cache/aoe2techtree-*
+          key: data-${{ hashFiles('data/sources/data_sources.json') }}-py312
+      - run: npm ci --legacy-peer-deps
+      - run: python3 -m pip install Pillow==12.3.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium || (sleep 30 && npx playwright install --with-deps chromium)
+      - name: Static checks
+        run: node scripts/ci-commands.mjs static
+      - name: Extra static checks (unused exports, contrast, introductions)
+        if: ${{ !cancelled() }}
+        run: node scripts/ci-commands.mjs main
+      - name: Unit tests
+        if: ${{ !cancelled() }}
+        run: npx vitest run
+      - name: Data pipeline reproducibility
+        if: ${{ !cancelled() }}
+        run: node scripts/ci-commands.mjs data
+      - name: Build
+        if: ${{ !cancelled() }}
+        run: npm run build
+      - name: Full browser regression
+        if: ${{ !cancelled() }}
+        run: npx playwright test --reporter=line
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: browser-diagnostics, path: test-results, if-no-files-found: ignore }

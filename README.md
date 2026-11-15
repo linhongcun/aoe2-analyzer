@@ -42,14 +42,14 @@
 
 ## 数据与流水线 / Data pipeline
 
-| 数据                                                                                       | 来源                                                                                                                                                                  | 脚本                                                                              |
-| ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `data/sources/data_sources.json`，188329）                                       | `npm run data`（`scripts/build_data.py`）                                         |
+| 数据                                                                                        | 来源                                                                                                                                                                  | 脚本                                                                              |
+| ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 文明、单位、科技、建筑、科技树、中英文本、图标                                              | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `data/sources/data_sources.json`，188329）                                  | `npm run data`（`scripts/build_data.py`）                                         |
 | 科技/文明加成/团队加成的结构化效果（`data/game/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定                | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
-| 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`data/game/eco.json`） | 同上                                                                                                                                                                  | `npm run eco`（`scripts/eco_build.py`，对账见 `data/reports/ECO-DATA.md`）                |
+| 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`data/game/eco.json`） | 同上                                                                                                                                                                  | `npm run eco`（`scripts/eco_build.py`，对账见 `data/reports/ECO-DATA.md`）        |
 | 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`data/game/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue218-spec.md) | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
-| 开局库（`data/game/build-orders/*.json`）                                                  | 社区开局转写，逐个注明出处（[数据](data/game/build-orders/)；[验证](tests/unit/buildOrders.test.ts)）                                                                  | `npm run bo:check`                                                                |
-| 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                                  | `npm run stats:check`                                                             |
+| 开局库（`data/game/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（[数据](data/game/build-orders/)；[验证](tests/unit/buildOrders.test.ts)）                                                                 | `npm run bo:check`                                                                |
+| 基础数值对账（aoe2techtree vs .dat）                                                        | 同上                                                                                                                                                                  | `npm run stats:check`                                                             |
 
 数据目录归属与运行时边界见 [`data/README.md`](data/README.md)。
 
@@ -88,7 +88,7 @@ npm run test:py      # Python 测试：补丁号识别、差异摘要、标记�
 
 ## 部署 / Deploy
 
-GitHub Actions 根据 `.github/workflows/ci.yml` 中的计划选择验证阶段。普通 PR/push 的默认门禁为 static、build 与窄范围 Playwright 冒烟；unit、data、其他浏览器范围按计划条件运行或复用可信证据。不是每个 PR 都运行完整 Vitest、Python 与数据再生成。确切的默认范围、手动 full 与部署条件见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)。
+GitHub Actions（`.github/workflows/ci.yml`）对每个 PR/push 运行 static、构建和窄范围 Playwright 冒烟；完整 Vitest、Python 与数据再生成在每日/手动的 `full.yml` 运行。确切范围与部署条件见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)。
 
 只有 push 到 `main` 且计划与聚合检查成功时，`deploy` 才通过 `actions/deploy-pages` 发布；PR 不部署。线上手动验证命令和限制见 [RELEASING](docs/RELEASING.md)。
 

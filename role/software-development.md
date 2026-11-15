@@ -138,32 +138,22 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 没设 `BASE_URL` 时，Playwright 自己起 `vite preview --port 4173 --strictPort`，读的是已有 `dist/`，所以要先 `npm run build`。设了 `BASE_URL` 就不再起服务。
 
-**当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
+**当前 CI**（`.github/workflows/ci.yml`，普通 `pull_request` 和 `push` 到 `main`）只有一个 `check` 作业和 main 专用的 `deploy`：
 
-| 作业                          | 普通 PR / main push                                                                                                                                                           |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plan`                        | 每次都跑。冻结选择，并决定后面哪些作业可以复用                                                                                                                                |
-| `static`                      | 需求里始终有。检查是 `npm run lint`、`npx tsc -p . --noEmit`、`content:check --strict`、`check-source-presentation.mjs`、`content:validators --check`、`lint:layers --strict` |
-| `build`                       | 每次都跑，不可复用。`npm run build`，再加构建身份烟测（页脚版本与这次检出的提交）                                                                                             |
-| `browser-1`                   | 每次都跑，窄门禁下不可复用。对着这次构建，Chromium 单分片                                                                                                                     |
-| `test`                        | 每次都跑。聚齐本次需求里的阶段；失败则不部署                                                                                                                                  |
-| `deploy`                      | 仅 `main` 的 push，且 `plan` 与 `test` 都成功                                                                                                                                 |
-| `unit`、`data`、`static-main` | 普通路径不纳入需求，作业会被跳过                                                                                                                                              |
-| `browser-2` 到 `browser-4`    | 只在手动 full                                                                                                                                                                 |
+| 步骤   | 内容                                                                                                                                                                                            |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| static | `node scripts/ci-commands.mjs static`：`npm run lint`、`npx tsc -p . --noEmit`、`content:check --strict`、`check-source-presentation.mjs`、`content:validators --check`、`lint:layers --strict` |
+| build  | `npm run build`，构建本次检出的提交                                                                                                                                                             |
+| smoke  | `node scripts/ci-commands.mjs smoke`：对着这次构建跑 7 条窄冒烟                                                                                                                                 |
+| deploy | 仅 `main` 的 push 且 `check` 成功：`actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物供 Release                                                                                       |
 
-窄冒烟固定为 `tests/e2e/smoke.spec.ts` 的 6 条：首页、`#civs`、`#/civ/Franks`、`#unit/569` 可打开且无控制台错误；Ctrl+K 搜索 `paladin`；法兰克圣骑士满科技生命值 192。缺一条，规划失败。构建身份是 `tests/e2e/ciBuild659.spec.ts` 里标题为 fresh build identity 的那一条。手动 full 才保留 24 条冷路由。
+窄冒烟由 `scripts/ci-scope.mjs` 的 `GATE_NARROW_SMOKE` 固定：`tests/e2e/smoke.spec.ts` 的首页、`#civs`、`#/civ/Franks`、`#unit/569` 可打开且无控制台错误；Ctrl+K 搜索；法兰克圣骑士满科技生命值 192；加 `tests/e2e/ciBuild659.spec.ts` 的构建身份（页脚版本与本次检出的提交一致）。改标题要同步改该常量，否则 `--grep` 选不到用例。
 
-手动 full：Actions 里对 **CI / Deploy** 做 workflow_dispatch，`full` 默认为 true。那一次跑 `static-main`、全部单测、`data`、四片浏览器，并且不部署。`ci-probe.yml`、`ci-timing.yml` 不在默认 PR 路径。CI 钉的是 Node `20.19.5` 和 Python `3.12`（`ci.yml`）。README 写的是本机 Node 20+、Python 3.10+。
+全部单测、`data`、`unused`/对比度/简介检查和整站 Playwright 在 **CI full**（`.github/workflows/full.yml`，每日北京时间 02:30 或 Actions 手动触发）运行，不部署。CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`；README 写的是本机 Node 20+、Python 3.10+。
 
-e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:browser-weights`：每个 `tests/e2e/*.spec.ts` 都要有一条正整数权重，多出来的条目也不行。权重是历史种子，供手动 full 把用例分到四个 runner；它不是实测耗时承诺，也不把该文件拉进默认窄冒烟。新增 spec 却忘了权重，默认 `static` 会失败。
+e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:browser-weights`：每个 `tests/e2e/*.spec.ts` 都要有一条正整数权重，多出来的条目也不行；新增 spec 却忘了权重，`static` 会失败。权重现在只是历史记录，不用于分片。
 
-跳过要分开看：
-
-- `unit`、`data`、`static-main` 在普通路径没有步骤，是没被选进需求。跳过不等于跑过，更不等于通过。
-- `static` 在需求里。它被跳过且没有步骤，是因为已有匹配仓库、tree、策略、工具链和精确检查集合的复用证明（`scripts/ci-stage-evidence.mjs`）。`build` 和窄门禁的 `browser-1` 标成不可复用，普通路径应当实跑。
-- 作业页面上看，两种跳过都是空步骤。要分清，读该次 `plan` 日志里的 `reused` 和 `missing`，以及 `test` 的聚合收据。不要把 skip 或本地命令写成「CI 实跑」。
-
-`test` 成功之后，main push 才上传 `deployed-site` 并部署同一份 `dist`。PR 不部署。
+CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失败就没有部署。不要把 skip 或本地命令写成「CI 实跑」。
 
 ## 7. 从改动到可以称上线
 
@@ -174,7 +164,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 5. PR 标题要能通过 `scripts/check-pr-title.mjs`：`类型(范围): 描述`，范围可以省略。类型含 `docs`、`feat`、`fix` 等。仓库约定 squash 合并，PR 标题会成为 `main` 上的提交说明。涉及网站的实现 PR 写 `Relates #N`，避免一合并就把还没上线的 issue 关掉。纯文档、合入即完成的事项才用 `Fixes #N`。
 6. 看 CI 时以最终 head 为准。PR 检查的是合并结果，不是分支上某次更早的绿。准备再推或改历史之前，先看这个 PR 是否已经 merged、`main` 是否已经有对应提交。维护者可能已经 squash 合入；合入后的新工作从新的 `main` 另开分支。
 7. squash 之后，`main` 上的 SHA 不是 PR 分支尖。例如 #979 的分支尖是 `484798c3`，合入 `main` 的是 `471c1368`。部署、页脚和 tag 都对 `main` 这个 SHA。
-8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `test` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
+8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `check` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
 9. 正式 Release 还要再看。`release.yml` 在 `main` 的成功 push 型 CI 之后接续。生成 draft 不等于发布完成。当前公开的 `v0.77.92` 不是 draft，annotated tag 指向 `0db9c309`。发版步骤见 [docs/RELEASING.md](../docs/RELEASING.md)。
 10. 网站事项仍在原 Issue 更新上线证据，并在范围已上线、正式 Release 核实后转 `阶段:已上线`，加 `已部署` 并关闭。`Relates` 不会在合并时自动关。纯仓库文档事项在原 Issue 记录“仓库交付，无网站发布”，不标 `已部署`；驳回/重复事项写理由关闭，不伪标上线。
 
@@ -192,7 +182,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 ## 9. 旧文档口径与当前状态
 
-2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节、[ci-749](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md) 和 TESTING 文首为准。
+2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节和 TESTING 文首为准。
 
 | 位置                                                                                      | 当时写着的内容                                                | 状态                                                                                                                           |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |

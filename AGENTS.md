@@ -34,21 +34,21 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 
 ## 目录
 
-| 路径                   | 内容                                                                                                                                                                                                                                                                                                             |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/`             | 路由 `routes.tsx`、布局 `Layout.tsx`（页眉/导航/页脚）、`nav/`                                                                                                                                                                                                                                                   |
-| `data/`                | 跟踪的数据载荷；按游戏数据、内容、schema、参考、证据、来源、测试 fixture、报告和补丁说明分类，归属与校验入口见 [`data/README.md`](data/README.md) |
-| `src/data/`            | TypeScript 数据适配器和别名代码：`index.ts`（异步入口）、`hooks.ts`、`raw/*.ts`（核心 JSON 唯一同步入口）、`aliases.ts`、`confusables.ts`；JSON 载荷位于 `data/` |
-| `src/domain/`          | 领域逻辑，纯函数、不依赖 React，必须配 Vitest 单测（`duel.ts` 战斗、`realCost.ts` 等采集时间、`search.ts` 搜索、`simulator.ts`、`buildSim.ts` 等）                                                                                                                                                               |
-| `src/features/<模块>/` | 各页面：`civs` `units` `techs` `buildings` `tree` `bonuses` `dlc` `compare` `matchup` `simulator` `duel` `builds` `search` `home` `about` `feedback`                                                                                                                                                             |
-| `src/shared/ui/`       | 通用组件；图标登记在 `Icon.tsx` 的 `ICONS` 表                                                                                                                                                                                                                                                                    |
-| `src/shared/styles/`   | 样式，颜色只用 `tokens.css` 里的设计令牌                                                                                                                                                                                                                                                                         |
-| `scripts/`             | 数据管线（`build_data.py`、`effects_build.py`、`eco_build.py`、`pinyin_build.mjs` 等）、`release.mjs` 发版脚本、`check-pr-title.mjs`、`check-colors.mjs`、`check-css.mjs`、`check-layers.mjs` 分层边界检查（`npm run lint:layers`）                                                                              |
-| `tests/unit/`          | Vitest（`*.test.ts`，只有这里会被收集）                                                                                                                                                                                                                                                                          |
-| `tests/e2e/`           | Playwright（`*.spec.ts`），默认宽度 1280                                                                                                                                                                                                                                                                         |
-| `tests/py/`            | Python 数据脚本测试                                                                                                                                                                                                                                                                                              |
-| `docs/`                | 当前架构、数据更新与来源、测试/发布流程、设计原则和维护规则；产品规格留在原 Issue                                                                                                                                                                                                                                |
-| `public/img/`          | 游戏图标（生成）                                                                                                                                                                                                                                                                                                 |
+| 路径                   | 内容                                                                                                                                                                                                                                |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/`             | 路由 `routes.tsx`、布局 `Layout.tsx`（页眉/导航/页脚）、`nav/`                                                                                                                                                                      |
+| `data/`                | 跟踪的数据载荷；按游戏数据、内容、schema、参考、证据、来源、测试 fixture、报告和补丁说明分类，归属与校验入口见 [`data/README.md`](data/README.md)                                                                                   |
+| `src/data/`            | TypeScript 数据适配器和别名代码：`index.ts`（异步入口）、`hooks.ts`、`raw/*.ts`（核心 JSON 唯一同步入口）、`aliases.ts`、`confusables.ts`；JSON 载荷位于 `data/`                                                                    |
+| `src/domain/`          | 领域逻辑，纯函数、不依赖 React，必须配 Vitest 单测（`duel.ts` 战斗、`realCost.ts` 等采集时间、`search.ts` 搜索、`simulator.ts`、`buildSim.ts` 等）                                                                                  |
+| `src/features/<模块>/` | 各页面：`civs` `units` `techs` `buildings` `tree` `bonuses` `dlc` `compare` `matchup` `simulator` `duel` `builds` `search` `home` `about` `feedback`                                                                                |
+| `src/shared/ui/`       | 通用组件；图标登记在 `Icon.tsx` 的 `ICONS` 表                                                                                                                                                                                       |
+| `src/shared/styles/`   | 样式，颜色只用 `tokens.css` 里的设计令牌                                                                                                                                                                                            |
+| `scripts/`             | 数据管线（`build_data.py`、`effects_build.py`、`eco_build.py`、`pinyin_build.mjs` 等）、`release.mjs` 发版脚本、`check-pr-title.mjs`、`check-colors.mjs`、`check-css.mjs`、`check-layers.mjs` 分层边界检查（`npm run lint:layers`） |
+| `tests/unit/`          | Vitest（`*.test.ts`，只有这里会被收集）                                                                                                                                                                                             |
+| `tests/e2e/`           | Playwright（`*.spec.ts`），默认宽度 1280                                                                                                                                                                                            |
+| `tests/py/`            | Python 数据脚本测试                                                                                                                                                                                                                 |
+| `docs/`                | 当前架构、数据更新与来源、测试/发布流程、设计原则和维护规则；产品规格留在原 Issue                                                                                                                                                   |
+| `public/img/`          | 游戏图标（生成）                                                                                                                                                                                                                    |
 
 分层边界（#281，CI 用 `npm run lint:layers -- --strict` 检查，有任何违规即失败；不带 `--strict` 只报告、总以 0 退出）：`features/X` 不 import `features/Y`（要共享的挪到 `shared/` 或 `domain/`）；`shared/` 不 import `features/`、`app/`；`domain/` 不 import react、`features/`、`app/`、`shared/ui`；核心数据 JSON `data/game/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由 `scripts/check-layers.mjs` 的 `LOADERS` 里逐个登记的 7 个文件直接 import，src 下其他任何文件（含 `shared/`、`app/`、`data/` 其他文件）都要经它们读取：`src/data/index.ts`（异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包）、`src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts`（唯一的同步入口，原样转出）、`src/domain/datEffects.ts`（特例：effects.json 的类型与转换）。新增入口要登记进 `LOADERS` 并同步更新本段和 `docs/ARCHITECTURE.md`。`import type` 和动态 `import()` 同样计入。
 
@@ -98,11 +98,9 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。默认 CI、手动 full 与部署范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)和工作流；不把手动 full 误写为默认部署门槛。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。默认 CI（static、构建、7 条窄冒烟）、CI full 与部署范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)和 `.github/workflows/`。
 
-手动 full 不是普通 PR 的合并条件。需要时才跑；默认窄冒烟失败、超时或错构建不得部署。历史 #749 范围见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)。
-
-只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与默认 `browser-1` 不复用，main 始终重建真实 SHA。static-main 只属于手动 full。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。当前规则见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史 #749/#659 规格分别见[ci-749](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)与[ci-659](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)原件。
+CI full（每日/手动）不是普通 PR 的合并条件；默认窄冒烟失败或错构建不得部署。CI 每次实跑，不复用其他 run 的结果；main 始终重建真实 SHA 并用同一份 `dist` 部署。
 
 ## 测试规则
 
@@ -110,7 +108,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 - Kent 只确认这次改动的功能是否正常。每 PR：必要冒烟，加与 diff 直接相关的测试。纯布局不重跑无关计算或数据。全站全尺寸主题矩阵不是门禁。
 - 旧布局、旧入口、旧链接协议、重复功能不必兼容。有意合并、替代或删除不算 bug，相关旧断言可改成新行为或删除。计算或数据改动要核对该结果，不能靠删断言掩盖错误。
-- 报告分开写实际执行、CI 范围（默认是 #749 的 static、构建身份和单分片窄冒烟）和未验证项。`Relates` / `Fixes` 仍见 [TESTING](docs/TESTING.md#编码代理交接)。
+- 报告分开写实际执行、CI 范围（默认是 static、构建身份和 7 条窄冒烟）和未验证项。`Relates` / `Fixes` 仍见 [TESTING](docs/TESTING.md#编码代理交接)。
 
 ## 界面约定
 
@@ -153,7 +151,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore data test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。静态数据快照用 `data`。
 3. PR 描述按交付条件选关键词，并附本地测试结果，写明实际执行、CI 范围和未验证项。不要求四宽截图。网站实现 PR 写 `Relates #N`，避免合入即提前关闭；Pages、线上核对和正式 Release 通过后，由执行者直接关闭已完成范围的 issue。合入即完成、无需网站交付的工程或文档事项可写 `Fixes #N`。合到非默认分支不会自动关 issue，发版时仍核对实际状态。细则见 [TESTING](docs/TESTING.md#编码代理交接)。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
 4. 默认审阅门禁：实现者之外的独立代理复核＋按风险选择的一次验证；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题。测试范围见「测试规则」，不把四宽或先红用例当作门禁。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则。release/main 可以按代码树、策略、范围和真实来源复用成功证据，不机械重跑相同验证。不得伪造他人结论、删除分支、修改仓库权限，或用删断言掩盖计算和数据错误；已获授权时按顺序集成并发布。
-5. 版本号一律三段 `vX.Y.Z`。完成独立复核和适用验证后合入 main；main 的真实 `test` 检查可记录可信复用结果，仍须完成真实 SHA 构建、短烟测和 Pages 部署。Release 核对线上版本/构建、本次功能及 tag，直接打包同一已部署产物和校验文件后正式发布，不再二次构建或默认跑大范围线上回归。按持续发布授权自动继续，无需再问是否上线；不要在 main 的检查和部署尚未结束时让脚本等待部署。
+5. 版本号一律三段 `vX.Y.Z`。完成独立复核和适用验证后合入 main；main 的 `check` 实跑 static、真实 SHA 构建和窄冒烟，`deploy` 用同一份产物发布 Pages。Release 核对线上版本/构建、本次功能及 tag，直接打包同一已部署产物和校验文件后正式发布，不再二次构建或默认跑大范围线上回归。按持续发布授权自动继续，无需再问是否上线；不要在 main 的检查和部署尚未结束时让脚本等待部署。
 
 ## 提交身份
 
