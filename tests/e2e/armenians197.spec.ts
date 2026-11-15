@@ -32,7 +32,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('[data-step="2"] .n')).toContainText('60木、15食物');
       await expect(page.locator('[data-step="2"] .n')).not.toContainText('伐木场');
       await expect(detail.locator('[data-t="step-cost"]')).toContainText('食物 15');
-      await expect(detail.locator('[data-t="step-cost"]')).toContainText('木头 60');
+      await expect(detail.locator('[data-t="step-cost"]')).toContainText('木材 60');
       await overflow(page);
       expect(await nowrap(page)).toEqual([]);
       if (width === 360 && theme === 'light')
@@ -65,7 +65,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByRole('region', { name: '步骤详情', exact: true }).getByRole('link', { name: '骡车', exact: true })).toBeVisible();
       await expect(page.locator('[data-step="8"] .n')).toContainText('60木、15食物');
       // The old primary-action cost is the House, not the sum of this compound action block.
-      await expect(page.locator('[data-t="step-cost"]')).toContainText('木头 25');
+      await expect(page.locator('[data-t="step-cost"]')).toContainText('木材 25');
       // The first wood cart already exists here; 202 can use it while this second cart is built.
       await expect(page.locator('[data-t="civ-note"]')).toContainText('对应研究完成后');
       await overflow(page);

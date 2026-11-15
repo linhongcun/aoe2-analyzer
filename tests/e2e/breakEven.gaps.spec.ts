@@ -53,7 +53,7 @@ for (const w of WIDTHS) {
       await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
       await expect(page.locator('[data-t=be-n]')).toHaveText('16');
       await expect(page.locator('#duel-be')).not.toContainText('部分数量也能赢');
-      await expect(page.locator('#duel-be')).not.toContainText(/食物|木头|黄金|总价|价格/);
+      await expect(page.locator('#duel-be')).not.toContainText(/食物|木材|黄金|总价|价格/);
     });
   });
 }

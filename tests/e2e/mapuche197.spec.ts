@@ -35,7 +35,7 @@ for (const width of [360, 375, 390, 1280])
       await supported(page);
       const first = page.getByRole('region', { name: '步骤详情', exact: true });
       await expect(first).toContainText(/食物\s+200/);
-      await expect(first).toContainText(/木头\s+200/);
+      await expect(first).toContainText(/木材\s+200/);
       await expect(first).toContainText(/人口\s+4\/5/);
       const steps = page.locator('.tl-steps');
       await expect(steps).toContainText('聚落');

@@ -27,12 +27,12 @@ const start = (civ: string) => run('drush-fc', civ).steps[0]!.stock;
 const G = () => start('Generic');
 
 describe('#42 放开：开局资源（守护：main dd451de 已绿）', () => {
-  it('波斯 +50 食物 +50 木头', () => expect([start('Persians').food - G().food, start('Persians').wood - G().wood]).toEqual([50, 50]));
+  it('波斯 +50 食物 +50 木材', () => expect([start('Persians').food - G().food, start('Persians').wood - G().wood]).toEqual([50, 50]));
   it('阿兹特克 +50 黄金', () => expect(start('Aztecs').gold - G().gold).toBe(50));
-  it('图皮 食物/木头/石头各 +25', () => { const s = start('Tupi'), g = G(); expect([s.food - g.food, s.wood - g.wood, s.stone - g.stone]).toEqual([25, 25, 25]); });
-  it('西西里 +100 石头', () => expect(start('Sicilians').stone - G().stone).toBe(100));
+  it('图皮 食物/木材/石料各 +25', () => { const s = start('Tupi'), g = G(); expect([s.food - g.food, s.wood - g.wood, s.stone - g.stone]).toEqual([25, 25, 25]); });
+  it('西西里 +100 石料', () => expect(start('Sicilians').stone - G().stone).toBe(100));
   it('埃塞俄比亚：871/587/588 生效（去掉后封建更晚）', () => expect(feudal(run('feudal-drush-18', 'Ethiopians')).reachAt).toBeLessThan(feudal(run('feudal-drush-18', 'Ethiopians', without('Ethiopians', 871, 587, 588))).reachAt));
-  it('德拉威：开局 +200 木头', () => expect(start('Dravidians').wood - G().wood).toBe(200));
+  it('德拉威：开局 +200 木材', () => expect(start('Dravidians').wood - G().wood).toBe(200));
 });
 
 // 穆伊斯卡/勃艮第/越南/库曼在 dd451de 已生效，为守护

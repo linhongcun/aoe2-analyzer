@@ -1,5 +1,6 @@
 import type { Action, BuildOrder, Task } from './buildOrder';
 import type { BuildTimeline } from './buildSim';
+import { AGE_ZH } from './ratings';
 
 /** 已手动跟完的步骤数，与时间线选择、模拟时间完全独立。 */
 export function practiceProgress(completed: number, total: number, command: 'next' | 'previous' | 'reset'): number {
@@ -33,7 +34,6 @@ const TASK_ZH: Record<Task, string> = {
   stone: '采石',
   build: '建造',
 };
-const AGE_ZH = { 2: '封建时代', 3: '城堡时代', 4: '帝王时代' };
 
 /** 动作文字不省略多动作步骤中的训练、研究或搬人。数值只来自开局数据。 */
 export function practiceAction(action: Action, name: PracticeNames): string {

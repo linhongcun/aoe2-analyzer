@@ -64,7 +64,7 @@ test('flag 打开：按匈奴计、造房片段划掉并标「匈奴不需要」
   const sw = page.locator('[data-t="auto-house"]').first();
   await expect(sw).toBeDisabled();
   await expect(sw).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('[data-t="sum-compare"]')).toHaveText(/^比通用：到达封建 早 \d+:\d\d · 木头按净值省 \d+（起始少 100 木）$/);
+  await expect(page.locator('[data-t="sum-compare"]')).toHaveText(/^比通用：到达封建 早 \d+:\d\d · 木材按净值省 \d+（起始少 100 木）$/);
 });
 
 for (const width of [360, 375, 390])

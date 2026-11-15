@@ -51,9 +51,9 @@ for (const width of [360, 375, 390, 1280])
         await supported(page, knights);
         const first = page.getByRole('region', { name: '步骤详情', exact: true });
         await expect(first).toContainText(/食物\s+200/);
-        await expect(first).toContainText(/木头\s+200/);
+        await expect(first).toContainText(/木材\s+200/);
         await expect(first).toContainText(/黄金\s+100/);
-        await expect(first).toContainText(/石头\s+200/);
+        await expect(first).toContainText(/石料\s+200/);
         await expect(first).toContainText(/人口\s+4\/5/);
         await page.getByRole('button', { name: '估算', exact: true }).click();
         const assumptions = page.getByRole('dialog', { name: '估算说明' });

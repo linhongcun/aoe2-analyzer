@@ -18,8 +18,8 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
       await expect(page.locator('[data-t="civ-note"]')).toContainText(constructionNote);
       await expect(page.locator('[data-t="civ-note"]')).toContainText(farmNote);
-      await expect(page.locator('[data-t="step-cost"]')).toContainText('木头 550');
-      await expect(page.locator('[data-t="step-cost"]')).toContainText('石头 200');
+      await expect(page.locator('[data-t="step-cost"]')).toContainText('木材 550');
+      await expect(page.locator('[data-t="step-cost"]')).toContainText('石料 200');
       await page.screenshot({ path: info.outputPath(`sicilians-timeline-${width}-${theme}.png`), fullPage: true });
       await page.getByRole('button', { name: '估算', exact: true }).click();
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText('额外城镇中心的产村民队列未模拟');

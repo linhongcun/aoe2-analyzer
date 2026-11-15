@@ -37,7 +37,7 @@ function card(id: string, civ: string, civZh: string, house = true, dist: number
 }
 
 describe('#19 分享卡 buildShareCard', () => {
-  it('卡在木头：与页面摘要同函数输出逐字一致（fast-castle-boom · 法兰克）', () => {
+  it('卡在木材：与页面摘要同函数输出逐字一致（fast-castle-boom · 法兰克）', () => {
     const { c, view, target, targetZh } = card('fast-castle-boom', 'Franks', '法兰克');
     const sum = summaryText(pickSummaryBottleneck(view.bottlenecks), targetZh);
     expect(c.cells[0]).toEqual({
@@ -50,10 +50,10 @@ describe('#19 分享卡 buildShareCard', () => {
     expect(c.cells[1]!.valueParts!.join(' ')).toBe(sum.main);
     expect(c.cells[2]).toEqual({ label: '城镇中心闲置', value: `约 ${formatClock(view.tcIdleTotal)}`, accent: false, sub: null });
     // Jony 验收要点 1（SPEC）
-    expect(c.title).toBe('法兰克·速升城堡暴经济，约 15:32 到城堡，卡在木头');
+    expect(c.title).toBe('法兰克·速升城堡暴经济，约 15:32 到城堡，卡在木材');
     expect(c.cells.map((x) => [x.value, x.sub])).toEqual([
       ['约 15:32', '误差 14:32–17:09'],
-      ['卡在木头 约 5:04', '第 5 步'],
+      ['卡在木材 约 5:04', '第 5 步'],
       ['约 0:43', null],
     ]);
     expect(c.basis).toBe(`按法兰克计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`);

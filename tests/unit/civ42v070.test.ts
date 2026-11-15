@@ -36,7 +36,7 @@ describe('A 匈奴', () => {
       expect(tl.housePaidAt, b.id).toHaveLength(0);
     }
   });
-  it('A2 起始木头比通用少 100（数值来自 tech 225 / effect 214：res 92 add −100）', () => {
+  it('A2 起始木材比通用少 100（数值来自 tech 225 / effect 214：res 92 add −100）', () => {
     const e = row('Huns', 225).effects.find((x) => x.kind === 'res' && x.res === 92)!;
     expect(e.op).toBe('add');
     for (const id of ['scouts-18', 'drush-fc', 'fast-castle-boom'])

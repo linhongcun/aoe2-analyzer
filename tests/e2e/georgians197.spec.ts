@@ -30,9 +30,9 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('[data-t="civ-note"]')).toContainText('原营地动作仍逐次新增付费骡车');
       const first = page.getByRole('region', { name: '步骤详情', exact: true });
       await expect(first).toContainText(/食物\s+200/);
-      await expect(first).toContainText(/木头\s+200/);
+      await expect(first).toContainText(/木材\s+200/);
       await expect(first).toContainText(/黄金\s+100/);
-      await expect(first).toContainText(/石头\s+200/);
+      await expect(first).toContainText(/石料\s+200/);
       await expect(first).toContainText(/人口\s+4\/5/);
       await overflow(page);
       expect(await nowrap(page)).toEqual([]);
@@ -44,7 +44,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('[data-step="2"] .n')).toContainText('80木、20食物');
       await expect(page.locator('[data-step="2"] .n')).not.toContainText('伐木场');
       await expect(detail.locator('[data-t="step-cost"]')).toContainText('食物 20');
-      await expect(detail.locator('[data-t="step-cost"]')).toContainText('木头 80');
+      await expect(detail.locator('[data-t="step-cost"]')).toContainText('木材 80');
       await expect(page.locator('[data-t="civ-note"]')).toContainText('移动和自动复用未模拟');
       await page.reload();
       await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按格鲁吉亚计');
@@ -99,7 +99,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(compound.getByRole('link', { name: '双刃斧', exact: true })).toHaveAttribute('href', '#/tech/202');
       await expect(page.locator('[data-step="8"] .n')).toContainText('80木、20食物');
       // The primary action is a House; its cost remains independent of the paid cart in this block.
-      await expect(compound.locator('[data-t="step-cost"]')).toContainText('木头 25');
+      await expect(compound.locator('[data-t="step-cost"]')).toContainText('木材 25');
       await expect(page.locator('[data-t="civ-note"]')).toContainText('免费骡车');
       await overflow(page);
       expect(await nowrap(page)).toEqual([]);

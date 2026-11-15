@@ -35,7 +35,7 @@ for (const width of [360, 375, 390, 1280])
       await supported(page);
       const detail = page.getByRole('region', { name: '步骤详情', exact: true });
       await expect(detail).toContainText(/食物\s+0/);
-      await expect(detail).toContainText(/木头\s+150/);
+      await expect(detail).toContainText(/木材\s+150/);
       await expect(detail).toContainText(/人口\s+7\/15/);
       await layout(page);
       await page.screenshot({ path: info.outputPath(`chinese-timeline-${width}-${theme}.png`), fullPage: true });

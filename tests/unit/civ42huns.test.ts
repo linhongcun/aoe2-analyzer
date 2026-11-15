@@ -27,7 +27,7 @@ const run = (id: string, civ: string, autoHouses = true) => simulateBuild(bo(id)
 const targetAge = (id: string) => (['', '', 'feudal', 'castle', 'imperial'] as const)[bo(id).target.age]!;
 
 describe('#42 匈奴：数据与分类', () => {
-  it('人口加成与起始木头从 eco.json 读：res 4 +2000、res 92 −100', () => {
+  it('人口加成与起始木材从 eco.json 读：res 4 +2000、res 92 −100', () => {
     const effs = E.civEco.Huns!.flatMap((r) => r.effects);
     expect(effs).toContainEqual(expect.objectContaining({ kind: 'res', res: 4, op: 'add', v: 2000 }));
     expect(effs).toContainEqual(expect.objectContaining({ kind: 'res', res: 92, op: 'add', v: -100 }));
@@ -66,13 +66,13 @@ describe('#42 匈奴：模拟', () => {
     expect(run(id, 'Huns').skippedHouseSteps).toEqual(want);
     expect(run(id, 'Generic').skippedHouseSteps).toEqual([]);
   });
-  it('起始木头比通用少 100：scouts-18 第 1 步（都不付房子木头时）', () => {
-    // 第 1 步快照在付房子木头之前；关自动补房
+  it('起始木材比通用少 100：scouts-18 第 1 步（都不付房子木材时）', () => {
+    // 第 1 步快照在付房子木材之前；关自动补房
     const h = run('scouts-18', 'Huns', false).steps[0]!;
     const g = run('scouts-18', 'Generic', false).steps[0]!;
     expect(h.stock.wood - g.stock.wood).toBe(-100);
   });
-  it.each(buildOrders.map((b) => [b.id] as const))('%s：到达目标时代比通用早；木头净值 = 通用到达前付的房子数乘 25 − 100', (id) => {
+  it.each(buildOrders.map((b) => [b.id] as const))('%s：到达目标时代比通用早；木材净值 = 通用到达前付的房子数乘 25 − 100', (id) => {
     const h = run(id, 'Huns'),
       g = run(id, 'Generic');
     const c = noHouseCompare(h, g, E, 'Huns', targetAge(id))!;
@@ -82,7 +82,7 @@ describe('#42 匈奴：模拟', () => {
     expect(c.housesSaved).toBe(g.housePaidAt.filter((t) => t <= gReach).length);
     expect(c.woodNet).toBe(c.housesSaved * 25 - 100);
   });
-  it('feudal-drush-18：封建早 20.8s、通用到封建前付 4 座房子 时 木头净省 0（防回归）', () => {
+  it('feudal-drush-18：封建早 20.8s、通用到封建前付 4 座房子 时 木材净省 0（防回归）', () => {
     const c = noHouseCompare(run('feudal-drush-18', 'Huns'), run('feudal-drush-18', 'Generic'), E, 'Huns', 'feudal')!;
     expect(c.earlierSec).toBeCloseTo(20.8, 1);
     expect(c.housesSaved).toBe(4);
@@ -128,10 +128,10 @@ describe('#42 匈奴：界面文案（flag 打开时的模型，强制支持测�
   });
   it('对比行文案', () => {
     expect(noHouseCompareText({ earlierSec: 20.8, startWoodDelta: -100, woodNet: 0 }, '封建')).toBe(
-      '比通用：到达封建 早 0:20 · 木头按净值省 0（起始少 100 木）',
+      '比通用：到达封建 早 0:20 · 木材按净值省 0（起始少 100 木）',
     );
     expect(noHouseCompareText({ earlierSec: 25.6, startWoodDelta: -100, woodNet: 100 }, '城堡')).toBe(
-      '比通用：到达城堡 早 0:25 · 木头按净值省 100（起始少 100 木）',
+      '比通用：到达城堡 早 0:25 · 木材按净值省 100（起始少 100 木）',
     );
   });
 });

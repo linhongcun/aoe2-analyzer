@@ -19,7 +19,7 @@ export function villagerGroups(tl: BuildTimeline): VillagerEvent[][] {
 }
 
 export function followupHint(step: TimelineStep, noHouses: boolean): string | null {
-  return !noHouses && step.pop.cap < 200 && step.pop.cap - step.pop.used <= 2 ? '接下来记得补房子，人口空位已不多；自动造房仍需要足够木头。' : null;
+  return !noHouses && step.pop.cap < 200 && step.pop.cap - step.pop.used <= 2 ? '接下来记得补房子，人口空位已不多；自动造房仍需要足够木材。' : null;
 }
 
 export function stepEntities(step: Step) {
