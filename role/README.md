@@ -18,11 +18,11 @@
 
 执行会话不保留记忆，这里的角色指南就是各角色的长期经验。完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 回看本次工作：有跨 Issue 可复用且已核实的经验，就写进本角色指南的对应小节；没有就不写。
 
-| 角色     | 写到哪里                                                                                                                  |
-| -------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 产品经理 | [product-management.md「已经付过代价的经验」](product-management.md)                                                      |
-| 体验设计 | [experience-design.md「可迁移案例」](experience-design.md)                                                                |
-| 软件开发 | [software-development.md「已经核对过的失败和后续上线」](software-development.md)                                          |
-| 产品运营 | [product-operations.md「用好工具再提需求」](product-operations.md)；阵容等游戏经验写 [game-strategy.md](game-strategy.md) |
+| 角色     | 写到哪里                                                                                                                                                                      |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 产品经理 | [product-management.md「已经付过代价的经验」](product-management.md#6-已经付过代价的经验)                                                                                     |
+| 体验设计 | [experience-design.md「可迁移案例」](experience-design.md#可迁移案例)                                                                                                         |
+| 软件开发 | [software-development.md「已经核对过的失败和后续上线」](software-development.md#8-已经核对过的失败和后续上线)                                                                 |
+| 产品运营 | [product-operations.md「用好工具再提需求」](product-operations.md#用好工具再提需求)；阵容等游戏经验按[该文件的维护要求](game-strategy.md#怎样读与继续维护)写 game-strategy.md |
 
-每条写清现象、原因、以后怎么做并附出处链接；相近条目合并，过时条目改正或删除。
+每条写清现象、原因、以后怎么做并附出处链接；相近条目合并，过时条目改正或删除。只改本角色的指南，本文件不在回写范围内。
