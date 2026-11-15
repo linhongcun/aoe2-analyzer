@@ -210,7 +210,7 @@ export function reverseCounters(
   const byCategory = new Map<string, ReverseCounterUnit[]>();
   let parsedCandidateCount = 0;
   const candidates = units
-    .filter((unit) => !!unit && typeof unit === 'object' && unit.id !== target.id)
+    .filter((unit) => !!unit && typeof unit === 'object')
     .slice()
     .sort((a, b) => (Number.isSafeInteger(a.id) ? a.id : Number.MAX_SAFE_INTEGER) - (Number.isSafeInteger(b.id) ? b.id : Number.MAX_SAFE_INTEGER));
   for (const candidate of candidates) {

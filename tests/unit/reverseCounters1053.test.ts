@@ -46,6 +46,37 @@ describe('单位详情反向类别加成（#1053）', () => {
     expect(query(core.unitById[1263]!, [core.unitById[38]!]).groups.find((item) => item.category === '村民')?.rows).toEqual([]);
   });
 
+  it('包含真实正向镜像贡献和同单位 PK；无正贡献的镜像仍不出现', () => {
+    const samurai = core.unitById[291]!;
+    expect(samurai).toMatchObject({ en: 'Samurai', age: 3, civs: ['Japanese'] });
+    expect(samurai.atks).toContainEqual(['独特单位', 10]);
+    expect(samurai.armc).toContainEqual(['独特单位', 0]);
+
+    const mirror = query(samurai, [samurai]);
+    expect(mirror.state).toBe('ready');
+    expect(
+      mirror.groups.find((group) => group.category === '独特单位')?.rows.map(({ unit, attack, armor, damage }) => [unit.id, attack, armor, damage]),
+    ).toEqual([[291, 10, 0, 10]]);
+    expect(reverseCounterDuelHref(samurai, samurai, core, trees, 'Japanese', 'Japanese', 3)).toBe('/duel?a=291.Japanese.3..&b=291.Japanese.3..&m=1');
+
+    const archer = core.unitById[4]!;
+    expect(archer).toMatchObject({ en: 'Archer' });
+    const noPositiveMirror = query(archer, [archer]);
+    expect(noPositiveMirror.state).toBe('ready');
+    expect(noPositiveMirror.groups.flatMap((group) => group.rows)).toEqual([]);
+
+    const malformedSelf = { ...samurai, atks: [...samurai.atks, null] } as unknown as Unit;
+    const partial = query(malformedSelf, [malformedSelf]);
+    expect(partial.state).toBe('partial');
+    expect(partial.groups.find((group) => group.category === '独特单位')?.rows[0]).toMatchObject({
+      unit: { id: 291 },
+      attack: 10,
+      armor: 0,
+      damage: 10,
+    });
+    expect(reverseCounterDuelHref(malformedSelf, malformedSelf, core, trees, 'Japanese', 'Japanese', 3)).toBeNull();
+  });
+
   it('只有完整基础字段相同且来自不同训练建筑时才合并；1658 与 1660 保持独立', () => {
     const base = core.unitById[1658]!;
     const clone = { ...base, id: 3_000_000, b: base.b + 10_000, bz: '另一训练建筑', ben: 'Another building' };
