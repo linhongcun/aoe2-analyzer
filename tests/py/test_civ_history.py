@@ -196,6 +196,13 @@ class CivHistoryTests(unittest.TestCase):
                     self.assertEqual(effect['entityRefs'][0]['type'], 'tech')
                     self.assertIn('未注明', effect['conditions'][-1])
 
+    def test_building_and_game_mode_restrictions_apply_to_each_effect(self):
+        for prefix, condition, count in [('da5947ed', '定居点训练', 4), ('c5f73078', '正常模式', 2)]:
+            event = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-' + prefix))
+            effects = event['claims'][0]['effects']
+            self.assertEqual(len(effects), count)
+            self.assertTrue(all(condition in effect['conditions'] for effect in effects))
+
     def test_observation_boundaries_and_unknown_array_mapping_remain_explicit(self):
         events = {e['id']: e for e in self.payload['events']}
         cannon = next(m for m in self.payload['legacyMap'] if m['key'] == '185872:185872-116')

@@ -44024,6 +44024,7 @@
               "operation": "set",
               "text": "训练时间",
               "conditions": [
+                "定居点训练",
                 "普通形态"
               ],
               "scope": null,
@@ -44044,6 +44045,7 @@
               "operation": "set",
               "text": "训练时间",
               "conditions": [
+                "定居点训练",
                 "精锐形态"
               ],
               "scope": null,
@@ -44065,7 +44067,7 @@
               "operation": "set",
               "text": "训练时间",
               "conditions": [
-                "定居点士兵"
+                "定居点训练"
               ],
               "scope": null,
               "id": "cl-se-da5947ed-b739-4226-a606-fb6a4917d57c-structured-3"
@@ -44086,7 +44088,7 @@
               "operation": "set",
               "text": "训练时间",
               "conditions": [
-                "定居点士兵"
+                "定居点训练"
               ],
               "scope": null,
               "id": "cl-se-da5947ed-b739-4226-a606-fb6a4917d57c-structured-4"
@@ -68694,12 +68696,14 @@
                 }
               ],
               "text": "正常模式刀剑手的近战护甲",
-              "conditions": [],
+              "conditions": [
+                "正常模式"
+              ],
               "scope": null,
               "type": "numeric",
               "attribute": "近战护甲",
-              "before": 2.0,
-              "after": 0.0,
+              "before": 2,
+              "after": 0,
               "delta": null,
               "unit": null,
               "operation": "set",
@@ -68712,7 +68716,9 @@
                 }
               ],
               "text": "正常模式刀剑手的近战护甲从2下调到0",
-              "conditions": [],
+              "conditions": [
+                "正常模式"
+              ],
               "scope": null,
               "type": "mechanic",
               "legacyBefore": null,
