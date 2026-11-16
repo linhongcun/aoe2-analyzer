@@ -99,19 +99,101 @@ test('真实 openSim canonical replace 后编辑并刷新仍返回带待净化�
 
 test('尾部空科技与团队段在模拟器编辑和刷新后按原 pathname 返回', async ({ page }) => {
   const origin = '/unit/40/Byzantines/4//?tab=ov&z=2&dup=1&dup=2#unit-reverse-counters';
+  const originLocation = {
+    pathname: '/unit/40/Byzantines/4//',
+    search: '?tab=ov&z=2&dup=1&dup=2',
+    hash: '#unit-reverse-counters',
+  };
+  const readEntry = () =>
+    page.evaluate(() => {
+      type RouteLocation = { pathname: string; search: string; hash: string };
+      type Provenance = { source: RouteLocation; expected: RouteLocation };
+      const raw = window.location.hash.slice(1);
+      const hashIndex = raw.indexOf('#');
+      const pathAndSearch = hashIndex < 0 ? raw : raw.slice(0, hashIndex);
+      const searchIndex = pathAndSearch.indexOf('?');
+      const location = {
+        pathname: searchIndex < 0 ? pathAndSearch : pathAndSearch.slice(0, searchIndex),
+        search: searchIndex < 0 ? '' : pathAndSearch.slice(searchIndex),
+        hash: hashIndex < 0 ? '' : raw.slice(hashIndex),
+      };
+      const state = window.history.state as { idx?: number; usr?: { unitSimReturnProvenance?: Provenance } | null } | null;
+      return { index: state?.idx ?? null, location, provenance: state?.usr?.unitSimReturnProvenance ?? null };
+    });
+
   await open(page, origin);
   await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  const sourceEntry = await readEntry();
   await page.getByRole('button', { name: '打开科技模拟器' }).click();
   await expect(page.locator('#sim')).toBeVisible();
+  const openedEntry = await readEntry();
+  expect(openedEntry.location).toEqual(openedEntry.provenance?.expected);
+  expect(openedEntry.location).toEqual({
+    pathname: '/unit/40/Byzantines/4//',
+    search: '?tab=sim&z=2&dup=1&dup=2',
+    hash: '#unit-reverse-counters',
+  });
+  expect(openedEntry.provenance?.source).toEqual(originLocation);
+  expect(openedEntry.index).toBe((sourceEntry.index ?? 0) + 1);
+
   await page.locator('#simage').selectOption('3');
+  const ageEntry = await readEntry();
+  expect(ageEntry.location).toEqual(ageEntry.provenance?.expected);
+  expect(ageEntry.provenance?.source).toEqual(originLocation);
+  expect(ageEntry.provenance?.expected).not.toEqual(openedEntry.provenance?.expected);
+  expect(ageEntry.index).toBe(openedEntry.index);
+
   const tech = page.locator('#sim .simg input[type="checkbox"]').first();
   await expect(tech).toBeVisible();
   await tech.click();
+  const techEntry = await readEntry();
+  expect(techEntry.location).toEqual(techEntry.provenance?.expected);
+  expect(techEntry.provenance?.source).toEqual(originLocation);
+  expect(techEntry.provenance?.expected).not.toEqual(ageEntry.provenance?.expected);
+  expect(techEntry.index).toBe(openedEntry.index);
+
   await page.reload();
   await expect(page.locator('#sim')).toBeVisible();
+  const reloadedEntry = await readEntry();
+  expect(reloadedEntry.location).toEqual(reloadedEntry.provenance?.expected);
+  expect(reloadedEntry.provenance?.source).toEqual(originLocation);
+  expect(reloadedEntry.provenance?.expected).toEqual(techEntry.provenance?.expected);
+  expect(reloadedEntry.index).toBe(techEntry.index);
+
   await page.getByRole('button', { name: '返回概览' }).click();
   await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
   await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  const returnedEntry = await readEntry();
+  expect(returnedEntry.location).toEqual(originLocation);
+  expect(returnedEntry.provenance).toBeNull();
+  expect(returnedEntry.index).toBe((reloadedEntry.index ?? 0) + 1);
+
+  await page.goBack();
+  await expect(page.locator('#sim')).toBeVisible();
+  const backToSimulator = await readEntry();
+  expect(backToSimulator.location).toEqual(backToSimulator.provenance?.expected);
+  expect(backToSimulator.provenance?.source).toEqual(originLocation);
+  expect(backToSimulator.index).toBe(reloadedEntry.index);
+
+  await page.goBack();
+  await expect.poll(async () => (await readEntry()).location).toEqual(originLocation);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  const backToOrigin = await readEntry();
+  expect(backToOrigin.provenance).toBeNull();
+
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page.locator('#sim')).toBeVisible();
+  const reopenedEntry = await readEntry();
+  expect(reopenedEntry.location).toEqual(reopenedEntry.provenance?.expected);
+  expect(reopenedEntry.provenance?.source).toEqual(originLocation);
+  expect(reopenedEntry.index).toBe((backToOrigin.index ?? 0) + 1);
+
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  const reopenedReturn = await readEntry();
+  expect(reopenedReturn.provenance).toBeNull();
+  expect(reopenedReturn.index).toBe((reopenedEntry.index ?? 0) + 1);
 });
 
 test('真实文明漂移丢弃原来源并在返回时使用显式 ov fallback', async ({ page }) => {

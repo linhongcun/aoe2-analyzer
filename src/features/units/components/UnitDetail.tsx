@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { Link, UNSAFE_NavigationContext, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { civNote, dupPeers } from '../../../domain/dupNames';
 import { baseUnit } from '../../../domain/family';
@@ -57,6 +57,7 @@ const JUMPS = [
 export default function UnitDetail() {
   const loc = useLocation();
   const nav = useNavigate();
+  const navigator = useContext(UNSAFE_NavigationContext).navigator;
   const resources = useUnitDetailResources();
   const core = resources.core;
   const trees = resources.trees;
@@ -153,12 +154,13 @@ export default function UnitDetail() {
     const source = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
     const destination = { pathname: loc.pathname, search: withUnitTab(loc.search, 'sim'), hash: loc.hash };
     const state = createUnitSimReturnState(source, destination, u.id, u.civs, context?.en);
-    nav(destination, { state });
+    // Bypass useNavigate's resolveTo normalization to preserve valid empty pathname segments.
+    navigator.push(destination, state);
   };
   const closeSim = () => {
     const current = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
     const source = readUnitSimReturnSource(loc.state, current, u.id, u.civs, context?.en);
-    if (source) nav(source);
+    if (source) navigator.push(source, null);
     else nav({ pathname: loc.pathname, search: withUnitTab(loc.search, 'ov') });
   };
   const forkCivs = (id: number) => {
