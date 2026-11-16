@@ -60,6 +60,22 @@ class CivHistoryTests(unittest.TestCase):
         again, _ = build.assemble(self.inputs)
         self.assertEqual(build.encode(again), build.encode(self.payload))
 
+    def test_migrated_citations_keep_each_exact_source_url_including_anchors(self):
+        entries = {entry['id']: entry for entry in self.payload['sourceEntries']}
+        sources = {source['id']: source for source in self.payload['sources']}
+        claims = {claim['id']: claim for event in self.payload['events'] for claim in event['claims']}
+        for mapping in self.payload['legacyMap']:
+            if mapping['disposition'] != 'migrated':
+                continue
+            citations = [entries[sid] for sid in claims[mapping['claimId']]['sourceEntryIds'] if mapping['key'] in entries[sid]['legacyKeys']]
+            self.assertTrue(citations)
+            self.assertEqual({sources[entry['sourceId']]['url'] for entry in citations}, {mapping['originalRecord']['source']})
+        changed = copy.deepcopy(self.inputs)
+        patch = next(patch for _, patch in changed['archives'] if patch['id'] == '185872')
+        next(record for record in patch['entries'] if record['id'] == '185872-24')['source'] = 'javascript:alert(1)'
+        with self.assertRaisesRegex(ValueError, 'Unsafe legacy entry source'):
+            build.assemble(changed)
+
     def test_a_missing_original_or_legacy_mapping_fails_closed(self):
         changed = copy.deepcopy(self.inputs)
         changed['snapshots'][0][1]['entries'].pop()

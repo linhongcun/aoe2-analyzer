@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { conflictHistoryFixture, emptyHistoryFixture } from '../helpers/civUpdatesFixture';
 
+test('migrated Bohemian citation opens its original official section', async ({ page }) => {
+  await page.goto('/#/civ/Bohemians?tab=history&histVersion=de-185872&histSource=official');
+  const event = page.locator('[data-event-id="ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf"]');
+  await event.locator('summary').click();
+  await expect(event.getByRole('link', { name: '打开来源页面' })).toHaveAttribute('href', 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373');
+});
+
 test('Cuman entity-name searches retain the cards showing those names', async ({ page }) => {
   await page.goto('/#/civ/Cumans?tab=history&histQuery=补给');
   await expect(page.locator('[data-event-id="ev-se-23238351-959c-42c5-872f-b6f1355ebc21"]')).toBeVisible();

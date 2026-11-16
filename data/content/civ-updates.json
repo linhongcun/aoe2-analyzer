@@ -1571,6 +1571,62 @@
       "capturedAt": null
     },
     {
+      "id": "legacy-source-185872-9a95a87f5845fadc",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-1f5f8e9f6543ea6e",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d530",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-3ee445bfa521a1f9",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6df85",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-c4d3a167b25f837a",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e44f",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-290d069c8fe8d761",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e5c7",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-b2581d050ee6864d",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e71f",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
+      "id": "legacy-source-185872-ae613e72eb0826fc",
+      "title": "DE Update 185872 · 既有档案",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6eaad",
+      "category": "official",
+      "sourcePublishedAt": null,
+      "capturedAt": null
+    },
+    {
       "id": "legacy-source-188329",
       "title": "DE Update 188329 · 既有档案",
       "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-188329/",
@@ -24400,7 +24456,7 @@
     },
     {
       "id": "src-legacy-Bohemians: (Elite) Hussite Wagon cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-9a95a87f5845fadc",
       "sectionId": null,
       "group": null,
       "locator": "Bohemians: (Elite) Hussite Wagon cost",
@@ -24443,7 +24499,7 @@
     },
     {
       "id": "src-legacy-Burgundians: Flemish Militia cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-1f5f8e9f6543ea6e",
       "sectionId": null,
       "group": null,
       "locator": "Burgundians: Flemish Militia cost",
@@ -24716,7 +24772,7 @@
     },
     {
       "id": "src-legacy-Mapuche: (Elite) Bolas Rider cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-3ee445bfa521a1f9",
       "sectionId": null,
       "group": null,
       "locator": "Mapuche: (Elite) Bolas Rider cost",
@@ -24782,7 +24838,7 @@
     },
     {
       "id": "src-legacy-Shu: War Chariot cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-c4d3a167b25f837a",
       "sectionId": null,
       "group": null,
       "locator": "Shu: War Chariot cost",
@@ -24824,7 +24880,7 @@
     },
     {
       "id": "src-legacy-Spanish: (Elite) Conquistador cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-290d069c8fe8d761",
       "sectionId": null,
       "group": null,
       "locator": "Spanish: (Elite) Conquistador cost",
@@ -24867,7 +24923,7 @@
     },
     {
       "id": "src-legacy-Spanish: Missionary cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-290d069c8fe8d761",
       "sectionId": null,
       "group": null,
       "locator": "Spanish: Missionary cost",
@@ -24930,7 +24986,7 @@
     },
     {
       "id": "src-legacy-Tupi: (Elite) Blackwood Archer cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-b2581d050ee6864d",
       "sectionId": null,
       "group": null,
       "locator": "Tupi: (Elite) Blackwood Archer cost",
@@ -25057,7 +25113,7 @@
     },
     {
       "id": "src-legacy-Wei: Xianbei Raider cost",
-      "sourceId": "legacy-source-185872",
+      "sourceId": "legacy-source-185872-ae613e72eb0826fc",
       "sectionId": null,
       "group": null,
       "locator": "Wei: Xianbei Raider cost",

@@ -200,12 +200,18 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
                     event['civRelations'].append(projection)
                 if projection['civId'] not in event['scope']['affectedCivIds']:
                     event['scope']['affectedCivIds'].append(projection['civId'])
+            citation_url = entry['source']
+            require(safe_source(citation_url), f'{key}: Unsafe legacy entry source')
+            citation_source_id = legacy_source_id if citation_url == patch['source'] else legacy_source_id + '-' + hashlib.sha256(citation_url.encode()).hexdigest()[:16]
+            same_document = urlsplit(citation_url)._replace(fragment='') == urlsplit(patch['source'])._replace(fragment='')
+            sources.setdefault(citation_source_id, {**sources[legacy_source_id], 'id': citation_source_id, 'url': citation_url, 'category': 'official' if urlsplit(citation_url).hostname in ['www.ageofempires.com', 'ageofempires.com'] else 'other', 'sourcePublishedAt': sources[legacy_source_id]['sourcePublishedAt'] if same_document else None})
+            require(sources[citation_source_id]['url'] == citation_url, 'Legacy citation identity collision')
             source_entry_id = 'src-legacy-' + (entry.get('sourceBullet') or entry['id'])
             if source_entry_id not in source_entries:
-                source_entries[source_entry_id] = {'id': source_entry_id, 'sourceId': legacy_source_id, 'sectionId': None, 'group': None, 'locator': entry.get('sourceBullet') or entry['id'], 'originalText': entry.get('originalText'), 'rawVersionLabels': [patch['id']], 'sourceBullet': entry.get('sourceBullet'), 'legacyKeys': [], 'processing': 'mapped', 'eventIds': [], 'reason': '保留旧记录原文及定位；未登记原文的记录不补写原文。'}
+                source_entries[source_entry_id] = {'id': source_entry_id, 'sourceId': citation_source_id, 'sectionId': None, 'group': None, 'locator': entry.get('sourceBullet') or entry['id'], 'originalText': entry.get('originalText'), 'rawVersionLabels': [patch['id']], 'sourceBullet': entry.get('sourceBullet'), 'legacyKeys': [], 'processing': 'mapped', 'eventIds': [], 'reason': '保留旧记录原文及定位；未登记原文的记录不补写原文。'}
                 source_entries[source_entry_id]['supersedesEntryIds'] = []
             original = source_entries[source_entry_id]
-            require(original['sourceId'] == legacy_source_id and original['originalText'] == entry.get('originalText'), f'{key}: sourceBullet re-used for a different original; split explicit mapping')
+            require(original['sourceId'] == citation_source_id and original['originalText'] == entry.get('originalText'), f'{key}: sourceBullet re-used for a different original; split explicit mapping')
             original['legacyKeys'].append(key)
             if eid not in original['eventIds']:
                 original['eventIds'].append(eid)
