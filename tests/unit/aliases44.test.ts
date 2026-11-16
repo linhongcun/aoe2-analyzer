@@ -4,6 +4,7 @@ import { PENDING_UNIT_ALIASES, UNIT_ALIAS_ROWS, UNIT_ALIASES } from '../../src/d
 import { CONFUSABLES, confusablesOf } from '../../src/data/confusables';
 import { civNote, dupIdsIn, dupNameGroups, dupPeers, nameKey } from '../../src/domain/dupNames';
 import { buildFamilies, collapse } from '../../src/domain/family';
+import { filterUnitFamilies, type UnitFilters } from '../../src/domain/unitFilters';
 import civsRaw from '../../data/game/civs.json';
 import { units } from './helpers';
 
@@ -11,12 +12,22 @@ const byId = Object.fromEntries(units.map((u) => [u.id, u]));
 const fam = buildFamilies(units, byId);
 const fams = collapse(units, fam);
 const cz = (en: string) => (civsRaw as { en: string; zh: string }[]).find((c) => c.en === en)?.zh;
-const items: SearchItem[] = fams.map(({ u }) => ({ kind: 'unit', id: String(u.id), zh: u.zh, en: u.en, href: '', sub: '', aliases: UNIT_ALIASES[u.id] }));
+const items: SearchItem[] = fams.map(({ u }) => ({
+  kind: 'unit',
+  id: String(u.id),
+  zh: u.zh,
+  en: u.en,
+  href: `/unit/${u.id}`,
+  sub: '',
+  aliases: UNIT_ALIASES[u.id],
+}));
 const U = (id: number) => byId[id]!;
 
 describe('#44 单位别名', () => {
-  it('上线名单：有 2020 年以后出处的 8 个', () => {
-    expect(UNIT_ALIAS_ROWS.map(([, a]) => a).sort()).toEqual(['冲车', '和尚', '圣骑士', '投石车', '斥候', '波斯象', '骆驼', '骑射'].sort());
+  it('上线名单：有 2020 年以后出处的 10 个（含 #1055 两种字形）', () => {
+    expect(UNIT_ALIAS_ROWS.map(([, a]) => a).sort()).toEqual(
+      ['冲车', '和尚', '圣骑士', '投石车', '斥候', '波斯象', '骆驼', '骑射', '匈牙利轻骑兵', '匈牙利輕騎兵'].sort(),
+    );
   });
   for (const [id, a] of UNIT_ALIAS_ROWS)
     it(`「${a}」搜出 ${U(id).zh}（${id}），别名档或更高`, () => {
@@ -33,7 +44,7 @@ describe('#44 单位别名', () => {
     const all = Object.values(UNIT_ALIASES).flat();
     for (const x of ['散兵', '投石机', '游侠骑兵', '战象', '侦察骑', '条顿', '芒古代']) expect(all).not.toContain(x);
     for (const [, a] of PENDING_UNIT_ALIASES) expect(all).not.toContain(a);
-    expect(UNIT_ALIASES[441]).toBeUndefined();
+    expect(UNIT_ALIASES[441]).toEqual(['匈牙利轻骑兵', '匈牙利輕騎兵']);
     expect(UNIT_ALIASES[1132]).toBeUndefined();
   });
   it('「战象」「游侠」列出全部匹配，不只一个结果', () => {
@@ -44,6 +55,41 @@ describe('#44 单位别名', () => {
     }
     expect(search(items, '战象')[0]!.id).toBe('239');
     expect(search(items, '游侠')[0]!.id).toBe('569');
+  });
+});
+
+describe('#1055 Hussar 别名白名单与共享消费者', () => {
+  for (const alias of ['匈牙利轻骑兵', '匈牙利輕騎兵']) {
+    it(`「${alias}」仅登记441，完整词及空白归一化只搜出正式单位`, () => {
+      expect(UNIT_ALIAS_ROWS.filter(([, name]) => name === alias)).toEqual([[441, alias]]);
+      for (const query of [alias, ` ${alias.split('').join(' ')} `]) {
+        expect(search(items, query)).toEqual([expect.objectContaining({ id: '441', zh: '翼骑兵', en: 'Hussar', href: '/unit/441' })]);
+      }
+    });
+    it(`目录「${alias}」只筛出441，且不绕过其他筛选`, () => {
+      const select = (overrides: Partial<UnitFilters> = {}) =>
+        filterUnitFamilies(units, fam, { query: alias, type: '', age: '', dlc: '', ...overrides }).map(({ u }) => u.id);
+      expect(select()).toEqual([441]);
+      for (const civ of ['Cumans', 'Tatars']) expect(select({ civ, type: 'UnitUpgrade', age: '4', role: 'cavalry' })).toEqual([441]);
+      for (const blocked of [{ civ: 'Poles' }, { type: 'RegionalUnit' }, { age: '3' }, { role: 'infantry' }, { dlc: 'none' }] as const)
+        expect(select(blocked)).toEqual([]);
+    });
+  }
+  it('不为1707新增别名，不收录无修饰的骠骑兵／驃騎兵', () => {
+    expect(UNIT_ALIASES[1707]).toBeUndefined();
+    for (const alias of ['骠骑兵', '驃騎兵']) expect(UNIT_ALIAS_ROWS.some(([, name]) => name === alias)).toBe(false);
+    expect(U(441).en).toBe('Hussar');
+    expect(U(1707).en).toBe('Winged Hussar');
+  });
+  it.each([
+    ['Hussar', ['441', '1707']],
+    ['Winged Hussar', ['1707']],
+    ['翼骑兵', ['441', '1707']],
+    ['波兰翼骑兵', ['1707']],
+  ])('正式名「%s」仍保持精确命中优先及自然匹配', (query, ids) => {
+    const result = search(items, query);
+    expect(result.map(({ id }) => id)).toEqual(ids);
+    expect(score(result[0]!, query)).toBe(TIER.exact);
   });
 });
 

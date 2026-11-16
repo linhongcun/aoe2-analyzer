@@ -6,8 +6,8 @@
 
 /**
  * 单位别名（#44）：单位 id → 别名。
- * 名单以 Reid 在 #44 的最后一版别名表为准（issuecomment-6106741314，注明替代此前两版），
- * 再按日期规则过滤：只收有 2020 年以后社区出处的叫法。每条注明出处与发布日期（均已打开核对）。
+ * 初始名单来自 Reid 在 #44 的最后一版别名表（issuecomment-6106741314，替代此前两版），后续按 Issue 批准补充。
+ * 只收有 2020 年以后社区出处的叫法。每条注明出处与发布日期（均已打开核对）。
  * 不作别名：散兵、投石机、游侠骑兵、战象（→象兵）；「战象」「游侠」是官方名，搜索列出全部匹配。
  */
 const UNIT_ALIAS_TABLE: readonly (readonly [number, string, string])[] = [
@@ -22,6 +22,13 @@ const UNIT_ALIAS_TABLE: readonly (readonly [number, string, string])[] = [
   [1258, '冲车', '233leyuan · 发布 2026-05-07（转载；原文不早于 2023-10）'], // 攻城锤：「冲车实际上克制纯远程」
   // Ark.Won 的 Steam 原创指南，发表于 2020-01-23，更新于 2022-10-10；「前言（二）」https://steamcommunity.com/sharedfiles/filedetails/?id=1976648251&l=schinese
   [569, '圣骑士', 'Steam 1976648251 · 2020-01-23（更新 2022-10-10）'], // 游侠：另一译名
+  // Issue 1055：UDN 遊戲角落／Despairile，发布 2020-01-09，核对 2026-11-16：
+  // https://game.udn.com/game/story/10449/4273323 ，原文「快速產出匈牙利輕騎兵」「重裝馬騎弓兵以及匈牙利輕騎兵」。
+  // 库曼/鞑靼语境指通用 Hussar（441）；简体为原词等义字形，不引用攻略平衡数字。
+  // 官方消歧（发布 2021-08-10，核对 2026-11-16）：https://www.ageofempires.com/news/availablenow-dukes/
+  // Winged Hussar replaces the Hussar upgrade，故不映射到波兰翼骑兵（1707）。
+  [441, '匈牙利轻骑兵', 'UDN 4273323 · 2020-01-09 · 核对 2026-11-16（原词简体）'],
+  [441, '匈牙利輕騎兵', 'UDN 4273323 · 2020-01-09 · 核对 2026-11-16（来源原文）'],
 ];
 
 /**
