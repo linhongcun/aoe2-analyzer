@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { Link, UNSAFE_NavigationContext, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { civNote, dupPeers } from '../../../domain/dupNames';
 import { baseUnit } from '../../../domain/family';
@@ -40,6 +40,8 @@ import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetai
 import { ReverseCounters } from './ReverseCounters';
 import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafety';
 import { readReverseCounterSession, reverseCounterSessionKey } from '../reverseCounterSession';
+import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnSource, sameUnitSimLocation } from '../unitSimReturnProvenance';
+import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -55,6 +57,7 @@ const JUMPS = [
 export default function UnitDetail() {
   const loc = useLocation();
   const nav = useNavigate();
+  const navigator = useContext(UNSAFE_NavigationContext).navigator;
   const resources = useUnitDetailResources();
   const core = resources.core;
   const trees = resources.trees;
@@ -135,13 +138,31 @@ export default function UnitDetail() {
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
   const simulatorRoute = routeWithQueryCiv(rt, context && canTrain ? context.en : undefined, u.civs);
+  const simNavigationAdapter: SimNavigationAdapter = ({ current, next, civ }) => {
+    const historyKey = (window.history.state as { key?: unknown } | null)?.key;
+    if (typeof historyKey === 'string' && historyKey !== loc.key) return { kind: 'ignore' };
+    const rendered = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
+    if (!sameUnitSimLocation(current, rendered)) return { kind: 'ignore' };
+    return { kind: 'navigate', state: advanceUnitSimReturnState(loc.state, current, next, u.id, u.civs, civ) };
+  };
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   const setCiv = (en: string) => {
     const next = replaceUnitCiv(loc.pathname, loc.search, en);
     nav({ pathname: next.pathname, search: next.search }, { replace: true });
   };
-  const openSim = () => nav({ pathname: loc.pathname, search: withUnitTab(loc.search, 'sim') });
-  const closeSim = () => nav({ pathname: loc.pathname, search: withUnitTab(loc.search, 'ov') });
+  const openSim = () => {
+    const source = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
+    const destination = { pathname: loc.pathname, search: withUnitTab(loc.search, 'sim'), hash: loc.hash };
+    const state = createUnitSimReturnState(source, destination, u.id, u.civs, context?.en);
+    // Bypass useNavigate's resolveTo normalization to preserve valid empty pathname segments.
+    navigator.push(destination, state);
+  };
+  const closeSim = () => {
+    const current = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
+    const source = readUnitSimReturnSource(loc.state, current, u.id, u.civs, context?.en);
+    if (source) navigator.push(source, null);
+    else nav({ pathname: loc.pathname, search: withUnitTab(loc.search, 'ov') });
+  };
   const forkCivs = (id: number) => {
     if (!trees) return '';
     const target = core.unitById[id];
@@ -489,7 +510,7 @@ export default function UnitDetail() {
         {workspace && (
           <div className="ud-workspace" data-t="workspace-open">
             {showEngine ? (
-              <Simulator key={u.id} u={u} route={simulatorRoute} />
+              <Simulator key={u.id} u={u} route={simulatorRoute} navigationAdapter={simNavigationAdapter} />
             ) : invalidCombatProjection ? (
               <p role="alert" data-t="workspace-invalid-target">
                 本单位攻击或护甲类别资料异常，已停用模拟器；不会用清理后的零值代替原始数据。

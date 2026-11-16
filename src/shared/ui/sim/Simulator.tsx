@@ -3,14 +3,14 @@ import { TEAM_BONUSES } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
 import { Loading } from '../widgets';
-import { useSimState } from '../../hooks/useSimState';
+import { useSimState, type SimNavigationAdapter } from '../../hooks/useSimState';
 import { SIM_ROWS } from '../../utils/simFormat';
 import SimPanel, { type StatRow } from './SimPanel';
 
 /** 单位科技模拟器（状态在路径中：#/unit/<id>/<civ>/<age>/<ids>/<team>） */
-export default function Simulator({ u, route }: { u: Unit; route: SimRoute }) {
+export default function Simulator({ u, route, navigationAdapter }: { u: Unit; route: SimRoute; navigationAdapter?: SimNavigationAdapter }) {
   const core = useCore();
-  const { state: S, go, setCmp } = useSimState(u, route);
+  const { state: S, go, setCmp } = useSimState(u, route, navigationAdapter);
   if (!S || !core)
     return (
       <div id="sim" className="posbox">

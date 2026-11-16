@@ -3,7 +3,7 @@ import { reverseCounterSessionKey, type ReverseCounterSession } from '../../src/
 
 type Location = { pathname: string; search: string; hash: string };
 
-const sessionKey = (location: Location) => reverseCounterSessionKey(40, 'Byzantines', location)!;
+const sessionKey = (location: Location, targetCiv = 'Byzantines') => reverseCounterSessionKey(40, targetCiv, location)!;
 
 async function selectCiv(page: Page, civ: string) {
   await page.locator('#reverse-counter-civ').click();
@@ -56,9 +56,9 @@ async function firstSelectableRow(panel: Locator, excludedId: number) {
   throw new Error('No enabled reverse-counter PK row found');
 }
 
-async function expectRestored(page: Page, location: Location, expected: Readonly<ReverseCounterSession>) {
+async function expectRestored(page: Page, location: Location, expected: Readonly<ReverseCounterSession>, targetCiv = 'Byzantines') {
   const panel = page.locator('#unit-reverse-counters');
-  const key = sessionKey(location);
+  const key = sessionKey(location, targetCiv);
   await expect(panel).toBeVisible();
   await expect(panel).toHaveAttribute('aria-busy', 'false');
   await expect(panel.locator('#reverse-counter-civ')).toContainText(expected.filters.civ || '不限');
@@ -201,6 +201,98 @@ test('40 Byzantines 的概览与模拟器分别恢复完整 URL 会话及阅读�
   await expectRestored(page, simulator, recordB);
   await page.reload();
   await expectRestored(page, simulator, recordB);
+});
+
+test('UnitList 普通无 tab 入口经模拟器刷新后精确返回，并隔离 A/B 完整 URL 会话', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const overview: Location = { pathname: '/unit/40', search: '?civ=Byzantines', hash: '' };
+  const simulator: Location = { pathname: '/unit/40', search: '?civ=Byzantines&tab=sim', hash: '' };
+  await page.goto('./#/unit');
+  await page.locator('#uciv').click();
+  await page.locator('.cp-panel .cp-q').fill('Byzantines');
+  await page.getByRole('option', { name: /Byzantines/ }).click();
+  const listRow = page.locator('#ugrid [data-unit-id="40"]');
+  await expect(listRow).toBeVisible();
+  await listRow.click();
+  await expect(page).toHaveURL(/#\/unit\/40\?civ=Byzantines$/);
+  const panel = page.locator('#unit-reverse-counters');
+  await expect(panel).toHaveAttribute('aria-busy', 'false');
+  await panel.locator('#reverse-counter-age').selectOption('3');
+  await selectCiv(page, 'Franks');
+  const uniqueGroup = panel.locator('[data-reverse-group]').filter({ hasText: '独特单位' }).first();
+  const uniqueToggle = uniqueGroup.locator('.ud-reverse-group-toggle');
+  if ((await uniqueToggle.getAttribute('aria-expanded')) === 'false') await uniqueToggle.click();
+  const rowA = panel.locator('[data-reverse-row]:has(a[href="#/unit/93"])').first();
+  await expect(rowA).toBeVisible();
+  await alignRow(page, rowA);
+  const pkA = rowA.locator('[data-t="reverse-counter-pk"]');
+  await pkA.click();
+  const summaryA = rowA.getByRole('region', { name: '核对单位 PK' });
+  await expect(summaryA.locator('[data-t="reverse-counter-open-duel"]')).toHaveAttribute('href', /b=93\.Franks\.3/);
+  const keyA = sessionKey(overview);
+  await expect.poll(async () => (await readSession(page, keyA))?.openPk?.id).toBe(93);
+  const recordAValue = await readSession(page, keyA);
+  expect(recordAValue).not.toBeNull();
+  const recordA = immutableSession(recordAValue!);
+  expect(recordA.location).toEqual(overview);
+  expect(recordA.filters).toEqual({ civ: 'Franks', age: 3 });
+  expect(recordA.openPk?.id).toBe(93);
+  expect(recordA.anchor).toBeTruthy();
+  expect(recordA.offset).toBeTruthy();
+  expect(recordA.focus).toBeTruthy();
+
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page).toHaveURL(/#\/unit\/40\?civ=Byzantines&tab=sim$/);
+  await expect(panel).toHaveAttribute('aria-busy', 'false');
+  const keyB = sessionKey(simulator);
+  await expect.poll(async () => (await readSession(page, keyB))?.location).toEqual(simulator);
+  const defaultRecordBValue = await readSession(page, keyB);
+  expect(defaultRecordBValue).not.toBeNull();
+  const defaultRecordB = immutableSession(defaultRecordBValue!);
+  expect(defaultRecordB.filters).toEqual({ civ: '', age: null });
+  expect(defaultRecordB.openPk).toBeNull();
+  expect(await readSession(page, keyA)).toEqual(recordA);
+
+  await selectCiv(page, 'Goths');
+  await panel.locator('#reverse-counter-age').selectOption('3');
+  const rowB = await firstSelectableRow(panel, 93);
+  await alignRow(page, rowB);
+  await rowB.locator('[data-t="reverse-counter-pk"]').click();
+  await expect(rowB.getByRole('region', { name: '核对单位 PK' })).toBeVisible();
+  await expect.poll(async () => (await readSession(page, keyB))?.openPk?.id).toBeTruthy();
+  const savedRecordBValue = await readSession(page, keyB);
+  expect(savedRecordBValue).not.toBeNull();
+  const savedRecordB = immutableSession(savedRecordBValue!);
+  expect(savedRecordB.location).toEqual(simulator);
+  expect(savedRecordB.filters).toEqual({ civ: 'Goths', age: 3 });
+  expect(savedRecordB.openPk?.id).not.toBe(recordA.openPk?.id);
+  expect(await readSession(page, keyA)).toEqual(recordA);
+
+  await page.locator('#simage').selectOption('3');
+  const tech = page.locator('#sim .simg input[type="checkbox"]').first();
+  await expect(tech).toBeVisible();
+  await tech.click();
+  await expect(page).toHaveURL(/#\/unit\/40\/[^/]+\/3\//);
+  await page.reload();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe('/unit/40?civ=Byzantines');
+  await expectRestored(page, overview, recordA);
+  await page.reload();
+  await expectRestored(page, overview, recordA);
+  expect(await readSession(page, keyB)).toEqual(savedRecordB);
+
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page).toHaveURL(/#\/unit\/40\?civ=Byzantines&tab=sim$/);
+  await expectRestored(page, simulator, savedRecordB);
+  expect(await readSession(page, keyA)).toEqual(recordA);
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expectRestored(page, overview, recordA);
+  const duel = panel.locator('[data-t="reverse-counter-open-duel"]');
+  await expect(duel).toHaveAttribute('href', /#\/duel\?a=40\.Byzantines\..*&b=93\.Franks\.3/);
+  await duel.click();
+  await expect(page).toHaveURL(/#\/duel\?/);
+  await expect(page.locator('#duel-res')).toBeVisible();
 });
 
 async function actionColors(locator: Locator) {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { parsePath, resolvePath, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../data/hooks';
 import { decideSimCanonical, makeSimContext, simTechs, unitHashLocation, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
 import type { Unit } from '../../domain/types';
@@ -15,8 +15,35 @@ export interface SimState {
   cmp: string;
 }
 
+export interface SimNavigationLocation {
+  pathname: string;
+  search: string;
+  hash: string;
+}
+
+export type SimNavigationAdapter = (request: {
+  current: SimNavigationLocation;
+  next: SimNavigationLocation;
+  civ: string;
+}) => { kind: 'navigate'; state: unknown } | { kind: 'ignore' };
+
+function currentHashLocation(): SimNavigationLocation | null {
+  const raw = window.location.hash;
+  const parsed = parsePath(raw.startsWith('#') ? raw.slice(1) : raw);
+  if (!parsed.pathname) return null;
+  return {
+    pathname: parsed.pathname.startsWith('/') ? parsed.pathname : `/${parsed.pathname}`,
+    search: parsed.search ?? '',
+    hash: parsed.hash ?? '',
+  };
+}
+
+function sameLocation(a: SimNavigationLocation, b: SimNavigationLocation): boolean {
+  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash;
+}
+
 /** 模拟器状态以 URL 为唯一来源：#/unit/<id>/<civ>/<age>/<ids>/<team> */
-export function useSimState(u: Unit, rt: SimRoute) {
+export function useSimState(u: Unit, rt: SimRoute, navigationAdapter?: SimNavigationAdapter) {
   const core = useCore(),
     trees = useTrees(),
     nav = useNavigate(),
@@ -36,8 +63,20 @@ export function useSimState(u: Unit, rt: SimRoute) {
     const ok = new Set(avail.map((x) => x.t.id));
     return { ctx, civ, age, sel: new Set(rt.ids.filter((i) => ok.has(i))), team: new Set(rt.team), avail, cmp };
   }, [ctx, u, rt.civ, rt.age, idsKey, teamKey, cmp]); // eslint-disable-line react-hooks/exhaustive-deps
-  const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) =>
-    nav(unitPath(u.id, civ, age, sel, team) + location.search, { replace: true });
+  const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => {
+    const pathname = unitPath(u.id, civ, age, sel, team);
+    if (!navigationAdapter) {
+      nav(pathname + location.search, { replace: true });
+      return;
+    }
+    if (!state) return;
+    const current = currentHashLocation();
+    const rendered = { pathname: location.pathname, search: location.search, hash: location.hash };
+    if (!current || !sameLocation(current, rendered)) return;
+    const next = resolvePath({ pathname, search: current.search, hash: current.hash }, current.pathname);
+    const result = navigationAdapter({ current, next, civ: state.civ });
+    if (result.kind === 'navigate') nav(next, { replace: true, state: result.state });
+  };
   const encodedSim = rt.age !== undefined || rt.ids.length > 0 || rt.team.length > 0;
   useEffect(() => {
     if (!state) return;
@@ -51,7 +90,18 @@ export function useSimState(u: Unit, rt: SimRoute) {
     const decision = decideSimCanonical(live.pathname, rt, { civ: state.civ, age: state.age, ids: [...state.sel], team: [...state.team] });
     if (decision.kind === 'ignore') return;
     session.lastSim = { uid: u.id, civ: state.civ, cmp };
-    if (decision.kind === 'replace') nav(decision.path + (live.search || location.search), { replace: true });
+    if (decision.kind === 'replace') {
+      if (!navigationAdapter) {
+        nav(decision.path + (live.search || location.search), { replace: true });
+        return;
+      }
+      const current = currentHashLocation();
+      const rendered = { pathname: location.pathname, search: location.search, hash: location.hash };
+      if (!current || !sameLocation(current, rendered)) return;
+      const next = resolvePath({ pathname: decision.path, search: current.search, hash: current.hash }, current.pathname);
+      const result = navigationAdapter({ current, next, civ: state.civ });
+      if (result.kind === 'navigate') nav(next, { replace: true, state: result.state });
+    }
   }, [state, location.pathname, location.search, encodedSim]); // eslint-disable-line react-hooks/exhaustive-deps
   return { state, go, setCmp: setCmpState };
 }
