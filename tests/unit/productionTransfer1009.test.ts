@@ -75,9 +75,9 @@ describe('#1009 PK to a new training scheme', () => {
     }
   });
   it('keeps unavailable cards and explicit legal unlocks without substituting a unit', () => {
-    const { resolved, transfer } = transferredSide(359, 'Chinese', [47], 17);
+    const { resolved, transfer } = transferredSide(291, 'Hindustanis', [47], 17);
     expect(isUnavail(resolved)).toBe(true);
-    expect(transfer.config).toMatchObject({ civ: 'Chinese', rows: [{ unit: 359, qty: '17' }] });
+    expect(transfer.config).toMatchObject({ civ: 'Hindustanis', rows: [{ unit: 291, qty: '17' }] });
     expect(transfer.config.techs).toContain(47);
     expect(evaluateTrainTotal(ctx, transfer.config).lines[0]?.status).toBe('unavail');
   });
@@ -219,7 +219,7 @@ describe('#1009 production mode transfers without quantity conversion', () => {
       const config = decodeTrainTotal('?' + encodeTrainTotal(total({ rows: [{ unit: 559, qty }] }))).config;
       expect(pendingTrainQuantity(evaluateTrainTotal(ctx, config).lines[0]!)).toBe(qty === '');
     }
-    expect(pendingTrainQuantity(evaluateTrainTotal(ctx, total({ rows: [{ unit: 359, qty: '' }] })).lines[0]!)).toBe(false);
+    expect(pendingTrainQuantity(evaluateTrainTotal(ctx, total({ rows: [{ unit: 291, qty: '' }] })).lines[0]!)).toBe(false);
     expect(pendingTrainQuantity(evaluateTrainTotal(ctx, total({ rows: [{ unit: 0, qty: '' }] })).lines[0]!)).toBe(false);
   });
   it('keeps only a serializable entry notice and dismisses it without removing unrelated router state', () => {
