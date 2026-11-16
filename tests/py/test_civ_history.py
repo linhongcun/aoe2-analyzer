@@ -180,6 +180,22 @@ class CivHistoryTests(unittest.TestCase):
         event = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-dd42a04b'))
         self.assertTrue(all(f['entityRefs'] == [{'entityId': 'unit/291'}] for c in event['claims'] for f in c['effects']))
 
+    def test_multi_object_changes_do_not_inherit_another_subject(self):
+        def effects(prefix):
+            return next(e for e in self.payload['events'] if e['id'].startswith('ev-se-' + prefix))['claims'][0]['effects']
+        for prefix in ['0ae70ba6', '190d318e', 'a20e4a32']:
+            self.assertFalse(any(f['type'] == 'mechanic' for f in effects(prefix)))
+        hp = next(f for f in effects('0ae70ba6') if f.get('attribute') == '生命值')
+        self.assertEqual(hp['entityRefs'], [{'entityId': 'unit/1016'}])
+        train = next(f for f in effects('a571b1ab') if f.get('attribute') == '训练时间')
+        self.assertEqual(train['entityRefs'], [{'unresolvedName': '佣兵钦察骑射手', 'type': 'unit'}])
+        self.assertEqual((train['before'], train['after']), (None, 12))
+        for prefix in ['edbd545e', 'b145e310']:
+            for effect in effects(prefix):
+                if effect.get('attribute', '').startswith('升级'):
+                    self.assertEqual(effect['entityRefs'][0]['type'], 'tech')
+                    self.assertIn('未注明', effect['conditions'][-1])
+
     def test_observation_boundaries_and_unknown_array_mapping_remain_explicit(self):
         events = {e['id']: e for e in self.payload['events']}
         cannon = next(m for m in self.payload['legacyMap'] if m['key'] == '185872:185872-116')

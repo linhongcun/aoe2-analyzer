@@ -17378,7 +17378,8 @@
             {
               "entityRefs": [
                 {
-                  "entityId": "tech/690"
+                  "unresolvedName": "精锐钦察骑射手",
+                  "type": "unit"
                 }
               ],
               "text": "每个城堡生成数量",
@@ -17417,7 +17418,8 @@
             {
               "entityRefs": [
                 {
-                  "entityId": "tech/690"
+                  "unresolvedName": "佣兵钦察骑射手",
+                  "type": "unit"
                 }
               ],
               "text": "训练时间",
@@ -18810,26 +18812,12 @@
               "scope": null,
               "type": "numeric",
               "attribute": "生命值",
-              "before": 40.0,
-              "after": 45.0,
+              "before": 40,
+              "after": 45,
               "delta": null,
               "unit": null,
               "operation": "set",
               "id": "cl-se-0ae70ba6-c37a-471c-948d-44ea8f364c19-effect-1"
-            },
-            {
-              "entityRefs": [
-                {
-                  "entityId": "unit/1018"
-                }
-              ],
-              "text": "弯刀勇士的生命值从40上调到45",
-              "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-0ae70ba6-c37a-471c-948d-44ea8f364c19-effect-2"
             },
             {
               "type": "numeric",
@@ -20526,8 +20514,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "训练时间",
-              "before": 17.0,
-              "after": 13.0,
+              "before": 17,
+              "after": 13,
               "delta": null,
               "unit": "秒",
               "operation": "set",
@@ -20551,7 +20539,8 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/281"
+                  "unresolvedName": "掷斧兵升级",
+                  "type": "tech"
                 }
               ],
               "attribute": "升级食物成本",
@@ -20562,7 +20551,8 @@
               "operation": "set",
               "text": "成本从1000肉750金下调到850肉550金",
               "conditions": [
-                "升级到该形态"
+                "升级到该形态",
+                "原文未注明升级目标形态；不绑定普通单位或推定精锐身份。"
               ],
               "scope": null,
               "id": "cl-se-edbd545e-12fe-4f21-986a-b6de415a1aef-structured-1"
@@ -20571,7 +20561,8 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/281"
+                  "unresolvedName": "掷斧兵升级",
+                  "type": "tech"
                 }
               ],
               "attribute": "升级黄金成本",
@@ -20582,7 +20573,8 @@
               "operation": "set",
               "text": "成本从1000肉750金下调到850肉550金",
               "conditions": [
-                "升级到该形态"
+                "升级到该形态",
+                "原文未注明升级目标形态；不绑定普通单位或推定精锐身份。"
               ],
               "scope": null,
               "id": "cl-se-edbd545e-12fe-4f21-986a-b6de415a1aef-structured-2"
@@ -48121,7 +48113,8 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/239"
+                  "unresolvedName": "战象升级",
+                  "type": "tech"
                 }
               ],
               "attribute": "升级食物成本",
@@ -48132,7 +48125,8 @@
               "operation": "set",
               "text": "费用从1600肉1200金下调到1350肉800金",
               "conditions": [
-                "升级到该形态"
+                "升级到该形态",
+                "原文未注明升级目标形态；不绑定普通单位或推定精锐身份。"
               ],
               "scope": null,
               "id": "cl-se-b145e310-b412-4a09-af6a-8afa788ca53f-structured-1"
@@ -48141,7 +48135,8 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/239"
+                  "unresolvedName": "战象升级",
+                  "type": "tech"
                 }
               ],
               "attribute": "升级黄金成本",
@@ -48152,7 +48147,8 @@
               "operation": "set",
               "text": "费用从1600肉1200金下调到1350肉800金",
               "conditions": [
-                "升级到该形态"
+                "升级到该形态",
+                "原文未注明升级目标形态；不绑定普通单位或推定精锐身份。"
               ],
               "scope": null,
               "id": "cl-se-b145e310-b412-4a09-af6a-8afa788ca53f-structured-2"
@@ -61584,8 +61580,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "攻击力",
-              "before": 12.0,
-              "after": 14.0,
+              "before": 12,
+              "after": 14,
               "delta": null,
               "unit": null,
               "operation": "set",
@@ -61602,26 +61598,12 @@
               "scope": null,
               "type": "numeric",
               "attribute": "近战护甲",
-              "before": 5.0,
-              "after": 7.0,
+              "before": 5,
+              "after": 7,
               "delta": null,
               "unit": null,
               "operation": "set",
               "id": "cl-se-a20e4a32-cd9b-4b6e-861c-9083d5058bc4-effect-2"
-            },
-            {
-              "entityRefs": [
-                {
-                  "entityId": "unit/554"
-                }
-              ],
-              "text": "条顿骑士攻击力从12上调到14；近战护甲从5上调到7",
-              "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-a20e4a32-cd9b-4b6e-861c-9083d5058bc4-effect-3"
             },
             {
               "type": "numeric",
@@ -66523,8 +66505,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "攻击力",
-              "before": 9.0,
-              "after": 12.0,
+              "before": 9,
+              "after": 12,
               "delta": null,
               "unit": null,
               "operation": "set",
@@ -66541,8 +66523,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "近战护甲",
-              "before": 0.0,
-              "after": 1.0,
+              "before": 0,
+              "after": 1,
               "delta": null,
               "unit": null,
               "operation": "set",
@@ -66559,26 +66541,12 @@
               "scope": null,
               "type": "numeric",
               "attribute": "训练时间",
-              "before": 14.0,
-              "after": 12.0,
+              "before": 14,
+              "after": 12,
               "delta": null,
               "unit": "秒",
               "operation": "set",
               "id": "cl-se-190d318e-252b-4a03-90f5-bbbb29f03f24-effect-3"
-            },
-            {
-              "entityRefs": [
-                {
-                  "entityId": "unit/694"
-                }
-              ],
-              "text": "狂战士攻击力从9上调到12；近战护甲从0上调到1；精锐狂战士的训练时间从14秒下调到12秒",
-              "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-190d318e-252b-4a03-90f5-bbbb29f03f24-effect-4"
             },
             {
               "type": "numeric",

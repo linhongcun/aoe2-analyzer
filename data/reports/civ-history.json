@@ -3,7 +3,7 @@
   "catalogSize": 56,
   "sourceEntryCount": 1109,
   "eventCount": 1184,
-  "effectCount": 1955,
+  "effectCount": 1952,
   "pendingEntryCount": 2,
   "legacyRecordCount": 366,
   "legacyMigratedCount": 289,
@@ -2649,7 +2649,7 @@
     "numeric": 563,
     "availability": 113,
     "bonus": 12,
-    "mechanic": 1256,
+    "mechanic": 1253,
     "rename": 5,
     "lifecycle": 6
   }
