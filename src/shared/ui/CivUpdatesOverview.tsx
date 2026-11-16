@@ -8,7 +8,7 @@ import {
   setHistoryQuery,
   type CivUpdatesData,
 } from '../../domain/civUpdates';
-import { CivUpdatesLoading } from './CivUpdates';
+import { CivUpdatesLoading } from './CivUpdatePrimitives';
 import './civ-updates.css';
 
 export function CivUpdatesOverviewReader({ data }: { data: CivUpdatesData }) {
