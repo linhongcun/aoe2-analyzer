@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { conflictHistoryFixture, emptyHistoryFixture } from '../helpers/civUpdatesFixture';
 
+test('Cuman entity-name searches retain the cards showing those names', async ({ page }) => {
+  await page.goto('/#/civ/Cumans?tab=history&histQuery=补给');
+  await expect(page.locator('[data-event-id="ev-se-23238351-959c-42c5-872f-b6f1355ebc21"]')).toBeVisible();
+  await page.getByTestId('civ-updates-reader').getByLabel('关键词').fill('木栅栏');
+  await expect(page.locator('[data-event-id="ev-se-efeba570-f6ef-4f76-805e-a080f02f7487"]')).toBeVisible();
+});
+
 test('Saracen 95810 retains the flat old health bonus when switching to percent', async ({ page }) => {
   await page.goto('/#/civ/Saracens?tab=history&histVersion=de-95810');
   const event = page.locator('[data-event-id="ev-se-78a3783c-8ff1-4564-a815-4e5eab998ee7"]');

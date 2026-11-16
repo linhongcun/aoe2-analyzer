@@ -94,6 +94,15 @@ describe('civilization update contract, independent of background history', () =
     expect(updateEventCounts(results)).toEqual({ events: 1, versions: 1, unknown: 0 });
   });
 
+  it('searches displayed historical entity names and aliases without expanding their civilization scope', () => {
+    for (const text of ['补给', 'Supplies', '供给']) {
+      expect(filterCivUpdates(data, 'Cumans', params(`histQuery=${text}`)).map((event) => event.id)).toContain('ev-se-23238351-959c-42c5-872f-b6f1355ebc21');
+    }
+    expect(filterCivUpdates(data, 'Cumans', params('histQuery=木栅栏')).map((event) => event.id)).toContain('ev-se-efeba570-f6ef-4f76-805e-a080f02f7487');
+    expect(filterCivUpdates(data, 'Danes', params('histQuery=Supplies'))).toEqual([]);
+    expect(filterCivUpdates(data, 'Cumans', params('histQuery=补给&histVersion=de-34055'))).toEqual([]);
+  });
+
   it('keeps unknown chronology last in either order and orders known historical version labels', () => {
     const historical = data.versions.filter((v) => v.id.startsWith('source-')).sort((a, b) => compareUpdateVersions(a, b, true));
     expect(historical[0]!.label).toContain('1.0c');

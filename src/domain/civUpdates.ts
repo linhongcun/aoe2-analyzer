@@ -260,6 +260,7 @@ export function filterCivUpdates(data: CivUpdatesData, civId: string, query: URL
   const versions = new Map(data.versions.map((version) => [version.id, version]));
   const sources = new Map(data.sources.map((source) => [source.id, source]));
   const entries = new Map(data.sourceEntries.map((entry) => [entry.id, entry]));
+  const identities = new Map(data.entities.map((entity) => [entity.id, entity]));
   const text = (query.get('histQuery') ?? '').trim().toLowerCase();
   const version = query.get('histVersion');
   const category = query.get('histSource');
@@ -268,6 +269,14 @@ export function filterCivUpdates(data: CivUpdatesData, civId: string, query: URL
       if (version && (version === 'unknown' ? event.versionId !== null : version !== event.versionId)) return false;
       if (query.has('histVerification') && event.verification !== query.get('histVerification')) return false;
       const eventEntries = event.claims.flatMap((claim) => claim.sourceEntryIds.map((id) => entries.get(id)));
+      const entityNames = event.claims.flatMap((claim) =>
+        claim.effects.flatMap((effect) =>
+          effect.entityRefs.flatMap((reference) => {
+            const entity = 'entityId' in reference ? identities.get(reference.entityId) : undefined;
+            return entity ? [entity.nameZh, entity.nameEn, ...entity.aliases] : [];
+          }),
+        ),
+      );
       if (
         category &&
         !eventEntries.some((entry) => {
@@ -278,7 +287,7 @@ export function filterCivUpdates(data: CivUpdatesData, civId: string, query: URL
         return false;
       return (
         !text ||
-        JSON.stringify([event.summary, event.claims.flatMap((claim) => claim.effects), eventEntries.map((entry) => entry?.originalText)])
+        JSON.stringify([event.summary, event.claims.flatMap((claim) => claim.effects), eventEntries.map((entry) => entry?.originalText), entityNames])
           .toLowerCase()
           .includes(text)
       );
