@@ -178,6 +178,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+源码注释中的 Issue 编号也可能触发颜色检查。[#1055](https://github.com/linhongcun/aoe2-analyzer/issues/1055) / [PR #1088](https://github.com/linhongcun/aoe2-analyzer/pull/1088) 的来源注释写了 `#1055`，首次本地 lint 将它识别成四位十六进制颜色；`scripts/check-colors.mjs` 扫描整个源码文本，不区分注释。只把注释改为 `Issue 1055` 后，本地 lint 与 [PR CI](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43830083713) 通过。以后在源码注释中用 `Issue 编号` 或完整 Issue URL 留追溯，照常跑颜色检查，不为编号改检查器或增加豁免；这不是实际 UI 颜色违规。
+
 最初的三件都是公开的 issue、PR 和 Actions。用来记住「聚合成功」「部署成功」和「产品测试失败」不是一回事。
 
 [#974](https://github.com/linhongcun/aoe2-analyzer/issues/974) / [PR #975](https://github.com/linhongcun/aoe2-analyzer/pull/975) 合入 `464b1442`。它的 main push [run 43292061822](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43292061822) 结论是 failure，`run_attempt` 为 1，这个 SHA 没有第二次 push run。`plan`、`build`、`browser-1` 成功，`static` 等作业跳过。`test` 里「Strict aggregate of every required phase」成功，Pages 制品也上传了；下一步 `node scripts/ci-report.mjs` 失败，日志是 `CI HTTP request failed with status 502`（抛出点在 `scripts/ci-budget.mjs`）。`deploy` 随后跳过。这次红在计时报告访问 GitHub，不能说成窄冒烟或圣骑士生命值算错，也不能说 `464b1442` 当时已经上线。
