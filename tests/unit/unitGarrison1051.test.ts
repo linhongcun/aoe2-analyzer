@@ -22,7 +22,7 @@ const summary = (id = 24, civ = 'Koreans', data = GENERAL_GARRISON_DATA) => unit
 const host = (id = 24, civ = 'Koreans', building = 235, data = GENERAL_GARRISON_DATA) => summary(id, civ, data).rows.find((r) => r.building.id === building)!;
 const probe = { civ: 'Koreans', age: 3, techs: [], rows: [{ unitId: 24, count: '0', entry: 'enter' as const }] };
 
-describe('#1051 unit → garrison summary', () => {
+describe('#1051 unit garrison summary', () => {
   it.each([
     [24, 'Koreans', 4, null],
     [5, 'Bohemians', 5, 4],
@@ -131,9 +131,7 @@ describe('#1051 重要渲染状态', () => {
     const data = structuredClone(GENERAL_GARRISON_DATA);
     data.units[79]!.max = NaN;
     const calculate = calculateGeneralGarrison;
-    const spy = vi
-      .spyOn(garrison, 'calculateGeneralGarrison')
-      .mockImplementation((context, building, config) => calculate(context, building, config, data));
+    const spy = vi.spyOn(garrison, 'calculateGeneralGarrison').mockImplementation((context, building, config) => calculate(context, building, config, data));
     try {
       const row = () => markup().match(/<li[^>]*data-host="79"[\s\S]*?<\/li>/u)![0];
       expect(row()).toContain('弹丸数待核实');
@@ -153,7 +151,7 @@ describe('#1051 重要渲染状态', () => {
     expect(markup()).toContain('容量内无法达到');
     expect(markup()).toContain('可驻军，驻军不增加弹丸');
     const zero = markup({ unitId: 93, civ: 'Armenians' });
-    expect(zero).toContain('data-garrison-total="">0 箭');
+    expect(zero).toContain('data-garrison-total="true">0 箭');
     expect(zero).not.toContain('待核实');
   });
   it('未选/不可用/加载/失败均无旧数字或预览链接，空宿主保留章节', () => {

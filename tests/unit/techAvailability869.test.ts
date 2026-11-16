@@ -173,7 +173,9 @@ describe('#869 科技可用性例外必须点名', () => {
   });
 
   it('displayUnitAge 丢掉文明展示分支会失败', () => {
-    const stripped = readFileSync('src/domain/availabilityAge.ts', 'utf8').replace("civ === 'Armenians' ? 1 : 2", 'catalogAge');
+    const source = readFileSync('src/domain/availabilityAge.ts', 'utf8');
+    const stripped = source.replace("return id === SPEARMAN_UNIT_ID ? (civ === 'Armenians' ? 1 : 2) : catalogAge;", 'return catalogAge;');
+    expect(stripped).not.toBe(source);
     const result = auditSources([{ name: 'src/domain/availabilityAge.ts', text: stripped }], []);
     expect(result.errors.some((error: string) => error.includes('displayUnitAge') && error.includes('没有扫到嵌套三元或等价 if/return'))).toBe(true);
     expect(result.errors.some((error: string) => error.includes('恰好一处'))).toBe(false);
