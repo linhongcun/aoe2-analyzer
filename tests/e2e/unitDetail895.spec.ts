@@ -78,6 +78,61 @@ test('站内模拟器返回原概览的原始查询顺序与嵌套 hash；直达
   await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
 });
 
+test('真实 openSim canonical replace 后编辑并刷新仍返回带待净化科技的原始地址', async ({ page }) => {
+  const origin = '/unit/40/Byzantines/4/999999/?z=2&tab=ov&civ=Byzantines&dup=1&x=%23&dup=2#unit-reverse-counters';
+  await open(page, origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'simulator');
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe('/unit/40/Byzantines/4/?z=2&tab=sim&civ=Byzantines&dup=1&x=%23&dup=2#unit-reverse-counters');
+  await page.locator('#simage').selectOption('3');
+  const tech = page.locator('#sim .simg input[type="checkbox"]').first();
+  await expect(tech).toBeVisible();
+  await tech.click();
+  await page.reload();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+});
+
+test('尾部空科技与团队段在模拟器编辑和刷新后按原 pathname 返回', async ({ page }) => {
+  const origin = '/unit/40/Byzantines/4//?tab=ov&z=2&dup=1&dup=2#unit-reverse-counters';
+  await open(page, origin);
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.locator('#simage').selectOption('3');
+  const tech = page.locator('#sim .simg input[type="checkbox"]').first();
+  await expect(tech).toBeVisible();
+  await tech.click();
+  await page.reload();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+});
+
+test('真实文明漂移丢弃原来源并在返回时使用显式 ov fallback', async ({ page }) => {
+  const origin = '/unit/93/Franks?z=2&tab=ov&dup=1&dup=2#unit-reverse-counters';
+  await open(page, origin);
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.locator('#simciv').click();
+  await page.getByRole('dialog', { name: '文明', exact: true }).locator('[role="option"][data-civ="Goths"]').click();
+  await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Goths');
+  await expect(page).toHaveURL(/#\/unit\/93\/Goths\//);
+  await page.reload();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  const returned = new URL(page.url()).hash.slice(1);
+  expect(returned).not.toBe(origin);
+  expect(returned).toMatch(/^\/unit\/93\/Goths\//);
+  expect(new URLSearchParams(returned.split('?')[1]?.split('#')[0]).get('tab')).toBe('ov');
+});
+
 test('精锐切换和旧相关地址保留文明与查询', async ({ page }) => {
   await open(page, '/unit/11?civ=Mongols&tab=sim&me=Mongols&opp=Britons');
   await expect(page.locator('#sim')).toBeVisible();

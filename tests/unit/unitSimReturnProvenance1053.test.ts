@@ -15,8 +15,8 @@ const sourceA: UnitSimLocation = { pathname: '/unit/40', search: '?civ=Franks&ta
 const simA: UnitSimLocation = { ...sourceA, search: withUnitTab(sourceA.search, 'sim') };
 
 let renderer: ReactTestRenderer | null = null;
-let route!: { location: UnitSimLocation; state: unknown };
-let routerActions!: {
+let helperRoute!: { location: UnitSimLocation; state: unknown };
+let helperRouterActions!: {
   open: () => void;
   go: (pathname: string, civ: string) => void;
   canonicalReplace: (pathname: string, civ: string) => void;
@@ -25,12 +25,12 @@ let routerActions!: {
   back: () => void;
 };
 
-function RouterProbe() {
+function UnitSimProvenanceHelperRouterProbe() {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
     const current = { pathname: location.pathname, search: location.search, hash: location.hash };
-    route = { location: current, state: location.state };
+    helperRoute = { location: current, state: location.state };
     const open = () => {
       const destination = { ...current, search: withUnitTab(current.search, 'sim') };
       const state = createUnitSimReturnState(current, destination, 40, civs, new URLSearchParams(current.search).get('civ') ?? undefined);
@@ -38,21 +38,21 @@ function RouterProbe() {
     };
     const replace = (pathname: string, civ: string) => {
       const next = resolvePath({ pathname, search: current.search, hash: current.hash }, current.pathname);
-      const state = advanceUnitSimReturnState(route.state, current, next, 40, civs, civ);
+      const state = advanceUnitSimReturnState(helperRoute.state, current, next, 40, civs, civ);
       navigate(next, { replace: true, state });
     };
     const close = () => {
-      const source = readUnitSimReturnSource(route.state, current, 40, civs, new URLSearchParams(current.search).get('civ') ?? undefined);
+      const source = readUnitSimReturnSource(helperRoute.state, current, 40, civs, new URLSearchParams(current.search).get('civ') ?? undefined);
       navigate(source ?? { pathname: current.pathname, search: withUnitTab(current.search, 'ov') });
     };
-    routerActions = { open, go: replace, canonicalReplace: replace, close, navigate, back: () => navigate(-1) };
+    helperRouterActions = { open, go: replace, canonicalReplace: replace, close, navigate, back: () => navigate(-1) };
   }, [location, navigate]);
   return null;
 }
 
-function mount(initialEntry: string | UnitSimLocation) {
+function mountHelperRouter(initialEntry: string | UnitSimLocation) {
   act(() => {
-    renderer = create(createElement(MemoryRouter, { initialEntries: [initialEntry as never] }, createElement(RouterProbe)));
+    renderer = create(createElement(MemoryRouter, { initialEntries: [initialEntry as never] }, createElement(UnitSimProvenanceHelperRouterProbe)));
   });
 }
 
@@ -66,22 +66,22 @@ afterEach(() => {
 });
 
 describe('单位模拟器返回来源（#1053）', () => {
-  it('在真实 Router 的 push 和多次 replace 中保留原始搜索顺序与 hash', () => {
-    mount(sourceA);
-    act(() => routerActions.open());
-    expect(route.location).toEqual(simA);
-    const first = route.state;
-    expect(readUnitSimReturnSource(first, route.location, 40, civs, 'Franks')).toEqual(sourceA);
+  it('helper 的 MemoryRouter 模拟在 push 和 replace 中保留原始搜索顺序与 hash', () => {
+    mountHelperRouter(sourceA);
+    act(() => helperRouterActions.open());
+    expect(helperRoute.location).toEqual(simA);
+    const first = helperRoute.state;
+    expect(readUnitSimReturnSource(first, helperRoute.location, 40, civs, 'Franks')).toEqual(sourceA);
 
-    act(() => routerActions.canonicalReplace('/unit/40/Franks/4//', 'Franks'));
-    expect(route.location).toEqual({ ...simA, pathname: '/unit/40/Franks/4/' });
-    expect(readUnitSimReturnSource(route.state, route.location, 40, civs, 'Franks')).toEqual(sourceA);
+    act(() => helperRouterActions.canonicalReplace('/unit/40/Franks/4//', 'Franks'));
+    expect(helperRoute.location).toEqual({ ...simA, pathname: '/unit/40/Franks/4/' });
+    expect(readUnitSimReturnSource(helperRoute.state, helperRoute.location, 40, civs, 'Franks')).toEqual(sourceA);
 
-    act(() => routerActions.go('/unit/40/Franks/3/39/', 'Franks'));
-    expect(route.location).toEqual({ ...simA, pathname: '/unit/40/Franks/3/39/' });
-    act(() => routerActions.close());
-    expect(route.location).toEqual(sourceA);
-    expect(route.state).toBeNull();
+    act(() => helperRouterActions.go('/unit/40/Franks/3/39/', 'Franks'));
+    expect(helperRoute.location).toEqual({ ...simA, pathname: '/unit/40/Franks/3/39/' });
+    act(() => helperRouterActions.close());
+    expect(helperRoute.location).toEqual(sourceA);
+    expect(helperRoute.state).toBeNull();
   });
 
   it('拒绝外站、非法路径、非概览、非法文明及目标漂移来源', () => {
@@ -123,28 +123,28 @@ describe('单位模拟器返回来源（#1053）', () => {
 
   it('direct simulator 使用显式概览 fallback，且返回后重新进入不复用旧来源', () => {
     const direct: UnitSimLocation = { pathname: '/unit/40', search: '?civ=Franks&tab=sim', hash: '' };
-    mount(direct);
-    act(() => routerActions.close());
-    expect(route.location).toEqual({ ...direct, search: '?civ=Franks&tab=ov' });
-    expect(route.state).toBeNull();
+    mountHelperRouter(direct);
+    act(() => helperRouterActions.close());
+    expect(helperRoute.location).toEqual({ ...direct, search: '?civ=Franks&tab=ov' });
+    expect(helperRoute.state).toBeNull();
 
     act(() => renderer!.unmount());
     renderer = null;
     const sourceB: UnitSimLocation = { pathname: '/unit/40', search: '?civ=Franks&tab=ov&record=B', hash: '#b' };
-    mount(sourceA);
-    act(() => routerActions.open());
-    act(() => routerActions.navigate(`${sourceB.pathname}${sourceB.search}${sourceB.hash}`));
-    act(() => routerActions.open());
-    expect(readUnitSimReturnSource(route.state, route.location, 40, civs, 'Franks')).toEqual(sourceB);
-    act(() => routerActions.close());
-    expect(route.location).toEqual(sourceB);
-    act(() => routerActions.back());
-    act(() => routerActions.close());
-    expect(route.location).toEqual(sourceB);
-    act(() => routerActions.back());
-    act(() => routerActions.back());
-    act(() => routerActions.back());
-    act(() => routerActions.close());
-    expect(route.location).toEqual(sourceA);
+    mountHelperRouter(sourceA);
+    act(() => helperRouterActions.open());
+    act(() => helperRouterActions.navigate(`${sourceB.pathname}${sourceB.search}${sourceB.hash}`));
+    act(() => helperRouterActions.open());
+    expect(readUnitSimReturnSource(helperRoute.state, helperRoute.location, 40, civs, 'Franks')).toEqual(sourceB);
+    act(() => helperRouterActions.close());
+    expect(helperRoute.location).toEqual(sourceB);
+    act(() => helperRouterActions.back());
+    act(() => helperRouterActions.close());
+    expect(helperRoute.location).toEqual(sourceB);
+    act(() => helperRouterActions.back());
+    act(() => helperRouterActions.back());
+    act(() => helperRouterActions.back());
+    act(() => helperRouterActions.close());
+    expect(helperRoute.location).toEqual(sourceA);
   });
 });
