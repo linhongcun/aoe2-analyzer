@@ -215,6 +215,29 @@ class CivHistoryTests(unittest.TestCase):
         self.assertEqual(formula['entityRefs'], [{'unresolvedName': '雇佣军', 'type': 'tech'}])
         self.assertIn('黄金成本用食物代替', formula['text'])
 
+    def test_remaining_shared_unit_speed_gold_and_unknown_version_training_time(self):
+        def event(prefix):
+            return next(e for e in self.payload['events'] if e['id'].startswith('ev-se-' + prefix))
+        woad = event('b5e648e5')
+        speed = next(f for f in woad['claims'][0]['effects'] if f.get('attribute') == '基础移动速度')
+        self.assertEqual((speed['before'], speed['after'], speed['entityRefs']), (1.2, 1.17, [{'entityId': 'unit/232'}, {'entityId': 'unit/534'}]))
+        attack = next(f for f in woad['claims'][0]['effects'] if f.get('attribute') == '基础攻击力')
+        self.assertEqual((attack['before'], attack['after'], attack['entityRefs']), (14, 15, [{'entityId': 'unit/534'}]))
+        shotel = event('4cf9db92')
+        numeric = [f for f in shotel['claims'][0]['effects'] if f['type'] == 'numeric']
+        self.assertEqual([(f['attribute'], f['before'], f['after'], f['unit'], f['entityRefs']) for f in numeric], [('黄金成本', 35, 30, '黄金', [{'entityId': 'unit/1016'}, {'entityId': 'unit/1018'}])])
+        food = next(f for f in shotel['claims'][0]['effects'] if f['type'] == 'mechanic')
+        self.assertIn('食物成本不变', food['text'])
+        self.assertIsNone(food['legacyBefore'])
+        self.assertIsNone(food['legacyAfter'])
+        boyar = event('c840ac79')
+        self.assertIsNone(boyar['versionId'])
+        self.assertEqual([(f['type'], f['attribute'], f['before'], f['after'], f['unit'], f['entityRefs']) for f in boyar['claims'][0]['effects']], [('numeric', '训练时间', 23, 15, '秒', [{'entityId': 'unit/876'}]), ('numeric', '训练时间', 20, 15, '秒', [{'entityId': 'unit/878'}])])
+        self.assertEqual((woad['versionId'], shotel['versionId']), ('de-141935', 'de-42848'))
+        for e in [woad, shotel, boyar]:
+            self.assertEqual(e['verification'], 'unverified')
+            self.assertTrue(all(c['verification'] == 'unverified' for c in e['claims']))
+
     def test_deduplication_preserves_claim_ids_and_does_not_absorb_other_candidates(self):
         mappings = {m['key']: m for m in self.payload['legacyMap']}
         events = {e['id']: e for e in self.payload['events']}

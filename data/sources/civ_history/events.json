@@ -14272,6 +14272,9 @@
               "entityRefs": [
                 {
                   "entityId": "unit/232"
+                },
+                {
+                  "entityId": "unit/534"
                 }
               ],
               "text": "基础移动速度",
@@ -18689,16 +18692,40 @@
             {
               "entityRefs": [
                 {
-                  "entityId": "civ/Ethiopians"
+                  "entityId": "unit/1016"
+                },
+                {
+                  "entityId": "unit/1018"
                 }
               ],
-              "text": "弯刀勇士和精锐弯刀勇士训练费用的35黄金下调到30黄金，食物不变",
+              "text": "弯刀勇士和精锐弯刀勇士食物成本不变",
               "conditions": [],
               "scope": null,
               "type": "mechanic",
               "legacyBefore": null,
               "legacyAfter": null,
               "id": "cl-se-4cf9db92-d985-40d4-87f2-2a5d2e11d91c-effect-1"
+            },
+            {
+              "id": "cl-se-4cf9db92-d985-40d4-87f2-2a5d2e11d91c-structured-1",
+              "type": "numeric",
+              "entityRefs": [
+                {
+                  "entityId": "unit/1016"
+                },
+                {
+                  "entityId": "unit/1018"
+                }
+              ],
+              "attribute": "黄金成本",
+              "before": 35,
+              "after": 30,
+              "delta": null,
+              "unit": "黄金",
+              "operation": "set",
+              "text": "弯刀勇士和精锐弯刀勇士训练费用的35黄金下调到30黄金",
+              "conditions": [],
+              "scope": null
             }
           ]
         }
@@ -57672,18 +57699,40 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-c840ac79-7308-48fc-b710-700e8fcdb238-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "civ/Slavs"
+                  "entityId": "unit/876"
                 }
               ],
-              "text": "贵族铁骑和精锐贵族铁骑训练时间是15秒，之前是23秒和20秒",
+              "attribute": "训练时间",
+              "before": 23,
+              "after": 15,
+              "delta": null,
+              "unit": "秒",
+              "operation": "set",
+              "text": "贵族铁骑训练时间从23秒调整为15秒",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-c840ac79-7308-48fc-b710-700e8fcdb238-effect-1"
+              "scope": null
+            },
+            {
+              "id": "cl-se-c840ac79-7308-48fc-b710-700e8fcdb238-structured-1",
+              "type": "numeric",
+              "entityRefs": [
+                {
+                  "entityId": "unit/878"
+                }
+              ],
+              "attribute": "训练时间",
+              "before": 20,
+              "after": 15,
+              "delta": null,
+              "unit": "秒",
+              "operation": "set",
+              "text": "精锐贵族铁骑训练时间从20秒调整为15秒",
+              "conditions": [],
+              "scope": null
             }
           ]
         }
