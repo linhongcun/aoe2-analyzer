@@ -1,12 +1,16 @@
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { countForBudget } from '../../src/domain/duel';
+import { DAT } from '../../src/domain/datEffects';
 import { applicableTrainingTechs, quoteTraining } from '../../src/domain/duelTrainingCost';
 import { unitCost } from '../../src/domain/unitCost';
 import { presetUpTo, simulate } from '../../src/domain/simulator';
+import * as unitCostModule from '../../src/domain/unitCost';
+import * as simulatorModule from '../../src/domain/simulator';
 import { contextSearchAfterCanon } from '../../src/features/duel/logic/duelContext';
 import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 import { DUEL_COST_MODEL, trainingLines } from '../../src/features/duel/logic/trainingCostView';
+import type { Trees } from '../../src/domain/types';
 import { ctx, techs, unit, units } from './helpers';
 
 const byId = Object.fromEntries(units.map((item) => [item.id, item]));
@@ -16,6 +20,21 @@ const side = (uid: number, civ: string, age: number, selected: 'f' | 'c' | numbe
   if (isUnavail(resolved)) throw new Error(`${civ} ${uid} unavailable`);
   return resolved;
 };
+const earlyBohemian = { uid: 5, civ: 'Bohemians', age: 3, ageSet: true, techs: [], team: [] };
+
+function withHandCannoneerTreeRow(change: (cell: unknown[]) => void) {
+  const trees = structuredClone(ctx.trees);
+  const treeMap = (trees as unknown as { t: Record<string, unknown[]> }).t;
+  const blocks = treeMap.Bohemians!;
+  const block = blocks.find(
+    (value) => Array.isArray(value) && Array.isArray(value[3]) && value[3].some((cell) => Array.isArray(cell) && cell[2] === 'u' && cell[3] === 5),
+  );
+  if (!Array.isArray(block) || !Array.isArray(block[3])) throw new Error('Bohemian Hand Cannoneer tree row missing');
+  const cell = block[3].find((value) => Array.isArray(value) && value[2] === 'u' && value[3] === 5);
+  if (!Array.isArray(cell)) throw new Error('Bohemian Hand Cannoneer tree row missing');
+  change(cell);
+  return { ...ctx, trees: trees as Trees };
+}
 
 describe('#943 单位 PK 训练价', () => {
   const kamandaran = techByEn('Kamandaran');
@@ -145,5 +164,144 @@ describe('#943 单位 PK 训练价', () => {
     expect(contextSearchAfterCanon('a=1', 'a=1', 'a=2')).toBe('a=2');
     expect(contextSearchAfterCanon('a=2', 'a=2', 'a=2')).toBeNull();
     expect(contextSearchAfterCanon('a=1', 'a=9', 'a=9')).toBe('a=9');
+  });
+
+  it('仅对真实合法的显式提前时代 Duel 输入保留单位价格档位', () => {
+    const franks = resolve(ctx, byId, { uid: 93, civ: 'Franks', age: 3, ageSet: true, techs: [], team: [] }, 93);
+    const early = resolve(ctx, byId, { uid: 5, civ: 'Bohemians', age: 3, ageSet: true, techs: [], team: [] }, 5);
+    expect(isUnavail(franks)).toBe(false);
+    if (isUnavail(franks)) throw new Error('Franks Spearman should be available in Castle Age');
+    expect(franks.age).toBe(3);
+    expect(franks.earlyAgeMarker).toBeUndefined();
+    expect(isUnavail(early)).toBe(false);
+    if (isUnavail(early)) throw new Error('Bohemian Hand Cannoneer should be available in Castle Age');
+    expect(early.age).toBe(3);
+    expect(early.earlyAgeMarker).toEqual({ unitId: 5, civ: 'Bohemians', age: 3 });
+    expect(early.S).toEqual(simulate(ctx, byId[5]!, 'Bohemians', 3, early.sel, new Set()));
+
+    const source = byId[5]!;
+    const directEarly = unitCost(source, 'Bohemians', 3);
+    const directCatalogue = unitCost(source, 'Bohemians', 4);
+    const earlyCosts = applicableTrainingTechs(ctx, source, 'Bohemians', 3, early.earlyAgeMarker);
+    const earlyQuote = quoteTraining(source, 'Bohemians', 3, new Set(), earlyCosts, new Set(), early.earlyAgeMarker);
+    expect(early.training.costs).toEqual(earlyCosts);
+    expect(early.training.price.discount.age).toBe(3);
+    expect(early.training.price.cost).toEqual(directEarly.cost);
+    expect(early.training.before).toEqual(directEarly.cost);
+    expect(early.training.deltas).toEqual([]);
+    expect(early.F.cost).toEqual(early.training.price.cost);
+    expect(earlyQuote.price.discount.age).toBe(3);
+    expect(earlyQuote.before).toEqual(directEarly.cost);
+
+    const fallback = resolve(ctx, byId, { uid: 999_999, civ: 'Bohemians', age: 3, ageSet: true, techs: [], team: [] }, 5);
+    expect(isUnavail(fallback)).toBe(false);
+    if (isUnavail(fallback)) throw new Error('fallback unit should remain available');
+    expect(fallback.earlyAgeMarker).toBeUndefined();
+    expect(fallback.age).toBe(4);
+
+    const noMarkerCosts = applicableTrainingTechs(ctx, source, 'Bohemians', 3);
+    const noMarker = quoteTraining(source, 'Bohemians', 3, new Set(), noMarkerCosts, new Set());
+    expect(noMarker.price.discount.age).toBe(4);
+    expect(noMarker.price.cost).toEqual(directCatalogue.cost);
+    expect(noMarker.before).toEqual(directCatalogue.cost);
+
+    const badMarker = { unitId: 5, civ: 'Bohemians', age: 2 };
+    const mismatched = quoteTraining(source, 'Bohemians', 3, new Set(), noMarkerCosts, new Set(), badMarker);
+    expect(mismatched.price.discount.age).toBe(4);
+    expect(mismatched.price.cost).toEqual(directCatalogue.cost);
+  });
+
+  it('提前时代验证拒绝不可用、隐式、回退或结构损坏的输入', () => {
+    const noMarker = (state: ReturnType<typeof resolve>) => ('earlyAgeMarker' in state ? state.earlyAgeMarker : undefined);
+    const resolveEarly = (spec: Partial<typeof earlyBohemian> = {}, context = ctx) => resolve(context, byId, { ...earlyBohemian, ...spec }, 5);
+
+    expect(noMarker(resolveEarly({ age: 2 }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ ageSet: false }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ age: 3.5 }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ age: 0 }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ age: 5 }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ age: 4 }))).toBeUndefined();
+    expect(noMarker(resolveEarly({ civ: 'UnknownCiv' }))).toBeUndefined();
+
+    const mismatchedCiv = resolveEarly({ civ: 'Britons' });
+    expect(isUnavail(mismatchedCiv)).toBe(true);
+
+    const fallback = resolve(ctx, byId, { ...earlyBohemian, uid: 999_999 }, 5);
+    expect(noMarker(fallback)).toBeUndefined();
+
+    const disabledTree = withHandCannoneerTreeRow((cell) => (cell[4] = 0));
+    expect(noMarker(resolveEarly({}, disabledTree))).toBeUndefined();
+
+    const missingTree = { ...ctx.trees, t: { ...ctx.trees.t, Bohemians: undefined } } as unknown as Trees;
+    expect(noMarker(resolveEarly({}, { ...ctx, trees: missingTree }))).toBeUndefined();
+
+    const stringAgeTree = withHandCannoneerTreeRow((cell) => (cell[0] = '5'));
+    expect(noMarker(resolveEarly({}, stringAgeTree))).toBeUndefined();
+    const nullAgeTree = withHandCannoneerTreeRow((cell) => (cell[0] = null));
+    expect(noMarker(resolveEarly({}, nullAgeTree))).toBeUndefined();
+
+    expect(noMarker(resolveEarly())).toEqual({ unitId: 5, civ: 'Bohemians', age: 3 });
+  });
+
+  it('只接受与费用输入完全匹配的内部训练时代 marker', () => {
+    const source = byId[5]!;
+    const markers = [
+      undefined,
+      { unitId: 93, civ: 'Bohemians', age: 3 },
+      { unitId: 5, civ: 'Franks', age: 3 },
+      { unitId: 5, civ: 'Bohemians', age: 2 },
+      { unitId: 5, civ: 'Bohemians', age: 3.5 },
+      { unitId: 5, civ: 'Bohemians', age: 0 },
+      { unitId: 5, civ: 'Bohemians', age: 5 },
+      { unitId: 5, civ: 'Bohemians', age: 4 },
+    ];
+    for (const marker of markers) {
+      const quote = quoteTraining(source, 'Bohemians', 3, new Set(), [], undefined, marker);
+      expect(quote.price.discount.age).toBe(4);
+    }
+  });
+
+  it('提前时代通过实际训练费用探测、before/delta/F.cost 和 simulate 参数', () => {
+    const source = byId[5]!;
+    const wagonburg = techByEn('Wagenburg Tactics');
+    const previousDatTech = DAT.techs[wagonburg.en];
+    DAT.techs[wagonburg.en] = {
+      id: wagonburg.id,
+      combat: false,
+      rules: [],
+      eco: [{ a: 103, op: 'mul', v: 0.5, t: [source.id] }],
+    };
+    const unitCostSpy = vi.spyOn(unitCostModule, 'unitCost');
+    const simulateSpy = vi.spyOn(simulatorModule, 'simulate');
+    try {
+      const resolved = resolve(ctx, byId, { ...earlyBohemian, techs: [wagonburg.id] }, 5);
+      expect(isUnavail(resolved)).toBe(false);
+      if (isUnavail(resolved)) throw new Error('Bohemian Hand Cannoneer should be available in Castle Age');
+
+      expect(resolved.earlyAgeMarker).toEqual({ unitId: source.id, civ: 'Bohemians', age: 3 });
+      expect(resolved.age).toBe(3);
+      expect(resolved.training.costs).toContainEqual({ tech: wagonburg, supported: true });
+      expect(resolved.sel.has(wagonburg.id)).toBe(true);
+      expect(
+        unitCostSpy.mock.calls.some(
+          ([unitInput, civ, age, applied]) =>
+            unitInput.id === source.id && civ === 'Bohemians' && age === 3 && applied?.some((item) => item.id === wagonburg.id) === true,
+        ),
+      ).toBe(true);
+      expect(unitCostSpy.mock.calls.every(([, , age]) => age === 3)).toBe(true);
+
+      const before = unitCost(source, 'Bohemians', 3).cost;
+      const after = unitCost(source, 'Bohemians', 3, [{ id: wagonburg.id, en: wagonburg.en, zh: wagonburg.zh }]).cost;
+      expect(resolved.training.price.discount.age).toBe(3);
+      expect(resolved.training.before).toEqual(before);
+      expect(resolved.training.price.cost).toEqual(after);
+      expect(resolved.training.deltas).toEqual([{ id: wagonburg.id, zh: wagonburg.zh, changes: [{ res: 'Food', delta: after.Food! - before.Food! }] }]);
+      expect(resolved.F.cost).toEqual(after);
+      expect(simulateSpy.mock.calls.some(([, unitInput, civ, age]) => unitInput.id === source.id && civ === 'Bohemians' && age === 3)).toBe(true);
+    } finally {
+      vi.restoreAllMocks();
+      if (previousDatTech) DAT.techs[wagonburg.en] = previousDatTech;
+      else delete DAT.techs[wagonburg.en];
+    }
   });
 });
