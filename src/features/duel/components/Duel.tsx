@@ -77,6 +77,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     });
   const invalidLink = linkStateInvalid || techFieldInvalid(sp.get('a')) || techFieldInvalid(sp.get('b')) || uidInvalid;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
+  const productionContext = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
   const params = decodeDuelParams(sp);
   const { mode, na, nb, bud, vils, mins } = params;
   const eq = mode === 'r' || mode === 't';
@@ -280,9 +281,27 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
         </div>
       )}
       <div className="duel-sides">
-        <Side k="a" side={A} fams={fams} onChange={(s) => upd('a', s)} count={cntA} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
+        <Side
+          k="a"
+          side={A}
+          fams={fams}
+          onChange={(s) => upd('a', s)}
+          count={cntA}
+          bud={mode === 'r' ? bud : 0}
+          time={mode === 't' ? [vils, mins] : null}
+          context={productionContext!}
+        />
         <div className="duel-vs">VS</div>
-        <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
+        <Side
+          k="b"
+          side={B}
+          fams={fams}
+          onChange={(s) => upd('b', s)}
+          count={cntB}
+          bud={mode === 'r' ? bud : 0}
+          time={mode === 't' ? [vils, mins] : null}
+          context={productionContext!}
+        />
       </div>
       {isUnavail(A) || isUnavail(B) ? (
         <div id="duel-pending" className="posbox duel-pending">

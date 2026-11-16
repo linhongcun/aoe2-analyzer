@@ -12,6 +12,7 @@ import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
   BUILDING_LIMIT,
   DEFAULT_PRODUCTION,
+  DEFAULT_PRODUCTION_COUNT,
   PRODUCTION_LIMIT,
   calculateProduction,
   decodeProduction,
@@ -34,6 +35,10 @@ import { ProductionPageTop, ProductionModeNav } from './ProductionModeNav';
 import { ProductionTrainCompare } from './ProductionTrainCompare';
 import { TrainTotal, TrainTotalLinkError } from './TrainTotal';
 import { useProductionContext } from './useProductionContext';
+import { isDefaultProduction, productionToTrainTotal } from '../../domain/productionTransfer';
+import { encodeTrainTotal, trainTotalHrefFrom } from './trainTotalCodec';
+import { productionTransferState } from '../../shared/utils/productionTransferState';
+import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import './production.css';
 import './trainCompare.css';
 
@@ -93,7 +98,7 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const update = (next: ProductionConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true });
+    navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true, state: location.state });
     resetShare();
   };
   return (
@@ -132,6 +137,14 @@ function ProductionBody({
   shareStatus: string;
   manualLink: string;
 }) {
+  const location = useLocation();
+  const transfer = useMemo(() => {
+    const mapped = productionToTrainTotal(ctx, config);
+    return {
+      to: isDefaultProduction(config) ? trainTotalHrefFrom(location.search) : '/production?' + encodeTrainTotal(mapped.config),
+      state: productionTransferState(mapped.notice),
+    };
+  }, [ctx, config, location.search]);
   const result = calculateProduction(ctx, config);
   const units = productionUnits(ctx, config),
     available = productionTechs(ctx, config),
@@ -154,7 +167,7 @@ function ProductionBody({
       <ToolPageHeader
         title="持续生产"
         description="从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。"
-        top={<ProductionPageTop />}
+        top={<ProductionPageTop transfer={transfer} />}
         dock={
           <CalcDock
             note={shareStatus}
@@ -163,6 +176,7 @@ function ProductionBody({
           />
         }
       />
+      <ProductionTransferBanner />
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {manualLink && (
         <label className="production-manual">
@@ -221,7 +235,7 @@ function ProductionBody({
                 type="button"
                 className="btn"
                 disabled={config.rows.length >= PRODUCTION_LIMIT}
-                onClick={() => update({ ...config, rows: [...config.rows, { unit: 83, building: 109, count: '1' }] })}
+                onClick={() => update({ ...config, rows: [...config.rows, { unit: 83, building: 109, count: DEFAULT_PRODUCTION_COUNT }] })}
               >
                 <Icon name="plus" />
                 添加需求

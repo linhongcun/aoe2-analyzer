@@ -14,6 +14,7 @@ import { toggleSelected } from './prereq';
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
 export const BUILDING_LIMIT = 100;
+export const DEFAULT_PRODUCTION_COUNT = '1';
 /** 只决定能否训练的科技。编号必须与 productionBuildings 里的门槛一致。 */
 export const PRODUCTION_UNLOCK_TECH_IDS = [16, 47, 483, 755] as const;
 export interface ProductionRow {
@@ -39,7 +40,7 @@ export const DEFAULT_PRODUCTION: ProductionConfig = {
   techs: [],
   walk: 3,
   farm: 1,
-  rows: [{ unit: VILLAGER_UNIT_ID, building: TC_BY_AGE[0]!, count: '1' }],
+  rows: [{ unit: VILLAGER_UNIT_ID, building: TC_BY_AGE[0]!, count: DEFAULT_PRODUCTION_COUNT }],
 };
 const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as const;
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };

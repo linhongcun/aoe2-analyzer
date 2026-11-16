@@ -2,6 +2,8 @@ import { civByEn } from '../../data';
 import { DEFAULT_PRODUCTION, PRODUCTION_LIMIT } from '../../domain/production';
 import { TRAIN_TOTAL_DEFAULT_AGE, emptyTrainTotal, type TrainTotalConfig, type TrainTotalRow } from '../../domain/trainTotal';
 
+export { encodeTrainTotal } from '../../domain/trainTotal';
+
 const KNOWN = new Set(['mode', 'civ', 'age', 'techs', 'units', 'v']);
 const LEGACY = ['rows', 'walk', 'farm', 'building'];
 
@@ -80,14 +82,4 @@ export function decodeTrainTotal(search: string): { config: TrainTotalConfig; wa
     warnings.push(`地址里误带了 ${legacy.map((key) => `${key}=${params.get(key) ?? ''}`).join('、')}。这些键不属于训练总价，已忽略，没有当成训练数量。`);
   if (other.length) warnings.push(`地址里还有未使用的参数 ${other.join('、')}，已忽略。`);
   return { config, warnings: [...new Set(warnings)] };
-}
-
-export function encodeTrainTotal(config: TrainTotalConfig): string {
-  const params = new URLSearchParams();
-  params.set('mode', 'train-total');
-  params.set('civ', config.civ);
-  params.set('age', config.ageRaw != null ? config.ageRaw : String(config.age ?? TRAIN_TOTAL_DEFAULT_AGE));
-  if (config.techs.length) params.set('techs', [...new Set(config.techs)].sort((a, b) => a - b).join(','));
-  if (config.rows.length) params.set('units', config.rows.map((row) => `${row.unit}:${row.qty}`).join(','));
-  return params.toString();
 }

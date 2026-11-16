@@ -81,6 +81,16 @@ export function emptyTrainTotal(civ = DEFAULT_PRODUCTION.civ, age = TRAIN_TOTAL_
   return { civ, age, ageRaw: null, techs: [], rows: [] };
 }
 
+export function encodeTrainTotal(config: TrainTotalConfig): string {
+  const params = new URLSearchParams();
+  params.set('mode', 'train-total');
+  params.set('civ', config.civ);
+  params.set('age', config.ageRaw != null ? config.ageRaw : String(config.age ?? TRAIN_TOTAL_DEFAULT_AGE));
+  if (config.techs.length) params.set('techs', [...new Set(config.techs)].sort((a, b) => a - b).join(','));
+  if (config.rows.length) params.set('units', config.rows.map((row) => `${row.unit}:${row.qty}`).join(','));
+  return params.toString();
+}
+
 export function pickNewUnit(availableIds: readonly number[]): number {
   return availableIds[0] ?? 0;
 }
