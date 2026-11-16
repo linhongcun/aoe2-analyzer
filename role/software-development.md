@@ -104,8 +104,8 @@ npm run lint:layers -- --strict
 
 历史怎么回来：
 
-- 模式切换用的是 `Link`，会留下一条历史。从别的模式进入训练总价时，`trainTotalHrefFrom` 只带合法文明和合法显式时代，训练行是空的。点当前模式时链接就是当前地址。浏览器返回回到上一跳的完整查询。
-- 表单编辑用 `navigate(..., { replace: true })`。训练总价、持续生产、攻城等工具都这样写，分享链接保持最新，同时不把每一次改动堆进历史。
+- 模式转换用 `Link` push，浏览器返回回到来源的完整查询。[#1009 / PR #1096](https://github.com/linhongcun/aoe2-analyzer/pull/1096) 后，PK→训练总价、训练总价↔持续生产由 `src/domain/productionTransfer.ts` 按来源协议携带解析后的文明、时代、单位形态及目标允许的已选科技，不再一概清空训练行。PK 保留卡片原形态及实际派出数，不可用卡也不替换形态；两种生产模式之间只带可用形态，不换算训练数量与建筑数量，目标分别用空训练数量、默认建筑数量。完整默认生产方案仍沿旧 `trainTotalHrefFrom` 保留默认时代例外；跨文明对照仍走自己的协议。资料未就绪时不生成会丢行的转换链接。
+- 表单编辑用 `navigate(..., { replace: true })`，分享链接保持最新，不把每一次改动堆进历史。训练总价/持续生产的转换说明属于当前 entry 的 router state：表单 replace 和当前模式同址 Link 都要保留 `location.state`；新转换生成新说明；dismiss 仅清本功能字段。刷新、返回/前进可恢复该 entry 的说明，复制 URL 到新标签则没有说明，方案本身仍从 URL 解码，不靠本机存储恢复。
 - 刷新和打开分享链接都从 URL 解码。`src/shared/utils/sticky.ts` 的筛选记忆和 `session.lastCiv` 只在这次页面进程里，刷新就没了。
 - 外观不进链接。键是 `aoe2-theme`（`src/app/theme/theme.ts`），存在 `localStorage`。复盘、快捷键、开一局另有自己的 `localStorage`，和工具查询不是同一套。
 
@@ -177,6 +177,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 ## 8. 已经核对过的失败和后续上线
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
+
+跨工具复用「已选集合」前，要核对它服务的计算范围。[#1009](https://github.com/linhongcun/aoe2-analyzer/issues/1009) / [PR #1096](https://github.com/linhongcun/aoe2-analyzer/pull/1096) 的首次方案只传 PK 的 `side.sel`，独立复核用显式解锁科技复现了遗漏：战斗/费用选择集合不一定保留纯训练解锁项。以后区分解析后的数值选择和显式解锁来源，先筛源有效选择及目标允许项，再判断形态；不要凭预设补源未选科技，也不要把支持度或数量合法性当成形态可选性。定向用例锁住这些语义，导航与历史行为同时以本节前面的当前实现为准，避免沿用旧「切模式清空行」假设。
 
 新增生成器只登记 schema 和数据族，仍可能漏掉补丁更新入口。[#1064](https://github.com/linhongcun/aoe2-analyzer/issues/1064) / [PR #1090](https://github.com/linhongcun/aoe2-analyzer/pull/1090) 的专用 `--check` 已可复现，但首次遗漏 `data/sources/data_update_coverage.json`，使 `data:update` / `data:status` 在预检就失败；[修复提交](https://github.com/linhongcun/aoe2-analyzer/commit/a9b37d75d23e8be8f2d43a6d02e6cd24a5eb1f2b) 补齐登记后通过。以后新增生成链时同时核对 schema catalog、数据族、更新覆盖清单和 data 检查组，并运行覆盖清单预检与生成器 `--check`；两者证明的事情不同。证据只覆盖固定来源时，在覆盖清单写明不自动迁移的原因、维护责任和检查命令，换 pin 后重新取证，不把通用补丁更新成功当作新配置已认证。[#1082](https://github.com/linhongcun/aoe2-analyzer/issues/1082) / [PR #1092](https://github.com/linhongcun/aoe2-analyzer/pull/1092) 还暴露了嵌套校验缺口：只限制旧映射的文明范围，漏验效果级 `scope`，使越界效果通过生成与 `--check`。以后映射和效果复用文明子集约束，对真实生成命令和 `--check` 分别运行负例，并保留 null 继承、合法跨文明投影和团队 provider 正例；直接调用 build 函数不能记作 CLI 端到端验证。修复后的 [main CI](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43910896095) 通过默认检查，CLI 负例与独立复核的实际范围仍以该 PR 记录为准。
 
