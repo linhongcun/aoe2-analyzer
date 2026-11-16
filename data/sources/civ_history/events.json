@@ -18265,18 +18265,23 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-32192b74-a2c1-4c3b-8d1b-7ff51d9cb756-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "civ/Dravidians"
+                  "unresolvedName": "印度剑客",
+                  "type": "unit"
                 }
               ],
-              "text": "【待补充】版本补丁后，印度剑客生命值从55/65上调到60/70，远程护甲从0上调到了1",
+              "attribute": "远程护甲",
+              "before": 0,
+              "after": 1,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
+              "text": "印度剑客远程护甲从0上调到了1",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-32192b74-a2c1-4c3b-8d1b-7ff51d9cb756-effect-1"
+              "scope": null
             },
             {
               "type": "numeric",
@@ -21484,13 +21489,13 @@
                   "type": "unit"
                 }
               ],
-              "attribute": "食物折扣率",
+              "attribute": "训练成本折扣率",
               "before": null,
               "after": 10,
               "delta": null,
               "unit": "%",
               "operation": "set",
-              "text": "食物折扣率",
+              "text": "步兵训练成本折扣率",
               "conditions": [
                 "封建时代"
               ],
@@ -21505,13 +21510,13 @@
                   "type": "unit"
                 }
               ],
-              "attribute": "食物折扣率",
+              "attribute": "训练成本折扣率",
               "before": null,
               "after": 15,
               "delta": null,
               "unit": "%",
               "operation": "set",
-              "text": "食物折扣率",
+              "text": "步兵训练成本折扣率",
               "conditions": [
                 "城堡时代"
               ],
@@ -21526,13 +21531,13 @@
                   "type": "unit"
                 }
               ],
-              "attribute": "食物折扣率",
+              "attribute": "训练成本折扣率",
               "before": null,
               "after": 25,
               "delta": null,
               "unit": "%",
               "operation": "set",
-              "text": "食物折扣率",
+              "text": "步兵训练成本折扣率",
               "conditions": [
                 "帝王时代"
               ],
@@ -31026,18 +31031,22 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-5a574943-799a-4bb6-a2fd-f0b164bfef77-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "civ/Incas"
+                  "entityId": "unit/879"
                 }
               ],
-              "text": "食物折扣文明加成效率从5%/10%/15%/20%上调到15%/20%/25%/30%，印加枪兵长的食物成本从60上调到70以平衡新的食物折扣率",
+              "attribute": "食物成本",
+              "before": 60,
+              "after": 70,
+              "delta": null,
+              "unit": "食物",
+              "operation": "set",
+              "text": "印加枪兵长的食物成本从60上调到70",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-5a574943-799a-4bb6-a2fd-f0b164bfef77-effect-1"
+              "scope": null
             },
             {
               "type": "numeric",
@@ -37065,26 +37074,33 @@
               "scope": null,
               "type": "numeric",
               "attribute": "生命值",
-              "before": 290.0,
-              "after": 280.0,
+              "before": 290,
+              "after": 280,
               "delta": null,
               "unit": null,
               "operation": "set",
               "id": "cl-se-220fafb8-f67f-4228-a6de-d0cd4d46548d-effect-1"
             },
             {
+              "id": "cl-se-220fafb8-f67f-4228-a6de-d0cd4d46548d-effect-2",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "civ/Khmer"
+                  "entityId": "unit/1120"
+                },
+                {
+                  "entityId": "unit/1122"
                 }
               ],
-              "text": "重弩战象/精锐重弩战象的重型攻城器护甲从20下调到10，精锐重弩战象生命值从290下调到280",
+              "attribute": "重型攻城器护甲",
+              "before": 20,
+              "after": 10,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
+              "text": "重弩战象/精锐重弩战象的重型攻城器护甲从20下调到10",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-220fafb8-f67f-4228-a6de-d0cd4d46548d-effect-2"
+              "scope": null
             }
           ]
         }
@@ -40388,18 +40404,27 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-fdf0ba33-fded-44c0-baae-e9aaf5603b76-effect-2",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "tech/692"
+                  "unresolvedName": "长枪兵",
+                  "type": "unit"
+                },
+                {
+                  "unresolvedName": "投矛手",
+                  "type": "unit"
                 }
               ],
+              "attribute": "远程护甲加成",
+              "before": 1,
+              "after": 2,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
               "text": "长枪兵和投矛手的远程装甲从原来的+1调整为+2",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-fdf0ba33-fded-44c0-baae-e9aaf5603b76-effect-2"
+              "scope": null
             },
             {
               "type": "numeric",
@@ -41458,8 +41483,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "训练时间",
-              "before": 16.0,
-              "after": 14.0,
+              "before": 16,
+              "after": 14,
               "delta": null,
               "unit": "秒",
               "operation": "set",
@@ -41468,10 +41493,11 @@
             {
               "entityRefs": [
                 {
-                  "entityId": "unit/869"
+                  "unresolvedName": "雇佣军",
+                  "type": "tech"
                 }
               ],
-              "text": "马扎尔骠骑生命值从70上调到了75；精锐马扎尔骠骑训练时间从16秒下调到14秒；雇佣军科技效果从删除黄金成本修改为黄金成本用食物代替",
+              "text": "雇佣军科技效果从删除黄金成本修改为黄金成本用食物代替",
               "conditions": [],
               "scope": null,
               "type": "mechanic",
@@ -41514,6 +41540,24 @@
               "conditions": [],
               "scope": null,
               "id": "cl-se-30a6793e-dcd2-4c3a-91c2-524eebada20d-structured-2"
+            },
+            {
+              "id": "cl-se-30a6793e-dcd2-4c3a-91c2-524eebada20d-structured-3",
+              "type": "numeric",
+              "entityRefs": [
+                {
+                  "entityId": "unit/869"
+                }
+              ],
+              "attribute": "生命值",
+              "before": 70,
+              "after": 75,
+              "delta": null,
+              "unit": "HP",
+              "operation": "set",
+              "text": "马扎尔骠骑生命值从70上调到了75",
+              "conditions": [],
+              "scope": null
             }
           ]
         }
@@ -42548,19 +42592,21 @@
             {
               "entityRefs": [
                 {
-                  "unresolvedName": "爪刀勇士和精锐爪刀勇士",
-                  "type": null
+                  "entityId": "unit/1123"
+                },
+                {
+                  "entityId": "unit/1125"
                 }
               ],
               "text": "爪刀勇士和精锐爪刀勇士的训练食物成本",
               "conditions": [],
               "scope": null,
               "type": "numeric",
-              "attribute": "训练食物成本",
-              "before": 30.0,
-              "after": 25.0,
+              "attribute": "食物成本",
+              "before": 30,
+              "after": 25,
               "delta": null,
-              "unit": null,
+              "unit": "食物",
               "operation": "set",
               "id": "cl-se-8c92eed8-cac7-4890-9208-21ad34869130-effect-1"
             },
@@ -47788,8 +47834,10 @@
             {
               "entityRefs": [
                 {
-                  "unresolvedName": "战象、精锐战象",
-                  "type": null
+                  "entityId": "unit/239"
+                },
+                {
+                  "entityId": "unit/558"
                 }
               ],
               "text": "战象、精锐战象的训练时间",
@@ -47797,8 +47845,8 @@
               "scope": null,
               "type": "numeric",
               "attribute": "训练时间",
-              "before": 31.0,
-              "after": 25.0,
+              "before": 31,
+              "after": 25,
               "delta": null,
               "unit": "秒",
               "operation": "set",
@@ -53402,19 +53450,25 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-883a3b65-927f-4eb6-827c-d03808825bed-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "unresolvedName": "狂热行为",
-                  "type": null
+                  "unresolvedName": "骆驼单位",
+                  "type": "unit"
                 }
               ],
+              "attribute": "生命值加成",
+              "before": 30,
+              "after": 20,
+              "delta": null,
+              "unit": "HP",
+              "operation": "set",
               "text": "现在为骆驼单位增加20生命值；此前是30",
-              "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-883a3b65-927f-4eb6-827c-d03808825bed-effect-1"
+              "conditions": [
+                "狂热行为科技效果"
+              ],
+              "scope": null
             },
             {
               "type": "numeric",
@@ -56040,11 +56094,19 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
                   "entityId": "tech/756"
                 }
               ],
+              "attribute": "生产量",
+              "before": 7,
+              "after": 5,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
               "text": "生产量从7下调到了5",
               "conditions": [],
               "scope": {
@@ -56055,11 +56117,7 @@
                 ],
                 "beneficiary": "self",
                 "conditions": []
-              },
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1-effect-1"
+              }
             },
             {
               "type": "numeric",
@@ -57665,8 +57723,10 @@
             {
               "entityRefs": [
                 {
-                  "unresolvedName": "贵族铁骑和精锐贵族铁骑",
-                  "type": null
+                  "entityId": "unit/876"
+                },
+                {
+                  "entityId": "unit/878"
                 }
               ],
               "text": "贵族铁骑和精锐贵族铁骑移动速度",
@@ -60005,25 +60065,29 @@
               "type": "numeric",
               "attribute": "爆炸半径",
               "before": 1.5,
-              "after": 2.0,
+              "after": 2,
               "delta": null,
               "unit": null,
               "operation": "set",
               "id": "cl-se-95611fa0-6d16-4231-b160-8c622495e74f-effect-1"
             },
             {
+              "id": "cl-se-95611fa0-6d16-4231-b160-8c622495e74f-effect-2",
+              "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "civ/Tatars"
+                  "entityId": "unit/1263"
                 }
               ],
-              "text": "火焰骆驼对战象的加成由80点提升到130点，爆炸半径从1.5提升到2",
+              "attribute": "对战象加成",
+              "before": 80,
+              "after": 130,
+              "delta": null,
+              "unit": "点",
+              "operation": "set",
+              "text": "火焰骆驼对战象的加成由80点提升到130点",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-95611fa0-6d16-4231-b160-8c622495e74f-effect-2"
+              "scope": null
             }
           ]
         }
@@ -66937,6 +67001,9 @@
             {
               "entityRefs": [
                 {
+                  "entityId": "unit/692"
+                },
+                {
                   "entityId": "unit/694"
                 }
               ],
@@ -66952,35 +67019,13 @@
                 "conditions": []
               },
               "type": "numeric",
-              "attribute": "狂战士和的生命值恢复量",
-              "before": 20.0,
-              "after": 40.0,
+              "attribute": "生命值恢复量",
+              "before": 20,
+              "after": 40,
               "delta": null,
               "unit": null,
               "operation": "set",
               "id": "cl-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0-effect-1"
-            },
-            {
-              "entityRefs": [
-                {
-                  "entityId": "civ/Vikings"
-                }
-              ],
-              "text": "狂战士和精锐狂战士的生命值恢复量从20上调到40",
-              "conditions": [],
-              "scope": {
-                "scopeKind": "civ",
-                "providerCivIds": [],
-                "affectedCivIds": [
-                  "Vikings"
-                ],
-                "beneficiary": "self",
-                "conditions": []
-              },
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0-effect-2"
             }
           ]
         }
@@ -67826,18 +67871,22 @@
           "legacyKeys": [],
           "effects": [
             {
+              "id": "cl-se-940b9170-f212-467b-9694-38716c99d9f9-effect-1",
+              "type": "numeric",
               "entityRefs": [
                 {
                   "entityId": "tech/1061"
                 }
               ],
+              "attribute": "效率",
+              "before": 1.2,
+              "after": 1.8,
+              "delta": null,
+              "unit": "食物/分钟",
+              "operation": "set",
               "text": "屯田科技效率从1.2食物每分钟上调到1.8食物每分钟",
               "conditions": [],
-              "scope": null,
-              "type": "mechanic",
-              "legacyBefore": null,
-              "legacyAfter": null,
-              "id": "cl-se-940b9170-f212-467b-9694-38716c99d9f9-effect-1"
+              "scope": null
             },
             {
               "type": "numeric",

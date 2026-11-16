@@ -3,6 +3,8 @@ import copy
 import importlib.util
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 import unittest
@@ -149,6 +151,68 @@ class CivHistoryTests(unittest.TestCase):
         self.assertEqual([(f['entityRefs'][0]['entityId'], f['before'], f['after']) for f in elephants if f['type'] == 'numeric'], [('unit/1132', 7, 4), ('unit/1134', 10, 7)])
         self.assertEqual(len([f for f in elephants if f['type'] == 'mechanic' and '碰撞体积' in f['text']]), 1)
 
+    def test_shared_berserker_targets_and_unspecified_goth_discount_resource(self):
+        berserk = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-8321b7f4'))
+        effect = berserk['claims'][0]['effects'][0]
+        self.assertEqual(effect['entityRefs'], [{'entityId': 'unit/692'}, {'entityId': 'unit/694'}])
+        self.assertEqual((effect['attribute'], effect['before'], effect['after'], effect['unit']), ('生命值恢复量', 20, 40, None))
+        goths = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-725580de'))
+        discounts = [f for f in goths['claims'][0]['effects'] if f['type'] == 'numeric']
+        self.assertEqual([(f['before'], f['after'], f['unit'], f['conditions']) for f in discounts], [(None, 10, '%', ['封建时代']), (None, 15, '%', ['城堡时代']), (None, 25, '%', ['帝王时代'])])
+        self.assertTrue(all(f['attribute'] == '训练成本折扣率' and f['entityRefs'] == [{'unresolvedName': '步兵', 'type': 'unit'}] for f in discounts))
+
+    def test_other_explicit_values_in_compound_source_claims_are_numeric(self):
+        cases = [
+            ('5a574943', '食物成本', 60, 70, '食物', [{'entityId': 'unit/879'}]),
+            ('940b9170', '效率', 1.2, 1.8, '食物/分钟', [{'entityId': 'tech/1061'}]),
+            ('d81f1c94', '生产量', 7, 5, None, [{'entityId': 'tech/756'}]),
+            ('fdf0ba33', '远程护甲加成', 1, 2, None, [{'unresolvedName': '长枪兵', 'type': 'unit'}, {'unresolvedName': '投矛手', 'type': 'unit'}]),
+        ]
+        for prefix, attribute, before, after, unit, refs in cases:
+            with self.subTest(prefix=prefix):
+                event = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-' + prefix))
+                claim = next(c for c in event['claims'] if c['id'].startswith('cl-se-'))
+                effect = next(f for f in claim['effects'] if f.get('attribute') == attribute)
+                self.assertEqual((effect['type'], effect['before'], effect['after'], effect['unit'], effect['entityRefs']), ('numeric', before, after, unit, refs))
+                self.assertEqual(claim['verification'], 'unverified')
+                self.assertEqual((effect['scope'] or event['scope'])['affectedCivIds'], event['scope']['affectedCivIds'])
+                if prefix == 'd81f1c94':
+                    self.assertNotIn('城镇中心', effect['text'])
+                    self.assertEqual(effect['conditions'], [])
+        inca = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-5a574943'))
+        discounts = [f for f in inca['claims'][0]['effects'] if f.get('attribute') == '食物折扣率']
+        self.assertEqual([(f['before'], f['after']) for f in discounts], [(5, 15), (10, 20), (15, 25), (20, 30)])
+        self.assertTrue(all('未注明' in f['conditions'][0] for f in discounts))
+
+    def test_bounded_related_multi_object_and_compound_changes(self):
+        def effects(prefix):
+            return next(e for e in self.payload['events'] if e['id'].startswith('ev-se-' + prefix))['claims'][0]['effects']
+        for prefix, attribute, ids, values in [
+            ('8c92eed8', '食物成本', ['unit/1123', 'unit/1125'], (30, 25)),
+            ('c59f126b', '训练时间', ['unit/239', 'unit/558'], (31, 25)),
+            ('8d25eadb', '移动速度', ['unit/876', 'unit/878'], (1.4, 1.3)),
+            ('220fafb8', '重型攻城器护甲', ['unit/1120', 'unit/1122'], (20, 10)),
+        ]:
+            with self.subTest(prefix=prefix):
+                effect = next(f for f in effects(prefix) if f.get('attribute') == attribute)
+                self.assertEqual(effect['entityRefs'], [{'entityId': identity} for identity in ids])
+                self.assertEqual((effect['before'], effect['after']), values)
+        for prefix, attribute, values, refs in [
+            ('32192b74', '远程护甲', (0, 1), [{'unresolvedName': '印度剑客', 'type': 'unit'}]),
+            ('30a6793e', '生命值', (70, 75), [{'entityId': 'unit/869'}]),
+            ('95611fa0', '对战象加成', (80, 130), [{'entityId': 'unit/1263'}]),
+            ('883a3b65', '生命值加成', (30, 20), [{'unresolvedName': '骆驼单位', 'type': 'unit'}]),
+        ]:
+            with self.subTest(prefix=prefix):
+                effect = next(f for f in effects(prefix) if f.get('attribute') == attribute)
+                self.assertEqual((effect['before'], effect['after']), values)
+                self.assertEqual(effect['entityRefs'], refs)
+        india = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-32192b74'))
+        self.assertIsNone(india['versionId'])
+        formula = next(f for f in effects('30a6793e') if f['type'] == 'mechanic')
+        self.assertEqual(formula['entityRefs'], [{'unresolvedName': '雇佣军', 'type': 'tech'}])
+        self.assertIn('黄金成本用食物代替', formula['text'])
+
     def test_deduplication_preserves_claim_ids_and_does_not_absorb_other_candidates(self):
         mappings = {m['key']: m for m in self.payload['legacyMap']}
         events = {e['id']: e for e in self.payload['events']}
@@ -222,6 +286,67 @@ class CivHistoryTests(unittest.TestCase):
         self.assertIsNone(cost['黄金']['after'])
         bad_names = {'效果', 'O', '0', '射程', '生命值', '训练时间', '近战护甲', '攻击力', '远程防御'}
         self.assertFalse(any(ref.get('unresolvedName') in bad_names for event in events.values() for claim in event['claims'] for effect in claim['effects'] if effect['type'] in ['numeric', 'bonus'] for ref in effect['entityRefs']))
+
+    def test_legacy_effect_scope_is_bounded_by_old_projections_in_real_cli(self):
+        # Unlike build(root) below, launch the actual script/main and --check.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(ROOT / build.INPUT, root / build.INPUT)
+            shutil.copytree(ROOT / 'data/game/patches', root / 'data/game/patches')
+            for relative in [
+                *[f'data/game/{name}.json' for name in ['civs', 'units', 'buildings', 'techs']],
+                'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json',
+                'scripts/civ_history_build.py', 'scripts/civ_history_validate.mjs',
+                'scripts/content-schema.mjs', 'scripts/content-baseline.mjs',
+                'scripts/content-schema-catalog.mjs', 'src/content/schema/policy.mjs',
+            ]:
+                (root / relative).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / relative, root / relative)
+            (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
+
+            def cli(*args):
+                return subprocess.run([sys.executable, str(root / 'scripts/civ_history_build.py'), *args], cwd=root, capture_output=True, text=True, timeout=60)
+
+            for args in [(), ('--check',)]:
+                result = cli(*args)
+                self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json.loads((root / build.OUTPUT).read_text())
+            medical = next(e for e in payload['events'] if e['id'].startswith('ev-se-86e20f2d'))
+            medical_claim = next(c for c in medical['claims'] if '81058:81058-61' in c['legacyKeys'])
+            self.assertEqual(medical_claim['effects'][0]['scope']['affectedCivIds'], ['Dravidians'])
+            team = next(e for e in payload['events'] if e['id'].startswith('ev-se-f62ee4b7'))
+            self.assertTrue(all(f['scope']['providerCivIds'] == ['Incas'] and f['scope']['beneficiary'] == 'team' for c in team['claims'] if c['legacyKeys'] for f in c['effects']))
+
+            path = root / build.INPUT / 'legacy-map.json'
+            original = json.loads(path.read_text())
+            # Explicit scopes may include every civilization the original record
+            # actually projected to; they need not be restricted to one civ.
+            supported = copy.deepcopy(original)
+            mapping = next(m for m in supported['entries'] if len(m['projections']) > 1)
+            old = next(m for m in payload['legacyMap'] if m['key'] == mapping['key'])
+            claim = next(c for e in payload['events'] for c in e['claims'] if c['id'] == old['claimId'])
+            effect = copy.deepcopy(next(f for f in claim['effects'] if f['id'] == 'ef-legacy-' + old['entryId']))
+            effect['scope']['affectedCivIds'] = [p['civId'] for p in mapping['projections']]
+            mapping['effects'] = [effect]
+            path.write_text(build.encode(supported))
+            for args in [(), ('--check',)]:
+                result = cli(*args)
+                self.assertEqual(result.returncode, 0, result.stderr)
+            outputs = {relative: (root / relative).read_bytes() for relative in [build.OUTPUT, build.AUDIT, build.REPORT]}
+
+            for field in ['affectedCivIds', 'providerCivIds']:
+                with self.subTest(field=field):
+                    changed = copy.deepcopy(original)
+                    mapping = next(m for m in changed['entries'] if m['key'] == '81058:81058-61')
+                    scope = copy.deepcopy(mapping['scope'])
+                    scope[field] = ['Saracens']
+                    mapping['effects'][0]['scope'] = scope
+                    path.write_text(build.encode(changed))
+                    for args in [(), ('--check',)]:
+                        result = cli(*args)
+                        self.assertNotEqual(result.returncode, 0, result.stdout)
+                        self.assertIn('Legacy scope cannot introduce an unsupported civilization', result.stderr)
+                        self.assertEqual({relative: (root / relative).read_bytes() for relative in outputs}, outputs)
 
     def test_real_build_rejects_bad_candidates_links_catalog_targets_and_build_keys(self):
         # Use real files/load_inputs/build/schema calls, without mocking assembly.

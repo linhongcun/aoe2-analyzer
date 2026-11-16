@@ -2065,6 +2065,39 @@
       "status": "current",
       "linkPath": "/tech/1061",
       "identityNote": "对象依据指定原文及旧档案的显式身份对应；当前目录仅核对名称、ID及链接，不用于推断历史数值。"
+    },
+    {
+      "id": "unit/1123",
+      "type": "unit",
+      "catalogId": "1123",
+      "nameZh": "爪刀勇士",
+      "nameEn": "Karambit Warrior",
+      "aliases": [],
+      "status": "current",
+      "linkPath": "/unit/1123",
+      "identityNote": "来源显式普通/精锐名称与固定目录一致；仅用于身份链接，不从当前目录补历史数值。"
+    },
+    {
+      "id": "unit/1125",
+      "type": "unit",
+      "catalogId": "1125",
+      "nameZh": "精锐爪刀勇士",
+      "nameEn": "Elite Karambit Warrior",
+      "aliases": [],
+      "status": "current",
+      "linkPath": "/unit/1125",
+      "identityNote": "来源显式普通/精锐名称与固定目录一致；仅用于身份链接，不从当前目录补历史数值。"
+    },
+    {
+      "id": "unit/878",
+      "type": "unit",
+      "catalogId": "878",
+      "nameZh": "精锐贵族铁骑",
+      "nameEn": "Elite Boyar",
+      "aliases": [],
+      "status": "current",
+      "linkPath": "/unit/878",
+      "identityNote": "来源显式普通/精锐名称与固定目录一致；仅用于身份链接，不从当前目录补历史数值。"
     }
   ]
 }

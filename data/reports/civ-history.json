@@ -2646,10 +2646,10 @@
     }
   ],
   "effectTypes": {
-    "numeric": 563,
+    "numeric": 572,
     "availability": 113,
     "bonus": 12,
-    "mechanic": 1253,
+    "mechanic": 1244,
     "rename": 5,
     "lifecycle": 6
   }

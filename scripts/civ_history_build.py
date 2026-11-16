@@ -76,6 +76,11 @@ def legacy_projections(entry: dict[str, Any], civ_ids: list[str]) -> list[dict[s
     return result
 
 
+def require_legacy_scope(scope: dict[str, Any], projections: list[dict[str, str]]) -> None:
+    supported = {row['civId'] for row in projections}
+    require(all(civ in supported for civ in scope['providerCivIds'] + scope['affectedCivIds']), 'Legacy scope cannot introduce an unsupported civilization')
+
+
 def load_inputs(root: Path = ROOT) -> dict[str, Any]:
     documents = []
     loaded = {}
@@ -207,7 +212,7 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
             event = events[eid]
             require(event['versionId'] == 'de-' + patch['id'], f'{key}: cross-version merge is not allowed')
             if scope_override:
-                require(all(civ in [row['civId'] for row in projections] for civ in scope_override['providerCivIds'] + scope_override['affectedCivIds']), 'Legacy scope cannot introduce an unsupported civilization')
+                require_legacy_scope(scope_override, projections)
                 if not event['claims']:
                     event['scope'] = copy.deepcopy(scope_override)
             for projection in projections:
@@ -267,6 +272,7 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
                     effect['conditions'].append(entry['scopeNote'])
                 if effect['scope'] is None:
                     effect['scope'] = copy.deepcopy(scope_override) if scope_override else {'scopeKind': 'civ' if kind == 'civ' else 'unknown', 'providerCivIds': [], 'affectedCivIds': [projection['civId'] for projection in projections], 'beneficiary': 'unknown', 'conditions': []}
+                require_legacy_scope(effect['scope'], projections)
                 if entry.get('scopeNote') and entry['scopeNote'] not in effect['scope']['conditions']:
                     effect['scope']['conditions'].append(entry['scopeNote'])
             claim['effects'].extend(effects)
