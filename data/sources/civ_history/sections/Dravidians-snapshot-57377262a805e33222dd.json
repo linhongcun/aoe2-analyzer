@@ -1,0 +1,180 @@
+{
+  "civId": "Dravidians",
+  "sourceId": "seicing-dravidians",
+  "url": "https://seicing.com/html/aoe2/2/%E8%BE%BE%E7%BD%97%E6%AF%97%E8%8D%BC.html",
+  "indexLabel": "达罗毗荼Dravidians",
+  "title": "达罗毗荼",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-57377262a805e33222dd",
+  "documentSha256": "57377262a805e33222ddadb2161aa44535ad03fec82bb3a57d11b5feb7dfc5a3",
+  "capturedAt": "2026-11-16T11:42:55.101342+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-58797371-30ae-4c62-b3f6-00bfbcad6662",
+      "group": "印度王朝",
+      "locator": "#change li[1]",
+      "originalText": "作为印度王朝版本的三个新文明登场",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-58797371-30ae-4c62-b3f6-00bfbcad6662"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2d50da99-7f76-46b8-bcca-208adba18171",
+      "group": "印度王朝",
+      "locator": "#change li[2]",
+      "originalText": "66692版本后，可以生产手推炮",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2d50da99-7f76-46b8-bcca-208adba18171"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7266e26c-4680-48f4-8f44-9d96a8b34d8b",
+      "group": "印度王朝",
+      "locator": "#change li[3]",
+      "originalText": "81058版本后，获得攻城武器-33%木材成本加成",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7266e26c-4680-48f4-8f44-9d96a8b34d8b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-500556ab-f8e5-4fe8-b2e5-9864f9a81e01",
+      "group": "印度王朝",
+      "locator": "#change li[4]",
+      "originalText": "81058版本后，获得软甲",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-500556ab-f8e5-4fe8-b2e5-9864f9a81e01"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
+      "group": "印度王朝",
+      "locator": "#change li[5]",
+      "originalText": "81058版本后，医疗团队成本从350肉250金下调到300肉200金，效果从20上调到30",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-79bcf960-0843-4f7a-9bc8-35c59fc00a94",
+      "group": "成王败寇",
+      "locator": "#change li[6]",
+      "originalText": "111772版本更新后，乌兹钢成本从750肉600金下调到650肉550金",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-79bcf960-0843-4f7a-9bc8-35c59fc00a94"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-96ac723e-23e7-49ca-b9b4-b59ea34cf030",
+      "group": "成王败寇",
+      "locator": "#change li[7]",
+      "originalText": "125283版本更新后，巨舰基础射程从6上调到了7",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-96ac723e-23e7-49ca-b9b4-b59ea34cf030"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca707694-8178-461f-899c-4ba8fa830ca7",
+      "group": "三国",
+      "locator": "#change li[8]",
+      "originalText": "141935版本更新后，印度剑客攻击力从8/10上调到9/11，移动速度从1.05上调到1.1",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca707694-8178-461f-899c-4ba8fa830ca7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a6dad71-fb09-43d8-84ce-c9782bfc4d7f",
+      "group": "三国",
+      "locator": "#change li[9]",
+      "originalText": "141935版本更新后，获得畜牧",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a6dad71-fb09-43d8-84ce-c9782bfc4d7f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-70b7c3fd-0222-4d70-bfa9-c2075b72caf3",
+      "group": "最后的酋长",
+      "locator": "#change li[10]",
+      "originalText": "169123版本更新后，巨舰属性重新平衡：攻击力9→10，远程护甲10→11，舰船护甲+8→+0，移动速度1.3→1.25，对建筑+9→+7，对舰船+9→+0，获得+7对远程舰船伤害",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-70b7c3fd-0222-4d70-bfa9-c2075b72caf3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-32192b74-a2c1-4c3b-8d1b-7ff51d9cb756",
+      "group": "维京传奇",
+      "locator": "#change li[11]",
+      "originalText": "【待补充】版本补丁后，印度剑客生命值从55/65上调到60/70，远程护甲从0上调到了1",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-32192b74-a2c1-4c3b-8d1b-7ff51d9cb756"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    印度王朝\n    \n        作为印度王朝版本的三个新文明登场\n        66692版本后，可以生产手推炮\n        81058版本后，获得攻城武器-33%木材成本加成\n        81058版本后，获得软甲\n        81058版本后，医疗团队成本从350肉250金下调到300肉200金，效果从20上调到30\n    \n\n    成王败寇\n    \n        111772版本更新后，乌兹钢成本从750肉600金下调到650肉550金\n        125283版本更新后，巨舰基础射程从6上调到了7\n    \n\n    三国\n    \n        141935版本更新后，印度剑客攻击力从8/10上调到9/11，移动速度从1.05上调到1.1\n        141935版本更新后，获得畜牧\n    \n\n    最后的酋长\n    \n        169123版本更新后，巨舰属性重新平衡：攻击力9→10，远程护甲10→11，舰船护甲+8→+0，移动速度1.3→1.25，对建筑+9→+7，对舰船+9→+0，获得+7对远程舰船伤害\n    \n\n\n\n    维京传奇\n    \n        【待补充】版本补丁后，印度剑客生命值从55/65上调到60/70，远程护甲从0上调到了1",
+  "sectionTextSha256": "91434484b7a01e183ecbf11fcd17caa0632264ddb736995d9c02f558211733e9",
+  "observedEntryCount": 11,
+  "supersedesRevisionId": null
+}

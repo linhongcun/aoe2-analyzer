@@ -1,0 +1,64 @@
+{
+  "civId": "Tupi",
+  "sourceId": "seicing-tupi",
+  "url": "https://seicing.com/html/aoe2/2/%E5%9B%BE%E7%9A%AE.html",
+  "indexLabel": "图皮Tupi",
+  "title": "图皮",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-43858b22458ae91a247d",
+  "documentSha256": "43858b22458ae91a247db688ee9c4fd3b314afc8f5d798b5eb9146b0eb7dc751",
+  "capturedAt": "2026-11-16T11:47:52.757550+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-5b9fe660-ca46-4632-b476-f1115be98168",
+      "group": "最后的酋长",
+      "locator": "#change li[1]",
+      "originalText": "170934版本更新后，黑檀木步弓手的箭毒伤害从3点下调到2点",
+      "rawVersions": [
+        "170934"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5b9fe660-ca46-4632-b476-f1115be98168"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-46aa82ad-698b-48bd-bc1f-85a62064e851",
+      "group": "最后的酋长",
+      "locator": "#change li[2]",
+      "originalText": "177723版本更新后，黑檀木步弓手训练时间从14秒上调到18秒，精锐黑檀木步弓手训练时间不变",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-46aa82ad-698b-48bd-bc1f-85a62064e851"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e179f9cd-d6a7-4415-a0e4-35c993661315",
+      "group": "维京传奇",
+      "locator": "#change li[3]",
+      "originalText": "185872版本补丁后，黑檀木步弓手成本从35木45金上调到40木45金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e179f9cd-d6a7-4415-a0e4-35c993661315"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    最后的酋长\n    \n        170934版本更新后，黑檀木步弓手的箭毒伤害从3点下调到2点\n        177723版本更新后，黑檀木步弓手训练时间从14秒上调到18秒，精锐黑檀木步弓手训练时间不变\n    \n\n    维京传奇\n    \n        185872版本补丁后，黑檀木步弓手成本从35木45金上调到40木45金",
+  "sectionTextSha256": "933731e7d671412b1956c469496be1e5193cf5d5a64968af814b278b7304af1e",
+  "observedEntryCount": 3,
+  "supersedesRevisionId": null
+}

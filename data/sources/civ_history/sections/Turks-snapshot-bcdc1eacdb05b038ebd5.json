@@ -1,0 +1,297 @@
+{
+  "civId": "Turks",
+  "sourceId": "seicing-turks",
+  "url": "https://seicing.com/html/aoe2/2/%E5%9C%9F%E8%80%B3%E5%85%B6.html",
+  "indexLabel": "土耳其Turks",
+  "title": "土耳其",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-bcdc1eacdb05b038ebd5",
+  "documentSha256": "bcdc1eacdb05b038ebd5baa339bb0866709367703a4394161ade028e4b2af62d",
+  "capturedAt": "2026-11-16T11:47:58.909487+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-3ea1b63d-c741-4113-8dad-2a988c91e64c",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "火药部队+50%HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3ea1b63d-c741-4113-8dad-2a988c91e64c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6a41c7cd-15ae-4bc9-a398-e0747316e5c2",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "金矿工工作速度+15%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6a41c7cd-15ae-4bc9-a398-e0747316e5c2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5312c141-9e31-4780-85b7-544e21c712c7",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "苏丹亲兵有15攻击力，精锐苏丹亲兵有18攻击力，苏丹亲兵对步兵有4点攻击加成，精锐苏丹亲兵对建筑物有3点攻击加成，对步兵有8点攻击加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5312c141-9e31-4780-85b7-544e21c712c7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b332d9d8-b987-4217-bab8-785e682267e7",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "苏丹亲兵命中率是55%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b332d9d8-b987-4217-bab8-785e682267e7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d66f396-8a9c-4ba8-a167-18d23927a3a7",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "土耳其的团队奖励不适用于精锐苏丹亲兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d66f396-8a9c-4ba8-a167-18d23927a3a7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-618f031a-ba04-4526-a43d-858ea5617c3f",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "火药部队+25%HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-618f031a-ba04-4526-a43d-858ea5617c3f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fc1a1417-7473-4c98-a1b7-473a502e5af6",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "火炮术科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fc1a1417-7473-4c98-a1b7-473a502e5af6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d09bd83e-916c-4f0c-a09c-6f2d4e6b2497",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "苏丹亲兵有17攻击力，精锐苏丹亲兵有22攻击力，但失去对步兵和建筑物的加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d09bd83e-916c-4f0c-a09c-6f2d4e6b2497"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-57997dd8-d46c-4c9c-8396-8f224dcdea29",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "苏丹亲兵命中率是50%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-57997dd8-d46c-4c9c-8396-8f224dcdea29"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-691e42d6-35d9-4e89-b269-0a4ca0e721d5",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "突厥骑射科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-691e42d6-35d9-4e89-b269-0a4ca0e721d5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-35059be3-2c29-47b2-a25b-ad5df6c75801",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "土耳其的团队奖励现在适用于精锐苏丹亲兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-35059be3-2c29-47b2-a25b-ad5df6c75801"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-11e1e245-7d66-4b09-b2c2-c80f94183107",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "4.8补丁后，金矿工工作速度+20%",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-11e1e245-7d66-4b09-b2c2-c80f94183107"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8180bde1-a283-4a52-b711-b14de4a1be54",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "42848版本后，轻骑兵系列单位+1远程护甲",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8180bde1-a283-4a52-b711-b14de4a1be54"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b09d4b73-91ba-4f6c-9e58-c94eed025c36",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "42848版本后，精锐苏丹亲兵命中率从50%提升到65%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b09d4b73-91ba-4f6c-9e58-c94eed025c36"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5f735441-6e57-4edb-bf81-040bd42f0804",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "50292版本后，火炮术的石头成本被木材取代，现在研发火炮术需要500黄金和450木材",
+      "rawVersions": [
+        "50292"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5f735441-6e57-4edb-bf81-040bd42f0804"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1d7c6b1b-784a-45ad-ab70-8af7e4e13844",
+      "group": "公爵的崛起",
+      "locator": "#change li[16]",
+      "originalText": "51737更新中，苏丹亲兵子弹速度从5.5提升到7.5",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1d7c6b1b-784a-45ad-ab70-8af7e4e13844"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ecff8228-8cdd-4272-8a8b-f84f034c8a91",
+      "group": "印度王朝",
+      "locator": "#change li[17]",
+      "originalText": "81058版本后，火炮术价格从450木500金调整为600肉650金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-18d86f48-80b8-404e-a959-538d922b1a8e",
+      "group": "罗马归来",
+      "locator": "#change li[18]",
+      "originalText": "87863版本后，苏丹亲兵(非精锐)射程从8下调到7",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-18d86f48-80b8-404e-a959-538d922b1a8e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8de1aa9c-9be2-4fbd-8a5a-dcf12c1c6331",
+      "group": "成王败寇",
+      "locator": "#change li[19]",
+      "originalText": "125283版本更新后，银冠科技“突厥骑射”更改名称为“西帕希骑兵”",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8de1aa9c-9be2-4fbd-8a5a-dcf12c1c6331"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1431cd95-4fde-4fd7-ba03-02acc9a6452a",
+      "group": "三国",
+      "locator": "#change li[20]",
+      "originalText": "162286版本更新后，黄金矿工工作效率加成率从20%上调到25%",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1431cd95-4fde-4fd7-ba03-02acc9a6452a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        火药部队+50%HP\n        金矿工工作速度+15%\n        苏丹亲兵有15攻击力，精锐苏丹亲兵有18攻击力，苏丹亲兵对步兵有4点攻击加成，精锐苏丹亲兵对建筑物有3点攻击加成，对步兵有8点攻击加成\n        苏丹亲兵命中率是55%\n        土耳其的团队奖励不适用于精锐苏丹亲兵\n    \n\n    征服者\n    \n        火药部队+25%HP\n        火炮术科技加入\n        苏丹亲兵有17攻击力，精锐苏丹亲兵有22攻击力，但失去对步兵和建筑物的加成\n        苏丹亲兵命中率是50%\n    \n\n    失落帝国\n    \n        突厥骑射科技加入\n        土耳其的团队奖励现在适用于精锐苏丹亲兵\n    \n\n    非洲王国\n    \n        4.8补丁后，金矿工工作速度+20%\n    \n\n    最后的可汗\n    \n        42848版本后，轻骑兵系列单位+1远程护甲\n        42848版本后，精锐苏丹亲兵命中率从50%提升到65%\n        50292版本后，火炮术的石头成本被木材取代，现在研发火炮术需要500黄金和450木材\n    \n\n    公爵的崛起\n    \n        51737更新中，苏丹亲兵子弹速度从5.5提升到7.5\n    \n\n    印度王朝\n    \n        81058版本后，火炮术价格从450木500金调整为600肉650金\n    \n\n    \n        罗马归来\n    \n    \n        87863版本后，苏丹亲兵(非精锐)射程从8下调到7\n    \n\n    成王败寇\n    \n        125283版本更新后，银冠科技“突厥骑射”更改名称为“西帕希骑兵”\n    \n\n    三国\n    \n        162286版本更新后，黄金矿工工作效率加成率从20%上调到25%",
+  "sectionTextSha256": "6965e18171a8bf4602cba299f18b54f04e985af1d6d5bb490801fdf7c5e9f1e9",
+  "observedEntryCount": 20,
+  "supersedesRevisionId": null
+}

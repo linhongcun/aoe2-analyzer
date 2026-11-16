@@ -1,0 +1,212 @@
+{
+  "civId": "Gurjaras",
+  "sourceId": "seicing-gurjaras",
+  "url": "https://seicing.com/html/aoe2/2/%E7%9E%BF%E6%8A%98%E7%BD%97.html",
+  "indexLabel": "瞿折罗Gurjaras",
+  "title": "瞿折罗",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-3acd5a7f426672af3e8c",
+  "documentSha256": "3acd5a7f426672af3e8c351acea71664544d77572b1b65968d50f43f263e9b38",
+  "capturedAt": "2026-11-16T11:43:31.748171+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-0f4bf915-84fe-488b-9b61-234c52aa97f7",
+      "group": "印度王朝",
+      "locator": "#change li[1]",
+      "originalText": "作为印度王朝版本的三个新文明登场",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0f4bf915-84fe-488b-9b61-234c52aa97f7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f04bcf1d-c1f6-410a-98ce-1ac8989187ef",
+      "group": "印度王朝",
+      "locator": "#change li[2]",
+      "originalText": "66692版本后，精锐施里瓦姆沙骑手的躲避条蓄力时间从15秒上调到20秒",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f04bcf1d-c1f6-410a-98ce-1ac8989187ef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fc57e00d-29f1-4ca3-8f7a-7b9482400c9a",
+      "group": "印度王朝",
+      "locator": "#change li[3]",
+      "originalText": "66692版本后，骑乘部队造成的额外伤害加成从50%下调到了40%",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fc57e00d-29f1-4ca3-8f7a-7b9482400c9a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b8f6361f-b795-4013-b037-e2affa98188a",
+      "group": "印度王朝",
+      "locator": "#change li[4]",
+      "originalText": "66692版本后，驻扎到磨坊的动物食物收入现在使用非线性计算",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b8f6361f-b795-4013-b037-e2affa98188a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-87d237a1-5d1f-490e-9cbb-93f2e30f9067",
+      "group": "印度王朝",
+      "locator": "#change li[5]",
+      "originalText": "73855版本后，\"骑乘部队造成的额外伤害+40%\"文明加成修改成“骑乘部队造成的额外伤害在封建时代/城堡时代/帝王时代+20%/30%/40%”",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-87d237a1-5d1f-490e-9cbb-93f2e30f9067"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6587e2ed-bbf4-41f1-bbf6-2c8f6b453e95",
+      "group": "印度王朝",
+      "locator": "#change li[6]",
+      "originalText": "73855版本后，飞轮刃投掷手/精锐飞轮刃投掷手伤害从5/6下调到3/4，贯穿伤害从50%上调到100%，精锐飞轮刃投掷手获得+1对步兵额外伤害",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6587e2ed-bbf4-41f1-bbf6-2c8f6b453e95"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3206baa1-2838-4555-bed8-ba852a191a01",
+      "group": "印度王朝",
+      "locator": "#change li[7]",
+      "originalText": "78174版本后，精锐飞轮刃投掷手对意大利佣兵+1额外伤害",
+      "rawVersions": [
+        "78174"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3206baa1-2838-4555-bed8-ba852a191a01"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-34848776-53cb-493c-88c5-b913b077f2ca",
+      "group": "印度王朝",
+      "locator": "#change li[8]",
+      "originalText": "81058版本后，刹帝利科技价格从200肉400金上调到500肉450金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-34848776-53cb-493c-88c5-b913b077f2ca"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "group": "印度王朝",
+      "locator": "#change li[9]",
+      "originalText": "81058版本后，施里瓦姆沙骑手黄金成本从20金上调到30金，攻击间隔时间从1.75上调到2.0",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b678da45-ff2d-4c82-acd9-d32970d5eb29",
+      "group": "三国",
+      "locator": "#change li[10]",
+      "originalText": "151401版本更新后，起始果丛食物量加成从125上调到175",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b678da45-ff2d-4c82-acd9-d32970d5eb29"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-17eca076-e4b2-48e5-a649-289f826d87dd",
+      "group": "三国",
+      "locator": "#change li[11]",
+      "originalText": "151401版本更新后，骆驼斥候训练时间从48秒下调到22秒，到达封建时代时攻击力从4上调到5",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-17eca076-e4b2-48e5-a649-289f826d87dd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-86984189-00d3-418b-8c77-e9755e9b5548",
+      "group": "最后的酋长",
+      "locator": "#change li[12]",
+      "originalText": "169123版本更新后，船坞驻扎渔船加成更变为船坞可驻扎渔船数量+5",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-86984189-00d3-418b-8c77-e9755e9b5548"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-83924a0f-ecec-4f4a-916c-e0d0a6d42c97",
+      "group": "维京传奇",
+      "locator": "#change li[13]",
+      "originalText": "185872版本补丁后，船坞+5容量加成删除",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-83924a0f-ecec-4f4a-916c-e0d0a6d42c97"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    印度王朝\n    \n        作为印度王朝版本的三个新文明登场\n        66692版本后，精锐施里瓦姆沙骑手的躲避条蓄力时间从15秒上调到20秒\n        66692版本后，骑乘部队造成的额外伤害加成从50%下调到了40%\n        66692版本后，驻扎到磨坊的动物食物收入现在使用非线性计算\n        73855版本后，\"骑乘部队造成的额外伤害+40%\"文明加成修改成“骑乘部队造成的额外伤害在封建时代/城堡时代/帝王时代+20%/30%/40%”\n        73855版本后，飞轮刃投掷手/精锐飞轮刃投掷手伤害从5/6下调到3/4，贯穿伤害从50%上调到100%，精锐飞轮刃投掷手获得+1对步兵额外伤害\n        78174版本后，精锐飞轮刃投掷手对意大利佣兵+1额外伤害\n        81058版本后，刹帝利科技价格从200肉400金上调到500肉450金\n        81058版本后，施里瓦姆沙骑手黄金成本从20金上调到30金，攻击间隔时间从1.75上调到2.0\n    \n\n    三国\n    \n        151401版本更新后，起始果丛食物量加成从125上调到175\n        151401版本更新后，骆驼斥候训练时间从48秒下调到22秒，到达封建时代时攻击力从4上调到5\n    \n\n    最后的酋长\n    \n        169123版本更新后，船坞驻扎渔船加成更变为船坞可驻扎渔船数量+5\n    \n\n\n\n    维京传奇\n    \n        185872版本补丁后，船坞+5容量加成删除",
+  "sectionTextSha256": "cda6a204d23c6ec46fc2f392d253cd396f118bc3ce764ac5581ceafeea244d0c",
+  "observedEntryCount": 13,
+  "supersedesRevisionId": null
+}

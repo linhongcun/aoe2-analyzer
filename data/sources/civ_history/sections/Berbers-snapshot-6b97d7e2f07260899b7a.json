@@ -1,0 +1,277 @@
+{
+  "civId": "Berbers",
+  "sourceId": "seicing-berbers",
+  "url": "https://seicing.com/html/aoe2/2/%E6%9F%8F%E6%9F%8F%E5%B0%94.html",
+  "indexLabel": "柏柏尔Berbers",
+  "title": "柏柏尔",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-6b97d7e2f07260899b7a",
+  "documentSha256": "6b97d7e2f07260899b7a3a5679d3d1ed9ff2c12c6a58edb17dc19d8c4db78513",
+  "capturedAt": "2026-11-16T11:40:56.590957+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-f7ae0fe0-5104-4e40-91c8-9c354bd29ea8",
+      "group": "非洲王国",
+      "locator": "#change li[1]",
+      "originalText": "骆驼射手对步兵有1点攻击加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f7ae0fe0-5104-4e40-91c8-9c354bd29ea8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a76c5d09-b411-4aab-b9ad-3a942bb9fc68",
+      "group": "非洲王国",
+      "locator": "#change li[2]",
+      "originalText": "贸易车队的贸易会减少少量黄金，抵消他们的速度奖励，让他们实际上和其他文明的贸易速度差不多",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a76c5d09-b411-4aab-b9ad-3a942bb9fc68"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-205d22f2-271a-40a9-a058-cf8fd9507e68",
+      "group": "非洲王国",
+      "locator": "#change li[3]",
+      "originalText": "骑兵部队在城堡时代-20%费用，4.8版本后在城堡/帝王时代-15%/-20%费用",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-205d22f2-271a-40a9-a058-cf8fd9507e68"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1d582b0c-4aeb-415d-8e0b-d5bf1c3af405",
+      "group": "非洲王国",
+      "locator": "#change li[4]",
+      "originalText": "无法研发射手环甲，4.8版本后可以研发",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1d582b0c-4aeb-415d-8e0b-d5bf1c3af405"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f0fada21-234f-4fdb-adad-acb5650e0ea0",
+      "group": "非洲王国",
+      "locator": "#change li[5]",
+      "originalText": "土堡不仅可以增加25%队友的城堡工作效率，自身也会增加25%效率(总计56.25%)，4.8版本后只会生效一次",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f0fada21-234f-4fdb-adad-acb5650e0ea0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5098ac64-6b24-420e-aadb-b54194974955",
+      "group": "非洲王国",
+      "locator": "#change li[6]",
+      "originalText": "非精锐标枪骑兵有4点攻击和3点射程，4.8版本后他们拥有3点攻击和4点射程",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5098ac64-6b24-420e-aadb-b54194974955"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-52a96dfe-141b-4098-b60e-87251f26a731",
+      "group": "非洲王国",
+      "locator": "#change li[7]",
+      "originalText": "骆驼射手/精锐骆驼射手拥有60/65HP，2点抵抗反骆驼攻击和反骑射手攻击的额外护甲，对冲车有2点伤害加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-52a96dfe-141b-4098-b60e-87251f26a731"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5a78f14f-a52d-4e9e-b1aa-6c1f7d79da09",
+      "group": "非洲王国",
+      "locator": "#change li[8]",
+      "originalText": "骆驼射手训练速度是21秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5a78f14f-a52d-4e9e-b1aa-6c1f7d79da09"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d10bccf6-5c07-4f6b-943f-ce071f5d8471",
+      "group": "蛮王崛起",
+      "locator": "#change li[9]",
+      "originalText": "5.3补丁后，骆驼射手不再对步兵有伤害加成",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d10bccf6-5c07-4f6b-943f-ce071f5d8471"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-241d9fad-6764-4660-b6d4-3c06581636cb",
+      "group": "蛮王崛起",
+      "locator": "#change li[10]",
+      "originalText": "5.7补丁后，骆驼射手/精锐骆驼射手拥有55/60HP，失去了抵抗反骆驼攻击和反骑射手攻击的额外护甲，失去对冲车的伤害加成",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-241d9fad-6764-4660-b6d4-3c06581636cb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8ed75512-4af0-4196-93d0-a4296b9164dd",
+      "group": "蛮王崛起",
+      "locator": "#change li[11]",
+      "originalText": "5.8补丁后骆驼射手训练速度是25秒",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8ed75512-4af0-4196-93d0-a4296b9164dd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d564c2c-2817-4a51-b7d2-8fdbc2be4d2f",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "标枪骑兵对长矛兵攻击+2",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d564c2c-2817-4a51-b7d2-8fdbc2be4d2f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ae680d13-ec06-4937-a77f-aed084185084",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "贸易车队的贸易不再减少少量黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ae680d13-ec06-4937-a77f-aed084185084"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d765d09e-458c-4e07-9d53-c33019343883",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "35584版本后，标枪骑兵获得+1远程护甲",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d765d09e-458c-4e07-9d53-c33019343883"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dee80ef2-577b-4ebe-8ff3-bf3ecc02686f",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "81058版本后，村民在黑暗时代移动速度+5%，在封建时代之后移动速度+10%，此前是全时代+10%",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dee80ef2-577b-4ebe-8ff3-bf3ecc02686f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d064d4bc-c45b-4362-9a57-557b1d7a7fc6",
+      "group": "皇家山脉",
+      "locator": "#change li[16]",
+      "originalText": "95810版本后，标枪骑兵对长矛兵伤害从+2上调到了+3",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d064d4bc-c45b-4362-9a57-557b1d7a7fc6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-aae5a9eb-4b4c-48e8-b01b-08b7d5ef14f5",
+      "group": "成王败寇",
+      "locator": "#change li[17]",
+      "originalText": "111772版本更新后，柏柏尔人获得造船匠",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aae5a9eb-4b4c-48e8-b01b-08b7d5ef14f5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6ef5ac1-b8e7-44ed-ab45-2b650118730e",
+      "group": "最后的酋长",
+      "locator": "#change li[18]",
+      "originalText": "169123版本更新后，标枪骑兵获得+2对马穆鲁克伤害",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6ef5ac1-b8e7-44ed-ab45-2b650118730e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    非洲王国\n    \n        骆驼射手对步兵有1点攻击加成\n        贸易车队的贸易会减少少量黄金，抵消他们的速度奖励，让他们实际上和其他文明的贸易速度差不多\n        骑兵部队在城堡时代-20%费用，4.8版本后在城堡/帝王时代-15%/-20%费用\n        无法研发射手环甲，4.8版本后可以研发\n        土堡不仅可以增加25%队友的城堡工作效率，自身也会增加25%效率(总计56.25%)，4.8版本后只会生效一次\n        非精锐标枪骑兵有4点攻击和3点射程，4.8版本后他们拥有3点攻击和4点射程\n        骆驼射手/精锐骆驼射手拥有60/65HP，2点抵抗反骆驼攻击和反骑射手攻击的额外护甲，对冲车有2点伤害加成\n        骆驼射手训练速度是21秒\n    \n\n    蛮王崛起\n    \n        5.3补丁后，骆驼射手不再对步兵有伤害加成\n        5.7补丁后，骆驼射手/精锐骆驼射手拥有55/60HP，失去了抵抗反骆驼攻击和反骑射手攻击的额外护甲，失去对冲车的伤害加成\n        5.8补丁后骆驼射手训练速度是25秒\n    \n\n    最后的可汗\n    \n        标枪骑兵对长矛兵攻击+2\n        贸易车队的贸易不再减少少量黄金\n        35584版本后，标枪骑兵获得+1远程护甲\n    \n\n    印度王朝\n    \n        81058版本后，村民在黑暗时代移动速度+5%，在封建时代之后移动速度+10%，此前是全时代+10%\n    \n\n    皇家山脉\n    \n        95810版本后，标枪骑兵对长矛兵伤害从+2上调到了+3\n    \n\n    成王败寇\n    \n        111772版本更新后，柏柏尔人获得造船匠\n    \n\n\n    最后的酋长\n    \n        169123版本更新后，标枪骑兵获得+2对马穆鲁克伤害",
+  "sectionTextSha256": "dc02db5832252a6daa6ac29a1f52fcf598f22a4a7ab67920e0cefb29f3ca86e6",
+  "observedEntryCount": 18,
+  "supersedesRevisionId": null
+}

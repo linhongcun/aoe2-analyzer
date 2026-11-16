@@ -1,0 +1,350 @@
+{
+  "civId": "Khmer",
+  "sourceId": "seicing-khmer",
+  "url": "https://seicing.com/html/aoe2/2/%E9%AB%98%E6%A3%89.html",
+  "indexLabel": "高棉Khmer",
+  "title": "高棉",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-1985b184e82d6f1e11a1",
+  "documentSha256": "1985b184e82d6f1e11a1a3edfa9b2a22e6c3969a65d0dad4377fe622590420d1",
+  "capturedAt": "2026-11-16T11:44:32.338811+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-7063e91c-838f-4ef0-871c-6331c49ff1ba",
+      "group": "蛮王崛起",
+      "locator": "#change li[1]",
+      "originalText": "无法训练轻骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7063e91c-838f-4ef0-871c-6331c49ff1ba"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f40e575f-dbdb-4d1d-9e22-8db690c4e59d",
+      "group": "蛮王崛起",
+      "locator": "#change li[2]",
+      "originalText": "可以研发造船匠",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f40e575f-dbdb-4d1d-9e22-8db690c4e59d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3f81fb01-fc25-49f8-889f-cd8f8df923d7",
+      "group": "蛮王崛起",
+      "locator": "#change li[3]",
+      "originalText": "无法训练弩兵，在5.8版本后才可以训练",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3f81fb01-fc25-49f8-889f-cd8f8df923d7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3a03b41e-e487-407e-8e69-97f0aec36eed",
+      "group": "蛮王崛起",
+      "locator": "#change li[4]",
+      "originalText": "无法研发信仰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3a03b41e-e487-407e-8e69-97f0aec36eed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ed12695f-669b-43d9-a193-1b2ef21a7a99",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "可以训练轻骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ed12695f-669b-43d9-a193-1b2ef21a7a99"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d6f55e7-f4eb-428c-8644-22bc303a5aec",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "无法研发造船匠",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d6f55e7-f4eb-428c-8644-22bc303a5aec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-28ef3b80-e65b-4e28-819d-0fe3b0309c40",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "可以研发信仰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-28ef3b80-e65b-4e28-819d-0fe3b0309c40"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2d6f2076-0549-4d04-849e-35f99f6ff165",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "高棉农民在耕作时不需要回到磨坊，而是以直接增加粮食的形式获取食物",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2d6f2076-0549-4d04-849e-35f99f6ff165"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7be8f34f-a919-40e8-88b9-af83764e6e97",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "35584版本后，高棉人在开启完整科技树的时候可以正确地取消掉耕作不需要回到磨坊的功能",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7be8f34f-a919-40e8-88b9-af83764e6e97"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9d3f6ece-6aa6-4b45-bed3-dcde467ba2a2",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "36906版本后，农民工作效率-3%",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9d3f6ece-6aa6-4b45-bed3-dcde467ba2a2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-78d77b56-09c4-4f0c-bca3-b9baccc2938e",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "36906版本后，不再可以研发手推炮",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-78d77b56-09c4-4f0c-bca3-b9baccc2938e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-75ba61cf-8cd6-44c8-85f3-528ba4fcc042",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3d82c46e-985b-4c40-907b-46549f115857",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "39284版本后，象兵的区域伤害从50%下调为25%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f297d284-7f61-4fa8-b24a-8165b5b19a1e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ed77a0bd-1c88-4e25-a48b-5076a339817d",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4dcf4df6-c08e-44b1-b68a-b45a1971762e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-360cd426-ca5d-4c00-a223-2e90d554c57e",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "42848版本后，农民工作效率-5%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-360cd426-ca5d-4c00-a223-2e90d554c57e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6f55d71-b589-4d84-b0ce-ee159ea05675",
+      "group": "最后的可汗",
+      "locator": "#change li[16]",
+      "originalText": "42848版本后，象兵的移动速度加成从+15%下调到+10%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6f55d71-b589-4d84-b0ce-ee159ea05675"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-33a0f85a-a939-4d19-aa40-03d4c1904deb",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "42848版本后，獠牙剑花费从200木300金提升到300木450金",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-33a0f85a-a939-4d19-aa40-03d4c1904deb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-050268e5-bcb6-4b02-a9b9-29cd843ee7a5",
+      "group": "西方霸主",
+      "locator": "#change li[18]",
+      "originalText": "44725更新后，失去脚踏起重机",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-050268e5-bcb6-4b02-a9b9-29cd843ee7a5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c3a6f075-08f7-4de8-98db-cbe3f9590de6",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "61321版本后，重弩战象/精锐重弩战象的攻击力从8/11上调到10/12",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c3a6f075-08f7-4de8-98db-cbe3f9590de6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "group": "印度王朝",
+      "locator": "#change li[20]",
+      "originalText": "81058版本后，重弩战象/精锐重弩战象的骑兵/战象/攻城护甲从-2修改为0，获得20胡斯派战车护甲",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "group": "成王败寇",
+      "locator": "#change li[21]",
+      "originalText": "125283版本更新后，重弩战象接受弹道学加成",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2ad98c5c-305b-4cad-b7d7-23e1d5cb9f3a",
+      "group": "三国",
+      "locator": "#change li[22]",
+      "originalText": "141935版本更新后，重弩战象/精锐重弩战象的攻击力从10/11下调到9/10",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2ad98c5c-305b-4cad-b7d7-23e1d5cb9f3a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-220fafb8-f67f-4228-a6de-d0cd4d46548d",
+      "group": "三国",
+      "locator": "#change li[23]",
+      "originalText": "151401版本后，重弩战象/精锐重弩战象的重型攻城器护甲从20下调到10，精锐重弩战象生命值从290下调到280",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-220fafb8-f67f-4228-a6de-d0cd4d46548d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    蛮王崛起\n    \n        无法训练轻骑兵\n        可以研发造船匠\n        无法训练弩兵，在5.8版本后才可以训练\n        无法研发信仰\n    \n\n    最后的可汗\n    \n        可以训练轻骑兵\n        无法研发造船匠\n        可以研发信仰\n        高棉农民在耕作时不需要回到磨坊，而是以直接增加粮食的形式获取食物\n        35584版本后，高棉人在开启完整科技树的时候可以正确地取消掉耕作不需要回到磨坊的功能\n        36906版本后，农民工作效率-3%\n        36906版本后，不再可以研发手推炮\n        37650版本后，不再拥有供给\n        39284版本后，象兵的区域伤害从50%下调为25%\n        42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积\n        42848版本后，农民工作效率-5%\n        42848版本后，象兵的移动速度加成从+15%下调到+10%\n        42848版本后，獠牙剑花费从200木300金提升到300木450金\n    \n\n    西方霸主\n    \n        44725更新后，失去脚踏起重机\n    \n\n    印度王朝\n    \n        61321版本后，重弩战象/精锐重弩战象的攻击力从8/11上调到10/12\n        81058版本后，重弩战象/精锐重弩战象的骑兵/战象/攻城护甲从-2修改为0，获得20胡斯派战车护甲\n    \n\n    成王败寇\n    \n        125283版本更新后，重弩战象接受弹道学加成\n    \n\n    三国\n    \n        141935版本更新后，重弩战象/精锐重弩战象的攻击力从10/11下调到9/10\n        151401版本后，重弩战象/精锐重弩战象的重型攻城器护甲从20下调到10，精锐重弩战象生命值从290下调到280",
+  "sectionTextSha256": "94420e33e64f1e8778ddeb1352f09785a4b3d4b0c47b79b24877ce2ab7e91f1d",
+  "observedEntryCount": 23,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,375 @@
+{
+  "civId": "Japanese",
+  "sourceId": "seicing-japanese",
+  "url": "https://seicing.com/html/aoe2/2/%E6%97%A5%E6%9C%AC.html",
+  "indexLabel": "日本Japanese",
+  "title": "日本",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-9b86f1680dbc09fd89b0",
+  "documentSha256": "9b86f1680dbc09fd89b0e15caa80035867254879fd3ef6e381eea2cdec567330",
+  "capturedAt": "2026-11-16T11:44:13.820893+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-79ceb337-1b19-4e1c-8c74-c709b225e7fd",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "步兵在封建/城堡/帝王时代增加11%/18/33%攻击速度",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [
+        "ev-se-79ceb337-1b19-4e1c-8c74-c709b225e7fd"
+      ],
+      "reason": "原文时代数组为 11%/18/33%，中间项单位未写全；保留原文待核，不补百分号。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7af7702b-e1bd-4887-8c0d-275ce432b0f8",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "无法研发采金法",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7af7702b-e1bd-4887-8c0d-275ce432b0f8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a3ce8fb3-825c-4605-bf2b-4965d04fff17",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "无法研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a3ce8fb3-825c-4605-bf2b-4965d04fff17"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8a78ba88-9b09-48d8-af5d-e9f1ae848365",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "日本武士训练时间是16秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8a78ba88-9b09-48d8-af5d-e9f1ae848365"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ad6e8359-a700-4e76-a276-4b5a72497748",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "日本武士远程护甲是0，攻速是2.03，移动速度0.9",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ad6e8359-a700-4e76-a276-4b5a72497748"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4727ed77-49cc-4b64-aa7a-38d6a65fb440",
+      "group": "国王时代",
+      "locator": "#change li[6]",
+      "originalText": "日本武士对独特单位的攻击加成是5，精锐是6",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4727ed77-49cc-4b64-aa7a-38d6a65fb440"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-203da413-6694-4b86-bdfc-1b6fbbaedd86",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "步兵在封建时代开始攻击速度+33%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-203da413-6694-4b86-bdfc-1b6fbbaedd86"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-09e4895c-bf3c-4fac-b3e4-624a916f0b0d",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "无法研发血统",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-09e4895c-bf3c-4fac-b3e4-624a916f0b0d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-09167cfb-9332-4186-8ace-0800ec5b6a99",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "添加弹射器科技",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-09167cfb-9332-4186-8ace-0800ec5b6a99"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5f4f655e-0209-46dd-9623-4b0dbab2b72c",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "日本武士训练时间是9秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5f4f655e-0209-46dd-9623-4b0dbab2b72c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fdcee5e4-1160-4ce0-8b74-3a92c3781c33",
+      "group": "征服者",
+      "locator": "#change li[11]",
+      "originalText": "日本武士远程护甲是1，攻速是1.93，移动速度1",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fdcee5e4-1160-4ce0-8b74-3a92c3781c33"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4eb54bbe-00f8-4ac3-a0c5-cd689de9b4c8",
+      "group": "征服者",
+      "locator": "#change li[12]",
+      "originalText": "日本武士对独特单位的攻击加成是10，精锐是12",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4eb54bbe-00f8-4ac3-a0c5-cd689de9b4c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-989d1f9a-ca99-4544-8b53-bdc9f27958e3",
+      "group": "失落帝国",
+      "locator": "#change li[13]",
+      "originalText": "可以研发血统",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-989d1f9a-ca99-4544-8b53-bdc9f27958e3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-78c63fb6-3c49-4c93-8992-ab7144e108f0",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "可以研发采金法",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-78c63fb6-3c49-4c93-8992-ab7144e108f0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-02219e1d-77bc-4c81-aee8-167476e541b9",
+      "group": "失落帝国",
+      "locator": "#change li[15]",
+      "originalText": "添加射箭孔科技，消费300食物和400木材，为箭塔提供额外3支箭",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-02219e1d-77bc-4c81-aee8-167476e541b9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4070c467-258e-4d9b-bb42-97a8a25d7724",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "射箭孔消费300食物和300木材",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4070c467-258e-4d9b-bb42-97a8a25d7724"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cc934671-5abe-463d-b418-5beaac444049",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "4.8补丁中，射箭孔更变为为箭塔提供额外2支箭",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cc934671-5abe-463d-b418-5beaac444049"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ddccbb2e-f2a9-471a-83b8-669ba6de7997",
+      "group": "非洲王国",
+      "locator": "#change li[18]",
+      "originalText": "4.8补丁中，可以研发脚踏起重机",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ddccbb2e-f2a9-471a-83b8-669ba6de7997"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cd39d2db-5c59-40d0-8cc2-5c04f789107e",
+      "group": "公爵的崛起",
+      "locator": "#change li[19]",
+      "originalText": "日本武士生命值从60上调到70，攻击力从8上调到10，升级到精锐日本武士城堡从950食物875黄金调整为750食物650黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cd39d2db-5c59-40d0-8cc2-5c04f789107e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6bba70da-f46b-45b1-9010-a52d54b98118",
+      "group": "印度王朝",
+      "locator": "#change li[20]",
+      "originalText": "81058版本后，获得围墙科技",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6bba70da-f46b-45b1-9010-a52d54b98118"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-98d4459c-d902-4364-9bab-756a88b63f4f",
+      "group": "印度王朝",
+      "locator": "#change li[21]",
+      "originalText": "81058版本后，弹射器成本从750木400金下调到550木300金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-98d4459c-d902-4364-9bab-756a88b63f4f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cb321b35-73c0-407b-a8fd-83027349d5a1",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "81058版本后，日本武士成本从60肉30金下调到50肉30金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cb321b35-73c0-407b-a8fd-83027349d5a1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-72a7564c-9211-4d78-913a-e08b9eac5e76",
+      "group": "皇家山脉",
+      "locator": "#change li[23]",
+      "originalText": "95810版本后，骑射手对射手部队(除掷矛手外)+2伤害",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-72a7564c-9211-4d78-913a-e08b9eac5e76"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dd42a04b-bb90-4268-a675-4dc72127ca08",
+      "group": "三国",
+      "locator": "#change li[24]",
+      "originalText": "141935版本更新后，武士成本从50肉30金下调到45肉30金，获得冲锋加速和冲锋+1攻击力",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dd42a04b-bb90-4268-a675-4dc72127ca08"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4d0b2e34-054c-443f-86e7-700353a36e66",
+      "group": "三国",
+      "locator": "#change li[25]",
+      "originalText": "141935版本更新后，团队奖励的+50%视野改成+4视野",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4d0b2e34-054c-443f-86e7-700353a36e66"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-edfc0833-941e-4378-8189-277a11be5ec2",
+      "group": "最后的酋长",
+      "locator": "#change li[26]",
+      "originalText": "169123版本更新后，渔船加成不再拥有+2远程护甲加成，仅增加100%生命值",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-edfc0833-941e-4378-8189-277a11be5ec2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        步兵在封建/城堡/帝王时代增加11%/18/33%攻击速度\n        无法研发采金法\n        无法研发脚踏起重机\n        日本武士训练时间是16秒\n        日本武士远程护甲是0，攻速是2.03，移动速度0.9\n        日本武士对独特单位的攻击加成是5，精锐是6\n    \n\n    征服者\n    \n        步兵在封建时代开始攻击速度+33%\n        无法研发血统\n        添加弹射器科技\n        日本武士训练时间是9秒\n        日本武士远程护甲是1，攻速是1.93，移动速度1\n        日本武士对独特单位的攻击加成是10，精锐是12\n    \n\n    失落帝国\n    \n        可以研发血统\n        可以研发采金法\n        添加射箭孔科技，消费300食物和400木材，为箭塔提供额外3支箭\n    \n\n    非洲王国\n    \n        射箭孔消费300食物和300木材\n        4.8补丁中，射箭孔更变为为箭塔提供额外2支箭\n        4.8补丁中，可以研发脚踏起重机\n    \n\n    公爵的崛起\n    \n        日本武士生命值从60上调到70，攻击力从8上调到10，升级到精锐日本武士城堡从950食物875黄金调整为750食物650黄金\n    \n\n    印度王朝\n    \n        81058版本后，获得围墙科技\n        81058版本后，弹射器成本从750木400金下调到550木300金\n        81058版本后，日本武士成本从60肉30金下调到50肉30金\n    \n\n    皇家山脉\n    \n        95810版本后，骑射手对射手部队(除掷矛手外)+2伤害\n    \n\n    三国\n    \n        141935版本更新后，武士成本从50肉30金下调到45肉30金，获得冲锋加速和冲锋+1攻击力\n        141935版本更新后，团队奖励的+50%视野改成+4视野\n    \n\n    最后的酋长\n    \n        169123版本更新后，渔船加成不再拥有+2远程护甲加成，仅增加100%生命值",
+  "sectionTextSha256": "e20be044a9d57947931dc43aec89c787d3fe2fd815323eb0a1ad42f74fd81e6d",
+  "observedEntryCount": 26,
+  "supersedesRevisionId": null
+}

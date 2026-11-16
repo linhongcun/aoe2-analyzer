@@ -1,0 +1,199 @@
+{
+  "civId": "Georgians",
+  "sourceId": "seicing-georgians",
+  "url": "https://seicing.com/html/aoe2/2/%E6%A0%BC%E9%B2%81%E5%90%89%E4%BA%9A.html",
+  "indexLabel": "格鲁吉亚Georgians",
+  "title": "格鲁吉亚",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-59fb6d95e1196acaf606",
+  "documentSha256": "59fb6d95e1196acaf606c2162e5717f708d4eee32de47960a06c58df33d17da8",
+  "capturedAt": "2026-11-16T11:43:15.408332+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-e36bf6bb-907e-422d-a000-f14bc05ea7bb",
+      "group": "皇家山脉",
+      "locator": "#change li[1]",
+      "originalText": "99311版本后，修理建筑消耗资源量减少率从50%下调到25%",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e36bf6bb-907e-422d-a000-f14bc05ea7bb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2bb46274-92e2-4833-9a33-97ea75dc75ee",
+      "group": "皇家山脉",
+      "locator": "#change li[2]",
+      "originalText": "99311版本后，骡车成本从100木20肉下调到了80木20肉",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9456ae2b-899a-4f1b-b1e5-5832d1dd8090"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-32b24284-c2c5-4a0e-8e78-1b0226bb08d2",
+      "group": "成王败寇",
+      "locator": "#change li[3]",
+      "originalText": "107882版本更新后，开始游戏不再有-50肉的惩罚",
+      "rawVersions": [
+        "107882"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-32b24284-c2c5-4a0e-8e78-1b0226bb08d2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f5fb525c-49e2-4a40-9500-bbc5d71aedec",
+      "group": "成王败寇",
+      "locator": "#change li[4]",
+      "originalText": "107882版本更新后，“骑兵在封建时代/城堡时代/帝王时代每分钟恢复5/10/15生命值”加成更变为“骑兵每分钟恢复15%生命值”",
+      "rawVersions": [
+        "107882"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f5fb525c-49e2-4a40-9500-bbc5d71aedec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d84516b-b55b-4ad6-adb0-283de145fdd2",
+      "group": "成王败寇",
+      "locator": "#change li[5]",
+      "originalText": "107882版本更新后，莫纳斯帕的训练时间从11秒上调到了14秒，对骑兵数量的要求量从5个上调到了7个",
+      "rawVersions": [
+        "107882"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d84516b-b55b-4ad6-adb0-283de145fdd2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d19febc-d2ef-4b7e-aa7a-3f0d9250f8d8",
+      "group": "成王败寇",
+      "locator": "#change li[6]",
+      "originalText": "111772版本更新后，“骑兵每分钟恢复15%生命值”加成更变为“骑兵在封建时代/城堡时代/帝王时代每分钟恢复5/10/15生命值”",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d19febc-d2ef-4b7e-aa7a-3f0d9250f8d8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8b181601-aa4b-4bdc-bf42-ae252a02c164",
+      "group": "成王败寇",
+      "locator": "#change li[7]",
+      "originalText": "125283版本更新后，精锐莫纳斯帕生命值从90下调到了80",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8b181601-aa4b-4bdc-bf42-ae252a02c164"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-404496dd-7ae1-48c0-8989-4de741e27eab",
+      "group": "三国",
+      "locator": "#change li[8]",
+      "originalText": "141935版本更新后，骑兵每分钟恢复生命值效率从5/10/15调整为2/8/14",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-404496dd-7ae1-48c0-8989-4de741e27eab"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-02c33930-1c5d-4bff-81fd-aeaf8215cbf7",
+      "group": "三国",
+      "locator": "#change li[9]",
+      "originalText": "162286版本更新后，阿兹瑙里骑兵人口占用减少率从15%提高到20%，成本从750肉250金下调到了550肉250金",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-02c33930-1c5d-4bff-81fd-aeaf8215cbf7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0f15bef8-4558-4706-ab12-8484e4dadf45",
+      "group": "三国",
+      "locator": "#change li[10]",
+      "originalText": "162286版本更新后，强化教堂光环范围从8格提高到9格",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0f15bef8-4558-4706-ab12-8484e4dadf45"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-597568ea-104c-43fa-a403-defa40b0231b",
+      "group": "最后的酋长",
+      "locator": "#change li[11]",
+      "originalText": "169123版本更新后，强化教堂对建筑物的额外伤害从+5下调到+0，射程从6下调到4，现在可以从远程铁匠铺升级获得射程加成",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b83f1013-ce4b-49af-b026-50aee7a217c9"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1b271dc3-599c-49f5-bc79-9201cc31c379",
+      "group": "维京传奇",
+      "locator": "#change li[12]",
+      "originalText": "185872版本补丁后，强化教堂建造时间从40秒上调到50秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9cf5a940-a9aa-46ef-880f-657d419a499b"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    皇家山脉\n    \n        99311版本后，修理建筑消耗资源量减少率从50%下调到25%\n        99311版本后，骡车成本从100木20肉下调到了80木20肉\n    \n\n    成王败寇\n    \n        107882版本更新后，开始游戏不再有-50肉的惩罚\n        107882版本更新后，“骑兵在封建时代/城堡时代/帝王时代每分钟恢复5/10/15生命值”加成更变为“骑兵每分钟恢复15%生命值”\n        107882版本更新后，莫纳斯帕的训练时间从11秒上调到了14秒，对骑兵数量的要求量从5个上调到了7个\n        111772版本更新后，“骑兵每分钟恢复15%生命值”加成更变为“骑兵在封建时代/城堡时代/帝王时代每分钟恢复5/10/15生命值”\n        125283版本更新后，精锐莫纳斯帕生命值从90下调到了80\n    \n\n    三国\n    \n        141935版本更新后，骑兵每分钟恢复生命值效率从5/10/15调整为2/8/14\n        162286版本更新后，阿兹瑙里骑兵人口占用减少率从15%提高到20%，成本从750肉250金下调到了550肉250金\n        162286版本更新后，强化教堂光环范围从8格提高到9格\n    \n\n    最后的酋长\n    \n        169123版本更新后，强化教堂对建筑物的额外伤害从+5下调到+0，射程从6下调到4，现在可以从远程铁匠铺升级获得射程加成\n    \n\n    维京传奇\n    \n        185872版本补丁后，强化教堂建造时间从40秒上调到50秒",
+  "sectionTextSha256": "8e60e5d7c148263ac85e9aeee4e1918e12fcb764fbd17d1d675f44f76f700c20",
+  "observedEntryCount": 12,
+  "supersedesRevisionId": null
+}

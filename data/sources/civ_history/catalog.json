@@ -1,0 +1,887 @@
+{
+  "schemaVersion": 1,
+  "index": {
+    "url": "https://seicing.com/html/aoe2/index-aoe2.html",
+    "capturedAt": "2026-11-16T11:38:17.943921+00:00",
+    "documentSha256": "036681bf45980ae2acad24063fecf4392a4f8206be04f9626f67b86cf4b30879"
+  },
+  "pages": [
+    {
+      "civId": "Armenians",
+      "nameZh": "亚美尼亚",
+      "indexLabel": "亚美尼亚Armenians",
+      "url": "https://seicing.com/html/aoe2/2/%E4%BA%9A%E7%BE%8E%E5%B0%BC%E4%BA%9A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Armenians-snapshot-b36fe06d608425383d04.json",
+          "sha256": "e570c70434769c30df152910dc18e1a71daaa61422488b3c1b6465cb3283be6e"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:39:51.076277+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Aztecs",
+      "nameZh": "阿兹特克",
+      "indexLabel": "阿兹特克Aztecs",
+      "url": "https://seicing.com/html/aoe2/2/%E9%98%BF%E5%85%B9%E7%89%B9%E5%85%8B.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Aztecs-snapshot-79669004e02a0cad756a.json",
+          "sha256": "b234725cdf5f045d42a27fede4a77700639aa59d024d08ad264a7e47d99cc439"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:40:18.504441+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Bengalis",
+      "nameZh": "孟加拉",
+      "indexLabel": "孟加拉Bengalis",
+      "url": "https://seicing.com/html/aoe2/2/%E5%AD%9F%E5%8A%A0%E6%8B%89.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Bengalis-snapshot-55a41a71078a57525372.json",
+          "sha256": "a03b63fd2b16a9b82e0e40792d4a891ebed256ea39ccb3b5484e5b8b665f3be9"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:40:36.758535+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Berbers",
+      "nameZh": "柏柏尔",
+      "indexLabel": "柏柏尔Berbers",
+      "url": "https://seicing.com/html/aoe2/2/%E6%9F%8F%E6%9F%8F%E5%B0%94.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Berbers-snapshot-6b97d7e2f07260899b7a.json",
+          "sha256": "9563485d3207b9f3d973d4879f12044cbdf3e84fc09ce5cc3430f71eba4e2220"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:40:56.590957+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Bohemians",
+      "nameZh": "波希米亚",
+      "indexLabel": "波希米亚Bohemians",
+      "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E5%B8%8C%E7%B1%B3%E4%BA%9A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Bohemians-snapshot-67d3d88fe8c52ca39b58.json",
+          "sha256": "f1ba4059316beea04b02d3d379187fa634ac30f2a665ea7bff8e38636474e98c"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:41:12.769234+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Britons",
+      "nameZh": "不列颠",
+      "indexLabel": "不列颠Britons",
+      "url": "https://seicing.com/html/aoe2/2/%E4%B8%8D%E5%88%97%E9%A2%A0.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Britons-snapshot-e66fff9404975f6ac46f.json",
+          "sha256": "fe81131efb69c0ceb2c25798c9eff7840812b09ba565ee747d875a03efe93911"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:41:27.031411+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Bulgarians",
+      "nameZh": "保加利亚",
+      "indexLabel": "保加利亚Bulgarians",
+      "url": "https://seicing.com/html/aoe2/2/%E4%BF%9D%E5%8A%A0%E5%88%A9%E4%BA%9A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Bulgarians-snapshot-82ea3996dd9a815a30a1.json",
+          "sha256": "fdd9b803991c5221047571e2bf64d903921ca21fbc017e69afbbc14220202ece"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:41:34.103699+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Burgundians",
+      "nameZh": "勃艮第",
+      "indexLabel": "勃艮第Burgundians",
+      "url": "https://seicing.com/html/aoe2/2/%E5%8B%83%E8%89%AE%E7%AC%AC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Burgundians-snapshot-6fdc3f3ce2e6ad823a7b.json",
+          "sha256": "4b8a9dd487eb483b380969d8ad3494f187ff5abfde3d074790a6ace1c35a7d93"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:41:45.923872+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Burmese",
+      "nameZh": "缅甸",
+      "indexLabel": "缅甸Burmese",
+      "url": "https://seicing.com/html/aoe2/2/%E7%BC%85%E7%94%B8.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Burmese-snapshot-f12f351016e424c2a8ce.json",
+          "sha256": "25f9b62602f84ac05fbe98ba7dab9094ca95ed8dde24d2483fdebb8e884857a5"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:41:55.695219+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Byzantines",
+      "nameZh": "拜占庭",
+      "indexLabel": "拜占庭Byzantines",
+      "url": "https://seicing.com/html/aoe2/2/%E6%8B%9C%E5%8D%A0%E5%BA%AD.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Byzantines-snapshot-fbbfaf746f5c04979e34.json",
+          "sha256": "3816bc7179652815221119261709b7df6fb12a1e00e94c14c2378073e89031e1"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:42:02.313794+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Celts",
+      "nameZh": "凯尔特",
+      "indexLabel": "凯尔特Celts",
+      "url": "https://seicing.com/html/aoe2/2/%E5%87%AF%E5%B0%94%E7%89%B9.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Celts-snapshot-049498de9863feb91e10.json",
+          "sha256": "63ec99380b341b91a615878ec735e672db44cd6c67f04f12e9538fbac2f40c99"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:42:15.143482+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Chinese",
+      "nameZh": "中国",
+      "indexLabel": "中国Chinese",
+      "url": "https://seicing.com/html/aoe2/2/%E4%B8%AD%E5%9B%BD.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Chinese-snapshot-a5f3dcd76ea833749a2e.json",
+          "sha256": "fc23eec1a82ea4c1c9c44b15f57d0bdc7ef0323ff16fe149124160a80632b300"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:42:25.692460+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Cumans",
+      "nameZh": "库曼",
+      "indexLabel": "库曼Cumans",
+      "url": "https://seicing.com/html/aoe2/2/%E5%BA%93%E6%9B%BC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Cumans-snapshot-a6c8185e686b7be2ff9d.json",
+          "sha256": "b71d6fa25af423e2e2d160827edcd0cdf1ceed979b1dbf1746bae028d2d227b6"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:10:24.905007+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Danes",
+      "nameZh": "丹麦人",
+      "indexLabel": "丹麦Danes",
+      "url": "https://seicing.com/html/aoe2/2/%E4%B8%B9%E9%BA%A6.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Danes-snapshot-11523c2c2d60720e9691.json",
+          "sha256": "eff09e55a94463dbd311478b7487a1ffad0d207cc7128db5d01db013cab12fa6"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:42:35.099839+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。章节原文为“暂无”；不表示游戏从未变动。"
+    },
+    {
+      "civId": "Dravidians",
+      "nameZh": "达罗毗荼",
+      "indexLabel": "达罗毗荼Dravidians",
+      "url": "https://seicing.com/html/aoe2/2/%E8%BE%BE%E7%BD%97%E6%AF%97%E8%8D%BC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Dravidians-snapshot-57377262a805e33222dd.json",
+          "sha256": "1679506a61557371cbbe72a617413d102155a85be5da06bc75f042ac56343474"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:42:55.101342+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Ethiopians",
+      "nameZh": "埃塞俄比亚",
+      "indexLabel": "埃塞俄比亚Ethiopians",
+      "url": "https://seicing.com/html/aoe2/2/%E5%9F%83%E5%A1%9E%E4%BF%84%E6%AF%94%E4%BA%9A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Ethiopians-snapshot-b8a832e344890f42d3c1.json",
+          "sha256": "1919a5c93d115fbf2de724208951a5fbbacc7b7689041f150243b1a21b5330b9"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:02.179312+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Franks",
+      "nameZh": "法兰克",
+      "indexLabel": "法兰克Franks",
+      "url": "https://seicing.com/html/aoe2/2/%E6%B3%95%E5%85%B0%E5%85%8B.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Franks-snapshot-cccaeb64592948648119.json",
+          "sha256": "ee744f9449b6864f31f660ebc067b0769b829bb0bd03cb9067ba59586b9cd102"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:10.146747+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Georgians",
+      "nameZh": "格鲁吉亚",
+      "indexLabel": "格鲁吉亚Georgians",
+      "url": "https://seicing.com/html/aoe2/2/%E6%A0%BC%E9%B2%81%E5%90%89%E4%BA%9A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Georgians-snapshot-59fb6d95e1196acaf606.json",
+          "sha256": "3ea0df85ec171a2a839359a93be29c5d90dfbc57797c4e99a7f2e8ca44a32f10"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:15.408332+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Goths",
+      "nameZh": "哥特",
+      "indexLabel": "哥特Goths",
+      "url": "https://seicing.com/html/aoe2/2/%E5%93%A5%E7%89%B9.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Goths-snapshot-9aa1bee6bc4e186060b1.json",
+          "sha256": "0992906823d6cf1d027da18aacde8ed8feebd7afe7572112c4bb63b9d35e1103"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:24.382549+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Gurjaras",
+      "nameZh": "瞿折罗",
+      "indexLabel": "瞿折罗Gurjaras",
+      "url": "https://seicing.com/html/aoe2/2/%E7%9E%BF%E6%8A%98%E7%BD%97.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Gurjaras-snapshot-3acd5a7f426672af3e8c.json",
+          "sha256": "898cac59d0edc2b4d4df3156792a03b86c553e87da9b9ab7d0247e5a83f09fcf"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:31.748171+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Hindustanis",
+      "nameZh": "印度斯坦",
+      "indexLabel": "印度斯坦Hindustanis",
+      "url": "https://seicing.com/html/aoe2/2/%E5%8D%B0%E5%BA%A6%E6%96%AF%E5%9D%A6.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Hindustanis-snapshot-56887d7fff761c529d49.json",
+          "sha256": "64d14f43424a408ea318afda6944e4195ac3460f2d828d4dc7b83d476725c9de"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:39.152629+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Huns",
+      "nameZh": "匈奴",
+      "indexLabel": "匈奴Huns",
+      "url": "https://seicing.com/html/aoe2/2/%E5%8C%88%E5%A5%B4.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Huns-snapshot-3211771fe571ad7e66f5.json",
+          "sha256": "2d34cca3dda8f8a74527c5e30db77378e1e4a21e5a692db571dac8ba1c756ad5"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:46.223036+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Incas",
+      "nameZh": "印加",
+      "indexLabel": "印加Inca",
+      "url": "https://seicing.com/html/aoe2/2/%E5%8D%B0%E5%8A%A0.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Incas-snapshot-4a134a6b3ac2469d7127.json",
+          "sha256": "119ad73d9cc20a2936253584b3c18bce5965df566c48ebc054fd5e1a2cd39489"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:43:52.012090+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Italians",
+      "nameZh": "意大利",
+      "indexLabel": "意大利Italians",
+      "url": "https://seicing.com/html/aoe2/2/%E6%84%8F%E5%A4%A7%E5%88%A9.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Italians-snapshot-81e603b1cb7d32859b7b.json",
+          "sha256": "cf314ab5e5f3ab04a92e6b633764ac55369dc3c1f0dc69938bf2f2df7e8aff17"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:08.548174+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Japanese",
+      "nameZh": "日本",
+      "indexLabel": "日本Japanese",
+      "url": "https://seicing.com/html/aoe2/2/%E6%97%A5%E6%9C%AC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Japanese-snapshot-9b86f1680dbc09fd89b0.json",
+          "sha256": "5b2ff231dc180daa1186b9dbc69960efca780adc71b9df36168d7c64f18876db"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:13.820893+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Jurchens",
+      "nameZh": "女真",
+      "indexLabel": "女真Jurchens",
+      "url": "https://seicing.com/html/aoe2/2/%E5%A5%B3%E7%9C%9F.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Jurchens-snapshot-ff00dca6288a35da9971.json",
+          "sha256": "5a2e9d9cfbbf58c2ed158f060e4c3b09c705fbc2eb7e1cff6e8d608322c5b61d"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:20.931219+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Khitans",
+      "nameZh": "契丹",
+      "indexLabel": "契丹Khitans",
+      "url": "https://seicing.com/html/aoe2/2/%E5%A5%91%E4%B8%B9.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Khitans-snapshot-81918eb4db8793ad7429.json",
+          "sha256": "66db562a8f2c31250621574dfbd0816606d40fffec37e4f91983682ef92bf980"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:25.913633+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Khmer",
+      "nameZh": "高棉",
+      "indexLabel": "高棉Khmer",
+      "url": "https://seicing.com/html/aoe2/2/%E9%AB%98%E6%A3%89.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Khmer-snapshot-1985b184e82d6f1e11a1.json",
+          "sha256": "7db122de0fdfe8b007f709555bf8757bb421131f33bb58b128e704fa6e08b2c4"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:32.338811+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Koreans",
+      "nameZh": "高丽",
+      "indexLabel": "高丽Koreans",
+      "url": "https://seicing.com/html/aoe2/2/%E9%AB%98%E4%B8%BD.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Koreans-snapshot-04c2576b45579b68c629.json",
+          "sha256": "2c6e84d692cc002b49f040081e95b00d051bb8e6120e9e1df5a1d61a178c04bc"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:44.585232+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Lithuanians",
+      "nameZh": "立陶宛",
+      "indexLabel": "立陶宛Lithuanians",
+      "url": "https://seicing.com/html/aoe2/2/%E7%AB%8B%E9%99%B6%E5%AE%9B.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Lithuanians-snapshot-40498c0a9085014c78d8.json",
+          "sha256": "f0556464624571f878c2afaa6c1795a391d17e5e90dc21fb4827e044e8e065c2"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:44:53.906991+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Magyars",
+      "nameZh": "马扎尔",
+      "indexLabel": "马扎尔Magyars",
+      "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%89%8E%E5%B0%94.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Magyars-snapshot-1a82266334efa626b18d.json",
+          "sha256": "19e5c9ed9322bb4dd1cc85e6853821d093c126981e0d59e26073705077a370a5"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:01.417796+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Malay",
+      "nameZh": "马来",
+      "indexLabel": "马来Malay",
+      "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%9D%A5.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Malay-snapshot-6d48e4cc90769666ee3b.json",
+          "sha256": "aea095f7a37faab7a1324970c9f55e0c8dc50a90dd02332f44a610511b48e225"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:09.007761+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Malians",
+      "nameZh": "马里",
+      "indexLabel": "马里Malians",
+      "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E9%87%8C.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Malians-snapshot-b858fef6e58394d4e606.json",
+          "sha256": "3fad01791b2763ad0440479df1cc607fd5c653c1de26fbc5f240c5b1e2bf37ba"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:20.742259+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Mapuche",
+      "nameZh": "马普切",
+      "indexLabel": "马普切Mapuche",
+      "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%99%AE%E5%88%87.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Mapuche-snapshot-f590573c7b0cb4166686.json",
+          "sha256": "4912d2ad117ecf3692c8635b2418a595420245714bb6fe5d60f96eac7dcfbff5"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:27.708273+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Mayans",
+      "nameZh": "玛雅",
+      "indexLabel": "玛雅Maya",
+      "url": "https://seicing.com/html/aoe2/2/%E7%8E%9B%E9%9B%85.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Mayans-snapshot-280c15098993d29b617a.json",
+          "sha256": "54a16d30823741352abaf6b181876b1defb0dcb673e618b7aa7761dc5e7ca7d1"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:32.932786+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Mongols",
+      "nameZh": "蒙古",
+      "indexLabel": "蒙古Mongols",
+      "url": "https://seicing.com/html/aoe2/2/%E8%92%99%E5%8F%A4.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Mongols-snapshot-65bf6dbebb92f8dce992.json",
+          "sha256": "917efe2acb69b0e15c1b487bbdfe36ac34284a29e939f0da56d8e8ec03b7f022"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:43.944592+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Muisca",
+      "nameZh": "穆伊斯卡",
+      "indexLabel": "穆伊斯卡Muisca",
+      "url": "https://seicing.com/html/aoe2/2/%E7%A9%86%E4%BC%8A%E6%96%AF%E5%8D%A1.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Muisca-snapshot-eb5dcea60cdddc9b917b.json",
+          "sha256": "c022dea986f8458becec77998d1bc1f0884ea1481edab9bde54f3e7582519472"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:45:53.230600+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Persians",
+      "nameZh": "波斯",
+      "indexLabel": "波斯Persians",
+      "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E6%96%AF.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Persians-snapshot-30778a766cfd33211950.json",
+          "sha256": "53b2aa2c8d9ddec37a544a14fa0fdcb8ef124ef487cd9866fadaccbbe6b02f89"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:00.161117+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Poles",
+      "nameZh": "波兰",
+      "indexLabel": "波兰Poles",
+      "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E5%85%B0.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Poles-snapshot-ad8d656a554222c67559.json",
+          "sha256": "0d20fd603947b312cd257f665bc87dad5dbcf91e11c529319dc5e87a620f1f08"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:07.606714+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Portuguese",
+      "nameZh": "葡萄牙",
+      "indexLabel": "葡萄牙Portuguese",
+      "url": "https://seicing.com/html/aoe2/2/%E8%91%A1%E8%90%84%E7%89%99.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Portuguese-snapshot-e5a7f7035d1dedfb0464.json",
+          "sha256": "e74987f8ab8829a49bac5a9e4e528b589d1fbcfe12f43343f2bffc5cacab37e3"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:12.354948+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Romans",
+      "nameZh": "罗马",
+      "indexLabel": "罗马Romans",
+      "url": "https://seicing.com/html/aoe2/2/%E7%BD%97%E9%A9%AC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Romans-snapshot-2ed19922324a33b02e31.json",
+          "sha256": "b9c29d2be58453616bfad5052d8a4cd03e0c18d6034ab3445eb3669ea43339d3"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:22.521978+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Saracens",
+      "nameZh": "萨拉森",
+      "indexLabel": "萨拉森Saracens",
+      "url": "https://seicing.com/html/aoe2/2/%E8%90%A8%E6%8B%89%E6%A3%AE.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Saracens-snapshot-1d497710c6ade7c7bbd5.json",
+          "sha256": "d957ee92acb5f61f5018e54cc986a0148e21f98be1c426717794eaed93ac7d50"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:30.593839+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Saxons",
+      "nameZh": "撒克逊人",
+      "indexLabel": "撒克逊Saxons",
+      "url": "https://seicing.com/html/aoe2/2/%E6%92%92%E5%85%8B%E9%80%8A.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Saxons-snapshot-454ad3df378cd50bb071.json",
+          "sha256": "b0e8a3d669c02c8deb31152093e59b8556a780bcefd87e4a2e5b38c9dc3a0be1"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:37.638009+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。章节原文为“暂无”；不表示游戏从未变动。"
+    },
+    {
+      "civId": "Shu",
+      "nameZh": "蜀",
+      "indexLabel": "蜀Shu",
+      "url": "https://seicing.com/html/aoe2/2/%E8%9C%80.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Shu-snapshot-6de0e50ee881a18bd73e.json",
+          "sha256": "c28eddae0d581f48481e803564a0431e723ae4945ce98afaa64bbabd261b33cf"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:43.851056+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Sicilians",
+      "nameZh": "西西里",
+      "indexLabel": "西西里Sicilians",
+      "url": "https://seicing.com/html/aoe2/2/%E8%A5%BF%E8%A5%BF%E9%87%8C.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Sicilians-snapshot-2eef1572546215155984.json",
+          "sha256": "c4d82ce47547d24a10a49209b46d7986d394f387501c9eed132232b73fa6eb50"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:49.624111+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Slavs",
+      "nameZh": "斯拉夫",
+      "indexLabel": "斯拉夫Slavs",
+      "url": "https://seicing.com/html/aoe2/2/%E6%96%AF%E6%8B%89%E5%A4%AB.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Slavs-snapshot-1b8e914e89b8581effff.json",
+          "sha256": "bd5b75261b0f2c21477975d0001e94a863c47975e52cca5ed0de868738a89524"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:46:58.882386+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Spanish",
+      "nameZh": "西班牙",
+      "indexLabel": "西班牙Spanish",
+      "url": "https://seicing.com/html/aoe2/2/%E8%A5%BF%E7%8F%AD%E7%89%99.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Spanish-snapshot-cf958bacb4c86d06fcb9.json",
+          "sha256": "dd334ca1bb102f1e06ad3f94acc51e7d13b47df69e26a032e26a2870e4855fc5"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:47:19.139657+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Tatars",
+      "nameZh": "鞑靼",
+      "indexLabel": "鞑靼Tatars",
+      "url": "https://seicing.com/html/aoe2/2/%E9%9E%91%E9%9D%BC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Tatars-snapshot-dd19fbede340efbc90f5.json",
+          "sha256": "294704fb4ae766378dad8e7a3b4d7f228628a752525840021458caac8585b1b6"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:47:30.162334+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Teutons",
+      "nameZh": "条顿",
+      "indexLabel": "条顿Teutons",
+      "url": "https://seicing.com/html/aoe2/2/%E6%9D%A1%E9%A1%BF.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Teutons-snapshot-2c7f7efce51b98415f55.json",
+          "sha256": "912e1bdf06a640759dc88e974455bb3ffd6a15aca8aa8c09f848f8e8c8402476"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:47:37.830838+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Tupi",
+      "nameZh": "图皮",
+      "indexLabel": "图皮Tupi",
+      "url": "https://seicing.com/html/aoe2/2/%E5%9B%BE%E7%9A%AE.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Tupi-snapshot-43858b22458ae91a247d.json",
+          "sha256": "f95ac0e926283162579745ec0c5c7d421940c167ffb0336c06e2e8d919663b11"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:47:52.757550+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Turks",
+      "nameZh": "土耳其",
+      "indexLabel": "土耳其Turks",
+      "url": "https://seicing.com/html/aoe2/2/%E5%9C%9F%E8%80%B3%E5%85%B6.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Turks-snapshot-bcdc1eacdb05b038ebd5.json",
+          "sha256": "b3edbea9055215e2f1e72e07f18b8f1d56f15c6bed5866de827c52733db182e3"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:47:58.909487+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Varangians",
+      "nameZh": "瓦兰吉人",
+      "indexLabel": "瓦兰吉Varangians",
+      "url": "https://seicing.com/html/aoe2/2/%E7%93%A6%E5%85%B0%E5%90%89.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Varangians-snapshot-84d5968066c02483cb0f.json",
+          "sha256": "714abe07864b96b812ebdf8c0a8ace4e4be42c77169d91a1a4361c9745e3ff3c"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:48:07.335988+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Vietnamese",
+      "nameZh": "越南",
+      "indexLabel": "越南Vietnamese",
+      "url": "https://seicing.com/html/aoe2/2/%E8%B6%8A%E5%8D%97.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Vietnamese-snapshot-8ef4fa999c96d42bb3b3.json",
+          "sha256": "4150c6017ad6b0fc3179a2e066ae0f635daeedc37d1490018bee20dae2cb9bde"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:48:15.609907+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Vikings",
+      "nameZh": "维京",
+      "indexLabel": "维京Vikings",
+      "url": "https://seicing.com/html/aoe2/2/%E7%BB%B4%E4%BA%AC.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Vikings-snapshot-71c65a88af1f7a42e026.json",
+          "sha256": "989db2b69f3c4b1a9595ac2c4c562376f2e3adb94a113767132bb244e9127325"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:48:27.529898+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Wei",
+      "nameZh": "魏",
+      "indexLabel": "魏Wei",
+      "url": "https://seicing.com/html/aoe2/2/%E9%AD%8F.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Wei-snapshot-0ee39fa22c67102b1e11.json",
+          "sha256": "bd48309df5feeb333dd239eaea476b655fe03a263645a1fd57aea42922e31a11"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:48:35.049956+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    },
+    {
+      "civId": "Wu",
+      "nameZh": "吴",
+      "indexLabel": "吴Wu",
+      "url": "https://seicing.com/html/aoe2/2/%E5%90%B4.html",
+      "sectionFiles": [
+        {
+          "path": "sections/Wu-snapshot-6cc95e705e6ea6a2d9d3.json",
+          "sha256": "a446d5fb5f8caf43dd0cccfb2258d15a5d87f1ee8d292c50cd61ed4391f44ed2"
+        }
+      ],
+      "searchState": "found",
+      "checkedAt": "2026-11-16T11:48:47.002561+00:00",
+      "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
+    }
+  ],
+  "legacyBaseline": [
+    {
+      "path": "data/game/patches/125283.json",
+      "sha256": "bc7d1e86da0b03eeadae5fa5478793743f926a2bb406aab8d735b677a3563b84",
+      "entryCount": 33,
+      "civEntryCount": 20
+    },
+    {
+      "path": "data/game/patches/185872.json",
+      "sha256": "87b8c73086e832faeefba8c15654d2568eb5f8e3fd5efb3d366cb4f62cdb895d",
+      "entryCount": 126,
+      "civEntryCount": 99
+    },
+    {
+      "path": "data/game/patches/188329.json",
+      "sha256": "76df7299ed70c217f3b52c2e7af2194727080956190055a141bef69825b95ec0",
+      "entryCount": 7,
+      "civEntryCount": 1
+    },
+    {
+      "path": "data/game/patches/66692.json",
+      "sha256": "96381e88ebd867b89bd60685040e53e2586efdd2723883aa82a4396d15636250",
+      "entryCount": 46,
+      "civEntryCount": 37
+    },
+    {
+      "path": "data/game/patches/81058.json",
+      "sha256": "95f2acaa4c555369748b778664940a06077edc14c7eda1fb90db82b35eb3a33a",
+      "entryCount": 154,
+      "civEntryCount": 132
+    }
+  ],
+  "review": {
+    "sessionUrl": "https://app.devin.ai/sessions/94185017063e4dc79ab3cea6e0e506b2",
+    "reviewedAt": "2026-11-16T11:57:53.085007+00:00",
+    "note": "逐页检查全部目录来源链接、标题、日志章节及全部顶层原条目。保留前 DE 分组和缺失版本，不猜日期；社区事实未独立认证，仍须独立数据复核。"
+  }
+}

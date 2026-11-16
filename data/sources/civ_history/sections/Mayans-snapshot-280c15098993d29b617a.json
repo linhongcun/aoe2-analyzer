@@ -1,0 +1,327 @@
+{
+  "civId": "Mayans",
+  "sourceId": "seicing-mayans",
+  "url": "https://seicing.com/html/aoe2/2/%E7%8E%9B%E9%9B%85.html",
+  "indexLabel": "玛雅Maya",
+  "title": "玛雅",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-280c15098993d29b617a",
+  "documentSha256": "280c15098993d29b617a488fbc839a2b40e8b75e99f64e8bc321d9c792f6c2ae",
+  "capturedAt": "2026-11-16T11:45:32.932786+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-aaa2df92-db8a-4b78-85e8-cd0ace5d70e9",
+      "group": "征服者",
+      "locator": "#change li[1]",
+      "originalText": "开局拥有鹰勇士",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aaa2df92-db8a-4b78-85e8-cd0ace5d70e9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bec10cbb-8ef3-4492-95ad-aaef956dae00",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "资源开采量增加20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bec10cbb-8ef3-4492-95ad-aaef956dae00"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-57e6d973-d091-4e83-8771-bc8a06455cc2",
+      "group": "征服者",
+      "locator": "#change li[3]",
+      "originalText": "羽箭手花费46木材和46黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-57e6d973-d091-4e83-8771-bc8a06455cc2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-80ce9fd5-6bd8-4239-be77-1f2c96becd37",
+      "group": "征服者",
+      "locator": "#change li[4]",
+      "originalText": "升级精锐羽箭手花费500食物和1000木材",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-80ce9fd5-6bd8-4239-be77-1f2c96becd37"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-98be5b6a-90c1-4e48-9c95-63b10827be4d",
+      "group": "失落帝国",
+      "locator": "#change li[5]",
+      "originalText": "开局拥有鹰斥候而不是鹰勇士",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-98be5b6a-90c1-4e48-9c95-63b10827be4d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7789ee53-aacf-44e8-9fa2-f95a2aaa1af3",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "在mod时代，引入了黑曜石之箭的前身“统治者”(Tlatoani)，效果是弓箭手线+3对建筑物的伤害，需要300食物300黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7789ee53-aacf-44e8-9fa2-f95a2aaa1af3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5bfa066a-cc7d-4bda-a24d-562b281188dc",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "正式发行版本中，统治者被黑曜石之箭取代，效果是给与弓箭手4点对标准建筑的伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5bfa066a-cc7d-4bda-a24d-562b281188dc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7eeb90e1-357d-4f50-9342-8014c2dd5007",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "羽箭手花费50木头和50黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7eeb90e1-357d-4f50-9342-8014c2dd5007"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-46c79062-e5c8-408a-b82a-80f5c4640412",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "升级精锐羽箭手花费700食物和1000木材",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-46c79062-e5c8-408a-b82a-80f5c4640412"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f9b3f8d2-0a84-4fd9-8316-a0aa51d712f8",
+      "group": "非洲王国",
+      "locator": "#change li[10]",
+      "originalText": "鹰斥候在封建时代变得可用",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f9b3f8d2-0a84-4fd9-8316-a0aa51d712f8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4255bf39-5d8a-4aee-8549-e2e457a3c077",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "资源开采量增加15%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4255bf39-5d8a-4aee-8549-e2e457a3c077"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-531c0097-f682-4cea-9059-648084e74585",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "可以研发射箭槽，但是在4.8版本中被移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-531c0097-f682-4cea-9059-648084e74585"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-509bdaaf-b0af-41b6-b9f4-66202ade1640",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "黑曜石之箭给与弓箭手的对标准建筑的伤害提升为6，4.8版本更新后对石头护甲也有作用",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-509bdaaf-b0af-41b6-b9f4-66202ade1640"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eb857350-577f-4aa8-8caa-680ce7eb3487",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "34055版本后，羽箭手花费55木头和55黄金",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eb857350-577f-4aa8-8caa-680ce7eb3487"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ae8775a8-0ab3-4c2f-ad33-4ffdda8eaf03",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "34699版本后，额外的村民在开局没有城镇中心的地图不会出现，直到建造了一个城镇中心后在城镇中心附近生成",
+      "rawVersions": [
+        "34699"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ae8775a8-0ab3-4c2f-ad33-4ffdda8eaf03"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b594069f-cb7d-421c-bcb6-0cca7234896f",
+      "group": "最后的可汗",
+      "locator": "#change li[16]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-78065138-db58-4e8f-ac3a-d53afb926606",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "37650版本后，霍尔坎研发时间从50秒提升到70秒",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-78065138-db58-4e8f-ac3a-d53afb926606"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f147c03c-6c42-43fb-9076-cad3a0ed0d64",
+      "group": "最后的可汗",
+      "locator": "#change li[18]",
+      "originalText": "42848版本后，黑曜石之箭不再给与石墙、石门、塔和港口(石头护甲建筑)双倍加成",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f147c03c-6c42-43fb-9076-cad3a0ed0d64"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5234418b-53bd-4edd-8119-f9794981b7d0",
+      "group": "西方霸主",
+      "locator": "#change li[19]",
+      "originalText": "44725更新之前，玛雅人的额外村民适用于每个城镇中心，更新后变为仅适用于一个城镇中心",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5234418b-53bd-4edd-8119-f9794981b7d0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7ef0cbbb-fa14-4456-8145-4f82f43fac87",
+      "group": "西方霸主",
+      "locator": "#change li[20]",
+      "originalText": "44725更新后，黑曜石之箭删除，被胡尔切掷矛兵(Hul’che Javelineers)科技代替",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7ef0cbbb-fa14-4456-8145-4f82f43fac87"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-36c636e1-89b5-4f87-bbb9-4662394b56a1",
+      "group": "三国",
+      "locator": "#change li[21]",
+      "originalText": "141935版本更新后，英文名从Mayans更变为Maya",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-36c636e1-89b5-4f87-bbb9-4662394b56a1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a65d905e-7c2a-478e-ab5d-043f78bb0830",
+      "group": "最后的酋长",
+      "locator": "#change li[22]",
+      "originalText": "169123版本更新后，获得大型投石战舰",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a65d905e-7c2a-478e-ab5d-043f78bb0830"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    征服者\n    \n        开局拥有鹰勇士\n        资源开采量增加20%\n        羽箭手花费46木材和46黄金\n        升级精锐羽箭手花费500食物和1000木材\n    \n\n    失落帝国\n    \n        开局拥有鹰斥候而不是鹰勇士\n        在mod时代，引入了黑曜石之箭的前身“统治者”(Tlatoani)，效果是弓箭手线+3对建筑物的伤害，需要300食物300黄金\n        正式发行版本中，统治者被黑曜石之箭取代，效果是给与弓箭手4点对标准建筑的伤害\n        羽箭手花费50木头和50黄金\n        升级精锐羽箭手花费700食物和1000木材\n    \n\n    非洲王国\n    \n        鹰斥候在封建时代变得可用\n        资源开采量增加15%\n        可以研发射箭槽，但是在4.8版本中被移除\n        黑曜石之箭给与弓箭手的对标准建筑的伤害提升为6，4.8版本更新后对石头护甲也有作用\n    \n\n    最后的可汗\n    \n        34055版本后，羽箭手花费55木头和55黄金\n        34699版本后，额外的村民在开局没有城镇中心的地图不会出现，直到建造了一个城镇中心后在城镇中心附近生成\n        37650版本后，不再拥有供给\n        37650版本后，霍尔坎研发时间从50秒提升到70秒\n        42848版本后，黑曜石之箭不再给与石墙、石门、塔和港口(石头护甲建筑)双倍加成\n    \n\n    西方霸主\n    \n        44725更新之前，玛雅人的额外村民适用于每个城镇中心，更新后变为仅适用于一个城镇中心\n        44725更新后，黑曜石之箭删除，被胡尔切掷矛兵(Hul’che Javelineers)科技代替\n    \n\n    三国\n    \n        141935版本更新后，英文名从Mayans更变为Maya\n    \n\n    最后的酋长\n    \n        169123版本更新后，获得大型投石战舰",
+  "sectionTextSha256": "1866d0f299270ffc5035b6af71cf989ae922c281227bc695ce88f3894ff2072f",
+  "observedEntryCount": 22,
+  "supersedesRevisionId": null
+}

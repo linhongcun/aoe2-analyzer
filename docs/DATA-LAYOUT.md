@@ -20,6 +20,12 @@ Markdown 只给人看，放在 `docs/`；代码、测试和 CI 要用的内容�
 
 ## 子目录
 
+文明更新历史使用独立的 `data/sources/civ_history/` JSON 输入，离线生成
+`data/content/civ-updates.json` 和 `data/reports/civ-history.json`，后者排成
+[`reports/CIV-HISTORY.md`](reports/CIV-HISTORY.md)。输入、各章节快照、迁移映射和审计
+由 `scripts/civ_history_build.py` 显式调用独立 schema 的 `$defs` 校验；默认内容扫描器不会替它扫描来源目录。
+这条链不复用文明背景摘要 `data/content/civs/history.json` 或 `content-civ-history.json`。
+
 | 目录           | 用途与边界                                                                                                                                                                                                                                                                 |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `game/`        | 游戏数据与生成目录。生成流程见 [数据更新](DATA-UPDATE.md)；`src/data/` 保留同步、惰性与异步读取适配器。                                                                                                                                                                    |

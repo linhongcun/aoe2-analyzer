@@ -1,0 +1,319 @@
+{
+  "civId": "Cumans",
+  "sourceId": "seicing-cumans",
+  "url": "https://seicing.com/html/aoe2/2/%E5%BA%93%E6%9B%BC.html",
+  "indexLabel": "库曼Cumans",
+  "title": "库曼",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-a6c8185e686b7be2ff9d",
+  "documentSha256": "a6c8185e686b7be2ff9d90d222a501bb569c2321fa506bff7da2680aed0ced68",
+  "capturedAt": "2026-11-16T11:10:24.905007+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-9fc8c687-47ee-4406-8f74-63f4ba29498c",
+      "group": "最后的可汗",
+      "locator": "#change li[1]",
+      "originalText": "可以研发畜牧，但34055版本中移除",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9fc8c687-47ee-4406-8f74-63f4ba29498c"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-39b95ecc-03cd-4dca-834b-872769d7ac2b",
+      "group": "最后的可汗",
+      "locator": "#change li[2]",
+      "originalText": "骑兵在封建时代开始移速+10%，34055版本后封建/城堡/帝王时代提升骑兵5%/10%/15%移动速度",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-39b95ecc-03cd-4dca-834b-872769d7ac2b"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "group": "最后的可汗",
+      "locator": "#change li[3]",
+      "originalText": "钦察骑射手有1.8攻击间隔时间，34055版本后他们拥有2.2攻击间隔时间",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb",
+      "group": "最后的可汗",
+      "locator": "#change li[4]",
+      "originalText": "钦察骑射手/精锐钦察骑射手拥有50/55HP，34055版本后拥有40/45HP",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ea1a0967-24d1-456d-88a8-f7325d0a9369",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "精锐钦察骑射手每次射击发射4支箭，34055版本后之发射3支",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ea1a0967-24d1-456d-88a8-f7325d0a9369"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-df67dccd-1e57-4511-90d0-bfd20abb225b",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "34055版本后在封建时代建造城镇中心的时间从225秒提升到270秒",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-df67dccd-1e57-4511-90d0-bfd20abb225b"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6e1130ec-a314-4ad9-a188-4b512e42d8d1",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "36202版本后，草原枪兵的基础攻击力+1",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6e1130ec-a314-4ad9-a188-4b512e42d8d1"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-619dff87-462f-463f-997b-c731d02b2702",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "36202版本后，无法研发救赎",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-619dff87-462f-463f-997b-c731d02b2702"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-82ab80c2-0f6d-42f8-a28f-ec1244f2b864",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "36202版本后，从城堡时代开始就可以作为文明奖金研发中型冲车",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-82ab80c2-0f6d-42f8-a28f-ec1244f2b864"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "36202版本后，钦察骑射手/精锐钦察骑射手射出的副箭数量+1",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0e84be95-a5e3-4b1a-b039-50faf89cfa86",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "36202版本后，大草原畜牧可以作用于草原枪兵了，效率从80%下调为50%",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0e84be95-a5e3-4b1a-b039-50faf89cfa86"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-23238351-959c-42c5-872f-b6f1355ebc21",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-43024661-1b5b-4723-83a8-6e0bc034deab",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "42848版本后，钦察骑射手/精锐钦察骑射手获得0.5发射延迟，相当于蒙古突骑",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-43024661-1b5b-4723-83a8-6e0bc034deab"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-943a4beb-6b1e-4c7b-a69c-ba4485f73202",
+      "group": "西方霸主",
+      "locator": "#change li[14]",
+      "originalText": "47820版本后，草原枪兵黄金费用从45黄金下调为40黄金",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-943a4beb-6b1e-4c7b-a69c-ba4485f73202"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-efeba570-f6ef-4f76-805e-a080f02f7487",
+      "group": "西方霸主",
+      "locator": "#change li[15]",
+      "originalText": "47820版本后，团队的50%木墙生命值加成下调为33%",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-efeba570-f6ef-4f76-805e-a080f02f7487"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2a4a9999-6c98-4a5b-8f8e-16ee1956b2e3",
+      "group": "公爵的崛起",
+      "locator": "#change li[16]",
+      "originalText": "51737版本后，靶场和马厩便宜100木头",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2a4a9999-6c98-4a5b-8f8e-16ee1956b2e3"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2602492b-62e5-4ccc-b6be-ca2aa0ab5d45",
+      "group": "公爵的崛起",
+      "locator": "#change li[17]",
+      "originalText": "56005版本后，靶场和马厩便宜75木头",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2602492b-62e5-4ccc-b6be-ca2aa0ab5d45"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "group": "印度王朝",
+      "locator": "#change li[18]",
+      "originalText": "61321版本后，库曼雇佣兵金冠科技从原来的“团队成员可以在城堡生产10个钦察骑射手”修改为“团队成员每拥有一个城堡就生成5个精锐钦察骑射手，同时解锁在城堡训练佣兵钦察骑射手的机能”，队友训练钦察骑射手不再需要帝王时代，同时训练的佣兵钦察骑射手只需要12秒",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a571b1ab-1629-4c10-961e-9401f8287805"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-40509672-40b8-4ca5-a09c-31b3b322d6b6",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "81058版本后，独特部队“钦察骑射手”更名为“钦察”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-40509672-40b8-4ca5-a09c-31b3b322d6b6"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5917b108-d318-4753-93b7-24290021a679",
+      "group": "最后的酋长",
+      "locator": "#change li[20]",
+      "originalText": "169123版本更新后，获得大型投石战舰",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5917b108-d318-4753-93b7-24290021a679"
+      ],
+      "reason": "逐条核对库曼原文的对象、条件与效果；未知前后值保持 null，社区主张未核实。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    最后的可汗\n    \n        可以研发畜牧，但34055版本中移除\n        骑兵在封建时代开始移速+10%，34055版本后封建/城堡/帝王时代提升骑兵5%/10%/15%移动速度\n        钦察骑射手有1.8攻击间隔时间，34055版本后他们拥有2.2攻击间隔时间\n        钦察骑射手/精锐钦察骑射手拥有50/55HP，34055版本后拥有40/45HP\n        精锐钦察骑射手每次射击发射4支箭，34055版本后之发射3支\n        34055版本后在封建时代建造城镇中心的时间从225秒提升到270秒\n        36202版本后，草原枪兵的基础攻击力+1\n        36202版本后，无法研发救赎\n        36202版本后，从城堡时代开始就可以作为文明奖金研发中型冲车\n        36202版本后，钦察骑射手/精锐钦察骑射手射出的副箭数量+1\n        36202版本后，大草原畜牧可以作用于草原枪兵了，效率从80%下调为50%\n        37650版本后，不再拥有供给\n        42848版本后，钦察骑射手/精锐钦察骑射手获得0.5发射延迟，相当于蒙古突骑\n    \n\n    西方霸主\n    \n        47820版本后，草原枪兵黄金费用从45黄金下调为40黄金\n        47820版本后，团队的50%木墙生命值加成下调为33%\n    \n\n    公爵的崛起\n    \n        51737版本后，靶场和马厩便宜100木头\n        56005版本后，靶场和马厩便宜75木头\n    \n\n    印度王朝\n    \n        61321版本后，库曼雇佣兵金冠科技从原来的“团队成员可以在城堡生产10个钦察骑射手”修改为“团队成员每拥有一个城堡就生成5个精锐钦察骑射手，同时解锁在城堡训练佣兵钦察骑射手的机能”，队友训练钦察骑射手不再需要帝王时代，同时训练的佣兵钦察骑射手只需要12秒\n        \n        81058版本后，独特部队“钦察骑射手”更名为“钦察”\n    \n\n    最后的酋长\n    \n        169123版本更新后，获得大型投石战舰",
+  "sectionTextSha256": "39457b086a289ae644c757b67ae148c764490b07c51bc5f305d69ff7c138a642",
+  "observedEntryCount": 20,
+  "supersedesRevisionId": null
+}

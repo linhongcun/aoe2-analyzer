@@ -1,0 +1,400 @@
+{
+  "civId": "Byzantines",
+  "sourceId": "seicing-byzantines",
+  "url": "https://seicing.com/html/aoe2/2/%E6%8B%9C%E5%8D%A0%E5%BA%AD.html",
+  "indexLabel": "拜占庭Byzantines",
+  "title": "拜占庭",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-fbbfaf746f5c04979e34",
+  "documentSha256": "fbbfaf746f5c04979e34b6568c8d6358bcc7d83402558da41a625941a1713332",
+  "capturedAt": "2026-11-16T11:42:02.313794+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-5b24cfaa-bf5a-4639-a250-05f615eeaa38",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "必须像其他文明那样研发城镇瞭望",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5b24cfaa-bf5a-4639-a250-05f615eeaa38"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d44afe3d-8565-4d55-9611-a78f1bef5c16",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "拜占庭人的团队奖励是僧侣治疗速度加三倍",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d44afe3d-8565-4d55-9611-a78f1bef5c16"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ffa313bb-37a0-41dc-af03-f34775fe4660",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "甲胄骑兵训练需要23秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ffa313bb-37a0-41dc-af03-f34775fe4660"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8989ca73-8f19-4ffc-87a0-27c5d7f0b82d",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "甲胄骑兵的攻击间隔是2.03",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8989ca73-8f19-4ffc-87a0-27c5d7f0b82d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7fc2faa4-1b06-43d0-a33d-1e50a3b999c2",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "1.0c版本后，城镇瞭望免费",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7fc2faa4-1b06-43d0-a33d-1e50a3b999c2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7c512c29-4725-4939-bfb1-6f95c010499c",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "后勤学科技增加",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7c512c29-4725-4939-bfb1-6f95c010499c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3dea54a7-d537-4edd-8ea6-1377fc9e3b42",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "拜占庭人的团队奖励是僧侣治疗速度加1.5倍",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3dea54a7-d537-4edd-8ea6-1377fc9e3b42"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bcb4247f-1afd-4bc3-8fd4-e1c1d803d1d7",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "甲胄骑兵训练需要20秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bcb4247f-1afd-4bc3-8fd4-e1c1d803d1d7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3c3d2258-395c-4673-93df-45ead905463a",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "甲胄骑兵的攻击间隔是1.83，精锐是1.73",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3c3d2258-395c-4673-93df-45ead905463a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-566e5c9f-66c3-4458-a9ed-0cf103841dea",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "甲胄骑兵获得+12(精锐是+16)的反骑兵攻击护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-566e5c9f-66c3-4458-a9ed-0cf103841dea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a025116f-3a93-4be8-990e-2c8c2a08c97a",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "希腊之火科技增加，花费250食物和450黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a025116f-3a93-4be8-990e-2c8c2a08c97a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cf91cc24-275b-40f4-9784-c6c8ed9af665",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "4.8版本后，希腊之火花费250食物和300黄金",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cf91cc24-275b-40f4-9784-c6c8ed9af665"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4751414c-c2cd-44bf-acdb-5910251be28e",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "建筑风格由中东修改为地中海",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4751414c-c2cd-44bf-acdb-5910251be28e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1199b4ed-b8e1-4970-801f-4cc10f22cf23",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "39284版本后，升级精锐甲胄骑兵的食物费用下调为1200，之前是1600",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1199b4ed-b8e1-4970-801f-4cc10f22cf23"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f1ff1c67-b48c-490e-afcc-ecd7ad26f4e1",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "39284版本后，开发后勤学的食物费用下调为800，之前是1000",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f1ff1c67-b48c-490e-afcc-ecd7ad26f4e1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-28dd2b9c-e848-4cb8-b3c7-150cfdfcfb6d",
+      "group": "公爵的崛起",
+      "locator": "#change li[16]",
+      "originalText": "51737更新中，城镇巡逻免费，并且可以马上研发完毕",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-28dd2b9c-e848-4cb8-b3c7-150cfdfcfb6d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1595164b-701c-4d1a-93d2-1b888682ad2d",
+      "group": "公爵的崛起",
+      "locator": "#change li[17]",
+      "originalText": "56005更新中，团队奖励的僧侣+50%治疗速度加成修改成+100%治疗速度加成",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1595164b-701c-4d1a-93d2-1b888682ad2d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-573c97d4-4582-4512-b829-870d9b5147ec",
+      "group": "印度王朝",
+      "locator": "#change li[18]",
+      "originalText": "66692版本后，获得脚踏起重机",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-573c97d4-4582-4512-b829-870d9b5147ec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-97d2720f-c9bf-441a-9aec-a3431a6fc337",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "81058版本后，希腊火科技让炮塔造成额外的5点区域伤害",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-97d2720f-c9bf-441a-9aec-a3431a6fc337"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-98a34273-1441-4bdf-909e-74f11be83d86",
+      "group": "罗马归来",
+      "locator": "#change li[20]",
+      "originalText": "获得德罗蒙战舰，失去炮舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-98a34273-1441-4bdf-909e-74f11be83d86"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9bdf7c50-f25d-4183-b09a-63ce36e7be6e",
+      "group": "罗马归来",
+      "locator": "#change li[21]",
+      "originalText": "87863版本后，希腊之火科技让炮塔造成额外25%区域伤害，现在也作用于德罗蒙战舰，效果变成增加0.5格伤害区域",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9bdf7c50-f25d-4183-b09a-63ce36e7be6e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5e8b702f-1757-4448-8471-853692fd3e1c",
+      "group": "成王败寇",
+      "locator": "#change li[22]",
+      "originalText": "125283版本更新后，喷火船和德罗蒙战舰攻速加成量从25%下调到了20%",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5e8b702f-1757-4448-8471-853692fd3e1c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5478445e-46b9-4f59-97c3-aa94dbee2fb1",
+      "group": "最后的酋长",
+      "locator": "#change li[23]",
+      "originalText": "169123版本更新后，喷火船和德莱蒙战舰攻击加成率从20%上调到25%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5478445e-46b9-4f59-97c3-aa94dbee2fb1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7d9c49c7-e58e-4f68-8aef-615713c39452",
+      "group": "维京传奇",
+      "locator": "#change li[24]",
+      "originalText": "185872版本补丁后，甲胄骑兵对步兵的额外伤害从9/12上调到13/18",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7d9c49c7-e58e-4f68-8aef-615713c39452"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b2e03d69-c522-4dba-b1f5-3a8a43b5b403",
+      "group": "维京传奇",
+      "locator": "#change li[25]",
+      "originalText": "185872版本补丁后，后勤学作用于甲胄骑兵和瓦兰吉卫队，但不再+6对步兵伤害",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b2e03d69-c522-4dba-b1f5-3a8a43b5b403"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2d93c0b7-d92f-43c1-9749-78258c4dd08f",
+      "group": "维京传奇",
+      "locator": "#change li[26]",
+      "originalText": "185872版本补丁后，获得瓦兰吉卫队和精锐瓦兰吉卫队",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2d93c0b7-d92f-43c1-9749-78258c4dd08f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c61b666d-d91f-411d-8a4d-0fe00762fa5a",
+      "group": "维京传奇",
+      "locator": "#change li[27]",
+      "originalText": "185872版本补丁后，配音从中世纪拉丁语更改为中世纪希腊语",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c61b666d-d91f-411d-8a4d-0fe00762fa5a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        必须像其他文明那样研发城镇瞭望\n        拜占庭人的团队奖励是僧侣治疗速度加三倍\n        甲胄骑兵训练需要23秒\n        甲胄骑兵的攻击间隔是2.03\n    \n\n    征服者\n    \n        1.0c版本后，城镇瞭望免费\n        后勤学科技增加\n        拜占庭人的团队奖励是僧侣治疗速度加1.5倍\n        甲胄骑兵训练需要20秒\n        甲胄骑兵的攻击间隔是1.83，精锐是1.73\n        甲胄骑兵获得+12(精锐是+16)的反骑兵攻击护甲\n    \n\n    失落帝国\n    \n        希腊之火科技增加，花费250食物和450黄金\n    \n\n    非洲王国\n    \n        4.8版本后，希腊之火花费250食物和300黄金\n    \n\n    最后的可汗\n    \n        建筑风格由中东修改为地中海\n        39284版本后，升级精锐甲胄骑兵的食物费用下调为1200，之前是1600\n        39284版本后，开发后勤学的食物费用下调为800，之前是1000\n    \n\n    公爵的崛起\n    \n        51737更新中，城镇巡逻免费，并且可以马上研发完毕\n        56005更新中，团队奖励的僧侣+50%治疗速度加成修改成+100%治疗速度加成\n    \n\n    印度王朝\n    \n        66692版本后，获得脚踏起重机\n        81058版本后，希腊火科技让炮塔造成额外的5点区域伤害\n    \n\n    \n        罗马归来\n    \n    \n        获得德罗蒙战舰，失去炮舰\n        87863版本后，希腊之火科技让炮塔造成额外25%区域伤害，现在也作用于德罗蒙战舰，效果变成增加0.5格伤害区域\n    \n\n    成王败寇\n    \n        125283版本更新后，喷火船和德罗蒙战舰攻速加成量从25%下调到了20%\n    \n\n\n    最后的酋长\n    \n        169123版本更新后，喷火船和德莱蒙战舰攻击加成率从20%上调到25%\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，甲胄骑兵对步兵的额外伤害从9/12上调到13/18\n        185872版本补丁后，后勤学作用于甲胄骑兵和瓦兰吉卫队，但不再+6对步兵伤害\n        185872版本补丁后，获得瓦兰吉卫队和精锐瓦兰吉卫队\n        185872版本补丁后，配音从中世纪拉丁语更改为中世纪希腊语",
+  "sectionTextSha256": "1a4beb56dbb1fd66ecd7ceb6157d3609bd06f51f592c8b9df343eb311d866fcd",
+  "observedEntryCount": 27,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,109 @@
+{
+  "civId": "Khitans",
+  "sourceId": "seicing-khitans",
+  "url": "https://seicing.com/html/aoe2/2/%E5%A5%91%E4%B8%B9.html",
+  "indexLabel": "契丹Khitans",
+  "title": "契丹",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-81918eb4db8793ad7429",
+  "documentSha256": "81918eb4db8793ad742995e779e09f9774ed66773b9a89d833438920d850813b",
+  "capturedAt": "2026-11-16T11:44:25.913633+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-4e611ebb-7939-423b-8a1c-63cf99280da4",
+      "group": "三国",
+      "locator": "#change li[1]",
+      "originalText": "147949版本后，牧羊人+10%食物效率的加成删除",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4e611ebb-7939-423b-8a1c-63cf99280da4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-653c94f9-2f86-40a4-9791-a6bd4a55aca9",
+      "group": "三国",
+      "locator": "#change li[2]",
+      "originalText": "147949版本后，牧羊人在牧场的行走距离提高，牧羊人的收集效率调整，和未升级的农民相比，效率比率从原来的112%下调到了107%",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-653c94f9-2f86-40a4-9791-a6bd4a55aca9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-94bca1f6-d326-4221-a19d-ebe35c14b6c3",
+      "group": "三国",
+      "locator": "#change li[3]",
+      "originalText": "162286版本更新后，骆驼巨型投石机火焰区域大小从0.65上调到0.7格，燃烧持续时间从8秒上调到10秒",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-94bca1f6-d326-4221-a19d-ebe35c14b6c3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-69bd4d72-5bd6-4f24-a8a5-40a5640ca78d",
+      "group": "三国",
+      "locator": "#change li[4]",
+      "originalText": "162286版本更新后，牧场成本从100木上调到110木，牧场动物食物承载量从105上调到115，建造时间从18秒上调到22秒",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-69bd4d72-5bd6-4f24-a8a5-40a5640ca78d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e7262970-0d6a-4dd5-91f6-377e537ad8ae",
+      "group": "最后的酋长",
+      "locator": "#change li[5]",
+      "originalText": "169123版本更新后，掷矛手、长矛兵和斥候骑兵系列训练和升级速度效率从25%下调到15%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e7262970-0d6a-4dd5-91f6-377e537ad8ae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-879d3d95-427c-4a0a-9ee6-57da49d1c6e2",
+      "group": "最后的酋长",
+      "locator": "#change li[6]",
+      "originalText": "169123版本更新后，牧场工作效率下调4%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-879d3d95-427c-4a0a-9ee6-57da49d1c6e2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    三国\n    \n        147949版本后，牧羊人+10%食物效率的加成删除\n        147949版本后，牧羊人在牧场的行走距离提高，牧羊人的收集效率调整，和未升级的农民相比，效率比率从原来的112%下调到了107%\n        162286版本更新后，骆驼巨型投石机火焰区域大小从0.65上调到0.7格，燃烧持续时间从8秒上调到10秒\n        162286版本更新后，牧场成本从100木上调到110木，牧场动物食物承载量从105上调到115，建造时间从18秒上调到22秒\n    \n\n\n    最后的酋长\n    \n        169123版本更新后，掷矛手、长矛兵和斥候骑兵系列训练和升级速度效率从25%下调到15%\n        169123版本更新后，牧场工作效率下调4%",
+  "sectionTextSha256": "198c662412c916b447865115b9c00e3b32bf3723e456a57882b78e6508b661a8",
+  "observedEntryCount": 6,
+  "supersedesRevisionId": null
+}

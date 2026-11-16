@@ -1,0 +1,137 @@
+{
+  "civId": "Romans",
+  "sourceId": "seicing-romans",
+  "url": "https://seicing.com/html/aoe2/2/%E7%BD%97%E9%A9%AC.html",
+  "indexLabel": "罗马Romans",
+  "title": "罗马",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-2ed19922324a33b02e31",
+  "documentSha256": "2ed19922324a33b02e31a195faaea0f1e9b49e9ae8584c6f8042d5a3b8624401",
+  "capturedAt": "2026-11-16T11:46:22.521978+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-7b9bb4a2-2197-4866-8062-b58ee1af52a9",
+      "group": "罗马归来",
+      "locator": "#change li[1]",
+      "originalText": "在2023年5月16日罗马归来dlc中作为新文明加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7b9bb4a2-2197-4866-8062-b58ee1af52a9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bc256d62-aa91-4043-9e64-2d3271b138b5",
+      "group": "罗马归来",
+      "locator": "#change li[2]",
+      "originalText": "87863版本后，箭船+1攻击文明加成删除，原有的“战舰近战护甲和远程护甲+1，大型战舰和德罗蒙战舰近战护甲和远程护甲+2”加成修改成“战舰系和德罗蒙战舰近战护甲和远程护甲+1”",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bc256d62-aa91-4043-9e64-2d3271b138b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-73936a34-677a-4e50-9673-8ceb86e7e49e",
+      "group": "罗马归来",
+      "locator": "#change li[3]",
+      "originalText": "87863版本后，重弩不再增加战舰系的攻速，而是为战舰系+2攻击力",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-73936a34-677a-4e50-9673-8ceb86e7e49e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-27558538-2b64-4c3a-b7b4-bb9a2db7205f",
+      "group": "罗马归来",
+      "locator": "#change li[4]",
+      "originalText": "93001版本后，百夫长生命值从120下调到了110",
+      "rawVersions": [
+        "93001"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-27558538-2b64-4c3a-b7b4-bb9a2db7205f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-664bf47e-f721-40ff-a799-30a0e996cd7f",
+      "group": "皇家山脉",
+      "locator": "#change li[5]",
+      "originalText": "95810版本后，百夫长/精锐百夫长对民兵系攻速加成从+25%/+33%下调到+20%",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-664bf47e-f721-40ff-a799-30a0e996cd7f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-01e67d58-ebeb-4db3-8771-607dcb4b3972",
+      "group": "三国",
+      "locator": "#change li[6]",
+      "originalText": "141935版本更新后，罗马军基础移动速度从0.9上调到0.96",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-01e67d58-ebeb-4db3-8771-607dcb4b3972"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c2c69e9d-b731-48c2-baee-e20162b43dcd",
+      "group": "三国",
+      "locator": "#change li[7]",
+      "originalText": "141935版本更新后，失去纵火",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c2c69e9d-b731-48c2-baee-e20162b43dcd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-866effec-6d78-4ba6-bdae-1dc4e3e20b92",
+      "group": "三国",
+      "locator": "#change li[8]",
+      "originalText": "151401版本后，弩炮消耗黄金减少奖励从60%下调到50%",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-866effec-6d78-4ba6-bdae-1dc4e3e20b92"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    罗马归来\n    \n        在2023年5月16日罗马归来dlc中作为新文明加入\n        87863版本后，箭船+1攻击文明加成删除，原有的“战舰近战护甲和远程护甲+1，大型战舰和德罗蒙战舰近战护甲和远程护甲+2”加成修改成“战舰系和德罗蒙战舰近战护甲和远程护甲+1”\n        87863版本后，重弩不再增加战舰系的攻速，而是为战舰系+2攻击力\n        93001版本后，百夫长生命值从120下调到了110\n    \n\n    皇家山脉\n    \n        95810版本后，百夫长/精锐百夫长对民兵系攻速加成从+25%/+33%下调到+20%\n    \n\n    三国\n    \n        141935版本更新后，罗马军基础移动速度从0.9上调到0.96\n        141935版本更新后，失去纵火\n        151401版本后，弩炮消耗黄金减少奖励从60%下调到50%",
+  "sectionTextSha256": "771b31044025d5bc7a13c6d15e7b37f45f7c897686d3b27c2baaf994061ef44e",
+  "observedEntryCount": 8,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,355 @@
+{
+  "civId": "Teutons",
+  "sourceId": "seicing-teutons",
+  "url": "https://seicing.com/html/aoe2/2/%E6%9D%A1%E9%A1%BF.html",
+  "indexLabel": "条顿Teutons",
+  "title": "条顿",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-2c7f7efce51b98415f55",
+  "documentSha256": "2c7f7efce51b98415f55a6b7ca7cd8523e7091516b96efb925f1187b280ede31",
+  "capturedAt": "2026-11-16T11:47:37.830838+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-d7c7fabb-55be-4ca1-884c-911f0f6095df",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "城镇中心+2攻击和+5射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d7c7fabb-55be-4ca1-884c-911f0f6095df"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5ce8b0f6-bf6e-4c2f-9163-bb66584368ce",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "条顿骑士移动速度是0.65",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5ce8b0f6-bf6e-4c2f-9163-bb66584368ce"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ff6f65ca-f6d6-4e9e-9fee-9278cf5277c6",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "条顿骑士训练速度是19秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ff6f65ca-f6d6-4e9e-9fee-9278cf5277c6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6ecd0f64-6b6b-4585-bcae-efa5983259ce",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "条顿骑士拥有70HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6ecd0f64-6b6b-4585-bcae-efa5983259ce"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9e641c2e-a54b-4196-8272-d608783d8ce9",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "城镇中心+2攻击和+5视野",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9e641c2e-a54b-4196-8272-d608783d8ce9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e27b3ce0-dc14-4e2e-9bf6-61c41056f52c",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "开垛口科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e27b3ce0-dc14-4e2e-9bf6-61c41056f52c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b9465f96-5882-4630-a1e6-5c3457f5289f",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "条顿骑士训练速度是12秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b9465f96-5882-4630-a1e6-5c3457f5289f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-09ca2254-7ecb-4f64-82fd-8d3fbf447ab1",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "城镇中心现在可以驻扎25个部队，取代城镇中心+2攻击和+5射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-09ca2254-7ecb-4f64-82fd-8d3fbf447ab1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-40d43102-bc6e-436c-ab9a-ba10272dbe60",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "重装甲科技加入，花费500木头和350黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-40d43102-bc6e-436c-ab9a-ba10272dbe60"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-06c2852f-d6fc-432f-b3c9-934dfaf8fbc2",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "条顿骑士拥有80HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-06c2852f-d6fc-432f-b3c9-934dfaf8fbc2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b8af9432-8264-4747-bc25-db9541abc1a4",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "重装甲花费400木头和350黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b8af9432-8264-4747-bc25-db9541abc1a4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-44226755-4fac-479f-ac1f-577974226e27",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "4.8版本中，条顿骑士移动速度是0.7",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-44226755-4fac-479f-ac1f-577974226e27"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eb1b9cc3-225b-4af4-a506-ef397c1b02ba",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "获得草药，而且是免费的",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eb1b9cc3-225b-4af4-a506-ef397c1b02ba"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d27349c0-7676-45e0-802a-1e731cfb7bb5",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "35584版本后，农场便宜40%，之前是便宜33%",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d27349c0-7676-45e0-802a-1e731cfb7bb5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0da71fdd-4a1e-45e7-aef5-648d46866831",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "35584版本后，城堡时代开始兵营单位可以获得1近战护甲",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0da71fdd-4a1e-45e7-aef5-648d46866831"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-929c5f66-02c7-49a4-b2d2-e3e70bd9b44d",
+      "group": "最后的可汗",
+      "locator": "#change li[16]",
+      "originalText": "36906版本后，条顿骑士移动速度从0.7提升到0.8",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-929c5f66-02c7-49a4-b2d2-e3e70bd9b44d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-70d2158d-1608-4a31-8c08-c390a2022eea",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "36906版本后，兵营和马厩单位在城堡时代和帝王时代的近战护甲+1(总计2)",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-70d2158d-1608-4a31-8c08-c390a2022eea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a20e4a32-cd9b-4b6e-861c-9083d5058bc4",
+      "group": "公爵的崛起",
+      "locator": "#change li[18]",
+      "originalText": "56005版本后，条顿骑士攻击力从12上调到14，近战护甲从5上调到7，升级到精锐条顿骑士的成本从950食物875黄金下调到750食物650黄金",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a20e4a32-cd9b-4b6e-861c-9083d5058bc4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6736d488-7913-4452-931d-508e65da7692",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "66692版本后，失去脚踏起重机",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6736d488-7913-4452-931d-508e65da7692"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5458faa2-3de7-4985-9721-50cc13f726db",
+      "group": "印度王朝",
+      "locator": "#change li[20]",
+      "originalText": "81058版本后，条顿骑士成本从85肉40金下调到85肉30金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5458faa2-3de7-4985-9721-50cc13f726db"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1c6d06ec-0f21-41e7-a4f4-b55602d76b9e",
+      "group": "三国",
+      "locator": "#change li[21]",
+      "originalText": "141935版本更新后，条顿骑士/精锐条顿骑士生命值从80/100上调到90/110，基础招降抗性从0上调到3",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1c6d06ec-0f21-41e7-a4f4-b55602d76b9e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8d7e6daf-176d-446f-8129-da189aab3fdd",
+      "group": "维京传奇",
+      "locator": "#change li[22]",
+      "originalText": "185872版本补丁后，文明护甲加成的适用对象从“马厩和兵营”单位更变为“步兵和骑乘单位”",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8d7e6daf-176d-446f-8129-da189aab3fdd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-57b8c54b-cc81-4a47-ab9b-ca18a5f3226f",
+      "group": "维京传奇",
+      "locator": "#change li[23]",
+      "originalText": "185872版本补丁后，精锐条顿骑士基础近战护甲从10下调到8",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-57b8c54b-cc81-4a47-ab9b-ca18a5f3226f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2911629a-755d-48c2-822f-98957599492a",
+      "group": "维京传奇",
+      "locator": "#change li[24]",
+      "originalText": "185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2911629a-755d-48c2-822f-98957599492a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        城镇中心+2攻击和+5射程\n        条顿骑士移动速度是0.65\n        条顿骑士训练速度是19秒\n        条顿骑士拥有70HP\n    \n\n    征服者\n    \n        城镇中心+2攻击和+5视野\n        开垛口科技加入\n        条顿骑士训练速度是12秒\n    \n\n    失落帝国\n    \n        城镇中心现在可以驻扎25个部队，取代城镇中心+2攻击和+5射程\n        重装甲科技加入，花费500木头和350黄金\n        条顿骑士拥有80HP\n    \n\n    非洲王国\n    \n        重装甲花费400木头和350黄金\n        4.8版本中，条顿骑士移动速度是0.7\n    \n\n    最后的可汗\n    \n        获得草药，而且是免费的\n        35584版本后，农场便宜40%，之前是便宜33%\n        35584版本后，城堡时代开始兵营单位可以获得1近战护甲\n        36906版本后，条顿骑士移动速度从0.7提升到0.8\n        36906版本后，兵营和马厩单位在城堡时代和帝王时代的近战护甲+1(总计2)\n    \n\n    公爵的崛起\n    \n        56005版本后，条顿骑士攻击力从12上调到14，近战护甲从5上调到7，升级到精锐条顿骑士的成本从950食物875黄金下调到750食物650黄金\n    \n\n    印度王朝\n    \n        66692版本后，失去脚踏起重机\n        81058版本后，条顿骑士成本从85肉40金下调到85肉30金\n    \n\n    三国\n    \n        141935版本更新后，条顿骑士/精锐条顿骑士生命值从80/100上调到90/110，基础招降抗性从0上调到3\n    \n\n    维京传奇\n    \n        185872版本补丁后，文明护甲加成的适用对象从“马厩和兵营”单位更变为“步兵和骑乘单位”\n        185872版本补丁后，精锐条顿骑士基础近战护甲从10下调到8\n        185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手",
+  "sectionTextSha256": "085a66d7fd133ac325492a91801bfc7891ae9f890579d9eda7fec86cd95ffde8",
+  "observedEntryCount": 24,
+  "supersedesRevisionId": null
+}

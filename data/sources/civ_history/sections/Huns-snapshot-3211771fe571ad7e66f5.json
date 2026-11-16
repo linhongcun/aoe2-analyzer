@@ -1,0 +1,353 @@
+{
+  "civId": "Huns",
+  "sourceId": "seicing-huns",
+  "url": "https://seicing.com/html/aoe2/2/%E5%8C%88%E5%A5%B4.html",
+  "indexLabel": "匈奴Huns",
+  "title": "匈奴",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-3211771fe571ad7e66f5",
+  "documentSha256": "3211771fe571ad7e66f5ad7c8c7e8003ad99ac4e6232bfed57ae381b89c0774f",
+  "capturedAt": "2026-11-16T11:43:46.223036+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-d6c7a5f3-c1aa-4e99-aa64-d07f722d421a",
+      "group": "征服者",
+      "locator": "#change li[1]",
+      "originalText": "骑射手在城堡时代便宜25%，在帝王时代便宜30%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d6c7a5f3-c1aa-4e99-aa64-d07f722d421a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a781ec2-5801-43c1-9241-3c873f611d76",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "可以建造炮舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a781ec2-5801-43c1-9241-3c873f611d76"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d6857e21-e9ac-4a95-bdec-b6542922cc58",
+      "group": "征服者",
+      "locator": "#change li[3]",
+      "originalText": "可以研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d6857e21-e9ac-4a95-bdec-b6542922cc58"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-169e09f4-7b47-41c1-a845-a027a92ee961",
+      "group": "征服者",
+      "locator": "#change li[4]",
+      "originalText": "答剌罕骑兵拥有90HP和7攻击力",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-169e09f4-7b47-41c1-a845-a027a92ee961"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-82bc235b-d9b1-4f39-886f-73a80ae9d87f",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "答剌罕骑兵有2点远程护甲，精锐答剌罕骑兵有3点远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-82bc235b-d9b1-4f39-886f-73a80ae9d87f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-17a5b287-d2ae-4dfc-8192-037952b3ceb5",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "骑射手在城堡时代便宜15%，在帝王时代便宜25%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-17a5b287-d2ae-4dfc-8192-037952b3ceb5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2e49ed36-33e5-42c9-bf04-50c3ad6ab2a1",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "无法建造炮舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2e49ed36-33e5-42c9-bf04-50c3ad6ab2a1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-adcf9f9c-bc7e-482d-b9dd-3d29aac0c98c",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "无法研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-adcf9f9c-bc7e-482d-b9dd-3d29aac0c98c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d3a42cda-708d-4eea-a1b0-2f9e3373d2dc",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "掠夺者科技加入，花费500食物和200黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d3a42cda-708d-4eea-a1b0-2f9e3373d2dc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-126543ef-82b5-41a2-a3bf-b351b2060e5e",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "答剌罕骑兵拥有100HP和8攻击力",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-126543ef-82b5-41a2-a3bf-b351b2060e5e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fee7beea-15da-46c4-9d08-e28b50026133",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "骑射手在城堡时代便宜10%，在帝王时代便宜20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fee7beea-15da-46c4-9d08-e28b50026133"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7def128a-5395-486b-8ce1-7f6ce5231398",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "掠夺者花费300木材和200黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7def128a-5395-486b-8ce1-7f6ce5231398"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-89fd027e-f3d0-434e-8d41-7c24f555c1e1",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "可以研发射箭槽，但是在4.8版本移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-89fd027e-f3d0-434e-8d41-7c24f555c1e1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-236f95a6-8442-450e-be90-8c3a2e3f704e",
+      "group": "非洲王国",
+      "locator": "#change li[14]",
+      "originalText": "4.8版本后，答剌罕骑兵有3点远程护甲，精锐答剌罕骑兵有4点远程护甲",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-236f95a6-8442-450e-be90-8c3a2e3f704e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-54f1b56a-a5d3-4ae2-8044-33b079a2e281",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b7d16bb3-3116-4882-bd91-6d489e37fd5b",
+      "group": "西方霸主",
+      "locator": "#change li[16]",
+      "originalText": "44725更新后，无神论减少50%间谍成本修改为减少敌方50%的圣物收入",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b7d16bb3-3116-4882-bd91-6d489e37fd5b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a27381fe-3d82-4063-aa2c-20a54ee5887c",
+      "group": "印度王朝",
+      "locator": "#change li[17]",
+      "originalText": "81058版本后，无神论科技价格从500肉500金调整为到500肉300木",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a27381fe-3d82-4063-aa2c-20a54ee5887c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e7ea66ed-ea4a-4c77-a31e-d1d4fc4d4c62",
+      "group": "罗马归来",
+      "locator": "#change li[18]",
+      "originalText": "获得德罗蒙战舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e7ea66ed-ea4a-4c77-a31e-d1d4fc4d4c62"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5a082b7f-1045-4f15-8b90-741033accef6",
+      "group": "皇家山脉",
+      "locator": "#change li[19]",
+      "originalText": "99311版本后，答剌罕骑兵移动速度从1.35上调到了1.4",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5a082b7f-1045-4f15-8b90-741033accef6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4837090e-2ba6-4c68-811d-016f27229ca4",
+      "group": "皇家山脉",
+      "locator": "#change li[20]",
+      "originalText": "99311版本后，匈奴人可以在游牧类型地图建造城镇中心后免费获得一头用于侦察的野马",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4837090e-2ba6-4c68-811d-016f27229ca4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-185a5890-c7a9-46d7-bb73-e19be70ce3d6",
+      "group": "成王败寇",
+      "locator": "#change li[21]",
+      "originalText": "111772版本更新后，匈奴人在帝国战争模式开局里不会少100木开局，但失去了侦察的野马",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-185a5890-c7a9-46d7-bb73-e19be70ce3d6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2841337a-c387-4ce4-82b8-205087f848c4",
+      "group": "成王败寇",
+      "locator": "#change li[22]",
+      "originalText": "125283版本更新后，游牧类型地图生成的匈奴马移动速度从1.2下调到了1.05",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2841337a-c387-4ce4-82b8-205087f848c4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b7759136-f7cc-4ca6-a0ae-1e4e0d97b548",
+      "group": "三国",
+      "locator": "#change li[23]",
+      "originalText": "141935版本更新后，答剌罕骑兵攻击间隔时间从2.1下调到1.9",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b7759136-f7cc-4ca6-a0ae-1e4e0d97b548"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-db94e00b-7e0c-472d-ab7c-49642bdaee28",
+      "group": "维京传奇",
+      "locator": "#change li[24]",
+      "originalText": "185872版本补丁后，无神论现在只对敌方、中立玩家生效，效果现在可以叠加，圣物减少效果也适用于中立玩家",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-db94e00b-7e0c-472d-ab7c-49642bdaee28"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    征服者\n    \n        骑射手在城堡时代便宜25%，在帝王时代便宜30%\n        可以建造炮舰\n        可以研发脚踏起重机\n        答剌罕骑兵拥有90HP和7攻击力\n        答剌罕骑兵有2点远程护甲，精锐答剌罕骑兵有3点远程护甲\n    \n\n    失落帝国\n    \n        骑射手在城堡时代便宜15%，在帝王时代便宜25%\n        无法建造炮舰\n        无法研发脚踏起重机\n        掠夺者科技加入，花费500食物和200黄金\n        答剌罕骑兵拥有100HP和8攻击力\n    \n\n    非洲王国\n    \n        骑射手在城堡时代便宜10%，在帝王时代便宜20%\n        掠夺者花费300木材和200黄金\n        可以研发射箭槽，但是在4.8版本移除\n        4.8版本后，答剌罕骑兵有3点远程护甲，精锐答剌罕骑兵有4点远程护甲\n    \n\n    最后的可汗\n    \n        37650版本后，不再拥有供给\n    \n\n    西方霸主\n    \n        44725更新后，无神论减少50%间谍成本修改为减少敌方50%的圣物收入\n    \n\n    印度王朝\n    \n        81058版本后，无神论科技价格从500肉500金调整为到500肉300木\n    \n\n    罗马归来\n    \n        获得德罗蒙战舰\n    \n\n    皇家山脉\n    \n        99311版本后，答剌罕骑兵移动速度从1.35上调到了1.4\n        99311版本后，匈奴人可以在游牧类型地图建造城镇中心后免费获得一头用于侦察的野马\n    \n\n    成王败寇\n    \n        111772版本更新后，匈奴人在帝国战争模式开局里不会少100木开局，但失去了侦察的野马\n        125283版本更新后，游牧类型地图生成的匈奴马移动速度从1.2下调到了1.05\n    \n\n    三国\n    \n        141935版本更新后，答剌罕骑兵攻击间隔时间从2.1下调到1.9\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，无神论现在只对敌方、中立玩家生效，效果现在可以叠加，圣物减少效果也适用于中立玩家",
+  "sectionTextSha256": "d4b30d198e153d1be0ea8ec5b8a478094b3dba668d6f9e8fe6d0ba25cca8863f",
+  "observedEntryCount": 24,
+  "supersedesRevisionId": null
+}

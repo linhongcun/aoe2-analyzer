@@ -1,0 +1,429 @@
+{
+  "civId": "Burgundians",
+  "sourceId": "seicing-burgundians",
+  "url": "https://seicing.com/html/aoe2/2/%E5%8B%83%E8%89%AE%E7%AC%AC.html",
+  "indexLabel": "勃艮第Burgundians",
+  "title": "勃艮第",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-6fdc3f3ce2e6ad823a7b",
+  "documentSha256": "6fdc3f3ce2e6ad823a7be40c559ad3eefe0f3790d160a1928cf2a865e1e238bd",
+  "capturedAt": "2026-11-16T11:41:45.923872+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-9a6964b3-3ab2-44b9-b571-fbf6939ae83c",
+      "group": "西方霸主",
+      "locator": "#change li[1]",
+      "originalText": "在决定版发售一年多后的2021年1月26日的DLC“西方霸主”里正式登场",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9a6964b3-3ab2-44b9-b571-fbf6939ae83c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8dc8cb35-1eb1-498b-af8c-b6cc15109512",
+      "group": "西方霸主",
+      "locator": "#change li[2]",
+      "originalText": "圣物产生的食物量是20食物每分钟",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8dc8cb35-1eb1-498b-af8c-b6cc15109512"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-571756e7-8bc4-478d-b4f5-752f766d4892",
+      "group": "西方霸主",
+      "locator": "#change li[3]",
+      "originalText": "经济科技可以前一个时代研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-571756e7-8bc4-478d-b4f5-752f766d4892"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-71b9594d-bec7-4c20-9d82-c4ee084a2953",
+      "group": "西方霸主",
+      "locator": "#change li[4]",
+      "originalText": "勃艮第葡萄园转换所有的食物变成黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-71b9594d-bec7-4c20-9d82-c4ee084a2953"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-088ce606-26a0-4aa6-9d9a-b9e5c30d7bb9",
+      "group": "西方霸主",
+      "locator": "#change li[5]",
+      "originalText": "在1月26日正式发售之前，阵亡的骑兵返还50%黄金消耗，正式发售时这个加成被替换为马厩科技便宜50%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-088ce606-26a0-4aa6-9d9a-b9e5c30d7bb9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-94b0517b-b80b-4c60-a8c3-40e124b88f72",
+      "group": "西方霸主",
+      "locator": "#change li[6]",
+      "originalText": "45185补丁后，马上轻装兵/精锐马上轻装兵的冲锋伤害下调为25/30，此前是35/40",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-94b0517b-b80b-4c60-a8c3-40e124b88f72"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-55566f38-d7d2-4afc-9dce-0e5191f18373",
+      "group": "西方霸主",
+      "locator": "#change li[7]",
+      "originalText": "45185补丁后，马上轻装兵/精锐马上轻装兵不再对射手护甲类型的敌人造成双倍的冲锋伤害",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-55566f38-d7d2-4afc-9dce-0e5191f18373"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-337f5170-9f7e-414d-8ae8-d099f7a03543",
+      "group": "西方霸主",
+      "locator": "#change li[8]",
+      "originalText": "47820版本后，圣物产生的食物量是30食物每分钟",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-337f5170-9f7e-414d-8ae8-d099f7a03543"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-671c27ad-aacc-4610-80ac-e7aec059fb40",
+      "group": "西方霸主",
+      "locator": "#change li[9]",
+      "originalText": "47820版本后，经济科技可以前一个时代研发的同时减少50%的食物成本",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-671c27ad-aacc-4610-80ac-e7aec059fb40"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f83f2f5e-cc1f-4ffb-afa0-ba75ca042abe",
+      "group": "西方霸主",
+      "locator": "#change li[10]",
+      "originalText": "47820版本后，弗拉芒民兵对骑兵的附加伤害从12下调为8，对骆驼和船只的附加伤害从8下调为6",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f83f2f5e-cc1f-4ffb-afa0-ba75ca042abe"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5ce8fc8f-331f-4f31-8a51-2071e39b0e0a",
+      "group": "西方霸主",
+      "locator": "#change li[11]",
+      "originalText": "47820版本后，勃艮第葡萄园只会转换一半的食物为黄金，同时农民生产黄金的速度提高33%",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5ce8fc8f-331f-4f31-8a51-2071e39b0e0a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-860d689b-d96c-4a01-b287-b14d9faa5b01",
+      "group": "西方霸主",
+      "locator": "#change li[12]",
+      "originalText": "弗兰芒民兵对建筑附加2伤害，50292版本后，不再对建筑附加伤害",
+      "rawVersions": [
+        "50292"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-860d689b-d96c-4a01-b287-b14d9faa5b01"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2eb2268f-4079-42c8-bd0e-e6322d832499",
+      "group": "西方霸主",
+      "locator": "#change li[13]",
+      "originalText": "50292版本后，弗拉芒革命的成本从原来的800食物450黄金上调到1200食物650黄金",
+      "rawVersions": [
+        "50292"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2eb2268f-4079-42c8-bd0e-e6322d832499"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a6a99ed6-6e1c-4f5f-aedb-fd0ce7cdd100",
+      "group": "公爵的崛起",
+      "locator": "#change li[14]",
+      "originalText": "54480版本后，勃艮第葡萄园不再将一半食物转化为黄金，农民从耕作中获得黄金的机能保留",
+      "rawVersions": [
+        "54480"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a6a99ed6-6e1c-4f5f-aedb-fd0ce7cdd100"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4ec0d9fb-4112-454d-b0ce-7788a2112009",
+      "group": "公爵的崛起",
+      "locator": "#change li[15]",
+      "originalText": "56005版本后，现在勃艮第的火药部队攻击力加成可以作用在手推炮的反胡斯派战车的伤害上",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4ec0d9fb-4112-454d-b0ce-7788a2112009"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a5689424-5f3a-4d2c-af54-eb9253bdd809",
+      "group": "印度王朝",
+      "locator": "#change li[16]",
+      "originalText": "66692版本后，经济科技的食物折扣从50%下调到了40%",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a5689424-5f3a-4d2c-af54-eb9253bdd809"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f397bf5-7908-4335-b59e-ec9607e031d7",
+      "group": "印度王朝",
+      "locator": "#change li[17]",
+      "originalText": "66692版本后，马上轻装兵/精锐马上轻装兵的冲锋伤害从25/30下调到20/25",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f397bf5-7908-4335-b59e-ec9607e031d7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f7cfa211-1c68-42f1-ad7e-ba3c1271c017",
+      "group": "印度王朝",
+      "locator": "#change li[18]",
+      "originalText": "78174版本后，经济科技的食物折扣从40%下调到了33%",
+      "rawVersions": [
+        "78174"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f7cfa211-1c68-42f1-ad7e-ba3c1271c017"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "81058版本后，弗拉芒民兵的成本从60肉25金下调到50肉15金，训练位置从城镇中心改为兵营",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-56b37d60-6c69-4650-a886-66f3f0b1c014",
+      "group": "印度王朝",
+      "locator": "#change li[20]",
+      "originalText": "81058版本后，弗拉芒民兵的生命值从75下调到60，攻击力从12下调到11，远程防御从1下调到0",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fff7e4f6-757f-449a-9795-b6b47e737a3c",
+      "group": "印度王朝",
+      "locator": "#change li[21]",
+      "originalText": "81058版本后，弗拉芒革命的价格从1200肉650金调整为200肉+村民数*10肉+150金+村民数*5金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fff7e4f6-757f-449a-9795-b6b47e737a3c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b39af304-7bc8-45c4-9976-47cbfef04464",
+      "group": "三国",
+      "locator": "#change li[22]",
+      "originalText": "141935版本更新后，弗拉芒民兵可以在封建时代的兵营单独训练，成本从50肉15金下调到30肉30金，获得长矛兵护甲",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b39af304-7bc8-45c4-9976-47cbfef04464"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bd48e73a-5adf-4176-8601-2e13287e2d97",
+      "group": "三国",
+      "locator": "#change li[23]",
+      "originalText": "151401版本更新后，弗拉芒民兵成本从30肉30金下调到30肉25金，失去长矛兵护甲",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bd48e73a-5adf-4176-8601-2e13287e2d97"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-436ab9d1-9875-4886-bd8f-c4e559280976",
+      "group": "三国",
+      "locator": "#change li[24]",
+      "originalText": "162286版本更新后，弗拉芒民兵移动速度从0.9上调到了0.94",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-436ab9d1-9875-4886-bd8f-c4e559280976"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3aefa677-684f-4756-9c73-c229a02f52db",
+      "group": "最后的酋长",
+      "locator": "#change li[25]",
+      "originalText": "177723版本更新后，文明加成科技折扣率从33%上调到40%",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3aefa677-684f-4756-9c73-c229a02f52db"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-69c9ecf3-b19e-4537-91c3-184716527f9d",
+      "group": "最后的酋长",
+      "locator": "#change li[26]",
+      "originalText": "177723版本更新后，文明加成圣物食物效率从30下调到20",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-69c9ecf3-b19e-4537-91c3-184716527f9d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a0481f76-61da-4c89-8ccd-2d4f0b71b943",
+      "group": "维京传奇",
+      "locator": "#change li[27]",
+      "originalText": "185872版本补丁后，弗兰芒民兵成本从30肉25金上调到35肉25金，封建时代训练时间从14秒上调到16秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a0481f76-61da-4c89-8ccd-2d4f0b71b943"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e184a29e-25e4-4c9f-b603-d2499897afed",
+      "group": "维京传奇",
+      "locator": "#change li[28]",
+      "originalText": "185872版本补丁后，获得骑马弩兵；失去骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e184a29e-25e4-4c9f-b603-d2499897afed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    西方霸主\n    \n        在决定版发售一年多后的2021年1月26日的DLC“西方霸主”里正式登场\n        圣物产生的食物量是20食物每分钟\n        经济科技可以前一个时代研发\n        勃艮第葡萄园转换所有的食物变成黄金\n        在1月26日正式发售之前，阵亡的骑兵返还50%黄金消耗，正式发售时这个加成被替换为马厩科技便宜50%\n        45185补丁后，马上轻装兵/精锐马上轻装兵的冲锋伤害下调为25/30，此前是35/40\n        45185补丁后，马上轻装兵/精锐马上轻装兵不再对射手护甲类型的敌人造成双倍的冲锋伤害\n        47820版本后，圣物产生的食物量是30食物每分钟\n        47820版本后，经济科技可以前一个时代研发的同时减少50%的食物成本\n        47820版本后，弗拉芒民兵对骑兵的附加伤害从12下调为8，对骆驼和船只的附加伤害从8下调为6\n        47820版本后，勃艮第葡萄园只会转换一半的食物为黄金，同时农民生产黄金的速度提高33%\n        弗兰芒民兵对建筑附加2伤害，50292版本后，不再对建筑附加伤害\n        50292版本后，弗拉芒革命的成本从原来的800食物450黄金上调到1200食物650黄金\n    \n\n    公爵的崛起\n    \n        54480版本后，勃艮第葡萄园不再将一半食物转化为黄金，农民从耕作中获得黄金的机能保留\n        56005版本后，现在勃艮第的火药部队攻击力加成可以作用在手推炮的反胡斯派战车的伤害上\n    \n\n    印度王朝\n    \n        66692版本后，经济科技的食物折扣从50%下调到了40%\n        66692版本后，马上轻装兵/精锐马上轻装兵的冲锋伤害从25/30下调到20/25\n        78174版本后，经济科技的食物折扣从40%下调到了33%\n        81058版本后，弗拉芒民兵的成本从60肉25金下调到50肉15金，训练位置从城镇中心改为兵营\n        81058版本后，弗拉芒民兵的生命值从75下调到60，攻击力从12下调到11，远程防御从1下调到0\n        81058版本后，弗拉芒革命的价格从1200肉650金调整为200肉+村民数*10肉+150金+村民数*5金\n    \n\n    三国\n    \n        141935版本更新后，弗拉芒民兵可以在封建时代的兵营单独训练，成本从50肉15金下调到30肉30金，获得长矛兵护甲\n        151401版本更新后，弗拉芒民兵成本从30肉30金下调到30肉25金，失去长矛兵护甲\n        162286版本更新后，弗拉芒民兵移动速度从0.9上调到了0.94\n    \n\n    最后的酋长\n    \n        177723版本更新后，文明加成科技折扣率从33%上调到40%\n        177723版本更新后，文明加成圣物食物效率从30下调到20\n    \n\n    维京传奇\n    \n        185872版本补丁后，弗兰芒民兵成本从30肉25金上调到35肉25金，封建时代训练时间从14秒上调到16秒\n        185872版本补丁后，获得骑马弩兵；失去骑射手",
+  "sectionTextSha256": "61ff28319b882894719a00935f012c3ae4b1b362de7a8763e7b1e364e8055803",
+  "observedEntryCount": 28,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,199 @@
+{
+  "civId": "Lithuanians",
+  "sourceId": "seicing-lithuanians",
+  "url": "https://seicing.com/html/aoe2/2/%E7%AB%8B%E9%99%B6%E5%AE%9B.html",
+  "indexLabel": "立陶宛Lithuanians",
+  "title": "立陶宛",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-40498c0a9085014c78d8",
+  "documentSha256": "40498c0a9085014c78d83b4d2cb4fb55bbb6b269aa4384b1062d580e5776f2de",
+  "capturedAt": "2026-11-16T11:44:53.906991+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-1b1a5ad9-fd96-46ee-b88a-7f426545ae13",
+      "group": "最后的可汗",
+      "locator": "#change li[1]",
+      "originalText": "立陶宛骑兵的圣物加成上限是5，而且针对于全部骑兵，在34055版本更新后上限是4，而且不再适用于斥候骑兵",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1b1a5ad9-fd96-46ee-b88a-7f426545ae13"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6ec88f65-8a7c-4c91-ba6e-68f5bc636bf9",
+      "group": "最后的可汗",
+      "locator": "#change li[2]",
+      "originalText": "36906版本后，皇家骑兵/精锐皇家骑兵的训练费用从50食物80黄金调整为70食物50黄金",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6ec88f65-8a7c-4c91-ba6e-68f5bc636bf9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4ba21874-e2ba-4c54-ad3b-dd6866d41d8b",
+      "group": "最后的可汗",
+      "locator": "#change li[3]",
+      "originalText": "36906版本后，皇家骑兵/精锐皇家骑兵的训练时间从23秒/20秒下调为20秒/18秒",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4ba21874-e2ba-4c54-ad3b-dd6866d41d8b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fdf0ba33-fded-44c0-baae-e9aaf5603b76",
+      "group": "最后的可汗",
+      "locator": "#change li[4]",
+      "originalText": "36906版本后，塔盾的研发费用从800食物下调为500食物，长枪兵和投矛手的远程装甲从原来的+1调整为+2",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fdf0ba33-fded-44c0-baae-e9aaf5603b76"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-10b40f0e-6b84-4276-8605-4d224a50878b",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dc0fbdc0-b305-4f50-a4c5-b743496892be",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "42848版本后，皇家骑兵/精锐皇家骑兵远程防御从2下调到1",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dc0fbdc0-b305-4f50-a4c5-b743496892be"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-16405965-b552-49fe-a81c-35d6dcc30fc4",
+      "group": "公爵的崛起",
+      "locator": "#change li[7]",
+      "originalText": "51737更新中，可以使用波兰翼骑兵了，取代原来的翼骑兵",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-16405965-b552-49fe-a81c-35d6dcc30fc4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca8347b2-2541-4d6b-867a-b6a21362f094",
+      "group": "公爵的崛起",
+      "locator": "#change li[8]",
+      "originalText": "51737更新中，失去了鼓风炉技术",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca8347b2-2541-4d6b-867a-b6a21362f094"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6b73fb5c-ede0-4796-94c1-4b616f78a2e5",
+      "group": "公爵的崛起",
+      "locator": "#change li[9]",
+      "originalText": "51737更新中，皇家骑兵/精锐皇家骑兵的攻击力从12/14提升到13/16",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6b73fb5c-ede0-4796-94c1-4b616f78a2e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-938da759-e9c0-4182-b094-0dd485be1995",
+      "group": "印度王朝",
+      "locator": "#change li[10]",
+      "originalText": "81058版本后，开局+150食物加成修改成每个城镇中心提供100食物",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-938da759-e9c0-4182-b094-0dd485be1995"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f573ad39-ca1a-41cb-897f-f1b18eaf81fd",
+      "group": "印度王朝",
+      "locator": "#change li[11]",
+      "originalText": "81058版本后，独特部队“皇家骑兵”更名为“烈堤司”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f573ad39-ca1a-41cb-897f-f1b18eaf81fd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2f7927c3-3115-4c84-ab6b-6f6158634bed",
+      "group": "印度王朝",
+      "locator": "#change li[12]",
+      "originalText": "81058版本后，独特科技“山寨”更名为“山城堡”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2f7927c3-3115-4c84-ab6b-6f6158634bed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    最后的可汗\n    \n        立陶宛骑兵的圣物加成上限是5，而且针对于全部骑兵，在34055版本更新后上限是4，而且不再适用于斥候骑兵\n        36906版本后，皇家骑兵/精锐皇家骑兵的训练费用从50食物80黄金调整为70食物50黄金\n        36906版本后，皇家骑兵/精锐皇家骑兵的训练时间从23秒/20秒下调为20秒/18秒\n        36906版本后，塔盾的研发费用从800食物下调为500食物，长枪兵和投矛手的远程装甲从原来的+1调整为+2\n        37650版本后，不再拥有供给\n        42848版本后，皇家骑兵/精锐皇家骑兵远程防御从2下调到1\n    \n\n    公爵的崛起\n    \n        51737更新中，可以使用波兰翼骑兵了，取代原来的翼骑兵\n        51737更新中，失去了鼓风炉技术\n        51737更新中，皇家骑兵/精锐皇家骑兵的攻击力从12/14提升到13/16\n    \n\n    印度王朝\n    \n        81058版本后，开局+150食物加成修改成每个城镇中心提供100食物\n        81058版本后，独特部队“皇家骑兵”更名为“烈堤司”\n        81058版本后，独特科技“山寨”更名为“山城堡”",
+  "sectionTextSha256": "467261205e19c3d80b466d3561c2400d0f99efa0a0d11f703287565dd7245ed7",
+  "observedEntryCount": 12,
+  "supersedesRevisionId": null
+}

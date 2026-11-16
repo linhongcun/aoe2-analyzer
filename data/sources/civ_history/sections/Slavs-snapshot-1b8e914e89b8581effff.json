@@ -1,0 +1,277 @@
+{
+  "civId": "Slavs",
+  "sourceId": "seicing-slavs",
+  "url": "https://seicing.com/html/aoe2/2/%E6%96%AF%E6%8B%89%E5%A4%AB.html",
+  "indexLabel": "斯拉夫Slavs",
+  "title": "斯拉夫",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-1b8e914e89b8581effff",
+  "documentSha256": "1b8e914e89b8581effff88608a6fe66377880045d16f68947af7bf0f14d2eddc",
+  "capturedAt": "2026-11-16T11:46:58.882386+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-cf37d244-2abd-4e26-842e-240a43006ee4",
+      "group": "失落帝国",
+      "locator": "#change li[1]",
+      "originalText": "贵族铁骑移动速度是1.35",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cf37d244-2abd-4e26-842e-240a43006ee4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5a0d8505-c44c-43d2-8bb2-4b6aff2851bc",
+      "group": "非洲王国",
+      "locator": "#change li[2]",
+      "originalText": "可以研发射箭槽，但是4.8版本被删除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5a0d8505-c44c-43d2-8bb2-4b6aff2851bc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c1bb7508-df40-4a3e-b185-f8351ef36987",
+      "group": "非洲王国",
+      "locator": "#change li[3]",
+      "originalText": "4.8版本中，贵族铁骑移动速度是1.4",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c1bb7508-df40-4a3e-b185-f8351ef36987"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2adf8095-1f5c-411c-bdbe-4047743c4c32",
+      "group": "蛮王崛起",
+      "locator": "#change li[4]",
+      "originalText": "农田奖励现在可以正确配合独轮车和手推车工作",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2adf8095-1f5c-411c-bdbe-4047743c4c32"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a69ec412-6e9b-43cb-bc95-a41f710e6c50",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "5.8版本中，农田奖励稍稍下降，更加贴合他所描述的数据",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a69ec412-6e9b-43cb-bc95-a41f710e6c50"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-087f6fde-4c43-4825-ab1d-1588423e9eb3",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "获得信念科技",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-087f6fde-4c43-4825-ab1d-1588423e9eb3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-440fcfa4-3b7c-4e2e-ae77-fe5d5a51faf9",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "获得免费的供给(取代追踪术)",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-440fcfa4-3b7c-4e2e-ae77-fe5d5a51faf9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4f12eb3a-72da-46fa-82ac-7833c4dbc058",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "农民工作速度快10%(之前是15%)",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4f12eb3a-72da-46fa-82ac-7833c4dbc058"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c840ac79-7308-48fc-b710-700e8fcdb238",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "贵族铁骑和精锐贵族铁骑训练时间是15秒，之前是23秒和20秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c840ac79-7308-48fc-b710-700e8fcdb238"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8d25eadb-f270-4354-bb8e-878e9c4d08b3",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "36906版本后，贵族铁骑和精锐贵族铁骑移动速度从1.4下调为1.3",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8d25eadb-f270-4354-bb8e-878e9c4d08b3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-da1eccb8-834d-4b39-a915-678d3ca1962e",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "36906版本后，贵族铁骑和精锐贵族铁骑远程护甲+1",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-da1eccb8-834d-4b39-a915-678d3ca1962e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-be1c57ab-8a88-4085-8f4f-dc2284911bc3",
+      "group": "西方霸主",
+      "locator": "#change li[12]",
+      "originalText": "44725更新后，失去脚踏起重机",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-be1c57ab-8a88-4085-8f4f-dc2284911bc3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-98bc23e3-e536-47fc-92d6-7497416e678c",
+      "group": "西方霸主",
+      "locator": "#change li[13]",
+      "originalText": "50292版本后，精锐贵族铁骑的近战护甲上调到8，此前是6",
+      "rawVersions": [
+        "50292"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-98bc23e3-e536-47fc-92d6-7497416e678c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-27820128-c0e2-47b5-8af7-01b03ec21dd6",
+      "group": "印度王朝",
+      "locator": "#change li[14]",
+      "originalText": "61321版本后，东正教科技修改为“罗斯堡垒”，效果为防御建筑石头成本40%转化成木材成本",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-27820128-c0e2-47b5-8af7-01b03ec21dd6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5b40b461-8898-4e1d-a17e-3687d16072cc",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "81058版本后，贵族铁骑成本从50肉80金调整为60肉70金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5b40b461-8898-4e1d-a17e-3687d16072cc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3a0e72a8-6ecb-4e00-8bcf-b770ee9bfde7",
+      "group": "罗马归来",
+      "locator": "#change li[16]",
+      "originalText": "87863版本后，无法研发热情，获得僧侣移动速度+20%文明加成",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3a0e72a8-6ecb-4e00-8bcf-b770ee9bfde7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dffae1d3-850e-4149-82ad-f5d451e67a41",
+      "group": "皇家山脉",
+      "locator": "#change li[17]",
+      "originalText": "95810版本后，文明农田效率加成从10%上调到了15%",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dffae1d3-850e-4149-82ad-f5d451e67a41"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-518a6b27-8c5c-4cca-83b1-93076152eceb",
+      "group": "三国",
+      "locator": "#change li[18]",
+      "originalText": "141935版本更新后，纵火免费",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-518a6b27-8c5c-4cca-83b1-93076152eceb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    失落帝国\n    \n        贵族铁骑移动速度是1.35\n    \n\n    非洲王国\n    \n        可以研发射箭槽，但是4.8版本被删除\n        4.8版本中，贵族铁骑移动速度是1.4\n    \n\n    蛮王崛起\n    \n        农田奖励现在可以正确配合独轮车和手推车工作\n        5.8版本中，农田奖励稍稍下降，更加贴合他所描述的数据\n    \n\n    最后的可汗\n    \n        获得信念科技\n        获得免费的供给(取代追踪术)\n        农民工作速度快10%(之前是15%)\n        贵族铁骑和精锐贵族铁骑训练时间是15秒，之前是23秒和20秒\n        36906版本后，贵族铁骑和精锐贵族铁骑移动速度从1.4下调为1.3\n        36906版本后，贵族铁骑和精锐贵族铁骑远程护甲+1\n    \n\n    西方霸主\n    \n        44725更新后，失去脚踏起重机\n        50292版本后，精锐贵族铁骑的近战护甲上调到8，此前是6\n    \n\n    印度王朝\n    \n        61321版本后，东正教科技修改为“罗斯堡垒”，效果为防御建筑石头成本40%转化成木材成本\n        81058版本后，贵族铁骑成本从50肉80金调整为60肉70金\n    \n\n    罗马归来\n    \n        87863版本后，无法研发热情，获得僧侣移动速度+20%文明加成\n    \n\n    皇家山脉\n    \n        95810版本后，文明农田效率加成从10%上调到了15%\n    \n\n    三国\n    \n        141935版本更新后，纵火免费",
+  "sectionTextSha256": "8bd548b84dc026fb2cb8d2b633a6dd964eee93abbf14ce2e72805ab4eddba8fe",
+  "observedEntryCount": 18,
+  "supersedesRevisionId": null
+}

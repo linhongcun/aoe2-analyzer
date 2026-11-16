@@ -1,0 +1,182 @@
+{
+  "civId": "Poles",
+  "sourceId": "seicing-poles",
+  "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E5%85%B0.html",
+  "indexLabel": "波兰Poles",
+  "title": "波兰",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-ad8d656a554222c67559",
+  "documentSha256": "ad8d656a554222c6755928376959ab3bf1f681c037cd68c7ec2c268286a019ce",
+  "capturedAt": "2026-11-16T11:46:07.606714+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-aa355ee4-48a8-4da8-b6cb-b3b3060452d1",
+      "group": "公爵的崛起",
+      "locator": "#change li[1]",
+      "originalText": "在公爵的崛起版本推出了波兰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aa355ee4-48a8-4da8-b6cb-b3b3060452d1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c93e3bb4-c039-400d-a1fa-32694c427fff",
+      "group": "公爵的崛起",
+      "locator": "#change li[2]",
+      "originalText": "56005版本后，获得攻城技师技术",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c93e3bb4-c039-400d-a1fa-32694c427fff"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f667bd76-934c-46dd-ad7d-5557f7638a63",
+      "group": "公爵的崛起",
+      "locator": "#change li[3]",
+      "originalText": "56005版本后，奥布奇战锤兵/精锐奥布奇战锤兵的训练时间从9秒上调到12秒",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f667bd76-934c-46dd-ad7d-5557f7638a63"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-18622948-210a-4bae-8f74-9e3f6b263cea",
+      "group": "印度王朝",
+      "locator": "#change li[4]",
+      "originalText": "73855版本后，村民从石矿获取黄金的效率从50%下调到33%",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-18622948-210a-4bae-8f74-9e3f6b263cea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-346fbe14-dc1e-4656-be8e-14039c035552",
+      "group": "印度王朝",
+      "locator": "#change li[5]",
+      "originalText": "78174版本后，大庄园瞬间食物获取率从10%下调到8%",
+      "rawVersions": [
+        "78174"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-346fbe14-dc1e-4656-be8e-14039c035552"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-49db07a3-f2a2-4385-b20c-e884b820aad0",
+      "group": "印度王朝",
+      "locator": "#change li[6]",
+      "originalText": "81058版本后，村民黑暗时代自愈能力删除",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-49db07a3-f2a2-4385-b20c-e884b820aad0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0f1f5d75-6526-4ba3-8212-35dc8a49effe",
+      "group": "皇家山脉",
+      "locator": "#change li[7]",
+      "originalText": "95810版本后，失去行会",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0f1f5d75-6526-4ba3-8212-35dc8a49effe"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3603773e-f4ae-4958-9263-fde7051976ea",
+      "group": "皇家山脉",
+      "locator": "#change li[8]",
+      "originalText": "99311版本后，大庄园成本从125木下调到了100木",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3603773e-f4ae-4958-9263-fde7051976ea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4bcee10f-9918-40fa-8a3a-105b37faae8f",
+      "group": "成王败寇",
+      "locator": "#change li[9]",
+      "originalText": "125283版本更新后，获得“血统和轻骑兵系升级食物成本-50%”加成",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4bcee10f-9918-40fa-8a3a-105b37faae8f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fe5934d3-6bda-4700-8fd4-a1c1515dbed4",
+      "group": "三国",
+      "locator": "#change li[10]",
+      "originalText": "151401版本后，大庄园瞬间食物获取率从8%上调到10%",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fe5934d3-6bda-4700-8fd4-a1c1515dbed4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "group": "维京传奇",
+      "locator": "#change li[11]",
+      "originalText": "185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手、重装骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    公爵的崛起\n    \n        在公爵的崛起版本推出了波兰\n        56005版本后，获得攻城技师技术\n        56005版本后，奥布奇战锤兵/精锐奥布奇战锤兵的训练时间从9秒上调到12秒\n    \n\n    印度王朝\n    \n        73855版本后，村民从石矿获取黄金的效率从50%下调到33%\n        78174版本后，大庄园瞬间食物获取率从10%下调到8%\n        81058版本后，村民黑暗时代自愈能力删除\n    \n\n    皇家山脉\n    \n        95810版本后，失去行会\n        99311版本后，大庄园成本从125木下调到了100木\n    \n\n    成王败寇\n    \n        125283版本更新后，获得“血统和轻骑兵系升级食物成本-50%”加成\n    \n\n    三国\n    \n        151401版本后，大庄园瞬间食物获取率从8%上调到10%\n    \n\n    维京传奇\n    \n        185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手、重装骑射手",
+  "sectionTextSha256": "8a50d81f0c311733b229ec30c79b22c3b2e05fb7bdfcbc2a23c6e01bd24e3a4e",
+  "observedEntryCount": 11,
+  "supersedesRevisionId": null
+}

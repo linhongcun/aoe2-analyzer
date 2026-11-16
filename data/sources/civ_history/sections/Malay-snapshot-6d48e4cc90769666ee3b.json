@@ -1,0 +1,399 @@
+{
+  "civId": "Malay",
+  "sourceId": "seicing-malay",
+  "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%9D%A5.html",
+  "indexLabel": "马来Malay",
+  "title": "马来",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-6d48e4cc90769666ee3b",
+  "documentSha256": "6d48e4cc90769666ee3b66a64bcd61d5dbb226b2b23dff0238e87bd6b0dd0897",
+  "capturedAt": "2026-11-16T11:45:09.007761+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-4b0d8d15-a81c-41dd-8afa-844d96019d08",
+      "group": "蛮王崛起",
+      "locator": "#change li[1]",
+      "originalText": "马来的渔网提供无限食物",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4b0d8d15-a81c-41dd-8afa-844d96019d08"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1",
+      "group": "蛮王崛起",
+      "locator": "#change li[2]",
+      "originalText": "进入新时代速度+100%，5.3版本修改为+80%",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8a78de7a-5e33-4a7a-8e89-29ef50f24423",
+      "group": "蛮王崛起",
+      "locator": "#change li[3]",
+      "originalText": "捕鱼船便宜33%，5.3版本删除这条奖励",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8a78de7a-5e33-4a7a-8e89-29ef50f24423"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bf96a175-0ea8-47cd-b59f-c397812db0e2",
+      "group": "蛮王崛起",
+      "locator": "#change li[4]",
+      "originalText": "象兵便宜20%，5.3版本提高为25%，5.7版本提高为30%",
+      "rawVersions": [
+        "5.3",
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bf96a175-0ea8-47cd-b59f-c397812db0e2",
+        "ev-se-bf96a175-0ea8-47cd-b59f-c397812db0e2-5-7"
+      ],
+      "reason": "按原文明示5.3及5.7拆为两个版本事件；保留同一原文引用，不新增来源或猜发行日。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-592ef0e0-d8c9-4e6b-a0a3-2883efe20638",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "巨港的发射延迟是2.5，HP是2200，在5.3版本中发射延迟修改为3，HP修改为2000",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-592ef0e0-d8c9-4e6b-a0a3-2883efe20638"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b339bb21-70c4-481f-9728-4d26276cc551",
+      "group": "蛮王崛起",
+      "locator": "#change li[6]",
+      "originalText": "精锐爪刀勇士拥有2远程护甲，5.3版本修改为1远程护甲",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b339bb21-70c4-481f-9728-4d26276cc551"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0e8a9c88-3a5c-4e68-8c59-251c8d395cf3",
+      "group": "蛮王崛起",
+      "locator": "#change li[7]",
+      "originalText": "爪刀勇士攻击力是5，5.5版本修改为6",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0e8a9c88-3a5c-4e68-8c59-251c8d395cf3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2fbfae1e-e99f-40e5-9f2e-80a8334569f9",
+      "group": "蛮王崛起",
+      "locator": "#change li[8]",
+      "originalText": "精锐爪刀勇士攻击力是8，5.7版本修改为7",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2fbfae1e-e99f-40e5-9f2e-80a8334569f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c69e8dd9-65f1-40be-a356-ad5e0c12ecfd",
+      "group": "蛮王崛起",
+      "locator": "#change li[9]",
+      "originalText": "爪刀勇士消耗25食物和10黄金，5.8版本爪刀勇士消耗30食物和15黄金",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c69e8dd9-65f1-40be-a356-ad5e0c12ecfd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-56573262-f7f3-4c3a-99ff-8542d7676de1",
+      "group": "蛮王崛起",
+      "locator": "#change li[10]",
+      "originalText": "强制兵役移除民兵系单位的黄金消耗，需要1000食物和600黄金研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-56573262-f7f3-4c3a-99ff-8542d7676de1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a019bad8-efc3-4673-acb8-ea33949a9d6d",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "巨港最小射程由0修改为1，接受近射孔科技的影响",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a019bad8-efc3-4673-acb8-ea33949a9d6d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-55c9abac-9ae7-4b05-98b9-d294fc703fe0",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "巨港攻击力由6修改为3",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-55c9abac-9ae7-4b05-98b9-d294fc703fe0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d4160cf1-d426-40aa-9d35-769cba82765d",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "巨港对舰船只的伤害加成由9提升到10",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d4160cf1-d426-40aa-9d35-769cba82765d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5f542df2-9b54-49da-9b46-64bf7117c141",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "强制兵役现在用额外的食物消耗来代替民兵系单位的黄金消耗，需要800食物和500黄金研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5f542df2-9b54-49da-9b46-64bf7117c141"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d29b251d-e294-48b0-b22c-f5ba975e49f9",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "39606版本后，在研发巨港之后再研发化学、近射孔、预热射击等科技时，巨港可以正确地享受这些科技的加成了",
+      "rawVersions": [
+        "39606"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d29b251d-e294-48b0-b22c-f5ba975e49f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8c92eed8-cac7-4890-9208-21ad34869130",
+      "group": "最后的可汗",
+      "locator": "#change li[16]",
+      "originalText": "39284版本后，爪刀勇士和精锐爪刀勇士的训练食物成本从30下调为25",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8c92eed8-cac7-4890-9208-21ad34869130"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-263ca50d-a6d6-41c2-a28c-5ab4a386c1aa",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "39284版本后，象兵的区域伤害从50%下调为25%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f297d284-7f61-4fa8-b24a-8165b5b19a1e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0b8f38eb-b011-4cad-9ac1-4aaa6583ff62",
+      "group": "最后的可汗",
+      "locator": "#change li[18]",
+      "originalText": "42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4dcf4df6-c08e-44b1-b68a-b45a1971762e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-14cbbc0b-20ae-4548-9ef2-10d7398c37b5",
+      "group": "西方霸主",
+      "locator": "#change li[19]",
+      "originalText": "47820版本后，养鱼场提供+300%的食物，而不是之前的无限食物",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-14cbbc0b-20ae-4548-9ef2-10d7398c37b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7196d76e-5cf4-4bcb-a5b8-12bf197c4df2",
+      "group": "西方霸主",
+      "locator": "#change li[20]",
+      "originalText": "47820版本后，城堡时代/帝王时代象兵便宜30%/40%",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7196d76e-5cf4-4bcb-a5b8-12bf197c4df2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c8394d5f-accd-4845-b198-a6a19b52f07f",
+      "group": "西方霸主",
+      "locator": "#change li[21]",
+      "originalText": "47820版本后，爪刀勇士/精锐爪刀勇士的攻击力上调为7/8",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c8394d5f-accd-4845-b198-a6a19b52f07f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c86a1460-8301-4b7e-9ce2-1d6805dd660c",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "66692版本后，获得脚踏起重机",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c86a1460-8301-4b7e-9ce2-1d6805dd660c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b7c7cae2-662c-43d9-8754-bca5dda6e84d",
+      "group": "印度王朝",
+      "locator": "#change li[23]",
+      "originalText": "81058版本后，步兵护甲科技免费升级",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b7c7cae2-662c-43d9-8754-bca5dda6e84d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ee0ae199-3ea7-46fb-9769-ffc5d38191f2",
+      "group": "罗马归来",
+      "locator": "#change li[24]",
+      "originalText": "87863版本后，失去软甲",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ee0ae199-3ea7-46fb-9769-ffc5d38191f2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-595d8f4a-f219-4b63-8bd0-98e5d47c5d12",
+      "group": "成王败寇",
+      "locator": "#change li[25]",
+      "originalText": "111772版本更新后，象兵成本折扣从30%/40%下调到25%/35%",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-595d8f4a-f219-4b63-8bd0-98e5d47c5d12"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-682f6a55-fa6d-4b1d-a640-cfee96ed91fd",
+      "group": "三国",
+      "locator": "#change li[26]",
+      "originalText": "141935版本更新后，团队奖励的+100%视野改成+6视野",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-682f6a55-fa6d-4b1d-a640-cfee96ed91fd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    蛮王崛起\n    \n        马来的渔网提供无限食物\n        进入新时代速度+100%，5.3版本修改为+80%\n        捕鱼船便宜33%，5.3版本删除这条奖励\n        象兵便宜20%，5.3版本提高为25%，5.7版本提高为30%\n        巨港的发射延迟是2.5，HP是2200，在5.3版本中发射延迟修改为3，HP修改为2000\n        精锐爪刀勇士拥有2远程护甲，5.3版本修改为1远程护甲\n        爪刀勇士攻击力是5，5.5版本修改为6\n        精锐爪刀勇士攻击力是8，5.7版本修改为7\n        爪刀勇士消耗25食物和10黄金，5.8版本爪刀勇士消耗30食物和15黄金\n        强制兵役移除民兵系单位的黄金消耗，需要1000食物和600黄金研发\n    \n\n    最后的可汗\n    \n        巨港最小射程由0修改为1，接受近射孔科技的影响\n        巨港攻击力由6修改为3\n        巨港对舰船只的伤害加成由9提升到10\n        强制兵役现在用额外的食物消耗来代替民兵系单位的黄金消耗，需要800食物和500黄金研发\n        39606版本后，在研发巨港之后再研发化学、近射孔、预热射击等科技时，巨港可以正确地享受这些科技的加成了\n        39284版本后，爪刀勇士和精锐爪刀勇士的训练食物成本从30下调为25\n        39284版本后，象兵的区域伤害从50%下调为25%\n        42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积\n    \n\n    西方霸主\n    \n        47820版本后，养鱼场提供+300%的食物，而不是之前的无限食物\n        47820版本后，城堡时代/帝王时代象兵便宜30%/40%\n        47820版本后，爪刀勇士/精锐爪刀勇士的攻击力上调为7/8\n    \n\n    印度王朝\n    \n        66692版本后，获得脚踏起重机\n        81058版本后，步兵护甲科技免费升级\n    \n\n    罗马归来\n    \n        87863版本后，失去软甲\n    \n\n    成王败寇\n    \n        111772版本更新后，象兵成本折扣从30%/40%下调到25%/35%\n    \n\n    三国\n    \n        141935版本更新后，团队奖励的+100%视野改成+6视野",
+  "sectionTextSha256": "47505436c7f9c5c72a90a733cfef36c4ec7f9c7beac02b052bcfc2b3a5fab587",
+  "observedEntryCount": 26,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,396 @@
+{
+  "civId": "Goths",
+  "sourceId": "seicing-goths",
+  "url": "https://seicing.com/html/aoe2/2/%E5%93%A5%E7%89%B9.html",
+  "indexLabel": "哥特Goths",
+  "title": "哥特",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-9aa1bee6bc4e186060b1",
+  "documentSha256": "9aa1bee6bc4e186060b1cb37f8239a8641a72dcab17f27a963530c361dbeb912",
+  "capturedAt": "2026-11-16T11:43:24.382549+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-fae80bc2-713b-4e0b-8ce6-26d0d49c529a",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "可以研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fae80bc2-713b-4e0b-8ce6-26d0d49c529a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-725580de-ada5-4e07-a945-f6e90f053271",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "步兵从封建/城堡/帝王时代开始便宜10%/15%/25%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-725580de-ada5-4e07-a945-f6e90f053271"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-91172db7-df42-4f3a-bd47-f90a58802767",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "近卫军训练时间26秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-91172db7-df42-4f3a-bd47-f90a58802767"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f39fb006-5130-4fcf-a76b-c73a45101778",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "近卫军拥有4远程护甲，精锐近卫军有6",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f39fb006-5130-4fcf-a76b-c73a45101778"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-79b60184-01e8-4220-8532-69e97b3e62dd",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "近卫军有3点对射手的伤害加成，精锐近卫军是4",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-79b60184-01e8-4220-8532-69e97b3e62dd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d29613f3-66ac-4ddb-970e-ff5cbfec269b",
+      "group": "国王时代",
+      "locator": "#change li[6]",
+      "originalText": "近卫军移动速度是0.9",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d29613f3-66ac-4ddb-970e-ff5cbfec269b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7567a511-09f9-493e-bd27-f9d1340420b2",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "1.0c版本开始，步兵从封建时代开始便宜35%",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7567a511-09f9-493e-bd27-f9d1340420b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2f95a078-5d02-4587-8038-8071a76676ca",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "无政府科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2f95a078-5d02-4587-8038-8071a76676ca"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-692fcb1c-9cb4-4481-9a52-4d0452779b74",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "井喷科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-692fcb1c-9cb4-4481-9a52-4d0452779b74"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6aa3408d-4c57-41e1-8872-8a0be743238d",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "近卫军训练时间16秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6aa3408d-4c57-41e1-8872-8a0be743238d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-123a0062-bade-4d60-9126-cba540e32576",
+      "group": "征服者",
+      "locator": "#change li[11]",
+      "originalText": "近卫军拥有6远程护甲，精锐近卫军有8",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-123a0062-bade-4d60-9126-cba540e32576"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c77462b3-6824-4f0a-aefd-f4e08095db2e",
+      "group": "征服者",
+      "locator": "#change li[12]",
+      "originalText": "近卫军有6点对射手的伤害加成，精锐近卫军是10",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c77462b3-6824-4f0a-aefd-f4e08095db2e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2c4aa8b9-0f35-479f-8ad1-c051b4a550ba",
+      "group": "征服者",
+      "locator": "#change li[13]",
+      "originalText": "近卫军移动速度是1.05",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2c4aa8b9-0f35-479f-8ad1-c051b4a550ba"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8089d4d9-dc66-46b9-88c8-fa9b9ec58b7a",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "无法研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8089d4d9-dc66-46b9-88c8-fa9b9ec58b7a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f277ea2-d091-404c-95ea-d454c29e3b9a",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "可以研发射箭槽，但4.8版本被移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f277ea2-d091-404c-95ea-d454c29e3b9a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-aff6e1d9-b2e2-43a5-84ce-af9968d37485",
+      "group": "最后的可汗",
+      "locator": "#change li[16]",
+      "originalText": "35584版本后，哥特的步兵便宜35%加成从黑暗时代就开始生效",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aff6e1d9-b2e2-43a5-84ce-af9968d37485"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1d1f7a22-ceae-4719-81b6-a58dadc64ad0",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "36202版本后，哥特的步兵便宜35%加成修改为在黑暗/封建/城堡/帝王时代便宜20%/25%/30%/35%",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1d1f7a22-ceae-4719-81b6-a58dadc64ad0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e5e0c595-6144-48f8-ab0f-cbfda33eb2fc",
+      "group": "最后的可汗",
+      "locator": "#change li[18]",
+      "originalText": "36202版本后，哥特无法研发纵火",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e5e0c595-6144-48f8-ab0f-cbfda33eb2fc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fcc9d96b-f3c5-4638-9620-1afe78cecfb0",
+      "group": "最后的可汗",
+      "locator": "#change li[19]",
+      "originalText": "36202版本后，哥特文明奖励的步兵对建筑伤害加成+1修改为从封建时代开始每个时代都+1",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fcc9d96b-f3c5-4638-9620-1afe78cecfb0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d2510062-3acc-466b-8f4d-5c312eeacdc0",
+      "group": "最后的可汗",
+      "locator": "#change li[20]",
+      "originalText": "36906版本后，哥特文明奖励添加免费的织布机",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d2510062-3acc-466b-8f4d-5c312eeacdc0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-52b7e6cd-2a5f-4897-aaf6-25661560468e",
+      "group": "最后的可汗",
+      "locator": "#change li[21]",
+      "originalText": "42848版本后，可以马上研究织布机，但是需要50金费用",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-52b7e6cd-2a5f-4897-aaf6-25661560468e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c260e97e-8a34-4f90-92ba-a3547cd2a1e9",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "81058版本后，获得猎物资源产量+20%加成",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c260e97e-8a34-4f90-92ba-a3547cd2a1e9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a642e7e6-f709-4513-8e7b-155d53f05881",
+      "group": "罗马归来",
+      "locator": "#change li[23]",
+      "originalText": "获得德罗蒙战舰，失去炮舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a642e7e6-f709-4513-8e7b-155d53f05881"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-949791ab-dbc8-43b6-b9cd-3fd60b143a98",
+      "group": "三国",
+      "locator": "#change li[24]",
+      "originalText": "141935版本更新后，近卫军成本从80肉40金下调到75肉35金，城堡训练时间从16秒下调到13秒",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-949791ab-dbc8-43b6-b9cd-3fd60b143a98"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d3872a00-d45c-47d1-ab2b-5a428d527a36",
+      "group": "三国",
+      "locator": "#change li[25]",
+      "originalText": "141935版本更新后，步兵每个时代折扣率从20/25/30/35%下调到15/20/25/30%",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d3872a00-d45c-47d1-ab2b-5a428d527a36"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8e21938c-8d5f-4de4-a68f-5a723f9a83e6",
+      "group": "三国",
+      "locator": "#change li[26]",
+      "originalText": "151401版本更新后，村民对野猪攻击力+5加成删除",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8e21938c-8d5f-4de4-a68f-5a723f9a83e6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e8a63aa9-2418-4c0b-acd9-464bc9a68bec",
+      "group": "维京传奇",
+      "locator": "#change li[27]",
+      "originalText": "185872版本补丁后，获得脚踏起重机",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e8a63aa9-2418-4c0b-acd9-464bc9a68bec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        可以研发脚踏起重机\n        步兵从封建/城堡/帝王时代开始便宜10%/15%/25%\n        近卫军训练时间26秒\n        近卫军拥有4远程护甲，精锐近卫军有6\n        近卫军有3点对射手的伤害加成，精锐近卫军是4\n        近卫军移动速度是0.9\n    \n\n    征服者\n    \n        1.0c版本开始，步兵从封建时代开始便宜35%\n        无政府科技加入\n        井喷科技加入\n        近卫军训练时间16秒\n        近卫军拥有6远程护甲，精锐近卫军有8\n        近卫军有6点对射手的伤害加成，精锐近卫军是10\n        近卫军移动速度是1.05\n    \n\n    失落帝国\n    \n        无法研发脚踏起重机\n    \n\n    非洲王国\n    \n        可以研发射箭槽，但4.8版本被移除\n    \n\n    最后的可汗\n    \n        35584版本后，哥特的步兵便宜35%加成从黑暗时代就开始生效\n        36202版本后，哥特的步兵便宜35%加成修改为在黑暗/封建/城堡/帝王时代便宜20%/25%/30%/35%\n        36202版本后，哥特无法研发纵火\n        36202版本后，哥特文明奖励的步兵对建筑伤害加成+1修改为从封建时代开始每个时代都+1\n        36906版本后，哥特文明奖励添加免费的织布机\n        42848版本后，可以马上研究织布机，但是需要50金费用\n    \n\n    印度王朝\n    \n        81058版本后，获得猎物资源产量+20%加成\n    \n\n    罗马归来\n    \n        获得德罗蒙战舰，失去炮舰\n    \n\n    三国\n    \n        141935版本更新后，近卫军成本从80肉40金下调到75肉35金，城堡训练时间从16秒下调到13秒\n        141935版本更新后，步兵每个时代折扣率从20/25/30/35%下调到15/20/25/30%\n        151401版本更新后，村民对野猪攻击力+5加成删除\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，获得脚踏起重机",
+  "sectionTextSha256": "e74f1544d2a1e5638ee9351c5ccf3750c08defaf9c5d9e19bbc3947d0be868ea",
+  "observedEntryCount": 27,
+  "supersedesRevisionId": null
+}

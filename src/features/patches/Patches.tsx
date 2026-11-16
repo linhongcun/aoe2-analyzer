@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { civByEn, civs, type Core } from '../../data';
 import { useCore } from '../../data/hooks';
 import { usePatchArchives } from '../../data/patchHistory';
@@ -22,6 +22,7 @@ import {
 } from '../../domain/patches';
 import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';
+import { CivUpdatesOverview } from '../../shared/ui/CivUpdatesOverview';
 import { EntryBody, OBJECT_LABEL, ObjectSearch, civZh } from './patchParts';
 import './patches.css';
 
@@ -93,6 +94,8 @@ function Browse({ archives }: { archives: PatchArchive[] }) {
       <h1 className="page-heading">更新历史</h1>
       <p>先查一个文明、单位、建筑或科技，也可以按版本阅读已收录档案。没有收录，不代表从未改动。</p>
       <ObjectSearch archives={archives} core={core} />
+      <CivUpdatesOverview />
+      <h2>版本档案</h2>
       <div className="patch-versions">
         {versions.map((archive) => (
           <article className="patch-version" key={archive.id} data-testid="patch-version-card">
@@ -142,11 +145,18 @@ function catalogName(type: ObjectCandidate['type'], id: string, core: Core | nul
 
 function ObjectTimeline({ archives, raw }: { archives: PatchArchive[]; raw: string | null }) {
   const core = useCore();
+  const [params] = useSearchParams();
   const parsed = parseObjectParam(raw);
   if (!parsed) return <MissingObject />;
+  if (parsed.type === 'civ') {
+    const query = new URLSearchParams(params);
+    query.delete('obj');
+    query.set('tab', 'history');
+    return <Navigate replace to={`/civ/${parsed.id}?${query.toString()}#patches`} />;
+  }
   const name = catalogName(parsed.type, parsed.id, core);
   const identity = resolveHistoryIdentity(archives, { targetType: parsed.type, targetId: parsed.id }, name);
-  const waiting = parsed.type !== 'civ' && !name && !identity && !core;
+  const waiting = !name && !identity && !core;
   if (waiting)
     return (
       <section className="pane patches">

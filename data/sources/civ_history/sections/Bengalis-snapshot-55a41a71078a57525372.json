@@ -1,0 +1,227 @@
+{
+  "civId": "Bengalis",
+  "sourceId": "seicing-bengalis",
+  "url": "https://seicing.com/html/aoe2/2/%E5%AD%9F%E5%8A%A0%E6%8B%89.html",
+  "indexLabel": "孟加拉Bengalis",
+  "title": "孟加拉",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-55a41a71078a57525372",
+  "documentSha256": "55a41a71078a57525372204a474251bd073f5fc8211d475d7fab49f4f76cc3d3",
+  "capturedAt": "2026-11-16T11:40:36.758535+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-203fdffa-7f90-4a89-8f75-92b219de0b0d",
+      "group": "印度王朝",
+      "locator": "#change li[1]",
+      "originalText": "作为印度王朝版本的三个新文明登场",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-203fdffa-7f90-4a89-8f75-92b219de0b0d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-92cfd002-cb86-4ad1-be9b-8c5ee6a8e66a",
+      "group": "印度王朝",
+      "locator": "#change li[2]",
+      "originalText": "66692版本后，获得僧侣+3/+3护甲文明加成",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-92cfd002-cb86-4ad1-be9b-8c5ee6a8e66a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ee382e52-f9ba-41ed-a9b2-2cf25a8f8ac1",
+      "group": "印度王朝",
+      "locator": "#change li[3]",
+      "originalText": "81058版本后，获得供给",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ee382e52-f9ba-41ed-a9b2-2cf25a8f8ac1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a16d8c0b-e789-4bb9-a037-ce530584f256",
+      "group": "印度王朝",
+      "locator": "#change li[4]",
+      "originalText": "81058版本后，获得近战骑兵+2对掷矛手加成",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a16d8c0b-e789-4bb9-a037-ce530584f256"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-098f6481-d155-4c2b-8e69-40643ee14a12",
+      "group": "印度王朝",
+      "locator": "#change li[5]",
+      "originalText": "81058版本后，大乘佛教可以作用于僧侣了",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-098f6481-d155-4c2b-8e69-40643ee14a12"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-50cf056d-3350-4467-8e0b-3d4a8432d1fb",
+      "group": "印度王朝",
+      "locator": "#change li[6]",
+      "originalText": "81058版本后，文明主题音乐重制了",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-50cf056d-3350-4467-8e0b-3d4a8432d1fb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-31f40349-243f-4f85-ade7-6e9950eb0555",
+      "group": "皇家山脉",
+      "locator": "#change li[7]",
+      "originalText": "99311版本后，战车骑射手护甲+1，近战模式附带20%区域伤害",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-31f40349-243f-4f85-ade7-6e9950eb0555"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eca4964b-dd28-40a4-9cc3-df43c6c8e78f",
+      "group": "成王败寇",
+      "locator": "#change li[8]",
+      "originalText": "111772版本更新后，孟加拉人失去帕提亚战术",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eca4964b-dd28-40a4-9cc3-df43c6c8e78f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-440dfb2f-5f22-4b62-987d-e7069b0d0c70",
+      "group": "成王败寇",
+      "locator": "#change li[9]",
+      "originalText": "111772版本更新后，战车/精锐战车的近战护甲从2/2提高到3/3，远程护甲从1/1提高到2/3",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-440dfb2f-5f22-4b62-987d-e7069b0d0c70"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-59ca3a2f-a5ec-4df5-bf6b-af8ae15db24f",
+      "group": "成王败寇",
+      "locator": "#change li[10]",
+      "originalText": "111772版本更新后，战车/精锐战车对长矛兵系部队附加伤害从0/0上调到1/2",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-59ca3a2f-a5ec-4df5-bf6b-af8ae15db24f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f953d2cc-2f5b-491e-9713-eab26bc1fbf0",
+      "group": "三国",
+      "locator": "#change li[11]",
+      "originalText": "141935版本更新后，战车生命值从105下调到100，训练时间从18秒增加到20秒(精锐无变化)",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f953d2cc-2f5b-491e-9713-eab26bc1fbf0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d1e206f-6ec6-4b47-9d91-fd4e0144772c",
+      "group": "最后的酋长",
+      "locator": "#change li[12]",
+      "originalText": "169123版本更新后，普通战车的远程护甲从2下调到1，精锐战车的骑射手护甲从1下调到0",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d1e206f-6ec6-4b47-9d91-fd4e0144772c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5b272934-e264-4d62-8bce-1cd1bc55f7e0",
+      "group": "维京传奇",
+      "locator": "#change li[13]",
+      "originalText": "185872版本补丁后，战车训练时间从20秒上调到24秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5b272934-e264-4d62-8bce-1cd1bc55f7e0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7752584c-0bd9-4b77-8e71-94b1748f96a7",
+      "group": "维京传奇",
+      "locator": "#change li[14]",
+      "originalText": "185872版本补丁后，失去脚踏起重机",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7752584c-0bd9-4b77-8e71-94b1748f96a7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    印度王朝\n    \n        作为印度王朝版本的三个新文明登场\n        66692版本后，获得僧侣+3/+3护甲文明加成\n        81058版本后，获得供给\n        81058版本后，获得近战骑兵+2对掷矛手加成\n        81058版本后，大乘佛教可以作用于僧侣了\n        81058版本后，文明主题音乐重制了\n    \n\n    皇家山脉\n    \n        99311版本后，战车骑射手护甲+1，近战模式附带20%区域伤害\n    \n\n    成王败寇\n    \n        111772版本更新后，孟加拉人失去帕提亚战术\n        111772版本更新后，战车/精锐战车的近战护甲从2/2提高到3/3，远程护甲从1/1提高到2/3\n        111772版本更新后，战车/精锐战车对长矛兵系部队附加伤害从0/0上调到1/2\n    \n\n    三国\n    \n        141935版本更新后，战车生命值从105下调到100，训练时间从18秒增加到20秒(精锐无变化)\n    \n\n    最后的酋长\n    \n        169123版本更新后，普通战车的远程护甲从2下调到1，精锐战车的骑射手护甲从1下调到0\n    \n\n    维京传奇\n    \n        185872版本补丁后，战车训练时间从20秒上调到24秒\n        185872版本补丁后，失去脚踏起重机",
+  "sectionTextSha256": "7dd72c500814e297eb5a4023adf87bab2fce0b065b4caeff5170df25b32d0baa",
+  "observedEntryCount": 14,
+  "supersedesRevisionId": null
+}

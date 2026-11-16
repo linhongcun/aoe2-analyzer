@@ -1,0 +1,688 @@
+{
+  "civId": "Koreans",
+  "sourceId": "seicing-koreans",
+  "url": "https://seicing.com/html/aoe2/2/%E9%AB%98%E4%B8%BD.html",
+  "indexLabel": "高丽Koreans",
+  "title": "高丽",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-04c2576b45579b68c629",
+  "documentSha256": "04c2576b45579b68c629aead1381ecd83a92a74a63e394640180a8497fa49acc",
+  "capturedAt": "2026-11-16T11:44:44.585232+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-f2753c67-c505-4da3-aab6-82e1b55be5ff",
+      "group": "征服者",
+      "locator": "#change li[1]",
+      "originalText": "箭塔射程在城堡时代+1，帝王时代+2",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f2753c67-c505-4da3-aab6-82e1b55be5ff"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-46e381d2-e55d-40c0-88a5-d982ec2690f9",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "神机箭提供投石车2射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-46e381d2-e55d-40c0-88a5-d982ec2690f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-48a0fbd3-cadb-4256-a76a-ec58abf358ad",
+      "group": "征服者",
+      "locator": "#change li[3]",
+      "originalText": "生产龟甲船需要城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-48a0fbd3-cadb-4256-a76a-ec58abf358ad"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f69a798c-2d97-41f5-9879-1dfe5c5c7ce7",
+      "group": "征服者",
+      "locator": "#change li[4]",
+      "originalText": "龟甲船消耗200木和200金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f69a798c-2d97-41f5-9879-1dfe5c5c7ce7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a03a5480-4e7d-4ddc-ac46-88c00e8c054d",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "马战车训练需要25秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a03a5480-4e7d-4ddc-ac46-88c00e8c054d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-70ba3651-cbe0-4b5c-bb42-127808dcfecb",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "马战车消耗80木60金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-70ba3651-cbe0-4b5c-bb42-127808dcfecb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e553780d-8347-41e5-9ea3-2754ad9433b0",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "马战车拥有5射程，精锐马战车拥有6射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e553780d-8347-41e5-9ea3-2754ad9433b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d909fca9-8895-4283-aaff-7be127f6b5cb",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "村民和步兵拥有+2视野，1.0c版本中村民有+3视野",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d909fca9-8895-4283-aaff-7be127f6b5cb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d3d667bc-137b-4071-a9e0-4bd0643099de",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "1.0c版本中神机箭提供投石车1射程",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d3d667bc-137b-4071-a9e0-4bd0643099de"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-465ef833-c338-46a9-bc18-9af99098eb47",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "1.0c版本中马战车消耗120木60金",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-465ef833-c338-46a9-bc18-9af99098eb47"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-469a0e8b-fb34-40b7-b435-6d22358148fb",
+      "group": "征服者",
+      "locator": "#change li[11]",
+      "originalText": "1.0c版本中马战车拥有4射程，精锐马战车拥有5射程",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-469a0e8b-fb34-40b7-b435-6d22358148fb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e9971754-dda5-430f-bb0e-83a2ccc5956a",
+      "group": "征服者",
+      "locator": "#change li[12]",
+      "originalText": "高丽队伍奖励是投石车+1射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e9971754-dda5-430f-bb0e-83a2ccc5956a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-926e6c11-d34a-41a2-9914-23e8239daf53",
+      "group": "失落帝国",
+      "locator": "#change li[13]",
+      "originalText": "防御工事现在建筑速度+33%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-926e6c11-d34a-41a2-9914-23e8239daf53"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-171548f9-0970-4eda-a38a-db7256f35c1c",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "板屋船加入游戏，消耗400食物400木",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-171548f9-0970-4eda-a38a-db7256f35c1c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9962a8a0-b387-476c-931e-8361b746ed8b",
+      "group": "失落帝国",
+      "locator": "#change li[15]",
+      "originalText": "龟甲船消耗180木和180金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9962a8a0-b387-476c-931e-8361b746ed8b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e85e38ca-715e-475a-b175-338320b133dc",
+      "group": "失落帝国",
+      "locator": "#change li[16]",
+      "originalText": "马战车训练需要21秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e85e38ca-715e-475a-b175-338320b133dc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-89399b40-9f79-4555-82fb-531ccd2e2172",
+      "group": "失落帝国",
+      "locator": "#change li[17]",
+      "originalText": "马战车消耗110木60金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-89399b40-9f79-4555-82fb-531ccd2e2172"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4632124e-7265-4c90-a65b-9f254ce2c8b5",
+      "group": "失落帝国",
+      "locator": "#change li[18]",
+      "originalText": "高丽队伍奖励是投石车删除最小射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4632124e-7265-4c90-a65b-9f254ce2c8b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9fc0ca18-9b72-46bd-8b0a-0cc7d9332b55",
+      "group": "非洲王国",
+      "locator": "#change li[19]",
+      "originalText": "板屋船消耗300食物300木",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9fc0ca18-9b72-46bd-8b0a-0cc7d9332b55"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-32565d1c-e2c1-4163-9351-b9f5231c7993",
+      "group": "非洲王国",
+      "locator": "#change li[20]",
+      "originalText": "生产龟甲船不再需要城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-32565d1c-e2c1-4163-9351-b9f5231c7993"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-23c792ca-4e49-4446-b5ff-7a9e5ce600ce",
+      "group": "非洲王国",
+      "locator": "#change li[21]",
+      "originalText": "马战车获得骑射手护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23c792ca-4e49-4446-b5ff-7a9e5ce600ce"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dd423e4e-4482-4139-883b-02593ce3dce4",
+      "group": "非洲王国",
+      "locator": "#change li[22]",
+      "originalText": "4.8版本后，防御工事建造速度+33%被专门用在围墙上",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dd423e4e-4482-4139-883b-02593ce3dce4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2",
+      "group": "蛮王崛起",
+      "locator": "#change li[23]",
+      "originalText": "5.8版本后，塔建造速度+5%",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6615e654-4edf-4fdb-856b-f33db9c5c58d",
+      "group": "最后的可汗",
+      "locator": "#change li[24]",
+      "originalText": "塔和围墙的建造速度加成删除，修改为军事单位木材费用-15%，攻城武器除外",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6615e654-4edf-4fdb-856b-f33db9c5c58d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-af2b0f5e-93bc-40b0-b26d-4d2da7dd5ac3",
+      "group": "最后的可汗",
+      "locator": "#change li[25]",
+      "originalText": "39284版本后，文明加成的军事单位(攻城武器除外)木材费用减少15%调整为20%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-af2b0f5e-93bc-40b0-b26d-4d2da7dd5ac3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e8ce1ad5-e48b-4637-b37d-8821e9d73811",
+      "group": "最后的可汗",
+      "locator": "#change li[26]",
+      "originalText": "39284版本后，马战车的基础木材成本增加5，接受文明加成后花费92木材(原来是94)",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e8ce1ad5-e48b-4637-b37d-8821e9d73811"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-61a783ee-15d4-45e3-9327-e52393faf259",
+      "group": "最后的可汗",
+      "locator": "#change li[27]",
+      "originalText": "39284版本后，龟船的基础木材成本增加10，接受文明加成后花费152木材(原来是153)",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-61a783ee-15d4-45e3-9327-e52393faf259"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a5640c58-8e97-4ba0-8103-6f4a6a166abd",
+      "group": "最后的可汗",
+      "locator": "#change li[28]",
+      "originalText": "42848版本后，获得免费的射手护甲升级",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a5640c58-8e97-4ba0-8103-6f4a6a166abd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c6f6d80b-5ed8-49ea-b9bd-d0934f198f6c",
+      "group": "最后的可汗",
+      "locator": "#change li[29]",
+      "originalText": "42848版本后，箭塔射程在城堡时代+1，帝王时代+2的加成删除",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c6f6d80b-5ed8-49ea-b9bd-d0934f198f6c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e3ac9333-e515-406d-a758-5e2887f8f1c7",
+      "group": "最后的可汗",
+      "locator": "#change li[30]",
+      "originalText": "42848版本后，精锐龟甲船速度从0.9提升到1.035",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e3ac9333-e515-406d-a758-5e2887f8f1c7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6cc489f5-111b-46fd-860f-296c528b4db4",
+      "group": "最后的可汗",
+      "locator": "#change li[31]",
+      "originalText": "42848版本后，板屋船(Panokseon)被替换成邑城(Eupseong)，可以使得塔+2射程",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6cc489f5-111b-46fd-860f-296c528b4db4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a8b977ea-687a-4e98-8459-c80abcd585e5",
+      "group": "西方霸主",
+      "locator": "#change li[32]",
+      "originalText": "44725更新后，获得精锐炮舰",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a8b977ea-687a-4e98-8459-c80abcd585e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a7eda3f9-4cfc-474e-ac3b-d5c032791504",
+      "group": "印度王朝",
+      "locator": "#change li[33]",
+      "originalText": "66692版本后，高丽战车的骑射手护甲从0下调到了-1",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7eda3f9-4cfc-474e-ac3b-d5c032791504"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-87d10340-a530-417a-99cb-320153796dfd",
+      "group": "罗马归来",
+      "locator": "#change li[34]",
+      "originalText": "87863版本后，文明奖励的“除攻城器外所有军事部队便宜20%木”修改为“射手和步兵木材费用-50%，战舰木材费用-20%”",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-87d10340-a530-417a-99cb-320153796dfd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-00bf7de2-aa25-41b7-9777-0621e0eafb6a",
+      "group": "罗马归来",
+      "locator": "#change li[35]",
+      "originalText": "87863版本后，高丽战车成本从115木60金上调到200木60金",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-00bf7de2-aa25-41b7-9777-0621e0eafb6a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0052a34d-aaf1-4838-8944-5ec6e742d81c",
+      "group": "罗马归来",
+      "locator": "#change li[36]",
+      "originalText": "87863版本后，龟甲船现在接受攻城技师加成",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0052a34d-aaf1-4838-8944-5ec6e742d81c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "group": "成王败寇",
+      "locator": "#change li[37]",
+      "originalText": "125283版本更新后，升级到精锐龟甲船的成本从1000食物800黄金下调到650食物500黄金，龟甲船/精锐龟甲船的移动速度从0.9/1.035统一为1.05",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-51c8ce80-4b5a-4db0-862d-f1f6565ff1a2",
+      "group": "三国",
+      "locator": "#change li[38]",
+      "originalText": "141935版本更新后，获得火箭推车和火矛兵",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-51c8ce80-4b5a-4db0-862d-f1f6565ff1a2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b43c5139-debb-4109-901b-7a632f42b44b",
+      "group": "三国",
+      "locator": "#change li[39]",
+      "originalText": "141935版本更新后，团队奖励从减少投石车最小射程修改为村民视野+3",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b43c5139-debb-4109-901b-7a632f42b44b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f09a34a-1f39-48b7-a7c0-36350bfebbc3",
+      "group": "三国",
+      "locator": "#change li[40]",
+      "originalText": "141935版本更新后，高丽战车对建筑物额外伤害从5下调到2",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f09a34a-1f39-48b7-a7c0-36350bfebbc3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a1a7fce3-b3b5-477c-9c9a-877819e31d97",
+      "group": "三国",
+      "locator": "#change li[41]",
+      "originalText": "141935版本更新后，龟甲船在大炮之间发射两轮火箭，火炮攻击伤害修改为20/25、子弹速度从7.8下调到6，不受弹道学影响，火箭每次发射3根，发射两次，造成6/8伤害，+7对建筑，+5/+6对船只，近战护甲修改为6/8，远程护甲修改为7/8，+8/+10舰船护甲",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a1a7fce3-b3b5-477c-9c9a-877819e31d97"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fa98446e-bb32-4c92-aae7-38724171ba5a",
+      "group": "三国",
+      "locator": "#change li[42]",
+      "originalText": "141935版本更新后，失去投石车",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fa98446e-bb32-4c92-aae7-38724171ba5a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d",
+      "group": "三国",
+      "locator": "#change li[43]",
+      "originalText": "141935版本更新后，神机箭成本从800木500金修改为1100肉800金，增加火箭推车和龟船射程并发射更多火箭，不增加投石机射程",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-47b91276-7809-412b-9476-af18ee9dbf90",
+      "group": "三国",
+      "locator": "#change li[44]",
+      "originalText": "151401版本后，龟甲船/精锐龟甲船的火箭伤害从6/8(远程)调整为4(近战)，对战舰加成从+5/+6调整为+0/+1",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-47b91276-7809-412b-9476-af18ee9dbf90"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f8ec9f72-9b4b-4cb9-a4d8-c231ed35c4b5",
+      "group": "最后的酋长",
+      "locator": "#change li[45]",
+      "originalText": "169123版本更新后，龟甲船失去对所有舰船的伤害加成，成本从152木180金下调到152木130金，生命值从200/300上调到275/350，火箭伤害从4/4调整为到9/13，火箭伤害种类从近战改成远程，近战护甲从6/9下调到2/3，远程护甲从7/9上调到7/12，移动速度从1.05下调到1.0，舰船护甲从+8/+10下调到0",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f8ec9f72-9b4b-4cb9-a4d8-c231ed35c4b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-db6955bd-94e6-4653-adaa-b23924933130",
+      "group": "维京传奇",
+      "locator": "#change li[46]",
+      "originalText": "185872版本补丁后，龟甲船生命值从275下调到260",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-db6955bd-94e6-4653-adaa-b23924933130"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-68f13514-6525-4221-a654-caa7da07ef3b",
+      "group": "维京传奇",
+      "locator": "#change li[47]",
+      "originalText": "185872版本补丁后，失去软甲",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-68f13514-6525-4221-a654-caa7da07ef3b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    征服者\n    \n        箭塔射程在城堡时代+1，帝王时代+2\n        神机箭提供投石车2射程\n        生产龟甲船需要城堡\n        龟甲船消耗200木和200金\n        马战车训练需要25秒\n        马战车消耗80木60金\n        马战车拥有5射程，精锐马战车拥有6射程\n        村民和步兵拥有+2视野，1.0c版本中村民有+3视野\n        1.0c版本中神机箭提供投石车1射程\n        1.0c版本中马战车消耗120木60金\n        1.0c版本中马战车拥有4射程，精锐马战车拥有5射程\n        高丽队伍奖励是投石车+1射程\n    \n\n    失落帝国\n    \n        防御工事现在建筑速度+33%\n        板屋船加入游戏，消耗400食物400木\n        龟甲船消耗180木和180金\n        马战车训练需要21秒\n        马战车消耗110木60金\n        高丽队伍奖励是投石车删除最小射程\n    \n\n    非洲王国\n    \n        板屋船消耗300食物300木\n        生产龟甲船不再需要城堡\n        马战车获得骑射手护甲\n        4.8版本后，防御工事建造速度+33%被专门用在围墙上\n    \n\n    蛮王崛起\n    \n        5.8版本后，塔建造速度+5%\n    \n\n    最后的可汗\n    \n        塔和围墙的建造速度加成删除，修改为军事单位木材费用-15%，攻城武器除外\n        39284版本后，文明加成的军事单位(攻城武器除外)木材费用减少15%调整为20%\n        39284版本后，马战车的基础木材成本增加5，接受文明加成后花费92木材(原来是94)\n        39284版本后，龟船的基础木材成本增加10，接受文明加成后花费152木材(原来是153)\n        42848版本后，获得免费的射手护甲升级\n        42848版本后，箭塔射程在城堡时代+1，帝王时代+2的加成删除\n        42848版本后，精锐龟甲船速度从0.9提升到1.035\n        42848版本后，板屋船(Panokseon)被替换成邑城(Eupseong)，可以使得塔+2射程\n    \n\n    西方霸主\n    \n        44725更新后，获得精锐炮舰\n    \n\n    印度王朝\n    \n        66692版本后，高丽战车的骑射手护甲从0下调到了-1\n    \n\n    罗马归来\n    \n        87863版本后，文明奖励的“除攻城器外所有军事部队便宜20%木”修改为“射手和步兵木材费用-50%，战舰木材费用-20%”\n        87863版本后，高丽战车成本从115木60金上调到200木60金\n        87863版本后，龟甲船现在接受攻城技师加成\n    \n\n    成王败寇\n    \n        125283版本更新后，升级到精锐龟甲船的成本从1000食物800黄金下调到650食物500黄金，龟甲船/精锐龟甲船的移动速度从0.9/1.035统一为1.05\n    \n\n    三国\n    \n        141935版本更新后，获得火箭推车和火矛兵\n        141935版本更新后，团队奖励从减少投石车最小射程修改为村民视野+3\n        141935版本更新后，高丽战车对建筑物额外伤害从5下调到2\n        141935版本更新后，龟甲船在大炮之间发射两轮火箭，火炮攻击伤害修改为20/25、子弹速度从7.8下调到6，不受弹道学影响，火箭每次发射3根，发射两次，造成6/8伤害，+7对建筑，+5/+6对船只，近战护甲修改为6/8，远程护甲修改为7/8，+8/+10舰船护甲\n        \n        141935版本更新后，失去投石车\n        141935版本更新后，神机箭成本从800木500金修改为1100肉800金，增加火箭推车和龟船射程并发射更多火箭，不增加投石机射程\n        151401版本后，龟甲船/精锐龟甲船的火箭伤害从6/8(远程)调整为4(近战)，对战舰加成从+5/+6调整为+0/+1\n    \n\n    最后的酋长\n    \n        169123版本更新后，龟甲船失去对所有舰船的伤害加成，成本从152木180金下调到152木130金，生命值从200/300上调到275/350，火箭伤害从4/4调整为到9/13，火箭伤害种类从近战改成远程，近战护甲从6/9下调到2/3，远程护甲从7/9上调到7/12，移动速度从1.05下调到1.0，舰船护甲从+8/+10下调到0\n        \n    \n\n    维京传奇\n    \n        185872版本补丁后，龟甲船生命值从275下调到260\n        185872版本补丁后，失去软甲",
+  "sectionTextSha256": "d3a43bb3f2ea9f1f8f110bda6dfec4a17c10eda743813ac856f32976cd0414ee",
+  "observedEntryCount": 47,
+  "supersedesRevisionId": null
+}

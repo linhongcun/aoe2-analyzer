@@ -1,0 +1,94 @@
+{
+  "civId": "Jurchens",
+  "sourceId": "seicing-jurchens",
+  "url": "https://seicing.com/html/aoe2/2/%E5%A5%B3%E7%9C%9F.html",
+  "indexLabel": "女真Jurchens",
+  "title": "女真",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-ff00dca6288a35da9971",
+  "documentSha256": "ff00dca6288a35da99715f91d37f28d783c3434230e6c73c716a1711ce644724",
+  "capturedAt": "2026-11-16T11:44:20.931219+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-379488a5-2e8c-4331-96d4-6b60709a4a6e",
+      "group": "三国",
+      "locator": "#change li[1]",
+      "originalText": "147949版本后，掷弹兵生命值从35上调到40，成本从35肉70金下调到35肉65金，攻击力从11上调到12",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-379488a5-2e8c-4331-96d4-6b60709a4a6e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6db89359-d3c2-45ec-922d-495541067cfb",
+      "group": "三国",
+      "locator": "#change li[2]",
+      "originalText": "147949版本后，铁浮屠格挡冷却时间从60/50秒下调到40/30秒",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6db89359-d3c2-45ec-922d-495541067cfb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-61975502-9ca2-4814-b396-d5d1fcb36e33",
+      "group": "三国",
+      "locator": "#change li[3]",
+      "originalText": "162286版本更新后，铁浮屠攻击间隔时间从2.28秒下调到了2.15秒",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-61975502-9ca2-4814-b396-d5d1fcb36e33"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e69c214a-384f-4934-ace5-8377a30a53b7",
+      "group": "三国",
+      "locator": "#change li[4]",
+      "originalText": "162286版本更新后，骑兵和火矛兵攻速文明加成效率从20%上调到了25%",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e69c214a-384f-4934-ace5-8377a30a53b7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cfffb079-259f-4795-9022-05dd9c42ba7f",
+      "group": "维京传奇",
+      "locator": "#change li[5]",
+      "originalText": "185872版本补丁后，掷弹兵成本从35肉65金调整为55肉50金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cfffb079-259f-4795-9022-05dd9c42ba7f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    三国\n    \n        147949版本后，掷弹兵生命值从35上调到40，成本从35肉70金下调到35肉65金，攻击力从11上调到12\n        147949版本后，铁浮屠格挡冷却时间从60/50秒下调到40/30秒\n        162286版本更新后，铁浮屠攻击间隔时间从2.28秒下调到了2.15秒\n        162286版本更新后，骑兵和火矛兵攻速文明加成效率从20%上调到了25%\n    \n\n\n\n    维京传奇\n    \n        185872版本补丁后，掷弹兵成本从35肉65金调整为55肉50金",
+  "sectionTextSha256": "7d6bd4024fe7d59b513affee4487f7af1e3c8ad7c66028eb40e5465a1d15bf6c",
+  "observedEntryCount": 5,
+  "supersedesRevisionId": null
+}

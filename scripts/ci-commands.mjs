@@ -51,6 +51,7 @@ export const DATA_CHECKS = [
   ].map((name) => python(name, `scripts/${name}_build.py`, '--check')),
   python('patches', 'scripts/patches_build.py', '--check'),
   python('history', 'scripts/history_build.py', '--check'),
+  python('civ-updates', 'scripts/civ_history_build.py', '--check'),
   python('patch-notes', 'scripts/patch_notes.py', '--check'),
   python('civ-backgrounds', 'scripts/import_backgrounds.py', '--check'),
   ['build-orders', 'npm', ['run', 'bo:check']],

@@ -1,0 +1,45 @@
+{
+  "civId": "Varangians",
+  "sourceId": "seicing-varangians",
+  "url": "https://seicing.com/html/aoe2/2/%E7%93%A6%E5%85%B0%E5%90%89.html",
+  "indexLabel": "瓦兰吉Varangians",
+  "title": "瓦兰吉",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-84d5968066c02483cb0f",
+  "documentSha256": "84d5968066c02483cb0f9c915262aa2657e55932b97696b4211f78846fc5a8fa",
+  "capturedAt": "2026-11-16T11:48:07.335988+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-e783d257-81af-4bff-a427-fa3dcbedcba4",
+      "group": "维京传奇",
+      "locator": "#change li[1]",
+      "originalText": "【待补充】版本补丁后，首领的成本从75肉55金下调到70肉50金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e783d257-81af-4bff-a427-fa3dcbedcba4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d68bfae7-5456-424b-91b4-60fdd40b0f46",
+      "group": "维京传奇",
+      "locator": "#change li[2]",
+      "originalText": "【待补充】版本补丁后，文德尔之遗成本从500肉300金下调到250肉300金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d68bfae7-5456-424b-91b4-60fdd40b0f46"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n\n\n    维京传奇\n    \n        【待补充】版本补丁后，首领的成本从75肉55金下调到70肉50金\n        【待补充】版本补丁后，文德尔之遗成本从500肉300金下调到250肉300金",
+  "sectionTextSha256": "ad36d2488e94d84a48a146ef4cc2f3f4dcb93aa72c65c352ac58e79697ec99f8",
+  "observedEntryCount": 2,
+  "supersedesRevisionId": null
+}
