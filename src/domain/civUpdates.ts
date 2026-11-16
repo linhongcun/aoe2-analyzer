@@ -166,7 +166,7 @@ export const SOURCE_STATE_LABELS: Record<SourceState, string> = {
   'page-not-found': '未找到页面',
   'no-log': '来源无日志',
 };
-export const VERIFICATION_LABELS: Record<Verification, string> = { verified: '已核实', unverified: '未核实', conflict: '存在冲突' };
+export const VERIFICATION_LABELS: Record<Verification, string> = { verified: '已核实', unverified: '未核实', conflict: '来源冲突，尚未确认' };
 export const SOURCE_CATEGORY_LABELS: Record<SourceCategory, string> = { official: '官方', community: '社区', other: '其他', unknown: '来源类别未知' };
 export const OVERVIEW_KEYS = ['histQuery', 'histCoverage', 'histSourceState', 'histListOrder'] as const;
 export const DETAIL_KEYS = ['histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder'] as const;

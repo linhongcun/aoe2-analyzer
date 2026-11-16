@@ -183,14 +183,14 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
   useEffect(() => {
     if (!c) return;
     session.lastCiv = c.en;
-    if (tab != null) {
+    if (tab != null && tab !== 'history') {
       const next = new URLSearchParams(location.search);
       next.delete('tab');
       const anchor = TAB_ANCHOR[tab] ?? '';
       navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
       return;
     }
-    const id = location.hash.replace(/^#/, '');
+    const id = location.hash.replace(/^#/, '') || (tab === 'history' ? 'patches' : '');
     if (!id) {
       scrollTo(0, 0);
       return;

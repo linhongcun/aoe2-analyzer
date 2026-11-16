@@ -258,7 +258,7 @@ function EventCard({ data, event }: { data: CivUpdatesData; event: CivUpdateEven
         <UpdateText>{event.summary}</UpdateText>
       </h4>
       <ScopeText data={data} scope={event.scope} />
-      {event.verification === 'conflict' && <p className="civ-update-warning">适用形态或数值存在分歧，以下并列保留各方主张，尚未裁决。</p>}
+      {event.verification === 'conflict' && <p className="civ-update-warning">来源冲突，尚未确认。以下并列保留各方主张。</p>}
       <div className={event.verification === 'conflict' ? 'civ-update-conflict-claims' : undefined}>
         {event.claims.map((claim, index) => (
           <section className="civ-update-claim" key={claim.id} aria-label={`主张${index + 1}`}>
@@ -341,6 +341,10 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
   const allEvents = data.events.filter((event) => civ.eventIds.includes(event.id));
   const versionIds = new Set(allEvents.flatMap((event) => (event.versionId === null ? [] : [event.versionId])));
   const versions = data.versions.filter((version) => versionIds.has(version.id)).sort(compareUpdateVersions);
+  const sectionIds = new Set(civ.sectionIds);
+  const pendingCount = data.sourceEntries.filter(
+    (entry) => entry.sectionId !== null && sectionIds.has(entry.sectionId) && entry.processing === 'pending',
+  ).length;
   const groups = new Map<string | null, CivUpdateEvent[]>();
   for (const event of filtered) groups.set(event.versionId, [...(groups.get(event.versionId) ?? []), event]);
   const writeQuery = (next: URLSearchParams, replace = false) =>
@@ -381,7 +385,11 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
           </small>
         </div>
       </div>
-      {civ.sourceState === 'pending' && <p className="civ-update-warning">来源章节仍有导入待核条目，已留存原文和具体原因；已有历史可继续查阅。</p>}
+      {civ.sourceState === 'pending' && (
+        <p className="civ-update-warning">
+          来源章节仍有导入待核条目（待核 <span className="num nw">{pendingCount} 条</span>），已留存原文和具体原因；已有历史可继续查阅。
+        </p>
+      )}
       {civ.sourceState === 'no-log' && <p>指定来源页面存在，但日志章节暂无记录。这不表示该文明从未改动。</p>}
       {civ.sourceState === 'page-not-found' && <p>在已登记来源查找范围中未找到页面；请查看来源处理说明。</p>}
       <SourceProcessing data={data} civId={civId} />

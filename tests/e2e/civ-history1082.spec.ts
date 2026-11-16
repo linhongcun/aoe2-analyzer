@@ -65,17 +65,25 @@ test('overview filters, complete return URL, reload, back/forward and clear roun
   const reader = page.getByTestId('civ-updates-reader');
   await expect(reader).toBeVisible();
   const router = () => new URL('https://test.invalid' + new URL(page.url()).hash.slice(1));
-  expect(router().searchParams.get('histReturn')).toBe(returnPath);
+  const expectHistoryContext = () => {
+    expect(router().searchParams.get('tab')).toBe('history');
+    expect(router().searchParams.get('histReturn')).toBe(returnPath);
+  };
+  expectHistoryContext();
   await reader.getByLabel('来源类别').selectOption('community');
+  expectHistoryContext();
   await page.reload();
   await expect(reader.getByLabel('来源类别')).toHaveValue('community');
+  expectHistoryContext();
   await reader.getByRole('button', { name: '清除历史筛选' }).click();
   await expect(reader.getByLabel('来源类别')).toHaveValue('');
-  expect(router().searchParams.get('histReturn')).toBe(returnPath);
+  expectHistoryContext();
   await page.goBack();
   await expect(reader.getByLabel('来源类别')).toHaveValue('community');
+  expectHistoryContext();
   await page.goForward();
   await expect(reader.getByLabel('来源类别')).toHaveValue('');
+  expectHistoryContext();
   await reader.getByRole('link', { name: '返回文明历史总览' }).click();
   await expect(overview.locator('tbody tr')).toHaveCount(1);
   expect(router().pathname + router().search).toBe(returnPath);
@@ -84,6 +92,14 @@ test('overview filters, complete return URL, reload, back/forward and clear roun
   await page.goBack();
   await expect(overview.getByLabel('来源章节状态')).toHaveValue('processed');
   await expect(overview.locator('tbody tr')).toHaveCount(1);
+});
+
+test('Japanese pending count stays visible with source processing collapsed', async ({ page }) => {
+  await page.goto('/#/civ/Japanese?tab=history');
+  const reader = page.getByTestId('civ-updates-reader');
+  await expect(reader.getByTestId('civ-update-processing')).not.toHaveAttribute('open');
+  await expect(reader.locator('.civ-update-warning')).toBeVisible();
+  await expect(reader.locator('.civ-update-warning')).toContainText('待核 1 条');
 });
 
 test('new payload failure retries independently while the old version archive stays available', async ({ page }) => {
@@ -120,7 +136,7 @@ test('labelled conflict fixture retains both claims, unknown values and escaped 
   const event = reader.getByTestId('civ-update-event');
   await expect(event).toHaveCount(1);
   await expect(event).toContainText('测试夹具：来源范围冲突');
-  await expect(event).toContainText('尚未裁决');
+  await expect(event).toContainText('来源冲突，尚未确认');
   await expect(event.locator('[data-effect-type="numeric"]')).toHaveCount(2);
   await expect(event.locator('.civ-update-values .num')).toHaveText(['0', '1']);
   await expect(event.locator('.civ-update-values').first()).toContainText('未知');
