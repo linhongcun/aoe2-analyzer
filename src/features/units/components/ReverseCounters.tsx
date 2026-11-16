@@ -16,7 +16,7 @@ import { useReverseCounterSession, writeReverseCounterSession, type ReverseCount
 import { AGE_ZH } from './ReverseCounterAvailability';
 import { ReverseCounterEmptyState } from './ReverseCounterEmptyState';
 import { getPkUnavailableReason, PkSummary, RetainedPkSummary, selectPkSummaryMode } from './ReverseCounterPkSummary';
-import { clearRestoreNote, invalidateRestoreNote, replaceRestoreNote, restoreNoteForRecord, scheduleRestoreNote } from './reverseCounterRestoreNote';
+import * as restoreNoteHelpers from './reverseCounterRestoreNote';
 import './reverse-counters.css';
 
 interface Props {
@@ -217,8 +217,15 @@ export function ReverseCounters({
   location,
 }: Props) {
   const currentSession = useReverseCounterSession(target.id, targetCiv, location);
+  const currentSessionIdentity = currentSession.identity;
+  const {
+    state: restoreNoteState,
+    setState: setRestoreNoteState,
+    note: restoreNote,
+    sessionIdentityRef: currentSessionIdentityRef,
+  } = restoreNoteHelpers.useRestoreNoteState(currentSessionIdentity);
   const stored = currentSession.record;
-  const { restorePending, record: sessionRecord, markRestored } = currentSession;
+  const { markRestored } = currentSession;
   const storedFilter = stored?.filters;
   const initialFilters: ReverseCounterFilter = {
     civ: storedFilter?.civ && civNames.includes(storedFilter.civ) ? storedFilter.civ : '',
@@ -229,14 +236,12 @@ export function ReverseCounters({
   const [expandedRows, setExpandedRows] = useState<string[]>(stored?.expandedRows ?? []);
   const [openPk, setOpenPk] = useState<{ category: string; id: number } | null>(stored?.openPk ?? null);
   const [originButton, setOriginButton] = useState('');
-  const [restoreNoteState, setRestoreNoteState] = useState({ generation: 0, note: '' });
-  const restoreNote = restoreNoteState.note;
   const [defaultGroupsReady, setDefaultGroupsReady] = useState(!!stored);
   const [activeSessionIdentity, setActiveSessionIdentity] = useState(currentSession.identity);
   const sessionStateReady = activeSessionIdentity === currentSession.identity;
   if (!sessionStateReady) {
     const next = currentSession.record;
-    clearRestoreNote(setRestoreNoteState);
+    restoreNoteHelpers.clearRestoreNote(currentSessionIdentity, setRestoreNoteState);
     setFilter({
       civ: next?.filters.civ && civNames.includes(next.filters.civ) ? next.filters.civ : '',
       age: next?.filters.age ?? null,
@@ -299,7 +304,7 @@ export function ReverseCounters({
   if (sessionStateReady && openPk && !corePending && !coreError && !filteredPkRow && !basePkRow) {
     setOpenPk(null);
     setOriginButton('');
-    replaceRestoreNote(setRestoreNoteState, '所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
+    restoreNoteHelpers.replaceRestoreNote(currentSessionIdentity, setRestoreNoteState, '所选 PK 形态已不在当前正贡献目录中或无法核实，已关闭核对。');
   }
 
   const saveSession = useCallback(
@@ -338,25 +343,19 @@ export function ReverseCounters({
     return () => window.removeEventListener('pagehide', save);
   }, [saveSession]);
 
-  useEffect(() => {
-    if (!sessionStateReady || !restorePending || !sessionRecord || treesPending || corePending || coreError) return;
-    const record = sessionRecord;
-    const exact = record.anchor ? document.getElementById(record.anchor) : null;
-    const fallback = record.fallbackAnchor ? document.getElementById(record.fallbackAnchor) : null;
-    const destination = record.anchor || record.fallbackAnchor ? (exact ?? fallback ?? document.getElementById('unit-reverse-counters')) : null;
-    const note = restoreNoteForRecord(record, !!exact, !!basePkRow);
-    if (restoreNoteState.note !== note) return scheduleRestoreNote(restoreNoteState, setRestoreNoteState, note);
-    const frame = requestAnimationFrame(() => {
-      if (destination) window.scrollTo({ top: window.scrollY + destination.getBoundingClientRect().top - record.offset, behavior: 'auto' });
-      const focus =
-        (record.focus ? document.getElementById(record.focus) : null) ??
-        (record.openPk ? document.getElementById(pkButtonId(record.openPk.category, record.openPk.id)) : null);
-      if (record.focus || (record.openPk && destination)) (focus ?? destination)?.focus({ preventScroll: true });
-      if (record.openPk) setOriginButton(pkButtonId(record.openPk.category, record.openPk.id));
-      markRestored();
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [sessionStateReady, restorePending, sessionRecord, treesPending, corePending, coreError, basePkRow, restoreNoteState, markRestored]);
+  restoreNoteHelpers.useRestoreNoteEffect({
+    currentSession,
+    sessionIdentityRef: currentSessionIdentityRef,
+    sessionStateReady,
+    treesPending,
+    corePending,
+    coreError,
+    hasBasePkRow: !!basePkRow,
+    state: restoreNoteState,
+    setNoteState: setRestoreNoteState,
+    setOriginButton,
+    pkButtonId,
+  });
 
   useEffect(() => {
     if (sessionStateReady && !currentSession.restorePending) saveSession();
@@ -366,7 +365,7 @@ export function ReverseCounters({
     setCollapsed((current) => (current.includes(category) ? current.filter((item) => item !== category) : [...current, category]));
   };
   const changeFilter = (next: ReverseCounterFilter) => {
-    clearRestoreNote(setRestoreNoteState);
+    restoreNoteHelpers.clearRestoreNote(currentSessionIdentity, setRestoreNoteState);
     markRestored();
     setFilter(next);
     setOpenPk(null);
@@ -374,7 +373,7 @@ export function ReverseCounters({
     setCollapsed([]);
   };
   const closePk = (focusId = originButton || (openPk ? pkButtonId(openPk.category, openPk.id) : '')) => {
-    invalidateRestoreNote(restoreNoteState, setRestoreNoteState);
+    restoreNoteHelpers.invalidateRestoreNote(restoreNoteState, currentSessionIdentity, setRestoreNoteState);
     markRestored();
     setOpenPk(null);
     requestAnimationFrame(() => {
