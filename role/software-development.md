@@ -104,7 +104,7 @@ npm run lint:layers -- --strict
 
 历史怎么回来：
 
-- 模式转换用 `Link` push，浏览器返回回到来源的完整查询。[#1009 / PR #1096](https://github.com/linhongcun/aoe2-analyzer/pull/1096) 后，PK→训练总价、训练总价↔持续生产由 `src/domain/productionTransfer.ts` 携带解析后的文明、时代、可用单位形态及目标允许的已选科技，不再一概清空训练行。PK 携带卡片实际派出数；两种生产模式之间不换算训练数量与建筑数量，目标分别用空训练数量、默认建筑数量。完整默认生产方案仍沿旧 `trainTotalHrefFrom` 保留默认时代例外；跨文明对照仍走自己的协议。资料未就绪时不生成会丢行的转换链接。
+- 模式转换用 `Link` push，浏览器返回回到来源的完整查询。[#1009 / PR #1096](https://github.com/linhongcun/aoe2-analyzer/pull/1096) 后，PK→训练总价、训练总价↔持续生产由 `src/domain/productionTransfer.ts` 按来源协议携带解析后的文明、时代、单位形态及目标允许的已选科技，不再一概清空训练行。PK 保留卡片原形态及实际派出数，不可用卡也不替换形态；两种生产模式之间只带可用形态，不换算训练数量与建筑数量，目标分别用空训练数量、默认建筑数量。完整默认生产方案仍沿旧 `trainTotalHrefFrom` 保留默认时代例外；跨文明对照仍走自己的协议。资料未就绪时不生成会丢行的转换链接。
 - 表单编辑用 `navigate(..., { replace: true })`，分享链接保持最新，不把每一次改动堆进历史。训练总价/持续生产的转换说明属于当前 entry 的 router state：表单 replace 和当前模式同址 Link 都要保留 `location.state`；新转换生成新说明；dismiss 仅清本功能字段。刷新、返回/前进可恢复该 entry 的说明，复制 URL 到新标签则没有说明，方案本身仍从 URL 解码，不靠本机存储恢复。
 - 刷新和打开分享链接都从 URL 解码。`src/shared/utils/sticky.ts` 的筛选记忆和 `session.lastCiv` 只在这次页面进程里，刷新就没了。
 - 外观不进链接。键是 `aoe2-theme`（`src/app/theme/theme.ts`），存在 `localStorage`。复盘、快捷键、开一局另有自己的 `localStorage`，和工具查询不是同一套。
