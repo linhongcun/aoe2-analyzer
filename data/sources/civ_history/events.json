@@ -40423,7 +40423,9 @@
               "unit": null,
               "operation": "set",
               "text": "长枪兵和投矛手的远程装甲从原来的+1调整为+2",
-              "conditions": [],
+              "conditions": [
+                "塔盾科技效果"
+              ],
               "scope": null
             },
             {

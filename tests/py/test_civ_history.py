@@ -179,6 +179,8 @@ class CivHistoryTests(unittest.TestCase):
                 if prefix == 'd81f1c94':
                     self.assertNotIn('城镇中心', effect['text'])
                     self.assertEqual(effect['conditions'], [])
+                if prefix == 'fdf0ba33':
+                    self.assertEqual(effect['conditions'], ['塔盾科技效果'])
         inca = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-5a574943'))
         discounts = [f for f in inca['claims'][0]['effects'] if f.get('attribute') == '食物折扣率']
         self.assertEqual([(f['before'], f['after']) for f in discounts], [(5, 15), (10, 20), (15, 25), (20, 30)])
