@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-siege.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "meta", "classes", "attacker", "buildings", "coverage", "audit"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generatedBy", "patch", "dat", "techtree", "mechanics", "model", "engineVerifiedInPinnedBuild", "fields"],
+      "properties": {
+        "generatedBy": { "const": "scripts/siege_build.py" },
+        "patch": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "engineVerifiedInPinnedBuild": { "const": false },
+        "fields": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "dat": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repo", "commit", "path", "sha256", "version", "markers", "parser"],
+          "properties": {
+            "repo": { "type": "string", "minLength": 1 },
+            "commit": { "$ref": "#/$defs/commit" },
+            "path": { "const": "dat/empires2_x2_p1.dat" },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "version": { "const": "VER 8.9" },
+            "parser": { "const": "genieutils-py==0.1.2" },
+            "markers": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["civs", "techs", "effects", "newestCivs"],
+              "properties": {
+                "civs": { "type": "integer", "minimum": 1 },
+                "techs": { "type": "integer", "minimum": 1 },
+                "effects": { "type": "integer", "minimum": 1 },
+                "newestCivs": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 3 }
+              }
+            }
+          }
+        },
+        "techtree": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repo", "commit", "path", "sha256", "matches"],
+          "properties": {
+            "repo": { "type": "string", "minLength": 1 },
+            "commit": { "$ref": "#/$defs/commit" },
+            "path": { "const": "data/data.json" },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "matches": { "const": true }
+          }
+        },
+        "mechanics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url", "sha256", "section", "limitation"],
+          "properties": {
+            "url": { "type": "string", "pattern": "^https://" },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "section": { "type": "string", "minLength": 1 },
+            "limitation": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "classes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["3", "4", "11", "13", "16", "20", "37"],
+      "properties": {
+        "3": { "const": "穿刺" },
+        "4": { "const": "近战" },
+        "11": { "const": "所有建筑" },
+        "13": { "const": "石质防御" },
+        "16": { "const": "船只" },
+        "20": { "const": "攻城武器" },
+        "37": { "const": "重型攻城武器" }
+      }
+    },
+    "attacker": { "$ref": "#/$defs/combat", "type": "object", "properties": { "id": { "const": 36 } }, "required": ["id"] },
+    "buildings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["82", "235"],
+      "properties": { "82": { "$ref": "#/$defs/combat" }, "235": { "$ref": "#/$defs/combat" } }
+    },
+    "coverage": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unit", "building", "civ", "armor", "status"],
+        "properties": {
+          "unit": { "const": 36 },
+          "building": { "enum": [82, 235] },
+          "civ": { "enum": ["", "Turks"] },
+          "armor": { "type": "array", "maxItems": 0, "items": { "type": "integer" } },
+          "status": { "const": "verified" }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rawCivsCompared", "rawCombatEqual", "turks", "armorTechs", "armorTechCoverage"],
+      "properties": {
+        "rawCivsCompared": { "const": ["Gaia", "British", "Turks"] },
+        "rawCombatEqual": { "const": true },
+        "armorTechCoverage": { "type": "string", "minLength": 1 },
+        "armorTechs": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/tech" } },
+        "turks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "automaticTechs", "tree", "team", "chemistry", "conclusion"],
+          "properties": {
+            "id": { "const": 10 },
+            "conclusion": { "type": "string", "minLength": 1 },
+            "automaticTechs": { "type": "array", "items": { "$ref": "#/$defs/tech" } },
+            "tree": { "$ref": "#/$defs/effect" },
+            "team": { "$ref": "#/$defs/effect" },
+            "chemistry": { "$ref": "#/$defs/tech" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "prefixItems": [{ "type": "integer", "minimum": 0 }, { "type": "number" }],
+        "items": false,
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "combat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hp", "class", "attacks", "armors", "baseArmor", "reload", "modifiers", "modifiersVerified", "attacksComplete", "armorsComplete"],
+      "properties": {
+        "id": { "const": 36 },
+        "class": { "type": "integer", "minimum": 0 },
+        "hp": { "type": "number", "exclusiveMinimum": 0 },
+        "reload": { "type": "number", "exclusiveMinimum": 0 },
+        "baseArmor": { "type": "number", "minimum": 0 },
+        "attacks": { "$ref": "#/$defs/classes" },
+        "armors": { "$ref": "#/$defs/classes" },
+        "attacksComplete": { "const": true },
+        "armorsComplete": { "const": true },
+        "modifiersVerified": { "const": true },
+        "modifiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bonusResistance",
+            "reflection",
+            "blastDamage",
+            "accuracy",
+            "projectiles",
+            "maxProjectiles",
+            "secondaryProjectile",
+            "specialAbility",
+            "chargeType",
+            "chargeEvent",
+            "rear",
+            "flank"
+          ],
+          "properties": {
+            "bonusResistance": { "type": "number" },
+            "reflection": { "type": "number" },
+            "blastDamage": { "type": "number" },
+            "accuracy": { "type": "number" },
+            "projectiles": { "type": "number" },
+            "maxProjectiles": { "type": "integer" },
+            "secondaryProjectile": { "type": "integer" },
+            "specialAbility": { "type": "integer" },
+            "chargeType": { "type": "integer" },
+            "chargeEvent": { "type": "integer" },
+            "rear": { "type": "number" },
+            "flank": { "type": "number" }
+          }
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Type", "A", "B", "C", "D"],
+      "properties": {
+        "Type": { "type": "integer" },
+        "A": { "type": "integer" },
+        "B": { "type": "integer" },
+        "C": { "type": "integer" },
+        "D": { "type": "number" }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Name", "EffectCommands"],
+      "properties": { "Name": { "type": "string" }, "EffectCommands": { "type": "array", "items": { "$ref": "#/$defs/command" } } }
+    },
+    "tech": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tech", "effect", "name", "requires", "location", "commands"],
+      "properties": {
+        "tech": { "type": "integer" },
+        "effect": { "type": "integer" },
+        "name": { "type": "string" },
+        "location": { "type": "integer" },
+        "requires": { "type": "array", "items": { "type": "integer" } },
+        "commands": { "type": "array", "items": { "$ref": "#/$defs/command" } }
+      }
+    }
+  }
+}

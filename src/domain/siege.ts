@@ -4,6 +4,7 @@ import { applyEffects, baseStats } from './simulator';
 import { damageRows, hitCount, totalDamage } from './damageCore';
 import { buildingBase } from './buildingSim';
 import type { Building, Unit } from './types';
+import { verifiedSiegeInputs } from './siegeEvidence';
 
 // 有界的小规模理想齐射工具；避免把任意大军数量误读成包含碰撞/寻路的模拟。
 export const SIEGE_MAX_COUNT = 40;
@@ -30,6 +31,16 @@ interface SiegeCatalog {
 }
 export type SiegeResult = { verified: true; damage: number; hits: number; gameSeconds: number; realSeconds: number } | { verified: false; reason: string };
 const unknown = (reason: string): SiegeResult => ({ verified: false, reason });
+
+function timedResult(hp: number, damage: number, interval: number, n: number): SiegeResult {
+  const volleyDamage = n * damage;
+  if (![hp, damage, interval, volleyDamage].every((value) => Number.isFinite(value) && value > 0)) return unknown('生命值、伤害或攻击间隔数据待补。');
+  const hits = hitCount(hp, volleyDamage, { roundHp: true, epsilon: 0 });
+  const gameSeconds = (hits - 1) * interval;
+  const realSeconds = gameSeconds / SIEGE_SPEED;
+  if (!Number.isSafeInteger(hits) || hits < 1 || !Number.isFinite(gameSeconds) || !Number.isFinite(realSeconds)) return unknown('伤害或用时数据待补。');
+  return { verified: true, damage, hits, gameSeconds, realSeconds };
+}
 
 /** 只提供 .dat 中对当前目标有明确建筑效果的护甲科技。 */
 export function siegeArmorTechs(building: Building) {
@@ -109,6 +120,10 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   if ([280, 550, 588].includes(u.id)) return unknown(SIEGE_MANGONEL_REASON);
   if (!Number.isInteger(n) || n < 1 || n > SIEGE_MAX_COUNT) return unknown('数量须在允许范围内。');
   if (civ && (!DAT.civs[civ]?.dat || !u.civs.includes(civ))) return unknown('当前文明的单位可用性或效果数据未核实。');
+  if (u.id === 36) {
+    const inputs = verifiedSiegeInputs(u, b, civ, armor);
+    return inputs ? timedResult(inputs.hp, inputs.damage, inputs.interval, n) : unknown('当前手推炮配置的攻击、护甲或修正数据尚未核实。');
+  }
   const attacker = baseStats(u);
   const defender = buildingBase(b);
   // 按所选单位的时代计入无科技前置的文明属性效果；不加入手工回退、独特科技或盟友效果。
@@ -130,7 +145,7 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   for (const [category] of u.atks) {
     if (category === '近战' || category === '穿刺') attacks[category] = attacker.atk;
   }
-  // buildings_build.py 从 .dat 类别 11 生成 barm。建筑不属于攻城武器/船只/僧侣，不能加上对应伤害。
+  // 旧 ram/331 简表路径保持既有模型；手推炮使用上方独立的完整类别证据。
   const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣']);
   const armors: Record<string, number> = { 近战: defender.ma, 穿刺: defender.pa, 所有建筑: defender.barm };
   const filtered = Object.fromEntries(Object.entries(attacks).filter(([category]) => !irrelevant.has(category)));
@@ -141,7 +156,5 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   const interval = attacker.rof / attacker.rofx;
   if (!u.atks.length || !Number.isFinite(defender.hp) || defender.hp <= 0 || !Number.isFinite(interval) || interval <= 0)
     return unknown('生命值或攻击间隔数据待补。');
-  const hits = hitCount(defender.hp, n * damage, { roundHp: true, epsilon: 0 });
-  const gameSeconds = (hits - 1) * interval;
-  return { verified: true, damage, hits, gameSeconds, realSeconds: gameSeconds / SIEGE_SPEED };
+  return timedResult(defender.hp, damage, interval, n);
 }

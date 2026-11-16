@@ -14,10 +14,10 @@ const tempRoot = () => {
 afterEach(() => roots.splice(0).forEach((root) => rmSync(root, { recursive: true, force: true })));
 
 describe('#820 数据族索引', () => {
-  it('当前仓库 14 条登记完整', () => {
+  it('当前仓库 15 条登记完整（含 #1064 有界攻城证据）', () => {
     const result = checkDataFamilies(process.cwd());
     expect(result.errors).toEqual([]);
-    expect(result.files).toHaveLength(14);
+    expect(result.files).toHaveLength(15);
   });
 
   it('未登记的生成文件会失败', () => {

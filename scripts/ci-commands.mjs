@@ -25,6 +25,7 @@ export const DATA_CHECKS = [
   ['python-tests', 'npm', ['run', 'test:py']],
   ['dat', 'npm', ['run', 'dat:check']],
   ['stats', 'npm', ['run', 'stats:check']],
+  python('siege', 'scripts/siege_build.py', '--check'),
   python('map-previews', 'scripts/map_previews.py', '--check'),
   python('map-catalog', 'scripts/map_catalog_build.py', '--check'),
   python('core-data', 'scripts/build_data.py'),

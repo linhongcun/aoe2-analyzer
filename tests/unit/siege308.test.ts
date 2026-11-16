@@ -30,7 +30,7 @@ describe('攻城拆建筑 #308', () => {
     });
   });
 
-  it.each(['Mangonel', 'Onager', 'Siege Onager', 'Bombard Cannon'])('%s 不输出完整用时', (en) => {
+  it.each(['Mangonel', 'Onager', 'Siege Onager'])('%s 不输出完整用时', (en) => {
     expect(calculateSiege(unit(en), building(82), 1)).toMatchObject({ verified: false });
     expect(calculateSiege(unit(en), building(82), 1)).not.toHaveProperty('gameSeconds');
   });
