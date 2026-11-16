@@ -84763,7 +84763,9 @@
               "before": 10.0,
               "after": 25.0,
               "delta": null,
-              "unit": "%",
+              "unit": null,
+              "beforeUnit": "HP",
+              "afterUnit": "%",
               "operation": "set",
               "id": "cl-se-78a3783c-8ff1-4564-a815-4e5eab998ee7-effect-1"
             },

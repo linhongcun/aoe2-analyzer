@@ -8,12 +8,7 @@
       "type": "object",
       "properties": {
         "scopeKind": {
-          "enum": [
-            "civ",
-            "team",
-            "global",
-            "unknown"
-          ]
+          "enum": ["civ", "team", "global", "unknown"]
         },
         "providerCivIds": {
           "type": "array",
@@ -34,13 +29,7 @@
           "uniqueItems": true
         },
         "beneficiary": {
-          "enum": [
-            "self",
-            "allies",
-            "team",
-            "all",
-            "unknown"
-          ]
+          "enum": ["self", "allies", "team", "all", "unknown"]
         },
         "conditions": {
           "type": "array",
@@ -51,13 +40,7 @@
           "minItems": 0
         }
       },
-      "required": [
-        "scopeKind",
-        "providerCivIds",
-        "affectedCivIds",
-        "beneficiary",
-        "conditions"
-      ],
+      "required": ["scopeKind", "providerCivIds", "affectedCivIds", "beneficiary", "conditions"],
       "additionalProperties": false
     },
     "entityRef": {
@@ -70,9 +53,7 @@
               "minLength": 1
             }
           },
-          "required": [
-            "entityId"
-          ],
+          "required": ["entityId"],
           "additionalProperties": false
         },
         {
@@ -83,19 +64,10 @@
               "minLength": 1
             },
             "type": {
-              "enum": [
-                "civ",
-                "unit",
-                "building",
-                "tech",
-                null
-              ]
+              "enum": ["civ", "unit", "building", "tech", null]
             }
           },
-          "required": [
-            "unresolvedName",
-            "type"
-          ],
+          "required": ["unresolvedName", "type"],
           "additionalProperties": false
         }
       ]
@@ -108,12 +80,7 @@
           "minLength": 1
         },
         "type": {
-          "enum": [
-            "civ",
-            "unit",
-            "building",
-            "tech"
-          ]
+          "enum": ["civ", "unit", "building", "tech"]
         },
         "catalogId": {
           "type": "string",
@@ -124,10 +91,7 @@
           "minLength": 1
         },
         "nameEn": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "aliases": {
           "type": "array",
@@ -139,33 +103,17 @@
           "uniqueItems": true
         },
         "status": {
-          "enum": [
-            "current",
-            "retired"
-          ]
+          "enum": ["current", "retired"]
         },
         "linkPath": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "identityNote": {
           "type": "string",
           "minLength": 1
         }
       },
-      "required": [
-        "id",
-        "type",
-        "catalogId",
-        "nameZh",
-        "nameEn",
-        "aliases",
-        "status",
-        "linkPath",
-        "identityNote"
-      ],
+      "required": ["id", "type", "catalogId", "nameZh", "nameEn", "aliases", "status", "linkPath", "identityNote"],
       "additionalProperties": false
     },
     "version": {
@@ -180,35 +128,20 @@
           "minLength": 1
         },
         "build": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "branch": {
-          "enum": [
-            "DE",
-            null
-          ]
+          "enum": ["DE", null]
         },
         "orderKey": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "releaseDate": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "announcedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "evidenceSourceIds": {
           "type": "array",
@@ -220,16 +153,7 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "id",
-        "label",
-        "build",
-        "branch",
-        "orderKey",
-        "releaseDate",
-        "announcedAt",
-        "evidenceSourceIds"
-      ],
+      "required": ["id", "label", "build", "branch", "orderKey", "releaseDate", "announcedAt", "evidenceSourceIds"],
       "additionalProperties": false
     },
     "source": {
@@ -244,40 +168,19 @@
           "minLength": 1
         },
         "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "category": {
-          "enum": [
-            "official",
-            "community",
-            "other",
-            "unknown"
-          ]
+          "enum": ["official", "community", "other", "unknown"]
         },
         "sourcePublishedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "capturedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         }
       },
-      "required": [
-        "id",
-        "title",
-        "url",
-        "category",
-        "sourcePublishedAt",
-        "capturedAt"
-      ],
+      "required": ["id", "title", "url", "category", "sourcePublishedAt", "capturedAt"],
       "additionalProperties": false
     },
     "effect": {
@@ -319,60 +222,35 @@
               ]
             },
             "type": {
-              "enum": [
-                "numeric"
-              ]
+              "enum": ["numeric"]
             },
             "attribute": {
               "type": "string",
               "minLength": 1
             },
             "before": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "after": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "delta": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "unit": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
+            },
+            "beforeUnit": {
+              "type": ["string", "null"]
+            },
+            "afterUnit": {
+              "type": ["string", "null"]
             },
             "operation": {
-              "enum": [
-                "set",
-                "add",
-                "unknown"
-              ]
+              "enum": ["set", "add", "unknown"]
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "attribute",
-            "before",
-            "after",
-            "delta",
-            "unit",
-            "operation"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "attribute", "before", "after", "delta", "unit", "operation"],
           "additionalProperties": false
         },
         {
@@ -412,61 +290,35 @@
               ]
             },
             "type": {
-              "enum": [
-                "bonus"
-              ]
+              "enum": ["bonus"]
             },
             "attribute": {
               "type": "string",
               "minLength": 1
             },
             "before": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "after": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "delta": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "unit": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
+            },
+            "beforeUnit": {
+              "type": ["string", "null"]
+            },
+            "afterUnit": {
+              "type": ["string", "null"]
             },
             "operation": {
-              "enum": [
-                "absolute-discount",
-                "percentage-discount",
-                "rate",
-                "unknown"
-              ]
+              "enum": ["absolute-discount", "percentage-discount", "rate", "unknown"]
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "attribute",
-            "before",
-            "after",
-            "delta",
-            "unit",
-            "operation"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "attribute", "before", "after", "delta", "unit", "operation"],
           "additionalProperties": false
         },
         {
@@ -506,33 +358,16 @@
               ]
             },
             "type": {
-              "enum": [
-                "availability"
-              ]
+              "enum": ["availability"]
             },
             "before": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "after": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "before",
-            "after"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "before", "after"],
           "additionalProperties": false
         },
         {
@@ -572,33 +407,16 @@
               ]
             },
             "type": {
-              "enum": [
-                "mechanic"
-              ]
+              "enum": ["mechanic"]
             },
             "legacyBefore": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             },
             "legacyAfter": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "legacyBefore",
-            "legacyAfter"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "legacyBefore", "legacyAfter"],
           "additionalProperties": false
         },
         {
@@ -638,9 +456,7 @@
               ]
             },
             "type": {
-              "enum": [
-                "rename"
-              ]
+              "enum": ["rename"]
             },
             "beforeName": {
               "type": "string",
@@ -651,16 +467,7 @@
               "minLength": 1
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "beforeName",
-            "afterName"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "beforeName", "afterName"],
           "additionalProperties": false
         },
         {
@@ -700,26 +507,13 @@
               ]
             },
             "type": {
-              "enum": [
-                "lifecycle"
-              ]
+              "enum": ["lifecycle"]
             },
             "action": {
-              "enum": [
-                "introduced",
-                "retired"
-              ]
+              "enum": ["introduced", "retired"]
             }
           },
-          "required": [
-            "id",
-            "entityRefs",
-            "text",
-            "conditions",
-            "scope",
-            "type",
-            "action"
-          ],
+          "required": ["id", "entityRefs", "text", "conditions", "scope", "type", "action"],
           "additionalProperties": false
         }
       ]
@@ -732,11 +526,7 @@
           "minLength": 1
         },
         "verification": {
-          "enum": [
-            "verified",
-            "unverified",
-            "conflict"
-          ]
+          "enum": ["verified", "unverified", "conflict"]
         },
         "verificationNote": {
           "type": "string",
@@ -768,14 +558,7 @@
           "minItems": 1
         }
       },
-      "required": [
-        "id",
-        "verification",
-        "verificationNote",
-        "sourceEntryIds",
-        "legacyKeys",
-        "effects"
-      ],
+      "required": ["id", "verification", "verificationNote", "sourceEntryIds", "legacyKeys", "effects"],
       "additionalProperties": false
     },
     "relation": {
@@ -786,22 +569,14 @@
           "minLength": 1
         },
         "relation": {
-          "enum": [
-            "direct",
-            "related",
-            "provider"
-          ]
+          "enum": ["direct", "related", "provider"]
         },
         "note": {
           "type": "string",
           "minLength": 1
         }
       },
-      "required": [
-        "civId",
-        "relation",
-        "note"
-      ],
+      "required": ["civId", "relation", "note"],
       "additionalProperties": false
     },
     "event": {
@@ -812,21 +587,14 @@
           "minLength": 1
         },
         "versionId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "summary": {
           "type": "string",
           "minLength": 1
         },
         "verification": {
-          "enum": [
-            "verified",
-            "unverified",
-            "conflict"
-          ]
+          "enum": ["verified", "unverified", "conflict"]
         },
         "verificationNote": {
           "type": "string",
@@ -863,26 +631,13 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "eventId",
-              "reason"
-            ],
+            "required": ["eventId", "reason"],
             "additionalProperties": false
           },
           "minItems": 0
         }
       },
-      "required": [
-        "id",
-        "versionId",
-        "summary",
-        "verification",
-        "verificationNote",
-        "scope",
-        "civRelations",
-        "claims",
-        "candidates"
-      ],
+      "required": ["id", "versionId", "summary", "verification", "verificationNote", "scope", "civRelations", "claims", "candidates"],
       "additionalProperties": false
     },
     "sourceEntry": {
@@ -897,26 +652,17 @@
           "minLength": 1
         },
         "sectionId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "group": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "locator": {
           "type": "string",
           "minLength": 1
         },
         "originalText": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "rawVersionLabels": {
           "type": "array",
@@ -927,10 +673,7 @@
           "minItems": 0
         },
         "sourceBullet": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "legacyKeys": {
           "type": "array",
@@ -942,11 +685,7 @@
           "uniqueItems": true
         },
         "processing": {
-          "enum": [
-            "mapped",
-            "pending",
-            "excluded"
-          ]
+          "enum": ["mapped", "pending", "excluded"]
         },
         "eventIds": {
           "type": "array",
@@ -1000,10 +739,7 @@
           "minLength": 1
         },
         "supersedesRevisionId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "civId": {
           "type": "string",
@@ -1034,10 +770,7 @@
           "minLength": 1
         },
         "sourcePublishedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "observedEntryCount": {
           "type": "integer",
@@ -1053,12 +786,7 @@
           "uniqueItems": true
         },
         "sourceState": {
-          "enum": [
-            "processed",
-            "pending",
-            "page-not-found",
-            "no-log"
-          ]
+          "enum": ["processed", "pending", "page-not-found", "no-log"]
         },
         "reason": {
           "type": "string",
@@ -1100,18 +828,10 @@
           "minimum": 0
         },
         "sourceState": {
-          "enum": [
-            "processed",
-            "pending",
-            "page-not-found",
-            "no-log"
-          ]
+          "enum": ["processed", "pending", "page-not-found", "no-log"]
         },
         "historyCoverage": {
-          "enum": [
-            "partial",
-            "none"
-          ]
+          "enum": ["partial", "none"]
         },
         "sectionIds": {
           "type": "array",
@@ -1132,31 +852,19 @@
           "uniqueItems": true
         },
         "sourceEntryCount": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "eventCount": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "versionCount": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "unknownVersionEventCount": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "reason": {
@@ -1196,22 +904,13 @@
           "minLength": 1
         },
         "disposition": {
-          "enum": [
-            "migrated",
-            "archive-only"
-          ]
+          "enum": ["migrated", "archive-only"]
         },
         "eventId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "claimId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "reason": {
           "type": "string",
@@ -1227,21 +926,14 @@
                 "minLength": 1
               },
               "relation": {
-                "enum": [
-                  "direct",
-                  "related"
-                ]
+                "enum": ["direct", "related"]
               },
               "note": {
                 "type": "string",
                 "minLength": 1
               }
             },
-            "required": [
-              "civId",
-              "relation",
-              "note"
-            ],
+            "required": ["civId", "relation", "note"],
             "additionalProperties": false
           },
           "minItems": 0
@@ -1250,17 +942,7 @@
           "type": "object"
         }
       },
-      "required": [
-        "key",
-        "patchId",
-        "entryId",
-        "disposition",
-        "eventId",
-        "claimId",
-        "reason",
-        "projections",
-        "originalRecord"
-      ],
+      "required": ["key", "patchId", "entryId", "disposition", "eventId", "claimId", "reason", "projections", "originalRecord"],
       "additionalProperties": false
     },
     "baseline": {
@@ -1283,21 +965,14 @@
           "minimum": 0
         }
       },
-      "required": [
-        "path",
-        "sha256",
-        "entryCount",
-        "civEntryCount"
-      ],
+      "required": ["path", "sha256", "entryCount", "civEntryCount"],
       "additionalProperties": false
     },
     "runtime": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "meta": {
           "type": "object",
@@ -1339,24 +1014,13 @@
                     "type": "object"
                   }
                 },
-                "required": [
-                  "path",
-                  "sha256",
-                  "entryCount",
-                  "civEntryCount",
-                  "metadata"
-                ],
+                "required": ["path", "sha256", "entryCount", "civEntryCount", "metadata"],
                 "additionalProperties": false
               },
               "minItems": 0
             }
           },
-          "required": [
-            "coverageNote",
-            "sourceScopeNote",
-            "catalogSize",
-            "legacyBaseline"
-          ],
+          "required": ["coverageNote", "sourceScopeNote", "catalogSize", "legacyBaseline"],
           "additionalProperties": false
         },
         "versions": {
@@ -1416,27 +1080,14 @@
           "minItems": 0
         }
       },
-      "required": [
-        "schemaVersion",
-        "meta",
-        "versions",
-        "sources",
-        "sections",
-        "sourceEntries",
-        "entities",
-        "events",
-        "civilizations",
-        "legacyMap"
-      ],
+      "required": ["schemaVersion", "meta", "versions", "sources", "sections", "sourceEntries", "entities", "events", "civilizations", "legacyMap"],
       "additionalProperties": false
     },
     "catalog": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "index": {
           "type": "object",
@@ -1454,11 +1105,7 @@
               "pattern": "^[a-f0-9]{64}$"
             }
           },
-          "required": [
-            "url",
-            "capturedAt",
-            "documentSha256"
-          ],
+          "required": ["url", "capturedAt", "documentSha256"],
           "additionalProperties": false
         },
         "pages": {
@@ -1496,20 +1143,13 @@
                       "pattern": "^[a-f0-9]{64}$"
                     }
                   },
-                  "required": [
-                    "path",
-                    "sha256"
-                  ],
+                  "required": ["path", "sha256"],
                   "additionalProperties": false
                 },
                 "minItems": 0
               },
               "searchState": {
-                "enum": [
-                  "found",
-                  "pending",
-                  "page-not-found"
-                ]
+                "enum": ["found", "pending", "page-not-found"]
               },
               "checkedAt": {
                 "type": "string",
@@ -1520,16 +1160,7 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "civId",
-              "nameZh",
-              "indexLabel",
-              "url",
-              "sectionFiles",
-              "searchState",
-              "checkedAt",
-              "reason"
-            ],
+            "required": ["civId", "nameZh", "indexLabel", "url", "sectionFiles", "searchState", "checkedAt", "reason"],
             "additionalProperties": false
           },
           "minItems": 0
@@ -1557,21 +1188,11 @@
               "minLength": 1
             }
           },
-          "required": [
-            "sessionUrl",
-            "reviewedAt",
-            "note"
-          ],
+          "required": ["sessionUrl", "reviewedAt", "note"],
           "additionalProperties": false
         }
       },
-      "required": [
-        "schemaVersion",
-        "index",
-        "pages",
-        "legacyBaseline",
-        "review"
-      ],
+      "required": ["schemaVersion", "index", "pages", "legacyBaseline", "review"],
       "additionalProperties": false
     },
     "sectionSnapshot": {
@@ -1610,10 +1231,7 @@
           "minLength": 1
         },
         "supersedesRevisionId": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "documentSha256": {
           "type": "string",
@@ -1624,10 +1242,7 @@
           "minLength": 1
         },
         "sourcePublishedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "entries": {
           "type": "array",
@@ -1639,10 +1254,7 @@
                 "minLength": 1
               },
               "group": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "locator": {
                 "type": "string",
@@ -1661,11 +1273,7 @@
                 "minItems": 0
               },
               "processing": {
-                "enum": [
-                  "mapped",
-                  "pending",
-                  "excluded"
-                ]
+                "enum": ["mapped", "pending", "excluded"]
               },
               "eventIds": {
                 "type": "array",
@@ -1690,17 +1298,7 @@
                 "uniqueItems": true
               }
             },
-            "required": [
-              "id",
-              "group",
-              "locator",
-              "originalText",
-              "rawVersions",
-              "processing",
-              "eventIds",
-              "reason",
-              "supersedesEntryIds"
-            ],
+            "required": ["id", "group", "locator", "originalText", "rawVersions", "processing", "eventIds", "reason", "supersedesEntryIds"],
             "additionalProperties": false
           },
           "minItems": 0
@@ -1742,9 +1340,7 @@
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "versions": {
           "type": "array",
@@ -1782,31 +1378,20 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "eventId",
-              "sourceKeys",
-              "reason"
-            ],
+            "required": ["eventId", "sourceKeys", "reason"],
             "additionalProperties": false
           },
           "minItems": 0
         }
       },
-      "required": [
-        "schemaVersion",
-        "versions",
-        "events",
-        "merges"
-      ],
+      "required": ["schemaVersion", "versions", "events", "merges"],
       "additionalProperties": false
     },
     "identityInput": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "entities": {
           "type": "array",
@@ -1816,19 +1401,14 @@
           "minItems": 0
         }
       },
-      "required": [
-        "schemaVersion",
-        "entities"
-      ],
+      "required": ["schemaVersion", "entities"],
       "additionalProperties": false
     },
     "legacyMap": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "entries": {
           "type": "array",
@@ -1848,22 +1428,13 @@
                 "minLength": 1
               },
               "disposition": {
-                "enum": [
-                  "migrated",
-                  "archive-only"
-                ]
+                "enum": ["migrated", "archive-only"]
               },
               "eventId": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "claimId": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "reason": {
                 "type": "string",
@@ -1879,54 +1450,33 @@
                       "minLength": 1
                     },
                     "relation": {
-                      "enum": [
-                        "direct",
-                        "related"
-                      ]
+                      "enum": ["direct", "related"]
                     },
                     "note": {
                       "type": "string",
                       "minLength": 1
                     }
                   },
-                  "required": [
-                    "civId",
-                    "relation",
-                    "note"
-                  ],
+                  "required": ["civId", "relation", "note"],
                   "additionalProperties": false
                 },
                 "minItems": 0
               }
             },
-            "required": [
-              "key",
-              "patchId",
-              "entryId",
-              "disposition",
-              "eventId",
-              "claimId",
-              "reason",
-              "projections"
-            ],
+            "required": ["key", "patchId", "entryId", "disposition", "eventId", "claimId", "reason", "projections"],
             "additionalProperties": false
           },
           "minItems": 0
         }
       },
-      "required": [
-        "schemaVersion",
-        "entries"
-      ],
+      "required": ["schemaVersion", "entries"],
       "additionalProperties": false
     },
     "auditReport": {
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "enum": [
-            1
-          ]
+          "enum": [1]
         },
         "catalogSize": {
           "type": "integer",
@@ -1997,13 +1547,7 @@
                 "minimum": 0
               }
             },
-            "required": [
-              "path",
-              "sha256",
-              "documentSha256",
-              "sectionTextSha256",
-              "observedEntryCount"
-            ],
+            "required": ["path", "sha256", "documentSha256", "sectionTextSha256", "observedEntryCount"],
             "additionalProperties": false
           },
           "minItems": 0
@@ -2036,14 +1580,7 @@
               "minimum": 0
             }
           },
-          "required": [
-            "numeric",
-            "availability",
-            "bonus",
-            "mechanic",
-            "rename",
-            "lifecycle"
-          ],
+          "required": ["numeric", "availability", "bonus", "mechanic", "rename", "lifecycle"],
           "additionalProperties": false
         }
       },

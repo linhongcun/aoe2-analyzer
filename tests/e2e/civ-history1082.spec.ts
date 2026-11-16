@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { conflictHistoryFixture, emptyHistoryFixture } from '../helpers/civUpdatesFixture';
 
+test('Saracen 95810 retains the flat old health bonus when switching to percent', async ({ page }) => {
+  await page.goto('/#/civ/Saracens?tab=history&histVersion=de-95810');
+  const event = page.locator('[data-event-id="ev-se-78a3783c-8ff1-4564-a815-4e5eab998ee7"]');
+  await expect(event.locator('.civ-update-values .num')).toHaveText(['10 HP', '25 %']);
+});
+
 test('civilization history uses real multi-effect claims and sources at 360px', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 360, height: 900 });
   await page.goto('/#/civ/Cumans?tab=history&histVersion=de-34055&histSource=community');

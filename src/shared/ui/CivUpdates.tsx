@@ -82,16 +82,18 @@ function Effect({ data, effect }: { data: CivUpdatesData; effect: UpdateEffect }
   let content: ReactNode;
   switch (effect.type) {
     case 'numeric':
-    case 'bonus':
+    case 'bonus': {
+      const beforeUnit = effect.beforeUnit === undefined ? effect.unit : effect.beforeUnit;
+      const afterUnit = effect.afterUnit === undefined ? effect.unit : effect.afterUnit;
       content = (
         <>
           <strong>{effect.attribute}</strong>
           <div className="civ-update-values">
             {effect.type === 'bonus' && effect.operation === 'absolute-discount' ? (
               <>
-                本版绝对折扣 <Quantity value={effect.after} unit={effect.unit} />
+                本版绝对折扣 <Quantity value={effect.after} unit={afterUnit} />
                 ；旧折扣：
-                <Quantity value={effect.before} unit={effect.unit} />
+                <Quantity value={effect.before} unit={beforeUnit} />
               </>
             ) : effect.before === null && effect.after === null && effect.delta !== null ? (
               <>
@@ -105,13 +107,14 @@ function Effect({ data, effect }: { data: CivUpdatesData; effect: UpdateEffect }
               </>
             ) : (
               <>
-                <Quantity value={effect.before} unit={effect.unit} /> <ChangeArrow /> <Quantity value={effect.after} unit={effect.unit} />
+                <Quantity value={effect.before} unit={beforeUnit} /> <ChangeArrow /> <Quantity value={effect.after} unit={afterUnit} />
               </>
             )}
           </div>
         </>
       );
       break;
+    }
     case 'availability':
       content = (
         <>

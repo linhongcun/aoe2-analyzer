@@ -86,6 +86,8 @@ interface NumericValues {
   after: number | null;
   delta: number | null;
   unit: string | null;
+  beforeUnit?: string | null;
+  afterUnit?: string | null;
 }
 export type UpdateEffect = EffectBase &
   (

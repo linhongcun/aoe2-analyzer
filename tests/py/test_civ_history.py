@@ -98,6 +98,12 @@ class CivHistoryTests(unittest.TestCase):
             for eid in row['eventIds']:
                 self.assertTrue(any(row['id'] in claim['sourceEntryIds'] for claim in events[eid]['claims']))
 
+    def test_saracen_95810_changes_a_flat_health_bonus_to_a_percentage(self):
+        event = next(e for e in self.payload['events'] if e['id'] == 'ev-se-78a3783c-8ff1-4564-a815-4e5eab998ee7')
+        effect = event['claims'][0]['effects'][0]
+        self.assertEqual((effect['before'], effect.get('beforeUnit', effect['unit'])), (10, 'HP'))
+        self.assertEqual((effect['after'], effect.get('afterUnit', effect['unit'])), (25, '%'))
+
     def test_schema_rejects_fabricated_value_types_and_missing_pending_reason(self):
         event = copy.deepcopy(self.inputs['events']['events'][0])
         event['claims'][0]['effects'][0] = {'id': 'bad', 'type': 'numeric', 'entityRefs': [{'unresolvedName': 'unknown', 'type': None}], 'text': 'fixture', 'conditions': [], 'scope': None, 'attribute': 'hp', 'before': 'unknown', 'after': 0, 'delta': None, 'unit': None, 'operation': 'set'}
