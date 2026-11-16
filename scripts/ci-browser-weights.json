@@ -204,6 +204,7 @@
     "tests/e2e/sicilians197.spec.ts": 28316,
     "tests/e2e/sidebar44.spec.ts": 3468,
     "tests/e2e/siege308.spec.ts": 12322,
+    "tests/e2e/siege1064.spec.ts": 4500,
     "tests/e2e/siege533.spec.ts": 5687,
     "tests/e2e/siege554-555.spec.ts": 1687,
     "tests/e2e/siege581.spec.ts": 1968,

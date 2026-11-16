@@ -150,7 +150,7 @@ export interface Building {
   hp: number;
   ma: number;
   pa: number;
-  /** 建筑护甲（护甲类别 21） */
+  /** 所有建筑护甲（护甲类别 11） */
   barm: number;
   /** 建造时间（秒） */
   bt: number;

@@ -7,7 +7,6 @@ import {
   decideSiegeCanonical,
   SIEGE_DEFAULT_N,
   SIEGE_MANGONEL_REASON,
-  SIEGE_STONE_DEFENSE_REASON,
   siegeBuildingEntryVerified,
   siegeUnitEntryVerified,
 } from '../../src/domain/siege';
@@ -21,11 +20,11 @@ const castle = building(82);
 const ram = unit('Battering Ram');
 
 describe('攻城情境入口 #533', () => {
-  it('已核实单位对城堡显示入口，投石车系和手推炮不显示', () => {
-    for (const en of ['Battering Ram', 'Capped Ram', 'Siege Ram', 'Trebuchet (Packed)']) {
+  it('已核实单位对城堡显示入口，投石车系不显示', () => {
+    for (const en of ['Battering Ram', 'Capped Ram', 'Siege Ram', 'Trebuchet (Packed)', 'Bombard Cannon']) {
       expect(siegeUnitEntryVerified(unit(en), castle), en).toBe(true);
     }
-    for (const en of ['Mangonel', 'Onager', 'Siege Onager', 'Bombard Cannon']) {
+    for (const en of ['Mangonel', 'Onager', 'Siege Onager']) {
       expect(siegeUnitEntryVerified(unit(en), castle), en).toBe(false);
     }
   });
@@ -41,7 +40,7 @@ describe('攻城情境入口 #533', () => {
 
   it('未核实原因各一句，不改已核实金数', () => {
     expect(calculateSiege(unit('Mangonel'), castle, 1)).toEqual({ verified: false, reason: SIEGE_MANGONEL_REASON });
-    expect(calculateSiege(unit('Bombard Cannon'), castle, 1)).toEqual({ verified: false, reason: SIEGE_STONE_DEFENSE_REASON });
+    expect(calculateSiege(unit('Bombard Cannon'), building(109), 1)).toMatchObject({ verified: false });
     expect(calculateSiege(ram, building(109), 1)).toMatchObject({ verified: true, hits: 16, gameSeconds: 75 });
     expect(calculateSiege(ram, castle, 4)).toMatchObject({ verified: true, hits: 9, gameSeconds: 40 });
   });

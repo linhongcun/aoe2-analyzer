@@ -146,6 +146,15 @@
   "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 data/sources/catalog_introductions.json。",
   "intentionalSkips": [
     {
+      "id": "siege-1064",
+      "script": "scripts/siege_build.py",
+      "reason": "仅认证 DE188329 的固定原始文件与四个配置，不随通用补丁更新自动授予新覆盖。换 pin 时由当前数据更新执行者重新取证并审阅；现有 --check 与数据族校验继续拦截来源漂移。",
+      "owner": "当前数据更新执行者；#1064 的有界证据生成器维护者。",
+      "evidenceFile": "scripts/siege_build.py",
+      "ownerEvidence": "AUDITED_DAT 锁定实际 SHA-256；data/game/siege.json 记录完整性、来源和精确覆盖；data 检查组保留 --check。",
+      "command": "python3 scripts/siege_build.py --check"
+    },
+    {
       "id": "patches",
       "script": "scripts/patches_build.py",
       "reason": "补丁档案按历史身份锁定。data_update 不重写 data/game/patches。",

@@ -24,6 +24,7 @@ export const SCHEMA_CATALOG = {
       ['buildings', 'buildings'],
       ['trees', 'trees'],
       ['effects', 'effects'],
+      ['siege', 'siege'],
       ['eco', 'eco'],
       ['construction', 'construction'],
       ['garrison', 'garrison'],

@@ -6,7 +6,7 @@
 //   仅 calculateSiege 对城堡已核实的单位显示「算拆建筑」。
 //   攻城锤 1258 有 data-testid="unit-siege-entry"，href 只有 #/siege?unit=1258（不带 n/bldg）。
 //   点开后选择器为该单位；数量和建筑用页面缺省（4 台、城堡 82）。
-//   轻型投石车 280、手推炮 36 的详情没有这条入口。
+//   轻型投石车 280 的详情没有这条入口；#1064 已恢复手推炮基础组合入口。
 // 未核实（§3，wire-unverified-*.html）：沿用 siege-unverified，原因用 siege-unverified-reason。
 //   反馈是现有 FeedbackLink kind="data"、文案「反馈数据缺口」，不新造 siege-feedback。
 // 「冲车」（§2）：攻城锤主名仍是攻城锤并打开 #/unit/1258；攻城拆建筑页也能被搜到。不改官方名。
@@ -15,7 +15,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 const SPEED = 1.7;
 const REAL_TOLERANCE = 0.05;
 const MANGONEL_REASON = '主弹与副弹的伤害结算尚未对齐，不推算击数与用时。';
-const BOMBARD_REASON = '建筑的「石质防御」护甲数据尚未对齐，不推算击数与用时。';
+const BOMBARD_REASON = '当前手推炮配置的攻击、护甲或修正数据尚未核实。 核实前不显示击数与用时，避免给出错误数字。';
 
 function hashParams(url: string): URLSearchParams {
   const hash = new URL(url).hash;
@@ -106,10 +106,7 @@ test('#533 攻城锤详情「算拆建筑」只预填 unit=1258，缺省 4 台�
   expect(hashParams(page.url()).get('bldg')).toBe('82');
 });
 
-for (const [id, name] of [
-  ['280', '轻型投石车'],
-  ['36', '手推炮'],
-] as const) {
+for (const [id, name] of [['280', '轻型投石车']] as const) {
   test(`#533 ${name}详情没有「算拆建筑」`, async ({ page }) => {
     await page.goto(`./#/unit/${id}`);
     await expect(page.getByRole('heading', { level: 1, name: new RegExp(name) })).toBeVisible();
@@ -124,7 +121,8 @@ for (const [id, name, title, reason] of [
   ['36', '手推炮', '数据未核实，暂不计算', BOMBARD_REASON],
 ] as const) {
   test(`#533 ${name}未核实：无用时，有原因，反馈数据缺口可点`, async ({ page }) => {
-    await page.goto(`./#/siege?unit=${id}&n=1&bldg=82`);
+    // Keep the cannon feedback/unknown regression on an unaudited target.
+    await page.goto(`./#/siege?unit=${id}&n=1&bldg=${id === '36' ? '109' : '82'}`);
     const root = page.getByTestId('siege-page');
     await expect(root).toBeVisible();
     await expect(page.getByLabel('攻城单位', { exact: true })).toHaveValue(id);
