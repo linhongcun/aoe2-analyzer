@@ -178,6 +178,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+新增生成器只登记 schema 和数据族，仍可能漏掉补丁更新入口。[#1064](https://github.com/linhongcun/aoe2-analyzer/issues/1064) / [PR #1090](https://github.com/linhongcun/aoe2-analyzer/pull/1090) 的专用 `--check` 已可复现，但首次遗漏 `data/sources/data_update_coverage.json`，使 `data:update` / `data:status` 在预检就失败；[修复提交](https://github.com/linhongcun/aoe2-analyzer/commit/a9b37d75d23e8be8f2d43a6d02e6cd24a5eb1f2b) 补齐登记后通过。以后新增生成链时同时核对 schema catalog、数据族、更新覆盖清单和 data 检查组，并运行覆盖清单预检与生成器 `--check`；两者证明的事情不同。证据只覆盖固定来源时，在覆盖清单写明不自动迁移的原因、维护责任和检查命令，换 pin 后重新取证，不把通用补丁更新成功当作新配置已认证。
+
 源码注释中的 Issue 编号也可能触发颜色检查。[#1055](https://github.com/linhongcun/aoe2-analyzer/issues/1055) / [PR #1088](https://github.com/linhongcun/aoe2-analyzer/pull/1088) 的来源注释写了 `#1055`，首次本地 lint 将它识别成四位十六进制颜色；`scripts/check-colors.mjs` 扫描整个源码文本，不区分注释。只把注释改为 `Issue 1055` 后，本地 lint 与 [PR CI](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43830083713) 通过。以后在源码注释中用 `Issue 编号` 或完整 Issue URL 留追溯，照常跑颜色检查，不为编号改检查器或增加豁免；这不是实际 UI 颜色违规。
 
 最初的三件都是公开的 issue、PR 和 Actions。用来记住「聚合成功」「部署成功」和「产品测试失败」不是一回事。
