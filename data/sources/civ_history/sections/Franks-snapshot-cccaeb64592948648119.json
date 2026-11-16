@@ -1,0 +1,422 @@
+{
+  "civId": "Franks",
+  "sourceId": "seicing-franks",
+  "url": "https://seicing.com/html/aoe2/2/%E6%B3%95%E5%85%B0%E5%85%8B.html",
+  "indexLabel": "法兰克Franks",
+  "title": "法兰克",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-cccaeb64592948648119",
+  "documentSha256": "cccaeb64592948648119d1057dcc61b278c20e7ed31e856bd47368c95cf9c6c5",
+  "capturedAt": "2026-11-16T11:43:10.146747+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-edf1c920-ab61-412f-b594-ed760be47b24",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "骑士+20%HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-edf1c920-ab61-412f-b594-ed760be47b24"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cf78d5a0-334e-4315-b051-02d9821b3aee",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "无法研发护卫",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cf78d5a0-334e-4315-b051-02d9821b3aee"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c7af29bb-3c05-4105-99c4-a28c47459aee",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "掷斧兵拥有50HP，精锐掷斧兵拥有60HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c7af29bb-3c05-4105-99c4-a28c47459aee"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4469a5fe-2301-4708-bf38-d20faff008a0",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "掷斧兵移动速度是0.9",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4469a5fe-2301-4708-bf38-d20faff008a0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-63af832f-615c-445c-8a8b-0c44b6f06221",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "掷斧兵的攻击延迟是12",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-63af832f-615c-445c-8a8b-0c44b6f06221"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e965e7bb-3819-4b35-b598-bf7d6a7ef175",
+      "group": "国王时代",
+      "locator": "#change li[6]",
+      "originalText": "升级到精锐掷斧兵需要花费1000食物和850黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e965e7bb-3819-4b35-b598-bf7d6a7ef175"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6f3dbc81-9c03-4c3c-9456-d3cc48df4e40",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "无法升级到戟兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6f3dbc81-9c03-4c3c-9456-d3cc48df4e40"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7bb66809-b066-436b-a5ce-eaf0302b2de0",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "芒刺斧科技加入，需要400食物400黄金，帝王时代可以研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7bb66809-b066-436b-a5ce-eaf0302b2de0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-889c6810-217a-40bf-928c-0d8eed88d17a",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "1.0c版本中，可以升级到戟兵",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-889c6810-217a-40bf-928c-0d8eed88d17a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-700aa48a-7cc7-4dfb-8a90-5d4cbda6b0aa",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "粮草征收员工作效率+25%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-700aa48a-7cc7-4dfb-8a90-5d4cbda6b0aa"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-15b89bb5-336d-4271-afa7-f1f5ab707a55",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "可以研发护卫",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-15b89bb5-336d-4271-afa7-f1f5ab707a55"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1fb6ba24-2f7d-40e7-81bc-a5a5573f962c",
+      "group": "失落帝国",
+      "locator": "#change li[12]",
+      "originalText": "骑士精神科技加入，需要400木材400黄金，城堡时代可以研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1fb6ba24-2f7d-40e7-81bc-a5a5573f962c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-367ae7c7-6b15-4931-8ca2-30a0847311c0",
+      "group": "失落帝国",
+      "locator": "#change li[13]",
+      "originalText": "掷斧兵的攻击延迟是10",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-367ae7c7-6b15-4931-8ca2-30a0847311c0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-79427437-cd35-4305-9e76-bbbb8c135598",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "升级到精锐掷斧兵需要花费1000食物和750黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-79427437-cd35-4305-9e76-bbbb8c135598"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-036f2f17-cc81-4e45-b11d-c2b0e5381c4f",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "所有骑兵部队都+20%HP，而不只是骑士",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-036f2f17-cc81-4e45-b11d-c2b0e5381c4f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8300e363-4797-4dd1-a103-ee3380010638",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "掷斧兵移动速度是1",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8300e363-4797-4dd1-a103-ee3380010638"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-efb820df-daec-4727-9d6b-196e1b4cdae5",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "4.8版本后，掷斧兵拥有60HP，精锐掷斧兵拥有70HP",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-efb820df-daec-4727-9d6b-196e1b4cdae5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9c87b91e-e172-47ae-896e-bb930747d5c8",
+      "group": "最后的可汗",
+      "locator": "#change li[18]",
+      "originalText": "骑兵+20%HP的加成只能在封建时代之后激活",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9c87b91e-e172-47ae-896e-bb930747d5c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6af18cd9-ecbc-4a37-899a-53c204a07f1c",
+      "group": "西方霸主",
+      "locator": "#change li[19]",
+      "originalText": "44725更新后，失去脚踏起重机",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6af18cd9-ecbc-4a37-899a-53c204a07f1c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-51ed5a48-153a-43c5-870b-6a4b8c86e559",
+      "group": "西方霸主",
+      "locator": "#change li[20]",
+      "originalText": "44725更新后，粮草征收员的生产效率+15%，此前是25%",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-51ed5a48-153a-43c5-870b-6a4b8c86e559"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e35c638d-0b8c-409a-b8e7-0ed9fe9ea238",
+      "group": "西方霸主",
+      "locator": "#change li[21]",
+      "originalText": "47820版本后，骑士精神调整为帝王时代科技，芒刺斧调整为城堡时代科技",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e35c638d-0b8c-409a-b8e7-0ed9fe9ea238"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fd2f4c24-a4c3-4a43-9dfd-ecc5e0925120",
+      "group": "西方霸主",
+      "locator": "#change li[22]",
+      "originalText": "47820版本后，芒刺斧的成本从400食物400黄金下调为300食物300黄金",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fd2f4c24-a4c3-4a43-9dfd-ecc5e0925120"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5bdb4e6a-b972-4963-a9a7-8899efad4eb5",
+      "group": "西方霸主",
+      "locator": "#change li[23]",
+      "originalText": "47820版本后，骑士精神的成本从400木材400黄金上调为600木材500黄金",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5bdb4e6a-b972-4963-a9a7-8899efad4eb5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9c6a2fb8-a4ee-4b4a-8e20-ab8cdd1480c8",
+      "group": "罗马归来",
+      "locator": "#change li[24]",
+      "originalText": "93001版本后，全时代城堡便宜25%加成修改为分别在城堡时代/帝王时代便宜15%/25%",
+      "rawVersions": [
+        "93001"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9c6a2fb8-a4ee-4b4a-8e20-ab8cdd1480c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-38354656-ead5-4e37-a2f5-b03b01562495",
+      "group": "三国",
+      "locator": "#change li[25]",
+      "originalText": "151401版本更新后，芒刺斧科技射程加成从+1上调到+2",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-38354656-ead5-4e37-a2f5-b03b01562495"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-edbd545e-12fe-4f21-986a-b6de415a1aef",
+      "group": "三国",
+      "locator": "#change li[26]",
+      "originalText": "151401版本更新后，掷斧兵训练时间从17秒下调到13秒，升级成本从1000肉750金下调到850肉550金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-edbd545e-12fe-4f21-986a-b6de415a1aef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5cb76bf8-cb73-4096-af7e-8400b79aef91",
+      "group": "维京传奇",
+      "locator": "#change li[27]",
+      "originalText": "185872版本补丁后，掷斧兵/精锐掷斧兵射程从3/4上调到5/6",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5cb76bf8-cb73-4096-af7e-8400b79aef91"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-74f6be20-8cd5-47fb-bee5-b09d491c9a1c",
+      "group": "维京传奇",
+      "locator": "#change li[28]",
+      "originalText": "185872版本补丁后，芒刺斧科技删除，获得王家敕令骑兵科技",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-74f6be20-8cd5-47fb-bee5-b09d491c9a1c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-686787da-4c4a-469c-a484-25574f457ca0",
+      "group": "维京传奇",
+      "locator": "#change li[29]",
+      "originalText": "185872版本补丁后，获得骑马弩兵、重装骑马弩兵、便携弯弩装置、脚踏起重机；失去骑射手、重装骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-686787da-4c4a-469c-a484-25574f457ca0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        骑士+20%HP\n        无法研发护卫\n        掷斧兵拥有50HP，精锐掷斧兵拥有60HP\n        掷斧兵移动速度是0.9\n        掷斧兵的攻击延迟是12\n        升级到精锐掷斧兵需要花费1000食物和850黄金\n    \n\n    征服者\n    \n        无法升级到戟兵\n        芒刺斧科技加入，需要400食物400黄金，帝王时代可以研发\n        1.0c版本中，可以升级到戟兵\n    \n\n    失落帝国\n    \n        粮草征收员工作效率+25%\n        可以研发护卫\n        骑士精神科技加入，需要400木材400黄金，城堡时代可以研发\n        掷斧兵的攻击延迟是10\n        升级到精锐掷斧兵需要花费1000食物和750黄金\n    \n\n    非洲王国\n    \n        所有骑兵部队都+20%HP，而不只是骑士\n        掷斧兵移动速度是1\n        4.8版本后，掷斧兵拥有60HP，精锐掷斧兵拥有70HP\n    \n\n    最后的可汗\n    \n        骑兵+20%HP的加成只能在封建时代之后激活\n    \n\n    \n        西方霸主\n    \n    \n        44725更新后，失去脚踏起重机\n        44725更新后，粮草征收员的生产效率+15%，此前是25%\n        47820版本后，骑士精神调整为帝王时代科技，芒刺斧调整为城堡时代科技\n        47820版本后，芒刺斧的成本从400食物400黄金下调为300食物300黄金\n        47820版本后，骑士精神的成本从400木材400黄金上调为600木材500黄金\n    \n\n    \n        罗马归来\n    \n    \n        93001版本后，全时代城堡便宜25%加成修改为分别在城堡时代/帝王时代便宜15%/25%\n    \n\n    三国\n    \n        151401版本更新后，芒刺斧科技射程加成从+1上调到+2\n        151401版本更新后，掷斧兵训练时间从17秒下调到13秒，升级成本从1000肉750金下调到850肉550金\n    \n\n\n\n    维京传奇\n    \n        185872版本补丁后，掷斧兵/精锐掷斧兵射程从3/4上调到5/6\n        185872版本补丁后，芒刺斧科技删除，获得王家敕令骑兵科技\n        185872版本补丁后，获得骑马弩兵、重装骑马弩兵、便携弯弩装置、脚踏起重机；失去骑射手、重装骑射手",
+  "sectionTextSha256": "f73a9da335a558e9d94b8b7a9568814efe0a26c6256905f9ed545c06bc57b113",
+  "observedEntryCount": 29,
+  "supersedesRevisionId": null
+}

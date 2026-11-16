@@ -1,0 +1,212 @@
+{
+  "civId": "Ethiopians",
+  "sourceId": "seicing-ethiopians",
+  "url": "https://seicing.com/html/aoe2/2/%E5%9F%83%E5%A1%9E%E4%BF%84%E6%AF%94%E4%BA%9A.html",
+  "indexLabel": "埃塞俄比亚Ethiopians",
+  "title": "埃塞俄比亚",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-b8a832e344890f42d3c1",
+  "documentSha256": "b8a832e344890f42d3c1bc7cf0a1d7d9225043f92b9d408f4ebee5047058219c",
+  "capturedAt": "2026-11-16T11:43:02.179312+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-5bb31d56-ba13-4603-8762-7430e7a94ba2",
+      "group": "非洲王国",
+      "locator": "#change li[1]",
+      "originalText": "掷矛手适用文明奖励，发射速度更快，在4.8版本移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5bb31d56-ba13-4603-8762-7430e7a94ba2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1ff8b3c7-9c1f-44f7-a9f6-b18960ef7583",
+      "group": "非洲王国",
+      "locator": "#change li[2]",
+      "originalText": "可以研发射箭槽，但是在4.8版本被移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1ff8b3c7-9c1f-44f7-a9f6-b18960ef7583"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-70955e5c-46a0-4700-8412-9e5f2382a429",
+      "group": "非洲王国",
+      "locator": "#change li[3]",
+      "originalText": "弯刀勇士有2点(精锐是3点)对标准建筑的伤害加成，4.8版本后更变为0点(1点)伤害加成",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-70955e5c-46a0-4700-8412-9e5f2382a429"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-279b2073-6a89-466c-befc-89c383903d65",
+      "group": "非洲王国",
+      "locator": "#change li[4]",
+      "originalText": "长戟兵升级免费",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-279b2073-6a89-466c-befc-89c383903d65"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5af3e5f7-1560-4aa4-a665-87e71a0ffb70",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "5.7版本，免费长戟兵升级被删除",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5af3e5f7-1560-4aa4-a665-87e71a0ffb70"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fce0c3a4-5d2b-413d-b132-d0f67240859e",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "36906版本后，扭绞机的弩炮伤害区域从0.3格提升到0.5格",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fce0c3a4-5d2b-413d-b132-d0f67240859e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4cf9db92-d985-40d4-87f2-2a5d2e11d91c",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "42848版本后，弯刀勇士和精锐弯刀勇士训练费用的35黄金下调到30黄金，食物不变",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4cf9db92-d985-40d4-87f2-2a5d2e11d91c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-75806fc2-8ed9-4798-b0a4-cd69b39e84b0",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "42848版本后，扭绞机的弩炮伤害区域从0.5格减少到0.4格",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-75806fc2-8ed9-4798-b0a4-cd69b39e84b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0ae70ba6-c37a-471c-948d-44ea8f364c19",
+      "group": "公爵的崛起",
+      "locator": "#change li[9]",
+      "originalText": "56005版本后，弯刀勇士的生命值从40上调到45，升级到精锐弯刀勇士的费用从1200食物550黄金下调到900食物450黄金",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0ae70ba6-c37a-471c-948d-44ea8f364c19"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bf60323d-ef4d-42e6-9227-da59d05a9ba9",
+      "group": "印度王朝",
+      "locator": "#change li[10]",
+      "originalText": "61321版本后，从封建时代之后的时代开始游戏不会获得文明加成的额外资源",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bf60323d-ef4d-42e6-9227-da59d05a9ba9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a7af9b65-e5c1-466a-87f4-f8e52dc40ddc",
+      "group": "印度王朝",
+      "locator": "#change li[11]",
+      "originalText": "81058版本后，组队加成从“塔和哨站的视野+3”修改为“哨站的视野+3且不消耗石头”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7af9b65-e5c1-466a-87f4-f8e52dc40ddc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1a3ba141-3906-4e31-9530-784f10f61296",
+      "group": "印度王朝",
+      "locator": "#change li[12]",
+      "originalText": "81058版本后，精锐弯刀勇士训练时间从8秒下调到了4秒",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1a3ba141-3906-4e31-9530-784f10f61296"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6cb3ffce-085c-42a1-86e3-88d549c83548",
+      "group": "印度王朝",
+      "locator": "#change li[13]",
+      "originalText": "81058版本后，龙脉的效果从“弯刀勇士训练时间减半”修改为“弯刀勇士和骆驼兵受到来自骑兵的伤害-3”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6cb3ffce-085c-42a1-86e3-88d549c83548"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    非洲王国\n    \n        掷矛手适用文明奖励，发射速度更快，在4.8版本移除\n        可以研发射箭槽，但是在4.8版本被移除\n        弯刀勇士有2点(精锐是3点)对标准建筑的伤害加成，4.8版本后更变为0点(1点)伤害加成\n        长戟兵升级免费\n    \n\n    蛮王崛起\n    \n        5.7版本，免费长戟兵升级被删除\n    \n\n    最后的可汗\n    \n        36906版本后，扭绞机的弩炮伤害区域从0.3格提升到0.5格\n        42848版本后，弯刀勇士和精锐弯刀勇士训练费用的35黄金下调到30黄金，食物不变\n        42848版本后，扭绞机的弩炮伤害区域从0.5格减少到0.4格\n    \n\n    公爵的崛起\n    \n        56005版本后，弯刀勇士的生命值从40上调到45，升级到精锐弯刀勇士的费用从1200食物550黄金下调到900食物450黄金\n    \n\n    印度王朝\n    \n        61321版本后，从封建时代之后的时代开始游戏不会获得文明加成的额外资源\n        81058版本后，组队加成从“塔和哨站的视野+3”修改为“哨站的视野+3且不消耗石头”\n        81058版本后，精锐弯刀勇士训练时间从8秒下调到了4秒\n        81058版本后，龙脉的效果从“弯刀勇士训练时间减半”修改为“弯刀勇士和骆驼兵受到来自骑兵的伤害-3”",
+  "sectionTextSha256": "292ae1924569bff5599239c3241298117c6207f7110befd8421a89a18eab1d4d",
+  "observedEntryCount": 13,
+  "supersedesRevisionId": null
+}

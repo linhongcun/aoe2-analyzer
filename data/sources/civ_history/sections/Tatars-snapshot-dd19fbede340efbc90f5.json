@@ -1,0 +1,334 @@
+{
+  "civId": "Tatars",
+  "sourceId": "seicing-tatars",
+  "url": "https://seicing.com/html/aoe2/2/%E9%9E%91%E9%9D%BC.html",
+  "indexLabel": "鞑靼Tatars",
+  "title": "鞑靼",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-dd19fbede340efbc90f5",
+  "documentSha256": "dd19fbede340efbc90f554462197db8ed07417a3b08744ea5d393a7bdd33c299",
+  "capturedAt": "2026-11-16T11:47:30.162334+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-281d3b78-7e5a-4646-9f01-cdfd8276acef",
+      "group": "最后的可汗",
+      "locator": "#change li[1]",
+      "originalText": "怯薛花费50食物和80黄金，34055版本后花费50食物和40黄金",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-281d3b78-7e5a-4646-9f01-cdfd8276acef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-87314bf7-9d81-4ff0-95c3-daf6da804a5e",
+      "group": "最后的可汗",
+      "locator": "#change li[2]",
+      "originalText": "怯薛/精锐怯薛拥有100/130HP和12/14攻击，34055版本后拥有110/140HP和9/11攻击",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-87314bf7-9d81-4ff0-95c3-daf6da804a5e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bbebda33-fcea-437c-a53e-3a36a6d0734f",
+      "group": "最后的可汗",
+      "locator": "#change li[3]",
+      "originalText": "35584版本后，获得长戟兵",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bbebda33-fcea-437c-a53e-3a36a6d0734f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-47778717-1810-43c7-a6b5-4d709ab34fcf",
+      "group": "最后的可汗",
+      "locator": "#change li[4]",
+      "originalText": "36202版本后，草原枪兵的基础攻击力+1",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6e1130ec-a314-4ad9-a188-4b512e42d8d1"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e6a5679b-fdf5-463e-abb4-954fb1ef26bb",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "36202版本后，免费研发拇指环",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e6a5679b-fdf5-463e-abb4-954fb1ef26bb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8b801fed-b72f-4b85-86a6-d63d6447fb10",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "36202版本后，怯薛/精锐怯薛的训练时间从20秒/23秒下降为14秒/16秒",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8b801fed-b72f-4b85-86a6-d63d6447fb10"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e5333275-702d-41ea-be68-740ecabed89e",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "36202版本后，丝甲可以作用于草原枪兵了",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e5333275-702d-41ea-be68-740ecabed89e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cc72a384-b538-4a1e-bfd5-32939f90b18c",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "36202版本后，帖木儿攻城术提供的射程从1增加为2，并且让城堡可以研发爆破骆驼",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cc72a384-b538-4a1e-bfd5-32939f90b18c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f6551c5-afa1-4828-8900-fc08554faff0",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "36906版本后，爆破骆驼在拥有印度盟友的前提下可以正确地适用+5建筑伤害加成",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f6551c5-afa1-4828-8900-fc08554faff0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-79268190-1ba7-4a0d-9a23-967ede8f65d0",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-95611fa0-6d16-4231-b160-8c622495e74f",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "39284版本后，火焰骆驼对战象的加成由80点提升到130点，爆炸半径从1.5提升到2",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-95611fa0-6d16-4231-b160-8c622495e74f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6dd89428-f827-42cd-977e-44c94766db99",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "42848版本后，城镇中心在到达封建时代后生成两只羊，每个新建的城镇中心也会生成两只羊",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6dd89428-f827-42cd-977e-44c94766db99"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9541314e-06cf-44ab-91c0-ecce53e036a3",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "42848版本后，丝甲增加1近战护甲和1远程护甲，此前只增加1远程护甲",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9541314e-06cf-44ab-91c0-ecce53e036a3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ccc8ed25-b549-4e7e-b314-16c8031fb755",
+      "group": "西方霸主",
+      "locator": "#change li[14]",
+      "originalText": "44725更新后，新建的城镇中心产生额外的羊需要达到城堡时代",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ccc8ed25-b549-4e7e-b314-16c8031fb755"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f893035-0da5-4a3d-a989-698571d754f1",
+      "group": "西方霸主",
+      "locator": "#change li[15]",
+      "originalText": "44725更新后，怯薛/精锐怯薛的食物成本从50提升到60，黄金花费不变",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f893035-0da5-4a3d-a989-698571d754f1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-32328f35-ef33-4ba5-a3ba-54c62b3d4d16",
+      "group": "西方霸主",
+      "locator": "#change li[16]",
+      "originalText": "47820版本后，草原枪兵黄金费用从45黄金下调为40黄金",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-943a4beb-6b1e-4c7b-a69c-ba4485f73202"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f69bfb5c-4afd-41e6-85cf-7f11a1d7d0c8",
+      "group": "印度王朝",
+      "locator": "#change li[17]",
+      "originalText": "61321版本后，火焰骆驼对建筑物加成从100上调到200，对攻城武器加成从100下调到25",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f69bfb5c-4afd-41e6-85cf-7f11a1d7d0c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9979e895-591e-4255-bea4-9a930e5462c1",
+      "group": "印度王朝",
+      "locator": "#change li[18]",
+      "originalText": "81058版本后，怯薛/精锐怯薛训练时间从16/14秒调整为17/15秒",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9979e895-591e-4255-bea4-9a930e5462c1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4220362b-d4be-484c-92ba-475fc5722a1f",
+      "group": "成王败寇",
+      "locator": "#change li[19]",
+      "originalText": "107882版本更新后，帖木儿攻城术不再解锁火焰骆驼，火焰骆驼现在会在帝王时代在攻城武器厂解锁，火焰骆驼训练时间从20秒上调到了30秒",
+      "rawVersions": [
+        "107882"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4220362b-d4be-484c-92ba-475fc5722a1f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3059abdf-3538-415f-9776-78c4e1bf9aa4",
+      "group": "三国",
+      "locator": "#change li[20]",
+      "originalText": "162286版本更新后，怯薛/精锐怯薛生命值从110/140上调到120/145",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3059abdf-3538-415f-9776-78c4e1bf9aa4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-26644c85-782e-4f0d-80a5-b7f69ba81229",
+      "group": "三国",
+      "locator": "#change li[21]",
+      "originalText": "162286版本更新后，升级到精锐怯薛成本从700肉900金下调到700肉600金",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-26644c85-782e-4f0d-80a5-b7f69ba81229"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    最后的可汗\n    \n        怯薛花费50食物和80黄金，34055版本后花费50食物和40黄金\n        怯薛/精锐怯薛拥有100/130HP和12/14攻击，34055版本后拥有110/140HP和9/11攻击\n        35584版本后，获得长戟兵\n        36202版本后，草原枪兵的基础攻击力+1\n        36202版本后，免费研发拇指环\n        36202版本后，怯薛/精锐怯薛的训练时间从20秒/23秒下降为14秒/16秒\n        36202版本后，丝甲可以作用于草原枪兵了\n        36202版本后，帖木儿攻城术提供的射程从1增加为2，并且让城堡可以研发爆破骆驼\n        36906版本后，爆破骆驼在拥有印度盟友的前提下可以正确地适用+5建筑伤害加成\n        37650版本后，不再拥有供给\n        39284版本后，火焰骆驼对战象的加成由80点提升到130点，爆炸半径从1.5提升到2\n        42848版本后，城镇中心在到达封建时代后生成两只羊，每个新建的城镇中心也会生成两只羊\n        42848版本后，丝甲增加1近战护甲和1远程护甲，此前只增加1远程护甲\n    \n\n    \n        西方霸主\n    \n    \n        44725更新后，新建的城镇中心产生额外的羊需要达到城堡时代\n        44725更新后，怯薛/精锐怯薛的食物成本从50提升到60，黄金花费不变\n        47820版本后，草原枪兵黄金费用从45黄金下调为40黄金\n    \n\n    印度王朝\n    \n        61321版本后，火焰骆驼对建筑物加成从100上调到200，对攻城武器加成从100下调到25\n        81058版本后，怯薛/精锐怯薛训练时间从16/14秒调整为17/15秒\n    \n\n    成王败寇\n    \n        107882版本更新后，帖木儿攻城术不再解锁火焰骆驼，火焰骆驼现在会在帝王时代在攻城武器厂解锁，火焰骆驼训练时间从20秒上调到了30秒\n    \n\n    三国\n    \n        162286版本更新后，怯薛/精锐怯薛生命值从110/140上调到120/145\n        162286版本更新后，升级到精锐怯薛成本从700肉900金下调到700肉600金",
+  "sectionTextSha256": "4dc3b60727aeafe462603719914dbfd9872146ba58a6c79dade2587c9d9b304a",
+  "observedEntryCount": 21,
+  "supersedesRevisionId": null
+}

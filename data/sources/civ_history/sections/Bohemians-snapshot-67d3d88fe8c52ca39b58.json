@@ -1,0 +1,242 @@
+{
+  "civId": "Bohemians",
+  "sourceId": "seicing-bohemians",
+  "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E5%B8%8C%E7%B1%B3%E4%BA%9A.html",
+  "indexLabel": "波希米亚Bohemians",
+  "title": "波希米亚",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-67d3d88fe8c52ca39b58",
+  "documentSha256": "67d3d88fe8c52ca39b5833513de4f90b387bbad9b06c2d3287fdf9aa41a3db03",
+  "capturedAt": "2026-11-16T11:41:12.769234+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-159f3f5c-691b-4e58-96c2-dff9f0a1daae",
+      "group": "公爵的崛起",
+      "locator": "#change li[1]",
+      "originalText": "在公爵的崛起版本推出了波希米亚",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-159f3f5c-691b-4e58-96c2-dff9f0a1daae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c8349a8a-b574-493d-9b59-c92de5e19454",
+      "group": "公爵的崛起",
+      "locator": "#change li[2]",
+      "originalText": "56005版本后，胡斯派战车/精锐胡斯派战车的移动速度从0.85下调到0.8",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c8349a8a-b574-493d-9b59-c92de5e19454"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0b92bcca-bb29-47db-ae4b-066a86858d8c",
+      "group": "印度王朝",
+      "locator": "#change li[3]",
+      "originalText": "61321版本后，榴弹炮攻击力从55下调到50，攻击溅射半径从0.85下调到0.8，对船、渔船、石质建筑、胡斯派战车的附加伤害从55下调到50",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0b92bcca-bb29-47db-ae4b-066a86858d8c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1d092e90-0224-401d-8f8a-106cdde2f8a9",
+      "group": "印度王朝",
+      "locator": "#change li[4]",
+      "originalText": "61321版本后，修道院不再享受100木材的折扣",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1d092e90-0224-401d-8f8a-106cdde2f8a9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-21b505be-f8ea-4268-b047-136df1d417ab",
+      "group": "印度王朝",
+      "locator": "#change li[5]",
+      "originalText": "78174版本后，榴弹炮攻击溅射半径从0.8下调到0.7，升级到榴弹炮的成本从950肉750金上调到1100食物800金",
+      "rawVersions": [
+        "78174"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-21b505be-f8ea-4268-b047-136df1d417ab"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7e1753b5-5801-410b-89a2-8a14ac62064f",
+      "group": "印度王朝",
+      "locator": "#change li[6]",
+      "originalText": "81058版本后，胡斯革新成本从800肉450金调整为500肉450金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7e1753b5-5801-410b-89a2-8a14ac62064f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-86e0cbf4-2abd-442d-965f-4136243ebfb7",
+      "group": "罗马归来",
+      "locator": "#change li[7]",
+      "originalText": "87863版本后，胡斯派战车/精锐胡斯派战车帧延迟从30下调到了20",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-86e0cbf4-2abd-442d-965f-4136243ebfb7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-70432635-c536-4c56-aa16-7967909e36c5",
+      "group": "罗马归来",
+      "locator": "#change li[8]",
+      "originalText": "93001版本后，胡斯派战车/精锐胡斯派战车生命值从200/250下调到180/230，攻击力从17/20下调到11/13，追加子弹攻击力从2上调到4/6并获得+3对建筑物+3对冲车伤害，追加子弹数量从3上调到了5，现在一口气发射所有子弹",
+      "rawVersions": [
+        "93001"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-70432635-c536-4c56-aa16-7967909e36c5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c549948b-682e-46e0-a137-9d450cad27d8",
+      "group": "皇家山脉",
+      "locator": "#change li[9]",
+      "originalText": "99311版本后，胡斯派战车生命值从180下调到160，主弹伤害从11下调到10，训练时间从21秒上调到26秒",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c549948b-682e-46e0-a137-9d450cad27d8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1c806b1c-86dc-42e3-8bc5-bc809d37c426",
+      "group": "成王败寇",
+      "locator": "#change li[10]",
+      "originalText": "125283版本更新后，胡斯派战车生产时间从26秒上调到30秒",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1c806b1c-86dc-42e3-8bc5-bc809d37c426"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dbcac8e7-6db2-4191-97c9-d743cecb6a01",
+      "group": "三国",
+      "locator": "#change li[11]",
+      "originalText": "151401版本后，胡斯派战车/精锐胡斯派战车副弹伤害从4/6下调到3/5",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dbcac8e7-6db2-4191-97c9-d743cecb6a01"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf",
+      "group": "维京传奇",
+      "locator": "#change li[12]",
+      "originalText": "185872版本补丁后，胡斯派战车成本从110木70金上调到110木80金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e84b7f56-195b-4429-9d73-eb3d1a614090",
+      "group": "维京传奇",
+      "locator": "#change li[13]",
+      "originalText": "185872版本补丁后，大车阵战术对火药部队移速加成从15%下调到10%",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e84b7f56-195b-4429-9d73-eb3d1a614090"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f55e0ca5-841f-4185-afe9-4ae070ab1a5b",
+      "group": "维京传奇",
+      "locator": "#change li[14]",
+      "originalText": "185872版本补丁后，获得骑马弩兵",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f55e0ca5-841f-4185-afe9-4ae070ab1a5b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5e9f97f4-d1ea-4978-8d12-c5384d61e6b9",
+      "group": "维京传奇",
+      "locator": "#change li[15]",
+      "originalText": "185872版本补丁后，失去脚踏起重机",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5e9f97f4-d1ea-4978-8d12-c5384d61e6b9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    公爵的崛起\n    \n        在公爵的崛起版本推出了波希米亚\n        56005版本后，胡斯派战车/精锐胡斯派战车的移动速度从0.85下调到0.8\n    \n\n    印度王朝\n    \n        61321版本后，榴弹炮攻击力从55下调到50，攻击溅射半径从0.85下调到0.8，对船、渔船、石质建筑、胡斯派战车的附加伤害从55下调到50\n        61321版本后，修道院不再享受100木材的折扣\n        78174版本后，榴弹炮攻击溅射半径从0.8下调到0.7，升级到榴弹炮的成本从950肉750金上调到1100食物800金\n        81058版本后，胡斯革新成本从800肉450金调整为500肉450金\n    \n\n    \n        罗马归来\n    \n    \n        87863版本后，胡斯派战车/精锐胡斯派战车帧延迟从30下调到了20\n        \n            93001版本后，胡斯派战车/精锐胡斯派战车生命值从200/250下调到180/230，攻击力从17/20下调到11/13，追加子弹攻击力从2上调到4/6并获得+3对建筑物+3对冲车伤害，追加子弹数量从3上调到了5，现在一口气发射所有子弹\n        \n    \n\n    皇家山脉\n    \n        99311版本后，胡斯派战车生命值从180下调到160，主弹伤害从11下调到10，训练时间从21秒上调到26秒\n    \n\n    成王败寇\n    \n        125283版本更新后，胡斯派战车生产时间从26秒上调到30秒\n    \n\n    三国\n    \n        151401版本后，胡斯派战车/精锐胡斯派战车副弹伤害从4/6下调到3/5\n    \n\n    维京传奇\n    \n        185872版本补丁后，胡斯派战车成本从110木70金上调到110木80金\n        185872版本补丁后，大车阵战术对火药部队移速加成从15%下调到10%\n        185872版本补丁后，获得骑马弩兵\n        185872版本补丁后，失去脚踏起重机",
+  "sectionTextSha256": "d3d113ea922150651709c2d3427bd02729291159c41325ea337c1a7d8ec2434c",
+  "observedEntryCount": 15,
+  "supersedesRevisionId": null
+}

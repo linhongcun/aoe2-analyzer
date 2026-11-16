@@ -1,0 +1,219 @@
+{
+  "civId": "Magyars",
+  "sourceId": "seicing-magyars",
+  "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%89%8E%E5%B0%94.html",
+  "indexLabel": "马扎尔Magyars",
+  "title": "马扎尔",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-1a82266334efa626b18d",
+  "documentSha256": "1a82266334efa626b18dd8016e3c5809df4eb67353ba2a855645fec90fe6a2d4",
+  "capturedAt": "2026-11-16T11:45:01.417796+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-6716b5cf-c590-4ea1-9789-8ed5a57e594a",
+      "group": "失落帝国",
+      "locator": "#change li[1]",
+      "originalText": "斥候骑兵便宜10%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6716b5cf-c590-4ea1-9789-8ed5a57e594a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4a51be2f-41e0-438c-b35a-1b8aa876d7f6",
+      "group": "失落帝国",
+      "locator": "#change li[2]",
+      "originalText": "反曲弓提升骑射手1射程",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4a51be2f-41e0-438c-b35a-1b8aa876d7f6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e9eea420-6d84-4b3e-81f7-27c4dd186ea5",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "锻冶、铸铁、鼓风炉科技免费，但需要铁匠铺",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e9eea420-6d84-4b3e-81f7-27c4dd186ea5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e166f1c9-d7c1-4774-ac7d-0cc36b34b103",
+      "group": "失落帝国",
+      "locator": "#change li[4]",
+      "originalText": "无法研发攻城技师",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e166f1c9-d7c1-4774-ac7d-0cc36b34b103"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4f355758-32b7-4fcd-8218-578b71408bb6",
+      "group": "非洲王国",
+      "locator": "#change li[5]",
+      "originalText": "可以研发射箭槽，但是4.8版本削除了",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4f355758-32b7-4fcd-8218-578b71408bb6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5b8c47fa-5963-408b-85f3-c1c62411bd5f",
+      "group": "蛮王崛起",
+      "locator": "#change li[6]",
+      "originalText": "5.5版本后，斥候骑兵便宜15%",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5b8c47fa-5963-408b-85f3-c1c62411bd5f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-69c93007-3ce5-4659-844a-df0cef0ca577",
+      "group": "蛮王崛起",
+      "locator": "#change li[7]",
+      "originalText": "5.5版本后，反曲弓提升骑射手1射程和1攻击力",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-69c93007-3ce5-4659-844a-df0cef0ca577"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-064cab28-6ea6-4849-af8c-e0290fb62930",
+      "group": "蛮王崛起",
+      "locator": "#change li[8]",
+      "originalText": "5.5版本后，锻冶、铸铁、鼓风炉科技免费，而且不再需要铁匠铺",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-064cab28-6ea6-4849-af8c-e0290fb62930"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f909579d-d534-4e19-8dcd-2f219a772581",
+      "group": "蛮王崛起",
+      "locator": "#change li[9]",
+      "originalText": "5.5版本后，可以研发攻城技师",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f909579d-d534-4e19-8dcd-2f219a772581"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-10abece3-2879-477b-b2d5-ccb90a15db5d",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "Mercenaries科技重命名为Corvinian Army",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-10abece3-2879-477b-b2d5-ccb90a15db5d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca80b5fa-286a-4c6a-b755-549172d0f9f0",
+      "group": "罗马归来",
+      "locator": "#change li[11]",
+      "originalText": "87863版本后，团队加成从“步弓手视野+2”修改为“骑射手训练速度+25%”",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca80b5fa-286a-4c6a-b755-549172d0f9f0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-30a6793e-dcd2-4c3a-91c2-524eebada20d",
+      "group": "皇家山脉",
+      "locator": "#change li[12]",
+      "originalText": "95810版本后，马扎尔骠骑的成本从80食物10黄金调整为35食物45黄金，马扎尔骠骑生命值从70上调到了75，精锐马扎尔骠骑训练时间从16秒下调到14秒，雇佣军科技效果从删除黄金成本修改为黄金成本用食物代替",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-30a6793e-dcd2-4c3a-91c2-524eebada20d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2b016630-0d7c-497b-b81e-e99a1b6952b7",
+      "group": "三国",
+      "locator": "#change li[13]",
+      "originalText": "151401版本后，马扎尔骠骑/精锐马扎尔骠骑生命值从75/85上调到80/90，攻击力从9/10上调到10/11，训练时间从14秒下调到12秒",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2b016630-0d7c-497b-b81e-e99a1b6952b7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-76a7e9c7-48a8-44f1-8c88-811a954bde5d",
+      "group": "维京传奇",
+      "locator": "#change li[14]",
+      "originalText": "185872版本补丁后，马扎尔骠骑训练时间从12秒上调到18秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-76a7e9c7-48a8-44f1-8c88-811a954bde5d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    失落帝国\n    \n        斥候骑兵便宜10%\n        反曲弓提升骑射手1射程\n        锻冶、铸铁、鼓风炉科技免费，但需要铁匠铺\n        无法研发攻城技师\n    \n\n    非洲王国\n    \n        可以研发射箭槽，但是4.8版本削除了\n    \n\n    蛮王崛起\n    \n        5.5版本后，斥候骑兵便宜15%\n        5.5版本后，反曲弓提升骑射手1射程和1攻击力\n        5.5版本后，锻冶、铸铁、鼓风炉科技免费，而且不再需要铁匠铺\n        5.5版本后，可以研发攻城技师\n    \n\n    最后的可汗\n    \n        Mercenaries科技重命名为Corvinian Army\n    \n\n    罗马归来\n    \n        87863版本后，团队加成从“步弓手视野+2”修改为“骑射手训练速度+25%”\n    \n\n    皇家山脉\n    \n        95810版本后，马扎尔骠骑的成本从80食物10黄金调整为35食物45黄金，马扎尔骠骑生命值从70上调到了75，精锐马扎尔骠骑训练时间从16秒下调到14秒，雇佣军科技效果从删除黄金成本修改为黄金成本用食物代替\n        \n    \n\n    三国\n    \n        151401版本后，马扎尔骠骑/精锐马扎尔骠骑生命值从75/85上调到80/90，攻击力从9/10上调到10/11，训练时间从14秒下调到12秒\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，马扎尔骠骑训练时间从12秒上调到18秒",
+  "sectionTextSha256": "4f43f27a1665530742c66423d3ad76d7669751d6e5fe84fdf3e2b478448a6c8a",
+  "observedEntryCount": 14,
+  "supersedesRevisionId": null
+}

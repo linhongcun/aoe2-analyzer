@@ -1,0 +1,387 @@
+{
+  "civId": "Chinese",
+  "sourceId": "seicing-chinese",
+  "url": "https://seicing.com/html/aoe2/2/%E4%B8%AD%E5%9B%BD.html",
+  "indexLabel": "中国Chinese",
+  "title": "中国",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-a5f3dcd76ea833749a2e",
+  "documentSha256": "a5f3dcd76ea833749a2e24ca5bd83d41e2fb0d92c4be6b098a0634b13090c3f9",
+  "capturedAt": "2026-11-16T11:42:25.692460+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-dd3a06a8-e2f6-4286-aa6f-3bbefed8a161",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "以-150食物开始游戏",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dd3a06a8-e2f6-4286-aa6f-3bbefed8a161"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f0645958-cf9f-4f14-a82a-90438760527b",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "所有地图都以六个村民开始游戏",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f0645958-cf9f-4f14-a82a-90438760527b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4a09f54e-8ea3-495d-b3fd-62e9c43fa524",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "非精锐诸葛弩训练时间是19秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4a09f54e-8ea3-495d-b3fd-62e9c43fa524"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-13697805-b7c3-4f2e-ae3e-7f9a57a607a3",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "无法研究雕版印刷术",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-13697805-b7c3-4f2e-ae3e-7f9a57a607a3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-353d6ca1-720f-40df-a544-05b8e5086bce",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "以-150食物和-50木材开始游戏",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-353d6ca1-720f-40df-a544-05b8e5086bce"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b8a724fb-602e-4d53-895e-349e5a6d3d2b",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "添加火箭科技",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b8a724fb-602e-4d53-895e-349e5a6d3d2b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7befec26-6aa8-40fb-8287-64218c818fcd",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "诸葛弩获得2点对枪兵的伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7befec26-6aa8-40fb-8287-64218c818fcd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6c0986e2-6aeb-456d-8a88-4fbff119a82c",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "补丁1.0c后，以-200食物和-50木材开始游戏",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6c0986e2-6aeb-456d-8a88-4fbff119a82c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f3b8ccc8-eb99-49db-a82a-4a766716c63e",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "城镇中心视野+5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-164b339b-7035-4107-b68e-3aa38069d2ee",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "添加长城科技",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-164b339b-7035-4107-b68e-3aa38069d2ee"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6cc0efc7-12bf-4087-9a75-c54b2623f299",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "非精锐诸葛弩训练时间是16秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6cc0efc7-12bf-4087-9a75-c54b2623f299"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-34cda5c2-e6a8-4a1a-ae2b-4acdfbba4a11",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "34699更新后获得雕版印刷术",
+      "rawVersions": [
+        "34699"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-34cda5c2-e6a8-4a1a-ae2b-4acdfbba4a11"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6edd5a26-1656-4ddc-861e-e69296ac7632",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "34699更新后在开局没有城镇中心的地图，中国人以3个村民开始游戏，直到他们建造城镇中心后会自动生成剩下的3个村民",
+      "rawVersions": [
+        "34699"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6edd5a26-1656-4ddc-861e-e69296ac7632"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-350ec190-2df2-430d-af8a-62dbe58a12e1",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "36202版本后，无法研发救赎",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-350ec190-2df2-430d-af8a-62dbe58a12e1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ff6348bd-1703-4eab-aa34-3b2f8c99274f",
+      "group": "最后的可汗",
+      "locator": "#change li[15]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-86d8d4db-18b5-4733-97cf-f2e9c972d3fa",
+      "group": "西方霸主",
+      "locator": "#change li[16]",
+      "originalText": "44725更新之前，中国人的额外村民适用于每个城镇中心，更新后变为仅适用于一个城镇中心",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-86d8d4db-18b5-4733-97cf-f2e9c972d3fa"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-981c3673-dc04-435e-9610-6c202529a525",
+      "group": "公爵的崛起",
+      "locator": "#change li[17]",
+      "originalText": "51737更新中，团队奖励+45农田食物调整为+10%农田食物",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-981c3673-dc04-435e-9610-6c202529a525"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c896da2a-cdad-4885-8b93-9244f4ce48b4",
+      "group": "罗马归来",
+      "locator": "#change li[18]",
+      "originalText": "87863版本后，科技减价效率从-10%/-15%/-20%下调到-5%/-10%/-15%",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c896da2a-cdad-4885-8b93-9244f4ce48b4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e26db55c-6134-4b96-af4a-c856b392af99",
+      "group": "皇家山脉",
+      "locator": "#change li[19]",
+      "originalText": "99311版本后，“城镇中心提供人口数+10、视野+5”上调到“城镇中心提供人口数+15、视野+7”",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e26db55c-6134-4b96-af4a-c856b392af99"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-27b60a39-1728-41f3-9db7-2e07dec6505a",
+      "group": "三国",
+      "locator": "#change li[20]",
+      "originalText": "141935版本更新后，获得火矛兵、火箭推车、楼船、龙船",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-27b60a39-1728-41f3-9db7-2e07dec6505a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-238cf0ba-4f82-4b38-af98-0bdcec782f53",
+      "group": "三国",
+      "locator": "#change li[21]",
+      "originalText": "141935版本更新后，失去骆驼骑兵、投石车系和炮舰",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-238cf0ba-4f82-4b38-af98-0bdcec782f53"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f5749cb0-a51f-406b-aafb-5a1b8ff3f0d6",
+      "group": "三国",
+      "locator": "#change li[22]",
+      "originalText": "141935版本更新后，精锐诸葛弩攻击力从8上调到10，升级成本从807食物807黄金上调到1105食物1105黄金",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f5749cb0-a51f-406b-aafb-5a1b8ff3f0d6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f",
+      "group": "三国",
+      "locator": "#change li[23]",
+      "originalText": "141935版本更新后，火箭术成本从637木637金上调到935肉765金，效果从“诸葛弩+2、弩炮+4”修改为“弩炮、火箭推车和楼船+25%攻击，楼船发射火箭”",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-06babee4-6d52-4a68-8063-a00ad0393ec6",
+      "group": "三国",
+      "locator": "#change li[24]",
+      "originalText": "141935版本更新后，“爆破船生命值+50%”加成删除，修改为“火枪兵和喷火船移动速度在城堡时代/帝王时代+5%/+10%”",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-06babee4-6d52-4a68-8063-a00ad0393ec6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-37614b59-1d75-4bda-8d24-7632729bed1b",
+      "group": "最后的酋长",
+      "locator": "#change li[25]",
+      "originalText": "169123版本更新后，龙船生命值从150下调到135，护甲从2/8调整为3/7，移动速度从1.43上调到1.56，攻击力从1近战4远程统合为5近战，+4对舰船伤害调整为+1对远程舰船伤害，舰船护甲+9→+0，对重型舰船+4→+0，对建筑+4→+3",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-37614b59-1d75-4bda-8d24-7632729bed1b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6cfc45ec-5edc-4ce6-8b89-a009da942b77",
+      "group": "维京传奇",
+      "locator": "#change li[26]",
+      "originalText": "185872版本补丁后，失去重装骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6cfc45ec-5edc-4ce6-8b89-a009da942b77"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        以-150食物开始游戏\n        所有地图都以六个村民开始游戏\n        非精锐诸葛弩训练时间是19秒\n        无法研究雕版印刷术\n    \n\n    征服者\n    \n        以-150食物和-50木材开始游戏\n        添加火箭科技\n        诸葛弩获得2点对枪兵的伤害\n        补丁1.0c后，以-200食物和-50木材开始游戏\n    \n\n    失落帝国\n    \n        城镇中心视野+5\n        添加长城科技\n        非精锐诸葛弩训练时间是16秒\n    \n\n    最后的可汗\n    \n        34699更新后获得雕版印刷术\n        34699更新后在开局没有城镇中心的地图，中国人以3个村民开始游戏，直到他们建造城镇中心后会自动生成剩下的3个村民\n        36202版本后，无法研发救赎\n        37650版本后，不再拥有供给\n    \n\n    西方霸主\n    \n        44725更新之前，中国人的额外村民适用于每个城镇中心，更新后变为仅适用于一个城镇中心\n    \n\n    公爵的崛起\n    \n        51737更新中，团队奖励+45农田食物调整为+10%农田食物\n    \n\n    罗马归来\n    \n        87863版本后，科技减价效率从-10%/-15%/-20%下调到-5%/-10%/-15%\n    \n\n    皇家山脉\n    \n        99311版本后，“城镇中心提供人口数+10、视野+5”上调到“城镇中心提供人口数+15、视野+7”\n    \n\n    三国\n    \n        141935版本更新后，获得火矛兵、火箭推车、楼船、龙船\n        141935版本更新后，失去骆驼骑兵、投石车系和炮舰\n        141935版本更新后，精锐诸葛弩攻击力从8上调到10，升级成本从807食物807黄金上调到1105食物1105黄金\n        141935版本更新后，火箭术成本从637木637金上调到935肉765金，效果从“诸葛弩+2、弩炮+4”修改为“弩炮、火箭推车和楼船+25%攻击，楼船发射火箭”\n        141935版本更新后，“爆破船生命值+50%”加成删除，修改为“火枪兵和喷火船移动速度在城堡时代/帝王时代+5%/+10%”\n    \n\n    最后的酋长\n    \n        169123版本更新后，龙船生命值从150下调到135，护甲从2/8调整为3/7，移动速度从1.43上调到1.56，攻击力从1近战4远程统合为5近战，+4对舰船伤害调整为+1对远程舰船伤害，舰船护甲+9→+0，对重型舰船+4→+0，对建筑+4→+3\n        \n    \n\n\n    维京传奇\n    \n        185872版本补丁后，失去重装骑射手",
+  "sectionTextSha256": "be3fdd0609724cecfdf1d36acadd7c2e83f75c0daba0d297290ccfbdb8bc99e3",
+  "observedEntryCount": 26,
+  "supersedesRevisionId": null
+}

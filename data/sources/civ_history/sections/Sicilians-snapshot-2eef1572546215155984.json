@@ -1,0 +1,592 @@
+{
+  "civId": "Sicilians",
+  "sourceId": "seicing-sicilians",
+  "url": "https://seicing.com/html/aoe2/2/%E8%A5%BF%E8%A5%BF%E9%87%8C.html",
+  "indexLabel": "西西里Sicilians",
+  "title": "西西里",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-2eef1572546215155984",
+  "documentSha256": "2eef1572546215155984cb286651c4ee1733e85d4e2bf888a29b76dbcadd330b",
+  "capturedAt": "2026-11-16T11:46:49.624111+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-d493c9f8-acae-40cb-9a71-96c7f9a4cf16",
+      "group": "西方霸主",
+      "locator": "#change li[1]",
+      "originalText": "在决定版发售一年多后的2021年1月26日的DLC“西方霸主”里正式登场",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d493c9f8-acae-40cb-9a71-96c7f9a4cf16"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9485edde-3ceb-4a38-91e1-4ba6ca790766",
+      "group": "西方霸主",
+      "locator": "#change li[2]",
+      "originalText": "无法升级到重型投石车",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9485edde-3ceb-4a38-91e1-4ba6ca790766"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-42ca8a7e-0ff1-49f7-af37-3442ce797279",
+      "group": "西方霸主",
+      "locator": "#change li[3]",
+      "originalText": "城楼消耗200石头",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-42ca8a7e-0ff1-49f7-af37-3442ce797279"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-32a113a1-6d40-4893-9235-a9fc63f469f9",
+      "group": "西方霸主",
+      "locator": "#change li[4]",
+      "originalText": "在1月26日正式发售之前，地面部队吸收33%来自所有额外加成的伤害，正式发售时这个加成提高为50%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-32a113a1-6d40-4893-9235-a9fc63f469f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-21ef37e0-8c6e-4443-bc60-4fd75884c226",
+      "group": "西方霸主",
+      "locator": "#change li[5]",
+      "originalText": "在1月26日正式发售之前，每次农场升级都会给农民+1携带能力，正式发售时这个加成修改为“每次升级农场科技时，直到下一次播种之前农场都会获得额外100%的食物”",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-21ef37e0-8c6e-4443-bc60-4fd75884c226"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2757ee8b-5945-4769-acb4-7a3f097a4dae",
+      "group": "西方霸主",
+      "locator": "#change li[6]",
+      "originalText": "在1月26日正式发售之前，研究第一次十字军东征之后每个城镇中心出现的萨金特卫兵是7个，正式发售时是10个，并且添加了最大5个城镇中心能出兵的限制",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2757ee8b-5945-4769-acb4-7a3f097a4dae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6d0bc4e0-b858-4a7e-9014-c34ca014eb55",
+      "group": "西方霸主",
+      "locator": "#change li[7]",
+      "originalText": "45185补丁后，在游牧地图建造的第一个城镇中心不再受益于西西里人加快建造速度的加成",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6d0bc4e0-b858-4a7e-9014-c34ca014eb55"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6794e6d-5cec-453b-8234-2d322a9cde29",
+      "group": "西方霸主",
+      "locator": "#change li[8]",
+      "originalText": "45185补丁后，文明加成的抵抗伤害值不再适用于攻城武器",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6794e6d-5cec-453b-8234-2d322a9cde29"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2a282bdc-d3e0-46e1-8931-c32c045e00dc",
+      "group": "西方霸主",
+      "locator": "#change li[9]",
+      "originalText": "45185补丁后，萨金特卫兵不再可以在大逃杀地图里面建造塔楼",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2a282bdc-d3e0-46e1-8931-c32c045e00dc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b2a251ce-d8f5-4134-a999-0288be4d71d7",
+      "group": "西方霸主",
+      "locator": "#change li[10]",
+      "originalText": "45185补丁后，第一次十字军东征的生成士兵数量从10个重新下调到7个",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b2a251ce-d8f5-4134-a999-0288be4d71d7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e9b28237-7cd6-4901-bb46-dcd33ccadf64",
+      "group": "西方霸主",
+      "locator": "#change li[11]",
+      "originalText": "45185补丁后，免役税对于盟友的加成修改为根据盟友的军事部队数量决定，此前是根据玩家的情况决定",
+      "rawVersions": [
+        "45185"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e9b28237-7cd6-4901-bb46-dcd33ccadf64"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3fcb8bdc-ee66-4a56-b26e-026db848738b",
+      "group": "西方霸主",
+      "locator": "#change li[12]",
+      "originalText": "47820版本后，可以升级到重型投石车",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3fcb8bdc-ee66-4a56-b26e-026db848738b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-37dc1cbd-505e-4441-a61a-d54db6d16324",
+      "group": "西方霸主",
+      "locator": "#change li[13]",
+      "originalText": "47820版本后，萨金特卫兵封建时代的近战护甲从1增加到2，城堡时代的生命值从60增加到65，精锐萨金特卫兵生命值从75增加到85",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-37dc1cbd-505e-4441-a61a-d54db6d16324"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cd1f4f44-299e-49d3-826c-a04ce6aecaee",
+      "group": "西方霸主",
+      "locator": "#change li[14]",
+      "originalText": "47820版本后，城楼消耗175石头",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cd1f4f44-299e-49d3-826c-a04ce6aecaee"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-00a51448-1095-4a6b-8cd5-870837c522af",
+      "group": "西方霸主",
+      "locator": "#change li[15]",
+      "originalText": "47820版本后，第一次十字军东征还能额外增加单位的抗招降能力",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-00a51448-1095-4a6b-8cd5-870837c522af"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b9609eb8-d560-457a-92c3-8228e403cd29",
+      "group": "公爵的崛起",
+      "locator": "#change li[16]",
+      "originalText": "51737更新中，免役税科技删除，被替换成了锁子甲，为重装骑兵提供+1/+2护甲",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b9609eb8-d560-457a-92c3-8228e403cd29"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1306c470-b527-4be8-b66c-f047ca623223",
+      "group": "公爵的崛起",
+      "locator": "#change li[17]",
+      "originalText": "51737更新中，西西里人可以使用重型投石车了",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1306c470-b527-4be8-b66c-f047ca623223"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b169adba-fe94-4e80-8025-f57588126ccb",
+      "group": "公爵的崛起",
+      "locator": "#change li[18]",
+      "originalText": "51737更新中，西西里人开局拥有额外100石头",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b169adba-fe94-4e80-8025-f57588126ccb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1f3bf71d-8d89-4466-a1f0-3a0cf374e6d2",
+      "group": "公爵的崛起",
+      "locator": "#change li[19]",
+      "originalText": "51737更新中，西西里人的团队奖励效果修改为第一艘运输船免费并且立即建造完毕",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1f3bf71d-8d89-4466-a1f0-3a0cf374e6d2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ce8102e7-e0e8-4671-a6cb-52d5898d6352",
+      "group": "公爵的崛起",
+      "locator": "#change li[20]",
+      "originalText": "54480版本后，西西里人的团队奖励效果修改为运输船获得5视野并且成本降低50%",
+      "rawVersions": [
+        "54480"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ce8102e7-e0e8-4671-a6cb-52d5898d6352"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b599dfdb-d08b-4c8b-ab00-3f3fac29b8e5",
+      "group": "印度王朝",
+      "locator": "#change li[21]",
+      "originalText": "61321版本后，城楼封建时代的生命值从1000上调到1250",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b599dfdb-d08b-4c8b-ab00-3f3fac29b8e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e6de1e47-1167-4982-9566-4dbf8cf089c9",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "61321版本后，锁子甲研究成本从500肉400金上调到700肉600金",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e6de1e47-1167-4982-9566-4dbf8cf089c9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c1a8cb7c-07fb-4aea-a0c0-fd175d9226a8",
+      "group": "印度王朝",
+      "locator": "#change li[23]",
+      "originalText": "66692版本后，失去脚踏起重机",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c1a8cb7c-07fb-4aea-a0c0-fd175d9226a8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-90643570-9460-4714-ac6f-6b5b92a5db11",
+      "group": "印度王朝",
+      "locator": "#change li[24]",
+      "originalText": "66692版本后，文明加成的额外伤害抗性从50%下调到了33%",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-90643570-9460-4714-ac6f-6b5b92a5db11"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca530c31-b6dc-4ba8-943e-6a616bcfd59e",
+      "group": "印度王朝",
+      "locator": "#change li[25]",
+      "originalText": "81058版本后，城堡建筑速度加成从100%下调到了50%",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca530c31-b6dc-4ba8-943e-6a616bcfd59e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "group": "印度王朝",
+      "locator": "#change li[26]",
+      "originalText": "81058版本后，城楼接受围墙科技加成，可以作为马厩和靶场前置建筑以及训练长枪兵",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1",
+      "group": "印度王朝",
+      "locator": "#change li[27]",
+      "originalText": "81058版本后，第一次十字军东征成本从300肉600金调整为400肉300金，生产量从7下调到了5",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "group": "印度王朝",
+      "locator": "#change li[28]",
+      "originalText": "81058版本后，萨金特卫兵封建时代生命值从45上调到50，城堡时代生命值从65上调到75，封建时代建造速度-25%，升级到精锐级别的成本从1100肉800金下调到800肉675金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-174888e3-c307-4ce2-abe9-cb77f8be00bb",
+      "group": "印度王朝",
+      "locator": "#change li[29]",
+      "originalText": "81058版本后，100石加成从建造好城镇中心后才会获得",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-174888e3-c307-4ce2-abe9-cb77f8be00bb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-43a8e286-0b71-4c4d-8530-b90c3eae63b2",
+      "group": "印度王朝",
+      "locator": "#change li[30]",
+      "originalText": "81058版本后，升级农场科技额外食物效率从100%上调到125%",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-43a8e286-0b71-4c4d-8530-b90c3eae63b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ab7df1d2-3976-4f59-9719-04819bd86cfb",
+      "group": "罗马归来",
+      "locator": "#change li[31]",
+      "originalText": "93001版本后，萨金特卫兵/精锐萨金特卫兵成本从60肉35金下调到了50肉35金",
+      "rawVersions": [
+        "93001"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ab7df1d2-3976-4f59-9719-04819bd86cfb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-acd9a901-2408-41a6-906f-6642de7fd636",
+      "group": "成王败寇",
+      "locator": "#change li[32]",
+      "originalText": "111772版本更新后，“城堡建造速度+50%”加成调整为“防御设施建造速度+50%”",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-acd9a901-2408-41a6-906f-6642de7fd636"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4096f41f-f686-450a-984c-483e2b51df10",
+      "group": "成王败寇",
+      "locator": "#change li[33]",
+      "originalText": "111772版本更新后，城楼建造时间从90秒上调到125秒，成本从75木175石下调到50木175石",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4096f41f-f686-450a-984c-483e2b51df10"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8b744e5a-07d4-4fd9-bd21-e5073f07f8f9",
+      "group": "三国",
+      "locator": "#change li[34]",
+      "originalText": "141935版本更新后，萨金特卫兵成本从50肉35金调整为60肉25金，移动速度从0.9上调到0.95，近战护甲从2/3/4调整为2/4/6，远程护甲从2/3/4调整为1/2/3",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8b744e5a-07d4-4fd9-bd21-e5073f07f8f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7877fbe2-10a3-48c9-96cc-b0a34de3fe0a",
+      "group": "三国",
+      "locator": "#change li[35]",
+      "originalText": "141935版本更新后，城楼在黑暗时代可以建造",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7877fbe2-10a3-48c9-96cc-b0a34de3fe0a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6d76407d-de46-4384-9668-711b07ed5c96",
+      "group": "三国",
+      "locator": "#change li[36]",
+      "originalText": "151401版本后，部队受到的额外伤害减少率从33%上调到40%",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6d76407d-de46-4384-9668-711b07ed5c96"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-91729515-fb34-41c6-9555-0b597bbe29ea",
+      "group": "三国",
+      "locator": "#change li[37]",
+      "originalText": "151401版本后，萨金特卫兵的成本从60肉25金下调到55肉25金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-91729515-fb34-41c6-9555-0b597bbe29ea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9017acc6-d76e-4dd4-a084-a8e31a59dce0",
+      "group": "三国",
+      "locator": "#change li[38]",
+      "originalText": "151401版本后，城楼现在可以研究长矛兵升级和精锐萨金特卫兵升级",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9017acc6-d76e-4dd4-a084-a8e31a59dce0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "group": "维京传奇",
+      "locator": "#change li[39]",
+      "originalText": "185872版本补丁后，获得骑马弩兵、重装骑马弩兵、便携弯弩装置；失去骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    西方霸主\n    \n        在决定版发售一年多后的2021年1月26日的DLC“西方霸主”里正式登场\n        无法升级到重型投石车\n        城楼消耗200石头\n        在1月26日正式发售之前，地面部队吸收33%来自所有额外加成的伤害，正式发售时这个加成提高为50%\n        在1月26日正式发售之前，每次农场升级都会给农民+1携带能力，正式发售时这个加成修改为“每次升级农场科技时，直到下一次播种之前农场都会获得额外100%的食物”\n        在1月26日正式发售之前，研究第一次十字军东征之后每个城镇中心出现的萨金特卫兵是7个，正式发售时是10个，并且添加了最大5个城镇中心能出兵的限制\n        45185补丁后，在游牧地图建造的第一个城镇中心不再受益于西西里人加快建造速度的加成\n        45185补丁后，文明加成的抵抗伤害值不再适用于攻城武器\n        45185补丁后，萨金特卫兵不再可以在大逃杀地图里面建造塔楼\n        45185补丁后，第一次十字军东征的生成士兵数量从10个重新下调到7个\n        45185补丁后，免役税对于盟友的加成修改为根据盟友的军事部队数量决定，此前是根据玩家的情况决定\n        47820版本后，可以升级到重型投石车\n        47820版本后，萨金特卫兵封建时代的近战护甲从1增加到2，城堡时代的生命值从60增加到65，精锐萨金特卫兵生命值从75增加到85\n        47820版本后，城楼消耗175石头\n        47820版本后，第一次十字军东征还能额外增加单位的抗招降能力\n    \n\n    公爵的崛起\n    \n        51737更新中，免役税科技删除，被替换成了锁子甲，为重装骑兵提供+1/+2护甲\n        51737更新中，西西里人可以使用重型投石车了\n        51737更新中，西西里人开局拥有额外100石头\n        51737更新中，西西里人的团队奖励效果修改为第一艘运输船免费并且立即建造完毕\n        54480版本后，西西里人的团队奖励效果修改为运输船获得5视野并且成本降低50%\n    \n\n    印度王朝\n    \n        61321版本后，城楼封建时代的生命值从1000上调到1250\n        61321版本后，锁子甲研究成本从500肉400金上调到700肉600金\n        66692版本后，失去脚踏起重机\n        66692版本后，文明加成的额外伤害抗性从50%下调到了33%\n        81058版本后，城堡建筑速度加成从100%下调到了50%\n        81058版本后，城楼接受围墙科技加成，可以作为马厩和靶场前置建筑以及训练长枪兵\n        81058版本后，第一次十字军东征成本从300肉600金调整为400肉300金，生产量从7下调到了5\n        81058版本后，萨金特卫兵封建时代生命值从45上调到50，城堡时代生命值从65上调到75，封建时代建造速度-25%，升级到精锐级别的成本从1100肉800金下调到800肉675金\n        81058版本后，100石加成从建造好城镇中心后才会获得\n        81058版本后，升级农场科技额外食物效率从100%上调到125%\n    \n\n    罗马归来\n    \n        93001版本后，萨金特卫兵/精锐萨金特卫兵成本从60肉35金下调到了50肉35金\n    \n\n    成王败寇\n    \n        111772版本更新后，“城堡建造速度+50%”加成调整为“防御设施建造速度+50%”\n        111772版本更新后，城楼建造时间从90秒上调到125秒，成本从75木175石下调到50木175石\n    \n\n    三国\n    \n        141935版本更新后，萨金特卫兵成本从50肉35金调整为60肉25金，移动速度从0.9上调到0.95，近战护甲从2/3/4调整为2/4/6，远程护甲从2/3/4调整为1/2/3\n        141935版本更新后，城楼在黑暗时代可以建造\n        151401版本后，部队受到的额外伤害减少率从33%上调到40%\n        151401版本后，萨金特卫兵的成本从60肉25金下调到55肉25金\n        151401版本后，城楼现在可以研究长矛兵升级和精锐萨金特卫兵升级\n    \n\n    维京传奇\n    \n        185872版本补丁后，获得骑马弩兵、重装骑马弩兵、便携弯弩装置；失去骑射手",
+  "sectionTextSha256": "889ea0cb47050cc94601711c87ae18212185ee85ae250851eb64099b0fcd2ca8",
+  "observedEntryCount": 39,
+  "supersedesRevisionId": null
+}

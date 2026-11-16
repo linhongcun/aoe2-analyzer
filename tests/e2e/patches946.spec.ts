@@ -9,7 +9,7 @@ function watch(page: Page) {
   return errors;
 }
 
-test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }) => {
+test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, testInfo) => {
   const errors = watch(page);
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('./#/patches/185872');
@@ -28,7 +28,7 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }) =
   expect(scopeBox!.y).toBeGreaterThanOrEqual(0);
   expect(scopeBox!.y + scopeBox!.height).toBeLessThanOrEqual(800);
   expect(values!.y + values!.height).toBeLessThanOrEqual(800);
-  await page.screenshot({ path: '/opt/cursor/artifacts/patches-946-1280.png', fullPage: false });
+  await page.screenshot({ path: testInfo.outputPath('patches-946-1280.png'), fullPage: false });
 
   await page.goto('./#/patches');
   await page.getByRole('link', { name: /DE Update 185872/ }).click();
@@ -146,7 +146,7 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   expect(errors).toEqual([]);
 });
 
-test('#946 390 深色版本页可筛选且不横向溢出', async ({ page }) => {
+test('#946 390 深色版本页可筛选且不横向溢出', async ({ page }, testInfo) => {
   const errors = watch(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
@@ -159,6 +159,6 @@ test('#946 390 深色版本页可筛选且不横向溢出', async ({ page }) => 
   await page.locator('.patch-filters').getByRole('button', { name: '游戏修复', exact: true }).click();
   await expect(page).toHaveURL(/ctype=fix/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: '/opt/cursor/artifacts/patches-946-390-dark.png', fullPage: false });
+  await page.screenshot({ path: testInfo.outputPath('patches-946-390-dark.png'), fullPage: false });
   expect(errors).toEqual([]);
 });

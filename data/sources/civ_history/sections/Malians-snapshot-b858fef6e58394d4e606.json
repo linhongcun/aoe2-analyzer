@@ -1,0 +1,251 @@
+{
+  "civId": "Malians",
+  "sourceId": "seicing-malians",
+  "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E9%87%8C.html",
+  "indexLabel": "马里Malians",
+  "title": "马里",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-b858fef6e58394d4e606",
+  "documentSha256": "b858fef6e58394d4e606f0ea922dc643876744bf0731e855d257ac58c5ef3f3e",
+  "capturedAt": "2026-11-16T11:45:20.742259+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-bc1b606a-4c5e-49f1-b031-59a466ebf63c",
+      "group": "非洲王国",
+      "locator": "#change li[1]",
+      "originalText": "建筑物木材成本便宜的奖励适用于农田，但是在4.8版本中不再适用于农田",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bc1b606a-4c5e-49f1-b031-59a466ebf63c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-09914af2-a442-4851-9a23-11e90aeffb65",
+      "group": "非洲王国",
+      "locator": "#change li[2]",
+      "originalText": "可以升级戟兵，但是在4.8版本中移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-09914af2-a442-4851-9a23-11e90aeffb65"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7d1aefc8-86ad-48b0-8230-4c36a4687bf8",
+      "group": "非洲王国",
+      "locator": "#change li[3]",
+      "originalText": "可以研究射箭槽，但是在4.8版本中移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7d1aefc8-86ad-48b0-8230-4c36a4687bf8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5c582082-0621-4a58-aafe-e3faa98e7070",
+      "group": "非洲王国",
+      "locator": "#change li[4]",
+      "originalText": "精锐飞刀女兵有14攻击力，4.8版本中下调为13",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5c582082-0621-4a58-aafe-e3faa98e7070"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-538b91f1-a02e-432e-9f73-5483b08303e4",
+      "group": "非洲王国",
+      "locator": "#change li[5]",
+      "originalText": "意大利佣兵的马里文明奖励的兵营部队提升远程护甲的加成不会生效，4.8版本后修复并适用了",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-538b91f1-a02e-432e-9f73-5483b08303e4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0f3b18b7-9fd9-46d6-9894-460d6b24cc21",
+      "group": "非洲王国",
+      "locator": "#change li[6]",
+      "originalText": "钻井采金法免费",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0f3b18b7-9fd9-46d6-9894-460d6b24cc21"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5f20e713-a842-4d91-b231-d3fba7959911",
+      "group": "蛮王崛起",
+      "locator": "#change li[7]",
+      "originalText": "5.7版本后，钻井采金法不再免费",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5f20e713-a842-4d91-b231-d3fba7959911"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cb29ad73-6cf8-4588-a3b1-70986594f3d8",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "获得快速喷火船",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cb29ad73-6cf8-4588-a3b1-70986594f3d8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ecbc8d5b-22ae-41f0-96c1-f7685a38fa63",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "失去大型战舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ecbc8d5b-22ae-41f0-96c1-f7685a38fa63"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7b39a5b2-96ca-4680-abf7-214ba4d51197",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "飞刀女兵/精锐飞刀女兵射击延迟从1.2下调到1.0",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7b39a5b2-96ca-4680-abf7-214ba4d51197"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-66b7bed8-1e60-461c-b68f-f8a3d0345d68",
+      "group": "公爵的崛起",
+      "locator": "#change li[11]",
+      "originalText": "51737更新中，获得金矿开采量延长30%的加成，取代了原来金矿技术科技免费",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-66b7bed8-1e60-461c-b68f-f8a3d0345d68"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f1c9f858-4d94-4a4f-a479-1b2c1192c826",
+      "group": "公爵的崛起",
+      "locator": "#change li[12]",
+      "originalText": "56005版本后，飞刀女兵生命值从30调整为35",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f1c9f858-4d94-4a4f-a479-1b2c1192c826"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0c6f5cbf-ca73-49da-8e0e-3b640049c425",
+      "group": "印度王朝",
+      "locator": "#change li[13]",
+      "originalText": "81058版本后，“金矿开采延长30%”加成修改为“金矿开采延长15%，金矿工携带量+15%”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0c6f5cbf-ca73-49da-8e0e-3b640049c425"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e899f208-5569-4ba2-8ed4-688c4b8ef05e",
+      "group": "印度王朝",
+      "locator": "#change li[14]",
+      "originalText": "81058版本后，飞刀女兵/精锐飞刀女兵的生命值从35/45上调到40/50",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e899f208-5569-4ba2-8ed4-688c4b8ef05e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "81058版本后，蛮王科技提供的3支箭矢不算入城镇中心本身最大的箭矢数量(5个)，研发蛮王后城镇中心最多发射8支箭矢",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7e1e46be-39d3-4a84-9580-2102c846aef2",
+      "group": "罗马归来",
+      "locator": "#change li[16]",
+      "originalText": "87863版本后，金矿开采延长效率从15%下调到了10%",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7e1e46be-39d3-4a84-9580-2102c846aef2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    非洲王国\n    \n        建筑物木材成本便宜的奖励适用于农田，但是在4.8版本中不再适用于农田\n        可以升级戟兵，但是在4.8版本中移除\n        可以研究射箭槽，但是在4.8版本中移除\n        精锐飞刀女兵有14攻击力，4.8版本中下调为13\n        意大利佣兵的马里文明奖励的兵营部队提升远程护甲的加成不会生效，4.8版本后修复并适用了\n        钻井采金法免费\n    \n\n    蛮王崛起\n    \n        5.7版本后，钻井采金法不再免费\n    \n\n    最后的可汗\n    \n        获得快速喷火船\n        失去大型战舰\n        飞刀女兵/精锐飞刀女兵射击延迟从1.2下调到1.0\n    \n\n    公爵的崛起\n    \n        51737更新中，获得金矿开采量延长30%的加成，取代了原来金矿技术科技免费\n        56005版本后，飞刀女兵生命值从30调整为35\n    \n\n    印度王朝\n    \n        81058版本后，“金矿开采延长30%”加成修改为“金矿开采延长15%，金矿工携带量+15%”\n        81058版本后，飞刀女兵/精锐飞刀女兵的生命值从35/45上调到40/50\n        81058版本后，蛮王科技提供的3支箭矢不算入城镇中心本身最大的箭矢数量(5个)，研发蛮王后城镇中心最多发射8支箭矢\n    \n\n    罗马归来\n    \n        87863版本后，金矿开采延长效率从15%下调到了10%",
+  "sectionTextSha256": "dee8887c9e9757b84d5666eed86e96cf1435fe90f9550095eb94c23509157d85",
+  "observedEntryCount": 16,
+  "supersedesRevisionId": null
+}

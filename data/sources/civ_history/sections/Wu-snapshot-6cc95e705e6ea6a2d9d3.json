@@ -1,0 +1,109 @@
+{
+  "civId": "Wu",
+  "sourceId": "seicing-wu",
+  "url": "https://seicing.com/html/aoe2/2/%E5%90%B4.html",
+  "indexLabel": "吴Wu",
+  "title": "吴",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-6cc95e705e6ea6a2d9d3",
+  "documentSha256": "6cc95e705e6ea6a2d9d34ebbef3d791cfa82467076cf88a402bae555ad0f51e6",
+  "capturedAt": "2026-11-16T11:48:47.002561+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-4d477cc9-c4d0-40db-88e1-1f170c4b711e",
+      "group": "三国",
+      "locator": "#change li[1]",
+      "originalText": "151401版本后，建造军事生产建筑和船坞获得的食物量从65下调到55",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4d477cc9-c4d0-40db-88e1-1f170c4b711e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e75cb983-a232-4cfc-b4b6-058d5812e947",
+      "group": "三国",
+      "locator": "#change li[2]",
+      "originalText": "151401版本后，刀剑手近战护甲从3下调到2，冲击步兵护甲从1下调到0",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e75cb983-a232-4cfc-b4b6-058d5812e947"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a8bf7ca9-09e6-4a5d-a331-960c97a3922e",
+      "group": "三国",
+      "locator": "#change li[3]",
+      "originalText": "162286版本更新后，刀剑手训练时间从27秒上调到35秒",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a8bf7ca9-09e6-4a5d-a331-960c97a3922e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-331e9c31-3eb2-485a-ab64-8e32828f60ed",
+      "group": "最后的酋长",
+      "locator": "#change li[4]",
+      "originalText": "169123版本更新后，“修船厂、干船坞可提前一个时代研发且费用和研究时间-75%”加成更变为“修船厂、干船坞免费研发”",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-331e9c31-3eb2-485a-ab64-8e32828f60ed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca1e6894-cca2-4749-ba6b-b92d72cf2b02",
+      "group": "最后的酋长",
+      "locator": "#change li[5]",
+      "originalText": "169123版本更新后，步兵生命值恢复效率从10/20/30调整为10/15/30",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca1e6894-cca2-4749-ba6b-b92d72cf2b02"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c5f73078-907a-410b-bdaf-bb03bd2ced89",
+      "group": "最后的酋长",
+      "locator": "#change li[6]",
+      "originalText": "169123版本更新后，正常模式刀剑手的近战护甲从2下调到0",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c5f73078-907a-410b-bdaf-bb03bd2ced89"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    三国\n    \n        151401版本后，建造军事生产建筑和船坞获得的食物量从65下调到55\n        151401版本后，刀剑手近战护甲从3下调到2，冲击步兵护甲从1下调到0\n        162286版本更新后，刀剑手训练时间从27秒上调到35秒\n    \n\n    最后的酋长\n    \n        169123版本更新后，“修船厂、干船坞可提前一个时代研发且费用和研究时间-75%”加成更变为“修船厂、干船坞免费研发”\n        169123版本更新后，步兵生命值恢复效率从10/20/30调整为10/15/30\n        169123版本更新后，正常模式刀剑手的近战护甲从2下调到0",
+  "sectionTextSha256": "4decf651597719ad764cd823d85b68743ea89aff9d3bbdfbe81467530758ec2d",
+  "observedEntryCount": 6,
+  "supersedesRevisionId": null
+}

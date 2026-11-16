@@ -1,0 +1,553 @@
+{
+  "civId": "Portuguese",
+  "sourceId": "seicing-portuguese",
+  "url": "https://seicing.com/html/aoe2/2/%E8%91%A1%E8%90%84%E7%89%99.html",
+  "indexLabel": "葡萄牙Portuguese",
+  "title": "葡萄牙",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-e5a7f7035d1dedfb0464",
+  "documentSha256": "e5a7f7035d1dedfb0464e553bcf2b67c6d83b6651e3e4722f44a3f251bbdec89",
+  "capturedAt": "2026-11-16T11:46:12.354948+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-257d9ccb-1d2e-44da-872d-b3cdf500e03b",
+      "group": "非洲王国",
+      "locator": "#change li[1]",
+      "originalText": "风琴炮有1点区域伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-257d9ccb-1d2e-44da-872d-b3cdf500e03b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b943020b-1fcf-4e60-be9a-9d263d5d41f5",
+      "group": "非洲王国",
+      "locator": "#change li[2]",
+      "originalText": "火绳枪提升手推炮和炮塔的炮弹速度0.5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b943020b-1fcf-4e60-be9a-9d263d5d41f5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2b4f8a90-fb03-4ed9-acd3-57e1f44077da",
+      "group": "非洲王国",
+      "locator": "#change li[3]",
+      "originalText": "可以研发射箭槽，但是在4.8版本被删除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2b4f8a90-fb03-4ed9-acd3-57e1f44077da"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d9cd677e-60a1-4646-870c-4e04e5385778",
+      "group": "非洲王国",
+      "locator": "#change li[4]",
+      "originalText": "大商站花费250木头和250黄金，每秒生产0.7食物0.7木头0.45黄金0.45石头，4.8版本后，大商站花费250黄金和250石头，每秒生产0.8食物0.8木头0.45黄金0.25石头",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d9cd677e-60a1-4646-870c-4e04e5385778"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fba829a4-2cc9-4815-ab78-c1103a590cef",
+      "group": "非洲王国",
+      "locator": "#change li[5]",
+      "originalText": "风琴炮没有最小攻击范围，以及对步兵有1点攻击加成，4.8版本后增加了1最小攻击范围，以及删除了对步兵的加成",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fba829a4-2cc9-4815-ab78-c1103a590cef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-40427027-781b-430c-900d-1dd7bc56dce0",
+      "group": "蛮王崛起",
+      "locator": "#change li[6]",
+      "originalText": "火绳枪现在火药部队也有加成了，炮弹速度减少到原来的75%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-40427027-781b-430c-900d-1dd7bc56dce0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e2d32d6a-bdf1-45ba-8cca-1e559da44d3b",
+      "group": "蛮王崛起",
+      "locator": "#change li[7]",
+      "originalText": "5.2版本，手推炮和炮塔的炮弹速度加成移除",
+      "rawVersions": [
+        "5.2"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e2d32d6a-bdf1-45ba-8cca-1e559da44d3b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-60bbba99-9735-4a97-842c-5364bdaa34f9",
+      "group": "蛮王崛起",
+      "locator": "#change li[8]",
+      "originalText": "5.7版本，手推炮和炮塔的炮弹速度加成是0.2",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-60bbba99-9735-4a97-842c-5364bdaa34f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7ec7d234-68bd-4d6c-9024-b91c7e2791f8",
+      "group": "蛮王崛起",
+      "locator": "#change li[9]",
+      "originalText": "5.7版本，风琴炮有2点区域伤害",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7ec7d234-68bd-4d6c-9024-b91c7e2791f8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a7fa2ef0-2221-4d93-ae6a-b9b9644b786b",
+      "group": "蛮王崛起",
+      "locator": "#change li[10]",
+      "originalText": "5.7版本，制图学被移除，但是葡萄牙的团队奖励依旧可以在黑暗时代共享视野，其他文明需要建造市场才能共享视野",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7fa2ef0-2221-4d93-ae6a-b9b9644b786b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4f39db5f-9160-4e32-903c-730662fc735d",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "35584版本后，大商站每秒生产1.6食物1.0木头0.7黄金0.3石头",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4f39db5f-9160-4e32-903c-730662fc735d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ef206036-8eaa-4e59-8e16-586c84b2af65",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "39284版本后，文明加成的所有单位的黄金费用便宜15%调整为20%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ef206036-8eaa-4e59-8e16-586c84b2af65"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ed394d76-0063-43d7-941a-ac00cace4779",
+      "group": "最后的可汗",
+      "locator": "#change li[13]",
+      "originalText": "39284版本后，卡拉维尔战船的建造基本黄金成本+3，接受文明加成后这个成本是34.4黄金(原来是34黄金)",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ed394d76-0063-43d7-941a-ac00cace4779"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-34b4f818-1db7-4e76-a7fb-cb727914d2b2",
+      "group": "最后的可汗",
+      "locator": "#change li[14]",
+      "originalText": "42848版本后，所有科技研究速度+30%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-34b4f818-1db7-4e76-a7fb-cb727914d2b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a85fde5a-6f62-47a4-90e2-ceda9ce9937c",
+      "group": "西方霸主",
+      "locator": "#change li[15]",
+      "originalText": "47820版本后，风琴炮无论是否击中了主要目标，副弹总是造成2点伤害，而不是1点或2点之间随机",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a85fde5a-6f62-47a4-90e2-ceda9ce9937c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fff305fd-36d8-4206-b1b9-337c53ff1591",
+      "group": "公爵的崛起",
+      "locator": "#change li[16]",
+      "originalText": "51737更新中，在击中了主要目标后副弹总是造成2点伤害，而不是1点或2点之间随机",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fff305fd-36d8-4206-b1b9-337c53ff1591"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-110511e0-3e49-4015-a973-43ac05e35ceb",
+      "group": "公爵的崛起",
+      "locator": "#change li[17]",
+      "originalText": "51737更新中，风琴炮子弹速度从5.5提升到7.5",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-110511e0-3e49-4015-a973-43ac05e35ceb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2372397f-5f65-41db-8e3a-b8a63d1d2c01",
+      "group": "公爵的崛起",
+      "locator": "#change li[18]",
+      "originalText": "54480版本后，大商站的生命值从5200降低到2700",
+      "rawVersions": [
+        "54480"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2372397f-5f65-41db-8e3a-b8a63d1d2c01"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bc8adf3c-b015-45ae-a637-b23aa701c7b1",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "61321版本后，大商站每分钟生产的木材从60下调到42，生产的黄金从42上调到60",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bc8adf3c-b015-45ae-a637-b23aa701c7b1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-69fc64ce-6eea-484a-924f-d4a21c359b91",
+      "group": "印度王朝",
+      "locator": "#change li[20]",
+      "originalText": "73855版本后，文明奖励的加快30%科技研发速度替换为村民从果丛获得额外的33%木材",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-69fc64ce-6eea-484a-924f-d4a21c359b91"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-12d36262-4df7-400f-856d-215c28977c18",
+      "group": "印度王朝",
+      "locator": "#change li[21]",
+      "originalText": "73855版本后，团队文明奖励从黑暗时代共享视野修改为科技研发速度+25%(不包括时代升级)",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-12d36262-4df7-400f-856d-215c28977c18"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-596e0d18-e1d7-4b4d-b894-74949aeb1fd1",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "81058版本后，升级精锐卡拉维尔战船成本从750肉475金调整为700肉525金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-596e0d18-e1d7-4b4d-b894-74949aeb1fd1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5c51cd63-b1db-497c-8b4d-0807c9ed2710",
+      "group": "印度王朝",
+      "locator": "#change li[23]",
+      "originalText": "81058版本后，风琴炮/精锐风琴炮攻击力从16/20调整为7/9，副弹攻击力同步本体攻击力，投射物数量从5/5修改为6/7，命中率从50%修改为0%，散布范围从0.75调整到0.25，对步兵攻击力+1，对建筑攻击力+1",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5c51cd63-b1db-497c-8b4d-0807c9ed2710"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-22c613b7-1211-45fd-8044-f908f8cb5da7",
+      "group": "印度王朝",
+      "locator": "#change li[24]",
+      "originalText": "82587版本后，风琴炮/精锐风琴炮散布范围从0.25调整到0.6，射弹数量从6/7减少到5/6，精锐风琴炮对掷矛手攻击力+1",
+      "rawVersions": [
+        "82587"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-22c613b7-1211-45fd-8044-f908f8cb5da7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cf23b24b-3291-4587-9f0d-e3b61f1f9807",
+      "group": "罗马归来",
+      "locator": "#change li[25]",
+      "originalText": "87863版本后，大商站成本从250金250石上调到350金300石",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cf23b24b-3291-4587-9f0d-e3b61f1f9807"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6adab42-1058-4845-b85d-f66a6cf6051c",
+      "group": "皇家山脉",
+      "locator": "#change li[26]",
+      "originalText": "99311版本后，风琴炮/精锐风琴炮伤害从7/9下调到了6/8，对步兵和掷矛手额外伤害从1上调到了2",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6adab42-1058-4845-b85d-f66a6cf6051c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f",
+      "group": "成王败寇",
+      "locator": "#change li[27]",
+      "originalText": "125283版本更新后，卡拉维尔战舰生产时间从36秒下调到25秒",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f94135ec-c019-4202-94c3-5513de97e019",
+      "group": "成王败寇",
+      "locator": "#change li[28]",
+      "originalText": "125283版本更新后，风琴炮生产时间从21秒上调到25秒",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f94135ec-c019-4202-94c3-5513de97e019"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-adb8b758-5100-4d25-9d24-958a9dab8741",
+      "group": "三国",
+      "locator": "#change li[29]",
+      "originalText": "141935版本更新后，风琴炮生命值从60下调到50",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-adb8b758-5100-4d25-9d24-958a9dab8741"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5ef89ac0-b8b5-4fc1-8045-737cf346123b",
+      "group": "最后的酋长",
+      "locator": "#change li[30]",
+      "originalText": "169123版本更新后，不再拥有爆破船系",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5ef89ac0-b8b5-4fc1-8045-737cf346123b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f2185f6-4949-46e3-83f3-eeb389c89c54",
+      "group": "最后的酋长",
+      "locator": "#change li[31]",
+      "originalText": "169123版本更新后，船只生命值加成从10%更改为船只生命值在黑暗/封建/城堡/帝王时代+10%/10%/15%/20%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f2185f6-4949-46e3-83f3-eeb389c89c54"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a66eb577-114e-44db-b476-a6aa00dd7df9",
+      "group": "最后的酋长",
+      "locator": "#change li[32]",
+      "originalText": "169123版本更新后，巨桅大帆船科技删除，获得环球航行科技",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a66eb577-114e-44db-b476-a6aa00dd7df9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4757da40-0fec-4084-bec2-42f5d7fb1473",
+      "group": "最后的酋长",
+      "locator": "#change li[33]",
+      "originalText": "169123版本更新后，卡拉维尔战舰攻击力从6/8下调到4/7，远程护甲从6/7下调到5/6，移动速度从1.43下调到1.36，对建筑伤害从+8/+9上调到+11，获得+4/+6对远程舰船伤害",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4757da40-0fec-4084-bec2-42f5d7fb1473"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d7bef1a4-9cd5-40da-bbde-14ed4ac902b6",
+      "group": "维京传奇",
+      "locator": "#change li[34]",
+      "originalText": "185872版本补丁后，风琴炮训练时间从25秒上调到28秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d7bef1a4-9cd5-40da-bbde-14ed4ac902b6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6c0a2596-8bc9-4c13-b68d-bb23ce648848",
+      "group": "维京传奇",
+      "locator": "#change li[35]",
+      "originalText": "185872版本补丁后，获得骑马弩兵；失去骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6c0a2596-8bc9-4c13-b68d-bb23ce648848"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a01e6e7f-8bac-4b6d-b73c-0407834275c3",
+      "group": "维京传奇",
+      "locator": "#change li[36]",
+      "originalText": "185872版本补丁后，失去救赎",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a01e6e7f-8bac-4b6d-b73c-0407834275c3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    非洲王国\n    \n        风琴炮有1点区域伤害\n        火绳枪提升手推炮和炮塔的炮弹速度0.5\n        可以研发射箭槽，但是在4.8版本被删除\n        大商站花费250木头和250黄金，每秒生产0.7食物0.7木头0.45黄金0.45石头，4.8版本后，大商站花费250黄金和250石头，每秒生产0.8食物0.8木头0.45黄金0.25石头\n        风琴炮没有最小攻击范围，以及对步兵有1点攻击加成，4.8版本后增加了1最小攻击范围，以及删除了对步兵的加成\n    \n\n    蛮王崛起\n    \n        火绳枪现在火药部队也有加成了，炮弹速度减少到原来的75%\n        5.2版本，手推炮和炮塔的炮弹速度加成移除\n        5.7版本，手推炮和炮塔的炮弹速度加成是0.2\n        5.7版本，风琴炮有2点区域伤害\n        5.7版本，制图学被移除，但是葡萄牙的团队奖励依旧可以在黑暗时代共享视野，其他文明需要建造市场才能共享视野\n    \n\n    最后的可汗\n    \n        35584版本后，大商站每秒生产1.6食物1.0木头0.7黄金0.3石头\n        39284版本后，文明加成的所有单位的黄金费用便宜15%调整为20%\n        39284版本后，卡拉维尔战船的建造基本黄金成本+3，接受文明加成后这个成本是34.4黄金(原来是34黄金)\n        42848版本后，所有科技研究速度+30%\n    \n\n    西方霸主\n    \n        47820版本后，风琴炮无论是否击中了主要目标，副弹总是造成2点伤害，而不是1点或2点之间随机\n    \n\n    公爵的崛起\n    \n        51737更新中，在击中了主要目标后副弹总是造成2点伤害，而不是1点或2点之间随机\n        51737更新中，风琴炮子弹速度从5.5提升到7.5\n        54480版本后，大商站的生命值从5200降低到2700\n    \n\n    印度王朝\n    \n        61321版本后，大商站每分钟生产的木材从60下调到42，生产的黄金从42上调到60\n        73855版本后，文明奖励的加快30%科技研发速度替换为村民从果丛获得额外的33%木材\n        73855版本后，团队文明奖励从黑暗时代共享视野修改为科技研发速度+25%(不包括时代升级)\n        81058版本后，升级精锐卡拉维尔战船成本从750肉475金调整为700肉525金\n        81058版本后，风琴炮/精锐风琴炮攻击力从16/20调整为7/9，副弹攻击力同步本体攻击力，投射物数量从5/5修改为6/7，命中率从50%修改为0%，散布范围从0.75调整到0.25，对步兵攻击力+1，对建筑攻击力+1\n        \n        82587版本后，风琴炮/精锐风琴炮散布范围从0.25调整到0.6，射弹数量从6/7减少到5/6，精锐风琴炮对掷矛手攻击力+1\n    \n\n    罗马归来\n    \n        87863版本后，大商站成本从250金250石上调到350金300石\n    \n\n    皇家山脉\n    \n        99311版本后，风琴炮/精锐风琴炮伤害从7/9下调到了6/8，对步兵和掷矛手额外伤害从1上调到了2\n    \n\n    成王败寇\n    \n        125283版本更新后，卡拉维尔战舰生产时间从36秒下调到25秒\n        125283版本更新后，风琴炮生产时间从21秒上调到25秒\n    \n\n    三国\n    \n        141935版本更新后，风琴炮生命值从60下调到50\n    \n\n    最后的酋长\n    \n        169123版本更新后，不再拥有爆破船系\n        169123版本更新后，船只生命值加成从10%更改为船只生命值在黑暗/封建/城堡/帝王时代+10%/10%/15%/20%\n        169123版本更新后，巨桅大帆船科技删除，获得环球航行科技\n        169123版本更新后，卡拉维尔战舰攻击力从6/8下调到4/7，远程护甲从6/7下调到5/6，移动速度从1.43下调到1.36，对建筑伤害从+8/+9上调到+11，获得+4/+6对远程舰船伤害\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，风琴炮训练时间从25秒上调到28秒\n        185872版本补丁后，获得骑马弩兵；失去骑射手\n        185872版本补丁后，失去救赎",
+  "sectionTextSha256": "2dc81112efc8bb2cfa3b7e7b2e2b8542220c51276813b88f987e8ea67310f958",
+  "observedEntryCount": 36,
+  "supersedesRevisionId": null
+}

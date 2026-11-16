@@ -1,0 +1,109 @@
+{
+  "civId": "Muisca",
+  "sourceId": "seicing-muisca",
+  "url": "https://seicing.com/html/aoe2/2/%E7%A9%86%E4%BC%8A%E6%96%AF%E5%8D%A1.html",
+  "indexLabel": "穆伊斯卡Muisca",
+  "title": "穆伊斯卡",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-eb5dcea60cdddc9b917b",
+  "documentSha256": "eb5dcea60cdddc9b917b02b639a655005c47da44ffd9664b969aaf5a3b65e99d",
+  "capturedAt": "2026-11-16T11:45:53.230600+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-d6ce7807-74e5-4e52-b9c8-d8bbddfd139e",
+      "group": "最后的酋长",
+      "locator": "#change li[1]",
+      "originalText": "177723版本更新后，定居点折扣率从25%上调到33%",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d6ce7807-74e5-4e52-b9c8-d8bbddfd139e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f404bdd0-cd70-4eb2-ae23-00b8862eb8a9",
+      "group": "最后的酋长",
+      "locator": "#change li[2]",
+      "originalText": "177723版本更新后，神庙护卫的费用从80肉45金下调到70肉45金",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f404bdd0-cd70-4eb2-ae23-00b8862eb8a9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-77126d82-ffe2-4b0c-abd9-c954aab70bdf",
+      "group": "最后的酋长",
+      "locator": "#change li[3]",
+      "originalText": "177723版本更新后，神庙护卫/精锐神庙护卫对骑兵的加成从3/6上调到5/8",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-77126d82-ffe2-4b0c-abd9-c954aab70bdf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-34b63b47-f1a5-4bdf-85dc-b3549964138d",
+      "group": "最后的酋长",
+      "locator": "#change li[4]",
+      "originalText": "177723版本更新后，格查战士/精锐格查战士的生命值从50/50上调到55/60",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-34b63b47-f1a5-4bdf-85dc-b3549964138d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7eacd421-af91-4c2e-86cd-d4db9a66c11f",
+      "group": "最后的酋长",
+      "locator": "#change li[5]",
+      "originalText": "177723版本更新后，瓦拉卡斯对投石手训练速度加成从25%上调到50%",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7eacd421-af91-4c2e-86cd-d4db9a66c11f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f403ea5a-fdb6-4e3a-a808-0d7b9b8bf3b2",
+      "group": "维京传奇",
+      "locator": "#change li[6]",
+      "originalText": "185872版本补丁后，神庙护卫攻击力从12下调到11",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f403ea5a-fdb6-4e3a-a808-0d7b9b8bf3b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n\n    最后的酋长\n    \n        177723版本更新后，定居点折扣率从25%上调到33%\n        177723版本更新后，神庙护卫的费用从80肉45金下调到70肉45金\n        177723版本更新后，神庙护卫/精锐神庙护卫对骑兵的加成从3/6上调到5/8\n        177723版本更新后，格查战士/精锐格查战士的生命值从50/50上调到55/60\n        177723版本更新后，瓦拉卡斯对投石手训练速度加成从25%上调到50%\n    \n\n    维京传奇\n    \n        185872版本补丁后，神庙护卫攻击力从12下调到11",
+  "sectionTextSha256": "cea7cc80d0978d175612466e40ed1b27c9a4711ae617930a9f11117560b7435d",
+  "observedEntryCount": 6,
+  "supersedesRevisionId": null
+}

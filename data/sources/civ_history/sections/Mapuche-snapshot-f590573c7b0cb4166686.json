@@ -1,0 +1,79 @@
+{
+  "civId": "Mapuche",
+  "sourceId": "seicing-mapuche",
+  "url": "https://seicing.com/html/aoe2/2/%E9%A9%AC%E6%99%AE%E5%88%87.html",
+  "indexLabel": "马普切Mapuche",
+  "title": "马普切",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-f590573c7b0cb4166686",
+  "documentSha256": "f590573c7b0cb41666864020c9f08565d48cac1c96fbbd7b66377f04d531930e",
+  "capturedAt": "2026-11-16T11:45:27.708273+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-da5947ed-b739-4226-a606-fb6a4917d57c",
+      "group": "最后的酋长",
+      "locator": "#change li[1]",
+      "originalText": "170934版本更新后，定居点士兵训练时间上调，掷矛手/精锐掷矛手从52/33秒上调到56/36秒，长矛兵/长枪兵从44/33上调到47/36秒",
+      "rawVersions": [
+        "170934"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-da5947ed-b739-4226-a606-fb6a4917d57c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-48dd6d2a-9055-48f2-93dc-79a7d8c58a9c",
+      "group": "最后的酋长",
+      "locator": "#change li[2]",
+      "originalText": "177723版本更新后，果丛采集者提交的额外食物量从20%上调到25%",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-48dd6d2a-9055-48f2-93dc-79a7d8c58a9c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c9314e98-7295-4ef2-96be-38cbdd7a400b",
+      "group": "维京传奇",
+      "locator": "#change li[3]",
+      "originalText": "185872版本补丁后，掷石绳骑兵成本从45木50金上调到50木55金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c9314e98-7295-4ef2-96be-38cbdd7a400b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2732a49a-ff59-41e5-9525-31057e6c8184",
+      "group": "维京传奇",
+      "locator": "#change li[4]",
+      "originalText": "188329版本补丁后，掷石绳骑兵的移动速度从1.5下调到1.45(精锐等级不变)",
+      "rawVersions": [
+        "188329"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2732a49a-ff59-41e5-9525-31057e6c8184"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n\n    最后的酋长\n    \n        170934版本更新后，定居点士兵训练时间上调，掷矛手/精锐掷矛手从52/33秒上调到56/36秒，长矛兵/长枪兵从44/33上调到47/36秒\n        177723版本更新后，果丛采集者提交的额外食物量从20%上调到25%\n    \n\n    维京传奇\n    \n        185872版本补丁后，掷石绳骑兵成本从45木50金上调到50木55金\n        188329版本补丁后，掷石绳骑兵的移动速度从1.5下调到1.45(精锐等级不变)",
+  "sectionTextSha256": "6713e4fe8033de689e0f459944e102fe2959171242861eea444021f68f366043",
+  "observedEntryCount": 4,
+  "supersedesRevisionId": null
+}

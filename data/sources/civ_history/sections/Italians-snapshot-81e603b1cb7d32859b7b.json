@@ -1,0 +1,611 @@
+{
+  "civId": "Italians",
+  "sourceId": "seicing-italians",
+  "url": "https://seicing.com/html/aoe2/2/%E6%84%8F%E5%A4%A7%E5%88%A9.html",
+  "indexLabel": "意大利Italians",
+  "title": "意大利",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-81e603b1cb7d32859b7b",
+  "documentSha256": "81e603b1cb7d32859b7b76fb9d5687bd6c0fa51b821807c3807863d74a4dc388",
+  "capturedAt": "2026-11-16T11:44:08.548174+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-a7874184-cc2b-4a79-bb70-6e684db04a9f",
+      "group": "失落帝国",
+      "locator": "#change li[1]",
+      "originalText": "升级时代便宜10%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7874184-cc2b-4a79-bb70-6e684db04a9f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8bca199b-335f-405d-96ad-5cb3c9dc7e67",
+      "group": "失落帝国",
+      "locator": "#change li[2]",
+      "originalText": "火药部队便宜15%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8bca199b-335f-405d-96ad-5cb3c9dc7e67"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d126f71a-a28f-4325-a159-f32c9484dd21",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "喷火船+2视野",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d126f71a-a28f-4325-a159-f32c9484dd21"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fcc0dc3f-011f-48fc-9741-5bdca7218522",
+      "group": "失落帝国",
+      "locator": "#change li[4]",
+      "originalText": "无法研发翼骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fcc0dc3f-011f-48fc-9741-5bdca7218522"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-50c76a81-1b99-4d8a-b99f-245da777552b",
+      "group": "失落帝国",
+      "locator": "#change li[5]",
+      "originalText": "大盾花费550食物300木头，只能作用于热那亚弩手",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-50c76a81-1b99-4d8a-b99f-245da777552b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-47e8de45-eb64-45d6-8f98-445797ca40cd",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "训练意大利佣兵需要建造城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-47e8de45-eb64-45d6-8f98-445797ca40cd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bf8214b1-76ce-4446-9c1c-912cfcf36c7e",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "意大利佣兵拥有9攻击和1攻速",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bf8214b1-76ce-4446-9c1c-912cfcf36c7e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6f8d9652-b550-442d-813f-141d9a5e76df",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "意大利佣兵训练时间是11秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6f8d9652-b550-442d-813f-141d9a5e76df"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1179f8bd-97ba-4e1a-b9b2-8968c7531781",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "热那亚弩手消耗50木头和50黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1179f8bd-97ba-4e1a-b9b2-8968c7531781"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-72184d6e-42ba-43cb-aa58-8ac16e9c3bbe",
+      "group": "非洲王国",
+      "locator": "#change li[10]",
+      "originalText": "升级时代便宜15%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-72184d6e-42ba-43cb-aa58-8ac16e9c3bbe"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d294c608-35ab-40ee-b186-c8d9375b77ed",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "火药部队便宜20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d294c608-35ab-40ee-b186-c8d9375b77ed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-29e3a8d8-e9a0-4a8c-b542-b019d07a4941",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "喷火船便宜33%，取代原来的+2视野",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-29e3a8d8-e9a0-4a8c-b542-b019d07a4941"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b3bc47e3-fb74-451c-8a06-41f79b9e9ae0",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "可以研发翼骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b3bc47e3-fb74-451c-8a06-41f79b9e9ae0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-59642b20-8b4f-431c-9888-d8cd6abbbad6",
+      "group": "非洲王国",
+      "locator": "#change li[14]",
+      "originalText": "大盾花费300食物150黄金并且可以作用于所有步弓手",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-59642b20-8b4f-431c-9888-d8cd6abbbad6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-02bfabcd-e9af-4bf0-9a85-ea2409cc7eb9",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "训练意大利佣兵不再需要城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-02bfabcd-e9af-4bf0-9a85-ea2409cc7eb9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d375355f-f5b7-4d73-9fc1-816219e7c13c",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "意大利佣兵拥有10攻击和1.2攻速",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d375355f-f5b7-4d73-9fc1-816219e7c13c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c0014891-e23f-403c-9eac-5b8d57fc7855",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "精锐热那亚弩手对骆驼伤害+5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c0014891-e23f-403c-9eac-5b8d57fc7855"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9b4a701e-3dcd-458a-bf73-ac97b9df452a",
+      "group": "非洲王国",
+      "locator": "#change li[18]",
+      "originalText": "4.8版本后，大盾不再适用于掷矛手",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9b4a701e-3dcd-458a-bf73-ac97b9df452a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b4e4abc6-bb2c-4bb6-805b-71af9dda4d6e",
+      "group": "非洲王国",
+      "locator": "#change li[19]",
+      "originalText": "4.8版本后，意大利佣兵训练时间是13秒",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b4e4abc6-bb2c-4bb6-805b-71af9dda4d6e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a0004fd-b3af-4014-9653-d1d936551062",
+      "group": "蛮王崛起",
+      "locator": "#change li[20]",
+      "originalText": "热那亚弩手花费45木头45黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a0004fd-b3af-4014-9653-d1d936551062"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-90b7106d-bb1e-42c9-911b-8477445248ec",
+      "group": "蛮王崛起",
+      "locator": "#change li[21]",
+      "originalText": "5.5版本后，渔船便宜20%",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-90b7106d-bb1e-42c9-911b-8477445248ec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fd7b9686-ff61-4360-9eda-029fa6ca6d60",
+      "group": "蛮王崛起",
+      "locator": "#change li[22]",
+      "originalText": "5.7版本后，精锐热那亚弩手对骆驼伤害+6",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fd7b9686-ff61-4360-9eda-029fa6ca6d60"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ee62d32f-3d35-410a-932c-b4f27563ffbc",
+      "group": "蛮王崛起",
+      "locator": "#change li[23]",
+      "originalText": "5.7版本后，意大利佣兵拥有9攻击和0远程护甲",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ee62d32f-3d35-410a-932c-b4f27563ffbc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b2844f28-6e06-4a5c-9a01-ace806c06022",
+      "group": "蛮王崛起",
+      "locator": "#change li[24]",
+      "originalText": "5.7版本后，意大利佣兵训练时间是18秒",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b2844f28-6e06-4a5c-9a01-ace806c06022"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7831070a-96d9-4a67-b843-2d7558ac4606",
+      "group": "蛮王崛起",
+      "locator": "#change li[25]",
+      "originalText": "5.7版本后，意大利佣兵拥有特殊部队护甲，可以抵抗火药部队10点伤害，但是不适用于其他反步兵攻击",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7831070a-96d9-4a67-b843-2d7558ac4606"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b7e4b208-be01-4123-8c5b-41bb3eb49762",
+      "group": "蛮王崛起",
+      "locator": "#change li[26]",
+      "originalText": "5.8版本后，渔船便宜15%",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b7e4b208-be01-4123-8c5b-41bb3eb49762"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-01238c79-2e57-453b-8df9-500998acd54a",
+      "group": "最后的可汗",
+      "locator": "#change li[27]",
+      "originalText": "热那亚弩手射击间隔时间由3秒减少到2秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-01238c79-2e57-453b-8df9-500998acd54a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-73205761-1cd7-44d2-a7c9-49924f4e84bd",
+      "group": "最后的可汗",
+      "locator": "#change li[28]",
+      "originalText": "36906版本后，文明奖励的-15木材调整为-15%木材，渔船成本由60提升到64",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-73205761-1cd7-44d2-a7c9-49924f4e84bd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-14cb5c6d-97a9-44d2-8189-1b2bc4557012",
+      "group": "最后的可汗",
+      "locator": "#change li[29]",
+      "originalText": "39284版本后，大盾科技的远程护甲和近程护甲+1也适用于意大利佣兵了",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-14cb5c6d-97a9-44d2-8189-1b2bc4557012"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-19d84174-9686-47a4-99e1-a024e7e76bfd",
+      "group": "最后的可汗",
+      "locator": "#change li[30]",
+      "originalText": "39284版本后，意大利佣兵攻击力从9上调到10",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-19d84174-9686-47a4-99e1-a024e7e76bfd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5e36fbcb-730b-4643-9fcb-bd399f41a7a9",
+      "group": "最后的可汗",
+      "locator": "#change li[31]",
+      "originalText": "42848版本后，热那亚弩手/精锐热那亚弩手训练时间从22秒/19秒下调到19秒/14秒",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5e36fbcb-730b-4643-9fcb-bd399f41a7a9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-81a87200-045d-4d78-8160-7c111ab7ebe1",
+      "group": "西方霸主",
+      "locator": "#change li[32]",
+      "originalText": "44725更新后，船坞科技便宜50%的加成下调为33%",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-81a87200-045d-4d78-8160-7c111ab7ebe1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-493abc69-b0fa-4b32-a230-76d33158acae",
+      "group": "西方霸主",
+      "locator": "#change li[33]",
+      "originalText": "44725更新后，科技便宜33%的加成也适用于大学了",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-493abc69-b0fa-4b32-a230-76d33158acae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d06e530f-14a8-4162-955a-2694e12d8bb7",
+      "group": "西方霸主",
+      "locator": "#change li[34]",
+      "originalText": "44725更新后，热那亚弩手/精锐热那亚弩手的黄金成本从45下调为40，木材成本不变",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d06e530f-14a8-4162-955a-2694e12d8bb7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-51e01798-d857-42de-a904-df2b4a554fc6",
+      "group": "罗马归来",
+      "locator": "#change li[35]",
+      "originalText": "87863版本后，大盾成本从300肉150金调整为200木150金",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-51e01798-d857-42de-a904-df2b4a554fc6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-71ea8529-de62-427c-87f5-a890151474e4",
+      "group": "成王败寇",
+      "locator": "#change li[36]",
+      "originalText": "107882版本更新后，热那亚弩手的训练时间从18秒下调到了14秒",
+      "rawVersions": [
+        "107882"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-71ea8529-de62-427c-87f5-a890151474e4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0173601d-b206-4eac-9185-c3fe4c60b531",
+      "group": "三国",
+      "locator": "#change li[37]",
+      "originalText": "141935版本更新后，丝绸之路变成银冠科技，成本从500肉250金下调到250肉250金",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0173601d-b206-4eac-9185-c3fe4c60b531"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6ff63722-d0d6-493f-8de9-1d99d1caff17",
+      "group": "三国",
+      "locator": "#change li[38]",
+      "originalText": "141935版本更新后，大盾科技被删除",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6ff63722-d0d6-493f-8de9-1d99d1caff17"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1b4aa89f-2fd6-4ad9-9ec5-7d57c981da98",
+      "group": "三国",
+      "locator": "#change li[39]",
+      "originalText": "141935版本更新后，获得新文明奖励“步弓手和意大利佣兵护甲+1/+1”",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1b4aa89f-2fd6-4ad9-9ec5-7d57c981da98"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e6b4cbcc-52ae-4dad-85c7-976b1eb1f2e9",
+      "group": "三国",
+      "locator": "#change li[40]",
+      "originalText": "141935版本更新后，获得新的金冠科技“烟火之术”",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e6b4cbcc-52ae-4dad-85c7-976b1eb1f2e9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7b6d6a40-6d9f-4268-8665-2fd6129f03e5",
+      "group": "最后的酋长",
+      "locator": "#change li[41]",
+      "originalText": "169123版本更新后，大学和码头折扣效率从33%下调到25%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7b6d6a40-6d9f-4268-8665-2fd6129f03e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f",
+      "group": "维京传奇",
+      "locator": "#change li[42]",
+      "originalText": "185872版本补丁后，获得骑马弩兵；失去骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    失落帝国\n    \n        升级时代便宜10%\n        火药部队便宜15%\n        喷火船+2视野\n        无法研发翼骑兵\n        大盾花费550食物300木头，只能作用于热那亚弩手\n        训练意大利佣兵需要建造城堡\n        意大利佣兵拥有9攻击和1攻速\n        意大利佣兵训练时间是11秒\n        热那亚弩手消耗50木头和50黄金\n    \n\n    非洲王国\n    \n        升级时代便宜15%\n        火药部队便宜20%\n        喷火船便宜33%，取代原来的+2视野\n        可以研发翼骑兵\n        大盾花费300食物150黄金并且可以作用于所有步弓手\n        训练意大利佣兵不再需要城堡\n        意大利佣兵拥有10攻击和1.2攻速\n        精锐热那亚弩手对骆驼伤害+5\n        4.8版本后，大盾不再适用于掷矛手\n        4.8版本后，意大利佣兵训练时间是13秒\n    \n\n    蛮王崛起\n    \n        热那亚弩手花费45木头45黄金\n        5.5版本后，渔船便宜20%\n        5.7版本后，精锐热那亚弩手对骆驼伤害+6\n        5.7版本后，意大利佣兵拥有9攻击和0远程护甲\n        5.7版本后，意大利佣兵训练时间是18秒\n        5.7版本后，意大利佣兵拥有特殊部队护甲，可以抵抗火药部队10点伤害，但是不适用于其他反步兵攻击\n        5.8版本后，渔船便宜15%\n    \n\n    最后的可汗\n    \n        热那亚弩手射击间隔时间由3秒减少到2秒\n        36906版本后，文明奖励的-15木材调整为-15%木材，渔船成本由60提升到64\n        39284版本后，大盾科技的远程护甲和近程护甲+1也适用于意大利佣兵了\n        39284版本后，意大利佣兵攻击力从9上调到10\n        42848版本后，热那亚弩手/精锐热那亚弩手训练时间从22秒/19秒下调到19秒/14秒\n    \n\n    \n        西方霸主\n    \n    \n        44725更新后，船坞科技便宜50%的加成下调为33%\n        44725更新后，科技便宜33%的加成也适用于大学了\n        44725更新后，热那亚弩手/精锐热那亚弩手的黄金成本从45下调为40，木材成本不变\n    \n\n    \n        罗马归来\n    \n    \n        87863版本后，大盾成本从300肉150金调整为200木150金\n    \n\n    成王败寇\n    \n        107882版本更新后，热那亚弩手的训练时间从18秒下调到了14秒\n    \n\n    三国\n    \n        141935版本更新后，丝绸之路变成银冠科技，成本从500肉250金下调到250肉250金\n        141935版本更新后，大盾科技被删除\n        141935版本更新后，获得新文明奖励“步弓手和意大利佣兵护甲+1/+1”\n        141935版本更新后，获得新的金冠科技“烟火之术”\n    \n\n    最后的酋长\n    \n        169123版本更新后，大学和码头折扣效率从33%下调到25%\n    \n\n\n    维京传奇\n    \n        185872版本补丁后，获得骑马弩兵；失去骑射手",
+  "sectionTextSha256": "eef6a807a6a50436a6dfcf931bd41829080de837b70a3375f0a4e0aef940fd93",
+  "observedEntryCount": 42,
+  "supersedesRevisionId": null
+}

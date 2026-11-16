@@ -1,0 +1,370 @@
+{
+  "civId": "Aztecs",
+  "sourceId": "seicing-aztecs",
+  "url": "https://seicing.com/html/aoe2/2/%E9%98%BF%E5%85%B9%E7%89%B9%E5%85%8B.html",
+  "indexLabel": "阿兹特克Aztecs",
+  "title": "阿兹特克",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-79669004e02a0cad756a",
+  "documentSha256": "79669004e02a0cad756a5315abd2ed14563887e114da1a559a0bc0029d794aed",
+  "capturedAt": "2026-11-16T11:40:18.504441+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-c3b14fa6-96d4-4d2d-af2d-859f899b424e",
+      "group": "征服者",
+      "locator": "#change li[1]",
+      "originalText": "开局拥有鹰勇士",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c3b14fa6-96d4-4d2d-af2d-859f899b424e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-af8ded62-e74b-4a25-af42-c24a8f7c83ef",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "豹勇士拥有0远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-af8ded62-e74b-4a25-af42-c24a8f7c83ef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ef281c8f-930e-4d5a-ad5a-9dc9667a60a3",
+      "group": "征服者",
+      "locator": "#change li[3]",
+      "originalText": "豹勇士拥有10点对步兵伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ef281c8f-930e-4d5a-ad5a-9dc9667a60a3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b97a3fac-7fc3-463d-9727-86a85a871a25",
+      "group": "征服者",
+      "locator": "#change li[4]",
+      "originalText": "无法建造爆破船",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b97a3fac-7fc3-463d-9727-86a85a871a25"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-36f42510-b8f9-4647-a2e5-d2dd4335bec0",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "村民携带量多5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-36f42510-b8f9-4647-a2e5-d2dd4335bec0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4356a7a6-1872-423b-8cd7-634afd9d7d27",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "1.0c版本后，织布机免费",
+      "rawVersions": [
+        "1.0c"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4356a7a6-1872-423b-8cd7-634afd9d7d27"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-23c649f0-572e-4b3d-afac-7224a01dc5a2",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "织布机免费删除，取代的是+50黄金开局",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23c649f0-572e-4b3d-afac-7224a01dc5a2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6db4a9dc-5591-4e75-8a28-c823a20cbc6b",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "现在开局拥有鹰斥候而不是鹰勇士",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6db4a9dc-5591-4e75-8a28-c823a20cbc6b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bae81b04-2f03-45d6-89a4-3a57d5fe915c",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "掷矛器科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bae81b04-2f03-45d6-89a4-3a57d5fe915c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-53160df7-6627-47e7-b871-91e2e9b9e6ea",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "豹勇士拥有1远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-53160df7-6627-47e7-b871-91e2e9b9e6ea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2ebdd5fc-4ce1-4556-af18-013f70042feb",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "豹勇士拥有11点对步兵伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2ebdd5fc-4ce1-4556-af18-013f70042feb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d6c9a93f-b8ca-488d-9f2f-5f0ddc0e6558",
+      "group": "失落帝国",
+      "locator": "#change li[12]",
+      "originalText": "豹勇士和精锐豹勇士训练时间是20秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d6c9a93f-b8ca-488d-9f2f-5f0ddc0e6558"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-592ec423-df5b-4da5-9389-4887ca9b622a",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "无法建造爆破筏，4.8版本后可以建造",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-592ec423-df5b-4da5-9389-4887ca9b622a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0a5724c7-c919-4272-8cb3-03c9eda420b2",
+      "group": "非洲王国",
+      "locator": "#change li[14]",
+      "originalText": "4.8版本后，爆破船可以建造",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0a5724c7-c919-4272-8cb3-03c9eda420b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2d0471df-c986-46db-bb54-2d5192ad4e34",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "可以从招降的马厩里生成索洛托骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2d0471df-c986-46db-bb54-2d5192ad4e34"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-18601c5e-fa4f-4bbe-8eab-74bc859d0c89",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "37650版本后，文明奖金的“+15%军事单位生产速度”减少到11.1%",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-18601c5e-fa4f-4bbe-8eab-74bc859d0c89"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-07b2f78b-86cc-4c9f-bbe8-5797f731a61e",
+      "group": "最后的可汗",
+      "locator": "#change li[17]",
+      "originalText": "42848版本后，文明奖金的“村民携带量多5”减少到3",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-07b2f78b-86cc-4c9f-bbe8-5797f731a61e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c79dc858-8ef8-4653-9629-ef3515ec918c",
+      "group": "最后的可汗",
+      "locator": "#change li[18]",
+      "originalText": "42848版本后，帝国战争模式不再以额外的黄金开局",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c79dc858-8ef8-4653-9629-ef3515ec918c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c1b3ccd2-4286-4495-942d-8942f73f5bdf",
+      "group": "最后的可汗",
+      "locator": "#change li[19]",
+      "originalText": "42848版本后，豹勇士和精锐豹勇士训练时间下调到12秒",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c1b3ccd2-4286-4495-942d-8942f73f5bdf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5c88d39d-edba-436a-b5ba-0c5d0c338eb3",
+      "group": "最后的可汗",
+      "locator": "#change li[20]",
+      "originalText": "42848版本后，索洛托骑兵在帝王时代后自动获得+30HP，2攻击和2近战护甲和远程护甲",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5c88d39d-edba-436a-b5ba-0c5d0c338eb3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cd1b0e88-d669-4685-ad3d-19db8bd8189a",
+      "group": "公爵的崛起",
+      "locator": "#change li[21]",
+      "originalText": "56005版本后，豹勇士生命值从50上调为65",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cd1b0e88-d669-4685-ad3d-19db8bd8189a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c",
+      "group": "印度王朝",
+      "locator": "#change li[22]",
+      "originalText": "81058版本后，精锐豹勇士远程护甲从1上调到了2",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9ab53670-c86c-4366-b088-77bd83fd947a",
+      "group": "成王败寇",
+      "locator": "#change li[23]",
+      "originalText": "125283版本更新后，军事单位生产速度加成率从11.1%上调到了15%",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9ab53670-c86c-4366-b088-77bd83fd947a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-aff4fe28-e9bf-46cc-84b9-0ad0fcf056bb",
+      "group": "三国",
+      "locator": "#change li[24]",
+      "originalText": "141935版本更新后，豹勇士/精锐豹勇士攻击力从10/12上调到15/19，对步兵额外伤害从10/11下调到5/6，获得晋升功能，击败军事单位+1攻击力，最大4",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aff4fe28-e9bf-46cc-84b9-0ad0fcf056bb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8233ffbb-71cb-4028-a24b-c7f25099ec27",
+      "group": "最后的酋长",
+      "locator": "#change li[25]",
+      "originalText": "169123版本更新后，获得大型投石战舰",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8233ffbb-71cb-4028-a24b-c7f25099ec27"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    征服者\n    \n        开局拥有鹰勇士\n        豹勇士拥有0远程护甲\n        豹勇士拥有10点对步兵伤害\n        无法建造爆破船\n        村民携带量多5\n        1.0c版本后，织布机免费\n    \n\n    失落帝国\n    \n        织布机免费删除，取代的是+50黄金开局\n        现在开局拥有鹰斥候而不是鹰勇士\n        掷矛器科技加入\n        豹勇士拥有1远程护甲\n        豹勇士拥有11点对步兵伤害\n        豹勇士和精锐豹勇士训练时间是20秒\n    \n\n    非洲王国\n    \n        无法建造爆破筏，4.8版本后可以建造\n        4.8版本后，爆破船可以建造\n        可以从招降的马厩里生成索洛托骑兵\n        37650版本后，文明奖金的“+15%军事单位生产速度”减少到11.1%\n    \n\n    最后的可汗\n    \n        42848版本后，文明奖金的“村民携带量多5”减少到3\n        42848版本后，帝国战争模式不再以额外的黄金开局\n        42848版本后，豹勇士和精锐豹勇士训练时间下调到12秒\n        42848版本后，索洛托骑兵在帝王时代后自动获得+30HP，2攻击和2近战护甲和远程护甲\n    \n\n    公爵的崛起\n    \n        56005版本后，豹勇士生命值从50上调为65\n    \n\n    印度王朝\n    \n        81058版本后，精锐豹勇士远程护甲从1上调到了2\n    \n\n    成王败寇\n    \n        125283版本更新后，军事单位生产速度加成率从11.1%上调到了15%\n    \n\n    三国\n    \n        141935版本更新后，豹勇士/精锐豹勇士攻击力从10/12上调到15/19，对步兵额外伤害从10/11下调到5/6，获得晋升功能，击败军事单位+1攻击力，最大4\n    \n\n    最后的酋长\n    \n        169123版本更新后，获得大型投石战舰",
+  "sectionTextSha256": "45b709e78c6833453e1a9fc45e611d46b90be3d5f7d48bf33b3929f392f248fb",
+  "observedEntryCount": 25,
+  "supersedesRevisionId": null
+}

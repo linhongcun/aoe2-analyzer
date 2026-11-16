@@ -1,0 +1,726 @@
+{
+  "civId": "Incas",
+  "sourceId": "seicing-incas",
+  "url": "https://seicing.com/html/aoe2/2/%E5%8D%B0%E5%8A%A0.html",
+  "indexLabel": "印加Inca",
+  "title": "印加",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-4a134a6b3ac2469d7127",
+  "documentSha256": "4a134a6b3ac2469d712707663a41498356a6ab9a45e38376fa6adff6c7b4cbd4",
+  "capturedAt": "2026-11-16T11:43:52.012090+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-809089d2-da5c-447f-b4c6-2d1b69234b92",
+      "group": "失落帝国",
+      "locator": "#change li[1]",
+      "originalText": "村民接受铁匠铺科技加成，不论哪个时代",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-809089d2-da5c-447f-b4c6-2d1b69234b92"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e6838649-4f2b-4717-9a5f-e565c40f20f6",
+      "group": "失落帝国",
+      "locator": "#change li[2]",
+      "originalText": "无法研发大型箭塔",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e6838649-4f2b-4717-9a5f-e565c40f20f6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f104d763-eac1-4a5f-91da-bc3f6caaa769",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "无法研发行会",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f104d763-eac1-4a5f-91da-bc3f6caaa769"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-05c859f9-2b63-4f41-878d-faeaf2f5d035",
+      "group": "失落帝国",
+      "locator": "#change li[4]",
+      "originalText": "无法研发雕版印刷术",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-05c859f9-2b63-4f41-878d-faeaf2f5d035"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-de07e5c9-198a-4ca5-ac4f-f36a2b4ed79f",
+      "group": "失落帝国",
+      "locator": "#change li[5]",
+      "originalText": "无法研发指环",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-de07e5c9-198a-4ca5-ac4f-f36a2b4ed79f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-efed2bd0-2ca2-4c84-96bf-2cba480d98d3",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "信使提供鹰勇士、印加枪兵长和投石手+10%移动速度",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-efed2bd0-2ca2-4c84-96bf-2cba480d98d3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-20944d8f-a862-4a4f-acc4-0341461c649a",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "信使花费400食物和200黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-20944d8f-a862-4a4f-acc4-0341461c649a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-daebd2c9-c1a6-4ded-b1fc-2780f30245cc",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "训练投石手需要建造城堡，攻击力是5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-daebd2c9-c1a6-4ded-b1fc-2780f30245cc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0a1fe182-9cf5-44c1-a7c4-b1006dfdda5a",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "印加枪兵长移动速度是0.95",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0a1fe182-9cf5-44c1-a7c4-b1006dfdda5a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-15a2903d-b7ad-4365-bc98-ce94255f97ae",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "升级精锐印加枪兵长花费1000食物和600黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-15a2903d-b7ad-4365-bc98-ce94255f97ae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2ecd6192-5994-44ad-a082-a4c3c5fc38b5",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "鹰斥候在封建时代可用",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2ecd6192-5994-44ad-a082-a4c3c5fc38b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a9f7472-5a12-44ef-97ac-933d08b5c90f",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "可以研发大型箭塔",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a9f7472-5a12-44ef-97ac-933d08b5c90f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6305cbb0-a57f-49de-9ba4-621eaf878cd9",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "可以研发行会",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6305cbb0-a57f-49de-9ba4-621eaf878cd9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1ee2b727-e14f-4767-bd29-6e03d8f180b2",
+      "group": "非洲王国",
+      "locator": "#change li[14]",
+      "originalText": "可以研发雕版印刷术",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1ee2b727-e14f-4767-bd29-6e03d8f180b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b25b5dff-a45a-4f07-a9af-18556f6d9063",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "可以研发指环",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b25b5dff-a45a-4f07-a9af-18556f6d9063"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-76785a1e-2cc5-4cbb-a5e2-3368e1d75056",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "信使现在提供1近战护甲和2远程护甲，代替10%移动速度加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-76785a1e-2cc5-4cbb-a5e2-3368e1d75056"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a813221-ae7f-4b35-a690-bff9a5b29ab5",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "训练投石手不再需要城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a813221-ae7f-4b35-a690-bff9a5b29ab5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-88e606f2-be38-4f7f-a09c-e7a80d3ad9b0",
+      "group": "非洲王国",
+      "locator": "#change li[18]",
+      "originalText": "升级精锐印加枪兵长花费900食物和500黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-88e606f2-be38-4f7f-a09c-e7a80d3ad9b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2bc78d61-1525-4708-a9ee-aaa29002bece",
+      "group": "非洲王国",
+      "locator": "#change li[19]",
+      "originalText": "印加枪兵长有4点，精锐印加枪兵长有6点对骆驼的伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2bc78d61-1525-4708-a9ee-aaa29002bece"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dac0198a-1309-4886-9110-8da952b88709",
+      "group": "非洲王国",
+      "locator": "#change li[20]",
+      "originalText": "4.8版本后，印加枪兵长移动速度是1",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dac0198a-1309-4886-9110-8da952b88709"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-44a54493-f912-44da-863a-4e76bffcaff7",
+      "group": "非洲王国",
+      "locator": "#change li[21]",
+      "originalText": "4.8版本后，印加枪兵长拥有20点对象兵的伤害加成",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-44a54493-f912-44da-863a-4e76bffcaff7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-64694059-1258-44bf-8bb4-b6673bab4dec",
+      "group": "蛮王崛起",
+      "locator": "#change li[22]",
+      "originalText": "5.7版本后，印加枪兵长有6点，精锐印加枪兵长有10点对骆驼的伤害",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-64694059-1258-44bf-8bb4-b6673bab4dec"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a7e3ca9b-5549-4aff-818d-49aff139ea55",
+      "group": "蛮王崛起",
+      "locator": "#change li[23]",
+      "originalText": "5.8版本后，信使花费600食物和600黄金",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7e3ca9b-5549-4aff-818d-49aff139ea55"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c824f3ae-60da-47df-bd58-7f77c68ec898",
+      "group": "最后的可汗",
+      "locator": "#change li[24]",
+      "originalText": "信使(Couriers)更名为织物盾(Fabric Shields)",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c824f3ae-60da-47df-bd58-7f77c68ec898"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6fe15b7-170e-48dc-a071-e0660139a706",
+      "group": "最后的可汗",
+      "locator": "#change li[25]",
+      "originalText": "投石手攻击力是4",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6fe15b7-170e-48dc-a071-e0660139a706"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-252de448-702b-4fab-b03c-f42e271617da",
+      "group": "最后的可汗",
+      "locator": "#change li[26]",
+      "originalText": "可以从招降的马厩里生成索洛托骑兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-252de448-702b-4fab-b03c-f42e271617da"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5becd34f-b23b-49de-a7cf-38aa7dfdeab9",
+      "group": "最后的可汗",
+      "locator": "#change li[27]",
+      "originalText": "42848版本后，索洛托骑兵在帝王时代后自动获得+30HP，2攻击和2近战护甲和远程护甲",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5becd34f-b23b-49de-a7cf-38aa7dfdeab9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5d6922cd-7467-49c3-97ac-d5d0394e1bf6",
+      "group": "西方霸主",
+      "locator": "#change li[28]",
+      "originalText": "44725更新之前，印加人的额外羊驼适用于每个城镇中心，更新后变为仅适用于一个城镇中心",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5d6922cd-7467-49c3-97ac-d5d0394e1bf6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-aa100870-312b-48dd-b557-a20c25621ff5",
+      "group": "西方霸主",
+      "locator": "#change li[29]",
+      "originalText": "47820版本后，村民接受铁匠铺科技加成需要城堡时代才开始生效",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aa100870-312b-48dd-b557-a20c25621ff5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1ba627f8-6152-40f3-a901-3037538acb64",
+      "group": "公爵的崛起",
+      "locator": "#change li[30]",
+      "originalText": "56005版本后，印加枪兵长的生命值从60上调到70，近战护甲从0上调到1",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1ba627f8-6152-40f3-a901-3037538acb64"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-98f771ee-b8c0-4a27-a64b-b648bd2f093d",
+      "group": "印度王朝",
+      "locator": "#change li[31]",
+      "originalText": "61321版本后，“农田建造速度+50%”团队加成删除，修改成“长枪兵和投矛手+2视野”",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-98f771ee-b8c0-4a27-a64b-b648bd2f093d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f76fb4bc-98ec-433e-b3d8-b961eaa89489",
+      "group": "印度王朝",
+      "locator": "#change li[32]",
+      "originalText": "73855版本后，投石手可以从指环获得17.6%攻击速度加成(在之后某个版本暗改删除了此加成)",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f76fb4bc-98ec-433e-b3d8-b961eaa89489",
+        "ev-se-f76fb4bc-98ec-433e-b3d8-b961eaa89489-later-removal"
+      ],
+      "reason": "逐条拆为73855加入及其后未知版本撤销；后者版本保持 null，不猜暗改日期或补丁。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e41bd3c1-985c-47e7-9967-d6ed810e03ed",
+      "group": "印度王朝",
+      "locator": "#change li[33]",
+      "originalText": "81058版本后，安第斯弹弓使投石手+1攻击力",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e41bd3c1-985c-47e7-9967-d6ed810e03ed"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0fd2ef5a-8d42-4ecc-bc6c-4f596781d76f",
+      "group": "印度王朝",
+      "locator": "#change li[34]",
+      "originalText": "81058版本后，步兵单位在每个时代减少15%/20%/25%/30%食物成本",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0fd2ef5a-8d42-4ecc-bc6c-4f596781d76f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5c80f139-8f52-4635-95fc-2e4fec91b202",
+      "group": "印度王朝",
+      "locator": "#change li[35]",
+      "originalText": "81058版本后，失去供给",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5c80f139-8f52-4635-95fc-2e4fec91b202"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc",
+      "group": "印度王朝",
+      "locator": "#change li[36]",
+      "originalText": "81058版本后，组队加成从“长枪兵和投矛手+2视野”修改为“团队成员获得1只羊驼”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a050df9-67d0-460c-adcb-6b70d56cb12c",
+      "group": "印度王朝",
+      "locator": "#change li[37]",
+      "originalText": "81058版本后，印加枪兵长价格从60肉30金上调到65肉30金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a050df9-67d0-460c-adcb-6b70d56cb12c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-01bc0638-44d5-4d9f-8b32-c8e1ea445a5c",
+      "group": "印度王朝",
+      "locator": "#change li[38]",
+      "originalText": "81058版本后，投石手价格从30肉40金上调到40肉40金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-01bc0638-44d5-4d9f-8b32-c8e1ea445a5c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9b05e5df-e12b-4adb-85ce-0e094852bb49",
+      "group": "皇家山脉",
+      "locator": "#change li[39]",
+      "originalText": "99311版本后，军事单位食物折扣从15%/20%/25%/30%下调到10%/15%/20%/25%",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9b05e5df-e12b-4adb-85ce-0e094852bb49"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f5cb9677-9c48-4e84-a451-e2c5f864f8c4",
+      "group": "皇家山脉",
+      "locator": "#change li[40]",
+      "originalText": "99311版本后，印加枪兵长成本从65肉30金下调到60肉30金",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f5cb9677-9c48-4e84-a451-e2c5f864f8c4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8fdde268-df9e-42fd-a7b1-7c6271cb5be9",
+      "group": "三国",
+      "locator": "#change li[41]",
+      "originalText": "141935版本更新后，英文名从Incas更变为Inca",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8fdde268-df9e-42fd-a7b1-7c6271cb5be9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-38b4289a-c0c9-45fb-8de3-aa4782c46b79",
+      "group": "最后的酋长",
+      "locator": "#change li[42]",
+      "originalText": "169123版本更新后，获得大型投石战舰",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-38b4289a-c0c9-45fb-8de3-aa4782c46b79"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3eef054a-a2fe-425d-9324-0cf7483fc177",
+      "group": "最后的酋长",
+      "locator": "#change li[43]",
+      "originalText": "169123版本更新后，投石手不再是印加的独特单位，现在它是南美系文明的区域单位",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3eef054a-a2fe-425d-9324-0cf7483fc177"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-56561d7c-4b91-4c08-b07f-70e7ca15c94e",
+      "group": "最后的酋长",
+      "locator": "#change li[44]",
+      "originalText": "169123版本更新后，失去剑士，获得蔷琵战士",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-56561d7c-4b91-4c08-b07f-70e7ca15c94e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-95e3273c-f24c-4a56-bb93-b021d49085ac",
+      "group": "最后的酋长",
+      "locator": "#change li[45]",
+      "originalText": "169123版本更新后，获得定居点，建筑群从中美洲更变为南美洲风格",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-95e3273c-f24c-4a56-bb93-b021d49085ac"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3a86774c-10e9-4de5-8e7f-eacea84324dc",
+      "group": "最后的酋长",
+      "locator": "#change li[46]",
+      "originalText": "169123版本更新后，织物盾的护甲加成从+1/+2下调到+1/+1，适用于蔷琵战士",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3a86774c-10e9-4de5-8e7f-eacea84324dc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-47b6f425-7130-4688-afb4-097eb3edfb8c",
+      "group": "最后的酋长",
+      "locator": "#change li[47]",
+      "originalText": "169123版本更新后，房屋+5人口加成适用于定居点",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-47b6f425-7130-4688-afb4-097eb3edfb8c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-25a06605-cb25-4a9a-95d6-ce88a9350aaa",
+      "group": "最后的酋长",
+      "locator": "#change li[48]",
+      "originalText": "169123版本更新后，精锐印加枪兵长远程护甲从0上调到1",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-25a06605-cb25-4a9a-95d6-ce88a9350aaa"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-16b36f0d-83ff-4f21-88c9-d89d881aa8d1",
+      "group": "最后的酋长",
+      "locator": "#change li[49]",
+      "originalText": "169123版本更新后，食物折扣文明加成效率从10%/15%/20%/25%下调到5%/10%/15%/20%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-16b36f0d-83ff-4f21-88c9-d89d881aa8d1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5a574943-799a-4bb6-a2fd-f0b164bfef77",
+      "group": "最后的酋长",
+      "locator": "#change li[50]",
+      "originalText": "177723版本更新后，食物折扣文明加成效率从5%/10%/15%/20%上调到15%/20%/25%/30%，印加枪兵长的食物成本从60上调到70以平衡新的食物折扣率",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5a574943-799a-4bb6-a2fd-f0b164bfef77"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    失落帝国\n    \n        村民接受铁匠铺科技加成，不论哪个时代\n        无法研发大型箭塔\n        无法研发行会\n        无法研发雕版印刷术\n        无法研发指环\n        信使提供鹰勇士、印加枪兵长和投石手+10%移动速度\n        信使花费400食物和200黄金\n        训练投石手需要建造城堡，攻击力是5\n        印加枪兵长移动速度是0.95\n        升级精锐印加枪兵长花费1000食物和600黄金\n    \n\n    非洲王国\n    \n        鹰斥候在封建时代可用\n        可以研发大型箭塔\n        可以研发行会\n        可以研发雕版印刷术\n        可以研发指环\n        信使现在提供1近战护甲和2远程护甲，代替10%移动速度加成\n        训练投石手不再需要城堡\n        升级精锐印加枪兵长花费900食物和500黄金\n        印加枪兵长有4点，精锐印加枪兵长有6点对骆驼的伤害\n        4.8版本后，印加枪兵长移动速度是1\n        4.8版本后，印加枪兵长拥有20点对象兵的伤害加成\n    \n\n    蛮王崛起\n    \n        5.7版本后，印加枪兵长有6点，精锐印加枪兵长有10点对骆驼的伤害\n        5.8版本后，信使花费600食物和600黄金\n    \n\n    最后的可汗\n    \n        信使(Couriers)更名为织物盾(Fabric Shields)\n        投石手攻击力是4\n        可以从招降的马厩里生成索洛托骑兵\n        42848版本后，索洛托骑兵在帝王时代后自动获得+30HP，2攻击和2近战护甲和远程护甲\n    \n\n    西方霸主\n    \n        44725更新之前，印加人的额外羊驼适用于每个城镇中心，更新后变为仅适用于一个城镇中心\n        47820版本后，村民接受铁匠铺科技加成需要城堡时代才开始生效\n    \n\n    公爵的崛起\n    \n        56005版本后，印加枪兵长的生命值从60上调到70，近战护甲从0上调到1\n    \n\n    印度王朝\n    \n        61321版本后，“农田建造速度+50%”团队加成删除，修改成“长枪兵和投矛手+2视野”\n        73855版本后，投石手可以从指环获得17.6%攻击速度加成(在之后某个版本暗改删除了此加成)\n        81058版本后，安第斯弹弓使投石手+1攻击力\n        81058版本后，步兵单位在每个时代减少15%/20%/25%/30%食物成本\n        81058版本后，失去供给\n        81058版本后，组队加成从“长枪兵和投矛手+2视野”修改为“团队成员获得1只羊驼”\n        81058版本后，印加枪兵长价格从60肉30金上调到65肉30金\n        81058版本后，投石手价格从30肉40金上调到40肉40金\n    \n\n    皇家山脉\n    \n        99311版本后，军事单位食物折扣从15%/20%/25%/30%下调到10%/15%/20%/25%\n        99311版本后，印加枪兵长成本从65肉30金下调到60肉30金\n    \n\n\n    三国\n    \n        141935版本更新后，英文名从Incas更变为Inca\n    \n\n    最后的酋长\n    \n        169123版本更新后，获得大型投石战舰\n        169123版本更新后，投石手不再是印加的独特单位，现在它是南美系文明的区域单位\n        169123版本更新后，失去剑士，获得蔷琵战士\n        169123版本更新后，获得定居点，建筑群从中美洲更变为南美洲风格\n        169123版本更新后，织物盾的护甲加成从+1/+2下调到+1/+1，适用于蔷琵战士\n        169123版本更新后，房屋+5人口加成适用于定居点\n        169123版本更新后，精锐印加枪兵长远程护甲从0上调到1\n        169123版本更新后，食物折扣文明加成效率从10%/15%/20%/25%下调到5%/10%/15%/20%\n        177723版本更新后，食物折扣文明加成效率从5%/10%/15%/20%上调到15%/20%/25%/30%，印加枪兵长的食物成本从60上调到70以平衡新的食物折扣率",
+  "sectionTextSha256": "6bf16404e837e49bb3f043f5d5ede3b926d79138ae72adddc3afbf70938a24ce",
+  "observedEntryCount": 50,
+  "supersedesRevisionId": null
+}

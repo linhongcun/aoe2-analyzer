@@ -1,0 +1,109 @@
+{
+  "civId": "Shu",
+  "sourceId": "seicing-shu",
+  "url": "https://seicing.com/html/aoe2/2/%E8%9C%80.html",
+  "indexLabel": "蜀Shu",
+  "title": "蜀",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-6de0e50ee881a18bd73e",
+  "documentSha256": "6de0e50ee881a18bd73ec71e21e5d52452c63c48310bfc81627b92d1b6ccc0a1",
+  "capturedAt": "2026-11-16T11:46:43.851056+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-8e01cbd2-35af-4dca-abbf-7af14db8c270",
+      "group": "三国",
+      "locator": "#change li[1]",
+      "originalText": "147949版本后，连弩战车移动速度从0.8上调到0.9，攻击间隔时间从8下调到6.5",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8e01cbd2-35af-4dca-abbf-7af14db8c270"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-389d41de-5b27-44b6-a703-f5f53aa7c955",
+      "group": "三国",
+      "locator": "#change li[2]",
+      "originalText": "151401版本后，蜀伐木工获取食物的效率从10%下调到9%",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-389d41de-5b27-44b6-a703-f5f53aa7c955"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-77bd75a0-edf2-409b-ad70-a2522fe0fa99",
+      "group": "三国",
+      "locator": "#change li[3]",
+      "originalText": "151401版本后，连弩战车成本从50肉90金上调到65肉90金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-77bd75a0-edf2-409b-ad70-a2522fe0fa99"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-602b3eca-b41c-4763-9b51-a32a8651a648",
+      "group": "三国",
+      "locator": "#change li[4]",
+      "originalText": "162286版本更新后，伐木额外获取食物效率从9%下调到7%",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-602b3eca-b41c-4763-9b51-a32a8651a648"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9dc50a2e-943f-4e10-b8e0-5575ed87a965",
+      "group": "维京传奇",
+      "locator": "#change li[5]",
+      "originalText": "185872版本补丁后，连弩战车成本从65肉90金上调到75肉90金，训练时间从28秒上调到32秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9dc50a2e-943f-4e10-b8e0-5575ed87a965"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-73e42eed-f2d5-47f3-a9e0-f1ef1b68879a",
+      "group": "维京传奇",
+      "locator": "#change li[6]",
+      "originalText": "185872版本补丁后，获得脚踏起重机",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-73e42eed-f2d5-47f3-a9e0-f1ef1b68879a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    三国\n    \n        147949版本后，连弩战车移动速度从0.8上调到0.9，攻击间隔时间从8下调到6.5\n        151401版本后，蜀伐木工获取食物的效率从10%下调到9%\n        151401版本后，连弩战车成本从50肉90金上调到65肉90金\n        162286版本更新后，伐木额外获取食物效率从9%下调到7%\n    \n\n    维京传奇\n    \n        185872版本补丁后，连弩战车成本从65肉90金上调到75肉90金，训练时间从28秒上调到32秒\n        185872版本补丁后，获得脚踏起重机",
+  "sectionTextSha256": "569a34b23ee6b213f8bec1112de9ea1e84f6c5b3dc214c5567ffaf4eb7ae7a99",
+  "observedEntryCount": 6,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,644 @@
+{
+  "civId": "Vikings",
+  "sourceId": "seicing-vikings",
+  "url": "https://seicing.com/html/aoe2/2/%E7%BB%B4%E4%BA%AC.html",
+  "indexLabel": "维京Vikings",
+  "title": "维京",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-71c65a88af1f7a42e026",
+  "documentSha256": "71c65a88af1f7a42e02643c5ce607701132ec7d92b89fb71275690ce38cec4ae",
+  "capturedAt": "2026-11-16T11:48:27.529898+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-4e586883-7967-4d12-bc5b-e23713cb36ea",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "战船便宜20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4e586883-7967-4d12-bc5b-e23713cb36ea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cc12d3c3-f271-49c0-96a1-ab606ca5270c",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "无法研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cc12d3c3-f271-49c0-96a1-ab606ca5270c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-713dfb81-1400-479e-aba0-80fb9f3861df",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "团队奖励是船坞便宜25%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-713dfb81-1400-479e-aba0-80fb9f3861df"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-33921052-4069-46bf-9fcc-a4b76370cfdf",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "训练龙头战舰需要建造城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-33921052-4069-46bf-9fcc-a4b76370cfdf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d00976f2-985f-4c71-8b04-3fc86e134cc6",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "龙头战舰需要花费100木头和50黄金，花费41秒去训练",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d00976f2-985f-4c71-8b04-3fc86e134cc6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a975e9ab-f949-4ba9-a6fe-4c898b675cf0",
+      "group": "国王时代",
+      "locator": "#change li[6]",
+      "originalText": "狂战士拥有48HP，精锐狂战士拥有60HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a975e9ab-f949-4ba9-a6fe-4c898b675cf0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cb681de3-56d4-4724-b46b-5c91bc96a144",
+      "group": "国王时代",
+      "locator": "#change li[7]",
+      "originalText": "狂战士训练时间是16秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cb681de3-56d4-4724-b46b-5c91bc96a144"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4cfd1d2e-4e53-4c5b-9aca-38c4a0858466",
+      "group": "国王时代",
+      "locator": "#change li[8]",
+      "originalText": "狂战士移动速度是0.9",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4cfd1d2e-4e53-4c5b-9aca-38c4a0858466"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-819d7267-53f0-476f-85c2-3879c668e62f",
+      "group": "国王时代",
+      "locator": "#change li[9]",
+      "originalText": "狂战士远程护甲是0",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-819d7267-53f0-476f-85c2-3879c668e62f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dff06756-0d6b-480f-b1dd-c90ec5cf2e4c",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "狂战士暴怒科技加入，花费500食物和850黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-dff06756-0d6b-480f-b1dd-c90ec5cf2e4c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2eadd229-4f06-40a8-908d-97dcd566b245",
+      "group": "征服者",
+      "locator": "#change li[11]",
+      "originalText": "龙头战舰训练速度是25秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2eadd229-4f06-40a8-908d-97dcd566b245"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cc3808e2-73b3-4b1d-bc0e-e0af0bf3cb35",
+      "group": "征服者",
+      "locator": "#change li[12]",
+      "originalText": "狂战士移动速度是1.05",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cc3808e2-73b3-4b1d-bc0e-e0af0bf3cb35"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7381dbff-1677-4199-b1fc-e1872a653cca",
+      "group": "征服者",
+      "locator": "#change li[13]",
+      "originalText": "狂战士远程护甲是1",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7381dbff-1677-4199-b1fc-e1872a653cca"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-07eccef8-6c9b-40d0-be93-05c60d465f3a",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "战船在封建/城堡/帝王时代便宜10%/15%/20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-07eccef8-6c9b-40d0-be93-05c60d465f3a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1d005ae2-cbec-406e-962b-89232a0e276c",
+      "group": "失落帝国",
+      "locator": "#change li[15]",
+      "originalText": "可以研发脚踏起重机",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1d005ae2-cbec-406e-962b-89232a0e276c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-089a253d-7682-4273-ae2c-d0a82f0ee6f4",
+      "group": "失落帝国",
+      "locator": "#change li[16]",
+      "originalText": "狂战士暴怒花费850食物和400黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-089a253d-7682-4273-ae2c-d0a82f0ee6f4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d4ff84fb-17e2-430d-9c7a-98193b24cee5",
+      "group": "失落帝国",
+      "locator": "#change li[17]",
+      "originalText": "酋长科技加入，花费700食物和400黄金，提供狂战士4点对骑兵伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d4ff84fb-17e2-430d-9c7a-98193b24cee5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-645cf9e8-1901-4554-989a-daa8aad1f3f4",
+      "group": "失落帝国",
+      "locator": "#change li[18]",
+      "originalText": "团队奖励是船坞便宜15%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-645cf9e8-1901-4554-989a-daa8aad1f3f4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-641123bf-0b5f-4e68-9e58-7b9b9c02d829",
+      "group": "失落帝国",
+      "locator": "#change li[19]",
+      "originalText": "龙头战舰需要花费90木头和50黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-641123bf-0b5f-4e68-9e58-7b9b9c02d829"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5a58374f-9a7f-4055-9d0f-50278891a7ff",
+      "group": "失落帝国",
+      "locator": "#change li[20]",
+      "originalText": "狂战士拥有54HP，精锐狂战士拥有62HP",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5a58374f-9a7f-4055-9d0f-50278891a7ff"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b5fea7ec-4192-4e20-b685-eb728c009f81",
+      "group": "失落帝国",
+      "locator": "#change li[21]",
+      "originalText": "狂战士训练时间是14秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b5fea7ec-4192-4e20-b685-eb728c009f81"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f2da1000-e239-46c8-84fd-7863a262eb39",
+      "group": "非洲王国",
+      "locator": "#change li[22]",
+      "originalText": "酋长花费400食物和300黄金，提供狂战士5点对骑兵伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f2da1000-e239-46c8-84fd-7863a262eb39"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e52ae887-4e74-4252-b353-b149b8745738",
+      "group": "非洲王国",
+      "locator": "#change li[23]",
+      "originalText": "龙头战舰不再需要城堡就能建造",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e52ae887-4e74-4252-b353-b149b8745738"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ae66d70c-6654-457c-b11e-f8dbb4f55cbb",
+      "group": "非洲王国",
+      "locator": "#change li[24]",
+      "originalText": "龙头战舰需要花费100木头和50黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ae66d70c-6654-457c-b11e-f8dbb4f55cbb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f5917f4f-d6dc-4f3a-894a-ad6d7173c259",
+      "group": "非洲王国",
+      "locator": "#change li[25]",
+      "originalText": "4.8版本，酋长对所有步兵都有效了",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f5917f4f-d6dc-4f3a-894a-ad6d7173c259"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f43db69b-a9f1-4227-9b01-38990e093a9d",
+      "group": "非洲王国",
+      "locator": "#change li[26]",
+      "originalText": "4.8b版本，酋长给予所有步兵2点对骆驼的伤害",
+      "rawVersions": [
+        "4.8b"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f43db69b-a9f1-4227-9b01-38990e093a9d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8516e5d9-26ca-43f2-9ebe-cc80fbb1b5fd",
+      "group": "蛮王崛起",
+      "locator": "#change li[27]",
+      "originalText": "5.5版本中，战船在封建/城堡/帝王时代便宜15%/15%/20%",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8516e5d9-26ca-43f2-9ebe-cc80fbb1b5fd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d4ad8500-da94-48c9-9c2a-f1603c7166dd",
+      "group": "蛮王崛起",
+      "locator": "#change li[28]",
+      "originalText": "5.7版本中，酋长对骆驼的额外伤害修改为4",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d4ad8500-da94-48c9-9c2a-f1603c7166dd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3c3a0f73-25ca-4544-9436-0ae12a3040b3",
+      "group": "最后的可汗",
+      "locator": "#change li[29]",
+      "originalText": "42848版本后，酋长花费700食物和500黄金，原来是400食物和300黄金",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3c3a0f73-25ca-4544-9436-0ae12a3040b3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-190d318e-252b-4a03-90f5-bbbb29f03f24",
+      "group": "公爵的崛起",
+      "locator": "#change li[30]",
+      "originalText": "56005版本后，狂战士攻击力从9上调到12，近战护甲从0上调到1，精锐狂战士的训练时间从14秒下调到12秒，升级到精锐狂战士的成本从1300食物550黄金下调到1075食物475黄金",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-190d318e-252b-4a03-90f5-bbbb29f03f24"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bcba718a-b18c-44c8-a250-292c5895eb86",
+      "group": "公爵的崛起",
+      "locator": "#change li[31]",
+      "originalText": "56005版本后，无法再研发扳指技术",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bcba718a-b18c-44c8-a250-292c5895eb86"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9f70bd48-e654-4408-9777-26ea921d8aff",
+      "group": "公爵的崛起",
+      "locator": "#change li[32]",
+      "originalText": "56005版本后，步兵封建时代生命值+10%，城堡时代+15%，帝王时代+20%的加成统一为封建时代+20%",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9f70bd48-e654-4408-9777-26ea921d8aff"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-27e6af09-8748-46e2-8c0f-13aab08716f9",
+      "group": "印度王朝",
+      "locator": "#change li[33]",
+      "originalText": "73855版本后，文明折扣奖励不再适用于运输船",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-27e6af09-8748-46e2-8c0f-13aab08716f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "group": "印度王朝",
+      "locator": "#change li[34]",
+      "originalText": "81058版本后，酋长价格从700肉500金调整为600肉450金，获得杀死村民/僧侣/贸易单位获得5/20/20金的功能",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "group": "印度王朝",
+      "locator": "#change li[35]",
+      "originalText": "81058版本后，狂战士暴怒删除，被替换成博格斯维加尔",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0",
+      "group": "印度王朝",
+      "locator": "#change li[36]",
+      "originalText": "81058版本后，狂战士和精锐狂战士的生命值恢复量从20上调到40",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-51f3e43c-d1bb-465f-b2a8-2c13cd091a06",
+      "group": "印度王朝",
+      "locator": "#change li[37]",
+      "originalText": "81058版本后，精锐龙头战舰对船伤害加成从11下调到10，对建筑伤害加成从8下调到7",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-51f3e43c-d1bb-465f-b2a8-2c13cd091a06"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ca9daf51-e268-4b3c-b4b5-8d781e4fc332",
+      "group": "三国",
+      "locator": "#change li[38]",
+      "originalText": "141935版本更新后，狂战士成本从65肉25金下调到65肉20金",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ca9daf51-e268-4b3c-b4b5-8d781e4fc332"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9b79e387-bd82-484b-b8ac-a641f5309f6f",
+      "group": "最后的酋长",
+      "locator": "#change li[39]",
+      "originalText": "169123版本更新后，获得火艨艟、喷火船，失去爆破船系",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9b79e387-bd82-484b-b8ac-a641f5309f6f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7cbe04cc-b188-42d2-815f-f80bbfb73886",
+      "group": "最后的酋长",
+      "locator": "#change li[40]",
+      "originalText": "169123版本更新后，船只封建时代折扣价格从15%下调到10%",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7cbe04cc-b188-42d2-815f-f80bbfb73886"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-644eb72f-f380-4491-9962-35517c7f6441",
+      "group": "最后的酋长",
+      "locator": "#change li[41]",
+      "originalText": "169123版本更新后，龙头战舰的4发子弹伤害统一，生命值从130/160下调到125/130，远程攻击力从7/8下调到了5/7，远程护甲从6/8下调到了3/6，删除对建筑伤害，+9/+10对舰船伤害调整为+1对远程舰船伤害，移动速度从1.54下调到1.46",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-644eb72f-f380-4491-9962-35517c7f6441"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eeef9b58-6b2f-41f9-ae1a-4bac36e2aca6",
+      "group": "维京传奇",
+      "locator": "#change li[42]",
+      "originalText": "185872版本补丁后，酋长不再拥有击杀单位获得黄金的功能",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eeef9b58-6b2f-41f9-ae1a-4bac36e2aca6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "group": "维京传奇",
+      "locator": "#change li[43]",
+      "originalText": "185872版本补丁后，获得瓦兰吉卫队、精锐瓦兰吉卫队、骑马弩兵；失去软甲和骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5e37a393-e6e0-43c6-a69b-8e0831568f54",
+      "group": "维京传奇",
+      "locator": "#change li[44]",
+      "originalText": "185872版本补丁后，龙头战舰从维京独特部队修改为北欧区域单位，名字从龙头战舰(Longboat)更变为维京长船(Longship)",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5e37a393-e6e0-43c6-a69b-8e0831568f54"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-50c0f0ca-0318-4bc3-9e82-dd7d70fab430",
+      "group": "维京传奇",
+      "locator": "#change li[45]",
+      "originalText": "【待补充】版本补丁后，狂战士远程护甲从1上调到了2",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-50c0f0ca-0318-4bc3-9e82-dd7d70fab430"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        战船便宜20%\n        无法研发脚踏起重机\n        团队奖励是船坞便宜25%\n        训练龙头战舰需要建造城堡\n        龙头战舰需要花费100木头和50黄金，花费41秒去训练\n        狂战士拥有48HP，精锐狂战士拥有60HP\n        狂战士训练时间是16秒\n        狂战士移动速度是0.9\n        狂战士远程护甲是0\n    \n\n    征服者\n    \n        狂战士暴怒科技加入，花费500食物和850黄金\n        龙头战舰训练速度是25秒\n        狂战士移动速度是1.05\n        狂战士远程护甲是1\n    \n\n    失落帝国\n    \n        战船在封建/城堡/帝王时代便宜10%/15%/20%\n        可以研发脚踏起重机\n        狂战士暴怒花费850食物和400黄金\n        酋长科技加入，花费700食物和400黄金，提供狂战士4点对骑兵伤害\n        团队奖励是船坞便宜15%\n        龙头战舰需要花费90木头和50黄金\n        狂战士拥有54HP，精锐狂战士拥有62HP\n        狂战士训练时间是14秒\n    \n\n    非洲王国\n    \n        酋长花费400食物和300黄金，提供狂战士5点对骑兵伤害\n        龙头战舰不再需要城堡就能建造\n        龙头战舰需要花费100木头和50黄金\n        4.8版本，酋长对所有步兵都有效了\n        4.8b版本，酋长给予所有步兵2点对骆驼的伤害\n    \n\n    蛮王崛起\n    \n        5.5版本中，战船在封建/城堡/帝王时代便宜15%/15%/20%\n        5.7版本中，酋长对骆驼的额外伤害修改为4\n    \n\n    最后的可汗\n    \n        42848版本后，酋长花费700食物和500黄金，原来是400食物和300黄金\n    \n\n    公爵的崛起\n    \n        56005版本后，狂战士攻击力从9上调到12，近战护甲从0上调到1，精锐狂战士的训练时间从14秒下调到12秒，升级到精锐狂战士的成本从1300食物550黄金下调到1075食物475黄金\n        56005版本后，无法再研发扳指技术\n        56005版本后，步兵封建时代生命值+10%，城堡时代+15%，帝王时代+20%的加成统一为封建时代+20%\n    \n\n    印度王朝\n    \n        73855版本后，文明折扣奖励不再适用于运输船\n        81058版本后，酋长价格从700肉500金调整为600肉450金，获得杀死村民/僧侣/贸易单位获得5/20/20金的功能\n        81058版本后，狂战士暴怒删除，被替换成博格斯维加尔\n        81058版本后，狂战士和精锐狂战士的生命值恢复量从20上调到40\n        81058版本后，精锐龙头战舰对船伤害加成从11下调到10，对建筑伤害加成从8下调到7\n    \n\n    三国\n    \n        141935版本更新后，狂战士成本从65肉25金下调到65肉20金\n    \n\n    最后的酋长\n    \n        169123版本更新后，获得火艨艟、喷火船，失去爆破船系\n        169123版本更新后，船只封建时代折扣价格从15%下调到10%\n        169123版本更新后，龙头战舰的4发子弹伤害统一，生命值从130/160下调到125/130，远程攻击力从7/8下调到了5/7，远程护甲从6/8下调到了3/6，删除对建筑伤害，+9/+10对舰船伤害调整为+1对远程舰船伤害，移动速度从1.54下调到1.46\n        \n    \n\n    维京传奇\n    \n        185872版本补丁后，酋长不再拥有击杀单位获得黄金的功能\n        185872版本补丁后，获得瓦兰吉卫队、精锐瓦兰吉卫队、骑马弩兵；失去软甲和骑射手\n        185872版本补丁后，龙头战舰从维京独特部队修改为北欧区域单位，名字从龙头战舰(Longboat)更变为维京长船(Longship)\n        【待补充】版本补丁后，狂战士远程护甲从1上调到了2",
+  "sectionTextSha256": "5e73567c0bd4e1038d185a1a4d64f90aeec44b1e2481d5ef599513174e9c2f23",
+  "observedEntryCount": 45,
+  "supersedesRevisionId": null
+}

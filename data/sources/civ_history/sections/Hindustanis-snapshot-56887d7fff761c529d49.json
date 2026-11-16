@@ -1,0 +1,703 @@
+{
+  "civId": "Hindustanis",
+  "sourceId": "seicing-hindustanis",
+  "url": "https://seicing.com/html/aoe2/2/%E5%8D%B0%E5%BA%A6%E6%96%AF%E5%9D%A6.html",
+  "indexLabel": "印度斯坦Hindustanis",
+  "title": "印度斯坦",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-56887d7fff761c529d49",
+  "documentSha256": "56887d7fff761c529d493b4246dbb374d350f927650d3e3687e97e5d62c8da80",
+  "capturedAt": "2026-11-16T11:43:39.152629+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-35642572-8ddd-4527-9996-4b42ca2a88f1",
+      "group": "失落帝国",
+      "locator": "#change li[1]",
+      "originalText": "村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-35642572-8ddd-4527-9996-4b42ca2a88f1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7e6012d5-6237-4a90-b010-a88158d48e8b",
+      "group": "失落帝国",
+      "locator": "#change li[2]",
+      "originalText": "无法研发行会",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7e6012d5-6237-4a90-b010-a88158d48e8b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1853e317-7509-4524-9ae8-da794296135e",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "无法研发射手环甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1853e317-7509-4524-9ae8-da794296135e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-18e0b2d9-32b4-4798-9737-ee9574cf5fc8",
+      "group": "失落帝国",
+      "locator": "#change li[4]",
+      "originalText": "帝王骆驼兵和船共用一种护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-18e0b2d9-32b4-4798-9737-ee9574cf5fc8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-da7f21a8-782a-47ef-b366-f742eb35a4fa",
+      "group": "失落帝国",
+      "locator": "#change li[5]",
+      "originalText": "战象射手花费110食物80黄金，升级精锐战象射手需要1200食物800黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-da7f21a8-782a-47ef-b366-f742eb35a4fa"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c85b2260-9870-480a-8c6e-beaaf89b2160",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "战象射手拥有250HP，精锐是350",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c85b2260-9870-480a-8c6e-beaaf89b2160"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-72c1505b-6af8-40a0-9ac7-c58c7c361460",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "战象射手有4点远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-72c1505b-6af8-40a0-9ac7-c58c7c361460"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0a2b31fe-73a8-48fd-a772-8c9f3be58977",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "可以训练弩兵",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0a2b31fe-73a8-48fd-a772-8c9f3be58977"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-47060e56-cf96-4fbc-8df1-f904bd1d9749",
+      "group": "失落帝国",
+      "locator": "#change li[9]",
+      "originalText": "战象射手有-2射手护甲和0骑射手护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-47060e56-cf96-4fbc-8df1-f904bd1d9749"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c5f0ded0-b5bc-4cca-aa84-5cd651fca76d",
+      "group": "失落帝国",
+      "locator": "#change li[10]",
+      "originalText": "骆驼骑兵有1近战护甲和远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c5f0ded0-b5bc-4cca-aa84-5cd651fca76d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-563e03a5-0a13-4990-ae89-bdd546ef5869",
+      "group": "非洲王国",
+      "locator": "#change li[11]",
+      "originalText": "村民在黑暗/封建/城堡/帝王时代便宜10%/15%/20%/25%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-563e03a5-0a13-4990-ae89-bdd546ef5869"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6d3ef968-c2b1-4a9c-8d43-43a08bc398e8",
+      "group": "非洲王国",
+      "locator": "#change li[12]",
+      "originalText": "可以研发行会",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6d3ef968-c2b1-4a9c-8d43-43a08bc398e8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f9a25c60-c1d2-40e3-8f85-55ba787c5269",
+      "group": "非洲王国",
+      "locator": "#change li[13]",
+      "originalText": "可以研发射手环甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f9a25c60-c1d2-40e3-8f85-55ba787c5269"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a2ec2e5b-4127-410e-b557-ba46bd749d16",
+      "group": "非洲王国",
+      "locator": "#change li[14]",
+      "originalText": "可以研发射箭槽，但4.8版本被移除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a2ec2e5b-4127-410e-b557-ba46bd749d16"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-85eb3761-e1b3-42b4-b522-2dd9160c0ebe",
+      "group": "非洲王国",
+      "locator": "#change li[15]",
+      "originalText": "船只护甲和骆驼护甲分家，获得新护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-85eb3761-e1b3-42b4-b522-2dd9160c0ebe"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f4061648-9d1d-42a8-9f91-008eb79bbbb7",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "战象射手现在花费100食物80黄金，升级精锐战象射手需要1000食物800黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f4061648-9d1d-42a8-9f91-008eb79bbbb7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-41ff3d8d-20da-4325-a485-33816d7b927b",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "战象射手拥有280HP，精锐是330",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-41ff3d8d-20da-4325-a485-33816d7b927b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3f207eb6-6616-4043-b4f4-f8cef51f6c44",
+      "group": "非洲王国",
+      "locator": "#change li[18]",
+      "originalText": "战象射手有3点远程护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3f207eb6-6616-4043-b4f4-f8cef51f6c44"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b57ffefe-c84f-4871-82ae-f972c0df521d",
+      "group": "蛮王崛起",
+      "locator": "#change li[19]",
+      "originalText": "获得独特建筑风格",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b57ffefe-c84f-4871-82ae-f972c0df521d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-57a9727f-efdc-4862-8921-82faef81dfd7",
+      "group": "蛮王崛起",
+      "locator": "#change li[20]",
+      "originalText": "5.5版本他们不再能训练弩兵",
+      "rawVersions": [
+        "5.5"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-57a9727f-efdc-4862-8921-82faef81dfd7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2e07e19a-9186-498c-b8e3-344e73e79c7d",
+      "group": "蛮王崛起",
+      "locator": "#change li[21]",
+      "originalText": "5.8版本后战象射手有0射手护甲和-2骑射手护甲",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2e07e19a-9186-498c-b8e3-344e73e79c7d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d644482-ed4f-4b95-88c9-0650bbe6b1bc",
+      "group": "蛮王崛起",
+      "locator": "#change li[22]",
+      "originalText": "5.8版本后骆驼骑兵只有1远程护甲",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d644482-ed4f-4b95-88c9-0650bbe6b1bc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-39311325-bace-4df6-856b-9a005dac15a3",
+      "group": "最后的可汗",
+      "locator": "#change li[23]",
+      "originalText": "36906版本后，渔夫工作效率+15%下调到+10%，携带多15食物删除",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-39311325-bace-4df6-856b-9a005dac15a3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-adea515d-391c-408b-b227-adefefe2f07a",
+      "group": "最后的可汗",
+      "locator": "#change li[24]",
+      "originalText": "37650版本后，团队加分提供的伤害加成不再被石匠以及建筑学科技提供的加成减免了，并按照设定这个加成应用到了所有建筑",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-adea515d-391c-408b-b227-adefefe2f07a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f1712ab4-09a3-4573-b9fa-4f4be06e401e",
+      "group": "最后的可汗",
+      "locator": "#change li[25]",
+      "originalText": "37650版本后，战象射手/精锐战象射手的射击后装填时间从2.5秒减少到2秒",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f1712ab4-09a3-4573-b9fa-4f4be06e401e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0fa19a02-3aaa-4c73-be38-0450e2940a5f",
+      "group": "最后的可汗",
+      "locator": "#change li[26]",
+      "originalText": "37650版本后，战象射手/精锐战象射手的黄金成本从80下调到70",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0fa19a02-3aaa-4c73-be38-0450e2940a5f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-653a8244-eb20-4fde-8a29-36472a75a02e",
+      "group": "最后的可汗",
+      "locator": "#change li[27]",
+      "originalText": "42848版本后，所有马厩部队都能在城堡时代获得1远程护甲，在帝王时代再获得1远程护甲，此前仅限骆驼骑兵受益",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-653a8244-eb20-4fde-8a29-36472a75a02e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4544efb3-317e-49c9-8d6c-049afbaf789d",
+      "group": "最后的可汗",
+      "locator": "#change li[28]",
+      "originalText": "42848版本后，减少了骆驼单位对建筑物造成额外伤害的团队奖励，由+5下调到+4",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4544efb3-317e-49c9-8d6c-049afbaf789d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6d5f2d59-d487-4df5-9461-d34d9219c38c",
+      "group": "最后的可汗",
+      "locator": "#change li[29]",
+      "originalText": "42848版本后，失去骑兵钢甲技术",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6d5f2d59-d487-4df5-9461-d34d9219c38c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0954ed79-f0fb-4e9f-b22f-83f2f79f7656",
+      "group": "最后的可汗",
+      "locator": "#change li[30]",
+      "originalText": "42848版本后，修复了苏丹王获得黄金速度比预期更高的bug",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0954ed79-f0fb-4e9f-b22f-83f2f79f7656"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e8e7a6f7-ae2c-4575-9cf0-c65bfdb35a84",
+      "group": "最后的可汗",
+      "locator": "#change li[31]",
+      "originalText": "42848版本后，增加了战象的单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e8e7a6f7-ae2c-4575-9cf0-c65bfdb35a84"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f7d616c9-8b2a-4bc3-8ef2-3c8c7160e3ea",
+      "group": "印度王朝",
+      "locator": "#change li[32]",
+      "originalText": "61321版本后，原印度(Indians)文明被修改成了印度斯坦(Hindustanis)文明",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f7d616c9-8b2a-4bc3-8ef2-3c8c7160e3ea"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b7327b8e-3d88-4ab7-ab41-501d0bd35008",
+      "group": "印度王朝",
+      "locator": "#change li[33]",
+      "originalText": "61321版本后，获得商队驿站建筑",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b7327b8e-3d88-4ab7-ab41-501d0bd35008"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-666d14b6-86d6-4b01-9eab-abde9654c30e",
+      "group": "印度王朝",
+      "locator": "#change li[34]",
+      "originalText": "61321版本后，印度火铳的火枪兵射程加成从1上调到了2",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-666d14b6-86d6-4b01-9eab-abde9654c30e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e0e822de-7192-49d3-8dee-9fc91f8cbda1",
+      "group": "印度王朝",
+      "locator": "#change li[35]",
+      "originalText": "61321版本后，苏丹王科技被更名为大干路(Grand Trunk Road)",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e0e822de-7192-49d3-8dee-9fc91f8cbda1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-557a4ab4-e234-4ade-82f4-5adf1aa3dcf9",
+      "group": "印度王朝",
+      "locator": "#change li[36]",
+      "originalText": "61321版本后，团队加成从“骆驼骑兵对标准建筑攻击力+4”修改为“骆驼骑兵和轻骑兵对建筑攻击力+2”",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-557a4ab4-e234-4ade-82f4-5adf1aa3dcf9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-92e8aea3-05af-47bc-888c-dbde23c3767f",
+      "group": "印度王朝",
+      "locator": "#change li[37]",
+      "originalText": "61321版本后，“渔夫工作效率+10%”和“所有马厩部队在城堡时代远程护甲+1，在帝王时代远程护甲再+1”文明加成删除，改成“骆驼骑兵攻击速度+25%”和“火药部队近战护甲和远程护甲+1”",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-92e8aea3-05af-47bc-888c-dbde23c3767f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-83450106-2a9b-48af-a044-2a29eae94409",
+      "group": "印度王朝",
+      "locator": "#change li[38]",
+      "originalText": "61321版本后，靶场失去了帕提亚战术、攻城器制造厂失去了所有冲车，但是获得了装甲战象及其升级、船坞失去了重型爆破船和干船坞、铁匠铺得到了骑兵板甲、大学失去了预热射击",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-83450106-2a9b-48af-a044-2a29eae94409"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6617e081-4040-4963-97f6-afd3d21ade7e",
+      "group": "印度王朝",
+      "locator": "#change li[39]",
+      "originalText": "61321版本后，帝王骆驼兵攻击力从9下调到8，升级成本从1200食物600黄金下调到1000食物500黄金",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6617e081-4040-4963-97f6-afd3d21ade7e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8",
+      "group": "印度王朝",
+      "locator": "#change li[40]",
+      "originalText": "66692版本后，古拉姆/精锐古拉姆生命值从65/75下调到了55/65",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d2c95b41-1f97-4956-b7fa-699e3219fc9a",
+      "group": "印度王朝",
+      "locator": "#change li[41]",
+      "originalText": "66692版本后，无法升级长戟兵",
+      "rawVersions": [
+        "66692"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d2c95b41-1f97-4956-b7fa-699e3219fc9a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0afac231-e188-458d-8ab8-c22603cf6eb6",
+      "group": "印度王朝",
+      "locator": "#change li[42]",
+      "originalText": "73855版本后，\"骆驼骑兵攻击速度+25%\"文明加成修改成“骆驼骑兵攻击速度+20%”",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0afac231-e188-458d-8ab8-c22603cf6eb6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-23658f0b-bba6-4a05-9e4e-de661e870686",
+      "group": "印度王朝",
+      "locator": "#change li[43]",
+      "originalText": "78174版本后，村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%，此前是10%/15%/20%/25%",
+      "rawVersions": [
+        "78174"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23658f0b-bba6-4a05-9e4e-de661e870686"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c2255a3d-fc45-4417-b39f-306957151470",
+      "group": "罗马归来",
+      "locator": "#change li[44]",
+      "originalText": "87863版本后，失去行会，大干路成本从400肉400木下调到250肉200木，获得交易费用降低到10%的额外效果",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c2255a3d-fc45-4417-b39f-306957151470"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4354be32-2e25-449f-9518-d3c0229a6d23",
+      "group": "罗马归来",
+      "locator": "#change li[45]",
+      "originalText": "87863版本后，古拉姆/精锐古拉姆攻击力从8/10上调到9/11，生命值从55/65上调到60/70",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4354be32-2e25-449f-9518-d3c0229a6d23"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ba8f4b7e-fe5c-48d3-96e9-b1ac2b2db9b0",
+      "group": "皇家山脉",
+      "locator": "#change li[46]",
+      "originalText": "99311版本后，“村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%”加成率上调到“村民在黑暗/封建/城堡/帝王时代便宜8%/13%/18%/23%”",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ba8f4b7e-fe5c-48d3-96e9-b1ac2b2db9b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4c2d87c4-7fe5-4acf-99b0-9d722c3dec10",
+      "group": "三国",
+      "locator": "#change li[47]",
+      "originalText": "151401版本更新后，印度火铳科技成本从500肉300金上调到500肉650金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4c2d87c4-7fe5-4acf-99b0-9d722c3dec10"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d3168abf-e448-4aec-beb8-c898a9820a79",
+      "group": "最后的酋长",
+      "locator": "#change li[48]",
+      "originalText": "169123版本更新后，印度斯坦团队加成不再适用于草原枪兵系列",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d3168abf-e448-4aec-beb8-c898a9820a79"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    失落帝国\n    \n        村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%\n        无法研发行会\n        无法研发射手环甲\n        帝王骆驼兵和船共用一种护甲\n        战象射手花费110食物80黄金，升级精锐战象射手需要1200食物800黄金\n        战象射手拥有250HP，精锐是350\n        战象射手有4点远程护甲\n        可以训练弩兵\n        战象射手有-2射手护甲和0骑射手护甲\n        骆驼骑兵有1近战护甲和远程护甲\n    \n\n    非洲王国\n    \n        村民在黑暗/封建/城堡/帝王时代便宜10%/15%/20%/25%\n        可以研发行会\n        可以研发射手环甲\n        可以研发射箭槽，但4.8版本被移除\n        船只护甲和骆驼护甲分家，获得新护甲\n        战象射手现在花费100食物80黄金，升级精锐战象射手需要1000食物800黄金\n        战象射手拥有280HP，精锐是330\n        战象射手有3点远程护甲\n    \n\n    蛮王崛起\n    \n        获得独特建筑风格\n        5.5版本他们不再能训练弩兵\n        5.8版本后战象射手有0射手护甲和-2骑射手护甲\n        5.8版本后骆驼骑兵只有1远程护甲\n    \n\n    最后的可汗\n    \n        36906版本后，渔夫工作效率+15%下调到+10%，携带多15食物删除\n        37650版本后，团队加分提供的伤害加成不再被石匠以及建筑学科技提供的加成减免了，并按照设定这个加成应用到了所有建筑\n        37650版本后，战象射手/精锐战象射手的射击后装填时间从2.5秒减少到2秒\n        37650版本后，战象射手/精锐战象射手的黄金成本从80下调到70\n        42848版本后，所有马厩部队都能在城堡时代获得1远程护甲，在帝王时代再获得1远程护甲，此前仅限骆驼骑兵受益\n        42848版本后，减少了骆驼单位对建筑物造成额外伤害的团队奖励，由+5下调到+4\n        42848版本后，失去骑兵钢甲技术\n        42848版本后，修复了苏丹王获得黄金速度比预期更高的bug\n        42848版本后，增加了战象的单位碰撞体积\n    \n\n    印度王朝\n    \n        61321版本后，原印度(Indians)文明被修改成了印度斯坦(Hindustanis)文明\n        61321版本后，获得商队驿站建筑\n        61321版本后，印度火铳的火枪兵射程加成从1上调到了2\n        61321版本后，苏丹王科技被更名为大干路(Grand Trunk Road)\n        61321版本后，团队加成从“骆驼骑兵对标准建筑攻击力+4”修改为“骆驼骑兵和轻骑兵对建筑攻击力+2”\n        61321版本后，“渔夫工作效率+10%”和“所有马厩部队在城堡时代远程护甲+1，在帝王时代远程护甲再+1”文明加成删除，改成“骆驼骑兵攻击速度+25%”和“火药部队近战护甲和远程护甲+1”\n        61321版本后，靶场失去了帕提亚战术、攻城器制造厂失去了所有冲车，但是获得了装甲战象及其升级、船坞失去了重型爆破船和干船坞、铁匠铺得到了骑兵板甲、大学失去了预热射击\n        61321版本后，帝王骆驼兵攻击力从9下调到8，升级成本从1200食物600黄金下调到1000食物500黄金\n        66692版本后，古拉姆/精锐古拉姆生命值从65/75下调到了55/65\n        66692版本后，无法升级长戟兵\n        73855版本后，\"骆驼骑兵攻击速度+25%\"文明加成修改成“骆驼骑兵攻击速度+20%”\n        78174版本后，村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%，此前是10%/15%/20%/25%\n    \n\n    \n        罗马归来\n    \n    \n        87863版本后，失去行会，大干路成本从400肉400木下调到250肉200木，获得交易费用降低到10%的额外效果\n        87863版本后，古拉姆/精锐古拉姆攻击力从8/10上调到9/11，生命值从55/65上调到60/70\n    \n\n    皇家山脉\n    \n        99311版本后，“村民在黑暗/封建/城堡/帝王时代便宜5%/10%/15%/20%”加成率上调到“村民在黑暗/封建/城堡/帝王时代便宜8%/13%/18%/23%”\n    \n\n    三国\n    \n        151401版本更新后，印度火铳科技成本从500肉300金上调到500肉650金\n    \n\n    最后的酋长\n    \n        169123版本更新后，印度斯坦团队加成不再适用于草原枪兵系列",
+  "sectionTextSha256": "7ab882c178609e78c9526fcc7fe6a12a71fb38ac82e4715caf2a93974f91a605",
+  "observedEntryCount": 48,
+  "supersedesRevisionId": null
+}

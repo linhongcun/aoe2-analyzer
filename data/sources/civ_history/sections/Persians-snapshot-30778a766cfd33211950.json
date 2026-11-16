@@ -1,0 +1,337 @@
+{
+  "civId": "Persians",
+  "sourceId": "seicing-persians",
+  "url": "https://seicing.com/html/aoe2/2/%E6%B3%A2%E6%96%AF.html",
+  "indexLabel": "波斯Persians",
+  "title": "波斯",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-30778a766cfd33211950",
+  "documentSha256": "30778a766cfd33211950ddf80076813612696355eac252f73675b1014465d183",
+  "capturedAt": "2026-11-16T11:46:00.161117+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-bb8534d3-c7d1-4932-a800-6531b5c27dfb",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "只有精锐战象才能造成区域伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bb8534d3-c7d1-4932-a800-6531b5c27dfb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0e689559-0843-4142-86a5-0a6258d9334c",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "象夫科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0e689559-0843-4142-86a5-0a6258d9334c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-697692a0-d80b-437c-8ca5-25f047f864a7",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "沸油科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-697692a0-d80b-437c-8ca5-25f047f864a7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-42318fc7-53c5-4e56-bef7-c0ae18106091",
+      "group": "非洲王国",
+      "locator": "#change li[4]",
+      "originalText": "可以研发射箭槽，但是在4.8补丁中被删除",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-42318fc7-53c5-4e56-bef7-c0ae18106091"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bb68b9be-5f41-428f-9efa-51db0af5c4c3",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "战象和精锐战象都能造成区域伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bb68b9be-5f41-428f-9efa-51db0af5c4c3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0159ef5c-371d-4af2-bc2a-fe664f06edd1",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "沸油科技被波斯步弓手科技代替，花费200食物和200黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0159ef5c-371d-4af2-bc2a-fe664f06edd1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2f875168-b23e-4c57-8458-1b4e0b24c359",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "黑暗时代的城镇中心和船坞工作效率+5%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2f875168-b23e-4c57-8458-1b4e0b24c359"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1cad030c-202a-4e51-9ee7-d85b32157567",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "35584版本后，波斯步弓手花费400食物和300黄金",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1cad030c-202a-4e51-9ee7-d85b32157567"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-24f1ffe0-5eae-4ba6-bd91-0a7df6e2b149",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "36906版本后，波斯文明奖励的城镇中心和船坞的工作效率在黑暗时代的加成删除",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-24f1ffe0-5eae-4ba6-bd91-0a7df6e2b149"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d35ad764-0f2c-4bd7-a0b6-be27b6995d50",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "42848版本后，增加了战象的单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d35ad764-0f2c-4bd7-a0b6-be27b6995d50"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c59f126b-c45c-4826-8e51-db1c9ce00d9f",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "50292版本后，战象、精锐战象的训练时间从31秒下调到25秒，成本从200食物75黄金调整为170食物85黄金",
+      "rawVersions": [
+        "50292"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c59f126b-c45c-4826-8e51-db1c9ce00d9f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2c40e82b-1cda-4560-914c-84b0708722b3",
+      "group": "罗马归来",
+      "locator": "#change li[12]",
+      "originalText": "87863版本后，战象/精锐战象视野从4/5上调到7/8",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2c40e82b-1cda-4560-914c-84b0708722b3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cab44c69-4106-44d6-9772-e2dc4258e3ce",
+      "group": "皇家山脉",
+      "locator": "#change li[13]",
+      "originalText": "95810版本后，重新获得波斯文明奖励的城镇中心和船坞的工作效率在黑暗时代的加成",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cab44c69-4106-44d6-9772-e2dc4258e3ce"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8fb2805c-a4e7-4106-850f-0ab5df38214c",
+      "group": "皇家山脉",
+      "locator": "#change li[14]",
+      "originalText": "95810版本后，获得骑兵部队击杀敌方单位奖励黄金、城堡时代研发帕提亚战术、帝王时代建造商队旅馆的加成",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8fb2805c-a4e7-4106-850f-0ab5df38214c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b145e310-b412-4a09-af6a-8afa788ca53f",
+      "group": "皇家山脉",
+      "locator": "#change li[15]",
+      "originalText": "95810版本后，战象移动速度从0.6上调到0.8，升级费用从1600肉1200金下调到1350肉800金，对建筑物附加伤害从7/10上调到30",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b145e310-b412-4a09-af6a-8afa788ca53f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-fd02505a-e698-480e-b7ee-9ad9ff0a76b8",
+      "group": "皇家山脉",
+      "locator": "#change li[16]",
+      "originalText": "95810版本后，失去游侠，获得萨瓦尔",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-fd02505a-e698-480e-b7ee-9ad9ff0a76b8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2cff3e71-51ad-41bf-b188-c9f65e627267",
+      "group": "皇家山脉",
+      "locator": "#change li[17]",
+      "originalText": "95810版本后，象夫科技删除，获得新科技堡垒",
+      "rawVersions": [
+        "95810"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2cff3e71-51ad-41bf-b188-c9f65e627267"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6990c14a-aa48-4d1b-abb0-e73d4907a5ef",
+      "group": "皇家山脉",
+      "locator": "#change li[18]",
+      "originalText": "99311版本后，萨瓦尔骑兵对弓箭手伤害加成量从3下调到2，升级研发时间从150秒上调到160秒",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6990c14a-aa48-4d1b-abb0-e73d4907a5ef"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-183be4a1-3034-484b-9b44-4e9ae0ce083a",
+      "group": "皇家山脉",
+      "locator": "#change li[19]",
+      "originalText": "99311版本后，骑兵击杀敌方获得黄金的功能被删除",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-183be4a1-3034-484b-9b44-4e9ae0ce083a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-41ae9a4a-5cec-44f6-ab81-d8428d077142",
+      "group": "成王败寇",
+      "locator": "#change li[20]",
+      "originalText": "125283版本更新后，战象抗招降等级+2，现在招降所需基础时间+2.5秒",
+      "rawVersions": [
+        "125283"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-41ae9a4a-5cec-44f6-ab81-d8428d077142"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e55186cc-71c9-4d31-8e1d-ff485435d693",
+      "group": "三国",
+      "locator": "#change li[21]",
+      "originalText": "151401版本后，重装骑士升级到萨瓦尔的成本从1000肉600金上调到1200肉600金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e55186cc-71c9-4d31-8e1d-ff485435d693"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1b6f08c5-56bc-4a84-8ef0-c805114bdeb5",
+      "group": "三国",
+      "locator": "#change li[22]",
+      "originalText": "162286版本更新后，波斯步弓手消耗木材数量从60下调到50",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1b6f08c5-56bc-4a84-8ef0-c805114bdeb5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        只有精锐战象才能造成区域伤害 \n    \n\n    征服者\n    \n        象夫科技加入 \n    \n\n    失落帝国\n    \n        沸油科技加入 \n    \n\n    非洲王国\n    \n        可以研发射箭槽，但是在4.8补丁中被删除 \n    \n\n    蛮王崛起\n    \n        战象和精锐战象都能造成区域伤害 \n    \n\n    最后的可汗\n    \n        沸油科技被波斯步弓手科技代替，花费200食物和200黄金 \n        黑暗时代的城镇中心和船坞工作效率+5% \n        35584版本后，波斯步弓手花费400食物和300黄金 \n        36906版本后，波斯文明奖励的城镇中心和船坞的工作效率在黑暗时代的加成删除 \n        42848版本后，增加了战象的单位碰撞体积 \n        50292版本后，战象、精锐战象的训练时间从31秒下调到25秒，成本从200食物75黄金调整为170食物85黄金 \n    \n\n    罗马归来\n    \n        87863版本后，战象/精锐战象视野从4/5上调到7/8 \n    \n\n    皇家山脉\n    \n        95810版本后，重新获得波斯文明奖励的城镇中心和船坞的工作效率在黑暗时代的加成 \n        95810版本后，获得骑兵部队击杀敌方单位奖励黄金、城堡时代研发帕提亚战术、帝王时代建造商队旅馆的加成 \n        95810版本后，战象移动速度从0.6上调到0.8，升级费用从1600肉1200金下调到1350肉800金，对建筑物附加伤害从7/10上调到30 \n        95810版本后，失去游侠，获得萨瓦尔 \n        95810版本后，象夫科技删除，获得新科技堡垒 \n        99311版本后，萨瓦尔骑兵对弓箭手伤害加成量从3下调到2，升级研发时间从150秒上调到160秒 \n        99311版本后，骑兵击杀敌方获得黄金的功能被删除 \n    \n\n    成王败寇\n    \n        125283版本更新后，战象抗招降等级+2，现在招降所需基础时间+2.5秒 \n    \n\n    三国\n    \n        151401版本后，重装骑士升级到萨瓦尔的成本从1000肉600金上调到1200肉600金 \n        162286版本更新后，波斯步弓手消耗木材数量从60下调到50",
+  "sectionTextSha256": "36d4c4ac96f408e552f5fc0d6050bb48107c4022f5afabb4e71207899a229a3b",
+  "observedEntryCount": 22,
+  "supersedesRevisionId": null
+}

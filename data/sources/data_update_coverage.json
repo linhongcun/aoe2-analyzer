@@ -146,6 +146,15 @@
   "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 data/sources/catalog_introductions.json。",
   "intentionalSkips": [
     {
+      "id": "civ-history-1082",
+      "script": "scripts/civ_history_build.py",
+      "reason": "文明历史来自逐页核对的有界章节快照和显式事件/旧记录映射，不随 DAT 更新重新抓取、猜值或覆盖历史身份。",
+      "owner": "文明历史数据更新执行者，需逐条复核来源、映射及旧记录去向。",
+      "evidenceFile": "data/sources/civ_history/catalog.json",
+      "ownerEvidence": "目录登记每页证据与快照指纹；生成器逐文件校验输入及审计 schema，CI data 保留离线 --check。",
+      "command": "python3 scripts/civ_history_build.py --check"
+    },
+    {
       "id": "siege-1064",
       "script": "scripts/siege_build.py",
       "reason": "仅认证 DE188329 的固定原始文件与四个配置，不随通用补丁更新自动授予新覆盖。换 pin 时由当前数据更新执行者重新取证并审阅；现有 --check 与数据族校验继续拦截来源漂移。",

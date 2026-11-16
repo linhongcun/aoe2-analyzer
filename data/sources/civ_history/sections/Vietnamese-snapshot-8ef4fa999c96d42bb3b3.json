@@ -1,0 +1,369 @@
+{
+  "civId": "Vietnamese",
+  "sourceId": "seicing-vietnamese",
+  "url": "https://seicing.com/html/aoe2/2/%E8%B6%8A%E5%8D%97.html",
+  "indexLabel": "越南Vietnamese",
+  "title": "越南",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-8ef4fa999c96d42bb3b3",
+  "documentSha256": "8ef4fa999c96d42bb3b308c1961b28720f02e269359b16d9aa15b9cc9917d714",
+  "capturedAt": "2026-11-16T11:48:15.609907+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-0521964b-093b-4726-8674-7705bd4badf0",
+      "group": "蛮王崛起",
+      "locator": "#change li[1]",
+      "originalText": "不能研发畜牧",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0521964b-093b-4726-8674-7705bd4badf0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f8214d76-01a7-449c-88b2-e869e1c8c44f",
+      "group": "蛮王崛起",
+      "locator": "#change li[2]",
+      "originalText": "纸币花费800食物和200黄金，需要40秒时间研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f8214d76-01a7-449c-88b2-e869e1c8c44f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f0d3215d-ec6d-41a1-8ba8-55cc435ba7bd",
+      "group": "蛮王崛起",
+      "locator": "#change li[3]",
+      "originalText": "藤弓兵对步兵有1点伤害加成，在5.3补丁删除",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f0d3215d-ec6d-41a1-8ba8-55cc435ba7bd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c0a2b4e6-b0e9-4901-96db-01c6817bed55",
+      "group": "蛮王崛起",
+      "locator": "#change li[4]",
+      "originalText": "宝伞为象兵提供30生命值，5.7补丁修改成50点生命值",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c0a2b4e6-b0e9-4901-96db-01c6817bed55"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5527d2bd-d30b-46bf-a53f-e95eb308835f",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "藤弓兵/精锐藤弓兵拥有35/40HP，5.8补丁拥有40/45HP",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5527d2bd-d30b-46bf-a53f-e95eb308835f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-374d136c-f547-4979-88cd-600c90317971",
+      "group": "蛮王崛起",
+      "locator": "#change li[6]",
+      "originalText": "封建/城堡/帝王时代的靶场单位+10％/+15％/+20％HP，5.8补丁后统一为20%",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-374d136c-f547-4979-88cd-600c90317971"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3e68d5c0-3339-4f39-a143-58f5352e77b2",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "可以研发畜牧",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3e68d5c0-3339-4f39-a143-58f5352e77b2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c4c954c2-956d-45b2-b1ba-e2b546cbe5e4",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "纸币花费500食物和300木材，需要60秒时间研发",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c4c954c2-956d-45b2-b1ba-e2b546cbe5e4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2020bb43-c51b-4379-9cda-7bc7e873473e",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "建筑风格从东南亚改成东亚",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2020bb43-c51b-4379-9cda-7bc7e873473e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1403b1e7-ad32-431f-8f8e-36093aeb1744",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "35584版本后，研发经济科技不再需要木头",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1403b1e7-ad32-431f-8f8e-36093aeb1744"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3a1df7c0-d9a8-4580-b8df-f503aa428bc9",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "39284版本后，象兵的区域伤害比率从50%下调为25%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f297d284-7f61-4fa8-b24a-8165b5b19a1e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b799daa8-4c93-47c1-ac46-d28eb54b9920",
+      "group": "最后的可汗",
+      "locator": "#change li[12]",
+      "originalText": "42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4dcf4df6-c08e-44b1-b68a-b45a1971762e"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eac14506-efed-4fa4-90be-a72fab210576",
+      "group": "公爵的崛起",
+      "locator": "#change li[13]",
+      "originalText": "54480版本后，宝伞的生命值加成从50提升到100",
+      "rawVersions": [
+        "54480"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eac14506-efed-4fa4-90be-a72fab210576"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7230f43e-b591-46bf-8141-00d62183888d",
+      "group": "印度王朝",
+      "locator": "#change li[14]",
+      "originalText": "61321版本后，纸币科技效果更变，从“自己和每个同盟获得500黄金”修改为“伐木工工作时获得黄金，效率是每个伐木工65秒获得1黄金”",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7230f43e-b591-46bf-8141-00d62183888d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9e6e9081-8156-442d-bb34-62454bfc969a",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "81058版本后，纸币价格从600木350金下调到550肉200木",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9e6e9081-8156-442d-bb34-62454bfc969a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f0c235f2-ec61-431d-8c64-68a861f70461",
+      "group": "罗马归来",
+      "locator": "#change li[16]",
+      "originalText": "87863版本后，经济科技现在除了减少木材消耗外，还会+100%研究速度",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f0c235f2-ec61-431d-8c64-68a861f70461"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-42022cdf-daf4-4bcf-a158-0ac19e1488fb",
+      "group": "罗马归来",
+      "locator": "#change li[17]",
+      "originalText": "87863版本后，升级到帝王掷矛手的成本从300木450金下调到300木300金",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-42022cdf-daf4-4bcf-a158-0ac19e1488fb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-83e6f182-1bd5-4fab-b6b1-22a3f744b400",
+      "group": "三国",
+      "locator": "#change li[18]",
+      "originalText": "141935版本更新后，获得火矛兵",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-83e6f182-1bd5-4fab-b6b1-22a3f744b400"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bf94c709-a9c9-44f4-9c9d-8288981c3c07",
+      "group": "三国",
+      "locator": "#change li[19]",
+      "originalText": "141935版本更新后，靶场单位生命值加成现在还会加成火矛兵",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bf94c709-a9c9-44f4-9c9d-8288981c3c07"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4e5ffa7b-dd85-4717-9d9e-c2fd428edfa1",
+      "group": "最后的酋长",
+      "locator": "#change li[20]",
+      "originalText": "169123版本更新后，帝王掷矛手获得+3对马穆鲁克伤害",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4e5ffa7b-dd85-4717-9d9e-c2fd428edfa1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ec28ce60-7ddf-45c2-9fa9-af24c0f7eb12",
+      "group": "维京传奇",
+      "locator": "#change li[21]",
+      "originalText": "185872版本补丁后，“靶场部队和火矛兵的生命值+20%”加成现在只适用于步弓手和掷矛手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ec28ce60-7ddf-45c2-9fa9-af24c0f7eb12"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751",
+      "group": "维京传奇",
+      "locator": "#change li[22]",
+      "originalText": "185872版本补丁后，藤弓兵生命值从40/45下调到35/40",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6a83c865-e1a3-4f5c-bc93-ab8ae22f5b9d",
+      "group": "维京传奇",
+      "locator": "#change li[23]",
+      "originalText": "185872版本补丁后，精锐藤弓兵升级成本从1000肉750金下调到800肉750金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6a83c865-e1a3-4f5c-bc93-ab8ae22f5b9d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-799ca568-8aea-4612-b511-613b474d9350",
+      "group": "维京传奇",
+      "locator": "#change li[24]",
+      "originalText": "185872版本补丁后，获得石匠科技",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-799ca568-8aea-4612-b511-613b474d9350"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    蛮王崛起\n    \n        不能研发畜牧\n        纸币花费800食物和200黄金，需要40秒时间研发\n        藤弓兵对步兵有1点伤害加成，在5.3补丁删除\n        宝伞为象兵提供30生命值，5.7补丁修改成50点生命值\n        藤弓兵/精锐藤弓兵拥有35/40HP，5.8补丁拥有40/45HP\n        封建/城堡/帝王时代的靶场单位+10％/+15％/+20％HP，5.8补丁后统一为20%\n    \n\n    最后的可汗\n    \n        可以研发畜牧\n        纸币花费500食物和300木材，需要60秒时间研发\n        建筑风格从东南亚改成东亚\n        35584版本后，研发经济科技不再需要木头\n        39284版本后，象兵的区域伤害比率从50%下调为25%\n        42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积\n    \n\n    公爵的崛起\n    \n        54480版本后，宝伞的生命值加成从50提升到100\n    \n\n    印度王朝\n    \n        61321版本后，纸币科技效果更变，从“自己和每个同盟获得500黄金”修改为“伐木工工作时获得黄金，效率是每个伐木工65秒获得1黄金”\n        81058版本后，纸币价格从600木350金下调到550肉200木\n    \n\n    罗马归来\n    \n        87863版本后，经济科技现在除了减少木材消耗外，还会+100%研究速度\n        87863版本后，升级到帝王掷矛手的成本从300木450金下调到300木300金\n    \n\n    三国\n    \n        141935版本更新后，获得火矛兵\n        141935版本更新后，靶场单位生命值加成现在还会加成火矛兵\n    \n\n    最后的酋长\n    \n        169123版本更新后，帝王掷矛手获得+3对马穆鲁克伤害\n    \n\n    维京传奇\n    \n        185872版本补丁后，“靶场部队和火矛兵的生命值+20%”加成现在只适用于步弓手和掷矛手\n        185872版本补丁后，藤弓兵生命值从40/45下调到35/40\n        185872版本补丁后，精锐藤弓兵升级成本从1000肉750金下调到800肉750金\n        185872版本补丁后，获得石匠科技",
+  "sectionTextSha256": "fc7be8cc441d1acc40e2d21542fb8febd9ff605dc1b687017c32d3d6d0ac4614",
+  "observedEntryCount": 24,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,331 @@
+{
+  "civId": "Spanish",
+  "sourceId": "seicing-spanish",
+  "url": "https://seicing.com/html/aoe2/2/%E8%A5%BF%E7%8F%AD%E7%89%99.html",
+  "indexLabel": "西班牙Spanish",
+  "title": "西班牙",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-cf958bacb4c86d06fcb9",
+  "documentSha256": "cf958bacb4c86d06fcb9b5836507183d523cc1d913f9d73cc3c2145af03519dd",
+  "capturedAt": "2026-11-16T11:47:19.139657+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-c1c1dd81-b250-4102-b67d-1741d210a4b5",
+      "group": "征服者",
+      "locator": "#change li[1]",
+      "originalText": "西班牙团队奖励是贸易单位+33%黄金获取量",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c1c1dd81-b250-4102-b67d-1741d210a4b5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3f9c5b8f-fca1-4301-b37e-ec5ca8bb5255",
+      "group": "征服者",
+      "locator": "#change li[2]",
+      "originalText": "训练传教士需要建造城堡，而且不受血统和热情加成",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3f9c5b8f-fca1-4301-b37e-ec5ca8bb5255"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6bafb2f8-e6e1-4dc1-8c3e-eba7dd08321c",
+      "group": "失落帝国",
+      "locator": "#change li[3]",
+      "originalText": "宗教法庭科技加入，花费400食物和400黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6bafb2f8-e6e1-4dc1-8c3e-eba7dd08321c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f0fec341-8de6-45d5-892c-e5d08caae51a",
+      "group": "失落帝国",
+      "locator": "#change li[4]",
+      "originalText": "传教士现在可以接受血统和热情加成了",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f0fec341-8de6-45d5-892c-e5d08caae51a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4631d9ae-55ad-4960-8818-4a1d78d3beb6",
+      "group": "非洲王国",
+      "locator": "#change li[5]",
+      "originalText": "4.8版本后西班牙团队奖励是贸易单位+25%黄金获取量",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4631d9ae-55ad-4960-8818-4a1d78d3beb6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c6f1e760-e40d-4cfc-967f-0a2bea97d782",
+      "group": "非洲王国",
+      "locator": "#change li[6]",
+      "originalText": "宗教法庭花费100食物和300黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c6f1e760-e40d-4cfc-967f-0a2bea97d782"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e3811dd1-0dff-4db9-8ac1-defbcec2160f",
+      "group": "非洲王国",
+      "locator": "#change li[7]",
+      "originalText": "训练传教士不再需要建造城堡",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e3811dd1-0dff-4db9-8ac1-defbcec2160f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bb60aa2b-a3d7-4134-8ac9-53491143b74e",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "征服者现在可以受到反骑射手加成伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bb60aa2b-a3d7-4134-8ac9-53491143b74e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-854ff3aa-82fb-453a-9db9-03976e070e2d",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "研发畜牧后，传教士治疗速度就变得和僧侣一样快",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-854ff3aa-82fb-453a-9db9-03976e070e2d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7b5ecd80-be8e-4e1a-8bd2-a332d79713b8",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "建筑风格由西欧更变为地中海",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7b5ecd80-be8e-4e1a-8bd2-a332d79713b8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5857f77e-c2c0-4753-a072-d8b5e7eca378",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "42848版本修复了一个bug，这个bug导致火炮战船无法从加快火药单位装填时间加成中受益",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5857f77e-c2c0-4753-a072-d8b5e7eca378"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b892e37d-bcf5-41f3-9a14-b9dd93782414",
+      "group": "公爵的崛起",
+      "locator": "#change li[12]",
+      "originalText": "51737更新中，征服者子弹速度从5.5提升到7.5",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b892e37d-bcf5-41f3-9a14-b9dd93782414"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-526989bb-382b-44f6-a3eb-de1d3a242fd3",
+      "group": "印度王朝",
+      "locator": "#change li[13]",
+      "originalText": "81058版本后，宗教法庭可以让传教士+1射程",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-526989bb-382b-44f6-a3eb-de1d3a242fd3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a36dde3d-c7de-4bd6-b14c-fe1cd4061104",
+      "group": "印度王朝",
+      "locator": "#change li[14]",
+      "originalText": "81058版本后，征服者远程护甲从2下调到1",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a36dde3d-c7de-4bd6-b14c-fe1cd4061104"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-23ca48f4-08bd-4bca-a154-4b0a96971ee9",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "81058版本后，获得每研究一个科技获得20金的加成",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23ca48f4-08bd-4bca-a154-4b0a96971ee9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1b8d6c38-6233-4f27-be4e-72f5c9ca08b8",
+      "group": "三国",
+      "locator": "#change li[16]",
+      "originalText": "141935版本更新后，传教士可接受骑兵护甲升级",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1b8d6c38-6233-4f27-be4e-72f5c9ca08b8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-13bb02e2-bcd6-414c-852e-e89543e4cff2",
+      "group": "三国",
+      "locator": "#change li[17]",
+      "originalText": "151401版本后，征服者成本从60肉70金调整为70肉60金",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-13bb02e2-bcd6-414c-852e-e89543e4cff2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ed6d9b2a-fd2f-4d9e-8019-98a9024bac8d",
+      "group": "三国",
+      "locator": "#change li[18]",
+      "originalText": "162286版本更新后，精锐征服者攻击力从18上调到19，升级到精锐征服者的成本从1200肉600金下调到900肉600金",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ed6d9b2a-fd2f-4d9e-8019-98a9024bac8d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8ba2d8c7-00cc-4b92-827a-dff0478cc565",
+      "group": "最后的酋长",
+      "locator": "#change li[19]",
+      "originalText": "169123版本更新后，传教士可以以0.9的移动速度拿起圣物",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8ba2d8c7-00cc-4b92-827a-dff0478cc565"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-aef869ba-325d-4f86-85f2-c0ac1af94f63",
+      "group": "维京传奇",
+      "locator": "#change li[20]",
+      "originalText": "185872版本补丁后，征服者成本从70肉60金上调到75肉60金，非精锐训练时间从24秒上调到26秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-aef869ba-325d-4f86-85f2-c0ac1af94f63"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-bb5df202-bc19-4ed7-8431-70c301ca8862",
+      "group": "维京传奇",
+      "locator": "#change li[21]",
+      "originalText": "185872版本补丁后，传教士成本从100金上调到30肉100金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bb5df202-bc19-4ed7-8431-70c301ca8862"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "group": "维京传奇",
+      "locator": "#change li[22]",
+      "originalText": "185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手、重装骑射手",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    征服者\n    \n        西班牙团队奖励是贸易单位+33%黄金获取量\n        训练传教士需要建造城堡，而且不受血统和热情加成\n    \n\n    失落帝国\n    \n        宗教法庭科技加入，花费400食物和400黄金\n        传教士现在可以接受血统和热情加成了\n    \n\n    非洲王国\n    \n        4.8版本后西班牙团队奖励是贸易单位+25%黄金获取量\n        宗教法庭花费100食物和300黄金\n        训练传教士不再需要建造城堡\n    \n\n    最后的可汗\n    \n        征服者现在可以受到反骑射手加成伤害\n        研发畜牧后，传教士治疗速度就变得和僧侣一样快\n        建筑风格由西欧更变为地中海\n        42848版本修复了一个bug，这个bug导致火炮战船无法从加快火药单位装填时间加成中受益\n    \n\n    公爵的崛起\n    \n        51737更新中，征服者子弹速度从5.5提升到7.5\n    \n\n    印度王朝\n    \n        81058版本后，宗教法庭可以让传教士+1射程\n        81058版本后，征服者远程护甲从2下调到1\n        81058版本后，获得每研究一个科技获得20金的加成\n    \n\n    三国\n    \n        141935版本更新后，传教士可接受骑兵护甲升级\n        151401版本后，征服者成本从60肉70金调整为70肉60金\n        162286版本更新后，精锐征服者攻击力从18上调到19，升级到精锐征服者的成本从1200肉600金下调到900肉600金\n    \n\n    最后的酋长\n    \n        169123版本更新后，传教士可以以0.9的移动速度拿起圣物\n    \n\n    维京传奇\n    \n        185872版本补丁后，征服者成本从70肉60金上调到75肉60金，非精锐训练时间从24秒上调到26秒\n        185872版本补丁后，传教士成本从100金上调到30肉100金\n        185872版本补丁后，获得骑马弩兵、重装骑马弩兵；失去骑射手、重装骑射手",
+  "sectionTextSha256": "3701d938e5c3d16b8d6d94df286bc8a244b8f29253649cd915bf8977bc02fffc",
+  "observedEntryCount": 22,
+  "supersedesRevisionId": null
+}

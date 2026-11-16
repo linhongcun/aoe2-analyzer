@@ -1,0 +1,139 @@
+{
+  "civId": "Wei",
+  "sourceId": "seicing-wei",
+  "url": "https://seicing.com/html/aoe2/2/%E9%AD%8F.html",
+  "indexLabel": "魏Wei",
+  "title": "魏",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-0ee39fa22c67102b1e11",
+  "documentSha256": "0ee39fa22c67102b1e11ec5f3e5df2c83e5afdc9a1d30a0552f3f43338312fc6",
+  "capturedAt": "2026-11-16T11:48:35.049956+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-bee5128f-3976-46bd-98da-14bd78e8e7fc",
+      "group": "三国",
+      "locator": "#change li[1]",
+      "originalText": "147949版本后，获得钻井采金法",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-bee5128f-3976-46bd-98da-14bd78e8e7fc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-db59f159-7c1e-4285-8252-5a450218b927",
+      "group": "三国",
+      "locator": "#change li[2]",
+      "originalText": "147949版本后，鲜卑掠骑兵攻击力从4上调到了5，冲锋攻击现在造成1个5伤害的主要投射物和5个造成1伤害的副投射物，并正确地受到帕提亚战术的加成，在之前是发射5个1伤害的投射物",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-db59f159-7c1e-4285-8252-5a450218b927"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-940b9170-f212-467b-9694-38716c99d9f9",
+      "group": "三国",
+      "locator": "#change li[3]",
+      "originalText": "147949版本后，屯田科技效率从1.2食物每分钟上调到1.8食物每分钟，研发成本从250肉300金调整为250肉300木",
+      "rawVersions": [
+        "147949"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-940b9170-f212-467b-9694-38716c99d9f9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-50c10a6d-84b9-440e-a9e4-e5c0cec136c1",
+      "group": "三国",
+      "locator": "#change li[4]",
+      "originalText": "151401版本后，“每完成一项磨坊、伐木营地、采矿营地科技，获得1个村民”加成更变为“每完成一项经济科技，获得1个村民”",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-50c10a6d-84b9-440e-a9e4-e5c0cec136c1"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2875bac3-d82e-43f8-aa29-2fd6a424b390",
+      "group": "三国",
+      "locator": "#change li[5]",
+      "originalText": "153015版本后，黑光铠骑兵和鲜卑掠骑兵的生命值加成从+15%上调到+20%/+30%",
+      "rawVersions": [
+        "153015"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2875bac3-d82e-43f8-aa29-2fd6a424b390"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-05f868ba-3ab9-432e-a837-ef88884b7f3a",
+      "group": "最后的酋长",
+      "locator": "#change li[6]",
+      "originalText": "169123版本更新后，鲜卑掠骑兵训练时间从26秒上调到29秒，成本从60木25金上调到65木25金",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-05f868ba-3ab9-432e-a837-ef88884b7f3a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-dc97a028-5a88-4b33-94e8-6c34ad7a3a71",
+      "group": "最后的酋长",
+      "locator": "#change li[7]",
+      "originalText": "177723版本更新后，虎豹骑/精锐虎豹骑生命值从115/130下调到125，训练时间从15秒上调到18秒",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "pending",
+      "eventIds": [
+        "ev-se-dc97a028-5a88-4b33-94e8-6c34ad7a3a71"
+      ],
+      "reason": "原文把 115/130→125 写作下调，普通/精锐的方向和适用值有歧义；保留原文待核，不按当前值纠正。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-24d61e1f-983d-4904-addd-e255eae3c022",
+      "group": "维京传奇",
+      "locator": "#change li[8]",
+      "originalText": "185872版本补丁后，鲜卑掠骑兵成本从65木25金上调到65木35金",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-24d61e1f-983d-4904-addd-e255eae3c022"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    三国\n    \n        147949版本后，获得钻井采金法\n        147949版本后，鲜卑掠骑兵攻击力从4上调到了5，冲锋攻击现在造成1个5伤害的主要投射物和5个造成1伤害的副投射物，并正确地受到帕提亚战术的加成，在之前是发射5个1伤害的投射物\n        147949版本后，屯田科技效率从1.2食物每分钟上调到1.8食物每分钟，研发成本从250肉300金调整为250肉300木\n        151401版本后，“每完成一项磨坊、伐木营地、采矿营地科技，获得1个村民”加成更变为“每完成一项经济科技，获得1个村民”\n        153015版本后，黑光铠骑兵和鲜卑掠骑兵的生命值加成从+15%上调到+20%/+30%\n    \n\n    最后的酋长\n    \n        169123版本更新后，鲜卑掠骑兵训练时间从26秒上调到29秒，成本从60木25金上调到65木25金\n        177723版本更新后，虎豹骑/精锐虎豹骑生命值从115/130下调到125，训练时间从15秒上调到18秒\n    \n\n    维京传奇\n    \n        185872版本补丁后，鲜卑掠骑兵成本从65木25金上调到65木35金",
+  "sectionTextSha256": "ecd6b68fdc96a1adc5bbb43d52ae05864f5c61fa2b44d061223605385c35a67d",
+  "observedEntryCount": 8,
+  "supersedesRevisionId": null
+}

@@ -1,0 +1,429 @@
+{
+  "civId": "Mongols",
+  "sourceId": "seicing-mongols",
+  "url": "https://seicing.com/html/aoe2/2/%E8%92%99%E5%8F%A4.html",
+  "indexLabel": "蒙古Mongols",
+  "title": "蒙古",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-65bf6dbebb92f8dce992",
+  "documentSha256": "65bf6dbebb92f8dce992943a73e2430192f155b631a342187295672d6df4c87f",
+  "capturedAt": "2026-11-16T11:45:43.944592+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-770c304a-1c95-404e-ac29-efad85300c7b",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "可以研发精锐战舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-770c304a-1c95-404e-ac29-efad85300c7b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d1ad15ac-a72e-4b23-85e3-7541f015928e",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "蒙古突骑对攻城武器有3点额外伤害，精锐是5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d1ad15ac-a72e-4b23-85e3-7541f015928e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f7372121-6f75-487d-80d1-2c8cf63adceb",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "蒙古突骑的射击间隔是2.03",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f7372121-6f75-487d-80d1-2c8cf63adceb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b36af66c-a1b3-4349-a454-a47f24ca8617",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "蒙古突骑精确率100%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b36af66c-a1b3-4349-a454-a47f24ca8617"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a36b457b-773a-4b45-a434-e0f11a273df0",
+      "group": "国王时代",
+      "locator": "#change li[5]",
+      "originalText": "蒙古突骑移动速度是1.43",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a36b457b-773a-4b45-a434-e0f11a273df0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-edc5a41d-aa9b-4402-ab63-0cadd2ae6c69",
+      "group": "国王时代",
+      "locator": "#change li[6]",
+      "originalText": "蒙古突骑训练速度是21秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-edc5a41d-aa9b-4402-ab63-0cadd2ae6c69"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-daab52fb-cb61-4609-8f08-2e64b365066d",
+      "group": "国王时代",
+      "locator": "#change li[7]",
+      "originalText": "非精锐蒙古突骑的发射延迟是10",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-daab52fb-cb61-4609-8f08-2e64b365066d"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-322e0f93-1783-49eb-b010-67b14fe46ac4",
+      "group": "国王时代",
+      "locator": "#change li[8]",
+      "originalText": "精锐蒙古突骑发射延迟是0",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-322e0f93-1783-49eb-b010-67b14fe46ac4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2cd4fce3-c7ea-42b7-8d08-4150f0241e2b",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "攻城科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2cd4fce3-c7ea-42b7-8d08-4150f0241e2b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-5761b4a8-21ed-47fc-9383-94103c60e232",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "蒙古突骑对抗枪兵有1点额外伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5761b4a8-21ed-47fc-9383-94103c60e232"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-eb3c8e28-ada1-4af3-93cc-ed133e7dbfa8",
+      "group": "征服者",
+      "locator": "#change li[11]",
+      "originalText": "蒙古突骑的射击间隔是2.13",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-eb3c8e28-ada1-4af3-93cc-ed133e7dbfa8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-482d6445-e1aa-44d6-b0cf-4a8d8376e739",
+      "group": "征服者",
+      "locator": "#change li[12]",
+      "originalText": "蒙古突骑精确率95%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-482d6445-e1aa-44d6-b0cf-4a8d8376e739"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0d7e579f-dc90-40eb-81c5-e1abc3104610",
+      "group": "征服者",
+      "locator": "#change li[13]",
+      "originalText": "蒙古突骑移动速度是1.45",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0d7e579f-dc90-40eb-81c5-e1abc3104610"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ac80ef59-a2f1-4381-a6e6-9601b100ca6c",
+      "group": "征服者",
+      "locator": "#change li[14]",
+      "originalText": "蒙古突骑训练速度是26秒",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ac80ef59-a2f1-4381-a6e6-9601b100ca6c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d25ac04a-24c0-45e9-8516-23329649c014",
+      "group": "失落帝国",
+      "locator": "#change li[15]",
+      "originalText": "不可以研发精锐炮舰",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d25ac04a-24c0-45e9-8516-23329649c014"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8f5beecf-d553-41dd-9cd7-79b2a8d34c09",
+      "group": "失落帝国",
+      "locator": "#change li[16]",
+      "originalText": "游牧科技加入",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8f5beecf-d553-41dd-9cd7-79b2a8d34c09"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e9d5b070-affa-455e-9691-216c27e05bc7",
+      "group": "失落帝国",
+      "locator": "#change li[17]",
+      "originalText": "蒙古突骑对攻城武器有1点额外伤害",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e9d5b070-affa-455e-9691-216c27e05bc7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a0e4c834-0f5c-4727-8876-25ad0db2a692",
+      "group": "失落帝国",
+      "locator": "#change li[18]",
+      "originalText": "蒙古突骑现在专门对冲车有3点额外伤害，精锐是5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a0e4c834-0f5c-4727-8876-25ad0db2a692"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b955cdd8-4fa2-471a-b5c3-12eb39a46081",
+      "group": "失落帝国",
+      "locator": "#change li[19]",
+      "originalText": "非精锐蒙古突骑的发射延迟是5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b955cdd8-4fa2-471a-b5c3-12eb39a46081"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cfbd1b6a-72dc-4921-8a7d-b737069dffcf",
+      "group": "非洲王国",
+      "locator": "#change li[20]",
+      "originalText": "可以研发射箭槽，4.8补丁又移除了",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cfbd1b6a-72dc-4921-8a7d-b737069dffcf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6b7173ef-24fd-4e0c-acf1-912c33917ab4",
+      "group": "非洲王国",
+      "locator": "#change li[21]",
+      "originalText": "4.8补丁后，精锐蒙古突骑的发射延迟是5",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6b7173ef-24fd-4e0c-acf1-912c33917ab4"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6fb6794d-22b2-42be-b87c-d3a8f383a7f2",
+      "group": "非洲王国",
+      "locator": "#change li[22]",
+      "originalText": "4.8补丁后，蒙古突骑对攻城武器有3点额外伤害，精锐是5，即回调到最初版",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6fb6794d-22b2-42be-b87c-d3a8f383a7f2"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3ebf020b-1053-4e38-bd37-f07a63715b60",
+      "group": "最后的可汗",
+      "locator": "#change li[23]",
+      "originalText": "现在自行删除的房屋不再适用于游牧的机制",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3ebf020b-1053-4e38-bd37-f07a63715b60"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-42ac81ee-dfd2-4b4e-a97a-c128243e14cb",
+      "group": "最后的可汗",
+      "locator": "#change li[24]",
+      "originalText": "35584版本后，猎人工作效率从原来的50%下调为40%",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-42ac81ee-dfd2-4b4e-a97a-c128243e14cb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e503ea4c-f2c8-461d-8b7e-d4737b263a72",
+      "group": "最后的可汗",
+      "locator": "#change li[25]",
+      "originalText": "35584版本后，获得草原枪兵和精锐草原枪兵，蒙古骑兵30%血量加成对他们也有效",
+      "rawVersions": [
+        "35584"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e503ea4c-f2c8-461d-8b7e-d4737b263a72"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8585b343-392f-474d-b6e8-4ae84a5bbcc2",
+      "group": "最后的可汗",
+      "locator": "#change li[26]",
+      "originalText": "36202版本后，草原枪兵的基础攻击力+1",
+      "rawVersions": [
+        "36202"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6e1130ec-a314-4ad9-a188-4b512e42d8d1"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d5128937-ffac-48d2-83e5-76e551a8ba97",
+      "group": "最后的可汗",
+      "locator": "#change li[27]",
+      "originalText": "37650版本后，不再拥有供给",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-23238351-959c-42c5-872f-b6f1355ebc21"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6d5a6d70-e33e-457c-927d-9e352bf1b2bd",
+      "group": "西方霸主",
+      "locator": "#change li[28]",
+      "originalText": "47820版本后，草原枪兵黄金费用从45黄金下调为40黄金",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-943a4beb-6b1e-4c7b-a69c-ba4485f73202"
+      ],
+      "reason": "人工对照同版本、同对象形态及同条件的相同变化，复用事件；原文及文明来源关系各自保留。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-218ffef1-915c-44c7-8bec-6fa7edf97b05",
+      "group": "西方霸主",
+      "locator": "#change li[29]",
+      "originalText": "47820版本后，蒙古突骑的移动速度下调为1.4",
+      "rawVersions": [
+        "47820"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-218ffef1-915c-44c7-8bec-6fa7edf97b05"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-3e961f5c-c077-4a95-8f44-a82944e60e87",
+      "group": "成王败寇",
+      "locator": "#change li[30]",
+      "originalText": "111772版本更新后，轻骑兵+30%生命值加成修改为“城堡时代+20%、帝王时代+30%”",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-3e961f5c-c077-4a95-8f44-a82944e60e87"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    国王时代\n    \n        可以研发精锐战舰\n        蒙古突骑对攻城武器有3点额外伤害，精锐是5\n        蒙古突骑的射击间隔是2.03\n        蒙古突骑精确率100%\n        蒙古突骑移动速度是1.43\n        蒙古突骑训练速度是21秒\n        非精锐蒙古突骑的发射延迟是10\n        精锐蒙古突骑发射延迟是0\n    \n\n    征服者\n    \n        攻城科技加入\n        蒙古突骑对抗枪兵有1点额外伤害\n        蒙古突骑的射击间隔是2.13\n        蒙古突骑精确率95%\n        蒙古突骑移动速度是1.45\n        蒙古突骑训练速度是26秒\n    \n\n    失落帝国\n    \n        不可以研发精锐炮舰\n        游牧科技加入\n        蒙古突骑对攻城武器有1点额外伤害\n        蒙古突骑现在专门对冲车有3点额外伤害，精锐是5\n        非精锐蒙古突骑的发射延迟是5\n    \n\n    非洲王国\n    \n        可以研发射箭槽，4.8补丁又移除了\n        4.8补丁后，精锐蒙古突骑的发射延迟是5\n        4.8补丁后，蒙古突骑对攻城武器有3点额外伤害，精锐是5，即回调到最初版\n    \n\n    最后的可汗\n    \n        现在自行删除的房屋不再适用于游牧的机制\n        35584版本后，猎人工作效率从原来的50%下调为40%\n        35584版本后，获得草原枪兵和精锐草原枪兵，蒙古骑兵30%血量加成对他们也有效\n        36202版本后，草原枪兵的基础攻击力+1\n        37650版本后，不再拥有供给\n    \n\n    西方霸主\n    \n        47820版本后，草原枪兵黄金费用从45黄金下调为40黄金\n        47820版本后，蒙古突骑的移动速度下调为1.4\n    \n\n    成王败寇\n    \n        111772版本更新后，轻骑兵+30%生命值加成修改为“城堡时代+20%、帝王时代+30%”",
+  "sectionTextSha256": "3b95d41e20e20f7edfe38cce7f06d21007b61f6e5194679d92d561034593cabc",
+  "observedEntryCount": 30,
+  "supersedesRevisionId": null
+}

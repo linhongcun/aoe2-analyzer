@@ -1,0 +1,6023 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "125283:125283-001-001",
+      "patchId": "125283",
+      "entryId": "125283-001-001",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-001-002",
+      "patchId": "125283",
+      "entryId": "125283-001-002",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-002-003",
+      "patchId": "125283",
+      "entryId": "125283-002-003",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-003-004",
+      "patchId": "125283",
+      "entryId": "125283-003-004",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-004-005",
+      "patchId": "125283",
+      "entryId": "125283-004-005",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-005-006",
+      "patchId": "125283",
+      "entryId": "125283-005-006",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-006-007",
+      "patchId": "125283",
+      "entryId": "125283-006-007",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-007-008",
+      "patchId": "125283",
+      "entryId": "125283-007-008",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-007-009",
+      "patchId": "125283",
+      "entryId": "125283-007-009",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-008-010",
+      "patchId": "125283",
+      "entryId": "125283-008-010",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-009-011",
+      "patchId": "125283",
+      "entryId": "125283-009-011",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-009-012",
+      "patchId": "125283",
+      "entryId": "125283-009-012",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-010-013",
+      "patchId": "125283",
+      "entryId": "125283-010-013",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "125283:125283-011-014",
+      "patchId": "125283",
+      "entryId": "125283-011-014",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b011",
+      "claimId": "cl-legacy-125283-b011",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-012-015",
+      "patchId": "125283",
+      "entryId": "125283-012-015",
+      "disposition": "migrated",
+      "eventId": "ev-se-1c806b1c-86dc-42e3-8bc5-bc809d37c426",
+      "claimId": "cl-legacy-125283-b012",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-013-016",
+      "patchId": "125283",
+      "entryId": "125283-013-016",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b013",
+      "claimId": "cl-legacy-125283-b013",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-014-017",
+      "patchId": "125283",
+      "entryId": "125283-014-017",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b014",
+      "claimId": "cl-legacy-125283-b014",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
+      "projections": [
+        {
+          "civId": "Chinese",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Chinese"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
+    },
+    {
+      "key": "125283:125283-015-018",
+      "patchId": "125283",
+      "entryId": "125283-015-018",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b015",
+      "claimId": "cl-legacy-125283-b015",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-016-019",
+      "patchId": "125283",
+      "entryId": "125283-016-019",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b181601-aa4b-4bdc-bf42-ae252a02c164",
+      "claimId": "cl-legacy-125283-b016",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Georgians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-016-020",
+      "patchId": "125283",
+      "entryId": "125283-016-020",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b181601-aa4b-4bdc-bf42-ae252a02c164",
+      "claimId": "cl-legacy-125283-b016",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Georgians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-017-021",
+      "patchId": "125283",
+      "entryId": "125283-017-021",
+      "disposition": "migrated",
+      "eventId": "ev-se-2841337a-c387-4ce4-82b8-205087f848c4",
+      "claimId": "cl-legacy-125283-b017",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Huns",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-018-022",
+      "patchId": "125283",
+      "entryId": "125283-018-022",
+      "disposition": "migrated",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-018-023",
+      "patchId": "125283",
+      "entryId": "125283-018-023",
+      "disposition": "migrated",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-019-024",
+      "patchId": "125283",
+      "entryId": "125283-019-024",
+      "disposition": "migrated",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b019",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-020-025",
+      "patchId": "125283",
+      "entryId": "125283-020-025",
+      "disposition": "migrated",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b020",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-020-026",
+      "patchId": "125283",
+      "entryId": "125283-020-026",
+      "disposition": "migrated",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b020",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-021-027",
+      "patchId": "125283",
+      "entryId": "125283-021-027",
+      "disposition": "migrated",
+      "eventId": "ev-se-41ae9a4a-5cec-44f6-ab81-d8428d077142",
+      "claimId": "cl-legacy-125283-b021",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-021-028",
+      "patchId": "125283",
+      "entryId": "125283-021-028",
+      "disposition": "migrated",
+      "eventId": "ev-se-41ae9a4a-5cec-44f6-ab81-d8428d077142",
+      "claimId": "cl-legacy-125283-b021",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-022-029",
+      "patchId": "125283",
+      "entryId": "125283-022-029",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b022",
+      "claimId": "cl-legacy-125283-b022",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-023-030",
+      "patchId": "125283",
+      "entryId": "125283-023-030",
+      "disposition": "migrated",
+      "eventId": "ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f",
+      "claimId": "cl-legacy-125283-b023",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-023-031",
+      "patchId": "125283",
+      "entryId": "125283-023-031",
+      "disposition": "migrated",
+      "eventId": "ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f",
+      "claimId": "cl-legacy-125283-b023",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-024-032",
+      "patchId": "125283",
+      "entryId": "125283-024-032",
+      "disposition": "migrated",
+      "eventId": "ev-se-f94135ec-c019-4202-94c3-5513de97e019",
+      "claimId": "cl-legacy-125283-b024",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "125283:125283-025-033",
+      "patchId": "125283",
+      "entryId": "125283-025-033",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-125283-b025",
+      "claimId": "cl-legacy-125283-b025",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Romans",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-1",
+      "patchId": "185872",
+      "entryId": "185872-1",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-2",
+      "patchId": "185872",
+      "entryId": "185872-2",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-3",
+      "patchId": "185872",
+      "entryId": "185872-3",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-4",
+      "patchId": "185872",
+      "entryId": "185872-4",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-5",
+      "patchId": "185872",
+      "entryId": "185872-5",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-6",
+      "patchId": "185872",
+      "entryId": "185872-6",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-7",
+      "patchId": "185872",
+      "entryId": "185872-7",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-8",
+      "patchId": "185872",
+      "entryId": "185872-8",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-9",
+      "patchId": "185872",
+      "entryId": "185872-9",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-10",
+      "patchId": "185872",
+      "entryId": "185872-10",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-11",
+      "patchId": "185872",
+      "entryId": "185872-11",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-12",
+      "patchId": "185872",
+      "entryId": "185872-12",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-13",
+      "patchId": "185872",
+      "entryId": "185872-13",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-14",
+      "patchId": "185872",
+      "entryId": "185872-14",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-15",
+      "patchId": "185872",
+      "entryId": "185872-15",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-16",
+      "patchId": "185872",
+      "entryId": "185872-16",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-17",
+      "patchId": "185872",
+      "entryId": "185872-17",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-18",
+      "patchId": "185872",
+      "entryId": "185872-18",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-19",
+      "patchId": "185872",
+      "entryId": "185872-19",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-20",
+      "patchId": "185872",
+      "entryId": "185872-20",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-21",
+      "patchId": "185872",
+      "entryId": "185872-21",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-22",
+      "patchId": "185872",
+      "entryId": "185872-22",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-23",
+      "patchId": "185872",
+      "entryId": "185872-23",
+      "disposition": "migrated",
+      "eventId": "ev-se-5b272934-e264-4d62-8bce-1cd1bc55f7e0",
+      "claimId": "cl-legacy-185872-23",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-24",
+      "patchId": "185872",
+      "entryId": "185872-24",
+      "disposition": "migrated",
+      "eventId": "ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf",
+      "claimId": "cl-legacy-Bohemians: (Elite) Hussite Wagon cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-25",
+      "patchId": "185872",
+      "entryId": "185872-25",
+      "disposition": "migrated",
+      "eventId": "ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf",
+      "claimId": "cl-legacy-Bohemians: (Elite) Hussite Wagon cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-26",
+      "patchId": "185872",
+      "entryId": "185872-26",
+      "disposition": "migrated",
+      "eventId": "ev-se-e84b7f56-195b-4429-9d73-eb3d1a614090",
+      "claimId": "cl-legacy-185872-26",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-27",
+      "patchId": "185872",
+      "entryId": "185872-27",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Burgundians: Flemish Militia cost",
+      "claimId": "cl-legacy-Burgundians: Flemish Militia cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-28",
+      "patchId": "185872",
+      "entryId": "185872-28",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-28",
+      "claimId": "cl-legacy-185872-28",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-29",
+      "patchId": "185872",
+      "entryId": "185872-29",
+      "disposition": "migrated",
+      "eventId": "ev-se-7d9c49c7-e58e-4f68-8aef-615713c39452",
+      "claimId": "cl-legacy-185872-29",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-30",
+      "patchId": "185872",
+      "entryId": "185872-30",
+      "disposition": "migrated",
+      "eventId": "ev-se-7d9c49c7-e58e-4f68-8aef-615713c39452",
+      "claimId": "cl-legacy-185872-30",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-31",
+      "patchId": "185872",
+      "entryId": "185872-31",
+      "disposition": "migrated",
+      "eventId": "ev-se-b2e03d69-c522-4dba-b1f5-3a8a43b5b403",
+      "claimId": "cl-legacy-185872-31",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-32",
+      "patchId": "185872",
+      "entryId": "185872-32",
+      "disposition": "migrated",
+      "eventId": "ev-se-5cb76bf8-cb73-4096-af7e-8400b79aef91",
+      "claimId": "cl-legacy-185872-32",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-33",
+      "patchId": "185872",
+      "entryId": "185872-33",
+      "disposition": "migrated",
+      "eventId": "ev-se-5cb76bf8-cb73-4096-af7e-8400b79aef91",
+      "claimId": "cl-legacy-185872-33",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-34",
+      "patchId": "185872",
+      "entryId": "185872-34",
+      "disposition": "migrated",
+      "eventId": "ev-se-74f6be20-8cd5-47fb-bee5-b09d491c9a1c",
+      "claimId": "cl-legacy-185872-34",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-35",
+      "patchId": "185872",
+      "entryId": "185872-35",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-35",
+      "claimId": "cl-legacy-185872-35",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-36",
+      "patchId": "185872",
+      "entryId": "185872-36",
+      "disposition": "migrated",
+      "eventId": "ev-se-db94e00b-7e0c-472d-ab7c-49642bdaee28",
+      "claimId": "cl-legacy-185872-36",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Huns",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-37",
+      "patchId": "185872",
+      "entryId": "185872-37",
+      "disposition": "migrated",
+      "eventId": "ev-se-cfffb079-259f-4795-9022-05dd9c42ba7f",
+      "claimId": "cl-legacy-185872-37",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Jurchens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-38",
+      "patchId": "185872",
+      "entryId": "185872-38",
+      "disposition": "migrated",
+      "eventId": "ev-se-db6955bd-94e6-4653-adaa-b23924933130",
+      "claimId": "cl-legacy-185872-38",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-39",
+      "patchId": "185872",
+      "entryId": "185872-39",
+      "disposition": "migrated",
+      "eventId": "ev-se-76a7e9c7-48a8-44f1-8c88-811a954bde5d",
+      "claimId": "cl-legacy-185872-39",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Magyars",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-40",
+      "patchId": "185872",
+      "entryId": "185872-40",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mapuche",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-41",
+      "patchId": "185872",
+      "entryId": "185872-41",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mapuche",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-42",
+      "patchId": "185872",
+      "entryId": "185872-42",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mapuche",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-43",
+      "patchId": "185872",
+      "entryId": "185872-43",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mapuche",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-44",
+      "patchId": "185872",
+      "entryId": "185872-44",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-44",
+      "claimId": "cl-legacy-185872-44",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Muisca",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-45",
+      "patchId": "185872",
+      "entryId": "185872-45",
+      "disposition": "migrated",
+      "eventId": "ev-se-d7bef1a4-9cd5-40da-bbde-14ed4ac902b6",
+      "claimId": "cl-legacy-185872-45",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-46",
+      "patchId": "185872",
+      "entryId": "185872-46",
+      "disposition": "migrated",
+      "eventId": "ev-se-9dc50a2e-943f-4e10-b8e0-5575ed87a965",
+      "claimId": "cl-legacy-Shu: War Chariot cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Shu",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-47",
+      "patchId": "185872",
+      "entryId": "185872-47",
+      "disposition": "migrated",
+      "eventId": "ev-se-9dc50a2e-943f-4e10-b8e0-5575ed87a965",
+      "claimId": "cl-legacy-185872-47",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Shu",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-48",
+      "patchId": "185872",
+      "entryId": "185872-48",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Spanish: (Elite) Conquistador cost",
+      "claimId": "cl-legacy-Spanish: (Elite) Conquistador cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-49",
+      "patchId": "185872",
+      "entryId": "185872-49",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-Spanish: (Elite) Conquistador cost",
+      "claimId": "cl-legacy-Spanish: (Elite) Conquistador cost",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-50",
+      "patchId": "185872",
+      "entryId": "185872-50",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-50",
+      "claimId": "cl-legacy-185872-50",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-51",
+      "patchId": "185872",
+      "entryId": "185872-51",
+      "disposition": "migrated",
+      "eventId": "ev-se-bb5df202-bc19-4ed7-8431-70c301ca8862",
+      "claimId": "cl-legacy-Spanish: Missionary cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-52",
+      "patchId": "185872",
+      "entryId": "185872-52",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-52",
+      "claimId": "cl-legacy-185872-52",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-53",
+      "patchId": "185872",
+      "entryId": "185872-53",
+      "disposition": "migrated",
+      "eventId": "ev-se-57b8c54b-cc81-4a47-ab9b-ca18a5f3226f",
+      "claimId": "cl-legacy-185872-53",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-54",
+      "patchId": "185872",
+      "entryId": "185872-54",
+      "disposition": "migrated",
+      "eventId": "ev-se-e179f9cd-d6a7-4415-a0e4-35c993661315",
+      "claimId": "cl-legacy-Tupi: (Elite) Blackwood Archer cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Tupi",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-55",
+      "patchId": "185872",
+      "entryId": "185872-55",
+      "disposition": "migrated",
+      "eventId": "ev-se-e179f9cd-d6a7-4415-a0e4-35c993661315",
+      "claimId": "cl-legacy-Tupi: (Elite) Blackwood Archer cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Tupi",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-56",
+      "patchId": "185872",
+      "entryId": "185872-56",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-56",
+      "claimId": "cl-legacy-185872-56",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-57",
+      "patchId": "185872",
+      "entryId": "185872-57",
+      "disposition": "migrated",
+      "eventId": "ev-se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751",
+      "claimId": "cl-legacy-185872-57",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-58",
+      "patchId": "185872",
+      "entryId": "185872-58",
+      "disposition": "migrated",
+      "eventId": "ev-se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751",
+      "claimId": "cl-legacy-185872-58",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-59",
+      "patchId": "185872",
+      "entryId": "185872-59",
+      "disposition": "migrated",
+      "eventId": "ev-se-6a83c865-e1a3-4f5c-bc93-ab8ae22f5b9d",
+      "claimId": "cl-legacy-185872-59",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-60",
+      "patchId": "185872",
+      "entryId": "185872-60",
+      "disposition": "migrated",
+      "eventId": "ev-se-eeef9b58-6b2f-41f9-ae1a-4bac36e2aca6",
+      "claimId": "cl-legacy-185872-60",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-61",
+      "patchId": "185872",
+      "entryId": "185872-61",
+      "disposition": "migrated",
+      "eventId": "ev-se-24d61e1f-983d-4904-addd-e255eae3c022",
+      "claimId": "cl-legacy-Wei: Xianbei Raider cost",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Wei",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-62",
+      "patchId": "185872",
+      "entryId": "185872-62",
+      "disposition": "migrated",
+      "eventId": "ev-se-25df9ae1-bc13-4812-a322-77ea11c3dbae",
+      "claimId": "cl-legacy-185872-62",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Armenians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-63",
+      "patchId": "185872",
+      "entryId": "185872-63",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-63",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-64",
+      "patchId": "185872",
+      "entryId": "185872-64",
+      "disposition": "migrated",
+      "eventId": "ev-se-e8a63aa9-2418-4c0b-acd9-464bc9a68bec",
+      "claimId": "cl-legacy-185872-64",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Goths",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-65",
+      "patchId": "185872",
+      "entryId": "185872-65",
+      "disposition": "migrated",
+      "eventId": "ev-se-73e42eed-f2d5-47f3-a9e0-f1ef1b68879a",
+      "claimId": "cl-legacy-185872-65",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Shu",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-66",
+      "patchId": "185872",
+      "entryId": "185872-66",
+      "disposition": "migrated",
+      "eventId": "ev-se-7752584c-0bd9-4b77-8e71-94b1748f96a7",
+      "claimId": "cl-legacy-185872-66",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-67",
+      "patchId": "185872",
+      "entryId": "185872-67",
+      "disposition": "migrated",
+      "eventId": "ev-se-5e9f97f4-d1ea-4978-8d12-c5384d61e6b9",
+      "claimId": "cl-legacy-185872-67",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-68",
+      "patchId": "185872",
+      "entryId": "185872-68",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-68",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-69",
+      "patchId": "185872",
+      "entryId": "185872-69",
+      "disposition": "migrated",
+      "eventId": "ev-se-089d3561-f953-4823-86e9-06cc2403d55d",
+      "claimId": "cl-legacy-185872-69",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-70",
+      "patchId": "185872",
+      "entryId": "185872-70",
+      "disposition": "migrated",
+      "eventId": "ev-se-f55e0ca5-841f-4185-afe9-4ae070ab1a5b",
+      "claimId": "cl-legacy-185872-70",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-71",
+      "patchId": "185872",
+      "entryId": "185872-71",
+      "disposition": "migrated",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-71",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-72",
+      "patchId": "185872",
+      "entryId": "185872-72",
+      "disposition": "migrated",
+      "eventId": "ev-se-e184a29e-25e4-4c9f-b603-d2499897afed",
+      "claimId": "cl-legacy-185872-72",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-73",
+      "patchId": "185872",
+      "entryId": "185872-73",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-73",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-74",
+      "patchId": "185872",
+      "entryId": "185872-74",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-74",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-75",
+      "patchId": "185872",
+      "entryId": "185872-75",
+      "disposition": "migrated",
+      "eventId": "ev-se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f",
+      "claimId": "cl-legacy-185872-75",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Italians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-76",
+      "patchId": "185872",
+      "entryId": "185872-76",
+      "disposition": "migrated",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-76",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-77",
+      "patchId": "185872",
+      "entryId": "185872-77",
+      "disposition": "migrated",
+      "eventId": "ev-se-6c0a2596-8bc9-4c13-b68d-bb23ce648848",
+      "claimId": "cl-legacy-185872-77",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-78",
+      "patchId": "185872",
+      "entryId": "185872-78",
+      "disposition": "migrated",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-78",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-79",
+      "patchId": "185872",
+      "entryId": "185872-79",
+      "disposition": "migrated",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-79",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-80",
+      "patchId": "185872",
+      "entryId": "185872-80",
+      "disposition": "migrated",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-80",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-81",
+      "patchId": "185872",
+      "entryId": "185872-81",
+      "disposition": "migrated",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-81",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-82",
+      "patchId": "185872",
+      "entryId": "185872-82",
+      "disposition": "migrated",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-82",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-83",
+      "patchId": "185872",
+      "entryId": "185872-83",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-83",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-84",
+      "patchId": "185872",
+      "entryId": "185872-84",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-84",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-85",
+      "patchId": "185872",
+      "entryId": "185872-85",
+      "disposition": "migrated",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-85",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-86",
+      "patchId": "185872",
+      "entryId": "185872-86",
+      "disposition": "migrated",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-86",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-87",
+      "patchId": "185872",
+      "entryId": "185872-87",
+      "disposition": "migrated",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-87",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-88",
+      "patchId": "185872",
+      "entryId": "185872-88",
+      "disposition": "migrated",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-88",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-89",
+      "patchId": "185872",
+      "entryId": "185872-89",
+      "disposition": "migrated",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-89",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-90",
+      "patchId": "185872",
+      "entryId": "185872-90",
+      "disposition": "migrated",
+      "eventId": "ev-se-e184a29e-25e4-4c9f-b603-d2499897afed",
+      "claimId": "cl-legacy-185872-90",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-91",
+      "patchId": "185872",
+      "entryId": "185872-91",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-91",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-92",
+      "patchId": "185872",
+      "entryId": "185872-92",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-92",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-93",
+      "patchId": "185872",
+      "entryId": "185872-93",
+      "disposition": "migrated",
+      "eventId": "ev-se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f",
+      "claimId": "cl-legacy-185872-93",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Italians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-94",
+      "patchId": "185872",
+      "entryId": "185872-94",
+      "disposition": "migrated",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-94",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-95",
+      "patchId": "185872",
+      "entryId": "185872-95",
+      "disposition": "migrated",
+      "eventId": "ev-se-6c0a2596-8bc9-4c13-b68d-bb23ce648848",
+      "claimId": "cl-legacy-185872-95",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-96",
+      "patchId": "185872",
+      "entryId": "185872-96",
+      "disposition": "migrated",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-96",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-97",
+      "patchId": "185872",
+      "entryId": "185872-97",
+      "disposition": "migrated",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-97",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-98",
+      "patchId": "185872",
+      "entryId": "185872-98",
+      "disposition": "migrated",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-98",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-99",
+      "patchId": "185872",
+      "entryId": "185872-99",
+      "disposition": "migrated",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-99",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-100",
+      "patchId": "185872",
+      "entryId": "185872-100",
+      "disposition": "migrated",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-100",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-101",
+      "patchId": "185872",
+      "entryId": "185872-101",
+      "disposition": "migrated",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-101",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-102",
+      "patchId": "185872",
+      "entryId": "185872-102",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-102",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-103",
+      "patchId": "185872",
+      "entryId": "185872-103",
+      "disposition": "migrated",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-103",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-104",
+      "patchId": "185872",
+      "entryId": "185872-104",
+      "disposition": "migrated",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-104",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-105",
+      "patchId": "185872",
+      "entryId": "185872-105",
+      "disposition": "migrated",
+      "eventId": "ev-se-6cfc45ec-5edc-4ce6-8b89-a009da942b77",
+      "claimId": "cl-legacy-185872-105",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Chinese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-106",
+      "patchId": "185872",
+      "entryId": "185872-106",
+      "disposition": "migrated",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-106",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-107",
+      "patchId": "185872",
+      "entryId": "185872-107",
+      "disposition": "migrated",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-107",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-108",
+      "patchId": "185872",
+      "entryId": "185872-108",
+      "disposition": "migrated",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-108",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-109",
+      "patchId": "185872",
+      "entryId": "185872-109",
+      "disposition": "migrated",
+      "eventId": "ev-se-68f13514-6525-4221-a654-caa7da07ef3b",
+      "claimId": "cl-legacy-185872-109",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-110",
+      "patchId": "185872",
+      "entryId": "185872-110",
+      "disposition": "migrated",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-110",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-111",
+      "patchId": "185872",
+      "entryId": "185872-111",
+      "disposition": "migrated",
+      "eventId": "ev-se-a01e6e7f-8bac-4b6d-b73c-0407834275c3",
+      "claimId": "cl-legacy-185872-111",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-112",
+      "patchId": "185872",
+      "entryId": "185872-112",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-112",
+      "claimId": "cl-legacy-185872-112",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-113",
+      "patchId": "185872",
+      "entryId": "185872-113",
+      "disposition": "migrated",
+      "eventId": "ev-se-2d93c0b7-d92f-43c1-9749-78258c4dd08f",
+      "claimId": "cl-legacy-185872-113",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-114",
+      "patchId": "185872",
+      "entryId": "185872-114",
+      "disposition": "migrated",
+      "eventId": "ev-se-2d93c0b7-d92f-43c1-9749-78258c4dd08f",
+      "claimId": "cl-legacy-185872-114",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-115",
+      "patchId": "185872",
+      "entryId": "185872-115",
+      "disposition": "migrated",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-115",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-116",
+      "patchId": "185872",
+      "entryId": "185872-116",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-116",
+      "claimId": "cl-legacy-185872-116",
+      "reason": "O1 边界复核：社区 185872 科技树原文没有提及炮舰 unit/420；本旧记录保留为独立事件及原核验状态，不因同文明同版本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-117",
+      "patchId": "185872",
+      "entryId": "185872-117",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-117",
+      "claimId": "cl-legacy-185872-117",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-118",
+      "patchId": "185872",
+      "entryId": "185872-118",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-118",
+      "claimId": "cl-legacy-185872-118",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-119",
+      "patchId": "185872",
+      "entryId": "185872-119",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-119",
+      "claimId": "cl-legacy-185872-119",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Danes",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-120",
+      "patchId": "185872",
+      "entryId": "185872-120",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-120",
+      "claimId": "cl-legacy-185872-120",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Saxons",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-121",
+      "patchId": "185872",
+      "entryId": "185872-121",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-185872-121",
+      "claimId": "cl-legacy-185872-121",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Varangians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "185872:185872-122",
+      "patchId": "185872",
+      "entryId": "185872-122",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-123",
+      "patchId": "185872",
+      "entryId": "185872-123",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-124",
+      "patchId": "185872",
+      "entryId": "185872-124",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-125",
+      "patchId": "185872",
+      "entryId": "185872-125",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "185872:185872-126",
+      "patchId": "185872",
+      "entryId": "185872-126",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-1",
+      "patchId": "188329",
+      "entryId": "188329-1",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-2",
+      "patchId": "188329",
+      "entryId": "188329-2",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-3",
+      "patchId": "188329",
+      "entryId": "188329-3",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-4",
+      "patchId": "188329",
+      "entryId": "188329-4",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-5",
+      "patchId": "188329",
+      "entryId": "188329-5",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-188329-5",
+      "claimId": "cl-legacy-188329-5",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mapuche",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "188329:188329-6",
+      "patchId": "188329",
+      "entryId": "188329-6",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "188329:188329-7",
+      "patchId": "188329",
+      "entryId": "188329-7",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-001-001",
+      "patchId": "66692",
+      "entryId": "66692-001-001",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-002-002",
+      "patchId": "66692",
+      "entryId": "66692-002-002",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-003-003",
+      "patchId": "66692",
+      "entryId": "66692-003-003",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-003-004",
+      "patchId": "66692",
+      "entryId": "66692-003-004",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-004-005",
+      "patchId": "66692",
+      "entryId": "66692-004-005",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-005-006",
+      "patchId": "66692",
+      "entryId": "66692-005-006",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-006-007",
+      "patchId": "66692",
+      "entryId": "66692-006-007",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-006-008",
+      "patchId": "66692",
+      "entryId": "66692-006-008",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-007-009",
+      "patchId": "66692",
+      "entryId": "66692-007-009",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-010",
+      "patchId": "66692",
+      "entryId": "66692-007-010",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Chinese",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-011",
+      "patchId": "66692",
+      "entryId": "66692-007-011",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Huns",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-012",
+      "patchId": "66692",
+      "entryId": "66692-007-012",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-013",
+      "patchId": "66692",
+      "entryId": "66692-007-013",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Lithuanians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-014",
+      "patchId": "66692",
+      "entryId": "66692-007-014",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Mayans",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-015",
+      "patchId": "66692",
+      "entryId": "66692-007-015",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Persians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-016",
+      "patchId": "66692",
+      "entryId": "66692-007-016",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-007-017",
+      "patchId": "66692",
+      "entryId": "66692-007-017",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b007",
+      "claimId": "cl-legacy-66692-b007",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-008-018",
+      "patchId": "66692",
+      "entryId": "66692-008-018",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b008",
+      "claimId": "cl-legacy-66692-b008",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Ethiopians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-008-019",
+      "patchId": "66692",
+      "entryId": "66692-008-019",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b008",
+      "claimId": "cl-legacy-66692-b008",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-008-020",
+      "patchId": "66692",
+      "entryId": "66692-008-020",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b008",
+      "claimId": "cl-legacy-66692-b008",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-009-021",
+      "patchId": "66692",
+      "entryId": "66692-009-021",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "66692:66692-010-022",
+      "patchId": "66692",
+      "entryId": "66692-010-022",
+      "disposition": "migrated",
+      "eventId": "ev-se-92cfd002-cb86-4ad1-be9b-8c5ee6a8e66a",
+      "claimId": "cl-legacy-66692-b010",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-011-023",
+      "patchId": "66692",
+      "entryId": "66692-011-023",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b011",
+      "claimId": "cl-legacy-66692-b011",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-011-024",
+      "patchId": "66692",
+      "entryId": "66692-011-024",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b011",
+      "claimId": "cl-legacy-66692-b011",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-012-025",
+      "patchId": "66692",
+      "entryId": "66692-012-025",
+      "disposition": "migrated",
+      "eventId": "ev-se-cb7be739-d5ae-4227-b0e7-a9af85f423da",
+      "claimId": "cl-legacy-66692-b012",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-013-030",
+      "patchId": "66692",
+      "entryId": "66692-013-030",
+      "disposition": "migrated",
+      "eventId": "ev-se-8f397bf5-7908-4335-b59e-ec9607e031d7",
+      "claimId": "cl-legacy-66692-b013",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-014-031",
+      "patchId": "66692",
+      "entryId": "66692-014-031",
+      "disposition": "migrated",
+      "eventId": "ev-se-8f397bf5-7908-4335-b59e-ec9607e031d7",
+      "claimId": "cl-legacy-66692-b014",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-015-032",
+      "patchId": "66692",
+      "entryId": "66692-015-032",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b015",
+      "claimId": "cl-legacy-66692-b015",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-016-026",
+      "patchId": "66692",
+      "entryId": "66692-016-026",
+      "disposition": "migrated",
+      "eventId": "ev-se-573c97d4-4582-4512-b829-870d9b5147ec",
+      "claimId": "cl-legacy-66692-b016",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-017-033",
+      "patchId": "66692",
+      "entryId": "66692-017-033",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b017",
+      "claimId": "cl-legacy-66692-b017",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Cumans",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-018-034",
+      "patchId": "66692",
+      "entryId": "66692-018-034",
+      "disposition": "migrated",
+      "eventId": "ev-se-2d50da99-7f76-46b8-bcca-208adba18171",
+      "claimId": "cl-legacy-66692-b018",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-019-035",
+      "patchId": "66692",
+      "entryId": "66692-019-035",
+      "disposition": "migrated",
+      "eventId": "ev-se-f04bcf1d-c1f6-410a-98ce-1ac8989187ef",
+      "claimId": "cl-legacy-66692-b019",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-020-036",
+      "patchId": "66692",
+      "entryId": "66692-020-036",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b020",
+      "claimId": "cl-legacy-66692-b020",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-021-037",
+      "patchId": "66692",
+      "entryId": "66692-021-037",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b021",
+      "claimId": "cl-legacy-66692-b021",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-022-038",
+      "patchId": "66692",
+      "entryId": "66692-022-038",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b022",
+      "claimId": "cl-legacy-66692-b022",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-023-039",
+      "patchId": "66692",
+      "entryId": "66692-023-039",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b023",
+      "claimId": "cl-legacy-66692-b023",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-023-040",
+      "patchId": "66692",
+      "entryId": "66692-023-040",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b023",
+      "claimId": "cl-legacy-66692-b023",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-024-041",
+      "patchId": "66692",
+      "entryId": "66692-024-041",
+      "disposition": "migrated",
+      "eventId": "ev-se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8",
+      "claimId": "cl-legacy-66692-b024",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Hindustanis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-025-042",
+      "patchId": "66692",
+      "entryId": "66692-025-042",
+      "disposition": "migrated",
+      "eventId": "ev-se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8",
+      "claimId": "cl-legacy-66692-b025",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Hindustanis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-026-043",
+      "patchId": "66692",
+      "entryId": "66692-026-043",
+      "disposition": "migrated",
+      "eventId": "ev-se-d2c95b41-1f97-4956-b7fa-699e3219fc9a",
+      "claimId": "cl-legacy-66692-b026",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Hindustanis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-027-044",
+      "patchId": "66692",
+      "entryId": "66692-027-044",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b027",
+      "claimId": "cl-legacy-66692-b027",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-028-027",
+      "patchId": "66692",
+      "entryId": "66692-028-027",
+      "disposition": "migrated",
+      "eventId": "ev-se-c86a1460-8301-4b7e-9ce2-1d6805dd660c",
+      "claimId": "cl-legacy-66692-b028",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-029-045",
+      "patchId": "66692",
+      "entryId": "66692-029-045",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b029",
+      "claimId": "cl-legacy-66692-b029",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Saracens",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-030-046",
+      "patchId": "66692",
+      "entryId": "66692-030-046",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-66692-b030",
+      "claimId": "cl-legacy-66692-b030",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-031-028",
+      "patchId": "66692",
+      "entryId": "66692-031-028",
+      "disposition": "migrated",
+      "eventId": "ev-se-c1a8cb7c-07fb-4aea-a0c0-fd175d9226a8",
+      "claimId": "cl-legacy-66692-b031",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "66692:66692-032-029",
+      "patchId": "66692",
+      "entryId": "66692-032-029",
+      "disposition": "migrated",
+      "eventId": "ev-se-6736d488-7913-4452-931d-508e65da7692",
+      "claimId": "cl-legacy-66692-b032",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-1",
+      "patchId": "81058",
+      "entryId": "81058-1",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b001",
+      "claimId": "cl-legacy-81058-b001",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-2",
+      "patchId": "81058",
+      "entryId": "81058-2",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b002",
+      "claimId": "cl-legacy-81058-b002",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-3",
+      "patchId": "81058",
+      "entryId": "81058-3",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b003",
+      "claimId": "cl-legacy-81058-b003",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-4",
+      "patchId": "81058",
+      "entryId": "81058-4",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b004",
+      "claimId": "cl-legacy-81058-b004",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-5",
+      "patchId": "81058",
+      "entryId": "81058-5",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-6",
+      "patchId": "81058",
+      "entryId": "81058-6",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-7",
+      "patchId": "81058",
+      "entryId": "81058-7",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-8",
+      "patchId": "81058",
+      "entryId": "81058-8",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-9",
+      "patchId": "81058",
+      "entryId": "81058-9",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-10",
+      "patchId": "81058",
+      "entryId": "81058-10",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-11",
+      "patchId": "81058",
+      "entryId": "81058-11",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-12",
+      "patchId": "81058",
+      "entryId": "81058-12",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-13",
+      "patchId": "81058",
+      "entryId": "81058-13",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-14",
+      "patchId": "81058",
+      "entryId": "81058-14",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-15",
+      "patchId": "81058",
+      "entryId": "81058-15",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-16",
+      "patchId": "81058",
+      "entryId": "81058-16",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-17",
+      "patchId": "81058",
+      "entryId": "81058-17",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-18",
+      "patchId": "81058",
+      "entryId": "81058-18",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-19",
+      "patchId": "81058",
+      "entryId": "81058-19",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-20",
+      "patchId": "81058",
+      "entryId": "81058-20",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-21",
+      "patchId": "81058",
+      "entryId": "81058-21",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-22",
+      "patchId": "81058",
+      "entryId": "81058-22",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-23",
+      "patchId": "81058",
+      "entryId": "81058-23",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-24",
+      "patchId": "81058",
+      "entryId": "81058-24",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-25",
+      "patchId": "81058",
+      "entryId": "81058-25",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "掷矛手费用折扣适用"
+        },
+        {
+          "civId": "Lithuanians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Magyars",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-26",
+      "patchId": "81058",
+      "entryId": "81058-26",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "掷矛手费用折扣适用"
+        },
+        {
+          "civId": "Lithuanians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        },
+        {
+          "civId": "Magyars",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-27",
+      "patchId": "81058",
+      "entryId": "81058-27",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-28",
+      "patchId": "81058",
+      "entryId": "81058-28",
+      "disposition": "archive-only",
+      "eventId": null,
+      "claimId": null,
+      "reason": "无明确文明范围；仍由原版本档案提供，不根据今天科技树广播到文明。",
+      "projections": []
+    },
+    {
+      "key": "81058:81058-29",
+      "patchId": "81058",
+      "entryId": "81058-29",
+      "disposition": "migrated",
+      "eventId": "ev-se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c",
+      "claimId": "cl-legacy-81058-b024",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-30",
+      "patchId": "81058",
+      "entryId": "81058-30",
+      "disposition": "migrated",
+      "eventId": "ev-se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c",
+      "claimId": "cl-legacy-81058-b024",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-31",
+      "patchId": "81058",
+      "entryId": "81058-31",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b025",
+      "claimId": "cl-legacy-81058-b025",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-32",
+      "patchId": "81058",
+      "entryId": "81058-32",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b026",
+      "claimId": "cl-legacy-81058-b026",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Aztecs",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-33",
+      "patchId": "81058",
+      "entryId": "81058-33",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b027",
+      "claimId": "cl-legacy-81058-b027",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-34",
+      "patchId": "81058",
+      "entryId": "81058-34",
+      "disposition": "migrated",
+      "eventId": "ev-se-098f6481-d155-4c2b-8e69-40643ee14a12",
+      "claimId": "cl-legacy-81058-b028",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-35",
+      "patchId": "81058",
+      "entryId": "81058-35",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b029",
+      "claimId": "cl-legacy-81058-b029",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-36",
+      "patchId": "81058",
+      "entryId": "81058-36",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b029",
+      "claimId": "cl-legacy-81058-b029",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bengalis",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-37",
+      "patchId": "81058",
+      "entryId": "81058-37",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b030",
+      "claimId": "cl-legacy-81058-b030",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Berbers",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-38",
+      "patchId": "81058",
+      "entryId": "81058-38",
+      "disposition": "migrated",
+      "eventId": "ev-se-7e1753b5-5801-410b-89a2-8a14ac62064f",
+      "claimId": "cl-legacy-81058-b031",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Bohemians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-39",
+      "patchId": "81058",
+      "entryId": "81058-39",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b032",
+      "claimId": "cl-legacy-81058-b032",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Britons"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
+    },
+    {
+      "key": "81058:81058-40",
+      "patchId": "81058",
+      "entryId": "81058-40",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b033",
+      "claimId": "cl-legacy-81058-b033",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Britons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-41",
+      "patchId": "81058",
+      "entryId": "81058-41",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b034",
+      "claimId": "cl-legacy-81058-b034",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-42",
+      "patchId": "81058",
+      "entryId": "81058-42",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b035",
+      "claimId": "cl-legacy-81058-b035",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Bulgarians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-43",
+      "patchId": "81058",
+      "entryId": "81058-43",
+      "disposition": "migrated",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b036",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-44",
+      "patchId": "81058",
+      "entryId": "81058-44",
+      "disposition": "migrated",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b037",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-45",
+      "patchId": "81058",
+      "entryId": "81058-45",
+      "disposition": "migrated",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b038",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-46",
+      "patchId": "81058",
+      "entryId": "81058-46",
+      "disposition": "migrated",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b039",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-47",
+      "patchId": "81058",
+      "entryId": "81058-47",
+      "disposition": "migrated",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b040",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-48",
+      "patchId": "81058",
+      "entryId": "81058-48",
+      "disposition": "migrated",
+      "eventId": "ev-se-fff7e4f6-757f-449a-9795-b6b47e737a3c",
+      "claimId": "cl-legacy-81058-b041",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burgundians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-49",
+      "patchId": "81058",
+      "entryId": "81058-49",
+      "disposition": "migrated",
+      "eventId": "ev-se-80da7d99-98b5-4939-bcc0-a5178bc9c823",
+      "claimId": "cl-legacy-81058-b042",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-50",
+      "patchId": "81058",
+      "entryId": "81058-50",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b043",
+      "claimId": "cl-legacy-81058-b043",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Burmese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-51",
+      "patchId": "81058",
+      "entryId": "81058-51",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b044",
+      "claimId": "cl-legacy-81058-b044",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-52",
+      "patchId": "81058",
+      "entryId": "81058-52",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b045",
+      "claimId": "cl-legacy-81058-b045",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Byzantines",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-53",
+      "patchId": "81058",
+      "entryId": "81058-53",
+      "disposition": "migrated",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b046",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-54",
+      "patchId": "81058",
+      "entryId": "81058-54",
+      "disposition": "migrated",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b047",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-55",
+      "patchId": "81058",
+      "entryId": "81058-55",
+      "disposition": "migrated",
+      "eventId": "ev-se-82143c48-186b-4dea-8d3f-dd6662260393",
+      "claimId": "cl-legacy-81058-b048",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/232"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 70,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "靛蓝突袭者基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-55"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-56",
+      "patchId": "81058",
+      "entryId": "81058-56",
+      "disposition": "migrated",
+      "eventId": "ev-se-82143c48-186b-4dea-8d3f-dd6662260393",
+      "claimId": "cl-legacy-81058-b048",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/534"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 80,
+          "after": 85,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "靛蓝突袭者基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-56"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-57",
+      "patchId": "81058",
+      "entryId": "81058-57",
+      "disposition": "migrated",
+      "eventId": "ev-se-c9ff904f-ab26-443f-8f03-f7ea7cd5c4c3",
+      "claimId": "cl-legacy-81058-b049",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-58",
+      "patchId": "81058",
+      "entryId": "81058-58",
+      "disposition": "migrated",
+      "eventId": "ev-se-c9ff904f-ab26-443f-8f03-f7ea7cd5c4c3",
+      "claimId": "cl-legacy-81058-b049",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-59",
+      "patchId": "81058",
+      "entryId": "81058-59",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b050",
+      "claimId": "cl-legacy-81058-b050",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Celts",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-60",
+      "patchId": "81058",
+      "entryId": "81058-60",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b052",
+      "claimId": "cl-legacy-81058-b052",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-61",
+      "patchId": "81058",
+      "entryId": "81058-61",
+      "disposition": "migrated",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
+      "claimId": "cl-legacy-81058-b053",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "研究食物成本",
+          "before": 350,
+          "after": 300,
+          "delta": null,
+          "unit": "食物",
+          "operation": "set",
+          "text": "医疗部队研究费用降低。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-61"
+        },
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "研究黄金成本",
+          "before": 250,
+          "after": 200,
+          "delta": null,
+          "unit": "黄金",
+          "operation": "set",
+          "text": "医疗部队研究费用降低。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-61-2"
+        }
+      ],
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Dravidians"
+        ],
+        "beneficiary": "self",
+        "conditions": [
+          "文明特色科技：医疗团队（Medical Corps），不是团队奖励。"
+        ]
+      }
+    },
+    {
+      "key": "81058:81058-62",
+      "patchId": "81058",
+      "entryId": "81058-62",
+      "disposition": "migrated",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
+      "claimId": "cl-legacy-81058-b054",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "每分钟治疗量",
+          "before": 20,
+          "after": 30,
+          "delta": null,
+          "unit": "HP/分钟",
+          "operation": "set",
+          "text": "医疗部队的每分钟治疗量提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-62"
+        }
+      ],
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Dravidians"
+        ],
+        "beneficiary": "self",
+        "conditions": [
+          "文明特色科技：医疗团队（Medical Corps），不是团队奖励。"
+        ]
+      }
+    },
+    {
+      "key": "81058:81058-63",
+      "patchId": "81058",
+      "entryId": "81058-63",
+      "disposition": "migrated",
+      "eventId": "ev-se-500556ab-f8e5-4fe8-b2e5-9864f9a81e01",
+      "claimId": "cl-legacy-81058-b055",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Dravidians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-64",
+      "patchId": "81058",
+      "entryId": "81058-64",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b056",
+      "claimId": "cl-legacy-81058-b056",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
+      "projections": [
+        {
+          "civId": "Ethiopians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Ethiopians"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
+    },
+    {
+      "key": "81058:81058-65",
+      "patchId": "81058",
+      "entryId": "81058-65",
+      "disposition": "migrated",
+      "eventId": "ev-se-6cb3ffce-085c-42a1-86e3-88d549c83548",
+      "claimId": "cl-legacy-81058-b057",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Ethiopians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-66",
+      "patchId": "81058",
+      "entryId": "81058-66",
+      "disposition": "migrated",
+      "eventId": "ev-se-1a3ba141-3906-4e31-9530-784f10f61296",
+      "claimId": "cl-legacy-81058-b058",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Ethiopians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-67",
+      "patchId": "81058",
+      "entryId": "81058-67",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b059",
+      "claimId": "cl-legacy-81058-b059",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Franks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-68",
+      "patchId": "81058",
+      "entryId": "81058-68",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b060",
+      "claimId": "cl-legacy-81058-b060",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Goths",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-69",
+      "patchId": "81058",
+      "entryId": "81058-69",
+      "disposition": "migrated",
+      "eventId": "ev-se-34848776-53cb-493c-88c5-b913b077f2ca",
+      "claimId": "cl-legacy-81058-b061",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-70",
+      "patchId": "81058",
+      "entryId": "81058-70",
+      "disposition": "migrated",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b062",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-71",
+      "patchId": "81058",
+      "entryId": "81058-71",
+      "disposition": "migrated",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b062",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-72",
+      "patchId": "81058",
+      "entryId": "81058-72",
+      "disposition": "migrated",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b063",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-73",
+      "patchId": "81058",
+      "entryId": "81058-73",
+      "disposition": "migrated",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b063",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Gurjaras",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-74",
+      "patchId": "81058",
+      "entryId": "81058-74",
+      "disposition": "migrated",
+      "eventId": "ev-se-a27381fe-3d82-4063-aa2c-20a54ee5887c",
+      "claimId": "cl-legacy-81058-b064",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Huns",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-75",
+      "patchId": "81058",
+      "entryId": "81058-75",
+      "disposition": "migrated",
+      "eventId": "ev-se-e41bd3c1-985c-47e7-9967-d6ed810e03ed",
+      "claimId": "cl-legacy-81058-b065",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-76",
+      "patchId": "81058",
+      "entryId": "81058-76",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b066",
+      "claimId": "cl-legacy-81058-b066",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-77",
+      "patchId": "81058",
+      "entryId": "81058-77",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b067",
+      "claimId": "cl-legacy-81058-b067",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-78",
+      "patchId": "81058",
+      "entryId": "81058-78",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b068",
+      "claimId": "cl-legacy-81058-b068",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-79",
+      "patchId": "81058",
+      "entryId": "81058-79",
+      "disposition": "migrated",
+      "eventId": "ev-se-7a050df9-67d0-460c-adcb-6b70d56cb12c",
+      "claimId": "cl-legacy-81058-b069",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-80",
+      "patchId": "81058",
+      "entryId": "81058-80",
+      "disposition": "migrated",
+      "eventId": "ev-se-7a050df9-67d0-460c-adcb-6b70d56cb12c",
+      "claimId": "cl-legacy-81058-b069",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-81",
+      "patchId": "81058",
+      "entryId": "81058-81",
+      "disposition": "migrated",
+      "eventId": "ev-se-01bc0638-44d5-4d9f-8b32-c8e1ea445a5c",
+      "claimId": "cl-legacy-81058-b070",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-82",
+      "patchId": "81058",
+      "entryId": "81058-82",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b071",
+      "claimId": "cl-legacy-81058-b071",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-83",
+      "patchId": "81058",
+      "entryId": "81058-83",
+      "disposition": "migrated",
+      "eventId": "ev-se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc",
+      "claimId": "cl-legacy-81058-b072",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Incas"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
+    },
+    {
+      "key": "81058:81058-84",
+      "patchId": "81058",
+      "entryId": "81058-84",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b073",
+      "claimId": "cl-legacy-81058-b073",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Incas",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-85",
+      "patchId": "81058",
+      "entryId": "81058-85",
+      "disposition": "migrated",
+      "eventId": "ev-se-6bba70da-f46b-45b1-9010-a52d54b98118",
+      "claimId": "cl-legacy-81058-b074",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-86",
+      "patchId": "81058",
+      "entryId": "81058-86",
+      "disposition": "migrated",
+      "eventId": "ev-se-cb321b35-73c0-407b-a8fd-83027349d5a1",
+      "claimId": "cl-legacy-81058-b075",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-87",
+      "patchId": "81058",
+      "entryId": "81058-87",
+      "disposition": "migrated",
+      "eventId": "ev-se-cb321b35-73c0-407b-a8fd-83027349d5a1",
+      "claimId": "cl-legacy-81058-b075",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-88",
+      "patchId": "81058",
+      "entryId": "81058-88",
+      "disposition": "migrated",
+      "eventId": "ev-se-98d4459c-d902-4364-9bab-756a88b63f4f",
+      "claimId": "cl-legacy-81058-b076",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-89",
+      "patchId": "81058",
+      "entryId": "81058-89",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b077",
+      "claimId": "cl-legacy-81058-b077",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Japanese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-90",
+      "patchId": "81058",
+      "entryId": "81058-90",
+      "disposition": "migrated",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b078",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-91",
+      "patchId": "81058",
+      "entryId": "81058-91",
+      "disposition": "migrated",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b078",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-92",
+      "patchId": "81058",
+      "entryId": "81058-92",
+      "disposition": "migrated",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b079",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-93",
+      "patchId": "81058",
+      "entryId": "81058-93",
+      "disposition": "migrated",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b079",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Khmer",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-94",
+      "patchId": "81058",
+      "entryId": "81058-94",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b080",
+      "claimId": "cl-legacy-81058-b080",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-95",
+      "patchId": "81058",
+      "entryId": "81058-95",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b081",
+      "claimId": "cl-legacy-81058-b081",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-96",
+      "patchId": "81058",
+      "entryId": "81058-96",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b082",
+      "claimId": "cl-legacy-81058-b082",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Lithuanians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-97",
+      "patchId": "81058",
+      "entryId": "81058-97",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b083",
+      "claimId": "cl-legacy-81058-b083",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Malay",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-98",
+      "patchId": "81058",
+      "entryId": "81058-98",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b084",
+      "claimId": "cl-legacy-81058-b084",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Malay",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-99",
+      "patchId": "81058",
+      "entryId": "81058-99",
+      "disposition": "migrated",
+      "eventId": "ev-se-e899f208-5569-4ba2-8ed4-688c4b8ef05e",
+      "claimId": "cl-legacy-81058-b085",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Malians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-100",
+      "patchId": "81058",
+      "entryId": "81058-100",
+      "disposition": "migrated",
+      "eventId": "ev-se-e899f208-5569-4ba2-8ed4-688c4b8ef05e",
+      "claimId": "cl-legacy-81058-b085",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Malians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-101",
+      "patchId": "81058",
+      "entryId": "81058-101",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b086",
+      "claimId": "cl-legacy-81058-b086",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Malians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-102",
+      "patchId": "81058",
+      "entryId": "81058-102",
+      "disposition": "migrated",
+      "eventId": "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "claimId": "cl-legacy-81058-b087",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Malians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-103",
+      "patchId": "81058",
+      "entryId": "81058-103",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b088",
+      "claimId": "cl-legacy-81058-b088",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Malians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-104",
+      "patchId": "81058",
+      "entryId": "81058-104",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b089",
+      "claimId": "cl-legacy-81058-b089",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-105",
+      "patchId": "81058",
+      "entryId": "81058-105",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b090",
+      "claimId": "cl-legacy-81058-b090",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Persians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-106",
+      "patchId": "81058",
+      "entryId": "81058-106",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b091",
+      "claimId": "cl-legacy-81058-b091",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Poles",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-107",
+      "patchId": "81058",
+      "entryId": "81058-107",
+      "disposition": "migrated",
+      "eventId": "ev-se-5c51cd63-b1db-497c-8b4d-0807c9ed2710",
+      "claimId": "cl-legacy-81058-b092",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-108",
+      "patchId": "81058",
+      "entryId": "81058-108",
+      "disposition": "migrated",
+      "eventId": "ev-se-5c51cd63-b1db-497c-8b4d-0807c9ed2710",
+      "claimId": "cl-legacy-81058-b092",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-109",
+      "patchId": "81058",
+      "entryId": "81058-109",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b093",
+      "claimId": "cl-legacy-81058-b093",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-110",
+      "patchId": "81058",
+      "entryId": "81058-110",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b094",
+      "claimId": "cl-legacy-81058-b094",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Portuguese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-111",
+      "patchId": "81058",
+      "entryId": "81058-111",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b095",
+      "claimId": "cl-legacy-81058-b095",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-112",
+      "patchId": "81058",
+      "entryId": "81058-112",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b096",
+      "claimId": "cl-legacy-81058-b096",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Saracens",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-113",
+      "patchId": "81058",
+      "entryId": "81058-113",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b097",
+      "claimId": "cl-legacy-81058-b097",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-114",
+      "patchId": "81058",
+      "entryId": "81058-114",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b098",
+      "claimId": "cl-legacy-81058-b098",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-115",
+      "patchId": "81058",
+      "entryId": "81058-115",
+      "disposition": "migrated",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b099",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-116",
+      "patchId": "81058",
+      "entryId": "81058-116",
+      "disposition": "migrated",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b100",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-117",
+      "patchId": "81058",
+      "entryId": "81058-117",
+      "disposition": "migrated",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b101",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-118",
+      "patchId": "81058",
+      "entryId": "81058-118",
+      "disposition": "migrated",
+      "eventId": "ev-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1",
+      "claimId": "cl-legacy-81058-b102",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-119",
+      "patchId": "81058",
+      "entryId": "81058-119",
+      "disposition": "migrated",
+      "eventId": "ev-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1",
+      "claimId": "cl-legacy-81058-b103",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-120",
+      "patchId": "81058",
+      "entryId": "81058-120",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b104",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1658"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 45,
+          "after": 50,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "封建时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-120"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-121",
+      "patchId": "81058",
+      "entryId": "81058-121",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b104",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1660"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 45,
+          "after": 50,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "封建时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-121"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-122",
+      "patchId": "81058",
+      "entryId": "81058-122",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b105",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1658"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 75,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "城堡时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-122"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-123",
+      "patchId": "81058",
+      "entryId": "81058-123",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b105",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1660"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 75,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "城堡时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-123"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-124",
+      "patchId": "81058",
+      "entryId": "81058-124",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b106",
+      "claimId": "cl-legacy-81058-b106",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-125",
+      "patchId": "81058",
+      "entryId": "81058-125",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b106",
+      "claimId": "cl-legacy-81058-b106",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-126",
+      "patchId": "81058",
+      "entryId": "81058-126",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b107",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-127",
+      "patchId": "81058",
+      "entryId": "81058-127",
+      "disposition": "migrated",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b107",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-128",
+      "patchId": "81058",
+      "entryId": "81058-128",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b108",
+      "claimId": "cl-legacy-81058-b108",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-129",
+      "patchId": "81058",
+      "entryId": "81058-129",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b109",
+      "claimId": "cl-legacy-81058-b109",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Sicilians",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-130",
+      "patchId": "81058",
+      "entryId": "81058-130",
+      "disposition": "migrated",
+      "eventId": "ev-se-5b40b461-8898-4e1d-a17e-3687d16072cc",
+      "claimId": "cl-legacy-81058-b110",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-132",
+      "patchId": "81058",
+      "entryId": "81058-132",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b111",
+      "claimId": "cl-legacy-81058-b111",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-133",
+      "patchId": "81058",
+      "entryId": "81058-133",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b112",
+      "claimId": "cl-legacy-81058-b112",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Slavs",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-134",
+      "patchId": "81058",
+      "entryId": "81058-134",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b113",
+      "claimId": "cl-legacy-81058-b113",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Slavs",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-135",
+      "patchId": "81058",
+      "entryId": "81058-135",
+      "disposition": "migrated",
+      "eventId": "ev-se-526989bb-382b-44f6-a3eb-de1d3a242fd3",
+      "claimId": "cl-legacy-81058-b114",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-136",
+      "patchId": "81058",
+      "entryId": "81058-136",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b115",
+      "claimId": "cl-legacy-81058-b115",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-137",
+      "patchId": "81058",
+      "entryId": "81058-137",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b116",
+      "claimId": "cl-legacy-81058-b116",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "direct",
+          "note": "文明本身"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-138",
+      "patchId": "81058",
+      "entryId": "81058-138",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b117",
+      "claimId": "cl-legacy-81058-b117",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-139",
+      "patchId": "81058",
+      "entryId": "81058-139",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b118",
+      "claimId": "cl-legacy-81058-b118",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Spanish",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-140",
+      "patchId": "81058",
+      "entryId": "81058-140",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b119",
+      "claimId": "cl-legacy-81058-b119",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Tatars",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-141",
+      "patchId": "81058",
+      "entryId": "81058-141",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b119",
+      "claimId": "cl-legacy-81058-b119",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Tatars",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-142",
+      "patchId": "81058",
+      "entryId": "81058-142",
+      "disposition": "migrated",
+      "eventId": "ev-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91",
+      "claimId": "cl-legacy-81058-b120",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Turks",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-143",
+      "patchId": "81058",
+      "entryId": "81058-143",
+      "disposition": "migrated",
+      "eventId": "ev-se-5458faa2-3de7-4985-9721-50cc13f726db",
+      "claimId": "cl-legacy-81058-b121",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-144",
+      "patchId": "81058",
+      "entryId": "81058-144",
+      "disposition": "migrated",
+      "eventId": "ev-se-5458faa2-3de7-4985-9721-50cc13f726db",
+      "claimId": "cl-legacy-81058-b121",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-145",
+      "patchId": "81058",
+      "entryId": "81058-145",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b122",
+      "claimId": "cl-legacy-81058-b122",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-146",
+      "patchId": "81058",
+      "entryId": "81058-146",
+      "disposition": "migrated",
+      "eventId": "ev-se-9e6e9081-8156-442d-bb34-62454bfc969a",
+      "claimId": "cl-legacy-81058-b123",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vietnamese",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-147",
+      "patchId": "81058",
+      "entryId": "81058-147",
+      "disposition": "migrated",
+      "eventId": "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "claimId": "cl-legacy-81058-b124",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-148",
+      "patchId": "81058",
+      "entryId": "81058-148",
+      "disposition": "migrated",
+      "eventId": "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "claimId": "cl-legacy-81058-b125",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-149",
+      "patchId": "81058",
+      "entryId": "81058-149",
+      "disposition": "migrated",
+      "eventId": "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "claimId": "cl-legacy-81058-b126",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-150",
+      "patchId": "81058",
+      "entryId": "81058-150",
+      "disposition": "migrated",
+      "eventId": "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "claimId": "cl-legacy-81058-b126",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-151",
+      "patchId": "81058",
+      "entryId": "81058-151",
+      "disposition": "migrated",
+      "eventId": "ev-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0",
+      "claimId": "cl-legacy-81058-b127",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-152",
+      "patchId": "81058",
+      "entryId": "81058-152",
+      "disposition": "migrated",
+      "eventId": "ev-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0",
+      "claimId": "cl-legacy-81058-b127",
+      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-153",
+      "patchId": "81058",
+      "entryId": "81058-153",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b128",
+      "claimId": "cl-legacy-81058-b128",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-154",
+      "patchId": "81058",
+      "entryId": "81058-154",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b129",
+      "claimId": "cl-legacy-81058-b129",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    },
+    {
+      "key": "81058:81058-155",
+      "patchId": "81058",
+      "entryId": "81058-155",
+      "disposition": "migrated",
+      "eventId": "ev-legacy-81058-b130",
+      "claimId": "cl-legacy-81058-b130",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "projections": [
+        {
+          "civId": "Vikings",
+          "relation": "related",
+          "note": "该文明在本次改动的明确适用范围内"
+        }
+      ]
+    }
+  ]
+}

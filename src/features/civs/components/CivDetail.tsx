@@ -15,7 +15,8 @@ import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { session } from '../../../shared/utils/sticky';
-import { HistoricalEntityDetail, PatchHistory } from '../../../shared/ui/PatchHistory';
+import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { CivUpdates } from '../../../shared/ui/CivUpdates';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
 import { BonusRows } from './BonusRows';
@@ -182,14 +183,14 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
   useEffect(() => {
     if (!c) return;
     session.lastCiv = c.en;
-    if (tab != null) {
+    if (tab != null && tab !== 'history') {
       const next = new URLSearchParams(location.search);
       next.delete('tab');
       const anchor = TAB_ANCHOR[tab] ?? '';
       navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
       return;
     }
-    const id = location.hash.replace(/^#/, '');
+    const id = location.hash.replace(/^#/, '') || (tab === 'history' ? 'patches' : '');
     if (!id) {
       scrollTo(0, 0);
       return;
@@ -337,7 +338,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
           <CivHistory civ={c.en} />
         </Fold>
         <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <PatchHistory hostedHeading target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
+          <CivUpdates civId={c.en} />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>

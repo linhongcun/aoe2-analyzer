@@ -1,0 +1,199 @@
+{
+  "civId": "Armenians",
+  "sourceId": "seicing-armenians",
+  "url": "https://seicing.com/html/aoe2/2/%E4%BA%9A%E7%BE%8E%E5%B0%BC%E4%BA%9A.html",
+  "indexLabel": "亚美尼亚Armenians",
+  "title": "亚美尼亚",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-b36fe06d608425383d04",
+  "documentSha256": "b36fe06d608425383d0425d65b495f9c4c697a4bb863973f21bf733f51f3e76a",
+  "capturedAt": "2026-11-16T11:39:51.076277+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-f1858aef-8070-4424-8435-ac7ec749ab9e",
+      "group": "皇家山脉",
+      "locator": "#change li[1]",
+      "originalText": "99311版本后，“箭船发射双重箭矢”加成修改为“箭船和德罗蒙战舰发射子弹数+1”",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f1858aef-8070-4424-8435-ac7ec749ab9e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9456ae2b-899a-4f1b-b1e5-5832d1dd8090",
+      "group": "皇家山脉",
+      "locator": "#change li[2]",
+      "originalText": "99311版本后，骡车成本从100木20肉下调到了80木20肉",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9456ae2b-899a-4f1b-b1e5-5832d1dd8090"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-e53c3c77-30b5-4893-9291-651598bb7e59",
+      "group": "皇家山脉",
+      "locator": "#change li[3]",
+      "originalText": "99311版本后，骡车科技加成从25%上调到了40%，但无法研发双人锯",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-e53c3c77-30b5-4893-9291-651598bb7e59"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-29bf294f-5cac-4827-966e-9b488ee6d48e",
+      "group": "皇家山脉",
+      "locator": "#change li[4]",
+      "originalText": "99311版本后，奇里乞亚舰队爆破船加成半径从33%下调到了20%",
+      "rawVersions": [
+        "99311"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-29bf294f-5cac-4827-966e-9b488ee6d48e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1fad97c8-8337-401d-a92c-fed4acd6822b",
+      "group": "成王败寇",
+      "locator": "#change li[5]",
+      "originalText": "111772版本更新后，亚美尼亚人失去造船匠",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1fad97c8-8337-401d-a92c-fed4acd6822b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ac1f9073-bb85-4558-abb0-0e44556db6bf",
+      "group": "三国",
+      "locator": "#change li[6]",
+      "originalText": "162286版本更新后，牧师战士的成本从30肉60金下调到30肉50金",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ac1f9073-bb85-4558-abb0-0e44556db6bf"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b83f1013-ce4b-49af-b026-50aee7a217c9",
+      "group": "最后的酋长",
+      "locator": "#change li[7]",
+      "originalText": "169123版本更新后，强化教堂对建筑物的额外伤害从+5下调到+0，射程从6下调到4，现在可以从远程铁匠铺升级获得射程加成",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b83f1013-ce4b-49af-b026-50aee7a217c9"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-94ff8611-5ad9-4610-8a5e-33888f26f3e5",
+      "group": "最后的酋长",
+      "locator": "#change li[8]",
+      "originalText": "169123版本更新后，牧师战士的成本从30肉50金上调到40肉50金",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-94ff8611-5ad9-4610-8a5e-33888f26f3e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c59ad76a-4ba3-4d06-a60f-0b89c1d263fb",
+      "group": "最后的酋长",
+      "locator": "#change li[9]",
+      "originalText": "177723版本更新后，获得重型冲车",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c59ad76a-4ba3-4d06-a60f-0b89c1d263fb"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-6dc48aa7-dce3-428c-a492-5f7b4beb8bdc",
+      "group": "最后的酋长",
+      "locator": "#change li[10]",
+      "originalText": "177723版本更新后，精锐复合弓箭手的生命值从45上调到50",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6dc48aa7-dce3-428c-a492-5f7b4beb8bdc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-9cf5a940-a9aa-46ef-880f-657d419a499b",
+      "group": "维京传奇",
+      "locator": "#change li[11]",
+      "originalText": "185872版本补丁后，强化教堂建造时间从40秒上调到50秒",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9cf5a940-a9aa-46ef-880f-657d419a499b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-25df9ae1-bc13-4812-a322-77ea11c3dbae",
+      "group": "维京传奇",
+      "locator": "#change li[12]",
+      "originalText": "185872版本补丁后，获得脚踏起重机",
+      "rawVersions": [
+        "185872"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-25df9ae1-bc13-4812-a322-77ea11c3dbae"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    皇家山脉\n    \n        99311版本后，“箭船发射双重箭矢”加成修改为“箭船和德罗蒙战舰发射子弹数+1”\n        99311版本后，骡车成本从100木20肉下调到了80木20肉\n        99311版本后，骡车科技加成从25%上调到了40%，但无法研发双人锯\n        99311版本后，奇里乞亚舰队爆破船加成半径从33%下调到了20%\n    \n\n    成王败寇\n    \n        111772版本更新后，亚美尼亚人失去造船匠\n    \n\n    三国\n    \n        162286版本更新后，牧师战士的成本从30肉60金下调到30肉50金\n    \n\n    最后的酋长\n    \n        169123版本更新后，强化教堂对建筑物的额外伤害从+5下调到+0，射程从6下调到4，现在可以从远程铁匠铺升级获得射程加成\n        169123版本更新后，牧师战士的成本从30肉50金上调到40肉50金\n        177723版本更新后，获得重型冲车\n        177723版本更新后，精锐复合弓箭手的生命值从45上调到50\n    \n\n    维京传奇\n    \n        185872版本补丁后，强化教堂建造时间从40秒上调到50秒\n        185872版本补丁后，获得脚踏起重机",
+  "sectionTextSha256": "1fed120c18d5792b10a8b5614c1fa4bc056fed5dc9f6280f417811ad93bfde2d",
+  "observedEntryCount": 12,
+  "supersedesRevisionId": null
+}

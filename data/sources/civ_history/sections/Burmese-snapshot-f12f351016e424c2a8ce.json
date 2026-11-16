@@ -1,0 +1,343 @@
+{
+  "civId": "Burmese",
+  "sourceId": "seicing-burmese",
+  "url": "https://seicing.com/html/aoe2/2/%E7%BC%85%E7%94%B8.html",
+  "indexLabel": "缅甸Burmese",
+  "title": "缅甸",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-f12f351016e424c2a8ce",
+  "documentSha256": "f12f351016e424c2a8ceb1a71ed7f062638d473c8d65e2592f1b6c56491c88c3",
+  "capturedAt": "2026-11-16T11:41:55.695219+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-2486007b-b6e0-457f-95be-c1fb0201f44f",
+      "group": "蛮王崛起",
+      "locator": "#change li[1]",
+      "originalText": "象轿花费200食物和300木材提供象兵1近战护甲和2远程护甲，5.7版本后象轿花费400食物和300木材提供象兵1近战护甲和1远程护甲",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2486007b-b6e0-457f-95be-c1fb0201f44f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-37e7b750-3366-40aa-b03f-ca6ffec73228",
+      "group": "蛮王崛起",
+      "locator": "#change li[2]",
+      "originalText": "飞镖骑兵花费50木材和60黄金，5.8版本后花费80木材和60黄金",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-37e7b750-3366-40aa-b03f-ca6ffec73228"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-facda370-983a-4882-a84e-734edc2d8b9f",
+      "group": "蛮王崛起",
+      "locator": "#change li[3]",
+      "originalText": "飞镖骑兵拥有18攻击力，精锐飞镖骑兵拥有20攻击力，1.35移速，2点骑射手护甲。5.7版本后，飞镖骑兵拥有17攻击力，精锐飞镖骑兵拥有19攻击力，1.3移速，骑射手护甲删除",
+      "rawVersions": [
+        "5.7"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-facda370-983a-4882-a84e-734edc2d8b9f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0e0e7a59-4e64-47af-b8aa-6b07bf2a52c5",
+      "group": "蛮王崛起",
+      "locator": "#change li[4]",
+      "originalText": "曼尼普尔马提供6点对建筑的伤害，5.3版本后这个加成会分摊到建筑属性和标准建筑属性上，也就是说建筑学提供的建筑护甲不能很好地抵消这个额外伤害",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0e0e7a59-4e64-47af-b8aa-6b07bf2a52c5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-59ee1060-1e93-47af-903f-5bd339f123f7",
+      "group": "蛮王崛起",
+      "locator": "#change li[5]",
+      "originalText": "曼尼普尔马成本为650食物450黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-59ee1060-1e93-47af-903f-5bd339f123f7"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7216f97d-8cfc-45c0-85f7-13abceb01e6c",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "修复了缅甸的显示遗迹位置奖励的视野会永久显示的问题",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7216f97d-8cfc-45c0-85f7-13abceb01e6c"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-adcef7c8-ae42-41a3-94d1-792bac17ca73",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "37650版本后，曼尼普尔马科技提供的伤害加成不再被石匠科技提供的加成减免了",
+      "rawVersions": [
+        "37650"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-adcef7c8-ae42-41a3-94d1-792bac17ca73"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f297d284-7f61-4fa8-b24a-8165b5b19a1e",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "39284版本后，象兵的区域伤害从50%下调为25%",
+      "rawVersions": [
+        "39284"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f297d284-7f61-4fa8-b24a-8165b5b19a1e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-4dcf4df6-c08e-44b1-b68a-b45a1971762e",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-4dcf4df6-c08e-44b1-b68a-b45a1971762e"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-cae01f0c-bb8e-4073-a3ea-55ffcbfe1863",
+      "group": "最后的可汗",
+      "locator": "#change li[10]",
+      "originalText": "42848版本后，飞镖骑兵装弹时间提升到2.2，之前是2.0",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cae01f0c-bb8e-4073-a3ea-55ffcbfe1863"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c3556c2b-5070-4008-a239-c8cc31073a09",
+      "group": "西方霸主",
+      "locator": "#change li[11]",
+      "originalText": "44725更新后，飞镖骑兵/精锐飞镖骑兵遗漏的射击(没有命中首要目标但是射中了其他目标)的伤害从50%提升到100%，攻击力从17/19下降为12/15",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c3556c2b-5070-4008-a239-c8cc31073a09"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-85cddaca-3e45-4c9f-87ad-6507993f2c74",
+      "group": "西方霸主",
+      "locator": "#change li[12]",
+      "originalText": "44725更新后，精锐飞镖骑兵装弹时间从2.2下降为2.0",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-85cddaca-3e45-4c9f-87ad-6507993f2c74"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-915dafef-a295-4408-b85e-6f967676e9e0",
+      "group": "公爵的崛起",
+      "locator": "#change li[13]",
+      "originalText": "51737更新中，象轿的护甲加成从+1/+1上调到+1/+2",
+      "rawVersions": [
+        "51737"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-915dafef-a295-4408-b85e-6f967676e9e0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-ea5d7534-ff64-45c9-b9c8-7e8985f7b417",
+      "group": "公爵的崛起",
+      "locator": "#change li[14]",
+      "originalText": "56005更新中，曼尼普尔马的加成从+6对建筑物伤害调整为+5对弓箭手伤害，不再影响飞镖骑兵",
+      "rawVersions": [
+        "56005"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-ea5d7534-ff64-45c9-b9c8-7e8985f7b417"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a2ce0695-3e5a-43b2-8879-f213c495a2c8",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "61321版本后，获得“大象部队获得+1/+1防御力”文明加成，象轿的远程防御加成从2下调到1",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a2ce0695-3e5a-43b2-8879-f213c495a2c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-2d5a75a0-558b-4ce3-9702-0e77ab1251c8",
+      "group": "印度王朝",
+      "locator": "#change li[16]",
+      "originalText": "曼尼普尔马更名为曼尼普尔骑兵，成本从650食物400黄金下调到400食物400黄金",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-2d5a75a0-558b-4ce3-9702-0e77ab1251c8"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-998264a1-e26e-47f4-b840-9c515cad7b97",
+      "group": "印度王朝",
+      "locator": "#change li[17]",
+      "originalText": "61321版本后，飞镖骑兵生产时间从21秒下调到18秒",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-998264a1-e26e-47f4-b840-9c515cad7b97"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-8893f02b-35f3-49c8-8fb2-d4fa38cbea17",
+      "group": "印度王朝",
+      "locator": "#change li[18]",
+      "originalText": "73855版本后，飞镖骑兵享受帕提亚战术加成",
+      "rawVersions": [
+        "73855"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-8893f02b-35f3-49c8-8fb2-d4fa38cbea17"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-80da7d99-98b5-4939-bcc0-a5178bc9c823",
+      "group": "印度王朝",
+      "locator": "#change li[19]",
+      "originalText": "81058版本后，升级到精锐飞镖骑兵的成本从1100肉675金调整为1000肉750金",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-80da7d99-98b5-4939-bcc0-a5178bc9c823"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-f5760437-d640-4aed-a0bf-484497107046",
+      "group": "罗马归来",
+      "locator": "#change li[20]",
+      "originalText": "87863版本后，精锐飞镖骑兵攻击力从15下调到14",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f5760437-d640-4aed-a0bf-484497107046"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c1ede486-e7ae-443a-9092-759ab7a6acbd",
+      "group": "罗马归来",
+      "locator": "#change li[21]",
+      "originalText": "87863版本后，曼尼普尔骑兵科技移动到城堡时代，费用从400肉400金下调到300肉300金，效果从5下调到4",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c1ede486-e7ae-443a-9092-759ab7a6acbd"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-39f0c8db-f909-4160-b9de-b75f5fd45f2b",
+      "group": "罗马归来",
+      "locator": "#change li[22]",
+      "originalText": "87863版本后，象轿从城堡时代移动到帝王时代",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-39f0c8db-f909-4160-b9de-b75f5fd45f2b"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    蛮王崛起\n    \n        象轿花费200食物和300木材提供象兵1近战护甲和2远程护甲，5.7版本后象轿花费400食物和300木材提供象兵1近战护甲和1远程护甲\n        飞镖骑兵花费50木材和60黄金，5.8版本后花费80木材和60黄金\n        飞镖骑兵拥有18攻击力，精锐飞镖骑兵拥有20攻击力，1.35移速，2点骑射手护甲。5.7版本后，飞镖骑兵拥有17攻击力，精锐飞镖骑兵拥有19攻击力，1.3移速，骑射手护甲删除\n        曼尼普尔马提供6点对建筑的伤害，5.3版本后这个加成会分摊到建筑属性和标准建筑属性上，也就是说建筑学提供的建筑护甲不能很好地抵消这个额外伤害\n        曼尼普尔马成本为650食物450黄金\n    \n\n    最后的可汗\n    \n        修复了缅甸的显示遗迹位置奖励的视野会永久显示的问题\n        37650版本后，曼尼普尔马科技提供的伤害加成不再被石匠科技提供的加成减免了\n        39284版本后，象兵的区域伤害从50%下调为25%\n        42848版本后，象兵和精锐象兵对建筑物伤害加成从+7/+10下调到+4/+7，并且增加所有战象单位碰撞体积\n        42848版本后，飞镖骑兵装弹时间提升到2.2，之前是2.0\n    \n\n    西方霸主\n    \n        44725更新后，飞镖骑兵/精锐飞镖骑兵遗漏的射击(没有命中首要目标但是射中了其他目标)的伤害从50%提升到100%，攻击力从17/19下降为12/15\n        44725更新后，精锐飞镖骑兵装弹时间从2.2下降为2.0\n    \n\n    公爵的崛起\n    \n        51737更新中，象轿的护甲加成从+1/+1上调到+1/+2\n        56005更新中，曼尼普尔马的加成从+6对建筑物伤害调整为+5对弓箭手伤害，不再影响飞镖骑兵\n    \n\n    印度王朝\n    \n        61321版本后，获得“大象部队获得+1/+1防御力”文明加成，象轿的远程防御加成从2下调到1\n        曼尼普尔马更名为曼尼普尔骑兵，成本从650食物400黄金下调到400食物400黄金\n        61321版本后，飞镖骑兵生产时间从21秒下调到18秒\n        73855版本后，飞镖骑兵享受帕提亚战术加成\n        81058版本后，升级到精锐飞镖骑兵的成本从1100肉675金调整为1000肉750金\n    \n\n    罗马归来\n    \n        87863版本后，精锐飞镖骑兵攻击力从15下调到14\n        87863版本后，曼尼普尔骑兵科技移动到城堡时代，费用从400肉400金下调到300肉300金，效果从5下调到4\n        87863版本后，象轿从城堡时代移动到帝王时代",
+  "sectionTextSha256": "0013b11a901fd19b8e99dc4b972747768ca421fed2dc5222e5fe209775b9e43b",
+  "observedEntryCount": 22,
+  "supersedesRevisionId": null
+}

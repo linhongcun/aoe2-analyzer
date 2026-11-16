@@ -1,0 +1,289 @@
+{
+  "civId": "Bulgarians",
+  "sourceId": "seicing-bulgarians",
+  "url": "https://seicing.com/html/aoe2/2/%E4%BF%9D%E5%8A%A0%E5%88%A9%E4%BA%9A.html",
+  "indexLabel": "保加利亚Bulgarians",
+  "title": "保加利亚",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-82ea3996dd9a815a30a1",
+  "documentSha256": "82ea3996dd9a815a30a1905d90c9c50418f8b6782c0159b1805649aabf9ecce7",
+  "capturedAt": "2026-11-16T11:41:34.103699+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-9f0f4eda-3c7d-47f2-b5c0-086b86a30850",
+      "group": "最后的可汗",
+      "locator": "#change li[1]",
+      "originalText": "屯长提供3护甲，34055版本上调到了5",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9f0f4eda-3c7d-47f2-b5c0-086b86a30850"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-0bcf2e17-72a3-477f-95df-5da35fd75e6f",
+      "group": "最后的可汗",
+      "locator": "#change li[2]",
+      "originalText": "下马龙骑兵有1.9攻击间隔，34055版本上调到了2.4",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-0bcf2e17-72a3-477f-95df-5da35fd75e6f"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-da59dc44-c301-4e01-9874-a9e57d3bbfa0",
+      "group": "最后的可汗",
+      "locator": "#change li[3]",
+      "originalText": "龙骑兵有110HP，精锐龙骑兵有130HP，34055版本下调到了100/120",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-da59dc44-c301-4e01-9874-a9e57d3bbfa0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-d0ad3022-da8a-4726-aa2d-b0071d1501b0",
+      "group": "最后的可汗",
+      "locator": "#change li[4]",
+      "originalText": "下马龙骑兵不会被日本武士的特殊部队伤害加成，34055版本后这个加成可以正常工作了",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d0ad3022-da8a-4726-aa2d-b0071d1501b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1f498d05-8f98-4ce8-a4bc-ca8579a44735",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "营垒是4×4大小而且可以被招降，34055版本后他变成3×3大小而且无法被招降",
+      "rawVersions": [
+        "34055"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1f498d05-8f98-4ce8-a4bc-ca8579a44735"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c700bae6-41a5-42cf-b4d8-af06b9bc28c3",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "36906版本后，不再可以研发和生产游侠",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c700bae6-41a5-42cf-b4d8-af06b9bc28c3"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7a33e553-e46d-4cc5-90d7-39790a717f51",
+      "group": "最后的可汗",
+      "locator": "#change li[7]",
+      "originalText": "36906版本后，马镫作用于所有骑兵，而不仅仅是轻骑兵和龙骑兵",
+      "rawVersions": [
+        "36906"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7a33e553-e46d-4cc5-90d7-39790a717f51"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-666378e2-780d-4083-b27b-a9f65b64e752",
+      "group": "最后的可汗",
+      "locator": "#change li[8]",
+      "originalText": "42848版本后，铁匠铺和攻城制造所升级食物费用-50%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-666378e2-780d-4083-b27b-a9f65b64e752"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b6817b6f-da1d-4eed-b34e-59dd51d53e8a",
+      "group": "最后的可汗",
+      "locator": "#change li[9]",
+      "originalText": "42848版本后，铁匠铺工作效率+80%，之前是50%",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b6817b6f-da1d-4eed-b34e-59dd51d53e8a"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-7bc6663d-6d86-4ab1-ba27-1982f36e51a0",
+      "group": "西方霸主",
+      "locator": "#change li[10]",
+      "originalText": "44725更新后，下马龙骑兵和龙骑兵的视野一致了",
+      "rawVersions": [
+        "44725"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-7bc6663d-6d86-4ab1-ba27-1982f36e51a0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-43e6122c-9966-436e-a00d-59219551e343",
+      "group": "公爵的崛起",
+      "locator": "#change li[11]",
+      "originalText": "54480版本后，营垒的主箭和副箭的攻击力统一为10，此前分别为9和11",
+      "rawVersions": [
+        "54480"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-43e6122c-9966-436e-a00d-59219551e343"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-c3fd070d-4c63-4e5f-a846-7a435a62ab93",
+      "group": "印度王朝",
+      "locator": "#change li[12]",
+      "originalText": "81058版本后，独特部队“龙骑兵”更名为“保加利亚骑兵”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-c3fd070d-4c63-4e5f-a846-7a435a62ab93"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-a6b07129-68d4-40a0-b34c-7e5720006f41",
+      "group": "印度王朝",
+      "locator": "#change li[13]",
+      "originalText": "81058版本后，独特科技“屯长”更名为“协议”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-a6b07129-68d4-40a0-b34c-7e5720006f41"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-544fc734-82b7-4010-9d19-c1db898f9ebc",
+      "group": "罗马归来",
+      "locator": "#change li[14]",
+      "originalText": "87863版本后，下马保加利亚骑兵/精锐下马保加利亚骑兵的近战护甲从0/0上调到2/2，远程护甲从0/1上调到1/2",
+      "rawVersions": [
+        "87863"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-544fc734-82b7-4010-9d19-c1db898f9ebc"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-1aff64c1-b9d0-4fc3-9a08-1bfb094a0fa6",
+      "group": "成王败寇",
+      "locator": "#change li[15]",
+      "originalText": "111772版本更新后，保加利亚骑兵训练时间从19秒下调到16秒",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-1aff64c1-b9d0-4fc3-9a08-1bfb094a0fa6"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-afc0b145-b55a-4222-809a-7652e26116b0",
+      "group": "三国",
+      "locator": "#change li[16]",
+      "originalText": "141935版本更新后，下马保加利亚骑兵护甲从2/1上调到2/2",
+      "rawVersions": [
+        "141935"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-afc0b145-b55a-4222-809a-7652e26116b0"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-b863b795-b4ad-4f7d-94b0-050ee4a31777",
+      "group": "三国",
+      "locator": "#change li[17]",
+      "originalText": "151401版本后，营垒现在可以研究精锐保加利亚骑兵升级",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-b863b795-b4ad-4f7d-94b0-050ee4a31777"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-049ca24e-6f70-4810-aa4c-b0eaf3fc54e5",
+      "group": "三国",
+      "locator": "#change li[18]",
+      "originalText": "162286版本更新后，营垒现在可以生产爆破兵了",
+      "rawVersions": [
+        "162286"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-049ca24e-6f70-4810-aa4c-b0eaf3fc54e5"
+      ],
+      "reason": "已按完整文字机制及原文明确的标量/可用性映射；社区事实未核实，未知身份不提供链接。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志\n    \n    \n    最后的可汗\n    \n        屯长提供3护甲，34055版本上调到了5\n        下马龙骑兵有1.9攻击间隔，34055版本上调到了2.4\n        龙骑兵有110HP，精锐龙骑兵有130HP，34055版本下调到了100/120\n        下马龙骑兵不会被日本武士的特殊部队伤害加成，34055版本后这个加成可以正常工作了\n        营垒是4×4大小而且可以被招降，34055版本后他变成3×3大小而且无法被招降\n        36906版本后，不再可以研发和生产游侠\n        36906版本后，马镫作用于所有骑兵，而不仅仅是轻骑兵和龙骑兵\n        42848版本后，铁匠铺和攻城制造所升级食物费用-50%\n        42848版本后，铁匠铺工作效率+80%，之前是50%\n    \n\n    西方霸主\n    \n        44725更新后，下马龙骑兵和龙骑兵的视野一致了\n    \n\n    公爵的崛起\n    \n        54480版本后，营垒的主箭和副箭的攻击力统一为10，此前分别为9和11\n    \n\n    印度王朝\n    \n        81058版本后，独特部队“龙骑兵”更名为“保加利亚骑兵”\n        81058版本后，独特科技“屯长”更名为“协议”\n    \n\n    罗马归来\n    \n        87863版本后，下马保加利亚骑兵/精锐下马保加利亚骑兵的近战护甲从0/0上调到2/2，远程护甲从0/1上调到1/2\n    \n\n    成王败寇\n    \n        111772版本更新后，保加利亚骑兵训练时间从19秒下调到16秒\n    \n\n    三国\n    \n        141935版本更新后，下马保加利亚骑兵护甲从2/1上调到2/2\n        151401版本后，营垒现在可以研究精锐保加利亚骑兵升级\n        162286版本更新后，营垒现在可以生产爆破兵了",
+  "sectionTextSha256": "402f701b70ce5a961f06733a4b271490682060c8a32f1b25cfb23d3ad535c25d",
+  "observedEntryCount": 18,
+  "supersedesRevisionId": null
+}
