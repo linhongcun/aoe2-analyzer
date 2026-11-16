@@ -5,7 +5,11 @@ test('migrated Bohemian citation opens its original official section', async ({ 
   await page.goto('/#/civ/Bohemians?tab=history&histVersion=de-185872&histSource=official');
   const event = page.locator('[data-event-id="ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf"]');
   await event.locator('summary').click();
-  await expect(event.getByRole('link', { name: '打开来源页面' })).toHaveAttribute('href', 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373');
+  await expect(event.getByRole('link', { name: '打开来源页面' })).toHaveCount(2);
+  await expect(event.getByRole('region', { name: 'DE Update 185872 · 既有档案', exact: true }).getByRole('link', { name: '打开来源页面' })).toHaveAttribute(
+    'href',
+    'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373',
+  );
 });
 
 test('Cuman entity-name searches retain the cards showing those names', async ({ page }) => {
