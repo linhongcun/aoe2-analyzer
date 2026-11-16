@@ -55,6 +55,29 @@ test('已编码时代和 tab=sim 打开工作区，tab=ov 留在概览且路径�
   await expect(page).toHaveURL(/tab=ov/);
 });
 
+test('站内模拟器返回原概览的原始查询顺序与嵌套 hash；直达模拟器使用显式 ov fallback', async ({ page }) => {
+  const origin = '/unit/40?z=2&tab=ov&civ=Byzantines&dup=1&x=%23&dup=2#unit-reverse-counters';
+  await open(page, origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'simulator');
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toContain('z=2&tab=sim&civ=Byzantines&dup=1&x=%23&dup=2#unit-reverse-counters');
+  await page.locator('#simage').selectOption('3');
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toContain('/unit/40/Byzantines/3/');
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toContain('#unit-reverse-counters');
+  await page.reload();
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe(origin);
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+
+  await open(page, '/unit/40?z=2&civ=Byzantines&tab=sim#unit-reverse-counters');
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'simulator');
+  await page.getByRole('button', { name: '返回概览' }).click();
+  await expect.poll(() => new URL(page.url()).hash.slice(1)).toBe('/unit/40?z=2&civ=Byzantines&tab=ov');
+  await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
+});
+
 test('精锐切换和旧相关地址保留文明与查询', async ({ page }) => {
   await open(page, '/unit/11?civ=Mongols&tab=sim&me=Mongols&opp=Britons');
   await expect(page.locator('#sim')).toBeVisible();
