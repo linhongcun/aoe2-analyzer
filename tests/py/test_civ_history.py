@@ -176,6 +176,10 @@ class CivHistoryTests(unittest.TestCase):
         unknown = effects('ca1e6894')
         self.assertTrue(all(f['unit'] is None and '未注明' in f['conditions'][0] for f in unknown))
 
+    def test_japanese_samurai_shorthand_does_not_link_to_man_at_arms(self):
+        event = next(e for e in self.payload['events'] if e['id'].startswith('ev-se-dd42a04b'))
+        self.assertTrue(all(f['entityRefs'] == [{'entityId': 'unit/291'}] for c in event['claims'] for f in c['effects']))
+
     def test_observation_boundaries_and_unknown_array_mapping_remain_explicit(self):
         events = {e['id']: e for e in self.payload['events']}
         cannon = next(m for m in self.payload['legacyMap'] if m['key'] == '185872:185872-116')

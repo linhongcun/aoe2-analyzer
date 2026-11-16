@@ -34871,7 +34871,7 @@
             {
               "entityRefs": [
                 {
-                  "entityId": "unit/75"
+                  "entityId": "unit/291"
                 }
               ],
               "text": "获得冲锋加速和冲锋+1攻击力",
@@ -34886,7 +34886,7 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/75"
+                  "entityId": "unit/291"
                 }
               ],
               "attribute": "食物成本",
@@ -34904,7 +34904,7 @@
               "type": "numeric",
               "entityRefs": [
                 {
-                  "entityId": "unit/75"
+                  "entityId": "unit/291"
                 }
               ],
               "attribute": "黄金成本",
