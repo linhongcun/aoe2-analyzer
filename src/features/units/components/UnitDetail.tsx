@@ -36,6 +36,7 @@ import { SplashMechanics, splashDescription } from './SplashMechanics';
 import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
 import { VillagerGather } from './VillagerGather';
+import UnitGarrison from './UnitGarrison';
 import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
 import { ReverseCounters } from './ReverseCounters';
 import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafety';
@@ -47,6 +48,7 @@ import './unit-detail.css';
 const JUMPS = [
   ['unit-core', '属性'],
   ['unit-obtain', '如何获得'],
+  ['unit-garrison', '驻军'],
   ['unit-notes', '说明'],
   ['unit-related', '相关'],
   ['unit-sim', '模拟器'],
@@ -361,6 +363,18 @@ export default function UnitDetail() {
           </p>
         ))}
       </section>
+
+      {!workspace && (
+        <UnitGarrison
+          core={core}
+          trees={trees}
+          unitId={u.id}
+          civ={context?.en ?? ''}
+          error={resources.treesError}
+          pending={resources.treesPending}
+          retry={resources.retryTrees}
+        />
+      )}
 
       <section className="ud-section" id="unit-notes" aria-label="适用加成、护甲与说明">
         <h2>适用加成、护甲与说明</h2>

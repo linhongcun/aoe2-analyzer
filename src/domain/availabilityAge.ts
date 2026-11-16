@@ -31,11 +31,10 @@ export function availableUnitAge(civ: string, id: number, catalogAge: number, ro
 }
 
 /**
- * 生产/驻军口径的最低训练时代。长矛兵在原始目录里是黑暗时代，但实际生产最低封建；
- * 该例外只在这里写一次，Armenian 的黑暗可用性由 availableUnitAge 保留。
+ * 生产/驻军口径的最低训练时代。亚美尼亚长矛兵黑暗时代可训练，其他文明最低封建。
  */
 export function trainingUnitAge(civ: string, id: number, catalogAge: number, extraFloor = 0): number {
-  return Math.max(EARLY_UNIT_AGES[civ]?.[id] ?? catalogAge, id === SPEARMAN_UNIT_ID ? 2 : 1, extraFloor);
+  return Math.max(EARLY_UNIT_AGES[civ]?.[id] ?? catalogAge, id === SPEARMAN_UNIT_ID ? (civ === 'Armenians' ? 1 : 2) : 1, extraFloor);
 }
 
 /** 展示口径：Armenians 长矛兵按黑暗，其他文明按封建；不得用于生产/费用/战斗。登记见 techAvailability.ts。 */

@@ -28,6 +28,21 @@ const calc = (id: number, extra: Partial<GeneralGarrisonConfig> = {}) => calcula
 const candidates = (id: number, extra: Partial<GeneralGarrisonConfig> = {}) => getGarrisonCandidates(ctx, ctx.core.buildingById[id]!, config(extra));
 
 describe('#224 general garrison model', () => {
+  it('#1051 亚美尼亚长矛兵时代1驻城镇中心，保留真实0弹丸及建筑时代校验', () => {
+    const initial = { civ: 'Armenians', age: 1, techs: [], rows: [row(93, '0')] };
+    expect(candidates(109, initial).find((u) => u.id === 93)?.canEnter).toBe(true);
+    const capacity = calc(109, initial).capacity;
+    const final = { ...initial, rows: [row(93, String(capacity))] };
+    const result = calc(109, final);
+    expect(result.errors).toEqual([]);
+    expect(result).toMatchObject({ usedSlots: capacity, totalProjectiles: 0 });
+    const decoded = readGeneralGarrison(writeGeneralGarrison(final), ctx.core.buildingById[109]!);
+    expect(decoded).toEqual({ config: final, errors: [] });
+    expect(calc(109, decoded.config)).toEqual(result);
+    expect(candidates(109, { ...initial, civ: 'Franks' }).some((u) => u.id === 93 && u.canEnter)).toBe(false);
+    expect(candidates(109, { ...initial, civ: 'Franks', age: 2 }).some((u) => u.id === 93 && u.canEnter)).toBe(true);
+    for (const id of [79, 82]) expect(calc(id, initial).errors).toContain('时代无效或早于此建筑。');
+  });
   it('includes civilization-enabled hosts and production leave-ins', () => {
     const ids = getGarrisonBuildings(ctx).map((b) => b.id);
     expect(ids).toEqual(expect.arrayContaining([70, 68, 2556, 82, 1251, 1665, 1806, 236, 45, 1189, 12, 104]));

@@ -118,10 +118,16 @@ export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
     because: '生产口径把波希米亚化学（科技 47）写成时代 3。techs.json 里该科技的目录时代是 4。另外三套不使用这个手写时代。',
   },
   {
-    site: 'unit-floor:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:then=2:else=1',
+    site: 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain',
+    role: 'tech-age',
+    differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
+    because: '检查器按文明时代分支登记：亚美尼亚长矛兵训练下限为黑暗时代；四套科技判定不读此单位下限。',
+  },
+  {
+    site: 'unit-civ:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2',
     role: 'unit-age',
     differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
-    because: '长矛兵训练时代下限是 2（封建），写在 trainingUnitAge。它不是四套科技判定，也不替代 displayUnitAge 的展示时代。',
+    because: '长矛兵训练时代下限：亚美尼亚为 1，其他文明为 2，生产和驻军共用；目录与额外下限仍生效，不替代四套科技或展示时代。',
   },
   {
     site: 'display-age:src/domain/availabilityAge.ts:displayUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2',

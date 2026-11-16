@@ -1,6 +1,95 @@
 // #895 单位详情信息架构。只覆盖 issue 点名的地址、折后价和有限代表单位，不是全单位验收。
 import { expect, test } from '@playwright/test';
 
+test('#1051 单位摘要与建筑同参落地和浏览器返回', async ({ page }) => {
+  for (const [id, civ, buildings] of [
+    [24, 'Koreans', [235, 82, 109]],
+    [5, 'Bohemians', [235]],
+    [93, 'Armenians', [109]],
+  ] as const) {
+    await open(page, `/unit/${id}?civ=${civ}`);
+    for (const building of buildings) {
+      const row = page.locator(`#unit-garrison [data-host="${building}"]`);
+      const total = (await row.locator('[data-garrison-total]').innerText()).match(/\d+/u)![0]!;
+      const href = await row.getByRole('link').getAttribute('href');
+      const params = new URLSearchParams(href!.split('?')[1]);
+      expect(params.get('gv')).toBe('2');
+      expect(params.get('civ')).toBe(civ);
+      expect(params.get('gtechs')).toBe('');
+      expect(params.get('army')).toMatch(new RegExp(`^${id}:\\d+:e$`, 'u'));
+      if (id === 93) {
+        expect(params.get('age')).toBe('1');
+        expect(total).toBe('0');
+      }
+      await row.getByRole('link').click();
+      await expect(page.getByTestId('garrison-preview')).toBeVisible();
+      await expect(page.getByTestId('garrison-preview').getByRole('alert')).toHaveCount(0);
+      await expect(page.getByTestId('garrison-total')).toHaveText(total);
+      await expect(page.getByTestId('garrison-used')).toHaveText(params.get('army')!.split(':')[1]!);
+      await page.goBack();
+      await expect(page).toHaveURL(new RegExp(`unit/${id}\\?civ=${civ}$`, 'u'));
+      await expect(row.locator('[data-garrison-total]')).toContainText(total);
+    }
+  }
+});
+
+test('#1051 文明选择/清除、形态与无宿主/不可训练状态不保留旧结果', async ({ page }) => {
+  await open(page, '/unit/24');
+  const section = page.locator('#unit-garrison');
+  await expect(section).toContainText('选择文明后');
+  await expect(section.getByRole('link')).toHaveCount(0);
+  await page.locator('#unitciv').click();
+  await page.locator('[role="option"][data-civ="Koreans"]').click();
+  await expect(section.locator('[data-host="235"]')).toContainText('总 4 箭');
+  await expect(section.locator('[data-host="236"]')).toContainText('可驻军，驻军不增加弹丸');
+  await expect(section.locator('[data-host="236"] [data-garrison-total]')).toHaveCount(0);
+  await page.locator('#unitciv').click();
+  await page.locator('[role="option"][data-civ="__none"]').click();
+  await expect(section.getByRole('link')).toHaveCount(0);
+  await expect(section.locator('[data-garrison-total]')).toHaveCount(0);
+  await open(page, '/unit/24?civ=Bulgarians');
+  await expect(section).toContainText('无法训练');
+  await expect(section.getByRole('link')).toHaveCount(0);
+  await open(page, '/unit/280?civ=Franks');
+  await expect(section).toContainText('没有可从外部进入的驻军建筑');
+  await open(page, '/unit/4?civ=Koreans');
+  await page.locator('#unit-obtain a[href="#/unit/24"]').click();
+  await expect(page).toHaveURL(/#\/unit\/24$/u);
+  await expect(section.getByRole('link')).toHaveCount(0);
+  await open(page, '/unit/93?civ=Franks');
+  const tcHref = await section.locator('[data-host="109"] a').getAttribute('href');
+  expect(new URLSearchParams(tcHref!.split('?')[1]).get('age')).toBe('2');
+});
+
+test('#1051 1280浅色/360深色章节入口、数字不折行和触控尺寸', async ({ page }, testInfo) => {
+  for (const [width, theme] of [
+    [1280, 'light'],
+    [360, 'dark'],
+  ] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await open(page, '/unit/24?civ=Koreans');
+    await page.evaluate((value) => localStorage.setItem('aoe2-theme', value), theme);
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+    const jump = page.locator('.ud-jump').getByRole('button', { name: '驻军', exact: true });
+    await jump.click();
+    const section = page.locator('#unit-garrison');
+    await expect(section.getByRole('heading', { name: '驻军', exact: true })).toBeVisible();
+    for (const link of await section.getByRole('link').all()) {
+      const rect = await link.boundingBox();
+      expect(rect!.height).toBeGreaterThanOrEqual(44);
+      expect(rect!.width).toBeGreaterThanOrEqual(44);
+    }
+    const layout = await section.locator('.nw').evaluateAll((nodes) => nodes.every((el) => getComputedStyle(el).whiteSpace === 'nowrap'));
+    expect(layout).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await section.screenshot({ path: testInfo.outputPath(`garrison-${width}-${theme}.png`) });
+    for (const id of ['unit-core', 'unit-obtain', 'unit-notes', 'unit-related', 'unit-sim', 'unit-history', 'unit-reverse-counters']) {
+      await expect(page.locator('#' + id)).toHaveCount(1);
+    }
+  }
+});
+
 async function open(page: import('@playwright/test').Page, hash: string) {
   await page.goto('./#' + hash);
   await expect(page.locator('#unit h1')).toBeVisible();

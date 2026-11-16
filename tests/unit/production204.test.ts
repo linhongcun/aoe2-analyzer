@@ -138,6 +138,13 @@ describe('#204 持续生产固定数据回归', () => {
     expect(productionBuildings(ctx, plan({ civ: 'Turks', age: 4 }), ctx.core.unitById[5]!)).toContain(87);
     expect(productionBuildings(ctx, plan({ civ: 'Aztecs' }), ctx.core.unitById[38]!)).toEqual([]);
   });
+  it('#1051 亚美尼亚长矛兵可在黑暗时代训练，其他文明仍须封建', () => {
+    const spear = ctx.core.unitById[93]!;
+    expect(productionBuildings(ctx, plan({ civ: 'Armenians', age: 1 }), spear)).toEqual([12]);
+    expect(productionBuildings(ctx, plan({ civ: 'Franks', age: 1 }), spear)).toEqual([]);
+    expect(productionBuildings(ctx, plan({ civ: 'Franks', age: 2 }), spear)).toEqual([12]);
+    expect(productionBuildings(ctx, plan({ civ: 'Armenians', age: 1 }), ctx.core.unitById[77]!)).toEqual([]);
+  });
   it('丹麦存放食物收益及未知条件科技有具体未计入说明', () => {
     expect(run({ civ: 'Danes' }).warnings.some((w) => w.includes('存放'))).toBe(true);
     const r = run({ civ: 'Berbers', age: 4, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }] });

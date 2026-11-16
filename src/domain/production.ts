@@ -129,7 +129,7 @@ export function productionBuildings(ctx: ProductionContext, config: ProductionCo
       if (buildingAge(b, config.civ, ctx.trees) > config.age) return false;
       const cell = block[3].find((c) => c[2] === 'u' && c[3] === u.id && c[4] === 1);
       if (!cell) return false;
-      // 部分原始目录把长矛兵归为黑暗时代；实际科技树位于封建栏。
+      // 训练时代包含文明提前解锁与长矛兵下限。
       if (trainingUnitAge(config.civ, u.id, u.age) > config.age) return false;
       if ([759, 761].includes(u.id) && b.id === 12 && !selected.has(16)) return false;
       if ([886, 887].includes(u.id) && b.id === 101 && !selected.has(483)) return false;

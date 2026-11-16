@@ -42,7 +42,7 @@ describe('反制、提前解锁与建筑类型映射（issue 837）', () => {
     expect(COUNTER_EXTRA_GROUPS.lightCavalry).toContain(1707);
   });
 
-  it('提前解锁表覆盖全部条目，且四种口径不改变行为', () => {
+  it('提前解锁表覆盖全部条目，亚美尼亚长矛兵训练与驻军为黑暗时代', () => {
     for (const [civ, rows] of Object.entries(EARLY_UNIT_AGES)) {
       for (const [rawId, age] of Object.entries(rows)) {
         const id = Number(rawId);
@@ -51,7 +51,9 @@ describe('反制、提前解锁与建筑类型映射（issue 837）', () => {
       }
     }
     expect(availableUnitAge('Armenians', 93, 1, 1)).toBe(1);
-    expect(trainingUnitAge('Armenians', 93, 1)).toBe(2);
+    expect(trainingUnitAge('Armenians', 93, 1)).toBe(1);
+    expect(trainingUnitAge('Armenians', 93, 1, 3)).toBe(3);
+    expect(trainingUnitAge('Armenians', 93, 4)).toBe(4);
     expect(trainingUnitAge('Franks', 93, 1)).toBe(2);
     expect(displayUnitAge(93, 1, 'Armenians')).toBe(1);
     expect(displayUnitAge(93, 1, 'Franks')).toBe(2);
