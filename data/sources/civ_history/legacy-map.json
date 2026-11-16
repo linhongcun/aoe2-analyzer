@@ -186,14 +186,25 @@
       "disposition": "migrated",
       "eventId": "ev-legacy-125283-b014",
       "claimId": "cl-legacy-125283-b014",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
       "projections": [
         {
           "civId": "Chinese",
           "relation": "direct",
           "note": "文明本身"
         }
-      ]
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Chinese"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
     },
     {
       "key": "125283:125283-015-018",
@@ -2164,9 +2175,9 @@
       "patchId": "185872",
       "entryId": "185872-116",
       "disposition": "migrated",
-      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "eventId": "ev-legacy-185872-116",
       "claimId": "cl-legacy-185872-116",
-      "reason": "人工逐项对照：同版本、同对象形态/属性及条件、相符变化；社区来源与旧档案共享事件，各自主张/效果/核验状态和旧投影保留。社区未提及的旧效果不删除。",
+      "reason": "O1 边界复核：社区 185872 科技树原文没有提及炮舰 unit/420；本旧记录保留为独立事件及原核验状态，不因同文明同版本合并。",
       "projections": [
         {
           "civId": "Vikings",
@@ -3926,14 +3937,25 @@
       "disposition": "migrated",
       "eventId": "ev-legacy-81058-b032",
       "claimId": "cl-legacy-81058-b032",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
       "projections": [
         {
           "civId": "Britons",
           "relation": "direct",
           "note": "文明本身"
         }
-      ]
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Britons"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
     },
     {
       "key": "81058:81058-40",
@@ -4189,6 +4211,26 @@
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
         }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/232"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 70,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "靛蓝突袭者基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-55"
+        }
       ]
     },
     {
@@ -4204,6 +4246,26 @@
           "civId": "Celts",
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/534"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 80,
+          "after": 85,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "靛蓝突袭者基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-56"
         }
       ]
     },
@@ -4276,32 +4338,112 @@
       "patchId": "81058",
       "entryId": "81058-61",
       "disposition": "migrated",
-      "eventId": "ev-legacy-81058-b053",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
       "claimId": "cl-legacy-81058-b053",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。",
       "projections": [
         {
           "civId": "Dravidians",
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
         }
-      ]
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "研究食物成本",
+          "before": 350,
+          "after": 300,
+          "delta": null,
+          "unit": "食物",
+          "operation": "set",
+          "text": "医疗部队研究费用降低。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-61"
+        },
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "研究黄金成本",
+          "before": 250,
+          "after": 200,
+          "delta": null,
+          "unit": "黄金",
+          "operation": "set",
+          "text": "医疗部队研究费用降低。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-61-2"
+        }
+      ],
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Dravidians"
+        ],
+        "beneficiary": "self",
+        "conditions": [
+          "文明特色科技：医疗团队（Medical Corps），不是团队奖励。"
+        ]
+      }
     },
     {
       "key": "81058:81058-62",
       "patchId": "81058",
       "entryId": "81058-62",
       "disposition": "migrated",
-      "eventId": "ev-legacy-81058-b054",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
       "claimId": "cl-legacy-81058-b054",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。",
       "projections": [
         {
           "civId": "Dravidians",
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
         }
-      ]
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "tech/831"
+            }
+          ],
+          "attribute": "每分钟治疗量",
+          "before": 20,
+          "after": 30,
+          "delta": null,
+          "unit": "HP/分钟",
+          "operation": "set",
+          "text": "医疗部队的每分钟治疗量提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-62"
+        }
+      ],
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Dravidians"
+        ],
+        "beneficiary": "self",
+        "conditions": [
+          "文明特色科技：医疗团队（Medical Corps），不是团队奖励。"
+        ]
+      }
     },
     {
       "key": "81058:81058-63",
@@ -4326,14 +4468,25 @@
       "disposition": "migrated",
       "eventId": "ev-legacy-81058-b056",
       "claimId": "cl-legacy-81058-b056",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
       "projections": [
         {
           "civId": "Ethiopians",
           "relation": "direct",
           "note": "文明本身"
         }
-      ]
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Ethiopians"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
     },
     {
       "key": "81058:81058-65",
@@ -4628,16 +4781,27 @@
       "patchId": "81058",
       "entryId": "81058-83",
       "disposition": "migrated",
-      "eventId": "ev-legacy-81058-b072",
+      "eventId": "ev-se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc",
       "claimId": "cl-legacy-81058-b072",
-      "reason": "按原 sourceBullet 明确同一原文保留多效果；无 sourceBullet 的记录独立保留。不按相似文本合并。",
+      "reason": "独立数据复核 R3 后人工确认：同文明、同 81058 版本、同对象和相符的前后变化。复用社区 eventId；官方主张、sourceBullet、原文、数值单位和核验依据各自保留；未提及的效果不算冲突。 显式登记该文明提供的团队加成，保留原旧键×文明投影。",
       "projections": [
         {
           "civId": "Incas",
           "relation": "direct",
           "note": "文明本身"
         }
-      ]
+      ],
+      "scope": {
+        "scopeKind": "team",
+        "providerCivIds": [
+          "Incas"
+        ],
+        "affectedCivIds": [],
+        "beneficiary": "team",
+        "conditions": [
+          "旧原文明确写 Team Bonus；不枚举未被原文点名的受益文明。"
+        ]
+      }
     },
     {
       "key": "81058:81058-84",
@@ -5229,6 +5393,26 @@
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
         }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1658"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 45,
+          "after": 50,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "封建时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-120"
+        }
       ]
     },
     {
@@ -5244,6 +5428,26 @@
           "civId": "Sicilians",
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1660"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 45,
+          "after": 50,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "封建时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-121"
         }
       ]
     },
@@ -5261,6 +5465,26 @@
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
         }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1658"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 75,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "城堡时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-122"
+        }
       ]
     },
     {
@@ -5276,6 +5500,26 @@
           "civId": "Sicilians",
           "relation": "related",
           "note": "该文明在本次改动的明确适用范围内"
+        }
+      ],
+      "effects": [
+        {
+          "type": "numeric",
+          "entityRefs": [
+            {
+              "entityId": "unit/1660"
+            }
+          ],
+          "attribute": "生命值",
+          "before": 65,
+          "after": 75,
+          "delta": null,
+          "unit": "HP",
+          "operation": "set",
+          "text": "城堡时代萨金特卫兵基础生命值提高。",
+          "conditions": [],
+          "scope": null,
+          "id": "ef-legacy-81058-123"
         }
       ]
     },

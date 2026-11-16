@@ -567,6 +567,8 @@ const schema19 = {
               eventId: { type: ['string', 'null'] },
               claimId: { type: ['string', 'null'] },
               reason: { type: 'string', minLength: 1 },
+              scope: { $ref: '#/$defs/scope' },
+              effects: { type: 'array', items: { $ref: '#/$defs/effect' }, minItems: 1 },
               projections: {
                 type: 'array',
                 items: {

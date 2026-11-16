@@ -188,6 +188,8 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
             legacy_keys.add(key)
             require(key in maps, f'Unmapped legacy record {key}')
             mapping = maps[key]
+            effect_overrides = mapping.pop('effects', None)
+            scope_override = mapping.pop('scope', None)
             require(bool(mapping['reason'].strip()), f'{key}: every legacy disposition needs its reason')
             require(mapping['patchId'] == patch['id'] and mapping['entryId'] == entry['id'], 'Legacy key identity mismatch')
             projections = legacy_projections(entry, civ_ids)
@@ -195,6 +197,7 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
             mapping['originalRecord'] = copy.deepcopy(entry)
             if not projections:
                 require(mapping['disposition'] == 'archive-only' and mapping['eventId'] is None and mapping['claimId'] is None, f'{key}: no confirmed civilization relationship')
+                require(effect_overrides is None and scope_override is None, 'Archive-only records cannot gain projected effects or scope')
                 continue
             civ_entry_count += 1
             require(mapping['disposition'] == 'migrated' and mapping['eventId'] and mapping['claimId'], f'{key}: civilization-related record must migrate')
@@ -203,10 +206,15 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
                 events[eid] = {'id': eid, 'versionId': 'de-' + patch['id'], 'summary': entry.get('originalText') or entry['summaryZh'], 'verification': 'unverified', 'verificationNote': '保留旧档案的证据和核验依据；不从当前数值推导历史。', 'scope': {'scopeKind': 'unknown', 'providerCivIds': [], 'affectedCivIds': [], 'beneficiary': 'unknown', 'conditions': []}, 'civRelations': [], 'claims': [], 'candidates': []}
             event = events[eid]
             require(event['versionId'] == 'de-' + patch['id'], f'{key}: cross-version merge is not allowed')
+            if scope_override:
+                require(all(civ in [row['civId'] for row in projections] for civ in scope_override['providerCivIds'] + scope_override['affectedCivIds']), 'Legacy scope cannot introduce an unsupported civilization')
+                if not event['claims']:
+                    event['scope'] = copy.deepcopy(scope_override)
             for projection in projections:
-                if projection not in event['civRelations']:
-                    event['civRelations'].append(projection)
-                if projection['civId'] not in event['scope']['affectedCivIds']:
+                relation = {**projection, 'relation': 'provider'} if scope_override and projection['civId'] in scope_override['providerCivIds'] else projection
+                if relation not in event['civRelations']:
+                    event['civRelations'].append(relation)
+                if event['scope']['scopeKind'] != 'team' and projection['civId'] not in event['scope']['affectedCivIds']:
                     event['scope']['affectedCivIds'].append(projection['civId'])
             citation_url = entry['source']
             require(safe_source(citation_url), f'{key}: Unsafe legacy entry source')
@@ -251,7 +259,17 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
                 target_ref = {'entityId': identity}
             else:
                 target_ref = {'unresolvedName': name, 'type': kind}
-            claim['effects'].append({'id': 'ef-legacy-' + entry['id'], 'type': 'mechanic', 'entityRefs': [target_ref], 'text': entry['summaryZh'], 'conditions': [entry['scopeNote']] if entry.get('scopeNote') else [], 'scope': {'scopeKind': 'civ' if kind == 'civ' else 'unknown', 'providerCivIds': [], 'affectedCivIds': [projection['civId'] for projection in projections], 'beneficiary': 'unknown', 'conditions': [entry['scopeNote']] if entry.get('scopeNote') else []}, 'legacyBefore': entry.get('before'), 'legacyAfter': entry.get('after')})
+            effects = copy.deepcopy(effect_overrides) if effect_overrides is not None else [{'id': 'ef-legacy-' + entry['id'], 'type': 'mechanic', 'entityRefs': [target_ref], 'text': entry['summaryZh'], 'conditions': [], 'scope': None, 'legacyBefore': entry.get('before'), 'legacyAfter': entry.get('after')}]
+            require(bool(effects), 'Migrated records need an effect')
+            for effect in effects:
+                require(target_ref in effect['entityRefs'], f'{key}: structured effects must preserve the historical target identity')
+                if entry.get('scopeNote') and entry['scopeNote'] not in effect['conditions']:
+                    effect['conditions'].append(entry['scopeNote'])
+                if effect['scope'] is None:
+                    effect['scope'] = copy.deepcopy(scope_override) if scope_override else {'scopeKind': 'civ' if kind == 'civ' else 'unknown', 'providerCivIds': [], 'affectedCivIds': [projection['civId'] for projection in projections], 'beneficiary': 'unknown', 'conditions': []}
+                if entry.get('scopeNote') and entry['scopeNote'] not in effect['scope']['conditions']:
+                    effect['scope']['conditions'].append(entry['scopeNote'])
+            claim['effects'].extend(effects)
         require(civ_entry_count == baseline['civEntryCount'], f'{patch["id"]}: civilization-related count changed')
     require(set(maps) == legacy_keys, 'Every old key needs exactly one disposition; unknown map keys are forbidden')
     # Potential matches are an audit queue, never an automatic semantic merge.

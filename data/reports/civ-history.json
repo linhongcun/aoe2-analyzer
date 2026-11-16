@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "catalogSize": 56,
   "sourceEntryCount": 1109,
-  "eventCount": 1186,
-  "effectCount": 1669,
+  "eventCount": 1184,
+  "effectCount": 1955,
   "pendingEntryCount": 2,
   "legacyRecordCount": 366,
   "legacyMigratedCount": 289,
@@ -584,12 +584,10 @@
         "ev-legacy-81058-b002",
         "ev-legacy-81058-b003",
         "ev-legacy-81058-b004",
-        "ev-legacy-81058-b052",
-        "ev-legacy-81058-b053",
-        "ev-legacy-81058-b054"
+        "ev-legacy-81058-b052"
       ],
       "sourceEntryCount": 11,
-      "eventCount": 20,
+      "eventCount": 18,
       "versionCount": 6,
       "unknownVersionEventCount": 2,
       "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
@@ -960,11 +958,10 @@
         "ev-legacy-81058-b067",
         "ev-legacy-81058-b068",
         "ev-legacy-81058-b071",
-        "ev-legacy-81058-b072",
         "ev-legacy-81058-b073"
       ],
       "sourceEntryCount": 50,
-      "eventCount": 58,
+      "eventCount": 57,
       "versionCount": 15,
       "unknownVersionEventCount": 23,
       "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
@@ -2188,6 +2185,7 @@
         "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
         "ev-se-5e37a393-e6e0-43c6-a69b-8e0831568f54",
         "ev-se-50c0f0ca-0318-4bc3-9e82-dd7d70fab430",
+        "ev-legacy-185872-116",
         "ev-legacy-185872-117",
         "ev-legacy-185872-118",
         "ev-legacy-81058-b001",
@@ -2199,7 +2197,7 @@
         "ev-legacy-81058-b130"
       ],
       "sourceEntryCount": 45,
-      "eventCount": 54,
+      "eventCount": 55,
       "versionCount": 11,
       "unknownVersionEventCount": 25,
       "reason": "从实际文明索引链接逐页读取 HTTP 200，人工检查标题及 #change 章节。逐条留存完整原文；处理与事实核验分别记录。"
@@ -2648,10 +2646,10 @@
     }
   ],
   "effectTypes": {
-    "numeric": 184,
-    "availability": 111,
+    "numeric": 563,
+    "availability": 113,
     "bonus": 12,
-    "mechanic": 1351,
+    "mechanic": 1256,
     "rename": 5,
     "lifecycle": 6
   }

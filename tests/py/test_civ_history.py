@@ -88,6 +88,114 @@ class CivHistoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unmapped legacy'):
             build.assemble(changed)
 
+    def test_medical_corps_is_a_technology_with_distinct_source_claims(self):
+        event = next(e for e in self.payload['events'] if e['id'] == 'ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b')
+        self.assertEqual(event['scope']['scopeKind'], 'civ')
+        self.assertEqual(event['scope']['beneficiary'], 'self')
+        self.assertEqual(event['scope']['providerCivIds'], [])
+        self.assertEqual(len(event['claims']), 3)
+        self.assertEqual(sorted(c['verification'] for c in event['claims']), ['unverified', 'verified', 'verified'])
+        self.assertEqual(len({sid for c in event['claims'] for sid in c['sourceEntryIds']}), 3)
+        for claim in event['claims']:
+            for effect in claim['effects']:
+                self.assertEqual(effect['type'], 'numeric')
+                self.assertEqual(effect['entityRefs'], [{'entityId': 'tech/831'}])
+                self.assertNotEqual((effect['scope'] or event['scope'])['scopeKind'], 'team')
+        community = next(c for c in event['claims'] if c['id'].startswith('cl-se-'))
+        self.assertEqual([(f['before'], f['after'], f['unit']) for f in community['effects']], [(350, 300, '食物'), (250, 200, '黄金'), (20, 30, None)])
+        official = next(c for c in event['claims'] if '81058:81058-62' in c['legacyKeys'])
+        self.assertEqual(official['effects'][0]['unit'], 'HP/分钟')
+
+    def test_explicit_legacy_team_bonuses_retain_provider_beneficiary_and_old_projection(self):
+        events = {e['id']: e for e in self.payload['events']}
+        mappings = {m['key']: m for m in self.payload['legacyMap']}
+        for key, provider in [('125283:125283-014-017', 'Chinese'), ('81058:81058-39', 'Britons'), ('81058:81058-64', 'Ethiopians'), ('81058:81058-83', 'Incas')]:
+            with self.subTest(key=key):
+                mapping = mappings[key]
+                event = events[mapping['eventId']]
+                claim = next(c for c in event['claims'] if c['id'] == mapping['claimId'])
+                for scope in [event['scope'], *(f['scope'] for f in claim['effects'])]:
+                    self.assertEqual((scope['scopeKind'], scope['providerCivIds'], scope['beneficiary']), ('team', [provider], 'team'))
+                    self.assertEqual(scope['affectedCivIds'], [])
+                self.assertTrue(any(r['civId'] == provider and r['relation'] == 'provider' for r in event['civRelations']))
+                self.assertEqual(mapping['projections'], build.legacy_projections(mapping['originalRecord'], [c['en'] for c in self.inputs['civs']]))
+
+    def test_reported_numeric_objects_resources_zero_and_age_conditions_are_structured(self):
+        events = {e['id']: e for e in self.payload['events']}
+        def effects(prefix):
+            return next(e for e in events.values() if e['id'].startswith('ev-se-' + prefix))['claims'][0]['effects']
+        indigo = effects('82143c48')
+        self.assertEqual([(f['entityRefs'], f['before'], f['after']) for f in indigo], [([{'entityId': 'unit/232'}], 65, 70), ([{'entityId': 'unit/534'}], 80, 85)])
+        wagon = effects('9456ae2b')
+        # Mule Cart is building/1808 in this repository's current directory.
+        self.assertTrue(all(f['entityRefs'] == [{'entityId': 'building/1808'}] for f in wagon))
+        self.assertEqual([(f['unit'], f['before'], f['after']) for f in wagon], [('木材', 100, 80), ('食物', 20, 20)])
+        church = effects('b83f1013')
+        self.assertTrue(all(f['entityRefs'] == [{'entityId': 'building/1806'}] for f in church))
+        self.assertEqual([(f['before'], f['after']) for f in church if f['type'] == 'numeric'], [(5, 0), (6, 4)])
+        serjeant = effects('4de99517')
+        self.assertEqual([(f['before'], f['after'], f['conditions']) for f in serjeant if f['attribute'] == '生命值'], [(45, 50, ['封建时代']), (65, 75, ['城堡时代'])])
+        speed = next(f for f in serjeant if f['delta'] is not None)
+        self.assertEqual((speed['before'], speed['after'], speed['delta'], speed['conditions']), (None, None, -25, ['封建时代']))
+        self.assertEqual([(f['unit'], f['before'], f['after']) for f in serjeant if f['attribute'].startswith('升级')], [('食物', 1100, 800), ('黄金', 800, 675)])
+        for key in ['81058:81058-120', '81058:81058-121', '81058:81058-122', '81058:81058-123']:
+            mapping = next(m for m in self.payload['legacyMap'] if m['key'] == key)
+            claim = next(c for c in events[mapping['eventId']]['claims'] if c['id'] == mapping['claimId'])
+            effect = next(f for f in claim['effects'] if f['id'] == 'ef-legacy-' + mapping['entryId'])
+            self.assertEqual(effect['type'], 'numeric')
+            self.assertIn(mapping['originalRecord']['scopeNote'], effect['conditions'])
+            self.assertIn(mapping['originalRecord']['scopeNote'], effect['scope']['conditions'])
+        elephants = effects('4dcf4df6')
+        self.assertEqual([(f['entityRefs'][0]['entityId'], f['before'], f['after']) for f in elephants if f['type'] == 'numeric'], [('unit/1132', 7, 4), ('unit/1134', 10, 7)])
+        self.assertEqual(len([f for f in elephants if f['type'] == 'mechanic' and '碰撞体积' in f['text']]), 1)
+
+    def test_deduplication_preserves_claim_ids_and_does_not_absorb_other_candidates(self):
+        mappings = {m['key']: m for m in self.payload['legacyMap']}
+        events = {e['id']: e for e in self.payload['events']}
+        for key, eid in [('81058:81058-61', 'ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b'), ('81058:81058-62', 'ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b'), ('81058:81058-83', 'ev-se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc')]:
+            self.assertEqual(mappings[key]['eventId'], eid)
+            self.assertTrue(any(c['id'] == mappings[key]['claimId'] and key in c['legacyKeys'] for c in events[eid]['claims']))
+        self.assertTrue({'ev-legacy-81058-b053', 'ev-legacy-81058-b054', 'ev-legacy-81058-b072'}.isdisjoint(events))
+        self.assertIn('ev-legacy-81058-b052', events)
+        inca = events['ev-se-f62ee4b7-a8ff-40e9-8fdd-5c41070930cc']
+        self.assertEqual(len(inca['claims']), 2)
+        self.assertEqual(sorted(c['verification'] for c in inca['claims']), ['unverified', 'verified'])
+
+    def test_related_cost_and_array_patterns_keep_resource_formulas_and_unknown_units(self):
+        events = self.payload['events']
+        def effects(prefix):
+            return next(e for e in events if e['id'].startswith('ev-se-' + prefix))['claims'][0]['effects']
+        for prefix, expected in [('ac1f9073', [(30, 30, '食物'), (60, 50, '黄金')]), ('5bdb4e6a', [(400, 600, '木材'), (400, 500, '黄金')]), ('3603773e', [(125, 100, '木材')]), ('ab7df1d2', [(60, 50, '食物'), (35, 35, '黄金')]), ('ca9daf51', [(65, 65, '食物'), (25, 20, '黄金')])]:
+            with self.subTest(prefix=prefix):
+                self.assertEqual([(f['before'], f['after'], f['unit']) for f in effects(prefix)], expected)
+        formula = [f for f in effects('fff7e4f6') if f['type'] == 'numeric']
+        self.assertEqual([(f['before'], f['after']) for f in formula], [(1200, 200), (650, 150), (None, 10), (None, 5)])
+        self.assertTrue(all('基础项不等于总价格' in f['conditions'][0] for f in formula))
+        named = effects('2875bac3')
+        self.assertEqual([(f['entityRefs'][0]['unresolvedName'], f['before'], f['after']) for f in named], [('黑光铠骑兵', 15, 20), ('鲜卑掠骑兵', 15, 30)])
+        unknown = effects('ca1e6894')
+        self.assertTrue(all(f['unit'] is None and '未注明' in f['conditions'][0] for f in unknown))
+
+    def test_observation_boundaries_and_unknown_array_mapping_remain_explicit(self):
+        events = {e['id']: e for e in self.payload['events']}
+        cannon = next(m for m in self.payload['legacyMap'] if m['key'] == '185872:185872-116')
+        self.assertNotEqual(cannon['eventId'], 'ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b')
+        self.assertIn(cannon['eventId'], events)
+        removal = events['ev-se-f76fb4bc-98ec-433e-b3d8-b961eaa89489-later-removal']
+        self.assertIsNone(removal['versionId'])
+        self.assertIn('攻击速度加成', removal['claims'][0]['effects'][0]['entityRefs'][0]['unresolvedName'])
+        self.assertEqual(events['ev-se-f76fb4bc-98ec-433e-b3d8-b961eaa89489']['versionId'], 'de-73855')
+        unknown = next(e for e in events.values() if e['id'].startswith('ev-se-c896da2a'))
+        numeric = [f for f in unknown['claims'][0]['effects'] if f['type'] == 'numeric']
+        self.assertEqual([(f['before'], f['after']) for f in numeric], [(-10, -5), (-15, -10), (-20, -15)])
+        self.assertTrue(all('未注明' in f['conditions'][0] for f in numeric))
+        paper = next(e for e in events.values() if e['id'].startswith('ev-se-9e6e9081'))
+        cost = {f['unit']: f for f in paper['claims'][0]['effects'] if f['type'] == 'numeric'}
+        self.assertIsNone(cost['食物']['before'])
+        self.assertIsNone(cost['黄金']['after'])
+        bad_names = {'效果', 'O', '0', '射程', '生命值', '训练时间', '近战护甲', '攻击力', '远程防御'}
+        self.assertFalse(any(ref.get('unresolvedName') in bad_names for event in events.values() for claim in event['claims'] for effect in claim['effects'] if effect['type'] in ['numeric', 'bonus'] for ref in effect['entityRefs']))
+
     def test_real_build_rejects_bad_candidates_links_catalog_targets_and_build_keys(self):
         # Use real files/load_inputs/build/schema calls, without mocking assembly.
         with tempfile.TemporaryDirectory() as directory:
@@ -99,6 +207,7 @@ class CivHistoryTests(unittest.TestCase):
             shutil.copytree(ROOT / 'data/game/patches', root / 'data/game/patches')
             payload, audit = build.build(root)
             self.assertEqual(audit, self.audit)
+            self.assertTrue(any(entity['id'] == 'civ/Armenians' and entity['status'] == 'current' and entity['linkPath'] == '/civ/Armenians' for entity in payload['entities']))
             self.assertTrue(any(entity['status'] == 'retired' and entity['linkPath'] is None for entity in payload['entities']))
             self.assertTrue(any('unresolvedName' in ref for event in payload['events'] for claim in event['claims'] for effect in claim['effects'] for ref in effect['entityRefs']))
             cases = [
@@ -110,6 +219,8 @@ class CivHistoryTests(unittest.TestCase):
                 ('identities', 'missing-current-target', 'no catalog target', lambda value: next(entity for entity in value['entities'] if entity['id'] == 'unit/1231').update(catalogId='999999999', linkPath='/unit/999999999')),
                 ('events', 'wrong-key', 'canonical orderKey', lambda value: value['versions'][0].update(orderKey='2:9999999999')),
                 ('events', 'missing-key', 'canonical orderKey', lambda value: value['versions'][0].update(orderKey=None)),
+                ('legacy-map', 'wrong-historical-target', 'preserve the historical target', lambda value: next(row for row in value['entries'] if row['key'] == '81058:81058-55')['effects'][0].update(entityRefs=[{'entityId': 'unit/534'}])),
+                ('legacy-map', 'unsupported-provider', 'unsupported civilization', lambda value: next(row for row in value['entries'] if row['key'] == '81058:81058-83')['scope'].update(providerCivIds=['Saracens'])),
             ]
             for name, label, error, mutate in cases:
                 with self.subTest(label=label):
