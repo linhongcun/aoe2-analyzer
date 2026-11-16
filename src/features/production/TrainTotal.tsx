@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, civByEn } from '../../data';
-import { PRODUCTION_LIMIT, productionUnits, type ProductionContext } from '../../domain/production';
+import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
 import { defaultTrainUnit, evaluateTrainTotal, type TrainTotalConfig, type TrainTotalTechChoice } from '../../domain/trainTotal';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import type { Tech } from '../../domain/types';
@@ -12,7 +12,10 @@ import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionPageTop } from './ProductionModeNav';
 import { decodeTrainTotal, encodeTrainTotal, legacyHrefFromTotal } from './trainTotalCodec';
-import { TRAIN_TOTAL_DESCRIPTION, TRAIN_TOTAL_FOOTER, TRAIN_TOTAL_TITLE, trainTotalSummary } from './trainTotalCopy';
+import { TRAIN_TOTAL_DESCRIPTION, TRAIN_TOTAL_FOOTER, TRAIN_TOTAL_PENDING, TRAIN_TOTAL_TITLE, pendingTrainQuantity, trainTotalSummary } from './trainTotalCopy';
+import { trainTotalToProduction } from '../../domain/productionTransfer';
+import { productionTransferState } from '../../shared/utils/productionTransferState';
+import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import './trainTotal.css';
 
 const RESOURCES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
@@ -61,6 +64,10 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
   const navigate = useNavigate();
   const decoded = useMemo(() => decodeTrainTotal(location.search), [location.search]);
   const config = decoded.config;
+  const transfer = useMemo(() => {
+    const mapped = trainTotalToProduction(context, config);
+    return { to: '/production?' + encodeProduction(mapped.config), state: productionTransferState(mapped.notice) };
+  }, [context, config]);
   const result = useMemo(() => evaluateTrainTotal(context, config), [context, config]);
   const summary = trainTotalSummary({
     blocked: result.blocked.length > 0,
@@ -74,7 +81,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const write = (next: TrainTotalConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeTrainTotal(next) }, { replace: true });
+    navigate({ pathname: '/production', search: '?' + encodeTrainTotal(next) }, { replace: true, state: location.state });
     share.reset();
   };
   const blocked = result.blocked.length > 0;
@@ -89,7 +96,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
       <ToolPageHeader
         title={TRAIN_TOTAL_TITLE}
         description={TRAIN_TOTAL_DESCRIPTION}
-        top={<ProductionPageTop crumb={TRAIN_TOTAL_TITLE} flat />}
+        top={<ProductionPageTop crumb={TRAIN_TOTAL_TITLE} flat transfer={transfer} />}
         dock={
           <nav className="calc-dock" aria-label="方案操作">
             {share.status && (
@@ -129,6 +136,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
           </nav>
         }
       />
+      <ProductionTransferBanner />
       {share.manualLink && (
         <label className="train-total-manual">
           方案链接
@@ -195,11 +203,17 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
               {result.lines.map((line, index) => {
                 const row = config.rows[index];
                 if (!row) return null;
+                const waiting = pendingTrainQuantity(line);
                 return (
-                  <article className={line.status === 'ok' ? 'train-total-row' : 'train-total-row is-bad'} key={index} data-testid="train-total-row">
+                  <article
+                    className={`train-total-row${waiting ? ' is-waiting' : line.status === 'ok' ? '' : ' is-bad'}`}
+                    key={index}
+                    data-testid="train-total-row"
+                  >
                     <h3>
-                      兵种 {index + 1}
+                      <span className="nw num">兵种 {index + 1}</span>
                       {line.status === 'pending' ? ' · 待选' : ''}
+                      {waiting ? ' · 待填写数量' : ''}
                     </h3>
                     <label>
                       单位形态
@@ -224,7 +238,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                       训练数量
                       <input
                         aria-label={`兵种 ${index + 1} 训练数量`}
-                        aria-invalid={line.status === 'badqty'}
+                        aria-invalid={waiting ? undefined : line.status === 'badqty'}
+                        placeholder="填写 1–1000"
                         type="text"
                         inputMode="numeric"
                         value={row.qty}
@@ -256,8 +271,14 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                     </button>
                     {line.status !== 'ok' && (
                       <p className="train-total-flag">
-                        <Icon name="triangle-alert" />
-                        {line.reason}
+                        <Icon name={waiting ? 'info' : 'triangle-alert'} />
+                        {waiting ? (
+                          <span>
+                            请填写训练数量（<span className="num nw">1–1000</span> 的整数）。填写后计入合计。
+                          </span>
+                        ) : (
+                          line.reason
+                        )}
                       </p>
                     )}
                     {line.status === 'ok' && line.cost && line.subtotal && (
@@ -373,7 +394,15 @@ function Result({
           ))}
           {result.invalidTechIds.length > 0 && <p>有科技在当前条件下不可用，已停止计入。可手动移除，不会自动取消勾选。</p>}
           {excluded.map((line) => (
-            <p key={line.summary}>{line.summary}</p>
+            <p key={line.summary}>
+              {pendingTrainQuantity(line) ? (
+                <>
+                  <span className="nw num">第 {result.lines.indexOf(line) + 1} 行</span>还没有填写训练数量，未计入下面的小计。
+                </>
+              ) : (
+                line.summary
+              )}
+            </p>
           ))}
           {result.lines.some((line) => line.status === 'unavail') && (
             <button
@@ -398,7 +427,7 @@ function Result({
       )}
       {summary.none && (
         <p className="train-total-empty" data-testid="train-total-none">
-          {summary.none}不展示合计数字。可改回文明或时代、勾选所需科技，或移除不可用行。
+          {result.lines.every(pendingTrainQuantity) ? TRAIN_TOTAL_PENDING : <>{summary.none}不展示合计数字。可改回文明或时代、勾选所需科技，或移除不可用行。</>}
         </p>
       )}
       {summary.showCards && (

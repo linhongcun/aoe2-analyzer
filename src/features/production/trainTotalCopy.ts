@@ -1,7 +1,14 @@
+import type { TrainTotalLine } from '../../domain/trainTotal';
+
 export const TRAIN_TOTAL_TITLE = '训练总价';
 export const TRAIN_TOTAL_DESCRIPTION = '计算同一文明、同一时代下，多种单位形态的训练总价。不含研究费用。';
 export const TRAIN_TOTAL_EMPTY = '添加兵种并填写训练数量后查看合计。';
 export const TRAIN_TOTAL_NONE = '当前没有已计入的训练行。';
+export const TRAIN_TOTAL_PENDING = '当前没有已计入的训练行。不展示合计数字。填写训练数量后在这里显示合计。';
+
+export function pendingTrainQuantity(line: Pick<TrainTotalLine, 'status' | 'qty'>): boolean {
+  return line.status === 'badqty' && line.qty === '';
+}
 export const TRAIN_TOTAL_FULL_SCOPE = '下列总价只含训练费用，不含研究与升级费用。';
 export const TRAIN_TOTAL_PARTIAL_SCOPE = '下列只合计已计入的行，不是整份方案的训练总价。仍不含研究与升级费用。';
 export const TRAIN_TOTAL_ESTIMATE_SCOPE = '已选科技中有费用效果未能完整计入。下面是估算，不能当作完整准确的训练总价。';

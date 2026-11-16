@@ -165,6 +165,13 @@
 .train-total-row.is-bad {
   background: var(--color-warn-soft);
 }
+.train-total-row.is-waiting {
+  border-color: var(--color-link);
+}
+.train-total-row.is-waiting .train-total-flag > .ic {
+  color: var(--color-link);
+  flex-shrink: 0;
+}
 .train-total-flag {
   display: flex;
   align-items: flex-start;

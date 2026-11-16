@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
@@ -22,6 +24,11 @@ import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from './UnitPicker';
 import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
 import { radioKeyboard } from './radioKeyboard';
+import { duelToTrainTotal } from '../../../domain/productionTransfer';
+import type { ProductionContext } from '../../../domain/production';
+import { encodeTrainTotal } from '../../../domain/trainTotal';
+import { productionTransferState } from '../../../shared/utils/productionTransferState';
+import '../../../shared/ui/productionTransfer.css';
 
 export function Side({
   k,
@@ -31,6 +38,7 @@ export function Side({
   count,
   bud,
   time,
+  context,
 }: {
   k: 'a' | 'b';
   side: SideState;
@@ -41,9 +49,39 @@ export function Side({
   bud: number;
   /** #88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
   time: [number, number] | null;
+  context: ProductionContext;
 }) {
   const core = useCore()!;
-  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} />;
+  const transfer = useMemo(
+    () =>
+      duelToTrainTotal(context, {
+        side: k,
+        unit: side.u,
+        civ: side.civ,
+        age: side.age,
+        count,
+        techs: side.spec.techs,
+        selected: isUnavail(side) ? undefined : side.sel,
+      }),
+    [context, k, side, count],
+  );
+  const entry = (
+    <div className="duel-transfer">
+      <Link
+        className="duel-transfer-link"
+        to={'/production?' + encodeTrainTotal(transfer.config)}
+        state={productionTransferState(transfer.notice)}
+        replace={false}
+      >
+        <Icon name="calculator" />算 {k.toUpperCase()} 方训练总价
+        <Icon name="arrow-right" />
+      </Link>
+      <span className="note">
+        带入{civByEn(side.civ)?.zh ?? side.civ}、{AGE_ZH[side.age]}、{side.u.zh} <span className="num nw">× {count}</span>
+      </span>
+    </div>
+  );
+  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} entry={entry} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
@@ -68,6 +106,7 @@ export function Side({
         <TrainingPrice quote={side.training} sel={side.sel} bud={bud} count={count} />
         <CostDiscountBlock unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} />
       </div>
+      {entry}
       {time && (
         <RealCostBlock
           headingLevel={3}
@@ -217,7 +256,19 @@ export function Side({
 }
 
 /** issue 124：选的文明造不了这个单位。文明保持玩家选的，URL 不动；只有点按钮才改写 a / b */
-function UnavailSide({ k, side, fams, onChange }: { k: 'a' | 'b'; side: Unavail; fams: ReturnType<typeof collapse>; onChange: (s: SideSpec) => void }) {
+function UnavailSide({
+  k,
+  side,
+  fams,
+  onChange,
+  entry,
+}: {
+  k: 'a' | 'b';
+  side: Unavail;
+  fams: ReturnType<typeof collapse>;
+  onChange: (s: SideSpec) => void;
+  entry: React.ReactNode;
+}) {
   const { u, spec, sub } = side;
   const civZh = civByEn(side.civ)?.zh ?? side.civ;
   const civId = `duel-${k}-civ`;
@@ -250,6 +301,7 @@ function UnavailSide({ k, side, fams, onChange }: { k: 'a' | 'b'; side: Unavail;
           </button>
         </div>
       </div>
+      {entry}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
       </div>
