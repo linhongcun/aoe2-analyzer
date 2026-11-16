@@ -252,6 +252,7 @@ export function eventsForCivilization(data: CivUpdatesData, civId: string) {
 }
 export function compareUpdateVersions(a: UpdateVersion | undefined, b: UpdateVersion | undefined, oldest = false) {
   if (!a || !b) return !a ? (!b ? 0 : 1) : -1;
+  if (a.build !== null && b.build !== null) return (oldest ? 1 : -1) * (a.build - b.build);
   if (a.orderKey === null || b.orderKey === null) return a.orderKey === null ? (b.orderKey === null ? a.id.localeCompare(b.id) : 1) : -1;
   return (oldest ? 1 : -1) * a.orderKey.localeCompare(b.orderKey);
 }
@@ -406,7 +407,10 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
       for (const projection of mapping.projections) if (!event?.civRelations.some((relation) => relation.civId === projection.civId)) fail();
     }
   }
-  for (const version of versions.values()) if (version.evidenceSourceIds.some((id) => !sources.has(id))) fail();
+  for (const version of versions.values()) {
+    if (version.evidenceSourceIds.some((id) => !sources.has(id))) fail();
+    if (version.build !== null && version.orderKey !== `03:${String(version.build).padStart(8, '0')}`) fail();
+  }
   for (const entity of entities.values()) {
     if (entity.status === 'retired' && entity.linkPath !== null) fail();
     if (

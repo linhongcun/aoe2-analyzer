@@ -113,6 +113,18 @@ describe('civilization update contract, independent of background history', () =
     expect(rows.every((event) => event.versionId === null)).toBe(true);
   });
 
+  it('compares five/six-digit builds numerically and rejects inconsistent sort metadata', () => {
+    const early = { ...data.versions.find((version) => version.build === 34055)!, orderKey: '2:9999999999' };
+    const later = { ...data.versions.find((version) => version.build === 188329)!, orderKey: null };
+    expect([early, later].sort(compareUpdateVersions).map((version) => version.build)).toEqual([188329, 34055]);
+    expect([later, early].sort((a, b) => compareUpdateVersions(a, b, true)).map((version) => version.build)).toEqual([34055, 188329]);
+    for (const orderKey of ['2:9999999999', null]) {
+      const changed = structuredClone(data);
+      changed.versions.find((version) => version.build === 34055)!.orderKey = orderKey;
+      expect(() => assertCivUpdateReferences(changed)).toThrow();
+    }
+  });
+
   it.each([
     'histVerification=official',
     'histSource=all',

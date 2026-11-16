@@ -11,6 +11,7 @@ import argparse
 import copy
 import hashlib
 import json
+import re
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -126,6 +127,13 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     require(safe_source(catalog['index']['url']) and urlsplit(catalog['index']['url']).hostname == 'seicing.com', 'Unexpected source index')
     versions = index_unique(copy.deepcopy(event_input['versions']), 'id', 'versions')
     entities = index_unique(copy.deepcopy(inputs['identities']['entities']), 'id', 'entities')
+    for entity in entities.values():
+        path = entity['linkPath']
+        require(entity['status'] != 'retired' or path is None, 'Retired identity must not link to the current catalog')
+        require(path is None or (re.fullmatch(r'/(civ|unit|building|tech)/[A-Za-z0-9-]+', path) is not None and path == f'/{entity["type"]}/{entity["catalogId"]}'), 'Unsafe or mismatched historical identity link')
+        if entity['status'] == 'current':
+            targets = civ_ids if entity['type'] == 'civ' else inputs['catalogNames'][entity['type']]
+            require(entity['catalogId'] in targets, f'{entity["id"]}: current identity has no catalog target')
     events = index_unique(copy.deepcopy(event_input['events']), 'id', 'events')
     source_entries: dict[str, Any] = {}
     sources: dict[str, Any] = {}
@@ -260,6 +268,7 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
                 if not any(row['eventId'] == right['id'] for row in left['candidates']):
                     left['candidates'].append({'eventId': right['id'], 'reason': '同版本且有明确共同文明范围，尚未确认是否为同一变化；保持独立，不按相似文字合并。'})
     for event in events.values():
+        require(all(row['eventId'] in events and row['eventId'] != event['id'] for row in event['candidates']), 'Dangling or self candidate event')
         if event['verification'] == 'conflict':
             require(len(event['claims']) > 1 and bool(event['verificationNote']), 'Conflict requires both claims and an explanation')
         else:
@@ -306,6 +315,8 @@ def assemble(inputs: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
             require(previous is not None, 'Previous source revision must be retained')
             parent = previous['supersedesRevisionId']
     for version in versions.values():
+        if version['build'] is not None:
+            require(version['orderKey'] == f'03:{version["build"]:08d}', 'Numeric build requires its canonical orderKey')
         require(all(sid in sources for sid in version['evidenceSourceIds']), 'Version evidence source missing')
         for field in ['releaseDate', 'announcedAt']:
             if version[field] is not None:

@@ -2,6 +2,8 @@
 import copy
 import importlib.util
 import json
+import shutil
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -85,6 +87,41 @@ class CivHistoryTests(unittest.TestCase):
         changed['legacy-map']['entries'].pop()
         with self.assertRaisesRegex(ValueError, 'Unmapped legacy'):
             build.assemble(changed)
+
+    def test_real_build_rejects_bad_candidates_links_catalog_targets_and_build_keys(self):
+        # Use real files/load_inputs/build/schema calls, without mocking assembly.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(ROOT / build.INPUT, root / build.INPUT)
+            (root / 'data/game').mkdir(parents=True, exist_ok=True)
+            for name in ['civs', 'units', 'buildings', 'techs']:
+                shutil.copy2(ROOT / f'data/game/{name}.json', root / f'data/game/{name}.json')
+            shutil.copytree(ROOT / 'data/game/patches', root / 'data/game/patches')
+            payload, audit = build.build(root)
+            self.assertEqual(audit, self.audit)
+            self.assertTrue(any(entity['status'] == 'retired' and entity['linkPath'] is None for entity in payload['entities']))
+            self.assertTrue(any('unresolvedName' in ref for event in payload['events'] for claim in event['claims'] for effect in claim['effects'] for ref in effect['entityRefs']))
+            cases = [
+                ('events', 'missing-candidate', 'candidate', lambda value: value['events'][0]['candidates'].append({'eventId': 'missing-event', 'reason': 'synthetic negative'})),
+                ('events', 'self-candidate', 'candidate', lambda value: value['events'][0]['candidates'].append({'eventId': value['events'][0]['id'], 'reason': 'synthetic negative'})),
+                ('identities', 'external-link', 'identity link', lambda value: value['entities'][0].update(linkPath='https://invalid.example')),
+                ('identities', 'mismatched-link', 'identity link', lambda value: value['entities'][0].update(linkPath='/unit/1231')),
+                ('identities', 'retired-link', 'Retired identity', lambda value: next(entity for entity in value['entities'] if entity['status'] == 'retired').update(linkPath='/tech/716')),
+                ('identities', 'missing-current-target', 'no catalog target', lambda value: next(entity for entity in value['entities'] if entity['id'] == 'unit/1231').update(catalogId='999999999', linkPath='/unit/999999999')),
+                ('events', 'wrong-key', 'canonical orderKey', lambda value: value['versions'][0].update(orderKey='2:9999999999')),
+                ('events', 'missing-key', 'canonical orderKey', lambda value: value['versions'][0].update(orderKey=None)),
+            ]
+            for name, label, error, mutate in cases:
+                with self.subTest(label=label):
+                    path = root / build.INPUT / f'{name}.json'
+                    original = path.read_text()
+                    value = json.loads(original)
+                    mutate(value)
+                    path.write_text(build.encode(value))
+                    with self.assertRaisesRegex(ValueError, error):
+                        build.build(root)
+                    self.assertFalse((root / build.OUTPUT).exists())
+                    path.write_text(original)
 
     def test_multisource_and_multieffect_claims_keep_both_forms_and_unknowns(self):
         cumans = next(s for _, s in self.inputs['snapshots'] if s['civId'] == 'Cumans')
