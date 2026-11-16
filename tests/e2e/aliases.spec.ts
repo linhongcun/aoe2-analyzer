@@ -51,3 +51,35 @@ for (const q of ['武士', '骑士', '长剑', '弓箭手'])
     await expect(li.filter({ has: page.locator('.tag', { hasText: /^单位$/ }) }).first()).toBeVisible();
     await expect(li.first()).not.toContainText('开局时间线');
   });
+
+for (const alias of ['匈牙利轻骑兵', '匈牙利輕騎兵']) {
+  test(`#1055 全局搜索「${alias}」只命中翼骑兵并进入441正式详情`, async ({ page }) => {
+    const li = await open(page, alias);
+    const units = li.filter({ has: page.locator('.tag', { hasText: /^单位$/ }) });
+    await expect(units).toHaveCount(1);
+    await expect(units.first()).toContainText('翼骑兵');
+    await expect(units.first()).toContainText('Hussar');
+    await expect(units.first()).not.toContainText('波兰');
+    await units.first().click();
+    await expect(page).toHaveURL(/#\/unit\/441$/);
+    await expect(page.locator('h1')).toContainText('翼骑兵');
+    await expect(page.locator('h1')).not.toContainText('波兰');
+  });
+
+  test(`#1055 无筛选单位目录「${alias}」只命中441并进入正式详情`, async ({ page }) => {
+    await page.goto('./#/units');
+    await expect(page.locator('#ugrid .unit-row').first()).toBeVisible();
+    await expect(page.locator('#uq')).toHaveValue('');
+    await expect(page.getByRole('button', { name: '清空筛选', exact: true })).toHaveCount(0);
+    await page.locator('#uq').fill(alias);
+    const rows = page.locator('#ugrid .unit-row');
+    await expect(rows).toHaveCount(1);
+    await expect(rows.first()).toHaveAttribute('data-unit-id', '441');
+    await expect(rows.first()).toContainText('翼骑兵');
+    await expect(rows.first()).toContainText('Hussar');
+    await rows.first().click();
+    await expect(page).toHaveURL(/#\/unit\/441$/);
+    await expect(page.locator('h1')).toContainText('翼骑兵');
+    await expect(page.locator('h1')).not.toContainText('波兰');
+  });
+}
