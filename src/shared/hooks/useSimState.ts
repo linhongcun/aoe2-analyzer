@@ -31,7 +31,11 @@ function currentHashLocation(): SimNavigationLocation | null {
   const raw = window.location.hash;
   const parsed = parsePath(raw.startsWith('#') ? raw.slice(1) : raw);
   if (!parsed.pathname) return null;
-  return { pathname: parsed.pathname, search: parsed.search ?? '', hash: parsed.hash ?? '' };
+  return {
+    pathname: parsed.pathname.startsWith('/') ? parsed.pathname : `/${parsed.pathname}`,
+    search: parsed.search ?? '',
+    hash: parsed.hash ?? '',
+  };
 }
 
 function sameLocation(a: SimNavigationLocation, b: SimNavigationLocation): boolean {
