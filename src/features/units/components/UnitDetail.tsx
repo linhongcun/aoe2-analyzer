@@ -245,7 +245,7 @@ export default function UnitDetail() {
       </div>
 
       <nav className="ud-jump" aria-label="本页章节">
-        {JUMPS.map(([id, label]) => (
+        {JUMPS.filter(([id]) => id !== 'unit-garrison' || !workspace).map(([id, label]) => (
           <button
             key={id}
             type="button"

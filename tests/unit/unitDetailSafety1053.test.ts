@@ -77,6 +77,22 @@ function renderUnit(path: string) {
   return renderToStaticMarkup(createElement(StaticRouter, { location: path }, createElement(UnitDetail)));
 }
 
+describe('#1051 C3 驻军章节入口与目标', () => {
+  it.each([
+    ['/unit/24?civ=Koreans', true],
+    ['/unit/24?civ=Koreans&tab=sim', false],
+  ] as const)('%s 的新增入口与目标成对存在，保留原章节', (path, expected) => {
+    const html = renderUnit(path);
+    const navigation = html.match(/<nav[^>]*aria-label="本页章节"[^>]*>[\s\S]*?<\/nav>/u)![0];
+    expect(navigation.includes('>驻军</button>')).toBe(expected);
+    expect(html.includes('id="unit-garrison"')).toBe(expected);
+    for (const label of ['属性', '如何获得', '说明', '相关', '模拟器', '更新历史', '反向查询']) {
+      expect(navigation).toContain(`>${label}</button>`);
+    }
+    expect(navigation.match(/<button\b/gu)).toHaveLength(expected ? 8 : 7);
+  });
+});
+
 function setBrowserGlobal(name: string, value: unknown) {
   if (!browserDescriptors.has(name)) browserDescriptors.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
   Object.defineProperty(globalThis, name, { configurable: true, writable: true, value });
