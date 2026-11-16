@@ -257,17 +257,24 @@ describe('反向查询恢复提示并发取消（#1053）', () => {
 
   it('pending A 恢复提示不会跨真实 Router 导航进入无记录的 B', async () => {
     const values = new Map<string, string>();
+    const writes: { key: string; value: string }[] = [];
     const storage = {
       getItem: (key: string) => values.get(key) ?? null,
-      setItem: (key: string, value: string) => values.set(key, value),
+      setItem: (key: string, value: string) => {
+        values.set(key, value);
+        writes.push({ key, value });
+      },
     };
     const focusCalls: string[] = [];
     const scrollCalls: ScrollToOptions[] = [];
     class FakeElement {
-      constructor(private readonly elementId: string) {}
+      constructor(
+        private readonly elementId: string,
+        private readonly top = 100,
+      ) {}
 
       getBoundingClientRect() {
-        return { top: 100, bottom: 140 } as DOMRect;
+        return { top: this.top, bottom: this.top + 40 } as DOMRect;
       }
 
       closest() {
@@ -281,7 +288,8 @@ describe('反向查询恢复提示并发取消（#1053）', () => {
     const elements = new Map<string, FakeElement>([
       ['saved-anchor', new FakeElement('saved-anchor')],
       ['saved-focus', new FakeElement('saved-focus')],
-      ['unit-reverse-counters', new FakeElement('unit-reverse-counters')],
+      ['saved-b-focus', new FakeElement('saved-b-focus')],
+      ['unit-reverse-counters', new FakeElement('unit-reverse-counters', 150)],
     ]);
     let scrollY = 20;
     const frames = new Map<number, FrameRequestCallback>();
@@ -359,6 +367,7 @@ describe('反向查询恢复提示并发取消（#1053）', () => {
         createElement('button', { id: 'navigate-to-b', onClick: () => navigate(`${locationB.pathname}${locationB.search}${locationB.hash}`) }, 'Navigate B'),
         createElement('output', { id: 'route' }, `${route.pathname}${route.search}`),
         createElement(ReverseCounters, {
+          key: session.reverseCounterSessionKey(target.id, 'Byzantines', currentLocation),
           target,
           rawTarget: target,
           targetIssues: [],
@@ -376,10 +385,10 @@ describe('反向查询恢复提示并发取消（#1053）', () => {
         }),
       );
     }
-    const makeTree = (treesPending: boolean) =>
+    const makeTree = (treesPending: boolean, initialLocation = location) =>
       createElement(
         MemoryRouter,
-        { initialEntries: [`${location.pathname}${location.search}${location.hash}`] },
+        { initialEntries: [`${initialLocation.pathname}${initialLocation.search}${initialLocation.hash}`] },
         createElement(RouterHarness, { treesPending }),
       );
     const flushSync = (callback: () => void) =>
@@ -424,6 +433,108 @@ describe('反向查询恢复提示并发取消（#1053）', () => {
 
     await act(async () => renderer!.unmount());
     renderer = null;
+
+    const savedB: ReverseCounterSession = {
+      version: 1,
+      location: locationB,
+      filters: { civ: 'Goths', age: 2 },
+      collapsed: [group!.category],
+      expandedRows: [String(row!.unit.id)],
+      openPk: null,
+      anchor: 'missing-b-anchor',
+      fallbackAnchor: null,
+      offset: 35,
+      focus: 'saved-b-focus',
+    };
+    values.clear();
+    expect(session.writeReverseCounterSession(keyA, savedA, storage)).toBe(true);
+    expect(session.writeReverseCounterSession(keyB, savedB, storage)).toBe(true);
+    const savedAWithRecordedB = session.readReverseCounterSession(keyA, location, storage);
+    const savedBBefore = session.readReverseCounterSession(keyB, locationB, storage);
+    expect(savedAWithRecordedB).toEqual(savedA);
+    expect(savedBBefore).toEqual(savedB);
+    focusCalls.length = 0;
+    scrollCalls.length = 0;
+    frames.clear();
+    scrollY = 20;
+    writes.length = 0;
+
+    await act(async () => {
+      renderer = createConcurrent(makeTree(true), { unstable_isConcurrent: true });
+      controlledScheduler.unstable_flushAllWithoutAsserting();
+      await Promise.resolve();
+    });
+    flushSync(() => renderer!.update(makeTree(false)));
+    expect(restoreNoteText(renderer!)).toBe('');
+    expect(controlledScheduler.unstable_getFirstCallbackNode()).not.toBeNull();
+
+    writes.length = 0;
+    flushSync(() => renderer!.root.findByProps({ id: 'navigate-to-b' }).props.onClick());
+    expect(renderer!.root.findByProps({ id: 'route' }).children.join('')).toBe(`${locationB.pathname}${locationB.search}`);
+    expect(restoreNoteText(renderer!)).toBe('');
+    expect(nodeText(renderer!.root.findByProps({ id: 'reverse-counter-civ' }))).toContain('哥特');
+    expect(renderer!.root.findByProps({ id: 'reverse-counter-age' }).props.value).toBe(2);
+
+    await act(async () => {
+      controlledScheduler.unstable_flushAllWithoutAsserting();
+      await Promise.resolve();
+    });
+    const bNote = '已恢复本单位、敌方筛选与阅读位置；原结果行已变化，已定位到本类或查询区。';
+    expect(restoreNoteText(renderer!)).toBe(bNote);
+    expect(frames.size).toBe(1);
+    expect(writes).toEqual([]);
+    expect(scrollCalls).toEqual([]);
+    expect(focusCalls).toEqual([]);
+    const bRestoreFrame = [...frames.values()][0]!;
+    frames.clear();
+    await act(async () => bRestoreFrame(0));
+    await act(async () => {
+      controlledScheduler.unstable_flushAllWithoutAsserting();
+      await Promise.resolve();
+    });
+    expect(scrollCalls).toEqual([{ top: 135, behavior: 'auto' }]);
+    expect(focusCalls).toContain('saved-b-focus');
+    expect(writes.some((entry) => entry.key === keyB)).toBe(true);
+    expect(writes.some((entry) => entry.key === keyA)).toBe(false);
+    expect(session.readReverseCounterSession(keyB, locationB, storage)).toMatchObject({ location: locationB, filters: savedB.filters });
+    expect(session.readReverseCounterSession(keyA, location, storage)).toEqual(savedAWithRecordedB);
+
+    await act(async () => renderer!.unmount());
+    renderer = null;
+    values.clear();
+    expect(session.writeReverseCounterSession(keyA, savedA, storage)).toBe(true);
+    expect(session.writeReverseCounterSession(keyB, savedB, storage)).toBe(true);
+    focusCalls.length = 0;
+    scrollCalls.length = 0;
+    frames.clear();
+    scrollY = 20;
+    writes.length = 0;
+    await act(async () => {
+      renderer = createConcurrent(makeTree(false, locationB), { unstable_isConcurrent: true });
+      controlledScheduler.unstable_flushAllWithoutAsserting();
+      await Promise.resolve();
+    });
+    expect(nodeText(renderer!.root.findByProps({ id: 'reverse-counter-civ' }))).toContain('哥特');
+    expect(renderer!.root.findByProps({ id: 'reverse-counter-age' }).props.value).toBe(2);
+    expect(restoreNoteText(renderer!)).toBe(bNote);
+    expect(frames.size).toBe(1);
+    expect(writes).toEqual([]);
+    const directBRestoreFrame = [...frames.values()][0]!;
+    frames.clear();
+    await act(async () => directBRestoreFrame(0));
+    await act(async () => {
+      controlledScheduler.unstable_flushAllWithoutAsserting();
+      await Promise.resolve();
+    });
+    expect(scrollCalls).toEqual([{ top: 135, behavior: 'auto' }]);
+    expect(focusCalls).toContain('saved-b-focus');
+    expect(writes.some((entry) => entry.key === keyB)).toBe(true);
+    expect(writes.some((entry) => entry.key === keyA)).toBe(false);
+    expect(session.readReverseCounterSession(keyB, locationB, storage)).toMatchObject({ location: locationB, filters: savedB.filters });
+    expect(session.readReverseCounterSession(keyA, location, storage)).toEqual(savedA);
+    await act(async () => renderer!.unmount());
+    renderer = null;
+
     values.clear();
     expect(session.writeReverseCounterSession(keyA, savedA, storage)).toBe(true);
     focusCalls.length = 0;

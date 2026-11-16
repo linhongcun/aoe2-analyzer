@@ -403,7 +403,7 @@ export default function UnitDetail() {
       </section>
 
       <ReverseCounters
-        key={`${u.id}:${context?.en ?? ''}`}
+        key={reverseCounterSessionKey(u.id, context?.en ?? '', loc) ?? `${u.id}:${context?.en ?? ''}`}
         target={u}
         rawTarget={rawTarget!}
         targetIssues={targetProjection?.invalidFields ?? []}

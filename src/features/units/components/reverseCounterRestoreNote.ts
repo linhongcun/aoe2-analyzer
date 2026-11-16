@@ -31,6 +31,9 @@ export function useRestoreNoteState(sessionIdentity: object) {
   const sessionIdentityRef = useRef(sessionIdentity);
   useLayoutEffect(() => {
     sessionIdentityRef.current = sessionIdentity;
+    return () => {
+      if (sessionIdentityRef.current === sessionIdentity) sessionIdentityRef.current = {};
+    };
   }, [sessionIdentity]);
   return { state, setState, note: state.sessionIdentity === sessionIdentity ? state.note : '', sessionIdentityRef };
 }
