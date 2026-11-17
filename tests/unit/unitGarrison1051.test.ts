@@ -154,6 +154,48 @@ const markup = (overrides: Partial<Parameters<typeof UnitGarrison>[0]> = {}) =>
   );
 
 describe('#1051 重要渲染状态', () => {
+  it.each([
+    { civ: 'Teutons', unitId: 5, extra: 1, total: 2, text: '可驻军' },
+    { civ: 'Koreans', unitId: 24, extra: 0, total: 1, text: '可驻军，驻军不增加弹丸' },
+  ])('$civ/$unitId×236按真实模型extra=$extra条件化炮塔文案，不改同参链接', ({ civ, unitId, extra, total, text }) => {
+    const row = host(unitId, civ, 236);
+    expect(row.result).toMatchObject({ errors: [], mode: 'cannon', extraProjectiles: extra, totalProjectiles: total });
+    const html = markup({ unitId, civ }).match(/<li[^>]*data-host="236"[\s\S]*?<\/li>/)![0];
+    expect(html).toContain(`<span>${text}</span>`);
+    if (extra > 0) expect(html).not.toContain('不增加弹丸');
+    expect(html).not.toContain('data-garrison-total');
+    expect(html).not.toContain('data-garrison-max');
+    expect(html).not.toContain('data-garrison-saturation');
+    expect(html.match(/href="([^"]+)"/)![1]!.replace(/&amp;/g, '&')).toBe(row.href);
+    expect(readGeneralGarrison(new URLSearchParams(row.href!.split('?')[1]), row.building)).toEqual({ config: row.config, errors: [] });
+  });
+  it.each([
+    { civ: 'Teutons', unitId: 5 },
+    { civ: 'Koreans', unitId: 24 },
+  ])('$civ/$unitId×236真实模型null仍待核实并保留可信链接，无效容量则不链接', ({ civ, unitId }) => {
+    const data = copyData();
+    data.units[unitId]!.firepower = NaN;
+    const calculate = calculateGeneralGarrison;
+    const spy = vi.spyOn(garrison, 'calculateGeneralGarrison').mockImplementation((context, building, config) => calculate(context, building, config, data));
+    try {
+      const row = host(unitId, civ, 236, data);
+      expect(row.result).toMatchObject({ errors: [], mode: 'cannon', extraProjectiles: null, totalProjectiles: null });
+      const html = () => markup({ unitId, civ }).match(/<li[^>]*data-host="236"[\s\S]*?<\/li>/)![0];
+      expect(html()).toContain('弹丸数待核实');
+      expect(html()).not.toContain('可驻军');
+      expect(html()).not.toContain('data-garrison-total');
+      expect(
+        html()
+          .match(/href="([^"]+)"/)![1]!
+          .replace(/&amp;/g, '&'),
+      ).toBe(row.href);
+      data.units[236]!.capacity = NaN;
+      expect(html()).toContain('待核实，暂无法生成有效预览');
+      expect(html()).not.toContain('/building/');
+    } finally {
+      spy.mockRestore();
+    }
+  });
   it('真实模型未知上限不冒充已确认庇护；无效容量保留待核实且不链接', () => {
     const data = copyData();
     data.units[79]!.max = NaN;

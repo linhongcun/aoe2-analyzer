@@ -53,7 +53,7 @@ function GarrisonHost({ row }: { row: UnitGarrisonHost }) {
                 {r.extraProjectiles === 0 && <span>驻军不增加弹丸</span>}
               </>
             ) : (
-              <span>{r.mode === 'cannon' ? '可驻军，驻军不增加弹丸' : '可驻军'}</span>
+              <span>{r.mode === 'cannon' && r.extraProjectiles === 0 ? '可驻军，驻军不增加弹丸' : '可驻军'}</span>
             )}
           </>
         )}
