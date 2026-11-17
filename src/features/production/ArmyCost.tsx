@@ -527,7 +527,14 @@ function Ledger({ entry, onRemove }: { entry: ResearchEntry; onRemove: () => voi
       </div>
       <p className="note">
         {entry.beneficiaries.length > 1 ? '共享 · ' : ''}
-        {entry.beneficiaries.map((i) => `第 ${i + 1} 行`).join('、')}
+        {entry.beneficiaries.map((i, index) => (
+          <span key={i}>
+            {index > 0 && '、'}
+            <span className="nw">
+              第 <span className="num">{i + 1}</span> 行
+            </span>
+          </span>
+        ))}
         {entry.reason && ' · ' + entry.reason}
       </p>
       {entry.cost && <CostView c={entry.cost} />}
