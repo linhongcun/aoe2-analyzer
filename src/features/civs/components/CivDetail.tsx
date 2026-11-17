@@ -202,7 +202,7 @@ export default function CivDetail({ techTree }: { techTree: TechTreeComponent })
   const canonicalPath = civEnCasePath(civs, en);
   if (canonicalPath) return <Navigate to={{ pathname: canonicalPath, search: location.search, hash: location.hash }} replace />;
   if (!c) return <HistoricalEntityDetail target={{ targetType: 'civ', targetId: en }} />;
-  return <CivReading key={c.en} c={c} techTree={techTree} />;
+  return <CivReading c={c} techTree={techTree} />;
 }
 
 function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeComponent }) {
@@ -314,7 +314,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <p className="civ-kicker">机制事实</p>
           <h2 id="civ-bonus-title">文明加成</h2>
           <p className="note">事实在此完整列出一次。点开一行可进入加成详情。</p>
-          <Suspense fallback={<BonusTextList civ={c} />}>{core ? <BonusRows c={c} /> : <BonusTextList civ={c} />}</Suspense>
+          <Suspense fallback={<BonusTextList civ={c} />}>{core ? <BonusRows key={c.en} c={c} /> : <BonusTextList civ={c} />}</Suspense>
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>
@@ -360,7 +360,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
         </section>
       </div>
-      <CivFormations civ={c.en} resources={resources} />
+      <CivFormations key={c.en} civ={c.en} resources={resources} />
       <Suspense fallback={<TechTreePending />}>
         <TechTree civEn={c.en} resources={resources} />
       </Suspense>

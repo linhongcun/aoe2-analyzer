@@ -5,6 +5,9 @@ import { usePreviousHistoryEntry, type NavigationEntry } from '../../../shared/u
 export const formationAnchor = (id: string) => `formation-${id}`;
 export const isFormationHash = (hash: string) => hash === '#formations' || hash.startsWith('#formation-');
 
+const documentToken = crypto.getRandomValues(new Uint32Array(3)).join('-') + ':';
+let nextToken = 0;
+
 function scrollToFormation(target: HTMLElement, center = false) {
   const chapters = target.closest('.civ-read')?.querySelector<HTMLElement>('.civ-chapters');
   const chapterBottom = chapters ? (parseFloat(getComputedStyle(chapters).top) || 0) + chapters.offsetHeight : 0;
@@ -35,6 +38,7 @@ function readMemory(entry: HistoryEntry | null, civ: string): FormationReading |
   if (
     value?.civ === civ &&
     typeof value.token === 'string' &&
+    value.token.startsWith(documentToken) &&
     value.key === (entry?.key ?? 'default') &&
     typeof value.idx === 'number' &&
     value.idx === entry?.idx &&
@@ -51,15 +55,13 @@ export function readFormationReturn(civ: string, previous: NavigationEntry | und
   return memory && previous?.formationReturn === memory.token && previous.idx === memory.idx + 1 ? memory : undefined;
 }
 
-let nextToken = 0;
-
 export function useFormationNavigation(civ: string, pending: boolean) {
   const root = useRef<HTMLElement>(null);
   const { key, hash, state } = useLocation();
   const navigate = useNavigate();
   const previous = usePreviousHistoryEntry();
   const completed = useRef<string>();
-  const focusAnchor = useNavigationType() === 'PUSH' && state?.focusFormation === true;
+  const focusAnchor = useNavigationType() !== 'POP' && state?.focusFormation === true;
 
   useEffect(() => {
     const find = (id: string) => {
@@ -103,7 +105,7 @@ export function useFormationNavigation(civ: string, pending: boolean) {
     const entry = window.history.state as HistoryEntry | null;
     if (typeof entry?.idx !== 'number') return;
     event.preventDefault();
-    const token = `${key}:${++nextToken}`;
+    const token = `${documentToken}${key}:${++nextToken}`;
     const memory: FormationReading = { civ, route, entity: event.currentTarget.id, open, token, key, idx: entry.idx };
     window.history.replaceState({ ...entry, usr: { ...entry.usr, formationReading: memory } }, '');
     navigate(to, { state: { formationReturn: token } });

@@ -21,7 +21,9 @@ describe('#1120 发布与阵容状态', () => {
     mkdirSync(join(root, 'data/content'), { recursive: true });
     const check = () => spawnSync(process.execPath, [resolve('scripts/check-content.mjs'), '--root', root, '--strict'], { encoding: 'utf8' });
     try {
-      expect(check().stderr).toContain('缺少首批阵容发布文件');
+      const missing = check();
+      expect(missing.status).toBe(1);
+      expect(missing.stderr).toContain('缺少首批阵容发布文件');
       const partial = structuredClone(civFormationContent);
       partial[0]!.routes.pop();
       writeFileSync(join(root, file), JSON.stringify(partial));
@@ -35,7 +37,7 @@ describe('#1120 发布与阵容状态', () => {
     }
   });
 
-  it('阻止额外路线、重复、草稿、未知依赖，保留合法的过期档案', () => {
+  it('阻止额外路线、重复、草稿、未知依赖和错链，保留合法的过期档案', () => {
     const check = (mutate: (data: typeof civFormationContent) => void) => {
       const data = structuredClone(civFormationContent);
       mutate(data);
@@ -51,6 +53,21 @@ describe('#1120 发布与阵容状态', () => {
     expect(
       check((data) => {
         data[0]!.routes[0]!.adjustments[0]!.requires = [{ kind: 'unit', id: 9999 }];
+      }),
+    ).toBe(false);
+    expect(
+      check((data) => {
+        data[0]!.source.content = data[0]!.source.content.replace(/\/blob\/[a-f0-9]{40}\//, '/blob/main/');
+      }),
+    ).toBe(false);
+    expect(
+      check((data) => {
+        data[0]!.source.content = data[1]!.source.content;
+      }),
+    ).toBe(false);
+    expect(
+      check((data) => {
+        data[0]!.source.discussion = 'https://github.com/linhongcun/aoe2-analyzer/issues/1';
       }),
     ).toBe(false);
     expect(

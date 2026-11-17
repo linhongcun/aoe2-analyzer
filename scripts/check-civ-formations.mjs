@@ -1,5 +1,9 @@
 export const FORMATIONS_FILE = 'data/content/civ-formations.json';
 
+const strategySource = 'https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md';
+const discussionSource = 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4';
+const strategySections = { Spanish: '西班牙', Georgians: '格鲁吉亚' };
+
 const release = {
   Spanish: {
     'conquistador-hussar': {
@@ -45,6 +49,12 @@ export function formationProblems(content) {
     add('', '首批文明必须恰好为西班牙、格鲁吉亚，且各出现一次');
   for (const [i, entry] of content.entries()) {
     if (!Object.hasOwn(release, entry.civ)) continue;
+    if (entry.source.content !== `${strategySource}#${strategySections[entry.civ]}`) {
+      add(`/${i}/source/content`, '内容来源须指向批准的固定提交和文明章节');
+    }
+    if (entry.source.discussion !== discussionSource) {
+      add(`/${i}/source/discussion`, '原讨论链接不符合首批批准来源');
+    }
     const expectedRoutes = release[entry.civ];
     if (
       !sameKeys(

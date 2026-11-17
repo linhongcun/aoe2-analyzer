@@ -32,6 +32,9 @@ for (const width of [1280, 390]) {
     const title = page.locator(`#${paladin}`);
     await expect(title).toBeFocused();
     await onScreenBelowNav(title);
+    await jump.press('Enter');
+    await expect(title).toBeFocused();
+    await onScreenBelowNav(title);
     const card = section.locator('article').filter({ has: title });
     const detail = card.locator('summary').filter({ hasText: '查看攻守与调整' });
     await detail.press('Enter');
@@ -95,6 +98,24 @@ test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({
   await expect(section.getByRole('link', { name: '查看科技树' })).toHaveAttribute('href', '#/civ/Japanese#techtree');
   await expect(page.getByTestId('civ-tool-train-total')).toHaveAttribute('href', '#/production?mode=train-total&civ=Japanese');
   await expect(page.getByTestId('civ-tool-matchup')).toHaveAttribute('href', '#/matchup?me=Japanese');
+});
+
+test('#1120 刷新实体详情后返回只按锚点定位', async ({ page }) => {
+  await page.goto(`${spanish}#${paladin}`);
+  const title = page.locator(`#${paladin}`);
+  const card = page.locator(formations).locator('article').filter({ has: title });
+  await card.getByText('查看攻守与调整', { exact: true }).click();
+  const entity = card.locator(`#${paladin}-unit-569`);
+  const paladinPage = page.getByRole('heading', { level: 1, name: /游侠/ });
+  await entity.click();
+  await expect(paladinPage).toBeVisible();
+  await page.reload();
+  await expect(paladinPage).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(new RegExp(`#/civ/Spanish#${paladin}$`));
+  await onScreenBelowNav(title);
+  await expect(card.locator('details[open]')).toHaveCount(0);
+  await expect(entity).not.toBeFocused();
 });
 
 for (const asset of ['core', 'trees']) {
