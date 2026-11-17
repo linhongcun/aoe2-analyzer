@@ -84,7 +84,7 @@ test('overview filters, complete return URL, reload, back/forward and clear roun
   await page.goForward();
   await expect(reader.getByLabel('来源类别')).toHaveValue('');
   expectHistoryContext();
-  await reader.getByRole('link', { name: '返回文明历史总览' }).click();
+  await reader.getByRole('link', { name: '返回上次历史结果' }).click();
   await expect(overview.locator('tbody tr')).toHaveCount(1);
   expect(router().pathname + router().search).toBe(returnPath);
   await overview.getByLabel('来源章节状态').selectOption('no-log');

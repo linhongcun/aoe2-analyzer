@@ -7,7 +7,8 @@ import { readValidatedJson } from './validatedJson';
 let pending: Promise<CivUpdatesData> | undefined;
 
 /** Fetch only on a mounted history reader; failed promises are never cached. */
-export function loadCivUpdates(): Promise<CivUpdatesData> {
+export function loadCivUpdates(reload = false): Promise<CivUpdatesData> {
+  if (reload) pending = undefined;
   pending ??= fetch(updatesUrl)
     .then(async (response) => {
       if (!response.ok) throw new Error('文明更新历史读取失败');
@@ -28,7 +29,7 @@ export function useCivUpdates() {
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let active = true;
-    loadCivUpdates().then(
+    loadCivUpdates(attempt > 0).then(
       (loaded) => {
         if (active) {
           setData(loaded);

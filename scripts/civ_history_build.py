@@ -385,7 +385,11 @@ def main() -> None:
     units = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(units)
     result, unit_audit = units.extend_history(ROOT, result, validate_documents)
-    outputs = [(OUTPUT, encode(result)), (AUDIT, encode(audit)), (REPORT, render_report(audit)), (units.AUDIT, encode(unit_audit)), (units.REPORT, units.render_unit_report(unit_audit))]
+    spec = importlib.util.spec_from_file_location('building_history', ROOT / 'scripts/building_history.py')
+    buildings = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(buildings)
+    result, building_audit = buildings.extend_history(ROOT, result, validate_documents, units)
+    outputs = [(OUTPUT, encode(result)), (AUDIT, encode(audit)), (REPORT, render_report(audit)), (units.AUDIT, encode(unit_audit)), (units.REPORT, units.render_unit_report(unit_audit)), (buildings.AUDIT, encode(building_audit)), (buildings.REPORT, buildings.render_report(building_audit))]
     for relative, expected in outputs:
         path = ROOT / relative
         if args.check:
@@ -393,7 +397,7 @@ def main() -> None:
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(expected)
-    print(f"History: {audit['catalogSize']} civilizations, {unit_audit['units']['catalogSize']} units, {unit_audit['eventCount']} shared events; civilization baseline {audit['sourceEntryCount']} source bullets / {audit['eventCount']} events; legacy {unit_audit['unitLegacyMigratedCount']}/{unit_audit['unitLegacyCount']} unit keys, {audit['legacyRecordCount']} originals retained; {'check OK' if args.check else 'generated'}")
+    print(f"History: {audit['catalogSize']} civilizations, {unit_audit['units']['catalogSize']} units, {building_audit['buildings']['catalogSize']} buildings, {len(result['events'])} shared events; civilization baseline {audit['sourceEntryCount']} source bullets / {audit['eventCount']} events; legacy {unit_audit['unitLegacyMigratedCount']}/{unit_audit['unitLegacyCount']} unit keys, {building_audit['buildingLegacyMigratedCount']}/{building_audit['buildingLegacyCount']} building keys, {audit['legacyRecordCount']} originals retained; {'check OK' if args.check else 'generated'}")
 
 
 if __name__ == '__main__':

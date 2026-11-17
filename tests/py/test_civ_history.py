@@ -319,6 +319,7 @@ class CivHistoryTests(unittest.TestCase):
             shutil.copytree(ROOT / build.INPUT, root / build.INPUT)
             shutil.copytree(ROOT / 'data/game/patches', root / 'data/game/patches')
             shutil.copytree(ROOT / 'data/sources/unit_history', root / 'data/sources/unit_history')
+            shutil.copytree(ROOT / 'data/sources/building_history', root / 'data/sources/building_history')
             for relative in [
                 *[f'data/game/{name}.json' for name in ['civs', 'units', 'buildings', 'techs']],
                 'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json',
@@ -329,6 +330,7 @@ class CivHistoryTests(unittest.TestCase):
                 (root / relative).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / relative, root / relative)
             (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
+            shutil.copy2(ROOT / 'scripts/building_history.py', root / 'scripts/building_history.py')
 
             def cli(*args):
                 return subprocess.run([sys.executable, str(root / 'scripts/civ_history_build.py'), *args], cwd=root, capture_output=True, text=True, timeout=60)

@@ -10,6 +10,15 @@ const change = (path: string, before: string | null = '', after: string | null =
 const browser = (changes: unknown, env = pr) => applyBrowserPolicy(planChanges(changes), env);
 
 describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
+  it.each(['src/features/buildings/components/BuildingDetail.tsx', 'src/features/patches/Patches.tsx'])(
+    '%s retains shared building history regressions',
+    (path) => {
+      const selected = browser([change(path)]);
+      expect(selected.unit).toContain('tests/unit/buildingUpdates1084.test.ts');
+      expect(selected.unit).toContain('tests/unit/buildingUpdatesUI1084.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/buildingHistory.spec.ts');
+    },
+  );
   it('retains the exact audited source identity for the v1 snapshot', () => {
     expect(baseline.sourceCommit).toBe('407b1ea5a54c098dd6e6fd5a6bfcb60ed4cd125d');
     expect(baseline.scopeSha256).toBe('6ad39a970a1b2e9b683a8144a77750b07484ec235bd90857684ea9e00b99ec92');

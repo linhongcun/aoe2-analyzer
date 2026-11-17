@@ -24,6 +24,7 @@ import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { CivUpdatesOverview } from '../../shared/ui/CivUpdatesOverview';
 import { UnitUpdates, UnitUpdatesOverview } from '../../shared/ui/UnitUpdates';
+import { BuildingUpdates } from '../../shared/ui/BuildingUpdates';
 import { EntryBody, OBJECT_LABEL, ObjectSearch, civZh } from './patchParts';
 import './patches.css';
 
@@ -96,6 +97,9 @@ function Browse({ archives }: { archives: PatchArchive[] }) {
       <p>先查一个文明、单位、建筑或科技，也可以按版本阅读已收录档案。没有收录，不代表从未改动。</p>
       <ObjectSearch archives={archives} core={core} />
       <UnitUpdatesOverview />
+      <p>
+        <Link to="/patches?histView=buildings">按建筑查历史与来源覆盖</Link>
+      </p>
       <CivUpdatesOverview />
       <h2>版本档案</h2>
       <div className="patch-versions">
@@ -455,6 +459,12 @@ export default function Patches() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const { archives, error, retry } = usePatchArchives();
+  if (!id && (params.has('histView') || params.has('histEntity') || params.getAll('obj').some((raw) => raw.startsWith('building:'))))
+    return (
+      <section className="pane patches">
+        <BuildingUpdates />
+      </section>
+    );
   if (!id && params.getAll('obj').length > 1) {
     const candidates = [...new Set(params.getAll('obj'))].filter((raw) => parseObjectParam(raw));
     const choose = (raw?: string) => {

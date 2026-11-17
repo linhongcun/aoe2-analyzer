@@ -4,6 +4,782 @@
   "title": "文明更新历史（独立于文明背景摘要）",
   "$ref": "#/$defs/runtime",
   "$defs": {
+    "buildingPage": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "catalogOrder": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "searchState": {
+          "enum": [
+            "found",
+            "not-checked",
+            "not-located",
+            "page-not-found",
+            "no-log",
+            "read-failed"
+          ]
+        },
+        "checkedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "familyIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "identityNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "indexLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "entityId",
+        "catalogOrder",
+        "searchState",
+        "checkedAt",
+        "sectionIds",
+        "reason",
+        "familyIds",
+        "identityNote",
+        "aliases",
+        "sourceUrl",
+        "indexLabel"
+      ],
+      "additionalProperties": false
+    },
+    "buildingCatalog": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "directory": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "const": "data/game/buildings.json"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "count"
+          ],
+          "additionalProperties": false
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingPage"
+          },
+          "uniqueItems": true
+        },
+        "sectionFiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "review": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceIndex": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "documentSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "capturedAt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "href": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "label",
+                  "href"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "url",
+            "documentSha256",
+            "capturedAt",
+            "links"
+          ],
+          "additionalProperties": false
+        },
+        "coverageNote": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "directory",
+        "pages",
+        "sectionFiles",
+        "review",
+        "sourceIndex",
+        "coverageNote"
+      ],
+      "additionalProperties": false
+    },
+    "buildingCoverage": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "catalogOrder": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "searchState": {
+          "enum": [
+            "found",
+            "not-checked",
+            "not-located",
+            "page-not-found",
+            "no-log",
+            "read-failed"
+          ]
+        },
+        "checkedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "familyIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "identityNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceState": {
+          "enum": [
+            "processed",
+            "pending",
+            "not-checked",
+            "not-located",
+            "page-not-found",
+            "no-log",
+            "read-failed"
+          ]
+        },
+        "relatedSectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "eventIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sourceEntryCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "indexLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "entityId",
+        "catalogOrder",
+        "searchState",
+        "checkedAt",
+        "sectionIds",
+        "reason",
+        "familyIds",
+        "identityNote",
+        "sourceState",
+        "relatedSectionIds",
+        "eventIds",
+        "sourceEntryCount",
+        "aliases",
+        "sourceUrl",
+        "indexLabel"
+      ],
+      "additionalProperties": false
+    },
+    "buildingRelation": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effectIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "relation": {
+          "enum": [
+            "direct",
+            "related",
+            "identity-pending"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "entityId",
+        "eventId",
+        "effectIds",
+        "relation",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "buildingLegacyInput": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claimId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effectIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "key",
+        "eventId",
+        "claimId",
+        "effectIds",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "buildingImport": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "uniqueItems": true
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claimId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eventId",
+              "claimId",
+              "sourceEntryId",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "additionalEffects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claimId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "effect": {
+                "$ref": "#/$defs/effect"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eventId",
+              "claimId",
+              "sourceEntryId",
+              "effect",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "refinements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "effectId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "before": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "after": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "before",
+                  "after"
+                ],
+                "additionalProperties": false
+              },
+              "changes": {
+                "type": "object",
+                "properties": {
+                  "before": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uniqueItems": true
+                  },
+                  "scope": {
+                    "$ref": "#/$defs/scope"
+                  }
+                },
+                "required": [
+                  "before",
+                  "conditions"
+                ],
+                "additionalProperties": false
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eventId",
+              "effectId",
+              "sourceEntryId",
+              "expected",
+              "changes",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingRelation"
+          },
+          "uniqueItems": true
+        },
+        "legacy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingLegacyInput"
+          },
+          "uniqueItems": true
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/version"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "events",
+        "attachments",
+        "additionalEffects",
+        "refinements",
+        "relations",
+        "legacy",
+        "versions"
+      ],
+      "additionalProperties": false
+    },
+    "buildingData": {
+      "type": "object",
+      "properties": {
+        "catalogSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "directorySha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coverageNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingCoverage"
+          },
+          "uniqueItems": true
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingRelation"
+          },
+          "uniqueItems": true
+        },
+        "legacyMap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buildingLegacyInput"
+          },
+          "uniqueItems": true
+        },
+        "sourceIndex": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "documentSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "capturedAt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "href": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "label",
+                  "href"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "url",
+            "documentSha256",
+            "capturedAt",
+            "links"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "catalogSize",
+        "directorySha256",
+        "coverageNote",
+        "rows",
+        "relations",
+        "legacyMap",
+        "sourceIndex"
+      ],
+      "additionalProperties": false
+    },
+    "buildingAudit": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "legacyRecordCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "snapshots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "documentSha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sectionTextSha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observedEntryCount": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "documentSha256",
+              "sectionTextSha256",
+              "observedEntryCount"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "eventCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "buildings": {
+          "$ref": "#/$defs/buildingData"
+        },
+        "buildingLegacyCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "buildingLegacyMigratedCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "buildings",
+        "legacyRecordCount",
+        "buildingLegacyCount",
+        "buildingLegacyMigratedCount",
+        "snapshots",
+        "eventCount"
+      ],
+      "additionalProperties": false
+    },
     "scope": {
       "type": "object",
       "properties": {
@@ -1096,6 +1872,9 @@
         },
         "units": {
           "$ref": "#/$defs/unitData"
+        },
+        "buildings": {
+          "$ref": "#/$defs/buildingData"
         }
       },
       "required": ["schemaVersion", "meta", "versions", "sources", "sections", "sourceEntries", "entities", "events", "civilizations", "legacyMap"],

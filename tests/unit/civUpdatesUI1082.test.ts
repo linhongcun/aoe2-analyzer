@@ -99,7 +99,7 @@ it('F1 keeps the history tab and full return URL through real detail effects, re
   act(() => view.unmount());
   await mount(refreshed);
   expectContext();
-  const back = view.root.findAllByType('a').find((node) => text(node) === '返回文明历史总览')!;
+  const back = view.root.findAllByType('a').find((node) => text(node) === '返回上次历史结果')!;
   expect(back.props.href).toBe(returnPath);
   // Keeping tab=history must still allow the existing chapter anchors to work.
   frames.length = 0;

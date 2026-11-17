@@ -1,0 +1,395 @@
+{
+  "civId": null,
+  "entityIds": [
+    "building/79"
+  ],
+  "sourceId": "seicing-building-79",
+  "url": "https://seicing.com/html/aoe2/buildings/%E7%9E%AD%E6%9C%9B%E7%AE%AD%E5%A1%94.html",
+  "indexLabel": "瞭望箭塔",
+  "title": "瞭望箭塔",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-d464b9bb2412508a791a",
+  "supersedesRevisionId": null,
+  "documentSha256": "d464b9bb2412508a791a0063563fb95c157cf4ea03b56726d096cce382fd6bbf",
+  "capturedAt": "2026-11-17T10:36:31.321034+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-1",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "始终拥有1020生命值",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-1"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-2",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "升级到警戒箭塔需要100食物250石头",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-2"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-3",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "建造瞭望箭塔需要25木材125石头",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-3"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-4",
+      "group": "国王时代",
+      "locator": "#change li[4]",
+      "originalText": "瞭望箭塔对骆驼攻击力+7，因为他们和舰船共享护甲",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-4"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-5",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "升级到警戒箭塔需要100食物250木材",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-5"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-6",
+      "group": "征服者",
+      "locator": "#change li[6]",
+      "originalText": "瞭望箭塔对长矛兵伤害+2",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-6"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-7",
+      "group": "征服者",
+      "locator": "#change li[7]",
+      "originalText": "引入草药",
+      "rawVersions": [],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "草药科技引入，原文未声明建筑效果；不按页面归属直接投影。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-8",
+      "group": "征服者",
+      "locator": "#change li[8]",
+      "originalText": "引入异教",
+      "rawVersions": [],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "异教科技引入，原文未声明建筑效果；不按页面归属直接投影。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-9",
+      "group": "征服者",
+      "locator": "#change li[9]",
+      "originalText": "不列颠：引入英皇侍卫，在帝王时代可用",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "仅科技引入/时代，未声明精确建筑效果，身份与范围待核。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-10",
+      "group": "征服者",
+      "locator": "#change li[10]",
+      "originalText": "条顿：引入开垛口",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "仅科技引入，未声明精确建筑效果，身份与范围待核。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-11",
+      "group": "失落帝国",
+      "locator": "#change li[11]",
+      "originalText": "不列颠：英皇侍卫在城堡时代可用",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "仅科技可研究时代变化，未声明精确建筑效果。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-12",
+      "group": "失落帝国",
+      "locator": "#change li[12]",
+      "originalText": "中国：引入长城",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "仅科技引入，未声明精确建筑效果。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-13",
+      "group": "失落帝国",
+      "locator": "#change li[13]",
+      "originalText": "凯尔特：引入堡垒",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "仅科技引入，未声明精确建筑效果。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-14",
+      "group": "失落帝国",
+      "locator": "#change li[14]",
+      "originalText": "日本：引入射箭孔，可以增加3支副箭",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "射箭孔副箭，但未明确形态；保留原文，暂不分发建筑效果。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-15",
+      "group": "失落帝国",
+      "locator": "#change li[15]",
+      "originalText": "高丽：建造速度+33%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-926e6c11-d34a-41a2-9914-23e8239daf53"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-16",
+      "group": "非洲王国",
+      "locator": "#change li[16]",
+      "originalText": "骆驼被移除舰船装甲等级，瞭望箭塔失去了原来的对骆驼的攻击加成，额外获得+1对骆驼攻击补偿",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-16"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-17",
+      "group": "非洲王国",
+      "locator": "#change li[17]",
+      "originalText": "日本：射箭孔增加2支副箭而不是3支",
+      "rawVersions": [],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "射箭孔副箭，但未明确形态；保留原文，暂不分发建筑效果。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-18",
+      "group": "非洲王国",
+      "locator": "#change li[18]",
+      "originalText": "射箭槽科技引入了，在城堡时代可用，瞭望箭塔攻击力+2，4.8补丁后帝王时代可用，瞭望箭塔攻击力+1",
+      "rawVersions": [
+        "4.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-18"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-19",
+      "group": "蛮王崛起",
+      "locator": "#change li[19]",
+      "originalText": "建造瞭望箭塔需要50木材125石头",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-19"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-20",
+      "group": "蛮王崛起",
+      "locator": "#change li[20]",
+      "originalText": "高丽：5.8版本后，建造速度+5%",
+      "rawVersions": [
+        "5.8"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-21",
+      "group": "最后的可汗",
+      "locator": "#change li[21]",
+      "originalText": "城堡时代之前HP下调为700",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-21"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-22",
+      "group": "最后的可汗",
+      "locator": "#change li[22]",
+      "originalText": "高丽：不再加快建造速度",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-22"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-23",
+      "group": "最后的可汗",
+      "locator": "#change li[23]",
+      "originalText": "高丽：42848版本后，板屋船科技删除，被邑城代替，提高瞭望箭塔射程",
+      "rawVersions": [
+        "42848"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-6cc489f5-111b-46fd-860f-296c528b4db4"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-24",
+      "group": "最后的可汗",
+      "locator": "#change li[24]",
+      "originalText": "高丽：增加瞭望箭塔射程的文明加成删除",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-24"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-25",
+      "group": "印度王朝",
+      "locator": "#change li[25]",
+      "originalText": "61321版本后，封建时代的生命值从700上调到850",
+      "rawVersions": [
+        "61321"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-25"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-26",
+      "group": "印度王朝",
+      "locator": "#change li[26]",
+      "originalText": "埃塞俄比亚：81058版本后，组队加成从“塔和哨站的视野+3”修改为“哨站的视野+3且不消耗石头”",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-legacy-81058-b056"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-27",
+      "group": "成王败寇",
+      "locator": "#change li[27]",
+      "originalText": "111772版本更新后，瞭望塔线建筑物木材成本从50下调到35",
+      "rawVersions": [
+        "111772"
+      ],
+      "processing": "pending",
+      "eventIds": [],
+      "reason": "原文为瞭望塔线，形态范围未明确；不得展开当前全部升级形态。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-28",
+      "group": "最后的酋长",
+      "locator": "#change li[28]",
+      "originalText": "169123版本更新后，对船额外伤害从+7下调到+6",
+      "rawVersions": [
+        "169123"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-28"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-79-snapshot-d464b9bb2412508a791a-29",
+      "group": "最后的酋长",
+      "locator": "#change li[29]",
+      "originalText": "177723版本更新后，对船额外伤害从+6下调到+5",
+      "rawVersions": [
+        "177723"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-79-snapshot-d464b9bb2412508a791a-29"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志 国王时代 始终拥有1020生命值 升级到警戒箭塔需要100食物250石头 建造瞭望箭塔需要25木材125石头 瞭望箭塔对骆驼攻击力+7，因为他们和舰船共享护甲 征服者 升级到警戒箭塔需要100食物250木材 瞭望箭塔对长矛兵伤害+2 引入草药 引入异教 不列颠：引入英皇侍卫，在帝王时代可用 条顿：引入开垛口 失落帝国 不列颠：英皇侍卫在城堡时代可用 中国：引入长城 凯尔特：引入堡垒 日本：引入射箭孔，可以增加3支副箭 高丽：建造速度+33% 非洲王国 骆驼被移除舰船装甲等级，瞭望箭塔失去了原来的对骆驼的攻击加成，额外获得+1对骆驼攻击补偿 日本：射箭孔增加2支副箭而不是3支 射箭槽科技引入了，在城堡时代可用，瞭望箭塔攻击力+2，4.8补丁后帝王时代可用，瞭望箭塔攻击力+1 蛮王崛起 建造瞭望箭塔需要50木材125石头 高丽：5.8版本后，建造速度+5% 最后的可汗 城堡时代之前HP下调为700 高丽：不再加快建造速度 高丽：42848版本后，板屋船科技删除，被邑城代替，提高瞭望箭塔射程 高丽：增加瞭望箭塔射程的文明加成删除 印度王朝 61321版本后，封建时代的生命值从700上调到850 埃塞俄比亚：81058版本后，组队加成从“塔和哨站的视野+3”修改为“哨站的视野+3且不消耗石头” 成王败寇 111772版本更新后，瞭望塔线建筑物木材成本从50下调到35 最后的酋长 169123版本更新后，对船额外伤害从+7下调到+6 177723版本更新后，对船额外伤害从+6下调到+5",
+  "sectionTextSha256": "921a0970086682495e3a11bc8ae6520faa09121289e29816a0ee250269e014ee",
+  "observedEntryCount": 29
+}

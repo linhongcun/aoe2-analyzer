@@ -1,0 +1,1920 @@
+{
+  "schemaVersion": 1,
+  "versions": [
+    {
+      "id": "de-36909",
+      "label": "DE Update 36909",
+      "branch": "DE",
+      "build": 36909,
+      "channel": "unknown",
+      "releaseDate": null,
+      "announcedAt": null,
+      "orderKey": "03:00036909",
+      "orderReason": "仅保留原文版本编号；来源公开日/抓取时间不作为发行日期。",
+      "evidenceSourceIds": [
+        "seicing-building-109"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-1",
+      "versionId": null,
+      "summary": "城镇中心花费275木材",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-1",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-1"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-1-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "城镇中心花费275木材",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造木材费用",
+              "before": null,
+              "after": 275,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-2",
+      "versionId": null,
+      "summary": "波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20%",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Persians"
+        ],
+        "beneficiary": "self",
+        "conditions": []
+      },
+      "civRelations": [
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "建筑独立来源明确的文明条件；不将该文明独立来源页标为完成。"
+        }
+      ],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-2",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-2"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-2-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20%",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Persians"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "bonus",
+              "attribute": "工作速度加成",
+              "before": null,
+              "after": 10,
+              "delta": null,
+              "unit": "%",
+              "operation": "rate",
+              "conditions": [
+                "封建时代"
+              ]
+            },
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-2-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20%",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Persians"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "bonus",
+              "attribute": "工作速度加成",
+              "before": null,
+              "after": 15,
+              "delta": null,
+              "unit": "%",
+              "operation": "rate",
+              "conditions": [
+                "城堡时代"
+              ]
+            },
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-2-3",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20%",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Persians"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "bonus",
+              "attribute": "工作速度加成",
+              "before": null,
+              "after": 20,
+              "delta": null,
+              "unit": "%",
+              "operation": "rate",
+              "conditions": [
+                "帝王时代"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-4",
+      "versionId": null,
+      "summary": "城镇中心花费275木材、100石头",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-4",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-4"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-4-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "城镇中心花费275木材、100石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造木材费用",
+              "before": null,
+              "after": 275,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set",
+              "conditions": []
+            },
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-4-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "城镇中心花费275木材、100石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造石料费用",
+              "before": null,
+              "after": 100,
+              "delta": null,
+              "unit": "石头",
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-6",
+      "versionId": null,
+      "summary": "化学影响城镇中心",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-6",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-6"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-6-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "化学影响城镇中心",
+              "scope": null,
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": [
+                "研究化学"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-8",
+      "versionId": null,
+      "summary": "条顿：城镇中心可以驻扎25个单位，而不是增加攻击力和视野",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Teutons"
+        ],
+        "beneficiary": "self",
+        "conditions": []
+      },
+      "civRelations": [
+        {
+          "civId": "Teutons",
+          "relation": "related",
+          "note": "建筑独立来源明确的文明条件；不将该文明独立来源页标为完成。"
+        }
+      ],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-8",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-8"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-8-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "条顿：城镇中心可以驻扎25个单位，而不是增加攻击力和视野",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Teutons"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": [
+        {
+          "eventId": "ev-se-09ca2254-7ecb-4f64-82fd-8d3fbf447ab1",
+          "reason": "同分支城镇中心驻军条目，但被替换加成的“视野/射程”表述不同；保留双方原文，未据此误合并或裁定真伪。"
+        }
+      ]
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-9",
+      "versionId": null,
+      "summary": "骆驼兵的护甲改版，城镇中心不再对骆驼有攻击加成，只获得了1额外攻击补偿",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-9",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-9"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-9-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "骆驼兵的护甲改版，城镇中心不再对骆驼有攻击加成，只获得了1额外攻击补偿",
+              "scope": null,
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-11",
+      "versionId": "de-36909",
+      "summary": "波斯：黑暗时代/封建时代/城堡时代/帝王时代，城镇中心工作速度提高5%/10%/15%/20%，36909版本之后黑暗时代工作速度不再增加",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Persians"
+        ],
+        "beneficiary": "self",
+        "conditions": []
+      },
+      "civRelations": [
+        {
+          "civId": "Persians",
+          "relation": "related",
+          "note": "建筑独立来源明确的文明条件；不将该文明独立来源页标为完成。"
+        }
+      ],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-11",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-11"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-11-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "波斯：黑暗时代/封建时代/城堡时代/帝王时代，城镇中心工作速度提高5%/10%/15%/20%，36909版本之后黑暗时代工作速度不再增加",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Persians"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-109-snapshot-040c9a0515d2d295f4df-17",
+      "versionId": "de-151401",
+      "summary": "151401版本后，子弹速度从7上调到8，子弹判定尺寸从0.1上调到0.15",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-109-snapshot-040c9a0515d2d295f4df-17",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-109-snapshot-040c9a0515d2d295f4df-17"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-17-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "151401版本后，子弹速度从7上调到8，子弹判定尺寸从0.1上调到0.15",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "子弹速度",
+              "before": 7,
+              "after": 8,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
+              "conditions": []
+            },
+            {
+              "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-17-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/109"
+                }
+              ],
+              "text": "151401版本后，子弹速度从7上调到8，子弹判定尺寸从0.1上调到0.15",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "子弹判定尺寸",
+              "before": 0.1,
+              "after": 0.15,
+              "delta": null,
+              "unit": null,
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-1",
+      "versionId": null,
+      "summary": "始终拥有1020生命值",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-1",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-1"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-1-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "始终拥有1020生命值",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "生命值",
+              "before": null,
+              "after": 1020,
+              "delta": null,
+              "unit": "生命值",
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-2",
+      "versionId": null,
+      "summary": "升级到警戒箭塔需要100食物250石头",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-2",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-2"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-2-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "升级到警戒箭塔需要100食物250石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "升级到警戒箭塔的食物费用",
+              "before": null,
+              "after": 100,
+              "delta": null,
+              "unit": "食物",
+              "operation": "set",
+              "conditions": [
+                "升级到警戒箭塔"
+              ]
+            },
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-2-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "升级到警戒箭塔需要100食物250石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "升级到警戒箭塔的石料费用",
+              "before": null,
+              "after": 250,
+              "delta": null,
+              "unit": "石头",
+              "operation": "set",
+              "conditions": [
+                "升级到警戒箭塔"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-3",
+      "versionId": null,
+      "summary": "建造瞭望箭塔需要25木材125石头",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-3",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-3"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-3-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "建造瞭望箭塔需要25木材125石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造木材费用",
+              "before": null,
+              "after": 25,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set",
+              "conditions": []
+            },
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-3-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "建造瞭望箭塔需要25木材125石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造石料费用",
+              "before": null,
+              "after": 125,
+              "delta": null,
+              "unit": "石头",
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-4",
+      "versionId": null,
+      "summary": "瞭望箭塔对骆驼攻击力+7，因为他们和舰船共享护甲",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-4",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-4"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-4-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "瞭望箭塔对骆驼攻击力+7，因为他们和舰船共享护甲",
+              "scope": null,
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-5",
+      "versionId": null,
+      "summary": "升级到警戒箭塔需要100食物250木材",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-5",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-5"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-5-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "升级到警戒箭塔需要100食物250木材",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "升级到警戒箭塔的食物费用",
+              "before": null,
+              "after": 100,
+              "delta": null,
+              "unit": "食物",
+              "operation": "set",
+              "conditions": [
+                "升级到警戒箭塔"
+              ]
+            },
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-5-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "升级到警戒箭塔需要100食物250木材",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "升级到警戒箭塔的木材费用",
+              "before": null,
+              "after": 250,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set",
+              "conditions": [
+                "升级到警戒箭塔"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-6",
+      "versionId": null,
+      "summary": "瞭望箭塔对长矛兵伤害+2",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-6",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-6"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-6-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "瞭望箭塔对长矛兵伤害+2",
+              "scope": null,
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-16",
+      "versionId": null,
+      "summary": "骆驼被移除舰船装甲等级，瞭望箭塔失去了原来的对骆驼的攻击加成，额外获得+1对骆驼攻击补偿",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-16",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-16"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-16-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "骆驼被移除舰船装甲等级，瞭望箭塔失去了原来的对骆驼的攻击加成，额外获得+1对骆驼攻击补偿",
+              "scope": null,
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-18",
+      "versionId": "source-african-kingdoms-4.8",
+      "summary": "射箭槽科技引入了，在城堡时代可用，瞭望箭塔攻击力+2，4.8补丁后帝王时代可用，瞭望箭塔攻击力+1",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-18",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-18"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-18-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "射箭槽科技引入了，在城堡时代可用，瞭望箭塔攻击力+2，4.8补丁后帝王时代可用，瞭望箭塔攻击力+1",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "射箭槽攻击力加成",
+              "before": 2,
+              "after": 1,
+              "delta": null,
+              "unit": "点",
+              "operation": "set",
+              "conditions": [
+                "研究射箭槽",
+                "4.8 补丁后；帝王时代"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-19",
+      "versionId": null,
+      "summary": "建造瞭望箭塔需要50木材125石头",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-19",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-19"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-19-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "建造瞭望箭塔需要50木材125石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造木材费用",
+              "before": null,
+              "after": 50,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set",
+              "conditions": []
+            },
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-19-2",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "建造瞭望箭塔需要50木材125石头",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "建造石料费用",
+              "before": null,
+              "after": 125,
+              "delta": null,
+              "unit": "石头",
+              "operation": "set",
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-21",
+      "versionId": null,
+      "summary": "城堡时代之前HP下调为700",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-21",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-21"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-21-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "城堡时代之前HP下调为700",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "生命值",
+              "before": null,
+              "after": 700,
+              "delta": null,
+              "unit": "生命值",
+              "operation": "set",
+              "conditions": [
+                "城堡时代之前"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-22",
+      "versionId": null,
+      "summary": "高丽：不再加快建造速度",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Koreans"
+        ],
+        "beneficiary": "self",
+        "conditions": []
+      },
+      "civRelations": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "建筑独立来源明确的文明条件；不将该文明独立来源页标为完成。"
+        }
+      ],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-22",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-22"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-22-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "高丽：不再加快建造速度",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Koreans"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-24",
+      "versionId": null,
+      "summary": "高丽：增加瞭望箭塔射程的文明加成删除",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": [
+          "Koreans"
+        ],
+        "beneficiary": "self",
+        "conditions": []
+      },
+      "civRelations": [
+        {
+          "civId": "Koreans",
+          "relation": "related",
+          "note": "建筑独立来源明确的文明条件；不将该文明独立来源页标为完成。"
+        }
+      ],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-24",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-24"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-24-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "高丽：增加瞭望箭塔射程的文明加成删除",
+              "scope": {
+                "scopeKind": "civ",
+                "providerCivIds": [],
+                "affectedCivIds": [
+                  "Koreans"
+                ],
+                "beneficiary": "self",
+                "conditions": []
+              },
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null,
+              "conditions": []
+            }
+          ]
+        }
+      ],
+      "candidates": [
+        {
+          "eventId": "ev-se-c6f6d80b-5ed8-49ea-b9bd-d0934f198f6c",
+          "reason": "相近的高丽射程加成删除条目，但本建筑原文未注明版本；不从文明页反填版本或合并。"
+        }
+      ]
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-25",
+      "versionId": "de-61321",
+      "summary": "61321版本后，封建时代的生命值从700上调到850",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-25",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-25"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-25-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "61321版本后，封建时代的生命值从700上调到850",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "生命值",
+              "before": 700,
+              "after": 850,
+              "delta": null,
+              "unit": "生命值",
+              "operation": "set",
+              "conditions": [
+                "封建时代"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-28",
+      "versionId": "de-169123",
+      "summary": "169123版本更新后，对船额外伤害从+7下调到+6",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-28",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-28"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-28-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "169123版本更新后，对船额外伤害从+7下调到+6",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "对船额外伤害",
+              "before": 7,
+              "after": 6,
+              "delta": null,
+              "unit": "点",
+              "operation": "set",
+              "conditions": [
+                "攻击舰船"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-building-79-snapshot-d464b9bb2412508a791a-29",
+      "versionId": "de-177723",
+      "summary": "177723版本更新后，对船额外伤害从+6下调到+5",
+      "verification": "unverified",
+      "verificationNote": "社区建筑页的历史主张；未用官方历史版本或客户端独立认证。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-building-79-snapshot-d464b9bb2412508a791a-29",
+          "verification": "unverified",
+          "verificationNote": "保留未知旧值、单位与范围，不从当前目录反推。",
+          "sourceEntryIds": [
+            "se-building-79-snapshot-d464b9bb2412508a791a-29"
+          ],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-building-79-snapshot-d464b9bb2412508a791a-29-1",
+              "entityRefs": [
+                {
+                  "entityId": "building/79"
+                }
+              ],
+              "text": "177723版本更新后，对船额外伤害从+6下调到+5",
+              "scope": null,
+              "type": "numeric",
+              "attribute": "对船额外伤害",
+              "before": 6,
+              "after": 5,
+              "delta": null,
+              "unit": "点",
+              "operation": "set",
+              "conditions": [
+                "攻击舰船"
+              ]
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    }
+  ],
+  "attachments": [
+    {
+      "eventId": "ev-se-d7c7fabb-55be-4ca1-884c-911f0f6095df",
+      "claimId": "cl-se-d7c7fabb-55be-4ca1-884c-911f0f6095df",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-3",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-9e641c2e-a54b-4196-8272-d608783d8ce9",
+      "claimId": "cl-se-9e641c2e-a54b-4196-8272-d608783d8ce9",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-5",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e",
+      "claimId": "cl-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-7",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1",
+      "claimId": "cl-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-10",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-938da759-e9c0-4182-b094-0dd485be1995",
+      "claimId": "cl-se-938da759-e9c0-4182-b094-0dd485be1995",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-14",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "claimId": "cl-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-16",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-926e6c11-d34a-41a2-9914-23e8239daf53",
+      "claimId": "cl-se-926e6c11-d34a-41a2-9914-23e8239daf53",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-15",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2",
+      "claimId": "cl-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-20",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-se-6cc489f5-111b-46fd-860f-296c528b4db4",
+      "claimId": "cl-se-6cc489f5-111b-46fd-860f-296c528b4db4",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-23",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    },
+    {
+      "eventId": "ev-legacy-81058-b056",
+      "claimId": "cl-legacy-81058-b056",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-26",
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。"
+    }
+  ],
+  "additionalEffects": [
+    {
+      "eventId": "ev-se-d7c7fabb-55be-4ca1-884c-911f0f6095df",
+      "claimId": "cl-se-d7c7fabb-55be-4ca1-884c-911f0f6095df",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-3",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-3-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "条顿：城镇中心攻击力+2，射程+5",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Teutons"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-9e641c2e-a54b-4196-8272-d608783d8ce9",
+      "claimId": "cl-se-9e641c2e-a54b-4196-8272-d608783d8ce9",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-5",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-5-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "条顿：城镇中心攻击力+2，视野+5",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Teutons"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e",
+      "claimId": "cl-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-7",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-7-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "中国：城镇中心视野+5",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Chinese"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1",
+      "claimId": "cl-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-10",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-10-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "马来：时代升级速度+100%，5.3版本后，时代升级速度+80%",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Malay"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-938da759-e9c0-4182-b094-0dd485be1995",
+      "claimId": "cl-se-938da759-e9c0-4182-b094-0dd485be1995",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-14",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-14-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "立陶宛：81058版本后，开局+150食物加成修改成每个城镇中心提供100食物",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Lithuanians"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "claimId": "cl-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "sourceEntryId": "se-building-109-snapshot-040c9a0515d2d295f4df-16",
+      "effect": {
+        "id": "ef-building-109-snapshot-040c9a0515d2d295f4df-16-1",
+        "entityRefs": [
+          {
+            "entityId": "building/109"
+          }
+        ],
+        "text": "马里：81058版本后，蛮王科技提供的3支箭矢不算入城镇中心本身最大的箭矢数量(5个)，研发蛮王后城镇中心最多发射8支箭矢",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Malians"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": [
+          "研究蛮王"
+        ]
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-926e6c11-d34a-41a2-9914-23e8239daf53",
+      "claimId": "cl-se-926e6c11-d34a-41a2-9914-23e8239daf53",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-15",
+      "effect": {
+        "id": "ef-building-79-snapshot-d464b9bb2412508a791a-15-1",
+        "entityRefs": [
+          {
+            "entityId": "building/79"
+          }
+        ],
+        "text": "高丽：建造速度+33%",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Koreans"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2",
+      "claimId": "cl-se-5cf0072b-1ae5-4bfd-96c6-a13a0dd98cc2",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-20",
+      "effect": {
+        "id": "ef-building-79-snapshot-d464b9bb2412508a791a-20-1",
+        "entityRefs": [
+          {
+            "entityId": "building/79"
+          }
+        ],
+        "text": "高丽：5.8版本后，建造速度+5%",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Koreans"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-se-6cc489f5-111b-46fd-860f-296c528b4db4",
+      "claimId": "cl-se-6cc489f5-111b-46fd-860f-296c528b4db4",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-23",
+      "effect": {
+        "id": "ef-building-79-snapshot-d464b9bb2412508a791a-23-1",
+        "entityRefs": [
+          {
+            "entityId": "building/79"
+          }
+        ],
+        "text": "高丽：42848版本后，板屋船科技删除，被邑城代替，提高瞭望箭塔射程",
+        "scope": {
+          "scopeKind": "civ",
+          "providerCivIds": [],
+          "affectedCivIds": [
+            "Koreans"
+          ],
+          "beneficiary": "self",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": [
+          "研究邑城"
+        ]
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    },
+    {
+      "eventId": "ev-legacy-81058-b056",
+      "claimId": "cl-legacy-81058-b056",
+      "sourceEntryId": "se-building-79-snapshot-d464b9bb2412508a791a-26",
+      "effect": {
+        "id": "ef-building-79-snapshot-d464b9bb2412508a791a-26-1",
+        "entityRefs": [
+          {
+            "entityId": "building/79"
+          }
+        ],
+        "text": "埃塞俄比亚：81058版本后，组队加成从“塔和哨站的视野+3”修改为“哨站的视野+3且不消耗石头”",
+        "scope": {
+          "scopeKind": "team",
+          "providerCivIds": [
+            "Ethiopians"
+          ],
+          "affectedCivIds": [],
+          "beneficiary": "team",
+          "conditions": []
+        },
+        "type": "mechanic",
+        "legacyBefore": null,
+        "legacyAfter": null,
+        "conditions": []
+      },
+      "reason": "建筑页明确的精确建筑子效果；不将原事件其他对象效果分发给本建筑。"
+    }
+  ],
+  "refinements": [],
+  "relations": [],
+  "legacy": [
+    {
+      "key": "125283:125283-008-010",
+      "eventId": "ev-building-legacy-125283-008-010",
+      "claimId": "cl-building-legacy-125283-008-010",
+      "effectIds": [
+        "ef-legacy-125283-008-010"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "125283:125283-010-013",
+      "eventId": "ev-building-legacy-125283-010-013",
+      "claimId": "cl-building-legacy-125283-010-013",
+      "effectIds": [
+        "ef-legacy-125283-010-013"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "125283:125283-014-017",
+      "eventId": "ev-legacy-125283-b014",
+      "claimId": "cl-legacy-125283-b014",
+      "effectIds": [
+        "ef-legacy-125283-014-017"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "185872:185872-22",
+      "eventId": "ev-building-legacy-185872-22",
+      "claimId": "cl-building-legacy-185872-22",
+      "effectIds": [
+        "ef-legacy-185872-22"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "66692:66692-003-003",
+      "eventId": "ev-building-legacy-66692-003-003",
+      "claimId": "cl-building-legacy-66692-003-003",
+      "effectIds": [
+        "ef-legacy-66692-003-003"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "66692:66692-003-004",
+      "eventId": "ev-building-legacy-66692-003-004",
+      "claimId": "cl-building-legacy-66692-003-004",
+      "effectIds": [
+        "ef-legacy-66692-003-004"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "66692:66692-009-021",
+      "eventId": "ev-building-legacy-66692-009-021",
+      "claimId": "cl-building-legacy-66692-009-021",
+      "effectIds": [
+        "ef-legacy-66692-009-021"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "66692:66692-022-038",
+      "eventId": "ev-legacy-66692-b022",
+      "claimId": "cl-legacy-66692-b022",
+      "effectIds": [
+        "ef-legacy-66692-022-038"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "66692:66692-029-045",
+      "eventId": "ev-legacy-66692-b029",
+      "claimId": "cl-legacy-66692-b029",
+      "effectIds": [
+        "ef-legacy-66692-029-045"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-39",
+      "eventId": "ev-legacy-81058-b032",
+      "claimId": "cl-legacy-81058-b032",
+      "effectIds": [
+        "ef-legacy-81058-39"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-40",
+      "eventId": "ev-legacy-81058-b033",
+      "claimId": "cl-legacy-81058-b033",
+      "effectIds": [
+        "ef-legacy-81058-40"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-42",
+      "eventId": "ev-legacy-81058-b035",
+      "claimId": "cl-legacy-81058-b035",
+      "effectIds": [
+        "ef-legacy-81058-42"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-51",
+      "eventId": "ev-legacy-81058-b044",
+      "claimId": "cl-legacy-81058-b044",
+      "effectIds": [
+        "ef-legacy-81058-51"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-53",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b046",
+      "effectIds": [
+        "ef-legacy-81058-53"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-54",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b047",
+      "effectIds": [
+        "ef-legacy-81058-54"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-64",
+      "eventId": "ev-legacy-81058-b056",
+      "claimId": "cl-legacy-81058-b056",
+      "effectIds": [
+        "ef-legacy-81058-64"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-84",
+      "eventId": "ev-legacy-81058-b073",
+      "claimId": "cl-legacy-81058-b073",
+      "effectIds": [
+        "ef-legacy-81058-84"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-96",
+      "eventId": "ev-legacy-81058-b082",
+      "claimId": "cl-legacy-81058-b082",
+      "effectIds": [
+        "ef-legacy-81058-96"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-102",
+      "eventId": "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "claimId": "cl-legacy-81058-b087",
+      "effectIds": [
+        "ef-legacy-81058-102"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-103",
+      "eventId": "ev-legacy-81058-b088",
+      "claimId": "cl-legacy-81058-b088",
+      "effectIds": [
+        "ef-legacy-81058-103"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-113",
+      "eventId": "ev-legacy-81058-b097",
+      "claimId": "cl-legacy-81058-b097",
+      "effectIds": [
+        "ef-legacy-81058-113"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-115",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b099",
+      "effectIds": [
+        "ef-legacy-81058-115"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-116",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b100",
+      "effectIds": [
+        "ef-legacy-81058-116"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-117",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b101",
+      "effectIds": [
+        "ef-legacy-81058-117"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    },
+    {
+      "key": "81058:81058-139",
+      "eventId": "ev-legacy-81058-b118",
+      "claimId": "cl-legacy-81058-b118",
+      "effectIds": [
+        "ef-legacy-81058-139"
+      ],
+      "reason": "保持原档案 key/原件/文明去向；复用既有 canonical claim，或显式导入原 archive-only 建筑/关联档案；未新增事实认证。"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import type { UnitUpdateData } from './unitUpdates';
+import { buildingHistoryReturn, type BuildingUpdateData } from './buildingUpdates';
 /** Historical claims are independent of today's game values and technology tree. */
 export type Verification = 'verified' | 'unverified' | 'conflict';
 export type SourceCategory = 'official' | 'community' | 'other' | 'unknown';
@@ -163,6 +164,7 @@ export interface CivUpdatesData {
   civilizations: UpdateCivilization[];
   legacyMap: LegacyUpdateMapping[];
   units?: UnitUpdateData;
+  buildings?: BuildingUpdateData;
 }
 
 export const SOURCE_STATE_LABELS: Record<SourceState, string> = {
@@ -208,20 +210,28 @@ export function detailQueryError(query: URLSearchParams, data: CivUpdatesData, c
     histVersion: ['unknown', ...data.versions.map((version) => version.id)],
   });
   if (choice) return choice;
-  if (query.has('histReturn') && !validHistoryReturn(query.get('histReturn'))) return '返回地址无法识别，请清除无效返回地址';
+  if (query.has('histReturn') && !validHistoryReturn(query.get('histReturn'), data)) return '返回地址无法识别，请清除无效返回地址';
   return undefined;
 }
 /** Only a complete router-relative /patches URL; never a redirect to an external host. */
-export function validHistoryReturn(raw: string | null): string | null {
+export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): string | null {
+  if (data && raw) {
+    const params = new URLSearchParams(raw.split('?')[1] ?? '');
+    if (
+      raw.startsWith('/building/') ||
+      [...params].some(([key, value]) => ['histView', 'histEntity', 'buildingSourceState'].includes(key) || (key === 'obj' && value.startsWith('building:')))
+    )
+      return buildingHistoryReturn(data, raw);
+  }
   if (!raw || !/^\/patches(?:\?[^#\r\n\\]*)?$/u.test(raw) || [...raw].some((character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127))
     return null;
   return raw;
 }
-export function clearHistoryQuery(query: URLSearchParams, view: 'overview' | 'detail') {
+export function clearHistoryQuery(query: URLSearchParams, view: 'overview' | 'detail', data?: CivUpdatesData) {
   const result = new URLSearchParams(query);
   for (const key of [...result.keys()]) {
     if (!key.startsWith('hist')) continue;
-    if (view === 'detail' && key === 'histReturn' && result.getAll(key).length === 1 && validHistoryReturn(result.get(key))) continue;
+    if (view === 'detail' && key === 'histReturn' && result.getAll(key).length === 1 && validHistoryReturn(result.get(key), data)) continue;
     result.delete(key);
   }
   return result;
@@ -347,7 +357,7 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
   for (const event of events.values()) {
     if (event.versionId !== null && !versions.has(event.versionId)) fail();
     if (
-      (!event.civRelations.length && !data.units?.relations.some((row) => row.eventId === event.id)) ||
+      (!event.civRelations.length && ![...(data.units?.relations ?? []), ...(data.buildings?.relations ?? [])].some((row) => row.eventId === event.id)) ||
       event.civRelations.some((row) => !civIds.has(row.civId))
     )
       fail();
@@ -380,13 +390,20 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
   for (const section of sections.values()) {
     if (
       !sources.has(section.sourceId) ||
-      (section.civId === null ? !section.entityIds?.length || section.entityIds.some((id) => entities.get(id)?.type !== 'unit') : !civIds.has(section.civId)) ||
+      (section.civId === null
+        ? !section.entityIds?.length || section.entityIds.some((id) => !['unit', 'building'].includes(entities.get(id)?.type ?? ''))
+        : !civIds.has(section.civId)) ||
       section.entryIds.length !== section.observedEntryCount
     )
       fail();
     if (new Set(section.entryIds).size !== section.entryIds.length) fail();
     for (const id of section.entryIds) if (entries.get(id)?.sectionId !== section.id) fail();
-    if (section.sourceState === 'processed' && section.entryIds.some((id) => entries.get(id)?.processing === 'pending')) fail();
+    if (
+      section.sourceState === 'processed' &&
+      !section.entityIds?.every((id) => entities.get(id)?.type === 'building') &&
+      section.entryIds.some((id) => entries.get(id)?.processing === 'pending')
+    )
+      fail();
     if (section.sourceState === 'no-log' && section.entryIds.length) fail();
     let parent = section.supersedesRevisionId;
     const visited = new Set([section.revisionId]);
@@ -433,12 +450,15 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
     )
       fail();
   }
-  if (data.units) {
-    const units = data.units;
+  for (const [kind, units] of [
+    ['unit', data.units],
+    ['building', data.buildings],
+  ] as const) {
+    if (!units) continue;
     const ids = new Set(units.rows.map((row) => row.entityId));
     if (ids.size !== units.rows.length || ids.size !== units.catalogSize) fail();
     for (const row of units.rows) {
-      if (entities.get(row.entityId)?.type !== 'unit' || row.familyIds.some((id) => !ids.has(id))) fail();
+      if (entities.get(row.entityId)?.type !== kind || row.familyIds.some((id) => !ids.has(id))) fail();
       if (new Set(row.eventIds).size !== row.eventIds.length) fail();
       const actual = new Set(units.relations.filter((relation) => relation.entityId === row.entityId).map((relation) => relation.eventId));
       if (actual.size !== row.eventIds.length || row.eventIds.some((id) => !actual.has(id))) fail();
@@ -454,7 +474,7 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
       const event = events.get(relation.eventId);
       const effects = event?.claims.flatMap((claim) => claim.effects) ?? [];
       if (
-        entities.get(relation.entityId)?.type !== 'unit' ||
+        entities.get(relation.entityId)?.type !== kind ||
         !event ||
         !relation.effectIds.length ||
         relation.effectIds.some((id) => !effects.some((effect) => effect.id === id))
@@ -471,9 +491,9 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
     const legacyKeys = data.legacyMap
       .filter(
         (row) =>
-          row.originalRecord.targetType === 'unit' ||
+          row.originalRecord.targetType === kind ||
           (Array.isArray(row.originalRecord.relatedTargets) &&
-            row.originalRecord.relatedTargets.some((target: { targetType?: string }) => target.targetType === 'unit')),
+            row.originalRecord.relatedTargets.some((target: { targetType?: string }) => target.targetType === kind)),
       )
       .map((row) => row.key);
     if (units.legacyMap.length !== legacyKeys.length || new Set(units.legacyMap.map((row) => row.key)).size !== legacyKeys.length) fail();

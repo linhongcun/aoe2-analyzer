@@ -1,4 +1,5 @@
 import { compareUpdateVersions, type CivUpdateEvent, type CivUpdatesData, type UpdateEffect, type UpdateScope } from './civUpdates';
+import { ENTITY_HISTORY_FILTER_KEYS } from './historyFilters';
 
 export type UnitSourceState = 'processed' | 'pending' | 'not-checked' | 'not-located' | 'page-not-found' | 'no-log' | 'read-failed';
 export interface UnitCoverage {
@@ -46,7 +47,7 @@ export const UNIT_CONDITIONS = {
   prerequisite: '科技 / 时代等前提',
   unknown: '条件 / 范围待核',
 } as const;
-export const UNIT_FILTER_KEYS = ['histVersion', 'histVerification', 'histCiv', 'histCondition', 'histOrder'] as const;
+export const UNIT_FILTER_KEYS = ENTITY_HISTORY_FILTER_KEYS;
 export function unitCoverageQueryError(query: URLSearchParams) {
   const source = query.get('unitSourceState');
   return query.getAll('unitSourceState').length > 1 || (source !== null && !Object.hasOwn(UNIT_SOURCE_LABELS, source))
@@ -129,8 +130,8 @@ export interface UnitEventView {
   unknownScope: boolean;
 }
 /** Select effects by exact identity. Source originals remain unabridged evidence. */
-export function projectUnitEvents(data: CivUpdatesData, entityId: string): UnitEventView[] {
-  const relations = data.units?.relations.filter((row) => row.entityId === entityId) ?? [];
+export function projectUnitEvents(data: CivUpdatesData, entityId: string, sourceRelations = data.units?.relations ?? []): UnitEventView[] {
+  const relations = sourceRelations.filter((row) => row.entityId === entityId);
   return data.events.flatMap((original) => {
     const own = relations.filter((row) => row.eventId === original.id);
     if (!own.length) return [];
@@ -143,8 +144,11 @@ export function projectUnitEvents(data: CivUpdatesData, entityId: string): UnitE
 }
 export function filterUnitEvents(data: CivUpdatesData, entityId: string, query: URLSearchParams): UnitEventView[] {
   if (unitQueryError(data, query)) return [];
+  return filterProjectedEvents(data, projectUnitEvents(data, entityId), query);
+}
+export function filterProjectedEvents(data: CivUpdatesData, views: UnitEventView[], query: URLSearchParams): UnitEventView[] {
   const versions = new Map(data.versions.map((v) => [v.id, v]));
-  return projectUnitEvents(data, entityId)
+  return views
     .flatMap((view) => {
       const { event } = view;
       const version = versions.get(event.versionId ?? '');

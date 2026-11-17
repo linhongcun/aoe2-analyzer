@@ -1,0 +1,761 @@
+{
+  "schemaVersion": 1,
+  "directory": {
+    "path": "data/game/buildings.json",
+    "sha256": "9b6b290d946512cdd421c8f7c616d601930d3f3c0bb46eb37087c8e08697e902",
+    "count": 38
+  },
+  "pages": [
+    {
+      "entityId": "building/12",
+      "catalogOrder": 0,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/12"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/兵营.html",
+      "indexLabel": "兵营",
+      "aliases": []
+    },
+    {
+      "entityId": "building/45",
+      "catalogOrder": 1,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/45"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/船坞.html",
+      "indexLabel": "船坞",
+      "aliases": []
+    },
+    {
+      "entityId": "building/50",
+      "catalogOrder": 2,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/50"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/农田.html",
+      "indexLabel": "农田",
+      "aliases": []
+    },
+    {
+      "entityId": "building/68",
+      "catalogOrder": 3,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/68"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/磨坊.html",
+      "indexLabel": "磨坊",
+      "aliases": []
+    },
+    {
+      "entityId": "building/70",
+      "catalogOrder": 4,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/70"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/房屋.html",
+      "indexLabel": "房屋",
+      "aliases": []
+    },
+    {
+      "entityId": "building/72",
+      "catalogOrder": 5,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/72"
+      ],
+      "identityNote": "索引“木墙”与目录“木栅栏”人工逐项核对为同一建筑身份；仅名称别名，不作形态传播。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/木墙.html",
+      "indexLabel": "木墙",
+      "aliases": [
+        "木墙"
+      ]
+    },
+    {
+      "entityId": "building/109",
+      "catalogOrder": 6,
+      "searchState": "found",
+      "checkedAt": "2026-11-17T10:36:30.830332+00:00",
+      "sectionIds": [
+        "seicing-building-109:snapshot-040c9a0515d2d295f4df"
+      ],
+      "reason": "指定独立章节逐条登记 mapped/pending/excluded，待核原文仍可查看。",
+      "familyIds": [
+        "building/109"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/城镇中心.html",
+      "indexLabel": "城镇中心",
+      "aliases": []
+    },
+    {
+      "entityId": "building/562",
+      "catalogOrder": 7,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/562"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/伐木场.html",
+      "indexLabel": "伐木场",
+      "aliases": []
+    },
+    {
+      "entityId": "building/584",
+      "catalogOrder": 8,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/584"
+      ],
+      "identityNote": "索引“采矿营地”与目录“采矿场”人工逐项核对为同一建筑身份；仅名称别名，不作形态传播。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/采矿营地.html",
+      "indexLabel": "采矿营地",
+      "aliases": [
+        "采矿营地"
+      ]
+    },
+    {
+      "entityId": "building/598",
+      "catalogOrder": 9,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/598"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/哨站.html",
+      "indexLabel": "哨站",
+      "aliases": []
+    },
+    {
+      "entityId": "building/792",
+      "catalogOrder": 10,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/792"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/木城门.html",
+      "indexLabel": "木城门",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1665",
+      "catalogOrder": 11,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1665"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/城楼.html",
+      "indexLabel": "城楼",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1734",
+      "catalogOrder": 12,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1734"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/大庄园.html",
+      "indexLabel": "大庄园",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1808",
+      "catalogOrder": 13,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1808"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/骡车.html",
+      "indexLabel": "骡车",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1889",
+      "catalogOrder": 14,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1889"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/牧场.html",
+      "indexLabel": "牧场",
+      "aliases": []
+    },
+    {
+      "entityId": "building/2556",
+      "catalogOrder": 15,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/2556"
+      ],
+      "identityNote": "索引“定居点”与目录“聚落”人工逐项核对为同一建筑身份；仅名称别名，不作形态传播。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/定居点.html",
+      "indexLabel": "定居点",
+      "aliases": [
+        "定居点"
+      ]
+    },
+    {
+      "entityId": "building/79",
+      "catalogOrder": 16,
+      "searchState": "found",
+      "checkedAt": "2026-11-17T10:36:30.830332+00:00",
+      "sectionIds": [
+        "seicing-building-79:snapshot-d464b9bb2412508a791a"
+      ],
+      "reason": "指定独立章节逐条登记 mapped/pending/excluded，待核原文仍可查看。",
+      "familyIds": [
+        "building/79"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/瞭望箭塔.html",
+      "indexLabel": "瞭望箭塔",
+      "aliases": []
+    },
+    {
+      "entityId": "building/84",
+      "catalogOrder": 17,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/84"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/市场.html",
+      "indexLabel": "市场",
+      "aliases": []
+    },
+    {
+      "entityId": "building/87",
+      "catalogOrder": 18,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/87"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/靶场.html",
+      "indexLabel": "靶场",
+      "aliases": []
+    },
+    {
+      "entityId": "building/101",
+      "catalogOrder": 19,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/101"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/马厩.html",
+      "indexLabel": "马厩",
+      "aliases": []
+    },
+    {
+      "entityId": "building/103",
+      "catalogOrder": 20,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/103"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/铁匠铺.html",
+      "indexLabel": "铁匠铺",
+      "aliases": []
+    },
+    {
+      "entityId": "building/117",
+      "catalogOrder": 21,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/117"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/石墙.html",
+      "indexLabel": "石墙",
+      "aliases": []
+    },
+    {
+      "entityId": "building/199",
+      "catalogOrder": 22,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/199"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/养鱼场.html",
+      "indexLabel": "养鱼场",
+      "aliases": []
+    },
+    {
+      "entityId": "building/487",
+      "catalogOrder": 23,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/487"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/城门.html",
+      "indexLabel": "城门",
+      "aliases": []
+    },
+    {
+      "entityId": "building/49",
+      "catalogOrder": 24,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/49"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/攻城武器厂.html",
+      "indexLabel": "攻城武器厂",
+      "aliases": []
+    },
+    {
+      "entityId": "building/82",
+      "catalogOrder": 25,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/82"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/城堡.html",
+      "indexLabel": "城堡",
+      "aliases": []
+    },
+    {
+      "entityId": "building/104",
+      "catalogOrder": 26,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/104"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/修道院.html",
+      "indexLabel": "修道院",
+      "aliases": []
+    },
+    {
+      "entityId": "building/155",
+      "catalogOrder": 27,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/155"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/垛墙.html",
+      "indexLabel": "垛墙",
+      "aliases": []
+    },
+    {
+      "entityId": "building/209",
+      "catalogOrder": 28,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/209"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/大学.html",
+      "indexLabel": "大学",
+      "aliases": []
+    },
+    {
+      "entityId": "building/234",
+      "catalogOrder": 29,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/234"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/警戒箭塔.html",
+      "indexLabel": "警戒箭塔",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1189",
+      "catalogOrder": 30,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1189"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/巨港.html",
+      "indexLabel": "巨港",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1251",
+      "catalogOrder": 31,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1251"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/营垒.html",
+      "indexLabel": "营垒",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1806",
+      "catalogOrder": 32,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1806"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/强化教堂.html",
+      "indexLabel": "强化教堂",
+      "aliases": []
+    },
+    {
+      "entityId": "building/235",
+      "catalogOrder": 33,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/235"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/大型箭塔.html",
+      "indexLabel": "大型箭塔",
+      "aliases": []
+    },
+    {
+      "entityId": "building/236",
+      "catalogOrder": 34,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/236"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/炮塔.html",
+      "indexLabel": "炮塔",
+      "aliases": []
+    },
+    {
+      "entityId": "building/276",
+      "catalogOrder": 35,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/276"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/世界奇观.html",
+      "indexLabel": "世界奇观",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1021",
+      "catalogOrder": 36,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1021"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/大商站.html",
+      "indexLabel": "大商站",
+      "aliases": []
+    },
+    {
+      "entityId": "building/1754",
+      "catalogOrder": 37,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "只在固定建筑索引定位，未读取独立来源章节；不声称无日志。",
+      "familyIds": [
+        "building/1754"
+      ],
+      "identityNote": "与当前目录中英文稳定 ID 逐项核对；索引名称一致，不推断历史家族。",
+      "sourceUrl": "https://seicing.com/html/aoe2/buildings/商队旅馆.html",
+      "indexLabel": "商队旅馆",
+      "aliases": []
+    }
+  ],
+  "sectionFiles": [
+    {
+      "path": "sections/109-snapshot-040c9a0515d2d295f4df.json",
+      "sha256": "0197e6da6f8e13ee38ab55a7e6848779c5fc3990d9a6fdc3d3720a4a011d04d8"
+    },
+    {
+      "path": "sections/79-snapshot-d464b9bb2412508a791a.json",
+      "sha256": "be6ff495f3994de08dc84ca270c0422b153aaa15fadd76525528a733179994f4"
+    }
+  ],
+  "review": "#1084：仅索引定位全部目录；读取两个指定建筑 #change，不采集其他建筑页面。名称差异逐行说明，历史事实不借目录数值认证。",
+  "coverageNote": "部分收录；仅城镇中心与瞭望箭塔两个独立章节已逐条处置，其余页只在固定建筑索引定位、尚未检查。文明关联证据与独立来源分列；未收录不等于从未改动，处理完成不等于事实已核验。",
+  "sourceIndex": {
+    "url": "https://seicing.com/html/aoe2/index-aoe2buildings.html",
+    "documentSha256": "d2182ee1ef3bfc59df5c77317325e244597db9080146e8620c6c84c4728decc6",
+    "capturedAt": "2026-11-17T10:36:30.830332+00:00",
+    "links": [
+      {
+        "label": "房屋",
+        "href": "https://seicing.com/html/aoe2/buildings/房屋.html"
+      },
+      {
+        "label": "修道院",
+        "href": "https://seicing.com/html/aoe2/buildings/修道院.html"
+      },
+      {
+        "label": "世界奇观",
+        "href": "https://seicing.com/html/aoe2/buildings/世界奇观.html"
+      },
+      {
+        "label": "城镇中心",
+        "href": "https://seicing.com/html/aoe2/buildings/城镇中心.html"
+      },
+      {
+        "label": "磨坊",
+        "href": "https://seicing.com/html/aoe2/buildings/磨坊.html"
+      },
+      {
+        "label": "农田",
+        "href": "https://seicing.com/html/aoe2/buildings/农田.html"
+      },
+      {
+        "label": "市场",
+        "href": "https://seicing.com/html/aoe2/buildings/市场.html"
+      },
+      {
+        "label": "伐木场",
+        "href": "https://seicing.com/html/aoe2/buildings/伐木场.html"
+      },
+      {
+        "label": "采矿营地",
+        "href": "https://seicing.com/html/aoe2/buildings/采矿营地.html"
+      },
+      {
+        "label": "定居点",
+        "href": "https://seicing.com/html/aoe2/buildings/定居点.html"
+      },
+      {
+        "label": "商队旅馆",
+        "href": "https://seicing.com/html/aoe2/buildings/商队旅馆.html"
+      },
+      {
+        "label": "骡车",
+        "href": "https://seicing.com/html/aoe2/buildings/骡车.html"
+      },
+      {
+        "label": "大商站",
+        "href": "https://seicing.com/html/aoe2/buildings/大商站.html"
+      },
+      {
+        "label": "大庄园",
+        "href": "https://seicing.com/html/aoe2/buildings/大庄园.html"
+      },
+      {
+        "label": "牧场",
+        "href": "https://seicing.com/html/aoe2/buildings/牧场.html"
+      },
+      {
+        "label": "铁匠铺",
+        "href": "https://seicing.com/html/aoe2/buildings/铁匠铺.html"
+      },
+      {
+        "label": "大学",
+        "href": "https://seicing.com/html/aoe2/buildings/大学.html"
+      },
+      {
+        "label": "船坞",
+        "href": "https://seicing.com/html/aoe2/buildings/船坞.html"
+      },
+      {
+        "label": "养鱼场",
+        "href": "https://seicing.com/html/aoe2/buildings/养鱼场.html"
+      },
+      {
+        "label": "巨港",
+        "href": "https://seicing.com/html/aoe2/buildings/巨港.html"
+      },
+      {
+        "label": "兵营",
+        "href": "https://seicing.com/html/aoe2/buildings/兵营.html"
+      },
+      {
+        "label": "靶场",
+        "href": "https://seicing.com/html/aoe2/buildings/靶场.html"
+      },
+      {
+        "label": "马厩",
+        "href": "https://seicing.com/html/aoe2/buildings/马厩.html"
+      },
+      {
+        "label": "攻城武器厂",
+        "href": "https://seicing.com/html/aoe2/buildings/攻城武器厂.html"
+      },
+      {
+        "label": "哨站",
+        "href": "https://seicing.com/html/aoe2/buildings/哨站.html"
+      },
+      {
+        "label": "瞭望箭塔",
+        "href": "https://seicing.com/html/aoe2/buildings/瞭望箭塔.html"
+      },
+      {
+        "label": "警戒箭塔",
+        "href": "https://seicing.com/html/aoe2/buildings/警戒箭塔.html"
+      },
+      {
+        "label": "大型箭塔",
+        "href": "https://seicing.com/html/aoe2/buildings/大型箭塔.html"
+      },
+      {
+        "label": "炮塔",
+        "href": "https://seicing.com/html/aoe2/buildings/炮塔.html"
+      },
+      {
+        "label": "城堡",
+        "href": "https://seicing.com/html/aoe2/buildings/城堡.html"
+      },
+      {
+        "label": "强化教堂",
+        "href": "https://seicing.com/html/aoe2/buildings/强化教堂.html"
+      },
+      {
+        "label": "营垒",
+        "href": "https://seicing.com/html/aoe2/buildings/营垒.html"
+      },
+      {
+        "label": "城楼",
+        "href": "https://seicing.com/html/aoe2/buildings/城楼.html"
+      },
+      {
+        "label": "木墙",
+        "href": "https://seicing.com/html/aoe2/buildings/木墙.html"
+      },
+      {
+        "label": "木城门",
+        "href": "https://seicing.com/html/aoe2/buildings/木城门.html"
+      },
+      {
+        "label": "石墙",
+        "href": "https://seicing.com/html/aoe2/buildings/石墙.html"
+      },
+      {
+        "label": "垛墙",
+        "href": "https://seicing.com/html/aoe2/buildings/垛墙.html"
+      },
+      {
+        "label": "城门",
+        "href": "https://seicing.com/html/aoe2/buildings/城门.html"
+      }
+    ]
+  }
+}
