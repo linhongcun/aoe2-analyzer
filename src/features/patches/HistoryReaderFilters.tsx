@@ -124,6 +124,7 @@ export function ObjectPicker({ entities, choose }: { entities: UpdateEntity[]; c
               id={uid + '-' + i}
               key={entity.id}
               role="option"
+              tabIndex={-1}
               aria-selected={i === index}
               onPointerDown={(e) => {
                 if (e.pointerType === 'mouse') e.preventDefault();
