@@ -387,6 +387,16 @@
 .mix-footer {
   margin-top: var(--space-5);
 }
+.mix-share-fallback {
+  display: block;
+  margin-bottom: var(--space-4);
+}
+.mix-share-fallback textarea {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-2);
+  overflow-wrap: anywhere;
+}
 .mix-dialog {
   max-width: min(520px, calc(100% - 32px));
   color: var(--color-text);

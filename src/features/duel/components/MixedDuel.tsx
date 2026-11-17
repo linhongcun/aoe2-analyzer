@@ -42,6 +42,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const [busy, setBusy] = useState(false);
   const [hasRun, setHasRun] = useState(false);
   const [notice, setNotice] = useState('');
+  const [shareFallback, setShareFallback] = useState('');
   const [exitMode, setExitMode] = useState<ExitMode | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const originFocus = useRef<HTMLElement | null>(null);
@@ -52,6 +53,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     setOutcome(null);
     setBusy(false);
     setExitMode(null);
+    setShareFallback('');
   }
   useEffect(() => () => clearTimeout(timer.current), [raw, core, trees, loadError]);
   const update = (next: MixedDuelInput) => {
@@ -110,6 +112,18 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const closeConfirm = () => {
     setExitMode(null);
     requestAnimationFrame(() => originFocus.current?.focus());
+  };
+  const share = async () => {
+    if (!canCompute) return;
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setNotice('混编配置链接已复制；打开链接后请重新计算。');
+      setShareFallback('');
+    } catch {
+      setNotice('复制失败，请选择下方完整链接后手动复制。');
+      setShareFallback(url);
+    }
   };
   const result = canCompute && outcome?.signature === raw ? outcome.result : null;
   const stale = !result && !busy && hasRun;
@@ -248,7 +262,18 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           <Icon name="calculator" />
           {busy ? '正在计算…' : '计算混编结果'}
         </button>
+        <button type="button" data-testid="mix-share" disabled={!canCompute || busy} onClick={share}>
+          <Icon name="copy" />
+          复制当前配置链接
+        </button>
       </div>
+      {!canCompute && <p className="note">配置尚未有效，修正上述字段、资料或版本问题后才能分享。</p>}
+      {shareFallback && canCompute && (
+        <label className="mix-share-fallback">
+          完整混编配置链接（可选择复制）
+          <textarea readOnly rows={4} value={shareFallback} onFocus={(event) => event.currentTarget.select()} />
+        </label>
+      )}
       <div className="mix-result-anchor" aria-live="polite" aria-atomic="true">
         {!result && (
           <p className="mix-info" role="status">
@@ -265,22 +290,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
         )}
       </div>
       {result && result.status !== 'error' && view?.a && view.b && (
-        <MixedResult
-          result={result}
-          input={input}
-          a={view.a}
-          b={view.b}
-          headingRef={resultHeading}
-          onEdit={() => focusField('mix-a-civ')}
-          onShare={async () => {
-            try {
-              await navigator.clipboard.writeText(window.location.href);
-              setNotice('混编配置链接已复制；打开链接后请重新计算。');
-            } catch {
-              setNotice('复制失败，请从地址栏复制完整链接。');
-            }
-          }}
-        />
+        <MixedResult result={result} input={input} a={view.a} b={view.b} headingRef={resultHeading} onEdit={() => focusField('mix-a-civ')} onShare={share} />
       )}
       <p className="note mix-footer">混编不提供拐点、盈亏平衡、训练总价或单兵种回放；需要这些功能时请返回单兵种。</p>
       <p className="note mix-footer">

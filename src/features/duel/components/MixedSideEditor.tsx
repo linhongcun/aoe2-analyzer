@@ -62,7 +62,8 @@ export function MixedSideEditor({
       target = index + delta;
     [next[index], next[target]] = [next[target]!, next[index]!];
     onChange({ ...input, rows: next }, `${label}单位已移至受击优先级 ${target + 1}`);
-    focus(`${prefix}-qty-${target}`);
+    const direction = delta < 0 ? (target > 0 ? 'up' : 'down') : target < next.length - 1 ? 'down' : 'up';
+    focus(`${prefix}-${direction}-${target}`);
   };
   return (
     <section className={`mix-side side-${side}`} aria-labelledby={`${prefix}-title`}>
@@ -214,10 +215,16 @@ export function MixedSideEditor({
                   受击优先级 <span className="num nw">{i + 1}</span>
                 </strong>
                 <div className="mix-row-actions">
-                  <button type="button" disabled={i === 0} aria-label={`${label}第 ${i + 1} 行上移`} onClick={() => move(i, -1)}>
+                  <button type="button" id={`${prefix}-up-${i}`} disabled={i === 0} aria-label={`${label}第 ${i + 1} 行上移`} onClick={() => move(i, -1)}>
                     <Icon name="arrow-up" />
                   </button>
-                  <button type="button" disabled={i === input.rows.length - 1} aria-label={`${label}第 ${i + 1} 行下移`} onClick={() => move(i, 1)}>
+                  <button
+                    type="button"
+                    id={`${prefix}-down-${i}`}
+                    disabled={i === input.rows.length - 1}
+                    aria-label={`${label}第 ${i + 1} 行下移`}
+                    onClick={() => move(i, 1)}
+                  >
                     <Icon name="arrow-down" />
                   </button>
                   <button
@@ -287,6 +294,25 @@ export function MixedSideEditor({
                         </div>
                       ))}
                     </dl>
+                    {(
+                      [
+                        ['实际攻击类别（含附加攻击）', r.F.attack],
+                        ['实际护甲类别', r.F.armor],
+                      ] as const
+                    ).map(([title, values]) => (
+                      <div key={title}>
+                        <h4>{title}</h4>
+                        <dl className="mix-stats" aria-label={title}>
+                          {Object.entries(values).map(([category, value]) => (
+                            <div key={category}>
+                              <dt>{category}</dt>
+                              <dd className="num nw">{formatHp(value)}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </div>
+                    ))}
+                    <p className="note">以上类别直接用于逐击伤害；负类别攻击按原公式抵扣，零类别护甲不代表忽略该类攻击。</p>
                     <p className="note">
                       本行数值科技：
                       {[...r.sel]

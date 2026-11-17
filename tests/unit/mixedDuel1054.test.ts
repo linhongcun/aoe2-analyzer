@@ -103,6 +103,24 @@ describe('#1054 mixed strict production adapter', () => {
       ).army,
     ).toBeNull();
   });
+  it('identity, availability, duplicate row or count errors suppress the otherwise parseable side total', () => {
+    for (const input of [
+      side({ rows: [{ uid: '9999999', qty: '20' }] }),
+      side({ rows: [{ uid: '359', qty: '201' }] }),
+      side({
+        rows: [
+          { uid: '359', qty: '20' },
+          { uid: '359', qty: '1' },
+        ],
+      }),
+      side({ age: '1' }),
+      side({ civ: 'NoSuchCiv' }),
+    ]) {
+      expect(get(input).total).toBeNull();
+      expect(get(input).army).toBeNull();
+    }
+    expect(get(side()).total).toBe(35);
+  });
   it('ordinary/elite concrete forms are separate IDs, not collapsed by family', () => {
     const ids = CORE.units.filter((u) => u.civs.includes('Japanese') && (u.en === 'Samurai' || u.en === 'Elite Samurai')).map((u) => String(u.id));
     expect(ids).toHaveLength(2);

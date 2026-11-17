@@ -118,7 +118,7 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     errors,
     rows,
     techs,
-    total,
+    total: errors.some((e) => e.field !== `mix-${side}-techs` && e.field !== `mix-${side}-team`) ? null : total,
     army: errors.length ? null : rows.map((r, i) => ({ uid: r.unit!.id, count: +input.rows[i]!.qty, fighter: r.resolved!.F })),
   };
 }
