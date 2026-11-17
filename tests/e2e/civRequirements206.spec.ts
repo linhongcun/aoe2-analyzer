@@ -179,6 +179,7 @@ test('#206 数据加载期间不展示放宽后的文明结果', async ({ page }
     await page.goto('./#/civs?req=u:569,t:435', { waitUntil: 'domcontentloaded' });
     await expect.poll(() => heldRequests.length).toBeGreaterThan(0);
     await expect(page.getByTestId('requirements-loading')).toBeVisible();
+    await expect(page.locator('#cnt')).toHaveText('加载中');
     await expect(page.locator('#grid .card')).toHaveCount(0);
   } finally {
     releaseCore();
