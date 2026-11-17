@@ -48,7 +48,7 @@ export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: b
         sub={<EliteDelta n={elite ? u.hp - base.hp : undefined} hp />}
       />
       <StatTile
-        icon={u.rng > 1 ? 'crosshair' : 'sword'}
+        icon={u.rng > 1 ? 'bow-arrow' : 'sword'}
         stat="atk"
         label={u.id === 331 ? '攻击力（展开态）' : '攻击力'}
         value={<span className="num nw">{u.atk}</span>}
@@ -62,7 +62,7 @@ export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: b
         sub={<EliteDelta n={elite ? u.ma - base.ma : undefined} />}
       />
       <StatTile
-        icon="shield"
+        icon="shield-half"
         stat="pa"
         label={u.id === 331 ? '穿刺护甲（打包态）' : '穿刺护甲'}
         value={<span className="num nw">{u.pa}</span>}

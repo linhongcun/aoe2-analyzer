@@ -211,7 +211,7 @@ export default function UnitList() {
               </button>
             )}
           </div>
-          <p className="unit-basis">生命、攻击、近战护甲、远程护甲、射程和造价是目录基础值，不是满科技或折后结果。</p>
+          <p className="unit-basis">生命、攻击、近战护甲、穿刺护甲、射程和造价是目录基础值，不是满科技或折后结果。</p>
         </div>
       </div>
       {!core ? (
@@ -236,7 +236,7 @@ export default function UnitList() {
             <span className="unit-head-stat">生命</span>
             <span className="unit-head-stat">攻击</span>
             <span className="unit-head-stat">近战护甲</span>
-            <span className="unit-head-stat">远程护甲</span>
+            <span className="unit-head-stat">穿刺护甲</span>
             <span className="unit-head-stat">射程</span>
             <span />
           </div>
@@ -282,7 +282,7 @@ export default function UnitList() {
                   <dd className={statClass(u.ma)}>{formatCatalogStat(u.ma)}</dd>
                 </div>
                 <div data-stat="pa">
-                  <dt className="stat-label">远程护甲</dt>
+                  <dt className="stat-label">穿刺护甲</dt>
                   <dd className={statClass(u.pa)}>{formatCatalogStat(u.pa)}</dd>
                 </div>
                 <div data-stat="rng">
