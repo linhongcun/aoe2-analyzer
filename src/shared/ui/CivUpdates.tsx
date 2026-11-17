@@ -361,13 +361,13 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
   const writeQuery = (next: URLSearchParams, replace = false) =>
     navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: '#patches' }, { replace });
   const change = (key: string, value: string) => writeQuery(setHistoryQuery(query, key, value), key === 'histQuery');
-  const clear = () => writeQuery(clearHistoryQuery(query, 'detail'));
-  const returnPath = validHistoryReturn(query.get('histReturn')) ?? '/patches';
+  const clear = () => writeQuery(clearHistoryQuery(query, 'detail', data));
+  const returnPath = validHistoryReturn(query.get('histReturn'), data) ?? '/patches';
   return (
     <section className="civ-updates" aria-label={`${civ.nameZh}更新历史`} data-testid="civ-updates-reader">
       <h2>更新历史</h2>
       <p>
-        {data.meta.coverageNote} <Link to={returnPath}>返回文明历史总览</Link>
+        {data.meta.coverageNote} <Link to={returnPath}>{returnPath === '/patches' ? '返回文明历史总览' : '返回上次历史结果'}</Link>
       </p>
       <div className="civ-update-stats">
         <div>

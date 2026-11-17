@@ -1,0 +1,253 @@
+{
+  "civId": null,
+  "entityIds": [
+    "building/109"
+  ],
+  "sourceId": "seicing-building-109",
+  "url": "https://seicing.com/html/aoe2/buildings/%E5%9F%8E%E9%95%87%E4%B8%AD%E5%BF%83.html",
+  "indexLabel": "城镇中心",
+  "title": "城镇中心",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-040c9a0515d2d295f4df",
+  "supersedesRevisionId": null,
+  "documentSha256": "040c9a0515d2d295f4df4a420a7ae7d37c8db757299f365b39426e58bb621f36",
+  "capturedAt": "2026-11-17T10:36:30.963616+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-1",
+      "group": "国王时代",
+      "locator": "#change li[1]",
+      "originalText": "城镇中心花费275木材",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-1"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-2",
+      "group": "国王时代",
+      "locator": "#change li[2]",
+      "originalText": "波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20%",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-2"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-3",
+      "group": "国王时代",
+      "locator": "#change li[3]",
+      "originalText": "条顿：城镇中心攻击力+2，射程+5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d7c7fabb-55be-4ca1-884c-911f0f6095df"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-4",
+      "group": "征服者",
+      "locator": "#change li[4]",
+      "originalText": "城镇中心花费275木材、100石头",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-4"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-5",
+      "group": "征服者",
+      "locator": "#change li[5]",
+      "originalText": "条顿：城镇中心攻击力+2，视野+5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-9e641c2e-a54b-4196-8272-d608783d8ce9"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-6",
+      "group": "失落帝国",
+      "locator": "#change li[6]",
+      "originalText": "化学影响城镇中心",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-6"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-7",
+      "group": "失落帝国",
+      "locator": "#change li[7]",
+      "originalText": "中国：城镇中心视野+5",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-f3b8ccc8-eb99-49db-a82a-4a766716c63e"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-8",
+      "group": "失落帝国",
+      "locator": "#change li[8]",
+      "originalText": "条顿：城镇中心可以驻扎25个单位，而不是增加攻击力和视野",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-8"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-9",
+      "group": "非洲王国",
+      "locator": "#change li[9]",
+      "originalText": "骆驼兵的护甲改版，城镇中心不再对骆驼有攻击加成，只获得了1额外攻击补偿",
+      "rawVersions": [],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-9"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-10",
+      "group": "蛮王崛起",
+      "locator": "#change li[10]",
+      "originalText": "马来：时代升级速度+100%，5.3版本后，时代升级速度+80%",
+      "rawVersions": [
+        "5.3"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-cdcd2410-6e99-42a9-ac15-873a8c4d36c1"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-11",
+      "group": "最后的可汗",
+      "locator": "#change li[11]",
+      "originalText": "波斯：黑暗时代/封建时代/城堡时代/帝王时代，城镇中心工作速度提高5%/10%/15%/20%，36909版本之后黑暗时代工作速度不再增加",
+      "rawVersions": [
+        "36909"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-11"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-12",
+      "group": "印度王朝",
+      "locator": "#change li[12]",
+      "originalText": "西西里：81058版本后，第一次十字军东征生产量从7下调到了5",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "第一次十字军东征的单位生成量，不是城镇中心本体效果；本期不扩展科技独立历史。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-13",
+      "group": "印度王朝",
+      "locator": "#change li[13]",
+      "originalText": "波兰：81058版本后，村民黑暗时代自愈能力删除",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "村民自愈，不是建筑效果；保留原文但不按页面归给城镇中心。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-14",
+      "group": "印度王朝",
+      "locator": "#change li[14]",
+      "originalText": "立陶宛：81058版本后，开局+150食物加成修改成每个城镇中心提供100食物",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-938da759-e9c0-4182-b094-0dd485be1995"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-15",
+      "group": "印度王朝",
+      "locator": "#change li[15]",
+      "originalText": "西班牙：81058版本后，获得每研究一个科技获得20金的加成",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "西班牙研究科技所得黄金，未明确城镇中心本体；不从所在页推断关系。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-16",
+      "group": "印度王朝",
+      "locator": "#change li[16]",
+      "originalText": "马里：81058版本后，蛮王科技提供的3支箭矢不算入城镇中心本身最大的箭矢数量(5个)，研发蛮王后城镇中心最多发射8支箭矢",
+      "rawVersions": [
+        "81058"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70"
+      ],
+      "reason": "与既有同分支/版本、同条件原文语义核对；复用 canonical event/claim，仅补精确建筑 effect 和本页证据，核验状态不升级。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-building-109-snapshot-040c9a0515d2d295f4df-17",
+      "group": "三国",
+      "locator": "#change li[17]",
+      "originalText": "151401版本后，子弹速度从7上调到8，子弹判定尺寸从0.1上调到0.15",
+      "rawVersions": [
+        "151401"
+      ],
+      "processing": "mapped",
+      "eventIds": [
+        "ev-building-109-snapshot-040c9a0515d2d295f4df-17"
+      ],
+      "reason": "明确本建筑效果；仅保留来源主张，未独立核验；分支标题不推算日期。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志 国王时代 城镇中心花费275木材 波斯：封建时代/城堡时代/帝王时代，城镇中心工作速度提高10%/15%/20% 条顿：城镇中心攻击力+2，射程+5 征服者 城镇中心花费275木材、100石头 条顿：城镇中心攻击力+2，视野+5 失落帝国 化学影响城镇中心 中国：城镇中心视野+5 条顿：城镇中心可以驻扎25个单位，而不是增加攻击力和视野 非洲王国 骆驼兵的护甲改版，城镇中心不再对骆驼有攻击加成，只获得了1额外攻击补偿 蛮王崛起 马来：时代升级速度+100%，5.3版本后，时代升级速度+80% 最后的可汗 波斯：黑暗时代/封建时代/城堡时代/帝王时代，城镇中心工作速度提高5%/10%/15%/20%，36909版本之后黑暗时代工作速度不再增加 印度王朝 西西里：81058版本后，第一次十字军东征生产量从7下调到了5 波兰：81058版本后，村民黑暗时代自愈能力删除 立陶宛：81058版本后，开局+150食物加成修改成每个城镇中心提供100食物 西班牙：81058版本后，获得每研究一个科技获得20金的加成 马里：81058版本后，蛮王科技提供的3支箭矢不算入城镇中心本身最大的箭矢数量(5个)，研发蛮王后城镇中心最多发射8支箭矢 三国 151401版本后，子弹速度从7上调到8，子弹判定尺寸从0.1上调到0.15",
+  "sectionTextSha256": "ee9aaaa830a700ffe4541a963c9f79bdce8f4de0556ddd875da8b2752b67c44f",
+  "observedEntryCount": 17
+}

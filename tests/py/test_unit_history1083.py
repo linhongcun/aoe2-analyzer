@@ -59,12 +59,13 @@ class UnitHistoryTests(unittest.TestCase):
     def test_real_cli_rejects_missing_coverage_bad_merges_and_changed_evidence_before_writing(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for name in ['data/sources/civ_history', 'data/sources/unit_history', 'data/game/patches']:
+            for name in ['data/sources/civ_history', 'data/sources/unit_history', 'data/sources/building_history', 'data/game/patches']:
                 shutil.copytree(ROOT / name, root / name)
             for name in [*[f'data/game/{n}.json' for n in ['civs', 'units', 'buildings', 'techs']], 'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json', 'scripts/civ_history_build.py', 'scripts/unit_history.py', 'scripts/civ_history_validate.mjs', 'scripts/content-schema.mjs', 'scripts/content-schema-catalog.mjs', 'scripts/content-baseline.mjs', 'src/content/schema/policy.mjs']:
                 (root / name).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, root / name)
             (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
+            shutil.copy2(ROOT / 'scripts/building_history.py', root / 'scripts/building_history.py')
             def run(*args):
                 return subprocess.run([sys.executable, str(root / 'scripts/civ_history_build.py'), *args], cwd=root, capture_output=True, text=True, timeout=60)
             self.assertEqual(run().returncode, 0)

@@ -32,19 +32,22 @@ def index(rows, key='id'):
     return result
 
 
-def unit_legacy(record):
-    return record['targetType'] == 'unit' or any(t['targetType'] == 'unit' for t in record.get('relatedTargets', []))
+def unit_legacy(record, kind='unit'):
+    return record['targetType'] == kind or any(t['targetType'] == kind for t in record.get('relatedTargets', []))
 
 
-def extend_history(root, base, validate):
+def extend_history(root, base, validate, kind='unit'):
+    require(kind in ['unit', 'building'], 'unsupported history projection')
+    input_path = Path('data/sources') / (kind + '_history')
+    runtime_key = kind + 's'
     data = copy.deepcopy(base)
-    catalog = json.loads((root / INPUT / 'catalog.json').read_text())
-    imports = json.loads((root / INPUT / 'imports.json').read_text())
-    validate([{'file': str(INPUT / name), 'definition': definition, 'value': value} for name, definition, value in [('catalog.json', 'unitCatalog', catalog), ('imports.json', 'unitImport', imports)]])
+    catalog = json.loads((root / input_path / 'catalog.json').read_text())
+    imports = json.loads((root / input_path / 'imports.json').read_text())
+    validate([{'file': str(input_path / name), 'definition': definition, 'value': value} for name, definition, value in [('catalog.json', kind + 'Catalog', catalog), ('imports.json', kind + 'Import', imports)]])
     directory_path = root / catalog['directory']['path']
     require(digest(directory_path) == catalog['directory']['sha256'], 'directory pin changed; review identity coverage explicitly')
     directory = json.loads(directory_path.read_text())
-    names = {f'unit/{row["id"]}': row for row in directory}
+    names = {f'{kind}/{row["id"]}': row for row in directory}
     pages = index(catalog['pages'], 'entityId')
     require(len(names) == len(directory) == catalog['directory']['count'] == len(pages) and set(names) == set(pages), 'directory coverage must contain every current unit exactly once')
     entities = index(data['entities'])
@@ -52,22 +55,29 @@ def extend_history(root, base, validate):
         if eid in entities:
             require(entities[eid]['status'] == 'current' and entities[eid]['catalogId'] == str(row['id']) and row['zh'] in [entities[eid]['nameZh'], *entities[eid]['aliases']], 'current identity mismatch: ' + eid)
         else:
-            entity = {'id': eid, 'type': 'unit', 'catalogId': str(row['id']), 'nameZh': row['zh'], 'nameEn': row['en'], 'aliases': [], 'status': 'current', 'linkPath': '/unit/' + str(row['id']), 'identityNote': pages[eid]['identityNote']}
+            entity = {'id': eid, 'type': kind, 'catalogId': str(row['id']), 'nameZh': row['zh'], 'nameEn': row['en'], 'aliases': [], 'status': 'current', 'linkPath': '/' + kind + '/' + str(row['id']), 'identityNote': pages[eid]['identityNote']}
             data['entities'].append(entity)
             entities[eid] = entity
         require(all(family in names for family in pages[eid]['familyIds']) and eid in pages[eid]['familyIds'], 'invalid family navigation')
+        for alias in pages[eid].get('aliases', []):
+            if alias not in entities[eid]['aliases']:
+                entities[eid]['aliases'].append(alias)
+    for version in imports.get('versions', []):
+        require(all(v['id'] != version['id'] for v in data['versions']), 'version identity collision')
+        data['versions'].append(copy.deepcopy(version))
     events, sources, entries = (index(data[key]) for key in ['events', 'sources', 'sourceEntries'])
     declared, snapshots, snapshot_audit = set(), [], []
     for pin in catalog['sectionFiles']:
         relative = Path(pin['path'])
-        path = root / INPUT / relative
-        require(relative.parent == Path('sections') and relative.suffix == '.json' and not path.is_symlink() and path.resolve().is_relative_to((root / INPUT / 'sections').resolve()), 'unsafe snapshot path')
+        path = root / input_path / relative
+        require(relative.parent == Path('sections') and relative.suffix == '.json' and not path.is_symlink() and path.resolve().is_relative_to((root / input_path / 'sections').resolve()), 'unsafe snapshot path')
         require(pin['path'] not in declared and digest(path) == pin['sha256'], 'snapshot pin changed or duplicated')
         declared.add(pin['path'])
         snap = json.loads(path.read_text())
-        validate([{'file': str(INPUT / relative), 'definition': 'sectionSnapshot', 'value': snap}])
+        validate([{'file': str(input_path / relative), 'definition': 'sectionSnapshot', 'value': snap}])
         url = urlsplit(snap['url'])
-        require(url.scheme == 'https' and url.hostname == 'seicing.com' and not url.username and not url.password and url.path.startswith('/html/aoe2/unit/'), 'snapshot outside configured unit source scope')
+        source_kind = 'buildings' if kind == 'building' else 'unit'
+        require(url.scheme == 'https' and url.hostname == 'seicing.com' and not url.username and not url.password and url.path.startswith('/html/aoe2/' + source_kind + '/'), 'snapshot outside configured entity source scope')
         require(snap['civId'] is None and snap.get('entityIds') and set(snap['entityIds']) <= names.keys(), 'unit snapshot identity missing')
         require(snap['observedEntryCount'] == len(snap['entries']), 'original bullet count changed')
         require(hashlib.sha256(snap['originalSectionText'].encode()).hexdigest() == snap['sectionTextSha256'], 'section text digest changed')
@@ -75,14 +85,14 @@ def extend_history(root, base, validate):
         section_id = snap['sourceId'] + ':' + snap['revisionId']
         require(all(section['id'] != section_id for section in data['sections']), 'duplicate unit section')
         require(snap['sourceId'] not in sources, 'unit source identity collision')
-        source = {'id': snap['sourceId'], 'title': 'Seicing · ' + snap['title'] + '单位页', 'url': snap['url'], 'category': 'community', 'sourcePublishedAt': snap['sourcePublishedAt'], 'capturedAt': snap['capturedAt']}
+        source = {'id': snap['sourceId'], 'title': 'Seicing · ' + snap['title'] + ('单位页' if kind == 'unit' else '建筑页'), 'url': snap['url'], 'category': 'community', 'sourcePublishedAt': snap['sourcePublishedAt'], 'capturedAt': snap['capturedAt']}
         data['sources'].append(source)
         sources[source['id']] = source
-        state = 'pending' if any(e['processing'] == 'pending' for e in snap['entries']) else 'processed'
+        state = 'pending' if kind == 'unit' and any(e['processing'] == 'pending' for e in snap['entries']) else 'processed'
         if not snap['entries']:
             require('暂无' in snap['originalSectionText'], 'empty capture does not prove no-log')
             state = 'no-log'
-        data['sections'].append({**{k: snap[k] for k in ['revisionId', 'supersedesRevisionId', 'civId', 'entityIds', 'sourceId', 'anchor', 'documentSha256', 'sectionTextSha256', 'capturedAt', 'sourcePublishedAt', 'observedEntryCount']}, 'id': section_id, 'title': snap['section'], 'entryIds': [e['id'] for e in snap['entries']], 'sourceState': state, 'reason': '有界单位页章节快照；逐条处置不表示游戏事实已核实。'})
+        data['sections'].append({**{k: snap[k] for k in ['revisionId', 'supersedesRevisionId', 'civId', 'entityIds', 'sourceId', 'anchor', 'documentSha256', 'sectionTextSha256', 'capturedAt', 'sourcePublishedAt', 'observedEntryCount']}, 'id': section_id, 'title': snap['section'], 'entryIds': [e['id'] for e in snap['entries']], 'sourceState': state, 'reason': ('有界单位页章节快照' if kind == 'unit' else '有界建筑页章节快照') + '；逐条处置不表示游戏事实已核实。'})
         for original in snap['entries']:
             require(original['id'] not in entries and original['originalText'] in snap['originalSectionText'] and original['reason'].strip(), 'duplicate, missing or unexplained original')
             require(original['processing'] != 'mapped' or original['eventIds'], 'mapped bullet has no event')
@@ -91,8 +101,8 @@ def extend_history(root, base, validate):
             data['sourceEntries'].append(entry)
             entries[entry['id']] = entry
         snapshots.append(snap)
-        snapshot_audit.append({'path': str(INPUT / relative), **{k: pin[k] for k in ['sha256']}, **{k: snap[k] for k in ['documentSha256', 'sectionTextSha256', 'observedEntryCount']}})
-    require(declared == {'sections/' + p.name for p in (root / INPUT / 'sections').glob('*.json')}, 'unregistered unit snapshot')
+        snapshot_audit.append({'path': str(input_path / relative), **{k: pin[k] for k in ['sha256']}, **{k: snap[k] for k in ['documentSha256', 'sectionTextSha256', 'observedEntryCount']}})
+    require(declared == {'sections/' + p.name for p in (root / input_path / 'sections').glob('*.json')}, 'unregistered entity snapshot')
     for event in imports['events']:
         require(event['id'] not in events and event['claims'], 'unit event identity collision or empty event')
         events[event['id']] = event
@@ -108,7 +118,13 @@ def extend_history(root, base, validate):
         entry = entries.get(row['sourceEntryId'])
         require(entry is not None and row['eventId'] in entry['eventIds'] and row['reason'].strip(), 'invalid reviewed source attachment')
         event = events[row['eventId']]
-        require(event['versionId'] is None or event['versionId'].removeprefix('de-') in entry['rawVersionLabels'], 'cross-version source merge')
+        version = next((v for v in data['versions'] if v['id'] == event['versionId']), None)
+        source_version = version and version['build'] is None and version['label'] == str(entry['group']) + ' · ' + (entry['rawVersionLabels'][-1] if entry['rawVersionLabels'] else '')
+        unversioned = event['versionId'] is None and not entry['rawVersionLabels']
+        if kind == 'building' and unversioned:
+            claim = claim_for(row)
+            unversioned = any(entries[sid]['group'] == entry['group'] and not entries[sid]['rawVersionLabels'] for sid in claim['sourceEntryIds'])
+        require(unversioned or (event['versionId'] and event['versionId'].removeprefix('de-') in entry['rawVersionLabels']) or source_version, 'cross-version source merge: ' + row['sourceEntryId'])
 
     for row in imports['attachments']:
         claim = claim_for(row)
@@ -144,7 +160,7 @@ def extend_history(root, base, validate):
             require(version.get('channel', channel) == channel, 'different version channels cannot merge')
             version['channel'] = channel
             version['orderReason'] = '发行渠道依据固定版本档案的显式登记（' + {'release': '正式', 'pup': 'PUP', 'hotfix': '热修', 'unknown': '未登记，类别待核'}[channel] + '）；按版本编号排序，不以采集时间代替发行日期。'
-    legacy = {m['key']: m for m in data['legacyMap'] if unit_legacy(m['originalRecord'])}
+    legacy = {m['key']: m for m in data['legacyMap'] if unit_legacy(m['originalRecord'], kind)}
     mapping = index(imports['legacy'], 'key')
     require(set(mapping) == set(legacy), 'each old unit direct/related key needs one disposition')
     relations = list(imports['relations'])
@@ -166,7 +182,7 @@ def extend_history(root, base, validate):
             # Explicit import IDs group only the same old source bullet/version.
             eid, cid = row['eventId'], row['claimId']
             if eid not in events:
-                event = {'id': eid, 'versionId': 'de-' + old['patchId'], 'summary': '旧档案单位变化', 'verification': 'unverified', 'verificationNote': '继承旧记录核验边界，未进行本次官方复核。', 'scope': {'scopeKind': 'unknown', 'providerCivIds': [], 'affectedCivIds': [], 'beneficiary': 'unknown', 'conditions': []}, 'civRelations': [], 'claims': [], 'candidates': []}
+                event = {'id': eid, 'versionId': 'de-' + old['patchId'], 'summary': '旧档案单位变化' if kind == 'unit' else '旧档案建筑变化', 'verification': 'unverified', 'verificationNote': '继承旧记录核验边界，未进行本次官方复核。', 'scope': {'scopeKind': 'unknown', 'providerCivIds': [], 'affectedCivIds': [], 'beneficiary': 'unknown', 'conditions': []}, 'civRelations': [], 'claims': [], 'candidates': []}
                 events[eid] = event
                 data['events'].append(event)
             event = events[eid]
@@ -176,14 +192,14 @@ def extend_history(root, base, validate):
             citation_id = 'src-legacy-' + (record.get('sourceBullet') or record['id'])
             url = urlsplit(record['source'])
             require(url.scheme == 'https' and url.hostname and not url.username and not url.password, 'unsafe legacy source')
-            sid = 'legacy-unit-source-' + hashlib.sha256(record['source'].encode()).hexdigest()[:16]
+            sid = 'legacy-' + kind + '-source-' + hashlib.sha256(record['source'].encode()).hexdigest()[:16]
             if citation_id in entries:
                 source_entry = entries[citation_id]
                 require(sources[source_entry['sourceId']]['url'] == record['source'] and source_entry['originalText'] == record.get('originalText'), 'legacy bullet collision')
             else:
                 metadata = next(b['metadata'] for b in data['meta']['legacyBaseline'] if b['metadata']['id'] == old['patchId'])
                 same_document = url._replace(fragment='') == urlsplit(metadata['source'])._replace(fragment='')
-                source = {'id': sid, 'title': 'DE Update ' + old['patchId'] + ' · 既有单位档案', 'url': record['source'], 'category': 'official' if url.hostname in ['ageofempires.com', 'www.ageofempires.com'] else 'other', 'sourcePublishedAt': metadata.get('sourcePublishedAt') if same_document else None, 'capturedAt': None}
+                source = {'id': sid, 'title': 'DE Update ' + old['patchId'] + (' · 既有单位档案' if kind == 'unit' else ' · 既有建筑档案'), 'url': record['source'], 'category': 'official' if url.hostname in ['ageofempires.com', 'www.ageofempires.com'] else 'other', 'sourcePublishedAt': metadata.get('sourcePublishedAt') if same_document else None, 'capturedAt': None}
                 if sid not in sources:
                     data['sources'].append(source)
                     sources[sid] = source
@@ -216,25 +232,26 @@ def extend_history(root, base, validate):
             claim['effects'].append({'id': row['effectIds'][0], 'type': 'mechanic', 'entityRefs': [ref], 'text': record['summaryZh'], 'conditions': [record['scopeNote']] if record.get('scopeNote') else [], 'scope': None, 'legacyBefore': record.get('before'), 'legacyAfter': record.get('after')})
         require(key in claim['legacyKeys'] and set(row['effectIds']) <= {f['id'] for f in claim['effects']}, 'missing per-key legacy effects')
         for target in record.get('relatedTargets', []):
-            if target['targetType'] == 'unit':
-                relations.append({'entityId': resolve(target), 'eventId': row['eventId'], 'effectIds': row['effectIds'], 'relation': 'related', 'note': target['relation'] + '；关联机制，不作为本单位基础属性。'})
+            if target['targetType'] == kind:
+                relations.append({'entityId': resolve(target), 'eventId': row['eventId'], 'effectIds': row['effectIds'], 'relation': 'related', 'note': target['relation'] + '；关联机制，不作为本' + ('单位' if kind == 'unit' else '建筑') + '基础属性。'})
 
     # Direct effects are linked by exact identity, never by names or current tree.
     for event in data['events']:
         if event['verification'] != 'conflict':
             event['verification'] = 'verified' if all(c['verification'] == 'verified' for c in event['claims']) else 'unverified'
         for claim in event['claims']:
+            require(all(sid in entries for sid in claim['sourceEntryIds']), 'dangling claim citation')
             for effect in claim['effects']:
                 for ref in effect['entityRefs']:
-                    if ref.get('entityId', '').startswith('unit/'):
-                        relations.append({'entityId': ref['entityId'], 'eventId': event['id'], 'effectIds': [effect['id']], 'relation': 'direct', 'note': '原文/旧记录明确的稳定单位身份；不传播到其它形态。'})
+                    if ref.get('entityId', '').startswith(kind + '/'):
+                        relations.append({'entityId': ref['entityId'], 'eventId': event['id'], 'effectIds': [effect['id']], 'relation': 'direct', 'note': '原文/旧记录明确的稳定' + ('单位' if kind == 'unit' else '建筑') + '身份；不传播到其它形态。'})
     combined = {}
     for relation in relations:
         require(relation['entityId'] in entities and relation['eventId'] in events and relation['effectIds'] and relation['note'].strip(), 'dangling unit relation')
         ev = events[relation['eventId']]
         effects = {f['id']: f for c in ev['claims'] for f in c['effects']}
         require(set(relation['effectIds']) <= set(effects), 'dangling unit relation effect')
-        require(entities[relation['entityId']]['type'] == 'unit', 'unit relation needs a unit identity')
+        require(entities[relation['entityId']]['type'] == kind, 'relation needs the exact entity kind')
         if relation['relation'] == 'direct':
             require(all(any(ref.get('entityId') == relation['entityId'] for ref in effects[eid]['entityRefs']) for eid in relation['effectIds']), 'direct unit relation needs exact effect identity')
         key = relation['entityId'], relation['eventId'], relation['relation'], relation['note']
@@ -248,6 +265,7 @@ def extend_history(root, base, validate):
         require(len(own_sections) == len(page['sectionIds']) and all(eid in s.get('entityIds', []) for s in own_sections), 'coverage section identity mismatch')
         if page['searchState'] in ['found', 'no-log']:
             require(own_sections and page['checkedAt'] is not None, 'observed source state needs evidence')
+            require(page['searchState'] != 'no-log' or all(s['sourceState'] == 'no-log' for s in own_sections), 'no-log requires an observed empty chapter')
         elif page['searchState'] == 'not-checked':
             require(not own_sections and page['checkedAt'] is None, 'not-checked source must not pretend observation')
         else:
@@ -259,9 +277,14 @@ def extend_history(root, base, validate):
         if state == 'found':
             state = 'pending' if any(s['sourceState'] == 'pending' for s in own_sections) else 'no-log' if all(s['sourceState'] == 'no-log' for s in own_sections) else 'processed'
         rows.append({**page, 'sourceState': state, 'relatedSectionIds': related_sections, 'eventIds': sorted(linked), 'sourceEntryCount': sum(s['observedEntryCount'] for s in own_sections) if own_sections else None})
-    unit_data = {'catalogSize': len(names), 'directorySha256': catalog['directory']['sha256'], 'coverageNote': '部分收录；仅定点检查钦察单位页，其余独立单位来源页未检查。已有文明章节与旧档案仍可查询。没有收录不代表从未改动，处理完成不等于事实核验。', 'rows': rows, 'relations': relations, 'legacyMap': imports['legacy']}
-    data['units'] = unit_data
-    data['meta']['sourceScopeNote'] += ' 单位历史另含已登记的有界单位章节；各单位独立来源检查状态分列。'
+    unit_data = {'catalogSize': len(names), 'directorySha256': catalog['directory']['sha256'], 'coverageNote': catalog.get('coverageNote', '部分收录；仅定点检查钦察单位页，其余独立单位来源页未检查。已有文明章节与旧档案仍可查询。没有收录不代表从未改动，处理完成不等于事实核验。'), 'rows': rows, 'relations': relations, 'legacyMap': imports['legacy']}
+    data[runtime_key] = unit_data
+    if kind == 'building':
+        unit_data['sourceIndex'] = catalog['sourceIndex']
+        for civ in data['civilizations']:
+            own = [event for event in data['events'] if any(r['civId'] == civ['civId'] for r in event['civRelations'])]
+            civ.update(eventIds=[event['id'] for event in own], eventCount=len(own), versionCount=len({event['versionId'] for event in own if event['versionId'] is not None}), unknownVersionEventCount=sum(event['versionId'] is None for event in own), historyCoverage='partial' if own else 'none')
+    data['meta']['sourceScopeNote'] += (' 单位历史另含已登记的有界单位章节；各单位独立来源检查状态分列。' if kind == 'unit' else ' 建筑历史仅含两个有界建筑章节和既有证据；其余独立来源未检查。')
     # Shared graph references are validated before any output is written.
     claim_ids, effect_ids = set(), set()
     civ_ids = {c['civId'] for c in data['civilizations']}
@@ -269,9 +292,10 @@ def extend_history(root, base, validate):
     def check_scope(scope):
         require(set(scope['affectedCivIds'] + scope['providerCivIds']) <= civ_ids, 'dangling scope civilization')
     for event in data['events']:
-        require(event['claims'] and (event['civRelations'] or any(r['eventId'] == event['id'] for r in relations)), 'event needs explicit entity evidence')
+        require(event['claims'] and (event['civRelations'] or any(r['eventId'] == event['id'] for r in relations + data.get('units', {}).get('relations', []))), 'event needs explicit entity evidence')
         require(event['versionId'] is None or event['versionId'] in version_ids, 'dangling version')
         require(all(c['civId'] in civ_ids for c in event['civRelations']), 'dangling civilization relation')
+        require(all(c['eventId'] in events and c['eventId'] != event['id'] for c in event['candidates']), 'dangling candidate event')
         check_scope(event['scope'])
         require(event['verification'] != 'conflict' or len(event['claims']) > 1, 'conflict requires opposing claims')
         for claim in event['claims']:
@@ -297,8 +321,8 @@ def extend_history(root, base, validate):
             previous = sections.get(section['sourceId'] + ':' + parent)
             require(previous is not None, 'missing previous unit revision')
             parent = previous['supersedesRevisionId']
-    audit = {'schemaVersion': 1, 'units': unit_data, 'legacyRecordCount': len(data['legacyMap']), 'unitLegacyCount': len(legacy), 'unitLegacyMigratedCount': len(mapping), 'snapshots': snapshot_audit, 'eventCount': len(data['events'])}
-    validate([{'file': 'runtime with units', 'definition': 'runtime', 'value': data}, {'file': str(AUDIT), 'definition': 'unitAudit', 'value': audit}])
+    audit = {'schemaVersion': 1, runtime_key: unit_data, 'legacyRecordCount': len(data['legacyMap']), kind + 'LegacyCount': len(legacy), kind + 'LegacyMigratedCount': len(mapping), 'snapshots': snapshot_audit, 'eventCount': len(data['events'])}
+    validate([{'file': 'runtime with ' + runtime_key, 'definition': 'runtime', 'value': data}, {'file': kind + ' history audit', 'definition': kind + 'Audit', 'value': audit}])
     return data, audit
 
 

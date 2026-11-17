@@ -86,7 +86,10 @@ export const PROFILES = {
     [...sourceChecks, 'gameGuide256', 'v0300-335', 'elevation734', 'housing743', 'standardVictory747'],
     ['sourcePresentation442', 'gameGuide256', 'elevation734', 'housing743', 'standardVictory747'],
   ),
-  patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
+  patches: profile(
+    ['patches16', 'patchTree417', 'patchSearch16', 'buildingUpdates1084', 'buildingUpdatesUI1084'],
+    ['patches16', 'patchTree417', 'buildingHistory'],
+  ),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
     [
@@ -261,6 +264,8 @@ export const PROFILES = {
   ),
   buildings: profile(
     [
+      'buildingUpdates1084',
+      'buildingUpdatesUI1084',
       'buildings',
       'buildingSim',
       'buildingAge357',
@@ -275,6 +280,7 @@ export const PROFILES = {
       'buildingQuery881',
     ],
     [
+      'buildingHistory',
       'garrison218',
       'garrison224',
       'sidebar44',
@@ -437,11 +443,7 @@ export function removesSourceBaseline(before, after) {
 
 /** Only citation subtrees may use the source UI plan; step/card structures stay conservative. */
 export function sourceSchemaOnly(path, before, after) {
-  const schemaPath = rawSourceSchemas.has(path)
-    ? path
-    : legacyRawSourceSchemas.has(path)
-      ? path.replace('src/content/schema/', 'data/schemas/')
-      : null;
+  const schemaPath = rawSourceSchemas.has(path) ? path : legacyRawSourceSchemas.has(path) ? path.replace('src/content/schema/', 'data/schemas/') : null;
   if (!schemaPath || typeof before !== 'string' || typeof after !== 'string') return false;
   const normalize = (text) => {
     const schema = JSON.parse(text);

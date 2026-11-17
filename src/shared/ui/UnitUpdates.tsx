@@ -168,7 +168,17 @@ function Coverage({ data, entityId, displayedAnchors }: { data: CivUpdatesData; 
   );
 }
 
-function VersionEvents({ data, rows, anchorPrefix = 'hist-' }: { data: CivUpdatesData; rows: UnitEventView[]; anchorPrefix?: string }) {
+export function VersionEvents({
+  data,
+  rows,
+  anchorPrefix = 'hist-',
+  context,
+}: {
+  data: CivUpdatesData;
+  rows: UnitEventView[];
+  anchorPrefix?: string;
+  context?: (row: UnitEventView) => React.ReactNode;
+}) {
   const groups = new Map<string | null, UnitEventView[]>();
   rows.forEach((row) => groups.set(row.event.versionId, [...(groups.get(row.event.versionId) ?? []), row]));
   return [...groups].map(([versionId, views]) => {
@@ -208,6 +218,7 @@ function VersionEvents({ data, rows, anchorPrefix = 'hist-' }: { data: CivUpdate
               </p>
             )}
             <UpdateEventCard data={data} event={event} sourceEvent={original} anchorId={anchorPrefix + event.id} />
+            {context?.({ event, original, relations, unknownScope: false })}
           </div>
         ))}
       </section>

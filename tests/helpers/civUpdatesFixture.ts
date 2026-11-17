@@ -79,6 +79,7 @@ export function conflictHistoryFixture() {
 export function emptyHistoryFixture() {
   const data = historyFixture();
   delete data.units;
+  delete data.buildings;
   data.events = [];
   data.legacyMap = [];
   data.meta.legacyBaseline = [];

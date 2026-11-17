@@ -1,0 +1,24 @@
+.building-history code,
+.building-history .civ-update-source,
+.building-history .civ-update-warning {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.building-history-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem;
+  margin-block: 1rem;
+}
+
+.building-history-choices a {
+  min-height: 44px;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.building-history-choices small {
+  display: block;
+}
