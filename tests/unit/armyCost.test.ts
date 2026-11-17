@@ -3,7 +3,7 @@ import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';
 import { civs } from '../../src/data';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
-import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver, armyResearchChoices } from '../../src/domain/armyCost';
+import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver, armyResearchChoices, researchKey } from '../../src/domain/armyCost';
 import { evaluateTrainTotal } from '../../src/domain/trainTotal';
 import { armyResearchConditions } from '../../src/domain/armyResearchEvidence';
 
@@ -44,6 +44,33 @@ describe('army research pinned data', () => {
     expect(r.ledger.find((e) => e.id === 93)?.beneficiaries).toEqual([0]);
     expect(r.researchTotal).toMatchObject({ Wood: 300, Gold: 175 });
   });
+  it.each([
+    ['Slavs', 359, 513],
+    ['Ethiopians', 550, 575],
+  ] as const)('offers unit-scoped splash research for %s', (civ, unit, id) => {
+    const config = { ...makeArmyCost(civ), rows: [{ unit, qty: '1' }], targets: [researchKey(id)] };
+    expect(armyResearchChoices(ctx, config)).toContain(id);
+    const result = evaluateArmyCost(ctx, config);
+    expect(result.ledger.find((e) => e.id === id)?.beneficiaries).toEqual([0]);
+    expect(result.ledger.find((e) => e.id === id)?.status).toBe('planned');
+  });
+  it('uses fixed projectile effects rather than range to scope Ballistics', () => {
+    const monk = { ...makeArmyCost('Britons'), rows: [{ unit: 125, qty: '1' }] };
+    expect(ARMY_RESEARCH.nodes[93]!.projectileUnits).toContain(4);
+    expect(ARMY_RESEARCH.nodes[93]!.projectileUnits).not.toContain(125);
+    expect(armyResearchChoices(ctx, monk)).not.toContain(93);
+    const result = evaluateArmyCost(ctx, { ...monk, targets: ['t:93'] });
+    expect(result.partial).toBe(true);
+    expect(result.ledger.find((e) => e.id === 93)?.cost).toBe(null);
+  });
+  it.each([315, 202])('retains out-of-scope target %i without charging it or invalidating independent training', (id) => {
+    const base = { ...makeArmyCost('Britons'), rows: [{ unit: 4, qty: '1' }] };
+    const result = evaluateArmyCost(ctx, { ...base, targets: [researchKey(id)] });
+    expect(result.partial).toBe(true);
+    expect(result.ledger.find((e) => e.id === id)).toMatchObject({ status: 'invalid', cost: null });
+    expect(result.training.lines[0]?.status).toBe('ok');
+    expect(evaluateArmyCost(ctx, { ...base, done: [researchKey(id)] }).partial).toBe(false);
+  });
   it('merges equal and dominated paid prerequisite sets without discarding unknown alternatives', () => {
     const longsword = evaluateArmyCost(ctx, { ...makeArmyCost('Armenians', '3'), rows: [{ unit: 77, qty: '1' }] });
     expect(longsword.partial).toBe(false);
@@ -70,6 +97,7 @@ describe('army research pinned data', () => {
     for (const civ of ['Georgians', 'Khitans', 'Shu', 'Wu']) {
       const faith = evaluateArmyCost(ctx, { ...makeArmyCost(civ), targets: ['t:45'] });
       expect(faith.partial).toBe(true);
+      expect(faith.ledger.find((e) => e.id === 45)?.reason).toContain('未核实');
       expect(faith.hasValue).toBe(false);
     }
   });

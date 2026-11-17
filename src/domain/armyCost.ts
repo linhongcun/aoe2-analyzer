@@ -2,7 +2,7 @@ import { civByEn } from '../data';
 import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand } from '../data/armyResearch';
 import { AGE_BY_TECH } from './gameIds';
 import { productionBuildings, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from './production';
-import { makeSimContext, simTechs } from './simulator';
+import { makeSimContext, simTechs, civStatus } from './simulator';
 import type { Cost, Unit } from './types';
 import { applicableTrainingTechs } from './duelTrainingCost';
 import { unitCost } from './unitCost';
@@ -241,14 +241,23 @@ function unitUnlocks(ctx: ProductionContext, civ: string, age: number, unit: Uni
 }
 
 /** Unit-scoped combat mechanics, including text-only projectile effects; no production speed. */
-function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ: string, age: number) {
-  return simTechs(sim, u, civ).filter(
-    ({ t, ef }) =>
-      t.age <= age &&
-      (ef?.some((e) => e.s !== 'bt') ||
-        t.en === 'Ballistics' ||
-        DAT.techs[t.en]?.eco.some((e) => e.t?.includes(u.id) && e.a !== undefined && [24, 102, 107, 109].includes(e.a))),
-  );
+function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ: string, age: number, data = ARMY_RESEARCH) {
+  const numeric = new Map(simTechs(sim, u, civ).map((entry) => [entry.t.id, entry.ef]));
+  const tree = civStatus(sim.trees, civ);
+  return sim.techs
+    .filter((t) => t.age <= age && t.civs.includes(civ) && tree['t' + t.id])
+    .filter(
+      (t) =>
+        numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
+        data.nodes[t.id]?.projectileUnits.includes(u.id) ||
+        DAT.techs[t.en]?.eco.some(
+          (e) =>
+            (e.t?.includes(u.id) && e.a !== undefined && [10, 22, 24, 63, 102, 107, 108, 109].includes(e.a)) ||
+            // Global conversion resistance/death, and monk conversion permissions/group faith.
+            (e.res !== undefined && ([178, 179, 192].includes(e.res) || (u.cls.includes(25) && [27, 28, 29, 193].includes(e.res)))),
+        ),
+    )
+    .map((t) => ({ t, ef: numeric.get(t.id) ?? null }));
 }
 
 export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConfig): number[] {
@@ -260,6 +269,8 @@ export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConf
     for (const { t } of armyCombatResearch(sim, u, config.civ, Number(config.age))) ids.add(t.id);
     for (const { tech } of applicableTrainingTechs(sim, u, config.civ, Number(config.age))) ids.add(tech.id);
     for (const id of unitUnlocks(ctx, config.civ, Number(config.age), u)) ids.add(id);
+    // A form upgrade may also be an explicit target, in addition to automatic inference.
+    for (const [id, node] of Object.entries(ARMY_RESEARCH.nodes)) if (node.upgrades.some(([, target]) => target === u.id)) ids.add(Number(id));
   }
   return [...ids];
 }
@@ -275,6 +286,17 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
   const resolver = researchResolver(data, config.civ, age, completed);
   const manualDone = new Set(config.done);
   const badRows = new Map<number, string>();
+  // Removing the last row retains a legitimate research-only intention.
+  const targetScope = config.targets.length
+    ? new Set(
+        armyResearchChoices(ctx, {
+          ...config,
+          rows: config.rows.length
+            ? config.rows
+            : ctx.core.units.filter((u) => u.civs.includes(config.civ) && u.age <= age).map((u) => ({ unit: u.id, qty: '1' })),
+        }),
+      )
+    : new Set<number>();
   const ensure = (id: number): ResearchEntry => {
     const key = researchKey(id);
     let entry = ledger.get(key);
@@ -324,7 +346,8 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     noteOrigin(entry);
     if (row === undefined) entry.manual = true;
     if (row !== undefined && !entry.beneficiaries.includes(row)) entry.beneficiaries.push(row);
-    const closure = id === null ? fail('研究身份无法解析') : resolver.resolve(id);
+    const outsideScope = !done && row === undefined && id !== null && !targetScope.has(id);
+    const closure = id === null ? fail('研究身份无法解析') : outsideScope ? fail('不属于当前阵容的战斗、训练费用或形态研究；未计入') : resolver.resolve(id);
     if (closure.error || !data.nodes[id!]?.name) {
       entry.status = 'invalid';
       entry.problem = 'identity';
@@ -446,7 +469,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     const unit = line.unit;
     const related = unit
       ? new Set([
-          ...armyCombatResearch(sim, unit, config.civ, age).map((x) => x.t.id),
+          ...armyCombatResearch(sim, unit, config.civ, age, data).map((x) => x.t.id),
           ...applicableTrainingTechs(sim, unit, config.civ, age).map((x) => x.tech.id),
         ])
       : new Set<number>();
