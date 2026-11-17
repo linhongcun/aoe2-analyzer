@@ -56,8 +56,13 @@ test('#952 单位、建筑、科技展开后只有一枚更新历史标题', asy
     const box = await block.locator('> summary').boundingBox();
     expect(box!.height).toBeGreaterThanOrEqual(44);
     expect(box!.width).toBeGreaterThanOrEqual(44);
-    await expect(block.getByTestId('entity-history')).toContainText(copy);
-    await expect(block.locator('.history-count')).toBeVisible();
+    if (route.startsWith('/unit/')) {
+      await expect(block.locator('[data-unit-history]')).toContainText(copy);
+      await expect(block.locator('[data-unit-history]')).toContainText('部分收录');
+    } else {
+      await expect(block.getByTestId('entity-history')).toContainText(copy);
+      await expect(block.locator('.history-count')).toBeVisible();
+    }
   }
   expect(errors).toEqual([]);
 });
@@ -100,9 +105,10 @@ test('#952 文明页历史与更新标题不变', async ({ page }) => {
   await expect(fold.locator('> summary')).toHaveText('更新历史');
   await expect(fold.locator('> summary').getByRole('heading')).toHaveCount(0);
   await expect(fold.getByTestId('entity-history').getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
-  await expect(fold.getByRole('region', { name: '更新历史', exact: true })).toHaveCount(1);
-  await expect(fold.locator('.history-count')).toBeVisible();
+  await expect(fold.getByTestId('civ-updates-reader')).toBeVisible();
+  await expect(fold.getByRole('heading', { level: 2, name: '更新历史', exact: true })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(1);
+  await expect(fold.getByTestId('civ-updates-reader')).toContainText('部分收录');
   expect(errors).toEqual([]);
 });
 

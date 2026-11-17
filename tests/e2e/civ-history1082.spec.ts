@@ -35,8 +35,8 @@ test('civilization history uses real multi-effect claims and sources at 360px', 
   await expect(hp.locator('.civ-update-values .num')).toHaveText(['50 HP', '40 HP', '55 HP', '45 HP']);
   await hp.locator('summary').focus();
   await page.keyboard.press('Enter');
-  await expect(hp.locator('blockquote')).toContainText('34055版本后拥有40/45HP');
-  await expect(hp.getByRole('link', { name: '打开来源页面' })).toHaveAttribute('href', /^https:\/\/seicing\.com\/html\/aoe2\/2\//);
+  await expect(hp.locator('blockquote').first()).toContainText('34055版本后拥有40/45HP');
+  await expect(hp.getByRole('link', { name: '打开来源页面' }).first()).toHaveAttribute('href', /^https:\/\/seicing\.com\/html\/aoe2\/2\//);
   await expect(hp).toContainText('事实核验：未核实');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await hp.scrollIntoViewIfNeeded();

@@ -23,6 +23,7 @@ import {
 import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { CivUpdatesOverview } from '../../shared/ui/CivUpdatesOverview';
+import { UnitUpdates, UnitUpdatesOverview } from '../../shared/ui/UnitUpdates';
 import { EntryBody, OBJECT_LABEL, ObjectSearch, civZh } from './patchParts';
 import './patches.css';
 
@@ -94,6 +95,7 @@ function Browse({ archives }: { archives: PatchArchive[] }) {
       <h1 className="page-heading">更新历史</h1>
       <p>先查一个文明、单位、建筑或科技，也可以按版本阅读已收录档案。没有收录，不代表从未改动。</p>
       <ObjectSearch archives={archives} core={core} />
+      <UnitUpdatesOverview />
       <CivUpdatesOverview />
       <h2>版本档案</h2>
       <div className="patch-versions">
@@ -453,6 +455,38 @@ export default function Patches() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const { archives, error, retry } = usePatchArchives();
+  if (!id && params.getAll('obj').length > 1) {
+    const candidates = [...new Set(params.getAll('obj'))].filter((raw) => parseObjectParam(raw));
+    const choose = (raw?: string) => {
+      const next = new URLSearchParams(params);
+      next.delete('obj');
+      if (raw) next.set('obj', raw);
+      return '/patches?' + next.toString();
+    };
+    return (
+      <section className="pane patches">
+        <h1>更新历史</h1>
+        <p role="alert">历史对象参数重复，请明确选择一个对象。搜索及历史筛选会保留，非法筛选仍需清除。</p>
+        {candidates.map((raw) => {
+          const object = parseObjectParam(raw)!;
+          return (
+            <p key={raw}>
+              <Link to={choose(raw)}>
+                查看{OBJECT_LABEL[object.type]} <span className="num nw">ID {object.id}</span>
+              </Link>
+            </p>
+          );
+        })}
+        <Link to={choose()}>重新选择对象</Link>
+      </section>
+    );
+  }
+  if (!id && params.getAll('obj').length === 1 && /^unit:\d+$/u.test(params.get('obj') ?? ''))
+    return (
+      <section className="pane patches">
+        <UnitUpdates entityId={'unit/' + params.get('obj')!.slice(5)} overview />
+      </section>
+    );
   if (!archives) return <PatchLoading error={error} retry={retry} />;
   if (id) {
     const archive = archives.find((item) => item.id === id);

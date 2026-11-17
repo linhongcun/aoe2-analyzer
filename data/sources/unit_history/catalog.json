@@ -1,0 +1,3307 @@
+{
+  "schemaVersion": 1,
+  "directory": {
+    "path": "data/game/units.json",
+    "sha256": "f580e0e0e67c6728e3d44cf3dd68b79a330c5444f15351fde62ae31d122c896d",
+    "count": 248
+  },
+  "pages": [
+    {
+      "entityId": "unit/1699",
+      "catalogOrder": 0,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1699"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/759",
+      "catalogOrder": 1,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/759",
+        "unit/761"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1974",
+      "catalogOrder": 2,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1974"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2582",
+      "catalogOrder": 3,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2582",
+        "unit/2584"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2586",
+      "catalogOrder": 4,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2586",
+        "unit/2587"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/761",
+      "catalogOrder": 5,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/759",
+        "unit/761"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/882",
+      "catalogOrder": 6,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/882"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1793",
+      "catalogOrder": 7,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2584",
+      "catalogOrder": 8,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2582",
+        "unit/2584"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2587",
+      "catalogOrder": 9,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2586",
+        "unit/2587"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/831",
+      "catalogOrder": 10,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/831",
+        "unit/832"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1004",
+      "catalogOrder": 11,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1004",
+        "unit/1006"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/832",
+      "catalogOrder": 12,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/831",
+        "unit/832"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1006",
+      "catalogOrder": 13,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1004",
+        "unit/1006"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1302",
+      "catalogOrder": 14,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/529",
+        "unit/532",
+        "unit/1103",
+        "unit/1302"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1750",
+      "catalogOrder": 15,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1750"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1962",
+      "catalogOrder": 16,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1962"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1263",
+      "catalogOrder": 17,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1263"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1709",
+      "catalogOrder": 18,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/36",
+        "unit/1709"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1923",
+      "catalogOrder": 19,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1923"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/8",
+      "catalogOrder": 20,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/8",
+        "unit/530"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/11",
+      "catalogOrder": 21,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/11",
+        "unit/561"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/25",
+      "catalogOrder": 22,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/25",
+        "unit/554"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/40",
+      "catalogOrder": 23,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/40",
+        "unit/553"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/41",
+      "catalogOrder": 24,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/41",
+        "unit/555"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/46",
+      "catalogOrder": 25,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/46",
+        "unit/557"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/73",
+      "catalogOrder": 26,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/73",
+        "unit/559"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/232",
+      "catalogOrder": 27,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/232",
+        "unit/534"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/239",
+      "catalogOrder": 28,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/239",
+        "unit/558"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/281",
+      "catalogOrder": 29,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/281",
+        "unit/531"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/282",
+      "catalogOrder": 30,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/282",
+        "unit/556"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/291",
+      "catalogOrder": 31,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/291",
+        "unit/560"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/692",
+      "catalogOrder": 32,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/692",
+        "unit/694"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/725",
+      "catalogOrder": 33,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/725",
+        "unit/726"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/755",
+      "catalogOrder": 34,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/755",
+        "unit/757"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/763",
+      "catalogOrder": 35,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/763",
+        "unit/765"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/771",
+      "catalogOrder": 36,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/771",
+        "unit/773"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/827",
+      "catalogOrder": 37,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/827",
+        "unit/829"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/866",
+      "catalogOrder": 38,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/866",
+        "unit/868"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/869",
+      "catalogOrder": 39,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/869",
+        "unit/871"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/876",
+      "catalogOrder": 40,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/876",
+        "unit/878"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/879",
+      "catalogOrder": 41,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/879",
+        "unit/881"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1001",
+      "catalogOrder": 42,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1001",
+        "unit/1003"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1007",
+      "catalogOrder": 43,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1007",
+        "unit/1009"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1013",
+      "catalogOrder": 44,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1013",
+        "unit/1015"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1016",
+      "catalogOrder": 45,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1016",
+        "unit/1018"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1120",
+      "catalogOrder": 46,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1120",
+        "unit/1122"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1123",
+      "catalogOrder": 47,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1123",
+        "unit/1125"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1126",
+      "catalogOrder": 48,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1126",
+        "unit/1128"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1129",
+      "catalogOrder": 49,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1129",
+        "unit/1131"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1225",
+      "catalogOrder": 50,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1225",
+        "unit/1227"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1228",
+      "catalogOrder": 51,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1228",
+        "unit/1230"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1231",
+      "catalogOrder": 52,
+      "searchState": "found",
+      "checkedAt": "2026-11-17T05:07:57.169732+00:00",
+      "sectionIds": [
+        "seicing-unit-kipchak:snapshot-e1556f66c3d781606125"
+      ],
+      "reason": "人工逐条核对同一章节明示的普通/精锐形态；不含同名1260。来源处理不等于事实核验。",
+      "familyIds": [
+        "unit/1231",
+        "unit/1233",
+        "unit/1260"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。1260与1233身份独立，佣兵历史身份尚未解析。"
+    },
+    {
+      "entityId": "unit/1234",
+      "catalogOrder": 53,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1234",
+        "unit/1236"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1655",
+      "catalogOrder": 54,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1655",
+        "unit/1657"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1658",
+      "catalogOrder": 55,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1658",
+        "unit/1659"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1701",
+      "catalogOrder": 56,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1701",
+        "unit/1703"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1704",
+      "catalogOrder": 57,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1704",
+        "unit/1706"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1735",
+      "catalogOrder": 58,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1735",
+        "unit/1737"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1741",
+      "catalogOrder": 59,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1741",
+        "unit/1743"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1747",
+      "catalogOrder": 60,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1747",
+        "unit/1749"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1759",
+      "catalogOrder": 61,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1759",
+        "unit/1761"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1790",
+      "catalogOrder": 62,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1790",
+        "unit/1792"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1800",
+      "catalogOrder": 63,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1800",
+        "unit/1802"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1803",
+      "catalogOrder": 64,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1803",
+        "unit/1805"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1908",
+      "catalogOrder": 65,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1908",
+        "unit/1910"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1920",
+      "catalogOrder": 66,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1920",
+        "unit/1922"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1949",
+      "catalogOrder": 67,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1949",
+        "unit/1951"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1959",
+      "catalogOrder": 68,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1959",
+        "unit/1961"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1968",
+      "catalogOrder": 69,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1968",
+        "unit/1970"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2562",
+      "catalogOrder": 70,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2562",
+        "unit/2564"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2566",
+      "catalogOrder": 71,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2566",
+        "unit/2568"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2579",
+      "catalogOrder": 72,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2579",
+        "unit/2581"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2705",
+      "catalogOrder": 73,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2705",
+        "unit/2706"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2708",
+      "catalogOrder": 74,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2708",
+        "unit/2709"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2711",
+      "catalogOrder": 75,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2711",
+        "unit/2712"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/530",
+      "catalogOrder": 76,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/8",
+        "unit/530"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/531",
+      "catalogOrder": 77,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/281",
+        "unit/531"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/534",
+      "catalogOrder": 78,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/232",
+        "unit/534"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/553",
+      "catalogOrder": 79,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/40",
+        "unit/553"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/554",
+      "catalogOrder": 80,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/25",
+        "unit/554"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/555",
+      "catalogOrder": 81,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/41",
+        "unit/555"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/556",
+      "catalogOrder": 82,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/282",
+        "unit/556"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/557",
+      "catalogOrder": 83,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/46",
+        "unit/557"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/558",
+      "catalogOrder": 84,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/239",
+        "unit/558"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/559",
+      "catalogOrder": 85,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/73",
+        "unit/559"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/560",
+      "catalogOrder": 86,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/291",
+        "unit/560"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/561",
+      "catalogOrder": 87,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/11",
+        "unit/561"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/694",
+      "catalogOrder": 88,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/692",
+        "unit/694"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/726",
+      "catalogOrder": 89,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/725",
+        "unit/726"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/757",
+      "catalogOrder": 90,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/755",
+        "unit/757"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/765",
+      "catalogOrder": 91,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/763",
+        "unit/765"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/773",
+      "catalogOrder": 92,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/771",
+        "unit/773"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/829",
+      "catalogOrder": 93,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/827",
+        "unit/829"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/868",
+      "catalogOrder": 94,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/866",
+        "unit/868"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/871",
+      "catalogOrder": 95,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/869",
+        "unit/871"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/878",
+      "catalogOrder": 96,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/876",
+        "unit/878"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/881",
+      "catalogOrder": 97,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/879",
+        "unit/881"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1003",
+      "catalogOrder": 98,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1001",
+        "unit/1003"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1009",
+      "catalogOrder": 99,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1007",
+        "unit/1009"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1015",
+      "catalogOrder": 100,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1013",
+        "unit/1015"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1018",
+      "catalogOrder": 101,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1016",
+        "unit/1018"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1122",
+      "catalogOrder": 102,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1120",
+        "unit/1122"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1125",
+      "catalogOrder": 103,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1123",
+        "unit/1125"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1128",
+      "catalogOrder": 104,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1126",
+        "unit/1128"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1131",
+      "catalogOrder": 105,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1129",
+        "unit/1131"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1227",
+      "catalogOrder": 106,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1225",
+        "unit/1227"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1230",
+      "catalogOrder": 107,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1228",
+        "unit/1230"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1233",
+      "catalogOrder": 108,
+      "searchState": "found",
+      "checkedAt": "2026-11-17T05:07:57.169732+00:00",
+      "sectionIds": [
+        "seicing-unit-kipchak:snapshot-e1556f66c3d781606125"
+      ],
+      "reason": "人工逐条核对同一章节明示的普通/精锐形态；不含同名1260。来源处理不等于事实核验。",
+      "familyIds": [
+        "unit/1231",
+        "unit/1233",
+        "unit/1260"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。1260与1233身份独立，佣兵历史身份尚未解析。"
+    },
+    {
+      "entityId": "unit/1236",
+      "catalogOrder": 109,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1234",
+        "unit/1236"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1260",
+      "catalogOrder": 110,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1231",
+        "unit/1233",
+        "unit/1260"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。1260与1233身份独立，佣兵历史身份尚未解析。"
+    },
+    {
+      "entityId": "unit/1657",
+      "catalogOrder": 111,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1655",
+        "unit/1657"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1659",
+      "catalogOrder": 112,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1658",
+        "unit/1659"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1703",
+      "catalogOrder": 113,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1701",
+        "unit/1703"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1706",
+      "catalogOrder": 114,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1704",
+        "unit/1706"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1737",
+      "catalogOrder": 115,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1735",
+        "unit/1737"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1743",
+      "catalogOrder": 116,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1741",
+        "unit/1743"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1749",
+      "catalogOrder": 117,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1747",
+        "unit/1749"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1761",
+      "catalogOrder": 118,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1759",
+        "unit/1761"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1792",
+      "catalogOrder": 119,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1790",
+        "unit/1792"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1802",
+      "catalogOrder": 120,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1800",
+        "unit/1802"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1805",
+      "catalogOrder": 121,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1803",
+        "unit/1805"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1910",
+      "catalogOrder": 122,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1908",
+        "unit/1910"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1922",
+      "catalogOrder": 123,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1920",
+        "unit/1922"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1951",
+      "catalogOrder": 124,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1949",
+        "unit/1951"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1954",
+      "catalogOrder": 125,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1954"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1961",
+      "catalogOrder": 126,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1959",
+        "unit/1961"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1966",
+      "catalogOrder": 127,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1966"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1970",
+      "catalogOrder": 128,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1968",
+        "unit/1970"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1978",
+      "catalogOrder": 129,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1978"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2564",
+      "catalogOrder": 130,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2562",
+        "unit/2564"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2568",
+      "catalogOrder": 131,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2566",
+        "unit/2568"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2581",
+      "catalogOrder": 132,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2579",
+        "unit/2581"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2706",
+      "catalogOrder": 133,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2705",
+        "unit/2706"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2709",
+      "catalogOrder": 134,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2708",
+        "unit/2709"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2712",
+      "catalogOrder": 135,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2711",
+        "unit/2712"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1010",
+      "catalogOrder": 136,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1010",
+        "unit/1012"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1911",
+      "catalogOrder": 137,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1911"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1952",
+      "catalogOrder": 138,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1952"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2569",
+      "catalogOrder": 139,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2569",
+        "unit/2571"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1012",
+      "catalogOrder": 140,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1010",
+        "unit/1012"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1155",
+      "catalogOrder": 141,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/6",
+        "unit/7",
+        "unit/1155"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2571",
+      "catalogOrder": 142,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2569",
+        "unit/2571"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1755",
+      "catalogOrder": 143,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1755"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/886",
+      "catalogOrder": 144,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/886",
+        "unit/887"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1751",
+      "catalogOrder": 145,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1751",
+        "unit/1753"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/207",
+      "catalogOrder": 146,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/207",
+        "unit/329",
+        "unit/330"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/887",
+      "catalogOrder": 147,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/886",
+        "unit/887"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1753",
+      "catalogOrder": 148,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1751",
+        "unit/1753"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1813",
+      "catalogOrder": 149,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/38",
+        "unit/283",
+        "unit/569",
+        "unit/1813"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/775",
+      "catalogOrder": 150,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/775"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1254",
+      "catalogOrder": 151,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1254",
+        "unit/1255"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1255",
+      "catalogOrder": 152,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1254",
+        "unit/1255"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1660",
+      "catalogOrder": 153,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1660",
+        "unit/1661"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1661",
+      "catalogOrder": 154,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1660",
+        "unit/1661"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1811",
+      "catalogOrder": 155,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1811"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/74",
+      "catalogOrder": 156,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/93",
+      "catalogOrder": 157,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/93",
+        "unit/358",
+        "unit/359"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2550",
+      "catalogOrder": 158,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2550",
+        "unit/2552",
+        "unit/2554",
+        "unit/2588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/75",
+      "catalogOrder": 159,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/751",
+      "catalogOrder": 160,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/751",
+        "unit/752",
+        "unit/753"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2588",
+      "catalogOrder": 161,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2550",
+        "unit/2552",
+        "unit/2554",
+        "unit/2588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/77",
+      "catalogOrder": 162,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/358",
+      "catalogOrder": 163,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/93",
+        "unit/358",
+        "unit/359"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/753",
+      "catalogOrder": 164,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/751",
+        "unit/752",
+        "unit/753"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1901",
+      "catalogOrder": 165,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1901",
+        "unit/1903"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2552",
+      "catalogOrder": 166,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2550",
+        "unit/2552",
+        "unit/2554",
+        "unit/2588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2703",
+      "catalogOrder": 167,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2703",
+        "unit/2704"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/359",
+      "catalogOrder": 168,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/93",
+        "unit/358",
+        "unit/359"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/473",
+      "catalogOrder": 169,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/567",
+      "catalogOrder": 170,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/74",
+        "unit/75",
+        "unit/77",
+        "unit/473",
+        "unit/567",
+        "unit/1793"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/752",
+      "catalogOrder": 171,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/751",
+        "unit/752",
+        "unit/753"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1903",
+      "catalogOrder": 172,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1901",
+        "unit/1903"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2554",
+      "catalogOrder": 173,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2550",
+        "unit/2552",
+        "unit/2554",
+        "unit/2588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2704",
+      "catalogOrder": 174,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2703",
+        "unit/2704"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/13",
+      "catalogOrder": 175,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/13"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/545",
+      "catalogOrder": 176,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/545"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/17",
+      "catalogOrder": 177,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/17"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/539",
+      "catalogOrder": 178,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/21",
+        "unit/442",
+        "unit/539"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1103",
+      "catalogOrder": 179,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/529",
+        "unit/532",
+        "unit/1103",
+        "unit/1302"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1104",
+      "catalogOrder": 180,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/527",
+        "unit/528",
+        "unit/1104"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2626",
+      "catalogOrder": 181,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2626",
+        "unit/2627",
+        "unit/2628"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/21",
+      "catalogOrder": 182,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/21",
+        "unit/442",
+        "unit/539"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/250",
+      "catalogOrder": 183,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/250",
+        "unit/533"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/527",
+      "catalogOrder": 184,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/527",
+        "unit/528",
+        "unit/1104"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/529",
+      "catalogOrder": 185,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/529",
+        "unit/532",
+        "unit/1103",
+        "unit/1302"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2627",
+      "catalogOrder": 186,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2626",
+        "unit/2627",
+        "unit/2628"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/420",
+      "catalogOrder": 187,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/420",
+        "unit/691"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/442",
+      "catalogOrder": 188,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/21",
+        "unit/442",
+        "unit/539"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/528",
+      "catalogOrder": 189,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/527",
+        "unit/528",
+        "unit/1104"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/532",
+      "catalogOrder": 190,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/529",
+        "unit/532",
+        "unit/1103",
+        "unit/1302"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/533",
+      "catalogOrder": 191,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/250",
+        "unit/533"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/691",
+      "catalogOrder": 192,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/420",
+        "unit/691"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1795",
+      "catalogOrder": 193,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1795"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1948",
+      "catalogOrder": 194,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1948"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2628",
+      "catalogOrder": 195,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2626",
+        "unit/2627",
+        "unit/2628"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2633",
+      "catalogOrder": 196,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2633"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/279",
+      "catalogOrder": 197,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/279",
+        "unit/542"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/280",
+      "catalogOrder": 198,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/280",
+        "unit/550",
+        "unit/588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1105",
+      "catalogOrder": 199,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1105"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1258",
+      "catalogOrder": 200,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/422",
+        "unit/548",
+        "unit/1258"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1744",
+      "catalogOrder": 201,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1744",
+        "unit/1746"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1904",
+      "catalogOrder": 202,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1904",
+        "unit/1907"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/36",
+      "catalogOrder": 203,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/36",
+        "unit/1709"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/422",
+      "catalogOrder": 204,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/422",
+        "unit/548",
+        "unit/1258"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/542",
+      "catalogOrder": 205,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/279",
+        "unit/542"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/548",
+      "catalogOrder": 206,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/422",
+        "unit/548",
+        "unit/1258"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/550",
+      "catalogOrder": 207,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/280",
+        "unit/550",
+        "unit/588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/588",
+      "catalogOrder": 208,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/280",
+        "unit/550",
+        "unit/588"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1746",
+      "catalogOrder": 209,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1744",
+        "unit/1746"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1907",
+      "catalogOrder": 210,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1904",
+        "unit/1907"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1942",
+      "catalogOrder": 211,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1942"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/440",
+      "catalogOrder": 212,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/440"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/331",
+      "catalogOrder": 213,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/331"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/128",
+      "catalogOrder": 214,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/128"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/4",
+      "catalogOrder": 215,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/4",
+        "unit/24",
+        "unit/492"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/7",
+      "catalogOrder": 216,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/6",
+        "unit/7",
+        "unit/1155"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/6",
+      "catalogOrder": 217,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/6",
+        "unit/7",
+        "unit/1155"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/24",
+      "catalogOrder": 218,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/4",
+        "unit/24",
+        "unit/492"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/39",
+      "catalogOrder": 219,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/39",
+        "unit/474"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/185",
+      "catalogOrder": 220,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/185"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/873",
+      "catalogOrder": 221,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/873",
+        "unit/875"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2700",
+      "catalogOrder": 222,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2700",
+        "unit/2701"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/5",
+      "catalogOrder": 223,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/5"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/474",
+      "catalogOrder": 224,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/39",
+        "unit/474"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/492",
+      "catalogOrder": 225,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/4",
+        "unit/24",
+        "unit/492"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/875",
+      "catalogOrder": 226,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/873",
+        "unit/875"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/2701",
+      "catalogOrder": 227,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/2700",
+        "unit/2701"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/448",
+      "catalogOrder": 228,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/441",
+        "unit/448",
+        "unit/546",
+        "unit/1707"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/38",
+      "catalogOrder": 229,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/38",
+        "unit/283",
+        "unit/569",
+        "unit/1813"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/329",
+      "catalogOrder": 230,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/207",
+        "unit/329",
+        "unit/330"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/546",
+      "catalogOrder": 231,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/441",
+        "unit/448",
+        "unit/546",
+        "unit/1707"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1132",
+      "catalogOrder": 232,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1132",
+        "unit/1134"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1370",
+      "catalogOrder": 233,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1370",
+        "unit/1372"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1944",
+      "catalogOrder": 234,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1944",
+        "unit/1946"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/283",
+      "catalogOrder": 235,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/38",
+        "unit/283",
+        "unit/569",
+        "unit/1813"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/330",
+      "catalogOrder": 236,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/207",
+        "unit/329",
+        "unit/330"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/441",
+      "catalogOrder": 237,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/441",
+        "unit/448",
+        "unit/546",
+        "unit/1707"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/569",
+      "catalogOrder": 238,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/38",
+        "unit/283",
+        "unit/569",
+        "unit/1813"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1134",
+      "catalogOrder": 239,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1132",
+        "unit/1134"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1372",
+      "catalogOrder": 240,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1370",
+        "unit/1372"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1707",
+      "catalogOrder": 241,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/441",
+        "unit/448",
+        "unit/546",
+        "unit/1707"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1946",
+      "catalogOrder": 242,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1944",
+        "unit/1946"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/83",
+      "catalogOrder": 243,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/83"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1786",
+      "catalogOrder": 244,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1786",
+        "unit/1787",
+        "unit/1788"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1787",
+      "catalogOrder": 245,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1786",
+        "unit/1787",
+        "unit/1788"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/1788",
+      "catalogOrder": 246,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/1786",
+        "unit/1787",
+        "unit/1788"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    },
+    {
+      "entityId": "unit/125",
+      "catalogOrder": 247,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "reason": "本期未检查该单位的独立来源页；不猜URL、不称缺页或无日志。已有明确文明来源/旧档案另列。",
+      "familyIds": [
+        "unit/125"
+      ],
+      "identityNote": "稳定目录ID，形态分组仅按当前目录供导航；同名或升级链不证明历史效果相同。"
+    }
+  ],
+  "sectionFiles": [
+    {
+      "path": "sections/kipchak-snapshot-e1556f66c3d781606125.json",
+      "sha256": "5ae0cc1cdcb9a735d19dcca4c627e31f4b08f8aaac4bdf048ab8a9fd71459f5f"
+    }
+  ],
+  "review": "#1083；目录只提供身份/名称和当前形态导航，不提供任何历史数值；仅定点检查钦察页，未批量抓取。"
+}

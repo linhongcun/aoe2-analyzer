@@ -246,10 +246,20 @@ function SourceReferences({ data, event }: { data: CivUpdatesData; event: CivUpd
   );
 }
 
-function EventCard({ data, event }: { data: CivUpdatesData; event: CivUpdateEvent }) {
+export function UpdateEventCard({
+  data,
+  event,
+  sourceEvent = event,
+  anchorId = `hist-${event.id}`,
+}: {
+  data: CivUpdatesData;
+  event: CivUpdateEvent;
+  sourceEvent?: CivUpdateEvent;
+  anchorId?: string;
+}) {
   const categories = [...new Set(eventSourceEntries(data, event).map((entry) => data.sources.find((source) => source.id === entry.sourceId)!.category))];
   return (
-    <article className={`civ-update-event civ-update-${event.verification}`} id={`hist-${event.id}`} data-testid="civ-update-event" data-event-id={event.id}>
+    <article className={`civ-update-event civ-update-${event.verification}`} id={anchorId} data-testid="civ-update-event" data-event-id={event.id}>
       <div className="civ-update-badges">
         <span className="civ-update-pill">{{ civ: '文明专属', team: '团队', global: '全局', unknown: '范围待核' }[event.scope.scopeKind]}</span>
         <span className="civ-update-pill">{VERIFICATION_LABELS[event.verification]}</span>
@@ -270,13 +280,14 @@ function EventCard({ data, event }: { data: CivUpdatesData; event: CivUpdateEven
             {claim.effects.map((effect) => (
               <Effect data={data} effect={effect} key={effect.id} />
             ))}
+            {!claim.effects.length && <p>此主张未将效果明确归于当前稳定身份；完整主张与原文保留在来源中。</p>}
           </section>
         ))}
       </div>
       <p className="civ-update-meta">
         {categories.map((category) => SOURCE_CATEGORY_LABELS[category]).join('、')}来源 · {VERIFICATION_LABELS[event.verification]}
       </p>
-      <SourceReferences data={data} event={event} />
+      <SourceReferences data={data} event={sourceEvent} />
     </article>
   );
 }
@@ -478,7 +489,7 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
                     </p>
                   )}
                   {events.map((event) => (
-                    <EventCard data={data} event={event} key={event.id} />
+                    <UpdateEventCard data={data} event={event} key={event.id} />
                   ))}
                 </section>
               );

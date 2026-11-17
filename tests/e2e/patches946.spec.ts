@@ -75,7 +75,7 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, t
   await page.goto('./#/patches?obj=unit:74&kind=nerf&q=foo');
   await expect(page).toHaveURL(/kind=nerf/);
   await expect(page).toHaveURL(/q=foo/);
-  await expect(page.getByRole('heading', { level: 1, name: '民兵' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: '民兵 · 更新历史' })).toBeVisible();
   await expect(page.getByText('尚未收录该对象的更新历史。这不代表它从未改动。')).toHaveCount(0);
   await page.reload();
   await expect(page).toHaveURL(/kind=nerf/);
@@ -94,7 +94,7 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, t
   await page.goto('./#/patches?obj=nope:1');
   await expect(page.getByRole('heading', { name: '找不到对象', exact: true })).toBeVisible();
   await page.goto('./#/patches?obj=unit:999999999');
-  await expect(page.getByRole('heading', { name: '找不到对象', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '未定位到该单位历史身份', exact: true })).toBeVisible();
   await page.goto('./#/patches');
   await page.getByRole('combobox', { name: '查找对象' }).fill('旧狂战士');
   await page.getByRole('option', { name: /旧狂战士科技/ }).click();
@@ -114,7 +114,7 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   await expect(page.locator('#unit-history')).not.toHaveAttribute('open', '');
   await page.goto('./#/unit/24?tab=history');
   await expect(page.locator('#unit-history')).toHaveAttribute('open', '');
-  await expect(page.locator('#unit-history [data-history-entry]').first()).toBeVisible();
+  await expect(page.locator('#unit-history [data-testid="civ-update-event"]').first()).toBeVisible();
   const unitBox = await page.locator('#unit-history').boundingBox();
   expect(unitBox!.y).toBeLessThan(800);
 

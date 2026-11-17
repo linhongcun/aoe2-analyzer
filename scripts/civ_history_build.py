@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.util
 import json
 import re
 from collections import Counter, defaultdict
@@ -380,7 +381,11 @@ def main() -> None:
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     result, audit = build()
-    outputs = [(OUTPUT, encode(result)), (AUDIT, encode(audit)), (REPORT, render_report(audit))]
+    spec = importlib.util.spec_from_file_location('unit_history', ROOT / 'scripts/unit_history.py')
+    units = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(units)
+    result, unit_audit = units.extend_history(ROOT, result, validate_documents)
+    outputs = [(OUTPUT, encode(result)), (AUDIT, encode(audit)), (REPORT, render_report(audit)), (units.AUDIT, encode(unit_audit)), (units.REPORT, units.render_unit_report(unit_audit))]
     for relative, expected in outputs:
         path = ROOT / relative
         if args.check:
@@ -388,7 +393,7 @@ def main() -> None:
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(expected)
-    print(f"Civilization history: {audit['catalogSize']} civilizations, {audit['sourceEntryCount']} source bullets, {audit['eventCount']} events; legacy {audit['legacyMigratedCount']}/{audit['legacyRecordCount']}; {'check OK' if args.check else 'generated'}")
+    print(f"History: {audit['catalogSize']} civilizations, {unit_audit['units']['catalogSize']} units, {unit_audit['eventCount']} shared events; civilization baseline {audit['sourceEntryCount']} source bullets / {audit['eventCount']} events; legacy {unit_audit['unitLegacyMigratedCount']}/{unit_audit['unitLegacyCount']} unit keys, {audit['legacyRecordCount']} originals retained; {'check OK' if args.check else 'generated'}")
 
 
 if __name__ == '__main__':

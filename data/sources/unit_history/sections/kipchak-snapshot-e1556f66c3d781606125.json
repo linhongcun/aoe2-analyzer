@@ -1,0 +1,108 @@
+{
+  "civId": null,
+  "entityIds": ["unit/1231", "unit/1233"],
+  "sourceId": "seicing-unit-kipchak",
+  "url": "https://seicing.com/html/aoe2/unit/%E9%92%A6%E5%AF%9F.html",
+  "indexLabel": "钦察（PRD定点确认的单位页）",
+  "title": "钦察",
+  "section": "更新日志",
+  "anchor": "#change",
+  "revisionId": "snapshot-e1556f66c3d781606125",
+  "supersedesRevisionId": null,
+  "documentSha256": "e1556f66c3d781606125124bccb916c68be8a818ca1b014cf61eddd6258a903a",
+  "capturedAt": "2026-11-17T05:07:57.169732+00:00",
+  "sourcePublishedAt": null,
+  "entries": [
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-1",
+      "group": "最后的可汗",
+      "locator": "#change li[1]",
+      "originalText": "保加利亚：团队奖励使得铁匠铺工作效率提高50%，42848版本后，提升到80%",
+      "rawVersions": ["42848"],
+      "processing": "excluded",
+      "eventIds": [],
+      "reason": "保加利亚铁匠铺团队奖励；不属于单位本体历史，保留原文并排除。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "group": "最后的可汗",
+      "locator": "#change li[2]",
+      "originalText": "钦察骑射手/精锐钦察骑射手拥有50/55生命值，1.8射击间隔速度，34055版本后拥有40/45生命值和2.2射击间隔速度",
+      "rawVersions": ["34055"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb", "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b"],
+      "reason": "混合原文按普通/精锐生命值与射击间隔拆分，复用一期事件。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-3",
+      "group": "最后的可汗",
+      "locator": "#change li[3]",
+      "originalText": "钦察骑射手发射两支箭，36202版本后，钦察骑射手发射三支箭",
+      "rawVersions": ["36202"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058"],
+      "reason": "与文明页同版本普通副箭+1对应同一游戏变化；原有副箭增量保持，单位页总箭数另作效果，不混用计量轴。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-4",
+      "group": "最后的可汗",
+      "locator": "#change li[4]",
+      "originalText": "精锐钦察骑射手发射四支箭，34055版本后发射三支箭，36202版本后再次发射四支箭",
+      "rawVersions": ["34055", "36202"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-ea1a0967-24d1-456d-88a8-f7325d0a9369", "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058"],
+      "reason": "按34055与36202拆分；精锐箭数只归1233，不绑定同名1260。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-5",
+      "group": "最后的可汗",
+      "locator": "#change li[5]",
+      "originalText": "库曼奖励钦察骑射手移动速度提升10%，34055版本后在城堡时代/帝王时代提升10%/15%",
+      "rawVersions": ["34055"],
+      "processing": "mapped",
+      "eventIds": ["ev-unit-kipchak-34055-speed"],
+      "reason": "库曼/时代条件保留；原文未明示精锐，不能复制到1233。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-6",
+      "group": "最后的可汗",
+      "locator": "#change li[6]",
+      "originalText": "钦察骑射手攻击延迟是0，42848版本后提升到0.5",
+      "rawVersions": ["42848"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-43024661-1b5b-4723-83a8-6e0bc034deab"],
+      "reason": "单位页明确普通攻击延迟旧值0；与射击间隔区分，精锐旧值不从普通复制。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-7",
+      "group": "印度王朝",
+      "locator": "#change li[7]",
+      "originalText": "61321版本后，库曼雇佣兵金冠科技从原来的“团队成员可以在城堡生产10个钦察骑射手”修改为“团队成员每拥有一个城堡就生成5个精锐钦察骑射手，同时解锁在城堡训练佣兵钦察骑射手的机能”，队友训练钦察骑射手不再需要帝王时代，同时训练的佣兵钦察骑射手只需要12秒",
+      "rawVersions": ["61321"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-a571b1ab-1629-4c10-961e-9401f8287805"],
+      "reason": "复用团队/金冠机制；生成与解锁训练分开，佣兵身份仍未解析，不绑定1260/1233基础属性。",
+      "supersedesEntryIds": []
+    },
+    {
+      "id": "se-unit-kipchak-snapshot-e1556f66c3d781606125-8",
+      "group": "印度王朝",
+      "locator": "#change li[8]",
+      "originalText": "81058版本后，独特部队“钦察骑射手”更名为“钦察”",
+      "rawVersions": ["81058"],
+      "processing": "mapped",
+      "eventIds": ["ev-se-40509672-40b8-4ca5-a09c-31b3b322d6b6"],
+      "reason": "复用1231改名事件及旧名，未明示精锐不扩大。",
+      "supersedesEntryIds": []
+    }
+  ],
+  "originalSectionText": "更新日志 最后的可汗 保加利亚：团队奖励使得铁匠铺工作效率提高50%，42848版本后，提升到80% 钦察骑射手/精锐钦察骑射手拥有50/55生命值，1.8射击间隔速度，34055版本后拥有40/45生命值和2.2射击间隔速度 钦察骑射手发射两支箭，36202版本后，钦察骑射手发射三支箭 精锐钦察骑射手发射四支箭，34055版本后发射三支箭，36202版本后再次发射四支箭 库曼奖励钦察骑射手移动速度提升10%，34055版本后在城堡时代/帝王时代提升10%/15% 钦察骑射手攻击延迟是0，42848版本后提升到0.5 印度王朝 61321版本后，库曼雇佣兵金冠科技从原来的“团队成员可以在城堡生产10个钦察骑射手”修改为“团队成员每拥有一个城堡就生成5个精锐钦察骑射手，同时解锁在城堡训练佣兵钦察骑射手的机能”，队友训练钦察骑射手不再需要帝王时代，同时训练的佣兵钦察骑射手只需要12秒 81058版本后，独特部队“钦察骑射手”更名为“钦察”",
+  "sectionTextSha256": "1f252694a4f202d8e5a1c9ce33df316f2e7a09df5531b7a8cc5ed0e9725c62a8",
+  "observedEntryCount": 8
+}

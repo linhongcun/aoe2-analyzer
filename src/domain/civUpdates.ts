@@ -1,3 +1,4 @@
+import type { UnitUpdateData } from './unitUpdates';
 /** Historical claims are independent of today's game values and technology tree. */
 export type Verification = 'verified' | 'unverified' | 'conflict';
 export type SourceCategory = 'official' | 'community' | 'other' | 'unknown';
@@ -32,6 +33,8 @@ export interface UpdateVersion {
   releaseDate: string | null;
   announcedAt: string | null;
   evidenceSourceIds: string[];
+  channel?: 'release' | 'pup' | 'hotfix' | 'unknown';
+  orderReason?: string;
 }
 export interface UpdateSource {
   id: string;
@@ -45,7 +48,8 @@ export interface UpdateSection {
   id: string;
   revisionId: string;
   supersedesRevisionId: string | null;
-  civId: string;
+  civId: string | null;
+  entityIds?: string[];
   sourceId: string;
   title: string;
   anchor: string;
@@ -158,6 +162,7 @@ export interface CivUpdatesData {
   events: CivUpdateEvent[];
   civilizations: UpdateCivilization[];
   legacyMap: LegacyUpdateMapping[];
+  units?: UnitUpdateData;
 }
 
 export const SOURCE_STATE_LABELS: Record<SourceState, string> = {
@@ -341,7 +346,11 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
   const effectIds = new Set<string>();
   for (const event of events.values()) {
     if (event.versionId !== null && !versions.has(event.versionId)) fail();
-    if (!event.civRelations.length || event.civRelations.some((row) => !civIds.has(row.civId))) fail();
+    if (
+      (!event.civRelations.length && !data.units?.relations.some((row) => row.eventId === event.id)) ||
+      event.civRelations.some((row) => !civIds.has(row.civId))
+    )
+      fail();
     scopeCheck(event.scope);
     for (const candidate of event.candidates) if (!events.has(candidate.eventId) || candidate.eventId === event.id) fail();
     if (event.verification === 'conflict' && event.claims.length < 2) fail();
@@ -369,7 +378,12 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
     }
   }
   for (const section of sections.values()) {
-    if (!sources.has(section.sourceId) || !civIds.has(section.civId) || section.entryIds.length !== section.observedEntryCount) fail();
+    if (
+      !sources.has(section.sourceId) ||
+      (section.civId === null ? !section.entityIds?.length || section.entityIds.some((id) => entities.get(id)?.type !== 'unit') : !civIds.has(section.civId)) ||
+      section.entryIds.length !== section.observedEntryCount
+    )
+      fail();
     if (new Set(section.entryIds).size !== section.entryIds.length) fail();
     for (const id of section.entryIds) if (entries.get(id)?.sectionId !== section.id) fail();
     if (section.sourceState === 'processed' && section.entryIds.some((id) => entries.get(id)?.processing === 'pending')) fail();
@@ -418,5 +432,59 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
       (!/^\/(civ|unit|building|tech)\/[A-Za-z0-9-]+$/u.test(entity.linkPath) || entity.linkPath !== `/${entity.type}/${entity.catalogId}`)
     )
       fail();
+  }
+  if (data.units) {
+    const units = data.units;
+    const ids = new Set(units.rows.map((row) => row.entityId));
+    if (ids.size !== units.rows.length || ids.size !== units.catalogSize) fail();
+    for (const row of units.rows) {
+      if (entities.get(row.entityId)?.type !== 'unit' || row.familyIds.some((id) => !ids.has(id))) fail();
+      if (new Set(row.eventIds).size !== row.eventIds.length) fail();
+      const actual = new Set(units.relations.filter((relation) => relation.entityId === row.entityId).map((relation) => relation.eventId));
+      if (actual.size !== row.eventIds.length || row.eventIds.some((id) => !actual.has(id))) fail();
+      const own = row.sectionIds.map((id) => sections.get(id));
+      if (own.some((section) => !section?.entityIds?.includes(row.entityId))) fail();
+      if (row.sourceEntryCount !== (own.length ? own.reduce((sum, section) => sum + (section?.observedEntryCount ?? 0), 0) : null)) fail();
+      if (row.searchState === 'not-checked' && (own.length || row.checkedAt !== null || row.sourceState !== 'not-checked')) fail();
+      if (row.sourceState === 'processed' && (!own.length || own.some((section) => section?.sourceState !== 'processed'))) fail();
+      if (row.sourceState === 'no-log' && (!own.length || own.some((section) => section?.sourceState !== 'no-log'))) fail();
+      if (row.relatedSectionIds.some((id) => !sections.has(id))) fail();
+    }
+    for (const relation of units.relations) {
+      const event = events.get(relation.eventId);
+      const effects = event?.claims.flatMap((claim) => claim.effects) ?? [];
+      if (
+        entities.get(relation.entityId)?.type !== 'unit' ||
+        !event ||
+        !relation.effectIds.length ||
+        relation.effectIds.some((id) => !effects.some((effect) => effect.id === id))
+      )
+        fail();
+      if (
+        relation.relation === 'direct' &&
+        relation.effectIds.some(
+          (id) => !effects.find((effect) => effect.id === id)?.entityRefs.some((ref) => 'entityId' in ref && ref.entityId === relation.entityId),
+        )
+      )
+        fail();
+    }
+    const legacyKeys = data.legacyMap
+      .filter(
+        (row) =>
+          row.originalRecord.targetType === 'unit' ||
+          (Array.isArray(row.originalRecord.relatedTargets) &&
+            row.originalRecord.relatedTargets.some((target: { targetType?: string }) => target.targetType === 'unit')),
+      )
+      .map((row) => row.key);
+    if (units.legacyMap.length !== legacyKeys.length || new Set(units.legacyMap.map((row) => row.key)).size !== legacyKeys.length) fail();
+    for (const mapping of units.legacyMap) {
+      const claim = events.get(mapping.eventId)?.claims.find((row) => row.id === mapping.claimId);
+      if (
+        !legacyKeys.includes(mapping.key) ||
+        !claim?.legacyKeys.includes(mapping.key) ||
+        mapping.effectIds.some((id) => !claim?.effects.some((effect) => effect.id === id))
+      )
+        fail();
+    }
   }
 }
