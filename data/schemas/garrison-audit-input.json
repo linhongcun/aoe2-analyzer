@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "issue", "modelRevision", "patch", "datSha256", "samples"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "issue": {
+      "const": 1062
+    },
+    "modelRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "patch": {
+      "const": 188329
+    },
+    "datSha256": {
+      "const": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "buildingId", "config", "client"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(K-(T|C|TC)|M-(ON|OFF))-\\d{2}$"
+          },
+          "buildingId": {
+            "enum": [235, 82, 109]
+          },
+          "client": {
+            "type": "null",
+            "description": "v1只接受缺证；不得从模型自动升级客户端核实。收到逐项证据后由本Issue独立复核扩展证据格式。"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["civ", "age", "techs", "rows"],
+            "properties": {
+              "civ": {
+                "enum": ["Koreans", "Malians"]
+              },
+              "age": {
+                "const": 4
+              },
+              "techs": {
+                "type": "array",
+                "uniqueItems": true,
+                "maxItems": 1,
+                "items": {
+                  "const": 576
+                }
+              },
+              "rows": {
+                "type": "array",
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["unitId", "count", "entry"],
+                  "properties": {
+                    "unitId": {
+                      "enum": [1903, 1901, 492, 83, 359, 567, 1015, 1013]
+                    },
+                    "count": {
+                      "type": "string",
+                      "pattern": "^[1-9][0-9]?$"
+                    },
+                    "entry": {
+                      "const": "enter"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
