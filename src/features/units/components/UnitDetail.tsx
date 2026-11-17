@@ -85,7 +85,7 @@ export default function UnitDetail() {
     if (open) next.set('tab', 'history');
     else if (next.get('tab') === 'history') next.delete('tab');
     const query = next.toString();
-    nav({ pathname: loc.pathname, search: query ? `?${query}` : '' });
+    nav({ pathname: loc.pathname, search: query ? `?${query}` : '' }, { state: loc.state });
   };
 
   useEffect(() => {

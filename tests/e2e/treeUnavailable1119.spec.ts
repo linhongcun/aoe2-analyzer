@@ -181,6 +181,8 @@ for (const [kind, id, key] of [
     await expect(row).toBeFocused();
     expect(await page.evaluate(() => history.state.usr.sentinel)).toBe('keep');
     await row.press('Enter');
+    await page.getByRole('button', { name: '更新历史', exact: true }).click();
+    await expect(page.getByRole('link', { name: '返回日本科技树', exact: true })).toBeVisible();
     await page.getByRole('link', { name: '返回日本科技树', exact: true }).click();
     await expect(row).toBeFocused();
   });

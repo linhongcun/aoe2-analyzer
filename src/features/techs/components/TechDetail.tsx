@@ -40,7 +40,7 @@ export default function TechDetail() {
     if (open) next.set('tab', 'history');
     else if (next.get('tab') === 'history') next.delete('tab');
     const query = next.toString();
-    navigate({ pathname: location.pathname, search: query ? `?${query}` : '' });
+    navigate({ pathname: location.pathname, search: query ? `?${query}` : '' }, { state: location.state });
   };
 
   useEffect(() => {
