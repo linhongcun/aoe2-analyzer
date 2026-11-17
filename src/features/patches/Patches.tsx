@@ -455,6 +455,32 @@ export default function Patches() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const { archives, error, retry } = usePatchArchives();
+  if (!id && params.getAll('obj').length > 1) {
+    const candidates = [...new Set(params.getAll('obj'))].filter((raw) => parseObjectParam(raw));
+    const choose = (raw?: string) => {
+      const next = new URLSearchParams(params);
+      next.delete('obj');
+      if (raw) next.set('obj', raw);
+      return '/patches?' + next.toString();
+    };
+    return (
+      <section className="pane patches">
+        <h1>更新历史</h1>
+        <p role="alert">历史对象参数重复，请明确选择一个对象。搜索及历史筛选会保留，非法筛选仍需清除。</p>
+        {candidates.map((raw) => {
+          const object = parseObjectParam(raw)!;
+          return (
+            <p key={raw}>
+              <Link to={choose(raw)}>
+                查看{OBJECT_LABEL[object.type]} <span className="num nw">ID {object.id}</span>
+              </Link>
+            </p>
+          );
+        })}
+        <Link to={choose()}>重新选择对象</Link>
+      </section>
+    );
+  }
   if (!id && params.getAll('obj').length === 1 && /^unit:\d+$/u.test(params.get('obj') ?? ''))
     return (
       <section className="pane patches">

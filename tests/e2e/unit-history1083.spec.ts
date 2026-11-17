@@ -2,6 +2,33 @@ import { expect, test } from '@playwright/test';
 import { unitConflictFixture, unitSourceStateFixture } from '../helpers/unitUpdatesFixture';
 import { UNIT_SOURCE_LABELS } from '../../src/domain/unitUpdates';
 
+test('duplicate object input recovers explicitly without falling back to the old unit timeline', async ({ page }) => {
+  await page.goto('/#/patches?obj=unit:24&obj=unit:1231&histVersion=bad&histQuery=钦察');
+  await expect(page.getByRole('alert')).toContainText('历史对象参数重复');
+  await expect(page.locator('[data-unit-history], [data-history-entry]')).toHaveCount(0);
+  await page.getByRole('link', { name: '查看单位 ID 1231' }).click();
+  await expect(page.locator('[data-unit-history="unit/1231"]')).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('历史筛选值无法识别');
+  await page.getByRole('button', { name: '清除历史筛选', exact: true }).click();
+  await expect(page).toHaveURL(/histQuery=/);
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  expect(new URLSearchParams(page.url().split('?')[1]).getAll('obj')).toEqual(['unit:1231']);
+});
+
+test('clipboard failure offers the canonical selectable address without nested return state', async ({ page }) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => Promise.reject(new Error('denied by test')) } }),
+  );
+  await page.goto('/#/patches?obj=unit:1231&histVersion=de-34055&histReturn=%2Fpatches');
+  await page.getByRole('button', { name: '复制历史分享地址' }).click();
+  const manual = page.getByRole('textbox', { name: '手动复制分享地址' });
+  await expect(manual).toBeVisible();
+  expect(await manual.inputValue()).toContain('histVersion=de-34055');
+  expect(await manual.inputValue()).not.toContain('histReturn');
+  await manual.focus();
+  expect(await manual.evaluate((el: HTMLInputElement) => el.selectionEnd! - el.selectionStart!)).toBe((await manual.inputValue()).length);
+});
+
 test('mixed scope effects stay separate and every source jump targets a visible event', async ({ page }) => {
   await page.goto('/#/patches?obj=unit:1001&histVersion=de-125283&histCiv=Portuguese');
   const reader = page.locator('[data-unit-history]');

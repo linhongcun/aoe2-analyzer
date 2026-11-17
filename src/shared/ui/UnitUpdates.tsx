@@ -218,7 +218,7 @@ function VersionEvents({ data, rows, anchorPrefix = 'hist-' }: { data: CivUpdate
 export function UnitUpdatesReader({ data, entityId, overview = false }: { data: CivUpdatesData; entityId: string; overview?: boolean }) {
   const [query, setQuery] = useSearchParams();
   const location = useLocation();
-  const [copy, setCopy] = useState<{ path: string; text: string }>();
+  const [copy, setCopy] = useState<{ path: string; text: string; manualUrl?: string }>();
   const request = useRef(0);
   const entity = data.entities.find((r) => r.id === entityId && r.type === 'unit');
   const row = data.units?.rows.find((r) => r.entityId === entityId);
@@ -248,13 +248,13 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
   const set = (key: string, value: string) => setQuery(setHistoryQuery(query, key, value));
   const share = async () => {
     const seq = ++request.current;
+    const url = new URL(window.location.href);
+    url.hash = sharePath;
     try {
-      const url = new URL(window.location.href);
-      url.hash = sharePath;
       await navigator.clipboard.writeText(url.href);
       if (seq === request.current) setCopy({ path: sharePath, text: '已复制当前历史地址' });
     } catch {
-      if (seq === request.current) setCopy({ path: sharePath, text: '复制失败，请复制浏览器地址' });
+      if (seq === request.current) setCopy({ path: sharePath, text: '复制失败，请手动复制分享地址', manualUrl: url.href });
     }
   };
   const nameEvent = (view: UnitEventView) => ({
@@ -302,6 +302,12 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
         </button>
       </div>
       <p role="status">{copy?.path === sharePath ? copy.text : ''}</p>
+      {copy?.path === sharePath && copy.manualUrl && (
+        <label>
+          手动复制分享地址
+          <input readOnly value={copy.manualUrl} onFocus={(event) => event.currentTarget.select()} />
+        </label>
+      )}
       <p>{data.units.coverageNote}</p>
       <p className="note">
         <UpdateText>{row?.identityNote ?? entity.identityNote}</UpdateText>
