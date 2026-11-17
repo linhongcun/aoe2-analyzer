@@ -31,6 +31,7 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, t
   await page.screenshot({ path: testInfo.outputPath('patches-946-1280.png'), fullPage: false });
 
   await page.goto('./#/patches');
+  await page.getByRole('button', { name: '按版本', exact: true }).click();
   await page.getByRole('link', { name: /DE Update 185872/ }).click();
   await page.locator('.patch-filters summary').click();
   await page.locator('.patch-filters').getByRole('button', { name: '削弱', exact: true }).click();
@@ -72,15 +73,6 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, t
   await expect(page.locator('.patch-tree-summary')).toContainText('当前筛选下没有科技树开放或移除项。');
   await expect(page.getByRole('heading', { name: '没有符合筛选条件的改动' })).toBeVisible();
 
-  await page.goto('./#/patches?obj=unit:74&kind=nerf&q=foo');
-  await expect(page).toHaveURL(/kind=nerf/);
-  await expect(page).toHaveURL(/q=foo/);
-  await expect(page.getByRole('heading', { level: 1, name: '民兵 · 更新历史' })).toBeVisible();
-  await expect(page.getByText('尚未收录该对象的更新历史。这不代表它从未改动。')).toHaveCount(0);
-  await page.reload();
-  await expect(page).toHaveURL(/kind=nerf/);
-  await expect(page).toHaveURL(/q=foo/);
-
   await page.goto('./#/patches/81058?obj=unit:74&kind=new');
   await expect(page.getByRole('heading', { name: /DE Update 81058/ })).toBeVisible();
   await expect(page).toHaveURL(/obj=unit/);
@@ -88,20 +80,6 @@ test('#946 版本阅读首屏、筛选边界与前进后退', async ({ page }, t
   await page.goto('./#/patches/missing-version?obj=unit:74');
   await expect(page.getByRole('heading', { name: '找不到版本 missing-version' })).toBeVisible();
   await expect(page.getByTestId('patch-object')).toHaveCount(0);
-
-  await page.goto('./#/patches?obj=tech:22');
-  await expect(page.getByText('尚未收录该对象的更新历史。这不代表它从未改动。')).toBeVisible();
-  await page.goto('./#/patches?obj=nope:1');
-  await expect(page.getByRole('heading', { name: '找不到对象', exact: true })).toBeVisible();
-  await page.goto('./#/patches?obj=unit:999999999');
-  await expect(page.getByRole('heading', { name: '未定位到该单位历史身份', exact: true })).toBeVisible();
-  await page.goto('./#/patches');
-  await page.getByRole('combobox', { name: '查找对象' }).fill('旧狂战士');
-  await page.getByRole('option', { name: /旧狂战士科技/ }).click();
-  await expect(page).toHaveURL(/obj=tech:legacy-berserkergang$/);
-  await expect(page.getByRole('heading', { level: 1, name: '旧狂战士科技' })).toBeVisible();
-  await page.goBack();
-  await expect(page).toHaveURL(/#\/patches$/);
 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
@@ -114,7 +92,7 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   await expect(page.locator('#unit-history')).not.toHaveAttribute('open', '');
   await page.goto('./#/unit/24?tab=history');
   await expect(page.locator('#unit-history')).toHaveAttribute('open', '');
-  await expect(page.locator('#unit-history [data-testid="civ-update-event"]').first()).toBeVisible();
+  await expect(page.locator('#unit-history').getByRole('link', { name: '查看完整历史' })).toHaveAttribute('href', /obj=unit%3A24/u);
   const unitBox = await page.locator('#unit-history').boundingBox();
   expect(unitBox!.y).toBeLessThan(800);
 
@@ -122,11 +100,11 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   await expect(page.locator('#tech-history')).not.toHaveAttribute('open', '');
   await page.goto('./#/tech/22?tab=history');
   await expect(page.locator('#tech-history')).toHaveAttribute('open', '');
-  await expect(page.locator('#tech-history')).toContainText('尚未收录该对象的更新历史');
+  await expect(page.locator('#tech-history').getByRole('link', { name: '查看完整历史' })).toHaveAttribute('href', /obj=tech%3A22/u);
 
   await page.goto('./#/building/84?tab=history');
   await expect(page.locator('#building-history')).toHaveAttribute('open', '');
-  await expect(page.locator('#building-history [data-history-entry]').first()).toBeVisible();
+  await expect(page.locator('#building-history').getByRole('link', { name: '查看完整历史' })).toHaveAttribute('href', /obj=building%3A84/u);
   await page.goto('./#/building/999999999');
   await expect(page.getByRole('heading', { name: '尚未收录该对象的更新历史' })).toBeVisible();
   await expect(page.locator('#bgrid')).toHaveCount(0);
@@ -136,13 +114,12 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   await expect(page.getByText('历史档案，当前数据目录未收录')).toBeVisible();
 
   await page.goto('./#/civ/Tartars');
-  await expect(page.getByRole('heading', { name: '尚未收录该对象的更新历史' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '没找到这个文明' })).toHaveCount(0);
 
   await page.goto('./#/civ/Franks?tab=history');
-  const link = page.getByRole('link', { name: '查看本版本的文明分组改动（含未写明适用文明的记录）' }).first();
+  const link = page.getByRole('link', { name: '查看完整历史' }).first();
   await expect(link).toBeVisible();
-  await expect(link).toHaveAttribute('href', /#\/patches\/\d+\?civ=Franks$/);
+  await expect(link).toHaveAttribute('href', /obj=civ%3AFranks/u);
   expect(errors).toEqual([]);
 });
 

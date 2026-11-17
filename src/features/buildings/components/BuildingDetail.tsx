@@ -24,7 +24,7 @@ import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon, type IconName } from '../../../shared/ui/Icon';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { BuildingUpdates } from '../../../shared/ui/BuildingUpdates';
+import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
 import { Linked, Loading } from '../../../shared/ui/widgets';
 import { BuildingCatalog } from './BuildingCatalog';
 import BuildingSimulator from './BuildingSimulator';
@@ -348,7 +348,7 @@ export default function BuildingDetail() {
               <Icon name="chevron-down" />
               <h2>更新历史</h2>
             </summary>
-            <BuildingUpdates entityId={'building/' + b.id} />
+            <EncyclopediaHistoryLink entityId={'building/' + b.id} enabled={tab === 'history'} />
           </details>
         </>
       )}

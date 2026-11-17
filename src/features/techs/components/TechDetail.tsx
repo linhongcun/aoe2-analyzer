@@ -11,7 +11,7 @@ import { Icon } from '../../../shared/ui/Icon';
 import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { TechUpdates } from '../../../shared/ui/TechUpdates';
+import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
@@ -285,7 +285,7 @@ export default function TechDetail() {
           <Icon name="chevron-right" />
           <h2>更新历史</h2>
         </summary>
-        {tab === 'history' && <TechUpdates entityId={'tech/' + tech.id} />}
+        <EncyclopediaHistoryLink entityId={'tech/' + tech.id} enabled={tab === 'history'} />
       </details>
     </section>
   );

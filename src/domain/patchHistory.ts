@@ -8,7 +8,7 @@ export interface ArchivedTarget extends HistoryTarget {
 
 export interface PatchArchive {
   id: string;
-  date: string;
+  date?: string;
   releaseDate?: string;
   publishedAt?: string;
   sourcePublishedAt?: string;
@@ -16,8 +16,8 @@ export interface PatchArchive {
   note: string;
   title?: string;
   announcedAt?: string;
-  branch: 'DE';
-  releaseType: 'release';
+  branch?: 'DE';
+  releaseType?: 'release' | 'pup' | 'hotfix' | 'unknown';
   coverage: string;
   verifiedAt?: string;
   archivedTargets?: ArchivedTarget[];
@@ -30,6 +30,8 @@ export interface HistoryRecord {
   relation: 'direct' | 'related';
   relationNote?: string;
 }
+
+export const archiveOrderingDate = (archive: PatchArchive) => archive.releaseDate ?? archive.date ?? '';
 
 const sameTarget = (a: { targetType: string; targetId: number | string }, b: Pick<HistoryTarget, 'targetType' | 'targetId'>) =>
   a.targetType === b.targetType && String(a.targetId) === String(b.targetId);
@@ -54,7 +56,7 @@ export function historyFor(archives: readonly PatchArchive[], target: HistoryTar
       });
     }
   }
-  return records.sort((a, b) => b.patch.date.localeCompare(a.patch.date));
+  return records.sort((a, b) => archiveOrderingDate(b.patch).localeCompare(archiveOrderingDate(a.patch)));
 }
 
 function validDate(value: string) {
@@ -82,14 +84,14 @@ export function filterHistory(records: readonly HistoryRecord[], query: URLSearc
     ({ patch, entry, relation: actualRelation }) =>
       (!kind || kind === 'all' || kind === entry.kind) &&
       (!relation || relation === 'all' || relation === actualRelation) &&
-      (!from || patch.date >= from) &&
-      (!to || patch.date <= to) &&
+      (!from || archiveOrderingDate(patch) >= from) &&
+      (!to || archiveOrderingDate(patch) <= to) &&
       (!text ||
         `${entry.targetNameZh} ${entry.summaryZh} ${entry.originalText ?? ''} ${entry.before ?? ''} ${entry.after ?? ''} ${patch.id}`
           .toLowerCase()
           .includes(text)),
   );
-  return filtered.sort((a, b) => (query.get('histOrder') === 'oldest' ? 1 : -1) * a.patch.date.localeCompare(b.patch.date));
+  return filtered.sort((a, b) => (query.get('histOrder') === 'oldest' ? 1 : -1) * archiveOrderingDate(a.patch).localeCompare(archiveOrderingDate(b.patch)));
 }
 
 export function archivedTarget(archives: readonly PatchArchive[], target: HistoryTarget) {
