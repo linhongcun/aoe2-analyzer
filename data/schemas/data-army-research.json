@@ -39,7 +39,7 @@
       "propertyNames": { "pattern": "^[0-9]+$" },
       "additionalProperties": {
         "type": "object",
-        "required": ["name", "civ", "requires", "count", "location", "time", "cost", "upgrades", "mods", "enables", "projectileUnits"],
+        "required": ["name", "civ", "requires", "count", "location", "time", "cost", "upgrades", "mods", "enables", "combatUnits"],
         "additionalProperties": false,
         "properties": {
           "name": { "type": ["string", "null"] },
@@ -51,7 +51,7 @@
           "cost": { "type": "array", "items": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } } },
           "upgrades": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "integer" } } },
           "enables": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
-          "projectileUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+          "combatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
           "mods": { "$ref": "#/$defs/commands" }
         }
       }

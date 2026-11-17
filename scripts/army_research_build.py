@@ -16,6 +16,21 @@ def build(d):
     names = {t['id']: t['zh'] for t in techs}
     unit_names = {u['id']: u['zh'] for u in units}
     dat_units = d['Civs'][1]['Units']
+    transforms = {}
+    for uid, unit in enumerate(dat_units):
+        if unit and unit['Transform'] >= 0:
+            other = unit['Transform']
+            transforms.setdefault(uid, set()).add(other)
+            transforms.setdefault(other, set()).add(uid)
+    def forms(uid):
+        seen, todo = set(), [uid]
+        while todo:
+            current = todo.pop()
+            if current in seen: continue
+            seen.add(current)
+            todo.extend(transforms.get(current, set()) - seen)
+        return seen
+    combat_forms = {u['id']: forms(u['id']) for u in units}
 
     def cmds(effect):
         return d['Effects'][effect]['EffectCommands'] if effect >= 0 else []
@@ -26,13 +41,19 @@ def build(d):
     nodes = {}
     for i, t in enumerate(d['Techs']):
         commands = cmds(t['EffectID'])
+        combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 63, 102, 107, 108, 109}
         guided = {c['A'] for c in commands if c['Type'] in (0, 4, 5) and c['C'] == 19 and c['A'] >= 0}
-        projectile_units = sorted(u['id'] for u in units if guided.intersection(dat_units[u['id']]['Projectiles']))
+        def affects(uid):
+            fs = combat_forms[uid]
+            return any(guided.intersection(dat_units[f]['Projectiles']) for f in fs) or any(
+                c['Type'] in (0, 4, 5) and c['C'] in combat_attrs and
+                (c['A'] in fs or (c['A'] < 0 and any(dat_units[f]['Class'] == c['B'] for f in fs))) for c in commands)
+        combat_units = sorted(u['id'] for u in units if affects(u['id']))
         upgrades = [[c['A'], c['B']] for c in commands if c['Type'] == 3]
         label = names.get(i) or next(('升级：' + unit_names[b] for _, b in upgrades if b in unit_names), None)
         nodes[str(i)] = dict(name=label, civ=t['Civ'], requires=[x for x in t['RequiredTechs'] if x >= 0],
                              count=t['RequiredTechCount'], location=t['ResearchLocation'], time=t['ResearchTime'],
-                             cost=t['Cost'], upgrades=upgrades, enables=[c['A'] for c in commands if c['Type'] == 2 and c['B'] == 1], mods=[c for c in commands if relevant(c)], projectileUnits=projectile_units)
+                             cost=t['Cost'], upgrades=upgrades, enables=[c['A'] for c in commands if c['Type'] == 2 and c['B'] == 1], mods=[c for c in commands if relevant(c)], combatUnits=combat_units)
     civs = {}
     for i, c in enumerate(d['Civs']):
         if not i:

@@ -8,6 +8,7 @@ import { applicableTrainingTechs } from './duelTrainingCost';
 import { unitCost } from './unitCost';
 import { priceAge } from './costDiscount';
 import { DAT } from './datEffects';
+import { resistDelta, DEVOTION_ID, FAITH_ID } from './conversion';
 
 import type { ArmyCostConfig } from './armyCostConfig';
 export { emptyArmyCost } from './armyCostConfig';
@@ -249,12 +250,12 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
     .filter(
       (t) =>
         numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
-        data.nodes[t.id]?.projectileUnits.includes(u.id) ||
+        data.nodes[t.id]?.combatUnits.includes(u.id) ||
+        ([DEVOTION_ID, FAITH_ID].includes(t.id) && resistDelta(DAT.techs[t.en]) !== null) ||
         DAT.techs[t.en]?.eco.some(
           (e) =>
-            (e.t?.includes(u.id) && e.a !== undefined && [10, 22, 24, 63, 102, 107, 108, 109].includes(e.a)) ||
             // Global conversion resistance/death, and monk conversion permissions/group faith.
-            (e.res !== undefined && ([178, 179, 192].includes(e.res) || (u.cls.includes(25) && [27, 28, 29, 193].includes(e.res)))),
+            e.res !== undefined && (e.res === 192 || (u.cls.includes(25) && [27, 28, 29, 193].includes(e.res))),
         ),
     )
     .map((t) => ({ t, ef: numeric.get(t.id) ?? null }));

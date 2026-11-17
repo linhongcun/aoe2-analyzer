@@ -56,12 +56,25 @@ describe('army research pinned data', () => {
   });
   it('uses fixed projectile effects rather than range to scope Ballistics', () => {
     const monk = { ...makeArmyCost('Britons'), rows: [{ unit: 125, qty: '1' }] };
-    expect(ARMY_RESEARCH.nodes[93]!.projectileUnits).toContain(4);
-    expect(ARMY_RESEARCH.nodes[93]!.projectileUnits).not.toContain(125);
+    expect(ARMY_RESEARCH.nodes[93]!.combatUnits).toContain(4);
+    expect(ARMY_RESEARCH.nodes[93]!.combatUnits).not.toContain(125);
     expect(armyResearchChoices(ctx, monk)).not.toContain(93);
     const result = evaluateArmyCost(ctx, { ...monk, targets: ['t:93'] });
     expect(result.partial).toBe(true);
     expect(result.ledger.find((e) => e.id === 93)?.cost).toBe(null);
+  });
+  it('includes public monk mechanics without relying on an extra numeric civilization bonus', () => {
+    const config = { ...makeArmyCost('Byzantines'), rows: [{ unit: 125, qty: '1' }], targets: ['t:45', 't:233', 't:316'] };
+    expect(armyResearchChoices(ctx, config)).toEqual(expect.arrayContaining([45, 46, 316, 319, 439, 438, 233]));
+    const result = evaluateArmyCost(ctx, config);
+    for (const id of [45, 233, 316]) expect(result.ledger.find((e) => e.id === id)?.beneficiaries).toEqual([0]);
+  });
+  it('follows fixed building-transform and projectile relations for text combat mechanics', () => {
+    const config = { ...makeArmyCost('Britons'), rows: [{ unit: 331, qty: '1' }], targets: ['t:461'] };
+    expect(ARMY_RESEARCH.nodes[461]!.combatUnits).toContain(331);
+    expect(armyResearchChoices(ctx, config)).toContain(461);
+    expect(evaluateArmyCost(ctx, config).ledger.find((e) => e.id === 461)?.beneficiaries).toEqual([0]);
+    expect(armyResearchChoices(ctx, { ...makeArmyCost('Portuguese'), rows: [{ unit: 36, qty: '1' }] })).toContain(573);
   });
   it.each([315, 202])('retains out-of-scope target %i without charging it or invalidating independent training', (id) => {
     const base = { ...makeArmyCost('Britons'), rows: [{ unit: 4, qty: '1' }] };

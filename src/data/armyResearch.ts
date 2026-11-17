@@ -18,7 +18,7 @@ export interface ResearchNode {
   upgrades: number[][];
   enables: number[];
   mods: ResearchCommand[];
-  projectileUnits: number[];
+  combatUnits: number[];
 }
 export interface ArmyResearchData {
   meta: { generatedBy: string; patch: string; commit: string; sha256: string };
