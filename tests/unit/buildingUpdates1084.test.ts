@@ -201,6 +201,8 @@ describe('bounded building history #1084', () => {
     '/patches?obj=unit:1231&histCiv=NoSuch',
     '/patches?obj=unit:999999',
     '/unit/1231?tab=other',
+    '/unit/1231?obj=unit:999999',
+    '/unit/1231?obj=unit:1231',
     '/patches?unlisted=value',
   ])('rejects invalid returns at the civilization target reader and recovery: %s', (raw) => {
     const query = new URLSearchParams({ tab: 'history', histVersion: 'de-34055', histReturn: raw });

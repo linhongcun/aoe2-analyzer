@@ -229,6 +229,7 @@ export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): s
     return data ? buildingHistoryReturn(data, raw) : null;
   if (path?.startsWith('/unit/') || params.get('obj')?.startsWith('unit:') || params.has('unitSourceState')) {
     if (!data || unitQueryError(data, params) || unitCoverageQueryError(params)) return null;
+    if (path?.startsWith('/unit/') && params.has('obj')) return null;
     const id = path?.startsWith('/unit/') ? path.slice(1) : params.has('obj') ? 'unit/' + params.get('obj')!.slice(5) : null;
     if (id && !data.units?.rows.some((row) => row.entityId === id)) return null;
     return unitHistoryReturn(raw);
