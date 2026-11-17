@@ -21,7 +21,7 @@ import {
 import { Icon } from '../../shared/ui/Icon';
 import { EntryBody, civZh } from './patchParts';
 import { useCivUpdates } from '../../data/civUpdates';
-import { historyReaderPath, projectReaderEvents, readerReturn } from '../../domain/historyReader';
+import { historyArchiveFallback, historyReaderPath, projectReaderEvents } from '../../domain/historyReader';
 import { safeHistorySourceUrl } from '../../domain/civUpdates';
 import { SourceTime } from '../../shared/ui/CivUpdatePrimitives';
 import { canPopHistoryReturn, HistoryReaderLink, historyVisitKey, rememberHistoryVisit, savedHistoryVisit } from '../../shared/ui/HistoryReaderLink';
@@ -171,9 +171,10 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
   const navigate = useNavigate();
   const navigation = useNavigationType();
   const { data, error } = useCivUpdates();
-  const fromState = typeof location.state?.historyFrom === 'string' && location.state.historyFrom.startsWith('/patches?') ? location.state.historyFrom : null;
+  const readerPrefix = '/patches?';
+  const fromState = typeof location.state?.historyFrom === 'string' && location.state.historyFrom.startsWith(readerPrefix) ? location.state.historyFrom : null;
   const versionList = '/patches?read=versions';
-  const browseFrom = fromState === versionList ? fromState : data && fromState ? readerReturn(data, fromState) : null;
+  const browseFrom = data && fromState ? historyArchiveFallback(data, new URLSearchParams(fromState.slice(readerPrefix.length))) : versionList;
   const checkingReturn = fromState && fromState !== versionList && !data && !error;
   const from = location.pathname + canonicalSearch(location.search);
   const safeSource = safeHistorySourceUrl(archive.source);
@@ -256,8 +257,8 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
     <section className="pane patches patches-read">
       <p className="patch-eyebrow">
         {checkingReturn ? <span role="status">正在恢复更新历史来处…</span> : (
-          <Link to={browseFrom ?? versionList} onClick={(e) => {
-            if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && browseFrom && canPopHistoryReturn(location.state, browseFrom)) {
+          <Link to={browseFrom} onClick={(e) => {
+            if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && fromState && canPopHistoryReturn(location.state, fromState)) {
               e.preventDefault();
               navigate(-1);
             }

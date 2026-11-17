@@ -172,7 +172,13 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
   const focus = (id: string) => document.getElementById(id)?.focus({ preventScroll: true });
   useLayoutEffect(() => {
     if (!active) return;
-    const heading = document.getElementById(headingId);
+    if (!saved && !targetVisible && !rawEvent.length) {
+      const heading = document.getElementById(headingId);
+      if (type !== 'POP' && !location.state?.historyKeepFocus && !heading?.closest('[hidden]')) {
+        heading?.focus({ preventScroll: true });
+      }
+      return;
+    }
     const frame = requestAnimationFrame(() => {
       if (saved) {
         if (saved.focusId) {
@@ -187,15 +193,18 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
         const element = document.getElementById(eventKey(target.event.id));
         element?.scrollIntoView({ block: 'start' });
         element?.focus({ preventScroll: true });
-      } else if (rawEvent.length) {
+      } else {
         focus('history-target-warning');
-      } else if (type !== 'POP' && !location.state?.historyKeepFocus && !heading?.closest('[hidden]')) {
-        heading?.focus({ preventScroll: true });
       }
     });
+    return () => cancelAnimationFrame(frame);
+    // An entry's initial focus must not run again when a node toggles.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, visitKey]);
+  useLayoutEffect(() => {
+    if (!active || dialog) return;
     const capture = () => {
       const element = document.activeElement;
-      if (element?.closest('dialog')) return;
       rememberHistoryVisit(location, {
         y: window.scrollY,
         expanded: visit.current,
@@ -205,13 +214,10 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
     window.addEventListener('scroll', capture, { passive: true });
     document.addEventListener('focusin', capture);
     return () => {
-      cancelAnimationFrame(frame);
       window.removeEventListener('scroll', capture);
       document.removeEventListener('focusin', capture);
     };
-    // An entry's initial focus must not run again when a node toggles.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, visitKey]);
+  }, [active, dialog, location]);
   function updateExpanded(ids: string[]) {
     setExpansion({ key: visitKey, ids });
     rememberHistoryVisit(location, { expanded: ids, y: window.scrollY });
@@ -227,6 +233,11 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
   const apply = (next: URLSearchParams) => {
     const address = entity ? historyReaderPath(entity.id, next, undefined, back ?? undefined) : '/patches';
     navigate(address, { state: { ...location.state, historyKeepFocus: true }, replace: true });
+  };
+  const openDialog = (dialog: DialogView, button: HTMLButtonElement, event?: string) => {
+    const y = window.scrollY;
+    rememberHistoryVisit(location, { y, expanded, focusId: button.id });
+    setTransient({ key: visitKey, located, trigger: { button, event, y }, dialog });
   };
   const close = (id?: string) => {
     setTransient({ key: visitKey, located: id ?? located });
@@ -266,9 +277,7 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
         <button
           id="history-coverage-trigger"
           type="button"
-          onClick={(e) => {
-            setTransient({ key: visitKey, located, trigger: { button: e.currentTarget, y: window.scrollY }, dialog: { kind: 'coverage' } });
-          }}
+          onClick={(e) => openDialog({ kind: 'coverage' }, e.currentTarget)}
         >
           <Icon name="info" />
           收录说明
@@ -450,9 +459,7 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
                             view={view}
                             expanded={expanded}
                             from={origin}
-                            evidence={(button) => {
-                              setTransient({ key: visitKey, located, trigger: { button, event: view.event.id, y: window.scrollY }, dialog: { kind: 'event', view } });
-                            }}
+                            evidence={(button) => openDialog({ kind: 'event', view }, button, view.event.id)}
                           />
                         ))}
                     </div>

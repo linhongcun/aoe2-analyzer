@@ -159,15 +159,24 @@ test('restores encyclopedia and browser visits without merging same-URL entries'
 });
 
 test('related objects preserve exact event ownership and one return at a time', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 650 });
+  const scrollY = () => page.evaluate(() => window.scrollY);
   const id = 'ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb';
   const speed = 'ev-unit-kipchak-34055-speed';
   await page.goto(path('unit/1231', 'histVersion=de-34055', speed));
   const regular = event(page, speed);
   await regular.getByText('继续阅读', { exact: true }).click();
   const cuman = regular.getByRole('link', { name: '库曼 · 文明' });
+  await cuman.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+  const regularY = await scrollY();
+  expect(regularY).toBeGreaterThan(0);
   await cuman.click();
   await expect(selection(page).getByRole('heading', { name: '库曼', exact: true })).toBeVisible();
   const evidence = selection(page).getByRole('button', { name: '依据与原文' }).first();
+  await evidence.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+  const cumanY = await scrollY();
+  expect(cumanY).toBeGreaterThan(0);
+  expect(cumanY).not.toBe(regularY);
   await evidence.click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.goBack();
@@ -175,10 +184,12 @@ test('related objects preserve exact event ownership and one return at a time', 
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
   await expect(cuman).toBeFocused();
+  await expect.poll(async () => Math.abs(await scrollY() - regularY)).toBeLessThanOrEqual(2);
   await page.goForward();
   await expect(page).toHaveURL(/obj=civ%3ACumans/u);
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(evidence).toBeFocused();
+  await expect.poll(async () => Math.abs(await scrollY() - cumanY)).toBeLessThanOrEqual(2);
   await page.getByRole('link', { name: '返回来处' }).click();
   await expect(cuman).toBeFocused();
   await cuman.click();
@@ -258,6 +269,35 @@ test('returns through the archive list without dropping an object or nesting its
   await back.click();
   await expect(page).toHaveURL(/obj=unit%3A1231&histVersion=de-34055$/u);
   await expect(selection(page)).toContainText('钦察');
+});
+
+test('restores the exact invalid visit from archives or only valid context after a refresh', async ({ page }) => {
+  await page.goto('/#/unit/1231?tab=history&histVersion=garbage,de-34055&histEvent=stale');
+  await page.getByRole('link', { name: '查看完整历史' }).click();
+  const original = page.url();
+  await expect(selection(page)).toContainText('钦察');
+  await expect(page.getByRole('alert')).toContainText('以下条件无效');
+  const target = page.locator('#history-target-warning');
+  await expect(target).toBeVisible();
+  await page.getByRole('button', { name: '按版本', exact: true }).click();
+  const archive = page.getByTestId('patch-version-card').filter({ hasText: '185872' }).getByRole('link');
+  await archive.click();
+  const back = page.locator('.patch-eyebrow').getByRole('link', { name: '更新历史', exact: true });
+  await expect(back).toHaveAttribute('href', '#/patches?obj=unit%3A1231&histVersion=de-34055');
+  await back.click();
+  await expect(page).toHaveURL(original);
+  await expect(archive).toBeFocused();
+  await page.getByRole('button', { name: '按对象', exact: true }).click();
+  await expect(target).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('以下条件无效');
+  await expect(page.getByRole('link', { name: '返回来处' })).toBeVisible();
+  await page.getByRole('button', { name: '按版本', exact: true }).click();
+  await archive.click();
+  await page.reload();
+  await back.click();
+  await expect(page).toHaveURL(/obj=unit%3A1231&histVersion=de-34055$/u);
+  await expect(selection(page)).toContainText('钦察');
+  await expect(target).toHaveCount(0);
 });
 
 test('repairs only invalid filters without dropping a stale event or invalid return', async ({ page }) => {

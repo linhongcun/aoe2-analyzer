@@ -109,6 +109,15 @@ export function historyReaderPath(id: string, filters?: URLSearchParams, eventId
   return '/patches?' + params.toString();
 }
 
+export function historyArchiveFallback(data: CivUpdatesData, query: URLSearchParams) {
+  const entity = readerEntity(data, query);
+  if (!entity) return '/patches?read=versions';
+  const { valid } = readerFilters(data, query);
+  const targets = query.getAll('histEvent');
+  const target = targets.length === 1 && projectReaderEvents(data, entity).find(({ event }) => event.id === targets[0]);
+  return historyReaderPath(entity.id, valid, target ? target.event.id : undefined);
+}
+
 export function readerScopePending(view: UnitEventView, effect: UpdateEffect, entity: UpdateEntity) {
   const scope = effect.scope ?? view.original.scope;
   if (scope.scopeKind === 'unknown') return true;
