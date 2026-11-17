@@ -398,11 +398,11 @@ export const PAGES: readonly PageDef[] = [
     label: '持续生产',
     en: 'Production',
     icon: 'calculator',
-    desc: '按生产建筑和科技计算每分钟开销与村民分配',
+    desc: '计算持续生产、训练总价、跨文明训练对照与阵容新增费用',
     match: /^\/production$/,
     component: 'Production',
     metaTitle: '持续生产',
-    metaDescription: '按文明、时代、已研究科技和生产建筑数量估算每分钟开销与村民分配。',
+    metaDescription: '按文明与时代计算持续生产、训练总价、跨文明训练对照，以及多兵种新增训练与研究费用。',
   },
   {
     key: 'game-guide',

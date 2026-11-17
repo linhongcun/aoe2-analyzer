@@ -48,6 +48,7 @@ export const DATA_CHECKS = [
     'relic_income',
     'generate_resource',
     'charge_attack',
+    'army_research',
   ].map((name) => python(name, `scripts/${name}_build.py`, '--check')),
   python('patches', 'scripts/patches_build.py', '--check'),
   python('history', 'scripts/history_build.py', '--check'),

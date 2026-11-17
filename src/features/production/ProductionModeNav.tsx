@@ -4,6 +4,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { productionMode } from './productionMode';
 import { TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
 import { legacyHrefFromTotal, trainTotalHrefFrom } from './trainTotalCodec';
+import { armyContextQuery } from './armyCostCodec';
 
 export interface ProductionModeTransfer {
   to: string;
@@ -14,9 +15,18 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
   const { pathname, search, state } = useLocation();
   const mode = productionMode(search);
   const here = { pathname, search };
-  const current = mode.kind === 'legacy' ? 'legacy' : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total') ? 'total' : 'compare';
-  const legacyTo = current === 'legacy' ? here : mode.kind === 'total' ? legacyHrefFromTotal(search) : '/production';
-  const totalTo = current === 'total' ? here : trainTotalHrefFrom(search);
+  const current =
+    mode.kind === 'army'
+      ? 'army'
+      : mode.kind === 'legacy'
+        ? 'legacy'
+        : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total')
+          ? 'total'
+          : 'compare';
+  const shared = armyContextQuery(search);
+  const legacyTo =
+    current === 'legacy' ? here : current === 'army' ? '/production?' + shared : mode.kind === 'total' ? legacyHrefFromTotal(search) : '/production';
+  const totalTo = current === 'total' ? here : current === 'army' ? '/production?mode=train-total&' + shared : trainTotalHrefFrom(search);
   const compareTo = current === 'compare' ? here : TRAIN_COMPARE_ENTRY;
   const needsTransfer = mode.kind === 'legacy' || mode.kind === 'total';
   return (
@@ -58,6 +68,14 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
         aria-current={current === 'compare' ? 'page' : undefined}
       >
         跨文明训练对照
+      </Link>
+      <Link
+        className="community-tool-entry"
+        to={current === 'army' ? here : '/production?mode=army-cost&' + shared}
+        state={null}
+        aria-current={current === 'army' ? 'page' : undefined}
+      >
+        阵容新增费用
       </Link>
     </nav>
   );

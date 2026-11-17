@@ -1,0 +1,260 @@
+.army-cost-page {
+  --army-gap: 24px;
+  font-size: 15px;
+}
+.army-cost-page h2 {
+  font-size: 20px;
+  margin: 0 0 12px;
+}
+.army-cost-page h3 {
+  font-size: 16px;
+  margin: 12px 0 8px;
+}
+.army-cost-page .note {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.army-workspace {
+  display: grid;
+  grid-template-columns: 6fr 5fr;
+  gap: var(--army-gap);
+  align-items: start;
+  margin-top: 24px;
+}
+.army-inputs,
+.army-results {
+  display: grid;
+  gap: var(--army-gap);
+  min-width: 0;
+}
+.army-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.army-context {
+  max-width: 620px;
+  margin: 24px 0;
+}
+.army-fields,
+.army-editor-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.army-cost-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.army-cost-page input,
+.army-cost-page select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+.army-cost-page .btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+.army-section-heading,
+.army-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.army-section-heading h2,
+.army-section-heading h3 {
+  margin: 0;
+}
+.army-boundary {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  line-height: 1.6;
+}
+.army-boundary svg,
+.army-warning svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.army-unit-row {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+}
+.army-unit-row > .army-section-heading {
+  flex-wrap: nowrap;
+  margin-bottom: 16px;
+}
+.army-unit-button {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  text-align: left;
+  gap: 10px;
+  border: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
+  min-height: 44px;
+  cursor: pointer;
+}
+.army-unit-button small,
+.army-research-choice small {
+  display: block;
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: 5px;
+}
+.army-unit-button > svg {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.army-line-total {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.army-resources {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.army-resources span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.army-resources strong {
+  font-size: 21px;
+}
+.army-primary {
+  padding: 16px;
+  background: var(--color-surface-2);
+  border-radius: 8px;
+}
+.army-primary strong {
+  color: var(--color-accent);
+  font-size: 28px;
+}
+.army-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.army-tags > span {
+  background: var(--color-surface-2);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.army-ledger-entry {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.army-ledger-entry details {
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.army-ledger-entry summary {
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+  color: var(--color-accent);
+}
+.army-research-choice {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.army-research-choice > label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+}
+.army-research-choice input {
+  width: 18px;
+  min-height: 18px;
+  flex-shrink: 0;
+}
+.army-picker {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.army-picker-options {
+  display: grid;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 12px 0;
+  gap: 6px;
+}
+.army-warning {
+  display: flex;
+  gap: 8px;
+  line-height: 1.6;
+}
+.army-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-border);
+  margin-top: 40px;
+  padding-top: 20px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.army-raw {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1023px) {
+  .army-workspace {
+    grid-template-columns: 1fr;
+  }
+  .army-context {
+    max-width: none;
+  }
+}
+@media (max-width: 600px) {
+  .army-cost-page {
+    padding: 16px;
+  }
+  .army-card {
+    padding: 16px;
+  }
+  .army-editor-columns {
+    grid-template-columns: 1fr;
+  }
+  .army-resources {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .army-cost-page .team-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .army-cost-page .team-sections > * {
+    text-align: center;
+  }
+}

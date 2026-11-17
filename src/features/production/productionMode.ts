@@ -1,5 +1,13 @@
 /** Dispatch before the permissive legacy decoder; its URL contract stays unchanged. */
-export function productionMode(search: string): { kind: 'legacy' | 'compare' | 'total' | 'error'; errors: string[]; subject?: 'total' | 'compare' } {
+export function productionMode(search: string): {
+  kind: 'legacy' | 'compare' | 'total' | 'army' | 'error';
+  errors: string[];
+  subject?: 'total' | 'compare' | 'army';
+} {
+  // The strict army codec owns malformed links too, so they cannot fall through to legacy defaults.
+  const armyParams = new URLSearchParams(search);
+  if (armyParams.getAll('mode').includes('army-cost') || [...armyParams.keys()].some((key) => key.startsWith('ac')) || search.includes('army-cost'))
+    return { kind: 'army', errors: [] };
   let params: URLSearchParams;
   try {
     params = new URLSearchParams(search);

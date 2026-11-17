@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { Loading } from '../../shared/ui/widgets';
@@ -45,6 +45,7 @@ import './trainCompare.css';
 export { ProductionModeNav };
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
+const ArmyCost = lazy(() => import('./ArmyCost'));
 export default function Production() {
   const location = useLocation();
   const mode = useMemo(() => productionMode(location.search), [location.search]);
@@ -53,7 +54,11 @@ export default function Production() {
   const errors = mode.kind === 'error' ? mode.errors : (decoded?.errors ?? []);
   const title =
     mode.kind === 'legacy' ? '持续生产' : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total') ? '训练总价' : '跨文明训练对照';
-  return mode.kind === 'error' && mode.subject === 'total' ? (
+  return mode.kind === 'army' ? (
+    <Suspense fallback={<Loading />}>
+      <ArmyCost context={context} loadingError={error} />
+    </Suspense>
+  ) : mode.kind === 'error' && mode.subject === 'total' ? (
     <TrainTotalLinkError key={location.search} errors={errors} />
   ) : errors.length ? (
     <ProductionCompareError key={location.search} errors={errors} />
