@@ -5,10 +5,31 @@ import { civs } from '../../src/data';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
 import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver, armyResearchChoices } from '../../src/domain/armyCost';
 import { evaluateTrainTotal } from '../../src/domain/trainTotal';
+import { armyResearchConditions } from '../../src/domain/armyResearchEvidence';
 
 const ctx = { core: CORE, trees: await loadTrees() };
 const emptyArmyCost = (civ = 'Sicilians') => makeArmyCost(civ);
 describe('army research pinned data', () => {
+  it('retains every root reason, real prerequisite state and applied research-price command', () => {
+    const config = {
+      ...emptyArmyCost(),
+      rows: [
+        { unit: 1659, qty: '1' },
+        { unit: 1661, qty: '1' },
+      ],
+      targets: ['t:753'],
+    };
+    const r = evaluateArmyCost(ctx, config);
+    const elite = r.ledger.find((e) => e.id === 753)!;
+    expect(elite.origins.map((o) => o.kind)).toEqual(['target', 'shape', 'shape']);
+    const conditions = armyResearchConditions(ARMY_RESEARCH, config, r.ledger, 753);
+    expect(conditions.find((c) => c.id === 103)?.state).toBe('已到达时代条件');
+    expect(conditions.find((c) => c.id === 752)?.state).toBe('文明自动条件已满足');
+    const price = researchPrice(ARMY_RESEARCH, 'Burgundians', 4, 254, new Set());
+    expect(price.baseCost).toEqual({ Food: 150, Gold: 50 });
+    expect(price.modifiers.filter((m) => m.applied).map((m) => m.command.D)).toEqual([0.5, 0.5]);
+    expect(researchPrice(ARMY_RESEARCH, 'Chinese', 4, 67, new Set()).modifiers.some((m) => !m.applied && m.command.A === 85)).toBe(true);
+  });
   it('quotes Flemish militia training independently of its unlock resource marker', () => {
     const r = evaluateArmyCost(ctx, { ...makeArmyCost('Burgundians'), rows: [{ unit: 1699, qty: '2' }] });
     expect(r.training.lines[0]?.status).toBe('ok');
@@ -182,6 +203,8 @@ describe('army research pinned data', () => {
     expect(r.researchTotal.Food ?? 0).toBe(0);
     expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), civ: 'missing', rows: [{ unit: 1659, qty: '1' }] }).hasValue).toBe(false);
     expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), targets: ['t:99999'] }).hasValue).toBe(false);
+    expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), done: ['t:67'], targets: ['t:67'] }).hasValue).toBe(true);
+    expect(evaluateArmyCost(ctx, { ...makeArmyCost('Magyars'), targets: ['t:67'] }).hasValue).toBe(true);
   });
   it('respects count alternatives and ignores irrelevant unknown branches once the count is met (algorithm fixture)', () => {
     const data = structuredClone(ARMY_RESEARCH);

@@ -94,6 +94,8 @@ export interface ArmyResearchPrice {
   zero: boolean;
   reason: string;
   sources: string[];
+  baseCost: Cost | null;
+  modifiers: { source: string; condition: string; command: ResearchCommand; applied: boolean }[];
 }
 /** Research price uses raw research commands; unit-cost discounts never enter this function. */
 export function researchPrice(
@@ -106,7 +108,17 @@ export function researchPrice(
 ): ArmyResearchPrice {
   const node = data.nodes[id];
   const context = data.civs[civ];
-  const bad = (reason: string): ArmyResearchPrice => ({ cost: null, free: false, zero: false, reason, sources: [] });
+  let baseCost: Cost | null = null;
+  const modifiers: ArmyResearchPrice['modifiers'] = [];
+  const bad = (reason: string): ArmyResearchPrice => ({
+    cost: null,
+    free: false,
+    zero: false,
+    reason,
+    sources: [...new Set(modifiers.map((m) => m.source))],
+    baseCost,
+    modifiers,
+  });
   if (!node || !context) return bad('研究身份或文明未核实');
   const cost: Cost = {};
   const res: Record<number, string> = { 0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold' };
@@ -115,6 +127,7 @@ export function researchPrice(
     if (r === undefined || amount === undefined || !res[r] || !Number.isFinite(amount) || amount < 0) return bad('研究费用资源未核实');
     cost[res[r]!] = (cost[res[r]!] ?? 0) + amount;
   }
+  baseCost = { ...cost };
   const predicate = (tid: number, seen = new Set<number>()): boolean | null => {
     if (AGE_BY_TECH[tid]) return AGE_BY_TECH[tid]! <= age;
     const n = data.nodes[tid];
@@ -122,12 +135,15 @@ export function researchPrice(
     if (context.disabled.includes(tid) || (n.civ >= 0 && n.civ !== context.id)) return false;
     if (before.has(tid) || data.buildingTechs.includes(tid)) return true;
     if (n.location > 0) return active.has(tid) && tid !== id ? null : false;
+    if (n.time > 0 || n.cost.some(([, v, enabled]) => enabled && v! > 0)) return null;
     if (!n.requires.length && n.count > 0) return null;
     const results = n.requires.map((p) => predicate(p, new Set(seen).add(tid)));
     const yes = results.filter((r) => r === true).length;
     return yes >= n.count ? true : yes + results.filter((r) => r === null).length < n.count ? false : null;
   };
-  const groups: { source: string; mods: ResearchCommand[] }[] = [{ source: '本文明科技树与团队加成', mods: context.mods }];
+  const groups: { source: string; condition: string; mods: ResearchCommand[] }[] = [
+    { source: '本文明科技树与团队加成', condition: `文明 ${civ} 的常驻效果`, mods: context.mods },
+  ];
   for (const [key, n] of Object.entries(data.nodes)) {
     const tid = Number(key);
     const relevant = n.mods.filter(
@@ -135,14 +151,25 @@ export function researchPrice(
     );
     if (!relevant.length || (n.civ >= 0 && n.civ !== context.id)) continue;
     const applies = n.location > 0 ? (before.has(tid) ? true : active.has(tid) && tid !== id ? null : false) : predicate(tid);
-    if (applies === null) return bad('影响本项研究费用的文明条件尚未核实');
-    if (applies) groups.push({ source: n.name ?? `文明条件 t:${tid}`, mods: relevant });
+    const group = {
+      source: `${n.name ?? '文明条件'} t:${tid}`,
+      condition: before.has(tid) ? '已完成或本动作的确定必要前置' : `自动条件：前置 ${n.requires.map(researchKey).join('、') || '无'}，需满足 ${n.count} 项`,
+      mods: relevant,
+    };
+    if (applies === null) {
+      modifiers.push(...relevant.map((command) => ({ source: group.source, condition: '触发或相对研究顺序尚未核实', command, applied: false })));
+      return bad('影响本项研究费用的文明条件尚未核实');
+    }
+    if (applies) groups.push(group);
   }
   let time = node.time;
   const sources: string[] = [];
   const operations = new Map<string, { source: string; op: number; value: number }>();
   for (const group of groups)
     for (const c of group.mods) {
+      if (!(((c.Type === 101 || c.Type === 103) && c.A === id) || (c.Type === 102 && c.D === id) || ((c.Type === 1 || c.Type === 6) && c.A === 85))) continue;
+      const modifier = { source: group.source, condition: group.condition, command: c, applied: false };
+      modifiers.push(modifier);
       if (c.Type === 102 && c.D === id) return bad('本项研究被条件效果禁用');
       if ((c.Type === 1 || c.Type === 6) && c.A === 85) return bad('本文明全局研究费用倍率尚未核实');
       if (c.A !== id) continue;
@@ -165,11 +192,12 @@ export function researchPrice(
       else if (!res[c.B]) return bad('研究修正资源尚未核实');
       else cost[res[c.B]!] = apply(cost[res[c.B]!] ?? 0);
       sources.push(group.source);
+      modifier.applied = true;
     }
   // The engine's research rounding for nonintegral modifiers is not inferred from unit-cost rounding.
   if (Object.values(cost).some((v) => !Number.isInteger(v))) return bad('研究费用取整尚未核实');
   const zero = ARMY_RES.every((r) => !cost[r]);
-  return { cost, zero, free: zero && time === 0, reason: '', sources: [...new Set(sources)] };
+  return { cost, zero, free: zero && time === 0, reason: '', sources: [...new Set(sources)], baseCost, modifiers };
 }
 
 export interface ResearchEntry {
@@ -182,6 +210,8 @@ export interface ResearchEntry {
   manual: boolean;
   cost: Cost | null;
   sources: string[];
+  origins: { kind: 'done' | 'target' | 'shape' | 'prerequisite'; key: string; row?: number }[];
+  quote?: ArmyResearchPrice;
   problem?: 'identity' | 'price';
 }
 export interface ArmyCostResult {
@@ -259,6 +289,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
         manual: false,
         cost: null,
         sources: [],
+        origins: [],
       };
       ledger.set(key, entry);
     }
@@ -278,9 +309,19 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
             manual: true,
             cost: null,
             sources: [],
+            origins: [],
           }
         : ensure(id);
     ledger.set(key, entry);
+    const origin: ResearchEntry['origins'][number] = {
+      kind: done ? 'done' : row === undefined ? 'target' : 'shape',
+      key,
+      ...(row === undefined ? {} : { row }),
+    };
+    const noteOrigin = (e: ResearchEntry, reason = origin) => {
+      if (!e.origins.some((o) => o.kind === reason.kind && o.key === reason.key && o.row === reason.row)) e.origins.push(reason);
+    };
+    noteOrigin(entry);
     if (row === undefined) entry.manual = true;
     if (row !== undefined && !entry.beneficiaries.includes(row)) entry.beneficiaries.push(row);
     const closure = id === null ? fail('研究身份无法解析') : resolver.resolve(id);
@@ -294,6 +335,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     for (const tid of closure.ids) {
       all.add(tid);
       const e = ensure(tid);
+      noteOrigin(e, tid === id ? origin : { ...origin, kind: 'prerequisite' });
       if (row !== undefined && !e.beneficiaries.includes(row)) e.beneficiaries.push(row);
       if (done) {
         completed.add(tid);
@@ -352,11 +394,13 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     if (entry.status === 'invalid' || entry.id === null || !all.has(entry.id)) continue;
     if (completed.has(entry.id)) {
       entry.cost = {};
+      entry.quote = researchPrice(data, config.civ, age, entry.id, completed, new Set([...completed].filter((id) => id !== entry.id)));
       continue;
     }
     const before = new Set([...completed, ...resolver.resolve(entry.id).ids]);
     before.delete(entry.id);
     const price = researchPrice(data, config.civ, age, entry.id, all, before);
+    entry.quote = price;
     entry.sources = price.sources;
     entry.cost = price.cost;
     if (!price.cost) {
@@ -438,7 +482,11 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
   const total: Cost = {};
   addArmyCost(total, trainingTotal);
   addArmyCost(total, researchTotal);
-  const hasValue = !blocked.length && (training.lines.some((l) => l.status === 'ok') || [...ledger.values()].some((e) => e.status === 'planned' && !!e.cost));
+  const hasValue =
+    !blocked.length &&
+    (training.lines.some((l) => l.status === 'ok') ||
+      [...ledger.values()].some((e) => e.status === 'planned' && !!e.cost) ||
+      config.targets.some((key) => ['done', 'inferred-done', 'free'].includes(ledger.get(key)?.status ?? '')));
   return {
     blocked,
     ledger: [...ledger.values()],

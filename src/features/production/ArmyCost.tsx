@@ -2,7 +2,8 @@ import { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, civByEn } from '../../data';
 import { ARMY_RESEARCH } from '../../data/armyResearch';
-import { armyResearchChoices, evaluateArmyCost, researchKey, type ResearchEntry } from '../../domain/armyCost';
+import { armyResearchChoices, evaluateArmyCost, researchKey } from '../../domain/armyCost';
+import { ARMY_RESEARCH_STATES as STATES } from '../../domain/armyResearchEvidence';
 import { ARMY_COST_DATA, emptyArmyCost, type ArmyCostConfig } from '../../domain/armyCostConfig';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../domain/production';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
@@ -14,9 +15,9 @@ import { SHARE_STATUS_PROPS, useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionPageTop } from './ProductionModeNav';
 import { decodeArmyCost, encodeArmyCost } from './armyCostCodec';
 import { ArmyUnitPicker } from './ArmyUnitPicker';
+import { ArmyLedger } from './ArmyLedger';
 import './armyCost.css';
 
-const STATES = { done: '你标记已完成', 'inferred-done': '已满足前置（系统推导）', free: '免费自动完成', planned: '本次新增', invalid: '未核实，未计入' };
 const RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 function ResourceGrid({ cost, primary = false }: { cost: Cost; primary?: boolean }) {
   return (
@@ -467,6 +468,11 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                       <h3>一次性研究 / 升级费</h3>
                       <ResourceGrid cost={result.researchTotal} />
                       <p className="note">按实际研究动作去重，不乘训练数量。</p>
+                      {!result.partial && result.ledger.length > 0 && result.ledger.every((e) => ['done', 'inferred-done', 'free'].includes(e.status)) && (
+                        <p className="note">
+                          所有必要和目标研究均已完成；新增研究费为 <span className="num">0</span>。
+                        </p>
+                      )}
                     </>
                   )}
                   <p className="army-boundary">
@@ -478,9 +484,11 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   <h2>研究账本</h2>
                   <p className="note">名称仅用于显示，按同一个实际研究动作计费。</p>
                   {result?.ledger.map((entry) => (
-                    <Ledger
+                    <ArmyLedger
                       key={entry.key}
                       entry={entry}
+                      entries={result.ledger}
+                      config={config}
                       onRemove={() =>
                         update({ ...config, done: config.done.filter((k) => k !== entry.key), targets: config.targets.filter((k) => k !== entry.key) })
                       }
@@ -523,45 +531,5 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
         <span>输入是当前方案；分享链接不是旧版价格快照。</span>
       </footer>
     </section>
-  );
-}
-function Ledger({ entry, onRemove }: { entry: ResearchEntry; onRemove: () => void }) {
-  return (
-    <article className="army-ledger-entry">
-      <div className="army-section-heading">
-        <h3>{entry.name}</h3>
-        <span>{STATES[entry.status]}</span>
-      </div>
-      <p className="note">
-        {entry.beneficiaries.length > 1 ? '共享 · ' : ''}
-        {entry.beneficiaries.map((i, index) => (
-          <span key={i}>
-            {index > 0 && '、'}
-            <span className="nw">
-              第 <span className="num">{i + 1}</span> 行
-            </span>
-          </span>
-        ))}
-        {entry.reason && ' · ' + entry.reason}
-      </p>
-      {entry.cost && <CostView c={entry.cost} />}
-      <details>
-        <summary>依据与来源</summary>
-        <p>
-          研究动作：<span className="army-raw">{entry.key}</span>；{entry.manual ? '包含手动意图' : '由当前形态或研究推导'}。
-        </p>
-        <p>
-          来源：DE Update <span className="num">{ARMY_COST_DATA}</span> 固定游戏数据的研究定义、完整前置及文明条件。研究所需建筑只作为可研究条件，不在本期计费。
-        </p>
-        {entry.sources.map((source) => (
-          <p key={source}>修正：{source}</p>
-        ))}
-      </details>
-      {entry.status === 'invalid' && entry.manual && (
-        <button type="button" className="btn" onClick={onRemove}>
-          移除无效研究
-        </button>
-      )}
-    </article>
   );
 }
