@@ -147,14 +147,18 @@ export function filterTechEvents(data: CivUpdatesData, entityId: string, query: 
   return filterProjectedEvents(data, projectTechEvents(data, entityId), query);
 }
 export function revealTechEvent(data: CivUpdatesData, entityId: string, query: URLSearchParams) {
-  const next = new URLSearchParams(query);
   const event = projectTechEvents(data, entityId).filter((v) => v.event.id === query.get('histEvent'));
-  for (const key of TECH_FILTER_KEYS) {
-    if (!query.has(key) || key === 'histOrder') continue;
-    const isolated = new URLSearchParams({ [key]: query.get(key)! });
-    if (!filterProjectedEvents(data, event, isolated).length) next.delete(key);
+  const keys = TECH_FILTER_KEYS.filter((key) => key !== 'histOrder' && query.has(key));
+  // Test the complete conjunction: separate effects can each match one filter
+  // while no effect matches both. Remove the smallest stable subset of filters.
+  const subsets = Array.from({ length: 1 << keys.length }, (_, mask) => keys.filter((_, index) => mask & (1 << index)));
+  subsets.sort((a, b) => a.length - b.length);
+  for (const removed of subsets) {
+    const next = new URLSearchParams(query);
+    removed.forEach((key) => next.delete(key));
+    if (filterProjectedEvents(data, event, next).length) return next;
   }
-  return next;
+  return new URLSearchParams(query);
 }
 export function techEvidenceStats(data: CivUpdatesData, entityId: string) {
   const views = projectTechEvents(data, entityId);

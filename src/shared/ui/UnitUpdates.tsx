@@ -7,6 +7,7 @@ import {
   UNIT_FILTER_KEYS,
   UNIT_SOURCE_LABELS,
   clearUnitFilters,
+  recoverUnitEventQuery,
   filterUnitEvents,
   projectUnitEvents,
   partitionUnitScopes,
@@ -235,7 +236,8 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
   const request = useRef(0);
   const entity = data.entities.find((r) => r.id === entityId && r.type === 'unit');
   const row = data.units?.rows.find((r) => r.entityId === entityId);
-  const error = unitQueryError(data, query);
+  const error = unitQueryError(data, query, entityId);
+  const eventRecovery = recoverUnitEventQuery(data, query, entityId);
   const all = projectUnitEvents(data, entityId);
   const shown = filterUnitEvents(data, entityId, query);
   const { known, unknown, mixed } = query.has('histCiv') ? partitionUnitScopes(shown) : { known: shown, unknown: [], mixed: [] };
@@ -414,7 +416,14 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
         </div>
       </details>
       {error ? (
-        <p role="alert">{error}</p>
+        <div role="alert">
+          <p>{error}</p>
+          {query.has('histEvent') && !eventRecovery.has('histEvent') && (
+            <button type="button" onClick={() => setQuery(eventRecovery)}>
+              仅清除错误事件定位
+            </button>
+          )}
+        </div>
       ) : (
         <>
           <p role="status">

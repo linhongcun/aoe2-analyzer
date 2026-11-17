@@ -952,7 +952,7 @@
   "effectKinds": {
     "ef-legacy-185872-26": "effect",
     "ef-legacy-185872-31": "effect",
-    "ef-legacy-185872-34": "parameter",
+    "ef-legacy-185872-34": "unclassified",
     "ef-legacy-185872-36": "effect",
     "ef-legacy-185872-60": "effect",
     "ef-legacy-185872-62": "availability",
@@ -1032,7 +1032,7 @@
     "ef-legacy-81058-147": "effect",
     "ef-legacy-81058-148": "parameter",
     "ef-legacy-81058-149": "identity",
-    "ef-legacy-81058-150": "parameter",
+    "ef-legacy-81058-150": "unclassified",
     "ef-legacy-81058-155": "availability",
     "cl-se-7e1753b5-5801-410b-89a2-8a14ac62064f-structured-1": "parameter",
     "cl-se-7e1753b5-5801-410b-89a2-8a14ac62064f-structured-2": "parameter",

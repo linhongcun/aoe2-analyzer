@@ -56,7 +56,18 @@ export function unitCoverageQueryError(query: URLSearchParams) {
 }
 const KEYS = ['obj', 'tab', 'histQuery', 'histReturn', 'histEvent', ...UNIT_FILTER_KEYS];
 
-export function unitQueryError(data: CivUpdatesData, query: URLSearchParams): string | undefined {
+export function recoverUnitEventQuery(data: CivUpdatesData, query: URLSearchParams, entityId?: string) {
+  const next = new URLSearchParams(query);
+  const selected = entityId ?? (query.get('obj')?.startsWith('unit:') ? query.get('obj')!.replace(':', '/') : undefined);
+  if (
+    query.has('histEvent') &&
+    (query.getAll('histEvent').length !== 1 ||
+      !data.units?.relations.some((r) => r.eventId === query.get('histEvent') && (!selected || r.entityId === selected)))
+  )
+    next.delete('histEvent');
+  return next;
+}
+export function unitQueryError(data: CivUpdatesData, query: URLSearchParams, entityId?: string): string | undefined {
   for (const key of query.keys()) {
     if (key.startsWith('hist') && !KEYS.includes(key)) return '此历史筛选参数已失效，请清除历史筛选。';
     if (KEYS.includes(key) && query.getAll(key).length !== 1) return '历史筛选参数重复，请清除历史筛选。';
@@ -69,7 +80,7 @@ export function unitQueryError(data: CivUpdatesData, query: URLSearchParams): st
     histOrder: ['newest', 'oldest'],
   };
   for (const [key, values] of Object.entries(choices)) if (query.has(key) && !values.includes(query.get(key)!)) return '历史筛选值无法识别，请清除历史筛选。';
-  if (query.has('histEvent') && !data.events.some((e) => e.id === query.get('histEvent'))) return '历史事件定位已失效';
+  if (query.has('histEvent') && !recoverUnitEventQuery(data, query, entityId).has('histEvent')) return '历史事件定位不属于当前单位或已失效';
   if (query.has('histReturn') && !unitHistoryReturn(query.get('histReturn'), data)) return '返回地址无法识别，请清除历史筛选。';
   return undefined;
 }
@@ -96,6 +107,7 @@ export function unitHistoryPath(entityId: string, query: URLSearchParams, view: 
   if (view === 'overview') next.set('obj', 'unit:' + id);
   else next.set('tab', 'history');
   for (const key of ['histQuery', 'histEvent', ...UNIT_FILTER_KEYS]) if (query.getAll(key).length === 1) next.set(key, query.get(key)!);
+  if (data && !recoverUnitEventQuery(data, next, entityId).has('histEvent')) next.delete('histEvent');
   const back = unitHistoryReturn(returnTo ?? query.get('histReturn'), data);
   if (back) next.set('histReturn', back);
   return (view === 'overview' ? '/patches' : '/unit/' + id) + '?' + next.toString();
@@ -146,7 +158,7 @@ export function projectUnitEvents(data: CivUpdatesData, entityId: string, source
   });
 }
 export function filterUnitEvents(data: CivUpdatesData, entityId: string, query: URLSearchParams): UnitEventView[] {
-  if (unitQueryError(data, query)) return [];
+  if (unitQueryError(data, query, entityId)) return [];
   return filterProjectedEvents(data, projectUnitEvents(data, entityId), query);
 }
 export function filterProjectedEvents(data: CivUpdatesData, views: UnitEventView[], query: URLSearchParams): UnitEventView[] {

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { historyFixture } from '../helpers/civUpdatesFixture';
 import { assertCivUpdateReferences, validHistoryReturn } from '../../src/domain/civUpdates';
-import { clearUnitFilters, unitHistoryReturn } from '../../src/domain/unitUpdates';
-import { buildingHistoryReturn } from '../../src/domain/buildingUpdates';
+import { clearUnitFilters, recoverUnitEventQuery, unitHistoryPath, unitHistoryReturn, unitQueryError } from '../../src/domain/unitUpdates';
+import { buildingHistoryPath, buildingHistoryReturn, buildingQueryErrors, projectBuildingEvents, recoverBuildingQuery } from '../../src/domain/buildingUpdates';
 import {
   filterTechEvents,
   projectTechEvents,
@@ -54,6 +54,48 @@ it('retains validated civilization context when returning from technology to a u
   expect(techHistoryReturn(data, path + '&civ=Cumans')).toBeNull();
 });
 const views = (id: string, version: string) => projectTechEvents(data, id).filter((v) => v.event.versionId === version);
+
+it('reveals an event when separate effects match each filter but their conjunction is empty', () => {
+  const id = 'ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7';
+  const query = q('tab=history&civ=Armenians&histCiv=Armenians&histCondition=civ&histOrder=oldest&histQuery=保留搜索');
+  query.set('histEvent', id);
+  query.set('histReturn', '/unit/1370?tab=history');
+  expect(filterTechEvents(data, 'tech/463', q('histCiv=Armenians')).some((v) => v.event.id === id)).toBe(true);
+  expect(filterTechEvents(data, 'tech/463', q('histCondition=civ')).some((v) => v.event.id === id)).toBe(true);
+  expect(filterTechEvents(data, 'tech/463', query).some((v) => v.event.id === id)).toBe(false);
+  const recovered = revealTechEvent(data, 'tech/463', query);
+  expect(filterTechEvents(data, 'tech/463', recovered).some((v) => v.event.id === id)).toBe(true);
+  expect(['histCiv', 'histCondition'].filter((key) => !recovered.has(key))).toHaveLength(1);
+  for (const key of ['tab', 'civ', 'histOrder', 'histQuery', 'histEvent', 'histReturn']) expect(recovered.get(key)).toBe(query.get(key));
+});
+
+it('rejects unrelated event snapshots at all four targets and locally repairs unit/building state', () => {
+  const id = views('tech/689', 'de-36202')[0]!.event.id;
+  const query = q('tab=history&civ=Cumans&histVersion=de-36202&histOrder=oldest');
+  query.set('histEvent', id);
+  for (const route of ['/unit/4', '/building/79', '/tech/321', '/civ/Aztecs'])
+    expect(validHistoryReturn(route + '?tab=history&histEvent=' + id, data)).toBeNull();
+  expect(unitQueryError(data, query, 'unit/4')).toContain('事件定位');
+  expect(buildingQueryErrors(data, query, true, 'building/79')).toEqual(['histEvent']);
+  for (const repaired of [recoverUnitEventQuery(data, query, 'unit/4'), recoverBuildingQuery(data, query, 'building/79')]) {
+    const expected = new URLSearchParams(query);
+    expected.delete('histEvent');
+    expect(repaired.toString()).toBe(expected.toString());
+  }
+  expect(unitHistoryPath('unit/1370', query, 'detail', undefined, data)).toContain('histEvent=');
+  expect(unitHistoryPath('unit/4', query, 'detail', undefined, data)).not.toContain('histEvent=');
+  const towerEvent = projectBuildingEvents(data, 'building/79').find(
+    (v) => !projectBuildingEvents(data, 'building/109').some((t) => t.event.id === v.event.id),
+  )!.event.id;
+  query.set('histEvent', towerEvent);
+  expect(buildingHistoryPath(data, 'building/79', query, 'detail')).toContain('histEvent=');
+  expect(buildingHistoryPath(data, 'building/109', query, 'detail')).not.toContain('histEvent=');
+  expect(buildingHistoryPath(data, 'building/109', query, 'detail')).toContain('histVersion=de-36202');
+});
+
+it('does not describe compound legacy research/effect records as only research parameters', () => {
+  for (const id of ['ef-legacy-81058-150', 'ef-legacy-185872-34']) expect(data.techs!.effectKinds[id]).toBe('unclassified');
+});
 
 describe('technology evidence projections and route boundaries #1085', () => {
   it('validates all current identities, retired aliases and the 97 shared legacy claims', () => {

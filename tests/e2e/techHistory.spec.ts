@@ -118,6 +118,27 @@ test('#1085 invalid duplicate identity and external return never render another 
   await expect(cards(page)).toHaveCount(1);
 });
 
+test('#1085 combined filters reveal the related event and unrelated unit/building focus repairs locally', async ({ page }) => {
+  const id = 'ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7';
+  await page.goto('/#/tech/463?tab=history&histCiv=Armenians&histCondition=civ&histOrder=oldest&histEvent=' + id);
+  await reader(page).getByRole('button', { name: '显示这条关联记录' }).click();
+  await expect(reader(page).locator(`[data-event-id="${id}"]`)).toBeVisible();
+  await expect(reader(page).locator(`[data-event-id="${id}"]`)).toBeFocused();
+  await expect(page).toHaveURL(/histOrder=oldest/);
+  for (const [route, button] of [
+    ['unit/4', '仅清除错误事件定位'],
+    ['building/79', '仅清除错误参数'],
+  ]) {
+    await page.goto('/#/' + route + '?tab=history&civ=Cumans&histVersion=de-36202&histOrder=oldest&histEvent=' + eventId);
+    await expect(page.getByRole('alert')).toContainText(/事件|histEvent/);
+    await page.getByRole('button', { name: button, exact: true }).click();
+    await expect(page).not.toHaveURL(/histEvent=/);
+    await expect(page).toHaveURL(/histVersion=de-36202/);
+    await expect(page).toHaveURL(/histOrder=oldest/);
+    await expect(page).toHaveURL(/civ=Cumans/);
+  }
+});
+
 test('#1085 payload failure retries without losing context and distinguishes unrecorded/filter empty', async ({ page }) => {
   let attempts = 0;
   await page.route(payload, async (route) => {

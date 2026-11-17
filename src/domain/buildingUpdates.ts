@@ -27,7 +27,7 @@ const unsafe = (value: string) => /[\\#]/u.test(value) || [...value].some((c) =>
 const building = (data: CivUpdatesData, id: string) => data.entities.find((e) => e.type === 'building' && e.id === id);
 
 /** Invalid keys are returned separately so recovery cannot erase valid filters. */
-export function buildingQueryErrors(data: CivUpdatesData, query: URLSearchParams, checkReturn = true): string[] {
+export function buildingQueryErrors(data: CivUpdatesData, query: URLSearchParams, checkReturn = true, detailId?: string): string[] {
   const errors = new Set<string>();
   const choices: Record<string, string[]> = {
     histView: ['buildings', 'buildingCoverage'],
@@ -55,7 +55,9 @@ export function buildingQueryErrors(data: CivUpdatesData, query: URLSearchParams
     errors.add('obj');
     errors.add('histEntity');
   }
-  if (query.has('histEvent') && !data.events.some((event) => event.id === query.get('histEvent'))) errors.add('histEvent');
+  const selected = detailId ?? (query.has('obj') ? query.get('obj')!.replace(':', '/') : query.get('histEntity'));
+  if (query.has('histEvent') && !data.buildings?.relations.some((r) => r.eventId === query.get('histEvent') && (!selected || r.entityId === selected)))
+    errors.add('histEvent');
   if (checkReturn && query.has('histReturn') && !buildingHistoryReturn(data, query.get('histReturn'))) errors.add('histReturn');
   return [...errors];
 }
@@ -84,7 +86,7 @@ export function buildingHistoryReturn(data: CivUpdatesData, raw: string | null):
     allowed = ['tab', 'civ', 'histQuery', 'histEvent', ...BUILDING_FILTER_KEYS];
     if ((query.has('tab') && query.get('tab') !== 'history') || (query.has('civ') && !data.civilizations.some((c) => c.civId === query.get('civ'))))
       return null;
-    if (buildingQueryErrors(data, query, false).length) return null;
+    if (buildingQueryErrors(data, query, false, path.slice(1)).length) return null;
   } else if (path.startsWith('/civ/') && data.civilizations.some((c) => path === '/civ/' + c.civId)) {
     allowed = ['tab', 'histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder', 'histEvent'];
     if ((query.has('tab') && query.get('tab') !== 'history') || detailQueryError(query, data, path.slice(5))) return null;
@@ -93,9 +95,9 @@ export function buildingHistoryReturn(data: CivUpdatesData, raw: string | null):
   return path + (query.size ? '?' + query.toString() : '');
 }
 
-export function recoverBuildingQuery(data: CivUpdatesData, query: URLSearchParams) {
+export function recoverBuildingQuery(data: CivUpdatesData, query: URLSearchParams, detailId?: string) {
   const next = new URLSearchParams(query);
-  buildingQueryErrors(data, query).forEach((key) => next.delete(key));
+  buildingQueryErrors(data, query, true, detailId).forEach((key) => next.delete(key));
   return next;
 }
 export function clearBuildingFilters(query: URLSearchParams) {
@@ -109,6 +111,7 @@ export function buildingHistoryPath(data: CivUpdatesData, entityId: string, quer
   const detail = view === 'detail' && current;
   const next = new URLSearchParams();
   for (const key of ['histQuery', 'histEvent', ...BUILDING_FILTER_KEYS]) if (query.getAll(key).length === 1) next.set(key, query.get(key)!);
+  if (next.has('histEvent') && !data.buildings?.relations.some((r) => r.entityId === entityId && r.eventId === next.get('histEvent'))) next.delete('histEvent');
   if (detail) next.set('tab', 'history');
   else {
     next.set('histView', 'buildings');
@@ -129,5 +132,5 @@ export function projectBuildingEvents(data: CivUpdatesData, entityId: string) {
   return projectUnitEvents(data, entityId, data.buildings?.relations ?? []);
 }
 export function filterBuildingEvents(data: CivUpdatesData, entityId: string, query: URLSearchParams) {
-  return buildingQueryErrors(data, query).length ? [] : filterProjectedEvents(data, projectBuildingEvents(data, entityId), query);
+  return buildingQueryErrors(data, query, true, entityId).length ? [] : filterProjectedEvents(data, projectBuildingEvents(data, entityId), query);
 }
