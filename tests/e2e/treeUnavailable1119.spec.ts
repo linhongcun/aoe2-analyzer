@@ -200,6 +200,7 @@ test('#1119 跨建筑同实体返回第二行，修饰键不改源entry，外部
   await row.dispatchEvent('click', { ctrlKey: true });
   expect(await page.evaluate(() => history.state)).toEqual(old);
   await row.click();
+  await expect(page.getByRole('link', { name: '返回日本科技树', exact: true })).toBeVisible();
   await page.goBack();
   await expect(row).toBeFocused();
   await row.press('Enter');
