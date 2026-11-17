@@ -186,7 +186,15 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
               ))}
             </svg>
             {L.buildings.map((b) => {
-              const B = trees.b[b.bid]!;
+              const B = trees.b[b.bid];
+              if (!B)
+                return (
+                  <div key={b.bid} className="tbld" style={{ left: b.x, width: b.w }}>
+                    <span className="tbld-name">
+                      建筑 ID <span className="num nw">{b.bid}</span>
+                    </span>
+                  </div>
+                );
               const identB = treeNodeIdentity('b', b.bid, null);
               const to = `/building/${b.bid}${civQuery}`;
               return (
@@ -284,6 +292,13 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
   const savedSummary = readTreeSummaryMemory(location.state, civEn);
   const [summaryOpen, setSummaryOpen] = useState(!!savedSummary);
   const [summaryFocus, setSummaryFocus] = useState(savedSummary?.focus);
+  const summaryCiv = useRef(civEn);
+  useEffect(() => {
+    if (summaryCiv.current !== civEn) {
+      summaryCiv.current = civEn;
+      setSummaryFocus(undefined);
+    }
+  }, [civEn]);
   const summaryToggle = useRef<HTMLButtonElement>(null);
   const [compare, setCompare] = useSticky('civ.techtree.compare', '');
   const [jumpSlot, setJumpSlot] = useState<HTMLDivElement | null>(null);
@@ -371,7 +386,7 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             key={civ.en}
             civ={civ}
             resources={resources}
-            restoreFocus={summaryFocus}
+            restoreFocus={summaryCiv.current === civEn ? summaryFocus : undefined}
             onCollapse={() => {
               setSummaryOpen(false);
               setSummaryFocus(undefined);

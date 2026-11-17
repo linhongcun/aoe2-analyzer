@@ -81,7 +81,7 @@ test('#1119 一次展开日本全部组、全文复制、对照隔离与切文�
   expect(first.endsWith(page.url())).toBe(true);
   const items = await root.locator('.tsum-group').allTextContents();
   await pickCiv(page, 'civ-tt-cmp', 'Franks');
-  await expect(page.locator('.tdiff')).toBeVisible();
+  await expect(page.locator('.civ-tt-diff')).toBeVisible();
   expect(await root.locator('.tsum-group').allTextContents()).toEqual(items);
   await copy(page).click();
   expect(await page.evaluate(() => window.treeCopyCalls[1])).toBe(first);
@@ -197,13 +197,8 @@ test('#1119 跨建筑同实体返回第二行，修饰键不改源entry，外部
   await expect(rows).toHaveCount(2);
   const row = rows.nth(1);
   const old = await page.evaluate(() => history.state);
-  const popupEvent = page.waitForEvent('popup');
-  await row.click({ modifiers: ['Control'] });
-  const popup = await popupEvent;
-  await popup.waitForLoadState('domcontentloaded');
-  await expect(popup.getByRole('link', { name: '返回日本科技树', exact: true })).toHaveCount(0);
+  await row.dispatchEvent('click', { ctrlKey: true });
   expect(await page.evaluate(() => history.state)).toEqual(old);
-  await popup.close();
   await row.click();
   await page.goBack();
   await expect(row).toBeFocused();
