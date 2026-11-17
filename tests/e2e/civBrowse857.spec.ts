@@ -217,3 +217,29 @@ test('#1118 明暗主题均显示当前及键盘焦点，放大名称不裁切',
   );
   expect(layout.every((item) => item.height > 72 && item.fits)).toBe(true);
 });
+
+test('#1118 条件无效与真实空结果分别反馈，移除名称不清其他条件', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('./#/civs?q=Huns&ty=cav&dlc=1&req=u:569,t:435,u:0');
+  await expect(page.locator('#cnt')).toHaveText('条件无效');
+  await expect(page.getByTestId('requirements-blocked')).toBeVisible();
+  await expect(page.locator('#grid .card')).toHaveCount(0);
+  await page.getByRole('button', { name: '移除无效条件 u:0', exact: true }).click();
+  await expect(page.locator('#cnt')).toHaveText(`1 / ${civs.length}`);
+  await expect(page.locator('#grid .card').first()).toHaveAttribute('data-civ', 'Huns');
+  await page.getByRole('button', { name: '移除名称 Huns', exact: true }).click();
+  await expect(page.locator('#q')).toHaveValue('');
+  await expect(page.getByTestId('requirement-chip')).toHaveCount(2);
+  const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(params.get('ty')).toBe('cav');
+  expect(params.get('dlc')).toBe('1');
+  expect(params.get('req')?.split(',').sort()).toEqual(['t:435', 'u:569']);
+  await expect(page.locator('#grid .card')).not.toHaveCount(civs.length);
+  await expect(page.locator('#grid .card').first().locator('.civ-unique')).toBeHidden();
+  await page.locator('#q').fill('亚美尼亚');
+  await expect(page.locator('#cnt')).toHaveText(`0 / ${civs.length}`);
+  await expect(page.getByTestId('requirements-blocked')).toHaveCount(0);
+  await expect(page.getByText('没有符合条件的文明', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '重置全部', exact: true }).click();
+  await expect(page.locator('#cnt')).toHaveText(`${civs.length} / ${civs.length}`);
+});

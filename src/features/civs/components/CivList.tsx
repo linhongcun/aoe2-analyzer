@@ -135,7 +135,7 @@ export default function CivList() {
         <p className="civ-result-title">
           文明{' '}
           <span id="cnt" className="num nw">
-            {result.loading ? '加载中' : `${result.civs.length} / ${civs.length}`}
+            {result.loading ? '加载中' : result.blocked ? '条件无效' : `${result.civs.length} / ${civs.length}`}
           </span>
         </p>
         <span className="civ-scope">{active ? '条件已生效' : '全部文明，未设置条件'}</span>
