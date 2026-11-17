@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-import Ajv from 'ajv';
+import Ajv2020 from 'ajv/dist/2020.js';
 import inputSchema from '../data/schemas/garrison-audit-input.json';
 import sourcePin from '../data/sources/data_sources.json';
 import { loadCore, loadTrees } from '../src/data';
@@ -32,7 +32,7 @@ export interface AuditInput {
   datSha256: string;
   samples: { id: string; buildingId: number; config: GeneralGarrisonConfig; client: null }[];
 }
-const validate = new Ajv({ allErrors: true }).compile<AuditInput>(inputSchema);
+const validate = new Ajv2020({ allErrors: true }).compile<AuditInput>(inputSchema);
 export function validateInput(input: unknown): asserts input is AuditInput {
   if (!validate(input)) throw new Error(JSON.stringify(validate.errors));
   if (new Set(input.samples.map((s) => s.id)).size !== 30) throw new Error('Duplicate sample ID');
