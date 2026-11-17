@@ -21,6 +21,9 @@ import { radioKeyboard } from './radioKeyboard';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
+import { encodeMixedDuel, isMixedDuelLink, mixedDataVersion, type MixedSideInput } from '../../../domain/mixedDuelParams';
+import { MIXED_RULE } from '../../../domain/mixedFight';
+import { MixedDuel } from './MixedDuel';
 import { BreakEven } from './BreakEven';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
@@ -48,10 +51,12 @@ const FULL_DAMAGE = '伤害 = max(1, Σ max(min(0, 攻击类别), 攻击类别 �
 
 export default function Duel() {
   const resources = useCoreTrees();
+  const [params] = useSearchParams();
+  const mixed = isMixedDuelLink(params);
   return (
     <>
-      <DuelCalculator resources={resources} />
-      {resources.core.data && resources.trees.data ? <ChampiReferences core={resources.core.data} trees={resources.trees.data} /> : null}
+      {mixed ? <MixedDuel resources={resources} /> : <DuelCalculator resources={resources} />}
+      {!mixed && resources.core.data && resources.trees.data ? <ChampiReferences core={resources.core.data} trees={resources.trees.data} /> : null}
     </>
   );
 }
@@ -196,6 +201,24 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
             : 1;
   const cntA = cnt(A, na),
     cntB = cnt(B, nb);
+  const enterMixed = () => {
+    if (isUnavail(A) || isUnavail(B)) return;
+    const side = (s: Resolved, qty: string): MixedSideInput => ({
+      civ: s.civ,
+      age: String(s.age),
+      techs: [...s.sel].map(String),
+      team: s.spec.team.map(String),
+      rows: [{ uid: String(s.u.id), qty }],
+    });
+    setSp(
+      encodeMixedDuel({
+        rule: MIXED_RULE,
+        data: mixedDataVersion(DATA_SOURCES),
+        a: side(A, sp.get('na') ?? String(na)),
+        b: side(B, sp.get('nb') ?? String(nb)),
+      }),
+    );
+  };
   return (
     <section id="duel" className="pane">
       <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
@@ -240,6 +263,17 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
           </label>
         )}
       </div>
+      {mode === 'n' && (
+        <div className="bar mix-mode" role="radiogroup" aria-label="军队配置" onKeyDown={radioKeyboard}>
+          <button type="button" role="radio" aria-checked="true" className="on">
+            单兵种
+          </button>
+          <button type="button" role="radio" aria-checked="false" tabIndex={-1} disabled={isUnavail(A) || isUnavail(B)} onClick={enterMixed}>
+            混编
+          </button>
+          {(isUnavail(A) || isUnavail(B)) && <span className="note">请先修正不可用单位，再进入混编。</span>}
+        </div>
+      )}
       {eq && (
         <div className="rc-seg">
           <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>

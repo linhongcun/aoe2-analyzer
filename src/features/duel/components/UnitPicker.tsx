@@ -7,7 +7,23 @@ import { Icon } from '../../../shared/ui/Icon';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { civByEn } from '../../../data';
 
-export function UnitPicker({ id, value, list, onChange, label }: { id: string; value: Unit; list: FamilyEntry[]; onChange: (u: Unit) => void; label: string }) {
+export function UnitPicker({
+  id,
+  value,
+  list,
+  onChange,
+  label,
+  describedBy,
+  invalid,
+}: {
+  id: string;
+  value?: Unit;
+  list: FamilyEntry[];
+  onChange: (u: Unit) => void;
+  label: string;
+  describedBy?: string;
+  invalid?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [act, setAct] = useState(0);
@@ -75,19 +91,21 @@ export function UnitPicker({ id, value, list, onChange, label }: { id: string; v
         className="cp-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`${label}：${value.zh}`}
-        data-value={value.id}
+        aria-label={`${label}：${value?.zh ?? '请选择单位'}`}
+        aria-describedby={describedBy}
+        aria-invalid={invalid || undefined}
+        data-value={value?.id}
         onClick={() => {
           if (open) return close();
-          const i = list.findIndex((x) => x.u.id === value.id || x.elite?.id === value.id);
+          const i = list.findIndex((x) => x.u.id === value?.id || (!!value && x.elite?.id === value.id));
           setAct(i < 0 ? 0 : i);
           setOpen(true);
         }}
       >
-        <UnitIcon u={value} />
+        {value && <UnitIcon u={value} />}
         <span className="cp-name">
-          {value.zh}
-          <small> {value.en}</small>
+          {value?.zh ?? '请选择单位'}
+          {value && <small> {value.en}</small>}
         </span>
         <Icon name="chevron-down" />
       </button>
@@ -117,7 +135,7 @@ export function UnitPicker({ id, value, list, onChange, label }: { id: string; v
             </div>
             <div className="cp-list" id={lid} role="listbox" aria-label={label}>
               {opts.map((x, i) => {
-                const sel = x.u.id === value.id || x.elite?.id === value.id;
+                const sel = x.u.id === value?.id || (!!value && x.elite?.id === value.id);
                 return (
                   <div
                     key={x.u.id}
