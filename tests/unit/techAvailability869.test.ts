@@ -8,7 +8,8 @@ const ARMENIAN_75 = 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armen
 const BOHEMIANS = 'civ-age:src/domain/production.ts:productionTechAge:Bohemians:literal:3:id===47';
 const BURGUNDIANS = 'civ-age:src/domain/production.ts:productionTechAge:Burgundians:max(literal:1,age-1):ecoTechs+isGatherTech';
 const DISPLAY = 'display-age:src/domain/availabilityAge.ts:displayUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
-const SPEARMAN_FLOOR = 'unit-floor:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:then=2:else=1';
+const SPEARMAN_FLOOR = 'unit-civ:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
+const SPEARMAN_ARMENIAN = 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain';
 const KNOWN = [
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:358=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:359=3',
@@ -19,6 +20,7 @@ const KNOWN = [
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Burgundians:283=3',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:1258=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:422=3',
+  SPEARMAN_ARMENIAN,
   BOHEMIANS,
   BURGUNDIANS,
   DISPLAY,
@@ -38,6 +40,7 @@ describe('#869 科技可用性例外必须点名', () => {
     expect(bySite.get(DISPLAY)?.role).toBe('display-only');
     expect(bySite.get(DISPLAY)?.differs).toEqual(ALL);
     expect(bySite.get(SPEARMAN_FLOOR)?.role).toBe('unit-age');
+    expect(bySite.get(SPEARMAN_ARMENIAN)?.role).toBe('tech-age');
     expect(bySite.get(ARMENIAN_75)?.differs).toEqual(ALL);
     expect(result.sites.find((site) => site.key === BURGUNDIANS)?.usedBy).toEqual(['productionTechs']);
     expect(result.sites.find((site) => site.kind === 'display-age')?.usedBy).toEqual([]);
@@ -170,7 +173,9 @@ describe('#869 科技可用性例外必须点名', () => {
   });
 
   it('displayUnitAge 丢掉文明展示分支会失败', () => {
-    const stripped = readFileSync('src/domain/availabilityAge.ts', 'utf8').replace("civ === 'Armenians' ? 1 : 2", 'catalogAge');
+    const source = readFileSync('src/domain/availabilityAge.ts', 'utf8');
+    const stripped = source.replace("return id === SPEARMAN_UNIT_ID ? (civ === 'Armenians' ? 1 : 2) : catalogAge;", 'return catalogAge;');
+    expect(stripped).not.toBe(source);
     const result = auditSources([{ name: 'src/domain/availabilityAge.ts', text: stripped }], []);
     expect(result.errors.some((error: string) => error.includes('displayUnitAge') && error.includes('没有扫到嵌套三元或等价 if/return'))).toBe(true);
     expect(result.errors.some((error: string) => error.includes('恰好一处'))).toBe(false);
