@@ -1,4 +1,4 @@
-import { unitCoverageQueryError, unitHistoryReturn, unitQueryError, type UnitUpdateData } from './unitUpdates';
+import { UNIT_FILTER_KEYS, unitCoverageQueryError, unitHistoryReturn, unitQueryError, type UnitUpdateData } from './unitUpdates';
 import { buildingHistoryReturn, type BuildingUpdateData } from './buildingUpdates';
 import { techHistoryReturn, type TechUpdateData } from './techUpdates';
 /** Historical claims are independent of today's game values and technology tree. */
@@ -245,6 +245,12 @@ export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): s
     if (path?.startsWith('/unit/') && params.has('obj')) return null;
     const id = path?.startsWith('/unit/') ? path.slice(1) : params.has('obj') ? 'unit/' + params.get('obj')!.slice(5) : null;
     if (id && !data.units?.rows.some((row) => row.entityId === id)) return null;
+    if (path?.startsWith('/unit/')) {
+      const allowed = ['tab', 'civ', 'me', 'opp', 'histQuery', 'histEvent', ...UNIT_FILTER_KEYS];
+      if ([...params.keys()].some((key) => !allowed.includes(key)) || (params.has('tab') && params.get('tab') !== 'history')) return null;
+      for (const key of ['civ', 'me', 'opp']) if (params.has(key) && !data.civilizations.some((c) => c.civId === params.get(key))) return null;
+      return path + (params.size ? '?' + params.toString() : '');
+    }
     return unitHistoryReturn(raw);
   }
   if (path !== '/patches' || [...params.keys()].some((key) => !(OVERVIEW_KEYS as readonly string[]).includes(key)) || overviewQueryError(params)) return null;

@@ -18,6 +18,14 @@ import {
 
 const data = historyFixture();
 const q = (text = '') => new URLSearchParams(text);
+
+it('retains validated civilization context when returning from technology to a unit event', () => {
+  const path = '/unit/1370?tab=history&civ=Cumans&me=Cumans&opp=Aztecs&histVersion=de-36202';
+  expect(techHistoryReturn(data, path)).toBe(path);
+  expect(unitHistoryReturn(path, data)).toBe(path);
+  expect(techHistoryReturn(data, path.replace('civ=Cumans', 'civ=invalid'))).toBeNull();
+  expect(techHistoryReturn(data, path + '&civ=Cumans')).toBeNull();
+});
 const views = (id: string, version: string) => projectTechEvents(data, id).filter((v) => v.event.versionId === version);
 
 describe('technology evidence projections and route boundaries #1085', () => {
