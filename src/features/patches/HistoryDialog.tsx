@@ -81,7 +81,11 @@ function SourceCard({ data, entry, children }: { data: CivUpdatesData; entry: Up
         {source?.title ?? '来源未登记'}
         {source && ' · ' + SOURCE_CATEGORY_LABELS[source.category]}
       </h3>
-      {entry.originalText ? <blockquote>{entry.originalText}</blockquote> : <p>此来源未保存原文；本页不补写原文。</p>}
+      {entry.originalText ? (
+        <blockquote><UpdateText>{entry.originalText}</UpdateText></blockquote>
+      ) : (
+        <p>此来源未保存原文；本页不补写原文。</p>
+      )}
       <p>
         定位：<UpdateText>{entry.locator || '未登记'}</UpdateText>
         {section && ' · ' + section.title}
