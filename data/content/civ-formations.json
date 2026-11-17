@@ -1,0 +1,347 @@
+[
+  {
+    "civ": "Spanish",
+    "lead": "陆地帝王中后期，按局面选择一条路线。条件替代，不必同时训练。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#西班牙",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "未验证混编胜负，不把单兵克制当作阵容效果。"
+    },
+    "routes": [
+      {
+        "id": "conquistador-hussar",
+        "title": "精锐西班牙征服者＋翼骑兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "已有或能维持城堡金线，能操作机动部队，并有安全接敌路径。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 773,
+            "historicalName": "精锐西班牙征服者",
+            "role": "机动输出"
+          },
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "机动、反僧侣与条件侧袭"
+          }
+        ],
+        "supplements": [
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "弓手或骑射施压时提供反远程支援"
+          }
+        ],
+        "reason": "征服者保持机动输出，翼骑寻找侧翼与接敌窗口，分担保护任务。",
+        "limitation": "两线争食物。金流与城堡产能限制持续补兵，骑兵不正撞长矛屏障。",
+        "attack": "征服者利用射程机动。翼骑沿安全路径寻找侧翼、僧侣或攻城器接敌窗口。拆防或反攻城时，再按目标另配攻城器并安排护卫。",
+        "defense": "保留翼骑拦截与侧袭空间，保护金线主力，不把兵力全部压在正面。",
+        "adjustments": [
+          {
+            "when": "长矛与长戟屏障",
+            "text": "征服者保持射程，翼骑避开正面。接敌不利时换路。",
+            "id": "spears"
+          },
+          {
+            "id": "ranged",
+            "when": "弓手与骑射手",
+            "text": "可补精锐掷矛手反远程。征服者不作主要反弓手段。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 6
+              }
+            ],
+            "fallback": "征服者不作主要反弓手段。"
+          },
+          {
+            "when": "攻城器与护卫",
+            "text": "只有路径安全且能处理护卫，翼骑才尝试切入。攻城器按目标另配。",
+            "id": "siege"
+          }
+        ],
+        "alternatives": "不默认再叠第二条金线。两条金线的升级、补兵与损失会一起挤压金流，资源与接敌都支持时再考虑。",
+        "prerequisites": []
+      },
+      {
+        "id": "paladin-skirmisher",
+        "title": "游侠＋精锐掷矛手",
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "已有骑兵路线，或能承担升级和补兵，且地形与接敌适合骑兵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 569,
+            "historicalName": "游侠",
+            "role": "近战接触"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "反远程支援"
+          }
+        ],
+        "supplements": [
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "黄金紧张与接敌有利时可与掷矛搭配"
+          }
+        ],
+        "reason": "游侠接触适合的目标，掷矛手在后方提供反远程支援。",
+        "limitation": "两线争食物。游侠损失耗金，骆驼与强反骑会使正面接战风险上升。",
+        "attack": "游侠接触适合目标，精锐掷矛手在后支援。不要让骑兵撞入长矛屏障。攻城器按目标另配。",
+        "defense": "用精锐掷矛手分担远程压力，保留机动兵的拦截空间，按敌军压力调整填线。",
+        "adjustments": [
+          {
+            "id": "camels",
+            "when": "骆驼或强反骑",
+            "text": "避开正面接战。反骑压力大时可改火枪手＋长戟兵。",
+            "requires": [
+              {
+                "kind": "route",
+                "id": "handcannon-halberdier"
+              }
+            ],
+            "fallback": "避开正面接战。"
+          },
+          {
+            "when": "弓手与骑射手",
+            "text": "精锐掷矛手承担反远程支援，保持前后保护。",
+            "id": "ranged"
+          },
+          {
+            "when": "长矛屏障",
+            "text": "不让游侠正撞，按安全接敌条件换路。",
+            "id": "spears"
+          },
+          {
+            "id": "low-gold",
+            "when": "黄金紧张时",
+            "text": "可考虑低金翼骑＋掷矛，仍应评估安全接敌条件。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 441
+              }
+            ]
+          }
+        ],
+        "alternatives": "不默认同时补征服者，双黄金线会挤压金流。",
+        "prerequisites": []
+      },
+      {
+        "id": "handcannon-halberdier",
+        "title": "火枪手＋长戟兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "步兵或反骑压力与现有投入使这条路线适合，且能保护较慢的推进。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "处理步兵"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "反骑、保护火枪与攻城器"
+          }
+        ],
+        "supplements": [
+          {
+            "kind": "unit",
+            "id": 36,
+            "historicalName": "手推炮",
+            "role": "有反攻城需求时按需配备"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "有拆防需求时按需配备"
+          }
+        ],
+        "reason": "火枪处理步兵，长戟提供反骑保护，让远程单位与攻城器有掩护。",
+        "limitation": "推进较慢。弓手、骑射与范围攻城仍会施压，需要护卫、换位或换路。",
+        "attack": "火枪与长戟相互保护，按步兵接近路线保持掩护。拆防或反攻城时另配对应攻城器。",
+        "defense": "长戟按反骑压力填线，保护火枪等金线主力，不把部队全部压在正面。",
+        "adjustments": [
+          {
+            "when": "步兵海",
+            "text": "保护火枪的接敌空间，不把克制标签视为必胜。",
+            "id": "infantry"
+          },
+          {
+            "when": "弓手、骑射或范围攻城",
+            "text": "安排护卫、拉开、换位或换路。",
+            "id": "ranged"
+          },
+          {
+            "id": "anti-siege",
+            "when": "反攻城",
+            "text": "可按目标选手推炮并安排护卫。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 36
+              }
+            ]
+          },
+          {
+            "id": "break-defenses",
+            "when": "拆防",
+            "text": "可按目标选巨型投石机并安排护卫。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 331
+              }
+            ]
+          }
+        ],
+        "alternatives": "拆防与反攻城按目标分别选用，不固定塞入重型攻城线。海军按地图需要，不固定加入陆地路线。",
+        "prerequisites": []
+      }
+    ]
+  },
+  {
+    "civ": "Georgians",
+    "lead": "陆地帝王中后期的条件方案。主力、科技前提与按需补充分别列出。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "穿透目标数、逐个伤害和驻军输出未核实，不扩写为范围溅射或混编输出。"
+    },
+    "routes": [
+      {
+        "id": "monaspa-towers",
+        "title": "精锐莫纳斯帕＋箭塔",
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "能控制并保护施工位置，有石料与村民投入。不在暴露地点强行前置。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1805,
+            "historicalName": "精锐莫纳斯帕",
+            "role": "机动接战、护施工与侧翼"
+          },
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "建筑支点 · 瞭望箭塔系的帝王形态"
+          },
+          {
+            "kind": "tech",
+            "id": 923,
+            "historicalName": "斯万箭塔",
+            "role": "科技前提 · 城堡时代科技"
+          }
+        ],
+        "supplements": [
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "塔区形成后按需拆防，与莫纳斯帕竞争城堡队列"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "塔区外反远程时补入"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "强反骑压力下用于保护塔与施工队"
+          }
+        ],
+        "reason": "骑兵护施工与侧翼，箭塔支援进入塔区的交战。先取得区域控制，再按需推进。",
+        "limitation": "箭塔静态且可被绕开。射程外攻城器是威胁，石料、施工保护和城堡队列都要取舍。",
+        "attack": "先争取能保护施工的位置，骑兵护建、守侧翼。安全路径与护卫未解决时，不强行侧袭攻城器。",
+        "defense": "塔区守关键路口，莫纳斯帕保留机动应对侧翼。敌军仍可绕行或从射程外施压。",
+        "adjustments": [
+          {
+            "when": "塔区外的弓手与骑射手",
+            "text": "条件补精锐掷矛手作机动反远程支援，不固定纳入主组合。",
+            "id": "ranged",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 6
+              }
+            ]
+          },
+          {
+            "when": "骆驼与强反骑",
+            "text": "压力大时补长戟兵保护塔与施工队，莫纳斯帕避开正面硬接。",
+            "id": "camels",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359
+              }
+            ],
+            "fallback": "莫纳斯帕避开反骑正面。"
+          },
+          {
+            "when": "巨投与手推炮",
+            "text": "塔无法直接压制射程外攻城器。骑兵仅在路径安全且能处理护卫时侧袭，否则退守或换位。",
+            "id": "siege"
+          },
+          {
+            "id": "break-defenses",
+            "when": "塔区形成后需要拆防",
+            "text": "可按需用巨型投石机，留出城堡生产队列。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 331
+              }
+            ]
+          }
+        ],
+        "alternatives": "驻军输出未验证，不为驻塔固定另练兵线。按敌人和拆防需要调整辅助，不设固定兵量或比例。",
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 63
+          }
+        ]
+      }
+    ]
+  }
+]
