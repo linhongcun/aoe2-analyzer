@@ -46,13 +46,18 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const originFocus = useRef<HTMLElement | null>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
+  const [scope, setScope] = useState({ raw, core, trees, loadError });
+  if (scope.raw !== raw || scope.core !== core || scope.trees !== trees || scope.loadError !== loadError) {
+    setScope({ raw, core, trees, loadError });
     setOutcome(null);
     setBusy(false);
+    setExitMode(null);
+  }
+  useEffect(() => () => clearTimeout(timer.current), [raw, core, trees, loadError]);
+  const update = (next: MixedDuelInput) => {
     setNotice('');
-    return () => clearTimeout(timer.current);
-  }, [raw, core, trees, loadError]);
-  const update = (next: MixedDuelInput) => setParams(encodeMixedDuel(next), { replace: true });
+    setParams(encodeMixedDuel(next), { replace: true });
+  };
   const focusField = (id: string) => {
     const element = document.getElementById(id);
     if (!element) return;

@@ -146,7 +146,7 @@ describe('#1054 mixed strict production adapter', () => {
     expect(get(side({ techs: ['67', '68'] })).errors).toEqual([]);
   });
   it('does not import production-only chemistry age exception into new strict combat protocol', () => {
-    const r = get(side({ civ: 'Bohemians', age: '3', techs: ['47'], rows: [{ uid: '5', qty: '1' }] }));
+    const r = get(side({ civ: 'Bohemians', age: '3', techs: ['47'], rows: [{ uid: '4', qty: '1' }] }));
     expect(r.errors.some((e) => e.message.includes('高于本方时代'))).toBe(true);
   });
   it('support is based on actual fixed attack attributes, healing/conversion/explosive units fail closed', () => {

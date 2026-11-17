@@ -125,6 +125,18 @@ describe('#1054 受击队列集火 v1', () => {
       expect(Object.keys(r).sort()).toEqual(['reason', 'status']);
     }
   });
+  it('资源限额按实际事件/攻击计数，等于边界仍可成功', () => {
+    const a = [row(1, 1, { hp: 1, attack: { 近战: 1 } })],
+      b = [row(2, 1, { hp: 1, attack: { 近战: 1 } })];
+    expect(mixedFight(a, b, { maxEvents: 1, maxAttacks: 2 }).status).toBe('draw');
+    expect(mixedFight(a, b, { maxEvents: 1, maxAttacks: 1 }).status).toBe('error');
+    expect(mixedFight([row(1, 1, { rof: 1e-300, ...harmless })], [row(2, 1, harmless)], { maxEvents: 3 }).status).toBe('error');
+  });
+  it('继续复用负类别攻击与最低伤害，不将类别攻击直接相加', () => {
+    const a = row(1, 1, { hp: 100, attack: { 近战: 10, 反骑兵: -5 } });
+    const b = row(2, 1, { hp: 100, armor: { 近战: 6, 反骑兵: 0 }, ...harmless });
+    expect(valid(mixedFight([a], [b], { maxTime: 0 })).b.total.hp).toBe(99);
+  });
   it('非法数量、重复ID、超过3行、无持续攻击或非有限属性均fail closed', () => {
     for (const a of [
       [],
