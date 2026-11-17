@@ -44,13 +44,12 @@ for (const width of [360, 375, 390, 1280])
     await page.getByRole('tab', { name: '数据', exact: true }).click();
     expect(returned()).toBe(target);
     await page.getByRole('tab', { name: '更新历史', exact: true }).click();
-    await page.getByPlaceholder('名称、改动或版本号').fill('射程');
+    await page.getByRole('link', { name: '查看完整历史' }).click();
+    await expect(page).toHaveURL(/obj=civ%3ABritons/u);
+    await page.getByRole('link', { name: '返回来处' }).click();
     expect(returned()).toBe(target);
-    await page.getByRole('button', { name: '清除历史筛选', exact: true }).click();
-    expect(returned()).toBe(target);
-    await page.getByPlaceholder('名称、改动或版本号').fill('射程');
     await page.reload();
-    await expect(page.getByPlaceholder('名称、改动或版本号')).toHaveValue('射程');
+    await expect(page.getByRole('link', { name: '查看完整历史' })).toBeVisible();
     await page.goBack();
     await expect(page.getByRole('link', { name: '回开一局', exact: true })).toBeVisible();
     await page.goForward();

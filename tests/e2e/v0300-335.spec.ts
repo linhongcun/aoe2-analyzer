@@ -40,7 +40,7 @@ test.describe('#335 页面上的来源日期按北京时间', () => {
     });
 
   test('#/patches：补丁列表 185872 的日期是 2026-09-23', async ({ page }) => {
-    const text = await mainText(page, '/patches');
+    const text = await mainText(page, '/patches?read=versions');
     expect(text).toContain('2026-09-23');
     expect(text).not.toContain('2026-09-22');
   });

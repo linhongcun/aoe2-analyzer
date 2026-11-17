@@ -18,7 +18,7 @@ import { session } from '../../../shared/utils/sticky';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import { usePreviousHistoryEntry } from '../../../shared/utils/navigationEntry';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { CivUpdates } from '../../../shared/ui/CivUpdates';
+import { EncyclopediaHistoryLink, savedHistoryVisit } from '../../../shared/ui/HistoryReaderLink';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
 import { CivHistory } from './CivHistory';
@@ -251,7 +251,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     ['civ-tool-matchup', `/matchup?me=${c.en}`, '对局助手'],
     ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;
-  const historyOpen = tab === 'history' || location.hash === '#patches';
+  const historyOpen = tab === 'history' || location.hash === '#patches' || savedHistoryVisit(location)?.focusId === 'encyclopedia-complete-history';
   return (
     <CivBackground civ={c.en} className="civ-read">
       <Breadcrumbs current={c.zh} />
@@ -384,7 +384,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <CivHistory civ={c.en} />
         </Fold>
         <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <CivUpdates civId={c.en} />
+          <EncyclopediaHistoryLink entityId={'civ/' + c.en} />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>

@@ -19,6 +19,7 @@ for (const width of [360, 375, 390, 1280])
       await page.screenshot({ path: info.outputPath(`unit-873-${width}-${theme}.png`), fullPage: true });
 
       await page.goto('./#/patches');
+      await page.getByRole('button', { name: '按版本', exact: true }).click();
       await page.getByRole('link', { name: /DE Update 188329/ }).click();
       await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
       await expect(page.getByRole('link', { name: /当前数据版本：DE 188329/ })).toBeVisible();

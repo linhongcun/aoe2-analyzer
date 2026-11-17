@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { civByEn, civs, type Core } from '../../data';
+import { Link, useLocation, useNavigate, useNavigationType, useParams, useSearchParams } from 'react-router-dom';
+import { civs } from '../../data';
 import { useCore } from '../../data/hooks';
 import { usePatchArchives } from '../../data/patchHistory';
-import { historyCoverage, historyFor, resolveHistoryIdentity, type PatchArchive } from '../../domain/patchHistory';
+import { archiveOrderingDate, historyCoverage, type PatchArchive } from '../../domain/patchHistory';
 import {
   ARCHIVE_KIND_LABEL,
   ARCHIVE_KINDS,
@@ -12,26 +12,30 @@ import {
   civSelection,
   filterPatch,
   groupTreeChanges,
-  parseObjectParam,
   treeChangeLabel,
   partitionByStatedCiv,
   patchTarget,
   statedCivIds,
-  type ObjectCandidate,
   type PatchEntry,
 } from '../../domain/patches';
 import { Icon } from '../../shared/ui/Icon';
+import { EntryBody, civZh } from './patchParts';
+import { useCivUpdates } from '../../data/civUpdates';
+import { historyReaderPath, projectReaderEvents, readerReturn } from '../../domain/historyReader';
+import { safeHistorySourceUrl } from '../../domain/civUpdates';
+import { SourceTime } from '../../shared/ui/CivUpdatePrimitives';
+import { canPopHistoryReturn, HistoryReaderLink, historyVisitKey, rememberHistoryVisit, savedHistoryVisit } from '../../shared/ui/HistoryReaderLink';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { CivUpdatesOverview } from '../../shared/ui/CivUpdatesOverview';
-import { UnitUpdates, UnitUpdatesOverview } from '../../shared/ui/UnitUpdates';
-import { BuildingUpdates } from '../../shared/ui/BuildingUpdates';
-import { TechUpdates } from '../../shared/ui/TechUpdates';
-import { EntryBody, OBJECT_LABEL, ObjectSearch, civZh } from './patchParts';
+import { HistoryReader } from './HistoryReader';
 import './patches.css';
 
 const UNREVIEWED = '本档案尚未完成逐条原文核对。来源冲突的条目会单独标明，不会按数值改写档案标记。';
 const PINNED = '本站数值按此版本固定。这不表示本档案已收录该版本的全部官方说明，也不表示本站是完整更新史。';
 const KNOWN_CIVS = civs.map((civ) => civ.en);
+const canonicalSearch = (search: string) => {
+  const params = new URLSearchParams(search);
+  return params.size ? '?' + params.toString() : '';
+};
 
 function hasFilter(params: URLSearchParams) {
   return PATCH_FILTER_KEYS.some((key) => (params.get(key) ?? '').trim().length > 0);
@@ -44,23 +48,34 @@ function clearFilterParams(params: URLSearchParams) {
 }
 
 function ArchiveDate({ archive }: { archive: PatchArchive }) {
-  if (archive.releaseDate)
-    return (
-      <p>
-        官方发行日（公告当地日期）{' '}
-        <time className="num nw" dateTime={archive.releaseDate}>
-          {archive.releaseDate}
-        </time>
-      </p>
-    );
   return (
-    <p>
-      档案日期{' '}
-      <time className="num nw" dateTime={archive.date}>
-        {archive.date}
-      </time>
-      （不是已核对的官方发行日）
-    </p>
+    <div className="history-archive-dates">
+      <p>
+        {archive.releaseType === 'release' ? '正式版' : archive.releaseType === 'pup' ? '公开预览' : archive.releaseType === 'hotfix' ? '热修' : '类别未知'}
+      </p>
+      <p>
+        官方发行日（公告当地日期）：
+        <SourceTime value={archive.releaseDate ?? null} />
+      </p>
+      {archive.date && (
+        <p>
+          档案日期：
+          <SourceTime value={archive.date} />
+        </p>
+      )}
+      {archive.publishedAt && (
+        <p>
+          网页发布时间：
+          <SourceTime value={archive.publishedAt} />
+        </p>
+      )}
+      {archive.sourcePublishedAt && (
+        <p>
+          来源发布时间（原时区）：
+          <SourceTime value={archive.sourcePublishedAt} />
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -87,42 +102,56 @@ function PatchLoading({ error, retry }: { error: boolean; retry: () => void }) {
   );
 }
 
-function Browse({ archives }: { archives: PatchArchive[] }) {
-  const core = useCore();
+function ArchiveList({ from }: { from: string }) {
+  const { archives, error, retry } = usePatchArchives();
+  const [oldest, setOldest] = useState(false);
   const pinned = String(__DATA_SOURCES__.patch.build);
-  const versions = [...archives].sort((a, b) => b.date.localeCompare(a.date));
+  const versions = [...(archives ?? [])].sort(
+    (a, b) => (oldest ? 1 : -1) * archiveOrderingDate(a).localeCompare(archiveOrderingDate(b)) || a.id.localeCompare(b.id),
+  );
   return (
-    <section className="pane patches">
-      <Breadcrumbs />
-      <h1 className="page-heading">更新历史</h1>
-      <p>先查一个文明、单位、建筑或科技，也可以按版本阅读已收录档案。没有收录，不代表从未改动。</p>
-      <ObjectSearch archives={archives} core={core} />
-      <UnitUpdatesOverview />
-      <p>
-        <Link to="/patches?histView=techs">按科技查历史与来源覆盖</Link>
-      </p>
-      <p>
-        <Link to="/patches?histView=buildings">按建筑查历史与来源覆盖</Link>
-      </p>
-      <CivUpdatesOverview />
-      <h2>版本档案</h2>
-      <div className="patch-versions">
-        {versions.map((archive) => (
-          <article className="patch-version" key={archive.id} data-testid="patch-version-card">
-            <Link to={`/patches/${archive.id}`}>
-              <h2>
-                DE Update <span className="num nw">{archive.id}</span>
-              </h2>
-              <ArchiveDate archive={archive} />
-              {archive.id === pinned && <p className="patch-pin">当前数据版本</p>}
-              <p>收录范围：{coverageText(archive)}</p>
-              <p>
-                本档案 <span className="num nw">{archive.entries.length}</span> 条
-              </p>
-            </Link>
-          </article>
-        ))}
-      </div>
+    <section className="history-archives" aria-labelledby="history-archives">
+      <h2 id="history-archives" tabIndex={-1}>
+        版本档案
+      </h2>
+      <p>档案与对象时间线各自保留原记录，不合并计数。</p>
+      {error ? (
+        <>
+          <p role="alert">版本档案加载失败。</p>
+          <button type="button" onClick={retry}>
+            重试版本档案
+          </button>
+        </>
+      ) : !archives ? (
+        <p role="status">正在加载版本档案</p>
+      ) : (
+        <>
+          <label>
+            档案排序{' '}
+            <select value={oldest ? 'oldest' : 'newest'} onChange={(e) => setOldest(e.target.value === 'oldest')}>
+              <option value="newest">新到旧</option>
+              <option value="oldest">旧到新</option>
+            </select>
+          </label>
+          <div className="patch-versions">
+            {versions.map((archive) => (
+              <article className="patch-version" key={archive.id} data-testid="patch-version-card">
+                <HistoryReaderLink to={`/patches/${archive.id}`} from={from} id={'history-archive-' + archive.id}>
+                  <h3>
+                    DE Update <span className="num nw">{archive.id}</span>
+                  </h3>
+                  <ArchiveDate archive={archive} />
+                  {archive.id === pinned && <p className="patch-pin">当前数据版本</p>}
+                  <p>收录范围：{coverageText(archive)}</p>
+                  <p>
+                    本档案 <span className="num nw">{archive.entries.length} 条</span>
+                  </p>
+                </HistoryReaderLink>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
@@ -136,76 +165,27 @@ function MissingVersion({ id }: { id: string }) {
   );
 }
 
-function MissingObject() {
-  return (
-    <section className="pane patches" data-testid="patch-object-missing">
-      <h1>找不到对象</h1>
-      <Link to="/patches">返回更新历史</Link>
-    </section>
-  );
-}
-
-function catalogName(type: ObjectCandidate['type'], id: string, core: Core | null) {
-  if (type === 'civ') return civByEn(id)?.zh;
-  if (!core) return undefined;
-  if (type === 'unit') return core.unitById[Number(id)]?.zh;
-  if (type === 'building') return core.buildingById[Number(id)]?.zh;
-  return core.techById[Number(id)]?.zh;
-}
-
-function ObjectTimeline({ archives, raw }: { archives: PatchArchive[]; raw: string | null }) {
-  const core = useCore();
-  const [params] = useSearchParams();
-  const parsed = parseObjectParam(raw);
-  if (!parsed) return <MissingObject />;
-  if (parsed.type === 'civ') {
-    const query = new URLSearchParams(params);
-    query.delete('obj');
-    query.set('tab', 'history');
-    return <Navigate replace to={`/civ/${parsed.id}?${query.toString()}#patches`} />;
-  }
-  const name = catalogName(parsed.type, parsed.id, core);
-  const identity = resolveHistoryIdentity(archives, { targetType: parsed.type, targetId: parsed.id }, name);
-  const waiting = !name && !identity && !core;
-  if (waiting)
-    return (
-      <section className="pane patches">
-        <p role="status">正在加载目录</p>
-      </section>
-    );
-  if (!identity) return <MissingObject />;
-  const records = historyFor(archives, { targetType: parsed.type, targetId: parsed.id, targetNameZh: identity.name });
-  return (
-    <section className="pane patches" data-testid="patch-object">
-      <p className="patch-eyebrow">
-        <Link to="/patches">更新历史</Link>
-      </p>
-      <h1>{identity.name}</h1>
-      <p>
-        {OBJECT_LABEL[parsed.type]}
-        {identity.en ? ` · ${identity.en}` : ''} · 已收录 <span className="num nw">{records.length}</span> 条
-      </p>
-      {!records.length ? (
-        <p>尚未收录该对象的更新历史。这不代表它从未改动。</p>
-      ) : (
-        records.map((record) => (
-          <article className="patch-entry" key={`${record.patch.id}:${record.entry.id}`} data-history-entry={record.entry.id}>
-            <p>
-              <Link to={`/patches/${record.patch.id}`}>
-                DE Update <span className="num nw">{record.patch.id}</span>
-              </Link>
-            </p>
-            <ArchiveDate archive={record.patch} />
-            <EntryBody entry={record.entry} core={core} />
-          </article>
-        ))
-      )}
-    </section>
-  );
-}
-
 function VersionReading({ archive }: { archive: PatchArchive }) {
   const core = useCore();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const navigation = useNavigationType();
+  const { data } = useCivUpdates();
+  const browseFrom = data && typeof location.state?.historyFrom === 'string' && location.state.historyFrom.startsWith('/patches') ?
+    readerReturn(data, location.state.historyFrom) : null;
+  const from = location.pathname + canonicalSearch(location.search);
+  const safeSource = safeHistorySourceUrl(archive.source);
+  useEffect(() => {
+    if (navigation !== 'POP' || !data) return;
+    const saved = savedHistoryVisit(location);
+    if (!saved?.focusId?.startsWith('archive-object-')) return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(saved.focusId!)?.focus({ preventScroll: true });
+      window.scrollTo(0, saved.y);
+      rememberHistoryVisit(location, { y: saved.y });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [data, location, navigation]);
   const [params, setParams] = useSearchParams();
   const [draft, setDraft] = useState<{ base: string; value: string } | null>(null);
   const [filterOpen, setFilterOpen] = useState(() => hasFilter(params));
@@ -221,10 +201,10 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
       const next = new URLSearchParams(params);
       if (draft.value) next.set('q', draft.value);
       else next.delete('q');
-      setParams(next, { replace: true });
+      setParams(next, { replace: true, state: location.state });
     }, 200);
     return () => clearTimeout(timer);
-  }, [draft, params, setParams]);
+  }, [draft, location.state, params, setParams]);
   const selected = (key: string) => (params.get(key) ?? '').split(',').filter(Boolean);
   const toggle = (key: string, value: string) => {
     const values = selected(key);
@@ -232,10 +212,10 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
     const changed = values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
     if (changed.length) next.set(key, changed.join(','));
     else next.delete(key);
-    setParams(next, { replace: true });
+    setParams(next, { replace: true, state: location.state });
   };
   const clear = () => {
-    setParams(clearFilterParams(params), { replace: true });
+    setParams(clearFilterParams(params), { replace: true, state: location.state });
     setDraft(null);
     setFilterOpen(false);
   };
@@ -254,12 +234,31 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
     list.map((entry) => (
       <article className={`patch-entry patch-${entry.kind}`} key={entry.id} data-entry={entry.id} data-civs={statedCivIds(entry).join(',')}>
         <EntryBody entry={entry} core={core} />
+        {(() => {
+          const matches = data?.entities.filter((entity) => entity.type === entry.targetType && entity.catalogId === String(entry.targetId)) ?? [];
+          const entity = matches.length === 1 ? matches[0] : undefined;
+          const mapping = data?.legacyMap.find((row) => row.patchId === archive.id && row.entryId === entry.id);
+          const id =
+            data && entity && mapping?.eventId && projectReaderEvents(data, entity).some((r) => r.event.id === mapping.eventId) ? mapping.eventId : undefined;
+          return (
+            entity && (
+              <HistoryReaderLink from={from} to={historyReaderPath(entity.id, undefined, id, from)} id={'archive-object-' + entry.id}>
+                在对象时间线阅读
+              </HistoryReaderLink>
+            )
+          );
+        })()}
       </article>
     ));
   return (
     <section className="pane patches patches-read">
       <p className="patch-eyebrow">
-        <Link to="/patches">更新历史</Link>
+        <Link to={browseFrom ?? '/patches?read=versions'} onClick={(e) => {
+          if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && browseFrom && canPopHistoryReturn(location.state, browseFrom)) {
+            e.preventDefault();
+            navigate(-1);
+          }
+        }}>更新历史</Link>
       </p>
       <h1>
         DE Update <span className="num nw">{archive.id}</span>
@@ -451,75 +450,66 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
         </>
       )}
       <p>
-        <a href={archive.source} target="_blank" rel="noopener noreferrer">
-          官方完整说明
-        </a>
+        {safeSource ? (
+          <a href={safeSource} target="_blank" rel="noopener noreferrer">
+            官方完整说明
+          </a>
+        ) : (
+          '来源链接缺失'
+        )}
       </p>
     </section>
   );
 }
 
+function VersionPage({ id }: { id: string }) {
+  const { archives, error, retry } = usePatchArchives();
+  if (!archives) return <PatchLoading error={error} retry={retry} />;
+  const archive = archives.find((item) => item.id === id);
+  return archive ? <VersionReading key={archive.id} archive={archive} /> : <MissingVersion id={id} />;
+}
+
+const archiveVisits = new Set<string>();
+function ReaderPage() {
+  const location = useLocation();
+  const navigation = useNavigationType();
+  const visitKey = historyVisitKey(location);
+  const [archives, setArchives] = useState<{ key: string; active: boolean }>();
+  const active = archives?.key === visitKey ? archives.active :
+    archiveVisits.has(visitKey) || new URLSearchParams(location.search).get('read') === 'versions';
+  const [opened, setOpened] = useState({ archives: active, objects: !active });
+  useEffect(() => {
+    if (!active || navigation !== 'POP') return;
+    const saved = savedHistoryVisit(location);
+    if (!saved?.focusId?.startsWith('history-archive-')) return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(saved.focusId!)?.focus({ preventScroll: true });
+      window.scrollTo(0, saved.y);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [active, location, navigation]);
+  function select(next: boolean) {
+    if (next) {
+      archiveVisits.add(visitKey);
+      if (archiveVisits.size > 60) archiveVisits.delete(archiveVisits.keys().next().value!);
+    } else archiveVisits.delete(visitKey);
+    setArchives({ key: visitKey, active: next });
+    setOpened((current) => ({ archives: current.archives || next, objects: current.objects || !next }));
+  }
+  return <section className="pane patches history-reader">
+    <Breadcrumbs />
+    <h1 className="page-heading" id="history-page-title" tabIndex={-1}>更新历史</h1>
+    <p>按对象和版本阅读已收录的变化。部分收录；未收录不代表从未改动。</p>
+    <div className="history-controls" role="group" aria-label="阅读方式">
+      <button type="button" aria-pressed={!active} onClick={() => select(false)}>按对象</button>
+      <button type="button" aria-pressed={active} onClick={() => select(true)}>按版本</button>
+    </div>
+    <div hidden={active}>{(!active || opened.objects) && <HistoryReader active={!active} />}</div>
+    <div hidden={!active}>{(active || opened.archives) && <ArchiveList from={location.pathname + canonicalSearch(location.search)} />}</div>
+  </section>;
+}
+
 export default function Patches() {
   const { id } = useParams();
-  const [params] = useSearchParams();
-  const { archives, error, retry } = usePatchArchives();
-  if (
-    !id &&
-    (params.getAll('histView').some((v) => v.startsWith('tech')) ||
-      params.getAll('histEntity').some((v) => v.startsWith('tech/')) ||
-      params.getAll('obj').some((v) => v.startsWith('tech:')) ||
-      params.has('techSourceState') ||
-      params.has('techIdentity'))
-  )
-    return (
-      <section className="pane patches">
-        <TechUpdates />
-      </section>
-    );
-  if (!id && (params.has('histView') || params.has('histEntity') || params.getAll('obj').some((raw) => raw.startsWith('building:'))))
-    return (
-      <section className="pane patches">
-        <BuildingUpdates />
-      </section>
-    );
-  if (!id && params.getAll('obj').length > 1) {
-    const candidates = [...new Set(params.getAll('obj'))].filter((raw) => parseObjectParam(raw));
-    const choose = (raw?: string) => {
-      const next = new URLSearchParams(params);
-      next.delete('obj');
-      if (raw) next.set('obj', raw);
-      return '/patches?' + next.toString();
-    };
-    return (
-      <section className="pane patches">
-        <h1>更新历史</h1>
-        <p role="alert">历史对象参数重复，请明确选择一个对象。搜索及历史筛选会保留，非法筛选仍需清除。</p>
-        {candidates.map((raw) => {
-          const object = parseObjectParam(raw)!;
-          return (
-            <p key={raw}>
-              <Link to={choose(raw)}>
-                查看{OBJECT_LABEL[object.type]} <span className="num nw">ID {object.id}</span>
-              </Link>
-            </p>
-          );
-        })}
-        <Link to={choose()}>重新选择对象</Link>
-      </section>
-    );
-  }
-  if (!id && params.getAll('obj').length === 1 && /^unit:\d+$/u.test(params.get('obj') ?? ''))
-    return (
-      <section className="pane patches">
-        <UnitUpdates entityId={'unit/' + params.get('obj')!.slice(5)} overview />
-      </section>
-    );
-  if (!archives) return <PatchLoading error={error} retry={retry} />;
-  if (id) {
-    const archive = archives.find((item) => item.id === id);
-    if (!archive) return <MissingVersion id={id} />;
-    return <VersionReading key={archive.id} archive={archive} />;
-  }
-  if (params.has('obj')) return <ObjectTimeline archives={archives} raw={params.get('obj')} />;
-  return <Browse archives={archives} />;
+  return id ? <VersionPage id={id} /> : <ReaderPage />;
 }
