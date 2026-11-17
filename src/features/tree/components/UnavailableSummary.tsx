@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import type { Civ } from '../../../domain/types';
-import { treeSummaryDetail, treeSummaryMemory } from '../../../domain/treeSummaryNavigation';
+import { consumeTreeSummaryHistory, treeSummaryDetail, treeSummaryMemory } from '../../../domain/treeSummaryNavigation';
 import {
   unavailableSummary,
   unavailableText,
@@ -107,10 +107,11 @@ export function UnavailableSummary({
         target?.focus({ preventScroll: true });
         target?.scrollIntoView({ block: 'center' });
         restored.current = true;
+        window.history.replaceState(consumeTreeSummaryHistory(window.history.state, civ.en), '');
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [restoreFocus, pending, summary, root]);
+  }, [restoreFocus, pending, summary, root, civ.en]);
 
   const doCopy = async (fromFallback = false) => {
     if (!available || busy.current) return;

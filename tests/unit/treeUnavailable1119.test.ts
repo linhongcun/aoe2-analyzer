@@ -3,7 +3,13 @@ import { loadCore, loadTrees, type Core } from '../../src/data';
 import type { TreeCell, Trees } from '../../src/domain/types';
 import { treeAge } from '../../src/domain/treeAge';
 import { unavailableSummary, unavailableText, UNAVAILABLE_SCOPE } from '../../src/domain/treeUnavailable';
-import { readTreeSummaryMemory, treeSummaryDetail, treeSummaryMemory, treeSummaryReturn } from '../../src/domain/treeSummaryNavigation';
+import {
+  consumeTreeSummaryHistory,
+  readTreeSummaryMemory,
+  treeSummaryDetail,
+  treeSummaryMemory,
+  treeSummaryReturn,
+} from '../../src/domain/treeSummaryNavigation';
 
 let core: Core;
 let trees: Trees;
@@ -12,6 +18,21 @@ beforeAll(async () => {
 });
 const cell = (kind: 'u' | 't' | 'b', id: number, row = 6, col = 0, status = 0): TreeCell => [row, col, kind, id, status, null];
 const fixture = (cells: TreeCell[], bid = 101): Trees => ({ b: {}, t: { Test: [[bid, 0, 3, cells]] } });
+
+it('汇总恢复消费一次性焦点，收起仅清本功能记录并保留真实history字段', () => {
+  const state = { key: 'source', idx: 2, extra: 3, usr: { sentinel: 'keep', treeSummary: treeSummaryMemory('Japanese', '101:u441') } };
+  expect(consumeTreeSummaryHistory(state, 'Japanese')).toEqual({
+    ...state,
+    usr: { ...state.usr, treeSummary: { version: 1, civ: 'Japanese', source: '/civ/Japanese#techtree', open: true } },
+  });
+  expect(consumeTreeSummaryHistory(state, 'Japanese', true)).toEqual({ ...state, usr: { sentinel: 'keep' } });
+  expect(state.usr.treeSummary.focus).toBe('101:u441');
+});
+
+it('消费不触碰无记录、无效形态或其他文明history', () => {
+  for (const state of [null, [], { key: 'x' }, { usr: 'bad' }, { usr: { treeSummary: treeSummaryMemory('Aztecs', '101:u441') } }])
+    expect(consumeTreeSummaryHistory(state, 'Japanese', true)).toBe(state);
+});
 
 describe('#1119 当前树不可用项', () => {
   it('日本按建筑、kind+ID 和树时代顺序精确对账 9组16条', () => {

@@ -20,6 +20,21 @@ export function treeSummaryMemory(civ: string, focus?: string): TreeSummaryMemor
   return { version: 1, civ, source: `/civ/${civ}#techtree`, open: true, focus };
 }
 
+export function consumeTreeSummaryHistory(state: unknown, civ: string, close = false): unknown {
+  const history = record(state);
+  const usr = record(history?.usr);
+  const memory = readTreeSummaryMemory(usr, civ);
+  if (!history || !usr || !memory) return state;
+  const next = { ...usr };
+  if (close) delete next.treeSummary;
+  else {
+    const saved = { ...record(usr.treeSummary) };
+    delete saved.focus;
+    next.treeSummary = saved;
+  }
+  return { ...history, usr: next };
+}
+
 export function treeSummaryDetail(civ: string, building: number, kind: 'u' | 't', id: number) {
   return { treeSummaryDetail: { version: 1, civ, source: `/civ/${civ}#techtree`, kind, id, focus: `${building}:${kind}${id}` } };
 }

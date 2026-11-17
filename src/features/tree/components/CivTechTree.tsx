@@ -5,7 +5,7 @@ import { civByEn } from '../../../data';
 import type { Core } from '../../../data';
 import type { Civ, Trees } from '../../../domain/types';
 import { offColumnSpecialBuildings, treeNodeIdentity } from '../../../domain/treeIdentity';
-import { readTreeSummaryMemory } from '../../../domain/treeSummaryNavigation';
+import { consumeTreeSummaryHistory, readTreeSummaryMemory } from '../../../domain/treeSummaryNavigation';
 import { costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -292,13 +292,11 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
   const savedSummary = readTreeSummaryMemory(location.state, civEn);
   const [summaryOpen, setSummaryOpen] = useState(!!savedSummary);
   const [summaryFocus, setSummaryFocus] = useState(savedSummary?.focus);
-  const summaryCiv = useRef(civEn);
-  useEffect(() => {
-    if (summaryCiv.current !== civEn) {
-      summaryCiv.current = civEn;
-      setSummaryFocus(undefined);
-    }
-  }, [civEn]);
+  const [summaryCiv, setSummaryCiv] = useState(civEn);
+  if (summaryCiv !== civEn) {
+    setSummaryCiv(civEn);
+    setSummaryFocus(undefined);
+  }
   const summaryToggle = useRef<HTMLButtonElement>(null);
   const [compare, setCompare] = useSticky('civ.techtree.compare', '');
   const [jumpSlot, setJumpSlot] = useState<HTMLDivElement | null>(null);
@@ -309,6 +307,12 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
   const failed = core.error || trees.error;
   const blocks = ready && trees.data ? trees.data.t[civEn] : undefined;
   const showTree = !!(ready && blocks && trees.data && core.data && civ);
+  const closeSummary = () => {
+    window.history.replaceState(consumeTreeSummaryHistory(window.history.state, civEn, true), '');
+    setSummaryOpen(false);
+    setSummaryFocus(undefined);
+    summaryToggle.current?.focus();
+  };
 
   if (!civ) return null;
 
@@ -364,8 +368,12 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             aria-expanded={summaryOpen}
             aria-controls="tree-unavailable"
             onClick={() => {
+              if (summaryOpen) {
+                closeSummary();
+                return;
+              }
               setSummaryFocus(undefined);
-              setSummaryOpen(!summaryOpen);
+              setSummaryOpen(true);
             }}
           >
             不可用项汇总
@@ -386,12 +394,8 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             key={civ.en}
             civ={civ}
             resources={resources}
-            restoreFocus={summaryCiv.current === civEn ? summaryFocus : undefined}
-            onCollapse={() => {
-              setSummaryOpen(false);
-              setSummaryFocus(undefined);
-              summaryToggle.current?.focus();
-            }}
+            restoreFocus={summaryCiv === civEn ? summaryFocus : undefined}
+            onCollapse={closeSummary}
           />
         )}
       </div>

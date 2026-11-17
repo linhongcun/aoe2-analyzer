@@ -210,6 +210,25 @@ test('#1119 跨建筑同实体返回第二行，修饰键不改源entry，外部
   await expect(page.getByRole('link', { name: '返回日本科技树', exact: true })).toHaveCount(0);
 });
 
+test('#1119 返回后消费旧焦点，收起后原树往返不复活汇总', async ({ page }) => {
+  await open(page);
+  await page.evaluate(() => history.replaceState({ ...history.state, usr: { sentinel: 'keep' } }, ''));
+  await summary(page).locator('[data-summary-key="101:u441"]').click();
+  await expect(page.getByRole('link', { name: '返回日本科技树', exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(summary(page).locator('[data-summary-key="101:u441"]')).toBeFocused();
+  expect(await page.evaluate(() => history.state.usr.treeSummary.focus)).toBeUndefined();
+  await summary(page).getByRole('button', { name: '收起汇总' }).click();
+  expect(await page.evaluate(() => history.state.usr)).toEqual({ sentinel: 'keep' });
+  const source = await page.evaluate(() => ({ key: history.state.key, idx: history.state.idx }));
+  await page.locator('.tree .tcell[href="#/unit/569?civ=Japanese"]').click();
+  await expect(page.locator('h1').first()).toContainText('游侠');
+  await page.goBack();
+  await expect(toggle(page)).toHaveAttribute('aria-expanded', 'false');
+  await expect(summary(page)).toHaveCount(0);
+  expect(await page.evaluate(() => ({ key: history.state.key, idx: history.state.idx }))).toEqual(source);
+});
+
 test('#1119 来源条目消失时仅回焦汇总标题，不抢后续焦点', async ({ page }) => {
   await open(page);
   await summary(page).locator('[data-summary-key="101:u441"]').click();
