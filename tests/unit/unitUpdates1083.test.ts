@@ -5,6 +5,7 @@ import {
   effectCondition,
   filterUnitEvents,
   projectUnitEvents,
+  partitionUnitScopes,
   searchUpdateUnits,
   unitHistoryPath,
   unitHistoryReturn,
@@ -19,6 +20,40 @@ const effects = (id: string, version: string) =>
 const numeric = (f: UpdateEffect) => f.type === 'numeric' || f.type === 'bonus';
 
 describe('unit history exact identities and source semantics #1083', () => {
+  it('partitions mixed organ gun scopes by effect while retaining one stable event and all evidence', () => {
+    const rows = filterUnitEvents(data, 'unit/1001', q('histVersion=de-125283&histCiv=Portuguese'));
+    const groups = partitionUnitScopes(rows);
+    expect(groups.known).toHaveLength(1);
+    expect(groups.unknown).toHaveLength(1);
+    expect(groups.mixed).toHaveLength(0);
+    expect(groups.known[0]!.event.id).toBe(groups.unknown[0]!.event.id);
+    expect(groups.known[0]!.event.scope.scopeKind).toBe('civ');
+    expect(groups.unknown[0]!.event.scope.scopeKind).toBe('unknown');
+    for (const [key, group] of Object.entries(groups))
+      for (const row of group) {
+        expect(row.original).toBe(rows[0]!.original);
+        expect(
+          row.event.claims.every((claim) =>
+            claim.effects.every((effect) => ((effect.scope ?? row.event.scope).scopeKind === 'unknown') === (key === 'unknown')),
+          ),
+        ).toBe(true);
+      }
+    expect(
+      groups.known
+        .concat(groups.unknown)
+        .flatMap((row) => row.event.claims.flatMap((claim) => claim.effects))
+        .map((f) => f.id)
+        .sort(),
+    ).toEqual(
+      rows[0]!.event.claims
+        .flatMap((claim) => claim.effects)
+        .map((f) => f.id)
+        .sort(),
+    );
+    const fixture = structuredClone(rows[0]!);
+    fixture.event.verification = 'conflict';
+    expect(partitionUnitScopes([fixture]).mixed[0]).toBe(fixture);
+  });
   it('reconciles all directory identities, old keys and final graph references', () => {
     expect(() => assertCivUpdateReferences(data)).not.toThrow();
     expect(new Set(data.units!.rows.map((r) => r.entityId)).size).toBe(248);

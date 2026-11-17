@@ -184,3 +184,29 @@ export function filterUnitEvents(data: CivUpdatesData, entityId: string, query: 
         a.event.id.localeCompare(b.event.id),
     );
 }
+
+/** Scope belongs to each effect. Keep conflicting claims atomic, including mixed scopes. */
+export function partitionUnitScopes(rows: UnitEventView[]) {
+  const groups: Record<'known' | 'unknown' | 'mixed', UnitEventView[]> = { known: [], unknown: [], mixed: [] };
+  for (const row of rows) {
+    const scopes = row.event.claims.flatMap((claim) => claim.effects.map((effect) => effect.scope ?? row.event.scope));
+    const hasUnknown = scopes.some((scope) => scope.scopeKind === 'unknown');
+    const hasKnown = scopes.some((scope) => scope.scopeKind !== 'unknown');
+    if (!hasUnknown || !hasKnown || row.event.verification === 'conflict') {
+      groups[hasUnknown ? (hasKnown ? 'mixed' : 'unknown') : 'known'].push(row);
+      continue;
+    }
+    for (const group of ['known', 'unknown'] as const) {
+      const claims = row.event.claims
+        .map((claim) => ({
+          ...claim,
+          effects: claim.effects.filter((effect) => ((effect.scope ?? row.event.scope).scopeKind === 'unknown') === (group === 'unknown')),
+        }))
+        .filter((claim) => claim.effects.length);
+      const ownScopes = claims.flatMap((claim) => claim.effects.map((effect) => effect.scope ?? row.event.scope));
+      const scope = ownScopes.every((scope) => JSON.stringify(scope) === JSON.stringify(ownScopes[0])) ? ownScopes[0]! : row.event.scope;
+      groups[group].push({ ...row, event: { ...row.event, claims, scope }, unknownScope: group === 'unknown' });
+    }
+  }
+  return groups;
+}

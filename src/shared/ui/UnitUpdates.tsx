@@ -9,6 +9,7 @@ import {
   clearUnitFilters,
   filterUnitEvents,
   projectUnitEvents,
+  partitionUnitScopes,
   searchUpdateUnits,
   unitHistoryPath,
   unitHistoryReturn,
@@ -154,7 +155,7 @@ function Coverage({ data, entityId }: { data: CivUpdatesData; entityId: string }
   );
 }
 
-function VersionEvents({ data, rows }: { data: CivUpdatesData; rows: UnitEventView[] }) {
+function VersionEvents({ data, rows, anchorPrefix = 'hist-' }: { data: CivUpdatesData; rows: UnitEventView[]; anchorPrefix?: string }) {
   const groups = new Map<string | null, UnitEventView[]>();
   rows.forEach((row) => groups.set(row.event.versionId, [...(groups.get(row.event.versionId) ?? []), row]));
   return [...groups].map(([versionId, views]) => {
@@ -193,7 +194,7 @@ function VersionEvents({ data, rows }: { data: CivUpdatesData; rows: UnitEventVi
                   .join('；')}
               </p>
             )}
-            <UpdateEventCard data={data} event={event} sourceEvent={original} />
+            <UpdateEventCard data={data} event={event} sourceEvent={original} anchorId={anchorPrefix + event.id} />
           </div>
         ))}
       </section>
@@ -211,8 +212,7 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
   const error = unitQueryError(data, query);
   const all = projectUnitEvents(data, entityId);
   const shown = filterUnitEvents(data, entityId, query);
-  const known = shown.filter((r) => !query.has('histCiv') || !r.unknownScope);
-  const unknown = query.has('histCiv') ? shown.filter((r) => r.unknownScope) : [];
+  const { known, unknown, mixed } = query.has('histCiv') ? partitionUnitScopes(shown) : { known: shown, unknown: [], mixed: [] };
   const returnPath = unitHistoryReturn(query.get('histReturn'));
   const sharePath = unitHistoryPath(entityId, query, overview ? 'overview' : 'detail');
   const currentPath =
@@ -389,7 +389,14 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
             <section aria-label="适用文明待核">
               <h3>适用范围待核</h3>
               <p>这些记录未明确适用文明，单独保留，不当作已确认适用于所选文明。</p>
-              <VersionEvents data={data} rows={unknown.map(nameEvent)} />
+              <VersionEvents data={data} rows={unknown.map(nameEvent)} anchorPrefix="hist-scope-unknown-" />
+            </section>
+          )}
+          {mixed.length > 0 && (
+            <section aria-label="冲突主张范围并列">
+              <h3>冲突主张的适用范围并列</h3>
+              <p>同一冲突含已登记与待核范围，完整保留双方主张；不把已登记效果改标为未知。</p>
+              <VersionEvents data={data} rows={mixed.map(nameEvent)} />
             </section>
           )}
         </>
