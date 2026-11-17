@@ -7,6 +7,7 @@ import { _ } from 'ajv/dist/compile/codegen/index.js';
 import { publicFormats, constructionReferenceProblems } from '../src/content/schema/policy.mjs';
 import { LEGACY_SOURCE_BASELINE } from './content-baseline.mjs';
 import { schemaFileFor } from './content-schema-catalog.mjs';
+import { FORMATIONS_FILE, formationProblems } from './check-civ-formations.mjs';
 
 export const SCHEMA_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '../data/schemas');
 export const SCHEMA_ID_BASE = 'https://linhongcun.github.io/aoe2-analyzer/schema/';
@@ -71,6 +72,7 @@ export function validateDocument(file, data) {
       }));
   if (valid && file === 'data/game/construction.json')
     problems.push(...constructionReferenceProblems(data).map((entry) => problem(file, 'reference', entry.message, entry.path)));
+  if (valid && file === FORMATIONS_FILE) problems.push(...formationProblems(data).map((entry) => problem(file, 'formation', entry.message, entry.path)));
   return { valid: problems.length === 0, problems };
 }
 
@@ -103,6 +105,7 @@ export function checkDirectory(root = process.cwd()) {
     }
   };
   for (const directory of ['data/content', 'data/game']) walk(join(root, directory));
+  if (!files.includes(FORMATIONS_FILE)) problems.push(problem(FORMATIONS_FILE, 'coverage', '缺少首批阵容发布文件'));
   if (!files.length) problems.push(problem('data/content + data/game', 'coverage', '未发现任何 JSON 输入'));
   return { files: files.sort(), problems };
 }

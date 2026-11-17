@@ -6,6 +6,7 @@
   "defaultCaseMs": 1500,
   "staticSweepMs": 85000,
   "files": {
+    "tests/e2e/civFormations1120.spec.ts": 10500,
     "tests/e2e/treeUnavailable1119.spec.ts": 36500,
     "tests/e2e/unit-history1083.spec.ts": 18000,
     "tests/e2e/civ-history1082.spec.ts": 7500,

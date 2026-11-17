@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createElement, type ComponentType } from 'react';
+import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
@@ -12,7 +12,7 @@ import CivDetail from '../../src/features/civs/components/CivDetail';
 import { session } from '../../src/shared/utils/sticky';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
-const EmptyTree: ComponentType<{ civEn: string }> = () => null;
+const EmptyTree = () => null;
 
 function caseGroups(ids: readonly string[]): string[][] {
   const folded = new Map<string, Set<string>>();

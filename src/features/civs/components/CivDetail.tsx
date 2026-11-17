@@ -1,36 +1,57 @@
-import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn, civs } from '../../../data';
-import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
+import { civBonuses } from '../../../domain/civBonus';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
-import type { Building, Unit } from '../../../domain/types';
+import type { Building, Civ, Unit } from '../../../domain/types';
 import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { session } from '../../../shared/utils/sticky';
+import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
+import { usePreviousHistoryEntry } from '../../../shared/utils/navigationEntry';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { CivUpdates } from '../../../shared/ui/CivUpdates';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
-import { BonusRows } from './BonusRows';
 import { CivHistory } from './CivHistory';
 import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
+import { CivFormations } from './CivFormations';
+import { isFormationHash, readFormationReturn } from './useFormationNavigation';
 import './civ-read.css';
 import './civ-start-return.css';
+
+// 展开加成的计算依赖 CORE。避免它成为正文的静态加载前提。
+const BonusRows = lazy(() => import('./BonusRows').then(({ BonusRows }) => ({ default: BonusRows })));
+
+function BonusTextList({ civ }: { civ: Civ }) {
+  return (
+    <ul className="blrows">
+      {civBonuses(civ).map((bonus) => (
+        <li key={bonus.id} className="brow">
+          <Link className="brow-h" to={`/civ/${civ.en}/bonus/${bonus.idx}`}>
+            <EmNum text={bonus.zh} />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 const TAB_ANCHOR: Record<string, string> = {
   ov: 'identity',
   data: 'identity',
   tech: 'kit',
+  formations: 'formations',
   techtree: 'techtree',
   history: 'patches',
 };
@@ -39,6 +60,7 @@ const CHAPTERS = [
   ['identity', '身份'],
   ['bonuses', '加成'],
   ['kit', '兵种'],
+  ['formations', '推荐阵容'],
   ['techtree', '科技树'],
   ['more', '其他'],
 ] as const;
@@ -170,18 +192,30 @@ function KitUnits({
   );
 }
 
-export default function CivDetail({ techTree: TechTree }: { techTree: ComponentType<{ civEn: string }> }) {
+type TechTreeComponent = ComponentType<{ civEn: string; resources: CoreTreesResources }>;
+
+export default function CivDetail({ techTree }: { techTree: TechTreeComponent }) {
   const { en = '' } = useParams();
+  const location = useLocation();
+  const c = civByEn(en);
+  // 只差大小写时先 replace 到目录英文名。
+  const canonicalPath = civEnCasePath(civs, en);
+  if (canonicalPath) return <Navigate to={{ pathname: canonicalPath, search: location.search, hash: location.hash }} replace />;
+  if (!c) return <HistoricalEntityDetail target={{ targetType: 'civ', targetId: en }} />;
+  return <CivReading c={c} techTree={techTree} />;
+}
+
+function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeComponent }) {
   const location = useLocation();
   const navigate = useNavigate();
   const homeReturn = startReturnPath(location.search);
-  const c = civByEn(en);
-  const core = useCore();
+  const resources = useCoreTrees();
+  const core = resources.core.data;
+  const previous = usePreviousHistoryEntry();
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
   const chapter = useActiveChapter(location.pathname, location.hash);
   useEffect(() => {
-    if (!c) return;
     session.lastCiv = c.en;
     if (tab != null && tab !== 'history') {
       const next = new URLSearchParams(location.search);
@@ -190,6 +224,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
       navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
       return;
     }
+    if (readFormationReturn(c.en, previous) || isFormationHash(location.hash)) return;
     const id = location.hash.replace(/^#/, '') || (tab === 'history' ? 'patches' : '');
     if (!id) {
       scrollTo(0, 0);
@@ -197,11 +232,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
     }
     const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
-  }, [c, location.hash, location.pathname, location.search, navigate, tab]);
-  // 只差大小写时先 replace 到目录英文名。已是规范名或对不上目录则不跳，也不能先画出历史空态。
-  const canonicalPath = civEnCasePath(civs, en);
-  if (canonicalPath) return <Navigate to={{ pathname: canonicalPath, search: location.search, hash: location.hash }} replace />;
-  if (!c) return <HistoricalEntityDetail target={{ targetType: 'civ', targetId: en }} />;
+  }, [c, location.hash, location.key, location.pathname, location.search, navigate, previous, tab]);
   const insights = civInsights(c.en);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
   const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
@@ -268,7 +299,12 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
       </header>
       <nav className="civ-chapters" aria-label="本页章节">
         {CHAPTERS.map(([id, label]) => (
-          <Link key={id} to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }} aria-current={chapter === id ? 'location' : undefined}>
+          <Link
+            key={id}
+            to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }}
+            state={id === 'formations' ? { focusFormation: true } : undefined}
+            aria-current={chapter === id ? 'location' : undefined}
+          >
             {label}
           </Link>
         ))}
@@ -278,7 +314,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
           <p className="civ-kicker">机制事实</p>
           <h2 id="civ-bonus-title">文明加成</h2>
           <p className="note">事实在此完整列出一次。点开一行可进入加成详情。</p>
-          <BonusRows key={c.en} c={c} />
+          <Suspense fallback={<BonusTextList civ={c} />}>{core ? <BonusRows key={c.en} c={c} /> : <BonusTextList civ={c} />}</Suspense>
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>
@@ -287,7 +323,15 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
             名称进入单位或科技页。能造什么、缺什么见下方
             <Link to={{ pathname: location.pathname, search: location.search, hash: '#techtree' }}>科技树</Link>。
           </p>
-          {!core && <p role="status">正在加载兵种与科技…</p>}
+          {resources.core.pending && <p role="status">正在加载兵种与科技…</p>}
+          {resources.core.error && (
+            <div role="alert">
+              <p>关键兵种与科技读取失败。</p>
+              <button type="button" onClick={resources.core.retry}>
+                重试兵种与科技
+              </button>
+            </div>
+          )}
           <KitUnits label="独特单位" hint="本文明专属" lines={uniqueUnits} buildings={core?.buildings ?? null} testId="civ-unique-units" />
           {uniqueTechs.length > 0 && (
             <div className="civ-kit-group" data-testid="civ-unique-techs">
@@ -316,8 +360,9 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
         </section>
       </div>
+      <CivFormations key={c.en} civ={c.en} resources={resources} />
       <Suspense fallback={<TechTreePending />}>
-        <TechTree civEn={c.en} />
+        <TechTree civEn={c.en} resources={resources} />
       </Suspense>
       {insights.length > 0 && <InsightSlot items={insights} />}
       <ArenaCastleGold en={c.en} />
@@ -331,9 +376,10 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
             </Link>
           ))}
         </p>
+        <p className="note">这些入口沿用现有工具参数。阵容兵量、科技与成型总投入不会自动带入。</p>
         <p className="civ-kicker">其他资料</p>
         <h2>历史与更新</h2>
-        <p className="note">本页不展示能力评分、团战位置和开局短句。这些仍留在数据里，不作为打法或排名推荐。</p>
+        <p className="note">能力评分、团战位置和开局短句不作为本页推荐依据。</p>
         <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false}>
           <CivHistory civ={c.en} />
         </Fold>

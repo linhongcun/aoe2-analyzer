@@ -9,7 +9,7 @@ import { consumeTreeSummaryHistory, readTreeSummaryMemory } from '../../../domai
 import { costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
-import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
+import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import { useSticky } from '../../../shared/utils/sticky';
 import { AGE_BANDS, extraItems, HD, jumpScrollLeft, layoutTree, TH } from '../logic/layout';
 import { JumpToBuilding, type JumpTarget } from './JumpToBuilding';
@@ -284,10 +284,9 @@ function Placeholder({ text, alert, onRetry }: { text: string; alert?: boolean; 
   );
 }
 
-export default function CivTechTree({ civEn }: { civEn: string }) {
+export default function CivTechTree({ civEn, resources }: { civEn: string; resources: CoreTreesResources }) {
   const nav = useNavigate();
   const location = useLocation();
-  const resources = useCoreTrees();
   const { core, trees, retry } = resources;
   const savedSummary = readTreeSummaryMemory(location.state, civEn);
   const [summaryOpen, setSummaryOpen] = useState(!!savedSummary);
