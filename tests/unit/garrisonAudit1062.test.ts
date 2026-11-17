@@ -75,6 +75,22 @@ describe('#1062 fixed 188329 garrison model audit', () => {
     await expect(buildAudit(copy)).rejects.toThrow('invalid model result');
   });
 
+  it('accepts schema-valid configurations whose object keys are reordered', async () => {
+    const reordered = {
+      ...input,
+      samples: input.samples.map((s) => ({
+        ...s,
+        config: Object.fromEntries(
+          Object.entries(s.config)
+            .reverse()
+            .map(([key, value]) => [key, key === 'rows' ? s.config.rows.map((row) => Object.fromEntries(Object.entries(row).reverse())) : value]),
+        ),
+      })),
+    };
+    expect(() => validateInput(reordered)).not.toThrow();
+    await expect(buildAudit(reordered)).resolves.toEqual({ meta: report.meta, samples: report.samples });
+  });
+
   it('validates full URL identity, tab and exact inputs rather than only decoding its query', async () => {
     const core = await loadCore();
     const sample = report.samples[1]!;

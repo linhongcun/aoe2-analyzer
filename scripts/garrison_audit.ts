@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import Ajv from 'ajv';
 import inputSchema from '../data/schemas/garrison-audit-input.json';
 import sourcePin from '../data/sources/data_sources.json';
@@ -70,7 +71,7 @@ export function parseAuditUrl(url: string, b: Building, expected: GeneralGarriso
     throw new Error('Audit URL page identity differs');
   const params = new URLSearchParams(route[1]);
   const parsed = readGeneralGarrison(params, b);
-  if (params.toString() !== writeGeneralGarrison(expected).toString() || parsed.errors.length || JSON.stringify(parsed.config) !== JSON.stringify(expected))
+  if (params.toString() !== writeGeneralGarrison(expected).toString() || parsed.errors.length || !isDeepStrictEqual(parsed.config, expected))
     throw new Error('Audit URL input differs');
   return parsed.config;
 }
