@@ -141,6 +141,13 @@ test('#1054 窄屏编辑与逐行战果不溢出，数字和单位不折行', as
   await page.getByRole('button', { name: '计算混编结果', exact: true }).click();
   await expect(page.getByTestId('mixed-result')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  for (const side of ['A', 'B']) {
+    const table = page.getByRole('table', { name: `${side} 方逐兵种损失及合计` });
+    await expect(table).toBeVisible();
+    await expect(table.locator('caption')).toHaveCSS('position', 'absolute');
+    await expect(table.locator('caption')).toHaveCSS('width', '1px');
+    await expect(table.locator('caption')).toHaveCSS('height', '1px');
+  }
   const broken = await page
     .locator('.mixed-duel .num.nw')
     .evaluateAll((els) => els.filter((el) => getComputedStyle(el).whiteSpace !== 'nowrap').map((el) => el.textContent));
