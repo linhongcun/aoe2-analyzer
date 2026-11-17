@@ -158,6 +158,32 @@ test('#1085 payload failure retries without losing context and distinguishes unr
   await expect(reader(page)).toContainText('没有符合筛选条件的记录');
 });
 
+test('#1085 building overview selection retains a valid return while dropping stale event focus', async ({ page }) => {
+  const data = historyFixture();
+  const id = data.buildings!.relations.find(
+    (r) => r.entityId === 'building/79' && !data.buildings!.relations.some((t) => t.entityId === 'building/234' && t.eventId === r.eventId),
+  )!.eventId;
+  await page.goto('/#/building/79?tab=history&histOrder=oldest&histEvent=' + id);
+  const building = page.locator('[data-building-history]');
+  await building.getByRole('link', { name: '在更新历史总览查看', exact: true }).click();
+  const back = new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('histReturn');
+  expect(back).toContain('/building/79');
+  await building.getByText('切换建筑', { exact: true }).click();
+  await page.getByRole('textbox', { name: '搜索建筑历史' }).fill('234');
+  await page
+    .getByRole('navigation', { name: '选择精确建筑身份' })
+    .getByRole('link', { name: /ID 234/ })
+    .click();
+  await expect(building).toHaveAttribute('data-building-history', 'building/234');
+  const changed = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(changed.get('histReturn')).toBe(back);
+  expect(changed.has('histEvent')).toBe(false);
+  expect(changed.get('histOrder')).toBe('oldest');
+  expect(changed.get('histQuery')).toBe('234');
+  await building.getByRole('link', { name: '返回上次历史结果' }).click();
+  await expect(page.locator(`[data-event-id="${id}"]`)).toBeFocused();
+});
+
 test('#1085 synthetic conflict keeps both claims and narrow display contains long evidence', async ({ page }) => {
   const fixture = conflictHistoryFixture();
   const event = fixture.events.find((e) => e.id === 'fixture-conflict')!;

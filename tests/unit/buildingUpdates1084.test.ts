@@ -185,7 +185,10 @@ describe('bounded building history #1084', () => {
     expect(buildingHistoryReturn(data, '/civ/Cumans?tab=history&histVersion=de-34055')).toBe('/civ/Cumans?tab=history&histVersion=de-34055');
     expect(validHistoryReturn(overview, data)).toBe(overview);
     expect(validHistoryReturn('/patches?%6fbj=building%3A79&histVersion=bad', data)).toBeNull();
-    expect(buildingHistoryPath(data, 'building/109', params, 'overview')).not.toContain('histReturn');
+    const roundTrip = q(buildingHistoryPath(data, 'building/109', params, 'overview').split('?')[1]);
+    expect(roundTrip.get('histReturn')).toBe(overview);
+    expect(buildingHistoryReturn(data, roundTrip.get('histReturn'))).toBe(overview);
+    expect(q(roundTrip.get('histReturn')!.split('?')[1]).has('histReturn')).toBe(false);
   });
 
   it.each([

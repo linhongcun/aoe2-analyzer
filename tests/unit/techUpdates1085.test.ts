@@ -97,6 +97,27 @@ it('does not describe compound legacy research/effect records as only research p
   for (const id of ['ef-legacy-81058-150', 'ef-legacy-185872-34']) expect(data.techs!.effectKinds[id]).toBe('unclassified');
 });
 
+it('keeps a validated return when changing buildings and drops only the stale event location', () => {
+  const back = '/tech/689?tab=history&histVersion=de-36202';
+  const query = q('histView=buildings&obj=building:79&histOrder=oldest&histQuery=234');
+  query.set(
+    'histEvent',
+    projectBuildingEvents(data, 'building/79').find(
+      (entry) => !projectBuildingEvents(data, 'building/234').some((target) => target.event.id === entry.event.id),
+    )!.event.id,
+  );
+  query.set('histReturn', back);
+  const path = buildingHistoryPath(data, 'building/234', query, 'overview');
+  const params = q(path.split('?')[1]);
+  expect(params.get('histReturn')).toBe(back);
+  expect(params.get('obj')).toBe('building:234');
+  expect(params.get('histQuery')).toBe('234');
+  expect(params.get('histOrder')).toBe('oldest');
+  expect(params.has('histEvent')).toBe(false);
+  query.set('histReturn', back + '&histReturn=%2Fpatches');
+  expect(buildingHistoryPath(data, 'building/234', query, 'overview')).not.toContain('histReturn=');
+});
+
 describe('technology evidence projections and route boundaries #1085', () => {
   it('validates all current identities, retired aliases and the 97 shared legacy claims', () => {
     expect(() => assertCivUpdateReferences(data)).not.toThrow();

@@ -118,7 +118,7 @@ export function buildingHistoryPath(data: CivUpdatesData, entityId: string, quer
     if (entity && current) next.set('obj', 'building:' + entity.catalogId);
     else if (entity) next.set('histEntity', entity.id);
   }
-  const back = buildingHistoryReturn(data, returnTo ?? null);
+  const back = buildingHistoryReturn(data, returnTo ?? query.get('histReturn'));
   if (back) next.set('histReturn', back);
   return (detail ? '/building/' + entity!.catalogId : '/patches') + '?' + next.toString();
 }
