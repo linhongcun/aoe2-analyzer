@@ -34,6 +34,7 @@ const RELATION = { direct: '本对象变化', related: '相关变化', 'identity
 const headingId = 'history-page-title';
 const nodeId = (id: string) => 'history-node-' + id;
 const eventKey = (id: string) => 'history-event-' + id;
+type ReaderTransient = { key: string; dialog?: DialogView; located?: string; trigger?: { button: HTMLButtonElement; event?: string; y: number } };
 
 function EventCard({
   data,
@@ -67,8 +68,6 @@ function EventCard({
               ? '收录时期'
               : '机制调整',
     );
-  const effectIds = new Set(event.claims.flatMap((c) => c.effects.map((f) => f.id)));
-  const relations = view.relations.filter((r) => r.effectIds.some((id) => effectIds.has(id)));
   const civRelations = entity.type === 'civ' ? original.civRelations.filter((r) => r.civId === entity.catalogId) : [];
   return (
     <article className="history-event" id={eventKey(event.id)} tabIndex={-1} data-history-event={event.id}>
@@ -76,7 +75,7 @@ function EventCard({
         <h3>{[...new Set(title)].join('、') || '历史变化'}</h3>
         <span>{VERIFICATION_LABELS[event.verification]}</span>
       </header>
-      {[...relations, ...civRelations].map((relation, i) => (
+      {civRelations.map((relation, i) => (
         <p className="history-muted" key={i}>
           {RELATION[relation.relation]} · <UpdateText>{relation.note}</UpdateText>
         </p>
@@ -95,6 +94,11 @@ function EventCard({
               {effects.map((effect) => (
                 <li key={effect.id}>
                   <HistoryEffect data={data} effect={effect} fallbackScope={original.scope} />
+                  {view.relations.filter((r) => r.effectIds.includes(effect.id)).map((relation, i) => (
+                    <p className="history-muted" key={i}>
+                      {RELATION[relation.relation]} · <UpdateText>{relation.note}</UpdateText>
+                    </p>
+                  ))}
                   {readerScopePending(view, effect, entity) && <p className="history-muted">适用范围待核</p>}
                 </li>
               ))}
@@ -103,7 +107,7 @@ function EventCard({
         );
       })}
       <div className="history-controls">
-        <button type="button" onClick={(e) => evidence(e.currentTarget)}>
+        <button id={eventKey(event.id) + '-evidence'} type="button" onClick={(e) => evidence(e.currentTarget)}>
           依据与原文
         </button>
         {related.length > 0 && (
@@ -158,11 +162,12 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
   const expanded = expansion.key === visitKey ? expansion.ids : initial();
   const visit = useRef(expanded);
   useLayoutEffect(() => { visit.current = expanded; }, [expanded]);
-  const [dialog, setDialog] = useState<DialogView | null>(null);
-  const [located, setLocated] = useState<string>();
+  const [transient, setTransient] = useState<ReaderTransient>({ key: visitKey });
+  if (transient.key !== visitKey) setTransient({ key: visitKey });
+  const { dialog, located, trigger } = transient.key === visitKey ? transient : {};
+  const locationTarget = projected.find((v) => v.event.id === (located ?? target?.event.id));
   const [dismissed, setDismissed] = useState<string>();
-  const trigger = useRef<{ button: HTMLButtonElement; event?: string; y: number } | null>(null);
-  const sharePath = entity ? historyReaderPath(entity.id, valid, located ?? target?.event.id) : '/patches';
+  const sharePath = entity ? historyReaderPath(entity.id, valid, locationTarget?.event.id) : '/patches';
   const share = useShareLink({ stateKey: sharePath, successMessage: '分享链接已复制。' });
   const focus = (id: string) => document.getElementById(id)?.focus({ preventScroll: true });
   useLayoutEffect(() => {
@@ -188,12 +193,15 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
         heading?.focus({ preventScroll: true });
       }
     });
-    const capture = () =>
+    const capture = () => {
+      const element = document.activeElement;
+      if (element?.closest('dialog')) return;
       rememberHistoryVisit(location, {
         y: window.scrollY,
         expanded: visit.current,
-        focusId: document.activeElement instanceof HTMLElement ? document.activeElement.id || undefined : undefined,
+        focusId: element instanceof HTMLElement ? element.id || undefined : undefined,
       });
+    };
     window.addEventListener('scroll', capture, { passive: true });
     document.addEventListener('focusin', capture);
     return () => {
@@ -216,15 +224,13 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
     setParams(next, { replace: true, state: location.state });
   }, [entity, location.state, params, setParams]);
   const origin = entity ? historyReaderPath(entity.id, valid, target?.event.id) : '/patches';
-  const apply = (next: URLSearchParams, preserveTarget = false) => {
-    const address = entity ? historyReaderPath(entity.id, next, preserveTarget ? target?.event.id : undefined, back ?? undefined) : '/patches';
-    navigate(address, { state: { ...location.state, historyKeepFocus: !preserveTarget }, replace: true });
-    setLocated(undefined);
+  const apply = (next: URLSearchParams) => {
+    const address = entity ? historyReaderPath(entity.id, next, undefined, back ?? undefined) : '/patches';
+    navigate(address, { state: { ...location.state, historyKeepFocus: true }, replace: true });
   };
   const close = (id?: string) => {
-    setDialog(null);
+    setTransient({ key: visitKey, located: id ?? located });
     if (id) {
-      setLocated(id);
       const row = visible.find((v) => v.event.id === id);
       if (row) updateExpanded([...new Set([...expanded, row.event.versionId ?? 'unknown'])]);
       requestAnimationFrame(() => {
@@ -235,15 +241,14 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
       return;
     }
     requestAnimationFrame(() => {
-      if (trigger.current?.button.isConnected) trigger.current.button.focus({ preventScroll: true });
+      if (trigger?.button.isConnected) trigger.button.focus({ preventScroll: true });
       else {
-        const node = projected.find((row) => row.event.id === trigger.current?.event)?.event.versionId ?? 'unknown';
-        focus(trigger.current?.event && document.getElementById(nodeId(node)) ? nodeId(node) : headingId);
+        const node = projected.find((row) => row.event.id === trigger?.event)?.event.versionId ?? 'unknown';
+        focus(trigger?.event && document.getElementById(nodeId(node)) ? nodeId(node) : headingId);
       }
-      if (trigger.current) window.scrollTo(0, trigger.current.y);
+      if (trigger) window.scrollTo(0, trigger.y);
     });
   };
-  const locationTarget = projected.find((v) => v.event.id === (located ?? target?.event.id));
   const hiddenTarget = locationTarget && !visible.some((v) => v.event.id === locationTarget.event.id) ? locationTarget : undefined;
   const recovery = hiddenTarget && revealReaderEvent(data, hiddenTarget, valid);
   const coverage = entity && readerCoverage(data, entity);
@@ -254,16 +259,15 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
         key={entity?.id ?? 'browse'}
         entities={data.entities}
         choose={(selected) => {
-          setLocated(undefined);
           navigate(historyReaderPath(selected.id));
         }}
       />
       <div className="history-controls">
         <button
+          id="history-coverage-trigger"
           type="button"
           onClick={(e) => {
-            trigger.current = { button: e.currentTarget, y: window.scrollY };
-            setDialog({ kind: 'coverage' });
+            setTransient({ key: visitKey, located, trigger: { button: e.currentTarget, y: window.scrollY }, dialog: { kind: 'coverage' } });
           }}
         >
           <Icon name="info" />
@@ -291,7 +295,15 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
       {invalid.length > 0 && (
         <div role="alert" className="history-notice">
           以下条件无效：{invalid.map((k) => HISTORY_LABELS[k as HistoryFilter] ?? '排序').join('、')}。
-          <button type="button" onClick={() => apply(valid, true)}>
+          <button type="button" onClick={() => {
+            const next = new URLSearchParams(params);
+            for (const key of invalid) {
+              const value = valid.get(key);
+              if (value === null) next.delete(key);
+              else next.set(key, value);
+            }
+            setParams(next, { replace: true, state: location.state });
+          }}>
             移除无效条件
           </button>
         </div>
@@ -355,7 +367,6 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
                   <button
                     type="button"
                     onClick={() => {
-                      setLocated(undefined);
                       navigate(historyReaderPath(entity.id, recovery.next, hiddenTarget.event.id, back ?? undefined), { replace: true, state: location.state });
                     }}
                   >
@@ -395,6 +406,14 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
               {nodes.map((node) => {
                 const open = expanded.includes(node.id);
                 const label = node.version?.label ?? '版本未登记';
+                const effects = node.rows.flatMap((row) => row.event.claims.flatMap((claim) => claim.effects.map((effect) => ({ row, effect }))));
+                const summary = [...new Set(effects.map(({ effect }) =>
+                  'attribute' in effect ? effect.attribute : effect.type === 'mechanic' ? '机制' : '可用性或身份',
+                ))].slice(0, 4).join('、');
+                const pending = effects.some(({ row, effect }) =>
+                  readerScopePending(row, effect, entity) ||
+                  row.relations.some((r) => r.relation === 'identity-pending' && r.effectIds.includes(effect.id)),
+                );
                 return (
                   <section key={node.id} className="history-node" data-history-version={node.id}>
                     <h3>
@@ -406,35 +425,21 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
                         onClick={() => updateExpanded(open ? expanded.filter((id) => id !== node.id) : [...expanded, node.id])}
                       >
                         <Icon name={open ? 'chevron-down' : 'chevron-right'} />
-                        <span>
-                          <UpdateText>{label}</UpdateText>
-                        </span>
+                        <span><UpdateText>{label}</UpdateText></span>
                         <span className="num nw">{node.rows.length} 条</span>
+                        <span className="history-node-meta">
+                          {CHANNEL[node.version?.channel ?? 'unknown']} · 官方发行日：
+                          <SourceTime value={node.version?.releaseDate ?? null} />
+                          {!node.version?.orderKey && ' · 不参与版本先后排序'}
+                        </span>
+                        <span className="history-node-meta">
+                          <UpdateText>{summary}</UpdateText>
+                          {node.rows.some(({ event }) => event.verification === 'unverified') && ' · 有未核实'}
+                          {node.rows.some(({ event }) => event.verification === 'conflict') && ' · 有来源冲突'}
+                          {pending && ' · 有范围或身份待核'}
+                        </span>
                       </button>
                     </h3>
-                    <div className="history-node-meta">
-                      {CHANNEL[node.version?.channel ?? 'unknown']} · 官方发行日：
-                      <SourceTime value={node.version?.releaseDate ?? null} />
-                      {!node.version?.orderKey && ' · 不参与版本先后排序'}
-                      <p>
-                        <UpdateText>
-                          {[
-                            ...new Set(
-                              node.rows.flatMap((row) =>
-                                row.event.claims.flatMap((c) =>
-                                  c.effects.map((f) => ('attribute' in f ? f.attribute : f.type === 'mechanic' ? '机制' : '可用性或身份')),
-                                ),
-                              ),
-                            ),
-                          ]
-                            .slice(0, 4)
-                            .join('、')}
-                        </UpdateText>
-                        {node.rows.some(({ event }) => event.verification === 'unverified') && ' · 有未核实'}
-                        {node.rows.some(({ event }) => event.verification === 'conflict') && ' · 有来源冲突'}
-                        {node.rows.some((row) => row.unknownScope || row.relations.some((r) => r.relation === 'identity-pending')) && ' · 有范围或身份待核'}
-                      </p>
-                    </div>
                     <div id={nodeId(node.id) + '-body'} hidden={!open}>
                       {open &&
                         node.rows.map((view) => (
@@ -446,8 +451,7 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
                             expanded={expanded}
                             from={origin}
                             evidence={(button) => {
-                              trigger.current = { button, event: view.event.id, y: window.scrollY };
-                              setDialog({ kind: 'event', view });
+                              setTransient({ key: visitKey, located, trigger: { button, event: view.event.id, y: window.scrollY }, dialog: { kind: 'event', view } });
                             }}
                           />
                         ))}
@@ -459,7 +463,7 @@ function ReaderContent({ data, active }: { data: CivUpdatesData; active: boolean
           )}
         </section>
       )}
-      {dialog && (
+      {active && dialog && (
         <HistoryDialog
           title={dialog.kind === 'coverage' ? '收录说明' : '依据与原文'}
           subtitle={

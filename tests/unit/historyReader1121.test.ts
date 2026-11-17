@@ -97,6 +97,10 @@ it('intersects on the same projected effect/claim and removes a minimal set in f
   expect(filterReaderEvents(data, rows, query('histSource=community'))).toHaveLength(1);
   expect(filterReaderEvents(data, rows, query('histSource=community&histCiv=Chinese'))).toHaveLength(0);
   expect(filterReaderEvents(data, rows, query('histCondition=unknown&histCiv=Chinese'))).toHaveLength(0);
+  const oneClaim = { ...event, claims: [{ ...event.claims[0]!, effects: [...event.claims[0]!.effects, ...event.claims[1]!.effects] }] };
+  const combined = [{ ...view, event: oneClaim, original: oneClaim }];
+  expect(filterReaderEvents(data, combined, query('histCondition=unknown'))).toHaveLength(1);
+  expect(filterReaderEvents(data, combined, query('histCondition=unknown&histCiv=Chinese'))).toHaveLength(0);
   expect(revealReaderEvent(data, rows[0]!, query('histSource=community&histCiv=Chinese&histOrder=oldest')).removed).toEqual(['histSource']);
 });
 
@@ -117,6 +121,21 @@ it('separates request-independent coverage from source processing and shared eve
   expect(project('civ/Danes').length).toBeGreaterThan(0);
   expect(readerCoverage(data, entity('tech/10'))?.state).toBe('not-checked');
   expect(project('tech/10').length).toBeGreaterThan(0);
+});
+
+it('locates evidence only when its mapped claim has effects for the exact form', () => {
+  const id = 'ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f';
+  const rowsFor = (key: string) => readerProcessing(data, entity(key), project(key));
+  const locator = (row: ReturnType<typeof rowsFor>[number]) => row.entry.id === 'se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f';
+  const elite = rowsFor('unit/1006');
+  expect(rowsFor('unit/1004').find(locator)?.targets).toEqual([id]);
+  expect(elite.find(locator)?.entry.processing).toBe('mapped');
+  expect(elite.find(locator)?.targets).toEqual([]);
+  expect(elite.find((row) => row.entry.id === 'src-legacy-125283-b023')?.targets).toEqual([id]);
+  expect(rowsFor('civ/Cumans').find((row) => row.entry.id === 'se-unit-kipchak-snapshot-e1556f66c3d781606125-2')?.targets).toEqual([
+    'ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb',
+    'ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b',
+  ]);
 });
 
 it('sorts registered and comparable versions using order keys, not build number or release date', () => {

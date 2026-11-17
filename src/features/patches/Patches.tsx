@@ -170,9 +170,11 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
   const location = useLocation();
   const navigate = useNavigate();
   const navigation = useNavigationType();
-  const { data } = useCivUpdates();
-  const browseFrom = data && typeof location.state?.historyFrom === 'string' && location.state.historyFrom.startsWith('/patches') ?
-    readerReturn(data, location.state.historyFrom) : null;
+  const { data, error } = useCivUpdates();
+  const fromState = typeof location.state?.historyFrom === 'string' && location.state.historyFrom.startsWith('/patches?') ? location.state.historyFrom : null;
+  const versionList = '/patches?read=versions';
+  const browseFrom = fromState === versionList ? fromState : data && fromState ? readerReturn(data, fromState) : null;
+  const checkingReturn = fromState && fromState !== versionList && !data && !error;
   const from = location.pathname + canonicalSearch(location.search);
   const safeSource = safeHistorySourceUrl(archive.source);
   useEffect(() => {
@@ -253,12 +255,14 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
   return (
     <section className="pane patches patches-read">
       <p className="patch-eyebrow">
-        <Link to={browseFrom ?? '/patches?read=versions'} onClick={(e) => {
-          if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && browseFrom && canPopHistoryReturn(location.state, browseFrom)) {
-            e.preventDefault();
-            navigate(-1);
-          }
-        }}>更新历史</Link>
+        {checkingReturn ? <span role="status">正在恢复更新历史来处…</span> : (
+          <Link to={browseFrom ?? versionList} onClick={(e) => {
+            if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && browseFrom && canPopHistoryReturn(location.state, browseFrom)) {
+              e.preventDefault();
+              navigate(-1);
+            }
+          }}>更新历史</Link>
+        )}
       </p>
       <h1>
         DE Update <span className="num nw">{archive.id}</span>
@@ -474,6 +478,9 @@ function ReaderPage() {
   const location = useLocation();
   const navigation = useNavigationType();
   const visitKey = historyVisitKey(location);
+  const archiveParams = new URLSearchParams(location.search);
+  archiveParams.delete('histReturn');
+  const archiveFrom = archiveParams.size ? '/patches?' + archiveParams.toString() : '/patches?read=versions';
   const [archives, setArchives] = useState<{ key: string; active: boolean }>();
   const active = archives?.key === visitKey ? archives.active :
     archiveVisits.has(visitKey) || new URLSearchParams(location.search).get('read') === 'versions';
@@ -505,7 +512,7 @@ function ReaderPage() {
       <button type="button" aria-pressed={active} onClick={() => select(true)}>按版本</button>
     </div>
     <div hidden={active}>{(!active || opened.objects) && <HistoryReader active={!active} />}</div>
-    <div hidden={!active}>{(active || opened.archives) && <ArchiveList from={location.pathname + canonicalSearch(location.search)} />}</div>
+    <div hidden={!active}>{(active || opened.archives) && <ArchiveList from={archiveFrom} />}</div>
   </section>;
 }
 

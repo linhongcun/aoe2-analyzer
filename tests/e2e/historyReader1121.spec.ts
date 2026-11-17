@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { conflictHistoryFixture } from '../helpers/civUpdatesFixture';
+import { conflictHistoryFixture, historyFixture } from '../helpers/civUpdatesFixture';
 
 const asset = /\/civ-updates(?:-[^/]+)?\.json(?:\?|$)/u;
 const selection = (page: Page) => page.getByRole('region', { name: '对象时间线' });
@@ -70,6 +70,7 @@ test('finds exact identities, a directory alias and a retired technology', async
   await expect(bombard).toContainText('木材成本');
   await expect(bombard).toContainText('食物成本');
   await expect(bombard).toContainText('研究参数');
+  await expect(bombard.locator('.civ-update-values')).toHaveText(['450 木材 未知', '500 黄金 650 黄金', '未知 600 食物']);
 });
 
 test.describe('touch object picker', () => {
@@ -87,6 +88,12 @@ test('opens the evidence as one inert modal and returns focus via all close cont
   await page.goto(path('building/79', 'histVersion=de-81058', 'ev-legacy-81058-b056'));
   const tower = event(page, 'ev-legacy-81058-b056');
   await expect(tower).toContainText('提供者：埃塞俄比亚');
+  const related = tower.getByRole('listitem').filter({ hasText: '团队加成由箭塔和哨站视野' });
+  const direct = tower.getByRole('listitem').filter({ hasText: '瞭望箭塔不再享有埃塞俄比亚的组队视野加成' });
+  await expect(related).toContainText('相关变化');
+  await expect(related).not.toContainText('本对象变化');
+  await expect(direct).toContainText('本对象变化');
+  await expect(direct).not.toContainText('相关变化');
   const trigger = tower.getByRole('button', { name: '依据与原文' });
   for (const method of ['Escape', 'top', 'bottom']) {
     await trigger.click();
@@ -160,6 +167,18 @@ test('related objects preserve exact event ownership and one return at a time', 
   const cuman = regular.getByRole('link', { name: '库曼 · 文明' });
   await cuman.click();
   await expect(selection(page).getByRole('heading', { name: '库曼', exact: true })).toBeVisible();
+  const evidence = selection(page).getByRole('button', { name: '依据与原文' }).first();
+  await evidence.click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/obj=unit%3A1231/u);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+  await expect(cuman).toBeFocused();
+  await page.goForward();
+  await expect(page).toHaveURL(/obj=civ%3ACumans/u);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(evidence).toBeFocused();
   await page.getByRole('link', { name: '返回来处' }).click();
   await expect(cuman).toBeFocused();
   await cuman.click();
@@ -176,6 +195,10 @@ test('related objects preserve exact event ownership and one return at a time', 
   await expect(card.getByRole('link', { name: '精锐钦察 · 单位' })).toBeFocused();
   await page.goForward();
   await expect(card.locator('.civ-update-values .num')).toHaveText(['55 HP', '45 HP']);
+  await page.getByRole('link', { name: '返回来处' }).click();
+  await expect(page).toHaveURL(/obj=civ%3ACumans/u);
+  await page.getByRole('link', { name: '返回来处' }).click();
+  await expect(cuman).toBeFocused();
 });
 
 for (const [detail, id] of [
@@ -213,6 +236,37 @@ test('restores archive search, focus and raw dates from a separate set', async (
   await page.getByRole('link', { name: '返回来处' }).click();
   await expect(page).toHaveURL(/patches\/81058\?type=building/u);
   await expect(history).toBeFocused();
+});
+
+test('returns through the archive list without dropping an object or nesting its return address', async ({ page }) => {
+  await page.goto(path('unit/1231', 'histVersion=de-34055', undefined, '/unit/1231'));
+  const node = selection(page).locator('.history-node > h3 > button').first();
+  await node.click();
+  await expect(node).toHaveAttribute('aria-expanded', 'false');
+  await page.getByRole('button', { name: '按版本', exact: true }).click();
+  const archive = page.getByTestId('patch-version-card').filter({ hasText: '185872' }).getByRole('link');
+  await archive.click();
+  const back = page.locator('.patch-eyebrow').getByRole('link', { name: '更新历史', exact: true });
+  await back.click();
+  await expect(archive).toBeFocused();
+  await page.getByRole('button', { name: '按对象', exact: true }).click();
+  await expect(node).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByRole('link', { name: '返回来处' })).toBeVisible();
+  await page.getByRole('button', { name: '按版本', exact: true }).click();
+  await archive.click();
+  await page.reload();
+  await back.click();
+  await expect(page).toHaveURL(/obj=unit%3A1231&histVersion=de-34055$/u);
+  await expect(selection(page)).toContainText('钦察');
+});
+
+test('repairs only invalid filters without dropping a stale event or invalid return', async ({ page }) => {
+  await page.goto(path('unit/1231', 'histVersion=garbage,de-34055', 'stale', 'bad-return'));
+  await page.getByRole('button', { name: '移除无效条件' }).click();
+  await expect(page).toHaveURL(/histVersion=de-34055&histEvent=stale&histReturn=bad-return$/u);
+  await expect(page.getByText('找不到链接指定的变化。', { exact: false })).toBeVisible();
+  await expect(page.getByText('返回地址不可用', { exact: false })).toBeVisible();
+  await expect(page.getByRole('button', { name: '移除无效条件' })).toHaveCount(0);
 });
 
 test('keeps valid empty and invalid input distinct and copies without an unsafe return', async ({ page }) => {
@@ -262,16 +316,30 @@ test('retries an archive read without changing the object visit', async ({ page 
   await expect(page).toHaveURL(/histVersion=de-81058/u);
 });
 
+test('a source read failure preserves existing evidence without offering an app retry', async ({ page }) => {
+  const fixture = historyFixture();
+  const row = fixture.units!.rows.find((entry) => entry.entityId === 'unit/1231')!;
+  row.searchState = row.sourceState = 'read-failed';
+  row.reason = '测试夹具：来源读取失败，保留已登记旧快照。';
+  await page.route(asset, (route) => route.fulfill({ json: fixture }));
+  await page.goto(path('unit/1231', 'histVersion=de-34055'));
+  await expect(selection(page)).toContainText('来源读取失败（保留旧快照）');
+  await expect(page.getByRole('button', { name: /重试/u })).toHaveCount(0);
+  await event(page, 'ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb').getByRole('button', { name: '依据与原文' }).click();
+  await expect(page.getByRole('dialog', { name: '依据与原文' }).locator('blockquote').first()).toBeVisible();
+});
+
 test('keeps both conflict claims and escapes long original evidence in dark mode', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.emulateMedia({ colorScheme: 'dark' });
   const fixture = conflictHistoryFixture();
+  fixture.sources.find((source) => source.id === 'fixture-source-0')!.category = 'community';
   fixture.sourceEntries.find((entry) => entry.id === 'fixture-entry-0')!.originalText += '\n+12 HP\n' + '长原文'.repeat(900);
   fixture.sourceEntries.find((entry) => entry.id === 'fixture-entry-1')!.originalText = null;
   await page.route(asset, (route) => route.fulfill({ json: fixture }));
   const conflict = fixture.events.find((e) => e.verification === 'conflict')!;
   const civ = conflict.civRelations[0]!.civId;
-  await page.goto(path('civ/' + civ, 'histVerification=conflict', conflict.id));
+  await page.goto(path('civ/' + civ, 'histVerification=conflict&histSource=community', conflict.id));
   const card = event(page, conflict.id);
   await expect(card).toContainText('说法 1');
   await expect(card).toContainText('说法 2');
@@ -308,6 +376,12 @@ test('keeps fixed civilization values and original official citations', async ({
   await page.goto(path('civ/Bohemians', 'histVersion=de-185872', id));
   await event(page, id).getByRole('button', { name: '依据与原文' }).click();
   await expect(dialog.getByRole('link', { name: '打开原始来源' })).toHaveCount(2);
+  await page.goto(path('civ/Bohemians', 'histVersion=de-185872&histSource=community', id));
+  const node = selection(page).getByRole('button', { name: /^DE Update 185872/u });
+  await expect(node).toHaveAttribute('aria-expanded', 'true');
+  await expect(node).not.toContainText('有范围或身份待核');
+  await node.locator('.history-node-meta').last().click();
+  await expect(node).toHaveAttribute('aria-expanded', 'false');
 });
 
 test('stages advanced filters before applying and resets only advanced conditions', async ({ page }) => {

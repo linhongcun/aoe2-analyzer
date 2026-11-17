@@ -334,7 +334,17 @@ export function readerProcessing(data: CivUpdatesData, entity: UpdateEntity, vie
       (event.verification === 'conflict' ? original.claims : event.claims.filter((c) => c.effects.length)).flatMap((c) => c.sourceEntryIds),
     ),
   );
-  const ids = new Set(views.map((v) => v.event.id));
+  const claimTargets = new Map<string, Set<string>>();
+  for (const { event } of views) {
+    for (const claim of event.claims) {
+      if (!claim.effects.length) continue;
+      for (const id of claim.sourceEntryIds) {
+        const targets = claimTargets.get(id) ?? new Set<string>();
+        targets.add(event.id);
+        claimTargets.set(id, targets);
+      }
+    }
+  }
   return data.sourceEntries.flatMap((entry: UpdateSourceEntry) => {
     const provenance = [
       { kind: 'own', ids: own },
@@ -342,6 +352,8 @@ export function readerProcessing(data: CivUpdatesData, entity: UpdateEntity, vie
       { kind: 'claim', ids: claim },
     ] as const;
     const labels = provenance.filter((p) => p.ids.has(entry.id)).map((p) => p.kind);
-    return labels.length ? [{ entry, labels, targets: entry.processing === 'mapped' ? entry.eventIds.filter((id) => ids.has(id)) : [] }] : [];
+    return labels.length
+      ? [{ entry, labels, targets: entry.processing === 'mapped' ? entry.eventIds.filter((id) => claimTargets.get(entry.id)?.has(id)) : [] }]
+      : [];
   });
 }

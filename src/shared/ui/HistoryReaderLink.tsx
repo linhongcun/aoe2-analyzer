@@ -42,7 +42,7 @@ export function HistoryReaderLink({ to, from, id, expanded, children }: { to: st
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const idx = window.history.state?.idx;
     if (!Number.isInteger(idx)) return;
-    if (id) rememberHistoryVisit(location, { y: window.scrollY, expanded, focusId: id });
+    if (id) rememberHistoryVisit(location, { y: window.scrollY, expanded: expanded ?? savedHistoryVisit(location)?.expanded, focusId: id });
     links.delete(token);
     links.set(token, { key, idx, route: from });
     if (links.size > 60) links.delete(links.keys().next().value!);
