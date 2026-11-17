@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 from dat_source import DAT, load
+from effects_build import CIV_DAT
 
 ROOT = Path(__file__).resolve().parent.parent
 DEST = ROOT / 'data/game/army_research.json'
@@ -34,7 +35,7 @@ def build(d):
         if not i:
             continue
         tree = cmds(c['TechTreeID'])
-        civs[c['Name']] = dict(id=i, disabled=[int(x['D']) for x in tree if x['Type'] == 102],
+        civs[CIV_DAT.get(c['Name'], c['Name'])] = dict(id=i, disabled=[int(x['D']) for x in tree if x['Type'] == 102],
                                mods=[x for x in tree + cmds(c['TeamBonusID']) if relevant(x) and x['Type'] != 102])
     return dict(meta=dict(generatedBy='scripts/army_research_build.py', patch=DAT['patch'],
                           commit=DAT['commit'], sha256=DAT['sha256']),

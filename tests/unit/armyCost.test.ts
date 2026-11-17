@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';
+import { civs } from '../../src/data';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
 import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver } from '../../src/domain/armyCost';
 import { evaluateTrainTotal } from '../../src/domain/trainTotal';
@@ -8,6 +9,13 @@ import { evaluateTrainTotal } from '../../src/domain/trainTotal';
 const ctx = { core: CORE, trees: await loadTrees() };
 const emptyArmyCost = (civ = 'Sicilians') => makeArmyCost(civ);
 describe('army research pinned data', () => {
+  it('maps every published civilization to its fixed-data identity, including the default empty plan', () => {
+    for (const civ of civs) {
+      expect(ARMY_RESEARCH.civs[civ.en], civ.en).toBeDefined();
+      expect(evaluateArmyCost(ctx, makeArmyCost(civ.en)).blocked, civ.en).toEqual([]);
+    }
+    expect(evaluateArmyCost(ctx, makeArmyCost()).partial).toBe(false);
+  });
   it('deduplicates the two Sicilian elite forms and keeps the light cavalry upgrade separate', () => {
     const result = evaluateArmyCost(ctx, {
       ...emptyArmyCost(),
