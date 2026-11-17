@@ -144,7 +144,7 @@ describe('unit history exact identities and source semantics #1083', () => {
     expect(cleared.get('histQuery')).toBe('钦察');
     expect(cleared.get('histReturn')).toBe('/patches?obj=unit%3A1231');
     expect(cleared.has('histVersion')).toBe(false);
-    expect(unitHistoryPath('unit/1233', params, 'overview')).not.toContain('histReturn');
+    expect(new URLSearchParams(unitHistoryPath('unit/1233', params, 'overview').split('?')[1]).get('histReturn')).toBe('/patches?obj=unit%3A1231');
     for (const bad of [
       'https://evil.example/',
       '//evil.example',

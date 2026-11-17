@@ -689,6 +689,7 @@ const schema19 = {
         legacyMap: { type: 'array', items: { $ref: '#/$defs/legacyRow' }, minItems: 0 },
         units: { $ref: '#/$defs/unitData' },
         buildings: { $ref: '#/$defs/buildingData' },
+        techs: { $ref: '#/$defs/techData' },
       },
       required: ['schemaVersion', 'meta', 'versions', 'sources', 'sections', 'sourceEntries', 'entities', 'events', 'civilizations', 'legacyMap'],
       additionalProperties: false,
@@ -1151,6 +1152,71 @@ const schema19 = {
       required: ['schemaVersion', 'units', 'legacyRecordCount', 'unitLegacyCount', 'unitLegacyMigratedCount', 'snapshots', 'eventCount'],
       additionalProperties: false,
     },
+    techCatalog: {
+      type: 'object',
+      properties: {
+        schemaVersion: { const: 1 },
+        directory: {
+          type: 'object',
+          properties: {
+            path: { const: 'data/game/techs.json' },
+            sha256: { type: 'string', pattern: '^[a-f0-9]{64}$' },
+            count: { type: 'integer', minimum: 1 },
+          },
+          required: ['path', 'sha256', 'count'],
+          additionalProperties: false,
+        },
+        pages: { type: 'array', items: { $ref: '#/$defs/unitPage' }, uniqueItems: true },
+        review: { type: 'string', minLength: 1 },
+        retiredIds: { type: 'array', items: { type: 'string', minLength: 1 }, uniqueItems: true },
+      },
+      required: ['schemaVersion', 'directory', 'pages', 'review', 'retiredIds'],
+      additionalProperties: false,
+    },
+    techImport: {
+      type: 'object',
+      properties: {
+        schemaVersion: { const: 1 },
+        expectedReusedCount: { type: 'integer', minimum: 0 },
+        legacy: { type: 'array', items: { $ref: '#/$defs/unitLegacyInput' }, uniqueItems: true },
+        newEvents: { type: 'array', items: { $ref: '#/$defs/event' }, uniqueItems: true },
+        identityBindings: { type: 'object', additionalProperties: { type: 'string', minLength: 1 } },
+        relations: { type: 'array', items: { $ref: '#/$defs/unitRelation' }, uniqueItems: true },
+        effectKinds: { type: 'object', additionalProperties: { enum: ['parameter', 'effect', 'availability', 'identity', 'unclassified'] } },
+        relatedIdentities: { type: 'object', additionalProperties: { type: 'string', minLength: 1 } },
+      },
+      required: ['schemaVersion', 'expectedReusedCount', 'legacy', 'newEvents', 'identityBindings', 'relations', 'effectKinds', 'relatedIdentities'],
+      additionalProperties: false,
+    },
+    techData: {
+      type: 'object',
+      properties: {
+        catalogSize: { type: 'integer', minimum: 1 },
+        directorySha256: { type: 'string', minLength: 1 },
+        coverageNote: { type: 'string', minLength: 1 },
+        rows: { type: 'array', items: { $ref: '#/$defs/unitCoverage' }, uniqueItems: true },
+        relations: { type: 'array', items: { $ref: '#/$defs/unitRelation' }, uniqueItems: true },
+        legacyMap: { type: 'array', items: { $ref: '#/$defs/unitLegacyInput' }, uniqueItems: true },
+        historicalRows: { type: 'array', items: { $ref: '#/$defs/unitCoverage' }, uniqueItems: true },
+        effectKinds: { type: 'object', additionalProperties: { enum: ['parameter', 'effect', 'availability', 'identity', 'unclassified'] } },
+      },
+      required: ['catalogSize', 'directorySha256', 'coverageNote', 'rows', 'relations', 'legacyMap', 'historicalRows', 'effectKinds'],
+      additionalProperties: false,
+    },
+    techAudit: {
+      type: 'object',
+      properties: {
+        schemaVersion: { const: 1 },
+        techs: { $ref: '#/$defs/techData' },
+        legacyRecordCount: { type: 'integer', minimum: 0 },
+        techLegacyCount: { type: 'integer', minimum: 0 },
+        techLegacyReusedCount: { type: 'integer', minimum: 0 },
+        techLegacyImportedCount: { type: 'integer', minimum: 0 },
+        eventCount: { type: 'integer', minimum: 0 },
+      },
+      required: ['schemaVersion', 'techs', 'legacyRecordCount', 'techLegacyCount', 'techLegacyReusedCount', 'techLegacyImportedCount', 'eventCount'],
+      additionalProperties: false,
+    },
   },
 };
 const schema20 = {
@@ -1193,6 +1259,7 @@ const schema20 = {
     legacyMap: { type: 'array', items: { $ref: '#/$defs/legacyRow' }, minItems: 0 },
     units: { $ref: '#/$defs/unitData' },
     buildings: { $ref: '#/$defs/buildingData' },
+    techs: { $ref: '#/$defs/techData' },
   },
   required: ['schemaVersion', 'meta', 'versions', 'sources', 'sections', 'sourceEntries', 'entities', 'events', 'civilizations', 'legacyMap'],
   additionalProperties: false,
@@ -13749,6 +13816,523 @@ function validate99(data, { instancePath = '', parentData, parentDataProperty, r
 }
 validate99.evaluated = { props: true, dynamicProps: false, dynamicItems: false };
 
+const schema42 = {
+  type: 'object',
+  properties: {
+    catalogSize: { type: 'integer', minimum: 1 },
+    directorySha256: { type: 'string', minLength: 1 },
+    coverageNote: { type: 'string', minLength: 1 },
+    rows: { type: 'array', items: { $ref: '#/$defs/unitCoverage' }, uniqueItems: true },
+    relations: { type: 'array', items: { $ref: '#/$defs/unitRelation' }, uniqueItems: true },
+    legacyMap: { type: 'array', items: { $ref: '#/$defs/unitLegacyInput' }, uniqueItems: true },
+    historicalRows: { type: 'array', items: { $ref: '#/$defs/unitCoverage' }, uniqueItems: true },
+    effectKinds: { type: 'object', additionalProperties: { enum: ['parameter', 'effect', 'availability', 'identity', 'unclassified'] } },
+  },
+  required: ['catalogSize', 'directorySha256', 'coverageNote', 'rows', 'relations', 'legacyMap', 'historicalRows', 'effectKinds'],
+  additionalProperties: false,
+};
+
+function validate107(data, { instancePath = '', parentData, parentDataProperty, rootData = data, dynamicAnchors = {} } = {}) {
+  let vErrors = null;
+  let errors = 0;
+  const evaluated0 = validate107.evaluated;
+  if (evaluated0.dynamicProps) {
+    evaluated0.props = undefined;
+  }
+  if (evaluated0.dynamicItems) {
+    evaluated0.items = undefined;
+  }
+  if (errors === 0) {
+    if (data && typeof data == 'object' && !Array.isArray(data)) {
+      let missing0;
+      if (
+        (data.catalogSize === undefined && (missing0 = 'catalogSize')) ||
+        (data.directorySha256 === undefined && (missing0 = 'directorySha256')) ||
+        (data.coverageNote === undefined && (missing0 = 'coverageNote')) ||
+        (data.rows === undefined && (missing0 = 'rows')) ||
+        (data.relations === undefined && (missing0 = 'relations')) ||
+        (data.legacyMap === undefined && (missing0 = 'legacyMap')) ||
+        (data.historicalRows === undefined && (missing0 = 'historicalRows')) ||
+        (data.effectKinds === undefined && (missing0 = 'effectKinds'))
+      ) {
+        validate107.errors = [
+          {
+            instancePath,
+            schemaPath: '#/required',
+            keyword: 'required',
+            params: { missingProperty: missing0 },
+            message: "must have required property '" + missing0 + "'",
+          },
+        ];
+        return false;
+      } else {
+        const _errs1 = errors;
+        for (const key0 in data) {
+          if (!(
+            key0 === 'catalogSize' ||
+            key0 === 'directorySha256' ||
+            key0 === 'coverageNote' ||
+            key0 === 'rows' ||
+            key0 === 'relations' ||
+            key0 === 'legacyMap' ||
+            key0 === 'historicalRows' ||
+            key0 === 'effectKinds'
+          )) {
+            validate107.errors = [
+              {
+                instancePath,
+                schemaPath: '#/additionalProperties',
+                keyword: 'additionalProperties',
+                params: { additionalProperty: key0 },
+                message: 'must NOT have additional properties',
+              },
+            ];
+            return false;
+            break;
+          }
+        }
+        if (_errs1 === errors) {
+          if (data.catalogSize !== undefined) {
+            let data0 = data.catalogSize;
+            const _errs2 = errors;
+            if (!(typeof data0 == 'number' && !(data0 % 1) && !isNaN(data0) && isFinite(data0))) {
+              validate107.errors = [
+                {
+                  instancePath: instancePath + '/catalogSize',
+                  schemaPath: '#/properties/catalogSize/type',
+                  keyword: 'type',
+                  params: { type: 'integer' },
+                  message: 'must be integer',
+                },
+              ];
+              return false;
+            }
+            if (errors === _errs2) {
+              if (typeof data0 == 'number' && isFinite(data0)) {
+                if (data0 < 1 || isNaN(data0)) {
+                  validate107.errors = [
+                    {
+                      instancePath: instancePath + '/catalogSize',
+                      schemaPath: '#/properties/catalogSize/minimum',
+                      keyword: 'minimum',
+                      params: { comparison: '>=', limit: 1 },
+                      message: 'must be >= 1',
+                    },
+                  ];
+                  return false;
+                }
+              }
+            }
+            var valid0 = _errs2 === errors;
+          } else {
+            var valid0 = true;
+          }
+          if (valid0) {
+            if (data.directorySha256 !== undefined) {
+              let data1 = data.directorySha256;
+              const _errs4 = errors;
+              if (errors === _errs4) {
+                if (typeof data1 === 'string') {
+                  if (func2(data1) < 1) {
+                    validate107.errors = [
+                      {
+                        instancePath: instancePath + '/directorySha256',
+                        schemaPath: '#/properties/directorySha256/minLength',
+                        keyword: 'minLength',
+                        params: { limit: 1 },
+                        message: 'must NOT have fewer than 1 characters',
+                      },
+                    ];
+                    return false;
+                  }
+                } else {
+                  validate107.errors = [
+                    {
+                      instancePath: instancePath + '/directorySha256',
+                      schemaPath: '#/properties/directorySha256/type',
+                      keyword: 'type',
+                      params: { type: 'string' },
+                      message: 'must be string',
+                    },
+                  ];
+                  return false;
+                }
+              }
+              var valid0 = _errs4 === errors;
+            } else {
+              var valid0 = true;
+            }
+            if (valid0) {
+              if (data.coverageNote !== undefined) {
+                let data2 = data.coverageNote;
+                const _errs6 = errors;
+                if (errors === _errs6) {
+                  if (typeof data2 === 'string') {
+                    if (func2(data2) < 1) {
+                      validate107.errors = [
+                        {
+                          instancePath: instancePath + '/coverageNote',
+                          schemaPath: '#/properties/coverageNote/minLength',
+                          keyword: 'minLength',
+                          params: { limit: 1 },
+                          message: 'must NOT have fewer than 1 characters',
+                        },
+                      ];
+                      return false;
+                    }
+                  } else {
+                    validate107.errors = [
+                      {
+                        instancePath: instancePath + '/coverageNote',
+                        schemaPath: '#/properties/coverageNote/type',
+                        keyword: 'type',
+                        params: { type: 'string' },
+                        message: 'must be string',
+                      },
+                    ];
+                    return false;
+                  }
+                }
+                var valid0 = _errs6 === errors;
+              } else {
+                var valid0 = true;
+              }
+              if (valid0) {
+                if (data.rows !== undefined) {
+                  let data3 = data.rows;
+                  const _errs8 = errors;
+                  if (errors === _errs8) {
+                    if (Array.isArray(data3)) {
+                      var valid1 = true;
+                      const len0 = data3.length;
+                      for (let i0 = 0; i0 < len0; i0++) {
+                        const _errs10 = errors;
+                        if (
+                          !validate92(data3[i0], {
+                            instancePath: instancePath + '/rows/' + i0,
+                            parentData: data3,
+                            parentDataProperty: i0,
+                            rootData,
+                            dynamicAnchors,
+                          })
+                        ) {
+                          vErrors = vErrors === null ? validate92.errors : vErrors.concat(validate92.errors);
+                          errors = vErrors.length;
+                        }
+                        var valid1 = _errs10 === errors;
+                        if (!valid1) {
+                          break;
+                        }
+                      }
+                      if (valid1) {
+                        let i1 = data3.length;
+                        let j0;
+                        if (i1 > 1) {
+                          outer0: for (; i1--;) {
+                            for (j0 = i1; j0--;) {
+                              if (func0(data3[i1], data3[j0])) {
+                                validate107.errors = [
+                                  {
+                                    instancePath: instancePath + '/rows',
+                                    schemaPath: '#/properties/rows/uniqueItems',
+                                    keyword: 'uniqueItems',
+                                    params: { i: i1, j: j0 },
+                                    message: 'must NOT have duplicate items (items ## ' + j0 + ' and ' + i1 + ' are identical)',
+                                  },
+                                ];
+                                return false;
+                                break outer0;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    } else {
+                      validate107.errors = [
+                        {
+                          instancePath: instancePath + '/rows',
+                          schemaPath: '#/properties/rows/type',
+                          keyword: 'type',
+                          params: { type: 'array' },
+                          message: 'must be array',
+                        },
+                      ];
+                      return false;
+                    }
+                  }
+                  var valid0 = _errs8 === errors;
+                } else {
+                  var valid0 = true;
+                }
+                if (valid0) {
+                  if (data.relations !== undefined) {
+                    let data5 = data.relations;
+                    const _errs11 = errors;
+                    if (errors === _errs11) {
+                      if (Array.isArray(data5)) {
+                        var valid3 = true;
+                        const len1 = data5.length;
+                        for (let i2 = 0; i2 < len1; i2++) {
+                          const _errs13 = errors;
+                          if (
+                            !validate94(data5[i2], {
+                              instancePath: instancePath + '/relations/' + i2,
+                              parentData: data5,
+                              parentDataProperty: i2,
+                              rootData,
+                              dynamicAnchors,
+                            })
+                          ) {
+                            vErrors = vErrors === null ? validate94.errors : vErrors.concat(validate94.errors);
+                            errors = vErrors.length;
+                          }
+                          var valid3 = _errs13 === errors;
+                          if (!valid3) {
+                            break;
+                          }
+                        }
+                        if (valid3) {
+                          let i3 = data5.length;
+                          let j1;
+                          if (i3 > 1) {
+                            outer1: for (; i3--;) {
+                              for (j1 = i3; j1--;) {
+                                if (func0(data5[i3], data5[j1])) {
+                                  validate107.errors = [
+                                    {
+                                      instancePath: instancePath + '/relations',
+                                      schemaPath: '#/properties/relations/uniqueItems',
+                                      keyword: 'uniqueItems',
+                                      params: { i: i3, j: j1 },
+                                      message: 'must NOT have duplicate items (items ## ' + j1 + ' and ' + i3 + ' are identical)',
+                                    },
+                                  ];
+                                  return false;
+                                  break outer1;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      } else {
+                        validate107.errors = [
+                          {
+                            instancePath: instancePath + '/relations',
+                            schemaPath: '#/properties/relations/type',
+                            keyword: 'type',
+                            params: { type: 'array' },
+                            message: 'must be array',
+                          },
+                        ];
+                        return false;
+                      }
+                    }
+                    var valid0 = _errs11 === errors;
+                  } else {
+                    var valid0 = true;
+                  }
+                  if (valid0) {
+                    if (data.legacyMap !== undefined) {
+                      let data7 = data.legacyMap;
+                      const _errs14 = errors;
+                      if (errors === _errs14) {
+                        if (Array.isArray(data7)) {
+                          var valid5 = true;
+                          const len2 = data7.length;
+                          for (let i4 = 0; i4 < len2; i4++) {
+                            const _errs16 = errors;
+                            if (
+                              !validate96(data7[i4], {
+                                instancePath: instancePath + '/legacyMap/' + i4,
+                                parentData: data7,
+                                parentDataProperty: i4,
+                                rootData,
+                                dynamicAnchors,
+                              })
+                            ) {
+                              vErrors = vErrors === null ? validate96.errors : vErrors.concat(validate96.errors);
+                              errors = vErrors.length;
+                            }
+                            var valid5 = _errs16 === errors;
+                            if (!valid5) {
+                              break;
+                            }
+                          }
+                          if (valid5) {
+                            let i5 = data7.length;
+                            let j2;
+                            if (i5 > 1) {
+                              outer2: for (; i5--;) {
+                                for (j2 = i5; j2--;) {
+                                  if (func0(data7[i5], data7[j2])) {
+                                    validate107.errors = [
+                                      {
+                                        instancePath: instancePath + '/legacyMap',
+                                        schemaPath: '#/properties/legacyMap/uniqueItems',
+                                        keyword: 'uniqueItems',
+                                        params: { i: i5, j: j2 },
+                                        message: 'must NOT have duplicate items (items ## ' + j2 + ' and ' + i5 + ' are identical)',
+                                      },
+                                    ];
+                                    return false;
+                                    break outer2;
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        } else {
+                          validate107.errors = [
+                            {
+                              instancePath: instancePath + '/legacyMap',
+                              schemaPath: '#/properties/legacyMap/type',
+                              keyword: 'type',
+                              params: { type: 'array' },
+                              message: 'must be array',
+                            },
+                          ];
+                          return false;
+                        }
+                      }
+                      var valid0 = _errs14 === errors;
+                    } else {
+                      var valid0 = true;
+                    }
+                    if (valid0) {
+                      if (data.historicalRows !== undefined) {
+                        let data9 = data.historicalRows;
+                        const _errs17 = errors;
+                        if (errors === _errs17) {
+                          if (Array.isArray(data9)) {
+                            var valid7 = true;
+                            const len3 = data9.length;
+                            for (let i6 = 0; i6 < len3; i6++) {
+                              const _errs19 = errors;
+                              if (
+                                !validate92(data9[i6], {
+                                  instancePath: instancePath + '/historicalRows/' + i6,
+                                  parentData: data9,
+                                  parentDataProperty: i6,
+                                  rootData,
+                                  dynamicAnchors,
+                                })
+                              ) {
+                                vErrors = vErrors === null ? validate92.errors : vErrors.concat(validate92.errors);
+                                errors = vErrors.length;
+                              }
+                              var valid7 = _errs19 === errors;
+                              if (!valid7) {
+                                break;
+                              }
+                            }
+                            if (valid7) {
+                              let i7 = data9.length;
+                              let j3;
+                              if (i7 > 1) {
+                                outer3: for (; i7--;) {
+                                  for (j3 = i7; j3--;) {
+                                    if (func0(data9[i7], data9[j3])) {
+                                      validate107.errors = [
+                                        {
+                                          instancePath: instancePath + '/historicalRows',
+                                          schemaPath: '#/properties/historicalRows/uniqueItems',
+                                          keyword: 'uniqueItems',
+                                          params: { i: i7, j: j3 },
+                                          message: 'must NOT have duplicate items (items ## ' + j3 + ' and ' + i7 + ' are identical)',
+                                        },
+                                      ];
+                                      return false;
+                                      break outer3;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          } else {
+                            validate107.errors = [
+                              {
+                                instancePath: instancePath + '/historicalRows',
+                                schemaPath: '#/properties/historicalRows/type',
+                                keyword: 'type',
+                                params: { type: 'array' },
+                                message: 'must be array',
+                              },
+                            ];
+                            return false;
+                          }
+                        }
+                        var valid0 = _errs17 === errors;
+                      } else {
+                        var valid0 = true;
+                      }
+                      if (valid0) {
+                        if (data.effectKinds !== undefined) {
+                          let data11 = data.effectKinds;
+                          const _errs20 = errors;
+                          if (errors === _errs20) {
+                            if (data11 && typeof data11 == 'object' && !Array.isArray(data11)) {
+                              for (const key1 in data11) {
+                                let data12 = data11[key1];
+                                const _errs23 = errors;
+                                if (!(
+                                  data12 === 'parameter' ||
+                                  data12 === 'effect' ||
+                                  data12 === 'availability' ||
+                                  data12 === 'identity' ||
+                                  data12 === 'unclassified'
+                                )) {
+                                  validate107.errors = [
+                                    {
+                                      instancePath: instancePath + '/effectKinds/' + key1.replace(/~/g, '~0').replace(/\//g, '~1'),
+                                      schemaPath: '#/properties/effectKinds/additionalProperties/enum',
+                                      keyword: 'enum',
+                                      params: { allowedValues: schema42.properties.effectKinds.additionalProperties.enum },
+                                      message: 'must be equal to one of the allowed values',
+                                    },
+                                  ];
+                                  return false;
+                                }
+                                var valid9 = _errs23 === errors;
+                                if (!valid9) {
+                                  break;
+                                }
+                              }
+                            } else {
+                              validate107.errors = [
+                                {
+                                  instancePath: instancePath + '/effectKinds',
+                                  schemaPath: '#/properties/effectKinds/type',
+                                  keyword: 'type',
+                                  params: { type: 'object' },
+                                  message: 'must be object',
+                                },
+                              ];
+                              return false;
+                            }
+                          }
+                          var valid0 = _errs20 === errors;
+                        } else {
+                          var valid0 = true;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      validate107.errors = [{ instancePath, schemaPath: '#/type', keyword: 'type', params: { type: 'object' }, message: 'must be object' }];
+      return false;
+    }
+  }
+  validate107.errors = vErrors;
+  return errors === 0;
+}
+validate107.evaluated = { props: true, dynamicProps: false, dynamicItems: false };
+
 function validate53(data, { instancePath = '', parentData, parentDataProperty, rootData = data, dynamicAnchors = {} } = {}) {
   let vErrors = null;
   let errors = 0;
@@ -14752,6 +15336,26 @@ function validate53(data, { instancePath = '', parentData, parentDataProperty, r
                                   var valid0 = _errs52 === errors;
                                 } else {
                                   var valid0 = true;
+                                }
+                                if (valid0) {
+                                  if (data.techs !== undefined) {
+                                    const _errs53 = errors;
+                                    if (
+                                      !validate107(data.techs, {
+                                        instancePath: instancePath + '/techs',
+                                        parentData: data,
+                                        parentDataProperty: 'techs',
+                                        rootData,
+                                        dynamicAnchors,
+                                      })
+                                    ) {
+                                      vErrors = vErrors === null ? validate107.errors : vErrors.concat(validate107.errors);
+                                      errors = vErrors.length;
+                                    }
+                                    var valid0 = _errs53 === errors;
+                                  } else {
+                                    var valid0 = true;
+                                  }
                                 }
                               }
                             }

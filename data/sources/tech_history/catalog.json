@@ -1,0 +1,2002 @@
+{
+  "schemaVersion": 1,
+  "directory": {
+    "path": "data/game/techs.json",
+    "sha256": "9d7fed55d795e3cf33a6f9015f5984f368954f1450dc81fbd147c23517b33cee",
+    "count": 199
+  },
+  "pages": [
+    {
+      "entityId": "tech/3",
+      "catalogOrder": 0,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/3"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/16",
+      "catalogOrder": 1,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/16"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/28",
+      "catalogOrder": 2,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/28"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/455",
+      "catalogOrder": 3,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/455"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/460",
+      "catalogOrder": 4,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/460"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/462",
+      "catalogOrder": 5,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/462"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/463",
+      "catalogOrder": 6,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/463"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/464",
+      "catalogOrder": 7,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/464"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/482",
+      "catalogOrder": 8,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/482"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/483",
+      "catalogOrder": 9,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/483"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/484",
+      "catalogOrder": 10,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/484"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/485",
+      "catalogOrder": 11,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/485"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/486",
+      "catalogOrder": 12,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/486"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/487",
+      "catalogOrder": 13,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/487"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/488",
+      "catalogOrder": 14,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/488"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/489",
+      "catalogOrder": 15,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/489"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/491",
+      "catalogOrder": 16,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/491"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/492",
+      "catalogOrder": 17,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/492"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/499",
+      "catalogOrder": 18,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/499"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/506",
+      "catalogOrder": 19,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/506"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/514",
+      "catalogOrder": 20,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/514"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/516",
+      "catalogOrder": 21,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/516"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/574",
+      "catalogOrder": 22,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/574"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/576",
+      "catalogOrder": 23,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/576"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/578",
+      "catalogOrder": 24,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/578"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/622",
+      "catalogOrder": 25,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/622"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/624",
+      "catalogOrder": 26,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/624"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/627",
+      "catalogOrder": 27,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/627"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/628",
+      "catalogOrder": 28,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/628"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/685",
+      "catalogOrder": 29,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/685"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/687",
+      "catalogOrder": 30,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/687"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/689",
+      "catalogOrder": 31,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/689"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/691",
+      "catalogOrder": 32,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/691"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/754",
+      "catalogOrder": 33,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/754"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/756",
+      "catalogOrder": 34,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/756"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/782",
+      "catalogOrder": 35,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/782"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/784",
+      "catalogOrder": 36,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/784"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/831",
+      "catalogOrder": 37,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/831"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/833",
+      "catalogOrder": 38,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/833"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/835",
+      "catalogOrder": 39,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/835"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/883",
+      "catalogOrder": 40,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/883"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/922",
+      "catalogOrder": 41,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/922"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/923",
+      "catalogOrder": 42,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/923"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/996",
+      "catalogOrder": 43,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/996"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1006",
+      "catalogOrder": 44,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1006"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1061",
+      "catalogOrder": 45,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1061"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1070",
+      "catalogOrder": 46,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1070"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1080",
+      "catalogOrder": 47,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1080"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1365",
+      "catalogOrder": 48,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1365"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1379",
+      "catalogOrder": 49,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1379"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1392",
+      "catalogOrder": 50,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1392"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1404",
+      "catalogOrder": 51,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1404"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1473",
+      "catalogOrder": 52,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1473"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1484",
+      "catalogOrder": 53,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1484"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1491",
+      "catalogOrder": 54,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1491"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1496",
+      "catalogOrder": 55,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1496"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/4",
+      "catalogOrder": 56,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/4"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/5",
+      "catalogOrder": 57,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/5"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/6",
+      "catalogOrder": 58,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/6"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/7",
+      "catalogOrder": 59,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/7"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/10",
+      "catalogOrder": 60,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/10"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/11",
+      "catalogOrder": 61,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/11"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/21",
+      "catalogOrder": 62,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/21"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/24",
+      "catalogOrder": 63,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/24"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/49",
+      "catalogOrder": 64,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/49"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/52",
+      "catalogOrder": 65,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/52"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/59",
+      "catalogOrder": 66,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/59"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/61",
+      "catalogOrder": 67,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/61"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/440",
+      "catalogOrder": 68,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/440"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/445",
+      "catalogOrder": 69,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/445"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/454",
+      "catalogOrder": 70,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/454"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/457",
+      "catalogOrder": 71,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/457"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/461",
+      "catalogOrder": 72,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/461"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/493",
+      "catalogOrder": 73,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/493"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/507",
+      "catalogOrder": 74,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/507"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/513",
+      "catalogOrder": 75,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/513"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/515",
+      "catalogOrder": 76,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/515"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/517",
+      "catalogOrder": 77,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/517"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/573",
+      "catalogOrder": 78,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/573"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/575",
+      "catalogOrder": 79,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/575"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/577",
+      "catalogOrder": 80,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/577"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/579",
+      "catalogOrder": 81,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/579"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/623",
+      "catalogOrder": 82,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/623"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/625",
+      "catalogOrder": 83,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/625"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/626",
+      "catalogOrder": 84,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/626"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/629",
+      "catalogOrder": 85,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/629"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/686",
+      "catalogOrder": 86,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/686"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/688",
+      "catalogOrder": 87,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/688"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/690",
+      "catalogOrder": 88,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/690"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/692",
+      "catalogOrder": 89,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/692"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/755",
+      "catalogOrder": 90,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/755"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/757",
+      "catalogOrder": 91,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/757"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/783",
+      "catalogOrder": 92,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/783"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/785",
+      "catalogOrder": 93,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/785"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/832",
+      "catalogOrder": 94,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/832"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/834",
+      "catalogOrder": 95,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/834"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/836",
+      "catalogOrder": 96,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/836"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/884",
+      "catalogOrder": 97,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/884"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/902",
+      "catalogOrder": 98,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/902"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/921",
+      "catalogOrder": 99,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/921"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/924",
+      "catalogOrder": 100,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/924"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/997",
+      "catalogOrder": 101,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/997"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1007",
+      "catalogOrder": 102,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1007"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1062",
+      "catalogOrder": 103,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1062"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1069",
+      "catalogOrder": 104,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1069"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1081",
+      "catalogOrder": 105,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1081"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1366",
+      "catalogOrder": 106,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1366"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1380",
+      "catalogOrder": 107,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1380"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1393",
+      "catalogOrder": 108,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1393"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1464",
+      "catalogOrder": 109,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1464"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1474",
+      "catalogOrder": 110,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1474"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1483",
+      "catalogOrder": 111,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1483"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/602",
+      "catalogOrder": 112,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/602"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/215",
+      "catalogOrder": 113,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/215"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/875",
+      "catalogOrder": 114,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/875"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/906",
+      "catalogOrder": 115,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/906"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/34",
+      "catalogOrder": 116,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/34"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/65",
+      "catalogOrder": 117,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/65"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/35",
+      "catalogOrder": 118,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/35"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/14",
+      "catalogOrder": 119,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/14"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1014",
+      "catalogOrder": 120,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1014"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/13",
+      "catalogOrder": 121,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/13"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1013",
+      "catalogOrder": 122,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1013"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/12",
+      "catalogOrder": 123,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/12"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1012",
+      "catalogOrder": 124,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1012"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/315",
+      "catalogOrder": 125,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/315"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/321",
+      "catalogOrder": 126,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/321"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/379",
+      "catalogOrder": 127,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/379"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/408",
+      "catalogOrder": 128,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/408"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/23",
+      "catalogOrder": 129,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/23"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/48",
+      "catalogOrder": 130,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/48"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/15",
+      "catalogOrder": 131,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/15"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/17",
+      "catalogOrder": 132,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/17"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/437",
+      "catalogOrder": 133,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/437"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/436",
+      "catalogOrder": 134,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/436"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/1452",
+      "catalogOrder": 135,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/1452"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/435",
+      "catalogOrder": 136,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/435"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/39",
+      "catalogOrder": 137,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/39"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/67",
+      "catalogOrder": 138,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/67"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/74",
+      "catalogOrder": 139,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/74"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/81",
+      "catalogOrder": 140,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/81"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/199",
+      "catalogOrder": 141,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/199"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/211",
+      "catalogOrder": 142,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/211"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/68",
+      "catalogOrder": 143,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/68"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/76",
+      "catalogOrder": 144,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/76"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/82",
+      "catalogOrder": 145,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/82"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/200",
+      "catalogOrder": 146,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/200"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/212",
+      "catalogOrder": 147,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/212"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/75",
+      "catalogOrder": 148,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/75"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/77",
+      "catalogOrder": 149,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/77"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/80",
+      "catalogOrder": 150,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/80"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/201",
+      "catalogOrder": 151,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/201"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/219",
+      "catalogOrder": 152,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/219"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/46",
+      "catalogOrder": 153,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/46"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/231",
+      "catalogOrder": 154,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/231"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/252",
+      "catalogOrder": 155,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/252"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/316",
+      "catalogOrder": 156,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/316"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/319",
+      "catalogOrder": 157,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/319"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/439",
+      "catalogOrder": 158,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/439"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/441",
+      "catalogOrder": 159,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/441"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/45",
+      "catalogOrder": 160,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/45"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/230",
+      "catalogOrder": 161,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/230"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/233",
+      "catalogOrder": 162,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/233"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/438",
+      "catalogOrder": 163,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/438"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/22",
+      "catalogOrder": 164,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/22"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/101",
+      "catalogOrder": 165,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/101"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/8",
+      "catalogOrder": 166,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/8"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/102",
+      "catalogOrder": 167,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/102"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/213",
+      "catalogOrder": 168,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/213"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/103",
+      "catalogOrder": 169,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/103"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/249",
+      "catalogOrder": 170,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/249"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/280",
+      "catalogOrder": 171,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/280"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/50",
+      "catalogOrder": 172,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/50"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/54",
+      "catalogOrder": 173,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/54"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/93",
+      "catalogOrder": 174,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/93"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/140",
+      "catalogOrder": 175,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/140"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/194",
+      "catalogOrder": 176,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/194"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/322",
+      "catalogOrder": 177,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/322"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/374",
+      "catalogOrder": 178,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/374"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/380",
+      "catalogOrder": 179,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/380"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/908",
+      "catalogOrder": 180,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/908"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/909",
+      "catalogOrder": 181,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/909"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/47",
+      "catalogOrder": 182,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/47"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/51",
+      "catalogOrder": 183,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/51"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/63",
+      "catalogOrder": 184,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/63"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/64",
+      "catalogOrder": 185,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/64"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/373",
+      "catalogOrder": 186,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/373"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/375",
+      "catalogOrder": 187,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/375"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/377",
+      "catalogOrder": 188,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/377"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/608",
+      "catalogOrder": 189,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/608"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/907",
+      "catalogOrder": 190,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/907"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/910",
+      "catalogOrder": 191,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/910"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/202",
+      "catalogOrder": 192,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/202"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/203",
+      "catalogOrder": 193,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/203"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/221",
+      "catalogOrder": 194,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/221"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/55",
+      "catalogOrder": 195,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/55"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/278",
+      "catalogOrder": 196,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/278"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/182",
+      "catalogOrder": 197,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/182"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    },
+    {
+      "entityId": "tech/279",
+      "catalogOrder": 198,
+      "searchState": "not-checked",
+      "checkedAt": null,
+      "sectionIds": [],
+      "familyIds": ["tech/279"],
+      "identityNote": "固定当前目录的精确科技 ID；不按同名推断继任或历史数值。",
+      "reason": "本期仅接入既有共享证据与旧档案；未定位或读取独立科技来源页。"
+    }
+  ],
+  "retiredIds": ["tech/716@retired", "tech/legacy-berserkergang@retired", "tech/legacy-zealotry@retired"],
+  "review": "目录只认身份；三个既有退役身份原样保留，补给别名供给；不新增独立来源采集、历史替代或当前数值推算。"
+}

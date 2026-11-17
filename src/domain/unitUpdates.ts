@@ -1,4 +1,4 @@
-import { compareUpdateVersions, type CivUpdateEvent, type CivUpdatesData, type UpdateEffect, type UpdateScope } from './civUpdates';
+import { compareUpdateVersions, validHistoryReturn, type CivUpdateEvent, type CivUpdatesData, type UpdateEffect, type UpdateScope } from './civUpdates';
 import { ENTITY_HISTORY_FILTER_KEYS } from './historyFilters';
 
 export type UnitSourceState = 'processed' | 'pending' | 'not-checked' | 'not-located' | 'page-not-found' | 'no-log' | 'read-failed';
@@ -54,7 +54,7 @@ export function unitCoverageQueryError(query: URLSearchParams) {
     ? '单位来源状态筛选无法识别，请清除筛选'
     : undefined;
 }
-const KEYS = ['obj', 'tab', 'histQuery', 'histReturn', ...UNIT_FILTER_KEYS];
+const KEYS = ['obj', 'tab', 'histQuery', 'histReturn', 'histEvent', ...UNIT_FILTER_KEYS];
 
 export function unitQueryError(data: CivUpdatesData, query: URLSearchParams): string | undefined {
   for (const key of query.keys()) {
@@ -69,13 +69,15 @@ export function unitQueryError(data: CivUpdatesData, query: URLSearchParams): st
     histOrder: ['newest', 'oldest'],
   };
   for (const [key, values] of Object.entries(choices)) if (query.has(key) && !values.includes(query.get(key)!)) return '历史筛选值无法识别，请清除历史筛选。';
-  if (query.has('histReturn') && !unitHistoryReturn(query.get('histReturn'))) return '返回地址无法识别，请清除历史筛选。';
+  if (query.has('histEvent') && !data.events.some((e) => e.id === query.get('histEvent'))) return '历史事件定位已失效';
+  if (query.has('histReturn') && !unitHistoryReturn(query.get('histReturn'), data)) return '返回地址无法识别，请清除历史筛选。';
   return undefined;
 }
 
 /** Router-relative allowlist. Nested returns are never copied into new links. */
-export function unitHistoryReturn(raw: string | null): string | null {
+export function unitHistoryReturn(raw: string | null, data?: CivUpdatesData): string | null {
   if (!raw || /[\r\n\\#]/u.test(raw) || [...raw].some((c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127)) return null;
+  if (data) return validHistoryReturn(raw, data);
   const [path, ...tail] = raw.split('?');
   if (tail.length > 1 || !(path === '/patches' || /^\/unit\/\d+$/u.test(path ?? ''))) return null;
   const params = new URLSearchParams(tail[0] ?? '');
@@ -87,14 +89,15 @@ export function unitHistoryReturn(raw: string | null): string | null {
   if (unitCoverageQueryError(params)) return null;
   return path + (params.size ? '?' + params.toString() : '');
 }
-export function unitHistoryPath(entityId: string, query: URLSearchParams, view: 'overview' | 'detail', returnTo?: string): string {
+export function unitHistoryPath(entityId: string, query: URLSearchParams, view: 'overview' | 'detail', returnTo?: string, data?: CivUpdatesData): string {
   const id = /^unit\/(\d+)$/u.exec(entityId)?.[1];
   if (!id) return '/patches';
   const next = new URLSearchParams();
   if (view === 'overview') next.set('obj', 'unit:' + id);
   else next.set('tab', 'history');
-  for (const key of ['histQuery', ...UNIT_FILTER_KEYS]) if (query.getAll(key).length === 1) next.set(key, query.get(key)!);
-  if (returnTo && unitHistoryReturn(returnTo)) next.set('histReturn', unitHistoryReturn(returnTo)!);
+  for (const key of ['histQuery', 'histEvent', ...UNIT_FILTER_KEYS]) if (query.getAll(key).length === 1) next.set(key, query.get(key)!);
+  const back = unitHistoryReturn(returnTo ?? query.get('histReturn'), data);
+  if (back) next.set('histReturn', back);
   return (view === 'overview' ? '/patches' : '/unit/' + id) + '?' + next.toString();
 }
 export function clearUnitFilters(query: URLSearchParams) {

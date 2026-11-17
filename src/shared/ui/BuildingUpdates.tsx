@@ -19,6 +19,7 @@ import { UNIT_CONDITIONS, partitionUnitScopes, type UnitEventView } from '../../
 import { SourceTime, UpdateText } from './CivUpdatePrimitives';
 import { BuildingIcon } from './art';
 import { VersionEvents } from './UnitUpdates';
+import { HistoryEntityLinks } from './HistoryEntityLinks';
 import './unit-updates.css';
 import './building-updates.css';
 
@@ -230,7 +231,11 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
   }, [sharePath]);
   const anchor = anchors.get(query.get('histEvent') ?? '');
   useEffect(() => {
-    if (anchor) document.getElementById(anchor)?.scrollIntoView({ block: 'center' });
+    if (anchor) {
+      const node = document.getElementById(anchor);
+      node?.scrollIntoView({ block: 'center' });
+      node?.focus({ preventScroll: true });
+    }
   }, [anchor]);
   if (!entity || !data.buildings)
     return (
@@ -268,29 +273,8 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
         },
       };
     });
-  const context = (view: UnitEventView) => {
-    const scopes = view.event.claims.flatMap((c) => c.effects.map((f) => f.scope ?? view.event.scope));
-    const ids = new Set([...view.original.civRelations.map((r) => r.civId), ...scopes.flatMap((s) => [...s.providerCivIds, ...s.affectedCivIds])]);
-    const backQuery = new URLSearchParams(currentQuery);
-    backQuery.set('histEvent', view.event.id);
-    const returnTo = buildingHistoryReturn(data, location.pathname + '?' + backQuery.toString());
-    return (
-      <nav className="unit-history-actions" aria-label="关联文明历史">
-        {data.civilizations
-          .filter((c) => ids.has(c.civId))
-          .map((c) => {
-            const target = new URLSearchParams({ tab: 'history' });
-            if (view.event.versionId) target.set('histVersion', view.event.versionId);
-            if (returnTo) target.set('histReturn', returnTo);
-            return (
-              <Link key={c.civId} to={'/civ/' + c.civId + '?' + target.toString()}>
-                查看{c.nameZh}文明历史
-              </Link>
-            );
-          })}
-      </nav>
-    );
-  };
+  const context = (view: UnitEventView) => <HistoryEntityLinks data={data} event={view.event} sourceEntityId={entityId} />;
+
   return (
     <section className="building-history civ-updates unit-updates" aria-label="建筑更新历史" data-building-history={entityId}>
       {overview ? (

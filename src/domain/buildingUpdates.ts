@@ -1,4 +1,4 @@
-import { detailQueryError, type CivUpdatesData } from './civUpdates';
+import { detailQueryError, validHistoryReturn, type CivUpdatesData } from './civUpdates';
 import { ENTITY_HISTORY_FILTER_KEYS } from './historyFilters';
 import { UNIT_CONDITIONS, filterProjectedEvents, projectUnitEvents, type UnitCoverage, type UnitRelation, type UnitUpdateData } from './unitUpdates';
 
@@ -67,6 +67,14 @@ export function buildingHistoryReturn(data: CivUpdatesData, raw: string | null):
   if (tail.length > 1) return null;
   const query = new URLSearchParams(tail[0] ?? '');
   if ([...query].some(([key, value]) => key === 'histReturn' || query.getAll(key).length !== 1 || unsafe(value))) return null;
+  if (
+    path.startsWith('/tech/') ||
+    path.startsWith('/unit/') ||
+    query.get('histView')?.startsWith('tech') ||
+    query.get('obj')?.startsWith('tech:') ||
+    query.get('histEntity')?.startsWith('tech/')
+  )
+    return validHistoryReturn(raw, data);
   let allowed: readonly string[];
   if (path === '/patches') {
     allowed = KEYS.filter((key) => key !== 'histReturn');
@@ -78,7 +86,7 @@ export function buildingHistoryReturn(data: CivUpdatesData, raw: string | null):
       return null;
     if (buildingQueryErrors(data, query, false).length) return null;
   } else if (path.startsWith('/civ/') && data.civilizations.some((c) => path === '/civ/' + c.civId)) {
-    allowed = ['tab', 'histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder'];
+    allowed = ['tab', 'histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder', 'histEvent'];
     if ((query.has('tab') && query.get('tab') !== 'history') || detailQueryError(query, data, path.slice(5))) return null;
   } else return null;
   if ([...query.keys()].some((key) => !allowed.includes(key))) return null;

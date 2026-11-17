@@ -1,5 +1,6 @@
 import { unitCoverageQueryError, unitHistoryReturn, unitQueryError, type UnitUpdateData } from './unitUpdates';
 import { buildingHistoryReturn, type BuildingUpdateData } from './buildingUpdates';
+import { techHistoryReturn, type TechUpdateData } from './techUpdates';
 /** Historical claims are independent of today's game values and technology tree. */
 export type Verification = 'verified' | 'unverified' | 'conflict';
 export type SourceCategory = 'official' | 'community' | 'other' | 'unknown';
@@ -165,6 +166,7 @@ export interface CivUpdatesData {
   legacyMap: LegacyUpdateMapping[];
   units?: UnitUpdateData;
   buildings?: BuildingUpdateData;
+  techs?: TechUpdateData;
 }
 
 export const SOURCE_STATE_LABELS: Record<SourceState, string> = {
@@ -176,7 +178,7 @@ export const SOURCE_STATE_LABELS: Record<SourceState, string> = {
 export const VERIFICATION_LABELS: Record<Verification, string> = { verified: '已核实', unverified: '未核实', conflict: '来源冲突，尚未确认' };
 export const SOURCE_CATEGORY_LABELS: Record<SourceCategory, string> = { official: '官方', community: '社区', other: '其他', unknown: '来源类别未知' };
 export const OVERVIEW_KEYS = ['histQuery', 'histCoverage', 'histSourceState', 'histListOrder'] as const;
-export const DETAIL_KEYS = ['histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder'] as const;
+export const DETAIL_KEYS = ['histQuery', 'histVersion', 'histSource', 'histVerification', 'histOrder', 'histEvent'] as const;
 const OLD_KEYS = ['histKind', 'histRelation', 'histFrom', 'histTo'];
 
 function singleError(query: URLSearchParams, keys: readonly string[]) {
@@ -203,6 +205,8 @@ export function detailQueryError(query: URLSearchParams, data: CivUpdatesData, c
   if (invalid) return invalid;
   if (OLD_KEYS.some((key) => query.has(key))) return '旧文明历史筛选已不再适用，请清除筛选';
   if ([...query.keys()].some((key) => key.startsWith('hist') && ![...DETAIL_KEYS, 'histReturn'].includes(key))) return '该文明历史筛选参数不再适用，请清除筛选';
+  if (query.has('histEvent') && !data.events.some((e) => e.id === query.get('histEvent') && e.civRelations.some((r) => r.civId === civId)))
+    return '事件定位不属于该文明';
   const choice = enumError(query, {
     histSource: ['official', 'community', 'other'],
     histVerification: ['verified', 'unverified', 'conflict'],
@@ -221,6 +225,15 @@ export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): s
   if (tail.length > 1) return null;
   const params = new URLSearchParams(tail[0] ?? '');
   if ([...params].some(([key, value]) => key === 'histReturn' || params.getAll(key).length !== 1 || unsafe(key) || unsafe(value))) return null;
+  if (
+    path?.startsWith('/tech/') ||
+    params.get('histView')?.startsWith('tech') ||
+    params.get('obj')?.startsWith('tech:') ||
+    params.get('histEntity')?.startsWith('tech/') ||
+    params.has('techSourceState') ||
+    params.has('techIdentity')
+  )
+    return data ? techHistoryReturn(data, raw) : null;
   if (
     path?.startsWith('/building/') ||
     path?.startsWith('/civ/') ||
@@ -367,7 +380,8 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
   for (const event of events.values()) {
     if (event.versionId !== null && !versions.has(event.versionId)) fail();
     if (
-      (!event.civRelations.length && ![...(data.units?.relations ?? []), ...(data.buildings?.relations ?? [])].some((row) => row.eventId === event.id)) ||
+      (!event.civRelations.length &&
+        ![...(data.units?.relations ?? []), ...(data.buildings?.relations ?? []), ...(data.techs?.relations ?? [])].some((row) => row.eventId === event.id)) ||
       event.civRelations.some((row) => !civIds.has(row.civId))
     )
       fail();
@@ -463,6 +477,7 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
   for (const [kind, units] of [
     ['unit', data.units],
     ['building', data.buildings],
+    ['tech', data.techs],
   ] as const) {
     if (!units) continue;
     const ids = new Set(units.rows.map((row) => row.entityId));
@@ -514,6 +529,32 @@ export function assertCivUpdateReferences(data: CivUpdatesData): void {
         !claim?.legacyKeys.includes(mapping.key) ||
         mapping.effectIds.some((id) => !claim?.effects.some((effect) => effect.id === id))
       )
+        fail();
+    }
+  }
+  if (data.techs) {
+    const techs = data.techs;
+    const retired = data.entities.filter((e) => e.type === 'tech' && e.status === 'retired');
+    if (retired.length !== techs.historicalRows.length || new Set(techs.historicalRows.map((r) => r.entityId)).size !== retired.length) fail();
+    for (const row of techs.historicalRows) {
+      if (
+        !retired.some((e) => e.id === row.entityId && e.linkPath === null) ||
+        row.sourceState !== 'not-checked' ||
+        row.checkedAt !== null ||
+        row.sectionIds.length ||
+        row.sourceEntryCount !== null ||
+        row.familyIds.length
+      )
+        fail();
+      const ids = new Set(techs.relations.filter((r) => r.entityId === row.entityId).map((r) => r.eventId));
+      if (ids.size !== row.eventIds.length || row.eventIds.some((id) => !ids.has(id)) || row.relatedSectionIds.some((id) => !sections.has(id))) fail();
+    }
+    const projected = new Set(techs.relations.flatMap((r) => r.effectIds));
+    if (projected.size !== Object.keys(techs.effectKinds).length || Object.keys(techs.effectKinds).some((id) => !projected.has(id))) fail();
+    for (const row of techs.legacyMap) {
+      const matches = data.events.flatMap((e) => e.claims.filter((c) => c.legacyKeys.includes(row.key)).map((c) => ({ e, c })));
+      const old = data.legacyMap.find((r) => r.key === row.key);
+      if (matches.length !== 1 || matches[0]!.e.id !== row.eventId || matches[0]!.c.id !== row.claimId || matches[0]!.e.versionId !== 'de-' + old?.patchId)
         fail();
     }
   }

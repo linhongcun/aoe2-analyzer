@@ -86,6 +86,8 @@ class BuildingHistoryTests(unittest.TestCase):
             for name in [*[f'data/game/{n}.json' for n in ['civs', 'units', 'buildings', 'techs']], 'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json', *['scripts/' + f for f in ['civ_history_build.py', 'unit_history.py', 'building_history.py', 'civ_history_validate.mjs', 'content-schema.mjs', 'content-schema-catalog.mjs', 'content-baseline.mjs']], 'src/content/schema/policy.mjs']:
                 (root / name).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, root / name)
+            shutil.copytree(ROOT / 'data/sources/tech_history', root / 'data/sources/tech_history')
+            shutil.copy2(ROOT / 'scripts/tech_history.py', root / 'scripts/tech_history.py')
             (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
             def run(*args):
                 return subprocess.run([sys.executable, str(root / 'scripts/civ_history_build.py'), *args], cwd=root, capture_output=True, text=True, timeout=60)
@@ -131,7 +133,7 @@ class BuildingHistoryTests(unittest.TestCase):
             row = next(r for r in data['buildings']['rows'] if r['entityId'] == page['entityId'])
             self.assertEqual(row['sourceState'], 'read-failed')
             self.assertEqual(row['sourceEntryCount'], 17)
-            self.assertEqual(data['events'], self.data['events'])
+            self.assertEqual(data['events'][:len(self.data['events'])], self.data['events'])
             snap = root / INPUT / catalog['sectionFiles'][0]['path']
             snap.write_bytes(snap.read_bytes() + b' ')
             self.assertIn('snapshot pin', run('--check').stderr)

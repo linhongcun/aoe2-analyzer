@@ -99,7 +99,13 @@
   margin-block: var(--space-4);
 }
 .civ-update-event {
+  scroll-margin-block: 5rem;
   margin-block: var(--space-3);
+}
+
+.civ-update-event:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 .civ-update-badges {
   display: flex;

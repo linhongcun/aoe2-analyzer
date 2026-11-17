@@ -16,20 +16,10 @@
           "minimum": 0
         },
         "searchState": {
-          "enum": [
-            "found",
-            "not-checked",
-            "not-located",
-            "page-not-found",
-            "no-log",
-            "read-failed"
-          ]
+          "enum": ["found", "not-checked", "not-located", "page-not-found", "no-log", "read-failed"]
         },
         "checkedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "sectionIds": {
           "type": "array",
@@ -64,16 +54,10 @@
           "uniqueItems": true
         },
         "sourceUrl": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "indexLabel": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         }
       },
       "required": [
@@ -112,11 +96,7 @@
               "minimum": 1
             }
           },
-          "required": [
-            "path",
-            "sha256",
-            "count"
-          ],
+          "required": ["path", "sha256", "count"],
           "additionalProperties": false
         },
         "pages": {
@@ -140,10 +120,7 @@
                 "pattern": "^[a-f0-9]{64}$"
               }
             },
-            "required": [
-              "path",
-              "sha256"
-            ],
+            "required": ["path", "sha256"],
             "additionalProperties": false
           },
           "uniqueItems": true
@@ -181,20 +158,12 @@
                     "minLength": 1
                   }
                 },
-                "required": [
-                  "label",
-                  "href"
-                ],
+                "required": ["label", "href"],
                 "additionalProperties": false
               }
             }
           },
-          "required": [
-            "url",
-            "documentSha256",
-            "capturedAt",
-            "links"
-          ],
+          "required": ["url", "documentSha256", "capturedAt", "links"],
           "additionalProperties": false
         },
         "coverageNote": {
@@ -202,15 +171,7 @@
           "minLength": 1
         }
       },
-      "required": [
-        "schemaVersion",
-        "directory",
-        "pages",
-        "sectionFiles",
-        "review",
-        "sourceIndex",
-        "coverageNote"
-      ],
+      "required": ["schemaVersion", "directory", "pages", "sectionFiles", "review", "sourceIndex", "coverageNote"],
       "additionalProperties": false
     },
     "buildingCoverage": {
@@ -225,20 +186,10 @@
           "minimum": 0
         },
         "searchState": {
-          "enum": [
-            "found",
-            "not-checked",
-            "not-located",
-            "page-not-found",
-            "no-log",
-            "read-failed"
-          ]
+          "enum": ["found", "not-checked", "not-located", "page-not-found", "no-log", "read-failed"]
         },
         "checkedAt": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "sectionIds": {
           "type": "array",
@@ -265,15 +216,7 @@
           "minLength": 1
         },
         "sourceState": {
-          "enum": [
-            "processed",
-            "pending",
-            "not-checked",
-            "not-located",
-            "page-not-found",
-            "no-log",
-            "read-failed"
-          ]
+          "enum": ["processed", "pending", "not-checked", "not-located", "page-not-found", "no-log", "read-failed"]
         },
         "relatedSectionIds": {
           "type": "array",
@@ -292,10 +235,7 @@
           "uniqueItems": true
         },
         "sourceEntryCount": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "aliases": {
@@ -307,16 +247,10 @@
           "uniqueItems": true
         },
         "sourceUrl": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "indexLabel": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         }
       },
       "required": [
@@ -358,24 +292,14 @@
           "uniqueItems": true
         },
         "relation": {
-          "enum": [
-            "direct",
-            "related",
-            "identity-pending"
-          ]
+          "enum": ["direct", "related", "identity-pending"]
         },
         "note": {
           "type": "string",
           "minLength": 1
         }
       },
-      "required": [
-        "entityId",
-        "eventId",
-        "effectIds",
-        "relation",
-        "note"
-      ],
+      "required": ["entityId", "eventId", "effectIds", "relation", "note"],
       "additionalProperties": false
     },
     "buildingLegacyInput": {
@@ -406,13 +330,7 @@
           "minLength": 1
         }
       },
-      "required": [
-        "key",
-        "eventId",
-        "claimId",
-        "effectIds",
-        "reason"
-      ],
+      "required": ["key", "eventId", "claimId", "effectIds", "reason"],
       "additionalProperties": false
     },
     "buildingImport": {
@@ -450,12 +368,7 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "eventId",
-              "claimId",
-              "sourceEntryId",
-              "reason"
-            ],
+            "required": ["eventId", "claimId", "sourceEntryId", "reason"],
             "additionalProperties": false
           },
           "uniqueItems": true
@@ -485,13 +398,7 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "eventId",
-              "claimId",
-              "sourceEntryId",
-              "effect",
-              "reason"
-            ],
+            "required": ["eventId", "claimId", "sourceEntryId", "effect", "reason"],
             "additionalProperties": false
           },
           "uniqueItems": true
@@ -517,32 +424,20 @@
                 "type": "object",
                 "properties": {
                   "before": {
-                    "type": [
-                      "number",
-                      "null"
-                    ]
+                    "type": ["number", "null"]
                   },
                   "after": {
-                    "type": [
-                      "number",
-                      "null"
-                    ]
+                    "type": ["number", "null"]
                   }
                 },
-                "required": [
-                  "before",
-                  "after"
-                ],
+                "required": ["before", "after"],
                 "additionalProperties": false
               },
               "changes": {
                 "type": "object",
                 "properties": {
                   "before": {
-                    "type": [
-                      "number",
-                      "null"
-                    ]
+                    "type": ["number", "null"]
                   },
                   "conditions": {
                     "type": "array",
@@ -556,10 +451,7 @@
                     "$ref": "#/$defs/scope"
                   }
                 },
-                "required": [
-                  "before",
-                  "conditions"
-                ],
+                "required": ["before", "conditions"],
                 "additionalProperties": false
               },
               "reason": {
@@ -567,14 +459,7 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "eventId",
-              "effectId",
-              "sourceEntryId",
-              "expected",
-              "changes",
-              "reason"
-            ],
+            "required": ["eventId", "effectId", "sourceEntryId", "expected", "changes", "reason"],
             "additionalProperties": false
           },
           "uniqueItems": true
@@ -601,16 +486,7 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "schemaVersion",
-        "events",
-        "attachments",
-        "additionalEffects",
-        "refinements",
-        "relations",
-        "legacy",
-        "versions"
-      ],
+      "required": ["schemaVersion", "events", "attachments", "additionalEffects", "refinements", "relations", "legacy", "versions"],
       "additionalProperties": false
     },
     "buildingData": {
@@ -678,32 +554,16 @@
                     "minLength": 1
                   }
                 },
-                "required": [
-                  "label",
-                  "href"
-                ],
+                "required": ["label", "href"],
                 "additionalProperties": false
               }
             }
           },
-          "required": [
-            "url",
-            "documentSha256",
-            "capturedAt",
-            "links"
-          ],
+          "required": ["url", "documentSha256", "capturedAt", "links"],
           "additionalProperties": false
         }
       },
-      "required": [
-        "catalogSize",
-        "directorySha256",
-        "coverageNote",
-        "rows",
-        "relations",
-        "legacyMap",
-        "sourceIndex"
-      ],
+      "required": ["catalogSize", "directorySha256", "coverageNote", "rows", "relations", "legacyMap", "sourceIndex"],
       "additionalProperties": false
     },
     "buildingAudit": {
@@ -742,13 +602,7 @@
                 "minimum": 0
               }
             },
-            "required": [
-              "path",
-              "sha256",
-              "documentSha256",
-              "sectionTextSha256",
-              "observedEntryCount"
-            ],
+            "required": ["path", "sha256", "documentSha256", "sectionTextSha256", "observedEntryCount"],
             "additionalProperties": false
           },
           "uniqueItems": true
@@ -769,15 +623,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "schemaVersion",
-        "buildings",
-        "legacyRecordCount",
-        "buildingLegacyCount",
-        "buildingLegacyMigratedCount",
-        "snapshots",
-        "eventCount"
-      ],
+      "required": ["schemaVersion", "buildings", "legacyRecordCount", "buildingLegacyCount", "buildingLegacyMigratedCount", "snapshots", "eventCount"],
       "additionalProperties": false
     },
     "scope": {
@@ -1875,6 +1721,9 @@
         },
         "buildings": {
           "$ref": "#/$defs/buildingData"
+        },
+        "techs": {
+          "$ref": "#/$defs/techData"
         }
       },
       "required": ["schemaVersion", "meta", "versions", "sources", "sections", "sourceEntries", "entities", "events", "civilizations", "legacyMap"],
@@ -2908,6 +2757,194 @@
         }
       },
       "required": ["schemaVersion", "units", "legacyRecordCount", "unitLegacyCount", "unitLegacyMigratedCount", "snapshots", "eventCount"],
+      "additionalProperties": false
+    },
+    "techCatalog": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "directory": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "const": "data/game/techs.json"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["path", "sha256", "count"],
+          "additionalProperties": false
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitPage"
+          },
+          "uniqueItems": true
+        },
+        "review": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retiredIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": ["schemaVersion", "directory", "pages", "review", "retiredIds"],
+      "additionalProperties": false
+    },
+    "techImport": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "expectedReusedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "legacy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitLegacyInput"
+          },
+          "uniqueItems": true
+        },
+        "newEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "uniqueItems": true
+        },
+        "identityBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitRelation"
+          },
+          "uniqueItems": true
+        },
+        "effectKinds": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": ["parameter", "effect", "availability", "identity", "unclassified"]
+          }
+        },
+        "relatedIdentities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": ["schemaVersion", "expectedReusedCount", "legacy", "newEvents", "identityBindings", "relations", "effectKinds", "relatedIdentities"],
+      "additionalProperties": false
+    },
+    "techData": {
+      "type": "object",
+      "properties": {
+        "catalogSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "directorySha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coverageNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitCoverage"
+          },
+          "uniqueItems": true
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitRelation"
+          },
+          "uniqueItems": true
+        },
+        "legacyMap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitLegacyInput"
+          },
+          "uniqueItems": true
+        },
+        "historicalRows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitCoverage"
+          },
+          "uniqueItems": true
+        },
+        "effectKinds": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": ["parameter", "effect", "availability", "identity", "unclassified"]
+          }
+        }
+      },
+      "required": ["catalogSize", "directorySha256", "coverageNote", "rows", "relations", "legacyMap", "historicalRows", "effectKinds"],
+      "additionalProperties": false
+    },
+    "techAudit": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "techs": {
+          "$ref": "#/$defs/techData"
+        },
+        "legacyRecordCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "techLegacyCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "techLegacyReusedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "techLegacyImportedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eventCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["schemaVersion", "techs", "legacyRecordCount", "techLegacyCount", "techLegacyReusedCount", "techLegacyImportedCount", "eventCount"],
       "additionalProperties": false
     }
   }
