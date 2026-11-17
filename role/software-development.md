@@ -178,6 +178,10 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+焦点正确不等于焦点可见。[#1118](https://github.com/linhongcun/aoe2-analyzer/issues/1118) / [PR #1127](https://github.com/linhongcun/aoe2-analyzer/pull/1127) 的独立实现复核发现，速览内部已滚动后切换文明，直接 `focus({ preventScroll: true })` 会把焦点移到仍被裁切的关闭按钮；窄回归在旧构建复现了内部滚动偏移残留。修复只在打开面板或切换文明时先复位所属面板，再聚焦，不随筛选输入重置。以后先断言面板确实滚动、控件确已被裁切，再同时检查焦点、控件与面板/视口的边界、外层滚动和关闭回焦；不能只断言 `toBeFocused()`。自动点击工具可能另行滚动定位，须把它与产品滚动区分；键盘用例也不能冒充指针操作。[修复后 main CI/Pages](https://github.com/linhongcun/aoe2-analyzer/actions/runs/44129249013)、[v0.86.1](https://github.com/linhongcun/aoe2-analyzer/releases/tag/v0.86.1) 及原 Issue 的线上真实滚轮→指针切换已通过。
+
+44px 最小高度不能保证双向触控热区。同一 [#1118](https://github.com/linhongcun/aoe2-analyzer/issues/1118) 的长无效条件挤压 flex chip 后，移除按钮虽足够高，实际宽度只有 41.90625px；补上移动范围内的 `min-width: 44px` 后，原宽高断言通过。以后用真实长条件和组合条件量测每个移除控件的宽与高，不仅看字号、高度或正常短标签；不放宽断言掩盖挤压。修复、专项回归和上述同一版本的上线证据见 [PR #1127](https://github.com/linhongcun/aoe2-analyzer/pull/1127)。
+
 跨页返回须在发送端和目标读者执行完整的路由/视图校验。[#1084](https://github.com/linhongcun/aoe2-analyzer/issues/1084) / [PR #1114](https://github.com/linhongcun/aoe2-analyzer/pull/1114) 的独立复核发现，建筑发送端已校验，文明目标读者的旧兜底仍接受嵌套返回、解码后的控制字符、重复键和非法版本；单位详情还接受多余的对象参数。以后先解码并逐键/值拒绝重复、嵌套和控制字符，再按目标路由/视图校验允许字段与取值；详情不接受总览专属对象参数。正负例同时覆盖返回校验、目标读者错误提示及局部恢复，保留合法文明/单位/建筑往返。[修复后 main CI/Pages](https://github.com/linhongcun/aoe2-analyzer/actions/runs/44075093247) 与 [v0.85.0](https://github.com/linhongcun/aoe2-analyzer/releases/tag/v0.85.0) 已通过，真实线上返回和受控失败重试的范围见原 Issue，不把本地夹具当作线上故障。
 
 同一返回协议扩展到科技时，[#1085](https://github.com/linhongcun/aoe2-analyzer/issues/1085) / [PR #1124](https://github.com/linhongcun/aoe2-analyzer/pull/1124) 的复核和实际点击又发现：全局存在的事件未必属于当前对象；建筑搜索选择只读显式返回参数，会丢掉查询中的合法返回。以后按目标对象的实际 relation/event 集合校验定位，局部恢复或切换对象只清无关事件，保留合法筛选、上下文与单层返回；所有搜索、清筛选和对象选择入口都要走同一安全候选校验。中央分发先拒绝混合路由/视图，再调用各实体校验器，避免相互委派递归。回归既要有“全局存在但不属于此对象”的负例，也要实际走总览搜索、换对象、清筛选、返回并核对原事件焦点；[修复后 main CI/Pages](https://github.com/linhongcun/aoe2-analyzer/actions/runs/44115030765)、[v0.86.0](https://github.com/linhongcun/aoe2-analyzer/releases/tag/v0.86.0) 和原 Issue 的真实线上录像已通过，未把返回合法等同于来源事实已核实。
