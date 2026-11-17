@@ -1,0 +1,2032 @@
+{
+  "schemaVersion": 1,
+  "events": [
+    {
+      "id": "ev-unit-kipchak-34055-speed",
+      "versionId": "de-34055",
+      "summary": "库曼钦察移速奖励按时代调整",
+      "verification": "unverified",
+      "verificationNote": "社区主张未独立核实；不扩展到未明示的精锐/佣兵或其它文明。",
+      "scope": {
+        "scopeKind": "civ",
+        "providerCivIds": [],
+        "affectedCivIds": ["Cumans"],
+        "beneficiary": "self",
+        "conditions": ["库曼文明奖励", "按城堡/帝王时代区分"]
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-unit-kipchak-speed",
+          "verification": "unverified",
+          "verificationNote": "单位页原文明示条件；未知维度不补值。",
+          "sourceEntryIds": ["se-unit-kipchak-snapshot-e1556f66c3d781606125-5"],
+          "legacyKeys": [],
+          "effects": [
+            {
+              "id": "ef-unit-kipchak-speed-castle",
+              "entityRefs": [
+                {
+                  "entityId": "unit/1231"
+                }
+              ],
+              "text": "移动速度提升",
+              "conditions": ["城堡时代", "库曼奖励"],
+              "scope": null,
+              "type": "numeric",
+              "attribute": "移动速度提升",
+              "before": 10,
+              "after": 10,
+              "delta": null,
+              "unit": "%",
+              "operation": "set"
+            },
+            {
+              "id": "ef-unit-kipchak-speed-imperial",
+              "entityRefs": [
+                {
+                  "entityId": "unit/1231"
+                }
+              ],
+              "text": "移动速度提升",
+              "conditions": ["帝王时代", "库曼奖励"],
+              "scope": null,
+              "type": "numeric",
+              "attribute": "移动速度提升",
+              "before": 10,
+              "after": 15,
+              "delta": null,
+              "unit": "%",
+              "operation": "set"
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    }
+  ],
+  "attachments": [
+    {
+      "eventId": "ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb",
+      "claimId": "cl-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "reason": "混合原文按普通/精锐生命值与射击间隔拆分，复用一期事件。"
+    },
+    {
+      "eventId": "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "claimId": "cl-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "reason": "混合原文按普通/精锐生命值与射击间隔拆分，复用一期事件。"
+    },
+    {
+      "eventId": "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "claimId": "cl-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-3",
+      "reason": "与文明页同版本普通副箭+1对应同一游戏变化；原有副箭增量保持，单位页总箭数另作效果，不混用计量轴。"
+    },
+    {
+      "eventId": "ev-se-ea1a0967-24d1-456d-88a8-f7325d0a9369",
+      "claimId": "cl-se-ea1a0967-24d1-456d-88a8-f7325d0a9369",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-4",
+      "reason": "按34055与36202拆分；精锐箭数只归1233，不绑定同名1260。"
+    },
+    {
+      "eventId": "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "claimId": "cl-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-4",
+      "reason": "按34055与36202拆分；精锐箭数只归1233，不绑定同名1260。"
+    },
+    {
+      "eventId": "ev-se-43024661-1b5b-4723-83a8-6e0bc034deab",
+      "claimId": "cl-se-43024661-1b5b-4723-83a8-6e0bc034deab",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-6",
+      "reason": "单位页明确普通攻击延迟旧值0；与射击间隔区分，精锐旧值不从普通复制。"
+    },
+    {
+      "eventId": "ev-se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "claimId": "cl-se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-7",
+      "reason": "复用团队/金冠机制；生成与解锁训练分开，佣兵身份仍未解析，不绑定1260/1233基础属性。"
+    },
+    {
+      "eventId": "ev-se-40509672-40b8-4ca5-a09c-31b3b322d6b6",
+      "claimId": "cl-se-40509672-40b8-4ca5-a09c-31b3b322d6b6",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-8",
+      "reason": "复用1231改名事件及旧名，未明示精锐不扩大。"
+    }
+  ],
+  "additionalEffects": [
+    {
+      "eventId": "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "claimId": "cl-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "effect": {
+        "id": "ef-unit-kipchak-elite-interval",
+        "entityRefs": [
+          {
+            "entityId": "unit/1233"
+          }
+        ],
+        "text": "射击间隔",
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        },
+        "type": "numeric",
+        "attribute": "射击间隔",
+        "before": 1.8,
+        "after": 2.2,
+        "delta": null,
+        "unit": null,
+        "operation": "set"
+      },
+      "reason": "混合bullet明确普通/精锐同一射击间隔；来源未写秒单位，不自行补单位。"
+    },
+    {
+      "eventId": "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "claimId": "cl-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-3",
+      "effect": {
+        "id": "ef-unit-kipchak-total-arrows-1231",
+        "entityRefs": [
+          {
+            "entityId": "unit/1231"
+          }
+        ],
+        "text": "每次射击箭矢总数",
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        },
+        "type": "numeric",
+        "attribute": "每次射击箭矢总数",
+        "before": 2,
+        "after": 3,
+        "delta": null,
+        "unit": "支",
+        "operation": "set"
+      },
+      "reason": "单位页为总箭数；文明页为副箭增量，保留两个语义轴在同一稳定游戏事件中。"
+    },
+    {
+      "eventId": "ev-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "claimId": "cl-se-ab07eb73-541c-4c2a-8475-b9579e0c3058",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-4",
+      "effect": {
+        "id": "ef-unit-kipchak-total-arrows-1233",
+        "entityRefs": [
+          {
+            "entityId": "unit/1233"
+          }
+        ],
+        "text": "每次射击箭矢总数",
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        },
+        "type": "numeric",
+        "attribute": "每次射击箭矢总数",
+        "before": 3,
+        "after": 4,
+        "delta": null,
+        "unit": "支",
+        "operation": "set"
+      },
+      "reason": "单位页为总箭数；文明页为副箭增量，保留两个语义轴在同一稳定游戏事件中。"
+    }
+  ],
+  "refinements": [
+    {
+      "eventId": "ev-se-43024661-1b5b-4723-83a8-6e0bc034deab",
+      "effectId": "cl-se-43024661-1b5b-4723-83a8-6e0bc034deab-effect-1",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-6",
+      "expected": {
+        "before": null,
+        "after": 0.5
+      },
+      "changes": {
+        "before": 0,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位页bullet6明确普通基础攻击延迟0→0.5；不复制给精锐。"
+    },
+    {
+      "eventId": "ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb",
+      "effectId": "cl-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb-effect-1",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "expected": {
+        "before": 50,
+        "after": 40
+      },
+      "changes": {
+        "before": 50,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位章节明示该形态基础属性，与库曼奖励/时代/科技条件分列；不声明任意文明当时可用该单位。"
+    },
+    {
+      "eventId": "ev-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb",
+      "effectId": "cl-se-73d7a54c-b4cb-44a0-84c3-f58ec2a048fb-effect-2",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "expected": {
+        "before": 55,
+        "after": 45
+      },
+      "changes": {
+        "before": 55,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位章节明示该形态基础属性，与库曼奖励/时代/科技条件分列；不声明任意文明当时可用该单位。"
+    },
+    {
+      "eventId": "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "effectId": "cl-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b-effect-1",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "expected": {
+        "before": 1.8,
+        "after": 2.2
+      },
+      "changes": {
+        "before": 1.8,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位章节明示该形态基础属性，与库曼奖励/时代/科技条件分列；不声明任意文明当时可用该单位。"
+    },
+    {
+      "eventId": "ev-se-9c2f65a6-8217-49a6-941a-0fc7f3227f3b",
+      "effectId": "ef-unit-kipchak-elite-interval",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-2",
+      "expected": {
+        "before": 1.8,
+        "after": 2.2
+      },
+      "changes": {
+        "before": 1.8,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位章节明示该形态基础属性，与库曼奖励/时代/科技条件分列；不声明任意文明当时可用该单位。"
+    },
+    {
+      "eventId": "ev-se-ea1a0967-24d1-456d-88a8-f7325d0a9369",
+      "effectId": "cl-se-ea1a0967-24d1-456d-88a8-f7325d0a9369-effect-1",
+      "sourceEntryId": "se-unit-kipchak-snapshot-e1556f66c3d781606125-4",
+      "expected": {
+        "before": 4,
+        "after": 3
+      },
+      "changes": {
+        "before": 4,
+        "conditions": [],
+        "scope": {
+          "scopeKind": "global",
+          "providerCivIds": [],
+          "affectedCivIds": [],
+          "beneficiary": "all",
+          "conditions": []
+        }
+      },
+      "reason": "单位章节明示该形态基础属性，与库曼奖励/时代/科技条件分列；不声明任意文明当时可用该单位。"
+    }
+  ],
+  "relations": [
+    {
+      "eventId": "ev-se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "entityId": "unit/1231",
+      "effectIds": [
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-1",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-2",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-3",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-4"
+      ],
+      "relation": "identity-pending",
+      "note": "关联机制 · 身份待核；保留生成/训练与团队金冠条件，不认定为当前形态基础属性。"
+    },
+    {
+      "eventId": "ev-se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "entityId": "unit/1233",
+      "effectIds": [
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-1",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-2",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-3",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-4"
+      ],
+      "relation": "identity-pending",
+      "note": "关联机制 · 身份待核；保留生成/训练与团队金冠条件，不认定为当前形态基础属性。"
+    }
+  ],
+  "legacy": [
+    {
+      "key": "125283:125283-001-001",
+      "eventId": "ev-unit-legacy-125283-125283-b001",
+      "claimId": "cl-unit-legacy-125283-125283-b001",
+      "effectIds": ["ef-legacy-125283-001-001"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-001-002",
+      "eventId": "ev-unit-legacy-125283-125283-b001",
+      "claimId": "cl-unit-legacy-125283-125283-b001",
+      "effectIds": ["ef-legacy-125283-001-002"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-002-003",
+      "eventId": "ev-unit-legacy-125283-125283-b002",
+      "claimId": "cl-unit-legacy-125283-125283-b002",
+      "effectIds": ["ef-legacy-125283-002-003"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-003-004",
+      "eventId": "ev-unit-legacy-125283-125283-b003",
+      "claimId": "cl-unit-legacy-125283-125283-b003",
+      "effectIds": ["ef-legacy-125283-003-004"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-004-005",
+      "eventId": "ev-unit-legacy-125283-125283-b004",
+      "claimId": "cl-unit-legacy-125283-125283-b004",
+      "effectIds": ["ef-legacy-125283-004-005"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-005-006",
+      "eventId": "ev-unit-legacy-125283-125283-b005",
+      "claimId": "cl-unit-legacy-125283-125283-b005",
+      "effectIds": ["ef-legacy-125283-005-006"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-006-007",
+      "eventId": "ev-unit-legacy-125283-125283-b006",
+      "claimId": "cl-unit-legacy-125283-125283-b006",
+      "effectIds": ["ef-legacy-125283-006-007"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-007-008",
+      "eventId": "ev-unit-legacy-125283-125283-b007",
+      "claimId": "cl-unit-legacy-125283-125283-b007",
+      "effectIds": ["ef-legacy-125283-007-008"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-007-009",
+      "eventId": "ev-unit-legacy-125283-125283-b007",
+      "claimId": "cl-unit-legacy-125283-125283-b007",
+      "effectIds": ["ef-legacy-125283-007-009"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-009-011",
+      "eventId": "ev-unit-legacy-125283-125283-b009",
+      "claimId": "cl-unit-legacy-125283-125283-b009",
+      "effectIds": ["ef-legacy-125283-009-011"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-009-012",
+      "eventId": "ev-unit-legacy-125283-125283-b009",
+      "claimId": "cl-unit-legacy-125283-125283-b009",
+      "effectIds": ["ef-legacy-125283-009-012"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "125283:125283-012-015",
+      "eventId": "ev-se-1c806b1c-86dc-42e3-8bc5-bc809d37c426",
+      "claimId": "cl-legacy-125283-b012",
+      "effectIds": ["ef-legacy-125283-012-015"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-013-016",
+      "eventId": "ev-legacy-125283-b013",
+      "claimId": "cl-legacy-125283-b013",
+      "effectIds": ["ef-legacy-125283-013-016"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-015-018",
+      "eventId": "ev-legacy-125283-b015",
+      "claimId": "cl-legacy-125283-b015",
+      "effectIds": ["ef-legacy-125283-015-018"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-016-019",
+      "eventId": "ev-se-8b181601-aa4b-4bdc-bf42-ae252a02c164",
+      "claimId": "cl-legacy-125283-b016",
+      "effectIds": ["ef-legacy-125283-016-019"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-016-020",
+      "eventId": "ev-se-8b181601-aa4b-4bdc-bf42-ae252a02c164",
+      "claimId": "cl-legacy-125283-b016",
+      "effectIds": ["ef-legacy-125283-016-020"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-018-022",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "effectIds": ["ef-legacy-125283-018-022"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-018-023",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "effectIds": ["ef-legacy-125283-018-023"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-019-024",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b019",
+      "effectIds": ["ef-legacy-125283-019-024"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-020-025",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b020",
+      "effectIds": ["ef-legacy-125283-020-025"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-020-026",
+      "eventId": "ev-se-970b9e3a-525f-4eeb-8af3-fbeb1300d5cb",
+      "claimId": "cl-legacy-125283-b020",
+      "effectIds": ["ef-legacy-125283-020-026"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-021-027",
+      "eventId": "ev-se-41ae9a4a-5cec-44f6-ab81-d8428d077142",
+      "claimId": "cl-legacy-125283-b021",
+      "effectIds": ["ef-legacy-125283-021-027"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-021-028",
+      "eventId": "ev-se-41ae9a4a-5cec-44f6-ab81-d8428d077142",
+      "claimId": "cl-legacy-125283-b021",
+      "effectIds": ["ef-legacy-125283-021-028"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-023-030",
+      "eventId": "ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f",
+      "claimId": "cl-legacy-125283-b023",
+      "effectIds": ["ef-legacy-125283-023-030"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-023-031",
+      "eventId": "ev-se-bb7e6e82-5442-454d-92fe-a8f7e8e4036f",
+      "claimId": "cl-legacy-125283-b023",
+      "effectIds": ["ef-legacy-125283-023-031"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-024-032",
+      "eventId": "ev-se-f94135ec-c019-4202-94c3-5513de97e019",
+      "claimId": "cl-legacy-125283-b024",
+      "effectIds": ["ef-legacy-125283-024-032"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "125283:125283-025-033",
+      "eventId": "ev-legacy-125283-b025",
+      "claimId": "cl-legacy-125283-b025",
+      "effectIds": ["ef-legacy-125283-025-033"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-1",
+      "eventId": "ev-unit-legacy-185872-185872-1",
+      "claimId": "cl-unit-legacy-185872-185872-1",
+      "effectIds": ["ef-legacy-185872-1"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-2",
+      "eventId": "ev-unit-legacy-185872-185872-2",
+      "claimId": "cl-unit-legacy-185872-185872-2",
+      "effectIds": ["ef-legacy-185872-2"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-3",
+      "eventId": "ev-unit-legacy-185872-185872-3",
+      "claimId": "cl-unit-legacy-185872-185872-3",
+      "effectIds": ["ef-legacy-185872-3"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-4",
+      "eventId": "ev-unit-legacy-185872-185872-4",
+      "claimId": "cl-unit-legacy-185872-185872-4",
+      "effectIds": ["ef-legacy-185872-4"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-5",
+      "eventId": "ev-unit-legacy-185872-185872-5",
+      "claimId": "cl-unit-legacy-185872-185872-5",
+      "effectIds": ["ef-legacy-185872-5"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-6",
+      "eventId": "ev-unit-legacy-185872-185872-6",
+      "claimId": "cl-unit-legacy-185872-185872-6",
+      "effectIds": ["ef-legacy-185872-6"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-7",
+      "eventId": "ev-unit-legacy-185872-185872-7",
+      "claimId": "cl-unit-legacy-185872-185872-7",
+      "effectIds": ["ef-legacy-185872-7"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-8",
+      "eventId": "ev-unit-legacy-185872-185872-8",
+      "claimId": "cl-unit-legacy-185872-185872-8",
+      "effectIds": ["ef-legacy-185872-8"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-9",
+      "eventId": "ev-unit-legacy-185872-185872-9",
+      "claimId": "cl-unit-legacy-185872-185872-9",
+      "effectIds": ["ef-legacy-185872-9"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-10",
+      "eventId": "ev-unit-legacy-185872-185872-10",
+      "claimId": "cl-unit-legacy-185872-185872-10",
+      "effectIds": ["ef-legacy-185872-10"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-11",
+      "eventId": "ev-unit-legacy-185872-185872-11",
+      "claimId": "cl-unit-legacy-185872-185872-11",
+      "effectIds": ["ef-legacy-185872-11"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-12",
+      "eventId": "ev-unit-legacy-185872-185872-12",
+      "claimId": "cl-unit-legacy-185872-185872-12",
+      "effectIds": ["ef-legacy-185872-12"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-13",
+      "eventId": "ev-unit-legacy-185872-185872-13",
+      "claimId": "cl-unit-legacy-185872-185872-13",
+      "effectIds": ["ef-legacy-185872-13"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-14",
+      "eventId": "ev-unit-legacy-185872-185872-14",
+      "claimId": "cl-unit-legacy-185872-185872-14",
+      "effectIds": ["ef-legacy-185872-14"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-15",
+      "eventId": "ev-unit-legacy-185872-185872-15",
+      "claimId": "cl-unit-legacy-185872-185872-15",
+      "effectIds": ["ef-legacy-185872-15"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-16",
+      "eventId": "ev-unit-legacy-185872-185872-16",
+      "claimId": "cl-unit-legacy-185872-185872-16",
+      "effectIds": ["ef-legacy-185872-16"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-17",
+      "eventId": "ev-unit-legacy-185872-185872-17",
+      "claimId": "cl-unit-legacy-185872-185872-17",
+      "effectIds": ["ef-legacy-185872-17"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-18",
+      "eventId": "ev-unit-legacy-185872-185872-18",
+      "claimId": "cl-unit-legacy-185872-185872-18",
+      "effectIds": ["ef-legacy-185872-18"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-19",
+      "eventId": "ev-unit-legacy-185872-185872-19",
+      "claimId": "cl-unit-legacy-185872-185872-19",
+      "effectIds": ["ef-legacy-185872-19"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-20",
+      "eventId": "ev-unit-legacy-185872-185872-20",
+      "claimId": "cl-unit-legacy-185872-185872-20",
+      "effectIds": ["ef-legacy-185872-20"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-21",
+      "eventId": "ev-unit-legacy-185872-185872-21",
+      "claimId": "cl-unit-legacy-185872-185872-21",
+      "effectIds": ["ef-legacy-185872-21"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-23",
+      "eventId": "ev-se-5b272934-e264-4d62-8bce-1cd1bc55f7e0",
+      "claimId": "cl-legacy-185872-23",
+      "effectIds": ["ef-legacy-185872-23"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-24",
+      "eventId": "ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf",
+      "claimId": "cl-legacy-Bohemians: (Elite) Hussite Wagon cost",
+      "effectIds": ["ef-legacy-185872-24"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-25",
+      "eventId": "ev-se-3e23ab97-d1dc-47c8-8d19-23c16ed94fbf",
+      "claimId": "cl-legacy-Bohemians: (Elite) Hussite Wagon cost",
+      "effectIds": ["ef-legacy-185872-25"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-27",
+      "eventId": "ev-legacy-Burgundians: Flemish Militia cost",
+      "claimId": "cl-legacy-Burgundians: Flemish Militia cost",
+      "effectIds": ["ef-legacy-185872-27"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-28",
+      "eventId": "ev-legacy-185872-28",
+      "claimId": "cl-legacy-185872-28",
+      "effectIds": ["ef-legacy-185872-28"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-29",
+      "eventId": "ev-se-7d9c49c7-e58e-4f68-8aef-615713c39452",
+      "claimId": "cl-legacy-185872-29",
+      "effectIds": ["ef-legacy-185872-29"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-30",
+      "eventId": "ev-se-7d9c49c7-e58e-4f68-8aef-615713c39452",
+      "claimId": "cl-legacy-185872-30",
+      "effectIds": ["ef-legacy-185872-30"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-32",
+      "eventId": "ev-se-5cb76bf8-cb73-4096-af7e-8400b79aef91",
+      "claimId": "cl-legacy-185872-32",
+      "effectIds": ["ef-legacy-185872-32"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-33",
+      "eventId": "ev-se-5cb76bf8-cb73-4096-af7e-8400b79aef91",
+      "claimId": "cl-legacy-185872-33",
+      "effectIds": ["ef-legacy-185872-33"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-37",
+      "eventId": "ev-se-cfffb079-259f-4795-9022-05dd9c42ba7f",
+      "claimId": "cl-legacy-185872-37",
+      "effectIds": ["ef-legacy-185872-37"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-38",
+      "eventId": "ev-se-db6955bd-94e6-4653-adaa-b23924933130",
+      "claimId": "cl-legacy-185872-38",
+      "effectIds": ["ef-legacy-185872-38"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-39",
+      "eventId": "ev-se-76a7e9c7-48a8-44f1-8c88-811a954bde5d",
+      "claimId": "cl-legacy-185872-39",
+      "effectIds": ["ef-legacy-185872-39"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-40",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "effectIds": ["ef-legacy-185872-40"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-41",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "effectIds": ["ef-legacy-185872-41"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-42",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "effectIds": ["ef-legacy-185872-42"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-43",
+      "eventId": "ev-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "claimId": "cl-legacy-Mapuche: (Elite) Bolas Rider cost",
+      "effectIds": ["ef-legacy-185872-43"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-44",
+      "eventId": "ev-legacy-185872-44",
+      "claimId": "cl-legacy-185872-44",
+      "effectIds": ["ef-legacy-185872-44"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-45",
+      "eventId": "ev-se-d7bef1a4-9cd5-40da-bbde-14ed4ac902b6",
+      "claimId": "cl-legacy-185872-45",
+      "effectIds": ["ef-legacy-185872-45"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-46",
+      "eventId": "ev-se-9dc50a2e-943f-4e10-b8e0-5575ed87a965",
+      "claimId": "cl-legacy-Shu: War Chariot cost",
+      "effectIds": ["ef-legacy-185872-46"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-47",
+      "eventId": "ev-se-9dc50a2e-943f-4e10-b8e0-5575ed87a965",
+      "claimId": "cl-legacy-185872-47",
+      "effectIds": ["ef-legacy-185872-47"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-48",
+      "eventId": "ev-legacy-Spanish: (Elite) Conquistador cost",
+      "claimId": "cl-legacy-Spanish: (Elite) Conquistador cost",
+      "effectIds": ["ef-legacy-185872-48"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-49",
+      "eventId": "ev-legacy-Spanish: (Elite) Conquistador cost",
+      "claimId": "cl-legacy-Spanish: (Elite) Conquistador cost",
+      "effectIds": ["ef-legacy-185872-49"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-50",
+      "eventId": "ev-legacy-185872-50",
+      "claimId": "cl-legacy-185872-50",
+      "effectIds": ["ef-legacy-185872-50"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-51",
+      "eventId": "ev-se-bb5df202-bc19-4ed7-8431-70c301ca8862",
+      "claimId": "cl-legacy-Spanish: Missionary cost",
+      "effectIds": ["ef-legacy-185872-51"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-53",
+      "eventId": "ev-se-57b8c54b-cc81-4a47-ab9b-ca18a5f3226f",
+      "claimId": "cl-legacy-185872-53",
+      "effectIds": ["ef-legacy-185872-53"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-54",
+      "eventId": "ev-se-e179f9cd-d6a7-4415-a0e4-35c993661315",
+      "claimId": "cl-legacy-Tupi: (Elite) Blackwood Archer cost",
+      "effectIds": ["ef-legacy-185872-54"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-55",
+      "eventId": "ev-se-e179f9cd-d6a7-4415-a0e4-35c993661315",
+      "claimId": "cl-legacy-Tupi: (Elite) Blackwood Archer cost",
+      "effectIds": ["ef-legacy-185872-55"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-57",
+      "eventId": "ev-se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751",
+      "claimId": "cl-legacy-185872-57",
+      "effectIds": ["ef-legacy-185872-57"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-58",
+      "eventId": "ev-se-c3c66431-c6ce-4bc2-ad28-f0de9ac42751",
+      "claimId": "cl-legacy-185872-58",
+      "effectIds": ["ef-legacy-185872-58"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-59",
+      "eventId": "ev-se-6a83c865-e1a3-4f5c-bc93-ab8ae22f5b9d",
+      "claimId": "cl-legacy-185872-59",
+      "effectIds": ["ef-legacy-185872-59"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-61",
+      "eventId": "ev-se-24d61e1f-983d-4904-addd-e255eae3c022",
+      "claimId": "cl-legacy-Wei: Xianbei Raider cost",
+      "effectIds": ["ef-legacy-185872-61"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-70",
+      "eventId": "ev-se-f55e0ca5-841f-4185-afe9-4ae070ab1a5b",
+      "claimId": "cl-legacy-185872-70",
+      "effectIds": ["ef-legacy-185872-70"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-71",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-71",
+      "effectIds": ["ef-legacy-185872-71"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-72",
+      "eventId": "ev-se-e184a29e-25e4-4c9f-b603-d2499897afed",
+      "claimId": "cl-legacy-185872-72",
+      "effectIds": ["ef-legacy-185872-72"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-73",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-73",
+      "effectIds": ["ef-legacy-185872-73"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-74",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-74",
+      "effectIds": ["ef-legacy-185872-74"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-75",
+      "eventId": "ev-se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f",
+      "claimId": "cl-legacy-185872-75",
+      "effectIds": ["ef-legacy-185872-75"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-76",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-76",
+      "effectIds": ["ef-legacy-185872-76"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-77",
+      "eventId": "ev-se-6c0a2596-8bc9-4c13-b68d-bb23ce648848",
+      "claimId": "cl-legacy-185872-77",
+      "effectIds": ["ef-legacy-185872-77"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-78",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-78",
+      "effectIds": ["ef-legacy-185872-78"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-79",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-79",
+      "effectIds": ["ef-legacy-185872-79"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-80",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-80",
+      "effectIds": ["ef-legacy-185872-80"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-81",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-81",
+      "effectIds": ["ef-legacy-185872-81"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-82",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-82",
+      "effectIds": ["ef-legacy-185872-82"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-83",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-83",
+      "effectIds": ["ef-legacy-185872-83"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-84",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-84",
+      "effectIds": ["ef-legacy-185872-84"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-85",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-85",
+      "effectIds": ["ef-legacy-185872-85"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-86",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-86",
+      "effectIds": ["ef-legacy-185872-86"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-87",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-87",
+      "effectIds": ["ef-legacy-185872-87"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-88",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-88",
+      "effectIds": ["ef-legacy-185872-88"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-89",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-89",
+      "effectIds": ["ef-legacy-185872-89"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-90",
+      "eventId": "ev-se-e184a29e-25e4-4c9f-b603-d2499897afed",
+      "claimId": "cl-legacy-185872-90",
+      "effectIds": ["ef-legacy-185872-90"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-91",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-91",
+      "effectIds": ["ef-legacy-185872-91"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-92",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-92",
+      "effectIds": ["ef-legacy-185872-92"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-93",
+      "eventId": "ev-se-4af7f519-4a23-4ed6-b8ae-d0ba35bedd8f",
+      "claimId": "cl-legacy-185872-93",
+      "effectIds": ["ef-legacy-185872-93"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-94",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-94",
+      "effectIds": ["ef-legacy-185872-94"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-95",
+      "eventId": "ev-se-6c0a2596-8bc9-4c13-b68d-bb23ce648848",
+      "claimId": "cl-legacy-185872-95",
+      "effectIds": ["ef-legacy-185872-95"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-96",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-96",
+      "effectIds": ["ef-legacy-185872-96"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-97",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-97",
+      "effectIds": ["ef-legacy-185872-97"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-98",
+      "eventId": "ev-se-2911629a-755d-48c2-822f-98957599492a",
+      "claimId": "cl-legacy-185872-98",
+      "effectIds": ["ef-legacy-185872-98"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-99",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-99",
+      "effectIds": ["ef-legacy-185872-99"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-100",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-100",
+      "effectIds": ["ef-legacy-185872-100"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-101",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-101",
+      "effectIds": ["ef-legacy-185872-101"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-102",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-102",
+      "effectIds": ["ef-legacy-185872-102"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-103",
+      "eventId": "ev-se-16cdd616-3536-4dc6-8718-aa2b8ebdad4f",
+      "claimId": "cl-legacy-185872-103",
+      "effectIds": ["ef-legacy-185872-103"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-104",
+      "eventId": "ev-se-a7f907be-09f9-460a-bd54-588c8483e17f",
+      "claimId": "cl-legacy-185872-104",
+      "effectIds": ["ef-legacy-185872-104"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-105",
+      "eventId": "ev-se-6cfc45ec-5edc-4ce6-8b89-a009da942b77",
+      "claimId": "cl-legacy-185872-105",
+      "effectIds": ["ef-legacy-185872-105"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-113",
+      "eventId": "ev-se-2d93c0b7-d92f-43c1-9749-78258c4dd08f",
+      "claimId": "cl-legacy-185872-113",
+      "effectIds": ["ef-legacy-185872-113"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-114",
+      "eventId": "ev-se-2d93c0b7-d92f-43c1-9749-78258c4dd08f",
+      "claimId": "cl-legacy-185872-114",
+      "effectIds": ["ef-legacy-185872-114"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-115",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-115",
+      "effectIds": ["ef-legacy-185872-115"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-116",
+      "eventId": "ev-legacy-185872-116",
+      "claimId": "cl-legacy-185872-116",
+      "effectIds": ["ef-legacy-185872-116"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-117",
+      "eventId": "ev-legacy-185872-117",
+      "claimId": "cl-legacy-185872-117",
+      "effectIds": ["ef-legacy-185872-117"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-118",
+      "eventId": "ev-legacy-185872-118",
+      "claimId": "cl-legacy-185872-118",
+      "effectIds": ["ef-legacy-185872-118"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "185872:185872-122",
+      "eventId": "ev-unit-legacy-185872-185872-122",
+      "claimId": "cl-unit-legacy-185872-185872-122",
+      "effectIds": ["ef-legacy-185872-122"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-123",
+      "eventId": "ev-unit-legacy-185872-185872-123",
+      "claimId": "cl-unit-legacy-185872-185872-123",
+      "effectIds": ["ef-legacy-185872-123"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-124",
+      "eventId": "ev-unit-legacy-185872-185872-124",
+      "claimId": "cl-unit-legacy-185872-185872-124",
+      "effectIds": ["ef-legacy-185872-124"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "185872:185872-125",
+      "eventId": "ev-unit-legacy-185872-185872-125",
+      "claimId": "cl-unit-legacy-185872-185872-125",
+      "effectIds": ["ef-legacy-185872-125"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-1",
+      "eventId": "ev-unit-legacy-188329-188329-1",
+      "claimId": "cl-unit-legacy-188329-188329-1",
+      "effectIds": ["ef-legacy-188329-1"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-2",
+      "eventId": "ev-unit-legacy-188329-188329-2",
+      "claimId": "cl-unit-legacy-188329-188329-2",
+      "effectIds": ["ef-legacy-188329-2"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-3",
+      "eventId": "ev-unit-legacy-188329-188329-3",
+      "claimId": "cl-unit-legacy-188329-188329-3",
+      "effectIds": ["ef-legacy-188329-3"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-4",
+      "eventId": "ev-unit-legacy-188329-188329-4",
+      "claimId": "cl-unit-legacy-188329-188329-4",
+      "effectIds": ["ef-legacy-188329-4"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-5",
+      "eventId": "ev-legacy-188329-5",
+      "claimId": "cl-legacy-188329-5",
+      "effectIds": ["ef-legacy-188329-5"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "188329:188329-6",
+      "eventId": "ev-unit-legacy-188329-188329-6",
+      "claimId": "cl-unit-legacy-188329-188329-6",
+      "effectIds": ["ef-legacy-188329-6"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "188329:188329-7",
+      "eventId": "ev-unit-legacy-188329-188329-7",
+      "claimId": "cl-unit-legacy-188329-188329-7",
+      "effectIds": ["ef-legacy-188329-7"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-001-001",
+      "eventId": "ev-unit-legacy-66692-66692-b001",
+      "claimId": "cl-unit-legacy-66692-66692-b001",
+      "effectIds": ["ef-legacy-66692-001-001"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-002-002",
+      "eventId": "ev-unit-legacy-66692-66692-b002",
+      "claimId": "cl-unit-legacy-66692-66692-b002",
+      "effectIds": ["ef-legacy-66692-002-002"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-004-005",
+      "eventId": "ev-unit-legacy-66692-66692-b004",
+      "claimId": "cl-unit-legacy-66692-66692-b004",
+      "effectIds": ["ef-legacy-66692-004-005"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-005-006",
+      "eventId": "ev-unit-legacy-66692-66692-b005",
+      "claimId": "cl-unit-legacy-66692-66692-b005",
+      "effectIds": ["ef-legacy-66692-005-006"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-006-007",
+      "eventId": "ev-unit-legacy-66692-66692-b006",
+      "claimId": "cl-unit-legacy-66692-66692-b006",
+      "effectIds": ["ef-legacy-66692-006-007"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-006-008",
+      "eventId": "ev-unit-legacy-66692-66692-b006",
+      "claimId": "cl-unit-legacy-66692-66692-b006",
+      "effectIds": ["ef-legacy-66692-006-008"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "66692:66692-010-022",
+      "eventId": "ev-se-92cfd002-cb86-4ad1-be9b-8c5ee6a8e66a",
+      "claimId": "cl-legacy-66692-b010",
+      "effectIds": ["ef-legacy-66692-010-022"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-011-023",
+      "eventId": "ev-legacy-66692-b011",
+      "claimId": "cl-legacy-66692-b011",
+      "effectIds": ["ef-legacy-66692-011-023"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-011-024",
+      "eventId": "ev-legacy-66692-b011",
+      "claimId": "cl-legacy-66692-b011",
+      "effectIds": ["ef-legacy-66692-011-024"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-013-030",
+      "eventId": "ev-se-8f397bf5-7908-4335-b59e-ec9607e031d7",
+      "claimId": "cl-legacy-66692-b013",
+      "effectIds": ["ef-legacy-66692-013-030"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-014-031",
+      "eventId": "ev-se-8f397bf5-7908-4335-b59e-ec9607e031d7",
+      "claimId": "cl-legacy-66692-b014",
+      "effectIds": ["ef-legacy-66692-014-031"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-018-034",
+      "eventId": "ev-se-2d50da99-7f76-46b8-bcca-208adba18171",
+      "claimId": "cl-legacy-66692-b018",
+      "effectIds": ["ef-legacy-66692-018-034"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-019-035",
+      "eventId": "ev-se-f04bcf1d-c1f6-410a-98ce-1ac8989187ef",
+      "claimId": "cl-legacy-66692-b019",
+      "effectIds": ["ef-legacy-66692-019-035"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-021-037",
+      "eventId": "ev-legacy-66692-b021",
+      "claimId": "cl-legacy-66692-b021",
+      "effectIds": ["ef-legacy-66692-021-037"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-023-039",
+      "eventId": "ev-legacy-66692-b023",
+      "claimId": "cl-legacy-66692-b023",
+      "effectIds": ["ef-legacy-66692-023-039"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-023-040",
+      "eventId": "ev-legacy-66692-b023",
+      "claimId": "cl-legacy-66692-b023",
+      "effectIds": ["ef-legacy-66692-023-040"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-024-041",
+      "eventId": "ev-se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8",
+      "claimId": "cl-legacy-66692-b024",
+      "effectIds": ["ef-legacy-66692-024-041"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-025-042",
+      "eventId": "ev-se-7824b895-a3bf-4f6a-b94b-a43878e3f7e8",
+      "claimId": "cl-legacy-66692-b025",
+      "effectIds": ["ef-legacy-66692-025-042"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-026-043",
+      "eventId": "ev-se-d2c95b41-1f97-4956-b7fa-699e3219fc9a",
+      "claimId": "cl-legacy-66692-b026",
+      "effectIds": ["ef-legacy-66692-026-043"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "66692:66692-027-044",
+      "eventId": "ev-legacy-66692-b027",
+      "claimId": "cl-legacy-66692-b027",
+      "effectIds": ["ef-legacy-66692-027-044"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-1",
+      "eventId": "ev-legacy-81058-b001",
+      "claimId": "cl-legacy-81058-b001",
+      "effectIds": ["ef-legacy-81058-1"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-5",
+      "eventId": "ev-unit-legacy-81058-81058-b005",
+      "claimId": "cl-unit-legacy-81058-81058-b005",
+      "effectIds": ["ef-legacy-81058-5"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-6",
+      "eventId": "ev-unit-legacy-81058-81058-b005",
+      "claimId": "cl-unit-legacy-81058-81058-b005",
+      "effectIds": ["ef-legacy-81058-6"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-7",
+      "eventId": "ev-unit-legacy-81058-81058-b005",
+      "claimId": "cl-unit-legacy-81058-81058-b005",
+      "effectIds": ["ef-legacy-81058-7"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-8",
+      "eventId": "ev-unit-legacy-81058-81058-b006",
+      "claimId": "cl-unit-legacy-81058-81058-b006",
+      "effectIds": ["ef-legacy-81058-8"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-9",
+      "eventId": "ev-unit-legacy-81058-81058-b007",
+      "claimId": "cl-unit-legacy-81058-81058-b007",
+      "effectIds": ["ef-legacy-81058-9"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-10",
+      "eventId": "ev-unit-legacy-81058-81058-b008",
+      "claimId": "cl-unit-legacy-81058-81058-b008",
+      "effectIds": ["ef-legacy-81058-10"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-11",
+      "eventId": "ev-unit-legacy-81058-81058-b009",
+      "claimId": "cl-unit-legacy-81058-81058-b009",
+      "effectIds": ["ef-legacy-81058-11"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-12",
+      "eventId": "ev-unit-legacy-81058-81058-b010",
+      "claimId": "cl-unit-legacy-81058-81058-b010",
+      "effectIds": ["ef-legacy-81058-12"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-13",
+      "eventId": "ev-unit-legacy-81058-81058-b011",
+      "claimId": "cl-unit-legacy-81058-81058-b011",
+      "effectIds": ["ef-legacy-81058-13"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-14",
+      "eventId": "ev-unit-legacy-81058-81058-b012",
+      "claimId": "cl-unit-legacy-81058-81058-b012",
+      "effectIds": ["ef-legacy-81058-14"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-15",
+      "eventId": "ev-unit-legacy-81058-81058-b013",
+      "claimId": "cl-unit-legacy-81058-81058-b013",
+      "effectIds": ["ef-legacy-81058-15"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-16",
+      "eventId": "ev-unit-legacy-81058-81058-b014",
+      "claimId": "cl-unit-legacy-81058-81058-b014",
+      "effectIds": ["ef-legacy-81058-16"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-17",
+      "eventId": "ev-unit-legacy-81058-81058-b015",
+      "claimId": "cl-unit-legacy-81058-81058-b015",
+      "effectIds": ["ef-legacy-81058-17"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-20",
+      "eventId": "ev-unit-legacy-81058-81058-b018",
+      "claimId": "cl-unit-legacy-81058-81058-b018",
+      "effectIds": ["ef-legacy-81058-20"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-21",
+      "eventId": "ev-unit-legacy-81058-81058-b019",
+      "claimId": "cl-unit-legacy-81058-81058-b019",
+      "effectIds": ["ef-legacy-81058-21"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-22",
+      "eventId": "ev-unit-legacy-81058-81058-b019",
+      "claimId": "cl-unit-legacy-81058-81058-b019",
+      "effectIds": ["ef-legacy-81058-22"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-23",
+      "eventId": "ev-unit-legacy-81058-81058-b020",
+      "claimId": "cl-unit-legacy-81058-81058-b020",
+      "effectIds": ["ef-legacy-81058-23"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-24",
+      "eventId": "ev-unit-legacy-81058-81058-b021",
+      "claimId": "cl-unit-legacy-81058-81058-b021",
+      "effectIds": ["ef-legacy-81058-24"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-25",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "effectIds": ["ef-legacy-81058-25"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-26",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "effectIds": ["ef-legacy-81058-26"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-27",
+      "eventId": "ev-unit-legacy-81058-81058-b023",
+      "claimId": "cl-unit-legacy-81058-81058-b023",
+      "effectIds": ["ef-legacy-81058-27"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-28",
+      "eventId": "ev-unit-legacy-81058-81058-b023",
+      "claimId": "cl-unit-legacy-81058-81058-b023",
+      "effectIds": ["ef-legacy-81058-28"],
+      "reason": "旧条目ID与名称均与目录身份相符，单位无需文明投影；按原文sourceBullet与版本显式归组，形态效果逐键保留。"
+    },
+    {
+      "key": "81058:81058-29",
+      "eventId": "ev-se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c",
+      "claimId": "cl-legacy-81058-b024",
+      "effectIds": ["ef-legacy-81058-29"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-30",
+      "eventId": "ev-se-838c2700-7eb7-40d0-b2f1-af03c0a2ca9c",
+      "claimId": "cl-legacy-81058-b024",
+      "effectIds": ["ef-legacy-81058-30"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-34",
+      "eventId": "ev-se-098f6481-d155-4c2b-8e69-40643ee14a12",
+      "claimId": "cl-legacy-81058-b028",
+      "effectIds": ["ef-legacy-81058-34"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-37",
+      "eventId": "ev-legacy-81058-b030",
+      "claimId": "cl-legacy-81058-b030",
+      "effectIds": ["ef-legacy-81058-37"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-43",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b036",
+      "effectIds": ["ef-legacy-81058-43"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-44",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b037",
+      "effectIds": ["ef-legacy-81058-44"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-45",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b038",
+      "effectIds": ["ef-legacy-81058-45"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-46",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b039",
+      "effectIds": ["ef-legacy-81058-46"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-47",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b040",
+      "effectIds": ["ef-legacy-81058-47"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-48",
+      "eventId": "ev-se-fff7e4f6-757f-449a-9795-b6b47e737a3c",
+      "claimId": "cl-legacy-81058-b041",
+      "effectIds": ["ef-legacy-81058-48"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-49",
+      "eventId": "ev-se-80da7d99-98b5-4939-bcc0-a5178bc9c823",
+      "claimId": "cl-legacy-81058-b042",
+      "effectIds": ["ef-legacy-81058-49"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-55",
+      "eventId": "ev-se-82143c48-186b-4dea-8d3f-dd6662260393",
+      "claimId": "cl-legacy-81058-b048",
+      "effectIds": ["ef-legacy-81058-55"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-56",
+      "eventId": "ev-se-82143c48-186b-4dea-8d3f-dd6662260393",
+      "claimId": "cl-legacy-81058-b048",
+      "effectIds": ["ef-legacy-81058-56"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-57",
+      "eventId": "ev-se-c9ff904f-ab26-443f-8f03-f7ea7cd5c4c3",
+      "claimId": "cl-legacy-81058-b049",
+      "effectIds": ["ef-legacy-81058-57"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-58",
+      "eventId": "ev-se-c9ff904f-ab26-443f-8f03-f7ea7cd5c4c3",
+      "claimId": "cl-legacy-81058-b049",
+      "effectIds": ["ef-legacy-81058-58"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-65",
+      "eventId": "ev-se-6cb3ffce-085c-42a1-86e3-88d549c83548",
+      "claimId": "cl-legacy-81058-b057",
+      "effectIds": ["ef-legacy-81058-65"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-66",
+      "eventId": "ev-se-1a3ba141-3906-4e31-9530-784f10f61296",
+      "claimId": "cl-legacy-81058-b058",
+      "effectIds": ["ef-legacy-81058-66"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-70",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b062",
+      "effectIds": ["ef-legacy-81058-70"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-71",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b062",
+      "effectIds": ["ef-legacy-81058-71"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-72",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b063",
+      "effectIds": ["ef-legacy-81058-72"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-73",
+      "eventId": "ev-se-e48437c9-ae8b-439a-bd51-d06a87816cb5",
+      "claimId": "cl-legacy-81058-b063",
+      "effectIds": ["ef-legacy-81058-73"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-75",
+      "eventId": "ev-se-e41bd3c1-985c-47e7-9967-d6ed810e03ed",
+      "claimId": "cl-legacy-81058-b065",
+      "effectIds": ["ef-legacy-81058-75"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-76",
+      "eventId": "ev-legacy-81058-b066",
+      "claimId": "cl-legacy-81058-b066",
+      "effectIds": ["ef-legacy-81058-76"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-77",
+      "eventId": "ev-legacy-81058-b067",
+      "claimId": "cl-legacy-81058-b067",
+      "effectIds": ["ef-legacy-81058-77"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-79",
+      "eventId": "ev-se-7a050df9-67d0-460c-adcb-6b70d56cb12c",
+      "claimId": "cl-legacy-81058-b069",
+      "effectIds": ["ef-legacy-81058-79"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-80",
+      "eventId": "ev-se-7a050df9-67d0-460c-adcb-6b70d56cb12c",
+      "claimId": "cl-legacy-81058-b069",
+      "effectIds": ["ef-legacy-81058-80"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-81",
+      "eventId": "ev-se-01bc0638-44d5-4d9f-8b32-c8e1ea445a5c",
+      "claimId": "cl-legacy-81058-b070",
+      "effectIds": ["ef-legacy-81058-81"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-86",
+      "eventId": "ev-se-cb321b35-73c0-407b-a8fd-83027349d5a1",
+      "claimId": "cl-legacy-81058-b075",
+      "effectIds": ["ef-legacy-81058-86"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-87",
+      "eventId": "ev-se-cb321b35-73c0-407b-a8fd-83027349d5a1",
+      "claimId": "cl-legacy-81058-b075",
+      "effectIds": ["ef-legacy-81058-87"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-90",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b078",
+      "effectIds": ["ef-legacy-81058-90"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-91",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b078",
+      "effectIds": ["ef-legacy-81058-91"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-92",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b079",
+      "effectIds": ["ef-legacy-81058-92"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-93",
+      "eventId": "ev-se-8d9ab230-eb47-4ec7-9c69-3091f82233b5",
+      "claimId": "cl-legacy-81058-b079",
+      "effectIds": ["ef-legacy-81058-93"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-94",
+      "eventId": "ev-legacy-81058-b080",
+      "claimId": "cl-legacy-81058-b080",
+      "effectIds": ["ef-legacy-81058-94"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-99",
+      "eventId": "ev-se-e899f208-5569-4ba2-8ed4-688c4b8ef05e",
+      "claimId": "cl-legacy-81058-b085",
+      "effectIds": ["ef-legacy-81058-99"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-100",
+      "eventId": "ev-se-e899f208-5569-4ba2-8ed4-688c4b8ef05e",
+      "claimId": "cl-legacy-81058-b085",
+      "effectIds": ["ef-legacy-81058-100"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-101",
+      "eventId": "ev-legacy-81058-b086",
+      "claimId": "cl-legacy-81058-b086",
+      "effectIds": ["ef-legacy-81058-101"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-106",
+      "eventId": "ev-legacy-81058-b091",
+      "claimId": "cl-legacy-81058-b091",
+      "effectIds": ["ef-legacy-81058-106"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-107",
+      "eventId": "ev-se-5c51cd63-b1db-497c-8b4d-0807c9ed2710",
+      "claimId": "cl-legacy-81058-b092",
+      "effectIds": ["ef-legacy-81058-107"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-108",
+      "eventId": "ev-se-5c51cd63-b1db-497c-8b4d-0807c9ed2710",
+      "claimId": "cl-legacy-81058-b092",
+      "effectIds": ["ef-legacy-81058-108"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-109",
+      "eventId": "ev-legacy-81058-b093",
+      "claimId": "cl-legacy-81058-b093",
+      "effectIds": ["ef-legacy-81058-109"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-116",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b100",
+      "effectIds": ["ef-legacy-81058-116"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-120",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b104",
+      "effectIds": ["ef-legacy-81058-120"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-121",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b104",
+      "effectIds": ["ef-legacy-81058-121"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-122",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b105",
+      "effectIds": ["ef-legacy-81058-122"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-123",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b105",
+      "effectIds": ["ef-legacy-81058-123"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-124",
+      "eventId": "ev-legacy-81058-b106",
+      "claimId": "cl-legacy-81058-b106",
+      "effectIds": ["ef-legacy-81058-124"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-125",
+      "eventId": "ev-legacy-81058-b106",
+      "claimId": "cl-legacy-81058-b106",
+      "effectIds": ["ef-legacy-81058-125"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-126",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b107",
+      "effectIds": ["ef-legacy-81058-126"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-127",
+      "eventId": "ev-se-4de99517-56e0-46aa-bd10-9459871e7cf6",
+      "claimId": "cl-legacy-81058-b107",
+      "effectIds": ["ef-legacy-81058-127"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-130",
+      "eventId": "ev-se-5b40b461-8898-4e1d-a17e-3687d16072cc",
+      "claimId": "cl-legacy-81058-b110",
+      "effectIds": ["ef-legacy-81058-130"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-135",
+      "eventId": "ev-se-526989bb-382b-44f6-a3eb-de1d3a242fd3",
+      "claimId": "cl-legacy-81058-b114",
+      "effectIds": ["ef-legacy-81058-135"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-136",
+      "eventId": "ev-legacy-81058-b115",
+      "claimId": "cl-legacy-81058-b115",
+      "effectIds": ["ef-legacy-81058-136"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-140",
+      "eventId": "ev-legacy-81058-b119",
+      "claimId": "cl-legacy-81058-b119",
+      "effectIds": ["ef-legacy-81058-140"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-141",
+      "eventId": "ev-legacy-81058-b119",
+      "claimId": "cl-legacy-81058-b119",
+      "effectIds": ["ef-legacy-81058-141"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-143",
+      "eventId": "ev-se-5458faa2-3de7-4985-9721-50cc13f726db",
+      "claimId": "cl-legacy-81058-b121",
+      "effectIds": ["ef-legacy-81058-143"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-144",
+      "eventId": "ev-se-5458faa2-3de7-4985-9721-50cc13f726db",
+      "claimId": "cl-legacy-81058-b121",
+      "effectIds": ["ef-legacy-81058-144"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-147",
+      "eventId": "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "claimId": "cl-legacy-81058-b124",
+      "effectIds": ["ef-legacy-81058-147"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-150",
+      "eventId": "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "claimId": "cl-legacy-81058-b126",
+      "effectIds": ["ef-legacy-81058-150"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-151",
+      "eventId": "ev-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0",
+      "claimId": "cl-legacy-81058-b127",
+      "effectIds": ["ef-legacy-81058-151"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-152",
+      "eventId": "ev-se-8321b7f4-7a2d-4781-a15a-2a224d97f3c0",
+      "claimId": "cl-legacy-81058-b127",
+      "effectIds": ["ef-legacy-81058-152"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-153",
+      "eventId": "ev-legacy-81058-b128",
+      "claimId": "cl-legacy-81058-b128",
+      "effectIds": ["ef-legacy-81058-153"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    },
+    {
+      "key": "81058:81058-154",
+      "eventId": "ev-legacy-81058-b129",
+      "claimId": "cl-legacy-81058-b129",
+      "effectIds": ["ef-legacy-81058-154"],
+      "reason": "保留一期稳定事件/效果及逐项原件；单位关系只取旧记录明示目标和relatedTargets。"
+    }
+  ]
+}

@@ -318,10 +318,11 @@ class CivHistoryTests(unittest.TestCase):
             root = Path(directory)
             shutil.copytree(ROOT / build.INPUT, root / build.INPUT)
             shutil.copytree(ROOT / 'data/game/patches', root / 'data/game/patches')
+            shutil.copytree(ROOT / 'data/sources/unit_history', root / 'data/sources/unit_history')
             for relative in [
                 *[f'data/game/{name}.json' for name in ['civs', 'units', 'buildings', 'techs']],
                 'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json',
-                'scripts/civ_history_build.py', 'scripts/civ_history_validate.mjs',
+                'scripts/civ_history_build.py', 'scripts/civ_history_validate.mjs', 'scripts/unit_history.py',
                 'scripts/content-schema.mjs', 'scripts/content-baseline.mjs',
                 'scripts/content-schema-catalog.mjs', 'src/content/schema/policy.mjs',
             ]:

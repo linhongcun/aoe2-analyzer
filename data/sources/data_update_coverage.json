@@ -148,10 +148,10 @@
     {
       "id": "civ-history-1082",
       "script": "scripts/civ_history_build.py",
-      "reason": "文明历史来自逐页核对的有界章节快照和显式事件/旧记录映射，不随 DAT 更新重新抓取、猜值或覆盖历史身份。",
+      "reason": "文明与单位历史来自有界章节快照和显式事件/旧记录映射，单位覆盖另见 data/sources/unit_history/catalog.json；不随 DAT 更新重新抓取、猜值或覆盖历史身份。",
       "owner": "文明历史数据更新执行者，需逐条复核来源、映射及旧记录去向。",
       "evidenceFile": "data/sources/civ_history/catalog.json",
-      "ownerEvidence": "目录登记每页证据与快照指纹；生成器逐文件校验输入及审计 schema，CI data 保留离线 --check。",
+      "ownerEvidence": "文明/单位目录登记每页证据、未检查缺口及快照指纹；civ_history_build.py 通过 unit_history.py 扩展同一事件图，校验最终输入、双向引用与分列审计，CI data 保留离线 --check。",
       "command": "python3 scripts/civ_history_build.py --check"
     },
     {

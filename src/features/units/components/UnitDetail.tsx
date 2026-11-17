@@ -20,7 +20,8 @@ import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
-import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { UnitUpdates } from '../../../shared/ui/UnitUpdates';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import { Linked, Loading } from '../../../shared/ui/widgets';
@@ -564,7 +565,7 @@ export default function UnitDetail() {
           <h2>更新历史</h2>
           <Icon name="chevron-down" />
         </summary>
-        <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} />
+        <UnitUpdates entityId={`unit/${u.id}`} />
       </details>
     </section>
   );
