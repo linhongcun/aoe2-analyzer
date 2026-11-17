@@ -162,6 +162,9 @@ describe('unit history exact identities and source semantics #1083', () => {
       (d: typeof data) => d.units!.rows.pop(),
       (d: typeof data) => d.units!.relations[0]!.effectIds.push('missing'),
       (d: typeof data) => {
+        d.units!.relations.find((row) => row.relation === 'identity-pending')!.relation = 'direct';
+      },
+      (d: typeof data) => {
         d.units!.legacyMap[0]!.effectIds = ['missing'];
       },
       (d: typeof data) => {

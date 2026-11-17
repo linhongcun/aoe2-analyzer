@@ -78,6 +78,7 @@ class UnitHistoryTests(unittest.TestCase):
                 same = [x for x in archived if x['key'].startswith('81058:')]
                 same[-1]['eventId'], same[-1]['claimId'] = same[0]['eventId'], same[0]['claimId']
             cases = [('catalog.json', lambda v: v['pages'].pop(), 'directory coverage'), ('imports.json', lambda v: v['legacy'].pop(), 'each old unit'), ('imports.json', bad_version, 'missing canonical event'), ('imports.json', bad_merge, 'unequal legacy bullets'), ('imports.json', lambda v: v['events'][0]['scope']['affectedCivIds'].append('missing-civ'), 'dangling scope')]
+            cases.append(('imports.json', lambda v: next(r for r in v['relations'] if r['relation'] == 'identity-pending').update(relation='direct'), 'direct unit relation needs exact effect identity'))
             for name, mutate, message in cases:
                 path = root / unit.INPUT / name
                 original = path.read_text()

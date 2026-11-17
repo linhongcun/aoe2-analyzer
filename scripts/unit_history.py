@@ -232,7 +232,11 @@ def extend_history(root, base, validate):
     for relation in relations:
         require(relation['entityId'] in entities and relation['eventId'] in events and relation['effectIds'] and relation['note'].strip(), 'dangling unit relation')
         ev = events[relation['eventId']]
-        require(set(relation['effectIds']) <= {f['id'] for c in ev['claims'] for f in c['effects']}, 'dangling unit relation effect')
+        effects = {f['id']: f for c in ev['claims'] for f in c['effects']}
+        require(set(relation['effectIds']) <= set(effects), 'dangling unit relation effect')
+        require(entities[relation['entityId']]['type'] == 'unit', 'unit relation needs a unit identity')
+        if relation['relation'] == 'direct':
+            require(all(any(ref.get('entityId') == relation['entityId'] for ref in effects[eid]['entityRefs']) for eid in relation['effectIds']), 'direct unit relation needs exact effect identity')
         key = relation['entityId'], relation['eventId'], relation['relation'], relation['note']
         combined.setdefault(key, {**relation, 'effectIds': []})
         combined[key]['effectIds'] = sorted(set(combined[key]['effectIds'] + relation['effectIds']))
