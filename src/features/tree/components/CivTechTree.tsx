@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../../data';
@@ -298,6 +298,21 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
     setSummaryFocus(undefined);
   }
   const summaryToggle = useRef<HTMLButtonElement>(null);
+  const returnSummaryFocus = useRef(false);
+  useLayoutEffect(() => {
+    if (summaryOpen || !returnSummaryFocus.current) return;
+    returnSummaryFocus.current = false;
+    const button = summaryToggle.current;
+    if (!button) return;
+    button.focus({ preventScroll: true });
+    const top = ['header.topbar', 'nav.civ-chapters'].reduce(
+      (sum, selector) => sum + (document.querySelector(selector)?.getBoundingClientRect().height ?? 0),
+      0,
+    );
+    const rect = button.getBoundingClientRect();
+    if (rect.top < top + 8 || rect.bottom > innerHeight - 8)
+      window.scrollBy({ top: rect.top - top - Math.max(8, (innerHeight - top - rect.height) / 2), behavior: 'instant' });
+  }, [summaryOpen]);
   const [compare, setCompare] = useSticky('civ.techtree.compare', '');
   const [jumpSlot, setJumpSlot] = useState<HTMLDivElement | null>(null);
   const civ = civByEn(civEn);
@@ -309,9 +324,9 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
   const showTree = !!(ready && blocks && trees.data && core.data && civ);
   const closeSummary = () => {
     window.history.replaceState(consumeTreeSummaryHistory(window.history.state, civEn, true), '');
+    returnSummaryFocus.current = true;
     setSummaryOpen(false);
     setSummaryFocus(undefined);
-    summaryToggle.current?.focus();
   };
 
   if (!civ) return null;

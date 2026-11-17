@@ -6,7 +6,7 @@
   "defaultCaseMs": 1500,
   "staticSweepMs": 85000,
   "files": {
-    "tests/e2e/treeUnavailable1119.spec.ts": 34500,
+    "tests/e2e/treeUnavailable1119.spec.ts": 36500,
     "tests/e2e/unit-history1083.spec.ts": 18000,
     "tests/e2e/civ-history1082.spec.ts": 7500,
     "tests/e2e/combatTools998.spec.ts": 4500,

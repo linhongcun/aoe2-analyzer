@@ -334,5 +334,37 @@ for (const width of [1280, 360]) {
     await root.getByRole('button', { name: '收起汇总' }).click();
     await expect(root).toHaveCount(0);
     await expect(toggle(page)).toBeFocused();
+    const position = await toggle(page).evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      const top = ['header.topbar', 'nav.civ-chapters'].reduce(
+        (sum, selector) => sum + (document.querySelector(selector)?.getBoundingClientRect().height ?? 0),
+        0,
+      );
+      return { top: rect.top, bottom: rect.bottom, inset: top, height: innerHeight };
+    });
+    expect(position.top).toBeGreaterThanOrEqual(position.inset);
+    expect(position.bottom).toBeLessThanOrEqual(position.height);
+  });
+}
+
+for (const height of [740, 480]) {
+  test(`#1119 360×${height}内部收起后入口焦点不被固定栏覆盖`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height });
+    await open(page);
+    const root = summary(page);
+    await root.locator('[data-summary-key="68:t12"]').scrollIntoViewIfNeeded();
+    await root.locator('.tsum-head').evaluate((el) => el.scrollIntoView({ block: 'center' }));
+    await root.getByRole('button', { name: '收起汇总' }).click();
+    await expect(toggle(page)).toBeFocused();
+    await expect(toggle(page)).toHaveAttribute('aria-expanded', 'false');
+    const visible = await toggle(page).evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const top = ['header.topbar', 'nav.civ-chapters'].reduce(
+        (sum, selector) => sum + (document.querySelector(selector)?.getBoundingClientRect().height ?? 0),
+        0,
+      );
+      return r.top >= top && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+    });
+    expect(visible).toBe(true);
   });
 }
