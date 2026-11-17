@@ -45,7 +45,7 @@ export function UnitObjectSearch({ data }: { data: CivUpdatesData }) {
   const options = searchUpdateUnits(data, query.get('histQuery') ?? '').slice(0, 30);
   const pick = (entityId: string) => {
     setOpen(false);
-    navigate(unitHistoryPath(entityId, query, 'overview'));
+    navigate(unitHistoryPath(entityId, query, 'overview', undefined, data));
     requestAnimationFrame(() => document.getElementById('unit-history-title')?.focus());
   };
   return (
@@ -500,7 +500,7 @@ export function UnitUpdatesOverview() {
         <ul className="unit-coverage-list">
           {rows.map((r) => (
             <li key={r.entityId}>
-              <Link to={unitHistoryPath(r.entityId, query, 'overview')}>
+              <Link to={unitHistoryPath(r.entityId, query, 'overview', undefined, data)}>
                 {data.entities.find((e) => e.id === r.entityId)?.nameZh} · <span className="num nw">ID {r.entityId.split('/')[1]}</span>
               </Link>
               <p>

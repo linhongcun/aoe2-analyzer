@@ -20,6 +20,7 @@ test('#1085 same steppe event on detail/overview and exact unit projection with 
   await expect(projected).toHaveCount(1);
   await expect(projected).toBeFocused();
   await expect(projected.locator('.civ-update-values')).toHaveCount(0);
+  await unit.getByRole('button', { name: '清除历史筛选', exact: true }).click();
   await unit.getByRole('link', { name: '返回上次历史结果' }).click();
   await expect(reader(page)).toHaveAttribute('data-tech-history', 'tech/689');
   await expect(page).toHaveURL(/histEvent=/);
@@ -30,6 +31,20 @@ test('#1085 same steppe event on detail/overview and exact unit projection with 
   await expect(page.getByRole('region', { name: '科技历史来源目录' })).toContainText('199 个当前目录 ID');
   await page.getByRole('link', { name: '返回上次历史结果' }).click();
   await expect(cards(page)).toHaveAttribute('data-event-id', eventId);
+});
+
+test('#1085 contextual unit return survives technology traversal and malformed mixed-route recovery', async ({ page }) => {
+  await page.goto('/#/unit/1370?tab=history&civ=Cumans&histVersion=de-36202');
+  await page.getByRole('link', { name: '查看大草原畜牧科技历史', exact: true }).click();
+  await reader(page).getByRole('link', { name: '返回上次历史结果' }).click();
+  await expect(page).toHaveURL(/unit\/1370/);
+  await expect(page).toHaveURL(/civ=Cumans/);
+  const invalid = encodeURIComponent('/unit/1370?histView=techs');
+  await page.goto('/#/tech/689?tab=history&histVersion=de-36202&histReturn=' + invalid);
+  await expect(page.getByRole('alert')).toContainText('histReturn');
+  await page.getByRole('button', { name: '仅清除错误参数' }).click();
+  await expect(cards(page)).toHaveCount(1);
+  await expect(page).toHaveURL(/histVersion=de-36202/);
 });
 
 test('#1085 alias submission, keyboard selection and independent coverage denominator', async ({ page }) => {
