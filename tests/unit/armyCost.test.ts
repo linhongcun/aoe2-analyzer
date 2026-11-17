@@ -205,6 +205,7 @@ describe('army research pinned data', () => {
     expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), targets: ['t:99999'] }).hasValue).toBe(false);
     expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), done: ['t:67'], targets: ['t:67'] }).hasValue).toBe(true);
     expect(evaluateArmyCost(ctx, { ...makeArmyCost('Magyars'), targets: ['t:67'] }).hasValue).toBe(true);
+    expect(evaluateArmyCost(ctx, { ...makeArmyCost('Magyars'), done: ['t:67'] }).hasValue).toBe(true);
   });
   it('respects count alternatives and ignores irrelevant unknown branches once the count is met (algorithm fixture)', () => {
     const data = structuredClone(ARMY_RESEARCH);

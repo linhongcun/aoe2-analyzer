@@ -48,6 +48,11 @@ describe('independent army protocol', () => {
     expect(productionMode(query).kind).toBe('army');
     expect(decodeArmyCost(query).config).toBe(null);
   });
+  it('does not dispatch an unrelated legacy note to the army codec', () => {
+    expect(productionMode('mode=train-total&note=army-cost').kind).toBe('total');
+    expect(productionMode('note=army-cost').kind).toBe('legacy');
+    expect(productionMode('mode=army-cost%ZZ').kind).toBe('army');
+  });
   it('rejects oversized row arrays and malformed row structures', () => {
     const params = new URLSearchParams(encodeArmyCost(emptyArmyCost()));
     for (const value of [Array.from({ length: 13 }, () => ({ unit: 546, qty: '1' })), [{ unit: '546', qty: '1' }], [{ unit: 546, qty: 1 }]]) {

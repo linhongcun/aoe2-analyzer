@@ -6,7 +6,7 @@ export function productionMode(search: string): {
 } {
   // The strict army codec owns malformed links too, so they cannot fall through to legacy defaults.
   const armyParams = new URLSearchParams(search);
-  if (armyParams.getAll('mode').includes('army-cost') || [...armyParams.keys()].some((key) => key.startsWith('ac')) || search.includes('army-cost'))
+  if (armyParams.getAll('mode').some((mode) => mode.startsWith('army-cost')) || [...armyParams.keys()].some((key) => key.startsWith('ac')))
     return { kind: 'army', errors: [] };
   let params: URLSearchParams;
   try {

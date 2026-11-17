@@ -486,7 +486,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     !blocked.length &&
     (training.lines.some((l) => l.status === 'ok') ||
       [...ledger.values()].some((e) => e.status === 'planned' && !!e.cost) ||
-      config.targets.some((key) => ['done', 'inferred-done', 'free'].includes(ledger.get(key)?.status ?? '')));
+      [...config.done, ...config.targets].some((key) => ['done', 'inferred-done', 'free'].includes(ledger.get(key)?.status ?? '')));
   return {
     blocked,
     ledger: [...ledger.values()],
