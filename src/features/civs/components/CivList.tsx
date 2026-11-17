@@ -86,6 +86,8 @@ export default function CivList() {
 
   useEffect(() => {
     const target = panel === 'detail' ? detailCloseRef.current : panel === 'filter' ? filterCloseRef.current : null;
+    const container = target?.closest<HTMLElement>('.civ-panel');
+    if (container) container.scrollTop = 0;
     target?.focus({ preventScroll: true });
   }, [panel, detailEn]);
 

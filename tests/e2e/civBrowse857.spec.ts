@@ -207,6 +207,41 @@ test('#1118 600px 边界、桌面卡片、速览切换和完整资料返回', as
   await expect(page.locator('#grid .card')).toHaveCount(1);
 });
 
+test('#1118 已滚动速览切换文明后关闭焦点可见，且外层列表不跳动', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 420 });
+  const preview = page.locator('#civ-preview');
+  const close = preview.getByRole('button', { name: '关闭', exact: true });
+  const row = page.locator('#grid .card[data-civ="Aztecs"]');
+  for (const method of ['Escape', 'close']) {
+    await page.goto('./#/civs');
+    await page.locator('#grid .card[data-civ="Armenians"]').click();
+    await expect(close).toBeFocused();
+    await preview.evaluate((panel) => (panel.scrollTop = panel.scrollHeight));
+    expect(await preview.evaluate((panel) => panel.scrollHeight > panel.clientHeight && panel.scrollTop > 0)).toBe(true);
+    expect(await close.evaluate((button) => button.getBoundingClientRect().bottom < button.closest('.civ-panel')!.getBoundingClientRect().top)).toBe(true);
+    await row.scrollIntoViewIfNeeded();
+    await row.evaluate((element) => element.focus({ preventScroll: true }));
+    const before = await row.evaluate((element) => ({ scroll: scrollY, top: element.getBoundingClientRect().top }));
+    await row.press('Enter');
+    await expect(preview.locator('.civ-en')).toHaveText('Aztecs');
+    await expect(close).toBeFocused();
+    const position = await close.evaluate((button) => {
+      const panel = button.closest('.civ-panel')!;
+      const box = button.getBoundingClientRect();
+      const bounds = panel.getBoundingClientRect();
+      return { top: box.top, bottom: box.bottom, panelTop: bounds.top, panelBottom: bounds.bottom, scroll: panel.scrollTop };
+    });
+    expect(position.scroll).toBe(0);
+    expect(position.top).toBeGreaterThanOrEqual(Math.max(position.panelTop, 0));
+    expect(position.bottom).toBeLessThanOrEqual(Math.min(position.panelBottom, 420));
+    expect(await row.evaluate((element) => ({ scroll: scrollY, top: element.getBoundingClientRect().top }))).toEqual(before);
+    if (method === 'Escape') await page.keyboard.press('Escape');
+    else await close.press('Enter');
+    await expect(row).toBeFocused();
+    expect(await row.evaluate((element) => ({ scroll: scrollY, top: element.getBoundingClientRect().top }))).toEqual(before);
+  }
+});
+
 test('#1118 明暗主题均显示当前及键盘焦点，放大名称不裁切', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('./#/civs');
