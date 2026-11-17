@@ -32,6 +32,11 @@ describe('army research pinned data', () => {
     expect(researchResolver(ARMY_RESEARCH, 'Georgians', 4).resolve(1138).state).toBe('unknown');
     const r = evaluateArmyCost(ctx, { ...makeArmyCost('Georgians'), rows: [{ unit: 567, qty: '1' }] });
     expect(r.partial).toBe(true);
+    for (const civ of ['Georgians', 'Khitans', 'Shu', 'Wu']) {
+      const faith = evaluateArmyCost(ctx, { ...makeArmyCost(civ), targets: ['t:45'] });
+      expect(faith.partial).toBe(true);
+      expect(faith.hasValue).toBe(false);
+    }
   });
   it('maps every published civilization to its fixed-data identity, including the default empty plan', () => {
     for (const civ of civs) {
