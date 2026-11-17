@@ -72,7 +72,16 @@ describe('#1062 fixed 188329 garrison model audit', () => {
   it('fails invalid model inputs instead of generating or clamping a report', async () => {
     const copy = structuredClone(input);
     copy.samples[1]!.config.rows[0]!.count = '99';
-    await expect(buildAudit(copy)).rejects.toThrow('invalid model result');
+    await expect(buildAudit(copy)).rejects.toThrow('enum');
+  });
+
+  it.each(['unknown ID', 'missing empty control', 'swapped bindings'])('rejects PRD coverage drift: %s', async (kind) => {
+    const copy = structuredClone(input);
+    if (kind === 'unknown ID') copy.samples[0]!.id = 'K-T-99';
+    if (kind === 'missing empty control') copy.samples[0]!.config = structuredClone(copy.samples[1]!.config);
+    if (kind === 'swapped bindings') [copy.samples[1]!.config, copy.samples[2]!.config] = [copy.samples[2]!.config, copy.samples[1]!.config];
+    expect(() => validateInput(copy)).toThrow();
+    await expect(buildAudit(copy)).rejects.toThrow();
   });
 
   it('accepts schema-valid configurations whose object keys are reordered', async () => {

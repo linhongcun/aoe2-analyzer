@@ -26,6 +26,489 @@
       "minItems": 30,
       "maxItems": 30,
       "items": {
+        "description": "冻结PRD的30个ID→配置绑定；数量及唯一ID约束保证全集，不能重命名、替换空对照或互换配置。",
+        "enum": [
+          {
+            "id": "K-T-00",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": []
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-01",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "1",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-02",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "2",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-03",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "3",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-04",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "4",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-05",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-06",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1901,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-07",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 492,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-08",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 83,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-09",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 359,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-T-10",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 567,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 235,
+            "client": null
+          },
+          {
+            "id": "K-C-00",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": []
+            },
+            "buildingId": 82,
+            "client": null
+          },
+          {
+            "id": "K-C-01",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "20",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 82,
+            "client": null
+          },
+          {
+            "id": "K-TC-00",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": []
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "K-TC-01",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "K-TC-02",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "6",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "K-TC-03",
+            "config": {
+              "civ": "Koreans",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 1903,
+                  "count": "15",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-00",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": []
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-01",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 1015,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-02",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 1013,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-03",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 567,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-04",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 492,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-05",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 492,
+                  "count": "8",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-06",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 492,
+                  "count": "9",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-07",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 83,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-08",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 83,
+                  "count": "9",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-ON-09",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [576],
+              "rows": [
+                {
+                  "unitId": 83,
+                  "count": "10",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-OFF-00",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [],
+              "rows": []
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-OFF-01",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 492,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          },
+          {
+            "id": "M-OFF-02",
+            "config": {
+              "civ": "Malians",
+              "age": 4,
+              "techs": [],
+              "rows": [
+                {
+                  "unitId": 83,
+                  "count": "5",
+                  "entry": "enter"
+                }
+              ]
+            },
+            "buildingId": 109,
+            "client": null
+          }
+        ],
         "type": "object",
         "additionalProperties": false,
         "required": ["id", "buildingId", "config", "client"],
