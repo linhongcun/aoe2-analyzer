@@ -67,7 +67,6 @@ export function EncyclopediaHistoryLink({ entityId, enabled = true }: { entityId
     const frame = requestAnimationFrame(() => {
       document.getElementById(id)?.focus({ preventScroll: true });
       window.scrollTo(0, saved.y);
-      rememberHistoryVisit(location, { y: saved.y });
     });
     return () => cancelAnimationFrame(frame);
   }, [enabled, location, navigation]);

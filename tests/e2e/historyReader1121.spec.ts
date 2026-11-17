@@ -72,6 +72,16 @@ test('finds exact identities, a directory alias and a retired technology', async
   await expect(bombard).toContainText('研究参数');
 });
 
+test.describe('touch object picker', () => {
+  test.use({ hasTouch: true, viewport: { width: 360, height: 760 } });
+  test('tapping the result selects an exact object without dismissing it first', async ({ page }) => {
+    await page.goto('/#/patches');
+    await page.getByRole('combobox', { name: '查找历史对象' }).fill('绞盘弩');
+    await page.getByRole('option', { name: /1452/u }).tap();
+    await expect(page).toHaveURL(/obj=tech%3A1452/u);
+  });
+});
+
 test('opens the evidence as one inert modal and returns focus via all close controls', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto(path('building/79', 'histVersion=de-81058', 'ev-legacy-81058-b056'));
@@ -256,7 +266,7 @@ test('keeps both conflict claims and escapes long original evidence in dark mode
   await page.setViewportSize({ width: 360, height: 760 });
   await page.emulateMedia({ colorScheme: 'dark' });
   const fixture = conflictHistoryFixture();
-  fixture.sourceEntries.find((entry) => entry.id === 'fixture-entry-0')!.originalText += '长原文'.repeat(900);
+  fixture.sourceEntries.find((entry) => entry.id === 'fixture-entry-0')!.originalText += '\n+12 HP\n' + '长原文'.repeat(900);
   fixture.sourceEntries.find((entry) => entry.id === 'fixture-entry-1')!.originalText = null;
   await page.route(asset, (route) => route.fulfill({ json: fixture }));
   const conflict = fixture.events.find((e) => e.verification === 'conflict')!;
@@ -271,6 +281,7 @@ test('keeps both conflict claims and escapes long original evidence in dark mode
   await expect(dialog).toContainText('说法 2');
   await expect(dialog.getByText(/<img src=x/)).toBeVisible();
   await expect(dialog.locator('blockquote img')).toHaveCount(0);
+  await expect(dialog.locator('blockquote .num.nw').getByText('+12 HP', { exact: true })).toHaveCSS('white-space', 'nowrap');
   await expect(dialog.getByText(/来源链接缺失/)).toHaveCount(2);
   await expect(dialog.getByText(/此来源未保存原文/)).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
@@ -289,10 +300,14 @@ test('keeps fixed civilization values and original official citations', async ({
   await page.goto(path('civ/Bohemians', 'histVersion=de-185872&histSource=official', id));
   await event(page, id).getByRole('button', { name: '依据与原文' }).click();
   const dialog = page.getByRole('dialog');
-  await expect(dialog.getByRole('link', { name: '打开原始来源' })).toHaveCount(2);
+  await expect(dialog.getByRole('link', { name: '打开原始来源' })).toHaveCount(1);
   await expect(dialog.locator('a[href$="#6af4bb1a6d373"]')).toHaveAttribute(
     'href', 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373',
   );
+  await page.keyboard.press('Escape');
+  await page.goto(path('civ/Bohemians', 'histVersion=de-185872', id));
+  await event(page, id).getByRole('button', { name: '依据与原文' }).click();
+  await expect(dialog.getByRole('link', { name: '打开原始来源' })).toHaveCount(2);
 });
 
 test('stages advanced filters before applying and resets only advanced conditions', async ({ page }) => {

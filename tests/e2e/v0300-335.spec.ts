@@ -22,7 +22,7 @@ const PAGES: [string, string, string, string][] = [
   ['/campaigns', '玩家社区整理', '发布于 2021-01-27', '发布于 2021-01-28'],
   ['/game-guide', '官方补丁', '发布 2026-09-22', '发布 2026-09-23'],
   ['/mixed-army', '官方补丁', '发布 2026-09-22', '发布 2026-09-23'],
-  ['/patches/185872', '当前数据版本', '2026-09-22', '2026-09-23'],
+  ['/patches/185872', '档案日期', '2026-09-22', '2026-09-23'],
 ];
 test.describe('#335 页面上的来源日期按北京时间', () => {
   for (const [route, anchor, oldDate, newDate] of PAGES)

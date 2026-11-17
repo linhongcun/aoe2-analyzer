@@ -39,17 +39,22 @@ for (const width of [360, 375, 390, 1280])
       }),
     );
     await expect(page.getByRole('link', { name: '回开一局', exact: true })).toBeVisible();
-    const returned = () => new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('returnTo');
+    const returned = () => new URL(new URL(page.url()).hash.slice(1), page.url()).searchParams.get('returnTo');
     const target = returned();
-    await page.getByRole('tab', { name: '数据', exact: true }).click();
+    const chapters = page.getByRole('navigation', { name: '本页章节' });
+    await chapters.getByRole('link', { name: '身份', exact: true }).click();
     expect(returned()).toBe(target);
-    await page.getByRole('tab', { name: '更新历史', exact: true }).click();
-    await page.getByRole('link', { name: '查看完整历史' }).click();
+    await chapters.getByRole('link', { name: '其他', exact: true }).click();
+    const history = page.getByTestId('civ-patches');
+    await history.locator('summary').click();
+    const reader = history.getByRole('link', { name: '查看完整历史' });
+    await reader.click();
     await expect(page).toHaveURL(/obj=civ%3ABritons/u);
     await page.getByRole('link', { name: '返回来处' }).click();
-    expect(returned()).toBe(target);
+    await expect.poll(returned).toBe(target);
+    await expect(reader).toBeFocused();
     await page.reload();
-    await expect(page.getByRole('link', { name: '查看完整历史' })).toBeVisible();
+    await expect(history).toBeVisible();
     await page.goBack();
     await expect(page.getByRole('link', { name: '回开一局', exact: true })).toBeVisible();
     await page.goForward();
