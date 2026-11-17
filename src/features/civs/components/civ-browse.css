@@ -576,6 +576,10 @@
 }
 
 @media (max-width: 600px) {
+  #list .civ-chip button {
+    min-width: 44px;
+  }
+
   #list #grid {
     grid-template-columns: 1fr;
     gap: 0;

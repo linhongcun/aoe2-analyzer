@@ -38,6 +38,7 @@ test('名称、版本和骑士一起筛选，速览使用真实加成', async ({
   await page.locator('#dlc').selectOption({ label: '西方霸主' });
   await page.locator('#option-search').fill('骑士');
   await expect(page.locator('#option-search')).toHaveValue('骑士');
+  await expect(page.locator('#option-search')).toBeFocused();
   await page.getByRole('checkbox', { name: '添加单位 骑士', exact: true }).check();
   await expect
     .poll(() => page.locator('#grid .card').evaluateAll((cards) => cards.map((card) => card.getAttribute('data-civ')).sort()))
@@ -122,6 +123,8 @@ test('#1118 手机连续身份行满足八行密度，搜索及长名称完整',
   await expect(page.getByText('没有符合条件的文明', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: '重置全部', exact: true }).click();
   await expect(rows).toHaveCount(civs.length);
+  await rows.first().click({ position: { x: 3, y: 32 } });
+  await expect(page.locator('#civ-preview .civ-en')).toHaveText('Armenians');
 });
 
 test('#1118 键盘速览、关闭与筛选均回焦且不跳动，触发行消失回搜索', async ({ page }) => {
@@ -135,6 +138,9 @@ test('#1118 键盘速览、关闭与筛选均回焦且不跳动，触发行消�
   for (const key of ['Enter', 'Space']) {
     await row.press(key);
     await expect(close).toBeFocused();
+    const closeBox = await close.boundingBox();
+    expect(closeBox?.width).toBeGreaterThanOrEqual(44);
+    expect(closeBox?.height).toBeGreaterThanOrEqual(44);
     await expect(row).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('#civ-preview .civ-type')).toBeVisible();
     await expect(page.locator('#civ-preview .civ-uu')).toBeVisible();
@@ -146,15 +152,25 @@ test('#1118 键盘速览、关闭与筛选均回焦且不跳动，触发行消�
     expect(await page.evaluate(() => scrollY)).toBeCloseTo(before, 0);
   }
 
-  await row.press('Enter');
-  await page.evaluate(() => (location.hash = '#/civs?q=Armenians'));
-  await expect(page.locator('#grid .card')).toHaveCount(1);
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#q')).toBeFocused();
+  for (const method of ['Escape', 'close']) {
+    await row.press('Enter');
+    await page.evaluate(() => (location.hash = '#/civs?q=Armenians'));
+    await expect(page.locator('#grid .card')).toHaveCount(1);
+    if (method === 'Escape') await page.keyboard.press('Escape');
+    else await close.press('Enter');
+    await expect(page.locator('#q')).toBeFocused();
+    await page.evaluate(() => (location.hash = '#/civs'));
+    await expect(page.locator('#grid .card')).toHaveCount(civs.length);
+  }
   const toggle = page.getByRole('button', { name: '按条件筛选', exact: true });
   await toggle.click();
   const collapse = page.locator('#filter-panel').getByRole('button', { name: '收起', exact: true });
   await expect(collapse).toBeFocused();
+  for (const control of [toggle, collapse]) {
+    const box = await control.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  }
   await collapse.press('Enter');
   await expect(toggle).toBeFocused();
   await toggle.press('Space');
@@ -224,6 +240,16 @@ test('#1118 条件无效与真实空结果分别反馈，移除名称不清其�
   await expect(page.locator('#cnt')).toHaveText('条件无效');
   await expect(page.getByTestId('requirements-blocked')).toBeVisible();
   await expect(page.locator('#grid .card')).toHaveCount(0);
+  const targets = await page.locator('.civ-chip button').evaluateAll((buttons) =>
+    buttons.map((button) => {
+      const box = button.getBoundingClientRect();
+      return { label: button.getAttribute('aria-label'), width: box.width, height: box.height };
+    }),
+  );
+  expect(
+    targets.every((target) => target.width >= 44 && target.height >= 44),
+    JSON.stringify(targets),
+  ).toBe(true);
   await page.getByRole('button', { name: '移除无效条件 u:0', exact: true }).click();
   await expect(page.locator('#cnt')).toHaveText(`1 / ${civs.length}`);
   await expect(page.locator('#grid .card').first()).toHaveAttribute('data-civ', 'Huns');
