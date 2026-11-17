@@ -5,7 +5,7 @@
  * 单位数值来源：aoe2techtree 数据 + 模拟器效果表（已与 Fandom 核对：法兰克满科技圣骑士 192 生命 / 18 攻 / 5/7 护甲）。
  */
 import { describe, expect, it } from 'vitest';
-import { countForBudget, damagePerHit, duel, fighterFrom, groupFight, oneWay } from '../../src/domain/duel';
+import { countForBudget, damagePerHit, duel, fighterFrom, groupFight, oneWay, type Fighter } from '../../src/domain/duel';
 import { allNumeric, simTechs, simulate } from '../../src/domain/simulator';
 import { ctx, unit } from './helpers';
 
@@ -13,6 +13,18 @@ const F = (en: string, civ: string, full = true) => {
   const u = unit(en);
   return fighterFrom(u, simulate(ctx, u, civ, 4, full ? allNumeric(simTechs(ctx, u, civ)) : new Set(), new Set()));
 };
+const testFighter = (overrides: Partial<Fighter> = {}): Fighter => ({
+  name: '边界测试兵',
+  hp: 10,
+  attack: { 近战: 1 },
+  armor: { 近战: 0, 穿刺: 0 },
+  rof: 1,
+  acc: 1,
+  ranged: false,
+  rng: 0,
+  cost: {},
+  ...overrides,
+});
 
 describe('伤害公式', () => {
   it('仅计入防守方拥有的护甲类别；最低 1 点', () => {
@@ -80,5 +92,48 @@ describe('N vs M', () => {
   });
   it('等资源数量', () => {
     expect(countForBudget({ Food: 60, Gold: 75 }, 1000)).toBe(7);
+  });
+
+  it('零攻击间隔的真实爆破兵镜像只结算首击，不在601秒虚构第二击', () => {
+    const petard = F('Petard', 'Franks', false);
+    expect(petard.rof).toBe(0);
+    const result = groupFight(petard, 1, petard, 1);
+    expect(result).toMatchObject({ winner: 'draw', duration: 600, aAlive: 1, bAlive: 1 });
+    expect(result.timeline.every(([time]) => time <= 600)).toBe(true);
+  });
+
+  it('单侧零攻击间隔不重复攻击，未决结果用满模拟时限', () => {
+    const petard = F('Petard', 'Franks', false);
+    const target = testFighter({ hp: 50, ranged: true, acc: 0, rof: 1000 });
+    const result = groupFight(petard, 1, target, 1);
+    expect(result).toMatchObject({ winner: 'draw', duration: 600, aAlive: 1, bAlive: 1 });
+    expect(result.timeline.at(-1)).toEqual([0, 1, 1]);
+  });
+
+  it('正攻击间隔恰在模拟时限内时仍结算，且保留t=0首击', () => {
+    const a = testFighter({ hp: 10, rof: 600 });
+    const b = testFighter({ hp: 2, rof: 1000 });
+    const result = groupFight(a, 1, b, 1);
+    expect(result).toMatchObject({ winner: 'a', duration: 600, aAlive: 1, bAlive: 0, hpLeft: 9 });
+    expect(result.timeline).toContainEqual([600, 1, 0]);
+  });
+
+  it.each([
+    [600, 600.000001],
+    [0, 0.000001],
+  ])('超过 maxT=%s 的下一击不结算，双方保留存活状态', (maxT, nextAttack) => {
+    const a = testFighter({ hp: 10, rof: nextAttack });
+    const b = testFighter({ hp: 2, rof: 1000, ranged: true, acc: 0 });
+    const result = groupFight(a, 1, b, 1, maxT);
+    expect(result).toMatchObject({ winner: 'draw', duration: maxT, aAlive: 1, bAlive: 1 });
+    expect(result.timeline.every(([time]) => time <= maxT)).toBe(true);
+  });
+
+  it('maxT为0时仍在t=0同时结算双方致命首击', () => {
+    const a = testFighter({ hp: 1 });
+    const b = testFighter({ hp: 1 });
+    const result = groupFight(a, 1, b, 1, 0);
+    expect(result).toMatchObject({ winner: 'draw', duration: 0, aAlive: 0, bAlive: 0 });
+    expect(result.timeline.at(-1)).toEqual([0, 0, 0]);
   });
 });
