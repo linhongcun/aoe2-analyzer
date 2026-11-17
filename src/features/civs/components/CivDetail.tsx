@@ -1,10 +1,11 @@
-import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn, civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
+import { civBonuses } from '../../../domain/civBonus';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Civ, Unit } from '../../../domain/types';
@@ -20,7 +21,6 @@ import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { CivUpdates } from '../../../shared/ui/CivUpdates';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
-import { BonusRows } from './BonusRows';
 import { CivHistory } from './CivHistory';
 import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
@@ -29,6 +29,23 @@ import { CivFormations } from './CivFormations';
 import { isFormationHash, readFormationReturn } from './useFormationNavigation';
 import './civ-read.css';
 import './civ-start-return.css';
+
+// 展开加成的计算依赖 CORE。避免它成为正文的静态加载前提。
+const BonusRows = lazy(() => import('./BonusRows').then(({ BonusRows }) => ({ default: BonusRows })));
+
+function BonusTextList({ civ }: { civ: Civ }) {
+  return (
+    <ul className="blrows">
+      {civBonuses(civ).map((bonus) => (
+        <li key={bonus.id} className="brow">
+          <Link className="brow-h" to={`/civ/${civ.en}/bonus/${bonus.idx}`}>
+            <EmNum text={bonus.zh} />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 const TAB_ANCHOR: Record<string, string> = {
   ov: 'identity',
@@ -297,7 +314,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <p className="civ-kicker">机制事实</p>
           <h2 id="civ-bonus-title">文明加成</h2>
           <p className="note">事实在此完整列出一次。点开一行可进入加成详情。</p>
-          <BonusRows key={c.en} c={c} />
+          <Suspense fallback={<BonusTextList civ={c} />}>{core ? <BonusRows c={c} /> : <BonusTextList civ={c} />}</Suspense>
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>

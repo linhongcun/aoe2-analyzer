@@ -5,6 +5,15 @@ import { usePreviousHistoryEntry, type NavigationEntry } from '../../../shared/u
 export const formationAnchor = (id: string) => `formation-${id}`;
 export const isFormationHash = (hash: string) => hash === '#formations' || hash.startsWith('#formation-');
 
+function scrollToFormation(target: HTMLElement, center = false) {
+  const chapters = target.closest('.civ-read')?.querySelector<HTMLElement>('.civ-chapters');
+  const chapterBottom = chapters ? (parseFloat(getComputedStyle(chapters).top) || 0) + chapters.offsetHeight : 0;
+  const headerBottom = document.querySelector('header.topbar')?.getBoundingClientRect().bottom ?? 0;
+  const box = target.getBoundingClientRect();
+  const offset = Math.max(chapterBottom + 16, headerBottom + 16, center ? (window.innerHeight - box.height) / 2 : 0);
+  window.scrollBy(0, box.top - offset);
+}
+
 interface FormationReading {
   token: string;
   key: string;
@@ -71,8 +80,9 @@ export function useFormationNavigation(civ: string, pending: boolean) {
         }
         const entity = find(memory.entity);
         const title = find(memory.route) ?? find('formations-title');
-        (entity ?? title)?.focus({ preventScroll: true });
-        (entity ?? title)?.scrollIntoView({ block: entity ? 'center' : 'start' });
+        const target = entity ?? title;
+        target?.focus({ preventScroll: true });
+        if (target) scrollToFormation(target, Boolean(entity));
         const usr = { ...entry?.usr };
         delete usr.formationReading;
         window.history.replaceState({ ...entry, usr }, '');
@@ -81,7 +91,7 @@ export function useFormationNavigation(civ: string, pending: boolean) {
       if (isFormationHash(hash)) {
         const title = find(hash === '#formations' ? 'formations-title' : hash.slice(1)) ?? find('formations-title');
         if (focusAnchor) title?.focus({ preventScroll: true });
-        title?.scrollIntoView({ block: 'start' });
+        if (title) scrollToFormation(title);
       }
     });
     return () => cancelAnimationFrame(frame);

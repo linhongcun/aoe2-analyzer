@@ -244,18 +244,14 @@ function FormationSection({
 }) {
   const { pathname, search } = useLocation();
   const { root, remember } = useFormationNavigation(civ, pending && !error);
-  const [retrying, setRetrying] = useState(false);
-  const [retryReady, setRetryReady] = useState(false);
+  const [requestedRetry, setRequestedRetry] = useState(false);
+  const retrying = requestedRetry && pending;
+  const retryReady = requestedRetry && !pending && !error;
   const title = useRef<HTMLHeadingElement>(null);
   const needsRetry = Boolean(retry && (pending || error));
   useEffect(() => {
-    if (pending || !retrying) return;
-    setRetrying(false);
-    if (!error) {
-      setRetryReady(true);
-      if (!document.activeElement || document.activeElement === document.body) title.current?.focus({ preventScroll: true });
-    }
-  }, [error, pending, retrying]);
+    if (retryReady && document.activeElement === document.body) title.current?.focus({ preventScroll: true });
+  }, [retryReady]);
   const active = routes.find((view) => view.status === 'current');
 
   return (
@@ -303,8 +299,7 @@ function FormationSection({
               aria-disabled={!error}
               onClick={() => {
                 if (!error) return;
-                setRetryReady(false);
-                setRetrying(true);
+                setRequestedRetry(true);
                 retry?.();
               }}
             >

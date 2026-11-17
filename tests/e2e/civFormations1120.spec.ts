@@ -10,10 +10,12 @@ async function onScreenBelowNav(target: Locator) {
       target.evaluate((el) => {
         const box = el.getBoundingClientRect();
         const bottom = document.querySelector('.civ-chapters')!.getBoundingClientRect().bottom;
-        return box.top >= bottom && box.bottom <= innerHeight && el.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+        const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+        if (box.top >= bottom && box.bottom <= innerHeight && el.contains(hit)) return 'visible';
+        return JSON.stringify({ top: box.top, bottom, y: scrollY, hit: hit?.className });
       }),
     )
-    .toBe(true);
+    .toBe('visible');
 }
 
 for (const width of [1280, 390]) {
@@ -46,6 +48,7 @@ for (const width of [1280, 390]) {
     }
     await unit.press('Enter');
     await expect(page).toHaveURL(/#\/unit\/569\?civ=Spanish$/);
+    await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`#/civ/Spanish#${paladin}$`));
     await expect(card.locator('details[open]')).toHaveCount(2);
@@ -73,6 +76,7 @@ test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({
   await details.close();
   expect(await page.evaluate(() => history.state.usr?.formationReading)).toBeUndefined();
   await entity.click();
+  await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/#\/civ\/Spanish$/);
   await expect(entity).toBeFocused();
