@@ -18,6 +18,7 @@ import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon } from '../../../shared/ui/Icon';
+import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
@@ -199,6 +200,7 @@ export default function UnitDetail() {
   return (
     <section id="unit" className="pane ud" data-view={workspace ? 'simulator' : 'overview'}>
       <Breadcrumbs current={u.zh} />
+      <TreeSummaryReturn civ={context} kind="u" id={u.id} />
       <div className="ud-id" data-t="unit-identity">
         <div className="ud-icon">
           <UnitIcon u={u} big />

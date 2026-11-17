@@ -5,6 +5,7 @@ import { civByEn } from '../../../data';
 import type { Core } from '../../../data';
 import type { Civ, Trees } from '../../../domain/types';
 import { offColumnSpecialBuildings, treeNodeIdentity } from '../../../domain/treeIdentity';
+import { readTreeSummaryMemory } from '../../../domain/treeSummaryNavigation';
 import { costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -12,6 +13,7 @@ import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
 import { useSticky } from '../../../shared/utils/sticky';
 import { AGE_BANDS, extraItems, HD, jumpScrollLeft, layoutTree, TH } from '../logic/layout';
 import { JumpToBuilding, type JumpTarget } from './JumpToBuilding';
+import { UnavailableSummary } from './UnavailableSummary';
 import '../tree.css';
 
 const JUMP_MS = 1600;
@@ -276,7 +278,13 @@ function Placeholder({ text, alert, onRetry }: { text: string; alert?: boolean; 
 
 export default function CivTechTree({ civEn }: { civEn: string }) {
   const nav = useNavigate();
-  const { core, trees, retry } = useCoreTrees();
+  const location = useLocation();
+  const resources = useCoreTrees();
+  const { core, trees, retry } = resources;
+  const savedSummary = readTreeSummaryMemory(location.state, civEn);
+  const [summaryOpen, setSummaryOpen] = useState(!!savedSummary);
+  const [summaryFocus, setSummaryFocus] = useState(savedSummary?.focus);
+  const summaryToggle = useRef<HTMLButtonElement>(null);
   const [compare, setCompare] = useSticky('civ.techtree.compare', '');
   const [jumpSlot, setJumpSlot] = useState<HTMLDivElement | null>(null);
   const civ = civByEn(civEn);
@@ -302,7 +310,10 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             label="换文明看科技树"
             value={civ.en}
             onChange={(en) => {
-              if (en && en !== civ.en) nav(`/civ/${en}#techtree`);
+              if (en && en !== civ.en) {
+                setSummaryFocus(undefined);
+                nav(`/civ/${en}#techtree`);
+              }
             }}
           />
           <span className="civ-tt-cmp">
@@ -331,6 +342,19 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
               </div>
             )}
           </div>
+          <button
+            type="button"
+            className="tsum-toggle"
+            ref={summaryToggle}
+            aria-expanded={summaryOpen}
+            aria-controls="tree-unavailable"
+            onClick={() => {
+              setSummaryFocus(undefined);
+              setSummaryOpen(!summaryOpen);
+            }}
+          >
+            不可用项汇总
+          </button>
         </div>
       </div>
       <div className="civ-tt-meta">
@@ -340,6 +364,21 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             <Icon name="move-horizontal" />共 <span className="num nw">{blocks!.length}</span> 列建筑，横向滚动查看
           </span>
         ) : null}
+      </div>
+      <div id="tree-unavailable" hidden={!summaryOpen}>
+        {summaryOpen && (
+          <UnavailableSummary
+            key={civ.en}
+            civ={civ}
+            resources={resources}
+            restoreFocus={summaryFocus}
+            onCollapse={() => {
+              setSummaryOpen(false);
+              setSummaryFocus(undefined);
+              summaryToggle.current?.focus();
+            }}
+          />
+        )}
       </div>
       {failed ? (
         <Placeholder text="科技树资料加载失败，页面其他内容仍可查看。" alert onRetry={retry} />

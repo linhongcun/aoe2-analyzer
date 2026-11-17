@@ -6,12 +6,7 @@ export const TW = 52,
   TH = 56,
   HD = 74,
   LW = 60;
-export const AGE_BANDS: [string, number, number][] = [
-  ['黑暗', 0, 1],
-  ['封建时代', 1, 2],
-  ['城堡时代', 3, 2],
-  ['帝王时代', 5, 2],
-];
+export { AGE_BANDS } from '../../../domain/treeAge';
 
 export interface LCell {
   k: 'u' | 't' | 'b';
