@@ -21,9 +21,27 @@ export function addArmyCost(to: Cost, from: Cost) {
 interface Closure {
   ids: Set<number>;
   error: string;
+  state: 'ready' | 'unavailable' | 'unknown';
 }
-const fail = (error: string): Closure => ({ ids: new Set(), error });
-const ok = (ids = new Set<number>()): Closure => ({ ids, error: '' });
+const fail = (error: string, state: Closure['state'] = 'unknown'): Closure => ({ ids: new Set(), error, state });
+const ok = (ids = new Set<number>()): Closure => ({ ids, error: '', state: 'ready' });
+
+/** Count refers to distinct conditions, while identical or larger paid sets add no alternative investment. */
+function requiredPaidSet(branches: Closure[], needed: number): Closure {
+  if (!needed) return ok();
+  if (branches.some((b) => b.state === 'unknown')) return fail('替代前置中存在未核实条件，无法确定必要研究');
+  const viable = branches.filter((b) => b.state === 'ready');
+  if (viable.length < needed) return fail('尚未满足所需前置条件', 'unavailable');
+  const combinations: Set<number>[] = [];
+  const choose = (start: number, left: number, ids: Set<number>) => {
+    if (!left) return void combinations.push(ids);
+    for (let i = start; i <= viable.length - left; i++) choose(i + 1, left - 1, new Set([...ids, ...viable[i]!.ids]));
+  };
+  choose(0, needed, new Set());
+  const unique = [...new Map(combinations.map((s) => [[...s].sort((a, b) => a - b).join(','), s])).values()];
+  const minimal = unique.filter((s) => !unique.some((t) => t.size < s.size && [...t].every((id) => s.has(id))));
+  return minimal.length === 1 ? ok(minimal[0]) : fail('存在替代前置，尚不能唯一确定');
+}
 
 /** Complete count-of prerequisites. Ambiguous alternative paid paths are not selected for the player. */
 export function researchResolver(data: ArmyResearchData, civ: string, age: number, completed: ReadonlySet<number> = new Set()) {
@@ -40,27 +58,29 @@ export function researchResolver(data: ArmyResearchData, civ: string, age: numbe
       revision = completed.size;
     }
     if (memo.has(id)) return memo.get(id)!;
-    if (!available(id)) return fail(`研究 t:${id} 在本文明不可用或身份未知`);
-    if (AGE_BY_TECH[id]) return AGE_BY_TECH[id]! <= age ? ok() : fail('尚未到达所需时代');
+    if (!data.nodes[id] || !context) return fail(`研究 t:${id} 身份或文明未知`);
+    if (!available(id)) return fail(`研究 t:${id} 在本文明不可用`, 'unavailable');
+    if (AGE_BY_TECH[id]) return AGE_BY_TECH[id]! <= age ? ok() : fail('尚未到达所需时代', 'unavailable');
     if (stack.has(id)) return fail(`研究 t:${id} 的前置有循环，未核实`);
     const node = data.nodes[id]!;
     // Construction is a context prerequisite only; no building/age expenditure is charged.
     if (data.buildingTechs.includes(id)) return ok();
     const next = new Set(stack).add(id);
     const branches = node.requires.map((pre) => resolve(pre, next));
-    const possible = branches.filter((b) => !b.error);
-    const satisfied = possible.filter((b) => [...b.ids].every((tid) => completed.has(tid))).length;
-    const needed = Math.max(0, node.count - satisfied);
-    const paid = possible.filter((b) => [...b.ids].some((tid) => !completed.has(tid)));
-    let result: Closure;
-    if (needed > paid.length) result = fail(branches.find((b) => b.error)?.error || `研究 t:${id} 的隐藏条件尚未核实`);
-    else if (needed && paid.length > needed) result = fail(`研究 t:${id} 存在替代前置，尚不能唯一确定`);
-    else {
-      const ids = new Set<number>();
-      if (needed) for (const branch of paid) for (const pre of branch.ids) ids.add(pre);
-      if (node.location > 0) ids.add(id);
-      result = ok(ids);
-    }
+    const satisfied = branches.filter((b) => b.state === 'ready' && [...b.ids].every((tid) => completed.has(tid))).length;
+    // Hidden event placeholders with a nonzero price/time have no proved automatic trigger.
+    let result =
+      node.location <= 0 && (node.time > 0 || node.cost.some(([, v, enabled]) => enabled && v! > 0))
+        ? fail(`研究 t:${id} 的外部触发条件尚未核实`)
+        : node.count > node.requires.length
+          ? fail(`研究 t:${id} 的隐藏条件尚未核实`)
+          : requiredPaidSet(
+              branches
+                .filter((b) => b.state !== 'ready' || [...b.ids].some((tid) => !completed.has(tid)))
+                .map((b) => ({ ...b, ids: new Set([...b.ids].filter((tid) => !completed.has(tid))) })),
+              Math.max(0, node.count - satisfied),
+            );
+    if (!result.error && node.location > 0) result = ok(new Set([...result.ids, id]));
     memo.set(id, result);
     return result;
   };
@@ -294,12 +314,13 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
           const possible = paths.filter((p) => !p.error);
           // An already satisfied enabling path makes extra paid alternatives unnecessary.
           const necessary = possible.find((p) => possible.every((other) => [...p.ids].every((id) => other.ids.has(id))));
-          if (!necessary) badRows.set(index, paths.find((p) => p.error)?.error ?? '单位启用条件存在未核实的替代路径');
+          if (!necessary || (necessary.ids.size > 0 && paths.some((p) => p.state === 'unknown')))
+            badRows.set(index, paths.find((p) => p.error)?.error ?? '单位启用条件存在未核实的替代路径');
           else for (const id of necessary.ids) request(researchKey(id), false, index);
         }
         if (u.from_) {
           const candidates = Object.entries(data.nodes).filter(
-            ([id, n]) => resolver.available(Number(id)) && n.upgrades.some(([, b]) => b === u.id) && !resolver.resolve(Number(id)).error,
+            ([id, n]) => resolver.available(Number(id)) && n.upgrades.some(([, b]) => b === u.id) && resolver.resolve(Number(id)).state !== 'unavailable',
           );
           if (candidates.length !== 1) {
             badRows.set(index, '单位升级研究身份未能唯一核实');

@@ -9,6 +9,30 @@ import { evaluateTrainTotal } from '../../src/domain/trainTotal';
 const ctx = { core: CORE, trees: await loadTrees() };
 const emptyArmyCost = (civ = 'Sicilians') => makeArmyCost(civ);
 describe('army research pinned data', () => {
+  it('merges equal and dominated paid prerequisite sets without discarding unknown alternatives', () => {
+    const longsword = evaluateArmyCost(ctx, { ...makeArmyCost('Armenians', '3'), rows: [{ unit: 77, qty: '1' }] });
+    expect(longsword.partial).toBe(false);
+    const halb = evaluateArmyCost(ctx, { ...makeArmyCost('Armenians'), rows: [{ unit: 359, qty: '1' }] });
+    expect(halb.partial).toBe(false);
+    expect(
+      halb.ledger
+        .filter((e) => e.status === 'planned')
+        .map((e) => e.id)
+        .sort(),
+    ).toEqual([197, 429]);
+    const data = structuredClone(ARMY_RESEARCH);
+    data.nodes[68]!.requires = [67, 99999];
+    data.nodes[68]!.count = 1;
+    const unknown = evaluateArmyCost(ctx, { ...emptyArmyCost(), targets: ['t:68'] }, data);
+    expect(unknown.partial).toBe(true);
+    expect(unknown.hasValue).toBe(false);
+    expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), done: ['t:67'], targets: ['t:68'] }, data).partial).toBe(false);
+  });
+  it('does not treat the nonfree Paphos shadow event as an automatic condition', () => {
+    expect(researchResolver(ARMY_RESEARCH, 'Georgians', 4).resolve(1138).state).toBe('unknown');
+    const r = evaluateArmyCost(ctx, { ...makeArmyCost('Georgians'), rows: [{ unit: 567, qty: '1' }] });
+    expect(r.partial).toBe(true);
+  });
   it('maps every published civilization to its fixed-data identity, including the default empty plan', () => {
     for (const civ of civs) {
       expect(ARMY_RESEARCH.civs[civ.en], civ.en).toBeDefined();
