@@ -250,6 +250,13 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
               <p>
                 输入已保留，旧版金额不会沿用。确认后按当前 DE Update <span className="num">{ARMY_COST_DATA}</span> 重新核算。
               </p>
+              <label>
+                原始参数
+                <textarea readOnly value={location.search} />
+              </label>
+              <button className="btn" type="button" onClick={() => void share.copy(location.search)}>
+                复制原始参数
+              </button>
               <button className="btn" type="button" onClick={() => update(config, true)}>
                 按当前数据重新核算
               </button>
