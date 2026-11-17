@@ -7,6 +7,7 @@ import type { Cost, Unit } from './types';
 import { applicableTrainingTechs } from './duelTrainingCost';
 import { unitCost } from './unitCost';
 import { priceAge } from './costDiscount';
+import { DAT } from './datEffects';
 
 import type { ArmyCostConfig } from './armyCostConfig';
 export { emptyArmyCost } from './armyCostConfig';
@@ -209,13 +210,24 @@ function unitUnlocks(ctx: ProductionContext, civ: string, age: number, unit: Uni
   return PRODUCTION_UNLOCK_TECH_IDS.filter((id) => productionBuildings(ctx, productionShell(civ, age, [id]), unit).length);
 }
 
+/** Unit-scoped combat mechanics, including text-only projectile effects; no production speed. */
+function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ: string, age: number) {
+  return simTechs(sim, u, civ).filter(
+    ({ t, ef }) =>
+      t.age <= age &&
+      (ef?.some((e) => e.s !== 'bt') ||
+        t.en === 'Ballistics' ||
+        DAT.techs[t.en]?.eco.some((e) => e.t?.includes(u.id) && e.a !== undefined && [24, 102, 107, 109].includes(e.a))),
+  );
+}
+
 export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConfig): number[] {
   const sim = makeSimContext(ctx.core.techs, ctx.trees);
   const ids = new Set<number>();
   for (const row of config.rows) {
     const u = ctx.core.unitById[row.unit];
     if (!u || !u.civs.includes(config.civ)) continue;
-    for (const { t, ef } of simTechs(sim, u, config.civ)) if (ef?.length && t.age <= Number(config.age)) ids.add(t.id);
+    for (const { t } of armyCombatResearch(sim, u, config.civ, Number(config.age))) ids.add(t.id);
     for (const { tech } of applicableTrainingTechs(sim, u, config.civ, Number(config.age))) ids.add(tech.id);
     for (const id of unitUnlocks(ctx, config.civ, Number(config.age), u)) ids.add(id);
   }
@@ -390,9 +402,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     const unit = line.unit;
     const related = unit
       ? new Set([
-          ...simTechs(sim, unit, config.civ)
-            .filter((x) => x.ef?.length)
-            .map((x) => x.t.id),
+          ...armyCombatResearch(sim, unit, config.civ, age).map((x) => x.t.id),
           ...applicableTrainingTechs(sim, unit, config.civ, age).map((x) => x.tech.id),
         ])
       : new Set<number>();
@@ -403,9 +413,11 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     );
     if (unknownSelected) badRows.set(index, '所选研究或其效果未核实，不能确认目标状态单价');
     if (unit && line.status === 'ok' && !badRows.has(index)) {
-      const techs = [...all]
-        .filter((id) => ledger.get(researchKey(id))?.problem !== 'identity')
-        .flatMap((id) => (ctx.core.techById[id] ? [ctx.core.techById[id]!] : []));
+      // Unlocks/combat actions may contain unrelated resource markers. Only unit-targeted
+      // training-cost research belongs in unitCost; unknown cost effects remain blocked there.
+      const techs = applicableTrainingTechs(sim, unit, config.civ, age)
+        .filter(({ tech }) => all.has(tech.id) && ledger.get(researchKey(tech.id))?.problem !== 'identity')
+        .map(({ tech }) => tech);
       const quote = unitCost(unit, config.civ, priceAge(unit.age, age), techs);
       if (quote.undecoded.length || quote.discount.unsupported.length) badRows.set(index, '目标状态训练费用修正未核实');
       else {

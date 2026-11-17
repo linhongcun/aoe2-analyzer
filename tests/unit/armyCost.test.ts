@@ -3,12 +3,26 @@ import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';
 import { civs } from '../../src/data';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
-import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver } from '../../src/domain/armyCost';
+import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver, armyResearchChoices } from '../../src/domain/armyCost';
 import { evaluateTrainTotal } from '../../src/domain/trainTotal';
 
 const ctx = { core: CORE, trees: await loadTrees() };
 const emptyArmyCost = (civ = 'Sicilians') => makeArmyCost(civ);
 describe('army research pinned data', () => {
+  it('quotes Flemish militia training independently of its unlock resource marker', () => {
+    const r = evaluateArmyCost(ctx, { ...makeArmyCost('Burgundians'), rows: [{ unit: 1699, qty: '2' }] });
+    expect(r.training.lines[0]?.status).toBe('ok');
+    expect(r.trainingTotal).toMatchObject({ Food: 70, Gold: 50 });
+    expect(r.ledger.find((e) => e.id === 755)?.status).toBe('planned');
+  });
+  it('offers scoped text combat research but excludes pure production speed', () => {
+    const config = { ...makeArmyCost('Britons'), rows: [{ unit: 4, qty: '1' }] };
+    expect(armyResearchChoices(ctx, config)).toContain(93);
+    expect(armyResearchChoices(ctx, config)).not.toContain(315);
+    const r = evaluateArmyCost(ctx, { ...config, targets: ['t:93'] });
+    expect(r.ledger.find((e) => e.id === 93)?.beneficiaries).toEqual([0]);
+    expect(r.researchTotal).toMatchObject({ Wood: 300, Gold: 175 });
+  });
   it('merges equal and dominated paid prerequisite sets without discarding unknown alternatives', () => {
     const longsword = evaluateArmyCost(ctx, { ...makeArmyCost('Armenians', '3'), rows: [{ unit: 77, qty: '1' }] });
     expect(longsword.partial).toBe(false);
