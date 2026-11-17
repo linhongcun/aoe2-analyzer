@@ -42,7 +42,8 @@ def build(d):
     for i, t in enumerate(d['Techs']):
         commands = cmds(t['EffectID'])
         combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 63, 102, 107, 108, 109}
-        guided = {c['A'] for c in commands if c['Type'] in (0, 4, 5) and c['C'] == 19 and c['A'] >= 0}
+        # Projectile guidance and poison combat fields (Curare): follow actual projectile users.
+        guided = {c['A'] for c in commands if c['Type'] in (0, 4, 5) and c['C'] in (19, 145, 146, 147) and c['A'] >= 0}
         def affects(uid):
             fs = combat_forms[uid]
             return any(guided.intersection(dat_units[f]['Projectiles']) for f in fs) or any(

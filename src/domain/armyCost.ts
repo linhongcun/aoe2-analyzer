@@ -252,6 +252,8 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
         numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
         data.nodes[t.id]?.combatUnits.includes(u.id) ||
         ([DEVOTION_ID, FAITH_ID].includes(t.id) && resistDelta(DAT.techs[t.en]) !== null) ||
+        (DAT.techs[t.en] &&
+          resistDelta({ ...DAT.techs[t.en]!, rules: [], eco: DAT.techs[t.en]!.eco.filter((e) => e.res === 178 || e.res === 179) }) !== null) ||
         DAT.techs[t.en]?.eco.some(
           (e) =>
             // Global conversion resistance/death, and monk conversion permissions/group faith.
@@ -261,7 +263,7 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
     .map((t) => ({ t, ef: numeric.get(t.id) ?? null }));
 }
 
-export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConfig): number[] {
+export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConfig, includeUnverified = true): number[] {
   const sim = makeSimContext(ctx.core.techs, ctx.trees);
   const ids = new Set<number>();
   for (const row of config.rows) {
@@ -273,6 +275,14 @@ export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConf
     // A form upgrade may also be an explicit target, in addition to automatic inference.
     for (const [id, node] of Object.entries(ARMY_RESEARCH.nodes)) if (node.upgrades.some(([, target]) => target === u.id)) ids.add(Number(id));
   }
+  // Unresolved unique abilities stay visible as unverified instead of silently disappearing.
+  if (includeUnverified)
+    for (const t of ctx.core.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(config.civ) && t.age <= Number(config.age))) {
+      const effects = DAT.techs[t.en];
+      const pureProduction =
+        effects && !effects.rules.length && effects.eco.length > 0 && effects.eco.every((e) => e.a !== undefined && [13, 14, 101].includes(e.a));
+      if (!pureProduction) ids.add(t.id);
+    }
   return [...ids];
 }
 
@@ -290,12 +300,16 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
   // Removing the last row retains a legitimate research-only intention.
   const targetScope = config.targets.length
     ? new Set(
-        armyResearchChoices(ctx, {
-          ...config,
-          rows: config.rows.length
-            ? config.rows
-            : ctx.core.units.filter((u) => u.civs.includes(config.civ) && u.age <= age).map((u) => ({ unit: u.id, qty: '1' })),
-        }),
+        armyResearchChoices(
+          ctx,
+          {
+            ...config,
+            rows: config.rows.length
+              ? config.rows
+              : ctx.core.units.filter((u) => u.civs.includes(config.civ) && u.age <= age).map((u) => ({ unit: u.id, qty: '1' })),
+          },
+          false,
+        ),
       )
     : new Set<number>();
   const ensure = (id: number): ResearchEntry => {

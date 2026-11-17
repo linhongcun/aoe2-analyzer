@@ -59,10 +59,12 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
   );
   const choices = useMemo(() => {
     const keys = new Set<string>(config ? [...config.done, ...config.targets] : []);
+    const scoped = new Set(context && config ? armyResearchChoices(context, config, false).map(researchKey) : []);
     if (context && config) for (const id of armyResearchChoices(context, config)) keys.add(researchKey(id));
     for (const e of result?.ledger ?? []) keys.add(e.key);
     return [...keys].map((key) => ({
       key,
+      scoped: scoped.has(key),
       entry: result?.ledger.find((e) => e.key === key),
       name: result?.ledger.find((e) => e.key === key)?.name ?? ARMY_RESEARCH.nodes[key.slice(2)]?.name ?? `未识别研究 ${key}`,
     }));
@@ -119,7 +121,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                 <span>
                   {c.name}
                   <small>
-                    {c.entry ? STATES[c.entry.status] : '可选'}
+                    {c.entry ? STATES[c.entry.status] : field === 'targets' && !c.scoped ? '作用域未核实，本次目标暂不计入' : '可选'}
                     {derived ? ' · 由当前目标或形态推导' : ''}
                   </small>
                 </span>

@@ -76,6 +76,20 @@ describe('army research pinned data', () => {
     expect(evaluateArmyCost(ctx, config).ledger.find((e) => e.id === 461)?.beneficiaries).toEqual([0]);
     expect(armyResearchChoices(ctx, { ...makeArmyCost('Portuguese'), rows: [{ unit: 36, qty: '1' }] })).toContain(573);
   });
+  it('scopes poison projectiles and the resistance portion of First Crusade, while exposing unresolved abilities', () => {
+    for (const [civ, unit, id] of [
+      ['Tupi', 4, 1393],
+      ['Sicilians', 1658, 756],
+    ] as const) {
+      const config = { ...makeArmyCost(civ), rows: [{ unit, qty: '1' }], targets: [researchKey(id)] };
+      expect(armyResearchChoices(ctx, config, false)).toContain(id);
+      expect(evaluateArmyCost(ctx, config).ledger.find((e) => e.id === id)?.beneficiaries).toEqual([0]);
+    }
+    const unresolved = { ...makeArmyCost('Saracens'), rows: [{ unit: 125, qty: '1' }], targets: ['t:28'] };
+    expect(armyResearchChoices(ctx, unresolved)).toContain(28);
+    expect(armyResearchChoices(ctx, unresolved, false)).not.toContain(28);
+    expect(evaluateArmyCost(ctx, unresolved).ledger.find((e) => e.id === 28)).toMatchObject({ status: 'invalid', cost: null });
+  });
   it.each([315, 202])('retains out-of-scope target %i without charging it or invalidating independent training', (id) => {
     const base = { ...makeArmyCost('Britons'), rows: [{ unit: 4, qty: '1' }] };
     const result = evaluateArmyCost(ctx, { ...base, targets: [researchKey(id)] });
