@@ -27,6 +27,7 @@ export const SCHEMA_CATALOG = {
       ['effects', 'effects'],
       ['siege', 'siege'],
       ['eco', 'eco'],
+      ['army_research', 'army-research'],
       ['construction', 'construction'],
       ['garrison', 'garrison'],
       ['garrison_general', 'garrison-general'],

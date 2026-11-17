@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-army-research.json",
+  "title": "Pinned army research graph",
+  "type": "object",
+  "required": ["meta", "nodes", "civs", "buildingTechs", "buildingTriggers"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["generatedBy", "patch", "commit", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "generatedBy": { "const": "scripts/army_research_build.py" },
+        "patch": { "type": "string" },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "buildingTechs": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+    "buildingTriggers": { "type": "object", "propertyNames": { "pattern": "^[0-9]+$" }, "additionalProperties": { "type": "integer", "minimum": 0 } },
+    "civs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "disabled", "mods"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "disabled": { "type": "array", "items": { "type": "integer" } },
+          "mods": { "$ref": "#/$defs/commands" }
+        }
+      }
+    },
+    "nodes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[0-9]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "civ", "requires", "count", "location", "time", "cost", "upgrades", "mods", "enables", "combatUnits"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": ["string", "null"] },
+          "civ": { "type": "integer" },
+          "requires": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+          "count": { "type": "integer", "minimum": 0 },
+          "location": { "type": "integer" },
+          "time": { "type": "number" },
+          "cost": { "type": "array", "items": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } } },
+          "upgrades": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "integer" } } },
+          "enables": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+          "combatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+          "mods": { "$ref": "#/$defs/commands" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["Type", "A", "B", "C", "D"],
+        "additionalProperties": false,
+        "properties": {
+          "Type": { "type": "integer" },
+          "A": { "type": "integer" },
+          "B": { "type": "integer" },
+          "C": { "type": "integer" },
+          "D": { "type": "number" }
+        }
+      }
+    }
+  }
+}

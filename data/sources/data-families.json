@@ -2,6 +2,14 @@
   "_doc": "issue 820 数据族索引：每个 .dat 派生文件的生成器、pin、复现命令、测试与审计状态。pin=\"dat\" 指向 data/sources/data_sources.json 的 sources.dat；pin=\"manual\" 表示手工输入。只读元数据，不做运行时加载。",
   "families": [
     {
+      "file": "data/game/army_research.json",
+      "generator": "scripts/army_research_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/army_research_build.py --check"],
+      "tests": ["tests/unit/armyCost.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
       "file": "data/game/siege.json",
       "generator": "scripts/siege_build.py",
       "pin": "dat",
