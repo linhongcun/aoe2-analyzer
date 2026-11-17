@@ -108,6 +108,18 @@ it('recovers only invalid keys, and distinguishes no mapped history from empty f
   expect(text(view.root)).toContain('已定位、未检查');
 });
 
+it('keeps the tower summary precise while retaining the related outpost mechanism and full source', async () => {
+  await dataReady();
+  await mount('/patches?obj=building:79&histVersion=de-81058');
+  const card = view.root.findAll((n) => n.type === 'article' && n.props['data-event-id'] === 'ev-legacy-81058-b056')[0]!;
+  const summary = card.findByType('h4');
+  expect(text(summary)).toContain('瞭望箭塔不再享有埃塞俄比亚的组队视野加成');
+  expect(text(summary)).not.toMatch(/哨站|石料|石头/u);
+  expect(text(view.root)).toContain('关联机制，不作为本建筑基础属性');
+  expect(text(card)).toContain('免除哨站石料费用');
+  expect(text(card)).toContain('哨站的视野+3且不消耗石头');
+});
+
 it('reloading a failed source snapshot retains all old evidence instead of presenting a false empty state', async () => {
   const data = historyFixture();
   const row = data.buildings!.rows.find((r) => r.entityId === 'building/109')!;

@@ -146,3 +146,20 @@ test('#1084 retains migrated direct and related archive semantics without claimi
   await expect(events(page)).toHaveCount(2);
   await expect(reader(page)).toContainText('关联机制，不作为本建筑基础属性');
 });
+
+test('#1084 rejects invalid nested returns at the civilization reader and keeps the exact tower summary separate from related evidence', async ({ page }) => {
+  for (const raw of ['/patches?histReturn=%2Fpatches', '/patches?histQuery=%00', '/patches?histQuery=a&histQuery=b', '/patches?histVersion=bad']) {
+    const query = new URLSearchParams({ tab: 'history', histVersion: 'de-34055', histReturn: raw });
+    await page.goto('/#/civ/Cumans?' + query.toString());
+    await expect(page.getByRole('alert')).toContainText('返回地址');
+    await expect(page.getByRole('link', { name: '返回上次历史结果' })).toHaveCount(0);
+  }
+  await page.goto('/#/building/79?tab=history&histVersion=de-81058');
+  const card = reader(page).locator('[data-event-id="ev-legacy-81058-b056"]');
+  await expect(card.getByRole('heading', { level: 4 })).toContainText('瞭望箭塔不再享有埃塞俄比亚的组队视野加成');
+  await expect(card.getByRole('heading', { level: 4 })).not.toContainText('哨站');
+  await expect(reader(page)).toContainText('关联机制，不作为本建筑基础属性');
+  await card.locator('summary').click();
+  await expect(card).toContainText('免除哨站石料费用');
+  await expect(card).toContainText('哨站的视野+3且不消耗石头');
+});

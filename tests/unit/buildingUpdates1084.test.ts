@@ -9,7 +9,7 @@ import {
   recoverBuildingQuery,
   searchUpdateBuildings,
 } from '../../src/domain/buildingUpdates';
-import { assertCivUpdateReferences, validHistoryReturn, type UpdateEffect } from '../../src/domain/civUpdates';
+import { assertCivUpdateReferences, clearHistoryQuery, detailQueryError, validHistoryReturn, type UpdateEffect } from '../../src/domain/civUpdates';
 import { partitionUnitScopes } from '../../src/domain/unitUpdates';
 import { historyFixture } from '../helpers/civUpdatesFixture';
 
@@ -110,6 +110,23 @@ describe('bounded building history #1084', () => {
     expect(unknown.unknown).toHaveLength(1);
   });
 
+  it('separates the precise tower effect from the preserved related outpost mechanism and source original', () => {
+    const view = projectBuildingEvents(data, 'building/79').find((r) => r.event.id === 'ev-legacy-81058-b056')!;
+    const direct = new Set(view.relations.filter((r) => r.relation === 'direct').flatMap((r) => r.effectIds));
+    const own = view.event.claims.flatMap((c) => c.effects).filter((f) => direct.has(f.id));
+    expect(own).toHaveLength(1);
+    expect(own[0]).toMatchObject({ text: '瞭望箭塔不再享有埃塞俄比亚的组队视野加成', entityRefs: [{ entityId: 'building/79' }] });
+    expect(JSON.stringify(own)).not.toMatch(/哨站|石头|石料/u);
+    const related = new Set(view.relations.filter((r) => r.relation === 'related').flatMap((r) => r.effectIds));
+    expect(view.event.claims.flatMap((c) => c.effects).filter((f) => related.has(f.id))).toMatchObject([
+      { id: 'ef-legacy-81058-64', text: '团队加成由箭塔和哨站视野 +3 改为哨站视野 +3 且免除哨站石料费用。' },
+    ]);
+    const entry = data.sourceEntries.find((e) => e.id === 'se-building-79-snapshot-d464b9bb2412508a791a-26')!;
+    expect(entry.originalText).toContain('哨站的视野+3且不消耗石头');
+    expect(view.event.claims.some((c) => c.sourceEntryIds.includes(entry.id))).toBe(true);
+    expect(data.legacyMap.find((m) => m.key === '81058:81058-64')!.originalRecord.summaryZh).toContain('免除哨站石料费用');
+  });
+
   it('retains both conflicting claims rather than filtering away an inconvenient scope', () => {
     const fixture = historyFixture();
     const event = fixture.events.find((e) => e.id === effects('building/79', 'de-61321')[0]!.id.replace('ef-', 'ev-').replace(/-1$/, ''))!;
@@ -169,6 +186,39 @@ describe('bounded building history #1084', () => {
     expect(validHistoryReturn(overview, data)).toBe(overview);
     expect(validHistoryReturn('/patches?%6fbj=building%3A79&histVersion=bad', data)).toBeNull();
     expect(buildingHistoryPath(data, 'building/109', params, 'overview')).not.toContain('histReturn');
+  });
+
+  it.each([
+    '/patches?histReturn=%2Fpatches',
+    '/patches?histQuery=%00',
+    '/patches?histQuery=a&histQuery=b',
+    '/patches?histVersion=bad',
+    '/patches?histCoverage=bad',
+    '/patches?histQuery=%7F',
+    '/patches?%68istQuery=a&histQuery=b',
+    '/patches?histQuery=%5Cevil',
+    '/patches?obj=unit:1231&histVersion=bad',
+    '/patches?obj=unit:1231&histCiv=NoSuch',
+    '/patches?obj=unit:999999',
+    '/unit/1231?tab=other',
+    '/patches?unlisted=value',
+  ])('rejects invalid returns at the civilization target reader and recovery: %s', (raw) => {
+    const query = new URLSearchParams({ tab: 'history', histVersion: 'de-34055', histReturn: raw });
+    expect(validHistoryReturn(raw, data)).toBeNull();
+    expect(detailQueryError(query, data, 'Cumans')).toContain('返回地址');
+    expect(clearHistoryQuery(query, 'detail', data).has('histReturn')).toBe(false);
+  });
+
+  it.each([
+    '/patches?histQuery=%E5%BA%93%E6%9B%BC&histCoverage=partial&histSourceState=processed&histListOrder=name',
+    '/patches?obj=unit%3A1231&histVersion=de-56005&histCiv=Cumans&histCondition=team',
+    '/unit/1231?tab=history&histOrder=oldest',
+    '/patches?unitSourceState=not-checked',
+  ])('preserves valid civilization and unit history return protocols: %s', (raw) => {
+    const query = new URLSearchParams({ tab: 'history', histVersion: 'de-34055', histReturn: raw });
+    expect(validHistoryReturn(raw, data)).toBe(raw);
+    expect(detailQueryError(query, data, 'Cumans')).toBeUndefined();
+    expect(clearHistoryQuery(query, 'detail', data).get('histReturn')).toBe(raw);
   });
 
   it.each([

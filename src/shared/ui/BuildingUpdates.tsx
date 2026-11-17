@@ -253,16 +253,21 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
     }
   };
   const titleRows = (rows: typeof shown) =>
-    rows.map((v) => ({
-      ...v,
-      event: {
-        ...v.event,
-        summary:
-          entity.nameZh +
-          ' · ' +
-          [...new Set(v.event.claims.flatMap((c) => c.effects.map((f) => (f.type === 'numeric' || f.type === 'bonus' ? f.attribute : f.text))))].join('；'),
-      },
-    }));
+    rows.map((v) => {
+      const directIds = new Set(v.relations.filter((r) => r.relation === 'direct').flatMap((r) => r.effectIds));
+      const effects = v.event.claims.flatMap((c) => c.effects);
+      const direct = effects.filter((f) => directIds.has(f.id));
+      return {
+        ...v,
+        event: {
+          ...v.event,
+          summary:
+            entity.nameZh +
+            ' · ' +
+            [...new Set((direct.length ? direct : effects).map((f) => (f.type === 'numeric' || f.type === 'bonus' ? f.attribute : f.text)))].join('；'),
+        },
+      };
+    });
   const context = (view: UnitEventView) => {
     const scopes = view.event.claims.flatMap((c) => c.effects.map((f) => f.scope ?? view.event.scope));
     const ids = new Set([...view.original.civRelations.map((r) => r.civId), ...scopes.flatMap((s) => [...s.providerCivIds, ...s.affectedCivIds])]);

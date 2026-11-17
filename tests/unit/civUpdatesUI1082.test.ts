@@ -58,7 +58,7 @@ it('F1 keeps the history tab and full return URL through real detail effects, re
     .mockResolvedValueOnce({ ok: false })
     .mockResolvedValue({ ok: true, json: async () => historyFixture() });
   vi.stubGlobal('fetch', fetch);
-  const returnPath = '/patches?histQuery=Cumans&histCoverage=partial&histSourceState=processed&histListOrder=name&keep=overview';
+  const returnPath = '/patches?histQuery=Cumans&histCoverage=partial&histSourceState=processed&histListOrder=name';
   const query = new URLSearchParams({ tab: 'history', histReturn: returnPath, keep: 'detail' });
   const expectContext = () => {
     const current = new URLSearchParams(location.search);

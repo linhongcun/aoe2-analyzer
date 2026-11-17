@@ -1,4 +1,4 @@
-import type { UnitUpdateData } from './unitUpdates';
+import { unitCoverageQueryError, unitHistoryReturn, unitQueryError, type UnitUpdateData } from './unitUpdates';
 import { buildingHistoryReturn, type BuildingUpdateData } from './buildingUpdates';
 /** Historical claims are independent of today's game values and technology tree. */
 export type Verification = 'verified' | 'unverified' | 'conflict';
@@ -213,18 +213,27 @@ export function detailQueryError(query: URLSearchParams, data: CivUpdatesData, c
   if (query.has('histReturn') && !validHistoryReturn(query.get('histReturn'), data)) return '返回地址无法识别，请清除无效返回地址';
   return undefined;
 }
-/** Only a complete router-relative /patches URL; never a redirect to an external host. */
+/** Validate every decoded parameter before dispatching to a history reader. */
 export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): string | null {
-  if (data && raw) {
-    const params = new URLSearchParams(raw.split('?')[1] ?? '');
-    if (
-      raw.startsWith('/building/') ||
-      [...params].some(([key, value]) => ['histView', 'histEntity', 'buildingSourceState'].includes(key) || (key === 'obj' && value.startsWith('building:')))
-    )
-      return buildingHistoryReturn(data, raw);
+  const unsafe = (value: string) => /[\\#]/u.test(value) || [...value].some((c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127);
+  if (!raw || unsafe(raw)) return null;
+  const [path, ...tail] = raw.split('?');
+  if (tail.length > 1) return null;
+  const params = new URLSearchParams(tail[0] ?? '');
+  if ([...params].some(([key, value]) => key === 'histReturn' || params.getAll(key).length !== 1 || unsafe(key) || unsafe(value))) return null;
+  if (
+    path?.startsWith('/building/') ||
+    path?.startsWith('/civ/') ||
+    [...params].some(([key, value]) => ['histView', 'histEntity', 'buildingSourceState'].includes(key) || (key === 'obj' && value.startsWith('building:')))
+  )
+    return data ? buildingHistoryReturn(data, raw) : null;
+  if (path?.startsWith('/unit/') || params.get('obj')?.startsWith('unit:') || params.has('unitSourceState')) {
+    if (!data || unitQueryError(data, params) || unitCoverageQueryError(params)) return null;
+    const id = path?.startsWith('/unit/') ? path.slice(1) : params.has('obj') ? 'unit/' + params.get('obj')!.slice(5) : null;
+    if (id && !data.units?.rows.some((row) => row.entityId === id)) return null;
+    return unitHistoryReturn(raw);
   }
-  if (!raw || !/^\/patches(?:\?[^#\r\n\\]*)?$/u.test(raw) || [...raw].some((character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127))
-    return null;
+  if (path !== '/patches' || [...params.keys()].some((key) => !(OVERVIEW_KEYS as readonly string[]).includes(key)) || overviewQueryError(params)) return null;
   return raw;
 }
 export function clearHistoryQuery(query: URLSearchParams, view: 'overview' | 'detail', data?: CivUpdatesData) {
