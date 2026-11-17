@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { civs, civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
@@ -46,8 +46,8 @@ export default function CivList() {
   const [detailEn, setDetailEn] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const panelRef = useRef(panel);
-  const detailEnRef = useRef(detailEn);
+  const filterCloseRef = useRef<HTMLButtonElement>(null);
+  const detailCloseRef = useRef<HTMLButtonElement>(null);
   const active = Boolean(filters.q.trim() || filters.ty || filters.dlc || conditions.length);
   const resolved = context ? resolveRequirements(conditions, context) : [];
   const selected = new Set(conditions.map((item) => item.token));
@@ -75,30 +75,25 @@ export default function CivList() {
     setOptionQuery('');
     commit({ q: '', ty: '', dlc: '' }, []);
   };
-  const closePanel = () => {
+  const closePanel = useCallback(() => {
     const restore = panel === 'detail' ? detailEn : null;
     setPanel(null);
     requestAnimationFrame(() => {
-      if (restore) document.querySelector<HTMLButtonElement>(`#grid .card[data-civ="${CSS.escape(restore)}"]`)?.focus();
-      else toggleRef.current?.focus();
+      const target = restore ? document.querySelector<HTMLButtonElement>(`#grid .card[data-civ="${CSS.escape(restore)}"]`) : toggleRef.current;
+      (target ?? searchRef.current)?.focus({ preventScroll: true });
     });
-  };
+  }, [panel, detailEn]);
 
   useEffect(() => {
-    panelRef.current = panel;
-    detailEnRef.current = detailEn;
+    const target = panel === 'detail' ? detailCloseRef.current : panel === 'filter' ? filterCloseRef.current : null;
+    target?.focus({ preventScroll: true });
   }, [panel, detailEn]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && panelRef.current) {
+      if (event.key === 'Escape' && panel) {
         event.preventDefault();
-        const restore = panelRef.current === 'detail' ? detailEnRef.current : null;
-        setPanel(null);
-        requestAnimationFrame(() => {
-          if (restore) document.querySelector<HTMLButtonElement>(`#grid .card[data-civ="${CSS.escape(restore)}"]`)?.focus();
-          else toggleRef.current?.focus();
-        });
+        closePanel();
         return;
       }
       if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
@@ -111,7 +106,7 @@ export default function CivList() {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, []);
+  }, [panel, closePanel]);
 
   return (
     <section id="list" className="pane">
@@ -151,7 +146,7 @@ export default function CivList() {
             className="civ-filter-toggle"
             aria-expanded={panel === 'filter'}
             aria-controls="filter-panel"
-            onClick={() => setPanel((current) => (current === 'filter' ? null : 'filter'))}
+            onClick={() => (panel === 'filter' ? closePanel() : setPanel('filter'))}
           >
             <Icon name="filter" />
             按条件筛选
@@ -267,12 +262,12 @@ export default function CivList() {
               <p>移除上方某个条件，或重置后重新查找。</p>
             </div>
           )}
-          <p className="civ-hint">点选文明可就地查看加成，或进入完整资料；英文名辅助识别，不显示无依据的评分。</p>
+          <p className="civ-hint">点选文明可就地查看类型、独特单位与加成，或进入完整资料。</p>
         </section>
         <aside id="filter-panel" className="civ-panel" hidden={panel !== 'filter'} aria-label="筛选文明">
           <div className="civ-panel-head">
             <h2>筛选文明</h2>
-            <button type="button" onClick={closePanel}>
+            <button ref={filterCloseRef} type="button" onClick={closePanel}>
               收起
             </button>
           </div>
@@ -348,7 +343,7 @@ export default function CivList() {
             <>
               <div className="civ-panel-head">
                 <h2>文明速览</h2>
-                <button type="button" onClick={closePanel}>
+                <button ref={detailCloseRef} type="button" onClick={closePanel}>
                   关闭
                 </button>
               </div>

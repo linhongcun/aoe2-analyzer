@@ -578,34 +578,68 @@
 @media (max-width: 600px) {
   #list #grid {
     grid-template-columns: 1fr;
-    gap: var(--space-3);
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
   }
 
   #list #grid > .card {
-    padding: 14px var(--space-4);
+    justify-content: center;
+    min-height: 64px;
+    padding: var(--space-2) var(--space-3);
+    border: 0;
+    border-radius: 0;
+    transition: none;
   }
 
-  #list .civ-card-head {
-    margin-bottom: var(--space-2);
+  #list #grid > .card:not(:last-child) {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  #list #grid > .card:hover {
+    background: var(--color-surface-2);
+    box-shadow: none;
+    transform: none;
+  }
+
+  #list #grid > .card[aria-pressed='true'] {
+    background: var(--color-accent-soft);
+    box-shadow: inset 3px 0 0 var(--color-accent);
+  }
+
+  #list #grid > .card:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -3px;
+  }
+
+  #list #grid .civ-card-head {
+    width: 100%;
+    min-width: 0;
+    gap: var(--space-3);
+    margin-bottom: 0;
   }
 
   #list #grid .card .ico {
-    width: 44px;
-    height: 48px;
+    width: 40px;
+    height: 44px;
   }
 
-  #list .civ-names {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 var(--space-2);
+  #list #grid .civ-names {
+    overflow-wrap: anywhere;
   }
 
-  #list .civ-type {
-    margin-bottom: 10px;
+  #list #grid .civ-zh {
+    font-size: 18px;
   }
 
-  #list .civ-unique {
-    padding-top: 10px;
+  #list #grid .civ-en {
+    font-size: 13px;
+  }
+
+  #list #grid .civ-type,
+  #list #grid .civ-unique {
+    display: none;
   }
 }
