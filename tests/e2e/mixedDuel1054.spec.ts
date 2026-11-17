@@ -203,6 +203,62 @@ test('#1054 未计算及合法修改均可分享，复制失败提供完整可�
   }
 });
 
+test('#1054 分享反馈使用status，同标签坏模式和JSON不保留旧确认', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await enter(page);
+  const valid = page.url();
+  const notice = page.getByText('混编配置链接已复制；打开链接后请重新计算。', { exact: true });
+  for (const field of ['m', 'ma']) {
+    await page.goto(valid);
+    await page.getByTestId('mix-share').click();
+    await expect(notice).toHaveAttribute('role', 'status');
+    await expect(notice).toHaveClass('mix-info');
+    const bad = new URL(valid);
+    const q = query(valid);
+    q.set(field, field === 'm' ? 'broken' : '{');
+    bad.hash = '/duel?' + q;
+    await page.evaluate((url) => {
+      location.href = url;
+    }, bad.href);
+    await expect(page.getByRole('heading', { name: '混编链接失效，未回退为默认对决' })).toBeVisible();
+    await expect(notice).toHaveCount(0);
+    await expect(page.getByTestId('mix-share')).toBeDisabled();
+    await expect(page.getByRole('button', { name: '计算混编结果', exact: true })).toBeDisabled();
+    expect(page.url()).toBe(bad.href);
+  }
+});
+
+test('#1054 导航后的旧剪贴板成功或失败回调不能回写提示或链接', async ({ page }) => {
+  await enter(page);
+  const valid = page.url();
+  await page.evaluate(() =>
+    Object.defineProperty(navigator.clipboard, 'writeText', {
+      configurable: true,
+      value: () =>
+        new Promise<void>((resolve, reject) => {
+          (window as unknown as { finishCopy: (fail: boolean) => void }).finishCopy = (fail) => (fail ? reject(new Error('denied')) : resolve());
+        }),
+    }),
+  );
+  for (const returnToValid of [false, true]) {
+    for (const fail of [false, true]) {
+      await page.goto(valid);
+      await expect(page.getByTestId('mix-share')).toBeEnabled();
+      await page.getByTestId('mix-share').click();
+      await replace(page, (q) => q.set('ma', '{'));
+      await expect(page.getByRole('heading', { name: '混编链接失效，未回退为默认对决' })).toBeVisible();
+      if (returnToValid) {
+        await page.goto(valid);
+        await expect(page.getByTestId('mix-share')).toBeEnabled();
+      }
+      await page.evaluate((failed) => (window as unknown as { finishCopy: (fail: boolean) => void }).finishCopy(failed), fail);
+      await expect(page.getByText('混编配置链接已复制；打开链接后请重新计算。', { exact: true })).toHaveCount(0);
+      await expect(page.getByText('复制失败，请选择下方完整链接后手动复制。', { exact: true })).toHaveCount(0);
+      await expect(page.getByRole('textbox', { name: '完整混编配置链接（可选择复制）' })).toHaveCount(0);
+    }
+  }
+});
+
 test('#1054 资料失败保留严格链接，局部重试恢复后不复活旧战果', async ({ page }) => {
   await enter(page);
   await page.getByRole('button', { name: '计算混编结果', exact: true }).click();
