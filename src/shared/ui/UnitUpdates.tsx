@@ -110,7 +110,7 @@ export function UnitObjectSearch({ data }: { data: CivUpdatesData }) {
   );
 }
 
-function Coverage({ data, entityId }: { data: CivUpdatesData; entityId: string }) {
+function Coverage({ data, entityId, displayedAnchors }: { data: CivUpdatesData; entityId: string; displayedAnchors: ReadonlyMap<string, string> }) {
   const row = data.units?.rows.find((r) => r.entityId === entityId);
   const own = data.sections.filter((s) => row?.sectionIds.includes(s.id));
   const ids = new Set(own.flatMap((s) => s.entryIds));
@@ -144,11 +144,24 @@ function Coverage({ data, entityId }: { data: CivUpdatesData; entityId: string }
           <p>
             对应 <span className="num nw">{entry.eventIds.length} 个事件</span>
           </p>
-          {entry.eventIds.map((id) => (
-            <button type="button" key={id} onClick={() => document.getElementById('hist-' + id)?.scrollIntoView({ block: 'center' })}>
-              定位已显示事件
-            </button>
-          ))}
+          {entry.eventIds
+            .filter((id) => displayedAnchors.has(id))
+            .map((id) => (
+              <button
+                type="button"
+                key={id}
+                aria-controls={displayedAnchors.get(id)}
+                onClick={() => document.getElementById(displayedAnchors.get(id)!)?.scrollIntoView({ block: 'center' })}
+              >
+                定位已显示事件
+              </button>
+            ))}
+          {entry.eventIds.some((id) => !displayedAnchors.has(id)) && (
+            <p>
+              另有 <span className="num nw">{entry.eventIds.filter((id) => !displayedAnchors.has(id)).length} 个关联事件</span>
+              未在当前身份或筛选结果中显示；可切换形态或调整筛选。
+            </p>
+          )}
         </article>
       ))}
     </details>
@@ -213,6 +226,10 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
   const all = projectUnitEvents(data, entityId);
   const shown = filterUnitEvents(data, entityId, query);
   const { known, unknown, mixed } = query.has('histCiv') ? partitionUnitScopes(shown) : { known: shown, unknown: [], mixed: [] };
+  const displayedAnchors = new Map([
+    ...unknown.map((row) => [row.event.id, 'hist-scope-unknown-' + row.event.id] as const),
+    ...known.concat(mixed).map((row) => [row.event.id, 'hist-' + row.event.id] as const),
+  ]);
   const returnPath = unitHistoryReturn(query.get('histReturn'));
   const sharePath = unitHistoryPath(entityId, query, overview ? 'overview' : 'detail');
   const currentPath =
@@ -303,7 +320,7 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
           ))}
         </nav>
       )}
-      <Coverage data={data} entityId={entityId} />
+      <Coverage data={data} entityId={entityId} displayedAnchors={displayedAnchors} />
       <details className="civ-update-processing" open={UNIT_FILTER_KEYS.some((key) => query.has(key)) || !!error}>
         <summary>筛选已收录的单位历史</summary>
         <div className="civ-update-filters">

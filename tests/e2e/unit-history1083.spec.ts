@@ -1,6 +1,30 @@
 import { expect, test } from '@playwright/test';
 import { unitConflictFixture, unitSourceStateFixture } from '../helpers/unitUpdatesFixture';
 import { UNIT_SOURCE_LABELS } from '../../src/domain/unitUpdates';
+
+test('mixed scope effects stay separate and every source jump targets a visible event', async ({ page }) => {
+  await page.goto('/#/patches?obj=unit:1001&histVersion=de-125283&histCiv=Portuguese');
+  const reader = page.locator('[data-unit-history]');
+  const unknown = reader.getByRole('region', { name: '适用文明待核', exact: true });
+  await expect(unknown.locator('[data-event-id]')).toHaveCount(1);
+  await expect(reader.locator('[data-event-id]')).toHaveCount(2);
+  const known = reader.locator('[data-event-id]').filter({ hasText: '文明专属' });
+  await expect(known).toHaveCount(1);
+  await expect(known).toContainText('葡萄牙');
+  expect(await page.locator('[id]').evaluateAll((nodes) => nodes.map((n) => n.id).filter((id, i, ids) => ids.indexOf(id) !== i))).toEqual([]);
+  await page.goto('/#/patches?obj=unit:1231&histVersion=de-34055');
+  await reader.getByText('来源覆盖与逐条处理', { exact: false }).click();
+  const jumps = reader.getByRole('button', { name: '定位已显示事件', exact: true });
+  expect(await jumps.count()).toBeGreaterThan(0);
+  const targets = await jumps.evaluateAll((nodes) => nodes.map((n) => n.getAttribute('aria-controls')));
+  for (let i = 0; i < targets.length; i++) {
+    const target = reader.locator(`[id="${targets[i]}"]`);
+    await expect(target).toHaveCount(1);
+    await jumps.nth(i).click();
+    await expect(target).toBeInViewport();
+  }
+  await expect(reader).toContainText('未在当前身份或筛选结果中显示');
+});
 import { historyFixture } from '../helpers/civUpdatesFixture';
 
 test('unit detail projects one shape while source processing keeps all eight original bullets', async ({ page }) => {
