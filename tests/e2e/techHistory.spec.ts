@@ -199,4 +199,12 @@ test('#1085 synthetic conflict keeps both claims and narrow display contains lon
   await expect(reader(page)).toContainText('测试原文A');
   await expect(reader(page)).toContainText('测试原文B');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await page.goto('/#/tech/690?tab=history&histVersion=de-61321');
+  await reader(page).getByText('来源与原文', { exact: false }).click();
+  await expect(reader(page).locator('.civ-update-source time').first()).toBeVisible();
+  expect(
+    await reader(page)
+      .locator('.civ-update-source')
+      .evaluateAll((cards) => cards.every((card) => card.scrollWidth <= card.clientWidth + 1)),
+  ).toBe(true);
 });
