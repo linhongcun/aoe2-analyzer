@@ -389,7 +389,12 @@ def main() -> None:
     buildings = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(buildings)
     result, building_audit = buildings.extend_history(ROOT, result, validate_documents, units)
+    spec = importlib.util.spec_from_file_location('tech_history', ROOT / 'scripts/tech_history.py')
+    techs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(techs)
+    result, tech_audit = techs.extend_history(ROOT, result, validate_documents)
     outputs = [(OUTPUT, encode(result)), (AUDIT, encode(audit)), (REPORT, render_report(audit)), (units.AUDIT, encode(unit_audit)), (units.REPORT, units.render_unit_report(unit_audit)), (buildings.AUDIT, encode(building_audit)), (buildings.REPORT, buildings.render_report(building_audit))]
+    outputs.extend([(techs.AUDIT, encode(tech_audit)), (techs.REPORT, techs.render_report(tech_audit))])
     for relative, expected in outputs:
         path = ROOT / relative
         if args.check:

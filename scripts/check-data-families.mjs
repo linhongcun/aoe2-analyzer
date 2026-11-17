@@ -33,11 +33,12 @@ function metaFacts(meta = {}) {
 
 function checkEntry(root, entry, pins, ciCommands, errors) {
   const label = entry.file;
-  if (typeof entry.file !== 'string' || !entry.file.startsWith('data/game/')) errors.push(`${label}: file 必须是 data/game/ 下的路径`);
+  if (typeof entry.file !== 'string' || !/^data\/(?:game|content)\//u.test(entry.file))
+    errors.push(`${label}: file 必须是 data/game/ 或 data/content/ 下的路径`);
   else if (!exists(root, entry.file)) errors.push(`${label}: 文件不存在`);
   if (typeof entry.generator !== 'string' && entry.generator !== null) errors.push(`${label}: generator 必须是路径或 null`);
   if (typeof entry.generator === 'string' && !exists(root, entry.generator)) errors.push(`${label}: generator 不存在：${entry.generator}`);
-  if (entry.pin !== 'dat' && entry.pin !== 'manual') errors.push(`${label}: pin 必须是 dat 或 manual`);
+  if (!['dat', 'manual', 'bounded'].includes(entry.pin)) errors.push(`${label}: pin 必须是 dat、manual 或 bounded`);
   if (!AUDIT_STATUS.has(entry.auditStatus)) errors.push(`${label}: auditStatus 未知：${entry.auditStatus}`);
   if (!Array.isArray(entry.tests) || entry.tests.length === 0) errors.push(`${label}: tests 不能为空`);
   else
@@ -46,7 +47,7 @@ function checkEntry(root, entry, pins, ciCommands, errors) {
         errors.push(`${label}: 测试不存在或不是测试文件：${test}`);
   if (!Array.isArray(entry.check)) errors.push(`${label}: check 必须是数组`);
   else {
-    if (entry.pin === 'dat' && entry.check.length === 0) errors.push(`${label}: dat 条目至少需要一条 check 命令`);
+    if (['dat', 'bounded'].includes(entry.pin) && entry.check.length === 0) errors.push(`${label}: 生成条目至少需要一条 check 命令`);
     for (const command of entry.check) {
       if (typeof command !== 'string' || !command.trim()) {
         errors.push(`${label}: check 命令为空`);
@@ -57,11 +58,22 @@ function checkEntry(root, entry, pins, ciCommands, errors) {
         if (!exists(root, match[0])) errors.push(`${label}: check 引用不存在的脚本：${match[0]}`);
     }
   }
+  if (entry.pin === 'bounded') {
+    if (typeof entry.generator !== 'string' || entry.auditStatus !== 'reproduced-by-check')
+      errors.push(`${label}: bounded 条目需要生成器和 reproduced-by-check 状态`);
+    if (
+      !Array.isArray(entry.inputs) ||
+      !entry.inputs.length ||
+      entry.inputs.some((file) => typeof file !== 'string' || !file.startsWith('data/sources/') || !exists(root, file))
+    )
+      errors.push(`${label}: bounded 输入证据缺失`);
+    if (typeof entry.audit !== 'string' || !entry.audit.startsWith('data/reports/') || !exists(root, entry.audit)) errors.push(`${label}: bounded 审计缺失`);
+    return;
+  }
   if (entry.pin === 'manual') {
     if (entry.generator !== null) errors.push(`${label}: manual 条目的 generator 必须为 null`);
     if (entry.auditStatus !== 'manual-input') errors.push(`${label}: manual 条目的 auditStatus 必须是 manual-input`);
-    if (exists(root, entry.file) && metaFacts(readJson(root, entry.file).meta).generatedBy)
-      errors.push(`${label}: manual 条目不应带 meta 生成器`);
+    if (exists(root, entry.file) && metaFacts(readJson(root, entry.file).meta).generatedBy) errors.push(`${label}: manual 条目不应带 meta 生成器`);
     return;
   }
   if (!exists(root, entry.file)) return;

@@ -140,24 +140,40 @@
     }
   ],
   "nestedInBuildData": [
-    { "script": "scripts/civs_build.py" },
-    { "script": "scripts/units_build.py" },
-    { "script": "scripts/techs_build.py" },
-    { "script": "scripts/trees_build.py" },
-    { "script": "scripts/buildings_build.py" },
-    { "script": "scripts/ages_build.py" },
-    { "script": "scripts/icons_hires.py" },
-    { "script": "scripts/catalog_introductions.mjs" }
+    {
+      "script": "scripts/civs_build.py"
+    },
+    {
+      "script": "scripts/units_build.py"
+    },
+    {
+      "script": "scripts/techs_build.py"
+    },
+    {
+      "script": "scripts/trees_build.py"
+    },
+    {
+      "script": "scripts/buildings_build.py"
+    },
+    {
+      "script": "scripts/ages_build.py"
+    },
+    {
+      "script": "scripts/icons_hires.py"
+    },
+    {
+      "script": "scripts/catalog_introductions.mjs"
+    }
   ],
   "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 data/sources/catalog_introductions.json。",
   "intentionalSkips": [
     {
       "id": "civ-history-1082",
       "script": "scripts/civ_history_build.py",
-      "reason": "文明、单位与建筑历史来自有界章节快照和显式事件/旧记录映射；覆盖另见 data/sources/unit_history/catalog.json 与 data/sources/building_history/catalog.json，不随 DAT 更新重新抓取、猜值或覆盖历史身份。",
+      "reason": "文明、单位、建筑与科技历史来自有界章节快照和显式事件/旧记录映射；覆盖另见 data/sources/unit_history/catalog.json 与 data/sources/building_history/catalog.json，不随 DAT 更新重新抓取、猜值或覆盖历史身份。 科技目录和导入见 data/sources/tech_history/{catalog,imports}.json。",
       "owner": "文明历史数据更新执行者，需逐条复核来源、映射及旧记录去向。",
       "evidenceFile": "data/sources/civ_history/catalog.json",
-      "ownerEvidence": "文明/单位/建筑目录登记每页证据、未检查缺口及快照指纹；civ_history_build.py 经 unit_history.py 和 building_history.py 扩展同一事件图，校验最终输入与双向引用；建筑分列审计 data/reports/building-history.json，相关回归 tests/py/test_building_history1084.py 与 tests/unit/buildingUpdates1084.test.ts，CI data 保留离线 --check。",
+      "ownerEvidence": "文明/单位/建筑目录登记每页证据、未检查缺口及快照指纹；civ_history_build.py 经 unit_history.py 和 building_history.py 扩展同一事件图，校验最终输入与双向引用；建筑分列审计 data/reports/building-history.json，相关回归 tests/py/test_building_history1084.py 与 tests/unit/buildingUpdates1084.test.ts，CI data 保留离线 --check。 科技扩展 scripts/tech_history.py 逐项对账97个旧key（94复用、3补入），保留199个当前ID与3个退役身份；审计 data/reports/tech-history.json，回归 tests/py/test_tech_history1085.py 与 tests/unit/techUpdates1085.test.ts。",
       "command": "python3 scripts/civ_history_build.py --check"
     },
     {

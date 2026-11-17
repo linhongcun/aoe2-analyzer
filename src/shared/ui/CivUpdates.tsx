@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, useEffect, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCivUpdates } from '../../data/civUpdates';
 import {
@@ -23,6 +23,8 @@ import {
 import './civ-updates.css';
 import { Icon } from './Icon';
 import { CivUpdatesLoading, SourceTime, UpdateText } from './CivUpdatePrimitives';
+import { TECH_EFFECT_LABELS } from '../../domain/techUpdates';
+import { HistoryEntityLinks } from './HistoryEntityLinks';
 
 function ChangeArrow() {
   return (
@@ -47,7 +49,7 @@ function EntityLabel({ data, reference }: { data: CivUpdatesData; reference: Ent
   if ('unresolvedName' in reference)
     return (
       <span>
-        <UpdateText>{reference.unresolvedName}</UpdateText> <small>（历史身份待核）</small>
+        <UpdateText>{reference.unresolvedName}</UpdateText> <small>（尚未解析；暂无可确认的详情，历史身份待核）</small>
       </span>
     );
   const entity = data.entities.find((row) => row.id === reference.entityId)!;
@@ -159,6 +161,7 @@ function Effect({ data, effect }: { data: CivUpdatesData; effect: UpdateEffect }
   }
   return (
     <div className="civ-update-effect" data-effect-type={effect.type}>
+      {data.techs?.effectKinds[effect.id] && <p className="civ-update-pill">{TECH_EFFECT_LABELS[data.techs.effectKinds[effect.id]!]}</p>}
       <div className="civ-update-entities">
         {effect.entityRefs.map((reference, index) => (
           <Fragment key={index}>
@@ -259,7 +262,13 @@ export function UpdateEventCard({
 }) {
   const categories = [...new Set(eventSourceEntries(data, event).map((entry) => data.sources.find((source) => source.id === entry.sourceId)!.category))];
   return (
-    <article className={`civ-update-event civ-update-${event.verification}`} id={anchorId} data-testid="civ-update-event" data-event-id={event.id}>
+    <article
+      className={`civ-update-event civ-update-${event.verification}`}
+      id={anchorId}
+      data-testid="civ-update-event"
+      data-event-id={event.id}
+      tabIndex={-1}
+    >
       <div className="civ-update-badges">
         <span className="civ-update-pill">{{ civ: '文明专属', team: '团队', global: '全局', unknown: '范围待核' }[event.scope.scopeKind]}</span>
         <span className="civ-update-pill">{VERIFICATION_LABELS[event.verification]}</span>
@@ -346,6 +355,14 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
   const navigate = useNavigate();
   const civ = data.civilizations.find((row) => row.civId === civId);
   const error = detailQueryError(query, data, civId);
+  const focusEvent = query.get('histEvent');
+  useEffect(() => {
+    if (focusEvent) {
+      const node = document.getElementById('hist-' + focusEvent);
+      node?.scrollIntoView({ block: 'center' });
+      node?.focus({ preventScroll: true });
+    }
+  }, [focusEvent]);
   if (!civ) return <p role="alert">未找到这个文明的历史目录。</p>;
   const filtered = filterCivUpdates(data, civId, query);
   const counts = updateEventCounts(filtered);
@@ -489,7 +506,10 @@ export function CivUpdatesReader({ data, civId }: { data: CivUpdatesData; civId:
                     </p>
                   )}
                   {events.map((event) => (
-                    <UpdateEventCard data={data} event={event} key={event.id} />
+                    <Fragment key={event.id}>
+                      <UpdateEventCard data={data} event={event} />
+                      <HistoryEntityLinks data={data} event={event} sourceEntityId={'civ/' + civId} />
+                    </Fragment>
                   ))}
                 </section>
               );

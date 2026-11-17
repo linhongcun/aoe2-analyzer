@@ -64,6 +64,8 @@ class UnitHistoryTests(unittest.TestCase):
             for name in [*[f'data/game/{n}.json' for n in ['civs', 'units', 'buildings', 'techs']], 'data/schemas/common.defs.json', 'data/schemas/content-civ-updates.json', 'scripts/civ_history_build.py', 'scripts/unit_history.py', 'scripts/civ_history_validate.mjs', 'scripts/content-schema.mjs', 'scripts/content-schema-catalog.mjs', 'scripts/content-baseline.mjs', 'src/content/schema/policy.mjs']:
                 (root / name).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, root / name)
+            shutil.copytree(ROOT / 'data/sources/tech_history', root / 'data/sources/tech_history')
+            shutil.copy2(ROOT / 'scripts/tech_history.py', root / 'scripts/tech_history.py')
             (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
             shutil.copy2(ROOT / 'scripts/building_history.py', root / 'scripts/building_history.py')
             def run(*args):

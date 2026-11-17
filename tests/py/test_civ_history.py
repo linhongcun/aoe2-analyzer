@@ -329,6 +329,8 @@ class CivHistoryTests(unittest.TestCase):
             ]:
                 (root / relative).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / relative, root / relative)
+            shutil.copytree(ROOT / 'data/sources/tech_history', root / 'data/sources/tech_history')
+            shutil.copy2(ROOT / 'scripts/tech_history.py', root / 'scripts/tech_history.py')
             (root / 'node_modules').symlink_to((ROOT / 'node_modules').resolve(), target_is_directory=True)
             shutil.copy2(ROOT / 'scripts/building_history.py', root / 'scripts/building_history.py')
 

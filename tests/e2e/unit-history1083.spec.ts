@@ -24,7 +24,7 @@ test('clipboard failure offers the canonical selectable address without nested r
   const manual = page.getByRole('textbox', { name: '手动复制分享地址' });
   await expect(manual).toBeVisible();
   expect(await manual.inputValue()).toContain('histVersion=de-34055');
-  expect(await manual.inputValue()).not.toContain('histReturn');
+  expect(new URLSearchParams((await manual.inputValue()).split('?')[1]).get('histReturn')).toBe('/patches');
   await manual.focus();
   expect(await manual.evaluate((el: HTMLInputElement) => el.selectionEnd! - el.selectionStart!)).toBe((await manual.inputValue()).length);
 });
@@ -114,7 +114,9 @@ test('historical name search, keyboard selection, share reload and full return p
   await page.getByRole('button', { name: '复制历史分享地址' }).click();
   await expect(page.getByRole('status').filter({ hasText: '已复制当前历史地址' })).toBeVisible();
   const copied = await page.evaluate(() => navigator.clipboard.readText());
-  expect(copied).not.toContain('histReturn');
+  const back = new URLSearchParams(copied.split('?')[1]).get('histReturn')!;
+  expect(back).toContain('/patches?obj=unit');
+  expect(back).not.toContain('histReturn');
   expect(copied).toContain('histVersion=de-34055');
   await page.getByRole('link', { name: '返回上次历史结果' }).click();
   expect(new URL(page.url()).hash).toBe(before);

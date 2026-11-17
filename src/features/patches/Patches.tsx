@@ -25,6 +25,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { CivUpdatesOverview } from '../../shared/ui/CivUpdatesOverview';
 import { UnitUpdates, UnitUpdatesOverview } from '../../shared/ui/UnitUpdates';
 import { BuildingUpdates } from '../../shared/ui/BuildingUpdates';
+import { TechUpdates } from '../../shared/ui/TechUpdates';
 import { EntryBody, OBJECT_LABEL, ObjectSearch, civZh } from './patchParts';
 import './patches.css';
 
@@ -97,6 +98,9 @@ function Browse({ archives }: { archives: PatchArchive[] }) {
       <p>先查一个文明、单位、建筑或科技，也可以按版本阅读已收录档案。没有收录，不代表从未改动。</p>
       <ObjectSearch archives={archives} core={core} />
       <UnitUpdatesOverview />
+      <p>
+        <Link to="/patches?histView=techs">按科技查历史与来源覆盖</Link>
+      </p>
       <p>
         <Link to="/patches?histView=buildings">按建筑查历史与来源覆盖</Link>
       </p>
@@ -459,6 +463,19 @@ export default function Patches() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const { archives, error, retry } = usePatchArchives();
+  if (
+    !id &&
+    (params.getAll('histView').some((v) => v.startsWith('tech')) ||
+      params.getAll('histEntity').some((v) => v.startsWith('tech/')) ||
+      params.getAll('obj').some((v) => v.startsWith('tech:')) ||
+      params.has('techSourceState') ||
+      params.has('techIdentity'))
+  )
+    return (
+      <section className="pane patches">
+        <TechUpdates />
+      </section>
+    );
   if (!id && (params.has('histView') || params.has('histEntity') || params.getAll('obj').some((raw) => raw.startsWith('building:'))))
     return (
       <section className="pane patches">

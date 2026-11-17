@@ -19,6 +19,7 @@ import { UNIT_CONDITIONS, partitionUnitScopes, type UnitEventView } from '../../
 import { SourceTime, UpdateText } from './CivUpdatePrimitives';
 import { BuildingIcon } from './art';
 import { VersionEvents } from './UnitUpdates';
+import { HistoryEntityLinks } from './HistoryEntityLinks';
 import './unit-updates.css';
 import './building-updates.css';
 
@@ -78,8 +79,18 @@ function BuildingSearch({
   );
 }
 
-function Recovery({ data, query, setQuery }: { data: CivUpdatesData; query: URLSearchParams; setQuery: (q: URLSearchParams) => void }) {
-  const errors = buildingQueryErrors(data, query);
+function Recovery({
+  data,
+  query,
+  setQuery,
+  entityId,
+}: {
+  data: CivUpdatesData;
+  query: URLSearchParams;
+  setQuery: (q: URLSearchParams) => void;
+  entityId?: string;
+}) {
+  const errors = buildingQueryErrors(data, query, true, entityId);
   if (!errors.length) return null;
   const candidates = [...new Set([...query.getAll('obj').map((s) => s.replace(':', '/')), ...query.getAll('histEntity')])].filter((id) =>
     data.entities.some((e) => e.type === 'building' && e.id === id),
@@ -87,7 +98,7 @@ function Recovery({ data, query, setQuery }: { data: CivUpdatesData; query: URLS
   return (
     <div className="civ-update-warning" role="alert">
       <p>历史地址有重复、失效或不适用的参数：{errors.join('、')}。未显示旧对象结果。</p>
-      <button type="button" onClick={() => setQuery(recoverBuildingQuery(data, query))}>
+      <button type="button" onClick={() => setQuery(recoverBuildingQuery(data, query, entityId))}>
         仅清除错误参数
       </button>
       {candidates.map((id) => (
@@ -211,7 +222,7 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
   const request = useRef(0);
   const entity = data.entities.find((e) => e.id === entityId && e.type === 'building');
   const row = data.buildings?.rows.find((r) => r.entityId === entityId);
-  const errors = buildingQueryErrors(data, query);
+  const errors = buildingQueryErrors(data, query, true, entityId);
   const all = projectBuildingEvents(data, entityId);
   const shown = filterBuildingEvents(data, entityId, query);
   const groups = query.has('histCiv') ? partitionUnitScopes(shown) : { known: shown, unknown: [], mixed: [] };
@@ -230,7 +241,11 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
   }, [sharePath]);
   const anchor = anchors.get(query.get('histEvent') ?? '');
   useEffect(() => {
-    if (anchor) document.getElementById(anchor)?.scrollIntoView({ block: 'center' });
+    if (anchor) {
+      const node = document.getElementById(anchor);
+      node?.scrollIntoView({ block: 'center' });
+      node?.focus({ preventScroll: true });
+    }
   }, [anchor]);
   if (!entity || !data.buildings)
     return (
@@ -268,29 +283,8 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
         },
       };
     });
-  const context = (view: UnitEventView) => {
-    const scopes = view.event.claims.flatMap((c) => c.effects.map((f) => f.scope ?? view.event.scope));
-    const ids = new Set([...view.original.civRelations.map((r) => r.civId), ...scopes.flatMap((s) => [...s.providerCivIds, ...s.affectedCivIds])]);
-    const backQuery = new URLSearchParams(currentQuery);
-    backQuery.set('histEvent', view.event.id);
-    const returnTo = buildingHistoryReturn(data, location.pathname + '?' + backQuery.toString());
-    return (
-      <nav className="unit-history-actions" aria-label="关联文明历史">
-        {data.civilizations
-          .filter((c) => ids.has(c.civId))
-          .map((c) => {
-            const target = new URLSearchParams({ tab: 'history' });
-            if (view.event.versionId) target.set('histVersion', view.event.versionId);
-            if (returnTo) target.set('histReturn', returnTo);
-            return (
-              <Link key={c.civId} to={'/civ/' + c.civId + '?' + target.toString()}>
-                查看{c.nameZh}文明历史
-              </Link>
-            );
-          })}
-      </nav>
-    );
-  };
+  const context = (view: UnitEventView) => <HistoryEntityLinks data={data} event={view.event} sourceEntityId={entityId} />;
+
   return (
     <section className="building-history civ-updates unit-updates" aria-label="建筑更新历史" data-building-history={entityId}>
       {overview ? (
@@ -305,7 +299,7 @@ function BuildingReader({ data, entityId, overview, retry }: { data: CivUpdatesD
       ) : (
         <h3>{entity.nameZh} · 建筑历史身份</h3>
       )}
-      <Recovery data={data} query={query} setQuery={setQuery} />
+      <Recovery data={data} query={query} setQuery={setQuery} entityId={entityId} />
       <p>当前目录值与历史主张分开；这里的改动不参与当前游戏计算。</p>
       <div className="unit-history-actions">
         <span className="civ-update-pill num nw">ID {entity.catalogId ?? '未登记'}</span>
@@ -510,12 +504,12 @@ export function BuildingUpdates({ entityId }: { entityId?: string }) {
   const state = useCivUpdates();
   const [query, setQuery] = useSearchParams();
   if (!state.data) return <BuildingLoading error={state.error} retry={state.retry} />;
-  const errors = buildingQueryErrors(state.data, query);
+  const errors = buildingQueryErrors(state.data, query, true, entityId);
   if (errors.length)
     return (
       <section className="building-history civ-updates">
         <h2>建筑历史地址需要修复</h2>
-        <Recovery data={state.data} query={query} setQuery={setQuery} />
+        <Recovery data={state.data} query={query} setQuery={setQuery} entityId={entityId} />
       </section>
     );
   const selected = entityId ?? (query.has('obj') ? 'building/' + query.get('obj')!.slice(9) : query.get('histEntity'));

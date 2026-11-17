@@ -9,7 +9,8 @@ import { AgeImg, BuildingIcon, CivChip, CivIcon, CostView, TechIcon, TechLink, T
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon } from '../../../shared/ui/Icon';
 import { Breadcrumbs } from '../../../shared/ui/layout';
-import { HistoricalEntityDetail, PatchHistory } from '../../../shared/ui/PatchHistory';
+import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { TechUpdates } from '../../../shared/ui/TechUpdates';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
@@ -282,7 +283,7 @@ export default function TechDetail() {
           <Icon name="chevron-right" />
           <h2>更新历史</h2>
         </summary>
-        <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />
+        {tab === 'history' && <TechUpdates entityId={'tech/' + tech.id} />}
       </details>
     </section>
   );

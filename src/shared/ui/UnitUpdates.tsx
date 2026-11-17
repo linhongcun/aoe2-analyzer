@@ -7,6 +7,7 @@ import {
   UNIT_FILTER_KEYS,
   UNIT_SOURCE_LABELS,
   clearUnitFilters,
+  recoverUnitEventQuery,
   filterUnitEvents,
   projectUnitEvents,
   partitionUnitScopes,
@@ -20,6 +21,7 @@ import {
 } from '../../domain/unitUpdates';
 import { UpdateEventCard } from './CivUpdates';
 import { SourceTime, UpdateText } from './CivUpdatePrimitives';
+import { HistoryEntityLinks } from './HistoryEntityLinks';
 import './unit-updates.css';
 
 function Loading({ error, retry }: { error: boolean; retry: () => void }) {
@@ -44,7 +46,7 @@ export function UnitObjectSearch({ data }: { data: CivUpdatesData }) {
   const options = searchUpdateUnits(data, query.get('histQuery') ?? '').slice(0, 30);
   const pick = (entityId: string) => {
     setOpen(false);
-    navigate(unitHistoryPath(entityId, query, 'overview'));
+    navigate(unitHistoryPath(entityId, query, 'overview', undefined, data));
     requestAnimationFrame(() => document.getElementById('unit-history-title')?.focus());
   };
   return (
@@ -219,6 +221,7 @@ export function VersionEvents({
             )}
             <UpdateEventCard data={data} event={event} sourceEvent={original} anchorId={anchorPrefix + event.id} />
             {context?.({ event, original, relations, unknownScope: false })}
+            {!context && <HistoryEntityLinks data={data} event={event} />}
           </div>
         ))}
       </section>
@@ -233,7 +236,8 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
   const request = useRef(0);
   const entity = data.entities.find((r) => r.id === entityId && r.type === 'unit');
   const row = data.units?.rows.find((r) => r.entityId === entityId);
-  const error = unitQueryError(data, query);
+  const error = unitQueryError(data, query, entityId);
+  const eventRecovery = recoverUnitEventQuery(data, query, entityId);
   const all = projectUnitEvents(data, entityId);
   const shown = filterUnitEvents(data, entityId, query);
   const { known, unknown, mixed } = query.has('histCiv') ? partitionUnitScopes(shown) : { known: shown, unknown: [], mixed: [] };
@@ -241,10 +245,18 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
     ...unknown.map((row) => [row.event.id, 'hist-scope-unknown-' + row.event.id] as const),
     ...known.concat(mixed).map((row) => [row.event.id, 'hist-' + row.event.id] as const),
   ]);
-  const returnPath = unitHistoryReturn(query.get('histReturn'));
-  const sharePath = unitHistoryPath(entityId, query, overview ? 'overview' : 'detail');
+  const anchor = displayedAnchors.get(query.get('histEvent') ?? '');
+  useEffect(() => {
+    if (anchor) {
+      const node = document.getElementById(anchor);
+      node?.scrollIntoView({ block: 'center' });
+      node?.focus({ preventScroll: true });
+    }
+  }, [anchor]);
+  const returnPath = unitHistoryReturn(query.get('histReturn'), data);
+  const sharePath = unitHistoryPath(entityId, query, overview ? 'overview' : 'detail', undefined, data);
   const currentPath =
-    unitHistoryReturn(location.pathname + '?' + new URLSearchParams([...query].filter(([key]) => key !== 'histReturn')).toString()) ?? '/patches';
+    unitHistoryReturn(location.pathname + '?' + new URLSearchParams([...query].filter(([key]) => key !== 'histReturn')).toString(), data) ?? '/patches';
   useEffect(() => {
     request.current += 1;
   }, [sharePath]);
@@ -306,7 +318,9 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
         <span className="civ-update-pill num nw">ID {entity.catalogId}</span>
         <span className="civ-update-pill">{all.length ? '部分收录' : '尚未收录'}</span>
         <span className="civ-update-pill">{row ? UNIT_SOURCE_LABELS[row.sourceState] : '历史身份'}</span>
-        <Link to={unitHistoryPath(entityId, query, overview ? 'detail' : 'overview', currentPath)}>{overview ? '打开单位详情' : '在更新历史总览查看'}</Link>
+        <Link to={unitHistoryPath(entityId, query, overview ? 'detail' : 'overview', currentPath, data)}>
+          {overview ? '打开单位详情' : '在更新历史总览查看'}
+        </Link>
         {returnPath && <Link to={returnPath}>返回上次历史结果</Link>}
         <button type="button" disabled={!!error} onClick={share}>
           复制历史分享地址
@@ -330,7 +344,7 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
             <Link
               key={id}
               aria-current={id === entityId ? 'page' : undefined}
-              to={unitHistoryPath(id, query, overview ? 'overview' : 'detail', returnPath ?? undefined)}
+              to={unitHistoryPath(id, query, overview ? 'overview' : 'detail', returnPath ?? undefined, data)}
             >
               {data.entities.find((e) => e.id === id)?.nameZh} · <span className="num nw">ID {id.split('/')[1]}</span>
             </Link>
@@ -396,13 +410,20 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
               <option value="oldest">由旧到新</option>
             </select>
           </label>
-          <button type="button" onClick={() => setQuery(clearUnitFilters(query))}>
+          <button type="button" onClick={() => setQuery(clearUnitFilters(query, data))}>
             清除历史筛选
           </button>
         </div>
       </details>
       {error ? (
-        <p role="alert">{error}</p>
+        <div role="alert">
+          <p>{error}</p>
+          {query.has('histEvent') && !eventRecovery.has('histEvent') && (
+            <button type="button" onClick={() => setQuery(eventRecovery)}>
+              仅清除错误事件定位
+            </button>
+          )}
+        </div>
       ) : (
         <>
           <p role="status">
@@ -488,7 +509,7 @@ export function UnitUpdatesOverview() {
         <ul className="unit-coverage-list">
           {rows.map((r) => (
             <li key={r.entityId}>
-              <Link to={unitHistoryPath(r.entityId, query, 'overview')}>
+              <Link to={unitHistoryPath(r.entityId, query, 'overview', undefined, data)}>
                 {data.entities.find((e) => e.id === r.entityId)?.nameZh} · <span className="num nw">ID {r.entityId.split('/')[1]}</span>
               </Link>
               <p>

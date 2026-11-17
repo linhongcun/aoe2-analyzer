@@ -128,6 +128,22 @@
       "check": [],
       "tests": ["tests/py/test_garrison_general224.py", "tests/py/test_garrison_healing229.py"],
       "auditStatus": "manual-input"
+    },
+    {
+      "file": "data/content/civ-updates.json",
+      "generator": "scripts/civ_history_build.py",
+      "pin": "bounded",
+      "inputs": [
+        "data/sources/civ_history/catalog.json",
+        "data/sources/unit_history/catalog.json",
+        "data/sources/building_history/catalog.json",
+        "data/sources/tech_history/catalog.json",
+        "data/sources/tech_history/imports.json"
+      ],
+      "check": ["python3 scripts/civ_history_build.py --check"],
+      "tests": ["tests/py/test_tech_history1085.py", "tests/unit/techUpdates1085.test.ts"],
+      "audit": "data/reports/tech-history.json",
+      "auditStatus": "reproduced-by-check"
     }
   ]
 }

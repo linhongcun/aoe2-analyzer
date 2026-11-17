@@ -80,6 +80,7 @@ export function emptyHistoryFixture() {
   const data = historyFixture();
   delete data.units;
   delete data.buildings;
+  delete data.techs;
   data.events = [];
   data.legacyMap = [];
   data.meta.legacyBaseline = [];

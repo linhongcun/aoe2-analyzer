@@ -1,0 +1,1124 @@
+{
+  "schemaVersion": 1,
+  "expectedReusedCount": 94,
+  "legacy": [
+    {
+      "key": "125283:125283-007-008",
+      "eventId": "ev-unit-legacy-125283-125283-b007",
+      "claimId": "cl-unit-legacy-125283-125283-b007",
+      "effectIds": ["ef-legacy-125283-007-008"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "125283:125283-007-009",
+      "eventId": "ev-unit-legacy-125283-125283-b007",
+      "claimId": "cl-unit-legacy-125283-125283-b007",
+      "effectIds": ["ef-legacy-125283-007-009"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "125283:125283-018-022",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "effectIds": ["ef-legacy-125283-018-022"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "125283:125283-018-023",
+      "eventId": "ev-se-0e53e4e6-e8da-478f-b0f8-67073fd440ab",
+      "claimId": "cl-legacy-125283-b018",
+      "effectIds": ["ef-legacy-125283-018-023"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "125283:125283-022-029",
+      "eventId": "ev-legacy-125283-b022",
+      "claimId": "cl-legacy-125283-b022",
+      "effectIds": ["ef-legacy-125283-022-029"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-26",
+      "eventId": "ev-se-e84b7f56-195b-4429-9d73-eb3d1a614090",
+      "claimId": "cl-legacy-185872-26",
+      "effectIds": ["ef-legacy-185872-26"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-31",
+      "eventId": "ev-se-b2e03d69-c522-4dba-b1f5-3a8a43b5b403",
+      "claimId": "cl-legacy-185872-31",
+      "effectIds": ["ef-legacy-185872-31"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-34",
+      "eventId": "ev-se-74f6be20-8cd5-47fb-bee5-b09d491c9a1c",
+      "claimId": "cl-legacy-185872-34",
+      "effectIds": ["ef-legacy-185872-34"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-36",
+      "eventId": "ev-se-db94e00b-7e0c-472d-ab7c-49642bdaee28",
+      "claimId": "cl-legacy-185872-36",
+      "effectIds": ["ef-legacy-185872-36"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-60",
+      "eventId": "ev-se-eeef9b58-6b2f-41f9-ae1a-4bac36e2aca6",
+      "claimId": "cl-legacy-185872-60",
+      "effectIds": ["ef-legacy-185872-60"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-62",
+      "eventId": "ev-se-25df9ae1-bc13-4812-a322-77ea11c3dbae",
+      "claimId": "cl-legacy-185872-62",
+      "effectIds": ["ef-legacy-185872-62"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-63",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-63",
+      "effectIds": ["ef-legacy-185872-63"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-64",
+      "eventId": "ev-se-e8a63aa9-2418-4c0b-acd9-464bc9a68bec",
+      "claimId": "cl-legacy-185872-64",
+      "effectIds": ["ef-legacy-185872-64"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-65",
+      "eventId": "ev-se-73e42eed-f2d5-47f3-a9e0-f1ef1b68879a",
+      "claimId": "cl-legacy-185872-65",
+      "effectIds": ["ef-legacy-185872-65"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-66",
+      "eventId": "ev-se-7752584c-0bd9-4b77-8e71-94b1748f96a7",
+      "claimId": "cl-legacy-185872-66",
+      "effectIds": ["ef-legacy-185872-66"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-67",
+      "eventId": "ev-se-5e9f97f4-d1ea-4978-8d12-c5384d61e6b9",
+      "claimId": "cl-legacy-185872-67",
+      "effectIds": ["ef-legacy-185872-67"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-68",
+      "eventId": "ev-se-8b4a9d49-aabc-4374-80ab-41e72a6e7023",
+      "claimId": "cl-legacy-185872-68",
+      "effectIds": ["ef-legacy-185872-68"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-69",
+      "eventId": "ev-se-089d3561-f953-4823-86e9-06cc2403d55d",
+      "claimId": "cl-legacy-185872-69",
+      "effectIds": ["ef-legacy-185872-69"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-106",
+      "eventId": "ev-se-ab20a597-de1d-4089-ac75-1c8d81d736ff",
+      "claimId": "cl-legacy-185872-106",
+      "effectIds": ["ef-legacy-185872-106"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-107",
+      "eventId": "ev-se-686787da-4c4a-469c-a484-25574f457ca0",
+      "claimId": "cl-legacy-185872-107",
+      "effectIds": ["ef-legacy-185872-107"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-108",
+      "eventId": "ev-se-e1b9d122-9b51-4afe-a402-a304c475bb96",
+      "claimId": "cl-legacy-185872-108",
+      "effectIds": ["ef-legacy-185872-108"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-109",
+      "eventId": "ev-se-68f13514-6525-4221-a654-caa7da07ef3b",
+      "claimId": "cl-legacy-185872-109",
+      "effectIds": ["ef-legacy-185872-109"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-110",
+      "eventId": "ev-se-148a5eb7-053d-4293-b614-a7d8c77c8c6b",
+      "claimId": "cl-legacy-185872-110",
+      "effectIds": ["ef-legacy-185872-110"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-111",
+      "eventId": "ev-se-a01e6e7f-8bac-4b6d-b73c-0407834275c3",
+      "claimId": "cl-legacy-185872-111",
+      "effectIds": ["ef-legacy-185872-111"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-112",
+      "eventId": "ev-legacy-185872-112",
+      "claimId": "cl-legacy-185872-112",
+      "effectIds": ["ef-legacy-185872-112"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "185872:185872-126",
+      "eventId": "ev-tech-legacy-185872-126",
+      "claimId": "cl-tech-legacy-185872-126",
+      "effectIds": ["ef-legacy-185872-126"],
+      "reason": "固定原件尚无共享主张，本期补入；不根据当前科技树猜测文明。"
+    },
+    {
+      "key": "66692:66692-006-007",
+      "eventId": "ev-unit-legacy-66692-66692-b006",
+      "claimId": "cl-unit-legacy-66692-66692-b006",
+      "effectIds": ["ef-legacy-66692-006-007"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-006-008",
+      "eventId": "ev-unit-legacy-66692-66692-b006",
+      "claimId": "cl-unit-legacy-66692-66692-b006",
+      "effectIds": ["ef-legacy-66692-006-008"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-009-021",
+      "eventId": "ev-building-legacy-66692-009-021",
+      "claimId": "cl-building-legacy-66692-009-021",
+      "effectIds": ["ef-legacy-66692-009-021"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-012-025",
+      "eventId": "ev-se-cb7be739-d5ae-4227-b0e7-a9af85f423da",
+      "claimId": "cl-legacy-66692-b012",
+      "effectIds": ["ef-legacy-66692-012-025"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-016-026",
+      "eventId": "ev-se-573c97d4-4582-4512-b829-870d9b5147ec",
+      "claimId": "cl-legacy-66692-b016",
+      "effectIds": ["ef-legacy-66692-016-026"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-028-027",
+      "eventId": "ev-se-c86a1460-8301-4b7e-9ce2-1d6805dd660c",
+      "claimId": "cl-legacy-66692-b028",
+      "effectIds": ["ef-legacy-66692-028-027"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-031-028",
+      "eventId": "ev-se-c1a8cb7c-07fb-4aea-a0c0-fd175d9226a8",
+      "claimId": "cl-legacy-66692-b031",
+      "effectIds": ["ef-legacy-66692-031-028"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "66692:66692-032-029",
+      "eventId": "ev-se-6736d488-7913-4452-931d-508e65da7692",
+      "claimId": "cl-legacy-66692-b032",
+      "effectIds": ["ef-legacy-66692-032-029"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-1",
+      "eventId": "ev-legacy-81058-b001",
+      "claimId": "cl-legacy-81058-b001",
+      "effectIds": ["ef-legacy-81058-1"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-2",
+      "eventId": "ev-legacy-81058-b002",
+      "claimId": "cl-legacy-81058-b002",
+      "effectIds": ["ef-legacy-81058-2"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-3",
+      "eventId": "ev-legacy-81058-b003",
+      "claimId": "cl-legacy-81058-b003",
+      "effectIds": ["ef-legacy-81058-3"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-4",
+      "eventId": "ev-legacy-81058-b004",
+      "claimId": "cl-legacy-81058-b004",
+      "effectIds": ["ef-legacy-81058-4"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-13",
+      "eventId": "ev-unit-legacy-81058-81058-b011",
+      "claimId": "cl-unit-legacy-81058-81058-b011",
+      "effectIds": ["ef-legacy-81058-13"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-18",
+      "eventId": "ev-tech-legacy-81058-18",
+      "claimId": "cl-tech-legacy-81058-18",
+      "effectIds": ["ef-legacy-81058-18"],
+      "reason": "固定原件尚无共享主张，本期补入；不根据当前科技树猜测文明。"
+    },
+    {
+      "key": "81058:81058-19",
+      "eventId": "ev-tech-legacy-81058-19",
+      "claimId": "cl-tech-legacy-81058-19",
+      "effectIds": ["ef-legacy-81058-19", "ef-legacy-81058-19-gold", "ef-legacy-81058-19-wood"],
+      "reason": "固定原件尚无共享主张，本期补入；不根据当前科技树猜测文明。"
+    },
+    {
+      "key": "81058:81058-20",
+      "eventId": "ev-unit-legacy-81058-81058-b018",
+      "claimId": "cl-unit-legacy-81058-81058-b018",
+      "effectIds": ["ef-legacy-81058-20"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-25",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "effectIds": ["ef-legacy-81058-25"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-26",
+      "eventId": "ev-legacy-81058-b022",
+      "claimId": "cl-legacy-81058-b022",
+      "effectIds": ["ef-legacy-81058-26"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-31",
+      "eventId": "ev-legacy-81058-b025",
+      "claimId": "cl-legacy-81058-b025",
+      "effectIds": ["ef-legacy-81058-31"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-34",
+      "eventId": "ev-se-098f6481-d155-4c2b-8e69-40643ee14a12",
+      "claimId": "cl-legacy-81058-b028",
+      "effectIds": ["ef-legacy-81058-34"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-35",
+      "eventId": "ev-legacy-81058-b029",
+      "claimId": "cl-legacy-81058-b029",
+      "effectIds": ["ef-legacy-81058-35"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-36",
+      "eventId": "ev-legacy-81058-b029",
+      "claimId": "cl-legacy-81058-b029",
+      "effectIds": ["ef-legacy-81058-36"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-38",
+      "eventId": "ev-se-7e1753b5-5801-410b-89a2-8a14ac62064f",
+      "claimId": "cl-legacy-81058-b031",
+      "effectIds": ["ef-legacy-81058-38"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-41",
+      "eventId": "ev-legacy-81058-b034",
+      "claimId": "cl-legacy-81058-b034",
+      "effectIds": ["ef-legacy-81058-41"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-44",
+      "eventId": "ev-se-9aa6a452-15ef-4559-aa9e-1326d7be1a7a",
+      "claimId": "cl-legacy-81058-b037",
+      "effectIds": ["ef-legacy-81058-44"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-48",
+      "eventId": "ev-se-fff7e4f6-757f-449a-9795-b6b47e737a3c",
+      "claimId": "cl-legacy-81058-b041",
+      "effectIds": ["ef-legacy-81058-48"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-50",
+      "eventId": "ev-legacy-81058-b043",
+      "claimId": "cl-legacy-81058-b043",
+      "effectIds": ["ef-legacy-81058-50"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-51",
+      "eventId": "ev-legacy-81058-b044",
+      "claimId": "cl-legacy-81058-b044",
+      "effectIds": ["ef-legacy-81058-51"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-52",
+      "eventId": "ev-legacy-81058-b045",
+      "claimId": "cl-legacy-81058-b045",
+      "effectIds": ["ef-legacy-81058-52"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-53",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b046",
+      "effectIds": ["ef-legacy-81058-53"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-54",
+      "eventId": "ev-se-861f882a-f2cc-4927-8602-c57efccbd822",
+      "claimId": "cl-legacy-81058-b047",
+      "effectIds": ["ef-legacy-81058-54"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-59",
+      "eventId": "ev-legacy-81058-b050",
+      "claimId": "cl-legacy-81058-b050",
+      "effectIds": ["ef-legacy-81058-59"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-61",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
+      "claimId": "cl-legacy-81058-b053",
+      "effectIds": ["ef-legacy-81058-61"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-62",
+      "eventId": "ev-se-86e20f2d-15b8-4637-83e4-35efde6ea57b",
+      "claimId": "cl-legacy-81058-b054",
+      "effectIds": ["ef-legacy-81058-62"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-63",
+      "eventId": "ev-se-500556ab-f8e5-4fe8-b2e5-9864f9a81e01",
+      "claimId": "cl-legacy-81058-b055",
+      "effectIds": ["ef-legacy-81058-63"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-65",
+      "eventId": "ev-se-6cb3ffce-085c-42a1-86e3-88d549c83548",
+      "claimId": "cl-legacy-81058-b057",
+      "effectIds": ["ef-legacy-81058-65"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-67",
+      "eventId": "ev-legacy-81058-b059",
+      "claimId": "cl-legacy-81058-b059",
+      "effectIds": ["ef-legacy-81058-67"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-69",
+      "eventId": "ev-se-34848776-53cb-493c-88c5-b913b077f2ca",
+      "claimId": "cl-legacy-81058-b061",
+      "effectIds": ["ef-legacy-81058-69"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-74",
+      "eventId": "ev-se-a27381fe-3d82-4063-aa2c-20a54ee5887c",
+      "claimId": "cl-legacy-81058-b064",
+      "effectIds": ["ef-legacy-81058-74"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-75",
+      "eventId": "ev-se-e41bd3c1-985c-47e7-9967-d6ed810e03ed",
+      "claimId": "cl-legacy-81058-b065",
+      "effectIds": ["ef-legacy-81058-75"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-76",
+      "eventId": "ev-legacy-81058-b066",
+      "claimId": "cl-legacy-81058-b066",
+      "effectIds": ["ef-legacy-81058-76"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-78",
+      "eventId": "ev-legacy-81058-b068",
+      "claimId": "cl-legacy-81058-b068",
+      "effectIds": ["ef-legacy-81058-78"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-85",
+      "eventId": "ev-se-6bba70da-f46b-45b1-9010-a52d54b98118",
+      "claimId": "cl-legacy-81058-b074",
+      "effectIds": ["ef-legacy-81058-85"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-88",
+      "eventId": "ev-se-98d4459c-d902-4364-9bab-756a88b63f4f",
+      "claimId": "cl-legacy-81058-b076",
+      "effectIds": ["ef-legacy-81058-88"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-89",
+      "eventId": "ev-legacy-81058-b077",
+      "claimId": "cl-legacy-81058-b077",
+      "effectIds": ["ef-legacy-81058-89"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-95",
+      "eventId": "ev-legacy-81058-b081",
+      "claimId": "cl-legacy-81058-b081",
+      "effectIds": ["ef-legacy-81058-95"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-97",
+      "eventId": "ev-legacy-81058-b083",
+      "claimId": "cl-legacy-81058-b083",
+      "effectIds": ["ef-legacy-81058-97"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-98",
+      "eventId": "ev-legacy-81058-b084",
+      "claimId": "cl-legacy-81058-b084",
+      "effectIds": ["ef-legacy-81058-98"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-102",
+      "eventId": "ev-se-d0d6e288-b69b-422b-bb7a-d489d26d9a70",
+      "claimId": "cl-legacy-81058-b087",
+      "effectIds": ["ef-legacy-81058-102"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-104",
+      "eventId": "ev-legacy-81058-b089",
+      "claimId": "cl-legacy-81058-b089",
+      "effectIds": ["ef-legacy-81058-104"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-110",
+      "eventId": "ev-legacy-81058-b094",
+      "claimId": "cl-legacy-81058-b094",
+      "effectIds": ["ef-legacy-81058-110"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-111",
+      "eventId": "ev-legacy-81058-b095",
+      "claimId": "cl-legacy-81058-b095",
+      "effectIds": ["ef-legacy-81058-111"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-112",
+      "eventId": "ev-legacy-81058-b096",
+      "claimId": "cl-legacy-81058-b096",
+      "effectIds": ["ef-legacy-81058-112"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-114",
+      "eventId": "ev-legacy-81058-b098",
+      "claimId": "cl-legacy-81058-b098",
+      "effectIds": ["ef-legacy-81058-114"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-115",
+      "eventId": "ev-se-b1ca338a-240d-472b-99e2-b7d2c0470167",
+      "claimId": "cl-legacy-81058-b099",
+      "effectIds": ["ef-legacy-81058-115"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-118",
+      "eventId": "ev-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1",
+      "claimId": "cl-legacy-81058-b102",
+      "effectIds": ["ef-legacy-81058-118"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-119",
+      "eventId": "ev-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1",
+      "claimId": "cl-legacy-81058-b103",
+      "effectIds": ["ef-legacy-81058-119"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-128",
+      "eventId": "ev-legacy-81058-b108",
+      "claimId": "cl-legacy-81058-b108",
+      "effectIds": ["ef-legacy-81058-128"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-132",
+      "eventId": "ev-legacy-81058-b111",
+      "claimId": "cl-legacy-81058-b111",
+      "effectIds": ["ef-legacy-81058-132"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-133",
+      "eventId": "ev-legacy-81058-b112",
+      "claimId": "cl-legacy-81058-b112",
+      "effectIds": ["ef-legacy-81058-133"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-134",
+      "eventId": "ev-legacy-81058-b113",
+      "claimId": "cl-legacy-81058-b113",
+      "effectIds": ["ef-legacy-81058-134"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-135",
+      "eventId": "ev-se-526989bb-382b-44f6-a3eb-de1d3a242fd3",
+      "claimId": "cl-legacy-81058-b114",
+      "effectIds": ["ef-legacy-81058-135"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-138",
+      "eventId": "ev-legacy-81058-b117",
+      "claimId": "cl-legacy-81058-b117",
+      "effectIds": ["ef-legacy-81058-138"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-142",
+      "eventId": "ev-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91",
+      "claimId": "cl-legacy-81058-b120",
+      "effectIds": ["ef-legacy-81058-142"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-145",
+      "eventId": "ev-legacy-81058-b122",
+      "claimId": "cl-legacy-81058-b122",
+      "effectIds": ["ef-legacy-81058-145"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-146",
+      "eventId": "ev-se-9e6e9081-8156-442d-bb34-62454bfc969a",
+      "claimId": "cl-legacy-81058-b123",
+      "effectIds": ["ef-legacy-81058-146"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-147",
+      "eventId": "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "claimId": "cl-legacy-81058-b124",
+      "effectIds": ["ef-legacy-81058-147"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-148",
+      "eventId": "ev-se-71636ab5-9a50-4128-bce9-8212abc5e6d7",
+      "claimId": "cl-legacy-81058-b125",
+      "effectIds": ["ef-legacy-81058-148"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-149",
+      "eventId": "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "claimId": "cl-legacy-81058-b126",
+      "effectIds": ["ef-legacy-81058-149"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-150",
+      "eventId": "ev-se-9538cbcd-29d1-45ad-8485-62f7465e7503",
+      "claimId": "cl-legacy-81058-b126",
+      "effectIds": ["ef-legacy-81058-150"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    },
+    {
+      "key": "81058:81058-155",
+      "eventId": "ev-legacy-81058-b130",
+      "claimId": "cl-legacy-81058-b130",
+      "effectIds": ["ef-legacy-81058-155"],
+      "reason": "复用共享主张及精确旧记录效果；保留原件和前三期去向。"
+    }
+  ],
+  "newEvents": [
+    {
+      "id": "ev-tech-legacy-185872-126",
+      "versionId": "de-185872",
+      "summary": "新增骑马弩兵相关科技；效果见详情。",
+      "verification": "unverified",
+      "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-tech-legacy-185872-126",
+          "verification": "unverified",
+          "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+          "sourceEntryIds": ["src-legacy-185872-126"],
+          "legacyKeys": ["185872:185872-126"],
+          "effects": [
+            {
+              "entityRefs": [
+                {
+                  "entityId": "tech/1452"
+                }
+              ],
+              "text": "新增骑马弩兵相关科技；效果见详情。",
+              "conditions": [],
+              "scope": null,
+              "id": "ef-legacy-185872-126",
+              "type": "mechanic",
+              "legacyBefore": null,
+              "legacyAfter": null
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-tech-legacy-81058-18",
+      "versionId": "de-81058",
+      "summary": "近射孔研究时间缩短。",
+      "verification": "verified",
+      "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-tech-legacy-81058-18",
+          "verification": "verified",
+          "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+          "sourceEntryIds": ["src-legacy-81058-b016"],
+          "legacyKeys": ["81058:81058-18"],
+          "effects": [
+            {
+              "entityRefs": [
+                {
+                  "entityId": "tech/322"
+                }
+              ],
+              "text": "近射孔研究时间缩短。",
+              "conditions": [],
+              "scope": null,
+              "id": "ef-legacy-81058-18",
+              "type": "numeric",
+              "attribute": "研究时间",
+              "before": 60,
+              "after": 35,
+              "delta": null,
+              "unit": "秒",
+              "operation": "set"
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "id": "ev-tech-legacy-81058-19",
+      "versionId": "de-81058",
+      "summary": "工兵研究费用中的黄金改为木材，食物费用不变。",
+      "verification": "verified",
+      "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+      "scope": {
+        "scopeKind": "unknown",
+        "providerCivIds": [],
+        "affectedCivIds": [],
+        "beneficiary": "unknown",
+        "conditions": []
+      },
+      "civRelations": [],
+      "claims": [
+        {
+          "id": "cl-tech-legacy-81058-19",
+          "verification": "verified",
+          "verificationNote": "仅继承固定旧原件的逐条核验等级；本次未重新核验官方史实。",
+          "sourceEntryIds": ["src-legacy-81058-b017"],
+          "legacyKeys": ["81058:81058-19"],
+          "effects": [
+            {
+              "entityRefs": [
+                {
+                  "entityId": "tech/321"
+                }
+              ],
+              "text": "工兵研究费用中的黄金改为木材，食物费用不变。",
+              "conditions": [],
+              "scope": null,
+              "id": "ef-legacy-81058-19",
+              "type": "numeric",
+              "attribute": "研究费用 · 食物",
+              "before": 400,
+              "after": 400,
+              "delta": null,
+              "unit": "食物",
+              "operation": "set"
+            },
+            {
+              "entityRefs": [
+                {
+                  "entityId": "tech/321"
+                }
+              ],
+              "text": "工兵研究费用中的黄金改为木材，食物费用不变。",
+              "conditions": [],
+              "scope": null,
+              "id": "ef-legacy-81058-19-gold",
+              "type": "numeric",
+              "attribute": "研究费用 · 黄金",
+              "before": 200,
+              "after": 0,
+              "delta": null,
+              "unit": "黄金",
+              "operation": "set"
+            },
+            {
+              "entityRefs": [
+                {
+                  "entityId": "tech/321"
+                }
+              ],
+              "text": "工兵研究费用中的黄金改为木材，食物费用不变。",
+              "conditions": [],
+              "scope": null,
+              "id": "ef-legacy-81058-19-wood",
+              "type": "numeric",
+              "attribute": "研究费用 · 木材",
+              "before": 0,
+              "after": 200,
+              "delta": null,
+              "unit": "木材",
+              "operation": "set"
+            }
+          ]
+        }
+      ],
+      "candidates": []
+    }
+  ],
+  "identityBindings": {
+    "185872:185872-26": "tech/784",
+    "185872:185872-31": "tech/61",
+    "185872:185872-34": "tech/1496",
+    "185872:185872-36": "tech/21",
+    "185872:185872-60": "tech/463",
+    "185872:185872-62": "tech/54",
+    "185872:185872-63": "tech/54",
+    "185872:185872-64": "tech/54",
+    "185872:185872-65": "tech/54",
+    "185872:185872-66": "tech/54",
+    "185872:185872-67": "tech/54",
+    "185872:185872-68": "tech/54",
+    "185872:185872-69": "tech/54",
+    "185872:185872-106": "tech/1452",
+    "185872:185872-107": "tech/1452",
+    "185872:185872-108": "tech/1452",
+    "185872:185872-109": "tech/875",
+    "185872:185872-110": "tech/875",
+    "185872:185872-111": "tech/316",
+    "185872:185872-112": "tech/50",
+    "185872:185872-126": "tech/1452",
+    "66692:66692-009-021": "tech/15",
+    "66692:66692-012-025": "tech/54",
+    "66692:66692-016-026": "tech/54",
+    "66692:66692-028-027": "tech/54",
+    "66692:66692-031-028": "tech/54",
+    "66692:66692-032-029": "tech/54",
+    "81058:81058-1": "tech/875",
+    "81058:81058-2": "tech/875",
+    "81058:81058-3": "tech/875",
+    "81058:81058-4": "tech/875",
+    "81058:81058-13": "tech/716@retired",
+    "81058:81058-18": "tech/322",
+    "81058:81058-19": "tech/321",
+    "81058:81058-20": "tech/321",
+    "81058:81058-31": "tech/875",
+    "81058:81058-34": "tech/834",
+    "81058:81058-35": "tech/716@retired",
+    "81058:81058-36": "tech/875",
+    "81058:81058-38": "tech/785",
+    "81058:81058-41": "tech/875",
+    "81058:81058-48": "tech/755",
+    "81058:81058-50": "tech/875",
+    "81058:81058-51": "tech/464",
+    "81058:81058-52": "tech/875",
+    "81058:81058-53": "tech/482",
+    "81058:81058-54": "tech/482",
+    "81058:81058-59": "tech/875",
+    "81058:81058-61": "tech/831",
+    "81058:81058-62": "tech/831",
+    "81058:81058-63": "tech/875",
+    "81058:81058-65": "tech/574",
+    "81058:81058-67": "tech/875",
+    "81058:81058-69": "tech/835",
+    "81058:81058-74": "tech/21",
+    "81058:81058-75": "tech/516",
+    "81058:81058-78": "tech/716@retired",
+    "81058:81058-85": "tech/379",
+    "81058:81058-88": "tech/59",
+    "81058:81058-89": "tech/875",
+    "81058:81058-95": "tech/875",
+    "81058:81058-98": "tech/875",
+    "81058:81058-102": "tech/576",
+    "81058:81058-104": "tech/875",
+    "81058:81058-110": "tech/875",
+    "81058:81058-111": "tech/legacy-zealotry@retired",
+    "81058:81058-112": "tech/875",
+    "81058:81058-118": "tech/756",
+    "81058:81058-119": "tech/756",
+    "81058:81058-128": "tech/875",
+    "81058:81058-132": "tech/513",
+    "81058:81058-133": "tech/875",
+    "81058:81058-135": "tech/492",
+    "81058:81058-138": "tech/875",
+    "81058:81058-142": "tech/10",
+    "81058:81058-145": "tech/875",
+    "81058:81058-146": "tech/629",
+    "81058:81058-147": "tech/463",
+    "81058:81058-148": "tech/463",
+    "81058:81058-149": "tech/legacy-berserkergang@retired",
+    "81058:81058-150": "tech/49",
+    "81058:81058-155": "tech/875"
+  },
+  "relations": [
+    {
+      "entityId": "tech/690",
+      "eventId": "ev-se-a571b1ab-1629-4c10-961e-9401f8287805",
+      "effectIds": [
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-1",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-2",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-3",
+        "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-4"
+      ],
+      "relation": "related",
+      "note": "同条库曼雇佣兵研究后生成/解锁/训练效果；佣兵身份未解析，不绑定当前单位或同轴计算数量差。"
+    }
+  ],
+  "effectKinds": {
+    "ef-legacy-185872-26": "effect",
+    "ef-legacy-185872-31": "effect",
+    "ef-legacy-185872-34": "unclassified",
+    "ef-legacy-185872-36": "effect",
+    "ef-legacy-185872-60": "effect",
+    "ef-legacy-185872-62": "availability",
+    "ef-legacy-185872-63": "availability",
+    "ef-legacy-185872-64": "availability",
+    "ef-legacy-185872-65": "availability",
+    "ef-legacy-185872-66": "availability",
+    "ef-legacy-185872-67": "availability",
+    "ef-legacy-185872-68": "availability",
+    "ef-legacy-185872-69": "availability",
+    "ef-legacy-185872-106": "availability",
+    "ef-legacy-185872-107": "availability",
+    "ef-legacy-185872-108": "availability",
+    "ef-legacy-185872-109": "availability",
+    "ef-legacy-185872-110": "availability",
+    "ef-legacy-185872-111": "availability",
+    "ef-legacy-185872-112": "availability",
+    "ef-legacy-185872-126": "identity",
+    "ef-legacy-66692-009-021": "effect",
+    "ef-legacy-66692-012-025": "availability",
+    "ef-legacy-66692-016-026": "availability",
+    "ef-legacy-66692-028-027": "availability",
+    "ef-legacy-66692-031-028": "availability",
+    "ef-legacy-66692-032-029": "availability",
+    "ef-legacy-81058-1": "effect",
+    "ef-legacy-81058-2": "parameter",
+    "ef-legacy-81058-3": "parameter",
+    "ef-legacy-81058-4": "availability",
+    "ef-legacy-81058-13": "parameter",
+    "ef-legacy-81058-18": "parameter",
+    "ef-legacy-81058-19": "parameter",
+    "ef-legacy-81058-19-gold": "parameter",
+    "ef-legacy-81058-19-wood": "parameter",
+    "ef-legacy-81058-20": "effect",
+    "ef-legacy-81058-31": "availability",
+    "ef-legacy-81058-34": "effect",
+    "ef-legacy-81058-35": "availability",
+    "ef-legacy-81058-36": "availability",
+    "ef-legacy-81058-38": "parameter",
+    "ef-legacy-81058-41": "availability",
+    "ef-legacy-81058-48": "parameter",
+    "ef-legacy-81058-50": "availability",
+    "ef-legacy-81058-51": "effect",
+    "ef-legacy-81058-52": "availability",
+    "ef-legacy-81058-53": "effect",
+    "ef-legacy-81058-54": "effect",
+    "ef-legacy-81058-59": "availability",
+    "ef-legacy-81058-61": "parameter",
+    "ef-legacy-81058-62": "effect",
+    "ef-legacy-81058-63": "availability",
+    "ef-legacy-81058-65": "effect",
+    "ef-legacy-81058-67": "availability",
+    "ef-legacy-81058-69": "parameter",
+    "ef-legacy-81058-74": "parameter",
+    "ef-legacy-81058-75": "effect",
+    "ef-legacy-81058-78": "availability",
+    "ef-legacy-81058-85": "availability",
+    "ef-legacy-81058-88": "parameter",
+    "ef-legacy-81058-89": "availability",
+    "ef-legacy-81058-95": "availability",
+    "ef-legacy-81058-98": "availability",
+    "ef-legacy-81058-102": "effect",
+    "ef-legacy-81058-104": "availability",
+    "ef-legacy-81058-110": "availability",
+    "ef-legacy-81058-111": "parameter",
+    "ef-legacy-81058-112": "availability",
+    "ef-legacy-81058-118": "effect",
+    "ef-legacy-81058-119": "parameter",
+    "ef-legacy-81058-128": "availability",
+    "ef-legacy-81058-132": "parameter",
+    "ef-legacy-81058-133": "availability",
+    "ef-legacy-81058-135": "effect",
+    "ef-legacy-81058-138": "availability",
+    "ef-legacy-81058-142": "parameter",
+    "ef-legacy-81058-145": "availability",
+    "ef-legacy-81058-146": "parameter",
+    "ef-legacy-81058-147": "effect",
+    "ef-legacy-81058-148": "parameter",
+    "ef-legacy-81058-149": "identity",
+    "ef-legacy-81058-150": "unclassified",
+    "ef-legacy-81058-155": "availability",
+    "cl-se-7e1753b5-5801-410b-89a2-8a14ac62064f-structured-1": "parameter",
+    "cl-se-7e1753b5-5801-410b-89a2-8a14ac62064f-structured-2": "parameter",
+    "cl-se-e84b7f56-195b-4429-9d73-eb3d1a614090-effect-1": "effect",
+    "cl-se-a2ce0695-3e5a-43b2-8879-f213c495a2c8-effect-1": "effect",
+    "cl-se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f-effect-1": "effect",
+    "cl-se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f-structured-1": "parameter",
+    "cl-se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f-structured-2": "parameter",
+    "cl-se-9c7cc611-ae0b-4785-a3d2-89375ab87d9f-structured-3": "parameter",
+    "cl-se-9fc8c687-47ee-4406-8f74-63f4ba29498c-effect-1": "availability",
+    "cl-se-619dff87-462f-463f-997b-c731d02b2702-effect-1": "availability",
+    "cl-se-0e84be95-a5e3-4b1a-b039-50faf89cfa86-effect-1": "effect",
+    "cl-se-0e84be95-a5e3-4b1a-b039-50faf89cfa86-effect-2": "effect",
+    "cl-se-23238351-959c-42c5-872f-b6f1355ebc21-effect-1": "availability",
+    "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-1": "effect",
+    "cl-se-86e20f2d-15b8-4637-83e4-35efde6ea57b-structured-1": "parameter",
+    "cl-se-86e20f2d-15b8-4637-83e4-35efde6ea57b-structured-2": "parameter",
+    "cl-se-86e20f2d-15b8-4637-83e4-35efde6ea57b-structured-3": "effect",
+    "ef-legacy-81058-61-2": "parameter",
+    "cl-se-79bcf960-0843-4f7a-9bc8-35c59fc00a94-structured-1": "parameter",
+    "cl-se-79bcf960-0843-4f7a-9bc8-35c59fc00a94-structured-2": "parameter",
+    "cl-se-fce0c3a4-5d2b-413d-b132-d0f67240859e-effect-1": "effect",
+    "cl-se-75806fc2-8ed9-4798-b0a4-cd69b39e84b0-effect-1": "effect",
+    "cl-se-02c33930-1c5d-4bff-81fd-aeaf8215cbf7-effect-1": "effect",
+    "cl-se-34848776-53cb-493c-88c5-b913b077f2ca-structured-1": "parameter",
+    "cl-se-34848776-53cb-493c-88c5-b913b077f2ca-structured-2": "parameter",
+    "cl-se-4c2d87c4-7fe5-4acf-99b0-9d722c3dec10-structured-1": "parameter",
+    "cl-se-4c2d87c4-7fe5-4acf-99b0-9d722c3dec10-structured-2": "parameter",
+    "cl-se-a27381fe-3d82-4063-aa2c-20a54ee5887c-structured-1": "parameter",
+    "cl-se-a27381fe-3d82-4063-aa2c-20a54ee5887c-structured-2": "parameter",
+    "cl-se-a27381fe-3d82-4063-aa2c-20a54ee5887c-structured-3": "parameter",
+    "cl-se-0173601d-b206-4eac-9185-c3fe4c60b531-effect-1": "parameter",
+    "cl-se-0173601d-b206-4eac-9185-c3fe4c60b531-structured-1": "parameter",
+    "cl-se-0173601d-b206-4eac-9185-c3fe4c60b531-structured-2": "parameter",
+    "cl-se-98d4459c-d902-4364-9bab-756a88b63f4f-structured-1": "parameter",
+    "cl-se-98d4459c-d902-4364-9bab-756a88b63f4f-structured-2": "parameter",
+    "cl-se-33a0f85a-a939-4d19-aa40-03d4c1904deb-structured-1": "parameter",
+    "cl-se-33a0f85a-a939-4d19-aa40-03d4c1904deb-structured-2": "parameter",
+    "cl-se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d-effect-1": "effect",
+    "cl-se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d-structured-1": "parameter",
+    "cl-se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d-structured-2": "parameter",
+    "cl-se-fac57ef4-0d8a-49c8-84df-4aeb56f2087d-structured-3": "parameter",
+    "cl-se-fdf0ba33-fded-44c0-baae-e9aaf5603b76-structured-1": "parameter",
+    "cl-se-78065138-db58-4e8f-ac3a-d53afb926606-effect-1": "parameter",
+    "cl-se-7eacd421-af91-4c2e-86cd-d4db9a66c11f-effect-1": "effect",
+    "cl-se-1b6f08c5-56bc-4a84-8ef0-c805114bdeb5-effect-1": "effect",
+    "cl-se-e6de1e47-1167-4982-9566-4dbf8cf089c9-structured-1": "parameter",
+    "cl-se-e6de1e47-1167-4982-9566-4dbf8cf089c9-structured-2": "parameter",
+    "cl-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1-effect-1": "effect",
+    "cl-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1-structured-1": "parameter",
+    "cl-se-d81f1c94-8b6b-4f0a-b504-cd893bc7f9f1-structured-2": "parameter",
+    "cl-se-cc72a384-b538-4a1e-bfd5-32939f90b18c-effect-1": "effect",
+    "cl-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91-structured-1": "parameter",
+    "cl-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91-structured-2": "parameter",
+    "cl-se-ecff8228-8cdd-4272-8a8b-f84f034c8a91-structured-3": "parameter",
+    "cl-se-eac14506-efed-4fa4-90be-a72fab210576-effect-1": "effect",
+    "cl-se-9e6e9081-8156-442d-bb34-62454bfc969a-structured-1": "parameter",
+    "cl-se-9e6e9081-8156-442d-bb34-62454bfc969a-structured-2": "parameter",
+    "cl-se-9e6e9081-8156-442d-bb34-62454bfc969a-structured-3": "parameter",
+    "cl-se-71636ab5-9a50-4128-bce9-8212abc5e6d7-effect-1": "effect",
+    "cl-se-71636ab5-9a50-4128-bce9-8212abc5e6d7-structured-1": "parameter",
+    "cl-se-71636ab5-9a50-4128-bce9-8212abc5e6d7-structured-2": "parameter",
+    "cl-se-940b9170-f212-467b-9694-38716c99d9f9-effect-1": "effect",
+    "cl-se-940b9170-f212-467b-9694-38716c99d9f9-structured-1": "parameter",
+    "cl-se-940b9170-f212-467b-9694-38716c99d9f9-structured-2": "parameter",
+    "cl-se-940b9170-f212-467b-9694-38716c99d9f9-structured-3": "parameter",
+    "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-2": "effect",
+    "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-3": "effect",
+    "cl-se-a571b1ab-1629-4c10-961e-9401f8287805-effect-4": "effect",
+    "ef-legacy-125283-007-008": "effect",
+    "ef-legacy-125283-007-009": "effect",
+    "ef-legacy-125283-018-022": "effect",
+    "ef-legacy-125283-018-023": "effect",
+    "ef-legacy-125283-022-029": "parameter",
+    "ef-legacy-66692-006-007": "effect",
+    "ef-legacy-66692-006-008": "effect",
+    "ef-legacy-81058-25": "effect",
+    "ef-legacy-81058-26": "effect",
+    "ef-legacy-81058-44": "effect",
+    "ef-legacy-81058-76": "effect",
+    "ef-legacy-81058-97": "availability",
+    "ef-legacy-81058-114": "effect",
+    "ef-legacy-81058-115": "effect",
+    "ef-legacy-81058-134": "effect"
+  },
+  "relatedIdentities": {
+    "tech/716": "tech/716@retired"
+  }
+}
