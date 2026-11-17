@@ -1,11 +1,13 @@
 // #895 单位详情信息架构。只覆盖 issue 点名的地址、折后价和有限代表单位，不是全单位验收。
 import { expect, test } from '@playwright/test';
 
-test('#1051 单位摘要与建筑同参落地和浏览器返回', async ({ page }) => {
+test('#1051 单位摘要与建筑同参落地和浏览器返回', async ({ page }, testInfo) => {
   for (const [id, civ, buildings] of [
     [24, 'Koreans', [235, 82, 109]],
     [5, 'Bohemians', [235]],
     [93, 'Armenians', [109]],
+    [751, 'Aztecs', [109]],
+    [751, 'Mayans', [109]],
   ] as const) {
     await open(page, `/unit/${id}?civ=${civ}`);
     for (const building of buildings) {
@@ -17,13 +19,20 @@ test('#1051 单位摘要与建筑同参落地和浏览器返回', async ({ page 
       expect(params.get('civ')).toBe(civ);
       expect(params.get('gtechs')).toBe('');
       expect(params.get('army')).toMatch(new RegExp(`^${id}:\\d+:e$`, 'u'));
-      if (id === 93) {
+      if (id === 93 || id === 751) {
         expect(params.get('age')).toBe('1');
         expect(total).toBe('0');
+      }
+      if (id === 751) {
+        expect(params.get('army')).toBe('751:15:e');
+        await expect(row).toContainText('黑暗时代');
+        await row.scrollIntoViewIfNeeded();
+        await page.screenshot({ path: testInfo.outputPath(`garrison-751-${civ}-age1.png`) });
       }
       await row.getByRole('link').click();
       await expect(page.getByTestId('garrison-preview')).toBeVisible();
       await expect(page.getByTestId('garrison-preview').getByRole('alert')).toHaveCount(0);
+      await expect(page.getByLabel('驻军时代')).toHaveValue(params.get('age')!);
       await expect(page.getByTestId('garrison-total')).toHaveText(total);
       await expect(page.getByTestId('garrison-used')).toHaveText(params.get('army')!.split(':')[1]!);
       await page.goBack();

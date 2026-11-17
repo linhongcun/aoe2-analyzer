@@ -13,6 +13,9 @@ import {
 import { unitGarrisonSummary } from '../../src/features/units/garrisonSummary';
 import UnitGarrison from '../../src/features/units/components/UnitGarrison';
 import * as garrison from '../../src/domain/garrisonGeneral';
+import { GARRISON_TECH_DATA } from '../../src/domain/garrisonTechs';
+import { trainingUnitAge } from '../../src/domain/availabilityAge';
+import { productionBuildings } from '../../src/domain/production';
 
 let ctx: GeneralGarrisonContext;
 beforeAll(async () => {
@@ -21,8 +24,30 @@ beforeAll(async () => {
 const summary = (id = 24, civ = 'Koreans', data = GENERAL_GARRISON_DATA) => unitGarrisonSummary(ctx, id, civ, data);
 const host = (id = 24, civ = 'Koreans', building = 235, data = GENERAL_GARRISON_DATA) => summary(id, civ, data).rows.find((r) => r.building.id === building)!;
 const probe = { civ: 'Koreans', age: 3, techs: [], rows: [{ unitId: 24, count: '0', entry: 'enter' as const }] };
+const copyData = () => structuredClone({ ...GENERAL_GARRISON_DATA, unitUpgradeTechs: GARRISON_TECH_DATA.unitUpgradeTechs });
 
 describe('#1051 unit garrison summary', () => {
+  it.each(['Aztecs', 'Mayans'])('%s751最早外部进入为时代1/15人/真实0；不改变训练生产时代', (civ) => {
+    const row = host(751, civ, 109);
+    expect(row.age).toBe(1);
+    expect(row.config).toEqual({ civ, age: 1, techs: [], rows: [{ unitId: 751, count: '15', entry: 'enter' }] });
+    expect(row.result).toMatchObject({ errors: [], capacity: 15, usedSlots: 15, remainingSlots: 0, totalProjectiles: 0 });
+    const params = new URLSearchParams(row.href!.split('?')[1]);
+    expect(Object.fromEntries(params)).toMatchObject({ tab: 'garrison', gv: '2', civ, age: '1', gtechs: '', army: '751:15:e' });
+    const decoded = readGeneralGarrison(params, row.building);
+    expect(decoded).toEqual({ config: row.config, errors: [] });
+    expect(calculateGeneralGarrison(ctx, row.building, decoded.config)).toEqual(row.result);
+    const unit = ctx.core.unitById[751]!;
+    expect(trainingUnitAge(civ, 751, unit.age)).toBe(2);
+    for (const age of [1, 2]) {
+      expect(productionBuildings(ctx, { civ, age, techs: [], walk: 0, farm: 0, rows: [] }, unit).includes(12)).toBe(age === 2);
+    }
+    expect(markup({ unitId: 751, civ })).toContain('data-garrison-total="true">0 箭');
+  });
+
+  it.each(['Incas', 'Franks'])('%s不可继承精确751的初始单位例外', (civ) => {
+    expect(summary(751, civ)).toEqual({ kind: 'unavailable', rows: [] });
+  });
   it.each([
     [24, 'Koreans', 4, null],
     [5, 'Bohemians', 5, 4],
@@ -53,6 +78,8 @@ describe('#1051 unit garrison summary', () => {
     expect(host(93, 'Armenians', 82).age).toBe(3);
     expect(host(93, 'Armenians', 79).age).toBe(2);
     expect(host(77, 'Armenians', 109).age).toBe(2);
+    expect(host(5, 'Bohemians', 79).age).toBe(3);
+    expect(host(5, 'Teutons', 236).age).toBe(4);
   });
 
   it('仅含外部进入宿主；未选文明/不可训练/无宿主不是同一空态', () => {
@@ -69,7 +96,7 @@ describe('#1051 unit garrison summary', () => {
   });
 
   it.each([NaN, -1, 256, 1.5])('真实 API 无效容量 %s 返回默认0时不吞成无宿主', (capacity) => {
-    const data = structuredClone(GENERAL_GARRISON_DATA);
+    const data = copyData();
     data.units[79]!.capacity = capacity;
     const result = calculateGeneralGarrison(ctx, ctx.core.buildingById[79]!, probe, data);
     expect(result).toMatchObject({ capacity: 0, rows: [] });
@@ -78,8 +105,8 @@ describe('#1051 unit garrison summary', () => {
   });
 
   it('真实有限0容量已处理单行，与未处理默认0不同', () => {
-    const data = structuredClone(GENERAL_GARRISON_DATA);
-    data.units[79]!.capacity = 0;
+    const data = copyData();
+    for (const id of data.buildings[79]!.eraForms) data.units[id]!.capacity = 0;
     const result = calculateGeneralGarrison(ctx, ctx.core.buildingById[79]!, probe, data);
     expect(result).toMatchObject({ capacity: 0, rows: [{ unitId: 24, countValue: 0, canEnter: false }] });
     expect(getGarrisonCandidates(ctx, ctx.core.buildingById[79]!, probe, data).some((r) => r.id === 24)).toBe(false);
@@ -87,7 +114,7 @@ describe('#1051 unit garrison summary', () => {
   });
 
   it.each(['contribution', 'max', 'firepower'] as const)('真实 %s 未知仍保留可信满容量配置和同参链接', (field) => {
-    const data = structuredClone(GENERAL_GARRISON_DATA);
+    const data = copyData();
     if (field === 'contribution') data.units[24]!.firepower = NaN;
     if (field === 'max') data.units[79]!.max = NaN;
     if (field === 'firepower') data.units[data.units[79]!.secondaryProjectile]!.attack = NaN;
@@ -100,7 +127,7 @@ describe('#1051 unit garrison summary', () => {
   });
 
   it('真实上下文前置错误不伪造可进入或空宿主', () => {
-    const data = structuredClone(GENERAL_GARRISON_DATA);
+    const data = copyData();
     delete data.civs.Koreans;
     const rows = summary(24, 'Koreans', data).rows;
     expect(rows.length).toBeGreaterThan(0);
@@ -128,7 +155,7 @@ const markup = (overrides: Partial<Parameters<typeof UnitGarrison>[0]> = {}) =>
 
 describe('#1051 重要渲染状态', () => {
   it('真实模型未知上限不冒充已确认庇护；无效容量保留待核实且不链接', () => {
-    const data = structuredClone(GENERAL_GARRISON_DATA);
+    const data = copyData();
     data.units[79]!.max = NaN;
     const calculate = calculateGeneralGarrison;
     const spy = vi.spyOn(garrison, 'calculateGeneralGarrison').mockImplementation((context, building, config) => calculate(context, building, config, data));
@@ -140,6 +167,8 @@ describe('#1051 重要渲染状态', () => {
       expect(row()).not.toContain('容量内无法达到');
       data.units[79]!.capacity = NaN;
       expect(row()).toContain('待核实，暂无法生成有效预览');
+      expect(row()).toContain('时代待核实');
+      expect(row()).not.toContain('封建时代');
       expect(row()).not.toContain('/building/79?');
       expect(markup()).toContain('部分宿主待核实，列表尚不完整');
     } finally {

@@ -14,7 +14,7 @@ function GarrisonHost({ row }: { row: UnitGarrisonHost }) {
         <BuildingIcon b={row.building} />
         <div>
           <strong>{row.building.zh}</strong>
-          <div className="ud-kicker">{AGE_ZH[row.age]}</div>
+          <div className="ud-kicker">{row.age === null ? '时代待核实' : AGE_ZH[row.age]}</div>
         </div>
       </div>
       <div className="ud-garrison-summary">
