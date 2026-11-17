@@ -199,7 +199,7 @@ export default function BuildingDetail() {
           <div className="bd-stat-grid">
             <Stat icon="heart" stat="hp" label="生命" value={formatHp(b.hp)} />
             <Stat icon="shield" stat="ma" label="近战护甲" value={String(b.ma)} />
-            <Stat icon="shield" stat="pa" label="远程护甲" value={String(b.pa)} />
+            <Stat icon="shield-half" stat="pa" label="穿刺护甲" value={String(b.pa)} />
             <Stat icon="eye" stat="los" label="视野" value={String(b.los)} />
             {b.gar ? <Stat icon="users" stat="gar" label="驻扎" value={String(b.gar)} /> : null}
             {b.pop ? <Stat icon="home" stat="pop" label="人口" value={String(b.pop)} id={POP_ANCHOR} /> : null}
