@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import type { Core } from '../../../data';
 import type { Civ, Trees } from '../../../domain/types';
 import { offColumnSpecialBuildings, treeNodeIdentity } from '../../../domain/treeIdentity';
+import { consumeTreeSummaryHistory, readTreeSummaryMemory } from '../../../domain/treeSummaryNavigation';
 import { costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -12,6 +13,7 @@ import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
 import { useSticky } from '../../../shared/utils/sticky';
 import { AGE_BANDS, extraItems, HD, jumpScrollLeft, layoutTree, TH } from '../logic/layout';
 import { JumpToBuilding, type JumpTarget } from './JumpToBuilding';
+import { UnavailableSummary } from './UnavailableSummary';
 import '../tree.css';
 
 const JUMP_MS = 1600;
@@ -184,7 +186,15 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
               ))}
             </svg>
             {L.buildings.map((b) => {
-              const B = trees.b[b.bid]!;
+              const B = trees.b[b.bid];
+              if (!B)
+                return (
+                  <div key={b.bid} className="tbld" style={{ left: b.x, width: b.w }}>
+                    <span className="tbld-name">
+                      建筑 ID <span className="num nw">{b.bid}</span>
+                    </span>
+                  </div>
+                );
               const identB = treeNodeIdentity('b', b.bid, null);
               const to = `/building/${b.bid}${civQuery}`;
               return (
@@ -276,7 +286,33 @@ function Placeholder({ text, alert, onRetry }: { text: string; alert?: boolean; 
 
 export default function CivTechTree({ civEn }: { civEn: string }) {
   const nav = useNavigate();
-  const { core, trees, retry } = useCoreTrees();
+  const location = useLocation();
+  const resources = useCoreTrees();
+  const { core, trees, retry } = resources;
+  const savedSummary = readTreeSummaryMemory(location.state, civEn);
+  const [summaryOpen, setSummaryOpen] = useState(!!savedSummary);
+  const [summaryFocus, setSummaryFocus] = useState(savedSummary?.focus);
+  const [summaryCiv, setSummaryCiv] = useState(civEn);
+  if (summaryCiv !== civEn) {
+    setSummaryCiv(civEn);
+    setSummaryFocus(undefined);
+  }
+  const summaryToggle = useRef<HTMLButtonElement>(null);
+  const returnSummaryFocus = useRef(false);
+  useLayoutEffect(() => {
+    if (summaryOpen || !returnSummaryFocus.current) return;
+    returnSummaryFocus.current = false;
+    const button = summaryToggle.current;
+    if (!button) return;
+    button.focus({ preventScroll: true });
+    const top = ['header.topbar', 'nav.civ-chapters'].reduce(
+      (sum, selector) => sum + (document.querySelector(selector)?.getBoundingClientRect().height ?? 0),
+      0,
+    );
+    const rect = button.getBoundingClientRect();
+    if (rect.top < top + 8 || rect.bottom > innerHeight - 8)
+      window.scrollBy({ top: rect.top - top - Math.max(8, (innerHeight - top - rect.height) / 2), behavior: 'instant' });
+  }, [summaryOpen]);
   const [compare, setCompare] = useSticky('civ.techtree.compare', '');
   const [jumpSlot, setJumpSlot] = useState<HTMLDivElement | null>(null);
   const civ = civByEn(civEn);
@@ -286,6 +322,12 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
   const failed = core.error || trees.error;
   const blocks = ready && trees.data ? trees.data.t[civEn] : undefined;
   const showTree = !!(ready && blocks && trees.data && core.data && civ);
+  const closeSummary = () => {
+    window.history.replaceState(consumeTreeSummaryHistory(window.history.state, civEn, true), '');
+    returnSummaryFocus.current = true;
+    setSummaryOpen(false);
+    setSummaryFocus(undefined);
+  };
 
   if (!civ) return null;
 
@@ -302,7 +344,10 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             label="换文明看科技树"
             value={civ.en}
             onChange={(en) => {
-              if (en && en !== civ.en) nav(`/civ/${en}#techtree`);
+              if (en && en !== civ.en) {
+                setSummaryFocus(undefined);
+                nav(`/civ/${en}#techtree`);
+              }
             }}
           />
           <span className="civ-tt-cmp">
@@ -331,6 +376,23 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
               </div>
             )}
           </div>
+          <button
+            type="button"
+            className="tsum-toggle"
+            ref={summaryToggle}
+            aria-expanded={summaryOpen}
+            aria-controls="tree-unavailable"
+            onClick={() => {
+              if (summaryOpen) {
+                closeSummary();
+                return;
+              }
+              setSummaryFocus(undefined);
+              setSummaryOpen(true);
+            }}
+          >
+            不可用项汇总
+          </button>
         </div>
       </div>
       <div className="civ-tt-meta">
@@ -340,6 +402,17 @@ export default function CivTechTree({ civEn }: { civEn: string }) {
             <Icon name="move-horizontal" />共 <span className="num nw">{blocks!.length}</span> 列建筑，横向滚动查看
           </span>
         ) : null}
+      </div>
+      <div id="tree-unavailable" hidden={!summaryOpen}>
+        {summaryOpen && (
+          <UnavailableSummary
+            key={civ.en}
+            civ={civ}
+            resources={resources}
+            restoreFocus={summaryCiv === civEn ? summaryFocus : undefined}
+            onCollapse={closeSummary}
+          />
+        )}
       </div>
       {failed ? (
         <Placeholder text="科技树资料加载失败，页面其他内容仍可查看。" alert onRetry={retry} />

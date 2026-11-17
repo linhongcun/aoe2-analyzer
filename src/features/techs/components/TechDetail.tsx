@@ -8,6 +8,7 @@ import { TECH_AKA } from '../../../data/aliases';
 import { AgeImg, BuildingIcon, CivChip, CivIcon, CostView, TechIcon, TechLink, TechReleaseBadge } from '../../../shared/ui/art';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon } from '../../../shared/ui/Icon';
+import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { TechUpdates } from '../../../shared/ui/TechUpdates';
@@ -39,7 +40,7 @@ export default function TechDetail() {
     if (open) next.set('tab', 'history');
     else if (next.get('tab') === 'history') next.delete('tab');
     const query = next.toString();
-    navigate({ pathname: location.pathname, search: query ? `?${query}` : '' });
+    navigate({ pathname: location.pathname, search: query ? `?${query}` : '' }, { state: location.state });
   };
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export default function TechDetail() {
   return (
     <section id="tech" className="pane td">
       <Breadcrumbs current={tech.zh} />
+      <TreeSummaryReturn civ={contextCiv} kind="t" id={tech.id} />
       {(contextCiv || (me && opp)) && (
         <nav className="ctx-bar" aria-label="文明相关入口">
           {contextCiv && (
