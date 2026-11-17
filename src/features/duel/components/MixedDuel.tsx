@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fmtSide, type Mode } from '../../../domain/duelState';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
@@ -17,6 +17,7 @@ import '../mixed-duel.css';
 
 const DATA_VERSION = mixedDataVersion(DATA_SOURCES);
 type ExitMode = Exclude<Mode, 't'>;
+type Notice = { kind: 'status' | 'error'; text: string };
 
 export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const [params, setParams] = useSearchParams();
@@ -41,10 +42,11 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const [outcome, setOutcome] = useState<{ signature: string; result: MixedFightResult } | null>(null);
   const [busy, setBusy] = useState(false);
   const [hasRun, setHasRun] = useState(false);
-  const [notice, setNotice] = useState('');
+  const [notice, setNotice] = useState<Notice | null>(null);
   const [shareFallback, setShareFallback] = useState('');
   const [exitMode, setExitMode] = useState<ExitMode | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>();
+  const shareRequest = useRef(0);
   const originFocus = useRef<HTMLElement | null>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const [scope, setScope] = useState({ raw, core, trees, loadError });
@@ -54,10 +56,17 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     setBusy(false);
     setExitMode(null);
     setShareFallback('');
+    setNotice(null);
   }
-  useEffect(() => () => clearTimeout(timer.current), [raw, core, trees, loadError]);
+  useLayoutEffect(
+    () => () => {
+      clearTimeout(timer.current);
+      shareRequest.current++;
+    },
+    [raw, core, trees, loadError],
+  );
   const update = (next: MixedDuelInput) => {
-    setNotice('');
+    setNotice(null);
     setParams(encodeMixedDuel(next), { replace: true });
   };
   const focusField = (id: string) => {
@@ -91,7 +100,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     const a = input.a.rows[0],
       b = input.b.rows[0];
     if (!a || !b || !view?.a?.army || !view.b?.army || protocolErrors.length || dataMismatch) {
-      setNotice('无法恢复单兵种：请先为双方配置有效的第一行与共享上下文，再切换模式。');
+      setNotice({ kind: 'error', text: '无法恢复单兵种：请先为双方配置有效的第一行与共享上下文，再切换模式。' });
       return;
     }
     const side = (key: 'a' | 'b') => {
@@ -103,7 +112,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const requestExit = (mode: ExitMode, trigger: HTMLElement) => {
     originFocus.current = trigger;
     if (!input.a.rows[0] || !input.b.rows[0]) {
-      setNotice('无法恢复单兵种：空军队没有可保留的第一行，请先添加单位。');
+      setNotice({ kind: 'error', text: '无法恢复单兵种：空军队没有可保留的第一行，请先添加单位。' });
       return;
     }
     if (input.a.rows.length > 1 || input.b.rows.length > 1) setExitMode(mode);
@@ -116,12 +125,16 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const share = async () => {
     if (!canCompute) return;
     const url = window.location.href;
+    const request = ++shareRequest.current;
+    const current = () => request === shareRequest.current && window.location.href === url;
     try {
       await navigator.clipboard.writeText(url);
-      setNotice('混编配置链接已复制；打开链接后请重新计算。');
+      if (!current()) return;
+      setNotice({ kind: 'status', text: '混编配置链接已复制；打开链接后请重新计算。' });
       setShareFallback('');
     } catch {
-      setNotice('复制失败，请选择下方完整链接后手动复制。');
+      if (!current()) return;
+      setNotice({ kind: 'error', text: '复制失败，请选择下方完整链接后手动复制。' });
       setShareFallback(url);
     }
   };
@@ -164,8 +177,8 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       </div>
       <MixedRules />
       {notice && (
-        <p role="alert" className="mix-error">
-          {notice}
+        <p role={notice.kind === 'error' ? 'alert' : 'status'} className={notice.kind === 'error' ? 'mix-error' : 'mix-info'}>
+          {notice.text}
         </p>
       )}
       {!!protocolErrors.length && (
@@ -246,7 +259,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
                 ctx={ctx!}
                 onChange={(value, message) => {
                   update({ ...input, [key]: value });
-                  if (message) requestAnimationFrame(() => setNotice(message));
+                  if (message) requestAnimationFrame(() => setNotice({ kind: 'status', text: message }));
                 }}
               />
             ))}
