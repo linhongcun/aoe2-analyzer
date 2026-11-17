@@ -19,6 +19,22 @@ import {
 const data = historyFixture();
 const q = (text = '') => new URLSearchParams(text);
 
+it.each([
+  '/unit/1370?histView=techs',
+  '/unit/1370?obj=tech:689',
+  '/unit/1370?techIdentity=current',
+  '/unit/1370?techSourceState=not-checked',
+  '/building/79?histEntity=tech/716@retired',
+  '/civ/Cumans?histView=techCoverage',
+  '/unknown?histView=techs',
+  '/patches?histView=buildings&techSourceState=not-checked',
+])('rejects mixed directory/route hints without recursive dispatch: %s', (path) => {
+  expect(validHistoryReturn(path, data)).toBeNull();
+  expect(unitHistoryReturn(path, data)).toBeNull();
+  expect(techHistoryReturn(data, path)).toBeNull();
+  expect(buildingHistoryReturn(data, path)).toBeNull();
+});
+
 it('clears unit filters while retaining only a validated technology return snapshot', () => {
   const path = '/tech/689?tab=history&histVersion=de-36202';
   const query = q('histVersion=de-81058&histQuery=草原');

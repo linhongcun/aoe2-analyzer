@@ -225,6 +225,13 @@ export function validHistoryReturn(raw: string | null, data?: CivUpdatesData): s
   if (tail.length > 1) return null;
   const params = new URLSearchParams(tail[0] ?? '');
   if ([...params].some(([key, value]) => key === 'histReturn' || params.getAll(key).length !== 1 || unsafe(key) || unsafe(value))) return null;
+  // Directory selectors belong only to the overview. Reject mixed route hints
+  // before dispatching, so family validators cannot delegate back in a cycle.
+  if (
+    path !== '/patches' &&
+    ['obj', 'histView', 'histEntity', 'techSourceState', 'techIdentity', 'buildingSourceState', 'unitSourceState'].some((key) => params.has(key))
+  )
+    return null;
   if (
     path?.startsWith('/tech/') ||
     params.get('histView')?.startsWith('tech') ||
