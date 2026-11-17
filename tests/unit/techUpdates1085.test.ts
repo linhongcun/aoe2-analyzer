@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { historyFixture } from '../helpers/civUpdatesFixture';
 import { assertCivUpdateReferences, validHistoryReturn } from '../../src/domain/civUpdates';
-import { unitHistoryReturn } from '../../src/domain/unitUpdates';
+import { clearUnitFilters, unitHistoryReturn } from '../../src/domain/unitUpdates';
 import { buildingHistoryReturn } from '../../src/domain/buildingUpdates';
 import {
   filterTechEvents,
@@ -18,6 +18,17 @@ import {
 
 const data = historyFixture();
 const q = (text = '') => new URLSearchParams(text);
+
+it('clears unit filters while retaining only a validated technology return snapshot', () => {
+  const path = '/tech/689?tab=history&histVersion=de-36202';
+  const query = q('histVersion=de-81058&histQuery=草原');
+  query.set('histReturn', path);
+  expect(clearUnitFilters(query, data).get('histReturn')).toBe(path);
+  expect(clearUnitFilters(query, data).has('histVersion')).toBe(false);
+  expect(clearUnitFilters(query, data).get('histQuery')).toBe('草原');
+  query.set('histReturn', path + '&histReturn=%2Fpatches');
+  expect(clearUnitFilters(query, data).has('histReturn')).toBe(false);
+});
 
 it('retains validated civilization context when returning from technology to a unit event', () => {
   const path = '/unit/1370?tab=history&civ=Cumans&me=Cumans&opp=Aztecs&histVersion=de-36202';

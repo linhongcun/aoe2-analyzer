@@ -408,7 +408,7 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
               <option value="oldest">由旧到新</option>
             </select>
           </label>
-          <button type="button" onClick={() => setQuery(clearUnitFilters(query))}>
+          <button type="button" onClick={() => setQuery(clearUnitFilters(query, data))}>
             清除历史筛选
           </button>
         </div>

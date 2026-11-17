@@ -100,10 +100,10 @@ export function unitHistoryPath(entityId: string, query: URLSearchParams, view: 
   if (back) next.set('histReturn', back);
   return (view === 'overview' ? '/patches' : '/unit/' + id) + '?' + next.toString();
 }
-export function clearUnitFilters(query: URLSearchParams) {
+export function clearUnitFilters(query: URLSearchParams, data?: CivUpdatesData) {
   const next = new URLSearchParams(query);
   for (const key of [...next.keys()])
-    if (key.startsWith('hist') && key !== 'histQuery' && !(key === 'histReturn' && query.getAll(key).length === 1 && unitHistoryReturn(query.get(key))))
+    if (key.startsWith('hist') && key !== 'histQuery' && !(key === 'histReturn' && query.getAll(key).length === 1 && unitHistoryReturn(query.get(key), data)))
       next.delete(key);
   if (query.getAll('histQuery').length > 1) next.delete('histQuery');
   return next;
