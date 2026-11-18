@@ -388,11 +388,11 @@
           "adjustments": [
             {
               "id": "china-fire-lancer-tower-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "china-fire-lancer-tower-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 559, "age": 4 }]
             },
             {
               "id": "china-fire-lancer-tower-adjustment-third",
@@ -401,13 +401,20 @@
             {
               "id": "china-fire-lancer-tower-adjustment-fourth",
               "requires": []
+            },
+            {
+              "id": "china-fire-lancer-tower-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 82, "age": 4 },
+                { "kind": "unit", "id": 559, "age": 4 }
+              ]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L200",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [200, 204, 208, 209, 210, 211, 213, 215, 221, 222, 223, 224, 228, 230, 231, 232, 234]
+          "sourceLines": [200, 204, 206, 208, 209, 210, 211, 213, 215, 221, 222, 223, 224, 228, 230, 231, 232, 234]
         }
       ]
     },
@@ -605,6 +612,10 @@
               ]
             },
             {
+              "mode": "conditional-evaluation",
+              "entities": [{ "kind": "unit", "id": 280, "age": 4 }]
+            },
+            {
               "mode": "mechanism-support",
               "entities": [
                 {
@@ -617,15 +628,15 @@
           "adjustments": [
             {
               "id": "byzantines-cataphract-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
             },
             {
               "id": "byzantines-cataphract-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 280, "age": 4 }]
             },
             {
               "id": "byzantines-cataphract-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "tech", "id": 61, "age": 4 }]
             }
           ],
           "source": {
