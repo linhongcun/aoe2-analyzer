@@ -64,6 +64,8 @@ interface CivRestoreEntry {
   owner: CivRestoreOwner;
 }
 
+const ACTIVE_CHAPTER_BOUNDARY_TOLERANCE_PX = 0.5;
+
 /** 章节条跟着滚动标出当前所在章节。 */
 function useActiveChapter(pathname: string, hash: string, chapterIds: readonly string[]): string {
   const [active, setActive] = useState<string>(chapterIds[0] ?? 'identity');
@@ -87,7 +89,7 @@ function useActiveChapter(pathname: string, hash: string, chapterIds: readonly s
           const el = root?.querySelector<HTMLElement>('#' + id);
           if (!el) continue;
           const top = el.getBoundingClientRect().top;
-          if (top <= boundary && (top > nearest || (top === nearest && hash === '#' + id))) {
+          if (top <= boundary + ACTIVE_CHAPTER_BOUNDARY_TOLERANCE_PX && (top > nearest || (top === nearest && hash === '#' + id))) {
             current = id;
             nearest = top;
           }

@@ -218,6 +218,31 @@ for (const width of [360, 390]) {
   });
 }
 
+test('#1137 1280 普通章节点击 active 且滚动仍驱动高亮', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/civ/Spanish');
+  const chapters = page.getByRole('navigation', { name: '本页章节' });
+  const treeLink = chapters.getByRole('link', { name: '科技树' });
+  await treeLink.click();
+  await expect(treeLink).toHaveAttribute('aria-current', 'location');
+  await onScreenBelowNav(page.locator('#civ-tt-title'));
+
+  const historyLink = chapters.getByRole('link', { name: '历史' });
+  await page.locator('#history').evaluate((element) => element.scrollIntoView({ block: 'start' }));
+  await expect(historyLink).toHaveAttribute('aria-current', 'location');
+  await expect(page).toHaveURL(/#techtree$/);
+
+  for (const [label, title] of [
+    ['历史', '#civ-history-title'],
+    ['套件', '#civ-kit-title'],
+  ] as const) {
+    const link = chapters.getByRole('link', { name: label });
+    await link.click();
+    await expect(link).toHaveAttribute('aria-current', 'location');
+    await onScreenBelowNav(page.locator(title));
+  }
+});
+
 test('#1137 科技树 pending 到 ready 保持稳定锚点焦点', async ({ page }) => {
   let unblock!: () => void;
   const gate = new Promise<void>((resolve) => {
