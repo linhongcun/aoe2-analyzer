@@ -337,7 +337,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [194, 196, 234]
+          "sourceLines": [194, 196]
         },
         {
           "id": "china-fire-lancer-tower",

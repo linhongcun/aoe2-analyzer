@@ -192,6 +192,21 @@ describe('#1139 文明路线契约与投影', () => {
       expect(withoutCandidatePrerequisite.adjustments.find(({ id }) => id === main.adjustments![2]!.id)?.text).toBe(expectedFallback);
   });
 
+  it('中国主路理由与限制只对应固定第194、196行，不串入火矛驻塔PK数据', () => {
+    const main = route('Chinese', 'china-chu-ko-nu');
+    const fireLancer = route('Chinese', 'china-fire-lancer-tower');
+    const mainText = `${main.reason} ${main.limitation}`;
+    expect(main.evidence.sourceLines).toEqual([194, 196]);
+    expect(main.evidence.scope).toContain('194、196');
+    expect(main.reason).toContain('经常使用精锐诸葛弩＋轻骑兵＋少量巨型投石机');
+    expect(main.limitation).toContain('诸葛弩训练耗木金，轻骑耗食物');
+    expect(main.reason).not.toContain('投入与边界');
+    expect(main.limitation).not.toContain('投入与边界');
+    expect(mainText).not.toMatch(/火矛|19\/85|48\/192|接触 PK/);
+    expect(fireLancer.adjustments[0]!.text).toContain('火矛兵和长戟兵一起顶');
+    expect(fireLancer.adjustments[0]!.text).toContain('19/85');
+  });
+
   it('required、前置或 choice 分支按其有效时代整卡不可用，可选补充仅局部隐藏', async () => {
     const resources = await catalog();
     const malay = byCiv('Malay');
