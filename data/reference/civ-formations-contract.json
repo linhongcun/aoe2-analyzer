@@ -1434,7 +1434,7 @@
           "adjustments": [
             {
               "id": "franks-paladin-skirmisher-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359 }]
             },
             {
               "id": "franks-paladin-skirmisher-adjustment-second",
@@ -1443,13 +1443,17 @@
             {
               "id": "franks-paladin-skirmisher-adjustment-third",
               "requires": []
+            },
+            {
+              "id": "franks-paladin-skirmisher-adjustment-siege",
+              "requires": []
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L590",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [579, 581, 587, 593, 595, 601, 602, 603, 609, 610, 611, 612, 616]
+          "sourceLines": [582, 584, 586, 590, 594, 596, 598, 604, 606, 612, 617, 619]
         },
         {
           "id": "franks-heavy-mounted-crossbow-light-cav",
@@ -1482,13 +1486,17 @@
             {
               "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-third",
               "requires": []
+            },
+            {
+              "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-siege",
+              "requires": []
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L591",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [579, 581, 588, 589, 593, 595, 601, 602, 603, 609, 610, 611, 612, 616]
+          "sourceLines": [582, 584, 586, 591, 594, 596, 606, 617, 619]
         },
         {
           "id": "franks-throwing-axeman-light-cav",
@@ -1508,11 +1516,19 @@
           ],
           "choices": [],
           "prerequisites": [],
-          "supplements": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                { "kind": "unit", "id": 36, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            }
+          ],
           "adjustments": [
             {
               "id": "franks-throwing-axeman-light-cav-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359 }]
             },
             {
               "id": "franks-throwing-axeman-light-cav-adjustment-second",
@@ -1524,10 +1540,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L589",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L592",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [579, 581, 588, 589, 593, 595, 601, 602, 603, 609, 610, 611, 612, 616]
+          "sourceLines": [582, 584, 586, 592, 594, 596, 598, 605, 606, 615, 617, 619]
         }
       ]
     },
@@ -1730,7 +1746,7 @@
             },
             {
               "id": "poles-obuch-winged-hussar-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }]
             },
             {
               "id": "poles-obuch-winged-hussar-adjustment-third",
@@ -1738,10 +1754,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L689",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [678, 684, 686, 687, 688, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
+          "sourceLines": [681, 685, 689, 693, 695, 697, 703, 704, 705, 711, 712]
         },
         {
           "id": "poles-arbalest-winged-hussar",
@@ -1791,10 +1807,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L690",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [678, 684, 686, 687, 688, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
+          "sourceLines": [681, 685, 690, 693, 695, 697, 704, 705, 709, 711, 712]
         },
         {
           "id": "poles-discount-knights",
@@ -1820,7 +1836,15 @@
               "id": 782
             }
           ],
-          "supplements": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                { "kind": "unit", "id": 36, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            }
+          ],
           "adjustments": [
             {
               "id": "poles-discount-knights-adjustment-first",
@@ -1828,7 +1852,7 @@
             },
             {
               "id": "poles-discount-knights-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }]
             },
             {
               "id": "poles-discount-knights-adjustment-third",
@@ -1836,10 +1860,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L691",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [678, 684, 688, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
+          "sourceLines": [681, 685, 691, 693, 695, 697, 703, 704, 705, 711, 712]
         }
       ]
     },
