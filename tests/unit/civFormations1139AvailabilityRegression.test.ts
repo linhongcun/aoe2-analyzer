@@ -87,6 +87,8 @@ describe('#1139 optional siege and source-backed availability regressions', () =
         if (partial.status !== 'current') continue;
         const partialGroup = partial.supplements.find(({ mode }) => mode === 'choice');
         expect(partialGroup?.entities.map(({ entity }) => entity.id)).toEqual(group.entities.filter(({ id }) => id !== missing.id).map(({ id }) => id));
+        expect(partialGroup).toBeDefined();
+        expect(partialGroup!.condition).not.toMatch(/手推炮|巨型投石机|巨投|重型冲车|二选一|两种/);
         const prose = visibleRouteText(partial);
         expect(prose).not.toContain(group.condition);
         for (const clause of stalePositiveClauses) expect(prose).not.toContain(clause);
@@ -123,11 +125,15 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     if (chinaNormal.status === 'current') expect(chinaNormal.adjustments.find(({ id }) => id.endsWith('-knight-replacement'))?.text).toContain('评估重装骑士');
     const chinaMissing = project('Chinese', china.id, removeUnit(core, 283), trees);
     expect(chinaMissing.status).toBe('current');
-    if (chinaMissing.status === 'current')
+    if (chinaMissing.status === 'current') {
       expect(chinaMissing.adjustments.find(({ id }) => id.endsWith('-knight-replacement'))).toMatchObject({
         unavailable: true,
         text: china.adjustments![0]!.fallback,
       });
+      const missing283Text = visibleRouteText(chinaMissing);
+      expect(missing283Text).not.toContain('黄金与骑士科技足够时只替换部分轻骑');
+      expect(missing283Text).not.toContain('黄金充足且有骑士科技时可评估重装骑士替换部分轻骑');
+    }
 
     const turks = route('Turks', 'turks-hussar-handcannon');
     expect(turks.condition).not.toContain('骆驼');
@@ -144,7 +150,12 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     expect(bohemia.required.map(({ id }) => id)).toEqual([5, 359, 36]);
     const no1709 = project('Bohemians', bohemia.id, removeUnit(core, 1709), trees);
     expect(no1709.status).toBe('current');
-    if (no1709.status === 'current') expect(no1709.supplements.some(({ mode }) => mode === 'upgrade')).toBe(false);
+    if (no1709.status === 'current') {
+      expect(no1709.supplements.some(({ mode }) => mode === 'upgrade')).toBe(false);
+      const missing1709Text = visibleRouteText(no1709);
+      expect(missing1709Text).not.toContain('经济与炮量允许升级');
+      expect(missing1709Text).not.toContain('按经济和已有炮量升级榴弹炮');
+    }
     expect(bohemia.age).toBe(4);
     expect(bohemia.supplements.find(({ mode }) => mode === 'upgrade')?.entities.map(({ id }) => id)).toEqual([1709]);
 
@@ -167,6 +178,11 @@ describe('#1139 optional siege and source-backed availability regressions', () =
           unavailable: true,
           text: bohemia.adjustments!.find(({ id }) => id.endsWith('-construction-variant'))!.fallback,
         });
+        const missingConstructionText = visibleRouteText(view);
+        expect(missingConstructionText).not.toContain('黄金采集支持火药单位，石头采集支持前线箭塔');
+        expect(missingConstructionText).not.toContain('按需用胡斯派战车对射、掩护，取得施工空间后再让村民进场');
+        if (missing.id === 235) expect(missingConstructionText).not.toContain('部分火枪驻塔可增加箭支并改变交战条件');
+        if (missing.id === 83) expect(missingConstructionText).not.toContain('村民的生命与移动加成可用于前线施工、生存与撤退');
         if (missing.id !== 83) expect(view.supplements.some(({ mode }) => mode === 'position-variant')).toBe(false);
       }
     }

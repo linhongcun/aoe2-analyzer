@@ -77,6 +77,7 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     expect(choice.condition).toContain('当前可用');
     expect(choice.condition).toContain('不要求另开产线');
     expect(choice.entities.find(({ id }) => id === 331)?.role).toContain('已有巨型投石机可先沿用');
+    expect(choice.entities.find(({ id }) => id === 331)?.role).toContain('不要求另产手推炮');
     expect(choice.entities.map(({ id }) => id)).toEqual([36, 331]);
     expect(conditional).toHaveLength(2);
     expect(conditional.map(({ entities }) => entities.map(({ id }) => id))).toEqual([[567], [5]]);

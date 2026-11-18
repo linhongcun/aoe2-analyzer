@@ -98,7 +98,8 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect(lithuanian.prerequisites).toEqual([]);
     expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建');
     expect(lithuanian.evidence.scope).toContain('驻军预览不代表混编实战或胜率证明');
-    expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('当前可用项');
+    expect(lithuanian.reason).toContain('烈堤司以近战处理重甲');
+    expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('烈堤司近战保护攻城器');
     expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.entities.find(({ id }) => id === 36)?.role).toContain(
       '有护卫时按需用手推炮寻找反制机会',
     );
