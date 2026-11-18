@@ -991,7 +991,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L415",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [415, 419]
+          "sourceLines": [171, 415, 419]
         },
         {
           "id": "koreans-fire-lancer-garrison",
@@ -1057,7 +1057,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [386, 388, 390, 391, 392, 395, 397, 399, 405, 406, 407, 408, 415, 416, 417, 419]
+          "sourceLines": [386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419]
         }
       ]
     },

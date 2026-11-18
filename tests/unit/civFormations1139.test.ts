@@ -70,6 +70,66 @@ describe('#1139 文明路线契约与投影', () => {
     }
   });
 
+  it('高丽战车与驻塔路线、女真路线保留各自版本和实战边界', () => {
+    const wagons = route('Koreans', 'koreans-war-wagon-halberdier');
+    const garrison = route('Koreans', 'koreans-fire-lancer-garrison');
+    const jurchens = route('Jurchens', 'jurchens-fire-lancer-tower');
+
+    expect([wagons.status, wagons.playtest, wagons.composition, wagons.age, wagons.required.map(({ id }) => id)]).toEqual([
+      'approved',
+      'unreported',
+      'combined',
+      4,
+      [829, 359],
+    ]);
+    expect(wagons.supplements).toHaveLength(1);
+    expect(wagons.supplements[0]!.mode).toBe('as-needed');
+    expect(wagons.supplements[0]!.condition).toBe('按需少量手推炮');
+    expect(wagons.supplements[0]!.entities.map(({ id }) => id)).toEqual([36]);
+    expect(wagons.evidence.recordedVersion).toBe('章节资料核对：v0.77.102 · DE 188329 · 84988dd；旧战车路线的单独对局版本未记录');
+    expect(wagons.evidence.sourceLines).toEqual([171, 415, 419]);
+    expect(wagons.evidence.scope).not.toContain('来源行');
+
+    expect([garrison.status, garrison.playtest, garrison.composition, garrison.age, garrison.required.map(({ id }) => id)]).toEqual([
+      'approved',
+      'pending',
+      'combined',
+      4,
+      [235, 1903],
+    ]);
+    expect(garrison.evidence.recognition).toContain('用户提出以火矛驻塔替换旧弩手驻塔的变体');
+    expect(garrison.evidence.recognition).not.toContain('固定策略记录将此路线列为认可方案');
+    expect(garrison.evidence.playtest).toContain('用户只观察到火矛驻塔会放箭');
+    expect(garrison.evidence.playtest).toContain('新组合仍待实战验证');
+    expect(garrison.evidence.playtest).toContain('没有逐箭计数、伤害或胜率验证');
+    expect(garrison.evidence.recordedVersion).toBe('章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）');
+    expect(garrison.evidence.sourceLines).toEqual([386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419]);
+    expect(garrison.evidence.scope).not.toContain('来源行');
+    expect(garrison.required[0]!.role).toBe('主要固定远程火力与掩体');
+    expect(garrison.required[1]!.role).toBe('驻塔增箭、出塔清冲车并保护塔和炮');
+    expect(garrison.attack).toContain('先取得施工空间');
+    expect(garrison.attack).toContain('保留撤退与维修资源');
+    expect(garrison.attack).toContain('成型塔阵不能倒推为施工中的保护');
+    expect(garrison.limitation).toContain('驻军仍占人口，建塔仍耗石');
+    expect(garrison.limitation).toContain('出塔清冲车会减少驻塔火力');
+    expect(garrison.limitation).toContain('站内理论预览，不含每箭伤害，未与客户端逐项核对');
+    expect(garrison.limitation).toContain('塔能输出不等于可省略拆城堡手段');
+    expect(garrison.limitation).toContain('约 13 射程塔不能压制火炮术后 14 射程');
+    expect(garrison.limitation).toContain('缺少鼓风炉时，火矛出塔仍有近战攻击科技缺口');
+    expect(garrison.limitation).not.toContain('主要固定远程火力与掩体');
+
+    expect([jurchens.status, jurchens.playtest, jurchens.composition, jurchens.age, jurchens.required.map(({ id }) => id)]).toEqual([
+      'approved',
+      'pending',
+      'combined',
+      4,
+      [235, 1903, 441],
+    ]);
+    expect(jurchens.evidence.recordedVersion).toBe('v0.77.105 · DE 188329 · cd9382c');
+    expect(jurchens.evidence.scope).toContain('描述前线箭塔、驻塔火矛和翼骑主路');
+    expect(jurchens.evidence.scope).not.toContain('来源行');
+  });
+
   it('保留 Malay 独立帝王缺金剑士路线、年龄推进和前置', async () => {
     const progression = route('Malay', 'malay-battle-elephant-progression');
     const swords = route('Malay', 'malay-two-handed-swordsman-sustain');
