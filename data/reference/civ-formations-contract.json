@@ -1611,11 +1611,12 @@
           "prerequisites": [],
           "supplements": [
             {
-              "mode": "conditional",
+              "mode": "choice",
               "entities": [
                 {
                   "kind": "unit",
-                  "id": 1131
+                  "id": 1131,
+                  "age": 4
                 },
                 {
                   "kind": "unit",
@@ -1647,12 +1648,33 @@
               ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "vietnamese-defensive-tower-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 1131, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 1155, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 1134, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            }
+          ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [620, 624, 626, 628, 629, 630, 634]
+          "sourceLines": [620, 622, 624, 626, 628, 629, 630, 632, 634]
         }
       ]
     },
@@ -2509,9 +2531,14 @@
               "entities": [
                 {
                   "kind": "unit",
-                  "id": 6
+                  "id": 6,
+                  "age": 3
                 }
               ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
             }
           ],
           "adjustments": [
@@ -2525,14 +2552,18 @@
             },
             {
               "id": "muisca-temple-guard-slinger-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 6, "age": 3 }]
+            },
+            {
+              "id": "muisca-temple-guard-slinger-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 331, "age": 4 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [984, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014]
+          "sourceLines": [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014]
         }
       ]
     },

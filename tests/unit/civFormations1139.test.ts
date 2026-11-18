@@ -263,7 +263,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(sicilians.routes[0]!.supplements.some((group) => group.mode === 'continuation-adjustment' && group.entities.some(({ id }) => id === 283))).toBe(
       true,
     );
-    expect(byCiv('Vietnamese').routes[0]!.supplements.every((group) => group.mode === 'conditional')).toBe(true);
+    expect(byCiv('Vietnamese').routes[0]!.supplements[0]!.mode).toBe('choice');
     const vietnamese = byCiv('Vietnamese').routes[0]!;
     const imperialSkirmisher = vietnamese.supplements.flatMap(({ entities }) => entities).find(({ historicalName }) => historicalName === '帝王掷矛手');
     expect([imperialSkirmisher?.id, imperialSkirmisher?.age]).toEqual([1155, 4]);
