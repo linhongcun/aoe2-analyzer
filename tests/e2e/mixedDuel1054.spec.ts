@@ -4,6 +4,7 @@ async function enter(page: Page) {
   await page.goto('./#/duel?m=n&a=359.Japanese.4..&b=567.Japanese.4..&na=20&nb=10');
   await page.getByRole('radio', { name: '混编', exact: true }).click();
   await expect(page.getByTestId('mixed-duel')).toBeVisible();
+  await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
   await expect(page.getByRole('button', { name: '计算混编结果', exact: true })).toBeEnabled();
 }
 function query(url: string) {
@@ -31,6 +32,8 @@ test('#1054 编辑、行序、计算、结果失效、完整链接恢复和模�
   await expect(page.getByTestId('mix-a-row-1')).toContainText('42.9%');
   await page.getByRole('button', { name: '计算混编结果', exact: true }).click();
   await expect(page.getByTestId('mixed-result')).toBeVisible();
+  await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
+  await expect(page.getByTestId('mixed-result')).toContainText('无走位、射程、溅射，不解释前排保护。');
   await expect(page.getByTestId('mixed-result').getByRole('table')).toHaveCount(2);
   await expect(page.getByTestId('mixed-result')).toContainText('本方合计');
   await expect(page.getByRole('heading', { name: /方在此规则下获胜|双方同刻全部阵亡|达到时限/ })).toBeFocused();

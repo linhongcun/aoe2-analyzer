@@ -87,7 +87,21 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   );
 }
 
-export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb: number; bud: number }) {
+export function Group({
+  A,
+  B,
+  na,
+  nb,
+  bud,
+  showContactBoundary,
+}: {
+  A: Resolved;
+  B: Resolved;
+  na: number;
+  nb: number;
+  bud: number;
+  showContactBoundary: boolean;
+}) {
   const g = groupFight(A.F, na, B.F, nb);
   const wn = g.winner === 'draw' ? '平局 / 同归于尽' : `${g.winner === 'a' ? 'A' : 'B'} · ${(g.winner === 'a' ? A : B).u.zh} 获胜`;
   return (
@@ -99,6 +113,14 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
           · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {formatHp(g.hpLeft)}
         </small>
       </h2>
+      {showContactBoundary ? (
+        <p className="duel-contact-boundary" data-t="duel-contact-boundary">
+          <span className="duel-contact-boundary-line">
+            <strong>接触战估算：</strong>双方在第 <span className="num nw">0 秒</span>同时出手，按集火计算。
+          </span>
+          <span className="duel-contact-boundary-line">不计射程带来的接敌前先手、走位 / 风筝及近战包围空间。</span>
+        </p>
+      ) : null}
       <ShareImage
         title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
         stats={[

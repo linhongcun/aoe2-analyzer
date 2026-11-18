@@ -68,6 +68,76 @@ for (const item of MODES) {
   }
 }
 
+test('#1142 标准群战胜负与平局显示精确说明并位于结果之后分享之前', async ({ page }) => {
+  const cases = [
+    'a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4',
+    'a=4.Britons.2..&b=7.Franks.2..&m=n&na=4&nb=4',
+    'a=7.Franks.2..&b=7.Franks.2..&m=n&na=4&nb=4',
+  ];
+  const expected = '接触战估算：双方在第 0 秒同时出手，按集火计算。 不计射程带来的接敌前先手、走位 / 风筝及近战包围空间。';
+  for (const query of cases) {
+    const width = query === cases[0] ? 360 : 1280;
+    await page.setViewportSize({ width, height: 900 });
+    await go(page, query);
+    const note = page.locator('[data-t="duel-contact-boundary"]');
+    await expect(note).toBeVisible();
+    expect((await note.innerText()).replace(/\s+/g, ' ').trim()).toBe(expected);
+    await expect(note.locator('strong')).toHaveText('接触战估算：');
+    await expect(note.locator('.num.nw')).toHaveText('0 秒');
+    const metrics = await note.evaluate((element) => {
+      const number = element.querySelector('.num.nw')!;
+      return {
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+        whiteSpace: getComputedStyle(number).whiteSpace,
+        noteRight: element.getBoundingClientRect().right,
+      };
+    });
+    expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
+    expect(metrics.whiteSpace).toBe('nowrap');
+    expect(metrics.noteRight).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(
+      await note.evaluate((element) => {
+        const heading = document.querySelector('#duel-res > .duel-win')!;
+        const share = document.querySelector('#duel-res > .share-image')!;
+        return [
+          !!(heading.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING),
+          !!(element.compareDocumentPosition(share) & Node.DOCUMENT_POSITION_FOLLOWING),
+        ];
+      }),
+    ).toEqual([true, true]);
+  }
+});
+
+test('#1142 深色主题说明继续使用表面和次级文字令牌', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
+  await go(page, 'a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4');
+  const colors = await page.locator('[data-t="duel-contact-boundary"]').evaluate((note) => {
+    const surface = document.createElement('div');
+    surface.style.backgroundColor = 'var(--color-surface-2)';
+    surface.style.color = 'var(--color-text-2)';
+    document.body.append(surface);
+    return {
+      background: getComputedStyle(note).backgroundColor,
+      expectedBackground: getComputedStyle(surface).backgroundColor,
+      color: getComputedStyle(note).color,
+      expectedColor: getComputedStyle(surface).color,
+    };
+  });
+  expect(colors.background).toBe(colors.expectedBackground);
+  expect(colors.color).toBe(colors.expectedColor);
+});
+
+test('#1142 1v1、等资源、等采集及无结果状态不显示标准群战说明', async ({ page }) => {
+  for (const item of [MODES[0], MODES[2], MODES[3], MODES[4], MODES[5]]) {
+    await go(page, item.query, item.unavailable);
+    await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
+  }
+  await go(page, 'a=569.Britons.4.f.&b=359.Japanese.4.f.&m=n&na=4&nb=4', true);
+  await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
+});
+
 test('#364 升级比较与条件瓦兰吉加成标题也纳入相同大纲', async ({ page }) => {
   await go(page, `a=38.Byzantines.3.67.&b=38.Byzantines.3..&m=1&base=38.Byzantines.3..&fixed=38.Byzantines.3..&basev=${pins.patch.build}`);
   await expand(page);

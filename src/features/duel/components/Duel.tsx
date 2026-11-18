@@ -347,7 +347,15 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
       ) : mode === '1' ? (
         <OneVOne key={[fmtSide(A.spec), fmtSide(B.spec)].join('|')} A={A} B={B} />
       ) : (
-        <Group key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')} A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
+        <Group
+          key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')}
+          A={A}
+          B={B}
+          na={cntA}
+          nb={cntB}
+          bud={mode === 'r' ? bud : 0}
+          showContactBoundary={mode === 'n'}
+        />
       )}
       <UpgradeComparison
         ctx={ctx}
