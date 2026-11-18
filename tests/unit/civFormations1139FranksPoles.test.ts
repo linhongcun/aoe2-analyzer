@@ -59,6 +59,7 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     expect(throwingAxeman.reason).toContain('按情境或兴趣选择');
     expect(throwingAxeman.limitation).toContain('共同消耗食物');
     expect(throwingAxeman.limitation).toContain('骑兵威胁');
+    expect(paladin.alternatives).toContain('反复前推城堡也不作默认选择');
 
     for (const entry of [paladin, mountedCrossbow]) {
       expect(entry.supplements).toEqual([]);
@@ -73,6 +74,8 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     expect(halberd.requires).toEqual([{ kind: 'unit', id: 359 }]);
     expect(halberd.text).toContain('未单独实战验证');
     expect(halberd.fallback).toContain('不把长戟支援当作固定');
+    expect(throwingAxeman.adjustments[0]!.fallback).toContain('骑兵威胁下');
+    expect(throwingAxeman.adjustments[0]!.fallback).not.toContain('反骑压力');
     const axeChoice = throwingAxeman.supplements.find(({ mode }) => mode === 'choice')!;
     expect(axeChoice.entities.map(({ id, age }) => [id, age])).toEqual([
       [36, 4],
@@ -123,9 +126,32 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     ]);
     for (const entry of [obuch, arbalest, knights]) {
       expect(entry.evidence.scope).not.toContain('来源行');
-      expect(entry.evidence.sourceLines).toContain(685);
+      expect(entry.evidence.sourceLines).toContain(682);
       expect(entry.evidence.sourceLines).toContain(712);
       expect(contractRoute('Poles', entry.id).sourceLines).toEqual(entry.evidence.sourceLines);
+    }
+    expect(obuch.adjustments[1]!.fallback).toContain('规避受保护的远程火力');
+    expect(obuch.adjustments[1]!.fallback).toContain('保留撤退和安全接敌空间');
+  });
+
+  it('六条路线的sourceLines与固定版本URL锚点逐条对应', () => {
+    const expected = [
+      ['Franks', 'franks-paladin-skirmisher', 587, [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]],
+      ['Franks', 'franks-heavy-mounted-crossbow-light-cav', 588, [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]],
+      ['Franks', 'franks-throwing-axeman-light-cav', 589, [579, 581, 583, 589, 591, 593, 595, 602, 603, 612, 614, 616]],
+      ['Poles', 'poles-obuch-winged-hussar', 686, [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]],
+      ['Poles', 'poles-arbalest-winged-hussar', 687, [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]],
+      ['Poles', 'poles-discount-knights', 688, [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]],
+    ] as const;
+    const url = (line: number) => `https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L${line}`;
+
+    for (const [civ, id, line, lines] of expected) {
+      const entry = route(civ, id);
+      const contract = contractRoute(civ, id);
+      expect(entry.evidence.sourceLines).toEqual(lines);
+      expect(contract.sourceLines).toEqual(lines);
+      expect(entry.source?.content).toBe(url(line));
+      expect(contract.source.content).toBe(url(line));
     }
   });
 

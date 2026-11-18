@@ -1450,10 +1450,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L590",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [582, 584, 586, 590, 594, 596, 598, 604, 606, 612, 617, 619]
+          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]
         },
         {
           "id": "franks-heavy-mounted-crossbow-light-cav",
@@ -1493,10 +1493,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L591",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [582, 584, 586, 591, 594, 596, 606, 617, 619]
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
         },
         {
           "id": "franks-throwing-axeman-light-cav",
@@ -1540,10 +1540,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L592",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L589",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [582, 584, 586, 592, 594, 596, 598, 605, 606, 615, 617, 619]
+          "sourceLines": [579, 581, 583, 589, 591, 593, 595, 602, 603, 612, 614, 616]
         }
       ]
     },
@@ -1754,10 +1754,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L689",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [681, 685, 689, 693, 695, 697, 703, 704, 705, 711, 712]
+          "sourceLines": [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
         },
         {
           "id": "poles-arbalest-winged-hussar",
@@ -1807,10 +1807,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L690",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [681, 685, 690, 693, 695, 697, 704, 705, 709, 711, 712]
+          "sourceLines": [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]
         },
         {
           "id": "poles-discount-knights",
@@ -1860,10 +1860,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L691",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
             "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
           },
-          "sourceLines": [681, 685, 691, 693, 695, 697, 703, 704, 705, 711, 712]
+          "sourceLines": [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]
         }
       ]
     },

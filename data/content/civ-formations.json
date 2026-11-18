@@ -2200,7 +2200,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录游侠与精锐掷矛的条件组合、食物与黄金投入、骆驼和长戟压力，以及按需攻城支援。",
           "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [582, 584, 586, 590, 594, 596, 598, 604, 606, 612, 617, 619]
+          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]
         },
         "reason": "游侠承担重骑主力，精锐掷矛手应对射手与长戟。游侠 60 食物 + 75 黄金，掷矛手 25 食物 + 35 木材；两线共用食物，资源并非完全分离。免费磨坊科技只节省升级投入，不意味着无限补兵。",
         "limitation": "游侠与掷矛手共同消耗食物，游侠另需黄金；骆驼压力大时谨慎投入游侠。精锐掷矛手缺护腕、扳指和射手锁甲，站内满科技射程为 7；免费磨坊科技不意味着无限补兵。",
@@ -2230,9 +2230,9 @@
             "text": "固定记录允许另配少量攻城器，未指定种类，不设固定比例。"
           }
         ],
-        "alternatives": "游侠与掷斧长期双主力不默认：两路都花黄金且共用食物，可能增加补兵压力；这是成本权衡，不是禁止混编。",
+        "alternatives": "游侠与掷斧长期双主力不默认：两路都花黄金且共用食物，可能增加补兵压力；这是成本权衡，不是禁止混编。反复前推城堡也不作默认选择：折扣仅文本、实际造价未核，仍耗石料且有施工暴露。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L590",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -2271,7 +2271,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录骑马弩与轻骑的资源分工、折扣估算边界、受保护攻城器风险及按需攻城支援。",
           "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [582, 584, 586, 591, 594, 596, 606, 617, 619]
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
         },
         "reason": "重装骑马弩持续输出，轻骑提供机动掩护；骑马弩目录费用为 65 黄金 + 40 木材，轻骑为 80 食物，训练资源相对分工。王家敕令骑兵黄金折扣仅作估算，并非目录已应用价格；免费磨坊科技只节省升级投入，不意味着无限补兵。",
         "limitation": "骑马弩持续占用木材与黄金，轻骑占用食物；王家敕令折扣不能写成已应用价格。轻骑接近受保护的敌方攻城器有被护卫拦截的风险；免费磨坊科技不消除补兵成本。",
@@ -2301,7 +2301,7 @@
         ],
         "alternatives": "王家敕令骑兵的黄金折扣只作估算：目录费用仍为 65 黄金 + 40 木材，不能把静算结果当作站内已应用折后价。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L591",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -2349,7 +2349,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录掷斧与轻骑的情境/兴趣定位、共享食物、骑兵压力及明确的攻城器选择边界。",
           "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [582, 584, 586, 592, 594, 596, 598, 605, 606, 615, 617, 619]
+          "sourceLines": [579, 581, 583, 589, 591, 593, 595, 602, 603, 612, 614, 616]
         },
         "reason": "精锐掷斧处理步兵，轻骑提供机动；掷斧 55 食物 + 25 黄金、射程 6，与轻骑共用食物。这是按情境或兴趣选择的路线，不作为通用主力；免费磨坊科技仅是共享经济背景，不意味着无限补兵。",
         "limitation": "掷斧与轻骑共同消耗食物，掷斧另需黄金；骑兵威胁会压缩两者的安全接战空间。精锐掷斧兵射程为 6，相关科技中没有旧掷斧增程科技；免费磨坊科技不意味着无限补兵。",
@@ -2361,7 +2361,7 @@
             "when": "骑兵威胁掷斧或轻骑",
             "text": "条件性评估长戟作为反骑支援；本建议未单独实战验证，轻骑也不保证能越过护卫切入。",
             "requires": [{ "kind": "unit", "id": 359 }],
-            "fallback": "不让掷斧和轻骑在反骑压力下硬接；不把长戟支援视为固定或已验证建议。"
+            "fallback": "不让掷斧和轻骑在骑兵威胁下硬接；不把长戟支援视为固定或已验证建议。"
           },
           {
             "id": "franks-throwing-axeman-light-cav-adjustment-second",
@@ -2376,7 +2376,7 @@
         ],
         "alternatives": "按情境／兴趣选择而不作通用主力；掷斧与轻骑共用食物，且在骑兵威胁下承压，不默认长期维持高比例。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L592",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L589",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -2686,10 +2686,10 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录奥布奇正面接战破甲与翼骑机动的认可条件、食物和城堡产能成本、共用攻城支援及反制边界。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
-          "sourceLines": [681, 685, 689, 693, 695, 697, 703, 704, 705, 711, 712]
+          "sourceLines": [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L689",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
@@ -2708,7 +2708,7 @@
             "when": "射手或火枪成群，后有反骑护卫",
             "text": "若需转向远程清理反骑护卫，可考虑劲弩路线；转换需承担射手科技与产能投入，不固定同出。",
             "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }],
-            "fallback": "继续按奥布奇单路接战、翼骑保留机动；不展示劲弩转线建议。"
+            "fallback": "规避受保护的远程火力，保留撤退和安全接敌空间；不展示不可用的劲弩转线建议。"
           },
           {
             "id": "poles-obuch-winged-hussar-adjustment-third",
@@ -2771,10 +2771,10 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录劲弩远射清理长戟与翼骑掩护的分工、训练资源互补、翼骑机制证据边界及共用攻城支援。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
-          "sourceLines": [681, 685, 690, 693, 695, 697, 704, 705, 709, 711, 712]
+          "sourceLines": [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L690",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
@@ -2853,10 +2853,10 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录贵族特权骑士的已有科技延续条件、折扣适用范围、共用经济与攻城支援边界。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
-          "sourceLines": [681, 685, 691, 693, 695, 697, 703, 704, 705, 711, 712]
+          "sourceLines": [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L691",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
