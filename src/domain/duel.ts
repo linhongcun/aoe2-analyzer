@@ -129,16 +129,17 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
     nextA = 0,
     nextB = 0;
   const alive = (X: number[]) => X.filter((h) => h > 1e-9).length;
+  const timeTolerance = 1e-9;
   const timeline: [number, number, number][] = [[0, na, nb]];
   while (alive(A) && alive(B) && t <= maxT) {
     const nextT = Math.min(nextA, nextB);
-    if (nextT > maxT) {
+    if (nextT > maxT && nextT - maxT >= timeTolerance) {
       t = maxT;
       break;
     }
-    t = nextT;
-    const aAtk = Math.abs(t - nextA) < 1e-9,
-      bAtk = Math.abs(t - nextB) < 1e-9;
+    t = Math.min(nextT, maxT);
+    const aAtk = Math.abs(t - nextA) < timeTolerance,
+      bAtk = Math.abs(t - nextB) < timeTolerance;
     const nA = alive(A),
       nB = alive(B);
     // 同时结算：先算出双方本轮伤害，再施加
@@ -156,7 +157,8 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
     if (hitA) apply(A, hitA, dB);
     if (aAtk) nextA += a.rof > 0 ? a.rof : maxT + 1;
     if (bAtk) nextB += b.rof > 0 ? b.rof : maxT + 1;
-    timeline.push([Math.round(t * 100) / 100, alive(A), alive(B)]);
+    timeline.push([Math.min(maxT, Math.round(t * 100) / 100), alive(A), alive(B)]);
+    if (t >= maxT) break;
   }
   const aAlive = alive(A),
     bAlive = alive(B);
