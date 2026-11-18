@@ -1,6 +1,7 @@
-/** Every game/content JSON has one explicit format; only like-shaped families share. */
+/** Scanned game/content JSON and the explicit reference contract have one format each. */
 export const SCHEMA_CATALOG = {
   'data/content/civ-formations.json': 'content-civ-formations.json',
+  'data/reference/civ-formations-contract.json': 'content-civ-formations-contract.json',
   'data/content/civ-updates.json': 'content-civ-updates.json',
   'data/content/civs/history.json': 'content-civ-history.json',
   ...Object.fromEntries(

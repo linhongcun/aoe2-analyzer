@@ -106,13 +106,13 @@ test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({
   const section = page.locator(formations);
   await expect(section.locator('article')).toHaveCount(1);
   await onScreenBelowNav(page.locator('#formation-monaspa-towers'));
-  await expect(section.getByRole('link', { name: /^大型箭塔/ })).toHaveAttribute('href', '#/building/235?civ=Georgians');
+  await expect(section.getByRole('link', { name: /^大型箭塔 建筑支点/ })).toHaveAttribute('href', '#/building/235?civ=Georgians');
   await expect(section.getByRole('link', { name: /^斯万箭塔/ })).toHaveAttribute('href', '#/tech/923?civ=Georgians');
-  await page.goto('./#/civ/Japanese#formations');
+  await page.goto('./#/civ/Celts#formations');
   await expect(section.getByRole('heading', { name: '暂无已整理阵容' })).toBeVisible();
-  await expect(section.getByRole('link', { name: '查看科技树' })).toHaveAttribute('href', '#/civ/Japanese#techtree');
-  await expect(page.getByTestId('civ-tool-train-total')).toHaveAttribute('href', '#/production?mode=train-total&civ=Japanese');
-  await expect(page.getByTestId('civ-tool-matchup')).toHaveAttribute('href', '#/matchup?me=Japanese');
+  await expect(section.getByRole('link', { name: '查看科技树' })).toHaveAttribute('href', '#/civ/Celts#techtree');
+  await expect(page.getByTestId('civ-tool-train-total')).toHaveAttribute('href', '#/production?mode=train-total&civ=Celts');
+  await expect(page.getByTestId('civ-tool-matchup')).toHaveAttribute('href', '#/matchup?me=Celts');
 });
 
 test('#1120 刷新实体详情后返回只按锚点定位', async ({ page }) => {
@@ -307,12 +307,125 @@ test('#1120 切换文明后迟到读取不带回旧路线', async ({ page }) => 
   try {
     await page.goto(`${spanish}#formations`, { waitUntil: 'domcontentloaded' });
     await expect(page.locator(formations).getByRole('status').filter({ hasText: '正在读取推荐阵容' })).toBeAttached();
-    await page.goto('./#/civ/Japanese#formations', { waitUntil: 'commit' });
+    await page.goto('./#/civ/Celts#formations', { waitUntil: 'commit' });
     unblock();
     await expect(page.locator(formations).getByRole('heading', { name: '暂无已整理阵容' })).toBeVisible();
-    await expect(page.getByTestId('civ-techtree')).toHaveAttribute('data-tree-civ', 'Japanese');
+    await expect(page.getByTestId('civ-techtree')).toHaveAttribute('data-tree-civ', 'Celts');
     await expect(page.locator(formations).locator('article')).toHaveCount(0);
   } finally {
     unblock();
   }
 });
+
+test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
+  test.setTimeout(90000);
+  const routes: Record<string, number> = {
+    Chinese: 2,
+    Hindustanis: 1,
+    Turks: 2,
+    Byzantines: 1,
+    Malians: 1,
+    Malay: 2,
+    Sicilians: 1,
+    Goths: 1,
+    Koreans: 2,
+    Jurchens: 1,
+    Saxons: 1,
+    Teutons: 3,
+    Franks: 3,
+    Vietnamese: 1,
+    Lithuanians: 1,
+    Poles: 3,
+    Bulgarians: 1,
+    Magyars: 1,
+    Bohemians: 1,
+    Aztecs: 1,
+    Incas: 2,
+    Mayans: 1,
+    Mapuche: 2,
+    Muisca: 1,
+    Tupi: 2,
+    Japanese: 1,
+  };
+  for (const [civ, count] of Object.entries(routes)) {
+    await page.goto(`./#/civ/${civ}#formations`);
+    await expect(page.locator(formations).locator('.formation-list > article')).toHaveCount(count);
+  }
+});
+
+for (const width of [360, 1280]) {
+  test(`#1139 ${width} choice、progression、来源与条件候选`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/civ/Chinese#formations');
+    const section = page.locator(formations);
+    await expect(section).toContainText('用户报告用过');
+    await expect(section).toContainText('待实战验证');
+
+    await page.goto('./#/civ/Malay#formation-malay-battle-elephant-progression');
+    const malayProgression = page.locator('#formation-malay-battle-elephant-progression');
+    await expect(malayProgression).toBeVisible();
+    const malayCard = section.locator('.formation-list > article').filter({ has: malayProgression });
+    await expect(malayCard.getByRole('heading', { level: 4, name: '先后阶段组成' })).toBeVisible();
+    const malayStages = malayCard.locator('.formation-entities').first().locator('.formation-entity');
+    await expect(malayStages).toHaveCount(2);
+    await expect(malayStages.nth(0)).toContainText('城堡时代');
+    await expect(malayStages.nth(1)).toContainText('帝王时代');
+    await page.goto('./#/civ/Malay#formation-malay-two-handed-swordsman-sustain');
+    const malaySwordsHeading = page.locator('#formation-malay-two-handed-swordsman-sustain');
+    const malaySwordsCard = section.locator('.formation-list > article').filter({ has: malaySwordsHeading });
+    await expect(malaySwordsCard).toContainText('缺金');
+    await expect(malaySwordsCard).toContainText('强征兵役');
+    await expect(malaySwordsCard.getByRole('link', { name: /^强征兵役/ })).toHaveAttribute('href', '#/tech/625?civ=Malay');
+
+    await page.goto('./#/civ/Poles#formation-poles-discount-knights');
+    const poles = page.locator('#formation-poles-discount-knights');
+    const polesCard = section.locator('.formation-list > article').filter({ has: poles });
+    await expect(polesCard.getByRole('heading', { level: 4, name: '先后阶段组成' })).toBeVisible();
+    const polesStages = polesCard.locator('.formation-entities').first().locator('.formation-entity');
+    await expect(polesStages).toHaveCount(2);
+    await expect(polesStages.nth(0)).toContainText('城堡时代');
+    await expect(polesStages.nth(1)).toContainText('帝王时代');
+
+    await page.goto('./#/civ/Turks#formation-turks-existing-line-choice');
+    const turks = page
+      .locator(formations)
+      .locator('article')
+      .filter({ has: page.locator('#formation-turks-existing-line-choice') });
+    await expect(turks).toContainText('按条件择一，不同时必出');
+    await expect(turks.locator('.formation-choice')).toHaveCount(2);
+    await expect(turks).toContainText('重装骑射手');
+    await expect(turks).toContainText('精锐苏丹亲兵');
+
+    await page.goto('./#/civ/Aztecs#formation-aztecs-eagle-skirmisher');
+    const aztecHeading = page.locator('#formation-aztecs-eagle-skirmisher');
+    const aztec = section.locator('.formation-list > article').filter({ has: aztecHeading });
+    await expect(aztec).toContainText('限定候选');
+    await expect(aztec).toContainText('不是通用主路');
+
+    await page.goto('./#/civs');
+    await page.locator('[data-civ="Incas"]').click();
+    await page.getByRole('link', { name: '打开完整文明资料' }).click();
+    await page.locator('.formation-jumps a[href$="#formation-incas-champi-candidate"]').click();
+    const inca = page.locator(formations);
+    const candidateHeading = page.locator('#formation-incas-champi-candidate');
+    const candidate = inca.locator('.formation-list > article').filter({ has: candidateHeading });
+    await expect(candidate).toContainText('限定候选');
+    await expect(candidate).toContainText('蔷琵战士');
+    await expect(candidate).toContainText('弩炮');
+    await expect(inca).not.toContainText('名称替换未经维护者确认');
+    await candidate.locator('summary').filter({ hasText: '来源与核对' }).click();
+    await expect(candidate.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://app.devin.ai/sessions/998ba78b2edf4799bb383d10b7e8eef9');
+    const champi = page.locator('#formation-incas-champi-candidate-unit-2554');
+    const clickBefore = await page.evaluate(() => window.history.state);
+    await champi.click();
+    await expect(page).toHaveURL(/#\/unit\/2554\?civ=Incas$/);
+    const entityPageState = await page.evaluate(() => window.history.state);
+    expect(clickBefore.idx).toBe(2);
+    expect(entityPageState.idx).toBe(3);
+    expect(entityPageState.usr.formationReturn).toBeTruthy();
+    await page.goBack();
+    await expect(champi).toBeFocused();
+    expect(await page.evaluate(() => window.history.state?.usr?.formationReading)).toBeUndefined();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

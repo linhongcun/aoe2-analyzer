@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import scouting from '../../data/content/scouting.json';
 import campaigns from '../../data/content/campaigns.json';
 import formations from '../../data/content/civ-formations.json';
+import formationsContract from '../../data/reference/civ-formations-contract.json';
 import units from '../../data/game/units.json';
 import construction from '../../data/game/construction.json';
 import { checkDirectory, LEGACY_SOURCE_BASELINE, ratchetProblems, validateDocument } from '../../scripts/content-schema.mjs';
@@ -19,7 +20,7 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
         const path = join(directory, entry.name);
         return entry.isDirectory() ? files(path) : path.endsWith('.json') ? [path] : [];
       });
-    expect(result.files.sort()).toEqual([...files('data/content'), ...files('data/game')].sort());
+    expect(result.files.sort()).toEqual([...files('data/content'), ...files('data/game'), 'data/reference/civ-formations-contract.json'].sort());
     expect(result.files.length).toBeGreaterThan(0);
     const migration = ratchetProblems(result.problems);
     expect(migration.errors).toEqual([]);
@@ -79,6 +80,15 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
       ).valid,
     ).toBe(false);
     expect(validateDocument(file, {}).valid).toBe(false);
+  });
+
+  it('文明阵容路线与调整 ID 保持 slug 锚点约束', () => {
+    const copy = JSON.parse(JSON.stringify(formations)) as typeof formations;
+    copy[2]!.routes[0]!.id = 'bad route id';
+    expect(validateDocument('data/content/civ-formations.json', copy).valid).toBe(false);
+    const adjustmentCopy = JSON.parse(JSON.stringify(formations)) as typeof formations;
+    adjustmentCopy[2]!.routes[0]!.adjustments = [{ id: 'bad adjustment id', when: '有压力', text: '按需调整' }];
+    expect(validateDocument('data/content/civ-formations.json', adjustmentCopy).valid).toBe(false);
   });
 
   it('新增未登记 JSON 不能被通用 object schema 放过', () => {
@@ -148,7 +158,9 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
   it('默认告警与 CI strict 模式的实际退出码不同', () => {
     const root = mkdtempSync(join(tmpdir(), 'content-285-'));
     mkdirSync(join(root, 'data/content'), { recursive: true });
+    mkdirSync(join(root, 'data/reference'), { recursive: true });
     writeFileSync(join(root, 'data/content/civ-formations.json'), JSON.stringify(formations));
+    writeFileSync(join(root, 'data/reference/civ-formations-contract.json'), JSON.stringify(formationsContract));
     writeFileSync(join(root, 'data/content/scouting.json'), JSON.stringify({ ...scouting, unknownField: 1 }));
     const run = (strict: boolean) =>
       spawnSync(process.execPath, [resolve('scripts/check-content.mjs'), '--root', root, ...(strict ? ['--strict'] : [])], { encoding: 'utf8' });
@@ -169,7 +181,9 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
     const root = mkdtempSync(join(tmpdir(), 'content-discovery-285-'));
     mkdirSync(join(root, 'data/content'), { recursive: true });
     mkdirSync(join(root, 'data/game'), { recursive: true });
+    mkdirSync(join(root, 'data/reference'), { recursive: true });
     writeFileSync(join(root, 'data/content/civ-formations.json'), JSON.stringify(formations));
+    writeFileSync(join(root, 'data/reference/civ-formations-contract.json'), JSON.stringify(formationsContract));
     writeFileSync(join(root, 'data/content/scouting.json'), JSON.stringify(scouting));
     writeFileSync(join(root, 'data/content/not-registered.json'), '{}');
     writeFileSync(join(root, 'data/game/construction.json'), '{broken');
@@ -180,6 +194,7 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
         'data/content/not-registered.json',
         'data/content/scouting.json',
         'data/game/construction.json',
+        'data/reference/civ-formations-contract.json',
       ]);
       expect(result.problems.map((entry) => [entry.file, entry.code])).toEqual([
         ['data/content/not-registered.json', 'coverage'],

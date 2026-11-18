@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-formations-contract.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "fixedSourceCommit", "civs"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "fixedSourceCommit": {
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 40
+    },
+    "civs": {
+      "type": "array",
+      "minItems": 28,
+      "maxItems": 28,
+      "items": {
+        "$ref": "#/$defs/civ"
+      }
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "enum": ["unit", "building", "tech"]
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "age": {
+          "enum": [3, 4]
+        }
+      }
+    },
+    "routeRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "const": "route"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "dependency": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ref"
+        },
+        {
+          "$ref": "#/$defs/routeRef"
+        }
+      ]
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "preconditions", "entities"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        }
+      }
+    },
+    "supplement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "entities"],
+      "properties": {
+        "mode": {
+          "enum": [
+            "as-needed",
+            "choice",
+            "replace",
+            "progression",
+            "mechanism-support",
+            "support",
+            "conditional",
+            "position-variant",
+            "mechanism-only",
+            "continuation-adjustment",
+            "production-alternative",
+            "upgrade",
+            "conditional-evaluation"
+          ]
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        }
+      }
+    },
+    "adjustment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "requires"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content", "discussion"],
+      "properties": {
+        "content": {
+          "type": "string",
+          "format": "public-url"
+        },
+        "discussion": {
+          "type": "string",
+          "format": "public-url"
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "playtest",
+        "composition",
+        "age",
+        "required",
+        "choices",
+        "prerequisites",
+        "supplements",
+        "adjustments",
+        "source",
+        "sourceLines"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["approved", "candidate", "unverified", "draft"]
+        },
+        "playtest": {
+          "enum": ["reported", "pending", "unreported"]
+        },
+        "composition": {
+          "enum": ["combined", "choice", "progression"]
+        },
+        "age": {
+          "enum": [3, 4]
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/choice"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "supplements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/supplement"
+          }
+        },
+        "adjustments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/adjustment"
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "sourceLines": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "civ": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["civ", "routes"],
+      "properties": {
+        "civ": {
+          "type": "string",
+          "minLength": 1
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/route"
+          }
+        }
+      }
+    }
+  }
+}

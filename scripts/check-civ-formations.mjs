@@ -1,87 +1,72 @@
+import { resolveFormationSource } from '../src/domain/civFormationsSource.mjs';
+
 export const FORMATIONS_FILE = 'data/content/civ-formations.json';
+export const FORMATION_CONTRACT_FILE = 'data/reference/civ-formations-contract.json';
+const FIXED_SOURCE_COMMIT = '8d1adeacc7c97374ee6d95d9cabfceb793d080d3';
 
-const strategySource = 'https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md';
-const discussionSource = 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4';
-const strategySections = { Spanish: '西班牙', Georgians: '格鲁吉亚' };
+const sameArray = (actual = [], expected = []) =>
+  actual.length === expected.length && actual.every((value, index) => JSON.stringify(value) === JSON.stringify(expected[index]));
+const ref = ({ kind, id, age }) => ({ kind, id, ...(age === undefined ? {} : { age }) });
+const entityRefs = (values = []) => values.map(ref);
+const routeDependency = ({ kind, id, age }) => (kind === 'route' ? { kind, id } : { kind, id, ...(age === undefined ? {} : { age }) });
 
-const release = {
-  Spanish: {
-    'conquistador-hussar': {
-      required: ['unit:773', 'unit:441'],
-      supplements: ['unit:6'],
-      adjustments: { spears: [], ranged: ['unit:6'], siege: [] },
-    },
-    'paladin-skirmisher': {
-      required: ['unit:569', 'unit:6'],
-      supplements: ['unit:441'],
-      adjustments: { camels: ['route:handcannon-halberdier'], ranged: [], spears: [], 'low-gold': ['unit:441'] },
-    },
-    'handcannon-halberdier': {
-      required: ['unit:5', 'unit:359'],
-      supplements: ['unit:36', 'unit:331'],
-      adjustments: { infantry: [], ranged: [], 'anti-siege': ['unit:36'], 'break-defenses': ['unit:331'] },
-    },
-  },
-  Georgians: {
-    'monaspa-towers': {
-      required: ['unit:1805', 'building:235', 'tech:923'],
-      prerequisites: ['tech:63'],
-      supplements: ['unit:331', 'unit:6', 'unit:359'],
-      adjustments: { ranged: ['unit:6'], camels: ['unit:359'], siege: [], 'break-defenses': ['unit:331'] },
-    },
-  },
-};
-
-const refKey = ({ kind, id }) => `${kind}:${id}`;
-const sameKeys = (actual, expected) =>
-  actual.length === expected.length && new Set(actual).size === actual.length && actual.every((key) => expected.includes(key));
-
-/** 首批交付合同。补丁过期属于显示状态，不改变此批已认可的发布集合。 */
-export function formationProblems(content) {
+export function formationProblems(content, contract) {
   const problems = [];
   const add = (path, message) => problems.push({ path, message });
-  if (
-    !sameKeys(
-      content.map(({ civ }) => civ),
-      Object.keys(release),
-    )
-  )
-    add('', '首批文明必须恰好为西班牙、格鲁吉亚，且各出现一次');
-  for (const [i, entry] of content.entries()) {
-    if (!Object.hasOwn(release, entry.civ)) continue;
-    if (entry.source.content !== `${strategySource}#${strategySections[entry.civ]}`) {
-      add(`/${i}/source/content`, '内容来源须指向批准的固定提交和文明章节');
-    }
-    if (entry.source.discussion !== discussionSource) {
-      add(`/${i}/source/discussion`, '原讨论链接不符合首批批准来源');
-    }
-    const expectedRoutes = release[entry.civ];
-    if (
-      !sameKeys(
-        entry.routes.map(({ id }) => id),
-        Object.keys(expectedRoutes),
-      )
-    )
-      add(`/${i}/routes`, '首批路线集合不匹配或出现重复');
-    for (const [j, route] of entry.routes.entries()) {
-      if (!Object.hasOwn(expectedRoutes, route.id)) continue;
-      const expected = expectedRoutes[route.id];
-      const path = `/${i}/routes/${j}`;
-      if (route.status !== 'approved') add(`${path}/status`, '只允许发布已认可路线');
-      for (const key of ['required', 'prerequisites', 'supplements']) {
-        if (!sameKeys(route[key].map(refKey), expected[key] ?? [])) add(`${path}/${key}`, '实体类型、角色或 ID 不符合首批批准范围');
+  if (!Array.isArray(content) || !contract || !Array.isArray(contract.civs)) {
+    add('', '阵容内容或独立发布契约缺失');
+    return problems;
+  }
+  if (contract.fixedSourceCommit !== FIXED_SOURCE_COMMIT) add('/fixedSourceCommit', '契约未固定到已审定的策略来源提交');
+  const civIds = content.map((entry) => entry.civ);
+  const contractCivs = contract.civs.map((entry) => entry.civ);
+  if (new Set(civIds).size !== civIds.length) add('', '文明重复');
+  if (new Set(contractCivs).size !== contractCivs.length) add('/civs', '契约文明重复');
+  if (!sameArray([...civIds].sort(), [...contractCivs].sort())) add('', '文明集合与独立发布契约不一致');
+  const expectedByCiv = new Map(contract.civs.map((entry) => [entry.civ, entry]));
+  for (const [i, civ] of content.entries()) {
+    const expectedCiv = expectedByCiv.get(civ.civ);
+    if (!expectedCiv) continue;
+    const path = `/${i}`;
+    const ids = civ.routes.map(({ id }) => id);
+    const expectedIds = expectedCiv.routes.map(({ id }) => id);
+    if (new Set(ids).size !== ids.length) add(`${path}/routes`, '路线 ID 重复');
+    if (!sameArray([...ids].sort(), [...expectedIds].sort())) add(`${path}/routes`, '路线集合与独立发布契约不一致');
+    const routeById = new Map(civ.routes.map((route) => [route.id, route]));
+    for (const [j, route] of civ.routes.entries()) {
+      const contractRoute = expectedCiv.routes.find((item) => item.id === route.id);
+      if (!contractRoute) continue;
+      const routePath = `${path}/routes/${j}`;
+      for (const key of ['status', 'playtest', 'composition', 'age']) {
+        if (route[key] !== contractRoute[key]) add(`${routePath}/${key}`, `与独立发布契约不一致：${key}`);
       }
-      if (
-        !sameKeys(
-          route.adjustments.map(({ id }) => id),
-          Object.keys(expected.adjustments),
-        )
-      )
-        add(`${path}/adjustments`, '条件调整集合不匹配或出现重复');
-      for (const [k, adjustment] of route.adjustments.entries()) {
-        if (!Object.hasOwn(expected.adjustments, adjustment.id)) continue;
-        if (!sameKeys((adjustment.requires ?? []).map(refKey), expected.adjustments[adjustment.id])) {
-          add(`${path}/adjustments/${k}/requires`, '条件建议与当前实体或路线的依赖不匹配');
+      if (!sameArray(entityRefs(route.required), contractRoute.required)) add(`${routePath}/required`, '必需实体或时代与独立发布契约不一致');
+      const choices = (route.choices ?? []).map(({ id, preconditions, entities }) => ({
+        id,
+        preconditions,
+        entities: entityRefs(entities),
+      }));
+      if (!sameArray(choices, contractRoute.choices)) add(`${routePath}/choices`, '路线选择与独立发布契约不一致');
+      if (!sameArray(entityRefs(route.prerequisites), contractRoute.prerequisites)) add(`${routePath}/prerequisites`, '路线前置或时代与独立发布契约不一致');
+      const supplements = (route.supplements ?? []).map(({ mode, entities }) => ({ mode, entities: entityRefs(entities) }));
+      if (!sameArray(supplements, contractRoute.supplements)) add(`${routePath}/supplements`, '补充/选择分类与独立发布契约不一致');
+      const adjustments = (route.adjustments ?? []).map(({ id, requires = [] }) => ({
+        id,
+        requires: requires.map(routeDependency),
+      }));
+      if (!sameArray(adjustments, contractRoute.adjustments)) add(`${routePath}/adjustments`, '调整或依赖与独立发布契约不一致');
+      const source = resolveFormationSource(civ.source, route);
+      if (!source || source.content !== contractRoute.source.content || source.discussion !== contractRoute.source.discussion)
+        add(`${routePath}/source`, '有效来源与独立发布契约不一致');
+      if (!sameArray(route.evidence?.sourceLines ?? [], contractRoute.sourceLines))
+        add(`${routePath}/evidence/sourceLines`, '固定策略来源行与独立发布契约不一致');
+      if (route.composition === 'choice' && (route.choices ?? []).length < 2) add(`${routePath}/choices`, '择一路线至少需要两个可审查选项');
+      for (const adjustment of route.adjustments ?? []) {
+        for (const dependency of adjustment.requires ?? []) {
+          if (dependency.kind !== 'route') continue;
+          const target = routeById.get(dependency.id);
+          if (!target) add(`${routePath}/adjustments`, `未知或跨文明路线依赖：${dependency.id}`);
+          else if (['draft', 'unverified'].includes(target.status)) add(`${routePath}/adjustments`, `依赖不能指向草稿或依据待核实路线：${dependency.id}`);
         }
       }
     }

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -7,7 +7,7 @@ import { _ } from 'ajv/dist/compile/codegen/index.js';
 import { publicFormats, constructionReferenceProblems } from '../src/content/schema/policy.mjs';
 import { LEGACY_SOURCE_BASELINE } from './content-baseline.mjs';
 import { schemaFileFor } from './content-schema-catalog.mjs';
-import { FORMATIONS_FILE, formationProblems } from './check-civ-formations.mjs';
+import { FORMATIONS_FILE, FORMATION_CONTRACT_FILE, formationProblems } from './check-civ-formations.mjs';
 
 export const SCHEMA_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '../data/schemas');
 export const SCHEMA_ID_BASE = 'https://linhongcun.github.io/aoe2-analyzer/schema/';
@@ -72,7 +72,6 @@ export function validateDocument(file, data) {
       }));
   if (valid && file === 'data/game/construction.json')
     problems.push(...constructionReferenceProblems(data).map((entry) => problem(file, 'reference', entry.message, entry.path)));
-  if (valid && file === FORMATIONS_FILE) problems.push(...formationProblems(data).map((entry) => problem(file, 'formation', entry.message, entry.path)));
   return { valid: problems.length === 0, problems };
 }
 
@@ -80,6 +79,8 @@ export function validateDocument(file, data) {
 export function checkDirectory(root = process.cwd()) {
   const files = [],
     problems = [];
+  let formationContent;
+  let formationContract;
   const visit = (path, file, symbolicLink = false) => {
     files.push(file);
     if (symbolicLink) {
@@ -93,7 +94,10 @@ export function checkDirectory(root = process.cwd()) {
       problems.push(problem(file, 'syntax', `JSON 语法无效：${error.message.slice(0, 160)}`));
       return;
     }
-    problems.push(...validateDocument(file, data).problems);
+    const validation = validateDocument(file, data);
+    problems.push(...validation.problems);
+    if (validation.valid && file === FORMATIONS_FILE) formationContent = data;
+    if (validation.valid && file === FORMATION_CONTRACT_FILE) formationContract = data;
   };
   const walk = (directory) => {
     if (!existsSync(directory)) return;
@@ -105,6 +109,11 @@ export function checkDirectory(root = process.cwd()) {
     }
   };
   for (const directory of ['data/content', 'data/game']) walk(join(root, directory));
+  const contractPath = join(root, FORMATION_CONTRACT_FILE);
+  if (existsSync(contractPath)) visit(contractPath, FORMATION_CONTRACT_FILE, lstatSync(contractPath).isSymbolicLink());
+  else problems.push(problem(FORMATION_CONTRACT_FILE, 'coverage', '缺少文明阵容独立发布契约'));
+  if (formationContent && formationContract)
+    problems.push(...formationProblems(formationContent, formationContract).map((entry) => problem(FORMATIONS_FILE, 'formation', entry.message, entry.path)));
   if (!files.includes(FORMATIONS_FILE)) problems.push(problem(FORMATIONS_FILE, 'coverage', '缺少首批阵容发布文件'));
   if (!files.length) problems.push(problem('data/content + data/game', 'coverage', '未发现任何 JSON 输入'));
   return { files: files.sort(), problems };
