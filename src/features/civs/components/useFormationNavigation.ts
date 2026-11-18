@@ -65,12 +65,12 @@ export function useFormationNavigation(civ: string, pending: boolean, suppressRe
 
   useEffect(() => {
     if (suppressRestore) return;
+    const token = readFormationReturn(civ, previous)?.token;
+    if (completed.current === key && !token) return;
     const find = (id: string) => {
       const node = document.getElementById(id);
       return root.current?.contains(node) ? node : null;
     };
-    if (completed.current === key) return;
-    const token = readFormationReturn(civ, previous)?.token;
     if (pending && (token || isFormationHash(hash))) return;
     const frame = requestAnimationFrame(() => {
       completed.current = key;

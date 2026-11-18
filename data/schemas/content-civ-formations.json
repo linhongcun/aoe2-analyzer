@@ -2,48 +2,48 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-formations.json",
   "type": "array",
+  "minItems": 28,
+  "maxItems": 28,
   "items": {
-    "type": "object",
-    "additionalProperties": false,
-    "required": ["civ", "lead", "source", "routes"],
-    "properties": {
-      "civ": {
-        "type": "string",
-        "pattern": "^[A-Za-z]+$"
-      },
-      "lead": {
-        "type": "string",
-        "minLength": 1
-      },
-      "source": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["content", "discussion", "boundary"],
-        "properties": {
-          "content": {
-            "type": "string",
-            "format": "public-url"
-          },
-          "discussion": {
-            "type": "string",
-            "format": "public-url"
-          },
-          "boundary": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      },
-      "routes": {
-        "type": "array",
-        "minItems": 1,
-        "items": {
-          "$ref": "#/$defs/route"
-        }
-      }
-    }
+    "$ref": "#/$defs/civ"
   },
   "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content", "discussion", "boundary"],
+      "properties": {
+        "content": {
+          "type": "string",
+          "format": "public-url"
+        },
+        "discussion": {
+          "type": "string",
+          "format": "public-url"
+        },
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "entityRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "enum": ["unit", "building", "tech"]
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "age": {
+          "enum": [3, 4]
+        }
+      }
+    },
     "entity": {
       "type": "object",
       "additionalProperties": false,
@@ -63,6 +63,181 @@
         "role": {
           "type": "string",
           "minLength": 1
+        },
+        "age": {
+          "enum": [3, 4]
+        }
+      }
+    },
+    "prerequisite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "historicalName", "role"],
+      "properties": {
+        "kind": {
+          "enum": ["unit", "building", "tech"]
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "historicalName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "age": {
+          "enum": [3, 4]
+        },
+        "condition": {
+          "type": "string"
+        }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "preconditions", "entities"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entity"
+          }
+        }
+      }
+    },
+    "supplement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "entities"],
+      "properties": {
+        "mode": {
+          "enum": [
+            "as-needed",
+            "choice",
+            "replace",
+            "progression",
+            "mechanism-support",
+            "support",
+            "conditional",
+            "position-variant",
+            "mechanism-only",
+            "continuation-adjustment",
+            "production-alternative",
+            "upgrade",
+            "conditional-evaluation"
+          ]
+        },
+        "condition": {
+          "type": "string"
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entity"
+          }
+        }
+      }
+    },
+    "routeDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "const": "route"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z]+(?:-[a-z]+)*$"
+        }
+      }
+    },
+    "dependency": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/entityRef"
+        },
+        {
+          "$ref": "#/$defs/routeDependency"
+        }
+      ]
+    },
+    "adjustment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "when", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z]+(?:-[a-z]+)*$"
+        },
+        "when": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          }
+        },
+        "fallback": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recognition", "playtest", "scope", "recordedVersion", "sourceLines"],
+      "properties": {
+        "recognition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "playtest": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordedVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceLines": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
         }
       }
     },
@@ -74,18 +249,15 @@
         "title",
         "status",
         "playtest",
+        "composition",
+        "age",
         "patch",
         "revised",
         "condition",
         "required",
+        "prerequisites",
         "supplements",
-        "reason",
-        "limitation",
-        "attack",
-        "defense",
-        "adjustments",
-        "alternatives",
-        "prerequisites"
+        "evidence"
       ],
       "properties": {
         "id": {
@@ -97,10 +269,16 @@
           "minLength": 1
         },
         "status": {
-          "enum": ["approved", "draft"]
+          "enum": ["approved", "candidate", "unverified", "draft"]
         },
         "playtest": {
-          "const": "unreported"
+          "enum": ["reported", "pending", "unreported"]
+        },
+        "composition": {
+          "enum": ["combined", "choice", "progression"]
+        },
+        "age": {
+          "enum": [3, 4]
         },
         "patch": {
           "type": "object",
@@ -127,118 +305,102 @@
         },
         "required": {
           "type": "array",
-          "minItems": 1,
           "items": {
             "$ref": "#/$defs/entity"
+          }
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/choice"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/prerequisite"
           }
         },
         "supplements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/entity"
+            "$ref": "#/$defs/supplement"
           }
-        },
-        "reason": {
-          "type": "string",
-          "minLength": 1
-        },
-        "limitation": {
-          "type": "string",
-          "minLength": 1
-        },
-        "attack": {
-          "type": "string",
-          "minLength": 1
-        },
-        "defense": {
-          "type": "string",
-          "minLength": 1
         },
         "adjustments": {
           "type": "array",
-          "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["id", "when", "text"],
-            "properties": {
-              "when": {
-                "type": "string",
-                "minLength": 1
-              },
-              "text": {
-                "type": "string",
-                "minLength": 1
-              },
-              "requires": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/dependency"
-                },
-                "minItems": 1,
-                "uniqueItems": true
-              },
-              "id": {
-                "type": "string",
-                "pattern": "^[a-z]+(?:-[a-z]+)*$"
-              },
-              "fallback": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "dependentRequired": {
-              "fallback": ["requires"]
-            }
+            "$ref": "#/$defs/adjustment"
           }
         },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "limitation": {
+          "type": "string"
+        },
+        "attack": {
+          "type": "string"
+        },
+        "defense": {
+          "type": "string"
+        },
         "alternatives": {
-          "type": "string",
-          "minLength": 1
-        },
-        "prerequisites": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/ref"
-          },
-          "uniqueItems": true
+          "type": "string"
         }
-      }
-    },
-    "ref": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["kind", "id"],
-      "properties": {
-        "kind": {
-          "enum": ["unit", "building", "tech"]
-        },
-        "id": {
-          "type": "integer",
-          "minimum": 1
-        }
-      }
-    },
-    "dependency": {
-      "oneOf": [
+      },
+      "allOf": [
         {
-          "$ref": "#/$defs/ref"
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["kind", "id"],
-          "properties": {
-            "kind": {
-              "const": "route"
+          "if": {
+            "properties": {
+              "composition": {
+                "const": "choice"
+              }
             },
-            "id": {
-              "type": "string",
-              "pattern": "^[a-z]+(?:-[a-z]+)*$"
+            "required": ["composition"]
+          },
+          "then": {
+            "required": ["choices"],
+            "properties": {
+              "choices": {
+                "type": "array",
+                "minItems": 2
+              }
             }
           }
         }
       ]
+    },
+    "civ": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["civ", "lead", "source", "routes"],
+      "properties": {
+        "civ": {
+          "type": "string",
+          "pattern": "^[A-Za-z]+$"
+        },
+        "lead": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/route"
+          }
+        }
+      }
     }
   }
 }

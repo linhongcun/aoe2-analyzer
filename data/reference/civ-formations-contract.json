@@ -1,0 +1,3030 @@
+{
+  "schemaVersion": 1,
+  "fixedSourceCommit": "8d1adeacc7c97374ee6d95d9cabfceb793d080d3",
+  "civs": [
+    {
+      "civ": "Spanish",
+      "routes": [
+        {
+          "id": "conquistador-hussar",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 773
+            },
+            {
+              "kind": "unit",
+              "id": 441
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "spears",
+              "requires": []
+            },
+            {
+              "id": "ranged",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "id": "siege",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#西班牙",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": []
+        },
+        {
+          "id": "paladin-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 569
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "camels",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "handcannon-halberdier"
+                }
+              ]
+            },
+            {
+              "id": "ranged",
+              "requires": []
+            },
+            {
+              "id": "spears",
+              "requires": []
+            },
+            {
+              "id": "low-gold",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#西班牙",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": []
+        },
+        {
+          "id": "handcannon-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 5
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "infantry",
+              "requires": []
+            },
+            {
+              "id": "ranged",
+              "requires": []
+            },
+            {
+              "id": "anti-siege",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            },
+            {
+              "id": "break-defenses",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#西班牙",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": []
+        }
+      ]
+    },
+    {
+      "civ": "Georgians",
+      "routes": [
+        {
+          "id": "monaspa-towers",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1805
+            },
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "tech",
+              "id": 923
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 63
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "ranged",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "id": "camels",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "id": "siege",
+              "requires": []
+            },
+            {
+              "id": "break-defenses",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": []
+        }
+      ]
+    },
+    {
+      "civ": "Chinese",
+      "routes": [
+        {
+          "id": "china-chu-ko-nu",
+          "status": "approved",
+          "playtest": "reported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 559
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "replace",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 283
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "china-chu-ko-nu-adjustment-knight-replacement",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 283,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [194, 196, 198]
+        },
+        {
+          "id": "china-fire-lancer-tower",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "unit",
+              "id": 1903
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 462
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "china-fire-lancer-tower-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "china-fire-lancer-tower-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 559, "age": 4 }]
+            },
+            {
+              "id": "china-fire-lancer-tower-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "china-fire-lancer-tower-adjustment-fourth",
+              "requires": []
+            },
+            {
+              "id": "china-fire-lancer-tower-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 82, "age": 4 },
+                { "kind": "unit", "id": 559, "age": 4 }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L200",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [200, 204, 206, 208, 209, 210, 211, 213, 215, 221, 222, 223, 224, 228, 230, 231, 232, 234]
+        }
+      ]
+    },
+    {
+      "civ": "Hindustanis",
+      "routes": [
+        {
+          "id": "hindustani-handcannon-hussar",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 5
+            },
+            {
+              "kind": "unit",
+              "id": 441
+            },
+            {
+              "kind": "unit",
+              "id": 36
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 207, "age": 4 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "hindustani-handcannon-hussar-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 207, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [238, 240, 242]
+        }
+      ]
+    },
+    {
+      "civ": "Turks",
+      "routes": [
+        {
+          "id": "turks-hussar-handcannon",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 441
+            },
+            {
+              "kind": "unit",
+              "id": 5
+            },
+            {
+              "kind": "unit",
+              "id": 36
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "turks-hussar-handcannon-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
+            },
+            {
+              "id": "turks-hussar-handcannon-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "turks-hussar-handcannon-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "turks-hussar-handcannon-adjustment-fourth",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277]
+        },
+        {
+          "id": "turks-existing-line-choice",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "choice",
+          "age": 4,
+          "required": [],
+          "choices": [
+            {
+              "id": "heavy-cavalry-archer",
+              "preconditions": ["已有骑射兵量；从零转需升级与科技"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 474
+                }
+              ]
+            },
+            {
+              "id": "elite-janissary",
+              "preconditions": ["已有亲兵基础；从零转需城堡产能和精锐升级"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 557
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L273",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [273, 274, 277]
+        }
+      ]
+    },
+    {
+      "civ": "Byzantines",
+      "routes": [
+        {
+          "id": "byzantines-cataphract",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 553
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [{ "kind": "unit", "id": 280, "age": 4 }]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 61
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "byzantines-cataphract-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
+            },
+            {
+              "id": "byzantines-cataphract-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 280, "age": 4 }]
+            },
+            {
+              "id": "byzantines-cataphract-adjustment-third",
+              "requires": [{ "kind": "tech", "id": 61, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312]
+        }
+      ]
+    },
+    {
+      "civ": "Malians",
+      "routes": [
+        {
+          "id": "malians-light-cavalry-gbeto",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 546
+            },
+            {
+              "kind": "unit",
+              "id": 1015
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 109
+                },
+                {
+                  "kind": "unit",
+                  "id": 83
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 576 }]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 577, "age": 4 }]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                },
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-sixth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "tech", "id": 576, "age": 4 }
+              ]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 280, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 349, 351]
+        }
+      ]
+    },
+    {
+      "civ": "Malay",
+      "routes": [
+        {
+          "id": "malay-battle-elephant-progression",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "progression",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1132
+            },
+            {
+              "kind": "unit",
+              "id": 1134,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "support",
+              "entities": [{ "kind": "unit", "id": 24, "age": 3 }]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 377,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "malay-battle-elephant-progression-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 24, "age": 3 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
+            "discussion": "https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac"
+          },
+          "sourceLines": [355, 356, 357]
+        },
+        {
+          "id": "malay-two-handed-swordsman-sustain",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 473
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 625
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [355, 356, 357]
+        }
+      ]
+    },
+    {
+      "civ": "Sicilians",
+      "routes": [
+        {
+          "id": "sicilians-serjeant-light-cavalry",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1659
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "continuation-adjustment",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 283
+                }
+              ]
+            },
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 1665
+                },
+                {
+                  "kind": "unit",
+                  "id": 1661
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 280
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372]
+        }
+      ]
+    },
+    {
+      "civ": "Goths",
+      "routes": [
+        {
+          "id": "goths-huskarl-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 761
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 567
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 5
+                }
+              ]
+            },
+            {
+              "mode": "production-alternative",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 555
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [13, 376, 378, 380]
+        }
+      ]
+    },
+    {
+      "civ": "Koreans",
+      "routes": [
+        {
+          "id": "koreans-war-wagon-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 829
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L415",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [171, 415, 419]
+        },
+        {
+          "id": "koreans-fire-lancer-garrison",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "unit",
+              "id": 1903
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 829, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 83, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-sixth",
+              "requires": [{ "kind": "route", "id": "koreans-war-wagon-halberdier" }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 492, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 1904, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419]
+        }
+      ]
+    },
+    {
+      "civ": "Jurchens",
+      "routes": [
+        {
+          "id": "jurchens-fire-lancer-tower",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "unit",
+              "id": 1903
+            },
+            {
+              "kind": "unit",
+              "id": 441
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1910
+                }
+              ]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 996
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 1910, "age": 4 }]
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-fourth",
+              "requires": []
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 1911, "age": 4 }]
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-sixth",
+              "requires": [{ "kind": "tech", "id": 996, "age": 3 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L452",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [452, 454, 456, 457, 458, 459, 461, 463, 464, 465, 471, 472, 473, 474, 480, 481, 482, 483, 485]
+        }
+      ]
+    },
+    {
+      "civ": "Saxons",
+      "routes": [
+        {
+          "id": "saxons-retainer-tower",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "unit",
+              "id": 2706
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [],
+          "adjustments": [
+            {
+              "id": "saxons-retainer-tower-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-fourth",
+              "requires": []
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-fifth",
+              "requires": []
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-sixth",
+              "requires": [{ "kind": "unit", "id": 83, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 567, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 125, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-ninth",
+              "requires": [
+                { "kind": "unit", "id": 125, "age": 4 },
+                { "kind": "tech", "id": 1491, "age": 3 }
+              ]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-tenth",
+              "requires": [
+                { "kind": "building", "id": 82, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [491, 493, 495, 496, 497, 499, 501, 503, 505, 507, 515, 516, 517, 518, 519, 525, 526, 527, 528, 529, 530, 532]
+        }
+      ]
+    },
+    {
+      "civ": "Teutons",
+      "routes": [
+        {
+          "id": "teutons-paladin-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 569
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "teutons-paladin-skirmisher-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "teutons-paladin-skirmisher-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "teutons-paladin-skirmisher-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "teutons-paladin-skirmisher-adjustment-fourth",
+              "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        },
+        {
+          "id": "teutons-halberdier-handcannon",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 359
+            },
+            {
+              "kind": "unit",
+              "id": 5
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "teutons-halberdier-handcannon-adjustment-first",
+              "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }]
+            },
+            {
+              "id": "teutons-halberdier-handcannon-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "teutons-halberdier-handcannon-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "teutons-halberdier-handcannon-adjustment-fourth",
+              "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L543",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [538, 540, 543, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        },
+        {
+          "id": "teutons-elite-knight-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 554
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "teutons-elite-knight-skirmisher-adjustment-first",
+              "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }]
+            },
+            {
+              "id": "teutons-elite-knight-skirmisher-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "teutons-elite-knight-skirmisher-adjustment-fourth",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L544",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        }
+      ]
+    },
+    {
+      "civ": "Franks",
+      "routes": [
+        {
+          "id": "franks-paladin-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 569
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [],
+          "adjustments": [
+            {
+              "id": "franks-paladin-skirmisher-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 359 }]
+            },
+            {
+              "id": "franks-paladin-skirmisher-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "franks-paladin-skirmisher-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "franks-paladin-skirmisher-adjustment-siege",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]
+        },
+        {
+          "id": "franks-heavy-mounted-crossbow-light-cav",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2701
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [],
+          "adjustments": [
+            {
+              "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-siege",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
+        },
+        {
+          "id": "franks-throwing-axeman-light-cav",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 531
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                { "kind": "unit", "id": 36, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "franks-throwing-axeman-light-cav-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 359 }]
+            },
+            {
+              "id": "franks-throwing-axeman-light-cav-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "franks-throwing-axeman-light-cav-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L589",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [579, 581, 583, 589, 591, 593, 595, 602, 603, 612, 614, 616]
+        }
+      ]
+    },
+    {
+      "civ": "Vietnamese",
+      "routes": [
+        {
+          "id": "vietnamese-defensive-tower",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 235
+            },
+            {
+              "kind": "unit",
+              "id": 1903
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1131,
+                  "age": 4
+                },
+                {
+                  "kind": "unit",
+                  "id": 1155,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1134
+                },
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "vietnamese-defensive-tower-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 1131, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 1155, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 1134, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "vietnamese-defensive-tower-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [620, 622, 624, 626, 628, 629, 630, 632, 634]
+        }
+      ]
+    },
+    {
+      "civ": "Lithuanians",
+      "routes": [
+        {
+          "id": "lithuanians-leitis-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1236
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 109
+                },
+                {
+                  "kind": "unit",
+                  "id": 83
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 691 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 5, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-sixth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 },
+                { "kind": "tech", "id": 691, "age": 4 }
+              ]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 569, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 1707, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674]
+        }
+      ]
+    },
+    {
+      "civ": "Poles",
+      "routes": [
+        {
+          "id": "poles-obuch-winged-hussar",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1703
+            },
+            {
+              "kind": "unit",
+              "id": 1707
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "poles-obuch-winged-hussar-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "poles-obuch-winged-hussar-adjustment-second",
+              "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }]
+            },
+            {
+              "id": "poles-obuch-winged-hussar-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
+            "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
+          },
+          "sourceLines": [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
+        },
+        {
+          "id": "poles-arbalest-winged-hussar",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 492
+            },
+            {
+              "kind": "unit",
+              "id": 1707
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "poles-arbalest-winged-hussar-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "poles-arbalest-winged-hussar-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "poles-arbalest-winged-hussar-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
+            "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
+          },
+          "sourceLines": [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]
+        },
+        {
+          "id": "poles-discount-knights",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "progression",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 38
+            },
+            {
+              "kind": "unit",
+              "id": 283,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 782
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                { "kind": "unit", "id": 36, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "poles-discount-knights-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "poles-discount-knights-adjustment-second",
+              "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }]
+            },
+            {
+              "id": "poles-discount-knights-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
+            "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab"
+          },
+          "sourceLines": [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]
+        }
+      ]
+    },
+    {
+      "civ": "Bulgarians",
+      "routes": [
+        {
+          "id": "bulgarians-krepost-konnik",
+          "status": "approved",
+          "playtest": "reported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "building",
+              "id": 1251
+            },
+            {
+              "kind": "unit",
+              "id": 1254
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "progression",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1255,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                },
+                {
+                  "kind": "unit",
+                  "id": 548,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 685
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-sixth",
+              "requires": [
+                { "kind": "building", "id": 82 },
+                { "kind": "tech", "id": 685 }
+              ]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-seventh",
+              "requires": [
+                { "kind": "building", "id": 82 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764]
+        }
+      ]
+    },
+    {
+      "civ": "Magyars",
+      "routes": [
+        {
+          "id": "magyars-huszar-hca",
+          "status": "approved",
+          "playtest": "reported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "building",
+              "id": 82
+            },
+            {
+              "kind": "unit",
+              "id": 871
+            },
+            {
+              "kind": "unit",
+              "id": 474
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            },
+            {
+              "kind": "tech",
+              "id": 514
+            },
+            {
+              "kind": "tech",
+              "id": 515
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [],
+          "adjustments": [
+            {
+              "id": "magyars-huszar-hca-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "magyars-huszar-hca-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "magyars-huszar-hca-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "magyars-huszar-hca-adjustment-fourth",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L770",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [770, 774, 775, 776, 777, 779, 781, 783, 789, 791, 793, 801, 802, 803, 804, 806, 812, 813, 814, 815, 816, 820, 822]
+        }
+      ]
+    },
+    {
+      "civ": "Bohemians",
+      "routes": [
+        {
+          "id": "bohemians-handcannon-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 5
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            },
+            {
+              "kind": "unit",
+              "id": 36
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "upgrade",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1709
+                }
+              ]
+            },
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 235
+                },
+                {
+                  "kind": "unit",
+                  "id": 1704
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-monk-variant",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 125
+                },
+                {
+                  "kind": "tech",
+                  "id": 231
+                },
+                {
+                  "kind": "tech",
+                  "id": 252
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-villager-tech-effects",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 83
+                },
+                {
+                  "kind": "tech",
+                  "id": 231
+                },
+                {
+                  "kind": "tech",
+                  "id": 252
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-construction-variant",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 235
+                },
+                {
+                  "kind": "unit",
+                  "id": 1704
+                },
+                {
+                  "kind": "unit",
+                  "id": 83
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-garrison-tower",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 235
+                },
+                {
+                  "kind": "unit",
+                  "id": 5
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L826",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [13, 826, 830, 835, 838, 840]
+        }
+      ]
+    },
+    {
+      "civ": "Aztecs",
+      "routes": [
+        {
+          "id": "aztecs-eagle-skirmisher",
+          "status": "candidate",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 753
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873]
+        }
+      ]
+    },
+    {
+      "civ": "Incas",
+      "routes": [
+        {
+          "id": "incas-kamayuk-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 879
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-third",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "incas-champi-candidate"
+                }
+              ]
+            },
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-fourth",
+              "requires": []
+            },
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 185, "age": 3 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L877",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [877, 885, 887, 888, 891, 893, 899, 900, 901, 902, 908, 910]
+        },
+        {
+          "id": "incas-champi-candidate",
+          "status": "candidate",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2554
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 517
+            }
+          ],
+          "supplements": [],
+          "adjustments": [
+            {
+              "id": "incas-champi-candidate-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879",
+            "discussion": "https://app.devin.ai/sessions/998ba78b2edf4799bb383d10b7e8eef9"
+          },
+          "sourceLines": [879, 889, 891, 893, 901, 902, 910]
+        }
+      ]
+    },
+    {
+      "civ": "Mayans",
+      "routes": [
+        {
+          "id": "mayans-plumed-archer-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 763
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 753
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mayans-plumed-archer-halberdier-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 753, "age": 4 }]
+            },
+            {
+              "id": "mayans-plumed-archer-halberdier-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "mayans-plumed-archer-halberdier-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 6, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944]
+        }
+      ]
+    },
+    {
+      "civ": "Mapuche",
+      "routes": [
+        {
+          "id": "mapuche-kona-bolas",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2566
+            },
+            {
+              "kind": "unit",
+              "id": 2569
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "progression",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2571,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 185 }]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mapuche-kona-bolas-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "mapuche-kona-bolas-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 185 }]
+            },
+            {
+              "id": "mapuche-kona-bolas-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]
+        },
+        {
+          "id": "mapuche-kona-slinger",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2566
+            },
+            {
+              "kind": "unit",
+              "id": 185
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mapuche-kona-slinger-adjustment-first",
+              "requires": [{ "kind": "route", "id": "mapuche-kona-bolas" }]
+            },
+            {
+              "id": "mapuche-kona-slinger-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "mapuche-kona-slinger-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L959",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [952, 956, 959, 963, 970, 977, 980]
+        }
+      ]
+    },
+    {
+      "civ": "Muisca",
+      "routes": [
+        {
+          "id": "muisca-temple-guard-slinger",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2586
+            },
+            {
+              "kind": "unit",
+              "id": 185
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "conditional-evaluation",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "muisca-temple-guard-slinger-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "muisca-temple-guard-slinger-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "muisca-temple-guard-slinger-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 6, "age": 3 }]
+            },
+            {
+              "id": "muisca-temple-guard-slinger-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 331, "age": 4 }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014]
+        }
+      ]
+    },
+    {
+      "civ": "Tupi",
+      "routes": [
+        {
+          "id": "tupi-champi-slinger",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2554
+            },
+            {
+              "kind": "unit",
+              "id": 185
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 1105
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 6, "age": 4 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2584,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [{ "kind": "unit", "id": 331 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "tupi-champi-slinger-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "tupi-champi-slinger-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 6 }]
+            },
+            {
+              "id": "tupi-champi-slinger-adjustment-third",
+              "requires": [{ "kind": "unit", "id": 359 }]
+            },
+            {
+              "id": "tupi-champi-slinger-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 2584 }]
+            },
+            {
+              "id": "tupi-champi-slinger-adjustment-fifth",
+              "requires": [{ "kind": "route", "id": "tupi-blackwood-halberdier" }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1024",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+        },
+        {
+          "id": "tupi-blackwood-halberdier",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2581
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 1105
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2554,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 6, "age": 4 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 2584, "age": 4 }]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 2554 }]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 6 }]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-fourth",
+              "requires": [{ "kind": "unit", "id": 2584 }]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-fifth",
+              "requires": [{ "kind": "route", "id": "tupi-champi-slinger" }]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1025",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+        }
+      ]
+    },
+    {
+      "civ": "Japanese",
+      "routes": [
+        {
+          "id": "japanese-samurai-light-cavalry",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 560
+            },
+            {
+              "kind": "unit",
+              "id": 546
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 235
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 484
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 474
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 59
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-second",
+              "requires": [{ "kind": "unit", "id": 6, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-fourth",
+              "requires": []
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-fifth",
+              "requires": []
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-sixth",
+              "requires": [{ "kind": "unit", "id": 5, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-seventh",
+              "requires": [{ "kind": "building", "id": 235, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 474, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-ninth",
+              "requires": [
+                { "kind": "building", "id": 235, "age": 4 },
+                { "kind": "tech", "id": 484, "age": 3 }
+              ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-tenth",
+              "requires": [
+                { "kind": "unit", "id": 331, "age": 4 },
+                { "kind": "tech", "id": 59, "age": 4 }
+              ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-eleventh",
+              "requires": [{ "kind": "unit", "id": 283, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-twelfth",
+              "requires": [{ "kind": "unit", "id": 567, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-thirteenth",
+              "requires": [
+                { "kind": "unit", "id": 492, "age": 4 },
+                { "kind": "unit", "id": 359, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-fourteenth",
+              "requires": [
+                { "kind": "building", "id": 235, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153",
+            "discussion": "https://app.devin.ai/sessions/ddea80a7615d41fbab87cf5879539194"
+          },
+          "sourceLines": [
+            1153, 1157, 1159, 1160, 1161, 1162, 1164, 1166, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1184, 1185, 1186, 1187, 1188, 1189, 1191, 1193
+          ]
+        }
+      ]
+    }
+  ]
+}

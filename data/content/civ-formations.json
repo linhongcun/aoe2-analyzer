@@ -35,10 +35,15 @@
         ],
         "supplements": [
           {
-            "kind": "unit",
-            "id": 6,
-            "historicalName": "精锐掷矛手",
-            "role": "弓手或骑射施压时提供反远程支援"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "弓手或骑射施压时提供反远程支援"
+              }
+            ]
           }
         ],
         "reason": "征服者保持机动输出，翼骑寻找侧翼与接敌窗口，分担保护任务。",
@@ -70,7 +75,16 @@
           }
         ],
         "alternatives": "不默认再叠第二条金线。两条金线的升级、补兵与损失会一起挤压金流，资源与接敌都支持时再考虑。",
-        "prerequisites": []
+        "prerequisites": [],
+        "age": 4,
+        "composition": "combined",
+        "evidence": {
+          "recognition": "固定记录中列为已认可路线；不将可选补充理解为固定同出。",
+          "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
+          "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
+          "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
+          "sourceLines": []
+        }
       },
       {
         "id": "paladin-skirmisher",
@@ -99,10 +113,15 @@
         ],
         "supplements": [
           {
-            "kind": "unit",
-            "id": 441,
-            "historicalName": "翼骑兵",
-            "role": "黄金紧张与接敌有利时可与掷矛搭配"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "historicalName": "翼骑兵",
+                "role": "黄金紧张与接敌有利时可与掷矛搭配"
+              }
+            ]
           }
         ],
         "reason": "游侠接触适合的目标，掷矛手在后方提供反远程支援。",
@@ -145,7 +164,16 @@
           }
         ],
         "alternatives": "不默认同时补征服者，双黄金线会挤压金流。",
-        "prerequisites": []
+        "prerequisites": [],
+        "age": 4,
+        "composition": "combined",
+        "evidence": {
+          "recognition": "固定记录中列为已认可路线；不将可选补充理解为固定同出。",
+          "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
+          "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
+          "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
+          "sourceLines": []
+        }
       },
       {
         "id": "handcannon-halberdier",
@@ -174,16 +202,26 @@
         ],
         "supplements": [
           {
-            "kind": "unit",
-            "id": 36,
-            "historicalName": "手推炮",
-            "role": "有反攻城需求时按需配备"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "有反攻城需求时按需配备"
+              }
+            ]
           },
           {
-            "kind": "unit",
-            "id": 331,
-            "historicalName": "巨型投石机",
-            "role": "有拆防需求时按需配备"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "有拆防需求时按需配备"
+              }
+            ]
           }
         ],
         "reason": "火枪处理步兵，长戟提供反骑保护，让远程单位与攻城器有掩护。",
@@ -225,7 +263,16 @@
           }
         ],
         "alternatives": "拆防与反攻城按目标分别选用，不固定塞入重型攻城线。海军按地图需要，不固定加入陆地路线。",
-        "prerequisites": []
+        "prerequisites": [],
+        "age": 4,
+        "composition": "combined",
+        "evidence": {
+          "recognition": "固定记录中列为已认可路线；不将可选补充理解为固定同出。",
+          "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
+          "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
+          "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
+          "sourceLines": []
+        }
       }
     ]
   },
@@ -271,22 +318,37 @@
         ],
         "supplements": [
           {
-            "kind": "unit",
-            "id": 331,
-            "historicalName": "巨型投石机",
-            "role": "塔区形成后按需拆防，与莫纳斯帕竞争城堡队列"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "塔区形成后按需拆防，与莫纳斯帕竞争城堡队列"
+              }
+            ]
           },
           {
-            "kind": "unit",
-            "id": 6,
-            "historicalName": "精锐掷矛手",
-            "role": "塔区外反远程时补入"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "塔区外反远程时补入"
+              }
+            ]
           },
           {
-            "kind": "unit",
-            "id": 359,
-            "historicalName": "长戟兵",
-            "role": "强反骑压力下用于保护塔与施工队"
+            "mode": "as-needed",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "强反骑压力下用于保护塔与施工队"
+              }
+            ]
           }
         ],
         "reason": "骑兵护施工与侧翼，箭塔支援进入塔区的交战。先取得区域控制，再按需推进。",
@@ -338,9 +400,4470 @@
         "prerequisites": [
           {
             "kind": "tech",
-            "id": 63
+            "id": 63,
+            "historicalName": "大型箭塔",
+            "role": "科技前提 · 大型箭塔"
           }
-        ]
+        ],
+        "age": 4,
+        "composition": "combined",
+        "evidence": {
+          "recognition": "固定记录中列为已认可路线；不将可选补充理解为固定同出。",
+          "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
+          "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
+          "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
+          "sourceLines": []
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Chinese",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "china-chu-ko-nu",
+        "title": "精锐诸葛弩＋轻骑兵＋少量巨型投石机",
+        "status": "approved",
+        "playtest": "reported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "阵地战；保存诸葛弩，轻骑前护。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 559,
+            "historicalName": "精锐诸葛弩",
+            "role": "主力输出"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "前方掩护与清理可接近目标"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "拆关键防御"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "replace",
+            "condition": "黄金充足且有骑士科技",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 283,
+                "historicalName": "重装骑士",
+                "role": "替换部分轻骑"
+              }
+            ]
+          }
+        ],
+        "adjustments": [
+          {
+            "id": "china-chu-ko-nu-adjustment-knight-replacement",
+            "when": "黄金充足且有骑士科技",
+            "text": "黄金充足且有骑士科技时可评估重装骑士替换部分轻骑；不把缺金当成所有帝王局面的前提。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 283,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重装骑士目录资料时隐藏替换建议；保留精锐诸葛弩＋轻骑兵＋少量巨型投石机主路，不建议失效替换。"
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "维护者报告有实战使用经验；本页面不作独立对局或胜率验证。",
+          "scope": "保留阵地战用户实战经验、诸葛弩与轻骑分工、巨投目标、资源投入与受保护攻城器边界；原讨论的完整站点版本和构建未记录，不以之后版本替代原观察。",
+          "recordedVersion": "原讨论的完整站点版本与构建未记录，不将后续版本补作原观察",
+          "sourceLines": [194, 196, 198]
+        },
+        "reason": "用户报告的实战经验：hongcun 经常使用精锐诸葛弩＋轻骑兵＋少量巨型投石机进行阵地战并分享过良好效果；2026-11-15 再次说明这套实战用过、经常取胜。诸葛弩是需保存的主力输出，轻骑通常前护并清理可接近的攻城器，巨投拆关键防御。绕侧不是轻骑发挥作用的必要前提，也不能假定受保护的攻城器一定能被清掉。",
+        "limitation": "诸葛弩训练耗木金，轻骑耗食物，主力训练资源分工有利于持续生产；巨投仍与诸葛弩争木金，农田补种也耗木。诸葛弩＋长戟＋冲车若无法处理受保护的攻城器，就不能仅凭正面输出判为完整方案。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "china-fire-lancer-tower",
+        "title": "前线大型箭塔＋驻扎精锐火矛兵＋轻型骑兵＋巨投",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "2026-11-15 讨论中认可的阵地变体；维护者尚未实战使用。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "相互支援的前线大型箭塔"
+          },
+          {
+            "kind": "unit",
+            "id": 1903,
+            "historicalName": "精锐火矛兵",
+            "role": "驻塔增箭、出塔反骑/清冲车"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "机动清炮、冲弓手"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "拆防御"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "按骑兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "长戟兵"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "长城仅作为提高塔生命的机制支持；不是必需主力或前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 462,
+                "historicalName": "长城",
+                "role": "长城"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "该路线仍待实战验证。",
+          "scope": "记录2026-11-15讨论认可的火矛驻塔阵地变体；维护者尚未实战使用，并与原有诸葛弩路线及其用户实战经验区分。",
+          "recordedVersion": "v0.77.105 · DE 188329 · cd9382c",
+          "sourceLines": [200, 204, 206, 208, 209, 210, 211, 213, 215, 221, 222, 223, 224, 228, 230, 231, 232, 234]
+        },
+        "reason": "火矛驻塔变体（2026-11-15，待实战验证）：hongcun 认可中国可以像高丽一样把火矛驻塔做成主力阵容，四家对比见火矛驻塔的跨文明复用。这套是2026-11-15 讨论中提出，hongcun 还没有实战用过；原来的诸葛弩路线是实战用过的打法，继续保留。 前线箭塔＋驻扎精锐火矛兵＋轻型骑兵＋巨投。",
+        "limitation": "中国没有手推炮和攻城技师，反制敌方火炮需要轻骑接近，受护卫与接敌条件限制。塔阵和额外城堡生产都要承担石料与施工投入；城堡或诸葛弩延伸会与火矛争黄金，不构成本变体主路要求。火矛主线仍受升级、产能与资源投入制约；变体尚待维护者实战确认，既有接触PK对位不等同混编或实战胜负。",
+        "attack": "塔往前修，火矛兵驻塔，轻骑兵先清对方的炮，巨投拆防御。",
+        "defense": "火矛兵驻塔放箭，冲车和骑兵靠近时出塔清掉，轻骑兵在塔外拦手推炮。",
+        "adjustments": [
+          {
+            "id": "china-fire-lancer-tower-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "火矛兵和长戟兵一起顶；接触 PK 中火矛兵胜重装骑士（剩 19/85），输给法兰克游侠（对方剩 48/192）",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏这条补充建议；保留火矛驻塔主路，不据此扩写其他对位。"
+          },
+          {
+            "id": "china-fire-lancer-tower-adjustment-second",
+            "when": "长戟兵多",
+            "text": "轻骑兵不撞长戟（输）；由火矛兵和精锐诸葛弩处理（诸葛弩胜长戟兵，剩 22/50）",
+            "requires": [{ "kind": "unit", "id": 559, "age": 4 }],
+            "fallback": "缺少精锐诸葛弩目录资料时隐藏这条条件建议；保留火矛驻塔主路，不把诸葛弩列为固定组成。"
+          },
+          {
+            "id": "china-fire-lancer-tower-adjustment-third",
+            "when": "冠军剑士等步兵成群",
+            "text": "火矛兵、精锐诸葛弩贴身都输；依托塔箭消耗，重型弩炮或重型火箭推车打密集步兵属待验证设想，本轮没有核对"
+          },
+          {
+            "id": "china-fire-lancer-tower-adjustment-fourth",
+            "when": "弓手成群",
+            "text": "轻骑兵冲（胜劲弩手，剩 65.6/80）"
+          },
+          {
+            "id": "china-fire-lancer-tower-adjustment-fifth",
+            "when": "已有城堡与精锐诸葛弩可复用",
+            "text": "预览中3个精锐诸葛弩驻塔达到5箭上限，可让诸葛弩驻塔、火矛兵留在塔外；这是复用既有兵力的选择，不另开诸葛弩生产线，也不反复前推城堡。",
+            "requires": [
+              { "kind": "building", "id": 82, "age": 4 },
+              { "kind": "unit", "id": 559, "age": 4 }
+            ],
+            "fallback": "缺少城堡或精锐诸葛弩目录资料时隐藏此驻塔变体；不把城堡或诸葛弩加入本路必需组成。"
+          }
+        ],
+        "alternatives": "劲弩手专门作驻军：预览中 5 个只有 4 箭，火矛兵 4 个就到 5 箭上限；为量产精锐诸葛弩另修城堡需 650 石（约等于 5 座塔石料），且会与火矛争黄金，非本路必要投入；重装骑士耗黄金且没有游侠，和轻骑兵一样怕长戟。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L200",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Hindustanis",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "hindustani-handcannon-hussar",
+        "title": "火枪手＋翼骑兵＋少量手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "节省黄金的帝王中后期；火枪和炮保存，翼骑承担消耗。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "处理威胁主力的步兵"
+          },
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "掩护、承担可补充损耗"
+          },
+          {
+            "kind": "unit",
+            "id": 36,
+            "historicalName": "手推炮",
+            "role": "拆防/反攻城"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "重骑压力且黄金/升级条件可承受",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 207,
+                "age": 4,
+                "historicalName": "帝王骆驼兵",
+                "role": "帝王骆驼兵"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "固定策略记录来源行：238, 240, 242。节省黄金的帝王中后期；火枪和炮保存，翼骑承担消耗。",
+          "recordedVersion": "原记录未记录站点版本/构建",
+          "sourceLines": [238, 240, 242]
+        },
+        "reason": "用户认可的经验：需要节省黄金的帝王中后期，以火枪手＋翼骑兵＋少量手推炮为基础。火枪处理威胁主力的步兵，翼骑掩护、承担持续补充的损耗并抓机会清攻城，炮拆防御、威胁敌方攻城器。火枪和翼骑都耗食物，必须支持两条生产线的农田需求；火炮消耗木金，应少量保存。训练资源差额不能代替战力与成型时间比较。",
+        "limitation": "火枪和翼骑都耗食物，需支持两条生产线；手推炮消耗木材与黄金，宜少量保存。训练资源差额不能代替战力与成型时间比较。",
+        "adjustments": [
+          {
+            "id": "hindustani-handcannon-hussar-adjustment-first",
+            "when": "重骑压力且黄金/升级条件可承受",
+            "text": "重骑压力且黄金与升级投入可承受时，评估帝王骆驼兵加入或替换部分骑兵；不默认同时维持多条耗金主力。",
+            "requires": [{ "kind": "unit", "id": 207, "age": 4 }],
+            "fallback": "缺少帝王骆驼兵目录资料时隐藏该条件投入；保留火枪手＋翼骑兵＋少量手推炮主路。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Turks",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "turks-hussar-handcannon",
+        "title": "翼骑兵＋火枪手＋少量手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "主结构获认可；不从零强转旧路线。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "掩护与机动"
+          },
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "保存输出核心"
+          },
+          {
+            "kind": "unit",
+            "id": 36,
+            "historicalName": "手推炮",
+            "role": "拆防/反攻城"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "骑士/游侠成群",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "historicalName": "重装骆驼兵",
+                "role": "重装骆驼兵反骑"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "覆盖获认可的翼骑、火枪与手推炮主结构及分工，反骑压力下的调整、重装骑士的非默认投入，以及炮属性与石质建筑处理时间的核实边界。",
+          "recordedVersion": "v0.77.102 · DE 188329 · 84988dd",
+          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277]
+        },
+        "reason": "用户认可保存火枪与手推炮的投入，让可补充的翼骑承担消耗并掩护火枪和炮前移；这不是混编模拟胜率结论。",
+        "limitation": "翼骑抗箭不等于能硬穿长戟阵；火枪与翼骑仍争食物，手推炮推进时需要保护。炮的属性不等于拆石质建筑所需时间；当前攻城工具的石质建筑数据仍待核实。",
+        "attack": "翼骑掩护火枪和炮前移，由炮拆防御建筑。",
+        "defense": "火枪护炮，翼骑拦截侧翼，炮反制对方攻城器。",
+        "adjustments": [
+          {
+            "id": "turks-hussar-handcannon-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "按 hongcun 经验补重装骆驼正面反骑，火枪处理护航步兵，翼骑保留侧翼任务。缺长枪兵、长戟兵，不能照搬长戟方案；采金加速帮助供应双金线，不增加矿中黄金总量",
+            "requires": [{ "kind": "unit", "id": 330, "age": 4 }],
+            "fallback": "缺少重装骆驼兵目录资料时隐藏该反骑建议；保留翼骑＋火枪＋手推炮主路。"
+          },
+          {
+            "id": "turks-hussar-handcannon-adjustment-second",
+            "when": "长戟＋弓手或掷矛",
+            "text": "火枪先清长戟，翼骑等缺口再接近远程兵"
+          },
+          {
+            "id": "turks-hussar-handcannon-adjustment-third",
+            "when": "冠军、近卫军等步兵海",
+            "text": "提高火枪比例，保持距离与兵量，翼骑掩护；不因接触 PK 输赢否定远程反步兵职责"
+          },
+          {
+            "id": "turks-hussar-handcannon-adjustment-fourth",
+            "when": "攻城器有护卫",
+            "text": "优先用长射程炮寻找射击机会，翼骑找侧翼空当，不假定能冲过护卫"
+          }
+        ],
+        "alternatives": "重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "turks-existing-line-choice",
+        "title": "已有基础的选择：重装骑射手或精锐苏丹亲兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "choice",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "已有骑射手或苏丹亲兵基础时，按条件择一延续为重装骑射手或精锐苏丹亲兵；不为采用该延续路线从零另起兵线，两者并非同时必需。",
+        "required": [],
+        "prerequisites": [],
+        "supplements": [],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "说明已有骑射手或苏丹亲兵基础时择一延续的条件，以及从零转线所需科技、城堡产能和精锐升级投入；不并入火枪主路。",
+          "recordedVersion": "v0.77.102 · DE 188329 · 84988dd",
+          "sourceLines": [273, 274, 277]
+        },
+        "choices": [
+          {
+            "id": "heavy-cavalry-archer",
+            "title": "重装骑射手",
+            "preconditions": ["已有骑射兵量；从零转需升级与科技"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "historicalName": "重装骑射手",
+                "role": "已有骑射基础"
+              }
+            ]
+          },
+          {
+            "id": "elite-janissary",
+            "title": "精锐苏丹亲兵",
+            "preconditions": ["已有亲兵基础；从零转需城堡产能和精锐升级"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 557,
+                "historicalName": "精锐苏丹亲兵",
+                "role": "已有亲兵基础"
+              }
+            ]
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L273",
+          "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+          "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
+        },
+        "reason": "沿已有骑射手或苏丹亲兵基础按条件延续，不必强转火枪。",
+        "limitation": "从零转重装骑射手仍需补升级与科技投入；贴身 PK 不能否定骑射手的射程和机动。苏丹亲兵依赖城堡产能和精锐升级。",
+        "adjustments": []
+      }
+    ]
+  },
+  {
+    "civ": "Byzantines",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "byzantines-cataphract",
+        "title": "精锐甲胄骑兵＋长戟兵＋精锐掷矛手＋按需攻城器",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "精锐甲胄骑兵、长戟兵与精锐掷矛手组成主结构。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 553,
+            "historicalName": "精锐甲胄骑兵",
+            "role": "反步兵并保护长戟/炮"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "正面反骑"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "反弓"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "按重骑压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "historicalName": "重装骆驼兵",
+                "role": "骆驼"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "少量攻城支援按已有兵量和射击机会，从当前可用项中按需选择。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "按需反攻城"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防"
+              }
+            ]
+          },
+          {
+            "mode": "conditional-evaluation",
+            "condition": "仅确需范围伤害且接敌地形允许时评估；投石车系基础目录参考，具体等级另行评估，不作固定配套",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 280,
+                "age": 4,
+                "historicalName": "轻型投石车",
+                "role": "投石车系基础目录参考（条件评估）"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "可选科技；不是路线必需前置，效果与投入由带科技依赖的条件调整表达",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 61,
+                "historicalName": "后勤学",
+                "role": "后勤学"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "基础方案及对手调整获明确认可；固定记录未说明实战状态。当前目录复核与早先接触PK讨论分别保留各自版本边界。",
+          "recordedVersion": "目录复核 v0.77.102 · DE 188329 · 84988dd；早先认可讨论及接触PK v0.77.100 · DE 188329 · 66c4763",
+          "sourceLines": [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312]
+        },
+        "reason": "精锐甲胄骑兵＋长戟兵＋精锐掷矛手为主结构；基础方案和对手调整获 hongcun 明确认可，折扣兵撑线并保存昂贵甲胄。",
+        "limitation": "甲胄与后勤学都要求城堡产能和帝王多线科技投入；甲胄不是通用反游侠单位。缺血统与鼓风炉，不按通用满科技骑兵估计；既有接触模型不含射程、走位或践踏，不能证明混编实战胜负。",
+        "attack": "甲胄处理步兵，长戟与掷矛分别承担反骑和反弓任务，按目标互相保护。",
+        "defense": "依托高生命建筑保存主力，长戟反骑、掷矛反弓；操作允许时利用团队治疗加成恢复伤兵。",
+        "adjustments": [
+          {
+            "id": "byzantines-cataphract-adjustment-first",
+            "when": "骑士、游侠为主",
+            "text": "增加长戟；重骑压力仍大时才评估折扣重装骆驼，甲胄处理护航步兵而不硬拼重骑",
+            "requires": [{ "kind": "unit", "id": 330, "age": 4 }],
+            "fallback": "缺少帝王重装骆驼目录资料时隐藏骆驼建议；仍以主路长戟承担反骑，不把甲胄当通用重骑克星。"
+          },
+          {
+            "id": "byzantines-cataphract-adjustment-second",
+            "when": "弓手为主、无法安全接近且需范围威胁",
+            "text": "增加掷矛，避免甲胄硬冲密集弓手；仅在确需范围伤害且接敌地形允许时，按已有兵量与射击机会评估投石车系基础目录参考，具体等级另行评估，不作固定配套",
+            "requires": [{ "kind": "unit", "id": 280, "age": 4 }],
+            "fallback": "缺少基础投石车目录资料时隐藏范围伤害评估；不替它指定其他攻城单位或升级形态。"
+          },
+          {
+            "id": "byzantines-cataphract-adjustment-third",
+            "when": "步兵为主",
+            "text": "提高甲胄的任务比重；只有按资源与兵量研究后勤学后才获得践踏伤害，同时防范弓手与重骑",
+            "requires": [{ "kind": "tech", "id": 61, "age": 4 }],
+            "fallback": "缺少后勤学科技资料时不展示相应增益建议；保留认可主路，不暗示科技已研究。"
+          }
+        ],
+        "alternatives": "大量重装骆驼常驻：针对骑兵压力，不代替甲胄清长戟；没有相应敌军时不必继续堆量。投石车固定配套：不默认配置，条件评估仅由对应依赖调整显示。所有升级同时开齐：升帝王费用优惠不保证精锐、后勤学及多线及时完成；无血统、鼓风炉，不按通用满科技骑兵估计。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Malians",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "malians-light-cavalry-gbeto",
+        "title": "轻骑兵＋精锐飞刀女兵＋按需攻城器",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "主结构获认可。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "免金主体/掩护飞刀"
+          },
+          {
+            "kind": "unit",
+            "id": 1015,
+            "historicalName": "精锐飞刀女兵",
+            "role": "处理长戟与步兵"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "position-variant",
+            "condition": "位置/资源足够时的hongcun常用阵地玩法；不代表全混编已实战",
+            "entities": [
+              {
+                "kind": "building",
+                "id": 109,
+                "historicalName": "城镇中心",
+                "role": "前线城镇中心"
+              },
+              {
+                "kind": "unit",
+                "id": 83,
+                "historicalName": "村民",
+                "role": "施工维修村民"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "蛮王机制支持；空中心开火仅由带依赖的条件调整表达，不是主路线前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 576,
+                "historicalName": "蛮王",
+                "role": "蛮王"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "完成死士研究后效果覆盖轻骑；研究前不生效，也不是主路前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 577,
+                "age": 4,
+                "historicalName": "死士",
+                "role": "死士科技"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "按目标与已有攻城器，从当前可用项中按需选择。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "拆防"
+              },
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "远程攻城器威胁时按需用手推炮反制"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "轻骑与精锐飞刀主结构获认可；前线TC阵地仅标注为hongcun常用经验，不据此将整套混编标成已实战。",
+          "recordedVersion": "v0.77.102 · DE 188329 · 84988dd",
+          "sourceLines": [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 349, 351]
+        },
+        "reason": "轻骑兵与精锐飞刀女兵互相掩护并保持机动，构成获用户认可的主结构；飞刀是远程进行近战攻击的步兵，受步兵护甲，与轻骑共享近战攻击科技而非射手线。",
+        "limitation": "轻骑仍怕长戟；接触PK胜弓手不保证追得上；飞刀避免被包围贴身。城镇中心目录价不是折后价，木材与石料不可互换；箭数与施工时间只是理论预览，未和本版本客户端核对；施工时间不含进场、阻挡、战斗或维修。",
+        "attack": "轻骑与飞刀先取得空间、互相保护并保持机动。",
+        "defense": "轻骑处理外围威胁，飞刀清长戟；保持两队相互支援，避免脱节。",
+        "adjustments": [
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "补重装骆驼反骑，飞刀处理护航长戟；追加金线解决实际缺口，不因“只留一条金线”拒绝反骑",
+            "requires": [{ "kind": "unit", "id": 330, "age": 4 }],
+            "fallback": "缺少重装骆驼目录资料时隐藏这条反骑补队建议；不据此把骆驼列为固定主力。"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-second",
+            "when": "长戟＋弓手",
+            "text": "飞刀清长戟，轻骑等机会接近弓手，两队不脱节"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-third",
+            "when": "步兵集中",
+            "text": "调高飞刀比例、利用射程，轻骑牵制绕后，避免飞刀被包围贴身"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-fourth",
+            "when": "远程攻城器",
+            "text": "轻骑找侧翼机会；不能只靠中心射程守住阵地",
+            "requires": [{ "kind": "unit", "id": 36, "age": 4 }],
+            "fallback": "缺少手推炮目录资料时隐藏反攻城支援建议；不把可选炮兵列为主路要求。"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-fifth",
+            "when": "有安全位置和资源，需前线阵地支点",
+            "text": "按hongcun常用阵地变体评估前线城镇中心，由村民施工、驻守和维修；不作为轻骑＋飞刀主路前置。",
+            "requires": [
+              { "kind": "building", "id": 109, "age": 4 },
+              { "kind": "unit", "id": 83, "age": 4 }
+            ],
+            "fallback": "缺少城镇中心或施工维修村民目录资料时隐藏前线阵地建议；保留轻骑与飞刀主结构，不据此建议建造或驻守中心。"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-sixth",
+            "when": "已有前线城镇中心并已完成蛮王研究",
+            "text": "完成蛮王研究后空中心开火；仅在已有前线中心时评估该可选机制，不作为主路前置。",
+            "requires": [
+              { "kind": "building", "id": 109, "age": 4 },
+              { "kind": "tech", "id": 576, "age": 4 }
+            ],
+            "fallback": "缺少城镇中心或蛮王科技目录资料时隐藏空中心开火建议；不推断机制已研究或主路失效。"
+          },
+          {
+            "id": "malians-light-cavalry-gbeto-adjustment-seventh",
+            "when": "目标无法安全接近或确需范围伤害",
+            "text": "目标无法安全接近或确需范围伤害时，评估投石车系基础兵种；具体等级另行评估，不作固定配套。",
+            "requires": [{ "kind": "unit", "id": 280, "age": 4 }],
+            "fallback": "缺少基础投石车目录资料时隐藏范围伤害评估；不指定升级等级或固定配套。"
+          }
+        ],
+        "alternatives": "冠军剑士常驻：额外远程护甲不解决追弓手的机动问题，不作默认投入；重装骑士或骆驼代替飞刀：叠骑兵留下共同怕长戟的缺口，骆驼补队只在对应依赖调整中显示；投石车常驻：不默认作为固定配套；长枪、掷矛再作常驻不耗金兵：已有轻骑主体，另开路线增加升级、产能与编队负担。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Malay",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "malay-battle-elephant-progression",
+        "title": "城堡时代象兵→经济允许时精锐象兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "progression",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "升帝王不自动转型；不把弩手列为固定阵容。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
+          "discussion": "https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac",
+          "boundary": "城堡时代起优先折扣象兵；弩手仅作枪兵压力下支援，劲弩只在已有弩手基础和相关科技投入时延续，不是固定第三主力；未确认用户亲自实战这套具体混编，本轮未做新模拟或实战验证。"
+        },
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1132,
+            "historicalName": "象兵",
+            "role": "前中期折扣象兵"
+          },
+          {
+            "kind": "unit",
+            "id": 1134,
+            "historicalName": "精锐象兵",
+            "role": "条件升级延续",
+            "age": 4
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "support",
+            "condition": "枪兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 24,
+                "age": 3,
+                "historicalName": "弩手",
+                "role": "弩手条件支援"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "已有弩手基础并投入相关射手科技时，可按需延续为劲弩手；不是固定第三主力。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 492,
+                "historicalName": "劲弩手",
+                "role": "已有弩手基础时的帝王延续",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "按骑兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "按骑兵压力补充",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "按拆防/反攻城需求；手推炮需攻城武器厂生产。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "攻城武器厂生产",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "完成攻城技师研究后才生效；不是手推炮训练前置。",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 377,
+                "age": 4,
+                "historicalName": "攻城技师",
+                "role": "按需研究后机制支持"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "未确认用户亲自实战这套具体混编；本轮未做新模拟或实战验证。",
+          "scope": "记录城堡时代折扣象兵起步、帝王时代按经济与反制条件延续，以及弩手和劲弩的条件支援；保留骑兵科技缺口与攻城生产/科技投入边界，具体混编未确认用户亲自实战。",
+          "recordedVersion": "原记录未记录站点版本/构建",
+          "sourceLines": [355, 356, 357]
+        },
+        "reason": "主路从城堡时代折扣象兵起步，帝王时代是否升级精锐象兵按经济与敌方反制评估；不固定象兵＋弩手组合。",
+        "adjustments": [
+          {
+            "id": "malay-battle-elephant-progression-adjustment-first",
+            "when": "出现枪兵压力",
+            "text": "枪兵压力下可用弩手作条件支援；不固定训练“象兵＋弩手”。",
+            "requires": [{ "kind": "unit", "id": 24, "age": 3 }],
+            "fallback": "缺少弩手目录资料时隐藏该条件支援；保留象兵进程主路。"
+          }
+        ],
+        "limitation": "象兵仍需食物与黄金；帝王时代不自动转线。僧侣密集或反骑护卫阻断接近时，先处理反制并评估转线。马来可用畜牧与骑兵鳞甲，但缺血统、骑兵锁甲和骑兵钢甲。劲弩需独立兵种线升级和射手攻防科技。"
+      },
+      {
+        "id": "malay-two-handed-swordsman-sustain",
+        "title": "缺金持续补兵：双手剑士",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "仅在帝王后期/消耗局、黄金不足并完成强征兵役时考虑持续补兵；不是象兵路线的默认转型。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 473,
+            "historicalName": "双手剑士",
+            "role": "帝王后期/消耗局缺金补兵"
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 625,
+            "historicalName": "强征兵役",
+            "role": "强征兵役",
+            "condition": "帝王后期/消耗局且黄金不足，研究须完成"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "按骑兵压力补充",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "长戟兵"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "按拆防或反攻城需要补少量手推炮",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "已有弩手基础且已投入相关科技时才续线",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 492,
+                "historicalName": "劲弩手",
+                "role": "劲弩手"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "未确认用户亲自实战这套具体混编；本轮未做新模拟或实战验证。",
+          "scope": "记录帝王后期或消耗局缺金、完成强征兵役后的补兵条件，特色科技的资源转换与本身成本，以及步兵持续补兵的资源、研究、产能和接战边界；不作为象兵路线默认转型。",
+          "recordedVersion": "原记录未记录站点版本/构建",
+          "sourceLines": [355, 356, 357]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356",
+          "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+          "boundary": "仅在帝王后期或消耗局、黄金不足且完成强征兵役时考虑；科技本身仍耗食物和黄金，持续补兵受资源、研究与产能限制；未确认用户亲自实战这套具体混编，本轮未做新模拟或实战验证。"
+        },
+        "reason": "只在帝王后期或消耗局、黄金不足且已完成强征兵役时，才考虑以双手剑士持续补兵；强征兵役将民兵系黄金成本换为额外食物，免费步兵护甲支持补兵；不作为象兵默认转型。",
+        "adjustments": [],
+        "limitation": "强征兵役科技本身仍耗食物和黄金；双手剑士与长戟兵都占食物，共用步兵攻击科技但兵种升级独立。人口、食物与木材供给、研究时间、扩产建筑和补兵距离限制持续补兵；步兵需要接近展开，范围伤害可能限制堆量，不能把双手剑士当作无条件肉盾或自动转型。"
+      }
+    ]
+  },
+  {
+    "civ": "Sicilians",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "sicilians-serjeant-light-cavalry",
+        "title": "精锐萨金特卫兵＋轻骑兵＋少量巨投",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1659,
+            "historicalName": "精锐萨金特卫兵",
+            "role": "城堡来源精锐萨金特卫兵"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "机动清理"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "拆关键防御"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "continuation-adjustment",
+            "condition": "已有骑士线投入、黄金和骑士科技允许时，延续重装骑士补充；不把骑士作为从零新开的完整阵容。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 283,
+                "historicalName": "重装骑士",
+                "role": "锁子甲重装骑士，替换轻骑"
+              }
+            ]
+          },
+          {
+            "mode": "position-variant",
+            "condition": "石头充足、已有稳定战线时考虑前线城楼阵地",
+            "entities": [
+              {
+                "kind": "building",
+                "id": 1665,
+                "historicalName": "城楼",
+                "role": "城楼"
+              },
+              {
+                "kind": "unit",
+                "id": 1661,
+                "historicalName": "精锐萨金特卫兵",
+                "role": "Donjon来源萨金特卫兵"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "敌方骑兵压力超出主力能力时按需增加长戟。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "按需补充反骑"
+              }
+            ]
+          },
+          {
+            "mode": "conditional-evaluation",
+            "condition": "敌方攻城器保护严密、轻骑难以接近时，先看路线与交战位置，再评估新增投石车投入；不把第二条反攻城路线列为标配。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 280,
+                "historicalName": "轻型投石车",
+                "role": "投石车系基础目录引用；新增投入仅作条件评估，非反攻城标配"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录萨金特卫兵与轻骑基础配置，以及按路线基础、资源、阵线和对手压力评估的骑士、城楼与条件支援。",
+          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录",
+          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372]
+        },
+        "reason": "精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机。卫兵凭高护甲承担正面接战与输出；轻骑提供机动，清理可接近的射手和攻城器；巨投拆城堡等关键防御。",
+        "limitation": "卫兵＋长戟可能一起受成群弩炮压制；减少所受额外伤害不等于减少所有基础伤害。轻骑已能完成清理任务时，优先用好已有兵种。卫兵与骑兵都争食物，步骑共享近战攻击但护甲和兵种升级分开；锁子甲、骑士线、城楼箭系各有新增投入。高护甲不代表卫兵必胜所有骑兵，城楼也受远程攻城和固定位置限制。",
+        "adjustments": [],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Goths",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "goths-huskarl-halberdier",
+        "title": "精锐近卫军＋长戟兵＋少量手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "长戟按骑兵压力。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 761,
+            "historicalName": "精锐近卫军",
+            "role": "接近弓手、冲击经济区"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "按骑兵压力调比例"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需选择当前可用的攻城补充；不要求另开产线。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "按需手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "已有巨型投石机可先沿用，不要求另产手推炮"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "强近战步兵压力时，可评估以冠军剑士替换部分近卫军。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 567,
+                "historicalName": "冠军剑士",
+                "role": "替换部分近卫军的条件选项"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "面对条顿武士等强反步兵单位时评估火枪支援；不为凑远程核心默认加入。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "historicalName": "火枪手",
+                "role": "条件火枪支援，不属固定远程核心"
+              }
+            ]
+          },
+          {
+            "mode": "production-alternative",
+            "condition": "游戏目录产地映射：城堡来源精锐近卫军；非固定策略讨论新增路线。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 555,
+                "historicalName": "精锐近卫军",
+                "role": "游戏目录产地映射，不代表固定讨论中的新增阵容"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录近卫军与长戟的步兵核心、按需攻城器择用、哥特补兵机制及对应投入边界。",
+          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录",
+          "sourceLines": [13, 376, 378, 380]
+        },
+        "reason": "精锐近卫军凭高穿刺护甲接近弓箭兵并冲击经济区；长戟兵按骑兵压力调比例。步兵折扣、无政府解锁兵营近卫军、井喷与团队兵营加成共同支持补兵。",
+        "limitation": "共享步兵攻防不免除精锐、长戟、冠军和特色科技的独立投入。农田、黄金和前线兵营产能须持续支持；便宜且产得快不等于资源可无限消耗。近卫军的高穿刺护甲不能代替近战能力，也不能抵消投石车打击。",
+        "adjustments": [],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Koreans",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "koreans-war-wagon-halberdier",
+        "title": "精锐高丽战车＋长戟兵＋少量手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "已有战车基础时继续，不必强转塔阵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 829,
+            "historicalName": "精锐高丽战车",
+            "role": "既有战车主力"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "反骑"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "按需少量手推炮",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "按需炮"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "覆盖已有战车基础时延续原有获认可路线，并以少量手推炮作为按需补充。",
+          "recordedVersion": "章节资料核对：v0.77.102 · DE 188329 · 84988dd；旧战车路线的单独对局版本未记录",
+          "sourceLines": [171, 415, 419]
+        },
+        "reason": "已有战车基础时可继续原本获认可的精锐战车＋长戟路线，不必强转火矛驻塔阵地。",
+        "limitation": "战车与火矛同时从零大量扩产会分散黄金、升级和城堡产能。",
+        "adjustments": [],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L415",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "koreans-fire-lancer-garrison",
+        "title": "前线箭塔＋驻扎精锐火矛兵＋少量攻城器",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "用户在 2026-11-15 观察只确认驻塔会放箭；无逐箭计数或胜率证据。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "主要固定远程火力与掩体"
+          },
+          {
+            "kind": "unit",
+            "id": 1903,
+            "historicalName": "精锐火矛兵",
+            "role": "驻塔增箭、出塔清冲车并保护塔和炮"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "骑士/游侠压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "长戟"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "按目标与已有基础从当前可用项中按需选择；攻城器不作固定主力。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "巨投、长射程火炮威胁时用手推炮寻找处理机会，必要时退守"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "用户提出以火矛驻塔替换旧弩手驻塔的变体；此处记录变体提出，不将旧弩手玩法的使用经验移作新组合的实战证据。",
+          "playtest": "用户只观察到火矛驻塔会放箭；新组合仍待实战验证，没有逐箭计数、伤害或胜率验证。",
+          "scope": "描述火矛驻塔替换旧弩手驻塔的阵地变体、施工与维修边界、驻塔预览范围和出塔机制限制。",
+          "recordedVersion": "章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）",
+          "sourceLines": [386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419]
+        },
+        "reason": "阵地变体：前线箭塔＋驻扎精锐火矛兵。原来的弩手驻塔、火矛塔下清冲车是 hongcun 常用且认为战损比好的玩法；用户进游戏观察到火矛驻塔确实会放箭，提出改为火矛驻塔、省掉弩手。只确认“会放箭”，没有逐箭计数，不能写成完整客户端对账或新组合胜率证明。",
+        "limitation": "驻军仍占人口，建塔仍耗石；火矛出塔清冲车会减少驻塔火力。指定预览中 4 个火矛兵达到 5 箭上限，同条件 5 个劲弩手仅 4 箭（站内理论预览，不含每箭伤害，未与客户端逐项核对）。塔能输出不等于可省略拆城堡手段；邑城并叠满箭羽线的约 13 射程塔不能压制火炮术后 14 射程土耳其手推炮，不把射程优势泛化到所有文明；这是源记录条件上限比较，不表示当前玩家已研究相关科技。鼓风炉缺口对火矛驻塔输出的影响仅为机制推断，待实战验证；火矛出塔清冲车或接骑兵仍有近战攻击科技缺口。",
+        "attack": "进攻前先取得施工空间并保留撤退与维修资源；成型塔阵不能倒推为施工中的保护。",
+        "defense": "火矛驻塔输出；冲车接近时出塔清理；对塔外远程威胁，仅在已有机动力量且可安全接近时处理，否则退守。",
+        "adjustments": [
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-first",
+            "when": "冲车接近",
+            "text": "部分火矛出塔清理后回驻，不把所有兵同时撤出造成火力空档"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-second",
+            "when": "骑士、游侠成群",
+            "text": "补长戟承担正面反骑，火矛保留驻塔和清冲车任务",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏该反骑建议；保留火矛驻塔与撤退边界。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-third",
+            "when": "步兵海或塔外弓手",
+            "text": "依托塔消耗；需要机动远程时比较战车投入，不让火矛单独追风筝部队",
+            "requires": [{ "kind": "unit", "id": 829, "age": 4 }],
+            "fallback": "缺少高丽战车目录资料时隐藏机动战车比较；不把火矛改作追击部队。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-fourth",
+            "when": "巨投、长射程火炮",
+            "text": "邑城并叠满箭羽线的约 13 射程塔不能压制火炮术后 14 射程的土耳其手推炮，不把射程优势泛化到所有文明",
+            "requires": [{ "kind": "unit", "id": 36, "age": 4 }],
+            "fallback": "缺少手推炮目录资料时隐藏用炮建议；仍可必要时退守。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-fifth",
+            "when": "安全空间与维修资源允许新建塔",
+            "text": "安排村民在塔区相互支援的位置建新塔；先保证施工空间、撤退与维修资源，成型塔阵不代表施工时受保护。",
+            "requires": [{ "kind": "unit", "id": 83, "age": 4 }],
+            "fallback": "缺少村民目录资料时隐藏新建建议；保留施工空间、撤退与维修的安全边界。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-sixth",
+            "when": "已有战车基础并适合延续",
+            "text": "按条件继续精锐高丽战车＋长戟主路线；不是火矛驻塔固定搭配，也不要求强行转型。",
+            "requires": [{ "kind": "route", "id": "koreans-war-wagon-halberdier" }],
+            "fallback": "原战车路线缺失或不可用于当前推荐时隐藏该改选；保留塔阵路线条件。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-seventh",
+            "when": "已有劲弩基础且需要驻塔远程",
+            "text": "仅在已有劲弩基础时复用，不新开驻军线；驻塔预览不代表其野外职责也被替代。",
+            "requires": [{ "kind": "unit", "id": 492, "age": 4 }],
+            "fallback": "缺少劲弩目录资料时隐藏既有兵复用建议；不据此新开驻军线。"
+          },
+          {
+            "id": "koreans-fire-lancer-garrison-adjustment-eighth",
+            "when": "需要范围伤害且能承担额外升级投入",
+            "text": "只在存在具体范围伤害需求时评估火箭推车；不作固定配套或主力，不指定升级等级。",
+            "requires": [{ "kind": "unit", "id": 1904, "age": 4 }],
+            "fallback": "缺少火箭推车目录资料时隐藏范围伤害选项；不将其当作常规配套。"
+          }
+        ],
+        "alternatives": "不专门新开弩手驻军线：增加升级投入，驻塔预览不代表替代野外职责；战车与火矛同时从零大量扩产会分散黄金、升级和城堡产能，已有战车基础时的路线选择见下方调整；火箭推车不作固定配套或主力，范围伤害条件见下方调整；翼骑常驻不默认加入：弱骑兵线与额外科技投入。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Jurchens",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L452",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "jurchens-fire-lancer-tower",
+        "title": "前线大型箭塔＋精锐火矛兵＋翼骑＋少量攻城器",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "用户认可为主路，但原文未实战用过。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "大型箭塔支点"
+          },
+          {
+            "kind": "unit",
+            "id": 1903,
+            "historicalName": "精锐火矛兵",
+            "role": "驻塔增箭/出塔清冲车"
+          },
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "塔外清炮/冲弓"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "敌步兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1910,
+                "historicalName": "精锐铁浮屠",
+                "role": "精锐铁浮屠"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "少量攻城器按需拆防；按目标与已有基础选择当前可用补充，不同时铺开。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "仅完成强化堡垒研究后适用；独立机制支持，不是路线前置，恢复数值由依赖调整说明",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 996,
+                "historicalName": "强化堡垒",
+                "role": "强化堡垒机制支持"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "该路线仍待实战验证。",
+          "scope": "描述前线箭塔、驻塔火矛和翼骑主路及按对手调整。指定输入下 4 个火矛与 5 个掷弹兵分别达到 5 箭上限；这是理论驻军箭数比较，不是胜率或自动招募配方。",
+          "recordedVersion": "v0.77.105 · DE 188329 · cd9382c",
+          "sourceLines": [452, 454, 456, 457, 458, 459, 461, 463, 464, 465, 471, 472, 473, 474, 480, 481, 482, 483, 485]
+        },
+        "reason": "前线箭塔＋驻扎精锐火矛兵＋翼骑兵。 hongcun 认可它可以像高丽一样做成主力阵容；这套是 2026-11-15 讨论中才发现的，hongcun 还没有实战用过，待实战验证。",
+        "limitation": "城堡产能与石料有限，多建城堡会挤占箭塔用料；铁浮屠与火矛争用黄金。女真不能研究步兵钢甲，驻塔时不受护甲缺口影响仅为机制推断；火矛出塔仍是 4/4，缺口仍在。文明攻速加成已被 PK 页计入火矛，但是否适用于火矛未由客户端核对；翼骑属于骑乘单位，不存在同一疑问。",
+        "attack": "塔往前修，火矛兵驻塔，翼骑兵先清对方的炮。",
+        "defense": "火矛兵驻塔放箭，冲车和骑兵靠近时出塔清掉，翼骑兵在塔外拦手推炮。",
+        "adjustments": [
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "火矛兵出塔接战，长戟兵补数量，翼骑兵不正面换；接触 PK 中火矛兵对法兰克游侠只剩 1/85 险胜，不能当作稳赢（当次接触模型，不是混编实战胜率）",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏长戟补数量建议；保留火矛与翼骑主路。"
+          },
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-second",
+            "when": "长戟兵多",
+            "text": "火矛兵顶在前面（胜长戟兵，剩 64/85），翼骑兵不撞长戟（输）（当次接触模型，不是混编实战胜率）"
+          },
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-third",
+            "when": "冠军剑士等步兵成群",
+            "text": "火矛兵、翼骑兵贴身都输；补精锐铁浮屠（胜冠军剑士，剩 82/160），其余依托塔箭消耗（当次接触模型，不是混编实战胜率）",
+            "requires": [{ "kind": "unit", "id": 1910, "age": 4 }],
+            "fallback": "缺少精锐铁浮屠目录资料时隐藏该步兵压力补队；保留火矛塔阵主路。"
+          },
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-fourth",
+            "when": "弓手成群",
+            "text": "翼骑兵冲（胜劲弩手，剩 80.6/95），火矛兵留在塔里（当次接触模型，不是混编实战胜率）"
+          },
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-fifth",
+            "when": "已有掷弹兵基础并考虑驻塔辅助",
+            "text": "仅在已有掷弹兵基础时按需复用；不新开靶场量产驻军线，也不作为主力。",
+            "requires": [{ "kind": "unit", "id": 1911, "age": 4 }],
+            "fallback": "缺少掷弹兵目录资料时隐藏既有兵复用建议；不建议另开靶场量产驻军。"
+          },
+          {
+            "id": "jurchens-fire-lancer-tower-adjustment-sixth",
+            "when": "已完成强化堡垒研究",
+            "text": "完成强化堡垒研究后，页面文字列出防御工事和城镇中心每分钟恢复 500 生命值；站内数值未计入，实战是否够用未验证。",
+            "requires": [{ "kind": "tech", "id": 996, "age": 3 }],
+            "fallback": "缺少强化堡垒科技目录资料时隐藏研究后机制说明；该科技不是路线前置。"
+          }
+        ],
+        "alternatives": "精锐铁浮屠不作常驻：需要城堡产能并争用石料、黄金，接触 PK 对游侠为负；步兵压力下的条件补队见下方调整。掷弹兵不新开靶场专作驻军：会占用产能并耗食物、黄金；已有基础时的复用见下方调整。精锐掷矛手驻塔：预览中 5 个只增加 1 箭。科技树缺口：没有骑士线、冠军剑士、劲弩手、火枪手和投石车线，远程固定火力主要靠塔和驻军。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L452",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Saxons",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "saxons-retainer-tower",
+        "title": "前线箭塔（后期大型箭塔）＋精锐扈从＋少量巨投",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "用户认可分析方向，实战状态待验证；城堡是产能条件，不是必须前置主力建筑。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "箭塔阵地"
+          },
+          {
+            "kind": "unit",
+            "id": 2706,
+            "historicalName": "精锐扈从部队",
+            "role": "驻军/出击"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "城堡生产拆防"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "该路线仍待实战验证。",
+          "scope": "记录箭塔＋精锐扈从＋巨投的待实战验证方向、指定驻军预览和基础箭数/步兵折扣边界；机制数字不代表伤害或混编胜率。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [491, 493, 495, 496, 497, 499, 501, 503, 505, 507, 515, 516, 517, 518, 519, 525, 526, 527, 528, 529, 530, 532]
+        },
+        "reason": "用户认可的方向（待实战验证）：前线箭塔（后期大型箭塔）＋扈从部队（后期精锐）＋少量巨投。扈从与巨投需要城堡产能；城堡是生产条件，不是必须前置的主力建筑。",
+        "limitation": "前线箭塔投入受石料、安全施工窗口和城堡产能限制；扈从与巨投需要城堡产能，城堡不是主路必备前置。扈从不适合单独接有骑兵护卫的近战目标，不能以单兵机制推断混编胜负。无额外驻军科技的指定预览中，5 个精锐扈从显示 2+4=6 箭；这是理论箭数，不代表伤害或胜率，也未完整模拟投枪充能。城堡时代起，箭塔基础箭数从 1 增至 2、城堡基础箭数从 5 增至 10；这些变化只作用于基础箭数，不会加倍驻军增箭。每座已控制的城镇中心或城堡使步兵成本降低 5%，最多 20%；箭塔不计，不为折扣单独建造。盾墙对成群步兵的防护只作定性说明，站内未编码可引用的精确护甲值。",
+        "attack": "利用前线已有塔作支点，扈从保护塔区并按目标驻塔或出击，巨投在塔后拆防御；新建塔的施工条件见下方调整。",
+        "defense": "驻军从塔内输出，扈从按射手等合适目标择机出击；不让扈从单独接骑兵，条件反骑见下方调整。",
+        "adjustments": [
+          {
+            "id": "saxons-retainer-tower-adjustment-first",
+            "when": "弓手、骑射手",
+            "text": "扈从针对射手，可驻塔输出；面对机动远射不要离开阵地长追。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-second",
+            "when": "骑兵",
+            "text": "按压力补长戟保护箭塔和巨投；长戟适用步兵折扣但不增加驻军箭。扈从不当主反骑，长戟不作固定主力。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏反骑建议；保留扈从与巨投主路。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-third",
+            "when": "冲车",
+            "text": "有安全窗口时出塔处理；有骑兵护卫时让长戟协同，不让扈从单独顶骑兵。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏骑兵护卫下的协同建议；保留扈从安全接敌边界。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-fourth",
+            "when": "长戟或其他步兵",
+            "text": "塔内驻军继续射击，扈从按目标出塔；不把单兵克制当作同资源混编的胜负结论。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-fifth",
+            "when": "手推炮、巨投",
+            "text": "用己方巨投寻找反制窗口，或趁推进慢时安全出击；受护卫和位置影响，不保证能处理掉。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-sixth",
+            "when": "新建前线箭塔且施工窗口安全",
+            "text": "有安全施工窗口时由村民建前线塔，扈从保护施工和塔区；先保留撤退与维修条件，不把成型防线当作施工保护。",
+            "requires": [{ "kind": "unit", "id": 83, "age": 4 }],
+            "fallback": "缺少村民目录资料时隐藏前线建塔建议；保留施工安全边界。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-seventh",
+            "when": "确需低成本成群步兵",
+            "text": "可比较冠军剑士作为低成本成群步兵；与扈从近战步兵职责重叠，且不能替代驻军增箭。",
+            "requires": [{ "kind": "unit", "id": 567, "age": 4 }],
+            "fallback": "缺少冠军剑士目录资料时隐藏低成本步兵选项；保留现有路线职责。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-eighth",
+            "when": "对方有昂贵单位且微操可承受",
+            "text": "僧侣可作针对昂贵单位的可选方案；微操负担较高，基础僧侣不依赖神职人员招募科技。",
+            "requires": [{ "kind": "unit", "id": 125, "age": 4 }],
+            "fallback": "缺少僧侣目录资料时隐藏该可选方案；不将其当作路线前置。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-ninth",
+            "when": "已完成神职人员招募研究",
+            "text": "研究完成后，目录说明：僧侣的招降射程 +1；训练速度 +33%。该增强同时依赖僧侣和此科技，不作为基础僧侣方案前置。",
+            "requires": [
+              { "kind": "unit", "id": 125, "age": 4 },
+              { "kind": "tech", "id": 1491, "age": 3 }
+            ],
+            "fallback": "缺少僧侣或神职人员招募科技目录资料时隐藏此增强建议；不据此声称僧侣可用。"
+          },
+          {
+            "id": "saxons-retainer-tower-adjustment-tenth",
+            "when": "现有城堡产能不足且确需扩产",
+            "text": "仅在确需城堡产能时增建；不为步兵成本折扣造城堡，施工前确认村民和前线安全。",
+            "requires": [
+              { "kind": "building", "id": 82, "age": 4 },
+              { "kind": "unit", "id": 83, "age": 4 }
+            ],
+            "fallback": "缺少城堡或村民目录资料时隐藏增建建议；不把步兵成本折扣当作建造理由。"
+          }
+        ],
+        "alternatives": "长戟兵固定主力：不列为常驻主力；不替代扈从处理射手，也不提供驻军增箭。；冠军剑士常驻：与扈从的近战步兵任务重叠，不能替代扈从增箭；确需低成本成群步兵时见下方调整。；重装骑士（Cavalier）：缺鼓风炉和骑兵钢甲，也不享步兵折扣，不按完整骑兵升级路线作为默认核心。；僧侣核心：微操负担高；针对昂贵单位的条件方案及独特科技效果见下方调整。；额外城堡只为折扣：箭塔不计入步兵折扣，额外城堡消耗石料并挤占箭塔投入；不为折扣单独建造，确需产能时见下方调整。；手推炮：撒克逊人不能训练手推炮；以巨投或安全出击寻找反攻城窗口，不把无法生产的单位列作默认手段。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Teutons",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L538",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "teutons-paladin-skirmisher",
+        "title": "游侠＋精锐掷矛手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "主动接战时；不是万金油。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 569,
+            "historicalName": "游侠",
+            "role": "主动接战主力"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "处理弓手/长戟"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需少量配置当前可用的攻城支援，并保护其推进。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；游侠与精锐掷矛手分担主力和反弓职责，限主动接战并保护昂贵游侠。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        },
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。游侠＋精锐掷矛手（主动接战时）；游侠作主力，掷矛处理弓手与长戟。",
+        "limitation": "游侠在帝王时代有 +2 近战护甲，但缺畜牧；精锐掷矛手缺护腕和扳指，满科技射程 7。掷矛不能替昂贵游侠吸收前线损耗，需保护游侠。",
+        "attack": "主动接战时以游侠＋精锐掷矛手为主路线；不把前推城堡当成每次进攻都需要的锚点。",
+        "defense": "利用已有阵地和狭口保护昂贵游侠；精锐掷矛手处理弓手与长戟，不以掷矛替游侠承担前线损耗。",
+        "adjustments": [
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-first",
+            "when": "弓手、长戟兵",
+            "text": "主动接战时可选游侠＋精锐掷矛手；掷矛对弓手、长矛兵有额外伤害，但缺护腕和扳指，射程 7，注意交战距离。"
+          },
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-second",
+            "when": "普通骑兵",
+            "text": "游侠有帝王时代 +2 近战护甲，不默认再叠长戟；这不代表游侠免疫骆驼等反骑单位。"
+          },
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-third",
+            "when": "黄金紧张或特定反骑压力",
+            "text": "黄金紧或出现特定反骑压力时，可用长戟替换部分游侠承担反骑；不默认让游侠和长戟常驻成对。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏此补队建议；保留游侠＋精锐掷矛手路线。"
+          },
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-fourth",
+            "when": "近战兵多、狭口或已有阵地",
+            "text": "近战压力、狭口或已有阵地时，按条件改选精锐条顿骑士＋精锐掷矛手主路线；不表示默认同时铺开三套。仍需注意开阔地风筝与慢速骑士追攻城器的风险。",
+            "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }],
+            "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留游侠＋精锐掷矛手路线。"
+          }
+        ],
+        "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "teutons-halberdier-handcannon",
+        "title": "长戟兵＋火枪手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "持续低价前排；怕弓手、骑射和投石车。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "低价反骑前排"
+          },
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "处理步兵"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需少量配置当前可用的攻城支援，并保护其推进。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；长戟与火枪组成低价前排，并保留该慢速路线怕远程单位和投石车的限制。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [538, 540, 543, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        },
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。长戟兵＋火枪手（持续用低价前排时）；长戟反骑并保护火枪，火枪处理步兵；火枪手对步兵有 +10 额外伤害，没有条顿专属攻击加成。",
+        "limitation": "这条慢速路线怕弓手、骑射手和投石车。",
+        "attack": "持续需要低价前排时以长戟兵＋火枪手推进；不把前推城堡当成每次进攻都需要的锚点。",
+        "defense": "利用已有阵地和狭口保护长戟兵与火枪手；长戟按实际反骑压力补充。",
+        "adjustments": [
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-first",
+            "when": "弓手、长戟兵",
+            "text": "主动接战且对手有弓手或长戟时，按条件改选游侠＋精锐掷矛手主路线；不表示默认同时铺开三套。",
+            "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }],
+            "fallback": "游侠路线缺失或不可用于当前推荐时隐藏此改选建议；保留本路线长戟＋火枪。"
+          },
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-second",
+            "when": "持续用低价前排",
+            "text": "本路线由长戟反骑并保护火枪，火枪处理步兵。"
+          },
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-third",
+            "when": "黄金紧张或特定反骑压力",
+            "text": "本路线已有长戟承担反骑；火枪投入随黄金与对手调整，不默认同时加入游侠。"
+          },
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-fourth",
+            "when": "近战兵多、狭口或已有阵地",
+            "text": "近战压力、狭口或已有阵地时，按条件改选精锐条顿骑士＋精锐掷矛手主路线；不表示默认同时铺开三套。",
+            "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }],
+            "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留本路线长戟＋火枪。"
+          }
+        ],
+        "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L543",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "teutons-elite-knight-skirmisher",
+        "title": "精锐条顿骑士＋精锐掷矛手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "近战重、狭口或已有阵地。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 554,
+            "historicalName": "精锐条顿骑士",
+            "role": "近战重/狭口或阵地"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "应对射手"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需少量配置当前可用的攻城支援，并保护其推进。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；条顿骑士与精锐掷矛手按近战重、狭口或已有阵地选择，并保留城堡产能边界。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+        },
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。条顿骑士（后期精锐）＋精锐掷矛手；骑士承担近战，掷矛应对射手。",
+        "limitation": "精锐条顿骑士护甲高但移动慢；掷矛的射程差，不宜对射远程攻城器或追击。条顿骑士需要城堡产能；已有城堡可用于生产和研究，不等于必须反复前推城堡。",
+        "attack": "近战压力重、狭口或已有阵地时以条顿骑士＋精锐掷矛手推进；不把前推城堡当成每次进攻都需要的锚点。",
+        "defense": "利用已有阵地和狭口保护条顿骑士与精锐掷矛手；不让慢速条顿骑士裸追远程攻城器。",
+        "adjustments": [
+          {
+            "id": "teutons-elite-knight-skirmisher-adjustment-first",
+            "when": "弓手、长戟兵",
+            "text": "主动接战面对弓手或长戟时，按条件改选游侠＋精锐掷矛手主路线；不表示默认同时铺开三套。",
+            "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }],
+            "fallback": "游侠路线缺失或不可用于当前推荐时隐藏此改选建议；保留条顿骑士＋精锐掷矛手路线。"
+          },
+          {
+            "id": "teutons-elite-knight-skirmisher-adjustment-second",
+            "when": "出现实际反骑压力",
+            "text": "按实际反骑压力补长戟兵；不替代本路线精锐条顿骑士＋精锐掷矛手，也不作为固定常驻兵线。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏该反骑补队；保留本条顿骑士＋掷矛手路线。"
+          },
+          {
+            "id": "teutons-elite-knight-skirmisher-adjustment-fourth",
+            "when": "近战兵多、狭口或已有阵地",
+            "text": "仅在近战压力、狭口或已有阵地时使用本路线；避免在开阔地被远程单位风筝或追击攻城器。"
+          }
+        ],
+        "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L544",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Franks",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L579",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "franks-paladin-skirmisher",
+        "title": "游侠＋掷矛",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "按对手、地形、经济与兴趣选路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 569,
+            "historicalName": "游侠",
+            "role": "骑兵主力"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "远程支援"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录游侠与精锐掷矛的条件组合、食物与黄金投入、骆驼和长戟压力，以及按需攻城支援。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]
+        },
+        "reason": "游侠承担重骑主力，精锐掷矛手应对射手与长戟。游侠 60 食物 + 75 黄金，掷矛手 25 食物 + 35 木材；两线共用食物，资源并非完全分离。免费磨坊科技只节省升级投入，不意味着无限补兵。",
+        "limitation": "游侠与掷矛手共同消耗食物，游侠另需黄金；骆驼压力大时谨慎投入游侠。精锐掷矛手缺护腕、扳指和射手锁甲，站内满科技射程为 7；免费磨坊科技不意味着无限补兵。",
+        "attack": "按敌军与地形选择接敌时机，游侠承担重骑推进，精锐掷矛手处理射手与长戟；避免游侠硬接骆驼。",
+        "defense": "依托阵地保护游侠，精锐掷矛手维持对射手与长戟的支援；骆驼压力下不让游侠硬接。",
+        "adjustments": [
+          {
+            "id": "franks-paladin-skirmisher-adjustment-first",
+            "when": "骆驼威胁游侠",
+            "text": "条件性评估长戟作为反骑支援；本建议未单独实战验证，也不将长戟列作固定护卫。",
+            "requires": [{ "kind": "unit", "id": 359 }],
+            "fallback": "保护阵地并谨慎调整游侠投入；不把长戟支援当作固定或已验证建议。"
+          },
+          {
+            "id": "franks-paladin-skirmisher-adjustment-second",
+            "when": "射手或长戟兵接近",
+            "text": "精锐掷矛手处理长矛兵；游侠保持安全接敌位置，不追入受保护的反骑阵。"
+          },
+          {
+            "id": "franks-paladin-skirmisher-adjustment-third",
+            "when": "食物或黄金补兵压力上升",
+            "text": "按经济重新评估游侠与掷矛手的补兵节奏；免费磨坊科技不代表可以无限补兵。"
+          },
+          {
+            "id": "franks-paladin-skirmisher-adjustment-siege",
+            "when": "按局势需要攻城支援",
+            "text": "固定记录允许另配少量攻城器，未指定种类，不设固定比例。"
+          }
+        ],
+        "alternatives": "游侠与掷斧长期双主力不默认：两路都花黄金且共用食物，可能增加补兵压力；这是成本权衡，不是禁止混编。反复前推城堡也不作默认选择：折扣仅文本、实际造价未核，仍耗石料且有施工暴露。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "franks-heavy-mounted-crossbow-light-cav",
+        "title": "重装骑马弩＋轻骑",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "路线按条件选择，不是强制与其他路混编。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2701,
+            "historicalName": "重装骑马弩兵",
+            "role": "远程主力"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "机动掩护"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录骑马弩与轻骑的资源分工、折扣估算边界、受保护攻城器风险及按需攻城支援。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
+        },
+        "reason": "重装骑马弩持续输出，轻骑提供机动掩护；骑马弩目录费用为 65 黄金 + 40 木材，轻骑为 80 食物，训练资源相对分工。王家敕令骑兵黄金折扣仅作估算，并非目录已应用价格；免费磨坊科技只节省升级投入，不意味着无限补兵。",
+        "limitation": "骑马弩持续占用木材与黄金，轻骑占用食物；王家敕令折扣不能写成已应用价格。轻骑接近受保护的敌方攻城器有被护卫拦截的风险；免费磨坊科技不消除补兵成本。",
+        "attack": "骑马弩持续远程输出，轻骑提供机动掩护并寻找安全侧翼；受保护的敌方攻城器不保证能被轻骑切入。",
+        "defense": "骑马弩依托安全射程输出，轻骑保留机动掩护，避免在反骑护卫前硬切。",
+        "adjustments": [
+          {
+            "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-first",
+            "when": "步兵或长戟兵成为主要威胁",
+            "text": "骑马弩持续处理可接近目标，轻骑按空间条件掩护；不设固定补兵比例。"
+          },
+          {
+            "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-second",
+            "when": "受保护的敌方攻城器",
+            "text": "轻骑只在护卫与路径允许时尝试接近；机动不等于能稳定切入。"
+          },
+          {
+            "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-third",
+            "when": "木金与食物补兵预算承压",
+            "text": "重新评估骑马弩木金与轻骑食物的分工，不把王家敕令折扣视为已应用价格。"
+          },
+          {
+            "id": "franks-heavy-mounted-crossbow-light-cav-adjustment-siege",
+            "when": "按局势需要攻城支援",
+            "text": "固定记录允许另配少量攻城器，未指定种类，不设固定比例。"
+          }
+        ],
+        "alternatives": "王家敕令骑兵的黄金折扣只作估算：目录费用仍为 65 黄金 + 40 木材，不能把静算结果当作站内已应用折后价。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "franks-throwing-axeman-light-cav",
+        "title": "精锐掷斧＋轻骑",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "按对手/地形/经济/兴趣择路；保留弱点条件。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 531,
+            "historicalName": "精锐掷斧兵",
+            "role": "掷斧"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "机动支援"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "帝王时代按目标从当前可用攻城支援中按需少量另配，不设固定比例。",
+            "entities": [
+              { "kind": "unit", "id": 36, "historicalName": "手推炮", "role": "按需攻城器选择", "age": 4 },
+              { "kind": "unit", "id": 331, "historicalName": "巨型投石机", "role": "按需攻城器选择", "age": 4 }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录掷斧与轻骑的情境/兴趣定位、共享食物、骑兵压力及明确的攻城器选择边界。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [579, 581, 583, 589, 591, 593, 595, 602, 603, 612, 614, 616]
+        },
+        "reason": "精锐掷斧处理步兵，轻骑提供机动；掷斧 55 食物 + 25 黄金、射程 6，与轻骑共用食物。这是按情境或兴趣选择的路线，不作为通用主力；免费磨坊科技仅是共享经济背景，不意味着无限补兵。",
+        "limitation": "掷斧与轻骑共同消耗食物，掷斧另需黄金；骑兵威胁会压缩两者的安全接战空间。精锐掷斧兵射程为 6，相关科技中没有旧掷斧增程科技；免费磨坊科技不意味着无限补兵。",
+        "attack": "精锐掷斧负责处理步兵，轻骑保持机动并在安全通路存在时寻找侧翼；不把机动等同于能稳定切入受保护的敌方攻城器。",
+        "defense": "骑兵威胁下不让掷斧和轻骑强行接战；依托阵地并为轻骑保留撤退空间。",
+        "adjustments": [
+          {
+            "id": "franks-throwing-axeman-light-cav-adjustment-first",
+            "when": "骑兵威胁掷斧或轻骑",
+            "text": "条件性评估长戟作为反骑支援；本建议未单独实战验证，轻骑也不保证能越过护卫切入。",
+            "requires": [{ "kind": "unit", "id": 359 }],
+            "fallback": "不让掷斧和轻骑在骑兵威胁下硬接；不把长戟支援视为固定或已验证建议。"
+          },
+          {
+            "id": "franks-throwing-axeman-light-cav-adjustment-second",
+            "when": "步兵或长戟兵出现",
+            "text": "掷斧承担对步兵的情境职责；保持本路兵种分工，不外推为通用主力。"
+          },
+          {
+            "id": "franks-throwing-axeman-light-cav-adjustment-third",
+            "when": "受保护的敌方攻城器",
+            "text": "轻骑仅在护卫与路径允许时接近；机动不等于能稳定切入。"
+          }
+        ],
+        "alternatives": "按情境／兴趣选择而不作通用主力；掷斧与轻骑共用食物，且在骑兵威胁下承压，不默认长期维持高比例。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L589",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Vietnamese",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "vietnamese-defensive-tower",
+        "title": "防守家园/资源点：大型箭塔＋精锐火矛驻塔＋轻骑",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "用户认为凑合可用，不作为主力；仅守家或资源点。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 235,
+            "historicalName": "大型箭塔",
+            "role": "防守塔"
+          },
+          {
+            "kind": "unit",
+            "id": 1903,
+            "historicalName": "精锐火矛兵",
+            "role": "塔内/塔外"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "有限机动清理"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "弓手压力按局势择一，不同时作为固定主力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1131,
+                "historicalName": "精锐藤弓兵",
+                "role": "精锐藤弓兵",
+                "age": 4
+              },
+              {
+                "kind": "unit",
+                "id": 1155,
+                "historicalName": "帝王掷矛手",
+                "role": "帝王掷矛手",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "骑兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1134,
+                "historicalName": "精锐象兵",
+                "role": "精锐象兵"
+              },
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "长戟"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "手推炮威胁",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "炮"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "用户认为火矛塔守点仅凑合可用；其他对位是站内接触PK机制核对，未经用户实战确认。",
+          "recordedVersion": "v0.77.105 · DE 188329 · cd9382c",
+          "sourceLines": [620, 622, 624, 626, 628, 629, 630, 632, 634]
+        },
+        "reason": "用户判断：越南大型箭塔＋精锐火矛＋轻骑驻塔组合仅凑合可用，只守家或资源点，不作主力；下列对位选项为站内接触PK，未经用户实战确认。",
+        "limitation": "没有建筑学，也没有鼓风炉；缺鼓风炉不影响火矛驻塔输出（机制推断，待实战验证），但会影响塔外近战和轻骑清炮。塔、火矛和轻骑无文明专属加成，塔仅守家或守资源点，不作主力。驻军预览里精锐藤弓兵5个才到5箭上限，帝王掷矛手5个只增1箭，均不比火矛兵强。",
+        "adjustments": [
+          {
+            "id": "vietnamese-defensive-tower-adjustment-first",
+            "when": "弓手压力且选择精锐藤弓兵",
+            "text": "精锐藤弓兵对劲弩手的站内接触模型为胜，剩余43.5/48；用户未实战确认，不代表胜率。",
+            "requires": [{ "kind": "unit", "id": 1131, "age": 4 }],
+            "fallback": "缺少精锐藤弓兵目录资料时隐藏此分支；另一分支按自身资料独立核验，不据此宣称可用。"
+          },
+          {
+            "id": "vietnamese-defensive-tower-adjustment-second",
+            "when": "弓手压力且选择帝王掷矛手",
+            "text": "帝王掷矛手对劲弩手的站内接触模型为胜，剩余36.6/42；用户未实战确认，不代表胜率。",
+            "requires": [{ "kind": "unit", "id": 1155, "age": 4 }],
+            "fallback": "缺少帝王掷矛手目录资料时隐藏此分支；另一分支按自身资料独立核验，不据此宣称可用。"
+          },
+          {
+            "id": "vietnamese-defensive-tower-adjustment-third",
+            "when": "骑士、游侠压力",
+            "text": "精锐象兵对法兰克游侠的站内接触模型为胜，剩余168/420；用户未实战确认，不代表胜率。火矛仅作辅助，不作为替代主路。",
+            "requires": [{ "kind": "unit", "id": 1134, "age": 4 }],
+            "fallback": "缺少精锐象兵目录资料时隐藏该对位建议；不把替代兵种升为主路。"
+          },
+          {
+            "id": "vietnamese-defensive-tower-adjustment-fourth",
+            "when": "骑兵压力，需要长戟辅助",
+            "text": "按需补长戟兵作为骑兵压力辅助；不替代主路或升为固定主力。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏该辅助建议；保留原塔防主路。"
+          },
+          {
+            "id": "vietnamese-defensive-tower-adjustment-fifth",
+            "when": "手推炮威胁",
+            "text": "需要时用己方手推炮反制；轻骑清炮较慢。",
+            "requires": [{ "kind": "unit", "id": 36, "age": 4 }],
+            "fallback": "缺少手推炮目录资料时隐藏炮兵反制建议；保留原塔防主路。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Lithuanians",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "lithuanians-leitis-skirmisher",
+        "title": "精锐烈堤司＋精锐掷矛手＋少量攻城器",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "主结构不固定数量；城镇中心阵地仅按条件支援呈现。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1236,
+            "historicalName": "精锐烈堤司",
+            "role": "主力"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "按弓兵压力"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "position-variant",
+            "condition": "前线中心需要施工维修村民且位置允许",
+            "entities": [
+              {
+                "kind": "building",
+                "id": 109,
+                "historicalName": "城镇中心",
+                "role": "城镇中心"
+              },
+              {
+                "kind": "unit",
+                "id": 83,
+                "historicalName": "村民",
+                "role": "施工维修村民"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "山城堡仅作为城镇中心射程机制支持；不是主路或建造前置，9射程建议由依赖调整控制",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 691,
+                "historicalName": "山城堡",
+                "role": "山城堡科技"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "骑兵压力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "长戟"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "按目标与已有攻城器，从当前可用项中按需选择；烈堤司近战保护攻城器并按目标处理。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "有护卫时按需用手推炮寻找反制机会"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "讨论认可烈堤司与掷矛主结构及驻军分工修正；驻军预览不代表混编实战或胜率证明，圣物数量不作开局假定。",
+          "recordedVersion": "原记录未记录站点版本/构建",
+          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674]
+        },
+        "reason": "烈堤司以近战处理重甲；掷矛反弓并远射长戟；主结构获讨论认可，记录未说明实战状态。",
+        "limitation": "烈堤司与掷矛的升级、食物/黄金投入和接敌方式限制成型；圣物是需争取的条件，不默认开局有4件。中心射程与驻军箭数为站内理论，未证明混编实战胜率；城镇中心不是主路线前置。",
+        "attack": "烈堤司与掷矛先争取安全接敌空间并相互支援；不连续抢建前线建筑。",
+        "defense": "烈堤司保持机动，掷矛反弓并远射长戟；保存撤退与安全接敌空间，不把城镇中心当主路前提。",
+        "adjustments": [
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-first",
+            "when": "长戟保护弓手",
+            "text": "掷矛先远射长戟，烈堤司等缺口再接战；不靠骑兵硬换长戟"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-second",
+            "when": "长戟数量太多，掷矛清得太慢",
+            "text": "减少骑兵补充，考虑转一部分投入到火枪；不在原阵容上无止境叠加金兵",
+            "requires": [{ "kind": "unit", "id": 5, "age": 4 }],
+            "fallback": "缺少火枪手目录资料时隐藏这条转线建议；不据此增加火枪手固定主力。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-third",
+            "when": "大量骆驼，或骑兵数量压制",
+            "text": "减少骑兵正面消耗，按弓手压力把部分掷矛换成长戟反骑",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏这条反骑转线建议；不据此把长戟加入固定主力。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-fourth",
+            "when": "有护卫的手推炮、巨投",
+            "text": "烈堤司找安全侧翼；不追入敌方护卫火力",
+            "requires": [{ "kind": "unit", "id": 36, "age": 4 }],
+            "fallback": "缺少手推炮目录资料时隐藏反攻城建议；保留安全接敌与撤退空间。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-fifth",
+            "when": "需要驻军避险并保护附近经济",
+            "text": "不必追求满箭；已有精锐掷矛可以驻中心，村民继续采集、施工和维修，不另练驻军。",
+            "requires": [
+              { "kind": "building", "id": 109, "age": 4 },
+              { "kind": "unit", "id": 83, "age": 4 }
+            ],
+            "fallback": "缺少城镇中心或施工维修村民目录资料时隐藏驻军分工建议；保留烈堤司＋掷矛主路。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-sixth",
+            "when": "完成山城堡研究后，需评估中心射程与驻矛",
+            "text": "完成山城堡研究后，城镇中心射程为9，仍够不到12射程普通手推炮；有中心和施工维修村民且能安全接敌时，再评估驻扎掷矛的射手应对；空驻军不开火。",
+            "requires": [
+              { "kind": "building", "id": 109, "age": 4 },
+              { "kind": "unit", "id": 83, "age": 4 },
+              { "kind": "tech", "id": 691, "age": 4 }
+            ],
+            "fallback": "缺少任一阵地或山城堡依赖时隐藏9射程建议；不把中心射程当作主路常态。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-seventh",
+            "when": "已有成熟骑士线、城堡产能不足或需要抗箭",
+            "text": "已有成熟骑士线、城堡产能不足或需要抗箭时，继续游侠合理；这是条件取舍，不要求转入烈堤司主路。",
+            "requires": [{ "kind": "unit", "id": 569, "age": 4 }],
+            "fallback": "缺少游侠目录资料时隐藏跨线取舍建议；不据此强制增加游侠线。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-eighth",
+            "when": "缺金或需要骚扰，且有翼骑投入",
+            "text": "可按当前资源替换部分贵骑兵；翼骑不补反长戟缺口，不能视作主路默认反骑。",
+            "requires": [{ "kind": "unit", "id": 1707, "age": 4 }],
+            "fallback": "缺少翼骑目录资料时隐藏该替换选择；不把翼骑列为固定反长戟主力。"
+          }
+        ],
+        "alternatives": "游侠与烈堤司同时大量生产：分散黄金和产能；烈堤司每名比游侠少 25 金。常驻一大队翼骑：没补上反长戟缺口，还扩大食物压力；圣物加攻不作用于翼骑。专门另练弩手驻中心：增加升级线，不作默认投入。游侠线、翼骑替换与中心驻军条件仅通过有目录依赖的调整显示，不因此列为固定主力。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Poles",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L678",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "poles-obuch-winged-hussar",
+        "title": "精锐奥布奇＋波兰翼骑",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "用户认可三条条件路线、彼此替代，不同时铺开。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1703,
+            "historicalName": "精锐奥布奇战锤兵",
+            "role": "正面破甲"
+          },
+          {
+            "kind": "unit",
+            "id": 1707,
+            "historicalName": "波兰翼骑兵",
+            "role": "机动包夹"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需拆关键防御/反攻城，只选择当前可用补充；翼骑兵保留机动拦截并保护己方攻城器。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录奥布奇正面接战破甲与翼骑机动的认可条件、食物和城堡产能成本、共用攻城支援及反制边界。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
+          "sourceLines": [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
+          "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
+          "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
+        },
+        "reason": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹。战锤兵每个 55 食、20 金，翼骑兵每个 80 食；食物消耗较大，战锤兵还依赖城堡产能。两者共享近战攻击科技，但步兵与骑兵护甲分别升级。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。战锤兵与翼骑兵都消耗食物；战锤兵依赖城堡产能，步兵与骑兵护甲需分别升级。翼骑兵缺骑兵钢甲；列克提克遗产的践踏在站内科技模拟器中为“仅文本”，不代表群战或混编胜率。",
+        "attack": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹并在有安全通路时寻找侧翼机会；不假定能绕到后排。",
+        "defense": "奥布奇依托阵地接战，翼骑兵保留机动拦截；不让翼骑兵对受保护的反骑阵硬冲。",
+        "adjustments": [
+          {
+            "id": "poles-obuch-winged-hussar-adjustment-first",
+            "when": "长戟等反骑部队护住后排",
+            "text": "奥布奇承担正面接战；翼骑兵等待侧翼通路，不硬冲反骑保护下的后排。"
+          },
+          {
+            "id": "poles-obuch-winged-hussar-adjustment-second",
+            "when": "射手或火枪成群，后有反骑护卫",
+            "text": "若需转向远程清理反骑护卫，可考虑劲弩路线；转换需承担射手科技与产能投入，不固定同出。",
+            "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }],
+            "fallback": "规避受保护的远程火力，保留撤退和安全接敌空间；不展示不可用的劲弩转线建议。"
+          },
+          {
+            "id": "poles-obuch-winged-hussar-adjustment-third",
+            "when": "受保护的攻城器",
+            "text": "翼骑兵只在护卫与路径允许时侧切；奥布奇承担野战接战，不替代远程攻城器拆防。"
+          }
+        ],
+        "alternatives": "本路与另外两条条件路线按经济和接敌条件择一；同时铺开会分散食物、升级与城堡产能，不作默认投入。"
+      },
+      {
+        "id": "poles-arbalest-winged-hussar",
+        "title": "劲弩手＋波兰翼骑",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "训练资源较互补；不固定再加入战锤兵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 492,
+            "historicalName": "劲弩手",
+            "role": "远程清长戟"
+          },
+          {
+            "kind": "unit",
+            "id": 1707,
+            "historicalName": "波兰翼骑兵",
+            "role": "掩护/侧袭"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "按需拆关键防御/反攻城，只选择当前可用补充；翼骑兵保留机动拦截并保护己方攻城器。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "手推炮"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "巨投"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录劲弩远射清理长戟与翼骑掩护的分工、训练资源互补、翼骑机制证据边界及共用攻城支援。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
+          "sourceLines": [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
+          "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
+          "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
+        },
+        "reason": "劲弩手远程清理长戟，翼骑兵掩护并寻找侧翼机会；劲弩耗木材与黄金、翼骑耗食物，训练资源较互补。劲弩没有波兰专属加成，不因能训练就默认优于其他路线。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。劲弩没有波兰专属加成；翼骑兵缺骑兵钢甲。列克提克遗产的践踏在站内科技模拟器中为“仅文本”，不代表群战或混编胜率；资源互补也不证明该路线必然优于其他选择。",
+        "attack": "劲弩先远射清理反骑护卫，翼骑兵掩护并在有安全侧翼通路时突入；不假定能绕到后排。",
+        "defense": "劲弩依托可互相支援的位置接战，翼骑兵保留机动拦截；不让翼骑对受保护的反骑阵硬冲。",
+        "adjustments": [
+          {
+            "id": "poles-arbalest-winged-hussar-adjustment-first",
+            "when": "长戟等反骑部队护住后排",
+            "text": "劲弩从射程内清理长戟，翼骑兵提供掩护并等待安全侧翼，不硬冲反骑阵。"
+          },
+          {
+            "id": "poles-arbalest-winged-hussar-adjustment-second",
+            "when": "射手或火枪成群，后有反骑护卫",
+            "text": "劲弩保持远程输出，翼骑检查侧翼通路；翼骑缺骑兵钢甲，不等于能承受远程火力接近。"
+          },
+          {
+            "id": "poles-arbalest-winged-hussar-adjustment-third",
+            "when": "受保护的攻城器",
+            "text": "翼骑只在护卫与路径允许时侧切；劲弩压制可接近的护卫并避免整队挤入火力。"
+          }
+        ],
+        "alternatives": "本路不固定加入战锤兵；训练资源较互补不表示必然优于另一条件路线，转型仍需承担射手科技和产能投入。"
+      },
+      {
+        "id": "poles-discount-knights",
+        "title": "贵族特权骑士/重装骑士海＋按需支援",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "progression",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "适合已有骑士/马厩科技且想延续兵量优势；折扣不作用于波兰翼骑。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 38,
+            "historicalName": "骑士",
+            "role": "已有骑士基础"
+          },
+          {
+            "kind": "unit",
+            "id": 283,
+            "historicalName": "重装骑士",
+            "role": "重装骑士延续",
+            "age": 4
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 782,
+            "historicalName": "贵族特权",
+            "role": "贵族特权",
+            "condition": "该折扣骑士路线明确科技条件"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "帝王时代按目标和已有攻城器基础，在当前可用补充中少量选配拆关键防御；按接敌条件保护当前可用攻城器，不作为城堡时代固定配置。",
+            "entities": [
+              { "kind": "unit", "id": 36, "historicalName": "手推炮", "role": "帝王时代按需攻城器", "age": 4 },
+              { "kind": "unit", "id": 331, "historicalName": "巨型投石机", "role": "帝王时代按需攻城器", "age": 4 }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录贵族特权骑士的已有科技延续条件、折扣适用范围、共用经济与攻城支援边界。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
+          "sourceLines": [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
+          "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
+          "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
+        },
+        "reason": "贵族特权路线从已有骑士与马厩科技基础延续到重装骑士，利用骑士系黄金折扣支持持续推进；这是条件延续，不代表从零转型无需升级或补兵投入。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。波兰没有游侠且缺骑兵钢甲；贵族特权折扣只作用于骑士系黄金，不作用于翼骑兵。长戟等共同反制仍需考虑，低金耗不能抵消持续的食物、科技、马厩产能与延续投入。",
+        "attack": "从已有骑士基础延续兵量推进；不假定骑士能绕到后排。",
+        "defense": "面对明确反骑阵容时不靠黄金折扣反复硬撞；按接敌条件控制骑士投入。",
+        "adjustments": [
+          {
+            "id": "poles-discount-knights-adjustment-first",
+            "when": "长戟等反骑部队护住后排",
+            "text": "不因贵族特权折扣继续硬撞；按长戟反制压力和已有骑士基础重新评估延续投入。"
+          },
+          {
+            "id": "poles-discount-knights-adjustment-second",
+            "when": "射手或火枪成群，后有反骑护卫",
+            "text": "若需转向劲弩远程清理反骑护卫，可考虑劲弩路线；转换仍需承担射手科技与产能投入。",
+            "requires": [{ "kind": "route", "id": "poles-arbalest-winged-hussar" }],
+            "fallback": "保守维持已有骑士投入并规避正面硬冲；不展示劲弩转线建议。"
+          },
+          {
+            "id": "poles-discount-knights-adjustment-third",
+            "when": "受保护的攻城器",
+            "text": "骑士仅在目标与路径允许时侧切；不假定骑士能绕过护卫。"
+          }
+        ],
+        "alternatives": "骑士路线以已有兵力和马厩科技延续为条件，与另外两条路线择一；同时铺开会分散食物、黄金、科技与产能投入。"
+      }
+    ]
+  },
+  {
+    "civ": "Bulgarians",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "bulgarians-krepost-konnik",
+        "title": "前线营垒＋保加利亚骑兵＋少量攻城器",
+        "status": "approved",
+        "playtest": "reported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "以前线营垒作为生产与推进支点，就地补充保加利亚骑兵；保持滚雪球式推进，避免为复杂编成增加操作负担。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 1251,
+            "historicalName": "营垒",
+            "role": "前线营垒"
+          },
+          {
+            "kind": "unit",
+            "id": 1254,
+            "historicalName": "保加利亚骑兵",
+            "role": "营垒生产的保加利亚骑兵"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "progression",
+            "condition": "营垒升级路线",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1255,
+                "historicalName": "精锐保加利亚骑兵",
+                "role": "营垒生产精锐保加利亚骑兵",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "按需少量选择当前可用攻城补充拆防。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需巨投",
+                "age": 4
+              },
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "重型冲车备选",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "可选机制科技；不是训练前置，效果与投入条件由单独调整建议表达",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 685,
+                "historicalName": "马镫",
+                "role": "马镫"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "hongcun 报告使用过主组合；与游侠的直接对拼属于其个人实战体验。除该对位外，其他敌情只有站内接触 PK，未单独经其实际对局确认；PK 数字不等于实战胜率。",
+          "scope": "记录营垒生产单位的目录映射（ID1254→1255；固定策略链接ID1225指城堡产出的同名单位），并区分用户实战报告、站内接触PK及目录/驻军数据边界。",
+          "recordedVersion": "v0.77.105 · DE 188329",
+          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764]
+        },
+        "reason": "前线营垒作为阵地支点并就地产主力；保加利亚骑兵承担主力接战与下马后续作战。",
+        "limitation": "营垒前移和就地补兵受石料、前线产能与推进空间限制；驻军箭数是站内理论预览、未与客户端核对，营垒和城堡生命/射程是未叠加科技的目录基础值。接触 PK 只算骑马阶段 1v1，不含下马、射程/走位或混编，不作为实战胜负保证。",
+        "attack": "营垒往前修，保加利亚骑兵就地补兵压上去。",
+        "defense": "保加利亚骑兵依托营垒接战，残血驻入营垒，村民按需要驻入加箭。",
+        "adjustments": [
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "hongcun 与游侠直接对拼的实战体验单独记录；帝王精锐形态接触 PK 对西班牙、匈奴游侠每击 13 对 13，骑马阶段后西班牙游侠剩 37/180；法兰克游侠剩 49/192。仅算接触 1v1 骑马阶段，不含下马、射程/走位或混编，不是胜率。",
+            "requires": [{ "kind": "unit", "id": 1255, "age": 4 }],
+            "fallback": "缺少帝王精锐形态资料时不展示这项对位结果；保留主路，不据此推断特定胜负或实战效果。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-second",
+            "when": "长戟兵多",
+            "text": "帝王精锐保加利亚骑兵接触 1v1 胜法兰克长戟兵（剩 66/140）；该结果仅站内模型，未单独经hongcun实战确认，且没有做同资源比较。只算接触骑马阶段，不含下马、射程/走位或混编，不能当实战胜率。",
+            "requires": [{ "kind": "unit", "id": 1255, "age": 4 }],
+            "fallback": "缺少帝王精锐形态资料时不展示该 PK 结果；保留主路，不据此推断对位胜负。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-third",
+            "when": "冠军剑士等步兵成群",
+            "text": "帝王精锐保加利亚骑兵接触 1v1 胜日本冠军剑士（剩 75/140）；该结果仅站内模型，未单独经hongcun实战确认。只算接触骑马阶段，不含下马、射程/走位或混编，不能当实战胜率。",
+            "requires": [{ "kind": "unit", "id": 1255, "age": 4 }],
+            "fallback": "缺少帝王精锐形态资料时不展示该 PK 结果；保留主路，不据此推断对位胜负。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-fourth",
+            "when": "弓手成群",
+            "text": "帝王精锐保加利亚骑兵接触 1v1 胜不列颠劲弩手（剩 132.8/140）；该结果仅站内模型，未单独经hongcun实战确认，未模拟接近过程中挨箭。不含下马、射程/走位或混编，不能当实战胜率。",
+            "requires": [{ "kind": "unit", "id": 1255, "age": 4 }],
+            "fallback": "缺少帝王精锐形态资料时不展示该 PK 结果；保留主路，不据此推断对位胜负。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-fifth",
+            "when": "手推炮",
+            "text": "帝王精锐保加利亚骑兵接触 1v1 胜条顿手推炮（剩 70/140），每挨一炮掉 35 血；该结果仅站内模型，未单独经hongcun实战确认，未模拟护卫和接近过程，也不含下马、射程/走位或混编，不能当实战胜率。",
+            "requires": [{ "kind": "unit", "id": 1255, "age": 4 }],
+            "fallback": "缺少帝王精锐形态资料时不展示该 PK 结果；保留主路，不据此推断对位胜负。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-sixth",
+            "when": "有城堡、评估马镫研究投入",
+            "text": "马镫需在城堡研究；如研究完成，攻击速度加成才生效，是否投入按资源决定；不是保加利亚骑兵训练前置。",
+            "requires": [
+              { "kind": "building", "id": 82 },
+              { "kind": "tech", "id": 685 }
+            ],
+            "fallback": "缺少城堡或马镫科技资料时不展示增益建议；保留营垒主路，不将马镫列为训练前置。"
+          },
+          {
+            "id": "bulgarians-krepost-konnik-adjustment-seventh",
+            "when": "规划帝王时代巨投拆防",
+            "text": "仅在计划帝王巨投拆防时评估第一座城堡的生产用途；不据此默认建城或量产。",
+            "requires": [
+              { "kind": "building", "id": 82 },
+              { "kind": "unit", "id": 331, "age": 4 }
+            ],
+            "fallback": "缺少城堡或帝王巨投资料时隐藏该条件建议；不展示建城或巨投生产结论，保留营垒主路。"
+          }
+        ],
+        "alternatives": "双手剑士：hongcun 认为没有必要：要另开一条步兵线，协议还要 900 食、450 金；保加利亚骑兵下马后已经是步兵；长戟兵：hongcun 认为没有必要：遇到游侠直接用保加利亚骑兵对拼；重装骑士：60 食、75 金，和主力争黄金、定位重复，而且不能从营垒生产；保加利亚没有游侠。这一条是站内数据推断；不为量产主力重复建城堡：营垒 350 石也能生产保加利亚骑兵，无驻军时预览同样是 5 箭；城堡 650 石，生命和射程更高（目录值 4800 对 2600、射程 8 对 7）。这一条是站内数据推断",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Magyars",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L770",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "magyars-huszar-hca",
+        "title": "城堡＋精锐马扎尔骠骑＋重装骑射手＋少量巨投",
+        "status": "approved",
+        "playtest": "reported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "科维尼安军队后骠骑免金；具体对局/胜率未提供。",
+        "required": [
+          {
+            "kind": "building",
+            "id": 82,
+            "historicalName": "城堡",
+            "role": "城堡产骠骑"
+          },
+          {
+            "kind": "unit",
+            "id": 871,
+            "historicalName": "精锐马扎尔骠骑",
+            "role": "前排/清攻城器"
+          },
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "远程输出"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "拆防"
+          },
+          {
+            "kind": "tech",
+            "id": 514,
+            "historicalName": "科维尼安军队",
+            "role": "科维尼安军队"
+          },
+          {
+            "kind": "tech",
+            "id": 515,
+            "historicalName": "反曲弓",
+            "role": "反曲弓"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录将主组合标为实战用过，但未提供具体对局或胜率；“重装骑射手打长戟兵、骠骑不硬冲”是 hongcun 判断，站内工具不能验证。其余对位仅有站内 PK/群战模型，未单独经 hongcun 实战确认。",
+          "scope": "记录主组合实战报告与对局/胜率未提供的边界，区分用户判断、接触PK和群战模型，并覆盖帝王成型、城堡产能及资源/操作限制。",
+          "recordedVersion": "DE 188329 · 2026-11-15 读取；未记录站点版本/构建",
+          "sourceLines": [770, 774, 775, 776, 777, 779, 781, 783, 789, 791, 793, 801, 802, 803, 804, 806, 812, 813, 814, 815, 816, 820, 822]
+        },
+        "reason": "城堡生产精锐马扎尔骠骑作前排并清攻城器、冲弓手，重装骑射手提供远程输出，少量巨投按需拆防。",
+        "limitation": "组合要到帝王时代并完成科维尼安军队、反曲弓等研究后才成型；城堡产能、科技和资源投入，以及前后排多线操作，都会限制成型与补兵。站内接触 PK 不模拟射程拉扯；群战是集火模型，不计包围空间、走位，人数偏多的一方结果偏好。模型结果不代表实战胜率。站内“近战攻击升级免费”只有文字，未折算节省资源。",
+        "attack": "骠骑在前清攻城器和弓手，重装骑射手在后射长戟兵和步兵，巨投拆防御。",
+        "defense": "骠骑拦截对方攻城器，重装骑射手边退边射，退回城堡附近。",
+        "adjustments": [
+          {
+            "id": "magyars-huszar-hca-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "单挑接触 PK 中骠骑负西班牙游侠（对方剩 100/180）；等资源群战模型获胜。该结果仅站内模型，未单独经hongcun实战确认。群战仅为集火模型，不计包围空间和走位，人数偏多的一方结果偏好，不能当胜率；单挑也不模拟射程拉扯。"
+          },
+          {
+            "id": "magyars-huszar-hca-adjustment-second",
+            "when": "长戟兵多",
+            "text": "重装骑射手打、骠骑不硬冲是 hongcun 判断，站内 PK 不能验证该策略。"
+          },
+          {
+            "id": "magyars-huszar-hca-adjustment-third",
+            "when": "冠军剑士等步兵成群",
+            "text": "站内接触 PK 中骠骑负日本冠军剑士（对方剩 4/70）；该结果仅站内模型，未单独经hongcun实战确认。仅为接触对打，不含射程拉扯、接近护卫或群战，不代表已验证的针对性打法或胜率。"
+          },
+          {
+            "id": "magyars-huszar-hca-adjustment-fourth",
+            "when": "弓手、攻城器",
+            "text": "接触 PK 中骠骑对不列颠劲弩手剩 99.2/110、对高棉重型弩炮剩 101/110；该结果仅站内模型，未单独经hongcun实战确认。不模拟射程拉扯、接近或护卫，不能把“骠骑冲”当作已验证策略或胜率。"
+          }
+        ],
+        "alternatives": "只出骠骑：hongcun 指出这样浪费黄金，而且对方出长戟兵就能克制；劲弩手：hongcun 指出马扎尔对它没有任何额外优势；重装骑射手有训练速度和反曲弓两项；翼骑兵：同样只花食物，但各项都比骠骑差，接触 PK 打不过手推炮。这一条是站内数据推断，没有城堡或城堡产能不够时才用；游侠：60 食、75 金，升级 1300 食、750 金，和重装骑射手争黄金。这一条是站内数据推断；箭塔阵地：没有大型箭塔、射箭槽和建筑学。因为没有塔线争石料，多修城堡生产骠骑不存在女真、中国那样的石料冲突，这一条是推断",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L770",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Bohemians",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L826",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "bohemians-handcannon-halberdier",
+        "title": "火枪手＋长戟兵＋少量手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "火枪手、长戟兵与手推炮组成认可主路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "主力远程输出"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "反骑/保护火枪"
+          },
+          {
+            "kind": "unit",
+            "id": 36,
+            "historicalName": "手推炮",
+            "role": "反攻城/拆防"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "upgrade",
+            "condition": "经济与炮量允许升级。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1709,
+                "historicalName": "榴弹炮",
+                "role": "榴弹炮"
+              }
+            ]
+          },
+          {
+            "mode": "position-variant",
+            "condition": "石头充足/施工窗口",
+            "entities": [
+              {
+                "kind": "building",
+                "id": 235,
+                "historicalName": "大型箭塔",
+                "role": "前线大型箭塔"
+              },
+              {
+                "kind": "unit",
+                "id": 1704,
+                "historicalName": "胡斯派战车",
+                "role": "胡斯派战车"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录获认可基础组合、经济与炮量条件下的升级，以及阵地推进、驻塔和条件变招的机制边界。",
+          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录",
+          "sourceLines": [13, 826, 830, 835, 838, 840]
+        },
+        "reason": "本站名称为“波希米亚”。用户认可的基础组合是火枪手＋长戟兵＋少量手推炮。火枪处理步兵，长戟反骑并保护火枪、炮；炮拆防御、威胁敌方攻城器。免费采矿科技的优势在于及时取得采集提升并省下研究投入，相对已经完成同等科技的普通文明不会凭此额外加速。延续城堡时代火枪基础可降低转型负担，不必一升帝王就同时开齐昂贵升级。",
+        "limitation": "火枪、长戟和密集阵地仍怕范围伤害，炮兵要主动处理共同威胁。",
+        "adjustments": [
+          {
+            "id": "bohemians-handcannon-halberdier-adjustment-monk-variant",
+            "when": "施工前先取得安全空间，且有资源与研究时间",
+            "text": "实际研究圣洁与狂热后，可评估以僧侣作条件变招；此变招待实战验证，不替代火枪、长戟与炮的基础组合。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 125
+              },
+              {
+                "kind": "tech",
+                "id": 231
+              },
+              {
+                "kind": "tech",
+                "id": 252
+              }
+            ],
+            "fallback": "缺少僧侣、圣洁或狂热目录资料时隐藏僧侣变招；不把僧侣训练或研究列为主路前置。"
+          },
+          {
+            "id": "bohemians-handcannon-halberdier-adjustment-villager-tech-effects",
+            "when": "前线施工、生存或撤退需要村民支援",
+            "text": "实际研究圣洁与狂热后，村民的生命与移动加成可用于前线施工、生存与撤退。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 83
+              },
+              {
+                "kind": "tech",
+                "id": 231
+              },
+              {
+                "kind": "tech",
+                "id": 252
+              }
+            ],
+            "fallback": "缺少村民或圣洁、狂热目录资料时隐藏该村民科技效果说明；不作为主路训练前置。"
+          },
+          {
+            "id": "bohemians-handcannon-halberdier-adjustment-construction-variant",
+            "when": "石头充足/施工窗口",
+            "text": "黄金采集支持火药单位，石头采集支持前线箭塔；先处理射手对工人的威胁，按需用胡斯派战车对射、掩护，取得施工空间后再让村民进场。战车掩护受站位、来箭路径与侧面威胁约束，不能当作工人全向免伤。",
+            "requires": [
+              {
+                "kind": "building",
+                "id": 235
+              },
+              {
+                "kind": "unit",
+                "id": 1704
+              },
+              {
+                "kind": "unit",
+                "id": 83
+              }
+            ],
+            "fallback": "缺少大型箭塔、胡斯派战车或村民目录资料时隐藏施工建议；保留火枪手＋长戟兵＋手推炮主路。"
+          },
+          {
+            "id": "bohemians-handcannon-halberdier-adjustment-garrison-tower",
+            "when": "面对射手并考虑火枪驻塔时",
+            "text": "部分火枪驻塔可增加箭支并改变交战条件；火枪驻塔不会把反步兵加成直接搬给塔。塔升级与箭系科技另有投入，不能照搬高丽免费塔升级或邑城。",
+            "requires": [
+              {
+                "kind": "building",
+                "id": 235
+              },
+              {
+                "kind": "unit",
+                "id": 5
+              }
+            ],
+            "fallback": "缺少大型箭塔或火枪目录资料时隐藏驻塔机制说明；不把火枪加成视为塔的固有属性。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L826",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Aztecs",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "aztecs-eagle-skirmisher",
+        "title": "限定候选：鹰勇士＋精锐掷矛手",
+        "status": "candidate",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "不是通用主路；不把此未验证混编列为已验证阵容。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 753,
+            "historicalName": "鹰勇士",
+            "role": "侧袭/追击/可接近攻城器"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "只在弓手/枪兵职责有用时"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "拆防按需另配少量巨型投石机，不设固定比例。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "少量按需拆防",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "限定候选；不等同于已认可的通用主路。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "限定候选，不是通用主路；不把此未验证混编列为已验证阵容，并保留重骑与冠军剑士可能共同压制两线的边界。",
+          "recordedVersion": "v0.78.0 · DE 188329 · 构建 e3104cc",
+          "sourceLines": [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873]
+        },
+        "reason": "限定候选（不是通用主路；尚未说明是否实战用过）：鹰勇士＋精锐掷矛手。鹰勇士可侧袭、追击并处理攻城器；精锐掷矛手只在敌方弓手或长枪兵系使其职责有用时配入。它不是已验证的完整混编。",
+        "limitation": "机动侧袭、处理可接近的攻城器；路线、护卫和接敌条件仍重要；不能只凭反攻城职责判断能否到达目标。 支援对弓手及长枪兵系的交战；有弓手／长枪兵任务时才配合；不因此把两线当成固定主力。 依实际兵种使用精锐掷矛手；没有对应任务时不为凑组合硬开这条线。 hongcun 指出两者都可能让鹰勇士与掷矛手同时受压；避免硬拼并重评路线。",
+        "attack": "鹰勇士找侧翼和攻城器，精锐掷矛手在确有反弓或反长枪任务时支援；不要把两线一起送去硬拼重骑兵或冠军剑士。",
+        "defense": "避免正面接下能同时压制两线的重骑兵或冠军剑士；此时重新评估阵地和路线，不宣称这套组合已经覆盖所有威胁。",
+        "adjustments": [
+          {
+            "id": "aztecs-eagle-skirmisher-adjustment-first",
+            "when": "弓手、长枪兵系",
+            "text": "依实际兵种使用精锐掷矛手；没有对应任务时不为凑组合硬开这条线。"
+          },
+          {
+            "id": "aztecs-eagle-skirmisher-adjustment-second",
+            "when": "重骑兵、冠军剑士",
+            "text": "hongcun 指出两者都可能让鹰勇士与掷矛手同时受压；避免硬拼并重评路线。"
+          },
+          {
+            "id": "aztecs-eagle-skirmisher-adjustment-third",
+            "when": "攻城器",
+            "text": "鹰勇士可尝试侧袭，但先看护卫、路径与接敌窗口，不把职责当作保证。"
+          }
+        ],
+        "alternatives": "把鹰勇士＋精锐掷矛手当主路：两线对弓手的职责可能重叠，重骑或冠军又可能共同压制；文明加成不等于已补齐所有反制和接敌缺口。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Incas",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L877",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "incas-kamayuk-skirmisher",
+        "title": "印加枪兵长＋按弓兵压力加入精锐掷矛手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "能守住阵地并让步兵接战；不设固定兵数。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 879,
+            "historicalName": "印加枪兵长",
+            "role": "近战接敌/阵地群体"
+          },
+          {
+            "kind": "unit",
+            "id": 6,
+            "historicalName": "精锐掷矛手",
+            "role": "按弓兵压力支援"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "拆防御时按需投入，不设固定比例",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防御",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "固定策略记录来源行：877, 885, 887, 888, 891, 893。能守住阵地并让步兵接战；不设固定兵数。",
+          "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a 核对",
+          "sourceLines": [877, 885, 887, 888, 891, 893, 899, 900, 901, 902, 908, 910]
+        },
+        "reason": "用户认可的条件方案（尚未说明是否实战用过）：印加枪兵长＋精锐掷矛手，在能守住阵地、让步兵接战的条件下组织近战群体；不设固定兵数。普通与精锐印加枪兵长页面的目录射程均为 1，说明均称其“拥有更广的攻击范围”。hongcun 强调集中成形、保持阵型可利用射程 1 让编队发挥近战群战优势，不应只用“反骑”标签概括；不写同时攻击确数或必胜。这是用户的阵型判断，不是群体模拟。",
+        "limitation": "枪兵长页面列出弓兵单位与枪炮手为弱项；射程 1 与“拥有更广的攻击范围”都是目录描述，不保证阵型能穿过护卫完成接敌，仍需控制队形与接敌位置。",
+        "attack": "只有在枪兵长能取得接战位置时才推进，掷矛手随阵地需要支援；不可把射程 1 写成必然能穿过护卫或弩炮接近目标。",
+        "defense": "成形后守住位置，让枪兵长发挥近战职责；面对弩炮时保护阵地、分散、换位或撤退。反攻城补队只列在独立候选路线。",
+        "adjustments": [
+          {
+            "id": "incas-kamayuk-skirmisher-adjustment-first",
+            "when": "骑兵、普通步兵",
+            "text": "先让已有枪兵长承担其页面说明的近战职责，不因兵种标签自动追加投石手。"
+          },
+          {
+            "id": "incas-kamayuk-skirmisher-adjustment-second",
+            "when": "弓手",
+            "text": "由精锐掷矛手补充应对；枪兵长不要被当成反弓单位。"
+          },
+          {
+            "id": "incas-kamayuk-skirmisher-adjustment-third",
+            "when": "弩炮",
+            "text": "可条件补精锐蔷琵战士反攻城；评估侧翼接敌，若考虑运输则先核对装载条件与路线，并安排护卫及撤退。织物盾的护甲加成不保证能安全接近。",
+            "requires": [
+              {
+                "kind": "route",
+                "id": "incas-champi-candidate"
+              }
+            ],
+            "fallback": "反攻城补队不是主路的普通建议；只有独立候选路线条件成立时才参考，否则保护阵地、分散、换位或撤退。"
+          },
+          {
+            "id": "incas-kamayuk-skirmisher-adjustment-fourth",
+            "when": "枪炮手",
+            "text": "枪兵长页面列出的弱项；让枪兵长避免直接接敌，按局面维持掷矛支援、换位或撤退；不把反攻城补队当作对枪炮手的通用答案。"
+          },
+          {
+            "id": "incas-kamayuk-skirmisher-adjustment-fifth",
+            "when": "现有编队仍缺少具体功能",
+            "text": "仅在现有编队确有具体功能缺口时评估投石手；不因普通步兵自动追加，不列为固定第三主力。",
+            "requires": [{ "kind": "unit", "id": 185, "age": 3 }],
+            "fallback": "缺少投石手目录资料时隐藏该条件比较；保留枪兵长＋精锐掷矛手主路。"
+          }
+        ],
+        "alternatives": "投石手作为固定第三线：与枪兵长已有的步兵近战职责有重叠；不因敌方有普通步兵自动加入。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L877",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "incas-champi-candidate",
+        "title": "单列候选：精锐蔷琵战士（应对弩炮）",
+        "status": "candidate",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "帝王时代弩炮威胁下按需补精锐蔷琵战士；保持侧翼接敌与护卫安排，织物盾不能保证安全接近。实战未核实。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2554,
+            "historicalName": "精锐蔷琵战士",
+            "role": "条件反攻城补队，不属主路"
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 517,
+            "historicalName": "织物盾",
+            "role": "织物盾，研究后获得源文所述+1近甲/+1穿甲",
+            "condition": "候选卡防护条件"
+          }
+        ],
+        "supplements": [],
+        "evidence": {
+          "recognition": "维护者已更正印加为蔷琵兵系；本卡仅记录弩炮威胁下的条件候选，不并入已认可主路。",
+          "playtest": "该反攻城条件打法实战未核实。",
+          "scope": "固定来源 L879 记录名称替换未经用户确认；维护者于 2026-11-18 08:51 UTC 后续更正蔷琵兵系，已取代该未确认边界。反攻城候选实战未核实，不并入主路。",
+          "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a 核对",
+          "sourceLines": [879, 889, 891, 893, 901, 902, 910]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879",
+          "discussion": "https://app.devin.ai/sessions/998ba78b2edf4799bb383d10b7e8eef9",
+          "boundary": "维护者更正确认蔷琵兵系名称，不确认候选打法实战或主路。"
+        },
+        "reason": "维护者已更正印加兵系；本候选按目录规范名记为精锐蔷琵战士，只在弩炮威胁下评估反攻城。织物盾研究后提供 +1 近甲、+1 穿甲，页面列对攻城武器 +3；这些页面数据不构成实战证明，候选打法仍未核实。",
+        "limitation": "织物盾研究后的护甲加成不保证安全接近；若无法安排侧翼接敌、护卫与撤退，不评估该候选。页面列出的对攻城武器 +3 不能视为实战胜负证明。",
+        "attack": "仅在弩炮威胁下评估侧翼接近；若考虑运输，先核对装载条件与路线，并预先安排护卫和撤退，不将此候选扩为枪炮手或其他敌情的通用解法。",
+        "defense": "遭遇弩炮时先分散、换位或撤退；只有具备受护卫的安全接敌路径时才考虑此候选。",
+        "adjustments": [
+          {
+            "id": "incas-champi-candidate-adjustment-third",
+            "when": "弩炮威胁且具备安全侧翼接近条件",
+            "text": "只在弩炮威胁下比较此候选；侧翼可接近、有护卫和撤退条件，若考虑运输先核对装载与路线。"
+          }
+        ],
+        "alternatives": "不把候选推广为完整主阵容或对枪炮手的通用答案；没有安全接敌与护卫条件时不作为当前支援建议。"
+      }
+    ]
+  },
+  {
+    "civ": "Mayans",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "mayans-plumed-archer-halberdier",
+        "title": "羽箭手＋按骑兵压力加入长戟兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "鹰勇士是按需袭扰/反攻城支援，不取代主路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 763,
+            "historicalName": "羽箭手",
+            "role": "远程主力/城堡产能"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "条件反骑"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "安全路径、护卫和操作允许",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 753,
+                "historicalName": "鹰勇士",
+                "role": "鹰勇士按需支援"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "拆防御时按需投入，不设固定比例",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防御",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录羽箭手＋长戟条件主路、城堡产能边界、鹰勇士侧袭的路径/护卫条件和独立反弓支援；可选行为不取代主路。",
+          "recordedVersion": "v0.78.0 · DE 188329 · 构建 e3104cc",
+          "sourceLines": [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944]
+        },
+        "reason": "用户认可的条件主路（尚未说明是否实战用过）：羽箭手＋长戟兵；鹰勇士不取代整条主路。羽箭手需要城堡产能，步弓手费用折扣和资源持续时间加成也不等于可以无视经济与生产上限。",
+        "limitation": "羽箭手依赖城堡产能，费用折扣与资源持续时间加成不等于无成本持续补兵；长戟按骑兵压力承担反骑。弩炮等范围攻城器会限制主力接敌；无法安全接近时保护、分散或换位，不保证运输或侧袭成功。",
+        "attack": "羽箭手与长戟按各自任务推进；注意城堡产能与范围攻城器风险，无法安全接敌时保护、分散或换位。",
+        "defense": "长戟拦骑并保护羽箭手，避免把主力堆入弩炮范围；若无法安全接敌，先换位或撤出威胁区。",
+        "adjustments": [
+          {
+            "id": "mayans-plumed-archer-halberdier-adjustment-first",
+            "when": "弩炮或其他范围攻城器",
+            "text": "仅在路径、护卫和操作允许时评估鹰勇士侧袭或反攻城；不可接近时保护、分散或换位，不保证运输或接近成功。",
+            "requires": [{ "kind": "unit", "id": 753, "age": 4 }],
+            "fallback": "缺少鹰勇士目录资料时隐藏侧袭选项；不据此宣称运输或接敌可行。"
+          },
+          {
+            "id": "mayans-plumed-archer-halberdier-adjustment-second",
+            "when": "骑兵成群",
+            "text": "保留长戟的反骑职责，按局势增补；不以鹰勇士替代长戟。"
+          },
+          {
+            "id": "mayans-plumed-archer-halberdier-adjustment-third",
+            "when": "弓手",
+            "text": "若有明确反弓缺口，可评估精锐掷矛手支援；不因此把鹰勇士＋掷矛手改成与羽箭手＋长戟同等的默认主路。",
+            "requires": [{ "kind": "unit", "id": 6, "age": 4 }],
+            "fallback": "缺少精锐掷矛手目录资料时隐藏反弓支援建议；保留羽箭手＋长戟主路。"
+          }
+        ],
+        "alternatives": "鹰勇士＋精锐掷矛手取代主路：两者的反弓职责有重叠，对其他近战威胁的覆盖并不完整；原记录只将其列为特定反弓需求候选，不取代羽箭手＋长戟主路，也不表示已认可为完整阵容或已实战核实。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Mapuche",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "mapuche-kona-bolas",
+        "title": "科那＋掷石绳骑兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "金流能持续支持科那与掷石绳骑兵两条金线并承受损失时，采用该主路；不把人海当无限补兵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2566,
+            "historicalName": "科那",
+            "role": "近战处理步兵/步弓"
+          },
+          {
+            "kind": "unit",
+            "id": 2569,
+            "historicalName": "掷石绳骑兵",
+            "role": "远程应对骑兵/减速"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "progression",
+            "condition": "帝王升级",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2571,
+                "historicalName": "精锐掷石绳骑兵",
+                "role": "精锐掷石绳骑兵",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "确有实际反步兵缺口，且已有双金主路仍能支撑追加补兵资源、接敌条件允许时补充；不作固定第三主力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 185,
+                "historicalName": "投石手",
+                "role": "仅按实际反步兵缺口条件支援"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "拆防按需少量巨型投石机；不设固定比例",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录用户将骑兵路线纳入取舍的个人偏好（不推导非骑兵经济更差），以及科那与掷石绳骑兵在可持续双金流下的分工、接敌与反制边界及按需投入。",
+          "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a",
+          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]
+        },
+        "reason": "科那负责近战处理步兵与步弓手，掷石绳骑兵在距离外应对骑兵并提供减速；前者耗食物与黄金，后者耗木材与黄金，两线分担食物和木材、共同需要黄金，只有金流能支撑两线并承受损失时采用。",
+        "limitation": "科那不适于攻击长矛兵系、骆驼和僧侣，仍需安全接敌；掷石绳骑兵不适于攻击步弓手、掷矛手和近程单位，蓄力减速不保证对所有骑兵占优。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。",
+        "attack": "科那在安全接敌后处理步兵与步弓手，掷石绳骑兵保留距离应对骑兵并减速；为两线安排护卫和撤退空间。",
+        "defense": "避免掷石绳骑兵进入弓手、掷矛手或近战单位的有效攻击；科那遇长矛兵系、骆驼或僧侣时不强接，按局势改位或脱离。",
+        "adjustments": [
+          {
+            "id": "mapuche-kona-bolas-adjustment-first",
+            "when": "骑兵",
+            "text": "掷石绳骑兵按页面描述应对骑兵；仍需安全接敌、充能和保护，不推成对所有骑兵都占优。"
+          },
+          {
+            "id": "mapuche-kona-bolas-adjustment-second",
+            "when": "普通步兵、长矛兵系",
+            "text": "普通步兵由科那处理；确有实际反步兵缺口，且已有双金主路仍能支撑追加补兵资源、接敌条件允许时，可按需补投石手。",
+            "requires": [{ "kind": "unit", "id": 185 }],
+            "fallback": "投石手支援不可用时不展示补队建议；以科那应对常规步兵，避开长矛兵系并保留撤退空间。"
+          },
+          {
+            "id": "mapuche-kona-bolas-adjustment-third",
+            "when": "步弓手、掷矛手",
+            "text": "科那可处理步弓手；掷石绳骑兵不适于攻击步弓手和掷矛手，须保护其远程输出，避免安排正面接战。"
+          }
+        ],
+        "alternatives": "双金不是自动排除本路的理由；若金流、战损或持续产能不足以支撑两线，重新评估其他条件路线，不为偏好硬撑。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "mapuche-kona-slinger",
+        "title": "科那＋投石手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "黄金吃紧或确有反步兵缺口时，按实际金流与持续补兵能力选择；科那仍耗黄金，科那与投石手两种单位共用食物。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2566,
+            "historicalName": "科那",
+            "role": "近战"
+          },
+          {
+            "kind": "unit",
+            "id": 185,
+            "historicalName": "投石手",
+            "role": "反步兵支援"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "拆防按需少量巨型投石机；不设固定比例",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录黄金紧张或实际反步兵缺口下的科那与投石手条件路线、共享食物、黄金投入及接敌边界。",
+          "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a",
+          "sourceLines": [952, 956, 959, 963, 970, 977, 980]
+        },
+        "reason": "科那处理步兵与步弓手，投石手承担反步兵职责；两种单位共用食物，科那仍耗黄金。在黄金吃紧或反步兵职责确有需要时，可按实际金流与持续补兵能力评估本路。",
+        "limitation": "科那需安全接敌，且不适于攻击长矛兵系、骆驼和僧侣；投石手承担反步兵职责，但持续补兵仍需资源，不表示它能反骑或反攻城。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。",
+        "attack": "科那只在安全接敌后处理步兵与步弓手，投石手按实际反步兵缺口补位；风险过高时保留距离和撤退空间。",
+        "defense": "科那遇长矛兵系、骆驼或僧侣时不强接；投石手仅按反步兵缺口投入，不将其写成其他职责的支援。",
+        "adjustments": [
+          {
+            "id": "mapuche-kona-slinger-adjustment-first",
+            "when": "骑兵",
+            "text": "若本路缺少应对骑兵的职责，可考虑转向科那＋掷石绳骑兵路线；仅在金流能持续支撑两条金线并承受损失、且有安全接敌和撤退空间时采用。",
+            "requires": [{ "kind": "route", "id": "mapuche-kona-bolas" }],
+            "fallback": "目标路线或金流、接敌条件不成立时，不展示转线建议；避免与骑兵硬接，保留撤退或改位空间。"
+          },
+          {
+            "id": "mapuche-kona-slinger-adjustment-second",
+            "when": "普通步兵、长矛兵系",
+            "text": "科那不适于攻击长矛兵系；投石手只按本路实际反步兵职责支援，不将其写成反骑补位。"
+          },
+          {
+            "id": "mapuche-kona-slinger-adjustment-third",
+            "when": "步弓手、掷矛手",
+            "text": "科那按页面描述可处理步弓手；投石手不据此推作反弓职责，按安全接敌条件保持距离。"
+          }
+        ],
+        "alternatives": "科那仍耗黄金且与投石手共用食物；金流无法支持持续补兵时，不把本路线视为低金或无代价方案。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L959",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Muisca",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "muisca-temple-guard-slinger",
+        "title": "神庙护卫＋投石手（非攻城单位）",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 3,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "两线同耗食物；投石手用于远程反步兵，不承担攻城职责。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2586,
+            "historicalName": "神庙护卫",
+            "role": "近战/反骑"
+          },
+          {
+            "kind": "unit",
+            "id": 185,
+            "historicalName": "投石手",
+            "role": "远程反步兵/民兵；非投石车"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "conditional-evaluation",
+            "condition": "确有反弓缺口时评估，不作为默认远程兵线",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "评估精锐掷矛手，不纳入默认核心",
+                "age": 3
+              }
+            ]
+          },
+          {
+            "mode": "conditional-evaluation",
+            "condition": "按需拆防，另配少量巨型投石机，不设固定比例",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "用户认可神庙护卫＋Slinger条件主路；持续攻速说明不等于群战量化，拆防巨投按需且不设比例。",
+          "recordedVersion": "v0.78.0 · DE 188329 · 构建 e3104cc",
+          "sourceLines": [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014]
+        },
+        "reason": "用户认可的条件方案（实战状态未说明）：神庙护卫承担近战与反骑职责，Slinger（投石手）处理其不擅长的步兵／民兵系；两者共用食物，Slinger不是攻城单位。",
+        "limitation": "两种单位共用食物；神庙护卫持续作战提高攻速是页面机制描述，未量化为群战结果。神庙护卫不适于攻击民兵系；Slinger不负责攻城；穆伊斯卡没有长戟兵补队，不能把长戟写成对骑兵的应急选择。",
+        "attack": "神庙护卫按近战职责接敌，投石手对付护卫附近的步兵；让其避开弓手火力，不因能打建筑就无保护推进。",
+        "defense": "神庙护卫守住近战接触位置；骑兵压力由其承担页面描述的反骑职责。穆伊斯卡没有长戟兵，不能把长戟列作可切换的常规答案。",
+        "adjustments": [
+          {
+            "id": "muisca-temple-guard-slinger-adjustment-first",
+            "when": "冠军剑士、其他民兵系",
+            "text": "投石手处理神庙护卫不擅长的目标；已有主力已能处理时，不重复开线。"
+          },
+          {
+            "id": "muisca-temple-guard-slinger-adjustment-second",
+            "when": "骑兵",
+            "text": "由神庙护卫承担近战反骑任务；没有长戟兵可临时替代，保护其接敌位置。"
+          },
+          {
+            "id": "muisca-temple-guard-slinger-adjustment-third",
+            "when": "弓手、骑射手",
+            "text": "确有反弓缺口时再考虑精锐掷矛手；不要因有弓手就默认同时添加格查战士和多条远程线。",
+            "requires": [{ "kind": "unit", "id": 6, "age": 3 }],
+            "fallback": "缺少精锐掷矛手目录资料时隐藏反弓补队建议；不把格查战士或多条远程线列为默认替代。"
+          },
+          {
+            "id": "muisca-temple-guard-slinger-adjustment-fourth",
+            "when": "有拆防目标时按需配置",
+            "text": "拆防可另配少量巨型投石机，不设固定比例，也不纳入主路必需组成。",
+            "requires": [{ "kind": "unit", "id": 331, "age": 4 }],
+            "fallback": "缺少巨型投石机目录资料时隐藏按需拆防补充；神庙护卫＋Slinger主路仍可用。"
+          }
+        ],
+        "alternatives": "格查战士：需要额外黄金且承担不同的远程职责；除非确有其目标和投入条件，不用它替换默认投石手／神庙护卫组合。；长戟兵：穆伊斯卡科技树没有长戟兵；不要把不可训练的兵种写成对骑兵的应急补队。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Tupi",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1018",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "tupi-champi-slinger",
+        "title": "精锐蔷琵战士＋投石手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "按敌方情况选择的主路之一；不要求同时开齐全部兵线，过渡或已有兵力可重叠，也不固定兵量。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2554,
+            "historicalName": "精锐蔷琵战士",
+            "role": "反步弓/攻城，必须先接敌"
+          },
+          {
+            "kind": "unit",
+            "id": 185,
+            "historicalName": "投石手",
+            "role": "反步兵"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "仅为战术候选；先核实目标兵种装载容量、兼容性及实战效果，并安排接近、卸兵、护卫、资源与操作；未核实前不作固定建议，也不把运输长戟视作反攻城",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "重型冲车"
+              },
+              {
+                "kind": "unit",
+                "id": 1105,
+                "historicalName": "攻城塔",
+                "role": "攻城塔"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "需要免金反弓且能安全接敌时按需支援；不是固定第三主力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "仅按免金反弓需求条件支援",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "骑兵压力下按需补充或替换部分蔷琵；不是固定兵线",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "仅按骑兵压力条件支援",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "确有近战范围反步兵缺口且能安全接敌时才考虑",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2584,
+                "historicalName": "精锐伊比拉贝玛战士",
+                "role": "仅按近战范围反步兵缺口条件支援",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "按拆防需要保留少量巨型投石机；非必需组成",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录蔷琵与投石手路线的兵种职责、训练资源分工、过渡重叠、拆防及条件支援。",
+          "recordedVersion": "v0.77.107、构建 da6e280 为前次观察，本次未刷新核对",
+          "sourceLines": [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+        },
+        "reason": "蔷琵负责反步弓与接敌后处理攻城器，投石手负责反步兵；两者共享食物但分别耗金和木材。卡西克完成研究后，其攻击速度加成才生效。",
+        "limitation": "蔷琵必须先安全接敌才能发挥对攻城器的作用；本路线共同缺反骑。投石手只承担反步兵，不替代反弓职责；两线共享食物，按实际补兵能力控制投入。",
+        "attack": "进攻时先取得安全接敌位置并保护现有兵力与撤退通道；拆防投入仅按需评估，不作为固定主线。",
+        "defense": "本路线缺反骑；分散队形应对重型弩炮穿透，保护蔷琵与投石手并保留撤退路线。",
+        "adjustments": [
+          {
+            "id": "tupi-champi-slinger-adjustment-first",
+            "when": "重型弩炮＋近战护卫",
+            "text": "先评估重型弩炮护卫与安全接敌路线；载具配合仅为战术候选，先核实是否存在适用载具及目标单位兼容性、容量和接敌护卫，不据此断言存在可用方案。"
+          },
+          {
+            "id": "tupi-champi-slinger-adjustment-second",
+            "when": "弓手、骑射手",
+            "text": "确有免金反弓需求且能安全接敌时，可按需选择精锐掷矛手；投石手仍只负责反步兵，不作固定第三主力。",
+            "requires": [{ "kind": "unit", "id": 6 }],
+            "fallback": "精锐掷矛手不可用时不展示该建议；不把投石手当反弓，保持距离或撤离射手压力。"
+          },
+          {
+            "id": "tupi-champi-slinger-adjustment-third",
+            "when": "骑兵成群",
+            "text": "骑兵压力下可按资源与接敌条件补充或替换部分蔷琵为长戟；不将长戟列为固定主力或反攻城手段。",
+            "requires": [{ "kind": "unit", "id": 359 }],
+            "fallback": "长戟不可用时不展示补队建议；避免与骑兵硬接，保留撤退空间。"
+          },
+          {
+            "id": "tupi-champi-slinger-adjustment-fourth",
+            "when": "步兵为主",
+            "text": "仅在确有近战范围反步兵缺口且能安全接敌时，才考虑精锐伊比拉贝玛战士；避免重复投入。",
+            "requires": [{ "kind": "unit", "id": 2584 }],
+            "fallback": "该单位不可用或无法安全接敌时不展示近战补队建议；继续由投石手承担反步兵职责，避免强行近身。"
+          },
+          {
+            "id": "tupi-champi-slinger-adjustment-fifth",
+            "when": "资源与敌方远程火力条件变化",
+            "text": "可考虑转以黑檀木步弓手＋长戟为主；目标路线仍需承担黑檀木与长戟共享木材、成对训练且计价单位未核的投入，并有合适远程接敌位置；过渡或已有兵力可重叠。",
+            "requires": [{ "kind": "route", "id": "tupi-blackwood-halberdier" }],
+            "fallback": "目标路线或经济、接敌条件不成立时不展示转线建议；维持当前职责并避免突然停补或硬开新线。"
+          }
+        ],
+        "alternatives": "精锐伊比拉贝玛与投石手的反步兵职责部分重叠，额外资源和近战接敌风险不作默认投入；运输载具另有资源、产能和操作成本。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1024",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "tupi-blackwood-halberdier",
+        "title": "精锐黑檀木步弓手＋长戟兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "按敌方情况选择的主路之一；不要求同时开齐全部兵线，过渡或已有兵力可重叠。黑檀木每对价格单位未核实，不折半。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 2581,
+            "historicalName": "精锐黑檀木步弓手",
+            "role": "远程集群火力"
+          },
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "按骑兵压力加入反骑"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "choice",
+            "condition": "仅为战术候选；先核实目标兵种装载容量、兼容性及实战效果，并安排接近、卸兵、护卫、资源与操作；未核实前不作固定建议，也不把运输长戟视作反攻城",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "重型冲车"
+              },
+              {
+                "kind": "unit",
+                "id": 1105,
+                "historicalName": "攻城塔",
+                "role": "攻城塔"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "只按拆防需要补充巨投；不是主力必需组成",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需拆防"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "确有反攻城补队需求且有安全接敌与护卫窗口时才按需补充；不得以运输长戟替代",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2554,
+                "historicalName": "精锐蔷琵战士",
+                "role": "按需反攻城；不得以运输长戟替代",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "确需免金反弓且能安全接敌时按需支援；不是固定第三主力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "仅按免金反弓需求条件支援",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "确有近战范围反步兵缺口且能安全接敌时才考虑",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2584,
+                "historicalName": "精锐伊比拉贝玛战士",
+                "role": "仅按近战范围反步兵缺口条件支援",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "记录黑檀木与长戟主路的兵种职责、共享木材、成对训练和计价边界，以及拆防、反骑和条件支援。",
+          "recordedVersion": "v0.77.107、构建 da6e280 为前次观察，本次未刷新核对",
+          "sourceLines": [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+        },
+        "reason": "精锐黑檀木步弓手提供远程集群火力，长戟仅按骑兵压力承担反骑；两者共享木材。黑檀木成对训练且占半数人口，工具列价 40 木材＋45 黄金，但计价单位未明，不折半推算。",
+        "limitation": "本路受重型弩炮威胁；黑檀木与长戟共享木材，且黑檀木成对训练、只占半数人口。40 木材＋45 黄金的计价单位未明，不推算单只成本；长戟按骑兵压力反骑，不因此视为反攻城。",
+        "attack": "黑檀木步弓手提供远程集群火力；骑兵压力下按需调整长戟比例并保护黑檀木，推进时保留安全接敌与撤退空间。",
+        "defense": "长戟只承担骑兵压力下的反骑；黑檀木步弓手避开重型弩炮穿透线，分散站位并保留撤退空间。",
+        "adjustments": [
+          {
+            "id": "tupi-blackwood-halberdier-adjustment-first",
+            "when": "重型弩炮＋近战护卫",
+            "text": "黑檀木与长戟本身不承担反攻城；有可用精锐蔷琵且能安全接敌、安排护卫时才按需补队，不把运输长戟当作反攻城。",
+            "requires": [{ "kind": "unit", "id": 2554 }],
+            "fallback": "精锐蔷琵不可用或无法安全接敌时不展示补队建议；规避受保护的重型弩炮并保留撤退空间，不以运输长戟代替反攻城。"
+          },
+          {
+            "id": "tupi-blackwood-halberdier-adjustment-second",
+            "when": "弓手、骑射手",
+            "text": "确需免金反弓且能安全接敌时，可按需选择精锐掷矛手；不作固定第三主力。",
+            "requires": [{ "kind": "unit", "id": 6 }],
+            "fallback": "精锐掷矛手不可用时不展示该建议；以本路远程主力处理允许的接敌位置，必要时撤离。"
+          },
+          {
+            "id": "tupi-blackwood-halberdier-adjustment-third",
+            "when": "骑兵成群",
+            "text": "骑兵压力下按需调整长戟比例并保护黑檀木；不将长戟职责扩展为反攻城。"
+          },
+          {
+            "id": "tupi-blackwood-halberdier-adjustment-fourth",
+            "when": "步兵为主",
+            "text": "仅在确有近战范围反步兵缺口且能安全接敌时，才考虑精锐伊比拉贝玛战士；避免重复投入。",
+            "requires": [{ "kind": "unit", "id": 2584 }],
+            "fallback": "该单位不可用或无法安全接敌时不展示近战补队建议；保持远程接敌并避免强行近身。"
+          },
+          {
+            "id": "tupi-blackwood-halberdier-adjustment-fifth",
+            "when": "需要安全的反攻城路线",
+            "text": "可考虑转以蔷琵＋投石手为主；目标路线仍需能承担共享食物、蔷琵黄金和持续补兵，并满足蔷琵安全接敌条件；过渡或已有兵力可重叠。不得用运输长戟替代反攻城。",
+            "requires": [{ "kind": "route", "id": "tupi-champi-slinger" }],
+            "fallback": "目标路线或其经济、接敌条件不成立时不展示转线建议；规避受保护的重型弩炮、保护现有兵力并保留撤退空间。"
+          }
+        ],
+        "alternatives": "精锐伊比拉贝玛另需黄金且承担近战接敌风险，不作默认投入；运输载具另有资源、产能和操作成本。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1025",
+          "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+          "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Japanese",
+    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153",
+      "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
+      "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+    },
+    "routes": [
+      {
+        "id": "japanese-samurai-light-cavalry",
+        "title": "精锐日本武士＋轻型骑兵＋少量巨投",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-18",
+        "condition": "箭塔是按需支点；按射手压力补远程支援，不把辅助合并为必出。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 560,
+            "historicalName": "精锐日本武士",
+            "role": "近战主力"
+          },
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "免金清攻城器/反弓/反僧"
+          },
+          {
+            "kind": "unit",
+            "id": 331,
+            "historicalName": "巨型投石机",
+            "role": "拆防"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "position-variant",
+            "condition": "已有大型箭塔可作阵地支点；基础塔不以射箭孔为前置",
+            "entities": [
+              {
+                "kind": "building",
+                "id": 235,
+                "historicalName": "大型箭塔",
+                "role": "大型箭塔"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "射箭孔科技资料；完成研究和依托大型箭塔的效果条件见下方调整",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 484,
+                "historicalName": "射箭孔",
+                "role": "射箭孔"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "射手压力下按需部署，不默认与重装骑射手同时铺开",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "精锐掷矛手"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "需要机动远程支援时单独评估，不默认与精锐掷矛手同时铺开",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "historicalName": "重装骑射手",
+                "role": "重装骑射手"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "完成弹射器研究后增强已产巨投；研究不是巨投训练前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 59,
+                "historicalName": "弹射器",
+                "role": "弹射器"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
+          "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
+          "scope": "武士/轻骑的等资源 PK 比值来自独立接触模型，不是混编实战胜率：武士攻击间隔约 1.43 秒、对独特单位额外伤害 +12、45F/30G，等资源对日本重装骑士 1:3.92、对西班牙游侠 1:2.22；轻骑 80F 零黄金，等资源对重型弩炮 1:12.19、对手推炮 1:19.13。该接触模型未模拟弹道穿透与溅射，原记录提示实战损耗更高。弹射器强化巨投、射箭孔研究后依托大型箭塔发射额外箭矢，均为固定记录列出的条件机制；基础箭数 1→3、驻 5 个劲弩手总 6 箭（上限 7）为指定理论预览，不是招募配方或每箭伤害。这些研究条件、机制与预览不表示玩家当前已完成研究，也不证明相关可选项当前可用。箭塔按需作阵地支点，射手压力下各支援择需，不默认同时铺开。",
+          "recordedVersion": "站点版本和构建本次未记录",
+          "sourceLines": [
+            1153, 1157, 1159, 1160, 1161, 1162, 1164, 1166, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1184, 1185, 1186, 1187, 1188, 1189, 1191, 1193
+          ]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153",
+          "discussion": "https://app.devin.ai/sessions/ddea80a7615d41fbab87cf5879539194",
+          "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
+        },
+        "reason": "用户认可的配置：精锐日本武士＋轻型骑兵＋少量巨型投石机。",
+        "limitation": "磨坊、伐木场、采矿场费用 -50% 利于扩张；缺轮作使后期食物线偏弱，轻骑（80F）与长戟（35F）虽省金但耗食，规模受农田经济制约。缺翼骑兵，轻骑封顶即最终形态；缺建筑学与加热射击，塔防硬度不及高丽。精锐日本武士目录基础近战/穿刺护甲为 1/1，不代表满科技数值。攻城线无手推炮，最高只到中型投石车。",
+        "attack": "武士贴身输出，轻骑切攻城器与后排，巨投拆防御；轻骑与武士同为近战混编，轻骑先接触吸引火力。",
+        "defense": "武士目录基础近战/穿刺护甲为 1/1，面对射手时注意其防护缺口；轻骑拦截可接近的突入攻城器。射手压力下的远程掩护见独立调整。",
+        "adjustments": [
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-first",
+            "when": "骑士、游侠成群",
+            "text": "缺金且承受重骑压力时补长戟填线；不作为常驻主力。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缺少长戟兵目录资料时隐藏补队建议；保留武士与轻骑主路。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-second",
+            "when": "劲弩、弓手文明",
+            "text": "按弓手压力评估精锐掷矛手，配合主路轻骑处理后排；不默认与重装骑射手同时铺开。",
+            "requires": [{ "kind": "unit", "id": 6, "age": 4 }],
+            "fallback": "缺少精锐掷矛手目录资料时隐藏反弓支援；轻骑主路保持独立。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-third",
+            "when": "独特单位文明",
+            "text": "精锐武士拉满，+12 克制加成是质变"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-fourth",
+            "when": "弩炮、手推炮群",
+            "text": "轻骑分波冲脸；有前排护卫时武士先接敌、轻骑绕侧，不直接撞阵"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-fifth",
+            "when": "巨投、炮塔阵地",
+            "text": "只能巨投对拆（无手推炮）；轻骑偷袭"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-sixth",
+            "when": "步兵海",
+            "text": "武士可对砍；压力过大时可评估火枪手（靶场全科技）作为备选。",
+            "requires": [{ "kind": "unit", "id": 5, "age": 4 }],
+            "fallback": "缺少火枪手目录资料时隐藏步兵压力下的替换建议；保留武士主路。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-seventh",
+            "when": "我方战线受压",
+            "text": "已有大型箭塔可在战线受压时巩固阵地并让主路回防；不默认武士驻塔增箭，额外箭矢见独立机制支持。",
+            "requires": [{ "kind": "building", "id": 235, "age": 4 }],
+            "fallback": "缺少大型箭塔目录资料时隐藏塔防支点建议；主路回防职责保留。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-eighth",
+            "when": "需要机动远程支援",
+            "text": "可单独评估重装骑射手（日本骑射对远程 +2，掷矛除外）；不默认与精锐掷矛手同时铺开。",
+            "requires": [{ "kind": "unit", "id": 474, "age": 4 }],
+            "fallback": "缺少重装骑射手目录资料时隐藏机动远程支援；精锐掷矛手分支仍须独立核对。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-ninth",
+            "when": "大型箭塔已建成且射箭孔研究已完成",
+            "text": "完成射箭孔研究后，目录说明：瞭望箭塔系可发射额外的箭矢。固定预览中基础箭数 1→3，驻 5 个劲弩手总 6 箭（上限 7），仅为指定理论预览，不是招募配方或每箭伤害。",
+            "requires": [
+              { "kind": "building", "id": 235, "age": 4 },
+              { "kind": "tech", "id": 484, "age": 3 }
+            ],
+            "fallback": "缺少大型箭塔或射箭孔目录资料时隐藏额外箭矢效果；基础塔支点不依赖该研究。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-tenth",
+            "when": "弹射器研究已完成且有巨型投石机",
+            "text": "完成弹射器研究后，目录说明：巨型投石机的攻击和组装/拆装速度更快。研究不是巨投训练前置。",
+            "requires": [
+              { "kind": "unit", "id": 331, "age": 4 },
+              { "kind": "tech", "id": 59, "age": 4 }
+            ],
+            "fallback": "缺少巨型投石机或弹射器目录资料时隐藏研究效果；主路拆防职责不变。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-eleventh",
+            "when": "顺风且已有骑士线",
+            "text": "可按顺风和已有骑士线评估重装骑士例外；不作为默认骑兵投入。",
+            "requires": [{ "kind": "unit", "id": 283, "age": 4 }],
+            "fallback": "缺少重装骑士目录资料时隐藏条件例外；保留轻骑主路。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-twelfth",
+            "when": "无城堡且需要省金",
+            "text": "无城堡且需要省金时可比较冠军剑士；目录金币消耗为 20G，对精锐日本武士的 30G 更低。仅作省金例外，不升级为默认主力。",
+            "requires": [{ "kind": "unit", "id": 567, "age": 4 }],
+            "fallback": "缺少冠军剑士目录资料时隐藏省金例外；保留武士主路。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-thirteenth",
+            "when": "需要远程输出且资源允许",
+            "text": "可比较劲弩手＋长戟兵＋巨投的远程备选；不替代武士＋轻骑＋巨投主路。",
+            "requires": [
+              { "kind": "unit", "id": 492, "age": 4 },
+              { "kind": "unit", "id": 359, "age": 4 },
+              { "kind": "unit", "id": 331, "age": 4 }
+            ],
+            "fallback": "缺少劲弩、长戟或巨投目录资料时隐藏远程备选；不将其升级为默认主力。"
+          },
+          {
+            "id": "japanese-samurai-light-cavalry-adjustment-fourteenth",
+            "when": "战线受压且有安全施工窗口",
+            "text": "由村民在安全窗口新建前线大型箭塔以巩固阵地；射箭孔研究不是基础建塔前置。",
+            "requires": [
+              { "kind": "building", "id": 235, "age": 4 },
+              { "kind": "unit", "id": 83, "age": 4 }
+            ],
+            "fallback": "缺少大型箭塔或村民目录资料时隐藏新建塔建议；已有塔支点另按自身资料核对。"
+          }
+        ],
+        "alternatives": "救赎僧侣：修道院几乎全科技、雕版印刷后射程持平手推炮，但招降要接敌、30 血易死、微操负担高；轻骑已覆盖反攻城职责（hongcun 否决）。；中型投石车：射程 8 压弩炮 7 且有溅射，但 135 黄金与武士抢金线；反攻城职责由免金轻骑覆盖（hongcun 改用轻骑）。；冠军剑士：与武士职责重叠，原 1v1 比较略输、不代表混编结论；无城堡省金例外见下方调整。；重装骑士：缺骑兵钢甲、翼骑兵和游侠，骑兵线投入大上限低；顺风已有骑士线的例外见下方调整。；劲弩手：靶场全科技但无文明加成，不作为默认步兵主力；条件远程备选见下方调整。；火枪手：不作为常驻线，对方步兵海的条件选项见第六调整。"
       }
     ]
   }
