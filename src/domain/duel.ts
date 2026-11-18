@@ -131,7 +131,12 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
   const alive = (X: number[]) => X.filter((h) => h > 1e-9).length;
   const timeline: [number, number, number][] = [[0, na, nb]];
   while (alive(A) && alive(B) && t <= maxT) {
-    t = Math.min(nextA, nextB);
+    const nextT = Math.min(nextA, nextB);
+    if (nextT > maxT) {
+      t = maxT;
+      break;
+    }
+    t = nextT;
     const aAtk = Math.abs(t - nextA) < 1e-9,
       bAtk = Math.abs(t - nextB) < 1e-9;
     const nA = alive(A),
