@@ -63,13 +63,35 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(main.limitation).toContain('只算骑马阶段 1v1');
     expect(main.limitation).toContain('不含下马、射程/走位或混编');
 
-    expect(contract.adjustments.at(-1)).toEqual({
+    expect(contract.adjustments[5]).toEqual({
       id: 'bulgarians-krepost-konnik-adjustment-sixth',
-      requires: [{ kind: 'tech', id: 685 }],
+      requires: [
+        { kind: 'building', id: 82 },
+        { kind: 'tech', id: 685 },
+      ],
     });
-    expect(main.adjustments[5]!.requires).toEqual([{ kind: 'tech', id: 685 }]);
-    expect(main.adjustments[5]!.text).toContain('如选择并完成马镫研究');
-    expect(main.adjustments[5]!.fallback).toContain('不依赖马镫解锁训练');
+    expect(contract.adjustments[6]).toEqual({
+      id: 'bulgarians-krepost-konnik-adjustment-seventh',
+      requires: [
+        { kind: 'building', id: 82 },
+        { kind: 'unit', id: 331, age: 4 },
+      ],
+    });
+    expect(main.adjustments[5]!.requires).toEqual([
+      { kind: 'building', id: 82 },
+      { kind: 'tech', id: 685 },
+    ]);
+    expect(main.adjustments[5]!.text).toContain('马镫需在城堡研究');
+    expect(main.adjustments[5]!.text).toContain('不是保加利亚骑兵训练前置');
+    expect(main.adjustments[5]!.fallback).toContain('不将马镫列为训练前置');
+    expect(main.adjustments[6]!.when).toContain('规划帝王时代巨投');
+    expect(main.adjustments[6]!.requires).toEqual([
+      { kind: 'building', id: 82 },
+      { kind: 'unit', id: 331, age: 4 },
+    ]);
+    expect(main.adjustments[6]!.fallback).toContain('不展示建城或巨投生产结论');
+    expect(main.alternatives).not.toMatch(/第一座城堡仍要修|马镫和巨投都靠它/);
+    expect(main.alternatives).toContain('不为量产主力重复建城堡');
   });
 
   it('将五个保加利亚对位 PK 限定为帝王精锐接触模型并逐项依赖精锐单位', () => {
@@ -88,6 +110,7 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
       expect(adjustment.text).toContain('射程/走位');
       expect(adjustment.text).toContain('混编');
       expect(adjustment.text).toMatch(/不是胜率|不能当实战胜率/);
+      if (index > 0) expect(adjustment.text).toContain('仅站内模型，未单独经hongcun实战确认');
       expect(contractComparisons[index]!.requires).toEqual([{ kind: 'unit', id: 1255, age: 4 }]);
     }
 
@@ -145,12 +168,15 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(cavalry!.text).toContain('不计包围空间和走位');
     expect(cavalry!.text).toContain('人数偏多的一方结果偏好');
     expect(cavalry!.text).toContain('不能当胜率');
+    expect(cavalry!.text).toContain('仅站内模型，未单独经hongcun实战确认');
     expect(halberdier!.text).toContain('hongcun 判断');
     expect(halberdier!.text).toContain('站内 PK 不能验证');
     expect(infantry!.text).toContain('接触 PK');
+    expect(infantry!.text).toContain('仅站内模型，未单独经hongcun实战确认');
     expect(infantry!.text).toContain('不含射程拉扯、接近护卫或群战');
     expect(infantry!.text).toContain('4/70');
     expect(rangedSiege!.text).toContain('接触 PK');
+    expect(rangedSiege!.text).toContain('仅站内模型，未单独经hongcun实战确认');
     expect(rangedSiege!.text).toContain('不模拟射程拉扯、接近或护卫');
     expect(rangedSiege!.text).toContain('不能把“骠骑冲”当作已验证策略');
     expect(main.adjustments).toHaveLength(4);
@@ -199,7 +225,61 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
         });
       }
       expect(view.adjustments.find(({ id }) => id.endsWith('-sixth'))).toMatchObject({ text: main.adjustments[5]!.text });
+      expect(view.adjustments.find(({ id }) => id.endsWith('-seventh'))).toMatchObject({ text: main.adjustments[6]!.text });
     }
+  });
+
+  it('缺少马镫、城堡或巨投时仅回退对应建议，营垒主路与重型冲车仍可用', async () => {
+    const main = route('Bulgarians', 'bulgarians-krepost-konnik');
+    const bulgarians = byCiv('Bulgarians');
+    const resources = { core: await loadCore(), trees: await loadTrees() };
+    const project = (core: typeof resources.core) =>
+      projectFormation(main, 'Bulgarians', DATA_PATCH, { core, trees: resources.trees }, bulgarians.routes, bulgarians.source);
+
+    const techById = { ...resources.core.techById };
+    delete techById[685];
+    const withoutStirrups = project({ ...resources.core, techById });
+    expect(withoutStirrups.status).toBe('current');
+    if (withoutStirrups.status === 'current') {
+      expect(withoutStirrups.adjustments.find(({ id }) => id.endsWith('-sixth'))).toMatchObject({
+        unavailable: true,
+        text: main.adjustments[5]!.fallback,
+      });
+      expect(withoutStirrups.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).not.toContain(685);
+    }
+
+    const buildingById = { ...resources.core.buildingById };
+    delete buildingById[82];
+    const withoutCastle = project({ ...resources.core, buildingById });
+    expect(withoutCastle.status).toBe('current');
+    if (withoutCastle.status === 'current') {
+      expect(withoutCastle.required.map(({ entity }) => entity.id)).toEqual([1251, 1254]);
+      expect(withoutCastle.adjustments.find(({ id }) => id.endsWith('-sixth'))).toMatchObject({
+        unavailable: true,
+        text: main.adjustments[5]!.fallback,
+      });
+      expect(withoutCastle.adjustments.find(({ id }) => id.endsWith('-seventh'))).toMatchObject({
+        unavailable: true,
+        text: main.adjustments[6]!.fallback,
+      });
+    }
+
+    const unitById = { ...resources.core.unitById };
+    delete unitById[331];
+    const withoutTrebuchet = project({ ...resources.core, unitById });
+    expect(withoutTrebuchet.status).toBe('current');
+    if (withoutTrebuchet.status === 'current') {
+      const supplementIds = withoutTrebuchet.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id));
+      expect(supplementIds).not.toContain(331);
+      expect(supplementIds).toContain(548);
+      expect(withoutTrebuchet.required.map(({ entity }) => entity.id)).toEqual([1251, 1254]);
+      expect(withoutTrebuchet.adjustments.find(({ id }) => id.endsWith('-seventh'))).toMatchObject({
+        unavailable: true,
+        text: main.adjustments[6]!.fallback,
+      });
+    }
+
+    expect(main.alternatives).not.toMatch(/第一座城堡仍要修|马镫和巨投都靠它/);
   });
 
   it('保留 Spanish/Georgians 原四路线的状态、组成、时代与 required', () => {

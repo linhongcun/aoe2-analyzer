@@ -1947,7 +1947,17 @@
             },
             {
               "id": "bulgarians-krepost-konnik-adjustment-sixth",
-              "requires": [{ "kind": "tech", "id": 685 }]
+              "requires": [
+                { "kind": "building", "id": 82 },
+                { "kind": "tech", "id": 685 }
+              ]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-seventh",
+              "requires": [
+                { "kind": "building", "id": 82 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
             }
           ],
           "source": {
