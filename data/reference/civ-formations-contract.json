@@ -514,7 +514,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 271, 273, 274, 275, 277]
+          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277]
         },
         {
           "id": "turks-existing-line-choice",
@@ -552,7 +552,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L273",
             "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
           },
-          "sourceLines": [256, 258, 264, 265, 266, 267, 273, 274, 275, 277]
+          "sourceLines": [273, 274]
         }
       ]
     },
@@ -744,6 +744,16 @@
               ]
             },
             {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492,
+                  "age": 4
+                }
+              ]
+            },
+            {
               "mode": "support",
               "entities": [
                 {
@@ -764,7 +774,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
             "discussion": "https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac"
           },
-          "sourceLines": [355, 356, 357, 358]
+          "sourceLines": [355, 356, 357]
         },
         {
           "id": "malay-two-handed-swordsman-sustain",
@@ -819,7 +829,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356",
             "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
           },
-          "sourceLines": [355, 356, 357, 358]
+          "sourceLines": [355, 356, 357]
         }
       ]
     },

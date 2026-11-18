@@ -82,8 +82,37 @@ describe('#1139 文明路线契约与投影', () => {
       ],
     ]);
     expect([swords.age, swords.composition, swords.required.map((ref) => ref.id)]).toEqual([4, 'combined', [473]]);
+    expect(swords.condition).toContain('帝王后期/消耗局');
+    expect(swords.condition).toContain('黄金不足');
     expect(swords.condition).toContain('强征兵役');
     expect(swords.prerequisites.map((ref) => ref.id)).toEqual([625]);
+    expect(swords.reason).toContain('将民兵系黄金成本换为额外食物');
+    expect(swords.reason).toContain('免费步兵护甲');
+    expect(swords.limitation).toContain('科技本身仍耗食物和黄金');
+    expect(swords.limitation).toContain('双手剑士与长戟兵都占食物');
+    expect(swords.limitation).toContain('不能把双手剑士当作无条件肉盾或自动转型');
+    expect(swords.status).toBe('approved');
+    expect(swords.playtest).toBe('unreported');
+    expect(swords.evidence.playtest).toContain('未确认用户亲自实战这套具体混编');
+    expect(swords.evidence.playtest).toContain('本轮未做新模拟或实战验证');
+    expect(swords.evidence.sourceLines).toEqual([355, 356, 357]);
+    expect(swords.evidence.scope).not.toContain('来源行');
+    const crossbowSupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 492))!;
+    expect(progression.supplements[0]!.entities[0]!.role).toBe('弩手条件支援');
+    expect(crossbowSupport.mode).toBe('as-needed');
+    expect(crossbowSupport.condition).toContain('已有弩手基础');
+    expect(crossbowSupport.condition).toContain('不是固定第三主力');
+    expect(crossbowSupport.entities).toEqual([expect.objectContaining({ kind: 'unit', id: 492, historicalName: '劲弩手', age: 4 })]);
+    expect(progression.required.map(({ id }) => id)).not.toContain(492);
+    expect(progression.limitation).toContain('可用畜牧与骑兵鳞甲，但缺血统、骑兵锁甲和骑兵钢甲');
+    expect(progression.limitation).toContain('手推炮需攻城武器厂');
+    expect(progression.limitation).toContain('劲弩需独立兵种线升级和射手攻防科技');
+    expect(progression.status).toBe('approved');
+    expect(progression.playtest).toBe('unreported');
+    expect(progression.evidence.playtest).toContain('未确认用户亲自实战这套具体混编');
+    expect(progression.evidence.playtest).toContain('本轮未做新模拟或实战验证');
+    expect(progression.evidence.sourceLines).toEqual([355, 356, 357]);
+    expect(progression.evidence.scope).not.toContain('来源行');
     const resources = await catalog();
     const view = projectFormation(progression, 'Malay', DATA_PATCH, resources, byCiv('Malay').routes, byCiv('Malay').source);
     expect(view.status).toBe('current');
@@ -102,12 +131,37 @@ describe('#1139 文明路线契约与投影', () => {
     ]);
     const turks = route('Turks', 'turks-existing-line-choice');
     expect(turks.composition).toBe('choice');
+    expect(turks.status).toBe('approved');
+    expect(turks.playtest).toBe('unreported');
     expect(turks.required).toEqual([]);
+    expect(turks.condition).toContain('已有重装骑射手或精锐苏丹亲兵基础');
+    expect(turks.condition).toContain('按条件择一延续');
+    expect(turks.condition).toContain('不从零强转火枪');
+    expect(turks.condition).toContain('不把两者同时列为必需');
+    expect(turks.reason).toContain('避免从零强转火枪');
+    expect(turks.limitation).toContain('重装骑射手仍需升级与科技投入');
+    expect(turks.limitation).toContain('苏丹亲兵依赖城堡产能和精锐升级');
+    expect(turks.alternatives).toBeUndefined();
     expect(turks.choices?.map(({ title, entities }) => [title, entities.map(({ id }) => id)])).toEqual([
       ['重装骑射手', [474]],
       ['精锐苏丹亲兵', [557]],
     ]);
     expect(route('Turks', 'turks-hussar-handcannon').id).not.toBe(turks.id);
+  });
+
+  it('土耳其主路理由保留保存火枪与炮的经验，限制只含投入和工具核实边界', () => {
+    const main = route('Turks', 'turks-hussar-handcannon');
+
+    expect(main.reason).toContain('保存火枪与手推炮的投入');
+    expect(main.reason).toContain('可补充的翼骑承担消耗');
+    expect(main.limitation).toContain('抗箭不等于能硬穿长戟阵');
+    expect(main.limitation).toContain('火枪与翼骑仍争食物');
+    expect(main.limitation).toContain('手推炮推进时需要保护');
+    expect(main.limitation).toContain('炮的属性不等于拆石质建筑所需时间');
+    expect(main.limitation).toContain('石质建筑数据仍待核实');
+    expect(main.limitation).not.toMatch(/掩护、拦截|保存下来的输出核心|免费化学|14 射程|100 生命/);
+    expect(main.alternatives).toBe('重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗；反骑缺口优先考虑重装骆驼。');
+    expect(main.evidence.scope).not.toContain('来源行');
   });
 
   it('攻城器和机制科技保持可选，西西里骑士只作延续调整', () => {
