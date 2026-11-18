@@ -59,6 +59,16 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(dialog2).not.toContainText('经济/费用效果（文本展示）');
   });
 
+  test('原句中的负号与数值在同一个不换行片段内', async ({ page }) => {
+    await page.goto('./#/civ/Burgundians');
+    const row = page.locator('.brow').filter({ hasText: '马厩科技费用 - 50%' });
+    const text = row.locator('.brow-t');
+    await expect(row).toHaveCount(1);
+    await expect(text.locator('span.num.nw')).toHaveCount(1);
+    await expect(text.locator('span.num.nw')).toHaveText('- 50%');
+    expect(await text.evaluate((element) => element.textContent)).toBe('马厩科技费用 - 50%');
+  });
+
   test('src = text：凯尔特 / 突厥 / 朝鲜被工具计入，不再显示「无 .dat 数据」；没有工具计入的（不列颠羊倌）仍显示', async ({ page }) => {
     for (const c of ['Celts', 'Turks', 'Koreans']) {
       await page.goto(`./#/civ/${c}/bonus/0`);
