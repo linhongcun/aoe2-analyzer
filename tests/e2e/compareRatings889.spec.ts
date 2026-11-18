@@ -13,11 +13,15 @@ const britons = civs.find((civ) => civ.en === 'Britons');
 if (!franks || !britons) throw new Error('对比评分用例缺少法兰克或不列颠');
 
 const AXES = ['骑兵', '弓手', '步兵', '经济', '防御', '攻城', '僧侣', '海军'] as const;
+const PAGE_LEDE = '选定两个文明，先对照文明资料，再按需参考开局示例与主观分数。分数不是胜率或精确战力。';
+const FACT_NOTE = '以下四项是文明机制资料，不由主观分数推导。';
+const OPENINGS_NOTE = '以下开局由维护者整理，仅作可选打法示例，不是官方推荐，也不由评分推导。请按地图、对手和当前局势调整。';
+const RUBRIC_NOTE = '特色兵种、城堡科技、帝王科技和团队加成属于资料对照；参考开局另列为维护者整理的可选打法示例。两者均不由这些分数推导。';
 
 test('#889 对比页可见雷达、原分数、资料对照和评分口径', async ({ page }) => {
   await page.goto('./#/compare');
-  await expect(page.locator('#compare h2')).toContainText('文明对比');
-  await expect(page.locator('#compare .lhead')).toContainText('不是胜率或精确战力');
+  await expect(page.getByRole('heading', { name: '文明对比', exact: true })).toBeVisible();
+  await expect(page.locator('#compare .lhead')).toContainText(PAGE_LEDE);
   const basis = page.getByTestId('compare-rating-basis');
   const summary = page.getByTestId('compare-rating-summary');
   await expect(basis).toBeVisible();
@@ -33,6 +37,7 @@ test('#889 对比页可见雷达、原分数、资料对照和评分口径', asy
   await page.getByRole('button', { name: '查看完整评分口径', exact: true }).click();
   const full = page.getByTestId('compare-rating-full');
   await expect(full).toContainText('游戏版本未知');
+  await expect(full).toContainText(RUBRIC_NOTE);
   for (const axis of AXES) await expect(full.getByRole('listitem').filter({ hasText: axis })).toBeVisible();
   await expect(page.locator('#crd')).toBeVisible();
   await expect(page.locator('#crd')).toHaveAttribute('aria-label', /不是胜率/);
@@ -51,9 +56,16 @@ test('#889 对比页可见雷达、原分数、资料对照和评分口径', asy
     await expect(scores.nth(1)).not.toHaveClass(/\bwin\b/);
   }
   await expect(page.locator('#compare')).not.toContainText('赢面');
-  for (const label of ['特色兵种', '城堡科技', '帝王科技', '团队加成', '参考开局']) {
-    await expect(page.locator('#compare-facts')).toContainText(label);
-  }
+  const facts = page.locator('#compare-facts');
+  await expect(facts).toContainText(FACT_NOTE);
+  await expect(facts.locator('tbody tr')).toHaveCount(5);
+  await expect(facts).not.toContainText('参考开局');
+  for (const label of ['特色兵种', '城堡科技', '帝王科技', '团队加成']) await expect(facts).toContainText(label);
+  const openings = page.getByTestId('compare-openings');
+  await expect(openings).toContainText('参考开局（打法示例）');
+  await expect(openings).toContainText(OPENINGS_NOTE);
+  await expect(page.getByTestId('compare-opening-a')).toContainText('文明 A · 法兰克');
+  await expect(page.getByTestId('compare-opening-b')).toContainText('文明 B · 不列颠');
   await expect(page.getByRole('link', { name: '查看这两个文明的团队加成来源' })).toBeVisible();
   const positions = page.locator('#cpos');
   await expect(positions).toContainText('团战位置适配');
