@@ -33,7 +33,13 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect(malian.evidence.scope).toContain('hongcun常用经验');
     expect(malian.evidence.scope).toContain('不据此将整套混编标成已实战');
     expect(malian.reason).toContain('轻骑兵与精锐飞刀女兵');
+    expect(malian.reason).toContain('远程进行近战攻击的步兵');
+    expect(malian.reason).toContain('受步兵护甲');
+    expect(malian.reason).toContain('与轻骑共享近战攻击科技而非射手线');
     expect([malian.reason, malian.attack, malian.defense].join(' ')).not.toMatch(/城镇中心|蛮王|空中心开火/);
+    expect(malian.limitation).toContain('轻骑仍怕长戟');
+    expect(malian.limitation).toContain('接触PK胜弓手不保证追得上');
+    expect(malian.limitation).toContain('飞刀避免被包围贴身');
     expect(malian.limitation).toContain('目录价不是折后价');
     expect(malian.limitation).toContain('箭数与施工时间只是理论预览');
     expect(malian.limitation).toContain('未和本版本客户端核对');
@@ -43,12 +49,18 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
 
     const position = malian.supplements.find(({ mode }) => mode === 'position-variant')!;
     const king = malian.supplements.find(({ mode }) => mode === 'mechanism-support')!;
+    expect(position.condition).toContain('hongcun常用阵地玩法');
+    expect(position.condition).toContain('不代表全混编已实战');
     expect(position.entities.map(({ kind, id }) => [kind, id])).toEqual([
       ['building', 109],
       ['unit', 83],
     ]);
     expect(king.entities.map(({ kind, id }) => [kind, id])).toEqual([['tech', 576]]);
-    expect([...malian.required, ...malian.prerequisites].some(({ id }) => id === 109 || id === 83 || id === 576)).toBe(false);
+    const deathSwords = malian.supplements.filter(({ mode }) => mode === 'mechanism-support')[1]!;
+    expect(deathSwords.entities.map(({ kind, id }) => [kind, id])).toEqual([['tech', 577]]);
+    expect(deathSwords.condition).toContain('完成死士研究后');
+    expect(deathSwords.condition).toContain('研究前不生效');
+    expect([...malian.required, ...malian.prerequisites].some(({ id }) => id === 109 || id === 83 || id === 576 || id === 577)).toBe(false);
     expect(malian.adjustments[0]!.requires).toEqual([{ kind: 'unit', id: 330, age: 4 }]);
     expect(malian.adjustments[0]!.fallback).toContain('隐藏');
     expect(malian.adjustments[3]!.requires).toEqual([{ kind: 'unit', id: 36, age: 4 }]);
@@ -61,6 +73,11 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
       { kind: 'building', id: 109, age: 4 },
       { kind: 'tech', id: 576, age: 4 },
     ]);
+    expect(malian.adjustments[5]!.text).toContain('完成蛮王研究后空中心开火');
+    expect(malian.adjustments[5]!.text).not.toContain('均可用');
+    expect(malian.adjustments[6]!.when).toContain('无法安全接近或确需范围伤害');
+    expect(malian.adjustments[6]!.requires).toEqual([{ kind: 'unit', id: 280, age: 4 }]);
+    expect(malian.adjustments[6]!.fallback).toContain('基础投石车目录资料');
     expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id }) => [kind, id])])).toEqual(
       malian.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id }) => [kind, id])]),
     );
@@ -76,7 +93,8 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect(lithuanian.prerequisites).toEqual([]);
     expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建');
     expect(lithuanian.evidence.scope).toContain('驻军预览不代表混编实战或胜率证明');
-    expect(lithuanian.reason).toContain('精锐烈堤司与精锐掷矛手');
+    expect(lithuanian.reason).toContain('烈堤司以近战处理重甲并保护攻城器');
+    expect(lithuanian.reason).toContain('掷矛反弓并远射长戟');
     expect([lithuanian.reason, lithuanian.attack, lithuanian.defense].join(' ')).not.toMatch(/前线城镇中心作支点|村民落中心|依托中心|中心与驻扎的掷矛控制/);
     expect(lithuanian.limitation).toContain('不默认开局有4件');
     expect(lithuanian.limitation).toContain('未证明混编实战胜率');
@@ -101,13 +119,18 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
       { kind: 'building', id: 109, age: 4 },
       { kind: 'unit', id: 83, age: 4 },
     ]);
-    expect(lithuanian.adjustments[5]!.text).toContain('9射程');
+    expect(lithuanian.adjustments[5]!.when).toContain('完成山城堡研究后');
+    expect(lithuanian.adjustments[5]!.text).toContain('完成山城堡研究后，城镇中心射程为9');
+    expect(lithuanian.adjustments[5]!.text).toContain('仍够不到12射程普通手推炮');
+    expect(lithuanian.adjustments[5]!.text).not.toContain('均具备时');
     expect(lithuanian.adjustments[5]!.requires).toEqual([
       { kind: 'building', id: 109, age: 4 },
       { kind: 'unit', id: 83, age: 4 },
       { kind: 'tech', id: 691, age: 4 },
     ]);
     expect(lithuanian.adjustments[6]!.requires).toEqual([{ kind: 'unit', id: 569, age: 4 }]);
+    expect(lithuanian.adjustments[6]!.when).toBe('已有成熟骑士线、城堡产能不足或需要抗箭');
+    expect(lithuanian.adjustments[6]!.text).toContain('已有成熟骑士线、城堡产能不足或需要抗箭时，继续游侠合理');
     expect(lithuanian.adjustments[7]!.requires).toEqual([{ kind: 'unit', id: 1707, age: 4 }]);
     expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id }) => [kind, id])])).toEqual(
       lithuanian.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id }) => [kind, id])]),
@@ -157,6 +180,14 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
       expect(noKingTech.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).not.toContain(576);
     }
 
+    const noDeathSwordsById = { ...core.techById };
+    delete noDeathSwordsById[577];
+    const noDeathSwords = project('Malians', malian, { ...core, techById: noDeathSwordsById });
+    expect(noDeathSwords.status).toBe('current');
+    if (noDeathSwords.status === 'current') {
+      expect(noDeathSwords.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).not.toContain(577);
+    }
+
     const noCamelById = { ...core.unitById };
     delete noCamelById[330];
     expectFallback(project('Malians', malian, { ...core, unitById: noCamelById }), malian, '-first');
@@ -166,6 +197,14 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expectFallback(noMalianCannon, malian, '-fourth');
     if (noMalianCannon.status === 'current') {
       expect(noMalianCannon.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toContain(331);
+    }
+
+    const noBasicSiegeById = { ...core.unitById };
+    delete noBasicSiegeById[280];
+    const noBasicSiege = project('Malians', malian, { ...core, unitById: noBasicSiegeById });
+    expectFallback(noBasicSiege, malian, '-seventh');
+    if (noBasicSiege.status === 'current') {
+      expect(noBasicSiege.adjustments.find(({ id }) => id.endsWith('-seventh'))?.text).not.toContain('评估投石车系基础兵种');
     }
 
     const noLithuanianCastleById = { ...core.buildingById };

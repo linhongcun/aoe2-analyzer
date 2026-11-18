@@ -687,6 +687,10 @@
               "entities": [{ "kind": "tech", "id": 576 }]
             },
             {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 577, "age": 4 }]
+            },
+            {
               "mode": "choice",
               "entities": [
                 {
@@ -730,6 +734,10 @@
                 { "kind": "building", "id": 109, "age": 4 },
                 { "kind": "tech", "id": 576, "age": 4 }
               ]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 280, "age": 4 }]
             }
           ],
           "source": {
