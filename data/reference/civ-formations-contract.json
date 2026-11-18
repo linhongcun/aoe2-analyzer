@@ -754,13 +754,18 @@
               ]
             },
             {
-              "mode": "support",
+              "mode": "as-needed",
               "entities": [
                 {
                   "kind": "unit",
                   "id": 359,
                   "age": 4
-                },
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
                 {
                   "kind": "unit",
                   "id": 36,
