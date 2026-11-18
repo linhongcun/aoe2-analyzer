@@ -2328,6 +2328,14 @@
                   "age": 4
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 185 }]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
             }
           ],
           "adjustments": [
@@ -2337,7 +2345,7 @@
             },
             {
               "id": "mapuche-kona-bolas-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 185 }]
             },
             {
               "id": "mapuche-kona-bolas-adjustment-third",
@@ -2348,7 +2356,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [948, 954, 956, 957, 961, 963, 969, 970, 971, 977, 978, 980]
+          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]
         },
         {
           "id": "mapuche-kona-slinger",
@@ -2368,11 +2376,16 @@
           ],
           "choices": [],
           "prerequisites": [],
-          "supplements": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+            }
+          ],
           "adjustments": [
             {
               "id": "mapuche-kona-slinger-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "mapuche-kona-bolas" }]
             },
             {
               "id": "mapuche-kona-slinger-adjustment-second",
@@ -2384,10 +2397,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L959",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [948, 956, 959, 961, 963, 969, 970, 971, 977, 978, 980]
+          "sourceLines": [952, 956, 959, 963, 970, 977, 980]
         }
       ]
     },
@@ -2482,21 +2495,25 @@
             },
             {
               "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 6, "age": 3 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 359, "age": 4 }]
+            },
+            {
+              "mode": "conditional",
               "entities": [
                 {
                   "kind": "unit",
-                  "id": 2584
+                  "id": 2584,
+                  "age": 4
                 }
               ]
             },
             {
               "mode": "as-needed",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 331
-                }
-              ]
+              "entities": [{ "kind": "unit", "id": 331 }]
             }
           ],
           "adjustments": [
@@ -2506,22 +2523,26 @@
             },
             {
               "id": "tupi-champi-slinger-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 6 }]
             },
             {
               "id": "tupi-champi-slinger-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359 }]
             },
             {
               "id": "tupi-champi-slinger-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 2584 }]
+            },
+            {
+              "id": "tupi-champi-slinger-adjustment-fifth",
+              "requires": [{ "kind": "route", "id": "tupi-blackwood-halberdier" }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1024",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1018, 1022, 1024, 1025, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1054]
+          "sourceLines": [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
         },
         {
           "id": "tupi-blackwood-halberdier",
@@ -2573,16 +2594,24 @@
                   "age": 4
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 6, "age": 3 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 2584, "age": 4 }]
             }
           ],
           "adjustments": [
             {
               "id": "tupi-blackwood-halberdier-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 2554 }]
             },
             {
               "id": "tupi-blackwood-halberdier-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 6 }]
             },
             {
               "id": "tupi-blackwood-halberdier-adjustment-third",
@@ -2590,14 +2619,18 @@
             },
             {
               "id": "tupi-blackwood-halberdier-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 2584 }]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-fifth",
+              "requires": [{ "kind": "route", "id": "tupi-champi-slinger" }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1025",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1018, 1022, 1024, 1025, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+          "sourceLines": [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
         }
       ]
     },
