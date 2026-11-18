@@ -203,8 +203,8 @@
   font-weight: 600;
 }
 
-.formation-fold:not([open]) .formation-fold-open,
-.formation-fold[open] .formation-fold-closed {
+.formation-fold:not([open]) > summary .formation-fold-open,
+.formation-fold[open] > summary .formation-fold-closed {
   display: none;
 }
 
