@@ -297,6 +297,54 @@
   background: transparent;
 }
 
+.civ-read .brow-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 8px;
+}
+
+.civ-read .brow-t {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--civ-ink);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.civ-read .brow-action {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-link);
+  background: var(--color-surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+.civ-read .brow-action:hover {
+  background: var(--color-link-soft);
+}
+
+.civ-read .civ-bonus-warning,
+.civ-read .civ-team-note {
+  margin: 0 8px 10px;
+  font-size: 13px;
+}
+
+.civ-read .civ-bonus-warning {
+  color: var(--color-warn);
+}
+
+.civ-read .civ-team-note {
+  color: var(--civ-ink-3);
+}
+
 .civ-read .blrows {
   margin: 0;
   box-shadow: 0 1px 0 var(--civ-line);

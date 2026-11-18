@@ -1,0 +1,241 @@
+.civ-bonus-dialog {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(720px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-2);
+}
+
+.civ-bonus-dialog::backdrop {
+  background: var(--color-scrim);
+}
+
+.civ-bonus-dialog-header,
+.civ-bonus-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-surface);
+}
+
+.civ-bonus-dialog-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.civ-bonus-dialog-footer {
+  border-top: 1px solid var(--color-border);
+}
+
+.civ-bonus-dialog-civ {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.civ-bonus-dialog-header h2 {
+  margin: 2px 0 0;
+  font-size: 20px;
+}
+
+.civ-bonus-dialog-scroll {
+  min-height: 0;
+  padding: 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}
+
+.civ-bonus-dialog-original {
+  margin: 0 0 12px;
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.civ-bonus-dialog-team,
+.civ-bonus-dialog-warning,
+.civ-bonus-dialog-error {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+
+.civ-bonus-dialog-warning {
+  color: var(--color-warn);
+  background: var(--color-warn-soft);
+}
+
+.civ-bonus-dialog-error {
+  color: var(--color-bad);
+  background: var(--color-bad-soft);
+}
+
+.civ-bonus-dialog button,
+.civ-bonus-dialog-detail {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-link);
+  background: var(--color-surface);
+  font: inherit;
+}
+
+.civ-bonus-dialog-detail {
+  display: inline-flex;
+  align-items: center;
+}
+
+.civ-bonus-dialog-close {
+  display: inline-grid;
+  place-items: center;
+}
+
+.civ-bonus-dialog :where(a, button):focus-visible {
+  outline: 3px solid var(--color-accent-ring);
+  outline-offset: 2px;
+}
+
+.civ-bonus-dialog-scroll :where(a, summary) {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.bonus-evidence-section {
+  margin: 24px 0;
+}
+
+.bonus-evidence-section > h4 {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+}
+
+.bonus-raw-entry {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+
+.bonus-raw-entry h5 {
+  margin: 0 0 8px;
+}
+
+.bonus-raw-meta {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.bonus-raw-meta > div {
+  display: grid;
+  grid-template-columns: minmax(72px, auto) 1fr;
+  gap: 8px;
+}
+
+.bonus-raw-meta dt {
+  color: var(--color-muted);
+}
+
+.bonus-raw-meta dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.bonus-raw-fx {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.bonus-raw-fx small,
+.bonus-raw-fx code {
+  overflow-wrap: anywhere;
+}
+
+.bonus-raw-target-title {
+  margin: 10px 0 4px;
+  color: var(--color-muted);
+}
+
+.bonus-raw-target {
+  margin-right: 4px;
+  padding: 0 4px;
+}
+
+.bonus-raw-more-targets {
+  margin-top: 4px;
+}
+
+.bonus-raw-more-targets summary,
+.civ-bonus-dialog .datfx > summary {
+  cursor: pointer;
+}
+
+.civ-bonus-dialog-warning p {
+  margin: 8px 0 0;
+}
+
+.civ-bonus-dialog-pending p {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+}
+
+.bonus-evidence-notes > p {
+  margin: 8px 0;
+  color: var(--color-muted);
+}
+
+.bonus-raw-rules code {
+  display: block;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.bonus-raw-meta {
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .civ-bonus-dialog {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .civ-bonus-dialog-header {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+
+  .civ-bonus-dialog-footer {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+
+  .civ-bonus-dialog-scroll {
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+}

@@ -233,6 +233,7 @@ function FormationSection({
   routes = [],
   error = false,
   pending = false,
+  suppressRestore = false,
   retry,
 }: {
   civ: string;
@@ -240,10 +241,11 @@ function FormationSection({
   routes?: FormationView[];
   error?: boolean;
   pending?: boolean;
+  suppressRestore?: boolean;
   retry?: () => void;
 }) {
   const { pathname, search } = useLocation();
-  const { root, remember } = useFormationNavigation(civ, pending && !error);
+  const { root, remember } = useFormationNavigation(civ, pending && !error, suppressRestore);
   const [requestedRetry, setRequestedRetry] = useState(false);
   const retrying = requestedRetry && pending;
   const retryReady = requestedRetry && !pending && !error;
@@ -326,11 +328,18 @@ function FormationSection({
   );
 }
 
-export function CivFormations({ civ, resources }: { civ: string; resources: CoreTreesResources }) {
+export function CivFormations({ civ, resources, suppressRestore = false }: { civ: string; resources: CoreTreesResources; suppressRestore?: boolean }) {
   const content = civFormationContent.find((entry) => entry.civ === civ);
   const routes = approvedFormations(content);
   if (!content || !routes.some((route) => currentFormationPatch(route.patch, DATA_PATCH))) {
-    return <FormationSection civ={civ} content={content} routes={routes.map((route) => projectFormation(route, civ, DATA_PATCH))} />;
+    return (
+      <FormationSection
+        civ={civ}
+        content={content}
+        routes={routes.map((route) => projectFormation(route, civ, DATA_PATCH))}
+        suppressRestore={suppressRestore}
+      />
+    );
   }
   const { core, trees, retry } = resources;
   const catalog = core.data && trees.data ? { core: core.data, trees: trees.data } : undefined;
@@ -338,5 +347,15 @@ export function CivFormations({ civ, resources }: { civ: string; resources: Core
     .filter((route) => catalog || !currentFormationPatch(route.patch, DATA_PATCH))
     .map((route) => projectFormation(route, civ, DATA_PATCH, catalog, routes));
   const error = core.error || trees.error;
-  return <FormationSection civ={civ} content={content} routes={visible} pending={!error && (core.pending || trees.pending)} error={error} retry={retry} />;
+  return (
+    <FormationSection
+      civ={civ}
+      content={content}
+      routes={visible}
+      pending={!error && (core.pending || trees.pending)}
+      error={error}
+      retry={retry}
+      suppressRestore={suppressRestore}
+    />
+  );
 }

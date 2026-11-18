@@ -54,14 +54,22 @@ export function HistoryReaderLink({ to, from, id, expanded, children }: { to: st
   );
 }
 
-export function EncyclopediaHistoryLink({ entityId, enabled = true }: { entityId: string; enabled?: boolean }) {
+export function EncyclopediaHistoryLink({
+  entityId,
+  enabled = true,
+  restoreEnabled = true,
+}: {
+  entityId: string;
+  enabled?: boolean;
+  restoreEnabled?: boolean;
+}) {
   const location = useLocation();
   const navigation = useNavigationType();
   const to = encyclopediaHistoryPath(entityId, location.pathname, location.search, location.hash);
   const from = new URLSearchParams(to.split('?')[1]).get('histReturn')!;
   const id = 'encyclopedia-complete-history';
   useEffect(() => {
-    if (!enabled || navigation !== 'POP') return;
+    if (!enabled || !restoreEnabled || navigation !== 'POP') return;
     const saved = savedHistoryVisit(location);
     if (saved?.focusId !== id) return;
     const frame = requestAnimationFrame(() => {
@@ -69,7 +77,7 @@ export function EncyclopediaHistoryLink({ entityId, enabled = true }: { entityId
       window.scrollTo(0, saved.y);
     });
     return () => cancelAnimationFrame(frame);
-  }, [enabled, location, navigation]);
+  }, [enabled, location, navigation, restoreEnabled]);
   if (!enabled) return null;
   return (
     <div className="entity-history-entry">
