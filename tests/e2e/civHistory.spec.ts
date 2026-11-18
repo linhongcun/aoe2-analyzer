@@ -12,6 +12,11 @@ for (const theme of ['light', 'dark']) {
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.setViewportSize({ width, height: 900 });
       await page.goto('./#/civ/Chinese');
+      const historyFold = page.getByTestId('civ-history-summary');
+      await expect(page.locator('#history')).toBeVisible();
+      await expect(page.getByRole('heading', { level: 2, name: '历史与更新' })).toBeVisible();
+      await expect(historyFold).not.toHaveAttribute('open', '');
+      await historyFold.locator('summary').click();
       const history = page.getByRole('article', { name: '文明历史', exact: true });
       await expect(history).toBeVisible();
       await expect(history.getByRole('heading', { level: 2, name: '文明历史', exact: true })).toBeVisible();
@@ -48,29 +53,81 @@ for (const theme of ['light', 'dark']) {
   }
 }
 
-test('切换文明与页签：背景不串页，更新历史保留补丁语义', async ({ page }) => {
+test('#1137 切换文明与章节：历史背景不串页，更新 Fold 保留补丁语义', async ({ page }) => {
   await page.goto('./#/civ/Franks');
+  const historyFold = page.getByTestId('civ-history-summary');
+  const updatesFold = page.getByTestId('civ-patches');
+  await expect(historyFold).not.toHaveAttribute('open', '');
+  await expect(updatesFold).not.toHaveAttribute('open', '');
+  await historyFold.locator('summary').click();
   const history = page.getByTestId('civ-history');
   await expect(history).toContainText('法兰克');
   await history.locator('summary').click();
   await expect(history.locator('details')).toHaveAttribute('open', '');
-  await page.getByRole('tab', { name: '数据', exact: true }).click();
-  await expect(history).toHaveCount(0);
-  await page.getByRole('tab', { name: '概览', exact: true }).click();
-  await expect(history.locator('details')).not.toHaveAttribute('open', '');
-  await history.locator('summary').click();
+  await updatesFold.locator('summary').click();
+  await expect(updatesFold).toHaveAttribute('open', '');
   await expect(history.locator('details')).toHaveAttribute('open', '');
   const originalSummary = await history.locator('.civ-history-lead').innerText();
   await page.evaluate(() => {
     window.location.hash = '/civ/Khitans';
   });
+  await expect(historyFold).not.toHaveAttribute('open', '');
+  await historyFold.locator('summary').click();
   await expect(history).toContainText('契丹');
   await expect(history.locator('.civ-history-lead')).not.toHaveText(originalSummary);
   await expect(history.locator('details')).not.toHaveAttribute('open', '');
   await expect(history.getByRole('link', { name: /官方原文/ })).toHaveAttribute('href', /ageofempires\.com/);
   await page.goto('./#/civ/Chinese?tab=history');
-  await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect(history).toHaveCount(0);
+  await expect(page.locator('#patches')).toHaveAttribute('open', '');
+  await expect(page.getByTestId('civ-history-summary')).not.toHaveAttribute('open', '');
+});
+
+for (const hash of ['#formations', '#formation-paladin-skirmisher']) {
+  test('#1137 历史 POP 保留阵容锚点并由历史链接恢复 ' + hash, async ({ page }) => {
+    await page.goto('./#/civ/Spanish' + hash);
+    const updates = page.locator('#patches');
+    await updates.locator('summary').click();
+    const historyLink = page.getByRole('link', { name: '查看完整历史' });
+    await historyLink.scrollIntoViewIfNeeded();
+    const savedY = await page.evaluate(() => scrollY);
+    await historyLink.click();
+    await expect(page).toHaveURL(/#\/patches\?obj=civ%3ASpanish/u);
+    await page.goBack();
+    await expect(page).toHaveURL(new RegExp('/civ/Spanish' + hash + '$'));
+    await expect(page.locator('#patches')).toHaveAttribute('open', '');
+    await expect(historyLink).toBeFocused();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(savedY);
+  });
+}
+
+test('#1137 历史 POP owner 抑制待加载阵容的延迟锚点跳转', async ({ page }) => {
+  let unblock!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    unblock = resolve;
+  });
+  await page.route(/\/assets\/trees-[^/]+\.js$/, async (route) => {
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto('./#/civ/Spanish#formation-paladin-skirmisher', { waitUntil: 'domcontentloaded' });
+    const formations = page.locator('#formations');
+    await expect(formations.getByRole('status').filter({ hasText: '正在读取推荐阵容' })).toBeAttached();
+    await page.locator('#patches summary').click();
+    const historyLink = page.getByRole('link', { name: '查看完整历史' });
+    await historyLink.scrollIntoViewIfNeeded();
+    const savedY = await page.evaluate(() => scrollY);
+    await historyLink.click();
+    await page.goBack();
+    await expect(historyLink).toBeFocused();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(savedY);
+    unblock();
+    await expect(formations.getByRole('status').filter({ hasText: '正在读取推荐阵容' })).toHaveCount(0);
+    await expect(historyLink).toBeFocused();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(savedY);
+  } finally {
+    unblock();
+  }
 });
 
 for (const width of [360, 375]) {

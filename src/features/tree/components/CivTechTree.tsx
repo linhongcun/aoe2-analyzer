@@ -331,12 +331,8 @@ export default function CivTechTree({ civEn, resources }: { civEn: string; resou
   if (!civ) return null;
 
   return (
-    <section id="techtree" className="civ-techtree tree-pane" data-tree-civ={civ.en} data-testid="civ-techtree" aria-labelledby="civ-tt-title">
+    <>
       <div className="civ-tt-head">
-        <div className="civ-tt-title">
-          <p className="civ-kicker">能造什么、缺什么</p>
-          <h2 id="civ-tt-title">科技树</h2>
-        </div>
         <div className="civ-tt-tools">
           <CivPicker
             id="civ-tt-civ"
@@ -423,6 +419,6 @@ export default function CivTechTree({ civEn, resources }: { civEn: string; resou
         <TreeCanvas trees={trees.data!} core={core.data!} civ={civ} cmp={activeCompare?.en ?? null} jumpSlot={jumpSlot} />
       )}
       {showTree && activeCompare ? <DiffLists trees={trees.data!} core={core.data!} mine={civ} other={activeCompare} /> : null}
-    </section>
+    </>
   );
 }

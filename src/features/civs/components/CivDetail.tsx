@@ -1,10 +1,12 @@
-import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
-import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Suspense, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { Link, Navigate, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn, civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
+import { arenaCastleGold } from '../arenaCastleGold';
+import { nomadReveal } from '../nomadReveal';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Civ, Unit } from '../../../domain/types';
@@ -18,8 +20,8 @@ import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/use
 import { usePreviousHistoryEntry } from '../../../shared/utils/navigationEntry';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { EncyclopediaHistoryLink, savedHistoryVisit } from '../../../shared/ui/HistoryReaderLink';
-import { ArenaCastleGold } from './ArenaCastleGold';
-import { NomadReveal } from './NomadReveal';
+import { ArenaCastleGoldView } from './ArenaCastleGold';
+import { NomadRevealView } from './NomadReveal';
 import { CivHistory } from './CivHistory';
 import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
@@ -43,30 +45,49 @@ const TAB_ANCHOR: Record<string, string> = {
 const CHAPTERS = [
   ['identity', '身份'],
   ['bonuses', '加成'],
-  ['kit', '兵种'],
-  ['formations', '推荐阵容'],
+  ['kit', '套件'],
   ['techtree', '科技树'],
-  ['more', '其他'],
+  ['history', '历史'],
+  ['formations', '推荐阵容'],
+  ['insights', '打法解读'],
+  ['more', '工具'],
 ] as const;
 
-const CHAPTER_IDS = CHAPTERS.map(([id]) => id);
+type CivRestoreOwner = 'bonus' | 'formation' | 'history' | null;
+
+interface CivRestoreEntry {
+  civ: string;
+  key: string;
+  pathname: string;
+  search: string;
+  hash: string;
+  owner: CivRestoreOwner;
+}
 
 /** 章节条跟着滚动标出当前所在章节。 */
-function useActiveChapter(pathname: string, hash: string): string {
-  const [active, setActive] = useState<string>(CHAPTER_IDS[0]!);
+function useActiveChapter(pathname: string, hash: string, chapterIds: readonly string[]): string {
+  const [active, setActive] = useState<string>(chapterIds[0] ?? 'identity');
   useEffect(() => {
     let frame = 0;
+    const root = document.querySelector<HTMLElement>('.civ-read');
+    const nav = root?.querySelector<HTMLElement>('.civ-chapters');
     const read = () => {
       frame = 0;
-      let current: string = CHAPTER_IDS[0]!;
+      const barHeight = nav?.getBoundingClientRect().height ?? 44;
+      const heightValue = String(barHeight) + 'px';
+      if (root?.style.getPropertyValue('--civ-chapter-bar-height') !== heightValue) root?.style.setProperty('--civ-chapter-bar-height', heightValue);
+      const boundary = (nav?.getBoundingClientRect().bottom ?? 140) + 12;
+      const first = chapterIds[0] ?? 'identity';
+      let current = first;
       let nearest = -Infinity;
-      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2 && scrollY > 0) current = CHAPTER_IDS[CHAPTER_IDS.length - 1]!;
+      if (chapterIds.length && innerHeight + scrollY >= document.documentElement.scrollHeight - 2 && scrollY > 0)
+        current = chapterIds[chapterIds.length - 1] ?? first;
       else
-        for (const id of CHAPTER_IDS) {
-          const el = document.getElementById(id);
+        for (const id of chapterIds) {
+          const el = root?.querySelector<HTMLElement>('#' + id);
           if (!el) continue;
           const top = el.getBoundingClientRect().top;
-          if (top <= 140 && (top > nearest || (top === nearest && hash === `#${id}`))) {
+          if (top <= boundary && (top > nearest || (top === nearest && hash === '#' + id))) {
             current = id;
             nearest = top;
           }
@@ -79,30 +100,36 @@ function useActiveChapter(pathname: string, hash: string): string {
     onScroll();
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll);
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(onScroll);
+    if (root) observer?.observe(root);
+    if (nav) observer?.observe(nav);
+    for (const id of chapterIds) {
+      const element = root?.querySelector<HTMLElement>('#' + id);
+      if (element) observer?.observe(element);
+    }
     return () => {
       removeEventListener('scroll', onScroll);
       removeEventListener('resize', onScroll);
+      observer?.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [pathname, hash]);
+  }, [chapterIds, hash, pathname]);
   return active;
+}
+
+function chapterFocusTarget(id: string): HTMLElement | null {
+  const section = document.getElementById(id);
+  if (!section) return null;
+  return id === 'techtree' ? section : section.querySelector<HTMLElement>('h1, h2');
 }
 
 function TechTreePending() {
   return (
-    <section id="techtree" className="civ-techtree" data-testid="civ-techtree" aria-labelledby="civ-tt-title">
-      <div className="civ-tt-head">
-        <div className="civ-tt-title">
-          <p className="civ-kicker">能造什么、缺什么</p>
-          <h2 id="civ-tt-title">科技树</h2>
-        </div>
-      </div>
-      <div className="civ-tt-frame is-end">
-        <p className="civ-tt-skel" role="status">
-          正在加载科技树…
-        </p>
-      </div>
-    </section>
+    <div className="civ-tt-frame is-end">
+      <p className="civ-tt-skel" role="status">
+        正在加载科技树…
+      </p>
+    </div>
   );
 }
 
@@ -192,33 +219,78 @@ export default function CivDetail({ techTree }: { techTree: TechTreeComponent })
 function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeComponent }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const homeReturn = startReturnPath(location.search);
   const resources = useCoreTrees();
   const core = resources.core.data;
   const previous = usePreviousHistoryEntry();
   const bonusReturn = useCivBonusReturn(c.en);
+  const historySnapshot = savedHistoryVisit(location);
+  const historyFocusId = historySnapshot?.focusId;
+  const restoreOwnerEntry = useMemo<CivRestoreEntry>(() => {
+    const formationOwner = readFormationReturn(c.en, previous);
+    const owner: CivRestoreOwner = bonusReturn.ownsRestore
+      ? 'bonus'
+      : formationOwner
+        ? 'formation'
+        : navigationType === 'POP' && historyFocusId === 'encyclopedia-complete-history'
+          ? 'history'
+          : null;
+    return {
+      civ: c.en,
+      key: location.key,
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+      owner,
+    };
+  }, [bonusReturn.ownsRestore, c.en, historyFocusId, location.hash, location.key, location.pathname, location.search, navigationType, previous]);
+  const restoreOwner = restoreOwnerEntry.owner;
+  const suppressFormationRestore = restoreOwner === 'bonus' || restoreOwner === 'history';
+  const historyRestoreEnabled = restoreOwner !== 'bonus' && restoreOwner !== 'formation';
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
-  const chapter = useActiveChapter(location.pathname, location.hash);
+  const { insights, arenaGold, nomad } = useMemo(
+    () => ({
+      insights: civInsights(c.en),
+      arenaGold: arenaCastleGold(c.en),
+      nomad: nomadReveal(c.en),
+    }),
+    [c.en],
+  );
+  const hasInsights = insights.length > 0 || arenaGold !== null || nomad !== null;
+  const chapters = useMemo(() => CHAPTERS.filter(([id]) => id !== 'insights' || hasInsights), [hasInsights]);
+  const chapterIds = useMemo(() => chapters.map(([id]) => id), [chapters]);
+  const chapter = useActiveChapter(location.pathname, location.hash, chapterIds);
+  const chapterFocusConsumed = useRef<string | null>(null);
   useEffect(() => {
     session.lastCiv = c.en;
+    if (restoreOwner !== null) return;
     if (tab != null && tab !== 'history') {
       const next = new URLSearchParams(location.search);
       next.delete('tab');
       const anchor = TAB_ANCHOR[tab] ?? '';
-      navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
+      navigate({ pathname: location.pathname, search: next.toString() ? '?' + next : '', hash: anchor ? '#' + anchor : '' }, { replace: true });
       return;
     }
-    if (bonusReturn.ownsRestore || readFormationReturn(c.en, previous) || isFormationHash(location.hash)) return;
+    if (isFormationHash(location.hash)) return;
     const id = location.hash.replace(/^#/, '') || (tab === 'history' ? 'patches' : '');
     if (!id) {
-      scrollTo(0, 0);
+      if (navigationType !== 'POP') scrollTo(0, 0);
       return;
     }
-    const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+    if (navigationType === 'POP' && previous) return;
+    const requested = (location.state as { civChapterFocus?: unknown } | null)?.civChapterFocus === id;
+    const focus = navigationType === 'PUSH' && requested && chapterFocusConsumed.current !== location.key;
+    if (focus) chapterFocusConsumed.current = location.key;
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      target.scrollIntoView({ block: 'start' });
+      if (focus) chapterFocusTarget(id)?.focus({ preventScroll: true });
+    });
     return () => cancelAnimationFrame(frame);
-  }, [bonusReturn.ownsRestore, c, location.hash, location.key, location.pathname, location.search, navigate, previous, tab]);
-  const insights = civInsights(c.en);
+  }, [c, location.hash, location.key, location.pathname, location.search, location.state, navigate, navigationType, previous, restoreOwner, tab]);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
   const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
   const regional = core
@@ -236,7 +308,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     ['civ-tool-matchup', `/matchup?me=${c.en}`, '对局助手'],
     ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;
-  const historyOpen = tab === 'history' || location.hash === '#patches' || savedHistoryVisit(location)?.focusId === 'encyclopedia-complete-history';
+  const historyOpen = tab === 'history' || location.hash === '#patches' || historySnapshot?.focusId === 'encyclopedia-complete-history';
   return (
     <CivBackground civ={c.en} className="civ-read">
       <Breadcrumbs current={c.zh} />
@@ -258,7 +330,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
               </Link>
             </p>
           )}
-          <h1>
+          <h1 tabIndex={-1}>
             {c.zh}
             <span>{c.en}</span>
           </h1>
@@ -283,11 +355,26 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
         </div>
       </header>
       <nav className="civ-chapters" aria-label="本页章节">
-        {CHAPTERS.map(([id, label]) => (
+        {chapters.map(([id, label]) => (
           <Link
             key={id}
             to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }}
-            state={id === 'formations' ? { focusFormation: true } : undefined}
+            state={id === 'formations' ? { focusFormation: true } : location.hash === '#' + id ? undefined : { civChapterFocus: id }}
+            onClick={(event) => {
+              if (
+                id === 'formations' ||
+                location.hash !== '#' + id ||
+                event.defaultPrevented ||
+                event.button !== 0 ||
+                event.metaKey ||
+                event.ctrlKey ||
+                event.shiftKey ||
+                event.altKey
+              )
+                return;
+              document.getElementById(id)?.scrollIntoView({ block: 'start' });
+              chapterFocusTarget(id)?.focus({ preventScroll: true });
+            }}
             aria-current={chapter === id ? 'location' : undefined}
           >
             {label}
@@ -305,7 +392,9 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>
-          <h2 id="civ-kit-title">关键兵种与科技</h2>
+          <h2 id="civ-kit-title" tabIndex={-1}>
+            关键兵种与科技
+          </h2>
           <p className="note">
             名称进入单位或科技页。能造什么、缺什么见下方
             <Link to={{ pathname: location.pathname, search: location.search, hash: '#techtree' }}>科技树</Link>。
@@ -347,14 +436,46 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
         </section>
       </div>
-      <CivFormations key={c.en} civ={c.en} resources={resources} suppressRestore={bonusReturn.ownsRestore} />
-      <Suspense fallback={<TechTreePending />}>
-        <TechTree civEn={c.en} resources={resources} />
-      </Suspense>
-      {insights.length > 0 && <InsightSlot items={insights} />}
-      <ArenaCastleGold en={c.en} />
-      <NomadReveal en={c.en} />
+      <section id="techtree" className="civ-techtree tree-pane" data-tree-civ={c.en} data-testid="civ-techtree" aria-labelledby="civ-tt-title" tabIndex={-1}>
+        <div className="civ-tt-title">
+          <p className="civ-kicker">能造什么、缺什么</p>
+          <h2 id="civ-tt-title">科技树</h2>
+        </div>
+        <Suspense fallback={<TechTreePending />}>
+          <TechTree civEn={c.en} resources={resources} />
+        </Suspense>
+      </section>
+      <DetailSource note="加成、单位与科技来自当前数据目录" />
+      <section id="history" className="civ-history-chapter" aria-labelledby="civ-history-title">
+        <p className="civ-kicker">历史资料</p>
+        <h2 id="civ-history-title" tabIndex={-1}>
+          历史与更新
+        </h2>
+        <p className="note">历史背景用于了解来历，不作为当前版本机制说明。</p>
+        <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false} testId="civ-history-summary">
+          <CivHistory civ={c.en} />
+        </Fold>
+        <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
+          <EncyclopediaHistoryLink entityId={'civ/' + c.en} restoreEnabled={historyRestoreEnabled} />
+        </Fold>
+      </section>
+      <CivFormations key={c.en} civ={c.en} resources={resources} suppressRestore={suppressFormationRestore} />
+      {hasInsights && (
+        <section id="insights" className="civ-insights-chapter" aria-labelledby="civ-insights-title">
+          <h2 id="civ-insights-title" tabIndex={-1}>
+            打法解读
+          </h2>
+          {insights.length > 0 && <InsightSlot items={insights} />}
+          {arenaGold && <ArenaCastleGoldView card={arenaGold} />}
+          {nomad && <NomadRevealView card={nomad} />}
+        </section>
+      )}
+      <p className="note civ-reading-note">能力评分、团战位置和开局短句不作为本页推荐依据。</p>
       <section className="civ-more" id="more" data-testid="civ-more">
+        <p className="civ-kicker">继续使用</p>
+        <h2 id="civ-more-title" tabIndex={-1}>
+          工具
+        </h2>
         <p className="civ-continue" data-testid="civ-related-tools">
           <span className="civ-continue-lab">用这个文明继续：</span>
           {tools.map(([id, to, label]) => (
@@ -364,16 +485,6 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           ))}
         </p>
         <p className="note">这些入口沿用现有工具参数。阵容兵量、科技与成型总投入不会自动带入。</p>
-        <p className="civ-kicker">其他资料</p>
-        <h2>历史与更新</h2>
-        <p className="note">能力评分、团战位置和开局短句不作为本页推荐依据。</p>
-        <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false}>
-          <CivHistory civ={c.en} />
-        </Fold>
-        <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <EncyclopediaHistoryLink entityId={'civ/' + c.en} restoreEnabled={!bonusReturn.ownsRestore} />
-        </Fold>
-        <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>
     </CivBackground>
   );

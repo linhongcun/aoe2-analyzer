@@ -197,7 +197,7 @@ test.describe('civ bonus evidence dialog', () => {
     await expect(page.getByRole('heading', { name: '文明加成' })).toBeFocused();
   });
 
-  test('history POP then #formations bonus POP keeps bonus restoration owner', async ({ page }) => {
+  test('#1137 history POP then #formations bonus POP keeps bonus restoration owner', async ({ page }) => {
     await page.goto('./#/civ/Gurjaras#formations');
     await page.locator('#patches summary').click();
     await page.getByRole('link', { name: '查看完整历史' }).click();
@@ -215,6 +215,16 @@ test.describe('civ bonus evidence dialog', () => {
     await page.goBack();
     await expect(page).toHaveURL(/civ\/Gurjaras#formations/u);
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(sourceY);
+    const focused = await page.evaluate(() => {
+      const element = document.activeElement as HTMLElement | null;
+      return {
+        tag: element?.tagName,
+        id: element?.id,
+        label: element?.getAttribute('aria-label'),
+        bonusAction: element?.dataset.bonusAction,
+      };
+    });
+    expect(focused, JSON.stringify(focused)).toMatchObject({ bonusAction: 'Gurjaras-2' });
     await expect(trigger).toBeFocused();
     await expect(page.getByRole('dialog')).not.toBeVisible();
   });

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { historyFixture } from '../helpers/civUpdatesFixture';
 import { historyFor, type PatchArchive } from '../../src/domain/patchHistory';
 import {
+  encyclopediaHistoryPath,
   filterReaderEvents,
   historyArchiveFallback,
   historyReaderPath,
@@ -172,6 +173,13 @@ it('accepts exact single-layer object, encyclopedia, and known archive returns',
   expect(readerReturn(data, path)).toBe(path);
   expect(readerReturn(data, '/unit/1231/Cumans/4//0?tab=history')).toBe('/unit/1231/Cumans/4//0?tab=history');
   expect(readerReturn(data, '/civ/Cumans?tab=history#patches')).toBe('/civ/Cumans?tab=history#patches');
+  for (const chapter of ['history', 'insights']) {
+    const path = encyclopediaHistoryPath('civ/Cumans', '/civ/Cumans', '', '#' + chapter);
+    const returnTo = new URLSearchParams(path.slice(path.indexOf('?') + 1)).get('histReturn');
+    expect(returnTo).toBe('/civ/Cumans#' + chapter);
+    expect(readerReturn(data, returnTo)).toBe(returnTo);
+  }
+  expect(readerReturn(data, '/civ/Cumans#history-extra')).toBeNull();
   expect(readerReturn(data, '/building/79?tab=history')).toBe('/building/79?tab=history');
   expect(readerReturn(data, '/patches/185872?kind=adjust&q=111')).toBe('/patches/185872?kind=adjust&q=111');
   expect(readerEntity(data, query('obj=tech:716@retired'))?.id).toBe('tech/716@retired');
@@ -184,8 +192,9 @@ it('builds the archive fallback from valid object context without weakening the 
   expect(readerReturn(data, '/patches?' + invalid)).toBeNull();
   expect(historyArchiveFallback(data, invalid)).toBe('/patches?obj=unit%3A1231&histVersion=de-34055');
   const event = project('unit/1231')[0]!.event.id;
-  expect(historyArchiveFallback(data, query('obj=unit:1231&histOrder=oldest&histEvent=' + event)))
-    .toBe(historyReaderPath('unit/1231', query('histOrder=oldest'), event));
+  expect(historyArchiveFallback(data, query('obj=unit:1231&histOrder=oldest&histEvent=' + event))).toBe(
+    historyReaderPath('unit/1231', query('histOrder=oldest'), event),
+  );
   expect(historyArchiveFallback(data, query('obj=unit:1231&obj=unit:1233&histVersion=de-34055'))).toBe('/patches?read=versions');
 });
 
