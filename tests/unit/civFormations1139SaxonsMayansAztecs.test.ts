@@ -94,6 +94,9 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     expectFallback(project(removeBuilding(resources.core, 82)), tower, 'saxons-retainer-tower-adjustment-tenth');
     expectFallback(project(removeUnit(resources.core, 567)), tower, 'saxons-retainer-tower-adjustment-seventh');
     expectFallback(project(removeUnit(resources.core, 125)), tower, 'saxons-retainer-tower-adjustment-eighth');
+    const noMonk = project(removeUnit(resources.core, 125));
+    expectFallback(noMonk, tower, 'saxons-retainer-tower-adjustment-ninth');
+    expect(tower.adjustments[8]!.fallback).toContain('不据此声称僧侣可用');
     const noClericalRecruitment = project(removeTech(resources.core, 1491));
     expectFallback(noClericalRecruitment, tower, 'saxons-retainer-tower-adjustment-ninth');
     if (noClericalRecruitment.status === 'current') {
@@ -105,17 +108,23 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     expect(tower.adjustments[5]!.requires).toEqual([{ kind: 'unit', id: 83, age: 4 }]);
     expect(tower.adjustments[6]!.requires).toEqual([{ kind: 'unit', id: 567, age: 4 }]);
     expect(tower.adjustments[7]!.requires).toEqual([{ kind: 'unit', id: 125, age: 4 }]);
-    expect(tower.adjustments[8]!.requires).toEqual([{ kind: 'tech', id: 1491, age: 3 }]);
+    expect(tower.adjustments[8]!.requires).toEqual([
+      { kind: 'unit', id: 125, age: 4 },
+      { kind: 'tech', id: 1491, age: 3 },
+    ]);
     expect(tower.adjustments[9]!.requires).toEqual([
       { kind: 'building', id: 82, age: 4 },
       { kind: 'unit', id: 83, age: 4 },
     ]);
+    expect(tower.adjustments[9]!.when).toBe('现有城堡产能不足且确需扩产');
+    expect(tower.alternatives).toContain('长戟兵固定主力：不列为常驻主力');
+    expect(tower.alternatives).not.toContain('只按骑兵压力补');
     expect([resources.core.techById[1491]!.en, resources.core.techById[1491]!.zh, resources.core.techById[1491]!.age]).toEqual([
       'Clerical Recruitment',
       '神职人员招募',
       3,
     ]);
-    expect(resources.core.techById[1491]!.desc).toContain('招降射程 +1；训练速度 +33%');
+    expect(tower.adjustments[8]!.text).toContain(resources.core.techById[1491]!.desc);
     expect(resources.core.techById[1464]!.zh).toBe('盾墙');
     expect(tower.adjustments.some(({ requires = [] }) => requires.some(({ id }) => id === 1464))).toBe(false);
     expect(tower.attack).not.toContain('村民在前线建塔');

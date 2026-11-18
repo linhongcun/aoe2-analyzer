@@ -1309,7 +1309,10 @@
             },
             {
               "id": "saxons-retainer-tower-adjustment-ninth",
-              "requires": [{ "kind": "tech", "id": 1491, "age": 3 }]
+              "requires": [
+                { "kind": "unit", "id": 125, "age": 4 },
+                { "kind": "tech", "id": 1491, "age": 3 }
+              ]
             },
             {
               "id": "saxons-retainer-tower-adjustment-tenth",
@@ -2820,7 +2823,12 @@
                 {
                   "kind": "building",
                   "id": 235
-                },
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
                 {
                   "kind": "tech",
                   "id": 484
@@ -2833,7 +2841,12 @@
                 {
                   "kind": "unit",
                   "id": 6
-                },
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
                 {
                   "kind": "unit",
                   "id": 474
@@ -2841,7 +2854,7 @@
               ]
             },
             {
-              "mode": "support",
+              "mode": "mechanism-support",
               "entities": [
                 {
                   "kind": "tech",
@@ -2853,11 +2866,11 @@
           "adjustments": [
             {
               "id": "japanese-samurai-light-cavalry-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "japanese-samurai-light-cavalry-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 6, "age": 4 }]
             },
             {
               "id": "japanese-samurai-light-cavalry-adjustment-third",
@@ -2873,11 +2886,45 @@
             },
             {
               "id": "japanese-samurai-light-cavalry-adjustment-sixth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 5, "age": 4 }]
             },
             {
               "id": "japanese-samurai-light-cavalry-adjustment-seventh",
-              "requires": []
+              "requires": [{ "kind": "building", "id": 235, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 474, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-ninth",
+              "requires": [
+                { "kind": "building", "id": 235, "age": 4 },
+                { "kind": "tech", "id": 484, "age": 3 }
+              ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-tenth",
+              "requires": [
+                { "kind": "unit", "id": 331, "age": 4 },
+                { "kind": "tech", "id": 59, "age": 4 }
+              ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-eleventh",
+              "requires": [{ "kind": "unit", "id": 283, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-twelfth",
+              "requires": [{ "kind": "unit", "id": 567, "age": 4 }]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-thirteenth",
+              "requires": [
+                { "kind": "unit", "id": 492, "age": 4 },
+                { "kind": "unit", "id": 359, "age": 4 },
+                { "kind": "unit", "id": 331, "age": 4 }
+              ]
             }
           ],
           "source": {
