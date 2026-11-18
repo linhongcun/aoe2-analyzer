@@ -13,32 +13,60 @@ const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.
 const axe = async (page: Page, sel: string) => (await new AxeBuilder({ page }).include(sel).withRules(['color-contrast']).analyze()).violations;
 
 test.describe('issue 317 罗马加成标签', () => {
-  test('#/civ/Romans：第 1 条部分计入、第 3 条已计入，展开后按工具列出', async ({ page }) => {
+  test('#/civ/Romans：正文常显，作用与依据按工具列出', async ({ page }) => {
     await page.goto('./#/civ/Romans');
     const r0 = page.locator('.brow[data-bonus="0"]');
     const r2 = page.locator('.brow[data-bonus="2"]');
-    await expect(r0.locator('.brow-h .tag')).toHaveText('部分计入');
-    await expect(r2.locator('.brow-h .tag')).toHaveText('已计入');
-    await r0.locator('.brow-h').click();
-    await expect(r0).not.toContainText('仅文本，未计入数值');
-    await expect(r0.locator('.brow-b')).toContainText('部分计入');
-    await expect(r0.locator('[data-usage="sim"]')).toContainText('开局模拟');
-    await expect(r0.locator('[data-usage="gather"]')).toContainText('真实成本');
-    await expect(r0.locator('[data-usage="construction"]')).toContainText('施工工具');
-    await expect(r0.locator('[data-usage="repair"]')).toContainText('修理');
-    await expect(r0.locator('[data-usage="sim"]')).toHaveAttribute('data-on', 'true');
-    await expect(r0.locator('[data-usage="sim"]')).toContainText('村民采集与建造加成已计入');
-    await expect(r0.locator('[data-usage="gather"]')).toHaveAttribute('data-on', 'true');
-    await expect(r0.locator('[data-usage="construction"]')).toHaveAttribute('data-on', 'true');
-    await expect(r0.locator('[data-usage="repair"]')).toHaveAttribute('data-on', 'false');
-    await r2.locator('.brow-h').click();
-    await expect(r2).not.toContainText('仅文本，未计入数值');
-    await expect(r2.locator('[data-usage="cost"]')).toContainText('训练费用');
-    await expect(r2.locator('[data-usage]')).toHaveCount(1);
-    await expect(r2.locator('[data-usage="cost"]')).toContainText('单位 PK「等资源」');
+    const original0 = await r0.locator('.brow-t').innerText();
+    const original2 = await r2.locator('.brow-t').innerText();
+    await expect(r0.locator('.brow-t')).toContainText('村民收集、建造和修理');
+    await expect(r2.locator('.brow-t')).toBeVisible();
+    const trigger0 = r0.getByRole('button', { name: /作用与依据/u });
+    await expect(trigger0).toBeVisible();
+    await trigger0.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator('.civ-bonus-dialog-original')).toHaveText(original0);
+    await expect(dialog).not.toContainText('仅文本，未计入数值');
+    const usage0 = dialog.locator('.bonus-evidence-section').filter({ hasText: '本站工具计入情况' });
+    await expect(usage0.getByRole('heading', { name: '本站工具计入情况' })).toBeVisible();
+    await expect(usage0.locator('[data-usage="sim"]')).toContainText('开局模拟');
+    await expect(usage0.locator('[data-usage="gather"]')).toContainText('真实成本');
+    await expect(usage0.locator('[data-usage="construction"]')).toContainText('施工工具');
+    await expect(usage0.locator('[data-usage="repair"]')).toContainText('修理');
+    await expect(usage0.locator('[data-on="true"]')).toHaveCount(3);
+    await expect(usage0.locator('[data-on="false"]')).toHaveCount(1);
+    await expect(usage0.locator('[data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+    await expect(usage0.locator('[data-usage="sim"]')).toContainText('村民采集与建造加成已计入');
+    await expect(usage0.locator('[data-usage="gather"]')).toHaveAttribute('data-on', 'true');
+    await expect(usage0.locator('[data-usage="construction"]')).toHaveAttribute('data-on', 'true');
+    await expect(usage0.locator('[data-usage="repair"]')).toHaveAttribute('data-on', 'false');
+    await expect(dialog).not.toContainText('经济/费用效果（文本展示）');
+    await dialog.getByRole('button', { name: '关闭', exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+    await r2.getByRole('button', { name: /作用与依据/u }).click();
+    const dialog2 = page.getByRole('dialog');
+    await expect(dialog2).toBeVisible();
+    await expect(dialog2.locator('.civ-bonus-dialog-original')).toHaveText(original2);
+    await expect(dialog2).not.toContainText('仅文本，未计入数值');
+    const usage2 = dialog2.locator('.bonus-evidence-section').filter({ hasText: '本站工具计入情况' });
+    await expect(usage2.getByRole('heading', { name: '本站工具计入情况' })).toBeVisible();
+    await expect(usage2.locator('[data-usage="cost"]')).toContainText('训练费用');
+    await expect(usage2.locator('[data-usage]')).toHaveCount(1);
+    await expect(usage2.locator('[data-usage="cost"]')).toHaveAttribute('data-on', 'true');
+    await expect(usage2.locator('[data-usage="cost"]')).toContainText('单位 PK「等资源」');
     // Steve 设计审查：有工具计入的加成不再显示「.dat 经济/费用效果（文本展示）」
-    await expect(r0).not.toContainText('经济/费用效果（文本展示）');
-    await expect(r2).not.toContainText('经济/费用效果（文本展示）');
+    await expect(dialog2).not.toContainText('经济/费用效果（文本展示）');
+  });
+
+  test('原句中的负号与数值在同一个不换行片段内', async ({ page }) => {
+    await page.goto('./#/civ/Burgundians');
+    const row = page.locator('.brow').filter({ hasText: '马厩科技费用 - 50%' });
+    const text = row.locator('.brow-t');
+    await expect(row).toHaveCount(1);
+    await expect(text.locator('span.num.nw')).toHaveCount(1);
+    await expect(text.locator('span.num.nw')).toHaveText('- 50%');
+    expect(await text.evaluate((element) => element.textContent)).toBe('马厩科技费用 - 50%');
   });
 
   test('src = text：凯尔特 / 突厥 / 朝鲜被工具计入，不再显示「无 .dat 数据」；没有工具计入的（不列颠羊倌）仍显示', async ({ page }) => {
@@ -83,13 +111,17 @@ test.describe('issue 317 罗马加成标签', () => {
 
   for (const theme of ['light', 'dark'])
     for (const w of WIDTHS)
-      test(`${theme} @${w}：标签对比度 AA、.num 不折行、不横向溢出`, async ({ page }) => {
+      test(`${theme} @${w}：作用与依据、.num 不折行、不横向溢出`, async ({ page }) => {
         await page.addInitScript((v) => localStorage.setItem('aoe2-theme', v), theme);
         await page.setViewportSize({ width: w, height: 900 });
         await page.goto('./#/civ/Romans');
-        await page.locator('.brow[data-bonus="0"] .brow-h').click();
-        await expect(page.locator('.brow[data-bonus="0"] .busage')).toBeVisible();
+        const row = page.locator('.brow[data-bonus="0"]');
+        await expect(row.locator('.brow-t')).toBeVisible();
+        await row.getByRole('button', { name: /作用与依据/u }).click();
+        const dialog = page.getByRole('dialog');
+        await expect(dialog.locator('.bonus-evidence-section').filter({ hasText: '本站工具计入情况' }).locator('.busage')).toBeVisible();
         expect(await axe(page, '.blrows')).toEqual([]);
+        expect(await axe(page, '.civ-bonus-dialog')).toEqual([]);
         expect(await noWrap(page, '.num:visible')).toBe(true);
         expect(await noOverflow(page)).toBe(true);
         await page.goto('./#/civ/Romans/bonus/0');

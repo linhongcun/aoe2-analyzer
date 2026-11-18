@@ -55,7 +55,7 @@ export function readFormationReturn(civ: string, previous: NavigationEntry | und
   return memory && previous?.formationReturn === memory.token && previous.idx === memory.idx + 1 ? memory : undefined;
 }
 
-export function useFormationNavigation(civ: string, pending: boolean) {
+export function useFormationNavigation(civ: string, pending: boolean, suppressRestore = false) {
   const root = useRef<HTMLElement>(null);
   const { key, hash, state } = useLocation();
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ export function useFormationNavigation(civ: string, pending: boolean) {
   const focusAnchor = useNavigationType() !== 'POP' && state?.focusFormation === true;
 
   useEffect(() => {
+    if (suppressRestore) return;
     const find = (id: string) => {
       const node = document.getElementById(id);
       return root.current?.contains(node) ? node : null;
@@ -97,7 +98,7 @@ export function useFormationNavigation(civ: string, pending: boolean) {
       }
     });
     return () => cancelAnimationFrame(frame);
-  }, [civ, focusAnchor, hash, key, pending, previous]);
+  }, [civ, focusAnchor, hash, key, pending, previous, suppressRestore]);
 
   function remember(event: MouseEvent<HTMLAnchorElement>, route: string, to: string) {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;

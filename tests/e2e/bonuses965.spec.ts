@@ -33,20 +33,20 @@ test.describe('#965 文明加成按文明分组', () => {
     await expect(page.locator('#bonus [role="tablist"]')).toHaveCount(0);
   });
 
-  test('五个文明的列表档位与文明页同一条一致，罗马第 1 条是部分计入', async ({ page }) => {
+  test('文明页五个样本保留原文并提供独立作用按钮', async ({ page }) => {
     const samples = [
-      ['Romans', '0', '部分计入'],
-      ['Franks', '0'],
-      ['Britons', '0'],
-      ['Poles', '2'],
-      ['Mayans', '1'],
+      ['Romans', 0],
+      ['Franks', 0],
+      ['Britons', 0],
+      ['Poles', 2],
+      ['Mayans', 1],
     ] as const;
-    for (const [civ, idx, expected] of samples) {
-      await page.goto('./#/bonuses');
-      const listTag = (await page.locator(`#blist a[href$="/civ/${civ}/bonus/${idx}"] .bg-lv`).innerText()).trim();
-      if (expected) expect(listTag).toBe(expected);
+    for (const [civ, idx] of samples) {
+      const source = (civs as { en: string; bon: string[] }[]).find((item) => item.en === civ)!.bon[idx]!;
       await page.goto(`./#/civ/${civ}`);
-      await expect(page.locator(`.brow[data-bonus="${idx}"] .brow-h .tag`)).toHaveText(listTag);
+      const row = page.locator(`.brow[data-bonus="${idx}"]`);
+      await expect(row.locator('.brow-t')).toHaveText(source);
+      await expect(row.getByRole('button', { name: `作用与依据：${source}` })).toBeVisible();
     }
   });
 

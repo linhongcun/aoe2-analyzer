@@ -1,11 +1,10 @@
-import { lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn, civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
-import { civBonuses } from '../../../domain/civBonus';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Civ, Unit } from '../../../domain/types';
@@ -26,26 +25,11 @@ import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { CivFormations } from './CivFormations';
+import { BonusRows } from './BonusRows';
+import { useCivBonusReturn } from './useCivBonusReturn';
 import { isFormationHash, readFormationReturn } from './useFormationNavigation';
 import './civ-read.css';
 import './civ-start-return.css';
-
-// 展开加成的计算依赖 CORE。避免它成为正文的静态加载前提。
-const BonusRows = lazy(() => import('./BonusRows').then(({ BonusRows }) => ({ default: BonusRows })));
-
-function BonusTextList({ civ }: { civ: Civ }) {
-  return (
-    <ul className="blrows">
-      {civBonuses(civ).map((bonus) => (
-        <li key={bonus.id} className="brow">
-          <Link className="brow-h" to={`/civ/${civ.en}/bonus/${bonus.idx}`}>
-            <EmNum text={bonus.zh} />
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 const TAB_ANCHOR: Record<string, string> = {
   ov: 'identity',
@@ -212,6 +196,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
   const resources = useCoreTrees();
   const core = resources.core.data;
   const previous = usePreviousHistoryEntry();
+  const bonusReturn = useCivBonusReturn(c.en);
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
   const chapter = useActiveChapter(location.pathname, location.hash);
@@ -224,7 +209,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
       navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
       return;
     }
-    if (readFormationReturn(c.en, previous) || isFormationHash(location.hash)) return;
+    if (bonusReturn.ownsRestore || readFormationReturn(c.en, previous) || isFormationHash(location.hash)) return;
     const id = location.hash.replace(/^#/, '') || (tab === 'history' ? 'patches' : '');
     if (!id) {
       scrollTo(0, 0);
@@ -232,7 +217,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     }
     const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
-  }, [c, location.hash, location.key, location.pathname, location.search, navigate, previous, tab]);
+  }, [bonusReturn.ownsRestore, c, location.hash, location.key, location.pathname, location.search, navigate, previous, tab]);
   const insights = civInsights(c.en);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
   const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
@@ -312,9 +297,11 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
       <div className="civ-columns">
         <section id="bonuses" aria-labelledby="civ-bonus-title" data-testid="civ-bonuses">
           <p className="civ-kicker">机制事实</p>
-          <h2 id="civ-bonus-title">文明加成</h2>
-          <p className="note">事实在此完整列出一次。点开一行可进入加成详情。</p>
-          <Suspense fallback={<BonusTextList civ={c} />}>{core ? <BonusRows key={c.en} c={c} /> : <BonusTextList civ={c} />}</Suspense>
+          <h2 id="civ-bonus-title" tabIndex={-1}>
+            文明加成
+          </h2>
+          <p className="note">加成直接可读。想查影响对象、工具计入或来源，选择「作用与依据」。</p>
+          <BonusRows key={`${c.en}:${location.key}`} c={c} onCaptureLink={bonusReturn.captureLink} />
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>
@@ -360,7 +347,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
         </section>
       </div>
-      <CivFormations key={c.en} civ={c.en} resources={resources} />
+      <CivFormations key={c.en} civ={c.en} resources={resources} suppressRestore={bonusReturn.ownsRestore} />
       <Suspense fallback={<TechTreePending />}>
         <TechTree civEn={c.en} resources={resources} />
       </Suspense>
@@ -384,7 +371,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <CivHistory civ={c.en} />
         </Fold>
         <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <EncyclopediaHistoryLink entityId={'civ/' + c.en} />
+          <EncyclopediaHistoryLink entityId={'civ/' + c.en} restoreEnabled={!bonusReturn.ownsRestore} />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>

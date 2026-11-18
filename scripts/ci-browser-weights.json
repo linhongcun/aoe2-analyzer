@@ -23,6 +23,7 @@
     "tests/e2e/batchUi994.spec.ts": 7500,
     "tests/e2e/bengalis197.spec.ts": 44749,
     "tests/e2e/bonuses965.spec.ts": 12000,
+    "tests/e2e/civBonusEvidence1122.spec.ts": 10500,
     "tests/e2e/breakEven.colors.spec.ts": 4152,
     "tests/e2e/breakEven.gaps.spec.ts": 12731,
     "tests/e2e/breakEven.stale.spec.ts": 4391,

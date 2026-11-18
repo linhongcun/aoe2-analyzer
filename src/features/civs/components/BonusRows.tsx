@@ -1,51 +1,46 @@
-/** 文明页的加成列表：每条可点击展开效果（与科技同等），并可进入独立详情页 */
-import { useState } from 'react';
+/** 文明页常显加成正文及按需作用依据入口 */
+import { useCallback, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { civBonuses } from '../../../domain/civBonus';
-import { bonusLevel, LEVEL_ZH } from '../../../domain/bonusUsage';
 import type { Civ } from '../../../domain/types';
-import { Icon } from '../../../shared/ui/Icon';
-import BonusBody, { BonusText } from '../../../shared/ui/BonusBody';
+import type { CivBonusEnt } from '../../../domain/civBonus';
+import { CivBonusText } from './civBonusText';
+import { BonusEvidenceDialog } from './BonusEvidenceDialog';
 
-/** 与加成列表同一判定（bonusLevel）：已计入 / 部分计入 / 仅文本。 */
-function RowTag({ b }: { b: ReturnType<typeof civBonuses>[number] }) {
-  const lv = bonusLevel(b);
-  return <span className={lv === 'none' ? 'tag txt' : 'tag ok'}>{LEVEL_ZH[lv]}</span>;
-}
-
-/** 行内数字和百分号不从中间拆开。原文不变。 */
-function BonusTitle({ text }: { text: string }) {
-  return text.split(/((?:[+＋−-]\s*)?\d+(?:\.\d+)?\s*%?)/g).map((part, index) =>
-    index % 2 ? (
-      <span className="num nw" key={index}>
-        {part}
-      </span>
-    ) : (
-      part
-    ),
-  );
-}
-
-export function BonusRows({ c }: { c: Civ }) {
+export function BonusRows({
+  c,
+  onCaptureLink = () => undefined,
+}: {
+  c: Civ;
+  onCaptureLink?: (event: MouseEvent<HTMLElement>, bonusId: string, scrollY: number) => (() => void) | undefined;
+}) {
   const list = civBonuses(c);
-  const [open, setOpen] = useState<string | null>(null);
-  const row = (b: (typeof list)[number]) => {
-    const on = open === b.id;
+  const [selected, setSelected] = useState<CivBonusEnt | null>(null);
+  const [originScrollY, setOriginScrollY] = useState(0);
+  const dismiss = useCallback(() => setSelected(null), []);
+  const row = (b: CivBonusEnt) => {
     return (
-      <li key={b.id} className={'brow' + (on ? ' open' : '')} data-bonus={b.idx}>
-        <button type="button" className="brow-h" aria-expanded={on} aria-controls={'bb-' + b.id} onClick={() => setOpen(on ? null : b.id)}>
-          <Icon name="chevron-right" className={'ic chev' + (on ? ' rot' : '')} />
-          <span className="brow-t">{b.civ === 'Sicilians' ? <BonusText b={b} linked={false} /> : <BonusTitle text={b.zh} />}</span>
-          <RowTag b={b} />
-        </button>
-        {on && (
-          <div id={'bb-' + b.id} className="brow-b">
-            <BonusBody b={b} compact />
-            <Link className="ulink" to={`/civ/${c.en}/bonus/${b.idx}`}>
-              查看详情页 <Icon name="arrow-right" />
-            </Link>
-          </div>
-        )}
+      <li key={b.id} className="brow" data-bonus={b.idx} data-bonus-id={b.id}>
+        <div className="brow-content">
+          <p className="brow-t">
+            <CivBonusText text={b.zh} />
+          </p>
+          <button
+            type="button"
+            className="brow-action"
+            data-bonus-action={b.id}
+            aria-haspopup="dialog"
+            aria-label={`作用与依据：${b.zh}`}
+            onClick={(event) => {
+              setOriginScrollY(window.scrollY);
+              setSelected(b);
+              event.currentTarget.blur();
+            }}
+          >
+            作用与依据
+          </button>
+        </div>
+        {b.fresh === false && <p className="civ-bonus-warning">游戏说明与游戏数据不一致</p>}
       </li>
     );
   };
@@ -56,6 +51,7 @@ export function BonusRows({ c }: { c: Civ }) {
       {team.length > 0 && (
         <div className="civ-team" data-testid="civ-team">
           <h3 className="civ-bonus-team">团队加成</h3>
+          <p className="civ-team-note">团队加成对你和所有盟友生效（包括你自己）。</p>
           <ul className="blrows">{team.map(row)}</ul>
           {c.en === 'Georgians' && (
             <p className="community-tool-row">
@@ -66,9 +62,17 @@ export function BonusRows({ c }: { c: Civ }) {
           )}
         </div>
       )}
-      <p className="note civ-bonus-cap">
-        标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。
-      </p>
+      {selected && (
+        <BonusEvidenceDialog
+          key={selected.id}
+          c={c}
+          b={selected}
+          open
+          originScrollY={originScrollY}
+          onClickCapture={(event) => onCaptureLink(event, selected.id, originScrollY)}
+          onDismiss={dismiss}
+        />
+      )}
     </>
   );
 }
