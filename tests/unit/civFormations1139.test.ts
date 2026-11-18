@@ -115,7 +115,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(garrison.limitation).toContain('站内理论预览，不含每箭伤害，未与客户端逐项核对');
     expect(garrison.limitation).toContain('塔能输出不等于可省略拆城堡手段');
     expect(garrison.limitation).toContain('约 13 射程塔不能压制火炮术后 14 射程');
-    expect(garrison.limitation).toContain('缺少鼓风炉时，火矛出塔仍有近战攻击科技缺口');
+    expect(garrison.limitation).toContain('鼓风炉缺口对火矛驻塔输出的影响仅为机制推断，待实战验证');
+    expect(garrison.limitation).toContain('出塔近战及清炮仍有近战攻击科技缺口');
     expect(garrison.limitation).not.toContain('主要固定远程火力与掩体');
 
     expect([jurchens.status, jurchens.playtest, jurchens.composition, jurchens.age, jurchens.required.map(({ id }) => id)]).toEqual([

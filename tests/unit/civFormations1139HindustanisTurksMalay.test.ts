@@ -55,6 +55,10 @@ describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
       { kind: 'tech', id: 625, condition: '帝王后期/消耗局且黄金不足，研究须完成' },
     ]);
     expect(route('Malay', 'malay-battle-elephant-progression').required.map(({ id }) => id)).toEqual([1132, 1134]);
+    expect(route('Hindustanis', 'hindustani-handcannon-hussar').supplements[0]!.entities[0]).toMatchObject({ kind: 'unit', id: 207, age: 4 });
+    expect(contractRoute('Hindustanis', 'hindustani-handcannon-hussar').supplements[0]!.entities).toEqual([{ kind: 'unit', id: 207, age: 4 }]);
+    expect(route('Malay', 'malay-battle-elephant-progression').supplements[0]!.entities[0]).toMatchObject({ kind: 'unit', id: 24, age: 3 });
+    expect(contractRoute('Malay', 'malay-battle-elephant-progression').supplements[0]!.entities).toEqual([{ kind: 'unit', id: 24, age: 3 }]);
   });
 
   it('Hindustani 207 与 Turks 330 缺失时只降级条件建议，主路仍 current', async () => {
@@ -62,7 +66,11 @@ describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
     const no207 = { ...core, unitById: { ...core.unitById } };
     delete no207.unitById[207];
     const hindustani = route('Hindustanis', 'hindustani-handcannon-hussar');
-    expectFallback(project(hindustani, 'Hindustanis', no207, trees), 'hindustani-handcannon-hussar-adjustment-first', hindustani.adjustments[0]!.fallback!);
+    const hindustaniView = project(hindustani, 'Hindustanis', no207, trees);
+    expectFallback(hindustaniView, 'hindustani-handcannon-hussar-adjustment-first', hindustani.adjustments[0]!.fallback!);
+    expect(hindustaniView.status === 'current' && hindustaniView.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 207))).toBe(
+      false,
+    );
     expect(hindustani.reason).toContain('两条生产线的农田需求');
     expect(hindustani.reason).toContain('火炮消耗木金');
     expect(hindustani.reason).toContain('训练资源差额不能代替战力与成型时间比较');
@@ -89,6 +97,10 @@ describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
     const crossbowView = project(elephant, 'Malay', no24, trees);
     expectFallback(crossbowView, 'malay-battle-elephant-progression-adjustment-first', elephant.adjustments[0]!.fallback!);
     expect(crossbowView.status).toBe('current');
+    expect(crossbowView.status === 'current' && crossbowView.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 24))).toBe(false);
+    expect(elephant.reason).toContain('不固定象兵＋弩手组合');
+    expect(elephant.reason).not.toContain('枪兵压力下作条件支援');
+    expect(elephant.reason).not.toContain('弩手可');
     expect(crossbowView.status === 'current' && crossbowView.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 492))).toBe(true);
 
     const no377 = { ...core, techById: { ...core.techById } };

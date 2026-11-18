@@ -443,7 +443,12 @@
           ],
           "choices": [],
           "prerequisites": [],
-          "supplements": [],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [{ "kind": "unit", "id": 207, "age": 4 }]
+            }
+          ],
           "adjustments": [
             {
               "id": "hindustani-handcannon-hussar-adjustment-first",
@@ -766,6 +771,10 @@
           "choices": [],
           "prerequisites": [],
           "supplements": [
+            {
+              "mode": "support",
+              "entities": [{ "kind": "unit", "id": 24, "age": 3 }]
+            },
             {
               "mode": "as-needed",
               "entities": [
@@ -1112,15 +1121,31 @@
             },
             {
               "id": "koreans-fire-lancer-garrison-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "koreans-fire-lancer-garrison-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 829, "age": 4 }]
             },
             {
               "id": "koreans-fire-lancer-garrison-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 83, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-sixth",
+              "requires": [{ "kind": "route", "id": "koreans-war-wagon-halberdier" }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 492, "age": 4 }]
+            },
+            {
+              "id": "koreans-fire-lancer-garrison-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 1904, "age": 4 }]
             }
           ],
           "source": {
@@ -1192,7 +1217,7 @@
           "adjustments": [
             {
               "id": "jurchens-fire-lancer-tower-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "jurchens-fire-lancer-tower-adjustment-second",
@@ -1200,11 +1225,19 @@
             },
             {
               "id": "jurchens-fire-lancer-tower-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1910, "age": 4 }]
             },
             {
               "id": "jurchens-fire-lancer-tower-adjustment-fourth",
               "requires": []
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 1911, "age": 4 }]
+            },
+            {
+              "id": "jurchens-fire-lancer-tower-adjustment-sixth",
+              "requires": [{ "kind": "tech", "id": 996, "age": 3 }]
             }
           ],
           "source": {
