@@ -31,10 +31,10 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     const sicilian = route('Sicilians', 'sicilians-serjeant-light-cavalry');
     const contract = contractRoute('Sicilians', 'sicilians-serjeant-light-cavalry');
     const core = await loadCore();
-    const trebuchet = core.unitById[331]!;
+    const mangonel = core.unitById[280]!;
     const position = sicilian.supplements.find(({ mode }) => mode === 'position-variant')!;
     const halberdier = sicilian.supplements.find(({ mode }) => mode === 'as-needed')!;
-    const trebuchetEvaluation = sicilian.supplements.find(({ mode }) => mode === 'conditional-evaluation')!;
+    const mangonelEvaluation = sicilian.supplements.find(({ mode }) => mode === 'conditional-evaluation')!;
 
     expect([sicilian.status, sicilian.playtest, sicilian.composition, sicilian.age]).toEqual(['approved', 'unreported', 'combined', 4]);
     expect(sicilian.condition).toBe('已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。');
@@ -43,17 +43,19 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     expect(position.condition).toContain('已有稳定战线');
     expect(halberdier.condition).toContain('敌方骑兵压力超出主力能力');
     expect(halberdier.entities.map(({ id, historicalName }) => [id, historicalName])).toEqual([[359, '长戟兵']]);
-    expect(trebuchetEvaluation.condition).toContain('敌方攻城器保护严密、轻骑难以接近');
-    expect(trebuchetEvaluation.condition).toContain('先看路线与交战位置，再评估新增投石车投入');
-    expect(trebuchetEvaluation.condition).toContain('不把第二条反攻城路线列为标配');
-    expect(trebuchetEvaluation.entities.map(({ id, historicalName }) => [id, historicalName])).toEqual([[331, '巨型投石机']]);
-    expect([trebuchet.id, trebuchet.en, trebuchet.zh, trebuchet.type, trebuchet.age]).toEqual([331, 'Trebuchet (Packed)', '巨型投石机', 'Unit', 4]);
+    expect(mangonelEvaluation.condition).toContain('敌方攻城器保护严密、轻骑难以接近');
+    expect(mangonelEvaluation.condition).toContain('先看路线与交战位置，再评估新增投石车投入');
+    expect(mangonelEvaluation.condition).toContain('不把第二条反攻城路线列为标配');
+    expect(mangonelEvaluation.entities.map(({ id, historicalName }) => [id, historicalName])).toEqual([[280, '轻型投石车']]);
+    expect(mangonelEvaluation.entities.map(({ id }) => id)).not.toContain(331);
+    expect(mangonelEvaluation.entities[0]!.role).toBe('投石车系基础目录引用；新增投入仅作条件评估，非反攻城标配');
+    expect([mangonel.id, mangonel.en, mangonel.zh, mangonel.type, mangonel.age]).toEqual([280, 'Mangonel', '轻型投石车', 'Unit', 3]);
     expect(contract.required.map(({ id }) => id)).toEqual([1659, 546, 331]);
     expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ id }) => id)])).toEqual([
       ['continuation-adjustment', [283]],
       ['position-variant', [1665, 1661]],
       ['as-needed', [359]],
-      ['conditional-evaluation', [331]],
+      ['conditional-evaluation', [280]],
     ]);
   });
 
