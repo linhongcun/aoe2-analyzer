@@ -112,10 +112,12 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(towerAdjustment('eighth').text).not.toMatch(/重型火箭|升级到/);
     expect(towerAdjustment('eighth').text).toContain('不指定升级等级');
     expect(warWagon.supplements.flatMap(({ entities }) => entities).map(({ id }) => id)).toContain(36);
-    expect(tower.reason).toContain('由可选补充组表达');
+    expect(tower.reason).toContain('范围威胁下的可选比较见下方调整');
     expect(tower.attack).not.toContain('村民在塔区相互支援的位置建新塔');
     expect(tower.defense).not.toMatch(/长戟|手推炮/);
+    expect(tower.defense).toContain('已有机动力量且可安全接近时处理，否则退守');
     expect(tower.alternatives).not.toContain('已有弩手仍可利用');
+    expect(tower.alternatives).toContain('战车与火矛同时从零大量扩产会分散黄金、升级和城堡产能');
     expect(tower.alternatives).not.toContain('范围伤害仅作为具体敌情下的选项');
     expect(warWagon.reason).not.toContain('少量手推炮');
     expect(tower.limitation).toContain('鼓风炉缺口对火矛驻塔输出的影响仅为机制推断');
@@ -181,11 +183,14 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     }
     expect(tower.alternatives).not.toContain('对方步兵成群时再补');
     expect(tower.alternatives).not.toContain('已有掷弹兵时可以利用');
+    expect(tower.alternatives).not.toContain('由依赖调整表达');
     expect(tower.adjustments[4]!.text).toContain('不新开靶场量产驻军线');
     expect(tower.limitation).toContain('驻塔时不受护甲缺口影响仅为机制推断');
     expect(tower.limitation).toContain('火矛出塔仍是 4/4');
     expect(tower.limitation).toContain('是否适用于火矛未由客户端核对');
     expect(tower.limitation).toContain('翼骑属于骑乘单位，不存在同一疑问');
+    expect(tower.evidence.scope).toContain('4 个火矛与 5 个掷弹兵分别达到 5 箭上限');
+    expect(tower.evidence.scope).toContain('理论驻军箭数比较，不是胜率或自动招募配方');
 
     const bastionsSupport = tower.supplements.find(({ mode }) => mode === 'mechanism-support')!;
     expect(bastionsSupport.condition).toContain('不是路线前置');

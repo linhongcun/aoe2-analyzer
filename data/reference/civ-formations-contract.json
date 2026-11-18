@@ -1281,11 +1281,11 @@
             },
             {
               "id": "saxons-retainer-tower-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "saxons-retainer-tower-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "saxons-retainer-tower-adjustment-fourth",
@@ -1294,13 +1294,36 @@
             {
               "id": "saxons-retainer-tower-adjustment-fifth",
               "requires": []
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-sixth",
+              "requires": [{ "kind": "unit", "id": 83, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 567, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 125, "age": 4 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-ninth",
+              "requires": [{ "kind": "tech", "id": 1491, "age": 3 }]
+            },
+            {
+              "id": "saxons-retainer-tower-adjustment-tenth",
+              "requires": [
+                { "kind": "building", "id": 82, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [491, 493, 495, 496, 497, 505, 507, 515, 516, 517, 518, 519, 525, 526, 527, 528, 529, 530, 532]
+          "sourceLines": [491, 493, 495, 496, 497, 499, 501, 503, 505, 507, 515, 516, 517, 518, 519, 525, 526, 527, 528, 529, 530, 532]
         }
       ]
     },
@@ -2400,7 +2423,7 @@
           "adjustments": [
             {
               "id": "mayans-plumed-archer-halberdier-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 753, "age": 4 }]
             },
             {
               "id": "mayans-plumed-archer-halberdier-adjustment-second",
@@ -2408,14 +2431,14 @@
             },
             {
               "id": "mayans-plumed-archer-halberdier-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 6, "age": 4 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [914, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944]
+          "sourceLines": [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944]
         }
       ]
     },
