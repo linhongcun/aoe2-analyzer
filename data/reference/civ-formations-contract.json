@@ -885,6 +885,24 @@
                   "id": 1661
                 }
               ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
             }
           ],
           "adjustments": [],
@@ -892,7 +910,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [361, 363, 365, 366, 367, 368, 372]
+          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372]
         }
       ]
     },
@@ -913,22 +931,36 @@
             {
               "kind": "unit",
               "id": 359
-            },
-            {
-              "kind": "unit",
-              "id": 36
             }
           ],
           "choices": [],
           "prerequisites": [],
           "supplements": [
             {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
               "mode": "conditional",
               "entities": [
                 {
                   "kind": "unit",
                   "id": 567
-                },
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
                 {
                   "kind": "unit",
                   "id": 5
@@ -950,7 +982,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [376, 378, 380]
+          "sourceLines": [13, 376, 378, 380]
         }
       ]
     },
@@ -2021,7 +2053,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L826",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [826, 830, 835, 838, 840]
+          "sourceLines": [13, 826, 830, 835, 838, 840]
         }
       ]
     },
