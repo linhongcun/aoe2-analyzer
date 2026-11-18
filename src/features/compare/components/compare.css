@@ -33,6 +33,62 @@
   margin: var(--space-6) 0 var(--space-3);
 }
 
+.compare-openings {
+  margin-bottom: var(--space-6);
+}
+
+.compare-openings .compare-section-title {
+  margin: 0 0 var(--space-3);
+}
+
+.compare-openings > .note {
+  margin: 0 0 var(--space-4);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--color-text-2);
+}
+
+.compare-opening-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.compare-opening-card {
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.compare-opening-card-b {
+  border-left-color: var(--color-link);
+}
+
+.compare-opening-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+#compare .compare-opening-heading .ico {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.compare-opening-steps {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
 .compare-basis p,
 .compare-scores .note,
 .compare-facts .note {
@@ -387,5 +443,11 @@
 
   .compare-share .detail-copy-button {
     width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .compare-opening-cards {
+    grid-template-columns: 1fr;
   }
 }

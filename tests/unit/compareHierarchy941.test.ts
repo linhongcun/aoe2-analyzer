@@ -7,12 +7,15 @@ import { AXES } from '../../src/domain/ratings';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../src/domain/teamBonuses';
 import Compare, {
   COMPARE_AXIS_NAMES_NOTE,
-  COMPARE_FACT_NOTE,
-  COMPARE_LEDE,
   CompareRatingDetail,
   compareRatingSummary,
 } from '../../src/features/compare/components/Compare';
 
+const PAGE_LEDE = '选定两个文明，先对照文明资料，再按需参考开局示例与主观分数。分数不是胜率或精确战力。';
+const FACT_NOTE = '以下四项是文明机制资料，不由主观分数推导。';
+const OPENINGS_TITLE = '参考开局（打法示例）';
+const OPENINGS_NOTE = '以下开局由维护者整理，仅作可选打法示例，不是官方推荐，也不由评分推导。请按地图、对手和当前局势调整。';
+const RUBRIC_NOTE = '特色兵种、城堡科技、帝王科技和团队加成属于资料对照；参考开局另列为维护者整理的可选打法示例。两者均不由这些分数推导。';
 const SUMMARY =
   '八维分数是维护者整理的 1–10 整数，用来对照和画雷达，不是胜率或精确战力。各轴没有单独的量化规则，规则待核。分数适用的游戏补丁未知。同一分数没有按地图、时代或打法拆开，这些边界未知。可复查的记录是维护者主观判断，没有逐条出处，缺出处的部分待核。旧说明写过团战排位社区的普遍看法。这份文件没有可复查的社区出处，该依据待核，不能当成已证实来源。文件复核日 2026-11-10 只表示本文件结构和口径查过，不是逐文明重打分，也不表示已经对齐当前资料版本。';
 
@@ -35,19 +38,28 @@ describe('#941 文明对比信息层级', () => {
   it('资料先于主观评分，完整口径默认收起且摘要、表和雷达保留', () => {
     const html = page('/compare?a=Franks&b=Britons');
     const body = text(html);
-    expect(body).toContain(COMPARE_LEDE);
+    expect(body).toContain(PAGE_LEDE);
     expect(html).toContain(`data-testid="compare-rating-summary"`);
     expect(body).toContain(SUMMARY);
     expect(html).not.toContain('>完整评分口径<');
     expect(html).toContain('查看完整评分口径');
     expect(html.indexOf('compare-toolbar')).toBeLessThan(html.indexOf('id="compare-facts-title"'));
-    expect(html.indexOf('id="compare-facts-title"')).toBeLessThan(html.indexOf('compare-rating-basis'));
+    expect(html.indexOf('id="compare-facts-title"')).toBeLessThan(html.indexOf('id="compare-openings-title"'));
+    expect(html.indexOf('id="compare-openings-title"')).toBeLessThan(html.indexOf('data-testid="compare-rating-basis"'));
     expect(html.indexOf('compare-rating-basis')).toBeLessThan(html.indexOf('id="compare-scores-title"'));
     expect(html.indexOf('id="compare-scores-title"')).toBeLessThan(html.indexOf('>能力评分<'));
     expect(html.indexOf('>能力评分<')).toBeLessThan(html.indexOf('团战位置适配'));
     expect(body.indexOf('查看这两个文明的团队加成来源')).toBeLessThan(body.indexOf('评分性质'));
-    expect(body).toContain('以下条目来自文明资料字段，不由主观分数推导。');
-    expect(body).toContain('参考开局');
+    const facts = html.match(/<section class="compare-facts"[\s\S]*?<\/section>/)?.[0] ?? '';
+    expect(facts.match(/<tr(?:\s|>)/g) ?? []).toHaveLength(5);
+    expect(facts).not.toContain('参考开局');
+    expect(body).toContain(FACT_NOTE);
+    expect(body).toContain(OPENINGS_TITLE);
+    expect(body).toContain(OPENINGS_NOTE);
+    expect(body).toContain('文明 A · 法兰克');
+    expect(body).toContain('文明 B · 不列颠');
+    expect(body).toContain('速城堡骑士');
+    expect(body).toContain('城堡弩兵');
     expect(html).toContain('href="/team-bonuses?');
     expect(html).toContain(encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), ['Franks', 'Britons'])).replace(/&/g, '&amp;'));
     expect(html).not.toMatch(/href="\/team-bonuses"/);
@@ -67,7 +79,8 @@ describe('#941 文明对比信息层级', () => {
     expect(body).toContain(RATING_BASIS.communityClaimNote);
     expect(body).toContain(RATING_BASIS.uncertainty);
     expect(body).toContain(RATING_BASIS.highlight);
-    expect(body).toContain(COMPARE_FACT_NOTE);
+    expect(body).toContain(RUBRIC_NOTE);
+    expect(body).not.toContain('特色兵种、城堡科技、帝王科技、团队加成和开局是资料对照');
     expect(RATING_BASIS.axes).toEqual([...AXES]);
     for (const axis of RATING_BASIS.axes) expect(html).toContain(`<li>${axis}</li>`);
     expect(body.split(RATING_BASIS.axisGap).length - 1).toBe(0);

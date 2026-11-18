@@ -18,7 +18,7 @@ import './compare.css';
 import '../../../shared/ui/contextLinks.css';
 
 /** 页头导语。首页卡片仍用登记表里的短说明。 */
-export const COMPARE_LEDE = '选定两个文明，并排查看主观参考分和资料对照。分数不是胜率或精确战力，资料行也不由这些分数推导。';
+export const COMPARE_LEDE = '选定两个文明，先对照文明资料，再按需参考开局示例与主观分数。分数不是胜率或精确战力。';
 
 /**
  * 已裁定的短摘要。句子逐字保留；复核日取评分文件。
@@ -40,18 +40,18 @@ export function compareRatingSummary(verifiedAt: string): string {
 /** 八轴原来各写一遍的 axisGap，合并后仍列出全部轴名。 */
 export const COMPARE_AXIS_NAMES_NOTE = '下列八个轴只按既定顺序命名，现有记录只有轴名。分数是该项相对强弱的主观整数，单独的量化规则待核。可在此核对各轴名称：';
 
-export const COMPARE_FACT_NOTE = '特色兵种、城堡科技、帝王科技、团队加成和开局是资料对照，不由这些分数推导。';
+export const COMPARE_FACT_NOTE = '特色兵种、城堡科技、帝王科技和团队加成属于资料对照；参考开局另列为维护者整理的可选打法示例。两者均不由这些分数推导。';
 
-const DATA_NOTE = '以下条目来自文明资料字段，不由主观分数推导。';
+const DATA_NOTE = '以下四项是文明机制资料，不由主观分数推导。';
+const OPENINGS_NOTE = '以下开局由维护者整理，仅作可选打法示例，不是官方推荐，也不由评分推导。请按地图、对手和当前局势调整。';
 
-const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
+const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb'][] = [
   ['特色兵种', 'uu'],
   ['城堡科技', 'ct'],
   ['帝王科技', 'it'],
   ['团队加成', 'tb'],
-  ['参考开局', 'op'],
 ];
-const cell = (c: Civ, k: (typeof ROWS)[number][1]) => (k === 'op' ? <Steps s={c.op} /> : c[k]);
+const cell = (c: Civ, k: (typeof ROWS)[number][1]) => c[k];
 const comparePage = PAGES.find((item) => item.key === 'compare');
 
 /** issue 772：坏参数/缺参的说明；地址栏被 replace 成完整参数后靠 location.state 保留一次。 */
@@ -197,6 +197,28 @@ export default function Compare() {
             ))}
           </tbody>
         </table>
+      </section>
+      <section className="compare-openings" id="compare-openings" aria-labelledby="compare-openings-title" data-testid="compare-openings">
+        <h2 className="compare-section-title" id="compare-openings-title">
+          参考开局（打法示例）
+        </h2>
+        <p className="note">{OPENINGS_NOTE}</p>
+        <div className="compare-opening-cards">
+          {[
+            { side: 'a', civ: a },
+            { side: 'b', civ: b },
+          ].map(({ side, civ }) => (
+            <article className={`compare-opening-card compare-opening-card-${side}`} data-testid={`compare-opening-${side}`} key={side}>
+              <h3 className="compare-opening-heading">
+                <CivIcon c={civ} />
+                <span>文明 {side === 'a' ? 'A' : 'B'} · {civ.zh}</span>
+              </h3>
+              <p className="compare-opening-steps">
+                <Steps s={civ.op} />
+              </p>
+            </article>
+          ))}
+        </div>
       </section>
       <h2 className="compare-section-title">主观评分参考</h2>
       <section className="compare-basis" aria-labelledby="compare-basis-title" data-testid="compare-rating-basis">
