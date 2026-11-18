@@ -118,6 +118,25 @@ describe('N vs M', () => {
     expect(result.timeline).toContainEqual([600, 1, 0]);
   });
 
+  it('小数攻击间隔的数学时限边界攻击仍结算，时间线不越界', () => {
+    const a = testFighter({ rof: 0.1 });
+    const b = testFighter({ hp: 4, ranged: true, acc: 0, rof: 1000 });
+    const result = groupFight(a, 1, b, 1, 0.3);
+    expect(result).toMatchObject({ winner: 'a', duration: 0.3, aAlive: 1, bAlive: 0 });
+    expect(result.timeline).toContainEqual([0.3, 1, 0]);
+    expect(result.timeline.every(([time]) => time <= 0.3)).toBe(true);
+  });
+
+  it('默认模拟时限下小数累积不会丢失第751击', () => {
+    const a = testFighter({ rof: 0.8 });
+    const b = testFighter({ hp: 751, ranged: true, acc: 0, rof: 1000 });
+    const result = groupFight(a, 1, b, 1);
+    expect(result).toMatchObject({ winner: 'a', duration: 600, aAlive: 1, bAlive: 0 });
+    expect(result.timeline).toHaveLength(752);
+    expect(result.timeline).toContainEqual([600, 1, 0]);
+    expect(result.timeline.every(([time]) => time <= 600)).toBe(true);
+  });
+
   it.each([
     [600, 600.000001],
     [0, 0.000001],
