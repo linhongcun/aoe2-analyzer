@@ -1317,11 +1317,11 @@
             },
             {
               "id": "teutons-paladin-skirmisher-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "teutons-paladin-skirmisher-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }]
             }
           ],
           "source": {
@@ -1366,7 +1366,7 @@
           "adjustments": [
             {
               "id": "teutons-halberdier-handcannon-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }]
             },
             {
               "id": "teutons-halberdier-handcannon-adjustment-second",
@@ -1378,7 +1378,7 @@
             },
             {
               "id": "teutons-halberdier-handcannon-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }]
             }
           ],
           "source": {
@@ -1423,15 +1423,11 @@
           "adjustments": [
             {
               "id": "teutons-elite-knight-skirmisher-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }]
             },
             {
               "id": "teutons-elite-knight-skirmisher-adjustment-second",
-              "requires": []
-            },
-            {
-              "id": "teutons-elite-knight-skirmisher-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "teutons-elite-knight-skirmisher-adjustment-fourth",
@@ -2279,6 +2275,10 @@
             {
               "id": "incas-kamayuk-skirmisher-adjustment-fourth",
               "requires": []
+            },
+            {
+              "id": "incas-kamayuk-skirmisher-adjustment-fifth",
+              "requires": [{ "kind": "unit", "id": 185, "age": 3 }]
             }
           ],
           "source": {
@@ -2309,19 +2309,7 @@
           "supplements": [],
           "adjustments": [
             {
-              "id": "incas-champi-candidate-adjustment-first",
-              "requires": []
-            },
-            {
-              "id": "incas-champi-candidate-adjustment-second",
-              "requires": []
-            },
-            {
               "id": "incas-champi-candidate-adjustment-third",
-              "requires": []
-            },
-            {
-              "id": "incas-champi-candidate-adjustment-fourth",
               "requires": []
             }
           ],
@@ -2329,7 +2317,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879",
             "discussion": "https://app.devin.ai/sessions/998ba78b2edf4799bb383d10b7e8eef9"
           },
-          "sourceLines": [879, 889, 891, 893, 899, 900, 901, 902, 908, 910]
+          "sourceLines": [879, 889, 891, 893, 901, 910]
         }
       ]
     },
