@@ -158,6 +158,40 @@ describe('#1139 文明路线契约与投影', () => {
     expect(byCiv('Koreans').routes.some(({ id }) => id.includes('crossbow-garrison'))).toBe(false);
   });
 
+  it('印加主路的反弩炮调整只引用独立候选，候选缺实体或前置时使用保守回退', async () => {
+    const resources = await catalog();
+    const incas = byCiv('Incas');
+    const main = route('Incas', 'incas-kamayuk-skirmisher');
+    const candidate = route('Incas', 'incas-champi-candidate');
+    expect(main.adjustments![2]!.requires).toEqual([{ kind: 'route', id: candidate.id }]);
+    for (const text of [main.reason, main.limitation, main.attack, main.defense]) expect(text).not.toContain('蔷琵战士');
+
+    const project = (catalogResources: Awaited<ReturnType<typeof catalog>>) =>
+      projectFormation(main, 'Incas', DATA_PATCH, catalogResources, incas.routes, incas.source);
+    const expectedFallback = main.adjustments![2]!.fallback;
+    const current = project(resources);
+    expect(current.status).toBe('current');
+    if (current.status === 'current') {
+      const adjustment = current.adjustments.find(({ id }) => id === main.adjustments![2]!.id);
+      expect(adjustment).toMatchObject({ unavailable: true, text: expectedFallback });
+      expect(adjustment?.text).not.toContain('蔷琵战士');
+    }
+
+    const missingUnit = { ...resources.core.unitById };
+    delete missingUnit[2554];
+    const withoutCandidateUnit = project({ core: { ...resources.core, unitById: missingUnit }, trees: resources.trees });
+    expect(withoutCandidateUnit.status).toBe('current');
+    if (withoutCandidateUnit.status === 'current')
+      expect(withoutCandidateUnit.adjustments.find(({ id }) => id === main.adjustments![2]!.id)?.text).toBe(expectedFallback);
+
+    const missingTech = { ...resources.core.techById };
+    delete missingTech[517];
+    const withoutCandidatePrerequisite = project({ core: { ...resources.core, techById: missingTech }, trees: resources.trees });
+    expect(withoutCandidatePrerequisite.status).toBe('current');
+    if (withoutCandidatePrerequisite.status === 'current')
+      expect(withoutCandidatePrerequisite.adjustments.find(({ id }) => id === main.adjustments![2]!.id)?.text).toBe(expectedFallback);
+  });
+
   it('required、前置或 choice 分支按其有效时代整卡不可用，可选补充仅局部隐藏', async () => {
     const resources = await catalog();
     const malay = byCiv('Malay');

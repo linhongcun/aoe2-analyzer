@@ -2098,7 +2098,12 @@
             },
             {
               "id": "incas-kamayuk-skirmisher-adjustment-third",
-              "requires": []
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "incas-champi-candidate"
+                }
+              ]
             },
             {
               "id": "incas-kamayuk-skirmisher-adjustment-fourth",
