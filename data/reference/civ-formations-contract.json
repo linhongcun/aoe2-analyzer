@@ -2495,7 +2495,7 @@
             },
             {
               "mode": "conditional",
-              "entities": [{ "kind": "unit", "id": 6, "age": 3 }]
+              "entities": [{ "kind": "unit", "id": 6, "age": 4 }]
             },
             {
               "mode": "conditional",
@@ -2597,7 +2597,7 @@
             },
             {
               "mode": "conditional",
-              "entities": [{ "kind": "unit", "id": 6, "age": 3 }]
+              "entities": [{ "kind": "unit", "id": 6, "age": 4 }]
             },
             {
               "mode": "conditional",

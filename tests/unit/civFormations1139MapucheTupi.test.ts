@@ -45,20 +45,32 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
 
     expect(konaBolas.condition).toContain('两条金线');
     expect(konaBolas.condition).toContain('承受损失');
+    expect(konaBolas.evidence.scope).toContain('个人偏好');
+    expect(konaBolas.evidence.scope).toContain('不推导非骑兵经济更差');
     expect(narrative(konaBolas)).not.toContain('投石手');
     expect(konaBolas.reason).toContain('分担食物和木材、共同需要黄金');
     expect(konaBolas.limitation).toContain('长矛兵系、骆驼和僧侣');
     expect(konaBolas.limitation).toContain('不适于攻击步弓手、掷矛手和近程单位');
     expect(konaBolas.limitation).toContain('不保证对所有骑兵占优');
+    expect(konaBolas.limitation).toContain('击杀产金适用范围未完全说明');
+    expect(konaBolas.limitation).toContain('布图马普折扣仅文本、未编码');
     expect([slingerSupport.entities[0]!.id, slingerSupport.entities[0]!.historicalName]).toEqual([185, '投石手']);
-    expect(slingerSupport.condition).toContain('确有反步兵缺口');
+    expect(slingerSupport.condition).toContain('确有实际反步兵缺口');
+    expect(slingerSupport.condition).toContain('已有双金主路仍能支撑追加补兵资源');
+    expect(slingerSupport.condition).toContain('接敌条件允许');
     expect(supportAdjustment.requires).toEqual([{ kind: 'unit', id: 185 }]);
+    expect(supportAdjustment.text).toContain('已有双金主路仍能支撑追加补兵资源');
     expect(supportAdjustment.fallback).toContain('不展示补队建议');
     expect([firstSiege.entities[0]!.id, firstSiege.entities[0]!.age]).toEqual([331, 4]);
     expect([secondSiege.entities[0]!.id, secondSiege.entities[0]!.age]).toEqual([331, 4]);
     expect(konaBolas.required.map(({ id }) => id)).not.toContain(185);
     expect(konaSlinger.condition).toContain('黄金吃紧或确有反步兵缺口');
-    expect(konaSlinger.condition).toContain('科那仍耗黄金，两路共用食物');
+    expect(konaSlinger.condition).toContain('科那仍耗黄金，科那与投石手两种单位共用食物');
+    expect(konaSlinger.reason).toContain('投石手承担反步兵职责');
+    expect(konaSlinger.reason).toContain('黄金吃紧或反步兵职责确有需要');
+    expect(konaSlinger.limitation).toContain('持续补兵仍需资源');
+    expect(konaSlinger.limitation).toContain('击杀产金适用范围未完全说明');
+    expect(konaSlinger.limitation).toContain('布图马普折扣仅文本、未编码');
     expect(narrative(konaSlinger)).not.toContain('掷石绳骑兵');
     expect(routeAdjustment.requires).toEqual([{ kind: 'route', id: 'mapuche-kona-bolas' }]);
     expect(routeAdjustment.text).toContain('持续支撑两条金线并承受损失');
@@ -75,15 +87,23 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(champi.condition).toContain('不要求同时开齐全部兵线');
     expect(champi.condition).toContain('过渡或已有兵力可重叠');
     expect(champi.condition).not.toContain('互斥');
+    expect(champi.title).not.toMatch(/巨投|巨型投石机/);
     expect(narrative(champi)).not.toMatch(/黑檀木|长戟/);
     expect(champi.reason).toContain('两者共享食物');
     expect(champi.reason).toContain('完成研究后');
     expect(champi.limitation).toContain('共同缺反骑');
     expect(champi.limitation).toContain('投石手只承担反步兵');
+    expect(champi.adjustments[0]!.text).toContain('载具配合仅为战术候选');
+    expect(champi.adjustments[0]!.text).not.toContain('重型冲车');
+    expect(champi.adjustments[0]!.text).not.toContain('攻城塔');
+    expect(champi.alternatives).toContain('职责部分重叠');
+    expect(champi.alternatives).toContain('不作默认投入');
+    expect(champi.alternatives).not.toContain('考虑');
 
     expect(blackwood.condition).toContain('不要求同时开齐全部兵线');
     expect(blackwood.condition).toContain('过渡或已有兵力可重叠');
     expect(blackwood.condition).not.toContain('互斥');
+    expect(blackwood.title).not.toMatch(/巨投|巨型投石机/);
     expect(narrative(blackwood)).not.toMatch(/蔷琵|投石手/);
     expect(blackwood.reason).toContain('两者共享木材');
     expect(blackwood.reason).toContain('成对训练');
@@ -91,6 +111,15 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(blackwood.reason).toContain('不折半推算');
     expect(blackwood.limitation).toContain('长戟按骑兵压力反骑');
     expect(blackwood.limitation).toContain('不因此视为反攻城');
+    expect(blackwood.attack).toContain('按需调整长戟比例');
+    expect(blackwood.attack).toContain('保护黑檀木');
+    expect(blackwood.attack).not.toMatch(/巨投|巨型投石机/);
+    expect(blackwood.adjustments[2]!.text).toContain('按需调整长戟比例');
+    expect(blackwood.adjustments[2]!.text).toContain('保护黑檀木');
+    expect(blackwood.adjustments[2]!.text).not.toContain('替换部分主力');
+    expect(blackwood.alternatives).toContain('职责重叠');
+    expect(blackwood.alternatives).toContain('不作默认投入');
+    expect(blackwood.alternatives).not.toContain('考虑');
 
     for (const candidate of [transport, blackwoodTransport]) {
       expect(candidate.entities.map(({ id }) => id)).toEqual([548, 1105]);
@@ -107,6 +136,29 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect([core.unitById[6]!.en, core.unitById[6]!.zh]).toEqual(['Elite Skirmisher', '精锐掷矛手']);
     expect([core.unitById[359]!.en, core.unitById[359]!.zh]).toEqual(['Halberdier', '长戟兵']);
     expect([core.unitById[2584]!.en, core.unitById[2584]!.zh]).toEqual(['Elite Ibirapema Warrior', '精锐伊比拉贝玛战士']);
+  });
+
+  it('帝王主路的精锐掷矛手支援以时代4投影，目录训练时代不变', async () => {
+    const resources = await catalog();
+    const tupi = byCiv('Tupi');
+
+    expect(resources.core.unitById[6]!.age).toBe(3);
+    for (const id of ['tupi-champi-slinger', 'tupi-blackwood-halberdier']) {
+      const entry = route('Tupi', id);
+      const support = entry.supplements.flatMap(({ entities }) => entities).find(({ id: unitId }) => unitId === 6)!;
+      const contractSupport = contractRoute('Tupi', id)
+        .supplements.flatMap(({ entities }) => entities)
+        .find(({ id: unitId }) => unitId === 6)!;
+      expect([support.id, support.age]).toEqual([6, 4]);
+      expect([contractSupport.id, contractSupport.age]).toEqual([6, 4]);
+
+      const view = projectFormation(entry, 'Tupi', DATA_PATCH, resources, tupi.routes, tupi.source);
+      expect(view.status).toBe('current');
+      if (view.status === 'current') {
+        const projected = view.supplements.flatMap(({ entities }) => entities).find(({ entity }) => entity.id === 6)!;
+        expect([projected.entity.id, projected.age]).toEqual([6, 4]);
+      }
+    }
   });
 
   it('为条件增援与跨路线建议设置真实依赖和保守fallback', () => {
@@ -211,6 +263,34 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
         text: champi.adjustments.find(({ id }) => id.endsWith('-fifth'))!.fallback,
       });
 
+    const withoutIbirapemaAndTrebuchet = { ...resources.core.unitById };
+    delete withoutIbirapemaAndTrebuchet[2584];
+    delete withoutIbirapemaAndTrebuchet[331];
+    for (const entry of [champi, blackwood]) {
+      const view = projectFormation(
+        entry,
+        'Tupi',
+        DATA_PATCH,
+        { core: { ...resources.core, unitById: withoutIbirapemaAndTrebuchet }, trees: resources.trees },
+        tupi.routes,
+        tupi.source,
+      );
+      const freeText = [entry.title, entry.condition, entry.reason, entry.limitation, entry.attack, entry.defense, entry.alternatives].join(' ');
+      expect(freeText).not.toMatch(/巨投|巨型投石机/);
+      expect(freeText).not.toMatch(/伊比拉贝玛[^。；]*(仅在|只在|可考虑|才考虑)/);
+      expect(entry.alternatives).toContain('不作默认投入');
+      expect(view.status).toBe('current');
+      if (view.status === 'current') {
+        const projectedIds = view.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id));
+        expect(projectedIds).not.toContain(2584);
+        expect(projectedIds).not.toContain(331);
+        expect(view.adjustments.find(({ id }) => id.endsWith('-fourth'))).toMatchObject({
+          unavailable: true,
+          text: entry.adjustments.find(({ id }) => id.endsWith('-fourth'))!.fallback,
+        });
+      }
+    }
+
     const withoutRam = { ...resources.core.unitById };
     delete withoutRam[548];
     const transportUnavailable = projectFormation(
@@ -222,5 +302,11 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
       tupi.source,
     );
     expect(transportUnavailable.status).toBe('current');
+    if (transportUnavailable.status === 'current') {
+      const choice = transportUnavailable.supplements.find(({ mode }) => mode === 'choice')!;
+      const projectedIds = choice.entities.map(({ entity }) => entity.id);
+      expect(projectedIds).toContain(1105);
+      expect(projectedIds).not.toContain(548);
+    }
   });
 });
