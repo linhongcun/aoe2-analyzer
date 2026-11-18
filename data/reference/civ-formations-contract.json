@@ -337,7 +337,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [194, 196]
+          "sourceLines": [194, 196, 198]
         },
         {
           "id": "china-fire-lancer-tower",
@@ -1244,7 +1244,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [538, 540, 542, 544, 545, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
         },
         {
           "id": "teutons-halberdier-handcannon",
@@ -1301,7 +1301,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L543",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [538, 540, 543, 545, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "sourceLines": [538, 540, 543, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
         },
         {
           "id": "teutons-elite-knight-skirmisher",
@@ -1358,7 +1358,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L544",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [538, 540, 542, 544, 545, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
         }
       ]
     },

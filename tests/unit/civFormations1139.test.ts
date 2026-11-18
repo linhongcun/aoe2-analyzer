@@ -192,13 +192,15 @@ describe('#1139 文明路线契约与投影', () => {
       expect(withoutCandidatePrerequisite.adjustments.find(({ id }) => id === main.adjustments![2]!.id)?.text).toBe(expectedFallback);
   });
 
-  it('中国主路理由与限制只对应固定第194、196行，不串入火矛驻塔PK数据', () => {
+  it('中国主路保留未记录版本边界，理由与限制不串入火矛驻塔PK数据', () => {
     const main = route('Chinese', 'china-chu-ko-nu');
     const fireLancer = route('Chinese', 'china-fire-lancer-tower');
     const fireLancerAdjustments = fireLancer.adjustments ?? [];
     const mainText = `${main.reason} ${main.limitation}`;
-    expect(main.evidence.sourceLines).toEqual([194, 196]);
-    expect(main.evidence.scope).toContain('194、196');
+    expect(main.evidence.sourceLines).toEqual([194, 196, 198]);
+    expect(main.evidence.recordedVersion).toBe('原讨论的完整站点版本与构建未记录，不将后续版本补作原观察');
+    expect(main.evidence.scope).toContain('原讨论的完整站点版本和构建未记录');
+    expect(main.evidence.scope).not.toContain('来源行');
     expect(main.reason).toContain('经常使用精锐诸葛弩＋轻骑兵＋少量巨型投石机');
     expect(main.limitation).toContain('诸葛弩训练耗木金，轻骑耗食物');
     expect(main.reason).not.toContain('投入与边界');
@@ -206,6 +208,54 @@ describe('#1139 文明路线契约与投影', () => {
     expect(mainText).not.toMatch(/火矛|19\/85|48\/192|接触 PK/);
     expect(fireLancerAdjustments[0]!.text).toContain('火矛兵和长戟兵一起顶');
     expect(fireLancerAdjustments[0]!.text).toContain('19/85');
+  });
+
+  it('西西里萨金特配置作为基础主路，骑士延续保留为条件调整', () => {
+    const sicilian = route('Sicilians', 'sicilians-serjeant-light-cavalry');
+    const knightContinuation = sicilian.supplements.find(({ mode }) => mode === 'continuation-adjustment');
+
+    expect(sicilian.condition).toBe('已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。');
+    expect(sicilian.reason).toBe(
+      '精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机。卫兵凭高护甲承担正面接战与输出；轻骑提供机动，清理可接近的射手和攻城器；巨投拆城堡等关键防御。',
+    );
+    expect(sicilian.limitation).toBe(
+      '卫兵＋长戟可能一起受成群弩炮压制；减少所受额外伤害不等于减少所有基础伤害。轻骑已能完成清理任务时，优先用好已有兵种。卫兵与骑兵都争食物，步骑共享近战攻击但护甲和兵种升级分开；锁子甲、骑士线、城楼箭系各有新增投入。高护甲不代表卫兵必胜所有骑兵，城楼也受远程攻城和固定位置限制。',
+    );
+    expect(sicilian.evidence.scope).not.toContain('来源行');
+    expect(knightContinuation?.condition).toContain('黄金和骑士科技允许');
+  });
+
+  it('条顿三路分别记录农田经济边界、本路线职责与限制', () => {
+    const paladin = route('Teutons', 'teutons-paladin-skirmisher');
+    const halberdier = route('Teutons', 'teutons-halberdier-handcannon');
+    const knight = route('Teutons', 'teutons-elite-knight-skirmisher');
+    const economicBoundary = '农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。';
+
+    for (const item of [paladin, halberdier, knight]) {
+      expect(item.reason).toContain(economicBoundary);
+      expect(item.evidence.sourceLines).toContain(547);
+      expect(item.evidence.scope).not.toContain('来源行');
+    }
+
+    expect(paladin.limitation).toContain('游侠在帝王时代有 +2 近战护甲，但缺畜牧');
+    expect(paladin.limitation).toContain('满科技射程 7');
+    expect(paladin.limitation).toContain('不能替昂贵游侠吸收前线损耗');
+    expect(paladin.limitation).not.toMatch(/条顿骑士|重装甲|城堡产能/);
+    expect(paladin.attack).toContain('游侠＋精锐掷矛手');
+    expect(paladin.defense).toContain('昂贵游侠');
+    expect(paladin.attack + paladin.defense).not.toMatch(/火枪手|条顿骑士/);
+
+    expect(halberdier.limitation).toBe('这条慢速路线怕弓手、骑射手和投石车。');
+    expect(halberdier.attack).toContain('长戟兵＋火枪手');
+    expect(halberdier.defense).toContain('长戟兵与火枪手');
+    expect(halberdier.attack + halberdier.defense).not.toMatch(/游侠|精锐掷矛手|条顿骑士/);
+
+    expect(knight.condition).toBe('近战重、狭口或已有阵地。');
+    expect(knight.limitation).toContain('条顿骑士需要城堡产能');
+    expect(knight.limitation).toContain('不等于必须反复前推城堡');
+    expect(knight.attack).toContain('条顿骑士＋精锐掷矛手');
+    expect(knight.defense).toContain('条顿骑士与精锐掷矛手');
+    expect(knight.attack + knight.defense).not.toMatch(/游侠|火枪手|长戟兵/);
   });
 
   it('required、前置或 choice 分支按其有效时代整卡不可用，可选补充仅局部隐藏', async () => {
