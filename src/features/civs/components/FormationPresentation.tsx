@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 const FORMATION_NUMBER = String.raw`[+\-−]?\d+(?:\.\d+)?`;
-const FORMATION_UNIT = String.raw`(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个|名|人|兵|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料|食|木|金|石|血|攻|甲|F|G|W|S|s)`;
+const FORMATION_UNIT = String.raw`(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个村民|个|名|人|兵|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料|食|木|金|石|血|攻|甲|F|G|W|S|s)`;
 const FORMATION_NUMBER_WITH_UNIT = String.raw`${FORMATION_NUMBER}(?:\s*${FORMATION_UNIT})?`;
 const FORMATION_TOKENS = new RegExp(
   String.raw`(?<longHash>(?<![a-f\d])[a-f\d]{12,40}(?![a-f\d]))|(?<protected>v\d+(?:\.\d+){1,3}|\d{4}-\d{2}-\d{2}|(?<![a-f\d])[a-f\d]{7,11}(?![a-f\d])|${FORMATION_NUMBER_WITH_UNIT}(?:\s*(?:/|:|–|—|-|至)\s*${FORMATION_NUMBER_WITH_UNIT})*)`,

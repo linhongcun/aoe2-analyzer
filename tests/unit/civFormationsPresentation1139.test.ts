@@ -14,7 +14,7 @@ const protectedCases = [
   { text: '45F/30G', token: '45F/30G' },
   { text: '1.43s', token: '1.43s' },
   { text: '1:12.19', token: '1:12.19' },
-  { text: '1个村民', token: '1个' },
+  { text: '1个村民', token: '1个村民' },
   { text: '1–2 秒', token: '1–2 秒' },
   { text: '−1.25%', token: '−1.25%' },
   { text: '+2.5%', token: '+2.5%' },
@@ -43,5 +43,11 @@ describe('#1139 文明阵容数字文本呈现', () => {
     const html = renderToStaticMarkup(createElement(FormationText, { text: '1和2' }));
 
     expect(html).toBe('<span class="num nw">1</span>和<span class="num nw">2</span>');
+  });
+
+  it('leaves text following a counted noun outside the nowrap token', () => {
+    const html = renderToStaticMarkup(createElement(FormationText, { text: '1个村民正在采集' }));
+
+    expect(html).toBe('<span class="num nw">1个村民</span>正在采集');
   });
 });
