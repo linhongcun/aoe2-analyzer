@@ -68,4 +68,16 @@ describe('#1139 文明阵容数字文本呈现', () => {
 
     expect(html).toBe(`<span class="num nw">${nounPhrase}</span>${rest}`);
   });
+
+  it.each([
+    ['5 个劲弩手仅 4 箭', '<span class="num nw">5 个劲弩手</span>仅 <span class="num nw">4 箭</span>'],
+    [
+      '5 个精锐扈从显示 2+4=6 箭',
+      '<span class="num nw">5 个精锐扈从</span>显示 <span class="num nw">2</span><span class="num nw">+4</span>=<span class="num nw">6 箭</span>',
+    ],
+    ['3个精锐诸葛弩（理论）', '<span class="num nw">3个精锐诸葛弩</span>（理论）'],
+    ['4个火矛兵达到5箭', '<span class="num nw">4个火矛兵</span>达到<span class="num nw">5箭</span>'],
+  ])('keeps real counted-unit phrases bounded in "$1"', (text, expectedHtml) => {
+    expect(renderToStaticMarkup(createElement(FormationText, { text }))).toBe(expectedHtml);
+  });
 });

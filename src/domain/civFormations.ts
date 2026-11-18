@@ -235,12 +235,13 @@ export function projectFormation(
       : { id, when, text, ...(candidateBoundary ? { candidateBoundary } : {}) };
   });
 
-  const supplementViews = route.supplements
-    .map((group) => ({
-      ...group,
-      entities: group.entities.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role)).filter((ref): ref is FormationEntityView => ref !== null),
-    }))
-    .filter((group) => group.entities.length > 0);
+  const supplementViews: FormationSupplementView[] = [];
+  for (const group of route.supplements) {
+    const entities = group.entities.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
+    if (group.mode === 'position-variant' && entities.some((entity) => entity === null)) continue;
+    const availableEntities = entities.filter((entity): entity is FormationEntityView => entity !== null);
+    if (availableEntities.length > 0) supplementViews.push({ ...group, entities: availableEntities });
+  }
 
   return {
     status: 'current',
