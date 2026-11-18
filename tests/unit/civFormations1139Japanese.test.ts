@@ -66,6 +66,9 @@ describe('#1139 Japanese formation support', () => {
     expect(position.entities.map(({ kind, id }) => [kind, id])).toEqual([['building', 235]]);
     const arrowSlitsSupport = entry.supplements.find(({ mode, entities }) => mode === 'mechanism-support' && entities.some(({ id }) => id === 484))!;
     expect(arrowSlitsSupport.entities.map(({ kind, id }) => [kind, id])).toEqual([['tech', 484]]);
+    expect(arrowSlitsSupport.condition).toContain('射箭孔科技资料');
+    expect(arrowSlitsSupport.condition).toContain('见下方调整');
+    expect(arrowSlitsSupport.condition).not.toContain('额外箭矢效果');
     const conditional = entry.supplements.filter(({ mode }) => mode === 'conditional');
     expect(conditional).toHaveLength(2);
     expect(conditional.map(({ entities }) => entities.map(({ id }) => id))).toEqual([[6], [474]]);
@@ -90,11 +93,18 @@ describe('#1139 Japanese formation support', () => {
     ]);
     expect(adjustment('eleventh').requires).toEqual([{ kind: 'unit', id: 283, age: 4 }]);
     expect(adjustment('twelfth').requires).toEqual([{ kind: 'unit', id: 567, age: 4 }]);
+    expect(adjustment('twelfth').when).toContain('无城堡');
+    expect(adjustment('twelfth').text).toContain('省金例外');
     expect(adjustment('thirteenth').requires).toEqual([
       { kind: 'unit', id: 492, age: 4 },
       { kind: 'unit', id: 359, age: 4 },
       { kind: 'unit', id: 331, age: 4 },
     ]);
+    expect(adjustment('fourteenth').requires).toEqual([
+      { kind: 'building', id: 235, age: 4 },
+      { kind: 'unit', id: 83, age: 4 },
+    ]);
+    expect(adjustment('fourteenth').text).toContain('射箭孔研究不是基础建塔前置');
     expect(entry.adjustments.some(({ requires = [] }) => requires.some(({ id }) => id === 6) && requires.some(({ id }) => id === 474))).toBe(false);
     expect(adjustment('ninth').text).toContain('完成射箭孔研究后');
     expect(adjustment('tenth').text).toContain('完成弹射器研究后');
@@ -119,6 +129,10 @@ describe('#1139 Japanese formation support', () => {
     expect(scope).toContain('1→3');
     expect(scope).toContain('驻 5 个劲弩手总 6 箭（上限 7）');
     expect(scope).toContain('不是招募配方或每箭伤害');
+    expect(scope).toContain('固定记录列出的条件机制');
+    expect(scope).toContain('不表示玩家当前已完成研究');
+    expect(scope).toContain('不证明相关可选项当前可用');
+    expect(scope).not.toMatch(/\b(?:59|235|484)\b/);
     expect(entry.limitation).toContain('缺轮作使后期食物线偏弱');
     expect(entry.limitation).toContain('目录基础近战/穿刺护甲为 1/1');
     expect(entry.limitation).not.toContain('等资源 PK');
@@ -136,6 +150,12 @@ describe('#1139 Japanese formation support', () => {
     expect(adjustment('ninth').text).toContain(resources.core.techById[484]!.desc);
     expect([resources.core.techById[59]!.en, resources.core.techById[59]!.zh, resources.core.techById[59]!.age]).toEqual(['Kataparuto', '弹射器', 4]);
     expect(adjustment('tenth').text).toContain(resources.core.techById[59]!.desc);
+    const championGold = resources.core.unitById[567]!.cost.Gold;
+    const samuraiGold = resources.core.unitById[560]!.cost.Gold;
+    expect([championGold, samuraiGold]).toEqual([20, 30]);
+    expect(adjustment('twelfth').text).toContain(String(championGold) + 'G');
+    expect(adjustment('twelfth').text).toContain(String(samuraiGold) + 'G');
+    expect(adjustment('twelfth').text).toContain(String(championGold) + 'G，对精锐日本武士的 ' + String(samuraiGold) + 'G 更低');
   });
 
   it('逐个缺失可选目录时只局部降级，6 与 474 仍独立可用', async () => {
@@ -153,10 +173,15 @@ describe('#1139 Japanese formation support', () => {
       { core: removeUnit(resources.core, 5), ids: ['japanese-samurai-light-cavalry-adjustment-sixth'] },
       {
         core: removeBuilding(resources.core, 235),
-        ids: ['japanese-samurai-light-cavalry-adjustment-seventh', 'japanese-samurai-light-cavalry-adjustment-ninth'],
+        ids: [
+          'japanese-samurai-light-cavalry-adjustment-seventh',
+          'japanese-samurai-light-cavalry-adjustment-ninth',
+          'japanese-samurai-light-cavalry-adjustment-fourteenth',
+        ],
       },
       { core: removeTech(resources.core, 484), ids: ['japanese-samurai-light-cavalry-adjustment-ninth'] },
       { core: removeTech(resources.core, 59), ids: ['japanese-samurai-light-cavalry-adjustment-tenth'] },
+      { core: removeUnit(resources.core, 83), ids: ['japanese-samurai-light-cavalry-adjustment-fourteenth'] },
       { core: removeUnit(resources.core, 283), ids: ['japanese-samurai-light-cavalry-adjustment-eleventh'] },
       { core: removeUnit(resources.core, 567), ids: ['japanese-samurai-light-cavalry-adjustment-twelfth'] },
       { core: removeUnit(resources.core, 492), ids: ['japanese-samurai-light-cavalry-adjustment-thirteenth'] },
@@ -183,6 +208,7 @@ describe('#1139 Japanese formation support', () => {
     if (noArrowSlits.status === 'current') {
       expect(noArrowSlits.supplements.some(({ mode, entities }) => mode === 'position-variant' && entities.some(({ entity }) => entity.id === 235))).toBe(true);
       expect(noArrowSlits.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 484))).toBe(false);
+      expect(noArrowSlits.adjustments.find(({ id }) => id.endsWith('-fourteenth'))?.unavailable).not.toBe(true);
     }
     const noTrebuchetResearch = project(removeTech(resources.core, 59));
     if (noTrebuchetResearch.status === 'current') {

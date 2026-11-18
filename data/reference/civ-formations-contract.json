@@ -2925,6 +2925,13 @@
                 { "kind": "unit", "id": 359, "age": 4 },
                 { "kind": "unit", "id": 331, "age": 4 }
               ]
+            },
+            {
+              "id": "japanese-samurai-light-cavalry-adjustment-fourteenth",
+              "requires": [
+                { "kind": "building", "id": 235, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
             }
           ],
           "source": {

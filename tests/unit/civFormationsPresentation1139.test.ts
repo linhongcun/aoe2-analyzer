@@ -21,6 +21,7 @@ const protectedCases = [
   { text: '13 射程', token: '13 射程' },
   { text: '14–16 射程', token: '14–16 射程' },
   { text: '19/85', token: '19/85' },
+  { text: '5箭/1个村民', token: '5箭/1个村民' },
   { text: '1.25 倍', token: '1.25 倍' },
 ] as const;
 
@@ -39,6 +40,13 @@ describe('#1139 文明阵容数字文本呈现', () => {
     expect(html).not.toContain(`<span class="num nw">${sha}</span>`);
   });
 
+  it('keeps 12+ digit values numeric instead of treating them as hashes', () => {
+    const digits = '123456789012345678901234';
+    const html = renderToStaticMarkup(createElement(FormationText, { text: digits }));
+
+    expect(html).toBe(`<span class="num nw">${digits}</span>`);
+  });
+
   it('does not treat arbitrary Chinese between numbers as a range', () => {
     const html = renderToStaticMarkup(createElement(FormationText, { text: '1和2' }));
 
@@ -49,5 +57,15 @@ describe('#1139 文明阵容数字文本呈现', () => {
     const html = renderToStaticMarkup(createElement(FormationText, { text: '1个村民正在采集' }));
 
     expect(html).toBe('<span class="num nw">1个村民</span>正在采集');
+  });
+
+  it.each([
+    ['5个火矛兵达到箭数上限', '5个火矛兵', '达到箭数上限'],
+    ['3个精锐诸葛弩在塔内', '3个精锐诸葛弩', '在塔内'],
+    ['5个火矛兵仍需操作', '5个火矛兵', '仍需操作'],
+  ])('keeps counted-unit phrase "$1" together without swallowing following prose', (text, nounPhrase, rest) => {
+    const html = renderToStaticMarkup(createElement(FormationText, { text }));
+
+    expect(html).toBe(`<span class="num nw">${nounPhrase}</span>${rest}`);
   });
 });

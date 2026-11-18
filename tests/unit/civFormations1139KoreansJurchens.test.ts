@@ -112,7 +112,9 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(towerAdjustment('eighth').text).not.toMatch(/重型火箭|升级到/);
     expect(towerAdjustment('eighth').text).toContain('不指定升级等级');
     expect(warWagon.supplements.flatMap(({ entities }) => entities).map(({ id }) => id)).toContain(36);
-    expect(tower.reason).toContain('范围威胁下的可选比较见下方调整');
+    expect(tower.reason).toContain('攻城器按目标与已有基础选配反攻城、拆关键防御，不作固定主力');
+    expect(tower.reason).toContain('长射程威胁下可用炮或机动部队寻找处理机会，必要时退守');
+    expect(tower.reason).not.toContain('范围威胁下的可选比较见下方调整');
     expect(tower.attack).not.toContain('村民在塔区相互支援的位置建新塔');
     expect(tower.defense).not.toMatch(/长戟|手推炮/);
     expect(tower.defense).toContain('已有机动力量且可安全接近时处理，否则退守');
