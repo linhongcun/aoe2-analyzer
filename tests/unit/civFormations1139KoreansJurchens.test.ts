@@ -117,7 +117,8 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(towerAdjustment('eighth').text).not.toMatch(/重型火箭|升级到/);
     expect(towerAdjustment('eighth').text).toContain('不指定升级等级');
     expect(warWagon.supplements.flatMap(({ entities }) => entities).map(({ id }) => id)).toContain(36);
-    expect(tower.reason).toContain('阵地变体：前线箭塔＋驻扎精锐火矛兵；攻城器不作固定主力，按目标与已有基础选配的条件见补充与调整。');
+    expect(tower.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('攻城器不作固定主力');
+    expect(tower.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('当前可用项');
     expect(tower.reason).not.toContain('可用炮');
     expect(tower.reason).toContain('用户进游戏观察到火矛驻塔确实会放箭');
     expect(tower.reason).toContain('只确认“会放箭”，没有逐箭计数');

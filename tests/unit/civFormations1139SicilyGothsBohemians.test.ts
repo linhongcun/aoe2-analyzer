@@ -74,8 +74,9 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       4,
     ]);
     expect(goth.required.map(({ id }) => id)).toEqual([761, 359]);
-    expect(choice.condition).toContain('已有巨型投石机可先沿用');
-    expect(choice.condition).toContain('不要求另产手推炮');
+    expect(choice.condition).toContain('当前可用');
+    expect(choice.condition).toContain('不要求另开产线');
+    expect(choice.entities.find(({ id }) => id === 331)?.role).toContain('已有巨型投石机可先沿用');
     expect(choice.entities.map(({ id }) => id)).toEqual([36, 331]);
     expect(conditional).toHaveLength(2);
     expect(conditional.map(({ entities }) => entities.map(({ id }) => id))).toEqual([[567], [5]]);
@@ -117,7 +118,12 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       4,
       [5, 359, 36],
     ]);
-    expect(bohemian.condition).toBe('按经济与已有炮量考虑榴弹炮；塔/胡斯派战车仅条件支援。');
+    expect(bohemian.condition).toBe('火枪手、长戟兵与手推炮组成认可主路。');
+    expect(bohemian.reason).toContain('延续城堡时代火枪基础可降低转型负担，不必一升帝王就同时开齐昂贵升级。');
+    expect(bohemian.supplements.find(({ mode }) => mode === 'upgrade')!.condition).toBe('经济与炮量允许升级。');
+    expect(bohemian.adjustments!.find(({ id }) => id === 'bohemians-handcannon-halberdier-adjustment-monk-variant')!.fallback).toContain(
+      '隐藏僧侣变招；不把僧侣训练或研究列为主路前置',
+    );
     expect(bohemian.supplements.map(({ mode, entities }) => [mode, entities.map(({ id }) => id)])).toEqual([
       ['upgrade', [1709]],
       ['position-variant', [235, 1704]],

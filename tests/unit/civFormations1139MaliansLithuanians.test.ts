@@ -98,7 +98,10 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect(lithuanian.prerequisites).toEqual([]);
     expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建');
     expect(lithuanian.evidence.scope).toContain('驻军预览不代表混编实战或胜率证明');
-    expect(lithuanian.reason).toContain('烈堤司以近战处理重甲并保护攻城器');
+    expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('当前可用项');
+    expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.entities.find(({ id }) => id === 36)?.role).toContain(
+      '有护卫时按需用手推炮寻找反制机会',
+    );
     expect(lithuanian.reason).toContain('掷矛反弓并远射长戟');
     expect([lithuanian.reason, lithuanian.attack, lithuanian.defense].join(' ')).not.toMatch(/前线城镇中心作支点|村民落中心|依托中心|中心与驻扎的掷矛控制/);
     expect(lithuanian.limitation).toContain('不默认开局有4件');

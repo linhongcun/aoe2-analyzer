@@ -332,7 +332,18 @@
               ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "china-chu-ko-nu-adjustment-knight-replacement",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 283,
+                  "age": 4
+                }
+              ]
+            }
+          ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L194",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
@@ -2226,7 +2237,67 @@
           "adjustments": [
             {
               "id": "bohemians-handcannon-halberdier-adjustment-monk-variant",
-              "requires": []
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 125
+                },
+                {
+                  "kind": "tech",
+                  "id": 231
+                },
+                {
+                  "kind": "tech",
+                  "id": 252
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-villager-tech-effects",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 83
+                },
+                {
+                  "kind": "tech",
+                  "id": 231
+                },
+                {
+                  "kind": "tech",
+                  "id": 252
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-construction-variant",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 235
+                },
+                {
+                  "kind": "unit",
+                  "id": 1704
+                },
+                {
+                  "kind": "unit",
+                  "id": 83
+                }
+              ]
+            },
+            {
+              "id": "bohemians-handcannon-halberdier-adjustment-garrison-tower",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 235
+                },
+                {
+                  "kind": "unit",
+                  "id": 5
+                }
+              ]
             }
           ],
           "source": {
@@ -2258,7 +2329,18 @@
           ],
           "choices": [],
           "prerequisites": [],
-          "supplements": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            }
+          ],
           "adjustments": [
             {
               "id": "aztecs-eagle-skirmisher-adjustment-first",
