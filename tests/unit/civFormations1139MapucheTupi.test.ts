@@ -117,7 +117,8 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(blackwood.adjustments[2]!.text).toContain('按需调整长戟比例');
     expect(blackwood.adjustments[2]!.text).toContain('保护黑檀木');
     expect(blackwood.adjustments[2]!.text).not.toContain('替换部分主力');
-    expect(blackwood.alternatives).toContain('职责重叠');
+    expect(blackwood.alternatives).toContain('另需黄金');
+    expect(blackwood.alternatives).toContain('近战接敌风险');
     expect(blackwood.alternatives).toContain('不作默认投入');
     expect(blackwood.alternatives).not.toContain('考虑');
 

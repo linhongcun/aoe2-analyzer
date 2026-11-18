@@ -1927,30 +1927,34 @@
           "adjustments": [
             {
               "id": "bulgarians-krepost-konnik-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
             },
             {
               "id": "bulgarians-krepost-konnik-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
             },
             {
               "id": "bulgarians-krepost-konnik-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
             },
             {
               "id": "bulgarians-krepost-konnik-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
             },
             {
               "id": "bulgarians-krepost-konnik-adjustment-fifth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 1255, "age": 4 }]
+            },
+            {
+              "id": "bulgarians-krepost-konnik-adjustment-sixth",
+              "requires": [{ "kind": "tech", "id": 685 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [718, 720, 722, 723, 724, 726, 728, 730, 745, 746, 747, 748, 749, 757, 758, 759, 760, 764]
+          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764]
         }
       ]
     },
@@ -2014,7 +2018,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L770",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [770, 772, 774, 775, 776, 777, 779, 781, 783, 801, 802, 803, 804, 812, 813, 814, 815, 816, 822]
+          "sourceLines": [770, 774, 775, 776, 777, 779, 781, 783, 789, 791, 793, 801, 802, 803, 804, 806, 812, 813, 814, 815, 816, 820, 822]
         }
       ]
     },
