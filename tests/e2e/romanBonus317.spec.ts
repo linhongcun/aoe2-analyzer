@@ -41,6 +41,7 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(usage0.locator('[data-usage="gather"]')).toHaveAttribute('data-on', 'true');
     await expect(usage0.locator('[data-usage="construction"]')).toHaveAttribute('data-on', 'true');
     await expect(usage0.locator('[data-usage="repair"]')).toHaveAttribute('data-on', 'false');
+    await expect(dialog).not.toContainText('经济/费用效果（文本展示）');
     await dialog.getByRole('button', { name: '关闭', exact: true }).click();
     await expect(dialog).not.toBeVisible();
     await r2.getByRole('button', { name: /作用与依据/u }).click();
@@ -55,7 +56,6 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(usage2.locator('[data-usage="cost"]')).toHaveAttribute('data-on', 'true');
     await expect(usage2.locator('[data-usage="cost"]')).toContainText('单位 PK「等资源」');
     // Steve 设计审查：有工具计入的加成不再显示「.dat 经济/费用效果（文本展示）」
-    await expect(dialog).not.toContainText('经济/费用效果（文本展示）');
     await expect(dialog2).not.toContainText('经济/费用效果（文本展示）');
   });
 
