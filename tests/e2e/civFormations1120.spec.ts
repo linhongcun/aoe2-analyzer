@@ -453,4 +453,22 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
     'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386',
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+  await page.goto('./#/civ/Jurchens#formation-jurchens-fire-lancer-tower');
+  const jurchensHeading = page.locator('#formation-jurchens-fire-lancer-tower');
+  const jurchens = page.locator(formations).locator('.formation-list > article').filter({ has: jurchensHeading });
+  await expect(jurchens).toBeVisible();
+  for (const token of ['14 攻', '80 食', '95 血']) {
+    await expect(jurchens.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+  await page.goto('./#/civ/Japanese#formation-japanese-samurai-light-cavalry');
+  const japaneseHeading = page.locator('#formation-japanese-samurai-light-cavalry');
+  const japanese = page.locator(formations).locator('.formation-list > article').filter({ has: japaneseHeading });
+  await expect(japanese).toBeVisible();
+  for (const token of ['45F/30G', '1.43s', '1:12.19', '80 食物']) {
+    await expect(japanese.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
