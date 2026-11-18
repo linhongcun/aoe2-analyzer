@@ -149,13 +149,17 @@ describe('#1139 文明路线契约与投影', () => {
     expect(turks.status).toBe('approved');
     expect(turks.playtest).toBe('unreported');
     expect(turks.required).toEqual([]);
-    expect(turks.condition).toContain('已有重装骑射手或精锐苏丹亲兵基础');
-    expect(turks.condition).toContain('按条件择一延续');
-    expect(turks.condition).toContain('不从零强转火枪');
-    expect(turks.condition).toContain('不把两者同时列为必需');
-    expect(turks.reason).toContain('避免从零强转火枪');
-    expect(turks.limitation).toContain('重装骑射手仍需升级与科技投入');
+    expect(turks.condition).toContain('已有骑射手或苏丹亲兵基础');
+    expect(turks.condition).toContain('按条件择一延续为重装骑射手或精锐苏丹亲兵');
+    expect(turks.condition).toContain('不为采用该延续路线从零另起兵线');
+    expect(turks.condition).toContain('两者并非同时必需');
+    expect(turks.reason).toContain('沿已有骑射手或苏丹亲兵基础按条件延续');
+    expect(turks.reason).toContain('不必强转火枪');
+    expect(turks.limitation).toContain('从零转重装骑射手仍需补升级与科技投入');
+    expect(turks.limitation).toContain('贴身 PK 不能否定骑射手的射程和机动');
     expect(turks.limitation).toContain('苏丹亲兵依赖城堡产能和精锐升级');
+    expect(turks.evidence.recordedVersion).toBe('v0.77.102 · DE 188329 · 84988dd');
+    expect(turks.evidence.sourceLines).toEqual([273, 274, 277]);
     expect(turks.alternatives).toBeUndefined();
     expect(turks.choices?.map(({ title, entities }) => [title, entities.map(({ id }) => id)])).toEqual([
       ['重装骑射手', [474]],
