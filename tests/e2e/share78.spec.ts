@@ -70,6 +70,45 @@ for (const width of [360, 375, 390, 1280])
     expect(errors).toEqual([]);
   });
 
+test('#1142 固定4v4 PK刷新及分享图尺寸、输入与恢复链接', async ({ page }) => {
+  const route = './#/duel?a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4';
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(route);
+  await expect(page.locator('#duel-res')).toBeVisible();
+  const capture = async () =>
+    page.locator('#duel-res').evaluate((root) => ({
+      winner: root.querySelector('.duel-win')?.textContent?.replace(/\s+/g, ' ').trim(),
+      counts: root.querySelector('.duel-tab')?.innerText,
+      cost: root.querySelector('[data-t="pk-trade"]')?.innerText,
+      replay: root.querySelector('[data-t="battle-replay"]')?.innerText,
+      groupModel: root.querySelector(':scope > p.note')?.innerText,
+      model: document.querySelector('#duel-model')?.innerText,
+    }));
+  const before = await capture();
+  await page.reload();
+  await expect(page.locator('#duel-res')).toBeVisible();
+  expect(await capture()).toEqual(before);
+
+  await page.getByRole('button', { name: '生成分享图', exact: true }).click();
+  const img = page.locator('.share-preview img');
+  await expect(img).toBeVisible();
+  await expect(img).toHaveAttribute('alt', /^4 .+ 对 4 .+：A · .+ 获胜分享图$/);
+  expect(await img.evaluate((image: HTMLImageElement) => [image.naturalWidth, image.naturalHeight])).toEqual([1200, 630]);
+  const share = await page.getByRole('link', { name: '打开此分享链接' }).getAttribute('href');
+  expect(share).toBeTruthy();
+  const parsed = new URL(share!);
+  expect(parsed.pathname.endsWith('/duel/')).toBe(true);
+  const params = new URLSearchParams(parsed.search);
+  expect(params.get('a')).toBe('7.Franks.2..');
+  expect(params.get('b')).toBe('4.Britons.2..');
+  expect(params.get('m')).toBe('n');
+  expect(params.get('na')).toBe('4');
+  expect(params.get('nb')).toBe('4');
+  await page.goto(share!);
+  await expect(page.locator('#duel-res')).toBeVisible();
+  expect(await capture()).toEqual(before);
+});
+
 test('开局真实路径还原设置，复制链接保留当前步骤', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('builds/scouts-18/?civ=Franks&dist=7&house=0&step=3');
