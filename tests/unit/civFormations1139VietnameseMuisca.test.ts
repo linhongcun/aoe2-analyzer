@@ -56,14 +56,15 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
       expect(adjustment.text).toContain('站内接触模型');
       expect(adjustment.text).toContain('用户未实战确认');
       expect(adjustment.text).toContain('不代表胜率');
-      expect(adjustment.fallback).toContain('独立保留');
+      expect(adjustment.fallback).toContain('另一分支按自身资料独立核验');
+      expect(adjustment.fallback).toContain('不据此宣称可用');
     }
 
     expect(vietnamese.reason).toContain('仅凑合可用');
     expect(vietnamese.reason).toContain('未经用户实战确认');
     expect(vietnamese.limitation).toContain('没有建筑学');
     expect(vietnamese.limitation).toContain('没有鼓风炉');
-    expect(vietnamese.limitation).toContain('不影响火矛驻塔输出');
+    expect(vietnamese.limitation).toContain('火矛驻塔输出（机制推断，待实战验证）');
     expect(vietnamese.limitation).toContain('影响塔外近战和轻骑清炮');
     expect(vietnamese.limitation).toContain('无文明专属加成');
     expect(vietnamese.limitation).toContain('塔仅守家或守资源点，不作主力');
@@ -72,6 +73,8 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(vietnamese.adjustments[2]!.text).toContain('剩余168/420');
     expect(vietnamese.adjustments[2]!.text).toContain('站内接触模型');
     expect(vietnamese.adjustments[2]!.text).toContain('用户未实战确认');
+    expect(vietnamese.adjustments[2]!.text).toContain('火矛仅作辅助');
+    expect(vietnamese.adjustments[2]!.text).not.toContain('长戟');
     expect(vietnamese.adjustments[2]!.requires).toEqual([{ kind: 'unit', id: 1134, age: 4 }]);
     expect(vietnamese.adjustments[3]!.requires).toEqual([{ kind: 'unit', id: 359, age: 4 }]);
     expect(vietnamese.adjustments[4]!.requires).toEqual([{ kind: 'unit', id: 36, age: 4 }]);
@@ -116,7 +119,33 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
       const missing = view(unitId);
       expectFallback(missing, vietnamese, adjustment.id);
       expect(missing.status).toBe('current');
-      if (missing.status === 'current') expect(missing.required.map(({ entity }) => entity.id)).toEqual([235, 1903, 546]);
+      if (missing.status === 'current') {
+        expect(missing.required.map(({ entity }) => entity.id)).toEqual([235, 1903, 546]);
+        if (unitId === 359) {
+          const visibleAdjustments = missing.adjustments
+            .filter(({ unavailable }) => !unavailable)
+            .map(({ text }) => text ?? '')
+            .join(' ');
+          expect(visibleAdjustments).not.toContain('长戟');
+        }
+      }
+    }
+
+    const unitById = { ...core.unitById };
+    delete unitById[1131];
+    delete unitById[1155];
+    const withoutBothArchers = project('Vietnamese', vietnamese, { ...core, unitById }, trees);
+    expect(withoutBothArchers.status).toBe('current');
+    if (withoutBothArchers.status === 'current') {
+      expect(withoutBothArchers.required.map(({ entity }) => entity.id)).toEqual([235, 1903, 546]);
+      expect(withoutBothArchers.supplements.some(({ mode }) => mode === 'choice')).toBe(false);
+      for (const adjustment of vietnamese.adjustments.slice(0, 2)) {
+        const fallback = withoutBothArchers.adjustments.find(({ id }) => id === adjustment.id);
+        expect(fallback).toMatchObject({ unavailable: true, text: adjustment.fallback });
+        expect(fallback?.text).toContain('另一分支按自身资料独立核验');
+        expect(fallback?.text).toContain('不据此宣称可用');
+        expect(fallback?.text).not.toMatch(/另一(?:分支|项)(?:仍|已|继续)?可(?:用|训练)/);
+      }
     }
   });
 
