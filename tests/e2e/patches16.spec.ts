@@ -8,6 +8,7 @@ for (const width of [360, 375, 390, 1280]) {
       if (e.type() === 'error') errors.push(e.text());
     });
     await page.goto('./#/patches');
+    await page.getByRole('button', { name: '按版本', exact: true }).click();
     await page.getByRole('link', { name: /DE Update 185872/ }).click();
     const filters = page.locator('.patch-filters');
     if (!(await filters.evaluate((el) => (el as HTMLDetailsElement).open))) await filters.locator('summary').click();

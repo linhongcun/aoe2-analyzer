@@ -2,9 +2,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const PAGES = [
-  ['/unit/873?tab=history', '#unit-history', '基础食物费用增加，黄金费用不变。'],
-  ['/building/84?tab=history', '#building-history', '食物基础交易价'],
-  ['/tech/875?tab=history', '#tech-history', '护甲'],
+  ['/unit/873?tab=history', '#unit-history', 'unit'],
+  ['/building/84?tab=history', '#building-history', 'building'],
+  ['/tech/875?tab=history', '#tech-history', 'tech'],
 ] as const;
 
 function watch(page: Page) {
@@ -41,7 +41,7 @@ async function visibleTitles(page: Page, selector: string) {
 test('#952 单位、建筑、科技展开后只有一枚更新历史标题', async ({ page }) => {
   const errors = watch(page);
   await lightDesktop(page);
-  for (const [route, root, copy] of PAGES) {
+  for (const [route, root, kind] of PAGES) {
     await page.goto(`./#${route}`);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     const block = page.locator(root);
@@ -56,13 +56,10 @@ test('#952 单位、建筑、科技展开后只有一枚更新历史标题', asy
     const box = await block.locator('> summary').boundingBox();
     expect(box!.height).toBeGreaterThanOrEqual(44);
     expect(box!.width).toBeGreaterThanOrEqual(44);
-    if (route.startsWith('/unit/')) {
-      await expect(block.locator('[data-unit-history]')).toContainText(copy);
-      await expect(block.locator('[data-unit-history]')).toContainText('部分收录');
-    } else {
-      await expect(block.getByTestId('entity-history')).toContainText(copy);
-      await expect(block.locator('.history-count')).toBeVisible();
-    }
+    await expect(block.getByRole('link', { name: '查看完整历史' })).toHaveAttribute(
+      'href',
+      new RegExp('/patches\\?obj=' + kind + '%3A' + route.split('/')[2]?.split('?')[0]),
+    );
   }
   expect(errors).toEqual([]);
 });
@@ -105,10 +102,7 @@ test('#952 文明页历史与更新标题不变', async ({ page }) => {
   await expect(fold.locator('> summary')).toHaveText('更新历史');
   await expect(fold.locator('> summary').getByRole('heading')).toHaveCount(0);
   await expect(fold.getByTestId('entity-history').getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
-  await expect(fold.getByTestId('civ-updates-reader')).toBeVisible();
-  await expect(fold.getByRole('heading', { level: 2, name: '更新历史', exact: true })).toHaveCount(1);
-  await expect(page.getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(1);
-  await expect(fold.getByTestId('civ-updates-reader')).toContainText('部分收录');
+  await expect(fold.getByRole('link', { name: '查看完整历史' })).toHaveAttribute('href', /obj=civ%3ABurgundians/u);
   expect(errors).toEqual([]);
 });
 

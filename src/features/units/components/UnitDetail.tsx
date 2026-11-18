@@ -22,7 +22,7 @@ import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { UnitUpdates } from '../../../shared/ui/UnitUpdates';
+import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import { Linked, Loading } from '../../../shared/ui/widgets';
@@ -567,7 +567,7 @@ export default function UnitDetail() {
           <h2>更新历史</h2>
           <Icon name="chevron-down" />
         </summary>
-        <UnitUpdates entityId={`unit/${u.id}`} />
+        <EncyclopediaHistoryLink entityId={'unit/' + u.id} enabled={tab === 'history'} />
       </details>
     </section>
   );

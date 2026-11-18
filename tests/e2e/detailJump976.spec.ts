@@ -183,7 +183,7 @@ test('缺项仍左对齐，点击跳转、更新历史和键盘焦点保持原�
   await techNav.getByRole('button', { name: '更新历史', exact: true }).click();
   await expect(page).toHaveURL(/#\/tech\/3\?tab=history$/);
   await expect(page.locator('#tech-history')).toHaveJSProperty('open', true);
-  await expect(page.getByTestId('entity-history')).toBeVisible();
+  await expect(page.locator('#tech-history').getByRole('link', { name: '查看完整历史' })).toBeVisible();
 
   await openAt(page, '/building/12', '#building h1');
   const buildingNav = page.locator('.bd-jump');
@@ -201,5 +201,5 @@ test('缺项仍左对齐，点击跳转、更新历史和键盘焦点保持原�
   await buildingNav.getByRole('button', { name: '更新历史', exact: true }).click();
   await expect(page).toHaveURL(/#\/building\/12\?tab=history$/);
   await expect(page.locator('#building-history')).toHaveJSProperty('open', true);
-  await expect(page.getByTestId('entity-history')).toBeVisible();
+  await expect(page.locator('#building-history').getByRole('link', { name: '查看完整历史' })).toBeVisible();
 });

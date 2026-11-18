@@ -8,6 +8,7 @@ import { parseResourceChange } from '../../domain/resourceValue';
 import { Icon } from './Icon';
 import { ResourceValue } from './ResourceValue';
 import { DetailPage } from './layout';
+import { EncyclopediaHistoryLink } from './HistoryReaderLink';
 import './patchHistory.css';
 
 /** 前后值之间的箭头是规定文案，不是界面图标。 */
@@ -377,6 +378,7 @@ export function HistoricalEntityDetail({ target }: { target: HistoryTarget }) {
             <>
               <p>历史档案，当前数据目录未收录</p>
               <p className="note">{archived?.status === 'upgrade' ? '这是单位升级科技的历史身份。' : '此处保留旧内容的历史身份与当时记录。'}</p>
+              <EncyclopediaHistoryLink entityId={target.targetType + '/' + target.targetId + (target.targetType === 'tech' ? '@retired' : '')} />
               <HistoryTimeline archives={state.archives} target={target} />
             </>
           ),

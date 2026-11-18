@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { PatchArchive } from '../domain/patchHistory';
+import { archiveOrderingDate, type PatchArchive } from '../domain/patchHistory';
 
 // Loaded only when a history tab or patch page is opened; current entity data stays independent.
 const sources = import.meta.glob('../../data/game/patches/*.json', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
@@ -14,14 +14,11 @@ export function loadPatchArchives(): Promise<PatchArchive[]> {
       if (!archive.id || !(archive.releaseDate ?? archive.date) || !Array.isArray(archive.entries)) throw new Error('补丁档案格式无效');
       return {
         ...archive,
-        date: archive.releaseDate ?? archive.date,
-        branch: archive.branch ?? 'DE',
-        releaseType: archive.releaseType ?? 'release',
         coverage: archive.coverage ?? '既有版本补丁记录，历史关联仍在补录',
       };
     }),
   )
-    .then((archives) => archives.sort((a, b) => b.date.localeCompare(a.date)))
+    .then((archives) => archives.sort((a, b) => archiveOrderingDate(b).localeCompare(archiveOrderingDate(a))))
     .catch((error: unknown) => {
       pending = undefined;
       throw error;

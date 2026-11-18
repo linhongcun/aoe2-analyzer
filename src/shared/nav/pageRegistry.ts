@@ -271,7 +271,7 @@ export const PAGES: readonly PageDef[] = [
     label: '更新历史',
     en: 'Update History',
     icon: 'scroll',
-    desc: '按对象或版本查看已收录改动',
+    desc: '按对象阅读变化与依据，或浏览独立版本档案',
     match: /^\/patches(\/.*)?$/,
     searchAliases: ['版本补丁', '补丁'],
     component: 'Patches',
