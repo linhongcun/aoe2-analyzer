@@ -157,12 +157,14 @@ describe('#1139 文明路线契约与投影', () => {
     expect(swords.evidence.playtest).toContain('本轮未做新模拟或实战验证');
     expect(swords.evidence.sourceLines).toEqual([355, 356, 357]);
     expect(swords.evidence.scope).not.toContain('来源行');
-    const crossbowSupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 492))!;
-    expect(progression.supplements[0]!.entities[0]!.role).toBe('弩手条件支援');
-    expect(crossbowSupport.mode).toBe('as-needed');
-    expect(crossbowSupport.condition).toContain('已有弩手基础');
-    expect(crossbowSupport.condition).toContain('不是固定第三主力');
-    expect(crossbowSupport.entities).toEqual([expect.objectContaining({ kind: 'unit', id: 492, historicalName: '劲弩手', age: 4 })]);
+    const crossbowSupport = progression.adjustments.find(({ id }) => id === 'malay-battle-elephant-progression-adjustment-first')!;
+    expect(crossbowSupport.requires).toEqual([{ kind: 'unit', id: 24, age: 3 }]);
+    expect(crossbowSupport.fallback).toContain('隐藏该条件支援');
+    const arbalesterSupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 492))!;
+    expect(arbalesterSupport.mode).toBe('as-needed');
+    expect(arbalesterSupport.condition).toContain('已有弩手基础');
+    expect(arbalesterSupport.condition).toContain('不是固定第三主力');
+    expect(arbalesterSupport.entities).toEqual([expect.objectContaining({ kind: 'unit', id: 492, historicalName: '劲弩手', age: 4 })]);
     expect(progression.required.map(({ id }) => id)).not.toContain(492);
     expect(progression.limitation).toContain('可用畜牧与骑兵鳞甲，但缺血统、骑兵锁甲和骑兵钢甲');
     expect(progression.limitation).toContain('劲弩需独立兵种线升级和射手攻防科技');
@@ -181,11 +183,15 @@ describe('#1139 文明路线契约与投影', () => {
     expect(siegeSupport.mode).toBe('as-needed');
     expect(siegeSupport.condition).toContain('按拆防/反攻城需求');
     expect(siegeSupport.condition).toContain('手推炮需攻城武器厂生产');
-    expect(siegeSupport.condition).toContain('攻城技师仅按需投入');
+    expect(siegeSupport.condition).not.toContain('攻城技师');
     expect(siegeSupport.condition).not.toContain('骑兵');
     expect(siegeSupport.entities.map(({ id }) => id)).toEqual([36]);
+    const siegeEngineer = progression.supplements.find(({ mode }) => mode === 'mechanism-support')!;
+    expect(siegeEngineer.condition).toContain('完成攻城技师研究后才生效');
+    expect(siegeEngineer.condition).toContain('不是手推炮训练前置');
+    expect(siegeEngineer.entities.map(({ id }) => id)).toEqual([377]);
     expect(siegeSupport.entities[0]!.role).toContain('攻城武器厂生产');
-    expect(siegeSupport.entities[0]!.role).toContain('攻城技师非必需');
+    expect(siegeSupport.entities[0]!.role).not.toContain('攻城技师');
     expect(progression.prerequisites).toEqual([]);
     expect(progression.required.map(({ id }) => id)).not.toContain(36);
     const resources = await catalog();
@@ -239,7 +245,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(main.limitation).toContain('炮的属性不等于拆石质建筑所需时间');
     expect(main.limitation).toContain('石质建筑数据仍待核实');
     expect(main.limitation).not.toMatch(/掩护、拦截|保存下来的输出核心|免费化学|14 射程|100 生命/);
-    expect(main.alternatives).toBe('重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗；反骑缺口优先考虑重装骆驼。');
+    expect(main.alternatives).toBe('重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗。');
     expect(main.evidence.scope).not.toContain('来源行');
   });
 

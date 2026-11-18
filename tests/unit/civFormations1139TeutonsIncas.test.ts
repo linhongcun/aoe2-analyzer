@@ -21,7 +21,7 @@ const INCAS_SOURCE_URLS = {
 } as const;
 const INCAS_SOURCE_LINES = {
   'incas-kamayuk-skirmisher': [877, 885, 887, 888, 891, 893, 899, 900, 901, 902, 908, 910],
-  'incas-champi-candidate': [879, 889, 891, 893, 901, 910],
+  'incas-champi-candidate': [879, 889, 891, 893, 901, 902, 910],
 } as const;
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
@@ -40,6 +40,25 @@ const expectFallback = (view: ReturnType<typeof projectFormation>, entry: Return
 };
 
 describe('#1139 条顿与印加路线边界', () => {
+  it('条顿按条件改选主路线而非硬互斥；印加候选保留名称更正时间边界', () => {
+    const teutons = byCiv('Teutons');
+    for (const entry of teutons.routes) {
+      for (const adjustment of entry.adjustments) {
+        if (adjustment.text?.includes('按条件改选')) {
+          expect(adjustment.text).toContain('不表示默认同时铺开三套');
+          expect(adjustment.text).not.toContain('不同时训练三套');
+        }
+      }
+    }
+    const eliteKnight = route('Teutons', 'teutons-elite-knight-skirmisher');
+    expect(eliteKnight.adjustments[1]!.text).not.toContain('已有长戟');
+    expect(eliteKnight.adjustments[1]!.text).toContain('按实际反骑压力补长戟兵');
+    const candidate = route('Incas', 'incas-champi-candidate');
+    expect(candidate.evidence.scope).toContain('固定来源 L879');
+    expect(candidate.evidence.scope).toContain('2026-11-18 08:51 UTC');
+    expect(candidate.evidence.scope).toContain('候选实战未核实');
+  });
+
   it('保留路线统计与原四条回归路线', () => {
     expect(civFormationContent).toHaveLength(28);
     expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(43);

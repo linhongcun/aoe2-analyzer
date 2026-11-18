@@ -443,18 +443,13 @@
           ],
           "choices": [],
           "prerequisites": [],
-          "supplements": [
+          "supplements": [],
+          "adjustments": [
             {
-              "mode": "conditional",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 207
-                }
-              ]
+              "id": "hindustani-handcannon-hussar-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 207, "age": 4 }]
             }
           ],
-          "adjustments": [],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
@@ -502,7 +497,7 @@
           "adjustments": [
             {
               "id": "turks-hussar-handcannon-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
             },
             {
               "id": "turks-hussar-handcannon-adjustment-second",
@@ -772,15 +767,6 @@
           "prerequisites": [],
           "supplements": [
             {
-              "mode": "support",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 24
-                }
-              ]
-            },
-            {
               "mode": "as-needed",
               "entities": [
                 {
@@ -809,9 +795,24 @@
                   "age": 4
                 }
               ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 377,
+                  "age": 4
+                }
+              ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "malay-battle-elephant-progression-adjustment-first",
+              "requires": [{ "kind": "unit", "id": 24, "age": 3 }]
+            }
+          ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
             "discussion": "https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac"
@@ -2317,7 +2318,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879",
             "discussion": "https://app.devin.ai/sessions/998ba78b2edf4799bb383d10b7e8eef9"
           },
-          "sourceLines": [879, 889, 891, 893, 901, 910]
+          "sourceLines": [879, 889, 891, 893, 901, 902, 910]
         }
       ]
     },

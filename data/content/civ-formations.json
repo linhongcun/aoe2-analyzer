@@ -654,20 +654,7 @@
           }
         ],
         "prerequisites": [],
-        "supplements": [
-          {
-            "mode": "conditional",
-            "condition": "重骑压力且黄金/升级条件可承受",
-            "entities": [
-              {
-                "kind": "unit",
-                "id": 207,
-                "historicalName": "帝王骆驼兵",
-                "role": "帝王骆驼兵"
-              }
-            ]
-          }
-        ],
+        "supplements": [],
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
@@ -675,9 +662,17 @@
           "recordedVersion": "原记录未记录站点版本/构建",
           "sourceLines": [238, 240, 242]
         },
-        "reason": "用户认可的经验：需要节省黄金的帝王中后期，以火枪手＋翼骑兵＋少量手推炮为基础。火枪处理威胁主力的步兵，翼骑掩护、承担持续补充的损耗并抓机会清攻城，炮拆防御、威胁敌方攻城器。 投入与扩展：火枪和翼骑都耗食物，必须支持两条生产线的农田需求；火炮消耗木金，应少量保存。骑兵压力大、黄金和升级投入可承受时，评估帝王骆驼兵加入或替换一部分骑兵，不默认同时维持多条耗金主力。训练资源差额不能代替战力与成型时间比较。",
-        "limitation": "投入与扩展：火枪和翼骑都耗食物，必须支持两条生产线的农田需求；火炮消耗木金，应少量保存。骑兵压力大、黄金和升级投入可承受时，评估帝王骆驼兵加入或替换一部分骑兵，不默认同时维持多条耗金主力。训练资源差额不能代替战力与成型时间比较。",
-        "adjustments": [],
+        "reason": "用户认可的经验：需要节省黄金的帝王中后期，以火枪手＋翼骑兵＋少量手推炮为基础。火枪处理威胁主力的步兵，翼骑掩护、承担持续补充的损耗并抓机会清攻城，炮拆防御、威胁敌方攻城器。火枪和翼骑都耗食物，必须支持两条生产线的农田需求；火炮消耗木金，应少量保存。训练资源差额不能代替战力与成型时间比较。",
+        "limitation": "火枪和翼骑都耗食物，需支持两条生产线；手推炮消耗木材与黄金，宜少量保存。训练资源差额不能代替战力与成型时间比较。",
+        "adjustments": [
+          {
+            "id": "hindustani-handcannon-hussar-adjustment-first",
+            "when": "重骑压力且黄金/升级条件可承受",
+            "text": "重骑压力且黄金与升级投入可承受时，评估帝王骆驼兵加入或替换部分骑兵；不默认同时维持多条耗金主力。",
+            "requires": [{ "kind": "unit", "id": 207, "age": 4 }],
+            "fallback": "缺少帝王骆驼兵目录资料时隐藏该条件投入；保留火枪手＋翼骑兵＋少量手推炮主路。"
+          }
+        ],
         "source": {
           "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
@@ -758,7 +753,9 @@
           {
             "id": "turks-hussar-handcannon-adjustment-first",
             "when": "骑士、游侠成群",
-            "text": "按 hongcun 经验补重装骆驼正面反骑，火枪处理护航步兵，翼骑保留侧翼任务。缺长枪兵、长戟兵，不能照搬长戟方案；采金加速帮助供应双金线，不增加矿中黄金总量"
+            "text": "按 hongcun 经验补重装骆驼正面反骑，火枪处理护航步兵，翼骑保留侧翼任务。缺长枪兵、长戟兵，不能照搬长戟方案；采金加速帮助供应双金线，不增加矿中黄金总量",
+            "requires": [{ "kind": "unit", "id": 330, "age": 4 }],
+            "fallback": "缺少重装骆驼兵目录资料时隐藏该反骑建议；保留翼骑＋火枪＋手推炮主路。"
           },
           {
             "id": "turks-hussar-handcannon-adjustment-second",
@@ -776,7 +773,7 @@
             "text": "优先用长射程炮寻找射击机会，翼骑找侧翼空当，不假定能冲过护卫"
           }
         ],
-        "alternatives": "重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗；反骑缺口优先考虑重装骆驼。",
+        "alternatives": "重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗。",
         "source": {
           "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
@@ -1206,18 +1203,6 @@
         "prerequisites": [],
         "supplements": [
           {
-            "mode": "support",
-            "condition": "枪兵压力",
-            "entities": [
-              {
-                "kind": "unit",
-                "id": 24,
-                "historicalName": "弩手",
-                "role": "弩手条件支援"
-              }
-            ]
-          },
-          {
             "mode": "as-needed",
             "condition": "已有弩手基础并投入相关射手科技时，可按需延续为劲弩手；不是固定第三主力。",
             "entities": [
@@ -1245,14 +1230,27 @@
           },
           {
             "mode": "as-needed",
-            "condition": "按拆防/反攻城需求；手推炮需攻城武器厂生产，攻城技师仅按需投入。",
+            "condition": "按拆防/反攻城需求；手推炮需攻城武器厂生产。",
             "entities": [
               {
                 "kind": "unit",
                 "id": 36,
                 "historicalName": "手推炮",
-                "role": "攻城武器厂生产，攻城技师非必需",
+                "role": "攻城武器厂生产",
                 "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "完成攻城技师研究后才生效；不是手推炮训练前置。",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 377,
+                "age": 4,
+                "historicalName": "攻城技师",
+                "role": "按需研究后机制支持"
               }
             ]
           }
@@ -1265,7 +1263,15 @@
           "sourceLines": [355, 356, 357]
         },
         "reason": "用户认为便宜的折扣象兵是前中期主力；帝王时代可按经济与敌方反制继续升级为精锐象兵。弩手仅在枪兵压力下作条件支援，不与象兵固定同出。",
-        "adjustments": [],
+        "adjustments": [
+          {
+            "id": "malay-battle-elephant-progression-adjustment-first",
+            "when": "出现枪兵压力",
+            "text": "枪兵压力下可用弩手作条件支援；不固定训练“象兵＋弩手”。",
+            "requires": [{ "kind": "unit", "id": 24, "age": 3 }],
+            "fallback": "缺少弩手目录资料时隐藏该条件支援；保留象兵进程主路。"
+          }
+        ],
         "limitation": "象兵仍需食物与黄金；帝王时代不自动转线。僧侣密集或反骑护卫阻断接近时，先处理反制并评估转线。马来可用畜牧与骑兵鳞甲，但缺血统、骑兵锁甲和骑兵钢甲。劲弩需独立兵种线升级和射手攻防科技。"
       },
       {
@@ -2060,7 +2066,7 @@
           {
             "id": "teutons-paladin-skirmisher-adjustment-fourth",
             "when": "近战兵多、狭口或已有阵地",
-            "text": "满足近战压力、狭口或已有阵地时，可按条件改选精锐条顿骑士＋精锐掷矛手路线；与游侠路线择一，不同时训练三套。仍需注意开阔地风筝与慢速骑士追攻城器的风险。",
+            "text": "近战压力、狭口或已有阵地时，按条件改选精锐条顿骑士＋精锐掷矛手主路线；不表示默认同时铺开三套。仍需注意开阔地风筝与慢速骑士追攻城器的风险。",
             "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }],
             "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留游侠＋精锐掷矛手路线。"
           }
@@ -2135,7 +2141,7 @@
           {
             "id": "teutons-halberdier-handcannon-adjustment-first",
             "when": "弓手、长戟兵",
-            "text": "主动接战且对手有弓手或长戟时，可按条件改选游侠＋精锐掷矛手路线；与本低价前排路线择一，不同时训练三套。",
+            "text": "主动接战且对手有弓手或长戟时，按条件改选游侠＋精锐掷矛手主路线；不表示默认同时铺开三套。",
             "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }],
             "fallback": "游侠路线缺失或不可用于当前推荐时隐藏此改选建议；保留本路线长戟＋火枪。"
           },
@@ -2152,7 +2158,7 @@
           {
             "id": "teutons-halberdier-handcannon-adjustment-fourth",
             "when": "近战兵多、狭口或已有阵地",
-            "text": "满足近战压力、狭口或已有阵地时，可按条件改选精锐条顿骑士＋精锐掷矛手路线；与本路线择一，不同时训练三套。",
+            "text": "近战压力、狭口或已有阵地时，按条件改选精锐条顿骑士＋精锐掷矛手主路线；不表示默认同时铺开三套。",
             "requires": [{ "kind": "route", "id": "teutons-elite-knight-skirmisher" }],
             "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留本路线长戟＋火枪。"
           }
@@ -2227,14 +2233,14 @@
           {
             "id": "teutons-elite-knight-skirmisher-adjustment-first",
             "when": "弓手、长戟兵",
-            "text": "主动接战面对弓手或长戟时，可按条件改选游侠＋精锐掷矛手路线；不与本条顿骑士路线同时列为主力。",
+            "text": "主动接战面对弓手或长戟时，按条件改选游侠＋精锐掷矛手主路线；不表示默认同时铺开三套。",
             "requires": [{ "kind": "route", "id": "teutons-paladin-skirmisher" }],
             "fallback": "游侠路线缺失或不可用于当前推荐时隐藏此改选建议；保留条顿骑士＋精锐掷矛手路线。"
           },
           {
             "id": "teutons-elite-knight-skirmisher-adjustment-second",
             "when": "出现实际反骑压力",
-            "text": "已有长戟兵可按实际反骑压力补队；不替代本路线精锐条顿骑士＋精锐掷矛手，也不作为固定常驻兵线。",
+            "text": "按实际反骑压力补长戟兵；不替代本路线精锐条顿骑士＋精锐掷矛手，也不作为固定常驻兵线。",
             "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
             "fallback": "缺少长戟兵目录资料时隐藏该反骑补队；保留本条顿骑士＋掷矛手路线。"
           },
@@ -3653,9 +3659,9 @@
         "evidence": {
           "recognition": "维护者已更正印加为蔷琵兵系；本卡仅记录弩炮威胁下的条件候选，不并入已认可主路。",
           "playtest": "该反攻城条件打法实战未核实。",
-          "scope": "仅记录维护者更正后的规范兵系名称、弩炮威胁下条件反攻城与接敌/护卫边界；本候选实战未核实，不并入主路。",
+          "scope": "固定来源 L879 记录名称替换未经用户确认；维护者于 2026-11-18 08:51 UTC 后续更正蔷琵兵系，已取代该未确认边界。反攻城候选实战未核实，不并入主路。",
           "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a 核对",
-          "sourceLines": [879, 889, 891, 893, 901, 910]
+          "sourceLines": [879, 889, 891, 893, 901, 902, 910]
         },
         "source": {
           "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879",
