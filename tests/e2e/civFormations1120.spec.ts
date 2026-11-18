@@ -18,6 +18,21 @@ async function onScreenBelowNav(target: Locator) {
     .toBe('visible');
 }
 
+async function chapterGeometry(chapters: Locator) {
+  return chapters.evaluate((element) => {
+    const links = Array.from(element.querySelectorAll('a'));
+    return {
+      count: links.length,
+      rows: new Set(links.map((link) => Math.round(link.getBoundingClientRect().top))).size,
+      wrap: getComputedStyle(element).flexWrap,
+      overflow: getComputedStyle(element).overflowX,
+      width: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      height: element.getBoundingClientRect().height,
+    };
+  });
+}
+
 for (const width of [1280, 390]) {
   test(`#1120 ${width} 键盘导航、双展开、实体同标签返回和可见焦点`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -116,6 +131,143 @@ test('#1120 刷新实体详情后返回只按锚点定位', async ({ page }) => 
   await onScreenBelowNav(title);
   await expect(card.locator('details[open]')).toHaveCount(0);
   await expect(entity).not.toBeFocused();
+});
+
+test('#1137 历史快照后阵容实体返回仍由阵容 owner 恢复', async ({ page }) => {
+  await page.goto('./#/civ/Spanish#formations');
+  await page.locator('#patches summary').click();
+  const historyLink = page.getByRole('link', { name: '查看完整历史' });
+  await historyLink.click();
+  await page.goBack();
+  await expect(historyLink).toBeFocused();
+  const card = page
+    .locator(formations)
+    .locator('article')
+    .filter({ has: page.locator('#' + paladin) });
+  await card.getByText('查看攻守与调整', { exact: true }).click();
+  const entity = card.locator('#' + paladin + '-unit-569');
+  await entity.click();
+  await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/civ\/Spanish#formations$/);
+  await expect(entity).toBeFocused();
+  await onScreenBelowNav(entity);
+});
+
+for (const width of [360, 390]) {
+  test('#1137 ' + width + ' 导航顺序、动态高亮与普通章节标题焦点', async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/civ/Malay');
+    const chapters = page.getByRole('navigation', { name: '本页章节' });
+    await expect(chapters.locator('a')).toHaveText(['身份', '加成', '套件', '科技树', '历史', '推荐阵容', '工具']);
+    await expect(page.locator('#insights')).toHaveCount(0);
+    const layout = await chapterGeometry(chapters);
+    expect(layout.count).toBe(7);
+    expect(layout.rows).toBeGreaterThan(1);
+    expect(layout.wrap).toBe('wrap');
+    expect(layout.overflow).toBe('visible');
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.width);
+    await expect
+      .poll(() => page.locator('.civ-read').evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue('--civ-chapter-bar-height'))))
+      .toBeCloseTo(layout.height, 1);
+    const formationLink = chapters.getByRole('link', { name: '推荐阵容' });
+    await formationLink.click();
+    await expect(formationLink).toHaveAttribute('aria-current', 'location');
+    await onScreenBelowNav(page.locator('#formations h2'));
+    for (const [label, headingId] of [
+      ['加成', '#civ-bonus-title'],
+      ['套件', '#civ-kit-title'],
+    ] as const) {
+      await chapters.getByRole('link', { name: label }).click();
+      const heading = page.locator(headingId);
+      await expect(heading).toBeFocused();
+      await expect(heading).toHaveCSS('outline-style', 'solid');
+      await onScreenBelowNav(heading);
+    }
+    const order = await page.evaluate(() =>
+      [
+        ...document.querySelectorAll(
+          '.civ-read #identity, .civ-read #bonuses, .civ-read #kit, .civ-read #techtree, .civ-read #history, .civ-read #formations, .civ-read #more',
+        ),
+      ].map((element) => element.id),
+    );
+    expect(order).toEqual(['identity', 'bonuses', 'kit', 'techtree', 'history', 'formations', 'more']);
+    await expect(page.locator('#more h2')).toHaveText('工具');
+    await expect(page.getByTestId('civ-tool-builds')).toHaveAttribute('href', '#/builds?civ=Malay');
+    await page.goto('./#/civ/Vietnamese');
+    await expect(chapters.locator('a')).toHaveText(['身份', '加成', '套件', '科技树', '历史', '推荐阵容', '打法解读', '工具']);
+    const eightChapterLayout = await chapterGeometry(chapters);
+    expect(eightChapterLayout.count).toBe(8);
+    expect(eightChapterLayout.rows).toBeGreaterThan(1);
+    expect(eightChapterLayout.scrollWidth).toBeLessThanOrEqual(eightChapterLayout.width);
+    await expect
+      .poll(() => page.locator('.civ-read').evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue('--civ-chapter-bar-height'))))
+      .toBeCloseTo(eightChapterLayout.height, 1);
+    await chapters.getByRole('link', { name: '推荐阵容' }).click();
+    await expect(chapters.getByRole('link', { name: '推荐阵容' })).toHaveAttribute('aria-current', 'location');
+    await onScreenBelowNav(page.locator('#formations h2'));
+    await page.goto('./#/civ/Spanish#formation-paladin-skirmisher');
+    await expect(chapters.getByRole('link', { name: '推荐阵容' })).toHaveAttribute('aria-current', 'location');
+    await chapters.getByRole('link', { name: '历史' }).click();
+    const historyTitle = page.locator('#civ-history-title');
+    await expect(historyTitle).toBeFocused();
+    await onScreenBelowNav(historyTitle);
+    await chapters.getByRole('link', { name: '工具' }).click();
+    await expect(page.locator('#civ-more-title')).toBeFocused();
+    await onScreenBelowNav(page.locator('#civ-more-title'));
+  });
+}
+
+test('#1137 1280 普通章节点击 active 且滚动仍驱动高亮', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/civ/Spanish');
+  const chapters = page.getByRole('navigation', { name: '本页章节' });
+  const treeLink = chapters.getByRole('link', { name: '科技树' });
+  await treeLink.click();
+  await expect(treeLink).toHaveAttribute('aria-current', 'location');
+  await onScreenBelowNav(page.locator('#civ-tt-title'));
+
+  const historyLink = chapters.getByRole('link', { name: '历史' });
+  await page.locator('#history').evaluate((element) => element.scrollIntoView({ block: 'start' }));
+  await expect(historyLink).toHaveAttribute('aria-current', 'location');
+  await expect(page).toHaveURL(/#techtree$/);
+
+  for (const [label, title] of [
+    ['历史', '#civ-history-title'],
+    ['套件', '#civ-kit-title'],
+  ] as const) {
+    const link = chapters.getByRole('link', { name: label });
+    await link.click();
+    await expect(link).toHaveAttribute('aria-current', 'location');
+    await onScreenBelowNav(page.locator(title));
+  }
+});
+
+test('#1137 科技树 pending 到 ready 保持稳定锚点焦点', async ({ page }) => {
+  let unblock!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    unblock = resolve;
+  });
+  await page.route(/\/assets\/CivTechTree-[^/]+\.js$/, async (route) => {
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto('./#/civ/Spanish', { waitUntil: 'domcontentloaded' });
+    const shell = page.getByTestId('civ-techtree');
+    await expect(shell.getByRole('status')).toContainText('正在加载科技树');
+    await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '科技树' }).click();
+    await expect(shell).toBeFocused();
+    const savedY = await page.evaluate(() => scrollY);
+    unblock();
+    await expect(shell.locator('.civ-tt-tools')).toBeVisible();
+    await expect(shell).toBeFocused();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(savedY);
+    await expect(page.locator('#civ-tt-title')).toHaveCount(1);
+    expect(await page.locator('#civ-tt-title').evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('solid');
+  } finally {
+    unblock();
+  }
 });
 
 for (const asset of ['core', 'trees']) {

@@ -38,6 +38,7 @@ async function expectFixedSlot(page: Page) {
     return {
       tag: el.tagName,
       inMain: !!el.closest('.dmain'),
+      inCivChapter: !!el.closest('#insights'),
       inSide: !!el.closest('aside.dside'),
       inDetails: !!el.closest('details'),
       inDesc: !!el.closest('p.desc'),
@@ -47,9 +48,9 @@ async function expectFixedSlot(page: Page) {
       links: el.querySelectorAll('a').length,
     };
   });
+  expect(facts.inMain || facts.inCivChapter).toBe(true);
   expect(facts).toMatchObject({
     tag: 'SECTION',
-    inMain: true,
     inSide: false,
     inDetails: false,
     inDesc: false,
@@ -142,15 +143,16 @@ async function unitNeighbors(page: Page) {
 
 async function civNeighbors(page: Page) {
   return page.evaluate(() => {
-    const main = document.querySelector('.dmain');
+    const main = document.querySelector('.civ-read');
     const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
-    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
-    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const formations = main?.querySelector('#formations') ?? null;
+    const insightChapter = main?.querySelector('#insights') ?? null;
+    const more = main?.querySelector('#more') ?? null;
     const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
-      afterRatings: follows(ratings, insight),
-      beforeBonuses: follows(insight, bonuses),
+      afterFormations: follows(formations, insightChapter),
+      beforeTools: follows(insightChapter, more),
       outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
       outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
       outsideFootnote: !insight?.closest('[data-testid="civ-rating-footnote"]'),
@@ -188,24 +190,14 @@ test('#/unit/38 骑士：造价与生产正下方有空槽「暂无」', async (
   await expectEmpty(slot(page));
 });
 
-test('#/civ/Franks 法兰克：没有洞察就不挂槽，概览不写「暂无」', async ({ page }) => {
+test('#1137 #/civ/Franks 法兰克：没有洞察就不挂槽，不出现空章节', async ({ page }) => {
   await openDetail(page, '/civ/Franks', /法兰克/);
   await expect(slot(page)).toHaveCount(0);
   await expect(page.getByTestId('insight-empty')).toHaveCount(0);
-  const placement = await page.evaluate(() => {
-    const main = document.querySelector('.dmain');
-    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
-    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
-    const follows = (earlier: Element | null, later: Element | null) =>
-      !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
-    return { bonusesAfterRatings: follows(ratings, bonuses), visibleEmpty: main instanceof HTMLElement && main.innerText.includes('暂无') };
-  });
-  expect(placement.bonusesAfterRatings).toBe(true);
-  expect(placement.visibleEmpty).toBe(false);
+  await expect(page.locator('#insights')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.getByRole('tab', { name: '数据', exact: true }).click();
-  await expect(page.getByRole('tab', { name: '概览', exact: true })).toHaveAttribute('aria-selected', 'false');
-  await page.getByRole('tab', { name: '概览', exact: true }).click();
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具' }).click();
+  await expect(page.locator('#insights')).toHaveCount(0);
   await expect(slot(page)).toHaveCount(0);
 });
 
@@ -258,7 +250,7 @@ for (const [id, title] of [
   });
 }
 
-test('#/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡混写', async ({ page }) => {
+test('#1137 #/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡混写', async ({ page }) => {
   await openDetail(page, '/civ/Malians', /马里/);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
@@ -274,21 +266,23 @@ test('#/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡
   await expectNowrap(region, /8\s*箭/);
   await expectNowrap(region, /^18$/);
   const placement = await page.evaluate(() => {
-    const main = document.querySelector('.dmain');
+    const main = document.querySelector('.civ-read');
     const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
-    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
-    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const formations = main?.querySelector('#formations') ?? null;
+    const insightChapter = main?.querySelector('#insights') ?? null;
+    const more = main?.querySelector('#more') ?? null;
     const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
-      afterRatings: follows(ratings, insight),
-      beforeBonuses: follows(insight, bonuses),
+      afterFormations: follows(formations, insightChapter),
+      beforeTools: follows(insightChapter, more),
       outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
       outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
     };
   });
-  expect(placement).toEqual({ afterRatings: true, beforeBonuses: true, outsideBonusList: true, outsideOpening: true });
-  await leaveAndReturn(page, '数据');
+  expect(placement).toEqual({ afterFormations: true, beforeTools: true, outsideBonusList: true, outsideOpening: true });
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具' }).click();
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '打法解读' }).click();
   await expect(
     slot(page)
       .getByTestId('insight-item')
@@ -327,7 +321,7 @@ test('#/unit/559 精锐诸葛弩：与普通诸葛弩同一组种子⑩', async 
   expect(texts.join('\n')).not.toMatch(/攻城加成|克制冲车|不怕冲车|绝对反制/);
 });
 
-test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等或免黄金', async ({ page }) => {
+test('#1137 #/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等或免黄金', async ({ page }) => {
   await openDetail(page, '/civ/Persians', /波斯/);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
@@ -341,21 +335,23 @@ test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等�
   await expectNowrap(region, /\+100%/);
   await expectNowrap(region, new RegExp(`2400${RANGE}4800`));
   const placement = await page.evaluate(() => {
-    const main = document.querySelector('.dmain');
+    const main = document.querySelector('.civ-read');
     const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
-    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
-    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const formations = main?.querySelector('#formations') ?? null;
+    const insightChapter = main?.querySelector('#insights') ?? null;
+    const more = main?.querySelector('#more') ?? null;
     const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
-      afterRatings: follows(ratings, insight),
-      beforeBonuses: follows(insight, bonuses),
+      afterFormations: follows(formations, insightChapter),
+      beforeTools: follows(insightChapter, more),
       outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
       outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
     };
   });
-  expect(placement).toEqual({ afterRatings: true, beforeBonuses: true, outsideBonusList: true, outsideOpening: true });
-  await leaveAndReturn(page, '数据');
+  expect(placement).toEqual({ afterFormations: true, beforeTools: true, outsideBonusList: true, outsideOpening: true });
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具' }).click();
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '打法解读' }).click();
   await expect(
     slot(page)
       .getByTestId('insight-item')
@@ -414,8 +410,8 @@ test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种�
   await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
   await expect(region.getByTestId('insight-empty')).toHaveCount(0);
   expect(await civNeighbors(page)).toEqual({
-    afterRatings: true,
-    beforeBonuses: true,
+    afterFormations: true,
+    beforeTools: true,
     outsideBonusList: true,
     outsideOpening: true,
     outsideFootnote: true,
@@ -501,13 +497,13 @@ test('单位页有内容洞察共用外壳，空槽收敛为紧凑状态行', as
   await expectNoHScroll(page);
 });
 
-test('文明页 1 条和 2 条洞察共用同一槽位外壳，位置不随条数变', async ({ page }) => {
+test('#1137 文明页 1 条和 2 条洞察共用同一槽位外壳，位置不随条数变', async ({ page }) => {
   await openDetail(page, '/civ/Saxons', /撒克逊/);
   const single = await slotShell(page);
   const singleCount = await slot(page).getByTestId('insight-item').count();
   expect(await civNeighbors(page)).toEqual({
-    afterRatings: true,
-    beforeBonuses: true,
+    afterFormations: true,
+    beforeTools: true,
     outsideBonusList: true,
     outsideOpening: true,
     outsideFootnote: true,
@@ -520,13 +516,29 @@ test('文明页 1 条和 2 条洞察共用同一槽位外壳，位置不随条�
   expect(singleCount).toBeGreaterThanOrEqual(1);
   expect(pairCount).toBeGreaterThan(singleCount);
   expect(await civNeighbors(page)).toEqual({
-    afterRatings: true,
-    beforeBonuses: true,
+    afterFormations: true,
+    beforeTools: true,
     outsideBonusList: true,
     outsideOpening: true,
     outsideFootnote: true,
   });
   await expectNoHScroll(page);
+});
+
+test('#1137 越南与撒克逊洞察和专题卡按内容只出现一次', async ({ page }) => {
+  for (const [civ, title] of [
+    ['Vietnamese', /越南/],
+    ['Saxons', /撒克逊/],
+  ] as const) {
+    await openDetail(page, '/civ/' + civ, title);
+    const chapter = page.locator('#insights');
+    await expect(chapter).toHaveCount(1);
+    await expect(page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '打法解读' })).toHaveCount(1);
+    await expect(chapter.getByTestId('insight-slot')).toHaveCount(civ === 'Saxons' ? 1 : 0);
+    await expect(chapter.getByTestId('nomad-reveal')).toHaveCount(civ === 'Vietnamese' ? 1 : 0);
+    await expect(chapter.getByTestId('arena-castle-gold')).toHaveCount(0);
+    expect(await civNeighbors(page)).toMatchObject({ afterFormations: true, beforeTools: true });
+  }
 });
 
 for (const theme of ['light', 'dark']) {
@@ -569,8 +581,8 @@ for (const theme of ['light', 'dark']) {
       await expectNowrap(region, /60\s*木/);
       await expectNowrap(region, /60\s*金/);
       expect(await civNeighbors(page)).toEqual({
-        afterRatings: true,
-        beforeBonuses: true,
+        afterFormations: true,
+        beforeTools: true,
         outsideBonusList: true,
         outsideOpening: true,
         outsideFootnote: true,

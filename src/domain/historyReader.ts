@@ -178,11 +178,7 @@ export function filterReaderEvents(data: CivUpdatesData, views: UnitEventView[],
   return views.flatMap((view) => {
     const { event, original } = view;
     const version = versions.get(event.versionId ?? '');
-    if (
-      versionValues &&
-      !versionValues.some((v) => (v === 'unknown' ? !event.versionId : v === version?.id || v === historyVersionKey(version)))
-    )
-      return [];
+    if (versionValues && !versionValues.some((v) => (v === 'unknown' ? !event.versionId : v === version?.id || v === historyVersionKey(version)))) return [];
     if (verification && event.verification !== verification) return [];
     if (!source && !condition && !civ) return [view];
     const claims = event.claims.map((claim) => ({
@@ -240,7 +236,7 @@ const DETAIL_TABS: Record<EntityType, readonly string[]> = {
   tech: ['affects', 'civs', 'history'],
 };
 const DETAIL_CIV_KEYS: Record<EntityType, readonly string[]> = { civ: [], unit: ['civ', 'me', 'opp'], building: ['civ'], tech: ['civ', 'me', 'opp'] };
-const CIV_CHAPTERS = ['identity', 'bonuses', 'kit', 'formations', 'techtree', 'more', 'patches'];
+const CIV_CHAPTERS = ['identity', 'bonuses', 'kit', 'techtree', 'history', 'formations', 'insights', 'more', 'patches'];
 const unsafe = (value: string) => /[\\#]/u.test(value) || [...value].some((c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127);
 
 export function encyclopediaHistoryPath(id: string, pathname: string, search: string, hash: string) {
