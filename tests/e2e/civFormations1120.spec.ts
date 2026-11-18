@@ -446,7 +446,7 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   await card.locator('summary').filter({ hasText: '来源与核对' }).click();
   const version = card.locator('.formation-evidence > div').filter({ hasText: '记录时版本' });
   await expect(version.locator('.num.nw').filter({ hasText: 'v0.77.105' })).toHaveCount(1);
-  await expect(version.locator('.num.nw').filter({ hasText: '188329' })).toHaveCount(1);
+  await expect(version.locator('.num.nw').filter({ hasText: '188329' })).toHaveCount(2);
   await expect(card.locator('time.num.nw')).toContainText('2026-11-18');
   await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
     'href',
@@ -458,7 +458,8 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   const jurchensHeading = page.locator('#formation-jurchens-fire-lancer-tower');
   const jurchens = page.locator(formations).locator('.formation-list > article').filter({ has: jurchensHeading });
   await expect(jurchens).toBeVisible();
-  for (const token of ['14 攻', '80 食', '95 血']) {
+  await jurchens.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+  for (const token of ['1/85', '64/85', '80.6/95']) {
     await expect(jurchens.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -467,8 +468,10 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   const japaneseHeading = page.locator('#formation-japanese-samurai-light-cavalry');
   const japanese = page.locator(formations).locator('.formation-list > article').filter({ has: japaneseHeading });
   await expect(japanese).toBeVisible();
-  for (const token of ['45F/30G', '1.43s', '1:12.19', '80 食物']) {
-    await expect(japanese.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
+  await japanese.locator('summary').filter({ hasText: '来源与核对' }).click();
+  const japaneseScope = japanese.locator('.formation-evidence > div').filter({ hasText: '武士/轻骑的等资源 PK 比值' });
+  for (const token of ['45F/30G', '1.43 秒', '1:12.19', '80F']) {
+    await expect(japaneseScope.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

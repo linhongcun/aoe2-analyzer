@@ -7,6 +7,7 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
+const rightArrow = String.fromCodePoint(0x2192);
 const route = (civ: string, id: string) => {
   const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
   assertDefinedProperties(formation, 'adjustments');
@@ -58,7 +59,7 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(main.evidence.playtest).toContain('其他敌情只有站内接触 PK');
     expect(main.evidence.playtest).toContain('未单独经其实际对局确认');
     expect(main.evidence.scope).not.toContain('来源行');
-    expect(main.evidence.scope).toContain('ID1254→1255');
+    expect(main.evidence.scope).toContain(`ID1254${rightArrow}1255`);
     expect(main.evidence.scope).toContain('ID1225');
     expect(main.evidence.recordedVersion).toBe('v0.77.105 · DE 188329');
     expect(main.reason).toContain('前线营垒');

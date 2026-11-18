@@ -8,6 +8,7 @@ import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153';
 const SOURCE_LINES = [1153, 1157, 1159, 1160, 1161, 1162, 1164, 1166, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1184, 1185, 1186, 1187, 1188, 1189, 1191, 1193];
+const rightArrow = String.fromCodePoint(0x2192);
 const japaneseCiv = () => civFormationContent.find(({ civ }) => civ === 'Japanese')!;
 const japaneseRoute = () => {
   const formation = japaneseCiv().routes.find(({ id }) => id === 'japanese-samurai-light-cavalry')!;
@@ -131,7 +132,7 @@ describe('#1139 Japanese formation support', () => {
     expect(scope).toContain('不是混编实战胜率');
     for (const ratio of ['1:3.92', '1:2.22', '1:12.19', '1:19.13']) expect(scope).toContain(ratio);
     expect(scope).toContain('未模拟弹道穿透与溅射');
-    expect(scope).toContain('1→3');
+    expect(scope).toContain(`1${rightArrow}3`);
     expect(scope).toContain('驻 5 个劲弩手总 6 箭（上限 7）');
     expect(scope).toContain('不是招募配方或每箭伤害');
     expect(scope).toContain('固定记录列出的条件机制');
