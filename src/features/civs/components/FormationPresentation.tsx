@@ -19,7 +19,11 @@ export function FormationText({ text }: { text: string }) {
     const index = match.index;
     if (index > cursor) parts.push(<Fragment key={`text-${cursor}`}>{text.slice(cursor, index)}</Fragment>);
     if (match.groups?.longHash) {
-      parts.push(<Fragment key={`hash-${index}`}>{token}</Fragment>);
+      parts.push(
+        <span className="formation-hash" key={`hash-${index}`}>
+          {token}
+        </span>,
+      );
     } else {
       parts.push(
         <span className="num nw" key={`numeric-${index}`}>

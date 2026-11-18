@@ -34,6 +34,10 @@
   font-size: 13px;
 }
 
+.formation-hash {
+  overflow-wrap: anywhere;
+}
+
 .formation-status {
   display: flex;
   flex-wrap: wrap;

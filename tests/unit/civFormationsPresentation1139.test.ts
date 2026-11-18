@@ -36,7 +36,7 @@ describe('#1139 文明阵容数字文本呈现', () => {
     const sha = '0123456789abcdef0123456789abcdef01234567';
     const html = renderToStaticMarkup(createElement(FormationText, { text: sha }));
 
-    expect(html).toBe(sha);
+    expect(html).toBe(`<span class="formation-hash">${sha}</span>`);
     expect(html).not.toContain(`<span class="num nw">${sha}</span>`);
   });
 
