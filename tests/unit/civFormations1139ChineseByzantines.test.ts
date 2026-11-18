@@ -81,9 +81,12 @@ describe('#1139 中国与拜占庭路线边界', () => {
     expect(camel.requires).toEqual([{ kind: 'unit', id: 330, age: 4 }]);
     expect(camel.fallback).toContain('隐藏骆驼建议');
     expect(mangonel.requires).toEqual([{ kind: 'unit', id: 280, age: 4 }]);
-    expect(mangonel.text).toContain('轻型投石车280');
-    expect(mangonel.text).toContain('不是巨投331或高阶升级态');
+    expect(mangonel.when).toBe('弓手为主、无法安全接近且需范围威胁');
+    expect(mangonel.text).toContain('投石车系基础目录参考');
+    expect(mangonel.text).toContain('具体等级另行评估');
+    expect(mangonel.text).toContain('不作固定配套');
     expect(mangonel.fallback).toContain('不替它指定其他攻城单位或升级形态');
+    expect([mangonel.when, mangonel.text, mangonel.fallback, byzantines.supplements[2]!.condition].join(' ')).not.toMatch(/\b(?:280|331)\b/);
     expect(logistics.requires).toEqual([{ kind: 'tech', id: 61, age: 4 }]);
     expect(logistics.fallback).toContain('不暗示科技已研究');
     expect(byzantines.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])])).toEqual([

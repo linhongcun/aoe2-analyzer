@@ -683,6 +683,10 @@
               ]
             },
             {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 576 }]
+            },
+            {
               "mode": "choice",
               "entities": [
                 {
@@ -699,7 +703,7 @@
           "adjustments": [
             {
               "id": "malians-light-cavalry-gbeto-adjustment-first",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
             },
             {
               "id": "malians-light-cavalry-gbeto-adjustment-second",
@@ -711,14 +715,28 @@
             },
             {
               "id": "malians-light-cavalry-gbeto-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            },
+            {
+              "id": "malians-light-cavalry-gbeto-adjustment-sixth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "tech", "id": 576, "age": 4 }
+              ]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 351]
+          "sourceLines": [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 349, 351]
         }
       ]
     },
@@ -1660,10 +1678,14 @@
                   "id": 109
                 },
                 {
-                  "kind": "tech",
-                  "id": 691
+                  "kind": "unit",
+                  "id": 83
                 }
               ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [{ "kind": "tech", "id": 691 }]
             },
             {
               "mode": "conditional",
@@ -1695,22 +1717,45 @@
             },
             {
               "id": "lithuanians-leitis-skirmisher-adjustment-second",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 5, "age": 4 }]
             },
             {
               "id": "lithuanians-leitis-skirmisher-adjustment-third",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "lithuanians-leitis-skirmisher-adjustment-fourth",
-              "requires": []
+              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-fifth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 }
+              ]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-sixth",
+              "requires": [
+                { "kind": "building", "id": 109, "age": 4 },
+                { "kind": "unit", "id": 83, "age": 4 },
+                { "kind": "tech", "id": 691, "age": 4 }
+              ]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-seventh",
+              "requires": [{ "kind": "unit", "id": 569, "age": 4 }]
+            },
+            {
+              "id": "lithuanians-leitis-skirmisher-adjustment-eighth",
+              "requires": [{ "kind": "unit", "id": 1707, "age": 4 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 659, 660, 661, 662, 668, 669, 670, 674]
+          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674]
         }
       ]
     },
