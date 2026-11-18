@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civFormationContent } from '../../../data/civFormations';
 import { DATA_PATCH } from '../../../data/sources';
@@ -24,6 +24,21 @@ function Version({ patch }: { patch: Route['patch'] }) {
     <>
       <span className="num nw">DE {patch.build}</span> <span className="num nw">（{patch.date}）</span>
     </>
+  );
+}
+
+const FORMATION_NUMERIC_TOKENS =
+  /(\d{4}-\d{2}-\d{2}|v\d+(?:\.\d+){1,3}|[a-f\d]{7,40}|[+\-−]?\d+(?:\.\d+)?(?:\s*(?:\/|[–—-至])\s*[+\-−]?\d+(?:\.\d+)?(?:\s*(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个|名|人|兵|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料))?)?(?:\s*(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个|名|人|兵|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料))?)/giu;
+
+export function FormationText({ text }: { text: string }) {
+  return text.split(FORMATION_NUMERIC_TOKENS).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      <Fragment key={index}>{part}</Fragment>
+    ),
   );
 }
 
@@ -53,9 +68,11 @@ function EntityLine({ row, civ, anchor, id, remember }: { row: FormationEntityVi
       {row.kind === 'building' && <BuildingIcon b={row.entity} />}
       {row.kind === 'tech' && <TechIcon t={row.entity} />}
       <span>
-        <b>{row.entity.zh}</b>
+        <b>
+          <FormationText text={row.entity.zh} />
+        </b>
         <small>
-          {row.role} · <span className="formation-age">{row.age === 3 ? '城堡时代' : '帝王时代'}</span>
+          <FormationText text={row.role} /> · <span className="formation-age">{row.age === 3 ? '城堡时代' : '帝王时代'}</span>
         </small>
       </span>
     </Link>
@@ -87,13 +104,17 @@ function FormationDetail({
       {route.attack && (
         <div>
           <h4>进攻怎样配合</h4>
-          <p>{route.attack}</p>
+          <p>
+            <FormationText text={route.attack} />
+          </p>
         </div>
       )}
       {route.defense && (
         <div>
           <h4>防守怎样配合</h4>
-          <p>{route.defense}</p>
+          <p>
+            <FormationText text={route.defense} />
+          </p>
         </div>
       )}
       {adjustments.length > 0 && (
@@ -102,10 +123,17 @@ function FormationDetail({
           <dl className="formation-adjustments">
             {adjustments.map(({ id, when, text, unavailable, candidateBoundary }) => (
               <div key={id}>
-                <dt>{when}</dt>
+                <dt>
+                  <FormationText text={when} />
+                </dt>
                 <dd>
-                  {text}
-                  {candidateBoundary && <span className="formation-meta"> 候选边界：{candidateBoundary}</span>}
+                  <FormationText text={text ?? ''} />
+                  {candidateBoundary && (
+                    <span className="formation-meta">
+                      {' 候选边界：'}
+                      <FormationText text={candidateBoundary} />
+                    </span>
+                  )}
                   {unavailable && <span className="formation-meta"> 这项补充资料暂不可用</span>}
                 </dd>
               </div>
@@ -116,7 +144,9 @@ function FormationDetail({
       {route.alternatives && (
         <>
           <h4>为什么不默认加入</h4>
-          <p>{route.alternatives}</p>
+          <p>
+            <FormationText text={route.alternatives} />
+          </p>
         </>
       )}
     </FormationFold>
@@ -127,7 +157,9 @@ function SourceLinks({ source }: { source: Source | null }) {
   if (!source) return <p className="formation-meta">来源链接暂不可用。</p>;
   return (
     <>
-      <p>{source.boundary}</p>
+      <p>
+        <FormationText text={source.boundary} />
+      </p>
       <div className="formation-source-links">
         <a href={source.content} target="_blank" rel="noreferrer">
           查看固定内容来源
@@ -146,19 +178,27 @@ function FormationEvidence({ route, source }: { route: Route; source: Source | n
       <dl className="formation-evidence">
         <div>
           <dt>认可状态</dt>
-          <dd>{route.evidence.recognition}</dd>
+          <dd>
+            <FormationText text={route.evidence.recognition} />
+          </dd>
         </div>
         <div>
           <dt>实战使用</dt>
-          <dd>{route.evidence.playtest}</dd>
+          <dd>
+            <FormationText text={route.evidence.playtest} />
+          </dd>
         </div>
         <div>
           <dt>依据范围</dt>
-          <dd>{route.evidence.scope}</dd>
+          <dd>
+            <FormationText text={route.evidence.scope} />
+          </dd>
         </div>
         <div>
           <dt>记录时版本</dt>
-          <dd>{route.evidence.recordedVersion}</dd>
+          <dd>
+            <FormationText text={route.evidence.recordedVersion} />
+          </dd>
         </div>
         <div>
           <dt>核对数据</dt>
@@ -192,7 +232,7 @@ function HistoricalEntities({ route }: { route: Route }) {
           ...route.supplements.flatMap((group) => group.entities),
         ].map((row, index) => (
           <li key={`${row.kind}-${row.id}-${index}`}>
-            {row.historicalName} · {row.role}
+            <FormationText text={`${row.historicalName} · ${row.role}`} />
             {row.age ? `（${row.age === 3 ? '城堡时代' : '帝王时代'}）` : ''}
           </li>
         ))}
@@ -210,8 +250,14 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
         <h3 id={anchor} tabIndex={-1}>
           路线依据待核实
         </h3>
-        <p>{view.pendingText}</p>
-        <p>{view.source?.boundary}</p>
+        <p>
+          <FormationText text={view.pendingText} />
+        </p>
+        {view.source?.boundary && (
+          <p>
+            <FormationText text={view.source.boundary} />
+          </p>
+        )}
         <div className="formation-source-links">
           {view.source && (
             <>
@@ -235,7 +281,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
       <article className="formation-card formation-warning">
         <div className="formation-card-heading">
           <h3 id={anchor} tabIndex={-1}>
-            {route.title}：暂不可用
+            <FormationText text={`${route.title}：暂不可用`} />
           </h3>
           <StatusBadges route={route} />
         </div>
@@ -251,7 +297,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
       <article className="formation-card formation-warning">
         <div className="formation-card-heading">
           <h3 id={anchor} tabIndex={-1}>
-            {route.title}：版本待复核
+            <FormationText text={`${route.title}：版本待复核`} />
           </h3>
           <StatusBadges route={route} />
         </div>
@@ -260,10 +306,20 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
         </p>
         <p>这份说明暂不作为当前版本推荐，不自动替换兵种。</p>
         <FormationFold id={`${anchor}-history`} label="查看历史说明（非当前推荐）">
-          <p>{route.condition}</p>
+          <p>
+            <FormationText text={route.condition} />
+          </p>
           <HistoricalEntities route={route} />
-          {route.reason && <p>{route.reason}</p>}
-          {route.limitation && <p>{route.limitation}</p>}
+          {route.reason && (
+            <p>
+              <FormationText text={route.reason} />
+            </p>
+          )}
+          {route.limitation && (
+            <p>
+              <FormationText text={route.limitation} />
+            </p>
+          )}
           <FormationDetail route={route} adjustments={route.adjustments ?? []} />
           <FormationEvidence route={route} source={source} />
         </FormationFold>
@@ -313,12 +369,12 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
     <article className="formation-card">
       <div className="formation-card-heading">
         <h3 id={anchor} tabIndex={-1}>
-          {route.title}
+          <FormationText text={route.title} />
         </h3>
         <StatusBadges route={route} />
       </div>
       <p className="formation-condition">
-        <b>适用条件</b> {route.condition}
+        <b>适用条件</b> <FormationText text={route.condition} />
       </p>
       <div className="formation-columns">
         <div className="formation-composition">
@@ -337,13 +393,17 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
               <h4 className="formation-group-label">备选分支（按条件择一，不同时必出）</h4>
               {view.choices.map((choice) => (
                 <section className="formation-choice" key={choice.id}>
-                  <h4>{choice.title}</h4>
+                  <h4>
+                    <FormationText text={choice.title} />
+                  </h4>
                   <ul className="formation-entities">
                     {choice.entities.map((row) => (
                       <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
                     ))}
                   </ul>
-                  <p>{choice.preconditions.join('；')}</p>
+                  <p>
+                    <FormationText text={choice.preconditions.join('；')} />
+                  </p>
                 </section>
               ))}
             </div>
@@ -356,7 +416,14 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
                   <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
                 ))}
               </ul>
-              {route.prerequisites.map((item) => item.condition && <p key={`${item.kind}-${item.id}`}>{item.condition}</p>)}
+              {route.prerequisites.map(
+                (item) =>
+                  item.condition && (
+                    <p key={`${item.kind}-${item.id}`}>
+                      <FormationText text={item.condition} />
+                    </p>
+                  ),
+              )}
             </div>
           )}
           {view.supplements.length > 0 && (
@@ -364,7 +431,11 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
               {view.supplements.map((group, index) => (
                 <div className="formation-supplement-group" key={`${group.mode}-${index}`}>
                   <h4 className="formation-group-label">{supplementLabel(group.mode)}</h4>
-                  {group.condition && <p>{group.condition}</p>}
+                  {group.condition && (
+                    <p>
+                      <FormationText text={group.condition} />
+                    </p>
+                  )}
                   <ul className="formation-entities">
                     {group.entities.map((row) => (
                       <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
@@ -380,12 +451,12 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
             <div className="formation-grid">
               {route.reason && (
                 <p>
-                  <b>为什么这样配</b> {route.reason}
+                  <b>为什么这样配</b> <FormationText text={route.reason} />
                 </p>
               )}
               {route.limitation && (
                 <p className="formation-limitation">
-                  <b>主要短板</b> {route.limitation}
+                  <b>主要短板</b> <FormationText text={route.limitation} />
                 </p>
               )}
             </div>
@@ -439,7 +510,9 @@ function FormationSection({
       </h2>
       {routes.length > 0 && content && (
         <>
-          <p>{content.lead}</p>
+          <p>
+            <FormationText text={content.lead} />
+          </p>
           <p className="formation-meta">
             核对数据 <Version patch={DATA_PATCH} />
           </p>
@@ -457,7 +530,7 @@ function FormationSection({
                     }}
                     state={{ focusFormation: true }}
                   >
-                    {label}
+                    <FormationText text={label} />
                   </Link>
                 ) : null;
               })}

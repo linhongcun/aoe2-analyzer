@@ -429,3 +429,28 @@ for (const width of [360, 1280]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
+
+test('#1139 来源版本与数字单位分别不换行，固定来源链接保持可用', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('./#/civ/Koreans#formation-koreans-fire-lancer-garrison');
+  const section = page.locator(formations);
+  const heading = page.locator('#formation-koreans-fire-lancer-garrison');
+  const card = section.locator('.formation-list > article').filter({ has: heading });
+  await expect(heading).toBeVisible();
+
+  const adjustment = card.locator('.formation-adjustments > div').filter({ hasText: '巨投、长射程火炮' });
+  await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+  await expect(adjustment.locator('.num.nw').filter({ hasText: '13 射程' })).toHaveCount(1);
+  await expect(adjustment.locator('.num.nw').filter({ hasText: '14 射程' })).toHaveCount(1);
+
+  await card.locator('summary').filter({ hasText: '来源与核对' }).click();
+  const version = card.locator('.formation-evidence > div').filter({ hasText: '记录时版本' });
+  await expect(version.locator('.num.nw').filter({ hasText: 'v0.77.105' })).toHaveCount(1);
+  await expect(version.locator('.num.nw').filter({ hasText: '188329' })).toHaveCount(1);
+  await expect(card.locator('time.num.nw')).toContainText('2026-11-18');
+  await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
+    'href',
+    'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386',
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
