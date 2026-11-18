@@ -4,9 +4,14 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 
 describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
@@ -36,7 +41,7 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
       ['unit', 1254],
     ]);
     expect(contract.prerequisites).toEqual([]);
-    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])])).toEqual([
+    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map((entity) => [entity.id, optionalEntityAge(entity)])])).toEqual([
       ['progression', [[1255, 4]]],
       [
         'choice',

@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URLS = {
   'saxons-retainer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491',
@@ -17,7 +18,11 @@ const SOURCE_LINES = {
 } as const;
 
 const byCiv = (name: string) => civFormationContent.find(({ civ }) => civ === name)!;
-const route = (name: string, id: string) => byCiv(name).routes.find(({ id: routeId }) => routeId === id)!;
+const route = (name: string, id: string) => {
+  const formation = byCiv(name).routes.find(({ id: routeId }) => routeId === id)!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = (name: string, id: string) => formationContract.civs.find(({ civ }) => civ === name)!.routes.find(({ id: routeId }) => routeId === id)!;
 const removeUnit = (core: Awaited<ReturnType<typeof loadCore>>, id: number) => {
   const unitById = { ...core.unitById };

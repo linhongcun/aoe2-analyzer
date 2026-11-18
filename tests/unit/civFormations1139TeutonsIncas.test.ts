@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const TEUTON_SOURCE_URLS = {
   'teutons-paladin-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542',
@@ -25,7 +26,11 @@ const INCAS_SOURCE_LINES = {
 } as const;
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 const catalog = async () => ({ core: await loadCore(), trees: await loadTrees() });
 
@@ -43,6 +48,7 @@ describe('#1139 条顿与印加路线边界', () => {
   it('条顿按条件改选主路线而非硬互斥；印加候选保留名称更正时间边界', () => {
     const teutons = byCiv('Teutons');
     for (const entry of teutons.routes) {
+      assertDefinedProperties(entry, 'adjustments');
       for (const adjustment of entry.adjustments) {
         if (adjustment.text?.includes('按条件改选')) {
           expect(adjustment.text).toContain('不表示默认同时铺开三套');
@@ -179,6 +185,7 @@ describe('#1139 条顿与印加路线边界', () => {
       const missingEntity = project(parent, teutons.routes, { ...resources.core, unitById });
       expectFallback(missingEntity, parent, adjustmentId);
       const otherPrimary = teutons.routes.find(({ id }) => id !== parent.id && id !== target.id)!;
+      assertDefinedProperties(otherPrimary, 'adjustments', 'source');
       expect(project(otherPrimary, teutons.routes, { ...resources.core, unitById }).status).toBe('current');
     }
   });

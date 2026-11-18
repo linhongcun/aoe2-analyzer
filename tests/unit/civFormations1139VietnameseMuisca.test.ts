@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620';
 const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984';
@@ -11,7 +12,11 @@ const VIETNAMESE_SOURCE_LINES = [620, 622, 624, 626, 628, 629, 630, 632, 634];
 const MUISCA_SOURCE_LINES = [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 
 const expectFallback = (view: ReturnType<typeof projectFormation>, entry: ReturnType<typeof route>, id: string) => {
@@ -78,7 +83,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(vietnamese.adjustments[2]!.requires).toEqual([{ kind: 'unit', id: 1134, age: 4 }]);
     expect(vietnamese.adjustments[3]!.requires).toEqual([{ kind: 'unit', id: 359, age: 4 }]);
     expect(vietnamese.adjustments[4]!.requires).toEqual([{ kind: 'unit', id: 36, age: 4 }]);
-    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id, age }) => [kind, id, age])])).toEqual(
+    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map((entity) => [entity.kind, entity.id, optionalEntityAge(entity)])])).toEqual(
       vietnamese.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id, age }) => [kind, id, age])]),
     );
     expect(contract.adjustments).toEqual(vietnamese.adjustments.map(({ id, requires }) => ({ id, requires: requires ?? [] })));
@@ -182,7 +187,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(muisca.adjustments[3]!.requires).toEqual([{ kind: 'unit', id: 331, age: 4 }]);
     expect(muisca.adjustments[3]!.fallback).toContain('隐藏');
     expect([muisca.title, muisca.reason, muisca.attack, muisca.defense, muisca.alternatives].join(' ')).not.toMatch(/巨型投石机|精锐掷矛手|格查战士推荐/);
-    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id, age }) => [kind, id, age])])).toEqual(
+    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map((entity) => [entity.kind, entity.id, optionalEntityAge(entity)])])).toEqual(
       muisca.supplements.map(({ mode, entities }) => [mode, entities.map(({ kind, id, age }) => [kind, id, age])]),
     );
     expect(contract.adjustments).toEqual(muisca.adjustments.map(({ id, requires }) => ({ id, requires: requires ?? [] })));

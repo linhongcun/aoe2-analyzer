@@ -4,6 +4,7 @@ import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation, publishedFormations } from '../../src/domain/civFormations';
 import { resolveFormationSource } from '../../src/domain/civFormationsSource.mjs';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
@@ -133,6 +134,7 @@ describe('#1139 文明路线契约与投影', () => {
 
   it('保留 Malay 独立帝王缺金剑士路线、年龄推进和前置', async () => {
     const progression = route('Malay', 'malay-battle-elephant-progression');
+    assertDefinedProperties(progression, 'adjustments');
     const swords = route('Malay', 'malay-two-handed-swordsman-sustain');
     expect([progression.age, progression.composition, progression.required.map((ref) => [ref.id, ref.age ?? progression.age])]).toEqual([
       3,
@@ -369,6 +371,9 @@ describe('#1139 文明路线契约与投影', () => {
     const paladin = route('Teutons', 'teutons-paladin-skirmisher');
     const halberdier = route('Teutons', 'teutons-halberdier-handcannon');
     const knight = route('Teutons', 'teutons-elite-knight-skirmisher');
+    assertDefinedProperties(paladin, 'attack', 'defense');
+    assertDefinedProperties(halberdier, 'attack', 'defense');
+    assertDefinedProperties(knight, 'attack', 'defense');
     const economicBoundary = '农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。';
 
     for (const item of [paladin, halberdier, knight]) {

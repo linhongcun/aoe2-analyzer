@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const urls = {
   'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238',
@@ -20,7 +21,11 @@ const lines = {
   'malay-two-handed-swordsman-sustain': [355, 356, 357],
 } as const;
 const civ = (name: string) => civFormationContent.find((entry) => entry.civ === name)!;
-const route = (name: string, id: string) => civ(name).routes.find((entry) => entry.id === id)!;
+const route = (name: string, id: string) => {
+  const formation = civ(name).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = (name: string, id: string) => contract.civs.find((entry) => entry.civ === name)!.routes.find((entry) => entry.id === id)!;
 const makeCatalog = async () => ({ core: await loadCore(), trees: await loadTrees() });
 const project = (entry: ReturnType<typeof route>, name: string, core: Awaited<ReturnType<typeof loadCore>>, trees: Awaited<ReturnType<typeof loadTrees>>) =>

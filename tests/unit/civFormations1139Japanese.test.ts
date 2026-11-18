@@ -4,11 +4,16 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153';
 const SOURCE_LINES = [1153, 1157, 1159, 1160, 1161, 1162, 1164, 1166, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1184, 1185, 1186, 1187, 1188, 1189, 1191, 1193];
 const japaneseCiv = () => civFormationContent.find(({ civ }) => civ === 'Japanese')!;
-const japaneseRoute = () => japaneseCiv().routes.find(({ id }) => id === 'japanese-samurai-light-cavalry')!;
+const japaneseRoute = () => {
+  const formation = japaneseCiv().routes.find(({ id }) => id === 'japanese-samurai-light-cavalry')!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = () => formationContract.civs.find(({ civ }) => civ === 'Japanese')!.routes.find(({ id }) => id === 'japanese-samurai-light-cavalry')!;
 const adjustment = (suffix: string) => japaneseRoute().adjustments.find(({ id }) => id.endsWith(`-${suffix}`))!;
 const removeUnit = (core: Awaited<ReturnType<typeof loadCore>>, id: number) => {

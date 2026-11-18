@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318';
 const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640';
@@ -11,7 +12,11 @@ const MALIAN_SOURCE_LINES = [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 3
 const LITHUANIAN_SOURCE_LINES = [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments', 'source');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 
 const expectFallback = (view: ReturnType<typeof projectFormation>, entry: ReturnType<typeof route>, suffix: string) => {

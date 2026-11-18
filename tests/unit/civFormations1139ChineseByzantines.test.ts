@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L200';
 const BYZANTINE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283';
@@ -11,7 +12,11 @@ const CHINESE_SOURCE_LINES = [200, 204, 206, 208, 209, 210, 211, 213, 215, 221, 
 const BYZANTINE_SOURCE_LINES = [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 
 describe('#1139 中国与拜占庭路线边界', () => {
@@ -101,7 +106,7 @@ describe('#1139 中国与拜占庭路线边界', () => {
       ['conditional-evaluation', [[280, 4]]],
       ['mechanism-support', [[61, undefined]]],
     ]);
-    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])])).toEqual(
+    expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map((entity) => [entity.id, optionalEntityAge(entity)])])).toEqual(
       byzantines.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])]),
     );
     expect(contract.adjustments).toEqual(byzantines.adjustments.map(({ id, requires }) => ({ id, requires: requires ?? [] })));
@@ -110,6 +115,8 @@ describe('#1139 中国与拜占庭路线边界', () => {
   it('uses literal fixed-source URLs and source lines for both routes', () => {
     const chinese = route('Chinese', 'china-fire-lancer-tower');
     const byzantines = route('Byzantines', 'byzantines-cataphract');
+    assertDefinedProperties(chinese, 'source');
+    assertDefinedProperties(byzantines, 'source');
 
     expect(chinese.source.content).toBe(CHINESE_SOURCE_URL);
     expect(contractRoute('Chinese', chinese.id).source.content).toBe(CHINESE_SOURCE_URL);
@@ -128,8 +135,10 @@ describe('#1139 中国与拜占庭路线边界', () => {
     const chineseRoute = route('Chinese', 'china-fire-lancer-tower');
     const byzantines = byCiv('Byzantines');
     const byzantineRoute = route('Byzantines', 'byzantines-cataphract');
-    const project = (civ: string, entry: typeof chineseRoute, currentCore: typeof core) =>
-      projectFormation(entry, civ, DATA_PATCH, { core: currentCore, trees }, byCiv(civ).routes, byCiv(civ).source);
+    const project = (civ: 'Chinese' | 'Byzantines', entry: typeof chineseRoute, currentCore: typeof core) => {
+      const civContent = civ === 'Chinese' ? chinese : byzantines;
+      return projectFormation(entry, civ, DATA_PATCH, { core: currentCore, trees }, civContent.routes, civContent.source);
+    };
 
     const withoutHalberdier = { ...core.unitById };
     delete withoutHalberdier[359];

@@ -4,9 +4,14 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
-const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
+const route = (civ: string, id: string) => {
+  const formation = byCiv(civ).routes.find((entry) => entry.id === id)!;
+  assertDefinedProperties(formation, 'adjustments');
+  return formation;
+};
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 const catalog = async () => ({ core: await loadCore(), trees: await loadTrees() });
 const narrative = (entry: ReturnType<typeof route>) => [entry.reason, entry.limitation, entry.attack, entry.defense].join(' ');
@@ -151,7 +156,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
         .supplements.flatMap(({ entities }) => entities)
         .find(({ id: unitId }) => unitId === 6)!;
       expect([support.id, support.age]).toEqual([6, 4]);
-      expect([contractSupport.id, contractSupport.age]).toEqual([6, 4]);
+      expect([contractSupport.id, optionalEntityAge(contractSupport)]).toEqual([6, 4]);
 
       const view = projectFormation(entry, 'Tupi', DATA_PATCH, resources, tupi.routes, tupi.source);
       expect(view.status).toBe('current');
