@@ -40,12 +40,15 @@
 }
 
 .civ-about-content a {
+  color: var(--color-link);
+}
+
+.civ-about-content a:not(.civ-about-sources a) {
   display: inline-flex;
   align-items: center;
   min-width: 44px;
   min-height: 44px;
   box-sizing: border-box;
-  color: var(--color-link);
 }
 
 .civ-about-links {

@@ -75,7 +75,7 @@ for (const width of [390, 1280]) {
       ].map((node) => node!.getBoundingClientRect().top),
     );
     expect(order).toEqual([...order].sort((a, b) => a - b));
-    for (const link of await content.locator('a').all()) {
+    for (const link of await content.locator('a:not(.civ-about-sources a)').all()) {
       await link.evaluate((el) => el.scrollIntoView({ block: 'center' }));
       const box = (await link.boundingBox())!;
       expect(box.width).toBeGreaterThanOrEqual(44);
@@ -89,12 +89,16 @@ for (const width of [390, 1280]) {
     }
     expect(
       await content.evaluate((el) => {
-        const boxes = [...el.querySelectorAll('a')].map((a) => a.getBoundingClientRect());
+        const boxes = [...el.querySelectorAll('a:not(.civ-about-sources a)')].map((a) => a.getBoundingClientRect());
         return boxes.every((a, i) =>
           boxes.slice(i + 1).every((b) => Math.min(a.right, b.right) <= Math.max(a.left, b.left) || Math.min(a.bottom, b.bottom) <= Math.max(a.top, b.top)),
         );
       }),
     ).toBe(true);
+    for (const link of await content.locator('.civ-about-sources a').all()) {
+      expect(await link.evaluate((el) => getComputedStyle(el).display)).toBe('inline');
+      expect(await link.evaluate((el) => [...el.getClientRects()].every((box) => box.left >= 0 && box.right <= innerWidth))).toBe(true);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await toggle.press('Space');
     await expect(content).toBeHidden();
@@ -109,7 +113,7 @@ test('反馈原预填及跨文明/离开后的折叠生命周期', async ({ page
   await context.route('https://github.com/linhongcun/aoe2-analyzer/issues/new?*', (route) =>
     route.fulfill({ contentType: 'text/html', body: '<title>预填目标</title>' }),
   );
-  await page.goto('./#/civ/Wei?tab=tools');
+  await page.goto('./#/civ/Wei?ref=1153');
   await page.getByRole('button', { name: '关于与反馈 展开' }).click();
   const panel = page.locator('.civ-about-feedback');
   for (const [kind, name] of [
