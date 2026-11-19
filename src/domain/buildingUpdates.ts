@@ -1,6 +1,6 @@
 import { detailQueryError, validHistoryReturn, type CivUpdatesData } from './civUpdates';
 import { ENTITY_HISTORY_FILTER_KEYS } from './historyFilters';
-import { UNIT_CONDITIONS, filterProjectedEvents, projectUnitEvents, type UnitCoverage, type UnitRelation, type UnitUpdateData } from './unitUpdates';
+import { UNIT_CONDITIONS, filterProjectedEvents, projectUnitEvents, type UnitCoverage, type UnitUpdateData } from './unitUpdates';
 
 export interface BuildingCoverage extends UnitCoverage {
   aliases: string[];
@@ -11,7 +11,6 @@ export interface BuildingUpdateData extends Omit<UnitUpdateData, 'rows'> {
   rows: BuildingCoverage[];
   sourceIndex: { url: string; documentSha256: string; capturedAt: string; links: { label: string; href: string }[] };
 }
-export type BuildingRelation = UnitRelation;
 export const BUILDING_SOURCE_LABELS = {
   processed: '建筑来源已逐条处理',
   pending: '建筑来源尚待处理',
