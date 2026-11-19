@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { useCivUpdates } from '../../data/civUpdates';
 import { VERIFICATION_LABELS, setHistoryQuery, type CivUpdatesData } from '../../domain/civUpdates';
 import {
   UNIT_CONDITIONS,
@@ -15,27 +14,12 @@ import {
   unitHistoryPath,
   unitHistoryReturn,
   unitQueryError,
-  unitCoverageQueryError,
   type UnitEventView,
-  type UnitSourceState,
 } from '../../domain/unitUpdates';
 import { UpdateEventCard } from './CivUpdates';
 import { SourceTime, UpdateText } from './CivUpdatePrimitives';
 import { HistoryEntityLinks } from './HistoryEntityLinks';
 import './unit-updates.css';
-
-function Loading({ error, retry }: { error: boolean; retry: () => void }) {
-  return error ? (
-    <div>
-      <p role="alert">单位更新历史读取失败，请检查连接后重试。筛选与对象地址已保留。</p>
-      <button type="button" onClick={retry}>
-        重试单位历史
-      </button>
-    </div>
-  ) : (
-    <p role="status">正在读取单位更新历史，请稍候。</p>
-  );
-}
 
 export function UnitObjectSearch({ data }: { data: CivUpdatesData }) {
   const [query, setQuery] = useSearchParams();
@@ -456,74 +440,6 @@ export function UnitUpdatesReader({ data, entityId, overview = false }: { data: 
           )}
         </>
       )}
-    </section>
-  );
-}
-
-export function UnitUpdates({ entityId, overview = false }: { entityId: string; overview?: boolean }) {
-  const state = useCivUpdates();
-  return state.data ? <UnitUpdatesReader data={state.data} entityId={entityId} overview={overview} /> : <Loading error={state.error} retry={state.retry} />;
-}
-
-export function UnitUpdatesOverview() {
-  const state = useCivUpdates();
-  const [query, setQuery] = useSearchParams();
-  const source = query.get('unitSourceState') ?? '';
-  const error = unitCoverageQueryError(query);
-  const setSource = (value: string) => setQuery(setHistoryQuery(query, 'unitSourceState', value));
-  if (!state.data) return <Loading error={state.error} retry={state.retry} />;
-  const data = state.data;
-  const matches = new Set(searchUpdateUnits(data, query.get('histQuery') ?? '').map((e) => e.id));
-  const rows = error ? [] : (data.units?.rows.filter((r) => matches.has(r.entityId) && (!source || r.sourceState === source)) ?? []);
-  return (
-    <section className="unit-updates" aria-label="单位历史来源目录">
-      <h2>按单位查历史</h2>
-      <p>{data.units?.coverageNote}</p>
-      <UnitObjectSearch data={data} />
-      <details className="civ-update-processing">
-        <summary>
-          查看单位目录与来源覆盖 · <span className="num nw">{data.units?.catalogSize ?? '未知'} 个 ID</span>
-        </summary>
-        <label>
-          单位来源状态
-          <select value={source} onChange={(e) => setSource(e.target.value)}>
-            <option value="">全部来源状态</option>
-            {Object.entries(UNIT_SOURCE_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        {error && (
-          <p role="alert">
-            {error}{' '}
-            <button type="button" onClick={() => setSource('')}>
-              清除单位来源筛选
-            </button>
-          </p>
-        )}
-        <p role="status">
-          显示 <span className="num nw">{rows.length} 个单位</span>；已有文明来源不会把未检查的单位独立来源页标成完成。
-        </p>
-        <ul className="unit-coverage-list">
-          {rows.map((r) => (
-            <li key={r.entityId}>
-              <Link to={unitHistoryPath(r.entityId, query, 'overview', undefined, data)}>
-                {data.entities.find((e) => e.id === r.entityId)?.nameZh} · <span className="num nw">ID {r.entityId.split('/')[1]}</span>
-              </Link>
-              <p>
-                {UNIT_SOURCE_LABELS[r.sourceState as UnitSourceState]} · {r.eventIds.length ? '部分收录' : '尚未收录'} ·{' '}
-                <span className="num nw">{r.eventIds.length} 个事件</span>
-              </p>
-              <p>
-                <UpdateText>{r.reason}</UpdateText>
-              </p>
-            </li>
-          ))}
-        </ul>
-        {!rows.length && <p>没有符合搜索与来源状态的单位。</p>}
-      </details>
     </section>
   );
 }
