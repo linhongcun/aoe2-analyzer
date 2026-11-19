@@ -66,13 +66,12 @@ describe('#1139 条顿与印加路线边界', () => {
   });
 
   it('保留路线统计与原四条回归路线', () => {
-    expect(civFormationContent).toHaveLength(28);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(43);
+    expect(civFormationContent).toHaveLength(31);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(46);
     expect(civFormationContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 1],
     ]);
-    expect(['Wei', 'Shu', 'Wu'].some((civ) => civFormationContent.some((entry) => entry.civ === civ))).toBe(false);
   });
 
   it('三条条顿主路保留各自阵容职责、按需炮类选择和独立条件', () => {

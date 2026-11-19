@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-formations.json",
   "type": "array",
-  "minItems": 28,
-  "maxItems": 28,
+  "minItems": 31,
+  "maxItems": 31,
   "items": {
     "$ref": "#/$defs/civ"
   },
@@ -238,6 +238,19 @@
             "type": "integer",
             "minimum": 1
           }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "href"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "href": { "type": "string", "format": "public-url" }
+            }
+          }
         }
       }
     },
@@ -315,6 +328,7 @@
             "$ref": "#/$defs/choice"
           }
         },
+        "choiceLabel": { "type": "string", "minLength": 1 },
         "prerequisites": {
           "type": "array",
           "items": {

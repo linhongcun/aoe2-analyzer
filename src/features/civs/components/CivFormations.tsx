@@ -123,7 +123,7 @@ function FormationDetail({
   );
 }
 
-function SourceLinks({ source }: { source: Source | null }) {
+function SourceLinks({ source, links }: { source: Source | null; links: Route['evidence']['links'] }) {
   if (!source) return <p className="formation-meta">来源链接暂不可用。</p>;
   return (
     <>
@@ -137,6 +137,11 @@ function SourceLinks({ source }: { source: Source | null }) {
         <a href={source.discussion} target="_blank" rel="noreferrer">
           原讨论
         </a>
+        {links?.map(({ label, href }) => (
+          <a key={href} href={href} target="_blank" rel="noreferrer">
+            <FormationText text={label} />
+          </a>
+        ))}
       </div>
     </>
   );
@@ -185,7 +190,7 @@ function FormationEvidence({ route, source }: { route: Route; source: Source | n
           </dd>
         </div>
       </dl>
-      <SourceLinks source={source} />
+      <SourceLinks source={source} links={route.evidence.links} />
     </>
   );
 }
@@ -360,7 +365,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
           )}
           {view.choices.length > 0 && (
             <div className="formation-choices">
-              <h4 className="formation-group-label">备选分支（按条件择一，不同时必出）</h4>
+              <h4 className="formation-group-label">{route.choiceLabel ?? '备选分支（按条件择一，不同时必出）'}</h4>
               {view.choices.map((choice) => (
                 <section className="formation-choice" key={choice.id}>
                   <h4>

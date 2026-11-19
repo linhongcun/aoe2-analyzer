@@ -11,15 +11,15 @@ const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => ent
 const catalog = async () => ({ core: await loadCore(), trees: await loadTrees() });
 
 describe('#1139 文明路线契约与投影', () => {
-  it('发布 26 个新增文明与四条回归路线，不包含魏蜀吴', () => {
-    expect(civFormationContent).toHaveLength(28);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(43);
-    expect(['Wei', 'Shu', 'Wu'].some((name) => civFormationContent.some((entry) => entry.civ === name))).toBe(false);
-    expect(civFormationContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
+  it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
+    const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu'].includes(civ));
+    expect(originalContent).toHaveLength(28);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(43);
+    expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 1],
     ]);
-    expect(Object.fromEntries(civFormationContent.slice(2).map(({ civ, routes }) => [civ, routes.length]))).toEqual({
+    expect(Object.fromEntries(originalContent.slice(2).map(({ civ, routes }) => [civ, routes.length]))).toEqual({
       Chinese: 2,
       Hindustanis: 1,
       Turks: 2,

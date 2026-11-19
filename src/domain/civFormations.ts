@@ -77,6 +77,7 @@ interface FormationEvidence {
   scope: string;
   recordedVersion: string;
   sourceLines: number[];
+  links?: { label: string; href: string }[];
 }
 
 interface Formation {
@@ -91,6 +92,7 @@ interface Formation {
   condition: string;
   required: FormationEntity[];
   choices?: FormationChoice[];
+  choiceLabel?: string;
   prerequisites: FormationPrerequisite[];
   supplements: FormationSupplement[];
   reason?: string;
