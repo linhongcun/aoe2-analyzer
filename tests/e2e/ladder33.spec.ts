@@ -312,6 +312,49 @@ test('#33 主表默认按胜率降序，点击表头只改排序指示，不把 
   expect(queryFlags(page.url()).civ).toBeNull();
 });
 
+for (const theme of ['light', 'dark'] as const) {
+  test(`#1143 ${theme} 窄屏表格标明友好度来源，不影响排序或桌面说明`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 900 });
+    await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+    await page.goto('./#/ladder?mode=arabia1v1');
+    await expectLadderPage(page);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+
+    const note = page.getByTestId('ladder-tier-source-note');
+    await expect(note).toBeVisible();
+    await expect(note).toHaveText('友好度由本站编辑评定，不由胜率推导，也不是官方推荐。');
+    const placement = async () =>
+      note.evaluate((element) => {
+        const previous = element.previousElementSibling;
+        const next = element.nextElementSibling;
+        const noteRect = element.getBoundingClientRect();
+        return {
+          followsMethods: previous?.classList.contains('ladder-stat-methods') ?? false,
+          precedesTable: next?.getAttribute('data-testid') === 'ladder-table',
+          inReadingOrder: Boolean(
+            previous && next && previous.getBoundingClientRect().bottom <= noteRect.top && noteRect.bottom <= next.getBoundingClientRect().top,
+          ),
+          textFits: element.scrollHeight <= element.clientHeight + 1,
+        };
+      });
+    const initialPlacement = await placement();
+    expect(initialPlacement).toMatchObject({ followsMethods: true, precedesTable: true, inReadingOrder: true, textFits: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+    await sortButton(page, 'tier').click();
+    await expect(sortHeader(page, 'tier')).not.toHaveAttribute('aria-sort', 'none');
+    expect(await placement()).toEqual(initialPlacement);
+
+    await page.setViewportSize({ width: 959, height: 900 });
+    await expect(note).toBeVisible();
+    await page.setViewportSize({ width: 960, height: 900 });
+    await expect(note).toHaveCount(0);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await expect(note).toHaveCount(0);
+    await expect(page.locator('.ladder-side .ladder-wide-only').filter({ hasText: '四档是本站编辑口径，不是官方推荐。' })).toBeVisible();
+  });
+}
+
 test('#33 行展开显示四档新手友好度，并链到加成与文明详情', async ({ page }) => {
   await page.goto('./#/ladder?mode=arabia1v1');
   const root = await expectLadderPage(page);

@@ -178,6 +178,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+定向 E2E 失败若拟归因为既存问题，须在未修改的基线 SHA 上用相同命令重跑同一用例，并保留两边的原始输出与 SHA；只有基线复现相同失败后，才按既存问题记录，不弱化断言或门禁。[#1142](https://github.com/linhongcun/aoe2-analyzer/issues/1142) / [PR #1159](https://github.com/linhongcun/aoe2-analyzer/pull/1159) 的 `#364 共享模拟器默认标题层级保留` 两例在实现 `d0a5cc0ab75b883b9316ddd0391e3c5089422fec` 与未修改基线 `95824f3851c78d6a89eb9cbc14861c2965412f6b` 上均预期 `heading-order` 的 H3 违规、实际收到空结果。
+
 粘性章节栏的滚动定位与当前节判断应共用实测几何。[#1137](https://github.com/linhongcun/aoe2-analyzer/issues/1137) / [PR #1146](https://github.com/linhongcun/aoe2-analyzer/pull/1146) 的窄屏复核发现，360/390 宽度下章节栏虽已受全局样式影响而折行，固定 140px active 阈值仍会在阵容跳转后高亮兵种；这不是原先完全不能换行。后续 1280 西班牙复现中，nav.bottom=97、active boundary=109、techtree.top=109.046875，严格比较仍漏选标题已可见的科技树。原因是固定阈值不随实际栏高变化，且布局坐标含亚像素值。以后显式允许本组件换行且不横溢，以同一实测栏底几何计算锚点偏移和 active 阈值；本例用 0.5 CSS px 容差修正，不将该数值当作通用常数。active 继续由滚动驱动，不能只看 hash，ResizeObserver 只更新高亮、不重滚。按受影响的窄屏换行布局与桌面边界定向验证直接跳转和手动滚动，并确认相邻章节不会被提前吞并。
 
 同一访问的模态关闭与跨访问卸载须分开测试。[#1121](https://github.com/linhongcun/aoe2-analyzer/issues/1121) / [PR #1133](https://github.com/linhongcun/aoe2-analyzer/pull/1133) 的独立复核发现：对话框卸载时浏览器原生回焦，旧访问仍在采样，覆盖了正确的滚动快照；焦点断言通过，但 Forward 偏约 90 px。以后打开模态时先保存真实背景位置和触发器，模态期间停止背景采样；用两个不同的非零偏移断言 Back、Forward 的位置、焦点、弹窗卸载和解锁，并与同页 Esc 对照。档案回链同样区分可信上一访问与刷新回退：前者恢复原访问及独立错误提示，后者由已校验字段重建单层地址；不因一个坏字段丢掉其余合法上下文，也不放宽任意来路的白名单。分别实走含失效目标、混合版本和非法来路的原页往返与刷新。[独立复核](https://app.devin.ai/sessions/3f253305fcb8479fa12e5a7aea78bdd3) 和 [v0.89.0 交付](https://github.com/linhongcun/aoe2-analyzer/releases/tag/v0.89.0) 已核实，线上定向验收范围见原 Issue。
