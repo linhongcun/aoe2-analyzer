@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { civByEn, loadCore, type Core } from '../../src/data';
+import { civUniqueTechs } from '../../src/domain/civKit';
 import { openingText } from '../../src/domain/civOpening';
-import { findUniqueTech } from '../../src/domain/linker';
 import { civDisplayText, civOpeningDisplayText } from '../../src/features/civs/displayNames';
 
 let core: Core;
@@ -28,13 +28,12 @@ describe('#470 蜀详情局部名称展示', () => {
     expect(civOpeningDisplayText(c.op, c.en, core)).not.toContain(tech.en);
   });
 
-  it('先解析独特科技原串，仅转换说明中的旧中文，科技身份与英文保持', () => {
+  it('按目录取得独特科技，仅在名称展示辅助函数中转换说明里的旧中文', () => {
     const c = civByEn('Shu')!;
-    const parsed = findUniqueTech(c.ct, c.en, core.techs)!;
-    expect(parsed.tech.id).toBe(1070);
-    expect(civDisplayText(parsed.rest, c.en, core)).toContain(core.unitById[1959]!.zh);
-    expect(parsed.en).toBe(core.techById[1070]!.en);
-    expect(parsed.zh).toBe(core.techById[1070]!.zh);
+    const castle = civUniqueTechs(c.en, core.techs)[0]!;
+    expect(castle).toBe(core.techById[1070]);
+    expect(castle.age).toBe(3);
+    expect(civDisplayText(castle.desc, c.en, core)).toContain(core.unitById[1959]!.zh);
   });
 
   it('其它文明保持原显示流程，不新增同名替换', () => {
