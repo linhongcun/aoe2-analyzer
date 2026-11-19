@@ -9,12 +9,16 @@ export function CivBackground({ civ, className = '', children }: { civ: string; 
   return (
     <div id="detail" className={classes} style={style} data-civ-background={background ? civ : undefined}>
       {children}
-      {background && (
-        <p className="civ-background-credit">
-          <a href={background.sourceUrl}>背景插画 · AoE2 Companion</a>
-          <span>© Microsoft</span>
-        </p>
-      )}
     </div>
   );
+}
+
+export function CivIllustrationCredit({ civ }: { civ: string }) {
+  const background = civBackground(civ);
+  return background ? (
+    <p className="civ-background-credit">
+      <a href={background.sourceUrl}>背景插画 · AoE2 Companion</a>
+      <span>© Microsoft</span>
+    </p>
+  ) : null;
 }

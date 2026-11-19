@@ -1,0 +1,81 @@
+.civ-about-feedback {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6) var(--space-8);
+  text-align: left;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.civ-about-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.civ-about-feedback :is(button, a):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.civ-about-content {
+  max-width: 760px;
+  line-height: 1.8;
+}
+
+.civ-about-content[hidden] {
+  display: none;
+}
+
+.civ-about-content p {
+  margin: var(--space-3) 0;
+}
+
+.civ-about-content a {
+  color: var(--color-link);
+}
+
+.civ-about-content a:not(.civ-about-sources a) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.civ-about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+.civ-about-links .fblink {
+  min-height: 44px;
+}
+
+.civ-about-content .fitem {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.civ-about-content .fmeta {
+  white-space: normal;
+}
+
+.civ-about-sources h2 {
+  margin: var(--space-5) 0 var(--space-2);
+  font-size: 14px;
+  color: var(--color-text);
+}
