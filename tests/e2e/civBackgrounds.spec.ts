@@ -27,10 +27,23 @@ for (const theme of ['light', 'dark']) {
         const header = page.locator('#detail .identity-art');
         const mask = await header.evaluate((element) => {
           const style = getComputedStyle(element);
-          return { image: style.backgroundImage, size: style.backgroundSize, pointerEvents: style.pointerEvents };
+          const box = element.getBoundingClientRect();
+          return {
+            image: style.backgroundImage,
+            size: style.backgroundSize,
+            pointerEvents: style.pointerEvents,
+            opacity: style.opacity,
+            display: style.display,
+            width: box.width,
+            height: box.height,
+          };
         });
         expect(mask.image).toContain('.webp');
-        expect(mask.size).toBe('cover');
+        expect(mask.size).toBe(width <= 600 ? 'contain' : 'cover');
+        expect(mask.opacity).toBe(width <= 600 ? '0.65' : '0.3');
+        expect(mask.display).not.toBe('none');
+        expect(mask.width).toBeGreaterThan(0);
+        expect(mask.height).toBeGreaterThan(0);
         expect(mask.pointerEvents).toBe('none');
         const url = mask.image.match(/^url\("?(.+?)"?\)$/)![1]!;
         expect(new URL(url).origin).toBe(new URL(page.url()).origin);

@@ -999,11 +999,13 @@
     padding-right: 0;
     padding-left: 0;
   }
-}
 
-@media (max-width: 480px) {
-  .identity-art {
-    display: none;
+  /* ≤600：标题卡保留插画。完整容纳，文字一侧淡出；不增加卡高，也不接收点击。 */
+  .civ-read .identity-art {
+    background-size: contain;
+    opacity: 0.65;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-text) 25%, transparent) 35%, var(--color-text) 65%);
+    mask-image: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-text) 25%, transparent) 35%, var(--color-text) 65%);
   }
 }
 
