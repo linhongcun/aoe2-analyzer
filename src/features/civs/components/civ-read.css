@@ -354,6 +354,11 @@
   background: var(--color-link-soft);
 }
 
+.brow-action-icon,
+.civ-bonus-hint-narrow {
+  display: none;
+}
+
 .civ-read .civ-bonus-warning,
 .civ-read .civ-team-note {
   margin: 0 8px 10px;
@@ -923,6 +928,51 @@
 }
 
 @media (max-width: 600px) {
+  .civ-read .brow-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    color: var(--civ-ink-3);
+    background: transparent;
+  }
+
+  .civ-read .brow-action:hover,
+  .civ-read .brow-action:active {
+    background: var(--color-link-soft);
+  }
+
+  .civ-read .brow-action:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+
+  .brow-action-label,
+  .civ-bonus-hint-wide {
+    display: none;
+  }
+
+  .brow-action-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .civ-bonus-hint-narrow {
+    display: inline;
+  }
+
+  .civ-bonus-hint-icon {
+    display: inline;
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+  }
+
   .civ-read {
     margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
     padding: 12px 16px 24px;

@@ -1,6 +1,7 @@
 /** 文明页常显加成正文及按需作用依据入口 */
 import { useCallback, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '../../../shared/ui/Icon';
 import { civBonuses } from '../../../domain/civBonus';
 import type { Civ } from '../../../domain/types';
 import type { CivBonusEnt } from '../../../domain/civBonus';
@@ -37,7 +38,8 @@ export function BonusRows({
               event.currentTarget.blur();
             }}
           >
-            作用与依据
+            <span className="brow-action-label">作用与依据</span>
+            <Icon name="info" className="brow-action-icon" />
           </button>
         </div>
         {b.fresh === false && <p className="civ-bonus-warning">游戏说明与游戏数据不一致</p>}
