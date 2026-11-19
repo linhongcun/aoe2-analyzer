@@ -223,6 +223,15 @@
   max-width: 100%;
   overflow-x: auto;
 }
+.ladder-tier-source-note {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-weight: 600;
+}
 .ladder-table {
   width: 100%;
   border-collapse: collapse;
