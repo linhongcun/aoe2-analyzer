@@ -217,9 +217,35 @@ export default function Market() {
   );
 }
 
+function fieldHint(id: string, message: string | undefined) {
+  if (!message) return { props: {}, hint: null };
+  return {
+    props: { 'aria-invalid': true as const, 'aria-describedby': id },
+    hint: (
+      <span id={id} className="eco-field-error">
+        {message.split(/(\d+(?:[–-]\d+)?(?:\s*笔)?)/g).map((part, index) =>
+          index % 2 === 1 ? (
+            <span className="num nw" key={index}>
+              {part}
+            </span>
+          ) : (
+            part
+          ),
+        )}
+      </span>
+    ),
+  };
+}
+
 function PlanEditor({ plan, update, name }: { plan: MarketPlan; update: (plan: MarketPlan) => void; name: string }) {
   const errors = marketErrors(plan),
-    unique = MARKET_DATA.uniqueFees[plan.civ];
+    unique = MARKET_DATA.uniqueFees[plan.civ],
+    planKey = name.toLowerCase();
+  const hint = (id: string, prefix: string) =>
+    fieldHint(
+      id,
+      errors.find((message) => message.startsWith(prefix)),
+    );
   const editOrder = (index: number, patch: Partial<MarketOrder>) =>
     update({ ...plan, orders: plan.orders.map((order, i) => (i === index ? { ...order, ...patch } : order)) });
   const moveOrder = (index: number, by: number) => {
@@ -260,21 +286,26 @@ function PlanEditor({ plan, update, name }: { plan: MarketPlan; update: (plan: M
       <fieldset>
         <legend>初始库存</legend>
         <div className="market-fields">
-          {STOCK_RESOURCES.map((resource) => (
-            <label key={resource}>
-              {RES_ZH[resource]}库存
-              <input
-                aria-label={`${RES_ZH[resource]}库存`}
-                inputMode="numeric"
-                type="number"
-                min="0"
-                max={MARKET_STOCK_LIMIT}
-                step="1"
-                value={plan.stock[resource]}
-                onChange={(event) => update({ ...plan, stock: { ...plan.stock, [resource]: event.target.value } })}
-              />
-            </label>
-          ))}
+          {STOCK_RESOURCES.map((resource) => {
+            const error = hint(`market-error-${planKey}-stock-${resource.toLowerCase()}`, `${RES_ZH[resource]}初始库存须`);
+            return (
+              <label key={resource}>
+                {RES_ZH[resource]}库存
+                <input
+                  {...error.props}
+                  aria-label={`${RES_ZH[resource]}库存`}
+                  inputMode="numeric"
+                  type="number"
+                  min="0"
+                  max={MARKET_STOCK_LIMIT}
+                  step="1"
+                  value={plan.stock[resource]}
+                  onChange={(event) => update({ ...plan, stock: { ...plan.stock, [resource]: event.target.value } })}
+                />
+                {error.hint}
+              </label>
+            );
+          })}
         </div>
       </fieldset>
       <details className="market-base">
@@ -284,21 +315,26 @@ function PlanEditor({ plan, update, name }: { plan: MarketPlan; update: (plan: M
           {MARKET_DATA.engine.initial.Stone}。这里输入不含手续费的基价，不能填游戏面板里的买价或卖价。
         </p>
         <div className="market-fields">
-          {MARKET_RESOURCES.map((resource) => (
-            <label key={resource}>
-              {RES_ZH[resource]}基价
-              <input
-                aria-label={`${RES_ZH[resource]}手续费前基价`}
-                inputMode="numeric"
-                type="number"
-                min={MARKET_DATA.engine.minBase}
-                max={MARKET_DATA.engine.maxBase}
-                step="1"
-                value={plan.base[resource]}
-                onChange={(event) => update({ ...plan, base: { ...plan.base, [resource]: event.target.value } })}
-              />
-            </label>
-          ))}
+          {MARKET_RESOURCES.map((resource) => {
+            const error = hint(`market-error-${planKey}-base-${resource.toLowerCase()}`, `${RES_ZH[resource]}手续费前基价须`);
+            return (
+              <label key={resource}>
+                {RES_ZH[resource]}基价
+                <input
+                  {...error.props}
+                  aria-label={`${RES_ZH[resource]}手续费前基价`}
+                  inputMode="numeric"
+                  type="number"
+                  min={MARKET_DATA.engine.minBase}
+                  max={MARKET_DATA.engine.maxBase}
+                  step="1"
+                  value={plan.base[resource]}
+                  onChange={(event) => update({ ...plan, base: { ...plan.base, [resource]: event.target.value } })}
+                />
+                {error.hint}
+              </label>
+            );
+          })}
         </div>
         <button type="button" className="btn" onClick={() => update({ ...plan, base: defaultMarketConfig().plans[0].base })}>
           恢复初始行情
@@ -323,76 +359,81 @@ function PlanEditor({ plan, update, name }: { plan: MarketPlan; update: (plan: M
       </div>
       {!plan.orders.length && <p>暂无交易，可添加第一项操作。</p>}
       <ol className="market-orders">
-        {plan.orders.map((order, index) => (
-          <li key={index} data-testid="market-order">
-            <h3>第 {index + 1} 项操作</h3>
-            <div className="market-order-fields">
-              <label>
-                方向
-                <select
-                  aria-label={`第 ${index + 1} 项方向`}
-                  value={order.direction}
-                  onChange={(event) => editOrder(index, { direction: event.target.value as MarketOrder['direction'] })}
+        {plan.orders.map((order, index) => {
+          const lotsError = hint(`market-error-${planKey}-order-${index + 1}-lots`, `第 ${index + 1} 项数量须`);
+          return (
+            <li key={index} data-testid="market-order">
+              <h3>第 {index + 1} 项操作</h3>
+              <div className="market-order-fields">
+                <label>
+                  方向
+                  <select
+                    aria-label={`第 ${index + 1} 项方向`}
+                    value={order.direction}
+                    onChange={(event) => editOrder(index, { direction: event.target.value as MarketOrder['direction'] })}
+                  >
+                    <option value="sell">卖出</option>
+                    <option value="buy">买入</option>
+                  </select>
+                </label>
+                <label>
+                  资源
+                  <select
+                    aria-label={`第 ${index + 1} 项资源`}
+                    value={order.resource}
+                    onChange={(event) => editOrder(index, { resource: event.target.value as MarketOrder['resource'] })}
+                  >
+                    {MARKET_RESOURCES.map((resource) => (
+                      <option key={resource} value={resource}>
+                        {RES_ZH[resource]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  数量（笔）
+                  <input
+                    {...lotsError.props}
+                    aria-label={`第 ${index + 1} 项笔数`}
+                    type="number"
+                    inputMode="numeric"
+                    min="1"
+                    max={MARKET_LOT_LIMIT}
+                    step="1"
+                    value={order.lots}
+                    onChange={(event) => editOrder(index, { lots: event.target.value })}
+                  />
+                  {lotsError.hint}
+                </label>
+              </div>
+              <div className="market-order-actions">
+                <button type="button" className="btn" aria-label={`上移第 ${index + 1} 项`} disabled={index === 0} onClick={() => moveOrder(index, -1)}>
+                  <Icon name="arrow-up" />
+                  上移
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  aria-label={`下移第 ${index + 1} 项`}
+                  disabled={index === plan.orders.length - 1}
+                  onClick={() => moveOrder(index, 1)}
                 >
-                  <option value="sell">卖出</option>
-                  <option value="buy">买入</option>
-                </select>
-              </label>
-              <label>
-                资源
-                <select
-                  aria-label={`第 ${index + 1} 项资源`}
-                  value={order.resource}
-                  onChange={(event) => editOrder(index, { resource: event.target.value as MarketOrder['resource'] })}
+                  <Icon name="arrow-down" />
+                  下移
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  aria-label={`删除第 ${index + 1} 项`}
+                  onClick={() => update({ ...plan, orders: plan.orders.filter((_, i) => i !== index) })}
                 >
-                  {MARKET_RESOURCES.map((resource) => (
-                    <option key={resource} value={resource}>
-                      {RES_ZH[resource]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                数量（笔）
-                <input
-                  aria-label={`第 ${index + 1} 项笔数`}
-                  type="number"
-                  inputMode="numeric"
-                  min="1"
-                  max={MARKET_LOT_LIMIT}
-                  step="1"
-                  value={order.lots}
-                  onChange={(event) => editOrder(index, { lots: event.target.value })}
-                />
-              </label>
-            </div>
-            <div className="market-order-actions">
-              <button type="button" className="btn" aria-label={`上移第 ${index + 1} 项`} disabled={index === 0} onClick={() => moveOrder(index, -1)}>
-                <Icon name="arrow-up" />
-                上移
-              </button>
-              <button
-                type="button"
-                className="btn"
-                aria-label={`下移第 ${index + 1} 项`}
-                disabled={index === plan.orders.length - 1}
-                onClick={() => moveOrder(index, 1)}
-              >
-                <Icon name="arrow-down" />
-                下移
-              </button>
-              <button
-                type="button"
-                className="btn"
-                aria-label={`删除第 ${index + 1} 项`}
-                onClick={() => update({ ...plan, orders: plan.orders.filter((_, i) => i !== index) })}
-              >
-                <Icon name="x" />
-                删除
-              </button>
-            </div>
-          </li>
-        ))}
+                  <Icon name="x" />
+                  删除
+                </button>
+              </div>
+            </li>
+          );
+        })}
       </ol>
       {!!errors.length && (
         <div role="alert" className="market-error">
