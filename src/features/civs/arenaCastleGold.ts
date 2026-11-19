@@ -85,7 +85,7 @@ interface TechCost {
   Gold?: unknown;
 }
 
-/** UI 切片视图：防御式解析 eco.json，字段比 ecoTypes 的 EcoTech 更宽；避免与导出类型同名。 */
+/** UI 切片视图：防御式解析 eco.json，保留此视图所需的宽松字段。 */
 interface ArenaTech {
   en?: unknown;
   cost?: TechCost;
