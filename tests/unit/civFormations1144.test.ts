@@ -65,8 +65,10 @@ describe('#1144 三国阵容', () => {
     const output = byCiv('Wei')
       .routes[0]!.evidence.links!.slice(0, 2)
       .map(({ href }) => {
-        const { civ, age, ids, team } = parseUnitPath(new URL(href).hash.split('?')[0]!.slice(2));
-        const { ma, pa } = simulate(ctx, unit('Hussar'), civ!, age!, new Set(ids), new Set(team));
+        const config = parseUnitPath(new URL(href).hash.split('?')[0]!.slice(2));
+        if (!config?.civ || !config.age) throw new Error(`未找到固定模拟配置：${href}`);
+        const { civ, age, ids, team } = config;
+        const { ma, pa } = simulate(ctx, unit('Hussar'), civ, age, new Set(ids), new Set(team));
         expect([civ, age]).toEqual(['Wei', 4]);
         return { ids, armor: [ma, pa] };
       });

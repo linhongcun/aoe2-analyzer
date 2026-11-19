@@ -123,7 +123,7 @@ function FormationDetail({
   );
 }
 
-function SourceLinks({ source }: { source: Source | null }) {
+function SourceLinks({ source, links }: { source: Source | null; links: Route['evidence']['links'] }) {
   if (!source) return <p className="formation-meta">来源链接暂不可用。</p>;
   return (
     <>
@@ -137,6 +137,11 @@ function SourceLinks({ source }: { source: Source | null }) {
         <a href={source.discussion} target="_blank" rel="noreferrer">
           原讨论
         </a>
+        {links?.map(({ label, href }) => (
+          <a key={href} href={href} target="_blank" rel="noreferrer">
+            <FormationText text={label} />
+          </a>
+        ))}
       </div>
     </>
   );
@@ -185,16 +190,7 @@ function FormationEvidence({ route, source }: { route: Route; source: Source | n
           </dd>
         </div>
       </dl>
-      <SourceLinks source={source} />
-      {route.evidence.links?.length ? (
-        <div className="formation-source-links">
-          {route.evidence.links.map(({ label, href }) => (
-            <a key={href} href={href} target="_blank" rel="noreferrer">
-              <FormationText text={label} />
-            </a>
-          ))}
-        </div>
-      ) : null}
+      <SourceLinks source={source} links={route.evidence.links} />
     </>
   );
 }

@@ -31,7 +31,7 @@ for (const { civ, anchor, width, unit, summary, adjustment, source } of cases) {
       await expect(choices).toHaveCount(2);
       await expect(choices.nth(0)).toContainText('有城堡产能');
       await expect(choices.nth(1)).toContainText('精锐掷矛手');
-      await expect(choices.nth(1)).not.toContainText('城堡');
+      await expect(choices.nth(1)).not.toContainText('城堡产能');
       await expect(card.locator('.formation-supplements')).toContainText('敌骑能切到我方后排时');
     }
 
@@ -51,6 +51,15 @@ for (const { civ, anchor, width, unit, summary, adjustment, source } of cases) {
     await expect(evidence).toHaveAttribute('href', new RegExp(`https://linhongcun.github.io/aoe2-analyzer/#/.*civ=${civ}`));
     await expect(evidence).toHaveAttribute('target', '_blank');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+    if (civ === 'Wei') {
+      await page.context().route('https://linhongcun.github.io/aoe2-analyzer/', (route) => route.fulfill({ body: 'source' }));
+      const [sourceTab] = await Promise.all([page.waitForEvent('popup'), evidence.click()]);
+      await expect(sourceTab).toHaveURL((url) => url.hash.includes('/441/Wei/4/1062,'));
+      await expect(page).toHaveURL((url) => url.hash === path);
+      await expect(card.locator('details[open]')).toHaveCount(2);
+      await sourceTab.close();
+    }
 
     const entity = card.locator(`#formation-${anchor}-unit-${unit}`);
     await entity.press('Enter');
