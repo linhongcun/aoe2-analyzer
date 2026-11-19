@@ -384,7 +384,6 @@ describe('#659 source-evidenced CSS ownership, not directory-name guessing', () 
     'src/features/civs/components/civ-regional-units.css',
     'src/features/civs/components/civ-regional-buildings.css',
     'src/features/civs/components/civ-unique-buildings.css',
-    'src/features/civs/openingBuildChoices.css',
     'src/features/ladder/ladder.css',
     'src/features/ladder/ladderMeta.css',
     'src/features/ladder/stat-methods.css',

@@ -643,7 +643,6 @@ const ownedFeatureCss = new Map([
   ['src/features/civs/components/civOverview.css', /^(?:\.detail\s+)?\.civ-[a-z-]+(?=$|\s|[.:#>\[])/],
   ['src/features/civs/components/civ-unique-buildings.css', /^\.civ-unique-buildings(?=$|\s|[.:#>\[])/],
   ['src/features/civs/components/civ-history.css', /^\.civ-history[a-z-]*(?=$|\s|[.:#>\[])/],
-  ['src/features/civs/openingBuildChoices.css', /^\.civ-opening-[a-z-]+(?=$|\s|[.:#>\[])/],
 ]);
 const ownedCssExactSelectors = new Map([
   ['src/features/civs/components/civRelatedTools.css', ['#detail .dtabs:has(+ .civ-related-tools)']],
