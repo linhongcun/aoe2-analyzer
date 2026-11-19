@@ -2,11 +2,8 @@ import { Fragment, useEffect, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { Civ } from '../../domain/types';
 import { AXES } from '../../domain/ratings';
-import { DLCS } from '../../domain/dlc';
 import { linkify } from '../../domain/linker';
 import { useCore } from '../../data/hooks';
-import { civs } from '../../data';
-import { AgeImg, DlcImg } from './art';
 import { Icon } from './Icon';
 
 /** 自动链接单位/科技名称；nl=true 时把换行渲染为 <br> */
@@ -52,13 +49,6 @@ export function Steps({ s }: { s: string }) {
         </Fragment>
       ))}
     </>
-  );
-}
-export function Sep() {
-  return (
-    <span className="sep">
-      <Icon name="chevron-right" />
-    </span>
   );
 }
 export function Join({ items, sep }: { items: ReactNode[]; sep: ReactNode }) {
@@ -166,70 +156,6 @@ export function PosBox({ list }: { list: Civ[] }) {
   );
 }
 
-export function CivOptions() {
-  return (
-    <>
-      {civs.map((c, i) => (
-        <option key={c.en} value={i}>
-          {c.zh} {c.en}
-        </option>
-      ))}
-    </>
-  );
-}
-
-/** DLC 下拉 + 图标按钮条（共享同一状态） */
-export function DlcSelect({
-  value,
-  onChange,
-  id,
-  includeUpdates = false,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  id?: string;
-  includeUpdates?: boolean;
-}) {
-  return (
-    <select id={id} aria-label={includeUpdates ? '首发版本' : '资料片'} value={value} onChange={(e) => onChange(e.target.value)}>
-      <option value="">{includeUpdates ? '全部首发版本' : '全部 DLC'}</option>
-      {DLCS.map((d, i) => (
-        <option key={i} value={i}>
-          {d.zh} {d.en} ({d.year})
-        </option>
-      ))}
-      {includeUpdates && <option value="update">免费更新</option>}
-      <option value="none">未标注</option>
-    </select>
-  );
-}
-export function DlcBar({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const b = (v: string, c: ReactNode) => (
-    <button type="button" key={v} data-v={v} className={value === v ? 'on' : undefined} aria-pressed={value === v} onClick={() => onChange(v)}>
-      {c}
-    </button>
-  );
-  return (
-    <div className="dbar" role="group" aria-label="DLC 快捷筛选">
-      {b('', '全部')}
-      {DLCS.map((_, i) => b(String(i), <DlcImg i={i} />))}
-      {b('none', '未标注')}
-    </div>
-  );
-}
-export function AgeBar({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const b = (v: string, c: ReactNode) => (
-    <button type="button" key={v} data-v={v} className={value === v ? 'on' : undefined} aria-pressed={value === v} onClick={() => onChange(v)}>
-      {c}
-    </button>
-  );
-  return (
-    <div className="dbar" role="group" aria-label="时代快捷筛选">
-      {b('', '全部')}
-      {([1, 2, 3, 4] as const).map((age) => b(String(age), <AgeImg age={age} />))}
-    </div>
-  );
-}
 export function SearchInput({
   id,
   value,
