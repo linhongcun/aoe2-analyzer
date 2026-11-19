@@ -199,7 +199,13 @@ export function UpdateEventCard({
               )}
               {claim.effects.map((effect) => (
                 <Fragment key={effect.id}>
-                  <HistoryEffect data={data} effect={effect} fallbackScope={inline ? sourceEvent.scope : undefined} inline={!!inline} />
+                  <HistoryEffect
+                    data={data}
+                    effect={effect}
+                    fallbackScope={inline ? sourceEvent.scope : undefined}
+                    inline={!!inline}
+                    showEntities={!inline || inline.entity.type === 'civ'}
+                  />
                   {inline && (effect.scope ?? sourceEvent.scope).scopeKind !== 'unknown' && readerScopePending(inline.view, effect, inline.entity) && (
                     <p>适用范围待核</p>
                   )}

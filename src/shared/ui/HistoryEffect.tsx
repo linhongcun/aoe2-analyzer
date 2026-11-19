@@ -66,11 +66,13 @@ export function HistoryEffect({
   effect,
   fallbackScope,
   inline = false,
+  showEntities = !inline,
 }: {
   data: CivUpdatesData;
   effect: UpdateEffect;
   fallbackScope?: UpdateScope;
   inline?: boolean;
+  showEntities?: boolean;
 }) {
   const scope = effect.scope ?? fallbackScope;
   let content: ReactNode;
@@ -154,7 +156,7 @@ export function HistoryEffect({
   return (
     <div className="civ-update-effect" data-effect-type={effect.type} data-history-effect={inline ? effect.id : undefined}>
       {data.techs?.effectKinds[effect.id] && <p className="civ-update-pill">{TECH_EFFECT_LABELS[data.techs.effectKinds[effect.id]!]}</p>}
-      {!inline && (
+      {showEntities && (
         <div className="civ-update-entities">
           {effect.entityRefs.map((reference, index) => (
             <Fragment key={index}>
