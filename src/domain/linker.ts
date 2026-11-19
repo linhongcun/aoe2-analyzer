@@ -44,13 +44,3 @@ export function linkify(text: string, L: Linker): Segment[] {
   if (last < text.length) out.push({ text: text.slice(last) });
   return out;
 }
-
-/** 解析“中文名 (说明)｜English”形式的独特科技字段 */
-export function findUniqueTech(s: string, civ: string, techs: Tech[]): { tech: Tech; zh: string; rest: string; en: string } | null {
-  const i = s.indexOf('｜');
-  const en = s.slice(i + 1);
-  const tech = techs.find((x) => x.type === 'UniqueTech' && x.en === en && x.civs.includes(civ));
-  if (!tech) return null;
-  const p = s.indexOf(' (');
-  return { tech, zh: s.slice(0, p), rest: s.slice(p, i), en };
-}

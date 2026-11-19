@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
+import techCatalog from '../../data/game/techs.json';
 import { civByEn, civs, loadCore, type Core } from '../../src/data';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../src/domain/civKit';
 import { regionalUnitLines } from '../../src/domain/civUnits';
@@ -24,14 +25,24 @@ describe('文明详情套件装配', () => {
     const units = civUniqueUnits('Mongols', core.units, core.fam);
     expect(units.map((line) => line.u.zh)).toEqual(['蒙古突骑']);
     expect(units[0]?.elite?.id).toBe(561);
-    const techs = civUniqueTechs(civByEn('Mongols')!, core.techs);
-    expect(techs.map((item) => item.tech.id)).toEqual([487, 6]);
+    const techs = civUniqueTechs('Mongols', core.techs);
+    expect(techs.map((tech) => tech.id)).toEqual([487, 6]);
   });
 
   it('拜占庭带上加成或独特科技点名的瓦兰吉卫队、德罗蒙和骆驼兵', () => {
     expect(bases('Byzantines').sort()).toEqual(['德罗蒙战舰', '瓦兰吉卫队', '骆驼兵'].sort());
-    const techs = civUniqueTechs(civByEn('Byzantines')!, core.techs);
-    expect(techs.map((item) => item.zh)).toEqual(['希腊之火', '后勤学']);
+    const techs = civUniqueTechs('Byzantines', core.techs);
+    expect(techs.map((tech) => tech.zh)).toEqual(['希腊之火', '后勤学']);
+  });
+
+  it.each(civs.map(({ en }) => en))('%s 的套件逐时代列全且只列本文明的目录独特科技', (civ) => {
+    const expected = techCatalog.flatMap((tech) => {
+      if (tech.type !== 'UniqueTech' || !tech.civs.includes(civ)) return [];
+      const { id, age, zh } = tech;
+      return [{ id, age, zh }];
+    });
+    expected.sort((a, b) => a.age - b.age || a.id - b.id);
+    expect(civUniqueTechs(civ, core.techs).map(({ id, age, zh }) => ({ id, age, zh }))).toEqual(expected);
   });
 
   it('宽类别效果不把整类骑兵都塞进套件', () => {

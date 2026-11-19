@@ -5,7 +5,7 @@
 import { DAT } from './datEffects';
 import { regionalUnitLines } from './civUnits';
 import { collapse, type Families } from './family';
-import { buildLinker, findUniqueTech, linkify } from './linker';
+import { buildLinker, linkify } from './linker';
 import type { Civ, Tech, Unit } from './types';
 
 /** 一份目标里，本文明可用单位的升级线多过这个数，就当成整类效果，不拿来点名区域单位。 */
@@ -18,11 +18,8 @@ export function civUniqueUnits(civ: string, units: readonly Unit[], fam: Familie
   );
 }
 
-export function civUniqueTechs(civ: Civ, techs: readonly Tech[]) {
-  return [civ.ct, civ.it].flatMap((text) => {
-    const found = findUniqueTech(text, civ.en, [...techs]);
-    return found ? [found] : [];
-  });
+export function civUniqueTechs(civ: string, techs: readonly Tech[]): Tech[] {
+  return techs.filter((tech) => tech.type === 'UniqueTech' && tech.civs.includes(civ)).sort((a, b) => a.age - b.age || a.id - b.id);
 }
 
 /** 与本文明加成或独特科技有关的区域单位线。没有则空数组。 */

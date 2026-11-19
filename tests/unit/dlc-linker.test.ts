@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import civsRaw from '../../data/game/civs.json';
+import { civUniqueTechs } from '../../src/domain/civKit';
 import { CIV_DLC, DLCS, dlcMatch } from '../../src/domain/dlc';
-import { buildLinker, findUniqueTech, linkify } from '../../src/domain/linker';
+import { buildLinker, linkify } from '../../src/domain/linker';
 import { strengths } from '../../src/domain/ratings';
 import type { Civ } from '../../src/domain/types';
 import { techs, units } from './helpers';
@@ -45,13 +46,16 @@ describe('auto-linker', () => {
   it('plain text passes through', () => {
     expect(linkify('无关文本', L)).toEqual([{ text: '无关文本' }]);
   });
-  it('finds civ unique techs', () => {
-    const fr = civs.find((c) => c.en === 'Franks')!;
-    expect(findUniqueTech(fr.ct, 'Franks', techs)?.tech.type).toBe('UniqueTech');
-  });
   it('strengths returns top3/bottom3', () => {
     const [s, w] = strengths(civs[16]!);
     expect(s).toHaveLength(3);
     expect(w).toHaveLength(3);
   });
+});
+
+it('finds the Frank castle and imperial unique techs in the technology catalog', () => {
+  expect(civUniqueTechs('Franks', techs).map(({ age, en, type }) => ({ age, en, type }))).toEqual([
+    { age: 3, en: 'Ordonnance Companies', type: 'UniqueTech' },
+    { age: 4, en: 'Chivalry', type: 'UniqueTech' },
+  ]);
 });
