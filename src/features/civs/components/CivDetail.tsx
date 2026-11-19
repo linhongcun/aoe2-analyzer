@@ -392,7 +392,13 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           <h2 id="civ-bonus-title" tabIndex={-1}>
             文明加成
           </h2>
-          <p className="note">加成直接可读。想查影响对象、工具计入或来源，选择「作用与依据」。</p>
+          <p className="note">
+            <span className="civ-bonus-hint-wide">加成直接可读。想查影响对象、工具计入或来源，选择「作用与依据」。</span>
+            <span className="civ-bonus-hint-narrow">
+              加成直接可读。点每条右侧的 <Icon name="info" className="civ-bonus-hint-icon" />
+              ，查看作用与依据。
+            </span>
+          </p>
           <BonusRows key={`${c.en}:${location.key}`} c={c} onCaptureLink={bonusReturn.captureLink} />
         </section>
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">

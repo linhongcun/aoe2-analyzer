@@ -15,6 +15,42 @@ const open = async (page: import('@playwright/test').Page, id: string) => {
 };
 
 test.describe('civ bonus evidence dialog', () => {
+  for (const width of [390, 1024, 1280]) {
+    test(`${width}px responsive entry and team dialog focus return`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/civ/Britons');
+      const rows = page.locator('.brow');
+      await expect(rows).toHaveCount(4);
+      for (const item of await rows.all()) {
+        const sentence = await item.locator('.brow-t').innerText();
+        const button = item.getByRole('button', { name: `作用与依据：${sentence}`, exact: true });
+        await expect(button).toHaveAttribute('aria-haspopup', 'dialog');
+        await expect(button.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+        await expect(button.locator('.brow-action-label')).toBeVisible({ visible: width > 600 });
+        await expect(button.locator('svg')).toBeVisible({ visible: width <= 600 });
+        if (width <= 600) {
+          const box = await button.boundingBox();
+          expect(box?.width).toBe(44);
+          expect(box?.height).toBe(44);
+        } else {
+          await expect(button).toHaveText('作用与依据');
+        }
+      }
+      await expect(page.locator('.civ-bonus-hint-narrow')).toBeVisible({ visible: width <= 600 });
+      await expect(page.locator('.civ-bonus-hint-wide')).toBeVisible({ visible: width > 600 });
+      const team = row(page, 'Britons-team').getByRole('button');
+      await team.focus();
+      await page.keyboard.press('Enter');
+      const dialog = page.getByRole('dialog');
+      await expect(dialog).toBeVisible();
+      await expect(dialog).toContainText('不列颠 · 团队加成');
+      await expect(dialog.locator('.civ-bonus-dialog-original')).toHaveText('靶场工作速度 +10%');
+      await page.keyboard.press('Escape');
+      await expect(team).toBeFocused();
+      await expect(page).toHaveURL(/#\/civ\/Britons$/u);
+    });
+  }
+
   test('always-visible original, native modal focus and ordinary close return', async ({ page }) => {
     await page.goto('./#/civ/Britons');
     const source = row(page, 'Britons-0');
