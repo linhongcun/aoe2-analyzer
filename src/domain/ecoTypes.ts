@@ -11,5 +11,3 @@ export type EcoMeta = {
   source?: string;
 };
 export type EcoDataView = Omit<EcoData, 'civEco'> & { civEco: Record<string, CivEcoRow[]>; meta?: EcoMeta };
-export type EcoTech = EcoData['techs'][string];
-export type EcoBuilding = EcoData['buildings'][string];
