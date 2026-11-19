@@ -4866,5 +4866,495 @@
         "alternatives": "救赎僧侣：修道院几乎全科技、雕版印刷后射程持平手推炮，但招降要接敌、30 血易死、微操负担高；轻骑已覆盖反攻城职责（hongcun 否决）。；中型投石车：射程 8 压弩炮 7 且有溅射，但 135 黄金与武士抢金线；反攻城职责由免金轻骑覆盖（hongcun 改用轻骑）。；冠军剑士：与武士职责重叠，原 1v1 比较略输、不代表混编结论；无城堡省金例外见下方调整。；重装骑士：缺骑兵钢甲、翼骑兵和游侠，骑兵线投入大上限低；顺风已有骑士线的例外见下方调整。；劲弩手：靶场全科技但无文明加成，不作为默认步兵主力；条件远程备选见下方调整。；火枪手：不作为常驻线，对方步兵海的条件选项见第六调整。"
       }
     ]
+  },
+  {
+    "civ": "Wei",
+    "lead": "帝王成军后由翼骑兵保护鲜卑掠骑兵；先确认能完成前置科技。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1198-L1234",
+      "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+      "boundary": "仅核对固定帝王科技配置与目录；曹操光环的幅度、范围、覆盖及混编胜负未验证。"
+    },
+    "routes": [
+      {
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-19",
+        "id": "wei-hussar-xianbei",
+        "title": "明光铠翼骑兵＋鲜卑掠骑兵",
+        "composition": "combined",
+        "age": 4,
+        "condition": "进入帝王时代且能完成翼骑兵升级、研究明光铠时，用翼骑兵护住鲜卑掠骑兵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "靠明光铠顶前排、护两翼",
+            "age": 4
+          },
+          {
+            "kind": "unit",
+            "id": 1952,
+            "historicalName": "鲜卑掠骑兵",
+            "role": "留在后方保持远程输出",
+            "age": 4
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 1062,
+            "historicalName": "明光铠",
+            "role": "只增加翼骑兵近甲，不增加穿甲",
+            "age": 4,
+            "condition": "同一套帝王单兵模拟配置中，只切换明光铠，翼骑兵双甲由 2/4 变为 6/4；不是城堡时代数值。"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "军队成形且资源允许时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1954,
+                "historicalName": "曹操",
+                "role": "随军提供攻速光环",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "敌方骑兵或骆驼能突破屏障时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "拦截突破的骑兵或骆驼",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "reason": "翼骑兵每名 80 食，鲜卑掠骑兵每名 65 木/35 金，训练资源分开，前排吸收火力，后排保持输出。",
+        "limitation": "翼骑兵升级、明光铠研究、城堡及英雄另有投入；不要把训练资源互补当作成军没有成本。",
+        "attack": "翼骑兵护住接敌窗口；鲜卑留在后方保持射程，不让翼骑正面撞进枪兵阵。",
+        "defense": "翼骑兵留出护两翼的空间，不让鲜卑被迫单独接战。",
+        "adjustments": [
+          {
+            "id": "wei-hussar-xianbei-infantry-archers",
+            "when": "普通近战兵与步弓混编",
+            "text": "翼骑在前承受火力，鲜卑留在后方输出。"
+          },
+          {
+            "id": "wei-hussar-xianbei-halberdiers",
+            "when": "长戟兵成群",
+            "text": "鲜卑保持距离，翼骑保护侧翼，不从正面硬撞。"
+          },
+          {
+            "id": "wei-hussar-xianbei-skirmishers",
+            "when": "掷矛手等散兵施压",
+            "text": "有安全接近路线才增加翼骑；路线受阻就减少鲜卑暴露。"
+          },
+          {
+            "id": "wei-hussar-xianbei-cavalry",
+            "when": "骆驼或重骑突破屏障",
+            "text": "补长戟拦截，避免让鲜卑被迫近身。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
+            "fallback": "若当前资料无法确认长戟可用，收缩前后排间距并避开突破口。"
+          },
+          {
+            "id": "wei-hussar-xianbei-cao-cao",
+            "when": "已成军且能承担英雄投入",
+            "text": "可再用曹操提供随军光环；不把光环当作成军前提。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1954,
+                "age": 4
+              }
+            ],
+            "fallback": "保留翼骑兵与鲜卑掠骑兵作为主轴。"
+          }
+        ],
+        "alternatives": "已有黑光铠骑兵可以继续用，但新补会与鲜卑争金，不作为帝王默认护卫；虎豹骑与前排职责重叠，也不取代主轴。曹操不在成军前投入。",
+        "evidence": {
+          "recognition": "用户认可的是这一配置及其适用条件，不是每局固定出兵。",
+          "playtest": "讨论未说明实战使用；单兵机制或模拟不代表混编结果。",
+          "scope": "只比较同一帝王配置下有无明光铠，并核对独立的训练资源。",
+          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。",
+          "sourceLines": [1198, 1200, 1206, 1207, 1208, 1210, 1212, 1214, 1220, 1221, 1222, 1223, 1229, 1230, 1231, 1232, 1234],
+          "links": [
+            {
+              "label": "翼骑兵模拟（不含明光铠）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/435,39,67,81,68,82,75/?civ=Wei&tab=sim"
+            },
+            {
+              "label": "翼骑兵模拟（含明光铠）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/1062,435,39,67,81,68,82,75/?civ=Wei&tab=sim"
+            },
+            {
+              "label": "明光铠",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1062?civ=Wei"
+            },
+            {
+              "label": "曹操",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1954?civ=Wei"
+            },
+            {
+              "label": "固定版本单位资料",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Shu",
+    "lead": "先看是否已有成队步弓，再决定是否延续到帝王。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1236-L1270",
+      "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+      "boundary": "弩箭匣的追加箭和盘蛇阵在混编中的收益未量化，未验证混编及客户端实战。"
+    },
+    "routes": [
+      {
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-19",
+        "id": "shu-crossbow-arbalester",
+        "title": "已有步弓：弩手 → 劲弩手",
+        "composition": "progression",
+        "age": 4,
+        "condition": "只在城堡时代已有成队步弓时延续：先用弩手，升帝王后按资源和时机升级劲弩；护卫和攻城按压力与推进目标决定。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 24,
+            "historicalName": "弩手",
+            "role": "城堡时代延续已有步弓",
+            "age": 3
+          },
+          {
+            "kind": "unit",
+            "id": 492,
+            "historicalName": "劲弩手",
+            "role": "帝王时代升级承接弓群",
+            "age": 4
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "敌方骑兵施压时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "保护已有弓群",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "推进目标明确且能安排护卫时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1942,
+                "historicalName": "牵引抛石机",
+                "role": "有推进目标时攻城，需护卫",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "reason": "利用存活弓群和已有升级延续输出。适用的科技折扣不是造兵折扣，视野也不是射程。",
+        "limitation": "没有成队步弓时不强转；保护、当下升级或补兵不足时，先解决眼前缺口。",
+        "attack": "保住已有弓群，按战况决定何时升级；不为凑成枪弓攻城三线而延误当前进攻。",
+        "defense": "弓群避免被迫贴身作战；接战前保留后撤路线，不让护卫追出阵线。",
+        "adjustments": [
+          {
+            "id": "shu-crossbow-arbalester-cavalry",
+            "when": "敌方骑兵施压",
+            "text": "补长戟保护弓群，不为没有骑兵威胁的战线常驻大量枪兵。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
+            "fallback": "若长戟资料暂不可用，先收拢弓群与已有护卫。"
+          },
+          {
+            "id": "shu-crossbow-arbalester-push",
+            "when": "有明确推进目标且能护住攻城器",
+            "text": "再投入牵引抛石机，不因升到帝王就常驻攻城线。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1942,
+                "age": 4
+              }
+            ],
+            "fallback": "若牵引抛石机资料暂不可用，先保住已有兵力，不盲推。"
+          },
+          {
+            "id": "shu-crossbow-arbalester-counter",
+            "when": "掷矛手或投石车压住弓线",
+            "text": "保持弓群存活；分散、保持距离，避免硬换，重新按现有兵力评估转型。"
+          },
+          {
+            "id": "shu-crossbow-arbalester-bolts",
+            "when": "经济、护卫与推进节奏都已稳住",
+            "text": "再考虑弩箭匣；它不享普通弓兵科技折扣，已有弓群也不自动研究。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 1069,
+                "age": 4
+              }
+            ],
+            "fallback": "先满足护卫、常用升级与补兵需要。"
+          }
+        ],
+        "alternatives": "不默认加战车：与弓群争金，弓群失去后才重新评估转型。精锐白毦兵需要城堡；盘蛇阵的联动不能替弓手提供收益。弩箭匣不是固定优先项。",
+        "evidence": {
+          "recognition": "用户认可的是这一配置及其适用条件，不是每局固定出兵。",
+          "playtest": "讨论未说明实战使用；单兵机制或模拟不代表混编结果。",
+          "scope": "固定劲弩科技模拟只说明单兵配置；折扣、额外箭与视野按固定科技资料解释。",
+          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。",
+          "sourceLines": [1236, 1238, 1244, 1245, 1246, 1247, 1249, 1251, 1257, 1258, 1259, 1260, 1265, 1266, 1267, 1268, 1270],
+          "links": [
+            {
+              "label": "劲弩手固定科技配置",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/492/Shu/4/437,199,211,200,212,201,219,47/?civ=Shu&tab=sim"
+            },
+            {
+              "label": "弩箭匣",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1069?civ=Shu"
+            },
+            {
+              "label": "盘蛇阵",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1070?civ=Shu"
+            },
+            {
+              "label": "长戟兵",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Shu"
+            },
+            {
+              "label": "牵引抛石机",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Shu"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "civ": "Wu",
+    "lead": "先按敌方兵力选择远程主力，再按威胁和推进目标补兵。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1272-L1310",
+      "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+      "boundary": "尚未验证拆城效率或混编实战；赤壁战术不作为已证实的拆城替代。"
+    },
+    "routes": [
+      {
+        "status": "approved",
+        "playtest": "unreported",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-19",
+        "id": "wu-ranged-by-opponent",
+        "title": "按敌选择远程主力",
+        "composition": "choice",
+        "age": 3,
+        "condition": "步兵多且有城堡产能时用火焰弓；对成群步弓用精锐掷矛手。没有城堡且已有弓群时可先延续。帝王按敌骑威胁或推进目标补兵。",
+        "required": [],
+        "choiceLabel": "按敌选择主力，不是同时必出",
+        "choices": [
+          {
+            "id": "wu-fire-archer",
+            "title": "对步兵",
+            "preconditions": ["对方以步兵为主", "有城堡产能"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1968,
+                "historicalName": "火焰弓箭手",
+                "role": "对付步兵，需要城堡产能",
+                "age": 3
+              }
+            ]
+          },
+          {
+            "id": "wu-elite-skirmisher",
+            "title": "对成群步弓",
+            "preconditions": ["对方已有成群步弓"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "对付成群步弓",
+                "age": 3
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "敌骑能切到我方后排时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "拦截切入后排的骑兵",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "有明确推进目标且能安排护卫时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1942,
+                "historicalName": "牵引抛石机",
+                "role": "有推进目标时攻城，需护卫",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "reason": "两种远程分别应对步兵和成群步弓，不强制双线；已有弓群可作无城堡时的过渡。",
+        "limitation": "火焰弓受城堡产能限制；补枪和攻城都看实际触发条件，不必同时投入。",
+        "attack": "按敌军切换远程主力；只有推进目标明确才投入攻城器并安排护卫。",
+        "defense": "避免远程集中吃范围伤害，敌骑有切入路径时优先保护后排。",
+        "adjustments": [
+          {
+            "id": "wu-ranged-by-opponent-infantry",
+            "when": "对方以步兵为主且有城堡产能",
+            "text": "用火焰弓压制，不外推未列明的对步兵加成。"
+          },
+          {
+            "id": "wu-ranged-by-opponent-archers",
+            "when": "对方步弓成群",
+            "text": "用精锐掷矛手应对，不要求同时大量生产火焰弓。"
+          },
+          {
+            "id": "wu-ranged-by-opponent-cavalry",
+            "when": "敌骑能切到我方后排",
+            "text": "才补长戟保护远程；我方能侧袭不是补枪理由。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
+            "fallback": "若长戟资料暂不可用，先减少后排暴露。"
+          },
+          {
+            "id": "wu-ranged-by-opponent-push",
+            "when": "有明确推进目标并能护卫",
+            "text": "再投入牵引抛石机。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1942,
+                "age": 4
+              }
+            ],
+            "fallback": "若牵引抛石机资料暂不可用，不把赤壁火焰当作替代攻城。"
+          },
+          {
+            "id": "wu-ranged-by-opponent-skirmishers",
+            "when": "敌方掷矛手压制火焰弓",
+            "text": "先减少火焰弓暴露；仅有安全侧袭路径时才加机动骑兵。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "age": 4
+              }
+            ],
+            "fallback": "没有安全路径或可用骑兵时，不强切。"
+          },
+          {
+            "id": "wu-ranged-by-opponent-siege",
+            "when": "对方有投石车等范围攻城器",
+            "text": "分散远程、为攻城器留护卫，不假设能安全接近或保证击杀。"
+          }
+        ],
+        "alternatives": "不走已撤回的剑士路线：贴近远程有接敌损耗，回血不是即时恢复。精锐火焰弓箭手升级只在已有火焰弓群且不拖垮补兵时考虑；赤壁战术强化火焰伤害，但未证实能替代牵引抛石机拆城堡。",
+        "evidence": {
+          "recognition": "用户认可的是这一配置及其适用条件，不是每局固定出兵。",
+          "playtest": "讨论未说明实战使用；单兵机制或模拟不代表混编结果。",
+          "scope": "单位和科技资料用于核对时代与机制，不用于推断拆城效率。",
+          "recordedVersion": "DE 188329；此前核对的是固定目录和站内机制，未核对当时的线上构建。",
+          "sourceLines": [1272, 1274, 1280, 1281, 1282, 1283, 1284, 1286, 1288, 1294, 1295, 1296, 1297, 1298, 1304, 1305, 1306, 1307, 1308, 1310],
+          "links": [
+            {
+              "label": "火焰弓箭手",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1968?civ=Wu"
+            },
+            {
+              "label": "精锐掷矛手",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Wu"
+            },
+            {
+              "label": "长戟兵",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Wu"
+            },
+            {
+              "label": "牵引抛石机",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Wu"
+            },
+            {
+              "label": "赤壁战术",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1080?civ=Wu"
+            },
+            {
+              "label": "固定版本单位资料",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json"
+            },
+            {
+              "label": "固定版本科技资料",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/techs.json"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

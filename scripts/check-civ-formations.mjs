@@ -3,6 +3,8 @@ import { resolveFormationSource } from '../src/domain/civFormationsSource.mjs';
 export const FORMATIONS_FILE = 'data/content/civ-formations.json';
 export const FORMATION_CONTRACT_FILE = 'data/reference/civ-formations-contract.json';
 const FIXED_SOURCE_COMMIT = '8d1adeacc7c97374ee6d95d9cabfceb793d080d3';
+const THREE_KINGDOMS_SOURCE_COMMIT = 'a348c548624a41da50735eebf166d23456ff56fa';
+const threeKingdoms = new Set(['Wei', 'Shu', 'Wu']);
 
 const sameArray = (actual = [], expected = []) =>
   actual.length === expected.length && actual.every((value, index) => JSON.stringify(value) === JSON.stringify(expected[index]));
@@ -47,6 +49,7 @@ export function formationProblems(content, contract) {
         entities: entityRefs(entities),
       }));
       if (!sameArray(choices, contractRoute.choices)) add(`${routePath}/choices`, '路线选择与独立发布契约不一致');
+      if (route.choiceLabel !== contractRoute.choiceLabel) add(`${routePath}/choiceLabel`, '选择组标题与独立发布契约不一致');
       if (!sameArray(entityRefs(route.prerequisites), contractRoute.prerequisites)) add(`${routePath}/prerequisites`, '路线前置或时代与独立发布契约不一致');
       const supplements = (route.supplements ?? []).map(({ mode, entities }) => ({ mode, entities: entityRefs(entities) }));
       if (!sameArray(supplements, contractRoute.supplements)) add(`${routePath}/supplements`, '补充/选择分类与独立发布契约不一致');
@@ -60,6 +63,18 @@ export function formationProblems(content, contract) {
         add(`${routePath}/source`, '有效来源与独立发布契约不一致');
       if (!sameArray(route.evidence?.sourceLines ?? [], contractRoute.sourceLines))
         add(`${routePath}/evidence/sourceLines`, '固定策略来源行与独立发布契约不一致');
+      if (
+        !sameArray(
+          route.evidence?.links?.map(({ href }) => href),
+          contractRoute.evidenceLinks,
+        )
+      )
+        add(`${routePath}/evidence/links`, '核对链接与独立发布契约不一致');
+      if (threeKingdoms.has(civ.civ)) {
+        const lines = contractRoute.sourceLines;
+        const pinned = `https://github.com/linhongcun/aoe2-analyzer/blob/${THREE_KINGDOMS_SOURCE_COMMIT}/role/game-strategy.md#L${lines[0]}-L${lines.at(-1)}`;
+        if (!lines.length || source?.content !== pinned) add(`${routePath}/source/content`, '魏蜀吴来源行必须对应本单固定策略版本');
+      }
       if (route.composition === 'choice' && (route.choices ?? []).length < 2) add(`${routePath}/choices`, '择一路线至少需要两个可审查选项');
       for (const adjustment of route.adjustments ?? []) {
         for (const dependency of adjustment.requires ?? []) {

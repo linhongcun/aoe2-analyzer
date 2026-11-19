@@ -25,6 +25,22 @@ async function mockFormationContent(page: Page, update: (formations: FormationFi
   return () => mocked;
 }
 
+test('#1144 魏补丁不匹配只显示历史说明，不展示当前主力入口', async ({ page }) => {
+  const mocked = await mockFormationContent(page, (formations) => {
+    const route = formations.find(({ civ }) => civ === 'Wei')?.routes[0];
+    if (!route) throw new Error('Wei formation is unavailable');
+    route.patch.build = 1;
+  });
+  await page.goto('./#/civ/Wei#formations');
+  await expect.poll(mocked).toBe(true);
+  const card = page.locator('#formations article');
+  await expect(card).toContainText('版本待复核');
+  await expect(card.getByRole('link', { name: /^翼骑兵/ })).toHaveCount(0);
+  await card.getByText('查看历史说明（非当前推荐）', { exact: true }).click();
+  await expect(card.getByRole('heading', { name: '原记录组成（非当前推荐）' })).toBeVisible();
+  await expect(card.getByRole('link', { name: '翼骑兵模拟（含明光铠）' })).toBeVisible();
+});
+
 test('#1139 历史嵌套折叠与常规来源名称可见且可展开', async ({ page }) => {
   const mocked = await mockFormationContent(page, (formations) => {
     const firstSpanishRoute = formations.find(({ civ }) => civ === 'Spanish')?.routes[0];

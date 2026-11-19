@@ -3025,6 +3025,321 @@
           ]
         }
       ]
+    },
+    {
+      "civ": "Wei",
+      "routes": [
+        {
+          "id": "wei-hussar-xianbei",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 441,
+              "age": 4
+            },
+            {
+              "kind": "unit",
+              "id": 1952,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 1062,
+              "age": 4
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1954,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "wei-hussar-xianbei-infantry-archers",
+              "requires": []
+            },
+            {
+              "id": "wei-hussar-xianbei-halberdiers",
+              "requires": []
+            },
+            {
+              "id": "wei-hussar-xianbei-skirmishers",
+              "requires": []
+            },
+            {
+              "id": "wei-hussar-xianbei-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "wei-hussar-xianbei-cao-cao",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1954,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1198-L1234",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [1198, 1200, 1206, 1207, 1208, 1210, 1212, 1214, 1220, 1221, 1222, 1223, 1229, 1230, 1231, 1232, 1234],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/435,39,67,81,68,82,75/?civ=Wei&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/1062,435,39,67,81,68,82,75/?civ=Wei&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1062?civ=Wei",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1954?civ=Wei",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json"
+          ]
+        }
+      ]
+    },
+    {
+      "civ": "Shu",
+      "routes": [
+        {
+          "id": "shu-crossbow-arbalester",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "progression",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 24,
+              "age": 3
+            },
+            {
+              "kind": "unit",
+              "id": 492,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "shu-crossbow-arbalester-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "shu-crossbow-arbalester-push",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "shu-crossbow-arbalester-counter",
+              "requires": []
+            },
+            {
+              "id": "shu-crossbow-arbalester-bolts",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1069,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1236-L1270",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [1236, 1238, 1244, 1245, 1246, 1247, 1249, 1251, 1257, 1258, 1259, 1260, 1265, 1266, 1267, 1268, 1270],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/492/Shu/4/437,199,211,200,212,201,219,47/?civ=Shu&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1069?civ=Shu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1070?civ=Shu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Shu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Shu"
+          ]
+        }
+      ]
+    },
+    {
+      "civ": "Wu",
+      "routes": [
+        {
+          "id": "wu-ranged-by-opponent",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "choice",
+          "age": 3,
+          "required": [],
+          "choices": [
+            {
+              "id": "wu-fire-archer",
+              "preconditions": ["对方以步兵为主", "有城堡产能"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1968,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "id": "wu-elite-skirmisher",
+              "preconditions": ["对方已有成群步弓"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "wu-ranged-by-opponent-infantry",
+              "requires": []
+            },
+            {
+              "id": "wu-ranged-by-opponent-archers",
+              "requires": []
+            },
+            {
+              "id": "wu-ranged-by-opponent-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "wu-ranged-by-opponent-push",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "wu-ranged-by-opponent-skirmishers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 441,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "wu-ranged-by-opponent-siege",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1272-L1310",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [1272, 1274, 1280, 1281, 1282, 1283, 1284, 1286, 1288, 1294, 1295, 1296, 1297, 1298, 1304, 1305, 1306, 1307, 1308, 1310],
+          "choiceLabel": "按敌选择主力，不是同时必出",
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1968?civ=Wu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Wu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Wu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Wu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1080?civ=Wu",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/techs.json"
+          ]
+        }
+      ]
     }
   ]
 }

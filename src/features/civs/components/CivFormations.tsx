@@ -186,6 +186,15 @@ function FormationEvidence({ route, source }: { route: Route; source: Source | n
         </div>
       </dl>
       <SourceLinks source={source} />
+      {route.evidence.links?.length ? (
+        <div className="formation-source-links">
+          {route.evidence.links.map(({ label, href }) => (
+            <a key={href} href={href} target="_blank" rel="noreferrer">
+              <FormationText text={label} />
+            </a>
+          ))}
+        </div>
+      ) : null}
     </>
   );
 }
@@ -360,7 +369,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
           )}
           {view.choices.length > 0 && (
             <div className="formation-choices">
-              <h4 className="formation-group-label">备选分支（按条件择一，不同时必出）</h4>
+              <h4 className="formation-group-label">{route.choiceLabel ?? '备选分支（按条件择一，不同时必出）'}</h4>
               {view.choices.map((choice) => (
                 <section className="formation-choice" key={choice.id}>
                   <h4>
