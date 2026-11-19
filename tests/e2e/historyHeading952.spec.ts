@@ -2,9 +2,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const PAGES = [
-  ['/unit/873?tab=history', '#unit-history', 'unit'],
-  ['/building/84?tab=history', '#building-history', 'building'],
-  ['/tech/875?tab=history', '#tech-history', 'tech'],
+  ['/unit/1699?tab=history', '#unit-history', 'unit'],
+  ['/building/50?tab=history', '#building-history', 'building'],
+  ['/tech/463?tab=history', '#tech-history', 'tech'],
 ] as const;
 
 function watch(page: Page) {
@@ -67,7 +67,7 @@ test('#952 单位、建筑、科技展开后只有一枚更新历史标题', asy
 test('#952 折叠、键盘、深链和返回仍只保留这一枚标题', async ({ page }) => {
   const errors = watch(page);
   await lightDesktop(page);
-  await page.goto('./#/unit/873');
+  await page.goto('./#/unit/1699');
   const block = page.locator('#unit-history');
   await expect(block).not.toHaveAttribute('open', '');
   expect(await visibleTitles(page, '#unit-history')).toBe(1);
@@ -83,10 +83,10 @@ test('#952 折叠、键盘、深链和返回仍只保留这一枚标题', async 
   await page.keyboard.press('Enter');
   await expect(block).not.toHaveAttribute('open', '');
   await expect(page).not.toHaveURL(/tab=history/);
-  await page.goto('./#/building/84?tab=history');
+  await page.goto('./#/building/50?tab=history');
   await expect(page.locator('#building-history')).toHaveAttribute('open', '');
   await page.goBack();
-  await expect(page).toHaveURL(/#\/unit\/873\/?$/);
+  await expect(page).toHaveURL(/#\/unit\/1699\/?$/);
   await expect(block).not.toHaveAttribute('open', '');
   expect(await visibleTitles(page, '#unit-history')).toBe(1);
   expect(errors).toEqual([]);

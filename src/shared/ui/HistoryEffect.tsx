@@ -61,7 +61,19 @@ export function ScopeText({ data, scope }: { data: CivUpdatesData; scope: Update
   );
 }
 
-export function HistoryEffect({ data, effect, fallbackScope }: { data: CivUpdatesData; effect: UpdateEffect; fallbackScope?: UpdateScope }) {
+export function HistoryEffect({
+  data,
+  effect,
+  fallbackScope,
+  inline = false,
+  showEntities = !inline,
+}: {
+  data: CivUpdatesData;
+  effect: UpdateEffect;
+  fallbackScope?: UpdateScope;
+  inline?: boolean;
+  showEntities?: boolean;
+}) {
   const scope = effect.scope ?? fallbackScope;
   let content: ReactNode;
   switch (effect.type) {
@@ -132,7 +144,7 @@ export function HistoryEffect({ data, effect, fallbackScope }: { data: CivUpdate
           <p>
             <UpdateText>{effect.text}</UpdateText>
           </p>
-          {(effect.legacyBefore !== null || effect.legacyAfter !== null) && (
+          {!inline && (effect.legacyBefore !== null || effect.legacyAfter !== null) && (
             <p>
               改动前：{effect.legacyBefore === null ? '未知' : <UpdateText>{effect.legacyBefore}</UpdateText>} <ChangeArrow /> 改动后：
               {effect.legacyAfter === null ? '未知' : <UpdateText>{effect.legacyAfter}</UpdateText>}
@@ -142,16 +154,18 @@ export function HistoryEffect({ data, effect, fallbackScope }: { data: CivUpdate
       );
   }
   return (
-    <div className="civ-update-effect" data-effect-type={effect.type}>
+    <div className="civ-update-effect" data-effect-type={effect.type} data-history-effect={inline ? effect.id : undefined}>
       {data.techs?.effectKinds[effect.id] && <p className="civ-update-pill">{TECH_EFFECT_LABELS[data.techs.effectKinds[effect.id]!]}</p>}
-      <div className="civ-update-entities">
-        {effect.entityRefs.map((reference, index) => (
-          <Fragment key={index}>
-            {index > 0 && '、'}
-            <EntityLabel data={data} reference={reference} />
-          </Fragment>
-        ))}
-      </div>
+      {showEntities && (
+        <div className="civ-update-entities">
+          {effect.entityRefs.map((reference, index) => (
+            <Fragment key={index}>
+              {index > 0 && '、'}
+              <EntityLabel data={data} reference={reference} />
+            </Fragment>
+          ))}
+        </div>
+      )}
       {content}
       {effect.conditions.length > 0 && (
         <p className="civ-update-condition">

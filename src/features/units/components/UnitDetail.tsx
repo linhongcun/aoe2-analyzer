@@ -22,7 +22,8 @@ import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
+import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
+import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import { Linked, Loading } from '../../../shared/ui/widgets';
@@ -77,6 +78,7 @@ export default function UnitDetail() {
   const rawTarget = core && rt ? core.unitById[rt.id] : undefined;
   const targetProjection = rawTarget ? projectUnitForDetail(rawTarget) : null;
   const u = targetProjection?.unit;
+  const entityHistory = useEntityHistory(u ? 'unit/' + u.id : undefined, tab === 'history');
   const savedReverseSession = readReverseCounterSession(reverseCounterSessionKey(rt?.id ?? null, context?.en ?? '', loc), loc);
   const hasSavedReverseReaderLocation = !!(savedReverseSession?.anchor || savedReverseSession?.fallbackAnchor);
   const workspace = rt ? unitWorkspaceOpen(rt, loc.search) : false;
@@ -92,9 +94,9 @@ export default function UnitDetail() {
     if (hasSavedReverseReaderLocation) return;
     if (workspace) document.getElementById('unit-sim')?.scrollIntoView({ block: 'start' });
     else if (tab === 'rel') document.getElementById('unit-related')?.scrollIntoView({ block: 'start' });
-    else if (tab === 'history') document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
+    else if (tab === 'history' && !entityHistory.empty) document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
     else scrollTo(0, 0);
-  }, [u?.id, workspace, tab, hasSavedReverseReaderLocation]);
+  }, [u?.id, workspace, tab, hasSavedReverseReaderLocation, entityHistory.empty]);
 
   if (!core)
     return (
@@ -248,7 +250,7 @@ export default function UnitDetail() {
       </div>
 
       <nav className="ud-jump" aria-label="本页章节">
-        {JUMPS.filter(([id]) => id !== 'unit-garrison' || !workspace).map(([id, label]) => (
+        {JUMPS.filter(([id]) => (id !== 'unit-garrison' || !workspace) && (id !== 'unit-history' || !entityHistory.empty)).map(([id, label]) => (
           <button
             key={id}
             type="button"
@@ -554,21 +556,23 @@ export default function UnitDetail() {
         </nav>
       )}
 
-      <details
-        className="ud-history"
-        id="unit-history"
-        open={tab === 'history'}
-        onToggle={(event) => {
-          if (event.currentTarget.open === (tab === 'history')) return;
-          setHistory(event.currentTarget.open);
-        }}
-      >
-        <summary>
-          <h2>更新历史</h2>
-          <Icon name="chevron-down" />
-        </summary>
-        <EncyclopediaHistoryLink entityId={'unit/' + u.id} enabled={tab === 'history'} />
-      </details>
+      {!entityHistory.empty && (
+        <details
+          className="ud-history"
+          id="unit-history"
+          open={tab === 'history'}
+          onToggle={(event) => {
+            if (event.currentTarget.open === (tab === 'history')) return;
+            setHistory(event.currentTarget.open);
+          }}
+        >
+          <summary>
+            <h2>更新历史</h2>
+            <Icon name="chevron-down" />
+          </summary>
+          <EntityHistoryInline resource={entityHistory} />
+        </details>
+      )}
     </section>
   );
 }

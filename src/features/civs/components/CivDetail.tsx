@@ -19,7 +19,9 @@ import { session } from '../../../shared/utils/sticky';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import { usePreviousHistoryEntry } from '../../../shared/utils/navigationEntry';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { EncyclopediaHistoryLink, savedHistoryVisit } from '../../../shared/ui/HistoryReaderLink';
+import { savedHistoryVisit } from '../../../shared/ui/HistoryReaderLink';
+import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
+import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { ArenaCastleGoldView } from './ArenaCastleGold';
 import { NomadRevealView } from './NomadReveal';
 import { CivHistory } from './CivHistory';
@@ -220,6 +222,7 @@ export default function CivDetail({ techTree }: { techTree: TechTreeComponent })
 
 function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeComponent }) {
   const location = useLocation();
+  const entityHistory = useEntityHistory('civ/' + c.en, new URLSearchParams(location.search).get('tab') === 'history' || location.hash === '#patches');
   const navigate = useNavigate();
   const navigationType = useNavigationType();
   const homeReturn = startReturnPath(location.search);
@@ -457,9 +460,11 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
         <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false} testId="civ-history-summary">
           <CivHistory civ={c.en} />
         </Fold>
-        <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <EncyclopediaHistoryLink entityId={'civ/' + c.en} restoreEnabled={historyRestoreEnabled} />
-        </Fold>
+        {!entityHistory.empty && (
+          <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
+            <EntityHistoryInline resource={entityHistory} restoreEnabled={historyRestoreEnabled} />
+          </Fold>
+        )}
       </section>
       <CivFormations key={c.en} civ={c.en} resources={resources} suppressRestore={suppressFormationRestore} />
       {hasInsights && (

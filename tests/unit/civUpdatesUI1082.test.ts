@@ -38,7 +38,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-it('F1 keeps the history tab and full return URL through real detail effects, retry, filters, back/forward and remount', async () => {
+it('F1 keeps the history tab and full return URL through inline retry, expansion and remount', async () => {
   const frames: FrameRequestCallback[] = [];
   const scrollIntoView = vi.fn();
   vi.stubGlobal('innerHeight', 900);
@@ -48,7 +48,10 @@ it('F1 keeps the history tab and full return URL through real detail effects, re
   vi.stubGlobal('scrollTo', vi.fn());
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => frames.push(callback));
   vi.stubGlobal('cancelAnimationFrame', vi.fn());
+  vi.stubGlobal('window', { history: { state: null }, addEventListener: vi.fn(), removeEventListener: vi.fn(), scrollTo: vi.fn() });
   vi.stubGlobal('document', {
+    querySelector: () => null,
+    querySelectorAll: () => [],
     documentElement: { scrollHeight: 10000 },
     getElementById: (id: string) => ({ getBoundingClientRect: () => ({ top: 999 }), scrollIntoView: () => scrollIntoView(id) }),
   });
@@ -69,38 +72,25 @@ it('F1 keeps the history tab and full return URL through real detail effects, re
   };
   await mount(`/civ/Cumans?${query}`);
   expectContext();
-  act(() => frames.splice(0).forEach((callback) => callback(0)));
+  await act(async () => frames.splice(0).forEach((callback) => callback(0)));
   expect(scrollIntoView).toHaveBeenCalledWith('patches');
-  await clickButton('重试文明历史');
+  await clickButton('重试');
+  await act(async () => frames.splice(0).forEach((callback) => callback(0)));
   expect(fetch).toHaveBeenCalledTimes(2);
   expectContext();
-  await clickButton('重试文明历史');
+  await clickButton('重试');
+  await act(async () => frames.splice(0).forEach((callback) => callback(0)));
   expect(fetch).toHaveBeenCalledTimes(3);
   expectContext();
-  await act(async () =>
-    view.root
-      .findAllByType('label')
-      .find((node) => text(node).startsWith('来源类别'))!
-      .findByType('select')
-      .props.onChange({ target: { value: 'community' } }),
-  );
+  const version = view.root.findAllByType('button').find((node) => node.props['aria-expanded'] !== undefined)!;
+  await act(async () => version.props.onClick());
   expectContext();
-  expect(new URLSearchParams(location.search).get('histSource')).toBe('community');
-  await clickButton('清除历史筛选');
-  expectContext();
-  expect(new URLSearchParams(location.search).has('histSource')).toBe(false);
-  await act(async () => navigate(-1));
-  expectContext();
-  expect(new URLSearchParams(location.search).get('histSource')).toBe('community');
-  await act(async () => navigate(1));
-  expectContext();
-  expect(new URLSearchParams(location.search).has('histSource')).toBe(false);
+  const complete = view.root.findAllByType('a').find((node) => text(node) === '查看完整历史')!;
+  expect(new URLSearchParams(complete.props.href.split('?')[1]).get('histReturn')).toBe('/civ/Cumans?tab=history');
   const refreshed = location.pathname + location.search + location.hash;
   act(() => view.unmount());
   await mount(refreshed);
   expectContext();
-  const back = view.root.findAllByType('a').find((node) => text(node) === '返回上次历史结果')!;
-  expect(back.props.href).toBe(returnPath);
   // Keeping tab=history must still allow the existing chapter anchors to work.
   frames.length = 0;
   await act(async () => navigate({ pathname: location.pathname, search: location.search, hash: '#identity' }));

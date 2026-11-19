@@ -97,10 +97,10 @@ test('#946 四类历史深链、科技折叠、身份回退与文明链接', asy
   expect(unitBox!.y).toBeLessThan(800);
 
   await page.goto('./#/tech/22');
-  await expect(page.locator('#tech-history')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#tech-history')).toHaveCount(0);
   await page.goto('./#/tech/22?tab=history');
-  await expect(page.locator('#tech-history')).toHaveAttribute('open', '');
-  await expect(page.locator('#tech-history').getByRole('link', { name: '查看完整历史' })).toHaveAttribute('href', /obj=tech%3A22/u);
+  await expect(page.locator('#tech-history')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '更新历史', exact: true })).toHaveCount(0);
 
   await page.goto('./#/building/84?tab=history');
   await expect(page.locator('#building-history')).toHaveAttribute('open', '');

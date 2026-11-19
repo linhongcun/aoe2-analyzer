@@ -16,20 +16,74 @@ import {
   validHistoryReturn,
   type CivUpdateEvent,
   type CivUpdatesData,
+  type UpdateEntity,
 } from '../../domain/civUpdates';
 import './civ-updates.css';
 import { CivUpdatesLoading, SourceTime, UpdateText } from './CivUpdatePrimitives';
 import { HistoryEntityLinks } from './HistoryEntityLinks';
 import { HistoryEffect, ScopeText } from './HistoryEffect';
+import { readerScopePending, relatedReaderEntities } from '../../domain/historyReader';
+import type { UnitEventView } from '../../domain/unitUpdates';
 
-function SourceReferences({ data, event }: { data: CivUpdatesData; event: CivUpdateEvent }) {
-  const entries = eventSourceEntries(data, event);
+type InlineEvent = { view: UnitEventView; entity: UpdateEntity; evidenceOpen: boolean; toggleEvidence: () => void };
+
+function SourceReferences({ data, event, inline }: { data: CivUpdatesData; event: CivUpdateEvent; inline?: InlineEvent }) {
+  const evidenceEvent =
+    inline && event.verification !== 'conflict'
+      ? { ...event, claims: event.claims.filter((claim) => inline.view.event.claims.some((row) => row.id === claim.id && row.effects.length)) }
+      : event;
+  const entries = eventSourceEntries(data, evidenceEvent);
+  const related = inline ? relatedReaderEntities(data, inline.view, inline.entity.id) : [];
   return (
-    <details className="civ-update-references">
+    <details
+      className="civ-update-references"
+      open={inline?.evidenceOpen}
+      onToggle={
+        inline
+          ? (event) => {
+              if (event.currentTarget.open !== inline.evidenceOpen) inline.toggleEvidence();
+            }
+          : undefined
+      }
+    >
       <summary>
-        来源与原文（<span className="num nw">{entries.length} 条引用</span>）
+        {inline ? (
+          '依据与原文'
+        ) : (
+          <>
+            来源与原文（<span className="num nw">{entries.length} 条引用</span>）
+          </>
+        )}
       </summary>
-      <p>{event.verificationNote}</p>
+      <p>
+        <UpdateText>{event.verificationNote}</UpdateText>
+      </p>
+      {inline && (
+        <>
+          <p>原文和事实核验分别保留。处理完成不代表事实已核实。</p>
+          {evidenceEvent.claims.map((claim) => (
+            <section key={claim.id}>
+              <p>
+                {VERIFICATION_LABELS[claim.verification]} · <UpdateText>{claim.verificationNote}</UpdateText>
+              </p>
+              {claim.effects.map((effect) => (
+                <div key={effect.id}>
+                  <p>
+                    <UpdateText>{effect.text}</UpdateText>
+                  </p>
+                  {'legacyBefore' in effect && (effect.legacyBefore !== null || effect.legacyAfter !== null) && (
+                    <p>
+                      旧记录：<UpdateText>{`${effect.legacyBefore ?? '未知'} 变为 ${effect.legacyAfter ?? '未知'}`}</UpdateText>
+                    </p>
+                  )}
+                </div>
+              ))}
+            </section>
+          ))}
+          {!!related.length && <p>关联对象：{related.map((entity) => entity.nameZh).join('、')}</p>}
+          {!entries.length && <p>来源与原文未登记。</p>}
+        </>
+      )}
       {entries.map((entry) => {
         const source = data.sources.find((row) => row.id === entry.sourceId)!;
         const section = data.sections.find((row) => row.id === entry.sectionId);
@@ -37,13 +91,15 @@ function SourceReferences({ data, event }: { data: CivUpdatesData; event: CivUpd
         const verification = [...new Set(event.claims.filter((claim) => claim.sourceEntryIds.includes(entry.id)).map((claim) => claim.verification))];
         return (
           <section className="civ-update-source" key={entry.id} aria-label={source.title}>
-            <h5>{source.title}</h5>
+            <h5>
+              <UpdateText>{source.title}</UpdateText>
+            </h5>
             <p>
               来源类别：{SOURCE_CATEGORY_LABELS[source.category]} · 事实核验：{verification.map((value) => VERIFICATION_LABELS[value]).join('、')}
             </p>
             <p>
-              章节：{section?.title ?? '既有版本档案'}
-              {entry.group && ` / ${entry.group}`} · 定位：<UpdateText>{entry.locator}</UpdateText>
+              章节：<UpdateText>{section?.title ?? '既有版本档案'}</UpdateText>
+              {entry.group && <UpdateText>{` / ${entry.group}`}</UpdateText>} · 定位：<UpdateText>{entry.locator}</UpdateText>
             </p>
             <p>
               来源发布时间：
@@ -70,7 +126,9 @@ function SourceReferences({ data, event }: { data: CivUpdatesData; event: CivUpd
             {event.claims
               .filter((claim) => claim.sourceEntryIds.includes(entry.id))
               .map((claim) => (
-                <p key={claim.id}>{claim.verificationNote}</p>
+                <p key={claim.id}>
+                  <UpdateText>{claim.verificationNote}</UpdateText>
+                </p>
               ))}
           </section>
         );
@@ -89,49 +147,80 @@ export function UpdateEventCard({
   event,
   sourceEvent = event,
   anchorId = `hist-${event.id}`,
+  inline,
 }: {
   data: CivUpdatesData;
   event: CivUpdateEvent;
   sourceEvent?: CivUpdateEvent;
   anchorId?: string;
+  inline?: InlineEvent;
 }) {
   const categories = [...new Set(eventSourceEntries(data, event).map((entry) => data.sources.find((source) => source.id === entry.sourceId)!.category))];
+  const scopes = inline
+    ? [...new Set(event.claims.flatMap((claim) => claim.effects.map((effect) => (effect.scope ?? sourceEvent.scope).scopeKind)))]
+    : [event.scope.scopeKind];
+  const verifications =
+    inline && event.verification !== 'conflict'
+      ? [...new Set(event.claims.filter((claim) => claim.effects.length).map((claim) => claim.verification))]
+      : [event.verification];
   return (
     <article
       className={`civ-update-event civ-update-${event.verification}`}
       id={anchorId}
       data-testid="civ-update-event"
       data-event-id={event.id}
+      data-history-event={inline ? event.id : undefined}
       tabIndex={-1}
     >
       <div className="civ-update-badges">
-        <span className="civ-update-pill">{{ civ: '文明专属', team: '团队', global: '全局', unknown: '范围待核' }[event.scope.scopeKind]}</span>
-        <span className="civ-update-pill">{VERIFICATION_LABELS[event.verification]}</span>
-      </div>
-      <h4>
-        <UpdateText>{event.summary}</UpdateText>
-      </h4>
-      <ScopeText data={data} scope={event.scope} />
-      {event.verification === 'conflict' && <p className="civ-update-warning">来源冲突，尚未确认。以下并列保留各方主张。</p>}
-      <div className={event.verification === 'conflict' ? 'civ-update-conflict-claims' : undefined}>
-        {event.claims.map((claim, index) => (
-          <section className="civ-update-claim" key={claim.id} aria-label={`主张${index + 1}`}>
-            {event.claims.length > 1 && (
-              <p>
-                主张 <span className="num nw">{index + 1}</span> · {VERIFICATION_LABELS[claim.verification]}
-              </p>
-            )}
-            {claim.effects.map((effect) => (
-              <HistoryEffect data={data} effect={effect} key={effect.id} />
-            ))}
-            {!claim.effects.length && <p>此主张未将效果明确归于当前稳定身份；完整主张与原文保留在来源中。</p>}
-          </section>
+        {scopes.map((scope) => (
+          <span key={scope} className="civ-update-pill" data-inline-scope={inline ? scope : undefined}>
+            {{ civ: '文明专属', team: '团队', global: '全局', unknown: '范围待核' }[scope]}
+          </span>
+        ))}
+        {verifications.map((verification) => (
+          <span key={verification} className="civ-update-pill" data-inline-verification={inline ? verification : undefined}>
+            {VERIFICATION_LABELS[verification]}
+          </span>
         ))}
       </div>
-      <p className="civ-update-meta">
-        {categories.map((category) => SOURCE_CATEGORY_LABELS[category]).join('、')}来源 · {VERIFICATION_LABELS[event.verification]}
-      </p>
-      <SourceReferences data={data} event={sourceEvent} />
+      <h4>{inline ? '历史变化' : <UpdateText>{event.summary}</UpdateText>}</h4>
+      {!inline && <ScopeText data={data} scope={event.scope} />}
+      {event.verification === 'conflict' && <p className="civ-update-warning">来源冲突，尚未确认。以下并列保留各方主张。</p>}
+      <div className={event.verification === 'conflict' ? 'civ-update-conflict-claims' : undefined}>
+        {event.claims
+          .filter((claim) => !inline || claim.effects.length)
+          .map((claim, index) => (
+            <section className="civ-update-claim" key={claim.id} aria-label={`主张${index + 1}`}>
+              {event.claims.length > 1 && (
+                <p>
+                  主张 <span className="num nw">{index + 1}</span> · {VERIFICATION_LABELS[claim.verification]}
+                </p>
+              )}
+              {claim.effects.map((effect) => (
+                <Fragment key={effect.id}>
+                  <HistoryEffect
+                    data={data}
+                    effect={effect}
+                    fallbackScope={inline ? sourceEvent.scope : undefined}
+                    inline={!!inline}
+                    showEntities={!inline || inline.entity.type === 'civ'}
+                  />
+                  {inline && (effect.scope ?? sourceEvent.scope).scopeKind !== 'unknown' && readerScopePending(inline.view, effect, inline.entity) && (
+                    <p>适用范围待核</p>
+                  )}
+                </Fragment>
+              ))}
+              {!claim.effects.length && <p>此主张未将效果明确归于当前稳定身份；完整主张与原文保留在来源中。</p>}
+            </section>
+          ))}
+      </div>
+      {!inline && (
+        <p className="civ-update-meta">
+          {categories.map((category) => SOURCE_CATEGORY_LABELS[category]).join('、')}来源 · {VERIFICATION_LABELS[event.verification]}
+        </p>
+      )}
+      <SourceReferences data={data} event={sourceEvent} inline={inline} />
     </article>
   );
 }
