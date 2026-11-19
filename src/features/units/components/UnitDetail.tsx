@@ -46,6 +46,7 @@ import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafet
 import { readReverseCounterSession, reverseCounterSessionKey } from '../reverseCounterSession';
 import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnSource, sameUnitSimLocation } from '../unitSimReturnProvenance';
 import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
+import { UpgradeLine } from './UpgradeLine';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -335,10 +336,10 @@ export default function UnitDetail() {
           </p>
         )}
         {trees ? (
-          <div className="ud-line">
+          <UpgradeLine>
             {line.map((x, index) => (
               <span key={x.id} className="ud-line-step">
-                {index > 0 && <Icon name="chevron-right" />}
+                {index > 0 && <Icon name="chevron-right" className="ic ud-line-connector" />}
                 {x.id === u.id ? (
                   <span className="ud-node is-current" aria-current="true">
                     <UnitIcon u={x} />
@@ -358,7 +359,7 @@ export default function UnitDetail() {
                 )}
               </span>
             ))}
-          </div>
+          </UpgradeLine>
         ) : (
           treeWaiting
         )}
