@@ -24,7 +24,8 @@ import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon, type IconName } from '../../../shared/ui/Icon';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
+import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
+import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { Linked, Loading } from '../../../shared/ui/widgets';
 import { BuildingCatalog } from './BuildingCatalog';
 import BuildingSimulator from './BuildingSimulator';
@@ -52,6 +53,7 @@ export default function BuildingDetail() {
   const params = new URLSearchParams(loc.search);
   const tab = params.get('tab');
   const b = core?.buildingById[+id];
+  const entityHistory = useEntityHistory(b ? 'building/' + b.id : undefined, tab === 'history');
   const host = !!b && garrisonHosts.includes(b.id);
   const view = buildingSurface(tab, host);
   const civ = b ? buildingCiv(params.get('civ'), b.civs) : null;
@@ -71,6 +73,11 @@ export default function BuildingDetail() {
 
   useEffect(() => {
     if (!b || (tab === 'garrison' && !host)) return;
+    if (tab === 'history' && entityHistory.empty) {
+      pendingScroll.current = null;
+      window.scrollTo(0, 0);
+      return;
+    }
     const next = buildingSurface(tab, host);
     if (next.surface === 'sim') {
       document.getElementById('building-sim')?.scrollIntoView({ block: 'start' });
@@ -85,7 +92,7 @@ export default function BuildingDetail() {
       return;
     }
     if (loc.hash === `#${POP_ANCHOR}`) document.getElementById(POP_ANCHOR)?.scrollIntoView({ block: 'start' });
-  }, [b, tab, host, loc.hash]);
+  }, [b, tab, host, loc.hash, entityHistory.empty]);
 
   if (!core)
     return (
@@ -180,9 +187,11 @@ export default function BuildingDetail() {
             {label}
           </button>
         ))}
-        <button type="button" onClick={openHistory}>
-          更新历史
-        </button>
+        {!entityHistory.empty && (
+          <button type="button" onClick={openHistory}>
+            更新历史
+          </button>
+        )}
       </nav>
 
       <div className="bd-civ">
@@ -334,22 +343,24 @@ export default function BuildingDetail() {
               })}
             </div>
           </section>
-          <details
-            className="bd-history"
-            id="building-history"
-            open={tab === 'history'}
-            onToggle={(event) => {
-              const open = event.currentTarget.open;
-              if (open === (tab === 'history')) return;
-              go({ tab: open ? 'history' : 'ov' });
-            }}
-          >
-            <summary>
-              <Icon name="chevron-down" />
-              <h2>更新历史</h2>
-            </summary>
-            <EncyclopediaHistoryLink entityId={'building/' + b.id} enabled={tab === 'history'} />
-          </details>
+          {!entityHistory.empty && (
+            <details
+              className="bd-history"
+              id="building-history"
+              open={tab === 'history'}
+              onToggle={(event) => {
+                const open = event.currentTarget.open;
+                if (open === (tab === 'history')) return;
+                go({ tab: open ? 'history' : 'ov' });
+              }}
+            >
+              <summary>
+                <Icon name="chevron-down" />
+                <h2>更新历史</h2>
+              </summary>
+              <EntityHistoryInline resource={entityHistory} />
+            </details>
+          )}
         </>
       )}
     </section>

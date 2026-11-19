@@ -11,7 +11,8 @@ import { Icon } from '../../../shared/ui/Icon';
 import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { EncyclopediaHistoryLink } from '../../../shared/ui/HistoryReaderLink';
+import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
+import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
@@ -35,6 +36,7 @@ export default function TechDetail() {
   const opp = civByEn(params.get('opp') ?? '');
   const core = useCore();
   const tech = core?.techById[+id];
+  const entityHistory = useEntityHistory(tech ? 'tech/' + tech.id : undefined, tab === 'history');
   const setHistory = (open: boolean) => {
     const next = new URLSearchParams(location.search);
     if (open) next.set('tab', 'history');
@@ -45,13 +47,17 @@ export default function TechDetail() {
 
   useEffect(() => {
     if (!tech) return;
+    if (tab === 'history' && entityHistory.empty) {
+      window.scrollTo(0, 0);
+      return;
+    }
     const target = tab === 'affects' ? 'affects' : tab === 'civs' ? 'tech-civs' : tab === 'history' ? 'tech-history' : null;
     if (!target) {
       window.scrollTo(0, 0);
       return;
     }
     document.getElementById(target)?.scrollIntoView({ block: 'start' });
-  }, [tech, tab]);
+  }, [tech, tab, entityHistory.empty]);
 
   if (!core)
     return (
@@ -148,15 +154,17 @@ export default function TechDetail() {
             目录关联
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => {
-            setHistory(true);
-            jump('tech-history');
-          }}
-        >
-          更新历史
-        </button>
+        {!entityHistory.empty && (
+          <button
+            type="button"
+            onClick={() => {
+              setHistory(true);
+              jump('tech-history');
+            }}
+          >
+            更新历史
+          </button>
+        )}
       </nav>
 
       <section className="td-research" id="tech-research" aria-label="研究">
@@ -272,21 +280,23 @@ export default function TechDetail() {
 
       <DetailSource note={entries.length ? '结构化效果与科技模拟器同源；未编码效果以游戏说明为准' : '这条科技没有编码数值，以游戏说明为准'} />
 
-      <details
-        className="td-history"
-        id="tech-history"
-        open={tab === 'history'}
-        onToggle={(event) => {
-          if (event.currentTarget.open === (tab === 'history')) return;
-          setHistory(event.currentTarget.open);
-        }}
-      >
-        <summary>
-          <Icon name="chevron-right" />
-          <h2>更新历史</h2>
-        </summary>
-        <EncyclopediaHistoryLink entityId={'tech/' + tech.id} enabled={tab === 'history'} />
-      </details>
+      {!entityHistory.empty && (
+        <details
+          className="td-history"
+          id="tech-history"
+          open={tab === 'history'}
+          onToggle={(event) => {
+            if (event.currentTarget.open === (tab === 'history')) return;
+            setHistory(event.currentTarget.open);
+          }}
+        >
+          <summary>
+            <Icon name="chevron-right" />
+            <h2>更新历史</h2>
+          </summary>
+          <EntityHistoryInline resource={entityHistory} />
+        </details>
+      )}
     </section>
   );
 }

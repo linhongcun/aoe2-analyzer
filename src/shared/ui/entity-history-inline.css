@@ -1,0 +1,66 @@
+.entity-history-inline {
+  color: var(--color-text);
+  min-width: 0;
+}
+.entity-inline-note {
+  color: var(--color-muted);
+}
+.entity-history-inline h3 {
+  margin: 16px 0 0;
+}
+.entity-history-inline h3 > button {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 15px;
+}
+.entity-history-inline article {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.entity-history-inline h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+.entity-history-inline li {
+  margin-bottom: 12px;
+}
+.entity-history-inline p {
+  margin: 8px 0;
+}
+.entity-history-inline summary {
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+  color: var(--color-link);
+}
+.entity-history-inline > a,
+.entity-history-inline .civ-update-source > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.entity-history-inline .civ-update-source {
+  padding: 12px;
+  margin: 12px 0;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+.entity-history-inline .civ-update-source blockquote {
+  margin: 12px 0;
+}
+.entity-history-inline .civ-update-source h5 {
+  font-size: 14px;
+  margin: 0;
+}

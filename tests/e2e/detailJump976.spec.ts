@@ -53,6 +53,7 @@ async function setTheme(page: Page, theme: 'light' | 'dark') {
 async function openAt(page: Page, hash: string, ready: string) {
   await page.goto('./#' + hash);
   await expect(page.locator(ready)).toBeVisible();
+  await expect(page.getByText('正在加载更新历史…', { exact: true })).toHaveCount(0);
 }
 
 async function jumpEdge(page: Page, selector: string) {
@@ -159,7 +160,7 @@ test('缺项仍左对齐，点击跳转、更新历史和键盘焦点保持原�
   await expect(page.locator('#tech h1')).toContainText('中型战船');
   const sparse = page.locator('.td-jump');
   await expect(sparse.getByRole('button', { name: '作用对象', exact: true })).toHaveCount(0);
-  await expect(sparse.getByRole('button')).toHaveText(TECH_WITHOUT_AFFECTS);
+  await expect(sparse.getByRole('button')).toHaveText(TECH_WITHOUT_AFFECTS.filter((label) => label !== '更新历史'));
   await jumpEdge(page, '.td-jump');
 
   await openAt(page, '/tech/3', '#tech h1');
@@ -180,10 +181,8 @@ test('缺项仍左对齐，点击跳转、更新历史和键盘焦点保持原�
   expect(researchTop).toBeGreaterThanOrEqual(0);
   expect(researchTop).toBeLessThan(160);
 
-  await techNav.getByRole('button', { name: '更新历史', exact: true }).click();
-  await expect(page).toHaveURL(/#\/tech\/3\?tab=history$/);
-  await expect(page.locator('#tech-history')).toHaveJSProperty('open', true);
-  await expect(page.locator('#tech-history').getByRole('link', { name: '查看完整历史' })).toBeVisible();
+  await expect(page.locator('#tech-history')).toHaveCount(0);
+  await expect(techNav.getByRole('button', { name: '更新历史', exact: true })).toHaveCount(0);
 
   await openAt(page, '/building/12', '#building h1');
   const buildingNav = page.locator('.bd-jump');
@@ -198,8 +197,6 @@ test('缺项仍左对齐，点击跳转、更新历史和键盘焦点保持原�
   const coreTop = await core.evaluate((el) => el.getBoundingClientRect().top);
   expect(coreTop).toBeGreaterThanOrEqual(0);
   expect(coreTop).toBeLessThan(160);
-  await buildingNav.getByRole('button', { name: '更新历史', exact: true }).click();
-  await expect(page).toHaveURL(/#\/building\/12\?tab=history$/);
-  await expect(page.locator('#building-history')).toHaveJSProperty('open', true);
-  await expect(page.locator('#building-history').getByRole('link', { name: '查看完整历史' })).toBeVisible();
+  await expect(page.locator('#building-history')).toHaveCount(0);
+  await expect(buildingNav.getByRole('button', { name: '更新历史', exact: true })).toHaveCount(0);
 });

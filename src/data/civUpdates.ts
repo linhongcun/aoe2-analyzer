@@ -9,7 +9,8 @@ let pending: Promise<CivUpdatesData> | undefined;
 /** Fetch only on a mounted history reader; failed promises are never cached. */
 export function loadCivUpdates(reload = false): Promise<CivUpdatesData> {
   if (reload) pending = undefined;
-  pending ??= fetch(updatesUrl)
+  if (pending) return pending;
+  const request = fetch(updatesUrl)
     .then(async (response) => {
       if (!response.ok) throw new Error('文明更新历史读取失败');
       const data = readValidatedJson(await response.json(), validate, '文明更新历史');
@@ -17,9 +18,10 @@ export function loadCivUpdates(reload = false): Promise<CivUpdatesData> {
       return data;
     })
     .catch((error: unknown) => {
-      pending = undefined;
+      if (pending === request) pending = undefined;
       throw error;
     });
+  pending = request;
   return pending;
 }
 
