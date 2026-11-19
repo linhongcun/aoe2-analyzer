@@ -75,6 +75,26 @@ for (const width of [390, 1280]) {
       ].map((node) => node!.getBoundingClientRect().top),
     );
     expect(order).toEqual([...order].sort((a, b) => a - b));
+    for (const link of await content.locator('a').all()) {
+      await link.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+      const box = (await link.boundingBox())!;
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+      expect(
+        await link.evaluate((el) => {
+          const box = el.getBoundingClientRect();
+          return document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2)?.closest('a') === el;
+        }),
+      ).toBe(true);
+    }
+    expect(
+      await content.evaluate((el) => {
+        const boxes = [...el.querySelectorAll('a')].map((a) => a.getBoundingClientRect());
+        return boxes.every((a, i) =>
+          boxes.slice(i + 1).every((b) => Math.min(a.right, b.right) <= Math.max(a.left, b.left) || Math.min(a.bottom, b.bottom) <= Math.max(a.top, b.top)),
+        );
+      }),
+    ).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await toggle.press('Space');
     await expect(content).toBeHidden();

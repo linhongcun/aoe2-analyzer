@@ -40,6 +40,11 @@
 }
 
 .civ-about-content a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
   color: var(--color-link);
 }
 
@@ -54,6 +59,10 @@
 }
 
 .civ-about-content .fitem {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  vertical-align: middle;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
