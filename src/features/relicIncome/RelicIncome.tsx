@@ -65,6 +65,29 @@ export default function RelicIncome() {
   const data = loaded.data;
   const r = data ? calculateRelicIncome(c, data) : null;
   const errors = [...decoded.structuralErrors, ...(r?.errors ?? [])];
+  const fieldHint = (id: string, prefix: string) => {
+    const message = errors.find((item) => item.startsWith(prefix));
+    if (!message) return { props: {}, hint: null };
+    return {
+      props: { 'aria-invalid': true as const, 'aria-describedby': id },
+      hint: (
+        <span id={id} className="eco-field-error">
+          {message.split(/(\d+(?:[–-]\d+)?)/g).map((part, index) =>
+            index % 2 === 1 ? (
+              <span className="num nw" key={index}>
+                {part}
+              </span>
+            ) : (
+              part
+            ),
+          )}
+        </span>
+      ),
+    };
+  };
+  const countError = fieldHint('relic-error-count', '圣物数量须');
+  const minutesError = fieldHint('relic-error-minutes', '持续时长须');
+  const targetError = fieldHint('relic-error-target', '目标金耗须');
   // issue 273：收入为 0 的资源不出卡片、不进计算步骤；黄金始终显示（与目标金耗对比），未核实（null）也显示
   const shownResources = RELIC_RESOURCES.filter((res) => res === 'Gold' || !r || r.resources[res].perMinute !== 0);
   const {
@@ -176,15 +199,36 @@ export default function RelicIncome() {
                   <label>本方文明{selectCiv(c.civ, (civ) => update({ ...c, civ }), '圣物文明')}</label>
                   <label>
                     已存放且生效的圣物数
-                    <input aria-label="已生效圣物数量" inputMode="numeric" value={c.count} onChange={(e) => update({ ...c, count: e.target.value })} />
+                    <input
+                      {...countError.props}
+                      aria-label="已生效圣物数量"
+                      inputMode="numeric"
+                      value={c.count}
+                      onChange={(e) => update({ ...c, count: e.target.value })}
+                    />
+                    {countError.hint}
                   </label>
                   <label>
                     持续游戏分钟
-                    <input aria-label="持续游戏分钟" inputMode="decimal" value={c.minutes} onChange={(e) => update({ ...c, minutes: e.target.value })} />
+                    <input
+                      {...minutesError.props}
+                      aria-label="持续游戏分钟"
+                      inputMode="decimal"
+                      value={c.minutes}
+                      onChange={(e) => update({ ...c, minutes: e.target.value })}
+                    />
+                    {minutesError.hint}
                   </label>
                   <label>
                     目标黄金／游戏分钟
-                    <input aria-label="目标黄金／游戏分钟" inputMode="decimal" value={c.target} onChange={(e) => update({ ...c, target: e.target.value })} />
+                    <input
+                      {...targetError.props}
+                      aria-label="目标黄金／游戏分钟"
+                      inputMode="decimal"
+                      value={c.target}
+                      onChange={(e) => update({ ...c, target: e.target.value })}
+                    />
+                    {targetError.hint}
                   </label>
                   <p className="relic-note relic-span">
                     数量只填已存放、生效且整个期间固定的圣物。时长为游戏时间；每项输入上限 {RELIC_INPUT_MAX.toLocaleString('zh-CN')} 是工具限制。

@@ -42,6 +42,13 @@
   font-size: 14px;
   min-width: 0;
 }
+.market-page .eco-field-error {
+  color: var(--color-bad);
+  font-size: var(--fs-sm);
+}
+.market-page input[aria-invalid='true'] {
+  border-color: var(--color-bad);
+}
 .market-page input:not([type='checkbox']),
 .market-page select {
   width: 100%;

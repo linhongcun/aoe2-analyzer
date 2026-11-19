@@ -154,6 +154,7 @@
     "tests/e2e/mapuche197.spec.ts": 18522,
     "tests/e2e/market215.spec.ts": 20948,
     "tests/e2e/marketFees745.spec.ts": 13500,
+    "tests/e2e/marketRelicField1164.spec.ts": 45000,
     "tests/e2e/matchReview257.spec.ts": 28517,
     "tests/e2e/matchup194.spec.ts": 9989,
     "tests/e2e/matchup939.spec.ts": 12000,
