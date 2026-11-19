@@ -3211,7 +3211,7 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1236-L1270",
             "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
           },
-          "sourceLines": [1236, 1238, 1244, 1245, 1246, 1247, 1249, 1251, 1257, 1258, 1259, 1260, 1265, 1266, 1267, 1268, 1270],
+          "sourceLines": [1236, 1238, 1244, 1245, 1246, 1248, 1250, 1252, 1257, 1258, 1259, 1261, 1265, 1266, 1267, 1268, 1270],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/492/Shu/4/437,199,211,200,212,201,219,47/?civ=Shu&tab=sim",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1069?civ=Shu",

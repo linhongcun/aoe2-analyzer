@@ -5,21 +5,36 @@ type FormationFixture = {
   routes: { id: string; patch: { build: number }; reason?: string }[];
 };
 
+function decodeModuleString(literal: string): string {
+  if (literal.startsWith('"')) return JSON.parse(literal) as string;
+  const escaped = literal.slice(1, -1).replace(/\\[\s\S]|"/g, (token) => (token === "\\'" ? "'" : token === '"' ? '\\"' : token));
+  return JSON.parse('"' + escaped + '"') as string;
+}
+
 async function mockFormationContent(page: Page, update: (formations: FormationFixture[]) => void) {
   let mocked = false;
-  await page.route(/\/data\/content\/civ-formations\.json(?:\?.*)?$/, async (route) => {
+  await page.route(/\/(?:data\/content\/civ-formations\.json|assets\/CivDetailPage-[\w-]+\.js)(?:\?.*)?$/, async (route) => {
     const response = await route.fetch();
     const source = await response.text();
-    const isModule = source.startsWith('export default');
-    const payload = isModule ? source.match(/JSON\.parse\(("(?:\\.|[^"\\])*")\)/) : null;
+    const isModule = !source.trimStart().startsWith('[');
+    // Vite inlines the formation JSON in the built civ detail chunk.
+    const payload = isModule
+      ? Array.from(source.matchAll(/JSON\.parse\(("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')\)/g)).find((match) =>
+          /^\[\s*\{\s*"civ"\s*:/.test(decodeModuleString(match[1]!)),
+        )
+      : undefined;
     if (isModule && !payload?.[1]) throw new Error('Vite civ formations JSON module payload is unavailable');
-    const json = payload?.[1] ? (JSON.parse(payload[1]) as string) : source;
+    const json = payload?.[1] ? decodeModuleString(payload[1]) : source;
     const formations = JSON.parse(json) as FormationFixture[];
     update(formations);
     mocked = true;
+    const serialized = JSON.stringify(formations);
+    const body = payload
+      ? source.slice(0, payload.index) + 'JSON.parse(' + JSON.stringify(serialized) + ')' + source.slice(payload.index + payload[0].length)
+      : serialized;
     await route.fulfill({
       response,
-      body: isModule ? 'export default /* #__PURE__ */ JSON.parse(' + JSON.stringify(JSON.stringify(formations)) + ');' : JSON.stringify(formations),
+      body,
     });
   });
   return () => mocked;
