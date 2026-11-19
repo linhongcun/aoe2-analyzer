@@ -297,7 +297,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     return () => cancelAnimationFrame(frame);
   }, [c, location.hash, location.key, location.pathname, location.search, location.state, navigate, navigationType, previous, restoreOwner, tab]);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
-  const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
+  const uniqueTechs = core ? civUniqueTechs(c.en, core.techs) : [];
   const regional = core
     ? relatedRegionalLines(c, core.units, core.techs).flatMap((line) => {
         const base = line[0];
@@ -420,18 +420,18 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
                 <b>独特科技</b>
                 <span>本文明专属</span>
               </p>
-              {uniqueTechs.map((item) => (
-                <Link className="kit-row" key={item.tech.id} to={`/tech/${item.tech.id}`}>
+              {uniqueTechs.map((tech) => (
+                <Link className="kit-row" key={tech.id} to={`/tech/${tech.id}`}>
                   <span className="kit-icons">
-                    <TechIcon t={item.tech} />
+                    <TechIcon t={tech} />
                   </span>
                   <span className="kit-meta">
-                    <span className="kit-name">{item.zh}</span>
+                    <span className="kit-name">{tech.zh}</span>
                     <span className="kit-sub">
-                      <EmNum text={item.tech.desc || item.rest} />
+                      <EmNum text={tech.desc} />
                     </span>
                   </span>
-                  <span className="kit-age">{AGE_ZH[item.tech.age] ?? ''}</span>
+                  <span className="kit-age">{AGE_ZH[tech.age] ?? ''}</span>
                 </Link>
               ))}
             </div>
