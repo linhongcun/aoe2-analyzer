@@ -1,0 +1,69 @@
+.civ-about-feedback {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 24px 32px;
+  text-align: left;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.civ-about-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.civ-about-feedback :is(button, a):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.civ-about-content {
+  max-width: 760px;
+  line-height: 1.8;
+}
+
+.civ-about-content[hidden] {
+  display: none;
+}
+
+.civ-about-content p {
+  margin: 12px 0;
+}
+
+.civ-about-content a {
+  color: var(--color-link);
+}
+
+.civ-about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.civ-about-links .fblink {
+  min-height: 44px;
+}
+
+.civ-about-content .fitem {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.civ-about-content .fmeta {
+  white-space: normal;
+}
+
+.civ-about-sources h2 {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  color: var(--color-text);
+}

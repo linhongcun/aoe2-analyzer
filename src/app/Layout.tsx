@@ -1,13 +1,17 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, matchPath, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
 import { WIKI } from '../shared/nav/sections';
 import { NavItem } from './nav/NavItem';
 import { ToolsMenu } from './nav/ToolsMenu';
 import FeedbackLink, { SiegeFeedbackNote } from '../shared/ui/FeedbackLink';
-import { appVersion } from '../shared/utils/feedback';
 import { DATA_SOURCES, REPO, versionLabel } from '../shared/utils/dataInfo';
+import { FEEDBACK_NOTE, SiteVersionInfo, SourceUsageStatement } from '../shared/ui/SiteInfo';
+import { PAGES } from '../shared/nav/pageRegistry';
+import { civs } from '../data';
+import { catalogCivByRouteEn } from '../domain/civRoute';
+import CivAboutFeedback from '../features/civs/components/CivAboutFeedback';
 import { bindGlobalSearch } from '../shared/search/globalSearch';
 import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
@@ -17,6 +21,7 @@ import '../shared/styles/community-tools.css';
 // 全局搜索带着拼音索引、术语表和加成数据，改为第一次打开时才加载，不进首页入口包（issue 280）。
 const loadCommandPalette = () => import('../features/search/components/CommandPalette');
 const CommandPalette = lazy(loadCommandPalette);
+const civDetailPath = PAGES.find((page) => page.key === 'civ-detail')!.path;
 
 /**
  * 搜索分包加载期间先画出与正式面板同结构的外壳和「加载中」，输入框可立即打字；
@@ -220,6 +225,8 @@ function MobileTheme({ preference, onSelect }: { preference: ThemePreference; on
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname, search, hash } = useLocation();
+  const civMatch = matchPath({ path: civDetailPath, end: true }, pathname);
+  const footerCiv = civMatch ? catalogCivByRouteEn(civs, civMatch.params.en ?? '') : undefined;
   const siegePage = pathname === '/siege' || pathname === '/siege/';
   // issue 775：评分免责只出现在真正展示 1–10 评分的页面。文明详情不再展示评分，只保留文明对比。
   const showsRatings = pathname === '/compare';
@@ -437,44 +444,27 @@ export function Layout({ children }: { children: ReactNode }) {
           <CommandPalette open onClose={closeSearch} initialQuery={pendingQuery} />
         </Suspense>
       )}
-      <footer className="editorial-footer">
-        <p className="fbfoot">
-          <FeedbackLink /> <FeedbackLink kind="feature" />
-          {siegePage && (
-            <>
-              {' '}
-              <SiegeFeedbackNote />
-            </>
-          )}{' '}
-          发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
-          <span className="fmeta" data-t="footer-meta">
-            <span className="build-id fitem" data-t="footer-app-version">
-              {appVersion()}
-            </span>
-            {' · '}
-            <Link className="fitem" to="/about-data" data-t="footer-version">
-              数据版本：{versionLabel(DATA_SOURCES)}
-            </Link>
-            {' · '}
-            <span className="build-id fitem" data-t="footer-build">
-              构建 {__BUILD__}
-            </span>
-          </span>
-        </p>
-        {showsRatings && <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>}
-        <details className="footer-sources">
-          <summary>资料来源与使用声明</summary>
-          <div>
-            单位/科技/建筑图标与科技树数据来自 <a href="https://github.com/SiegeEngineers/aoe2techtree">SiegeEngineers/aoe2techtree</a>（MIT 代码；图像 ©
-            Microsoft）；高清单位/科技/建筑图标来自 <a href="https://github.com/denniske/aoe2companion">denniske/aoe2companion</a>。界面图标：
-            <a href="https://lucide.dev">Lucide</a>（ISC 许可，本地打包）。属性/资源图标来自{' '}
-            <a href="https://ageofempires.fandom.com/">Age of Empires Fandom Wiki</a>（CC BY-SA；游戏图像 © Microsoft）。DLC 列表与资料片图标来自{' '}
-            <a href="https://seicing.com/html/aoe2/index-aoe2.html">seicing.com</a>。文明图标来自{' '}
-            <a href="https://github.com/denniske/aoe2companion">denniske/aoe2companion</a>，原始素材 © Microsoft / Age of Empires II。本站为非商业粉丝项目，依据{' '}
-            <a href="https://www.xbox.com/en-us/developers/rules">Microsoft 游戏内容使用规则</a> 使用，未获 Microsoft 认可或赞助。
-          </div>
-        </details>
-      </footer>
+      {footerCiv ? (
+        <CivAboutFeedback key={footerCiv.en} civ={footerCiv.en} />
+      ) : (
+        <footer className="editorial-footer">
+          <p className="fbfoot">
+            <FeedbackLink /> <FeedbackLink kind="feature" />
+            {siegePage && (
+              <>
+                {' '}
+                <SiegeFeedbackNote />
+              </>
+            )}{' '}
+            {FEEDBACK_NOTE} <SiteVersionInfo />
+          </p>
+          {showsRatings && <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>}
+          <details className="footer-sources">
+            <summary>资料来源与使用声明</summary>
+            <SourceUsageStatement />
+          </details>
+        </footer>
+      )}
     </>
   );
 }

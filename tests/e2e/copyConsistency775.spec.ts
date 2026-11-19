@@ -71,11 +71,15 @@ test('#775 页脚评分免责只出现在含 1–10 评分的页面', async ({ p
     const footer = page.locator('footer.editorial-footer');
     await expect(footer).not.toContainText('所有评分（1-10）');
   }
-  for (const route of ['/civ/Franks', '/compare']) {
+  for (const route of ['/compare']) {
     await page.goto('./#' + route);
     await expect(page.locator('main')).not.toBeEmpty();
     await expect(page.locator('footer.editorial-footer')).toContainText('所有评分（1-10）');
   }
+  await page.goto('./#/civ/Franks');
+  await expect(page.getByRole('button', { name: '关于与反馈 展开' })).toBeVisible();
+  await expect(page.locator('footer.editorial-footer')).toHaveCount(0);
+  await expect(page.locator('.civ-about-feedback')).not.toContainText('所有评分（1-10）');
 });
 
 test('#775 首页标题与静态页 title 不再重复品牌，其它页面仍是「页名 | 站点」', async ({ page }) => {

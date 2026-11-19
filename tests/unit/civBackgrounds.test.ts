@@ -7,12 +7,20 @@ import civs from '../../src/data/raw/civs';
 import manifest from '../../data/reference/civs/backgrounds.json';
 import source from '../../data/reference/civs/backgrounds.source.json';
 import { civBackground } from '../../src/features/civs/backgrounds';
-import { CivBackground } from '../../src/features/civs/components/CivBackground';
+import { CivBackground, CivIllustrationCredit } from '../../src/features/civs/components/CivBackground';
 
 const directory = new URL('../../src/features/civs/assets/backgrounds/', import.meta.url);
 const assets: Record<string, (typeof source.assets)[keyof typeof source.assets]> = source.assets;
 
 describe('#662 文明背景与固定来源', () => {
+  it('署名单独显示，背景正文不再输出署名', () => {
+    const credit = renderToStaticMarkup(createElement(CivIllustrationCredit, { civ: 'Wei' }));
+    expect(credit).toContain(civBackground('Wei')!.sourceUrl);
+    expect(credit).toContain('© Microsoft');
+    expect(credit).toContain('背景插画 · AoE2 Companion');
+    expect(renderToStaticMarkup(createElement(CivIllustrationCredit, { civ: 'Unknown' }))).toBe('');
+    expect(renderToStaticMarkup(createElement(CivBackground, { civ: 'Wei', children: '正文' }))).not.toContain('AoE2 Companion');
+  });
   it('当前文明、来源清单、运行时清单及本地文件一一覆盖', () => {
     const names = civs.map((civ) => civ.en).sort();
     expect(Object.keys(source.assets).sort()).toEqual(names);

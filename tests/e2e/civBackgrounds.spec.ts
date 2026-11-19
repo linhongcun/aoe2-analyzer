@@ -24,13 +24,13 @@ for (const theme of ['light', 'dark']) {
         const background = page.locator(`[data-civ-background="${civ}"]`);
         await expect(background).toBeVisible();
         await expect(page.locator('#detail h1')).toContainText(title!);
-        const header = page.locator('#detail .dhead');
+        const header = page.locator('#detail .identity-art');
         const mask = await header.evaluate((element) => {
-          const style = getComputedStyle(element, '::after');
-          return { image: style.maskImage, size: style.maskSize, pointerEvents: style.pointerEvents };
+          const style = getComputedStyle(element);
+          return { image: style.backgroundImage, size: style.backgroundSize, pointerEvents: style.pointerEvents };
         });
         expect(mask.image).toContain('.webp');
-        expect(mask.size).toBe('contain');
+        expect(mask.size).toBe('cover');
         expect(mask.pointerEvents).toBe('none');
         const url = mask.image.match(/^url\("?(.+?)"?\)$/)![1]!;
         expect(new URL(url).origin).toBe(new URL(page.url()).origin);
@@ -44,13 +44,12 @@ for (const theme of ['light', 'dark']) {
         expect(size[1]).toBe(civ === 'Chinese' ? 366 : 530);
         expect(artRequests.size).toBe(civ === 'Chinese' ? 1 : 2);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-        expect((await new AxeBuilder({ page }).include('#detail .dhead').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        expect((await new AxeBuilder({ page }).include('#detail .civ-identity').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
         await page.screenshot({ path: testInfo.outputPath(`${civ}-${theme}-${width}.png`) });
-        expect((await background.getByRole('link', { name: '背景插画 · AoE2 Companion' }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
-        await expect(background.getByRole('link', { name: '背景插画 · AoE2 Companion' })).toHaveAttribute(
-          'href',
-          new RegExp('/assets/history/civs2?/history_' + civ.toLowerCase() + '[.]png$'),
-        );
+        await page.getByRole('button', { name: '关于与反馈 展开' }).click();
+        const credit = page.locator('.civ-about-feedback').getByRole('link', { name: '背景插画 · AoE2 Companion' });
+        expect((await credit.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+        await expect(credit).toHaveAttribute('href', new RegExp('/assets/history/civs2?/history_' + civ.toLowerCase() + '[.]png$'));
       }
       expect(errors).toEqual([]);
     });
@@ -59,21 +58,20 @@ for (const theme of ['light', 'dark']) {
 
 test('文明与Tab切换更新背景，离开详情后不残留', async ({ page }) => {
   await page.goto('./#/civ/Chinese?tab=data');
-  const oldMask = await page.locator('#detail .dhead').evaluate((element) => getComputedStyle(element, '::after').maskImage);
+  const oldMask = await page.locator('#detail .identity-art').evaluate((element) => getComputedStyle(element).backgroundImage);
   await page.evaluate(() => {
     window.location.hash = '/civ/Danes?tab=data';
   });
   await expect(page.locator('[data-civ-background="Danes"]')).toBeVisible();
-  await expect(page.getByRole('tab', { name: '数据', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect.poll(() => page.locator('#detail .dhead').evaluate((element) => getComputedStyle(element, '::after').maskImage)).not.toBe(oldMask);
-  await page.getByRole('tab', { name: '概览', exact: true }).click();
+  await expect.poll(() => page.locator('#detail .identity-art').evaluate((element) => getComputedStyle(element).backgroundImage)).not.toBe(oldMask);
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具', exact: true }).click();
   await expect(page.locator('[data-civ-background="Danes"]')).toBeVisible();
   await page.evaluate(() => {
     window.location.hash = '/unit/4';
   });
   await expect(page.locator('#unit h1')).toContainText('步弓手');
   await expect(page.locator('[data-civ-background]')).toHaveCount(0);
-  expect(await page.locator('#unit .dhead').evaluate((element) => getComputedStyle(element, '::after').maskImage)).toBe('none');
+  expect(await page.locator('[data-t="unit-identity"]').evaluate((element) => getComputedStyle(element).getPropertyValue('--civ-art'))).toBe('');
 });
 
 test('背景延迟加载不移动标题和正文', async ({ page }) => {
@@ -94,14 +92,14 @@ test('背景延迟加载不移动标题和正文', async ({ page }) => {
   await page.goto('./#/civ/Chinese', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('[data-civ-background="Chinese"]')).toBeVisible();
   await intercepted;
-  await expect(page.getByTestId('civ-opening')).toBeVisible();
-  const before = await page.locator('#detail .dhead').boundingBox();
-  const openingBefore = await page.getByTestId('civ-opening').boundingBox();
+  await expect(page.getByTestId('civ-bonuses')).toBeVisible();
+  const before = await page.locator('#detail .civ-identity').boundingBox();
+  const openingBefore = await page.getByTestId('civ-bonuses').boundingBox();
   const loaded = page.waitForResponse(/\/chinese(?:-[\w-]+)?\.webp(?:\?|$)/);
   release();
   await (await loaded).finished();
-  expect(await page.locator('#detail .dhead').boundingBox()).toEqual(before);
-  expect(await page.getByTestId('civ-opening').boundingBox()).toEqual(openingBefore);
+  expect(await page.locator('#detail .civ-identity').boundingBox()).toEqual(before);
+  expect(await page.getByTestId('civ-bonuses').boundingBox()).toEqual(openingBefore);
 });
 
 test('图片失败仍可阅读和切换Tab', async ({ page }) => {
@@ -111,8 +109,10 @@ test('图片失败仍可阅读和切换Tab', async ({ page }) => {
   await page.goto('./#/civ/Chinese');
   await expect(page.locator('#detail h1')).toContainText('中国');
   await expect(page.locator('.detail-copy-button')).toBeEnabled();
-  await page.getByRole('tab', { name: '数据', exact: true }).click();
-  await expect(page.getByRole('tab', { name: '数据', exact: true })).toHaveAttribute('aria-selected', 'true');
-  expect(await page.locator('#detail .dhead').evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具', exact: true }).click();
+  await expect(page.getByTestId('civ-more')).toBeInViewport();
+  await page.getByRole('button', { name: '关于与反馈 展开' }).click();
+  await expect(page.getByRole('link', { name: '背景插画 · AoE2 Companion' })).toBeVisible();
+  expect(await page.locator('#detail .civ-identity').evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
   expect(errors).toEqual([]);
 });
