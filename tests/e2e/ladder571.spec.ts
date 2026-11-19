@@ -149,37 +149,39 @@ test('#571/#625 Elo 留在当前模式，显式模式切换更新真实胜率与
   await expect(source).not.toContainText(ELO_1200_1400);
 });
 
-async function expectMissingCombo(page: Page, hash: string, key: string, label: RegExp) {
+async function expectMissingCombo(page: Page, mode: '4v4' | 'arabia1v1', hash: string, key: string, label: RegExp) {
   await openLadder(page, hash);
+  await page.setViewportSize({ width: 360, height: 900 });
   const option = bandOption(page, key, label);
-  const optionCount = await option.count();
-  let disabled = false;
-  if (optionCount > 0) {
-    const node = option.first();
-    disabled = (await node.isDisabled()) || (await node.getAttribute('aria-disabled')) === 'true';
-  }
   const empty = page.getByTestId('ladder-empty');
-  const emptyVisible = await empty.isVisible();
-  const tableCount = await page.getByTestId('ladder-table').count();
-  expect(disabled || emptyVisible, `「${key}」没有这份切片：应禁用选项或明确空态，不能回落后继续展示别的胜率（table=${tableCount}）`).toBe(true);
-  if (emptyVisible) {
-    await expect(empty).toContainText(/暂无/);
-    await expect(page.getByTestId('ladder-table')).toHaveCount(0);
-    await expect(page.locator('[data-testid^="ladder-row-"]')).toHaveCount(0);
-    const text = ((await page.getByTestId('ladder-page').innerText()) ?? '').replace(/\s+/g, '');
-    expect(text, '空态不能留下两位小数胜率').not.toMatch(WIN_RATE);
-  }
-  if (disabled) {
-    await expect(option.first()).toHaveAttribute('aria-checked', 'true');
-  }
+  await expect(empty).toBeVisible();
+  await expect(empty).toContainText(/暂无/);
+  await expect(page.getByTestId('ladder-fallback-toast')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-table')).toHaveCount(0);
+  await expect(page.locator('[data-testid^="ladder-row-"]')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-tier-source-note')).toHaveCount(0);
+  await expect(option.first()).toHaveAttribute('aria-checked', 'true');
+  await expect(option.first()).toHaveAttribute('aria-disabled', 'true');
+  const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1] ?? '');
+  expect(params.get('mode')).toBe(mode);
+  expect(params.get('elo')).toBe(key);
+  const text = ((await page.getByTestId('ladder-page').innerText()) ?? '').replace(/\s+/g, '');
+  expect(text, '空态不能留下两位小数胜率').not.toMatch(WIN_RATE);
 }
 
 test('#571 无快照组合不展示假胜率：4v4 × <850', async ({ page }) => {
-  await expectMissingCombo(page, '/ladder?mode=4v4&elo=lt850', 'lt850', /<\s*850/);
+  await expectMissingCombo(page, '4v4', '/ladder?mode=4v4&elo=lt850', 'lt850', /<\s*850/);
 });
 
 test('#571 无快照组合不展示假胜率：阿拉伯 1v1 × 1200–1400', async ({ page }) => {
-  await expectMissingCombo(page, '/ladder?mode=arabia1v1&elo=1200-1400', '1200-1400', ELO_1200_1400);
+  await expectMissingCombo(page, 'arabia1v1', '/ladder?mode=arabia1v1&elo=1200-1400', '1200-1400', ELO_1200_1400);
+});
+
+test('#1143 窄屏非表格视图不显示友好度来源提示', async ({ page }) => {
+  await openLadder(page, '/ladder?mode=arabia1v1&view=tiers');
+  await page.setViewportSize({ width: 360, height: 900 });
+  await expect(page.getByTestId('ladder-view-tiers')).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByTestId('ladder-tier-source-note')).toHaveCount(0);
 });
 
 test('#571 不实时抓取；地图行在时来源条仍保留模式、Elo 与截止', async ({ page }) => {

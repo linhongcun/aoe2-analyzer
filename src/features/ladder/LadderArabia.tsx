@@ -242,6 +242,11 @@ export function LadderArabia({
               {view === 'table' && (
                 <div className="ladder-table-card">
                   <LadderStatMethods playerSample={playerSample} interval={false} trend={showTrend} />
+                  {!wide && (
+                    <p className="ladder-tier-source-note" data-testid="ladder-tier-source-note">
+                      友好度由本站编辑评定，不由胜率推导，也不是官方推荐。
+                    </p>
+                  )}
                   <table className="ladder-table" data-testid="ladder-table">
                     <caption className="ladder-sr">阿拉伯 1v1 {bracket.label} 各文明胜率</caption>
                     <colgroup>
