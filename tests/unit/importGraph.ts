@@ -22,7 +22,7 @@ export interface ImportEdge {
   /** 解析后的仓库内文件（相对仓库根）；外部包为 null */
   to: string | null;
   typeOnly: boolean;
-  /** import('x') 动态加载：不进入入口包（staticClosure 跳过），但仍算分层依赖 */
+  /** import('x') 动态加载：不进入入口包，但仍算分层依赖 */
   dynamic?: boolean;
 }
 
@@ -188,22 +188,6 @@ export function importsOf(file: string): ImportEdge[] {
   const edges = /\.(ts|tsx|mts|cts|js|jsx)$/.test(abs) ? parseImports(abs, readFileSync(abs, 'utf8')) : [];
   cache.set(key, edges);
   return edges;
-}
-
-/** 从 entry 出发沿静态（非 type-only）import 能到达的全部仓库内文件 */
-export function staticClosure(entry: string): Map<string, string[]> {
-  /** 文件 → 一条从入口到它的引用链（便于失败时定位） */
-  const seen = new Map<string, string[]>([[entry, [entry]]]);
-  const queue = [entry];
-  while (queue.length) {
-    const cur = queue.shift()!;
-    for (const e of importsOf(cur)) {
-      if (e.typeOnly || e.dynamic || !e.to || seen.has(e.to)) continue;
-      seen.set(e.to, [...seen.get(cur)!, `${e.to}（${e.from}:${e.line}）`]);
-      queue.push(e.to);
-    }
-  }
-  return seen;
 }
 
 /** src 下全部 ts/tsx 源文件（相对仓库根） */
