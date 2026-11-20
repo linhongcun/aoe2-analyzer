@@ -132,7 +132,7 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(warWagon.reason).not.toContain('少量手推炮');
     expect(tower.limitation).toContain('鼓风炉缺口对火矛驻塔输出的影响仅为机制推断');
     expect(tower.limitation).toContain('不含每箭伤害，未与客户端逐项核对');
-    expect(tower.limitation).toContain('源记录条件上限比较');
+    expect(towerAdjustment('fourth').decision?.exception).toContain('射程比较基于上述科技条件，不能据此判断胜负');
     expect(tower.playtest).toBe('pending');
     expect(tower.evidence.playtest).toContain('没有逐箭计数');
 

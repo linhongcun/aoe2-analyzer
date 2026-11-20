@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import type { CivFormationContent } from '../../../domain/civFormations';
+import type { CivFormationContent, FormationAdjustmentView } from '../../../domain/civFormations';
 import { AGE_ZH } from '../../../domain/ratings';
-import { FormationFold, FormationText } from './FormationPresentation';
+import { FormationDecisionText, FormationFold, FormationText } from './FormationPresentation';
 import { formationAnchor } from './useFormationNavigation';
 
 type Source = CivFormationContent['source'];
@@ -41,15 +41,7 @@ export function StatusBadges({ route, grouped }: { route: Route; grouped: boolea
   );
 }
 
-export function FormationDetail({
-  route,
-  adjustments,
-  support,
-}: {
-  route: Route;
-  adjustments: { id: string; when: string; text?: string; unavailable?: boolean; candidateBoundary?: string }[];
-  support?: ReactNode;
-}) {
+export function FormationDetail({ route, adjustments, support }: { route: Route; adjustments: FormationAdjustmentView[]; support?: ReactNode }) {
   const hasDetails = route.attack || route.defense || adjustments.length > 0 || route.alternatives || support;
   if (!hasDetails) return null;
   const expanded = route.presentation === 'age-progression';
@@ -76,13 +68,13 @@ export function FormationDetail({
         <>
           <Heading>对手变化时怎样调整</Heading>
           <dl className="formation-adjustments">
-            {adjustments.map(({ id, when, text, unavailable, candidateBoundary }) => (
-              <div key={id}>
+            {adjustments.map(({ id, when, text, decision, unavailable, candidateBoundary }) => (
+              <div key={id} className={decision ? 'formation-adjustment-decision' : undefined}>
                 <dt>
                   <FormationText text={when} />
                 </dt>
                 <dd>
-                  <FormationText text={text ?? ''} />
+                  {text && (decision ? <FormationDecisionText action={text} decision={decision} /> : <FormationText text={text} />)}
                   {candidateBoundary && (
                     <span className="formation-meta">
                       {' 候选边界：'}

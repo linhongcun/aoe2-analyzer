@@ -308,6 +308,34 @@
   font-weight: 600;
 }
 
+.formation-adjustments > .formation-adjustment-decision {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+
+.formation-adjustment-decision,
+.formation-research > .formation-decision {
+  padding: 8px;
+  border: 1px solid var(--color-accent-ring);
+  border-radius: var(--radius-md);
+  background: var(--color-warn-soft);
+}
+
+.formation-decision {
+  display: grid;
+  gap: 4px;
+}
+
+.formation-decision p {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px;
+}
+
+.formation-decision :is(b, .num) {
+  color: var(--color-accent);
+}
+
 .formation-card button {
   min-width: 44px;
   min-height: 44px;

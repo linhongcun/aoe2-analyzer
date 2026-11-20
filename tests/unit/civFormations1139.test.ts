@@ -115,7 +115,10 @@ describe('#1139 文明路线契约与投影', () => {
     expect(garrison.limitation).toContain('出塔清冲车会减少驻塔火力');
     expect(garrison.limitation).toContain('站内理论预览，不含每箭伤害，未与客户端逐项核对');
     expect(garrison.limitation).toContain('塔能输出不等于可省略拆城堡手段');
-    expect(garrison.limitation).toContain('约 13 射程塔不能压制火炮术后 14 射程');
+    const longRange = garrison.adjustments?.find(({ when }) => when === '巨投、长射程火炮');
+    expect(longRange?.text).toContain('约 13 射程的箭塔可压过 12 射程的普通手推炮');
+    expect(longRange?.decision?.exception).toContain('火炮术后 14 射程的土耳其手推炮，塔射程不足');
+    expect(garrison.limitation).not.toContain('14 射程');
     expect(garrison.limitation).toContain('鼓风炉缺口对火矛驻塔输出的影响仅为机制推断，待实战验证');
     expect(garrison.limitation).toContain('火矛出塔清冲车或接骑兵仍有近战攻击科技缺口');
     expect(garrison.limitation).not.toContain('主要固定远程火力与掩体');
