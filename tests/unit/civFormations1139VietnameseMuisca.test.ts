@@ -298,4 +298,17 @@ describe('#1172 越南主路与宝伞依据', () => {
       expect(intended(item, [331], true)).toMatchObject({ siege: [331], suggested: { unavailable: true } });
     }
   });
+
+  it('精锐象兵资料缺失时保留普通形态与宝伞说明', async () => {
+    const core = await loadCore();
+    const trees = await loadTrees();
+    const unitById = { ...core.unitById };
+    delete unitById[1134];
+    const view = projectFormation(front!, vietnamese.civ, DATA_PATCH, { core: { ...core, unitById }, trees }, vietnamese.routes, vietnamese.source);
+    expect(view.status).toBe('current');
+    if (view.status !== 'current') return;
+    expect(view.required.map(({ entity }) => entity.id)).toEqual([1132, 1155]);
+    expect(view.supplements.find(({ mode }) => mode === 'upgrade')?.entities.map(({ entity }) => entity.id)).toEqual([628]);
+    expect(view.route.alternatives).not.toContain('精锐象兵');
+  });
 });
