@@ -41,6 +41,7 @@ for (const width of [1120, 360]) {
     await expect(page.getByTestId('army-supply-page')).toBeVisible();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('持续生产');
     await expect(tab).toHaveAttribute('aria-current', 'page');
+    await expect(page).toHaveTitle('持续生产 | 帝国时代 II 分析器');
     const returnToArmy = page.getByRole('link', { name: '返回原阵容账本', exact: true });
     expect((await returnToArmy.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const source = page.getByTestId('army-supply-row');

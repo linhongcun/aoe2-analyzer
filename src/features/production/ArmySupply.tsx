@@ -4,6 +4,7 @@ import { civByEn } from '../../data';
 import { armySupplyResearch, projectArmySupply, type ArmySupplyRow, type ArmySupplySettings } from '../../domain/armySupply';
 import { BUILDING_LIMIT, calculateProduction, type ProductionContext } from '../../domain/production';
 import { AGE_ZH } from '../../domain/ratings';
+import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import { UnitIcon } from '../../shared/ui/art';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
@@ -25,7 +26,7 @@ export default function ArmySupply({ context, loadingError }: { context: Product
   const returnTo = decoded.kind === 'valid' ? '/production?' + decoded.sourceQuery : decoded.returnTo;
   return (
     <section className="pane production-page" data-testid="army-supply-page">
-      <ToolPageHeader title="持续生产" top={<ProductionPageTop />} />
+      <ToolPageHeader title={PRODUCTION_MODE_LABELS.legacy} top={<ProductionPageTop />} />
       {returnTo && <SupplyReturn to={returnTo} />}
       {decoded.kind === 'invalid' ? (
         <p role="alert">{decoded.reason}</p>
@@ -86,7 +87,7 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
   return (
     <section className="pane production-page army-supply" data-testid="army-supply-page">
       <ToolPageHeader
-        title="持续生产"
+        title={PRODUCTION_MODE_LABELS.legacy}
         top={<ProductionPageTop />}
         description="在原阵容的基础上确认科技口径、形态和专用生产建筑。"
         dock={<CalcDock note={share.status} resultId="army-supply-result-title" actions={[{ label: '复制方案链接', icon: 'copy', onClick: copy }]} />}
