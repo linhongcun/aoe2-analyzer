@@ -19,7 +19,7 @@ describe('#1054 strict mixed configuration protocol', () => {
   it('all context, row order, form IDs and quantities round-trip without local state', () => {
     const input = sample(),
       query = encodeMixedDuel(input);
-    expect(decodeMixedDuel(new URLSearchParams(query.toString()))).toEqual({ input, errors: [] });
+    expect(decodeMixedDuel(new URLSearchParams(query.toString()))).toEqual({ input, errors: [], sharedErrors: [], sideErrors: { a: [], b: [] } });
     expect(query.get('m')).toBe('mix');
     expect(input.a.rows[0]?.uid).toBe('359');
   });
@@ -31,7 +31,20 @@ describe('#1054 strict mixed configuration protocol', () => {
       { uid: '93', qty: '-2' },
       { uid: '567', qty: 'Infinity' },
     ];
-    expect(decodeMixedDuel(encodeMixedDuel(input))).toEqual({ input, errors: [] });
+    expect(decodeMixedDuel(encodeMixedDuel(input))).toEqual({ input, errors: [], sharedErrors: [], sideErrors: { a: [], b: [] } });
+  });
+  it('distinguishes unusable shared and single-side configuration without discarding the healthy side', () => {
+    const q = encodeMixedDuel(sample());
+    q.set('ma', '{');
+    let decoded = decodeMixedDuel(q);
+    expect(decoded.input.b).toEqual(sample().b);
+    expect(decoded.sideErrors.a).toEqual(['A 方链接 JSON 格式损坏']);
+    expect(decoded.sideErrors.b).toEqual([]);
+    expect(decoded.sharedErrors).toEqual([]);
+    q.set('rule', 'unknown');
+    decoded = decodeMixedDuel(q);
+    expect(decoded.sharedErrors).toEqual(['规则版本不受支持：unknown']);
+    expect(decoded.errors).toHaveLength(2);
   });
   it.each(['m=n&m=mix', 'm=mix&m=n', '', 'm=Mix'])('dispatches malformed mode %s to strict decoding before old fallback', (prefix) => {
     const query = new URLSearchParams(prefix + '&rule=queue-v1&data=x&ma={}&mb={}');

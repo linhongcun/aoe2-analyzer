@@ -26,24 +26,32 @@ export function isMixedDuelLink(params: URLSearchParams): boolean {
   return params.getAll('m').includes('mix') || ['ma', 'mb', 'rule'].some((key) => params.has(key));
 }
 
-export function decodeMixedDuel(params: URLSearchParams): { input: MixedDuelInput; errors: string[] } {
-  const errors: string[] = [];
+export function decodeMixedDuel(params: URLSearchParams): {
+  input: MixedDuelInput;
+  errors: string[];
+  sharedErrors: string[];
+  sideErrors: Record<'a' | 'b', string[]>;
+} {
+  const sharedErrors: string[] = [];
+  const sideErrors = { a: [] as string[], b: [] as string[] };
   const known = new Set(['m', 'rule', 'data', 'ma', 'mb']);
   for (const key of new Set(params.keys())) {
-    if (!known.has(key)) errors.push(`未知混编参数：${key}`);
-    if (params.getAll(key).length !== 1) errors.push(`重复混编参数：${key}`);
+    if (!known.has(key)) sharedErrors.push(`未知混编参数：${key}`);
+    if (params.getAll(key).length !== 1) {
+      const errors = key === 'ma' ? sideErrors.a : key === 'mb' ? sideErrors.b : sharedErrors;
+      errors.push(`重复混编参数：${key}`);
+    }
   }
-  if (params.get('m') !== 'mix') errors.push('混编模式标识无效');
+  if (params.get('m') !== 'mix') sharedErrors.push('混编模式标识无效');
   const rule = params.get('rule') ?? '';
-  if (rule !== MIXED_RULE) errors.push(`规则版本不受支持：${rule || '缺失'}`);
+  if (rule !== MIXED_RULE) sharedErrors.push(`规则版本不受支持：${rule || '缺失'}`);
   const data = params.get('data') ?? '';
-  if (!data) errors.push('缺少链接数据版本标识');
-  const side = (key: 'ma' | 'mb'): MixedSideInput => {
-    const name = key === 'ma' ? 'A' : 'B';
-    const fail = (message: string) => errors.push(`${name} 方${message}`);
+  if (!data) sharedErrors.push('缺少链接数据版本标识');
+  const side = (key: 'a' | 'b'): MixedSideInput => {
+    const fail = (message: string) => sideErrors[key].push(`${key.toUpperCase()} 方${message}`);
     let obj: unknown;
     try {
-      obj = JSON.parse(params.get(key) ?? '');
+      obj = JSON.parse(params.get(`m${key}`) ?? '');
     } catch {
       fail('链接 JSON 格式损坏');
       return emptyMixedSide();
@@ -75,7 +83,8 @@ export function decodeMixedDuel(params: URLSearchParams): { input: MixedDuelInpu
     });
     return { civ: scalar(obj.civ), age: scalar(obj.age), techs: list('techs'), team: list('team'), rows };
   };
-  return { input: { rule, data, a: side('ma'), b: side('mb') }, errors };
+  const input = { rule, data, a: side('a'), b: side('b') };
+  return { input, errors: [...sharedErrors, ...sideErrors.a, ...sideErrors.b], sharedErrors, sideErrors };
 }
 
 export function encodeMixedDuel(input: MixedDuelInput): URLSearchParams {

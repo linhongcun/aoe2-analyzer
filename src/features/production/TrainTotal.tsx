@@ -14,7 +14,7 @@ import { ProductionPageTop } from './ProductionModeNav';
 import { decodeTrainTotal, encodeTrainTotal, legacyHrefFromTotal } from './trainTotalCodec';
 import { TRAIN_TOTAL_DESCRIPTION, TRAIN_TOTAL_FOOTER, TRAIN_TOTAL_PENDING, TRAIN_TOTAL_TITLE, pendingTrainQuantity, trainTotalSummary } from './trainTotalCopy';
 import { trainTotalToProduction } from '../../domain/productionTransfer';
-import { productionTransferState } from '../../shared/utils/productionTransferState';
+import { productionTransferState, readProductionTransfer, withoutProductionTransfer } from '../../shared/utils/productionTransferState';
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import './trainTotal.css';
 
@@ -81,7 +81,9 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const write = (next: TrainTotalConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeTrainTotal(next) }, { replace: true, state: location.state });
+    const search = '?' + encodeTrainTotal(next);
+    const clearNotice = search !== location.search && readProductionTransfer(location.state)?.source === 'mixed-duel';
+    navigate({ pathname: '/production', search }, { replace: true, state: clearNotice ? withoutProductionTransfer(location.state) : location.state });
     share.reset();
   };
   const blocked = result.blocked.length > 0;

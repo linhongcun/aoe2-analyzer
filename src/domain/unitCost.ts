@@ -25,6 +25,7 @@ const COST_ATTR: Record<number, UnitCostResource | 'all'> = {
   106: 'Stone',
 };
 const COST_OPS = new Set(['set', 'mul', 'add']);
+export const isUnitCostAttribute = (attr: number | undefined) => attr !== undefined && COST_ATTR[attr] !== undefined;
 
 export interface UnitCostEffect {
   a?: number;
@@ -122,7 +123,7 @@ export function unitCost(
       for (const effect of markers) undecoded.push({ techId: tech.id, tech: tech.zh, reason: '含未解码的资源或条件效果', res: effect.res, op: effect.op });
       continue;
     }
-    const costEffects = effects.filter((effect) => effect.a !== undefined && COST_ATTR[effect.a] !== undefined && effect.t?.includes(u.id));
+    const costEffects = effects.filter((effect) => isUnitCostAttribute(effect.a) && effect.t?.includes(u.id));
     const invalid = costEffects.filter((effect) => !COST_OPS.has(effect.op));
     if (invalid.length) {
       for (const effect of invalid)

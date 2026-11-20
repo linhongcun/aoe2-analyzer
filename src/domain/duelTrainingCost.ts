@@ -12,9 +12,8 @@ import { DAT } from './datEffects';
 import { presetUpTo, type SimContext, type SimTech } from './simulator';
 import type { TechSpec } from './duelState';
 import type { Cost, Tech, Unit } from './types';
-import { unitCost, type UnitCostResult, type UnitCostTech } from './unitCost';
+import { isUnitCostAttribute, unitCost, type UnitCostResult, type UnitCostTech } from './unitCost';
 
-const COST_ATTRS = new Set([100, 103, 104, 105, 106]);
 export const TRAINING_RESOURCES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 
 export interface TrainingCostTech {
@@ -57,7 +56,7 @@ function trainingPriceAge(unit: Unit, civ: string, age: number, marker?: Trainin
 }
 
 function targetsUnit(tech: Tech, unitId: number) {
-  return (DAT.techs[tech.en]?.eco ?? []).some((effect) => effect.a !== undefined && COST_ATTRS.has(effect.a) && effect.t?.includes(unitId));
+  return (DAT.techs[tech.en]?.eco ?? []).some((effect) => isUnitCostAttribute(effect.a) && effect.t?.includes(unitId));
 }
 
 function asInput(tech: Tech): UnitCostTech {
