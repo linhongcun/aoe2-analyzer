@@ -44,6 +44,12 @@
         }
       }
     },
+    "trainingCost": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "enum": ["Food", "Wood", "Gold", "Stone"] },
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
     "entity": {
       "type": "object",
       "additionalProperties": false,
@@ -74,7 +80,15 @@
             "effect": { "type": "string", "minLength": 1 },
             "caveat": { "type": "string", "minLength": 1 },
             "optional": { "const": true },
-            "trainingPrice": { "const": true }
+            "trainingPrice": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["before", "after"],
+              "properties": {
+                "before": { "$ref": "#/$defs/trainingCost" },
+                "after": { "$ref": "#/$defs/trainingCost" }
+              }
+            }
           }
         },
         "age": {

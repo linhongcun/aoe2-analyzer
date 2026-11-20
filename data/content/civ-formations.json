@@ -5983,7 +5983,10 @@
               "tech": 488,
               "effect": "完成波斯步弓手（卡曼达兰）研究后，弩手训练仍耗木材。",
               "caveat": "研究费和每名弩手的训练费分别计算。",
-              "trainingPrice": true
+              "trainingPrice": {
+                "before": { "Wood": 25, "Gold": 45 },
+                "after": { "Wood": 50, "Gold": 0 }
+              }
             }
           },
           {

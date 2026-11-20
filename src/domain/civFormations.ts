@@ -3,7 +3,6 @@ import type { FormationSource } from './civFormationsSource.mjs';
 import { resolveFormationSource } from './civFormationsSource.mjs';
 import type { Building, Cost, Tech, Trees, Unit } from './types';
 import { techAvailable, unitAvailable } from './unitAvailability';
-import { unitCost } from './unitCost';
 
 type FormationAge = 2 | 3 | 4;
 type FormationStatus = 'approved' | 'candidate' | 'unverified' | 'draft';
@@ -27,7 +26,7 @@ interface FormationResearch {
   effect: string;
   caveat?: string;
   optional?: true;
-  trainingPrice?: true;
+  trainingPrice?: { before: Cost; after: Cost };
 }
 
 interface FormationEntity extends EntityRef {
@@ -135,13 +134,8 @@ interface FormationCatalog {
   trees: Trees;
 }
 
-type FormationResearchView = Omit<FormationResearch, 'tech' | 'trainingPrice'> & {
-  tech: Tech;
-  trainingPrice?: { before: Cost; after: Cost };
-};
-
 export type FormationEntityView =
-  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge; research?: FormationResearchView }
+  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge; research?: Omit<FormationResearch, 'tech'> & { tech: Tech } }
   | { kind: 'tech'; entity: Tech; role: string; age: FormationAge }
   | { kind: 'building'; entity: Building; role: string; age: FormationAge };
 
@@ -203,14 +197,9 @@ function availableEntity(catalog: FormationCatalog, civ: string, ref: EntityRef,
 function projectEntity(catalog: FormationCatalog, civ: string, ref: FormationEntity, routeAge: FormationAge): FormationEntityView | null {
   const row = availableEntity(catalog, civ, ref, routeAge, ref.role);
   if (row?.kind !== 'unit' || !ref.research) return row;
-  const { trainingPrice, ...copy } = ref.research;
   const tech = catalog.core.techById[ref.research.tech];
-  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return trainingPrice ? null : row;
-  if (!trainingPrice) return { ...row, research: { ...copy, tech } };
-  const after = unitCost(row.entity, civ, row.age, [tech]);
-  if (!after.appliedTechs.some(({ id }) => id === tech.id) || after.undecoded.length) return null;
-  const before = unitCost(row.entity, civ, row.age);
-  return { ...row, research: { ...copy, tech, trainingPrice: { before: before.cost, after: after.cost } } };
+  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return ref.research.trainingPrice ? null : row;
+  return { ...row, research: { ...ref.research, tech } };
 }
 
 function targetAvailable(target: Formation, civ: string, patch: FormationPatch, catalog: FormationCatalog): boolean {
