@@ -22,6 +22,7 @@ import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { savedHistoryVisit } from '../../../shared/ui/HistoryReaderLink';
 import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
 import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
+import { readBrowseReturn } from '../logic/browse';
 import { ArenaCastleGoldView } from './ArenaCastleGold';
 import { NomadRevealView } from './NomadReveal';
 import { CivHistory } from './CivHistory';
@@ -254,6 +255,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
   const suppressFormationRestore = restoreOwner === 'bonus' || restoreOwner === 'history';
   const historyRestoreEnabled = restoreOwner !== 'bonus' && restoreOwner !== 'formation';
   const params = new URLSearchParams(location.search);
+  const listReturn = readBrowseReturn(params, core, resources.core.pending);
   const tab = params.get('tab');
   const { insights, arenaGold, nomad } = useMemo(
     () => ({
@@ -354,9 +356,20 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
         </div>
         <div className="civ-identity-actions">
           <CopyPageLink />
-          <Link className="civ-list-link" to="/civs">
-            文明列表
-          </Link>
+          {listReturn.kind !== 'pending' && (
+            <Link
+              className="civ-list-link"
+              to={listReturn.kind === 'filtered' ? listReturn.to : '/civs'}
+              aria-describedby={listReturn.kind === 'invalid' ? 'civ-list-return-note' : undefined}
+            >
+              {listReturn.kind === 'filtered' ? '返回筛选结果' : '文明列表'}
+            </Link>
+          )}
+          {listReturn.kind === 'invalid' && (
+            <p className="civ-list-return-note" id="civ-list-return-note">
+              原筛选条件无法恢复，将打开全部文明。
+            </p>
+          )}
         </div>
       </header>
       <nav className="civ-chapters" aria-label="本页章节">

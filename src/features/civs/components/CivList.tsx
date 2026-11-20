@@ -18,6 +18,7 @@ import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
 import {
   browseCivs,
+  browseDetailPath,
   normalizeBrowseFilters,
   requirementKindLabel,
   requirementToken,
@@ -369,7 +370,7 @@ export default function CivList() {
               <p>{detail.tb}</p>
               <h4>独特单位</h4>
               <p className="civ-uu">{uniqueUnitLabel(detail.uu)}</p>
-              <Link className="civ-open-detail" to={`/civ/${detail.en}`}>
+              <Link className="civ-open-detail" to={browseDetailPath(detail.en, filters, conditions)}>
                 打开完整文明资料
                 <Icon name="arrow-right" />
               </Link>

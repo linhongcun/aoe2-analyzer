@@ -240,6 +240,17 @@
   align-self: start;
 }
 
+.civ-identity-actions:has(.civ-list-return-note) {
+  flex-wrap: wrap;
+}
+
+.civ-list-return-note {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+
 .civ-read .detail-copy-button,
 .civ-read .civ-list-link {
   border: 1px solid var(--civ-line-2);
