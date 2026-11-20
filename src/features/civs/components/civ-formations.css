@@ -391,6 +391,24 @@
   background: var(--color-surface-2);
 }
 
+.formation-condition-branch,
+.formation-condition-branch dl {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.formation-condition-branch header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.formation-condition-branch dt {
+  font-weight: 600;
+}
+
 @media (max-width: 650px) {
   .civ-formations,
   .formation-card {

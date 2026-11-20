@@ -82,6 +82,15 @@ interface Adjustment {
   fallback?: string;
 }
 
+export interface FormationConditionBranch {
+  id: string;
+  title: string;
+  requires: EntityRef[];
+  context: { label: string; text: string };
+  decision: { label: string; text: string };
+  evidence: string;
+}
+
 interface FormationEvidence {
   recognition: string;
   playtest: string;
@@ -112,6 +121,7 @@ interface Formation {
   attack?: string;
   defense?: string;
   adjustments?: Adjustment[];
+  conditionBranches?: FormationConditionBranch[];
   alternatives?: string;
   evidence: FormationEvidence;
   source?: FormationSource;
@@ -161,6 +171,7 @@ export type FormationView =
       choices: FormationChoiceView[];
       supplements: FormationSupplementView[];
       adjustments: FormationAdjustmentView[];
+      conditionBranches?: FormationConditionBranch[];
     };
 
 export function currentFormationPatch(source: FormationPatch, site: FormationPatch): boolean {
@@ -267,6 +278,7 @@ export function projectFormation(
     if (availableEntities.length > 0) supplementViews.push({ ...group, entities: availableEntities });
   }
 
+  const conditionBranches = route.conditionBranches?.filter((branch) => branch.requires.every((ref) => availableEntity(catalog, civ, ref, route.age) !== null));
   return {
     status: 'current',
     route,
@@ -279,5 +291,6 @@ export function projectFormation(
     })),
     supplements: supplementViews,
     adjustments,
+    ...(conditionBranches?.length ? { conditionBranches } : {}),
   };
 }

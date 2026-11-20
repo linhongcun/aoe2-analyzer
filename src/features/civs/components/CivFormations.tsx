@@ -14,6 +14,7 @@ import {
 import { BuildingIcon, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import {
+  FormationConditionBranches,
   FormationCost,
   FormationFold,
   FormationRoutes,
@@ -237,6 +238,7 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
       </p>
     </>
   );
+  const conditionBranches = view.conditionBranches && <FormationConditionBranches id={`${anchor}-conditional-branches`} branches={view.conditionBranches} />;
   if (route.presentation === 'age-progression') {
     const continuations = view.supplements.filter((group) => group.mode === 'progression').flatMap((group) => group.entities);
     const opponentSupport = view.supplements.filter((group) => group.mode === 'conditional-evaluation');
@@ -261,6 +263,7 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
           adjustments={view.adjustments}
           support={opponentSupport.length > 0 && renderFormationConditionalGroups(opponentSupport, entityLine)}
         />
+        {conditionBranches}
         <section className="formation-expanded-group">
           <h4>来源与核对</h4>
           <FormationEvidence route={route} source={source} />
@@ -400,6 +403,7 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
           <FormationDetail route={route} adjustments={view.adjustments} />
         </div>
       </div>
+      {conditionBranches}
       <FormationFold id={`${anchor}-sources`} label="来源与核对" closeLabel={grouped ? '收起来源与核对' : undefined}>
         <FormationEvidence route={route} source={source} />
       </FormationFold>

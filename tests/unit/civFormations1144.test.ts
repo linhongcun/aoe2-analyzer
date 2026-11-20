@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadCore, loadTrees } from '../../src/data';
+import { civByEn, loadCore, loadTrees } from '../../src/data';
 import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { projectFormation } from '../../src/domain/civFormations';
@@ -97,6 +97,38 @@ describe('#1144 三国阵容', () => {
     const unitById = { ...resources.core.unitById };
     delete unitById[1942];
     expect(siege({ ...resources, core: { ...resources.core, unitById } })).toBeUndefined();
+  });
+
+  it('#1177 条件分支按对象的实际可用性分别投影，保留魏的主轴', async () => {
+    const resources = await catalog();
+    const { core } = resources;
+    expect(civByEn('Wei')?.bon).toContain('牵引抛石机和楼船费用 -25%');
+    expect([core.unitById[1944]?.cost.Gold, core.unitById[1952]?.cost.Gold]).toEqual([65, 35]);
+    const verify = (missing: number[], ages?: { unit: number; age: number }) => {
+      const unitById = { ...core.unitById };
+      for (const id of missing) delete unitById[id];
+      if (ages) unitById[ages.unit] = { ...unitById[ages.unit]!, age: ages.age };
+      const view = project('Wei', { ...resources, core: { ...core, unitById } });
+      if (view.status !== 'current') throw new Error(view.status);
+      expect(view.required.map(({ entity }) => entity.id)).toEqual([441, 1952]);
+      expect(view.prerequisites.map(({ entity }) => entity.id)).toEqual([1062]);
+      expect(view.supplements[0]?.condition).toBe('军队成形且资源允许时');
+      return view.conditionBranches;
+    };
+    const blackLight = 'wei-retain-black-light-cavalry';
+    const siege = 'wei-siege-when-pushing-buildings';
+    const branches = verify([]);
+    expect(branches?.map(({ id, requires, evidence }) => [id, requires, evidence])).toEqual([
+      [blackLight, [{ kind: 'unit', id: 1944, age: 3 }], '未做混编或实战验证。'],
+      [siege, [{ kind: 'unit', id: 1942, age: 4 }], '未做混编或实战验证。'],
+    ]);
+    expect(branches?.[1]?.context.text).toBe('魏的牵引抛石机费用 −25%。');
+    expect(verify([1946])?.map(({ id }) => id)).toEqual([blackLight, siege]);
+    expect(verify([1944])?.map(({ id }) => id)).toEqual([siege]);
+    expect(verify([], { unit: 1944, age: 4 })?.map(({ id }) => id)).toEqual([siege]);
+    expect(verify([1942])?.map(({ id }) => id)).toEqual([blackLight]);
+    expect(verify([1942, 1944])).toBeUndefined();
+    expect(project('Wei', resources, { ...DATA_PATCH, build: DATA_PATCH.build + 1 })).not.toHaveProperty('conditionBranches');
   });
 
   it('固定的魏帝王链接只切换明光铠，对照不增加穿甲', () => {

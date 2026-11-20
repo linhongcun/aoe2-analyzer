@@ -5254,7 +5254,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-19",
+        "revised": "2026-11-20",
         "id": "wei-hussar-xianbei",
         "title": "明光铠翼骑兵＋鲜卑掠骑兵",
         "composition": "combined",
@@ -5318,6 +5318,48 @@
         "limitation": "翼骑兵升级、明光铠研究、城堡及英雄另有投入；不要把训练资源互补当作成军没有成本。",
         "attack": "翼骑兵护住接敌窗口；鲜卑留在后方保持射程，不让翼骑正面撞进枪兵阵。",
         "defense": "翼骑兵留出护两翼的空间，不让鲜卑被迫单独接战。",
+        "conditionBranches": [
+          {
+            "id": "wei-retain-black-light-cavalry",
+            "title": "已有黑光铠骑兵",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1944,
+                "age": 3
+              }
+            ],
+            "context": {
+              "label": "保留已有",
+              "text": "城堡时代留下的黑光可以继续当作前排，不必立即换掉。"
+            },
+            "decision": {
+              "label": "是否继续训练",
+              "text": "新补黑光会和鲜卑争用黄金。只有前排缺兵且不耽误鲜卑补员，才考虑继续训练。其他情况下先用已有部队。"
+            },
+            "evidence": "未做混编或实战验证。"
+          },
+          {
+            "id": "wei-siege-when-pushing-buildings",
+            "title": "已有推进拆城目标",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1942,
+                "age": 4
+              }
+            ],
+            "context": {
+              "label": "目录事实",
+              "text": "魏的牵引抛石机费用 −25%。"
+            },
+            "decision": {
+              "label": "是否投入",
+              "text": "已确定要拆哪座城堡或其他建筑，且主力能掩护推进时，再考虑投入。没有明确目标，不必因折扣提前造。"
+            },
+            "evidence": "未做混编或实战验证。"
+          }
+        ],
         "adjustments": [
           {
             "id": "wei-hussar-xianbei-infantry-archers",
@@ -5388,6 +5430,14 @@
             {
               "label": "固定版本单位资料",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json"
+            },
+            {
+              "label": "魏文明加成固定资料",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/civs.json"
+            },
+            {
+              "label": "魏科技树固定资料",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/trees.json"
             }
           ]
         }

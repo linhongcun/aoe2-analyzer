@@ -72,6 +72,9 @@ export function formationProblems(content, contract) {
         requires: requires.map(routeDependency),
       }));
       if (!sameArray(adjustments, contractRoute.adjustments)) add(`${routePath}/adjustments`, '调整或依赖与独立发布契约不一致');
+      const conditionBranches = (route.conditionBranches ?? []).map(({ id, requires }) => ({ id, requires: requires.map(ref) }));
+      if (new Set(conditionBranches.map(({ id }) => id)).size !== conditionBranches.length) add(`${routePath}/conditionBranches`, '条件分支 ID 重复');
+      if (!sameArray(conditionBranches, contractRoute.conditionBranches)) add(`${routePath}/conditionBranches`, '条件分支或依赖与独立发布契约不一致');
       const source = resolveFormationSource(civ.source, route);
       if (!source || source.content !== contractRoute.source.content || source.discussion !== contractRoute.source.discussion)
         add(`${routePath}/source`, '有效来源与独立发布契约不一致');
