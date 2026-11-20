@@ -12,7 +12,7 @@ import {
 } from '../../../domain/civFormations';
 import { BuildingIcon, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
-import { FormationFold, FormationText } from './FormationPresentation';
+import { FormationFold, FormationRoutes, FormationText } from './FormationPresentation';
 import { formationAnchor, useFormationNavigation } from './useFormationNavigation';
 import './civ-formations.css';
 
@@ -49,9 +49,9 @@ function EntityLine({ row, civ, anchor, id, remember }: { row: FormationEntityVi
   );
 }
 
-function StatusBadges({ route }: { route: Route }) {
+function StatusBadges({ route, grouped }: { route: Route; grouped: boolean }) {
   const recognition = route.status === 'candidate' ? '限定候选' : '讨论认可';
-  const playtest = route.playtest === 'reported' ? '用户报告用过' : route.playtest === 'pending' ? '待实战验证' : '实战未说明';
+  const playtest = route.playtest === 'reported' ? '用户报告用过' : route.playtest === 'pending' ? '待实战验证' : grouped ? '未说明实战使用' : '实战未说明';
   return (
     <div className="formation-status" aria-label="路线状态">
       <span className={route.status === 'candidate' ? 'formation-status-candidate' : ''}>{recognition}</span>
@@ -216,7 +216,7 @@ function HistoricalEntities({ route }: { route: Route }) {
   );
 }
 
-function FormationCard({ view, civ, remember }: { view: FormationView; civ: string; remember: RememberEntity }) {
+function FormationCard({ view, civ, remember, grouped = false }: { view: FormationView; civ: string; remember: RememberEntity; grouped?: boolean }) {
   if (view.status === 'draft') return null;
   if (view.status === 'unverified') {
     const anchor = formationAnchor(view.id);
@@ -258,10 +258,10 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
           <h3 id={anchor} tabIndex={-1}>
             <FormationText text={`${route.title}：暂不可用`} />
           </h3>
-          <StatusBadges route={route} />
+          <StatusBadges route={route} grouped={grouped} />
         </div>
         <p>必需单位、建筑或科技的资料在各自时代不可用。核对完成前不作为有效建议。</p>
-        <FormationFold id={`${anchor}-sources`} label="来源与核对">
+        <FormationFold id={`${anchor}-sources`} label="来源与核对" closeLabel={grouped ? '收起来源与核对' : undefined}>
           <FormationEvidence route={route} source={source} />
         </FormationFold>
         <TreeLink />
@@ -274,7 +274,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
           <h3 id={anchor} tabIndex={-1}>
             <FormationText text={`${route.title}：版本待复核`} />
           </h3>
-          <StatusBadges route={route} />
+          <StatusBadges route={route} grouped={grouped} />
         </div>
         <p>
           原核对版本 <Version patch={route.patch} /> · 本站 <Version patch={DATA_PATCH} />
@@ -346,7 +346,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
         <h3 id={anchor} tabIndex={-1}>
           <FormationText text={route.title} />
         </h3>
-        <StatusBadges route={route} />
+        <StatusBadges route={route} grouped={grouped} />
       </div>
       <p className="formation-condition">
         <b>适用条件</b> <FormationText text={route.condition} />
@@ -405,7 +405,9 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
             <div className="formation-supplements">
               {view.supplements.map((group, index) => (
                 <div className="formation-supplement-group" key={`${group.mode}-${index}`}>
-                  <h4 className="formation-group-label">{supplementLabel(group.mode)}</h4>
+                  <h4 className="formation-group-label">
+                    <FormationText text={group.label ?? supplementLabel(group.mode)} />
+                  </h4>
                   {group.condition && (
                     <p>
                       <FormationText text={group.condition} />
@@ -439,7 +441,7 @@ function FormationCard({ view, civ, remember }: { view: FormationView; civ: stri
           <FormationDetail route={route} adjustments={view.adjustments} />
         </div>
       </div>
-      <FormationFold id={`${anchor}-sources`} label="来源与核对">
+      <FormationFold id={`${anchor}-sources`} label="来源与核对" closeLabel={grouped ? '收起来源与核对' : undefined}>
         <FormationEvidence route={route} source={source} />
       </FormationFold>
     </article>
@@ -468,7 +470,7 @@ function FormationSection({
   suppressRestore?: boolean;
   retry?: () => void;
 }) {
-  const { pathname, search } = useLocation();
+  const { search } = useLocation();
   const { root, remember } = useFormationNavigation(civ, pending && !error, suppressRestore);
   const [requestedRetry, setRequestedRetry] = useState(false);
   const retrying = requestedRetry && pending;
@@ -491,36 +493,11 @@ function FormationSection({
           <p className="formation-meta">
             核对数据 <Version patch={DATA_PATCH} />
           </p>
-          {routes.length > 1 && (
-            <nav className="formation-jumps" aria-label="阵容路线">
-              {routes.map((view) => {
-                const label = view.status === 'unverified' ? '路线依据待核实' : view.status === 'draft' ? '' : view.route.title;
-                return label ? (
-                  <Link
-                    key={view.status === 'unverified' ? view.id : view.status === 'draft' ? 'draft' : view.route.id}
-                    to={{
-                      pathname,
-                      search,
-                      hash: `#${formationAnchor(view.status === 'unverified' ? view.id : view.status === 'draft' ? '' : view.route.id)}`,
-                    }}
-                    state={{ focusFormation: true }}
-                  >
-                    <FormationText text={label} />
-                  </Link>
-                ) : null;
-              })}
-            </nav>
-          )}
-          <div className="formation-list">
-            {routes.map((view) => (
-              <FormationCard
-                key={view.status === 'unverified' ? view.id : view.status === 'draft' ? 'draft' : view.route.id}
-                view={view}
-                civ={civ}
-                remember={remember}
-              />
-            ))}
-          </div>
+          <FormationRoutes
+            groups={content.routeGroups}
+            routes={routes}
+            renderCard={(id, view, grouped) => <FormationCard key={id} view={view} civ={civ} remember={remember} grouped={grouped} />}
+          />
         </>
       )}
       {needsRetry && (

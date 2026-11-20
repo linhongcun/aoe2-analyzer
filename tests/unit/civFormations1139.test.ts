@@ -14,7 +14,7 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(43);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(45);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 1],
@@ -33,7 +33,7 @@ describe('#1139 文明路线契约与投影', () => {
       Saxons: 1,
       Teutons: 3,
       Franks: 3,
-      Vietnamese: 1,
+      Vietnamese: 3,
       Lithuanians: 1,
       Poles: 3,
       Bulgarians: 1,
@@ -272,8 +272,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(sicilians.routes[0]!.supplements.some((group) => group.mode === 'continuation-adjustment' && group.entities.some(({ id }) => id === 283))).toBe(
       true,
     );
-    expect(byCiv('Vietnamese').routes[0]!.supplements[0]!.mode).toBe('choice');
-    const vietnamese = byCiv('Vietnamese').routes[0]!;
+    const vietnamese = route('Vietnamese', 'vietnamese-defensive-tower');
+    expect(vietnamese.supplements[0]!.mode).toBe('choice');
     const imperialSkirmisher = vietnamese.supplements.flatMap(({ entities }) => entities).find(({ historicalName }) => historicalName === '帝王掷矛手');
     expect([imperialSkirmisher?.id, imperialSkirmisher?.age]).toEqual([1155, 4]);
     const bulgarians = route('Bulgarians', 'bulgarians-krepost-konnik');

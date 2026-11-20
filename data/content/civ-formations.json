@@ -2626,7 +2626,7 @@
   },
   {
     "civ": "Vietnamese",
-    "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
+    "lead": "按经济、产能和敌军选一条主路。守点阵容只作局部补充。",
     "source": {
       "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
@@ -2634,8 +2634,307 @@
     },
     "routes": [
       {
+        "id": "vietnamese-light-cav-rattan",
+        "title": "机动主路 · 轻型骑兵＋精锐藤弓兵",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-20",
+        "condition": "有侧翼通道、能拉开距离时选。马厩以食物续轻骑，城堡以木材和黄金续藤弓。两边能持续补兵后，再分别承担轻骑与精锐藤弓的研究投入。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 546,
+            "historicalName": "轻型骑兵",
+            "role": "探侧翼、转场并护住退路。",
+            "age": 3
+          },
+          {
+            "kind": "unit",
+            "id": 1131,
+            "historicalName": "精锐藤弓兵",
+            "role": "保持射程输出。精锐升级在帝王时代。",
+            "age": 4
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "progression",
+            "label": "城堡时代延续",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1129,
+                "historicalName": "藤弓兵",
+                "role": "城堡时代可先生产普通藤弓兵，帝王时代再升精锐。",
+                "age": 3
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "label": "按需攻城支援 · 非固定组成",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "拆固定目标时考虑。与藤弓共用城堡队列，先确认能分出产能。",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "label": "反炮候选 · 按需支援",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 47,
+                "age": 4
+              }
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "有化学、攻城武器厂产能、己方护卫和通畅射线时评估反炮。",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "reason": "轻骑的机动为藤弓保留安全射程。已有兵力与各自生产建筑能继续补员时，再投入帝王阶段。",
+        "limitation": "侧翼封死、退路可能被骑兵截断时，机动优势难发挥。敌方攻城器有护卫时看通道、掩护和撤退条件，无法安全接近就换路。",
+        "attack": "轻骑探可达侧翼与退路，藤弓在安全射程跟进。有拆除目标、补兵能延续时再分配攻城产能。",
+        "defense": "轻骑遮护侧翼，藤弓依托射程守住撤退方向。对方能切断退路时先收拢部队。",
+        "adjustments": [
+          {
+            "id": "vietnamese-light-cav-rattan-flank",
+            "when": "侧翼封死或退路受骑兵威胁",
+            "text": "保留退路并保持射程。缺少安全通道时先撤，按经济和掩护考虑另一主路。"
+          },
+          {
+            "id": "vietnamese-light-cav-rattan-guarded-siege",
+            "when": "受保护的敌方攻城器",
+            "text": "先看护卫、可达通道、己方掩护与撤退线。无法安全接近就停战或换路。有化学、攻城武器厂产能、护卫和射线时才考虑手推炮反炮。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "age": 4
+              },
+              {
+                "kind": "tech",
+                "id": 47,
+                "age": 4
+              }
+            ],
+            "fallback": "先看护卫、可达通道、己方掩护与撤退线。无法安全接近或缺少反炮支援就停战或换路。"
+          }
+        ],
+        "alternatives": "攻城按目标分配。继续补充当前主力所需的城堡队列，避免拆固定目标时断兵。火矛驻塔只用于守点。",
+        "evidence": {
+          "recognition": "维护者于 2026-11-19 在原需求中确认这条主路方向。",
+          "playtest": "原讨论未说明实战使用。接敌与运营条件属于分析。",
+          "scope": "固定目录核对组成、时代、训练场所和科技。原讨论认可路线方向，接敌条件按局势判断。",
+          "recordedVersion": "原讨论未记录站点版本。目录及效果使用本页所列数据版本。",
+          "sourceLines": [624, 626, 628, 629, 630, 631],
+          "links": [
+            {
+              "label": "越南科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/trees.json"
+            },
+            {
+              "label": "固定单位目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/units.json"
+            },
+            {
+              "label": "固定科技目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/techs.json"
+            },
+            {
+              "label": "固定科技效果",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/effects.json"
+            }
+          ]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c97a5cce1349436044bd1d5519969848ff27ce28/role/game-strategy.md#L624-L631",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1172",
+          "boundary": "策略原文记录主路与附带条件，原讨论记录认可范围。"
+        }
+      },
+      {
+        "id": "vietnamese-elephant-skirmisher",
+        "title": "正面主路 · 象兵＋帝王掷矛手",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-20",
+        "condition": "需要稳步推进、能护住前排时选。帝王时代成型。马厩以食物与黄金补象兵，靶场以食物与木材补掷矛手。两边能持续补员再安排独立研究。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1132,
+            "historicalName": "象兵",
+            "role": "前排承压并守住入口。普通形态基础生命 250。",
+            "age": 3
+          },
+          {
+            "kind": "unit",
+            "id": 1155,
+            "historicalName": "帝王掷矛手",
+            "role": "从后排减轻远程压力。帝王升级另有研究投入。",
+            "age": 4
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "upgrade",
+            "label": "象兵生命与升级",
+            "condition": "基础生命按未研究科技的形态读取。",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 628,
+                "historicalName": "宝伞",
+                "role": "在城堡研究。象兵与精锐象兵生命 +100。",
+                "age": 3
+              },
+              {
+                "kind": "unit",
+                "id": 1134,
+                "historicalName": "精锐象兵",
+                "role": "精锐形态基础生命 300。按经济承担帝王时代的独立升级。",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "progression",
+            "label": "城堡时代延续",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "可先维持已有精锐掷矛手，等帝王升级。",
+                "age": 3
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "label": "按需攻城支援 · 非固定组成",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "有固定拆除目标且城堡能分出队列时考虑。先护住施工与展开位置。",
+                "age": 4
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "label": "反炮候选 · 按需支援",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 47,
+                "age": 4
+              }
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "有化学、攻城武器厂产能、己方护卫和通畅射线时评估反炮。",
+                "age": 4
+              }
+            ]
+          }
+        ],
+        "reason": "象兵在前吸收压力，掷矛手从后压弓。两列都耗食物，先保留已有城堡期兵力与补员能力，再安排后续研究。",
+        "limitation": "长戟成群、僧侣在后或通道狭窄时先稳住前排。发现带护卫的攻城器，先看护卫、通道和己方掩护。无法安全接近或支援不足就停止推进或换路。",
+        "attack": "象兵顶前，帝王掷矛手保持后排距离。设定固定推进目标后，按掩护与产能决定是否配攻城。",
+        "defense": "前排守入口，后排压制远程。追击会拉散阵形时停下，维持前后排间距。",
+        "adjustments": [
+          {
+            "id": "vietnamese-elephant-skirmisher-screen",
+            "when": "长戟、僧侣或狭窄通道",
+            "text": "先稳住前排与侧翼。护卫、后排火力或接近条件不足时停推，等待掩护或换路。"
+          },
+          {
+            "id": "vietnamese-elephant-skirmisher-guarded-siege",
+            "when": "受保护的敌方攻城器",
+            "text": "先看护卫、可达通道、己方掩护与撤退线。无法安全接近就停战或换路。有化学、攻城武器厂产能、护卫和射线时才考虑手推炮反炮。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "age": 4
+              },
+              {
+                "kind": "tech",
+                "id": 47,
+                "age": 4
+              }
+            ],
+            "fallback": "先看护卫、可达通道、己方掩护与撤退线。无法安全接近或缺少反炮支援就停战或换路。"
+          }
+        ],
+        "alternatives": "预留两边的补员与独立研究资源，精锐象兵按经济补升。攻城按推进和反炮目标选择，守点阵容用于局部防守。",
+        "evidence": {
+          "recognition": "维护者于 2026-11-19 在原需求中确认这条主路方向。",
+          "playtest": "原讨论未说明实战使用。接敌与运营条件属于分析。",
+          "scope": "固定目录核对组成、时代、训练场所和科技。原讨论认可路线方向，接敌条件按局势判断。",
+          "recordedVersion": "原讨论未记录站点版本。目录及效果使用本页所列数据版本。",
+          "sourceLines": [624, 633, 635, 636, 637, 638],
+          "links": [
+            {
+              "label": "越南科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/trees.json"
+            },
+            {
+              "label": "固定单位目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/units.json"
+            },
+            {
+              "label": "固定科技目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/techs.json"
+            },
+            {
+              "label": "固定科技效果",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/effects.json"
+            }
+          ]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c97a5cce1349436044bd1d5519969848ff27ce28/role/game-strategy.md#L624-L638",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1172",
+          "boundary": "策略原文记录主路与附带条件，原讨论记录认可范围。"
+        }
+      },
+      {
         "id": "vietnamese-defensive-tower",
-        "title": "防守家园/资源点：大型箭塔＋精锐火矛驻塔＋轻骑",
+        "title": "守点补充 · 火矛驻塔",
         "status": "approved",
         "playtest": "unreported",
         "composition": "combined",
@@ -2733,35 +3032,65 @@
             "id": "vietnamese-defensive-tower-adjustment-first",
             "when": "弓手压力且选择精锐藤弓兵",
             "text": "精锐藤弓兵对劲弩手的站内接触模型为胜，剩余43.5/48；用户未实战确认，不代表胜率。",
-            "requires": [{ "kind": "unit", "id": 1131, "age": 4 }],
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1131,
+                "age": 4
+              }
+            ],
             "fallback": "缺少精锐藤弓兵目录资料时隐藏此分支；另一分支按自身资料独立核验，不据此宣称可用。"
           },
           {
             "id": "vietnamese-defensive-tower-adjustment-second",
             "when": "弓手压力且选择帝王掷矛手",
             "text": "帝王掷矛手对劲弩手的站内接触模型为胜，剩余36.6/42；用户未实战确认，不代表胜率。",
-            "requires": [{ "kind": "unit", "id": 1155, "age": 4 }],
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1155,
+                "age": 4
+              }
+            ],
             "fallback": "缺少帝王掷矛手目录资料时隐藏此分支；另一分支按自身资料独立核验，不据此宣称可用。"
           },
           {
             "id": "vietnamese-defensive-tower-adjustment-third",
             "when": "骑士、游侠压力",
-            "text": "精锐象兵对法兰克游侠的站内接触模型为胜，剩余168/420；用户未实战确认，不代表胜率。火矛仅作辅助，不作为替代主路。",
-            "requires": [{ "kind": "unit", "id": 1134, "age": 4 }],
+            "text": "精锐象兵对法兰克游侠的站内接触模型为胜，剩余168/420。DE 188329 的 420 是精锐形态在血统、宝伞都已生效时的理论面板（300＋20＋100）。用户未实战确认，不代表胜率。火矛仅作辅助，不作为替代主路。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1134,
+                "age": 4
+              }
+            ],
             "fallback": "缺少精锐象兵目录资料时隐藏该对位建议；不把替代兵种升为主路。"
           },
           {
             "id": "vietnamese-defensive-tower-adjustment-fourth",
             "when": "骑兵压力，需要长戟辅助",
             "text": "按需补长戟兵作为骑兵压力辅助；不替代主路或升为固定主力。",
-            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
             "fallback": "缺少长戟兵目录资料时隐藏该辅助建议；保留原塔防主路。"
           },
           {
             "id": "vietnamese-defensive-tower-adjustment-fifth",
             "when": "手推炮威胁",
             "text": "需要时用己方手推炮反制；轻骑清炮较慢。",
-            "requires": [{ "kind": "unit", "id": 36, "age": 4 }],
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "age": 4
+              }
+            ],
             "fallback": "缺少手推炮目录资料时隐藏炮兵反制建议；保留原塔防主路。"
           }
         ],
@@ -2769,7 +3098,34 @@
           "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
-        }
+        },
+        "alternatives": "已撤回「火矛＋帝王掷矛手」的野战搭配。有护卫的攻城器会限制这套搭配的接敌。"
+      }
+    ],
+    "routeGroups": [
+      {
+        "title": "两条主路",
+        "note": "按条件择一，不同时必出。",
+        "routes": [
+          {
+            "id": "vietnamese-light-cav-rattan",
+            "label": "机动主路"
+          },
+          {
+            "id": "vietnamese-elephant-skirmisher",
+            "label": "正面主路"
+          }
+        ]
+      },
+      {
+        "title": "守家与资源点",
+        "note": "仅防守 · 非主力",
+        "routes": [
+          {
+            "id": "vietnamese-defensive-tower",
+            "label": "守点补充"
+          }
+        ]
       }
     ]
   },

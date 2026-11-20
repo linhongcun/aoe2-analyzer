@@ -110,6 +110,11 @@
             "conditional-evaluation"
           ]
         },
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ref" }
+        },
         "entities": {
           "type": "array",
           "minItems": 1,

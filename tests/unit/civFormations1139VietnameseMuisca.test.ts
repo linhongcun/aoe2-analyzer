@@ -4,6 +4,8 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { DAT } from '../../src/domain/datEffects';
+import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620';
@@ -234,5 +236,66 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(contractRoute('Muisca', muisca.id).source.content).toBe(MUISCA_SOURCE_URL);
     expect(muisca.evidence.sourceLines).toEqual(MUISCA_SOURCE_LINES);
     expect(contractRoute('Muisca', muisca.id).sourceLines).toEqual(MUISCA_SOURCE_LINES);
+  });
+});
+
+describe('#1172 越南主路与宝伞依据', () => {
+  const vietnamese = byCiv('Vietnamese');
+  const [mobile, front, holding] = vietnamese.routes;
+
+  it('分组覆盖两条独立主路与原守点，并拦截重复或缺失的分组入口', () => {
+    expect(vietnamese.routeGroups?.map(({ routes }) => routes.map(({ id }) => id))).toEqual([[mobile!.id, front!.id], [holding!.id]]);
+    expect([mobile!.required.map(({ id }) => id), front!.required.map(({ id }) => id)]).toEqual([
+      [546, 1131],
+      [1132, 1155],
+    ]);
+    for (const mainRoute of [mobile!, front!]) {
+      expect([mainRoute.status, mainRoute.playtest]).toEqual(['approved', 'unreported']);
+      expect(mainRoute.source?.content).toMatch(/blob\/[a-f0-9]{40}\/role\/game-strategy\.md#L\d+-L\d+$/);
+      expect(mainRoute.source?.discussion).toMatch(/issues\/1172$/);
+    }
+    expect(holding!.alternatives).toContain('已撤回');
+    const duplicate = structuredClone(civFormationContent);
+    const groups = duplicate.find(({ civ }) => civ === 'Vietnamese')!.routeGroups!;
+    groups[1]!.routes[0]!.id = mobile!.id;
+    expect(formationProblems(duplicate, formationContract)).toEqual([
+      expect.objectContaining({ path: expect.stringMatching(/routeGroups$/), message: expect.stringContaining('唯一入口') }),
+    ]);
+  });
+
+  it('用固定单位与科技效果核对两种象兵形态和旧 420 面板', async () => {
+    const core = await loadCore();
+    expect([1132, 1134].map((id) => core.unitById[id]?.hp)).toEqual([250, 300]);
+    expect(core.techById[628]).toMatchObject({ zh: '宝伞', age: 3 });
+    for (const id of [1132, 1134]) {
+      expect(DAT.techs.Chatras?.rules.find(({ t }) => t.includes(id))?.fx).toContainEqual({ s: 'hp', v: 100 });
+      expect(DAT.techs.Bloodlines?.rules.find(({ t }) => t.includes(id))?.fx).toContainEqual({ s: 'hp', v: 20 });
+    }
+    expect(holding!.adjustments?.[2]?.text).toContain('血统、宝伞都已生效时的理论面板（300＋20＋100）');
+  });
+
+  it('攻城支援分别按实体和化学降级，机动与正面主力继续可用', async () => {
+    const core = await loadCore();
+    const trees = await loadTrees();
+    const intended = (item: NonNullable<typeof mobile>, unitsAvailable: number[], chemistry: boolean) => {
+      const unitById = { ...core.unitById };
+      if (!unitsAvailable.includes(331)) delete unitById[331];
+      if (!unitsAvailable.includes(36)) delete unitById[36];
+      const techById = { ...core.techById };
+      if (!chemistry) delete techById[47];
+      const view = projectFormation(item, vietnamese.civ, DATA_PATCH, { core: { ...core, unitById, techById }, trees }, vietnamese.routes, vietnamese.source);
+      expect(view.status).toBe('current');
+      if (view.status !== 'current') return null;
+      return {
+        siege: view.supplements.filter(({ mode }) => mode === 'support').flatMap(({ entities }) => entities.map(({ entity }) => entity.id)),
+        suggested: view.adjustments.find(({ id }) => id.endsWith('-guarded-siege')),
+      };
+    };
+    for (const item of [mobile!, front!]) {
+      expect(intended(item, [331, 36], true)).toMatchObject({ siege: [331, 36], suggested: { text: expect.stringContaining('手推炮') } });
+      expect(intended(item, [331, 36], false)).toMatchObject({ siege: [331], suggested: { unavailable: true } });
+      expect(intended(item, [36], true)).toMatchObject({ siege: [36] });
+      expect(intended(item, [331], true)).toMatchObject({ siege: [331], suggested: { unavailable: true } });
+    }
   });
 });

@@ -1655,6 +1655,205 @@
       "civ": "Vietnamese",
       "routes": [
         {
+          "id": "vietnamese-light-cav-rattan",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 546,
+              "age": 3
+            },
+            {
+              "kind": "unit",
+              "id": 1131,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "progression",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1129,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 47,
+                  "age": 4
+                }
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "vietnamese-light-cav-rattan-flank",
+              "requires": []
+            },
+            {
+              "id": "vietnamese-light-cav-rattan-guarded-siege",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 47,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c97a5cce1349436044bd1d5519969848ff27ce28/role/game-strategy.md#L624-L631",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1172"
+          },
+          "sourceLines": [624, 626, 628, 629, 630, 631],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/effects.json"
+          ]
+        },
+        {
+          "id": "vietnamese-elephant-skirmisher",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1132,
+              "age": 3
+            },
+            {
+              "kind": "unit",
+              "id": 1155,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "upgrade",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 628,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 1134,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "progression",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 47,
+                  "age": 4
+                }
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "vietnamese-elephant-skirmisher-screen",
+              "requires": []
+            },
+            {
+              "id": "vietnamese-elephant-skirmisher-guarded-siege",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 47,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c97a5cce1349436044bd1d5519969848ff27ce28/role/game-strategy.md#L624-L638",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1172"
+          },
+          "sourceLines": [624, 633, 635, 636, 637, 638],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/effects.json"
+          ]
+        },
+        {
           "id": "vietnamese-defensive-tower",
           "status": "approved",
           "playtest": "unreported",
@@ -1718,23 +1917,53 @@
           "adjustments": [
             {
               "id": "vietnamese-defensive-tower-adjustment-first",
-              "requires": [{ "kind": "unit", "id": 1131, "age": 4 }]
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1131,
+                  "age": 4
+                }
+              ]
             },
             {
               "id": "vietnamese-defensive-tower-adjustment-second",
-              "requires": [{ "kind": "unit", "id": 1155, "age": 4 }]
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1155,
+                  "age": 4
+                }
+              ]
             },
             {
               "id": "vietnamese-defensive-tower-adjustment-third",
-              "requires": [{ "kind": "unit", "id": 1134, "age": 4 }]
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1134,
+                  "age": 4
+                }
+              ]
             },
             {
               "id": "vietnamese-defensive-tower-adjustment-fourth",
-              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
             },
             {
               "id": "vietnamese-defensive-tower-adjustment-fifth",
-              "requires": [{ "kind": "unit", "id": 36, "age": 4 }]
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                }
+              ]
             }
           ],
           "source": {
