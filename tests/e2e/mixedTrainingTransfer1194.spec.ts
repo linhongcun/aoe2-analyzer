@@ -122,7 +122,14 @@ test('#1194 无效侧定位并保留输入，另一方独立，失效版本暂�
   malformed.set('ma', '{');
   await page.goto('./#/duel?' + malformed);
   await expect(blocked).toContainText('A 方链接 JSON 格式损坏');
-  await b.click();
+  const repair = page.getByRole('button', { name: '重新配置双方（清空损坏方案）' });
+  await expect(repair).toBeEnabled();
+  await repair.focus();
+  for (let step = 0; step < 12 && !(await b.evaluate((element) => document.activeElement === element)); step++) {
+    await page.keyboard.press('Tab');
+  }
+  await expect(b).toBeFocused();
+  await page.keyboard.press('Enter');
   await expect(page.getByTestId('train-total-resource-Food')).toContainText('930');
   await open(page, { ...fixture, data: 'old-fixed-data' });
   await expect(a).toHaveCount(0);
