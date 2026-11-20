@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civFormationContent } from '../../../data/civFormations';
 import { DATA_PATCH } from '../../../data/sources';
-import { AGE_ZH } from '../../../domain/ratings';
+import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
+import { RESOURCE_IDS } from '../../../domain/resourceValue';
 import {
   currentFormationPatch,
   projectFormation,
@@ -39,7 +40,7 @@ function EntityLine({
   showAge: boolean;
 }) {
   const to = `/${row.kind}/${row.entity.id}?civ=${encodeURIComponent(civ)}`;
-  return (
+  const link = (
     <Link id={id} className="formation-entity" to={to} onClick={(event) => remember(event, anchor, to)}>
       {row.kind === 'unit' && <UnitIcon u={row.entity} />}
       {row.kind === 'building' && <BuildingIcon b={row.entity} />}
@@ -59,6 +60,52 @@ function EntityLine({
         </small>
       </span>
     </Link>
+  );
+  if (row.kind !== 'unit' || !row.research) return link;
+
+  const { tech, effect, caveat, optional } = row.research;
+  const researchTo = `/tech/${tech.id}?civ=${encodeURIComponent(civ)}`;
+  const label = optional ? '可选科技' : tech.type === 'UniqueTech' ? '独特科技' : '科技';
+  const effectLine = (
+    <p className="formation-research-effect">
+      <FormationText text={effect} />
+    </p>
+  );
+  return (
+    <div className="formation-research">
+      {optional ? (
+        link
+      ) : (
+        <div className="formation-research-unit">
+          {link}
+          {effectLine}
+        </div>
+      )}
+      <Link id={`${id}-research-${tech.id}`} className="formation-entity" to={researchTo} onClick={(event) => remember(event, anchor, researchTo)}>
+        <TechIcon t={tech} />
+        <span>
+          <b>{tech.zh}</b> <span className="formation-meta">{label}</span>
+          <small>
+            {AGE_ZH[tech.age]} · {tech.bz}
+          </small>
+          <span className="formation-research-cost">
+            <span>研究投入</span>
+            {RESOURCE_IDS.filter((resource) => (tech.cost[resource] ?? 0) > 0).map((resource) => (
+              <span className="num nw" key={resource}>
+                {tech.cost[resource]} {RES_ZH[resource]}
+              </span>
+            ))}
+            <span className="num nw">{tech.rt} 游戏秒</span>
+          </span>
+        </span>
+      </Link>
+      {optional && effectLine}
+      {caveat && (
+        <p className="formation-research-note formation-meta">
+          <FormationText text={caveat} />
+        </p>
+      )}
+    </div>
   );
 }
 

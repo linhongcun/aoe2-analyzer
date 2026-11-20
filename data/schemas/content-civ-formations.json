@@ -48,6 +48,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["kind", "id", "historicalName", "role"],
+      "dependentSchemas": { "research": { "properties": { "kind": { "const": "unit" } } } },
       "properties": {
         "kind": {
           "enum": ["unit", "building", "tech"]
@@ -63,6 +64,17 @@
         "role": {
           "type": "string",
           "minLength": 1
+        },
+        "research": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tech", "effect"],
+          "properties": {
+            "tech": { "type": "integer", "minimum": 1 },
+            "effect": { "type": "string", "minLength": 1 },
+            "caveat": { "type": "string", "minLength": 1 },
+            "optional": { "const": true }
+          }
         },
         "age": {
           "enum": [2, 3, 4]

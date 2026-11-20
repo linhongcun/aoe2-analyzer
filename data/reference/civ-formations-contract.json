@@ -441,7 +441,8 @@
           "required": [
             {
               "kind": "unit",
-              "id": 5
+              "id": 5,
+              "research": 507
             },
             {
               "kind": "unit",
@@ -470,7 +471,11 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [238, 240, 242]
+          "sourceLines": [238, 240, 242],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/e419a6c935782b679e0ca284094172ac22d931ef/role/game-strategy.md#L246",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c5aa0bcf258146ce9bb915c42ee5375b68b087c7/data/game/effects.json"
+          ]
         }
       ]
     },

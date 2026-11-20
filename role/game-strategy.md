@@ -243,6 +243,8 @@
 
 **投入与扩展**：火枪和翼骑都耗食物，必须支持两条生产线的农田需求；火炮消耗木金，应少量保存。骑兵压力大、黄金和升级投入可承受时，评估帝王骆驼兵加入或替换一部分骑兵，不默认同时维持多条耗金主力。训练资源差额不能代替战力与成型时间比较。
 
+火枪手基础射程 7，完成印度火铳研究后为 9（+2）。这项独特科技在帝王时代于城堡研究，需 500 食物、650 黄金和 40 游戏秒。火枪手可在研究前训练，40 游戏秒仅指这项科技的研究用时。[印度火铳](https://linhongcun.github.io/aoe2-analyzer/#/tech/507?civ=Hindustanis) · [DE 188329 固定科技效果](https://github.com/linhongcun/aoe2-analyzer/blob/c5aa0bcf258146ce9bb915c42ee5375b68b087c7/data/game/effects.json)
+
 **机制核对入口**：[本站印度斯坦资料与科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Hindustanis)。本节属于用户认可的策略建议，不是混编模拟或助手实战记录；原讨论的完整站点版本与构建未记录。历史训练总价观察及其边界另见[运营案例](product-operations.md#印度斯坦混编要的是训练总价)。
 
 ### 土耳其

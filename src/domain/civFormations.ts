@@ -21,9 +21,17 @@ interface EntityRef {
   age?: FormationAge;
 }
 
+interface FormationResearch {
+  tech: number;
+  effect: string;
+  caveat?: string;
+  optional?: true;
+}
+
 interface FormationEntity extends EntityRef {
   historicalName: string;
   role: string;
+  research?: FormationResearch;
 }
 
 interface FormationPrerequisite extends FormationEntity {
@@ -126,7 +134,7 @@ interface FormationCatalog {
 }
 
 export type FormationEntityView =
-  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge }
+  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge; research?: Omit<FormationResearch, 'tech'> & { tech: Tech } }
   | { kind: 'tech'; entity: Tech; role: string; age: FormationAge }
   | { kind: 'building'; entity: Building; role: string; age: FormationAge };
 
@@ -185,6 +193,14 @@ function availableEntity(catalog: FormationCatalog, civ: string, ref: EntityRef,
   }
 }
 
+function projectEntity(catalog: FormationCatalog, civ: string, ref: FormationEntity, routeAge: FormationAge): FormationEntityView | null {
+  const row = availableEntity(catalog, civ, ref, routeAge, ref.role);
+  if (row?.kind !== 'unit' || !ref.research) return row;
+  const tech = catalog.core.techById[ref.research.tech];
+  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return row;
+  return { ...row, research: { ...ref.research, tech } };
+}
+
 function targetAvailable(target: Formation, civ: string, patch: FormationPatch, catalog: FormationCatalog): boolean {
   if (target.status === 'draft' || target.status === 'unverified' || !currentFormationPatch(target.patch, patch)) return false;
   const required = [...target.required, ...target.prerequisites, ...(target.choices ?? []).flatMap((choice) => choice.entities)];
@@ -205,11 +221,11 @@ export function projectFormation(
   if (!currentFormationPatch(route.patch, patch)) return { status: 'historical', route, source };
   if (!catalog) return { status: 'unavailable', route, source };
 
-  const required = route.required.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
+  const required = route.required.map((ref) => projectEntity(catalog, civ, ref, route.age));
   const prerequisites = route.prerequisites.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
   const choices = (route.choices ?? []).map((choice) => ({
     ...choice,
-    entities: choice.entities.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role)),
+    entities: choice.entities.map((ref) => projectEntity(catalog, civ, ref, route.age)),
   }));
   if (
     required.some((ref) => ref === null) ||
@@ -244,7 +260,7 @@ export function projectFormation(
   const supplementViews: FormationSupplementView[] = [];
   for (const group of route.supplements) {
     if (group.requires?.some((ref) => !availableEntity(catalog, civ, ref, route.age))) continue;
-    const entities = group.entities.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
+    const entities = group.entities.map((ref) => projectEntity(catalog, civ, ref, route.age));
     if (group.mode === 'position-variant' && entities.some((entity) => entity === null)) continue;
     const availableEntities = entities.filter((entity): entity is FormationEntityView => entity !== null);
     if (availableEntities.length > 0) supplementViews.push({ ...group, entities: availableEntities });

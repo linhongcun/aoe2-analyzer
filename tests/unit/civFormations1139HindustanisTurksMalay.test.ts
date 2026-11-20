@@ -4,6 +4,8 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { DAT } from '../../src/domain/datEffects';
+import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const urls = {
@@ -36,6 +38,57 @@ const expectFallback = (view: ReturnType<typeof projectFormation>, id: string, t
   if (view.status !== 'current') return;
   expect(view.adjustments.find((adjustment) => adjustment.id === id)).toMatchObject({ unavailable: true, text });
 };
+
+describe('#1174 印度火铳', () => {
+  const name = 'Hindustanis';
+  const id = 'hindustani-handcannon-hussar';
+  const entry = route(name, id);
+
+  it('以固定资料核对研究后射程、研究投入及原阵容', async () => {
+    const { core, trees } = await makeCatalog();
+    const view = project(entry, name, core, trees);
+    expect(view.status).toBe('current');
+    if (view.status !== 'current') return;
+
+    expect(civ(name).routes.map((row) => row.id)).toEqual([id]);
+    expect(view.required.map(({ entity }) => entity.id)).toEqual([5, 441, 36]);
+    expect(view.prerequisites).toEqual([]);
+    expect(view.supplements[0]?.entities.map(({ entity }) => entity.id)).toEqual([207]);
+    const handCannon = view.required[0];
+    expect(handCannon?.kind).toBe('unit');
+    if (handCannon?.kind !== 'unit') return;
+    const tech = handCannon.research?.tech;
+    const range = DAT.techs.Shatagni?.rules.find(({ t }) => t.includes(5))?.fx.find(({ s }) => s === 'rng')?.v;
+    expect([handCannon.entity.rng, range]).toEqual([7, 2]);
+    expect(handCannon.research?.effect).toContain(`基础射程 ${handCannon.entity.rng}，完成印度火铳研究后 ${handCannon.entity.rng + range!}（+${range}）`);
+    expect(tech).toMatchObject({ id: 507, age: 4, b: 82, bz: '城堡', type: 'UniqueTech', cost: { Food: 500, Gold: 650 }, rt: 40 });
+    expect(contractRoute(name, id).required[0]).toEqual({ kind: 'unit', id: 5, research: 507 });
+  });
+
+  it('科技缺失、文明不符或时代不符时照常推荐原单位', async () => {
+    const { core, trees } = await makeCatalog();
+    const techs = { ...core.techById };
+    delete techs[507];
+    const tech = core.techById[507]!;
+    for (const techById of [techs, { ...techs, 507: { ...tech, civs: ['Turks'] } }, { ...techs, 507: { ...tech, age: 5 } }]) {
+      const view = project(entry, name, { ...core, techById }, trees);
+      expect(view.status).toBe('current');
+      if (view.status !== 'current') continue;
+      expect(view.required.map(({ entity }) => entity.id)).toEqual([5, 441, 36]);
+      expect(view.required[0]).not.toHaveProperty('research');
+    }
+  });
+
+  it('契约拒绝把科技换到另一实体或另一 ID', () => {
+    const altered = structuredClone(civFormationContent);
+    const subject = altered.find(({ civ }) => civ === name)!.routes[0]!.required;
+    subject[0]!.research!.tech = 47;
+    expect(formationProblems(altered, contract)).toContainEqual(expect.objectContaining({ path: expect.stringMatching(/\/required$/) }));
+    subject[1]!.research = subject[0]!.research;
+    delete subject[0]!.research;
+    expect(formationProblems(altered, contract)).toContainEqual(expect.objectContaining({ path: expect.stringMatching(/\/required$/) }));
+  });
+});
 
 describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
   it('保留路线身份、choice 与固定来源字面值', () => {
