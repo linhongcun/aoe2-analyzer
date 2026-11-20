@@ -1,0 +1,44 @@
+.supply-source,
+.supply-unit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.supply-source {
+  margin-bottom: var(--space-4);
+}
+
+.supply-unit img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.supply-row p {
+  margin: 0;
+}
+
+.army-supply .production-summary h3 {
+  margin-top: var(--space-3);
+}
+
+.army-supply .production-resource h3 {
+  margin-top: 0;
+}
+
+.army-supply .production-tech-group {
+  margin-top: var(--space-3);
+}
+
+.supply-distances {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+}
+
+.supply-result-scope {
+  margin-top: var(--space-3);
+  font-weight: 700;
+}

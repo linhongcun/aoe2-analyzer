@@ -257,3 +257,8 @@
     text-align: center;
   }
 }
+
+.army-supply-entry {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+}
