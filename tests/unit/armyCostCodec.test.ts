@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { emptyArmyCost, ARMY_COST_DATA } from '../../src/domain/armyCostConfig';
 import { decodeArmyCost, encodeArmyCost, armyContextQuery } from '../../src/features/production/armyCostCodec';
-import { productionMode } from '../../src/features/production/productionMode';
+import { productionMode } from '../../src/domain/productionMode';
 import { evaluateArmyCost } from '../../src/domain/armyCost';
 import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';

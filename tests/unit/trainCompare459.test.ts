@@ -8,7 +8,7 @@ import {
   type ProductionConfig,
   type ProductionContext,
 } from '../../src/domain/production';
-import { productionMode } from '../../src/features/production/productionMode';
+import { productionMode } from '../../src/domain/productionMode';
 import { decodeTrainCompare, encodeTrainCompare, type TrainCompareConfig } from '../../src/features/production/trainCompareCodec';
 import { compareTraining } from '../../src/features/production/trainCompareModel';
 

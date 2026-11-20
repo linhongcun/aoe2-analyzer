@@ -13,6 +13,7 @@ import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { SHARE_STATUS_PROPS, useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionPageTop } from './ProductionModeNav';
+import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import { decodeArmyCost, encodeArmyCost } from './armyCostCodec';
 import { ArmyUnitPicker } from './ArmyUnitPicker';
 import { ArmyLedger } from './ArmyLedger';
@@ -140,9 +141,9 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
   return (
     <section className="pane army-cost-page" data-testid="army-cost-page">
       <ToolPageHeader
-        title="阵容新增费用"
+        title={PRODUCTION_MODE_LABELS.army}
         description="从当前科技出发，核对一套阵容还要投入多少资源。"
-        top={<ProductionPageTop crumb="阵容新增费用" />}
+        top={<ProductionPageTop crumb={PRODUCTION_MODE_LABELS.army} />}
         dock={
           <div className="army-actions">
             <button type="button" className="btn" disabled={!config || decoded.dataChanged} onClick={copy}>

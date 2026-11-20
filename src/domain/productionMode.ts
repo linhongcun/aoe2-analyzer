@@ -1,3 +1,12 @@
+export const PRODUCTION_MODE_LABELS = {
+  legacy: '持续生产',
+  total: '训练总价',
+  compare: '跨文明训练对照',
+  army: '阵容新增费用',
+} as const;
+
+export const TRAIN_COMPARE_ENTRY = '/production?mode=train-compare&v=1&unit=38&age=3&n=10';
+
 /** Dispatch before the permissive legacy decoder; its URL contract stays unchanged. */
 export function productionMode(search: string): {
   kind: 'legacy' | 'compare' | 'total' | 'army' | 'error';
@@ -28,4 +37,8 @@ export function productionMode(search: string): {
   if (modes.length !== 1 || modes[0] !== 'train-compare') errors.push('对照模式缺失、重复或不支持。');
   if (errors.length) return { kind: 'error', errors, subject: 'compare' };
   return { kind: 'compare', errors: [] };
+}
+
+export function selectedProductionMode(mode: ReturnType<typeof productionMode>): keyof typeof PRODUCTION_MODE_LABELS {
+  return mode.kind === 'error' ? (mode.subject ?? 'compare') : mode.kind;
 }

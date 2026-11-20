@@ -1,6 +1,7 @@
+import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import type { TrainTotalLine } from '../../domain/trainTotal';
 
-export const TRAIN_TOTAL_TITLE = '训练总价';
+export const TRAIN_TOTAL_TITLE = PRODUCTION_MODE_LABELS.total;
 export const TRAIN_TOTAL_DESCRIPTION = '计算同一文明、同一时代下，多种单位形态的训练总价。不含研究费用。';
 export const TRAIN_TOTAL_EMPTY = '添加兵种并填写训练数量后查看合计。';
 export const TRAIN_TOTAL_NONE = '当前没有已计入的训练行。';

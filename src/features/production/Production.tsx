@@ -28,7 +28,7 @@ import {
   type ProductionRow,
 } from '../../domain/production';
 import { useShareLink } from '../../shared/ui/useShareLink';
-import { productionMode } from './productionMode';
+import { productionMode, PRODUCTION_MODE_LABELS, selectedProductionMode } from '../../domain/productionMode';
 import { decodeTrainCompare } from './trainCompareCodec';
 import { ProductionCompareError } from './ProductionCompareError';
 import { ProductionPageTop, ProductionModeNav } from './ProductionModeNav';
@@ -52,8 +52,7 @@ export default function Production() {
   const decoded = useMemo(() => (mode.kind === 'compare' ? decodeTrainCompare(location.search) : null), [mode, location.search]);
   const { context, error } = useProductionContext();
   const errors = mode.kind === 'error' ? mode.errors : (decoded?.errors ?? []);
-  const title =
-    mode.kind === 'legacy' ? '持续生产' : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total') ? '训练总价' : '跨文明训练对照';
+  const title = PRODUCTION_MODE_LABELS[selectedProductionMode(mode)];
   return mode.kind === 'army' ? (
     <Suspense fallback={<Loading />}>
       <ArmyCost context={context} loadingError={error} />
@@ -170,7 +169,7 @@ function ProductionBody({
   return (
     <section className="pane production-page" data-testid="production-page">
       <ToolPageHeader
-        title="持续生产"
+        title={PRODUCTION_MODE_LABELS.legacy}
         description="从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。"
         top={<ProductionPageTop transfer={transfer} />}
         dock={

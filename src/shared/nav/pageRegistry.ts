@@ -352,6 +352,7 @@ export const PAGES: readonly PageDef[] = [
     en: 'Simulator',
     icon: 'calculator',
     desc: '选择单位与科技，计算满科技属性与累计费用',
+    searchAliases: ['研究费用'],
     match: /^\/simulator$/,
     component: 'SimulatorHub',
     metaTitle: '科技模拟器',
