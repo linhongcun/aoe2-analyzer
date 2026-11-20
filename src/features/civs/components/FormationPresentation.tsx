@@ -1,6 +1,13 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import type { CivFormationContent, FormationConditionBranch, FormationEntityView, FormationSupplementView, FormationView } from '../../../domain/civFormations';
+import type {
+  CivFormationContent,
+  FormationConditionBranch,
+  FormationDecision,
+  FormationEntityView,
+  FormationSupplementView,
+  FormationView,
+} from '../../../domain/civFormations';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { RESOURCE_IDS } from '../../../domain/resourceValue';
 import type { Cost } from '../../../domain/types';
@@ -13,7 +20,7 @@ const FORMATION_COUNTED_NOUN = String.raw`${FORMATION_NUMBER}\s*(?:个|名|只|�
 const FORMATION_NUMBER_WITH_UNIT = String.raw`(?:${FORMATION_COUNTED_NOUN}|${FORMATION_NUMBER}(?:\s*${FORMATION_UNIT})?)`;
 const FORMATION_HEX_HASH = String.raw`(?<![a-f\d])(?=[a-f\d]{12,40}(?![a-f\d]))(?=[a-f\d]{0,39}[a-f])[a-f\d]{12,40}(?![a-f\d])`;
 const FORMATION_TOKENS = new RegExp(
-  String.raw`(?<longHash>${FORMATION_HEX_HASH})|(?<protected>v\d+(?:\.\d+){1,3}|\d{4}-\d{2}-\d{2}|(?<![a-f\d])[a-f\d]{7,11}(?![a-f\d])|${FORMATION_NUMBER_WITH_UNIT}(?:\s*(?:/|:|–|—|-|至)\s*${FORMATION_NUMBER_WITH_UNIT})*)`,
+  String.raw`(?<longHash>${FORMATION_HEX_HASH})|(?<protected>v\d+(?:\.\d+){1,3}|\d{4}-\d{2}-\d{2}|(?<![a-f\d])[a-f\d]{7,11}(?![a-f\d])|${FORMATION_NUMBER_WITH_UNIT}(?:\s*(?:/|:|–|—|-|至|\u2192)\s*${FORMATION_NUMBER_WITH_UNIT})*)`,
   'giu',
 );
 
@@ -43,6 +50,29 @@ export function FormationText({ text }: { text: string }) {
 
   if (cursor < text.length) parts.push(<Fragment key={`text-${cursor}`}>{text.slice(cursor)}</Fragment>);
   return parts;
+}
+
+export function FormationDecisionText({ action, decision }: { action: string; decision: FormationDecision }) {
+  const lines = [
+    ['条件', decision.condition],
+    ['行动', action],
+    ['同时', decision.also],
+    ['例外', decision.exception],
+  ] as const;
+  return (
+    <div className="formation-decision">
+      {lines.map(([label, text]) =>
+        text ? (
+          <p key={label}>
+            <b>{label}</b>
+            <span>
+              <FormationText text={text} />
+            </span>
+          </p>
+        ) : null,
+      )}
+    </div>
+  );
 }
 
 export function FormationCost({ cost, showZero = false }: { cost: Cost; showZero?: boolean }) {

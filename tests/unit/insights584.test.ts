@@ -122,10 +122,13 @@ describe('#584 鲜为人知槽位', () => {
     expect(civInsights('Bengalis').map(insightText).join('\n')).not.toContain('第一个');
   });
 
-  it('马里只写蛮王 8 箭 / 满驻 18，不写旧 +5，不和山城堡混在一条', () => {
-    const lines = civInsights('Malians').map(insightText);
-    expect(lines).toEqual(['蛮王：空城镇中心也能射 8 箭（满驻上限 18）。', '驻扎仍可再加箭。利于前线推进 / TC 对射。']);
-    expect(lines.join('\n')).not.toMatch(/\+5|＋5|山城堡|射程/);
+  it('#1200 仅保留六条未归入阵容步骤的文明提示', () => {
+    expect(
+      Object.values(CIV_INSIGHTS)
+        .flatMap((items) => items.map(({ id }) => id))
+        .sort(),
+    ).toEqual(['incas-stone', 'persians-tc-hp', 'ratha-cost', 'ratha-foodless', 'saxons-stone', 'teutons-crenellations']);
+    for (const civ of ['Malians', 'Koreans', 'Lithuanians']) expect(civInsights(civ)).toEqual([]);
   });
 
   it('山城堡、邑城、开垛口的数字跟建筑射程和科技树，禁写反制或大学线', () => {
@@ -146,19 +149,6 @@ describe('#584 鲜为人知槽位', () => {
     expect(civStatus(T, 'Teutons')['t201']).toBe(0);
     expect(8 + 2 + 3).toBe(13);
     expect(8 + 3 + 1 + 1).toBe(13);
-
-    const hill = civInsights('Lithuanians').map(insightText).join('\n');
-    expect(hill).toContain(`6${`\u2192`}9`);
-    expect(hill).toContain('盖过弩手和投石车');
-    expect(hill).toContain('盖不住投石机');
-    expect(hill).not.toMatch(/反制投石机|不怕投石机|手推炮|蛮王/);
-
-    const koreans = civInsights('Koreans').map(insightText).join('\n');
-    expect(koreans).toContain('叠满箭羽线');
-    expect(koreans).toContain('13');
-    expect(koreans).toContain('手推炮');
-    expect(koreans).toContain('12');
-    expect(koreans).not.toContain('盖不住');
 
     const teutons = civInsights('Teutons').map(insightText).join('\n');
     expect(teutons).toContain('叠箭羽+锥子');
@@ -205,10 +195,7 @@ describe('#584 鲜为人知槽位', () => {
     expect(techRows.find((tech) => tech.id === 50)?.desc).toContain('生命值 +10%');
 
     const lines = civInsights('Persians').map(insightText);
-    expect(lines).toEqual([
-      `城镇中心生命值 +100%（2400${`\u2192`}4800，同砌体与城堡基础齐），可当前线伪城堡。`,
-      '叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。',
-    ]);
+    expect(lines).toEqual([`城镇中心生命值 +100%（2400${`\u2192`}4800，同砌体与城堡基础齐），可当前线伪城堡。`]);
     expect(lines.join('\n')).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);
     expect(unitInsights(109)).toEqual([]);
   });
@@ -228,10 +215,9 @@ describe('#584 鲜为人知槽位', () => {
     expect(filled).not.toContain('insight-empty');
     expect(filled.match(/data-testid="insight-item"/g)).toHaveLength(2);
     expect(filled).toContain('<span class="nw"><span class="num">80</span><span> 木 + </span><span class="num">35</span><span> 金</span></span>');
-    const malians = renderToStaticMarkup(createElement(InsightSlot, { items: civInsights('Malians') }));
-    expect(malians).toContain('<span class="nw"><span class="num">8</span><span> 箭</span></span>');
-    expect(malians).toContain('<span class="nw"><span class="num">18</span></span>');
-    expect(malians).not.toContain('insight-empty');
+    const bengalis = renderToStaticMarkup(createElement(InsightSlot, { items: civInsights('Bengalis') }));
+    expect(bengalis).toContain('<span class="nw"><span class="num">60</span><span> 木 + </span><span class="num">60</span><span> 金</span></span>');
+    expect(bengalis).not.toContain('insight-empty');
     const chuKoNu = renderToStaticMarkup(createElement(InsightSlot, { items: unitInsights(73) }));
     expect(chuKoNu.match(/data-testid="insight-item"/g)).toHaveLength(2);
     expect(chuKoNu).toContain('<span class="nw"><span class="num">3</span><span> 箭</span></span>');
@@ -248,7 +234,7 @@ describe('#584 鲜为人知槽位', () => {
 
   it('同一组件可承载1/2/3条已核实内容，条数变化不改槽位外壳', () => {
     // 只组合现有事实验证展示容量，不向生产配置添加测试用内容。
-    const fixture = [unitInsights(2705)[0]!, unitInsights(73)[0]!, civInsights('Malians')[0]!];
+    const fixture = [unitInsights(2705)[0]!, unitInsights(73)[0]!, civInsights('Bengalis')[0]!];
     const shells = [1, 2, 3].map((count) => {
       const items = fixture.slice(0, count);
       const html = renderToStaticMarkup(createElement(InsightSlot, { items }));

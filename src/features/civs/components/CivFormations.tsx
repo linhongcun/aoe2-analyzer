@@ -16,6 +16,7 @@ import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import {
   FormationConditionBranches,
   FormationCost,
+  FormationDecisionText,
   FormationFold,
   FormationRoutes,
   FormationText,
@@ -70,17 +71,20 @@ function EntityLine({
   );
   if (row.kind !== 'unit' || !row.research) return link;
 
-  const { tech, effect, caveat, optional, trainingPrice } = row.research;
+  const { tech, effect, caveat, decision, optional, trainingPrice } = row.research;
   const researchTo = `/tech/${tech.id}?civ=${encodeURIComponent(civ)}`;
   const label = optional ? '可选科技' : tech.type === 'UniqueTech' ? '独特科技' : '科技';
-  const effectLine = (
+  const standaloneEffect = optional || trainingPrice || decision;
+  const effectLine = decision ? (
+    <FormationDecisionText action={effect} decision={decision} />
+  ) : (
     <p className="formation-research-effect">
       <FormationText text={effect} />
     </p>
   );
   return (
     <div className="formation-research">
-      {optional || trainingPrice ? (
+      {standaloneEffect ? (
         link
       ) : (
         <div className="formation-research-unit">
@@ -122,7 +126,7 @@ function EntityLine({
           </dl>
         </div>
       )}
-      {(optional || trainingPrice) && effectLine}
+      {standaloneEffect && effectLine}
       {caveat && (
         <p className="formation-research-note formation-meta">
           <FormationText text={caveat} />

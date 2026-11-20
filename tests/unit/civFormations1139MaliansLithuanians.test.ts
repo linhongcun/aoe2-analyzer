@@ -23,7 +23,9 @@ const expectFallback = (view: ReturnType<typeof projectFormation>, entry: Return
   expect(view.status).toBe('current');
   if (view.status !== 'current') return;
   const adjustment = entry.adjustments.find(({ id }) => id.endsWith(suffix))!;
-  expect(view.adjustments.find(({ id }) => id === adjustment.id)).toMatchObject({ unavailable: true, text: adjustment.fallback });
+  const projected = view.adjustments.find(({ id }) => id === adjustment.id);
+  expect(projected).toMatchObject({ unavailable: true, text: adjustment.fallback });
+  expect(projected?.decision).toBeUndefined();
 };
 
 describe('#1139 马里与立陶宛前线中心条件边界', () => {
@@ -78,7 +80,10 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
       { kind: 'building', id: 109, age: 4 },
       { kind: 'tech', id: 576, age: 4 },
     ]);
-    expect(malian.adjustments[5]!.text).toContain('完成蛮王研究后空中心开火');
+    expect(malian.adjustments[5]!.when).toContain('已完成蛮王研究');
+    expect(malian.adjustments[5]!.text).toContain('空城镇中心也能射 8 箭（满驻上限 18）');
+    expect(malian.adjustments[5]!.decision?.also).toContain('驻扎仍可再加箭');
+    expect(malian.adjustments[5]!.decision?.exception).toContain('蛮王不作为主路前置');
     expect(malian.adjustments[5]!.text).not.toContain('均可用');
     expect(malian.adjustments[6]!.when).toContain('无法安全接近或确需范围伤害');
     expect(malian.adjustments[6]!.requires).toEqual([{ kind: 'unit', id: 280, age: 4 }]);
@@ -129,8 +134,8 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
       { kind: 'unit', id: 83, age: 4 },
     ]);
     expect(lithuanian.adjustments[5]!.when).toContain('完成山城堡研究后');
-    expect(lithuanian.adjustments[5]!.text).toContain('完成山城堡研究后，城镇中心射程为9');
-    expect(lithuanian.adjustments[5]!.text).toContain('仍够不到12射程普通手推炮');
+    expect(lithuanian.adjustments[5]!.text).toContain(`城镇中心射程 6${`\u2192`}9，盖过基础射程的弩手和投石车`);
+    expect(lithuanian.adjustments[5]!.decision?.exception).toContain('盖不住投石机，也够不到 12 射程的普通手推炮。空驻军不开火');
     expect(lithuanian.adjustments[5]!.text).not.toContain('均具备时');
     expect(lithuanian.adjustments[5]!.requires).toEqual([
       { kind: 'building', id: 109, age: 4 },

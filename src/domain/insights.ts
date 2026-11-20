@@ -66,26 +66,7 @@ export const UNIT_INSIGHTS: Readonly<Record<number, readonly InsightItem[]>> = {
 export const CIV_INSIGHTS: Readonly<Record<string, readonly InsightItem[]>> = {
   Bengalis: ratha,
   Saxons: [{ id: 'saxons-stone', parts: ['磨坊、木营、采矿场建成得石，利于早塔/防塔爆。'] }],
-  Koreans: [
-    {
-      id: 'koreans-eupseong',
-      parts: ['邑城：叠满箭羽线后箭塔射程约 ', nw([num('13')]), '，可压过手推炮 ', nw([num('12')]), '。'],
-    },
-  ],
   Incas: [{ id: 'incas-stone', parts: ['开局 ', nw([num('200'), ' 石']), '可盖城镇中心 + 瞭望箭塔。'] }],
-  Lithuanians: [
-    {
-      id: 'lithuanians-hill-forts',
-      parts: ['山城堡：城镇中心射程 ', nw([num('6'), RANGE, num('9')]), '，盖过弩手和投石车。盖不住投石机。'],
-    },
-  ],
-  Malians: [
-    {
-      id: 'malians-tigui',
-      parts: ['蛮王：空城镇中心也能射 ', nw([num('8'), ' 箭']), '（满驻上限 ', nw([num('18')]), '）。'],
-    },
-    { id: 'malians-tigui-use', parts: ['驻扎仍可再加箭。利于前线推进 / TC 对射。'] },
-  ],
   Teutons: [
     {
       id: 'teutons-crenellations',
@@ -97,7 +78,6 @@ export const CIV_INSIGHTS: Readonly<Record<string, readonly InsightItem[]>> = {
       id: 'persians-tc-hp',
       parts: ['城镇中心生命值 ', nw([num('+100'), '%']), '（', nw([num('2400'), RANGE, num('4800')]), '，同砌体与城堡基础齐），可当前线伪城堡。'],
     },
-    { id: 'persians-kamandaran', parts: ['叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。'] },
   ],
 };
 

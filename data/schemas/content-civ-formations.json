@@ -79,6 +79,7 @@
             "tech": { "type": "integer", "minimum": 1 },
             "effect": { "type": "string", "minLength": 1 },
             "caveat": { "type": "string", "minLength": 1 },
+            "decision": { "$ref": "#/$defs/decisionCopy" },
             "optional": { "const": true },
             "trainingPrice": {
               "type": "object",
@@ -263,6 +264,16 @@
         }
       }
     },
+    "decisionCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exception"],
+      "properties": {
+        "condition": { "type": "string", "minLength": 1 },
+        "also": { "type": "string", "minLength": 1 },
+        "exception": { "type": "string", "minLength": 1 }
+      }
+    },
     "adjustment": {
       "type": "object",
       "additionalProperties": false,
@@ -280,6 +291,7 @@
           "type": "string",
           "minLength": 1
         },
+        "decision": { "$ref": "#/$defs/decisionCopy" },
         "requires": {
           "type": "array",
           "items": {

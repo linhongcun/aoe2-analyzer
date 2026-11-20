@@ -21,10 +21,17 @@ interface EntityRef {
   age?: FormationAge;
 }
 
+export interface FormationDecision {
+  condition?: string;
+  also?: string;
+  exception: string;
+}
+
 interface FormationResearch {
   tech: number;
   effect: string;
   caveat?: string;
+  decision?: FormationDecision;
   optional?: true;
   trainingPrice?: { before: Cost; after: Cost };
 }
@@ -78,6 +85,7 @@ interface Adjustment {
   id: string;
   when: string;
   text: string;
+  decision?: FormationDecision;
   requires?: AdjustmentDependency[];
   fallback?: string;
 }
@@ -151,7 +159,7 @@ export type FormationEntityView =
 
 export type FormationChoiceView = Omit<FormationChoice, 'entities'> & { entities: FormationEntityView[] };
 export type FormationSupplementView = Omit<FormationSupplement, 'entities'> & { entities: FormationEntityView[] };
-export type FormationAdjustmentView = Pick<Adjustment, 'id' | 'when'> & {
+export type FormationAdjustmentView = Pick<Adjustment, 'id' | 'when' | 'decision'> & {
   text?: string;
   unavailable?: boolean;
   candidateBoundary?: string;
@@ -246,7 +254,7 @@ export function projectFormation(
   )
     return { status: 'unavailable', route, source };
 
-  const adjustments = (route.adjustments ?? []).map(({ id, when, text, requires, fallback }) => {
+  const adjustments = (route.adjustments ?? []).map(({ id, when, text, decision, requires, fallback }) => {
     let unavailable = false;
     let candidateBoundary: string | undefined;
     for (const dependency of requires ?? []) {
@@ -266,7 +274,7 @@ export function projectFormation(
     }
     return unavailable
       ? { id, when, ...(fallback ? { text: fallback } : {}), unavailable: true }
-      : { id, when, text, ...(candidateBoundary ? { candidateBoundary } : {}) };
+      : { id, when, text, ...(decision ? { decision } : {}), ...(candidateBoundary ? { candidateBoundary } : {}) };
   });
 
   const supplementViews: FormationSupplementView[] = [];

@@ -81,12 +81,12 @@ async function leaveAndReturn(page: Page, otherTab: string) {
   await expect(slot(page).locator('details')).toHaveCount(0);
 }
 
-async function expectList(region: Locator) {
+async function expectList(region: Locator, minimumItems = 2) {
   await expect(region.getByTestId('insight-empty')).toHaveCount(0);
   await expect(region).not.toContainText('暂无');
   const items = region.getByTestId('insight-item');
   const count = await items.count();
-  expect(count).toBeGreaterThanOrEqual(2);
+  expect(count).toBeGreaterThanOrEqual(minimumItems);
   const texts: string[] = [];
   for (let index = 0; index < count; index += 1) {
     const item = items.nth(index);
@@ -250,46 +250,6 @@ for (const [id, title] of [
   });
 }
 
-test('#1137 #/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡混写', async ({ page }) => {
-  await openDetail(page, '/civ/Malians', /马里/);
-  const region = await expectFixedSlot(page);
-  const texts = await expectList(region);
-  const body = texts.join('\n');
-  expect(texts.some((text) => /空城镇中心也能射\s*8\s*箭/.test(text) && /满驻上限\s*18/.test(text))).toBe(true);
-  expect(body).toContain('驻扎仍可再加箭');
-  expect(body).toContain('前线推进');
-  expect(body).toContain('TC 对射');
-  expect(body).not.toMatch(/\+5|＋5/);
-  expect(body).not.toContain('山城堡');
-  await expect(region.locator('.num').filter({ hasText: /^8$/ })).toHaveCount(1);
-  await expect(region.locator('.num').filter({ hasText: /^18$/ })).toHaveCount(1);
-  await expectNowrap(region, /8\s*箭/);
-  await expectNowrap(region, /^18$/);
-  const placement = await page.evaluate(() => {
-    const main = document.querySelector('.civ-read');
-    const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
-    const formations = main?.querySelector('#formations') ?? null;
-    const insightChapter = main?.querySelector('#insights') ?? null;
-    const more = main?.querySelector('#more') ?? null;
-    const follows = (earlier: Element | null, later: Element | null) =>
-      !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
-    return {
-      afterFormations: follows(formations, insightChapter),
-      beforeTools: follows(insightChapter, more),
-      outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
-      outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
-    };
-  });
-  expect(placement).toEqual({ afterFormations: true, beforeTools: true, outsideBonusList: true, outsideOpening: true });
-  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '工具' }).click();
-  await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '打法解读' }).click();
-  await expect(
-    slot(page)
-      .getByTestId('insight-item')
-      .filter({ hasText: /空城镇中心也能射\s*8\s*箭/ }),
-  ).toBeVisible();
-});
-
 test('#/unit/73 诸葛弩：种子⑩多箭与 0 近战，不成攻城克制', async ({ page }) => {
   await openDetail(page, '/unit/73', /^诸葛弩/);
   const region = await expectFixedSlot(page);
@@ -321,12 +281,11 @@ test('#/unit/559 精锐诸葛弩：与普通诸葛弩同一组种子⑩', async 
   expect(texts.join('\n')).not.toMatch(/攻城加成|克制冲车|不怕冲车|绝对反制/);
 });
 
-test('#1137 #/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等或免黄金', async ({ page }) => {
+test('#1137 #/civ/Persians 波斯：原栏只保留城镇中心生命值', async ({ page }) => {
   await openDetail(page, '/civ/Persians', /波斯/);
   const region = await expectFixedSlot(page);
-  const texts = await expectList(region);
-  expect(texts[0]).toBe(`城镇中心生命值 +100%（2400${RANGE}4800，同砌体与城堡基础齐），可当前线伪城堡。`);
-  expect(texts[1]).toBe('叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。');
+  const texts = await expectList(region, 1);
+  expect(texts).toEqual([`城镇中心生命值 +100%（2400${RANGE}4800，同砌体与城堡基础齐），可当前线伪城堡。`]);
   const body = texts.join('\n');
   expect(body).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);
   await expect(region.locator('.num').filter({ hasText: /^\+100$/ })).toHaveCount(1);
@@ -397,14 +356,14 @@ for (const [id, name] of [
 test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种，不写「第一个」', async ({ page }) => {
   // #621 指定孟加拉承载两条，两个单位不复制同一洞察。
   await openDetail(page, '/civ/Bengalis', /孟加拉/);
-  await expect(page.locator('.dmain')).not.toContainText('第一个');
-  await expect(page.locator('.dmain')).not.toContainText('全游戏第一个');
-  await expect(page.getByTestId('civ-rating-footnote')).not.toContainText(RATHA_FOODLESS);
+  await expect(page.locator('#kit')).not.toContainText(RATHA_FOODLESS);
+  await expect(page.locator('.civ-reading-note')).not.toContainText(RATHA_FOODLESS);
   await expect(page.getByTestId('insight-empty')).toHaveCount(0);
   await expect(slot(page), '孟加拉页要有固定洞察槽，种子③不能只留在单位页').toHaveCount(1);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
   expect(texts).toEqual(['战车造价无粮（60 木 + 60 金）。', RATHA_FOODLESS]);
+  await expect(region).not.toContainText('第一个');
   await expectNowrap(region, /60\s*木/);
   await expectNowrap(region, /60\s*金/);
   await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
@@ -417,7 +376,9 @@ test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种�
     outsideFootnote: true,
   });
   await expectNoHScroll(page);
-  await leaveAndReturn(page, '数据');
+  const chapters = page.getByRole('navigation', { name: '本页章节' });
+  await chapters.getByRole('link', { name: '套件', exact: true }).click();
+  await chapters.getByRole('link', { name: '打法解读', exact: true }).click();
   await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
 });
 
@@ -508,7 +469,7 @@ test('#1137 文明页 1 条和 2 条洞察共用同一槽位外壳，位置不�
     outsideOpening: true,
     outsideFootnote: true,
   });
-  await openDetail(page, '/civ/Malians', /马里/);
+  await openDetail(page, '/civ/Bengalis', /孟加拉/);
   const pair = await slotShell(page);
   const pairCount = await slot(page).getByTestId('insight-item').count();
   expect(pair).toEqual(single);
