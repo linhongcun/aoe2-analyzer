@@ -7,7 +7,8 @@ import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionPageTop } from './ProductionModeNav';
 import { commitUrl } from '../../shared/utils/dataInfo';
-import { encodeTrainCompare, TRAIN_COMPARE_ENTRY, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
+import { encodeTrainCompare, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
+import { PRODUCTION_MODE_LABELS, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
 import { availableTrainingCivs, compareTraining } from './trainCompareModel';
 import { CompareNumberText } from './CompareNumberText';
 
@@ -44,9 +45,9 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
   return (
     <section className="pane train-compare-page" data-testid="train-compare-page">
       <ToolPageHeader
-        title="跨文明训练对照"
+        title={PRODUCTION_MODE_LABELS.compare}
         description="同一单位形态、同一座马厩，比较已选文明的训练间隔与费用。"
-        top={<ProductionPageTop crumb="跨文明训练对照" />}
+        top={<ProductionPageTop crumb={PRODUCTION_MODE_LABELS.compare} />}
         actions={[
           { label: '复制对照链接', icon: 'copy', disabled: changed || !!result.errors.length, onClick: () => void share() },
           {

@@ -10,8 +10,43 @@ import { buildOrders } from '../../data/buildOrders';
 import { BUILD_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
 import { civNote, dupIdsIn } from '../../domain/dupNames';
 import { glossarySearchItems } from '../../domain/glossary';
+import { PRODUCTION_MODE_LABELS, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
 
 export { TECH_AKA } from '../../data/aliases';
+
+const PRODUCTION_TASKS: SearchItem[] = [
+  {
+    kind: 'page',
+    id: 'production-train-total',
+    zh: PRODUCTION_MODE_LABELS.total,
+    en: 'Training Total',
+    py: 'xunlianzongjia',
+    pyi: 'xlzj',
+    href: '/production?mode=train-total',
+    sub: '合计这批单位的训练费用，不含研究费。',
+  },
+  {
+    kind: 'page',
+    id: 'production-army-cost',
+    zh: PRODUCTION_MODE_LABELS.army,
+    en: 'Additional Army Cost',
+    py: 'zhenrongxinzengfeiyong',
+    pyi: 'zrxzfy',
+    href: '/production?mode=army-cost',
+    sub: '计算新增兵种和未完成研究还要花多少资源。',
+    aliases: ['研究费用'],
+  },
+  {
+    kind: 'page',
+    id: 'production-train-compare',
+    zh: PRODUCTION_MODE_LABELS.compare,
+    en: 'Training Comparison',
+    py: 'kuawenmingxunlianduizhao',
+    pyi: 'kwmxldz',
+    href: TRAIN_COMPARE_ENTRY,
+    sub: '比较不同文明在同一座马厩的训练间隔与费用。',
+  },
+];
 
 export function useSearchIndex(): SearchItem[] {
   const core = useCore();
@@ -22,7 +57,7 @@ export function useSearchIndex(): SearchItem[] {
       zh: s.label,
       en: s.en,
       href: s.path,
-      sub: s.desc,
+      sub: s.key === 'simulator' ? '选一个单位，查看所选科技的累计研究费用。' : s.desc,
       aliases: s.searchAliases ? [...s.searchAliases] : undefined,
     }));
     civs.forEach((c) =>
@@ -110,6 +145,6 @@ export function useSearchIndex(): SearchItem[] {
         late: true,
       }),
     );
-    return [...items, ...glossarySearchItems].map(withSearchPy);
+    return [...items, ...PRODUCTION_TASKS, ...glossarySearchItems].map(withSearchPy);
   }, [core]);
 }

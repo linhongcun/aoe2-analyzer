@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { canonicalMetaKey, PAGE_META, sharePageUrl, SITE_NAME } from '../../domain/sharePage';
 import ShareImage from '../../shared/ui/ShareImage';
+import { productionMode, PRODUCTION_MODE_LABELS, selectedProductionMode } from '../../domain/productionMode';
 const notFoundMeta: (typeof PAGE_META)[string] = {
   title: '找不到该页',
   description: '这个地址没有对应的页面，请检查链接，或通过全局搜索查找内容。',
@@ -23,7 +24,8 @@ export default function PageMeta({
   const shareSearch = omitShareSearch ? '' : search;
   useEffect(() => {
     // issue 775：首页 metaTitle 就是站点名，不能拼成「帝国时代 II 分析器 | 帝国时代 II 分析器」。
-    document.title = meta.title === SITE_NAME ? SITE_NAME : `${meta.title} | ${SITE_NAME}`;
+    const canonicalTitle = meta.title === SITE_NAME ? SITE_NAME : `${meta.title} | ${SITE_NAME}`;
+    document.title = key === '/production' ? `${PRODUCTION_MODE_LABELS[selectedProductionMode(productionMode(search))]} | ${SITE_NAME}` : canonicalTitle;
     const set = (name: string, content: string, property = false) => {
       const attr = property ? 'property' : 'name';
       let tag = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
@@ -35,7 +37,7 @@ export default function PageMeta({
       tag.content = content;
     };
     set('description', meta.description);
-    set('og:title', document.title, true);
+    set('og:title', canonicalTitle, true);
     set('og:description', meta.description, true);
     // 复盘和团战计划的长状态只留在地址里，爬虫看到的是不带查询的工具页。
     set('og:url', sharePageUrl(pathname, shareSearch, document.baseURI, key), true);

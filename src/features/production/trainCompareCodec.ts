@@ -1,7 +1,6 @@
 import { civs, civByEn } from '../../data';
 
 export const TRAIN_COMPARE_UNITS = [38, 283, 569] as const;
-export const TRAIN_COMPARE_ENTRY = '/production?mode=train-compare&v=1&unit=38&age=3&n=10';
 export interface TrainCompareConfig {
   unit: number;
   age: 3;

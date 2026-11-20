@@ -1,8 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { productionMode } from './productionMode';
-import { TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
+import { productionMode, PRODUCTION_MODE_LABELS, selectedProductionMode, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
 import { legacyHrefFromTotal, trainTotalHrefFrom } from './trainTotalCodec';
 import { armyContextQuery } from './armyCostCodec';
 
@@ -15,14 +14,7 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
   const { pathname, search, state } = useLocation();
   const mode = productionMode(search);
   const here = { pathname, search };
-  const current =
-    mode.kind === 'army'
-      ? 'army'
-      : mode.kind === 'legacy'
-        ? 'legacy'
-        : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total')
-          ? 'total'
-          : 'compare';
+  const current = selectedProductionMode(mode);
   const shared = armyContextQuery(search);
   const legacyTo =
     current === 'legacy' ? here : current === 'army' ? '/production?' + shared : mode.kind === 'total' ? legacyHrefFromTotal(search) : '/production';
@@ -33,7 +25,7 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
     <nav className="bar team-sections" aria-label="生产模式">
       {current !== 'legacy' && needsTransfer && !transfer ? (
         <span className="community-tool-entry" aria-disabled="true">
-          持续生产
+          {PRODUCTION_MODE_LABELS.legacy}
         </span>
       ) : (
         <Link
@@ -43,12 +35,12 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
           replace={current === 'legacy'}
           aria-current={current === 'legacy' ? 'page' : undefined}
         >
-          持续生产
+          {PRODUCTION_MODE_LABELS.legacy}
         </Link>
       )}
       {current !== 'total' && needsTransfer && !transfer ? (
         <span className="community-tool-entry" aria-disabled="true">
-          训练总价
+          {PRODUCTION_MODE_LABELS.total}
         </span>
       ) : (
         <Link
@@ -58,7 +50,7 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
           replace={current === 'total'}
           aria-current={current === 'total' ? 'page' : undefined}
         >
-          训练总价
+          {PRODUCTION_MODE_LABELS.total}
         </Link>
       )}
       <Link
@@ -67,7 +59,7 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
         state={current === 'compare' ? state : null}
         aria-current={current === 'compare' ? 'page' : undefined}
       >
-        跨文明训练对照
+        {PRODUCTION_MODE_LABELS.compare}
       </Link>
       <Link
         className="community-tool-entry"
@@ -75,7 +67,7 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
         state={null}
         aria-current={current === 'army' ? 'page' : undefined}
       >
-        阵容新增费用
+        {PRODUCTION_MODE_LABELS.army}
       </Link>
     </nav>
   );

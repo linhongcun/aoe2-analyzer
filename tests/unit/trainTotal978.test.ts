@@ -6,7 +6,7 @@ import type { ProductionContext } from '../../src/domain/production';
 import { makeSimContext } from '../../src/domain/simulator';
 import { evaluateTrainTotal, pickNewUnit, type TrainTotalConfig } from '../../src/domain/trainTotal';
 import { unitCost } from '../../src/domain/unitCost';
-import { productionMode } from '../../src/features/production/productionMode';
+import { productionMode } from '../../src/domain/productionMode';
 import { decodeTrainTotal, encodeTrainTotal, legacyHrefFromTotal, trainTotalHrefFrom } from '../../src/features/production/trainTotalCodec';
 import {
   TRAIN_TOTAL_EMPTY,
