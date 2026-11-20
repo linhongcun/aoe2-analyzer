@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import type { CivFormationContent, FormationEntityView, FormationSupplementView, FormationView } from '../../../domain/civFormations';
+import type { CivFormationContent, FormationConditionBranch, FormationEntityView, FormationSupplementView, FormationView } from '../../../domain/civFormations';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { RESOURCE_IDS } from '../../../domain/resourceValue';
 import type { Cost } from '../../../domain/types';
@@ -161,5 +161,38 @@ export function renderFormationConditionalGroups(groups: FormationSupplementView
         </div>
       ))}
     </div>
+  );
+}
+
+export function FormationConditionBranches({ id, branches }: { id: string; branches: FormationConditionBranch[] }) {
+  return (
+    <section className="formation-expanded-group" aria-labelledby={id}>
+      <h4 id={id}>条件分支</h4>
+      <div className="formation-conditional-groups">
+        {branches.map(({ id: branchId, title, context, decision, evidence }) => (
+          <div className="formation-conditional-group formation-condition-branch" key={branchId}>
+            <header>
+              <h5>
+                <FormationText text={title} />
+              </h5>
+              <span className="formation-meta">条件推论</span>
+            </header>
+            <dl>
+              {[context, decision].map(({ label, text }) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>
+                    <FormationText text={text} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="formation-meta">
+              <FormationText text={evidence} />
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

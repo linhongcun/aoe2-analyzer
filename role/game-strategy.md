@@ -1265,6 +1265,11 @@
 | 城堡时代就按帝王翼骑 | 明光铠是帝王科技；不能把帝王模拟的 6/4 护甲提前套在城堡时代。                                |
 | 军队成形前的曹操     | 500 食/500 金且仅一名；光环未量化，先成军再考虑，不当作必需核心。                            |
 
+**条件分支（推论）**
+
+- **已有黑光铠骑兵**。城堡时代留下的黑光可以继续当作前排，不必立即换掉。新补黑光会和鲜卑争用黄金。只有前排缺兵且不耽误鲜卑补员，才考虑继续训练。其他情况下先用已有部队。未做混编或实战验证。
+- **已有推进拆城目标**。固定目录记录魏的牵引抛石机费用 −25%。已确定要拆哪座城堡或其他建筑，且主力能掩护推进时，再考虑投入。没有明确目标，不必因折扣提前造。未做混编或实战验证。 [固定文明目录](https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/civs.json) · [固定科技树](https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/trees.json)
+
 来源与版本：[魏](https://linhongcun.github.io/aoe2-analyzer/#/civ/Wei)、[翼骑兵满帝王模拟（含明光铠）](https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/1062,435,39,67,81,68,82,75/?civ=Wei&tab=sim)、[不含明光铠模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/435,39,67,81,68,82,75/?civ=Wei&tab=sim)、[曹操](https://linhongcun.github.io/aoe2-analyzer/#/unit/1954?civ=Wei)、[讨论与修正](https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2)、[Issue #1144](https://github.com/linhongcun/aoe2-analyzer/issues/1144)。数据版本 DE 188329；实际站点 v0.89.2 · DE 188329（2026-10-28）· 构建 5870754；混编胜负未测试。
 
 ### 蜀

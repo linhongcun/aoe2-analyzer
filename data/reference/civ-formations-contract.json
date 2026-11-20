@@ -3311,6 +3311,28 @@
               ]
             }
           ],
+          "conditionBranches": [
+            {
+              "id": "wei-retain-black-light-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1944,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "id": "wei-siege-when-pushing-buildings",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            }
+          ],
           "adjustments": [
             {
               "id": "wei-hussar-xianbei-infantry-archers",
@@ -3355,7 +3377,9 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/441/Wei/4/1062,435,39,67,81,68,82,75/?civ=Wei&tab=sim",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1062?civ=Wei",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1954?civ=Wei",
-            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/civs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/trees.json"
           ]
         }
       ]
