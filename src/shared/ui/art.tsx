@@ -81,9 +81,9 @@ export const costText = (c: Cost) =>
     .map(([k, v]) => `${v} ${RES_ZH[k] ?? k}`)
     .join(' + ') || '—';
 
-export const AgeImg = ({ age, className = 'dlci' }: { age: number; className?: string }) => {
+export const AgeImg = ({ age, className = 'dlci', draggable }: { age: number; className?: string; draggable?: boolean }) => {
   const zh = AGE_ZH[age] ?? '';
-  return <img className={className} src={img(`ages/${age}.webp`)} alt={zh} title={zh} />;
+  return <img className={className} src={img(`ages/${age}.webp`)} alt={zh} title={zh} draggable={draggable} />;
 };
 export const DlcImg = ({ i, className = 'dlci' }: { i: number; className?: string }) => {
   const d = DLCS[i]!;
