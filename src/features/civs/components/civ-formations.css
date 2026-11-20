@@ -212,6 +212,37 @@
   display: block;
 }
 
+.formation-research {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--civ-line);
+  border-radius: var(--radius-md);
+}
+
+.formation-research-unit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.formation-research-unit .formation-entity {
+  border-color: transparent;
+}
+
+.formation-research-effect,
+.formation-research-note {
+  padding-inline: 8px;
+}
+
+.formation-research-cost {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  font-size: 13px;
+}
+
 .formation-fold {
   margin-top: 8px;
   border-top: 1px solid var(--civ-line);
@@ -353,6 +384,7 @@
 
   .formation-columns,
   .formation-grid,
+  .formation-research-unit,
   .formation-adjustments > div {
     grid-template-columns: minmax(0, 1fr);
   }

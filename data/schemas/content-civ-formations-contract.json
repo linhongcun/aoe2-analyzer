@@ -27,6 +27,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["kind", "id"],
+      "dependentSchemas": { "research": { "properties": { "kind": { "const": "unit" } } } },
       "properties": {
         "kind": {
           "enum": ["unit", "building", "tech"]
@@ -37,7 +38,8 @@
         },
         "age": {
           "enum": [2, 3, 4]
-        }
+        },
+        "research": { "type": "integer", "minimum": 1 }
       }
     },
     "routeRef": {
