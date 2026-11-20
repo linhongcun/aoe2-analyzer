@@ -168,12 +168,14 @@ function buildingZh(id: number, buildings: readonly Building[] | null): string |
 }
 
 function KitUnits({
+  civ,
   label,
   hint,
   lines,
   buildings,
   testId,
 }: {
+  civ: string;
   label: string;
   hint: string;
   lines: { u: Unit; elite?: Unit }[];
@@ -191,7 +193,7 @@ function KitUnits({
         const made = buildingZh(u.b, buildings);
         const sub = [u.en, elite ? '含精锐' : '', made ? `${made}生产` : ''].filter(Boolean).join(' · ');
         return (
-          <Link className="kit-row uchips" key={u.id} to={`/unit/${u.id}`}>
+          <Link className="kit-row uchips" key={u.id} to={`/unit/${u.id}?civ=${encodeURIComponent(civ)}`}>
             <span className="kit-icons">
               <UnitIcon u={u} />
               {elite && <UnitIcon u={elite} />}
@@ -420,7 +422,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
             关键兵种与科技
           </h2>
           <p className="note">
-            名称进入单位或科技页。能造什么、缺什么见下方
+            打开单位资料时保留{c.zh}文明。能造什么、缺什么见下方
             <Link to={{ pathname: location.pathname, search: location.search, hash: '#techtree' }}>科技树</Link>。
           </p>
           {resources.core.pending && <p role="status">正在加载兵种与科技…</p>}
@@ -432,7 +434,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
               </button>
             </div>
           )}
-          <KitUnits label="独特单位" hint="本文明专属" lines={uniqueUnits} buildings={core?.buildings ?? null} testId="civ-unique-units" />
+          <KitUnits civ={c.en} label="独特单位" hint="本文明专属" lines={uniqueUnits} buildings={core?.buildings ?? null} testId="civ-unique-units" />
           {uniqueTechs.length > 0 && (
             <div className="civ-kit-group" data-testid="civ-unique-techs">
               <p className="civ-group-title">
@@ -455,7 +457,14 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
               ))}
             </div>
           )}
-          <KitUnits label="区域单位" hint="与本文明加成或独特科技有关" lines={regional} buildings={core?.buildings ?? null} testId="civ-regional-units" />
+          <KitUnits
+            civ={c.en}
+            label="区域单位"
+            hint="与本文明加成或独特科技有关"
+            lines={regional}
+            buildings={core?.buildings ?? null}
+            testId="civ-regional-units"
+          />
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
         </section>

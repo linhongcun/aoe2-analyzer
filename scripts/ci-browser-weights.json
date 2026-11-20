@@ -73,6 +73,7 @@
     "tests/e2e/civText402.spec.ts": 10625,
     "tests/e2e/civUniqueBuildings463.spec.ts": 16690,
     "tests/e2e/civUniqueTechs1151.spec.ts": 8000,
+    "tests/e2e/civUnitContext1191.spec.ts": 10000,
     "tests/e2e/communityIntegration230.spec.ts": 7027,
     "tests/e2e/communityIntegration244.spec.ts": 16781,
     "tests/e2e/communityIntegration249.spec.ts": 25368,
