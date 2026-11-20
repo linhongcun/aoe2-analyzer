@@ -102,3 +102,21 @@ test('#1195 损坏的交接链接无默认汇总，普通模式仍打开原界�
   await expect(page).toHaveURL(/#\/production\?civ=Goths&age=4$/);
   await expect(page.getByLabel('需求 1 单位')).toHaveValue('83');
 });
+
+test('#1195 已完成与目标研究分别恢复到原账本', async ({ page }) => {
+  const source = new URLSearchParams(ledger.split('?')[1]);
+  source.set('acdone', '["t:16"]');
+  source.set('actargets', '["t:47"]');
+  await page.goto('./#/production?' + source);
+  await page.getByRole('link', { name: '用这些兵种规划持续生产' }).click();
+  await expect(page.getByText('无政府 · 可带入当前科技条件')).toBeVisible();
+  await page.getByRole('radio', { name: '仅按当前已完成研究' }).check();
+  await expect(page.getByRole('combobox', { name: selector(1, '专用生产建筑') })).toBeEnabled();
+  await expect(page.getByRole('combobox', { name: selector(3, '专用生产建筑') })).toBeDisabled();
+  await expect(page.getByRole('checkbox', { name: '纳入化学' })).not.toBeChecked();
+  await page.getByRole('radio', { name: '按所选计划研究完成后估算' }).check();
+  await page.getByRole('checkbox', { name: '纳入化学' }).check();
+  await page.getByRole('link', { name: '返回原阵容账本', exact: true }).click();
+  await expect(page.getByText('原兵种、数量和研究状态未更改。')).toBeVisible();
+  expect(new URL(page.url()).hash).toBe('#/production?' + source);
+});
