@@ -201,10 +201,103 @@ test('#1118 600px 边界、桌面卡片、速览切换和完整资料返回', as
   await page.locator('#q').fill('Armenians');
   await row.click();
   await page.getByRole('link', { name: '打开完整文明资料', exact: true }).click();
-  await expect(page).toHaveURL(/#\/civ\/Armenians$/);
+  await expect(page).toHaveURL(/#\/civ\/Armenians\?civList=q%3DArmenians$/);
   await page.goBack();
   await expect(page.locator('#q')).toHaveValue('Armenians');
   await expect(page.locator('#grid .card')).toHaveCount(1);
+});
+
+test('文明详情返回原筛选结果，刷新、复制到新标签及浏览器后退均保留候选集', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  const filterHash = '#/civs?ty=inf&req=u%3A24';
+  const detailParams = new URLSearchParams({ civList: 'ty=inf&req=u%3A24' });
+  const detailHash = '#/civ/Aztecs?' + detailParams;
+  const names = (tab: Page) => tab.locator('#grid .card').evaluateAll((cards) => cards.map((card) => card.getAttribute('data-civ')));
+  const aztecs = page.locator('#grid .card[data-civ="Aztecs"]');
+  await page.goto('./' + filterHash);
+  await expect(aztecs).toBeVisible();
+  const before = await names(page);
+  expect(before.length).toBeLessThan(civs.length);
+  const captureFooter = (tab: Page) =>
+    tab.locator('footer [data-t="footer-app-version"], footer [data-t="footer-version"], footer [data-t="footer-build"]').allTextContents();
+  const footer = await captureFooter(page);
+  expect(footer.join(' ')).toMatch(/v\d+\.\d+\.\d+.*DE.*构建 [0-9a-f]{7}/);
+
+  const openDetail = async () => {
+    await aztecs.click();
+    await page.getByRole('link', { name: '打开完整文明资料', exact: true }).click();
+    expect(new URL(page.url()).hash).toBe(detailHash);
+  };
+  const checkReturn = async (tab: Page) => {
+    const back = tab.getByTestId('civ-identity').getByRole('link', { name: '返回筛选结果' });
+    const target = new URL((await back.getAttribute('href'))!, tab.url());
+    expect(target.origin).toBe(new URL(tab.url()).origin);
+    expect(target.hash).toBe(filterHash);
+    await back.click();
+    expect(new URL(tab.url()).hash).toBe(filterHash);
+    await expect.poll(() => names(tab)).toEqual(before);
+    const active = tab.getByLabel('当前生效条件');
+    await expect(active).toContainText('类型：步兵');
+    await expect(active.getByRole('link', { name: '弩手' })).toBeVisible();
+    expect(await captureFooter(tab)).toEqual(footer);
+  };
+
+  await openDetail();
+  await checkReturn(page);
+  await openDetail();
+  await page.goBack();
+  expect(new URL(page.url()).hash).toBe(filterHash);
+  await expect.poll(() => names(page)).toEqual(before);
+
+  await openDetail();
+  await page.reload();
+  expect(new URL(page.url()).hash).toBe(detailHash);
+  const copy = page.getByTestId('civ-identity').getByRole('button', { name: '复制链接' });
+  await copy.click();
+  await expect(copy.getByRole('status')).toHaveText('链接已复制');
+  const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
+  expect(copied.pathname).toMatch(/\/civ\/Aztecs\/$/);
+  expect(copied.search).toBe('?' + detailParams);
+
+  const fresh = await context.newPage();
+  await fresh.goto(copied.href);
+  await checkReturn(fresh);
+  await checkReturn(page);
+  await fresh.goto('./#/civ/Aztecs');
+  await expect(fresh.getByTestId('civ-identity').getByRole('link', { name: '文明列表' })).toHaveAttribute('href', '#/civs');
+  await expect(fresh.getByText('原筛选条件无法恢复，将打开全部文明。')).toHaveCount(0);
+  await fresh.close();
+});
+
+test('默认和无效来源可回全部文明，窄屏键盘返回保持可用', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  const note = '原筛选条件无法恢复，将打开全部文明。';
+  const identity = page.getByTestId('civ-identity');
+  const listLink = identity.getByRole('link', { name: '文明列表' });
+  await page.goto('./#/civs');
+  await page.locator('#grid .card[data-civ="Aztecs"]').click();
+  await page.getByRole('link', { name: '打开完整文明资料' }).click();
+  expect(new URL(page.url()).hash).toBe('#/civ/Aztecs');
+  await expect(identity.getByText(note)).toHaveCount(0);
+  await listLink.click();
+  await expect(page.locator('#grid .card')).toHaveCount(civs.length);
+
+  for (const civList of ['req=u:999999999', 'https://example.com/#/civs?ty=inf', '/units?q=弩手']) {
+    await page.goto('./#/civ/Aztecs?' + new URLSearchParams({ civList }));
+    await expect(identity.getByRole('heading', { name: /阿兹特克/ })).toBeVisible();
+    await expect(identity.getByText(note)).toBeVisible();
+    await expect(listLink).toHaveAttribute('href', '#/civs');
+    await expect(listLink).toHaveAccessibleDescription(note);
+  }
+  await identity.getByRole('button', { name: '复制链接' }).focus();
+  await page.keyboard.press('Tab');
+  await expect(listLink).toBeFocused();
+  expect((await listLink.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  expect(await listLink.evaluate((link) => getComputedStyle(link).outlineStyle)).not.toBe('none');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.keyboard.press('Enter');
+  expect(new URL(page.url()).hash).toBe('#/civs');
+  await expect(page.locator('#grid .card')).toHaveCount(civs.length);
 });
 
 test('#1118 已滚动速览切换文明后关闭焦点可见，且外层列表不跳动', async ({ page }) => {

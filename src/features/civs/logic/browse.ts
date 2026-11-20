@@ -3,7 +3,9 @@ import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
 import type { Civ, Tech, Unit } from '../../../domain/types';
 import {
+  EMPTY_CIV_FILTERS,
   filterCivsByRequirements,
+  readCivRequirements,
   requirementToken,
   resolveRequirements,
   type RequirementCondition,
@@ -99,6 +101,52 @@ export function writeBrowseQuery(current: URLSearchParams, filters: BrowseFilter
   if (conditions.length) next.set('req', conditions.map((item) => item.token).join(',') || ',');
   else next.delete('req');
   return next;
+}
+
+const LIST_ORIGIN_PARAM = 'civList';
+const LIST_ORIGIN_MAX_LENGTH = 4096;
+const LIST_FILTER_KEYS = new Set(['q', 'ty', 'dlc', 'req']);
+
+export function browseDetailPath(en: string, filters: BrowseFilters, conditions: readonly RequirementCondition[]): string {
+  const path = `/civ/${en}`;
+  const query = writeBrowseQuery(new URLSearchParams(), { ...filters, q: filters.q.trim() }, conditions).toString();
+  if (!query || query.length > LIST_ORIGIN_MAX_LENGTH) return path;
+  return `${path}?${new URLSearchParams({ [LIST_ORIGIN_PARAM]: query })}`;
+}
+
+type BrowseReturn = { kind: 'absent' | 'invalid' | 'pending' } | { kind: 'filtered'; to: string };
+
+/** 只接收文明列表的筛选字段，回程路径始终由应用生成。 */
+export function readBrowseReturn(detailParams: URLSearchParams, context: Pick<RequirementContext, 'units' | 'techs'> | null, pending: boolean): BrowseReturn {
+  const values = detailParams.getAll(LIST_ORIGIN_PARAM);
+  if (!values.length) return { kind: 'absent' };
+  const [query] = values;
+  if (values.length !== 1 || !query || query.length > LIST_ORIGIN_MAX_LENGTH || query.includes('\uFFFD')) return { kind: 'invalid' };
+  try {
+    decodeURIComponent(query);
+  } catch {
+    return { kind: 'invalid' };
+  }
+
+  const params = new URLSearchParams(query);
+  for (const [key, value] of params) {
+    if (!LIST_FILTER_KEYS.has(key) || !value || (key !== 'req' && params.getAll(key).length !== 1)) return { kind: 'invalid' };
+  }
+  const { filters, conditions } = readCivRequirements(params, EMPTY_CIV_FILTERS);
+  if (
+    (filters.ty && !Object.hasOwn(TYPE_ZH, filters.ty)) ||
+    (filters.dlc && activeDlc(filters.dlc) !== filters.dlc) ||
+    conditions.some((condition) => !condition.ref)
+  ) {
+    return { kind: 'invalid' };
+  }
+  const canonical = writeBrowseQuery(new URLSearchParams(), filters, conditions).toString();
+  if (!canonical) return { kind: 'invalid' };
+  if (conditions.length) {
+    if (!context) return { kind: pending ? 'pending' : 'invalid' };
+    if (resolveRequirements(conditions, context).some((condition) => condition.error)) return { kind: 'invalid' };
+  }
+  return { kind: 'filtered', to: `/civs?${canonical}` };
 }
 
 export const typeLabel = (ty: string) => (ty in TYPE_ZH ? TYPE_ZH[ty as CivType] : ty);
