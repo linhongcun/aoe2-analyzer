@@ -61,6 +61,44 @@ describe('#1144 三国阵容', () => {
     for (const civ of civs) expect(project(civ, partial, { ...DATA_PATCH, build: 1 }).status).toBe('historical');
   });
 
+  it('#1175 卧虎按牵引抛石机的帝王阶段挂在原推进分支', async () => {
+    const resources = await catalog();
+    const siege = (candidate: Catalog) => {
+      const view = project('Wu', candidate);
+      if (view.status !== 'current') throw new Error(view.status);
+      return view.supplements.find(({ entities }) => entities.some(({ entity }) => entity.id === 1942));
+    };
+    const support = siege(resources);
+    expect(support?.condition).toBe('有明确推进目标且能安排护卫时');
+    expect(support?.entities).toHaveLength(1);
+    const row = support?.entities[0];
+    if (row?.kind !== 'unit') throw new Error('缺少牵引抛石机');
+    expect(row).toMatchObject({
+      age: 4,
+      entity: { id: 1942 },
+      research: {
+        tech: { id: 1081, zh: '卧虎', age: 4, b: 82, bz: '城堡', cost: { Wood: 600, Gold: 300 }, rt: 40, civs: ['Wu'] },
+        optional: true,
+        effect: '牵引抛石机和楼船的巨型投石机武器可发射额外炮弹。',
+        caveat: '具体额外弹数未经核实。',
+      },
+    });
+    const route = byCiv('Wu').routes[0]!;
+    expect(route.age).toBe(3);
+    expect(route.alternatives).toContain('赤壁战术强化火焰伤害，但未证实能替代牵引抛石机拆城堡。');
+
+    const techById = { ...resources.core.techById };
+    delete techById[1081];
+    const missingTech = siege({ ...resources, core: { ...resources.core, techById } });
+    expect(missingTech?.entities).toHaveLength(1);
+    expect(missingTech?.entities[0]).toMatchObject({ entity: { id: 1942 } });
+    expect(missingTech?.entities[0]).not.toHaveProperty('research');
+
+    const unitById = { ...resources.core.unitById };
+    delete unitById[1942];
+    expect(siege({ ...resources, core: { ...resources.core, unitById } })).toBeUndefined();
+  });
+
   it('固定的魏帝王链接只切换明光铠，对照不增加穿甲', () => {
     const output = byCiv('Wei')
       .routes[0]!.evidence.links!.slice(0, 2)

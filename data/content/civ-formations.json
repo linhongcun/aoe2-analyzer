@@ -5560,7 +5560,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-19",
+        "revised": "2026-11-20",
         "id": "wu-ranged-by-opponent",
         "title": "按敌选择远程主力",
         "composition": "choice",
@@ -5622,7 +5622,13 @@
                 "id": 1942,
                 "historicalName": "牵引抛石机",
                 "role": "有推进目标时攻城，需护卫",
-                "age": 4
+                "age": 4,
+                "research": {
+                  "tech": 1081,
+                  "optional": true,
+                  "effect": "牵引抛石机和楼船的巨型投石机武器可发射额外炮弹。",
+                  "caveat": "具体额外弹数未经核实。"
+                }
               }
             ]
           }
