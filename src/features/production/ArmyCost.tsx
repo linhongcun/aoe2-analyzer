@@ -423,7 +423,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   </p>
                   <div className="army-supply-entry">
                     {supplyHref ? (
-                      <Link className="btn" to={supplyHref}>
+                      <Link className="community-tool-entry" to={supplyHref}>
                         用这些兵种规划持续生产
                       </Link>
                     ) : (

@@ -34,12 +34,15 @@ for (const width of [1120, 360]) {
     const tab = page.getByRole('navigation', { name: '生产模式' }).getByRole('link', { name: '持续生产', exact: true });
     await expect(tab).toHaveAttribute('href', '#/production?civ=Goths&age=4');
     await expect(start).toBeVisible();
+    expect((await start.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await start.focus();
     await page.keyboard.press('Enter');
 
     await expect(page.getByTestId('army-supply-page')).toBeVisible();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('持续生产');
     await expect(tab).toHaveAttribute('aria-current', 'page');
+    const returnToArmy = page.getByRole('link', { name: '返回原阵容账本', exact: true });
+    expect((await returnToArmy.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const source = page.getByTestId('army-supply-row');
     await expect(source.getByRole('heading', { level: 3 })).toHaveText(['第 1 行 · 精锐近卫军', '第 2 行 · 长戟兵', '第 3 行 · 手推炮']);
     await expect(source.getByText('来源 1 名')).toHaveCount(3);

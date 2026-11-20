@@ -25,7 +25,7 @@ export default function ArmySupply({ context, loadingError }: { context: Product
   const returnTo = decoded.kind === 'valid' ? '/production?' + decoded.sourceQuery : decoded.returnTo;
   return (
     <section className="pane production-page" data-testid="army-supply-page">
-      <ToolPageHeader title="持续生产" top={<ProductionPageTop crumb="持续生产" />} />
+      <ToolPageHeader title="持续生产" top={<ProductionPageTop />} />
       {returnTo && <SupplyReturn to={returnTo} />}
       {decoded.kind === 'invalid' ? (
         <p role="alert">{decoded.reason}</p>
@@ -48,7 +48,7 @@ export default function ArmySupply({ context, loadingError }: { context: Product
 
 function SupplyReturn({ to }: { to: string }) {
   return (
-    <Link className="btn" to={to} state={{ fromArmySupply: true }}>
+    <Link className="community-tool-entry" to={to} state={{ fromArmySupply: true }}>
       返回原阵容账本
     </Link>
   );
@@ -87,7 +87,7 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
     <section className="pane production-page army-supply" data-testid="army-supply-page">
       <ToolPageHeader
         title="持续生产"
-        top={<ProductionPageTop crumb="持续生产" />}
+        top={<ProductionPageTop />}
         description="在原阵容的基础上确认科技口径、形态和专用生产建筑。"
         dock={<CalcDock note={share.status} resultId="army-supply-result-title" actions={[{ label: '复制方案链接', icon: 'copy', onClick: copy }]} />}
       />
