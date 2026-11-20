@@ -4,6 +4,29 @@ import { parseSide, type SideSpec } from './duelState';
 
 const knownCiv = (en: string | null | undefined) => (typeof en === 'string' && civByEn(en) !== undefined ? en : undefined);
 
+export const RUSH_NAMES = { militia: '民兵快攻', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+export type RushId = keyof typeof RUSH_NAMES;
+export const DEFAULT_RUSH: RushId = 'militia';
+
+export function encodeRushPractice(me: string, opp: string, rush: RushId) {
+  return new URLSearchParams({ practice: `${me}.${opp}.${rush}` });
+}
+
+/** 演练来源独立于会在 PK 中被编辑的战斗参数。 */
+export function readRushPractice(params: URLSearchParams) {
+  const [source, ...duplicates] = params.getAll('practice');
+  if (!source || duplicates.length) return null;
+  const [me, opp, rush, ...extra] = source.split('.');
+  if (!me || !opp || !rush || extra.length || !isRushId(rush)) return null;
+  const own = civByEn(me);
+  const enemy = civByEn(opp);
+  return own && enemy ? { own, enemy, rush } : null;
+}
+
+function isRushId(value: string): value is RushId {
+  return Object.hasOwn(RUSH_NAMES, value);
+}
+
 export function readMatchupPair(params: URLSearchParams, sticky: { me: string; opp: string }) {
   if (params.has('pair')) {
     const valid =
@@ -77,3 +100,5 @@ export function writeExplicitMatchupPair(params: URLSearchParams, me: string | n
   return next;
 }
 export const explicitMatchupPath = (me: string | null, opp: string | null) => '/matchup?' + writeExplicitMatchupPair(new URLSearchParams(), me, opp);
+
+export const matchupPracticePath = (me: string, opp: string, rush: RushId) => '/matchup?' + writeExplicitMatchupPair(new URLSearchParams({ rush }), me, opp);

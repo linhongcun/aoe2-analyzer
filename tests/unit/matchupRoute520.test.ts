@@ -3,10 +3,13 @@ import {
   buildsMatchupReturn,
   buildsPath,
   duelCivs,
+  encodeRushPractice,
   matchupBuildPath,
   matchupPath,
+  matchupPracticePath,
   matchupUnitPath,
   readMatchupPair,
+  readRushPractice,
   writeMatchupPair,
   writeExplicitMatchupPair,
   explicitMatchupPath,
@@ -60,6 +63,34 @@ describe('#520 matchup URL context', () => {
     }
     expect(duelCivs(new URLSearchParams())).toEqual({ me: undefined, opp: undefined });
   });
+});
+
+describe('#1193 演练来源独立恢复', () => {
+  it.each(['militia', 'scouts', 'archers', 'towers'] as const)('保留原对阵和打法 %s', (rush) => {
+    const source = encodeRushPractice('Teutons', 'Japanese', rush);
+    source.set('a', '4.Franks.2..');
+    source.set('b', '74.Britons.2..');
+    const practice = readRushPractice(source);
+    expect(practice).toMatchObject({ own: { en: 'Teutons' }, enemy: { en: 'Japanese' }, rush });
+    const href = matchupPracticePath(practice!.own.en, practice!.enemy.en, practice!.rush);
+    expect(href.split('?')[0]).toBe('/matchup');
+    expect(readMatchupPair(query(href), sticky)).toEqual({ me: 'Teutons', opp: 'Japanese', invalid: false });
+    expect(query(href).get('rush')).toBe(rush);
+    expect(source.get('a')).toBe('4.Franks.2..');
+  });
+
+  it.each([
+    '',
+    'practice=',
+    'practice=Teutons.Japanese',
+    'practice=Teutons.Japanese.scouts.extra',
+    'practice=Unknown.Japanese.scouts',
+    'practice=Teutons.Unknown.scouts',
+    'practice=Teutons.Japanese.unknown',
+    'practice=Teutons.Japanese.constructor',
+    'practice=Teutons.Japanese.scouts&practice=Teutons.Japanese.scouts',
+    'practice=https%3A%2F%2Fexample.test%2F',
+  ])('拒绝缺失或无效来源 %s', (raw) => expect(readRushPractice(new URLSearchParams(raw))).toBeNull());
 });
 
 describe('#672 显式部分对阵独立于legacy默认', () => {

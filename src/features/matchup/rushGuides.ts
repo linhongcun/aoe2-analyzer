@@ -1,7 +1,7 @@
-const guides = [
-  {
-    id: 'militia',
-    name: '民兵快攻',
+import { DEFAULT_RUSH, RUSH_NAMES, type RushId } from '../../domain/matchupRoute';
+
+const guideDetails = {
+  militia: {
     cue: '黑暗时代发现提前兵营、少量采金或民兵离家时。',
     army: '黑暗时代先用现有侦察观察，封建落地后可先补 2 个步弓手驱赶少量民兵。弓手未出前不要让村民在空地追打；敌方升级武士后需重新评估。',
     wall: '在伐木、浆果周围补短木墙，留回城镇中心的通道；不为堵整个地图拖延升时代。近战兵已经接近落单村民时，先退入城镇中心。通常先保经济，不急着投入箭塔。',
@@ -12,9 +12,7 @@ const guides = [
     nb: 3,
     label: '2 步弓手对 3 民兵',
   },
-  {
-    id: 'scouts',
-    name: '肉马',
+  scouts: {
     cue: '对手到封建，看到马厩或侦察骑兵开始绕向资源点时。',
     army: '到封建后先补 2 个长矛兵，分别守最暴露的资源；看到对方继续加马再增援。矛兵保护村民，不追着骑兵跑出防线。',
     wall: '来袭前补齐伐木点和矿点缺口。短墙被拆或骑兵绕入时，村民优先进城镇中心；有安全后撤位置就不急着造箭塔。',
@@ -25,9 +23,7 @@ const guides = [
     nb: 3,
     label: '2 长矛兵对 3 斥候骑兵',
   },
-  {
-    id: 'archers',
-    name: '步弓',
+  archers: {
     cue: '看到靶场、持续采金，或第一批弓手接近木线时。',
     army: '封建先补 4 个掷矛手作为第一批防守兵，聚齐再接战；若伴随骑兵，再补长矛兵保护。敌方数量和箭羽升级都会改变所需数量。',
     wall: '木墙挡不住射击，应把村民移出射程。没有安全木线或金矿可换时，考虑在能覆盖关键资源的位置补防守箭塔；来不及建塔就先进城镇中心。',
@@ -38,9 +34,7 @@ const guides = [
     nb: 4,
     label: '4 掷矛手对 4 步弓手',
   },
-  {
-    id: 'towers',
-    name: '塔爆',
+  towers: {
     cue: '看到敌方村民前压、采石，或关键资源附近出现塔基时。',
     army: '敌塔未完工且没有敌军掩护时，可集中 6 个已织布村民尝试驱赶 5 个前置村民；条件不满足就撤离。封建后可补 2 个步弓手压制后续建筑者。',
     wall: '先把采集村民撤出塔的覆盖范围，保留另一片木线。防守塔只在能覆盖关键资源且不会被对方多塔集火的位置建；不要逐个冲进已经完工的塔下。近身遭袭时用城镇中心驻扎保护村民。',
@@ -51,7 +45,14 @@ const guides = [
     nb: 5,
     label: '6 村民对 5 村民（均已织布）',
   },
-];
+};
 
-export const rushGuide = (id: string | null) => guides.find((g) => g.id === id) ?? guides[0]!;
+const guides = (Object.keys(RUSH_NAMES) as RushId[]).map((id) => ({
+  id,
+  name: RUSH_NAMES[id],
+  ...guideDetails[id],
+}));
+
+const defaultGuide = guides.find((guide) => guide.id === DEFAULT_RUSH)!;
+export const rushGuide = (id: string | null) => guides.find((g) => g.id === id) ?? defaultGuide;
 export { guides };

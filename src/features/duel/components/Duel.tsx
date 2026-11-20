@@ -11,7 +11,7 @@ import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
 import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
 import { canonDuelParams, decodeDuelParams } from '../../../domain/duelParams';
-import { buildsPath, duelCivs, matchupPath } from '../../../domain/matchupRoute';
+import { buildsPath, DEFAULT_RUSH, duelCivs, matchupPath, matchupPracticePath, readRushPractice, RUSH_NAMES } from '../../../domain/matchupRoute';
 import '../../../shared/ui/contextLinks.css';
 import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
 import { contextSearchAfterCanon } from '../logic/duelContext';
@@ -126,11 +126,21 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     if (location.hash !== '#duel-model') return;
     document.getElementById('duel-model')?.scrollIntoView({ block: 'start' });
   }, [location.hash, core]);
+  const practice = readRushPractice(sp);
+  const returnTo = practice
+    ? matchupPracticePath(practice.own.en, practice.enemy.en, practice.rush)
+    : context.me && context.opp
+      ? matchupPath(context.me, context.opp)
+      : matchupPath();
+  const practiceReturnLabel = practice && practice.rush !== DEFAULT_RUSH ? `${practice.own.zh} 对 ${practice.enemy.zh} · ${RUSH_NAMES[practice.rush]}` : null;
   const contextBar = (
     <nav className="ctx-bar" aria-label="对阵相关入口">
-      <Link className="community-tool-entry" to={context.me && context.opp ? matchupPath(context.me, context.opp) : matchupPath()}>
+      <Link className={practiceReturnLabel ? 'community-tool-entry duel-practice-return' : 'community-tool-entry'} to={returnTo}>
         <Icon name="arrow-left" />
-        回对局助手
+        <span>
+          回对局助手
+          {practiceReturnLabel && <span className="duel-practice-return-detail">{practiceReturnLabel}</span>}
+        </span>
       </Link>
       {(['me', 'opp'] as const).map(
         (side) =>

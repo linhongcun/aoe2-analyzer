@@ -14,7 +14,7 @@ const guides = [
   { id: 'scouts', a: 93, b: 448, na: 2, nb: 3 },
   { id: 'archers', a: 7, b: 4, na: 4, nb: 4 },
   { id: 'towers', a: 83, b: 83, na: 6, nb: 5 },
-];
+] as const;
 const query = (url: string) => new URLSearchParams(url.split('?')[1]);
 
 function withoutCell(civ: string, kind: 'u' | 't', id: number): MatchupData {
@@ -86,6 +86,7 @@ describe('#469 current-matchup drills and executable reference flows', () => {
       expect(params.get('na')).toBe(String(guide.na));
       expect(params.get('nb')).toBe(String(guide.nb));
       expect(params.get('m')).toBe('n');
+      expect(params.get('practice')).toBe(`Franks.Britons.${guide.id}`);
     }
   });
 
