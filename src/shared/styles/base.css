@@ -389,20 +389,6 @@ a {
   left: 0;
   border-top: 1px solid var(--color-line);
 }
-.tband span {
-  position: sticky;
-  left: 0;
-  display: inline-block;
-  width: 50px;
-  padding: 6px 4px;
-  font-size: 12px;
-  color: var(--c-gold-hi);
-  background: var(--color-surface-2);
-  writing-mode: vertical-rl;
-  height: calc(100% - 12px);
-  text-align: center;
-  z-index: 2;
-}
 .tband.b0 {
   background: var(--color-surface);
 }

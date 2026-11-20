@@ -6,7 +6,7 @@ import type { Core } from '../../../data';
 import type { Civ, Trees } from '../../../domain/types';
 import { offColumnSpecialBuildings, treeNodeIdentity } from '../../../domain/treeIdentity';
 import { consumeTreeSummaryHistory, readTreeSummaryMemory } from '../../../domain/treeSummaryNavigation';
-import { costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
+import { AgeImg, costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
@@ -177,7 +177,10 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
           <div className="tree" style={{ width: L.W, height: L.H }}>
             {AGE_BANDS.map(([n, r, h], i) => (
               <div key={n} className={`tband b${i}`} style={{ top: HD + r * TH, height: h * TH, width: L.W }}>
-                <span>{n}</span>
+                <span className="tband-age">
+                  <AgeImg age={i + 1} className="tband-age-icon" draggable={false} />
+                  <span aria-hidden="true">{n.replace(/时代$/, '')}</span>
+                </span>
               </div>
             ))}
             <svg width={L.W} height={L.H}>
