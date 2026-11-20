@@ -167,6 +167,20 @@
 #duel .ctx-bar {
   margin: var(--space-1) 0;
 }
+#duel .ctx-bar .duel-practice-return {
+  white-space: normal;
+}
+#duel .duel-practice-return-detail {
+  display: block;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+  font-weight: normal;
+}
+@media (max-width: 600px) {
+  #duel .duel-practice-return {
+    flex-basis: 100%;
+  }
+}
 #duel .fbar {
   padding: var(--space-2);
 }

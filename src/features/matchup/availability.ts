@@ -2,6 +2,7 @@ import type { Core } from '../../data';
 import { unitAvailable, techAvailable } from '../../domain/unitAvailability';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { fmtSide } from '../../domain/duelState';
+import { encodeRushPractice, type RushId } from '../../domain/matchupRoute';
 import { COUNTER_EXTRA, COUNTER_EXTRA_GROUPS } from '../../domain/ratings';
 import type { CivType, Trees } from '../../domain/types';
 
@@ -17,7 +18,7 @@ export function unavailableBuildUnits(data: MatchupData, civ: string, order: Bui
 }
 
 export interface RushGuide {
-  id: string;
+  id: RushId;
   a: number;
   b: number;
   na: number;
@@ -36,7 +37,9 @@ export function rushDrill(data: MatchupData, own: string, enemy: string, guide: 
   const techs = guide.id === 'towers' ? [22] : [];
   const side = (uid: number, civ: string) => fmtSide({ uid, civ, age: 2, techs, team: [] });
   return {
-    url: unavailable.length ? null : `/duel?a=${side(guide.a, own)}&b=${side(guide.b, enemy)}&m=n&na=${guide.na}&nb=${guide.nb}`,
+    url: unavailable.length
+      ? null
+      : `/duel?a=${side(guide.a, own)}&b=${side(guide.b, enemy)}&m=n&na=${guide.na}&nb=${guide.nb}&${encodeRushPractice(own, enemy, guide.id)}`,
     unavailable,
   };
 }

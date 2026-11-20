@@ -209,6 +209,7 @@
     "tests/e2e/routes652.spec.ts": 16917,
     "tests/e2e/rowSegments.spec.ts": 19473,
     "tests/e2e/rush35.spec.ts": 9749,
+    "tests/e2e/rushPractice1193.spec.ts": 8000,
     "tests/e2e/rushGeneric507.spec.ts": 13044,
     "tests/e2e/scouting258.spec.ts": 25275,
     "tests/e2e/screenshots.spec.ts": 1783,
