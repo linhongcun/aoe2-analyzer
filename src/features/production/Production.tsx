@@ -39,13 +39,14 @@ import { isDefaultProduction, productionToTrainTotal } from '../../domain/produc
 import { encodeTrainTotal, trainTotalHrefFrom } from './trainTotalCodec';
 import { productionTransferState } from '../../shared/utils/productionTransferState';
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
+import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
 import './production.css';
 import './trainCompare.css';
 
 export { ProductionModeNav };
 
-const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
 const ArmyCost = lazy(() => import('./ArmyCost'));
+const ArmySupply = lazy(() => import('./ArmySupply'));
 export default function Production() {
   const location = useLocation();
   const mode = useMemo(() => productionMode(location.search), [location.search]);
@@ -56,6 +57,10 @@ export default function Production() {
   return mode.kind === 'army' ? (
     <Suspense fallback={<Loading />}>
       <ArmyCost context={context} loadingError={error} />
+    </Suspense>
+  ) : mode.kind === 'supply' ? (
+    <Suspense fallback={<Loading />}>
+      <ArmySupply context={context} loadingError={error} />
     </Suspense>
   ) : mode.kind === 'error' && mode.subject === 'total' ? (
     <TrainTotalLinkError key={location.search} errors={errors} />
@@ -377,23 +382,7 @@ function ProductionBody({
               添加生产需求后查看配置。
             </p>
           ) : (
-            <div className="production-resources">
-              {result.resources.map((r) => (
-                <div className="production-resource" key={r.key} data-testid={'production-resource-' + r.key}>
-                  <h3>{RES_ZH[r.key]}</h3>
-                  <strong className="production-number">{r.rounded} 人</strong>
-                  <span>
-                    理论 <b className="production-number">{num(r.villagers)} 人</b>
-                  </span>
-                  <span>
-                    开销 <b className="production-number">{num(r.spend)} / 分钟</b>
-                  </span>
-                  <small>
-                    每村民 <span className="production-number">{num(r.income)} / 分钟</span>
-                  </small>
-                </div>
-              ))}
-            </div>
+            <ProductionResources resources={result.resources} />
           )}
           <p className="note">先合计每种资源的开销，再分别向上取整。每行建筑专用于该单位，不模拟同一建筑混排。</p>
           {result.warnings.length > 0 && (

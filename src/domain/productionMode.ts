@@ -9,12 +9,14 @@ export const TRAIN_COMPARE_ENTRY = '/production?mode=train-compare&v=1&unit=38&a
 
 /** Dispatch before the permissive legacy decoder; its URL contract stays unchanged. */
 export function productionMode(search: string): {
-  kind: 'legacy' | 'compare' | 'total' | 'army' | 'error';
+  kind: 'legacy' | 'compare' | 'total' | 'army' | 'supply' | 'error';
   errors: string[];
   subject?: 'total' | 'compare' | 'army';
 } {
   // The strict army codec owns malformed links too, so they cannot fall through to legacy defaults.
   const armyParams = new URLSearchParams(search);
+  if (armyParams.getAll('mode').some((mode) => mode.startsWith('army-supply')) || ['asv', 'asSource', 'asPlan'].some((key) => armyParams.has(key)))
+    return { kind: 'supply', errors: [] };
   if (armyParams.getAll('mode').some((mode) => mode.startsWith('army-cost')) || [...armyParams.keys()].some((key) => key.startsWith('ac')))
     return { kind: 'army', errors: [] };
   let params: URLSearchParams;
@@ -40,5 +42,6 @@ export function productionMode(search: string): {
 }
 
 export function selectedProductionMode(mode: ReturnType<typeof productionMode>): keyof typeof PRODUCTION_MODE_LABELS {
+  if (mode.kind === 'supply') return 'legacy';
   return mode.kind === 'error' ? (mode.subject ?? 'compare') : mode.kind;
 }

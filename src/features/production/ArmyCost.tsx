@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs, civByEn } from '../../data';
 import { ARMY_RESEARCH } from '../../data/armyResearch';
 import { armyResearchChoices, evaluateArmyCost, researchKey } from '../../domain/armyCost';
@@ -16,6 +16,7 @@ import { ProductionPageTop } from './ProductionModeNav';
 import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import { decodeArmyCost, encodeArmyCost } from './armyCostCodec';
 import { ArmyUnitPicker } from './ArmyUnitPicker';
+import { armySupplyHref } from './armySupplyCodec';
 import { ArmyLedger } from './ArmyLedger';
 import './armyCost.css';
 
@@ -51,6 +52,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
   const manualLinkRef = useRef<HTMLInputElement>(null);
   const share = useShareLink({ stateKey: location.search });
   const result = useMemo(() => (context && config && !decoded.dataChanged ? evaluateArmyCost(context, config) : null), [context, config, decoded.dataChanged]);
+  const supplyHref = config && result && !result.blocked.length ? armySupplyHref(config) : null;
   const units = useMemo(
     () =>
       context && civ && age && civByEn(civ) && /^[1-4]$/.test(age)
@@ -171,6 +173,11 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
       </p>
       {['rows', 'units', 'techs'].some((key) => new URLSearchParams(location.search).has(key)) && (
         <p className="note">链接中的旧模式兵种与科技字段未用于此模式；请分别设置本次阵容、已完成和目标研究。</p>
+      )}
+      {location.state?.fromArmySupply === true && (
+        <p className="note" role="status">
+          原兵种、数量和研究状态未更改。
+        </p>
       )}
       {share.status && <p {...(share.manualLink ? { role: 'alert' } : SHARE_STATUS_PROPS)}>{share.status}</p>}
       {share.manualLink && (
@@ -414,6 +421,20 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                     每行 <span className="nw num">1–1000 名</span>，最多 <span className="nw num">12 行</span>。
                     {config.rows.length >= 12 && '已达行数上限，请删除一行后再添加。'}
                   </p>
+                  <div className="army-supply-entry">
+                    {supplyHref ? (
+                      <Link className="btn" to={supplyHref}>
+                        用这些兵种规划持续生产
+                      </Link>
+                    ) : (
+                      <button className="btn" type="button" disabled>
+                        用这些兵种规划持续生产
+                      </button>
+                    )}
+                    <p className="note">
+                      {supplyHref ? '带入原兵种和研究记录。生产建筑与座数在下一页设置。' : '请先准备带兵种、有效文明与时代的当前版本账本。'}
+                    </p>
+                  </div>
                 </section>
                 <section className="army-card">
                   <div className="army-section-heading">

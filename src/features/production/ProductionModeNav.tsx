@@ -4,6 +4,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { productionMode, PRODUCTION_MODE_LABELS, selectedProductionMode, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
 import { legacyHrefFromTotal, trainTotalHrefFrom } from './trainTotalCodec';
 import { armyContextQuery } from './armyCostCodec';
+import { decodeArmySupply } from './armySupplyCodec';
 
 export interface ProductionModeTransfer {
   to: string;
@@ -15,10 +16,12 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
   const mode = productionMode(search);
   const here = { pathname, search };
   const current = selectedProductionMode(mode);
-  const shared = armyContextQuery(search);
+  const supply = mode.kind === 'supply' ? decodeArmySupply(search) : null;
+  const shared = supply?.kind === 'valid' ? new URLSearchParams({ civ: supply.source.civ, age: supply.source.age }).toString() : armyContextQuery(search);
   const legacyTo =
     current === 'legacy' ? here : current === 'army' ? '/production?' + shared : mode.kind === 'total' ? legacyHrefFromTotal(search) : '/production';
-  const totalTo = current === 'total' ? here : current === 'army' ? '/production?mode=train-total&' + shared : trainTotalHrefFrom(search);
+  const totalTo =
+    current === 'total' ? here : current === 'army' || mode.kind === 'supply' ? '/production?mode=train-total&' + shared : trainTotalHrefFrom(search);
   const compareTo = current === 'compare' ? here : TRAIN_COMPARE_ENTRY;
   const needsTransfer = mode.kind === 'legacy' || mode.kind === 'total';
   return (
