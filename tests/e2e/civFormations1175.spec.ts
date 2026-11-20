@@ -18,7 +18,8 @@ for (const width of [1280, 360]) {
     await expect(launcher).toHaveAttribute('href', '#/unit/1942?civ=Wu');
     await expect(research).toHaveAttribute('href', '#/tech/1081?civ=Wu');
     await expect(research).toBeVisible();
-    await expect(siege).toContainText(/卧虎.*可选科技.*帝王时代.*城堡/);
+    await expect(research).toContainText(/卧虎.*可选科技/);
+    await expect(research.locator('small')).toHaveText('帝王时代 · 城堡研究');
 
     const effect = siege.getByText('牵引抛石机和楼船的巨型投石机武器可发射额外炮弹。', { exact: true });
     await expect(effect).toBeVisible();

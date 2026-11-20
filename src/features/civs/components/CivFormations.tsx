@@ -87,6 +87,7 @@ function EntityLine({
           <b>{tech.zh}</b> <span className="formation-meta">{label}</span>
           <small>
             {AGE_ZH[tech.age]} · {tech.bz}
+            {optional && '研究'}
           </small>
           <span className="formation-research-cost">
             <span>研究投入</span>
