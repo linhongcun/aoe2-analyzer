@@ -9,7 +9,12 @@ const threeKingdoms = new Set(['Wei', 'Shu', 'Wu']);
 const sameArray = (actual = [], expected = []) =>
   actual.length === expected.length && actual.every((value, index) => JSON.stringify(value) === JSON.stringify(expected[index]));
 const ref = ({ kind, id, age }) => ({ kind, id, ...(age === undefined ? {} : { age }) });
-const entityRefs = (values = []) => values.map((entity) => ({ ...ref(entity), ...(entity.research ? { research: entity.research.tech } : {}) }));
+const entityRefs = (values = []) =>
+  values.map((entity) => ({
+    ...ref(entity),
+    ...(entity.research ? { research: entity.research.tech } : {}),
+    ...(entity.research?.trainingPrice ? { trainingPrice: true } : {}),
+  }));
 const routeDependency = ({ kind, id, age }) => (kind === 'route' ? { kind, id } : { kind, id, ...(age === undefined ? {} : { age }) });
 
 export function formationProblems(content, contract) {

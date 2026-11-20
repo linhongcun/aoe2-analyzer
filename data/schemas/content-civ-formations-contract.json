@@ -15,8 +15,8 @@
     },
     "civs": {
       "type": "array",
-      "minItems": 32,
-      "maxItems": 32,
+      "minItems": 33,
+      "maxItems": 33,
       "items": {
         "$ref": "#/$defs/civ"
       }
@@ -28,6 +28,7 @@
       "additionalProperties": false,
       "required": ["kind", "id"],
       "dependentSchemas": { "research": { "properties": { "kind": { "const": "unit" } } } },
+      "dependentRequired": { "trainingPrice": ["research"] },
       "properties": {
         "kind": {
           "enum": ["unit", "building", "tech"]
@@ -39,7 +40,8 @@
         "age": {
           "enum": [2, 3, 4]
         },
-        "research": { "type": "integer", "minimum": 1 }
+        "research": { "type": "integer", "minimum": 1 },
+        "trainingPrice": { "const": true }
       }
     },
     "routeRef": {
@@ -189,7 +191,7 @@
         "composition": {
           "enum": ["combined", "choice", "progression"]
         },
-        "presentation": { "const": "age-progression" },
+        "presentation": { "enum": ["age-progression", "separate-support"] },
         "age": {
           "enum": [2, 3, 4]
         },

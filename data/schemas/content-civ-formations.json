@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-formations.json",
   "type": "array",
-  "minItems": 32,
-  "maxItems": 32,
+  "minItems": 33,
+  "maxItems": 33,
   "items": {
     "$ref": "#/$defs/civ"
   },
@@ -73,7 +73,8 @@
             "tech": { "type": "integer", "minimum": 1 },
             "effect": { "type": "string", "minLength": 1 },
             "caveat": { "type": "string", "minLength": 1 },
-            "optional": { "const": true }
+            "optional": { "const": true },
+            "trainingPrice": { "const": true }
           }
         },
         "age": {
@@ -308,7 +309,7 @@
         "composition": {
           "enum": ["combined", "choice", "progression"]
         },
-        "presentation": { "const": "age-progression" },
+        "presentation": { "enum": ["age-progression", "separate-support"] },
         "age": {
           "enum": [2, 3, 4]
         },

@@ -3733,6 +3733,74 @@
           ]
         }
       ]
+    },
+    {
+      "civ": "Persians",
+      "routes": [
+        {
+          "id": "persian-savar-crossbow-bombard",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "combined",
+          "presentation": "separate-support",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1813,
+              "age": 4
+            },
+            {
+              "kind": "unit",
+              "id": 24,
+              "age": 3,
+              "research": 488,
+              "trainingPrice": true
+            },
+            {
+              "kind": "unit",
+              "id": 36,
+              "age": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 488,
+              "age": 3
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 239,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/4202736a10ea200426b053adc026b4990459e6de/role/game-strategy.md#L251-L257",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1176"
+          },
+          "sourceLines": [
+            251,
+            253,
+            255,
+            257
+          ],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/tests/unit/duelTrainingCost943.test.ts#L48-L66"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -66,8 +66,8 @@ describe('#1139 条顿与印加路线边界', () => {
   });
 
   it('保留路线统计与原四条回归路线', () => {
-    expect(civFormationContent).toHaveLength(32);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(49);
+    expect(civFormationContent).toHaveLength(33);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(50);
     expect(civFormationContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 1],

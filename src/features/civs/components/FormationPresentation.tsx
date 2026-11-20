@@ -1,7 +1,9 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import type { CivFormationContent, FormationEntityView, FormationSupplementView, FormationView } from '../../../domain/civFormations';
-import { AGE_ZH } from '../../../domain/ratings';
+import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
+import { RESOURCE_IDS } from '../../../domain/resourceValue';
+import type { Cost } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { formationAnchor } from './useFormationNavigation';
 
@@ -41,6 +43,17 @@ export function FormationText({ text }: { text: string }) {
 
   if (cursor < text.length) parts.push(<Fragment key={`text-${cursor}`}>{text.slice(cursor)}</Fragment>);
   return parts;
+}
+
+export function FormationCost({ cost, showZero = false }: { cost: Cost; showZero?: boolean }) {
+  return RESOURCE_IDS.filter((resource) => {
+    const amount = cost[resource] ?? -1;
+    return amount > 0 || (showZero && amount === 0);
+  }).map((resource) => (
+    <span className="num nw" key={resource}>
+      {cost[resource]} {RES_ZH[resource]}
+    </span>
+  ));
 }
 
 export function FormationFold({ id, label, closeLabel, children }: { id: string; label: string; closeLabel?: string; children: ReactNode }) {

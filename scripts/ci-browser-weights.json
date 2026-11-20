@@ -13,6 +13,7 @@
     "tests/e2e/civFormations1173.spec.ts": 4000,
     "tests/e2e/civFormations1174.spec.ts": 5000,
     "tests/e2e/civFormations1175.spec.ts": 4000,
+    "tests/e2e/civFormations1176.spec.ts": 7500,
     "tests/e2e/civFormations1144.spec.ts": 12000,
     "tests/e2e/civFormationsHistoricalDisclosure1139.spec.ts": 1600,
     "tests/e2e/treeUnavailable1119.spec.ts": 36500,

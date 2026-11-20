@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civFormationContent } from '../../../data/civFormations';
 import { DATA_PATCH } from '../../../data/sources';
-import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
-import { RESOURCE_IDS } from '../../../domain/resourceValue';
+import { AGE_ZH } from '../../../domain/ratings';
 import {
   currentFormationPatch,
   projectFormation,
@@ -14,7 +13,14 @@ import {
 } from '../../../domain/civFormations';
 import { BuildingIcon, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
-import { FormationFold, FormationRoutes, FormationText, renderFormationAgeProgression, renderFormationConditionalGroups } from './FormationPresentation';
+import {
+  FormationCost,
+  FormationFold,
+  FormationRoutes,
+  FormationText,
+  renderFormationAgeProgression,
+  renderFormationConditionalGroups,
+} from './FormationPresentation';
 import { FormationDetail, FormationEvidence, HistoricalEntities, StatusBadges, Version } from './FormationRouteDetails';
 import { formationAnchor, useFormationNavigation } from './useFormationNavigation';
 import './civ-formations.css';
@@ -63,7 +69,7 @@ function EntityLine({
   );
   if (row.kind !== 'unit' || !row.research) return link;
 
-  const { tech, effect, caveat, optional } = row.research;
+  const { tech, effect, caveat, optional, trainingPrice } = row.research;
   const researchTo = `/tech/${tech.id}?civ=${encodeURIComponent(civ)}`;
   const label = optional ? '可选科技' : tech.type === 'UniqueTech' ? '独特科技' : '科技';
   const effectLine = (
@@ -73,7 +79,7 @@ function EntityLine({
   );
   return (
     <div className="formation-research">
-      {optional ? (
+      {optional || trainingPrice ? (
         link
       ) : (
         <div className="formation-research-unit">
@@ -90,17 +96,32 @@ function EntityLine({
             {optional && '研究'}
           </small>
           <span className="formation-research-cost">
-            <span>研究投入</span>
-            {RESOURCE_IDS.filter((resource) => (tech.cost[resource] ?? 0) > 0).map((resource) => (
-              <span className="num nw" key={resource}>
-                {tech.cost[resource]} {RES_ZH[resource]}
-              </span>
-            ))}
+            <span>{trainingPrice ? '一次性研究' : '研究投入'}</span>
+            <FormationCost cost={tech.cost} />
             <span className="num nw">{tech.rt} 游戏秒</span>
           </span>
         </span>
       </Link>
-      {optional && effectLine}
+      {trainingPrice && (
+        <div className="formation-training-price">
+          <h5>训练单价（每名{row.entity.zh}）</h5>
+          <dl>
+            <div>
+              <dt>研究前</dt>
+              <dd>
+                <FormationCost cost={trainingPrice.before} showZero />
+              </dd>
+            </div>
+            <div>
+              <dt>研究后</dt>
+              <dd>
+                <FormationCost cost={trainingPrice.after} showZero />
+              </dd>
+            </div>
+          </dl>
+        </div>
+      )}
+      {(optional || trainingPrice) && effectLine}
       {caveat && (
         <p className="formation-research-note formation-meta">
           <FormationText text={caveat} />
@@ -278,6 +299,33 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
                         ? '按需支援'
                         : '按需补充，不是固定主力';
 
+  const separateSupport = route.presentation === 'separate-support';
+  const prerequisites = view.prerequisites.filter(
+    (item) => item.kind !== 'tech' || !view.required.some((row) => row.kind === 'unit' && row.research?.tech.id === item.entity.id),
+  );
+  const renderSupplements = () =>
+    view.supplements.length > 0 && (
+      <div className="formation-supplements">
+        {view.supplements.map((group, index) => (
+          <div className="formation-supplement-group" key={`${group.mode}-${index}`}>
+            <h4 className="formation-group-label">
+              <FormationText text={group.label ?? supplementLabel(group.mode)} />
+            </h4>
+            {group.condition && (
+              <p>
+                <FormationText text={group.condition} />
+              </p>
+            )}
+            <ul className="formation-entities">
+              {group.entities.map((row) => (
+                <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+
   return (
     <article className="formation-card">
       {heading}
@@ -313,11 +361,11 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
               ))}
             </div>
           )}
-          {view.prerequisites.length > 0 && (
+          {prerequisites.length > 0 && (
             <div className="formation-prerequisites">
               <h4 className="formation-group-label">路线前置条件</h4>
               <ul className="formation-entities">
-                {view.prerequisites.map((row) => (
+                {prerequisites.map((row) => (
                   <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
                 ))}
               </ul>
@@ -331,29 +379,10 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
               )}
             </div>
           )}
-          {view.supplements.length > 0 && (
-            <div className="formation-supplements">
-              {view.supplements.map((group, index) => (
-                <div className="formation-supplement-group" key={`${group.mode}-${index}`}>
-                  <h4 className="formation-group-label">
-                    <FormationText text={group.label ?? supplementLabel(group.mode)} />
-                  </h4>
-                  {group.condition && (
-                    <p>
-                      <FormationText text={group.condition} />
-                    </p>
-                  )}
-                  <ul className="formation-entities">
-                    {group.entities.map((row) => (
-                      <li key={`${row.kind}-${row.entity.id}`}>{entityLine(row)}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          )}
+          {!separateSupport && renderSupplements()}
         </div>
         <div className="formation-analysis">
+          {separateSupport && renderSupplements()}
           {(route.reason || route.limitation) && (
             <div className="formation-grid">
               {route.reason && (

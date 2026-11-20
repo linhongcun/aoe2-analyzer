@@ -23,9 +23,11 @@ export function StatusBadges({ route, grouped }: { route: Route; grouped: boolea
       ? '用户报告用过'
       : route.playtest === 'pending'
         ? '待实战验证'
-        : grouped || isAgeProgression
-          ? '未说明实战使用'
-          : '实战未说明';
+        : route.presentation === 'separate-support'
+          ? '未报告实战'
+          : grouped || isAgeProgression
+            ? '未说明实战使用'
+            : '实战未说明';
   return (
     <div className="formation-status" aria-label="路线状态">
       <span className={route.status === 'candidate' ? 'formation-status-candidate' : ''}>{recognition}</span>
