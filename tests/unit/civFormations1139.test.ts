@@ -12,7 +12,7 @@ const catalog = async () => ({ core: await loadCore(), trees: await loadTrees() 
 
 describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
-    const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu'].includes(civ));
+    const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons'].includes(civ));
     expect(originalContent).toHaveLength(28);
     expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(45);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([

@@ -44,7 +44,7 @@ export function formationProblems(content, contract) {
       const contractRoute = expectedCiv.routes.find((item) => item.id === route.id);
       if (!contractRoute) continue;
       const routePath = `${path}/routes/${j}`;
-      for (const key of ['status', 'playtest', 'composition', 'age']) {
+      for (const key of ['status', 'playtest', 'composition', 'presentation', 'age']) {
         if (route[key] !== contractRoute[key]) add(`${routePath}/${key}`, `与独立发布契约不一致：${key}`);
       }
       if (!sameArray(entityRefs(route.required), contractRoute.required)) add(`${routePath}/required`, '必需实体或时代与独立发布契约不一致');

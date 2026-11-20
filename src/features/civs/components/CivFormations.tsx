@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civFormationContent } from '../../../data/civFormations';
 import { DATA_PATCH } from '../../../data/sources';
+import { AGE_ZH } from '../../../domain/ratings';
 import {
   currentFormationPatch,
   projectFormation,
@@ -12,25 +13,31 @@ import {
 } from '../../../domain/civFormations';
 import { BuildingIcon, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
-import { FormationFold, FormationRoutes, FormationText } from './FormationPresentation';
+import { FormationFold, FormationRoutes, FormationText, renderFormationAgeProgression, renderFormationConditionalGroups } from './FormationPresentation';
+import { FormationDetail, FormationEvidence, HistoricalEntities, StatusBadges, Version } from './FormationRouteDetails';
 import { formationAnchor, useFormationNavigation } from './useFormationNavigation';
 import './civ-formations.css';
 
 export { FormationText };
 
-type Source = CivFormationContent['source'];
 type Route = CivFormationContent['routes'][number];
 type RememberEntity = (event: MouseEvent<HTMLAnchorElement>, route: string, to: string) => void;
 
-function Version({ patch }: { patch: Route['patch'] }) {
-  return (
-    <>
-      <span className="num nw">DE {patch.build}</span> <span className="num nw">（{patch.date}）</span>
-    </>
-  );
-}
-
-function EntityLine({ row, civ, anchor, id, remember }: { row: FormationEntityView; civ: string; anchor: string; id: string; remember: RememberEntity }) {
+function EntityLine({
+  row,
+  civ,
+  anchor,
+  id,
+  remember,
+  showAge,
+}: {
+  row: FormationEntityView;
+  civ: string;
+  anchor: string;
+  id: string;
+  remember: RememberEntity;
+  showAge: boolean;
+}) {
   const to = `/${row.kind}/${row.entity.id}?civ=${encodeURIComponent(civ)}`;
   return (
     <Link id={id} className="formation-entity" to={to} onClick={(event) => remember(event, anchor, to)}>
@@ -42,177 +49,16 @@ function EntityLine({ row, civ, anchor, id, remember }: { row: FormationEntityVi
           <FormationText text={row.entity.zh} />
         </b>
         <small>
-          <FormationText text={row.role} /> · <span className="formation-age">{row.age === 3 ? '城堡时代' : '帝王时代'}</span>
+          <FormationText text={row.role} />
+          {showAge && (
+            <>
+              {' '}
+              · <span className="formation-age">{AGE_ZH[row.age]}</span>
+            </>
+          )}
         </small>
       </span>
     </Link>
-  );
-}
-
-function StatusBadges({ route, grouped }: { route: Route; grouped: boolean }) {
-  const recognition = route.status === 'candidate' ? '限定候选' : '讨论认可';
-  const playtest = route.playtest === 'reported' ? '用户报告用过' : route.playtest === 'pending' ? '待实战验证' : grouped ? '未说明实战使用' : '实战未说明';
-  return (
-    <div className="formation-status" aria-label="路线状态">
-      <span className={route.status === 'candidate' ? 'formation-status-candidate' : ''}>{recognition}</span>
-      <span>{playtest}</span>
-    </div>
-  );
-}
-
-function FormationDetail({
-  route,
-  adjustments,
-}: {
-  route: Route;
-  adjustments: { id: string; when: string; text?: string; unavailable?: boolean; candidateBoundary?: string }[];
-}) {
-  const hasDetails = route.attack || route.defense || adjustments.length > 0 || route.alternatives;
-  if (!hasDetails) return null;
-  return (
-    <FormationFold id={`${formationAnchor(route.id)}-detail`} label="查看攻守与调整" closeLabel="收起攻守与调整">
-      {route.attack && (
-        <div>
-          <h4>进攻怎样配合</h4>
-          <p>
-            <FormationText text={route.attack} />
-          </p>
-        </div>
-      )}
-      {route.defense && (
-        <div>
-          <h4>防守怎样配合</h4>
-          <p>
-            <FormationText text={route.defense} />
-          </p>
-        </div>
-      )}
-      {adjustments.length > 0 && (
-        <>
-          <h4>对手变化时怎样调整</h4>
-          <dl className="formation-adjustments">
-            {adjustments.map(({ id, when, text, unavailable, candidateBoundary }) => (
-              <div key={id}>
-                <dt>
-                  <FormationText text={when} />
-                </dt>
-                <dd>
-                  <FormationText text={text ?? ''} />
-                  {candidateBoundary && (
-                    <span className="formation-meta">
-                      {' 候选边界：'}
-                      <FormationText text={candidateBoundary} />
-                    </span>
-                  )}
-                  {unavailable && <span className="formation-meta"> 这项补充资料暂不可用</span>}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </>
-      )}
-      {route.alternatives && (
-        <>
-          <h4>为什么不默认加入</h4>
-          <p>
-            <FormationText text={route.alternatives} />
-          </p>
-        </>
-      )}
-    </FormationFold>
-  );
-}
-
-function SourceLinks({ source, links }: { source: Source | null; links: Route['evidence']['links'] }) {
-  if (!source) return <p className="formation-meta">来源链接暂不可用。</p>;
-  return (
-    <>
-      <p>
-        <FormationText text={source.boundary} />
-      </p>
-      <div className="formation-source-links">
-        <a href={source.content} target="_blank" rel="noreferrer">
-          查看固定内容来源
-        </a>
-        <a href={source.discussion} target="_blank" rel="noreferrer">
-          原讨论
-        </a>
-        {links?.map(({ label, href }) => (
-          <a key={href} href={href} target="_blank" rel="noreferrer">
-            <FormationText text={label} />
-          </a>
-        ))}
-      </div>
-    </>
-  );
-}
-
-function FormationEvidence({ route, source }: { route: Route; source: Source | null }) {
-  return (
-    <>
-      <dl className="formation-evidence">
-        <div>
-          <dt>认可状态</dt>
-          <dd>
-            <FormationText text={route.evidence.recognition} />
-          </dd>
-        </div>
-        <div>
-          <dt>实战使用</dt>
-          <dd>
-            <FormationText text={route.evidence.playtest} />
-          </dd>
-        </div>
-        <div>
-          <dt>依据范围</dt>
-          <dd>
-            <FormationText text={route.evidence.scope} />
-          </dd>
-        </div>
-        <div>
-          <dt>记录时版本</dt>
-          <dd>
-            <FormationText text={route.evidence.recordedVersion} />
-          </dd>
-        </div>
-        <div>
-          <dt>核对数据</dt>
-          <dd>
-            <Version patch={route.patch} />
-          </dd>
-        </div>
-        <div>
-          <dt>内容修订</dt>
-          <dd>
-            <time className="num nw" dateTime={route.revised}>
-              {route.revised}
-            </time>
-          </dd>
-        </div>
-      </dl>
-      <SourceLinks source={source} links={route.evidence.links} />
-    </>
-  );
-}
-
-function HistoricalEntities({ route }: { route: Route }) {
-  return (
-    <>
-      <h4>原记录组成（非当前推荐）</h4>
-      <ul>
-        {[
-          ...route.required,
-          ...route.prerequisites,
-          ...(route.choices ?? []).flatMap((choice) => choice.entities),
-          ...route.supplements.flatMap((group) => group.entities),
-        ].map((row, index) => (
-          <li key={`${row.kind}-${row.id}-${index}`}>
-            <FormationText text={`${row.historicalName} · ${row.role}`} />
-            {row.age ? `（${row.age === 3 ? '城堡时代' : '帝王时代'}）` : ''}
-          </li>
-        ))}
-      </ul>
-    </>
   );
 }
 
@@ -302,13 +148,57 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
     );
 
   const seenEntities = new Map<string, number>();
-  const entityLine = (row: FormationEntityView) => {
+  const entityLine = (row: FormationEntityView, showAge = true) => {
     const key = `${row.kind}-${row.entity.id}`;
     const occurrence = seenEntities.get(key) ?? 0;
     seenEntities.set(key, occurrence + 1);
     const id = `${anchor}-${key}${occurrence ? `-repeat-${occurrence}` : ''}`;
-    return <EntityLine row={row} civ={civ} anchor={anchor} id={id} remember={remember} />;
+    return <EntityLine row={row} civ={civ} anchor={anchor} id={id} remember={remember} showAge={showAge} />;
   };
+  const heading = (
+    <>
+      <div className="formation-card-heading">
+        <h3 id={anchor} tabIndex={-1}>
+          <FormationText text={route.title} />
+        </h3>
+        <StatusBadges route={route} grouped={grouped} />
+      </div>
+      <p className="formation-condition">
+        <b>适用条件</b> <FormationText text={route.condition} />
+      </p>
+    </>
+  );
+  if (route.presentation === 'age-progression') {
+    const continuations = view.supplements.filter((group) => group.mode === 'progression').flatMap((group) => group.entities);
+    const opponentSupport = view.supplements.filter((group) => group.mode === 'conditional-evaluation');
+    const support = view.supplements.filter((group) => group.mode !== 'progression' && group.mode !== 'conditional-evaluation');
+    return (
+      <article className="formation-card">
+        {heading}
+        {renderFormationAgeProgression(view.required, continuations, entityLine)}
+        {route.reason && (
+          <p className="formation-age-note">
+            <FormationText text={route.reason} />
+          </p>
+        )}
+        {support.length > 0 && (
+          <section className="formation-expanded-group">
+            <h4>条件支援与转型</h4>
+            {renderFormationConditionalGroups(support, entityLine)}
+          </section>
+        )}
+        <FormationDetail
+          route={route}
+          adjustments={view.adjustments}
+          support={opponentSupport.length > 0 && renderFormationConditionalGroups(opponentSupport, entityLine)}
+        />
+        <section className="formation-expanded-group">
+          <h4>来源与核对</h4>
+          <FormationEvidence route={route} source={source} />
+        </section>
+      </article>
+    );
+  }
   const requiredLabel =
     route.status === 'candidate'
       ? '局部选择'
@@ -342,15 +232,7 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
 
   return (
     <article className="formation-card">
-      <div className="formation-card-heading">
-        <h3 id={anchor} tabIndex={-1}>
-          <FormationText text={route.title} />
-        </h3>
-        <StatusBadges route={route} grouped={grouped} />
-      </div>
-      <p className="formation-condition">
-        <b>适用条件</b> <FormationText text={route.condition} />
-      </p>
+      {heading}
       <div className="formation-columns">
         <div className="formation-composition">
           {route.required.length > 0 && (
