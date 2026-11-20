@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-formations.json",
   "type": "array",
-  "minItems": 31,
-  "maxItems": 31,
+  "minItems": 32,
+  "maxItems": 32,
   "items": {
     "$ref": "#/$defs/civ"
   },
@@ -40,7 +40,7 @@
           "minimum": 1
         },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         }
       }
     },
@@ -65,7 +65,7 @@
           "minLength": 1
         },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         }
       }
     },
@@ -90,7 +90,7 @@
           "minLength": 1
         },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         },
         "condition": {
           "type": "string"
@@ -296,8 +296,9 @@
         "composition": {
           "enum": ["combined", "choice", "progression"]
         },
+        "presentation": { "const": "age-progression" },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         },
         "patch": {
           "type": "object",
@@ -392,6 +393,19 @@
                 "type": "array",
                 "minItems": 2
               }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "presentation": { "const": "age-progression" } },
+            "required": ["presentation"]
+          },
+          "then": {
+            "properties": {
+              "composition": { "const": "progression" },
+              "choices": { "type": "array", "maxItems": 0 },
+              "prerequisites": { "type": "array", "maxItems": 0 }
             }
           }
         }

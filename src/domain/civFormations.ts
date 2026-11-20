@@ -4,7 +4,7 @@ import { resolveFormationSource } from './civFormationsSource.mjs';
 import type { Building, Tech, Trees, Unit } from './types';
 import { techAvailable, unitAvailable } from './unitAvailability';
 
-type FormationAge = 3 | 4;
+type FormationAge = 2 | 3 | 4;
 type FormationStatus = 'approved' | 'candidate' | 'unverified' | 'draft';
 type FormationPlaytest = 'reported' | 'pending' | 'unreported';
 type FormationComposition = 'combined' | 'choice' | 'progression';
@@ -88,6 +88,7 @@ interface Formation {
   status: FormationStatus;
   playtest: FormationPlaytest;
   composition: FormationComposition;
+  presentation?: 'age-progression';
   age: FormationAge;
   patch: FormationPatch;
   revised: string;

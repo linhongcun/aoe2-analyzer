@@ -3569,6 +3569,164 @@
           ]
         }
       ]
+    },
+    {
+      "civ": "Britons",
+      "routes": [
+        {
+          "id": "britons-archer-progression",
+          "status": "approved",
+          "playtest": "unreported",
+          "composition": "progression",
+          "presentation": "age-progression",
+          "age": 2,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 4,
+              "age": 2
+            },
+            {
+              "kind": "unit",
+              "id": 24,
+              "age": 3
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "progression",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 93,
+                  "age": 2
+                },
+                {
+                  "kind": "unit",
+                  "id": 358,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 461,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "replace",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 8,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "mode": "support",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 79,
+                  "age": 2
+                }
+              ],
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 79,
+                  "age": 2
+                },
+                {
+                  "kind": "tech",
+                  "id": 3,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "mode": "conditional-evaluation",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 280,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "britons-few-scorpions-or-skirmishers",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/role/game-strategy.md#L1313-L1352",
+            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+          },
+          "sourceLines": [
+            1313,
+            1315,
+            1317,
+            1323,
+            1324,
+            1325,
+            1326,
+            1327,
+            1329,
+            1331,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1347,
+            1348,
+            1349,
+            1350,
+            1352
+          ],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/data/sources/data_sources.json"
+          ]
+        }
+      ]
     }
   ]
 }

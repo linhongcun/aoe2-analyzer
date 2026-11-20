@@ -15,8 +15,8 @@
     },
     "civs": {
       "type": "array",
-      "minItems": 31,
-      "maxItems": 31,
+      "minItems": 32,
+      "maxItems": 32,
       "items": {
         "$ref": "#/$defs/civ"
       }
@@ -36,7 +36,7 @@
           "minimum": 1
         },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         }
       }
     },
@@ -187,8 +187,9 @@
         "composition": {
           "enum": ["combined", "choice", "progression"]
         },
+        "presentation": { "const": "age-progression" },
         "age": {
-          "enum": [3, 4]
+          "enum": [2, 3, 4]
         },
         "required": {
           "type": "array",

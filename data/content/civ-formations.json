@@ -5712,5 +5712,213 @@
         }
       }
     ]
+  },
+  {
+    "civ": "Britons",
+    "lead": "不列颠 · 1v1 陆地",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/role/game-strategy.md#L1313-L1352",
+      "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
+      "boundary": "固定策略记载适用条件，机制与时代按固定目录核对。"
+    },
+    "routes": [
+      {
+        "id": "britons-archer-progression",
+        "title": "步弓系延续",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "progression",
+        "presentation": "age-progression",
+        "age": 2,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-20",
+        "condition": "延续已有步弓群，再按敌军和战线补兵。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 4,
+            "age": 2,
+            "historicalName": "步弓手",
+            "role": "以步弓手组成远程主力。"
+          },
+          {
+            "kind": "unit",
+            "id": 24,
+            "age": 3,
+            "historicalName": "弩手",
+            "role": "把已有步弓群升级为弩手。"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "progression",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 492,
+                "age": 4,
+                "historicalName": "劲弩手",
+                "role": "按存活弓群和经济决定是否升级。"
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "condition": "敌骑威胁侧翼时",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 93,
+                "age": 2,
+                "historicalName": "长矛兵",
+                "role": "补长枪兵系保护弓群与攻城器。敌骑威胁不到后排时，省下补枪的产能和资源。"
+              },
+              {
+                "kind": "unit",
+                "id": 358,
+                "age": 3,
+                "historicalName": "长枪兵",
+                "role": "长枪兵系后续形态"
+              },
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4,
+                "historicalName": "长戟兵",
+                "role": "长枪兵系后续形态"
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "condition": "推进固定防御时",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "age": 4
+              }
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "age": 4,
+                "historicalName": "巨型投石机",
+                "role": "用巨投拆除固定防御，安排弓群与按需投入的枪兵保护接近和撤退。"
+              },
+              {
+                "kind": "tech",
+                "id": 461,
+                "age": 4,
+                "historicalName": "战狼号",
+                "role": "投入巨投时可考虑研究。"
+              }
+            ]
+          },
+          {
+            "mode": "replace",
+            "condition": "三项前提都满足才转型",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 8,
+                "age": 3,
+                "historicalName": "长弓兵",
+                "role": "城堡能稳定生产、战线固定且确需射程时逐步转入。保留已成形的弩手主力，避免整线替换中断输出。"
+              }
+            ]
+          },
+          {
+            "mode": "support",
+            "condition": "需要固定守线支点时",
+            "requires": [
+              {
+                "kind": "building",
+                "id": 79,
+                "age": 2
+              }
+            ],
+            "entities": [
+              {
+                "kind": "building",
+                "id": 79,
+                "age": 2,
+                "historicalName": "瞭望箭塔",
+                "role": "按防线需要建塔，阵地不需固守时省下塔的投入。"
+              },
+              {
+                "kind": "tech",
+                "id": 3,
+                "age": 3,
+                "historicalName": "英皇侍卫",
+                "role": "按需研究。科技效果为步弓手和掷矛手系射程 +1、瞭望箭塔系攻击力 +2。"
+              }
+            ]
+          },
+          {
+            "mode": "conditional-evaluation",
+            "condition": "成群弩炮或掷矛手",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 280,
+                "age": 3,
+                "historicalName": "轻型投石车",
+                "role": "逐个处理超出微操或战线空间时，考虑投石车线。按实际压力判断兵量。"
+              }
+            ]
+          }
+        ],
+        "reason": "封建没有文明射程优势。同等升级时，封建步弓手与掷矛手射程相同。不列颠步弓系的文明射程加成从城堡时代起生效，城堡 +1，帝王 +2。",
+        "attack": "用弩手或已升级的远程主力延续攻势。推进固定防御时再投入攻城支援。",
+        "defense": "由弩手守住射程。敌骑能切侧翼再补枪，需要固定支点再巩固阵地。",
+        "adjustments": [
+          {
+            "id": "britons-few-scorpions-or-skirmishers",
+            "when": "少量弩炮或掷矛手",
+            "text": "只有当前确有射程优势且有操作空间，才逐个远程点杀。"
+          }
+        ],
+        "evidence": {
+          "recognition": "用户讨论认可这条 1v1 陆地条件路线。",
+          "playtest": "未说明实战使用。",
+          "scope": "混编胜率未测。",
+          "recordedVersion": "DE Update 188329",
+          "sourceLines": [
+            1313,
+            1315,
+            1317,
+            1323,
+            1324,
+            1325,
+            1326,
+            1327,
+            1329,
+            1331,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1347,
+            1348,
+            1349,
+            1350,
+            1352
+          ],
+          "links": [
+            {
+              "label": "查看固定数据版本",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/data/sources/data_sources.json"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

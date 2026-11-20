@@ -1,6 +1,8 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import type { CivFormationContent, FormationView } from '../../../domain/civFormations';
+import type { CivFormationContent, FormationEntityView, FormationSupplementView, FormationView } from '../../../domain/civFormations';
+import { AGE_ZH } from '../../../domain/ratings';
+import { Icon } from '../../../shared/ui/Icon';
 import { formationAnchor } from './useFormationNavigation';
 
 const FORMATION_NUMBER = String.raw`[+\-−]?\d+(?:\.\d+)?`;
@@ -100,5 +102,51 @@ export function FormationRoutes({
         {cards.filter(({ id }) => !groupLabels.has(id)).map(card)}
       </div>
     </>
+  );
+}
+
+type RenderFormationEntity = (row: FormationEntityView, showAge?: boolean) => ReactNode;
+
+export function renderFormationAgeProgression(required: FormationEntityView[], continuations: FormationEntityView[], renderEntity: RenderFormationEntity) {
+  const stages = [...required.map((row) => ({ row, optional: false })), ...continuations.map((row) => ({ row, optional: true }))].sort(
+    (a, b) => a.row.age - b.row.age,
+  );
+  return (
+    <section className="formation-expanded-group">
+      <h4>时代进阶</h4>
+      <ol className="formation-age-progression">
+        {stages.map(({ row, optional }, index) => (
+          <li key={`${row.kind}-${row.entity.id}`}>
+            <p className="formation-stage-age">
+              <span>{AGE_ZH[row.age]}</span>
+              {optional && <span>有条件</span>}
+            </p>
+            {renderEntity(row, false)}
+            {index < stages.length - 1 && <Icon name="chevron-right" className="formation-stage-arrow" />}
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+export function renderFormationConditionalGroups(groups: FormationSupplementView[], renderEntity: RenderFormationEntity) {
+  return (
+    <div className="formation-conditional-groups">
+      {groups.map((group, index) => (
+        <div className="formation-conditional-group" key={`${group.mode}-${index}`}>
+          {group.condition && (
+            <h5>
+              <FormationText text={group.condition} />
+            </h5>
+          )}
+          <ul className="formation-entities">
+            {group.entities.map((row) => (
+              <li key={`${row.kind}-${row.entity.id}`}>{renderEntity(row)}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }

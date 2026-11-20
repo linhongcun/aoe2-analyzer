@@ -265,6 +265,78 @@
   outline-offset: 2px;
 }
 
+.formation-expanded-group {
+  display: grid;
+  gap: 8px;
+  margin-block-start: 16px;
+}
+
+.formation-expanded-group h5 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.formation-age-progression {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formation-age-progression > li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formation-age-progression .formation-entity {
+  flex: 1;
+}
+
+.formation-stage-age {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  color: var(--civ-ink-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.formation-stage-arrow {
+  position: absolute;
+  inset-block-start: calc(50% + 2px);
+  inset-inline-end: -20px;
+  width: 16px;
+  height: 16px;
+  color: var(--civ-ink-2);
+}
+
+.formation-card .formation-age-note {
+  margin-block-start: 12px;
+  padding: 8px;
+  border-inline-start: 3px solid var(--civ-copper);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.formation-conditional-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 8px;
+}
+
+.formation-conditional-group {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--civ-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
 @media (max-width: 650px) {
   .civ-formations,
   .formation-card {
@@ -283,5 +355,16 @@
   .formation-grid,
   .formation-adjustments > div {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .formation-age-progression {
+    grid-auto-flow: row;
+  }
+
+  .formation-stage-arrow {
+    inset-block-start: auto;
+    inset-block-end: -20px;
+    inset-inline: calc(50% - 8px) auto;
+    transform: rotate(90deg);
   }
 }
