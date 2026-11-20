@@ -80,6 +80,13 @@ describe('阵容账本的持续生产交接', () => {
     expect(decodeArmySupply(query)).toEqual({ kind: 'valid', source, sourceQuery: encodeArmyCost(source), settings: plan });
     expect(decodeArmySupply(query + '&asv=1')).toMatchObject({ kind: 'invalid' });
     expect(decodeArmySupply(query + '&mode=army-cost')).toMatchObject({ kind: 'invalid' });
+    for (const invalidPlan of [
+      { ...plan, walk: 4.2 },
+      { ...plan, farm: 0.1 },
+      { ...plan, rows: [{ ...plan.rows[0]!, count: '123456789' }, ...plan.rows.slice(1)] },
+    ]) {
+      expect(decodeArmySupply(encodeArmySupply(source, invalidPlan))).toMatchObject({ kind: 'invalid', returnTo: '/production?' + encodeArmyCost(source) });
+    }
     expect(productionMode('?asv=1').kind).toBe('supply');
     expect(decodeArmySupply('mode=army-supply&asv=1')).toMatchObject({ kind: 'invalid' });
     const stale = new URLSearchParams(query);

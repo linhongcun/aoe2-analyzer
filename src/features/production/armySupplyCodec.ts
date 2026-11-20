@@ -7,6 +7,9 @@ import { decodeArmyCost, encodeArmyCost } from './armyCostCodec';
 const SUPPLY_VERSION = '1';
 const MAX_QUERY_LENGTH = 32_768;
 const SUPPLY_KEYS = ['mode', 'asv', 'asSource', 'asPlan'];
+export const SUPPLY_WALK_DISTANCES = [0, 1, 2, 3, 4, 5, 7, 10];
+export const SUPPLY_FARM_DISTANCES = [0, 0.5, 1, 2, 3, 5, 10];
+export const SUPPLY_COUNT_INPUT_LIMIT = 8;
 
 function supplyQuery(sourceQuery: string, settings: ArmySupplySettings): string {
   return new URLSearchParams({ mode: 'army-supply', asv: SUPPLY_VERSION, asSource: sourceQuery, asPlan: JSON.stringify(settings) }).toString();
@@ -39,8 +42,8 @@ function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-function validDistance(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 10;
+function validDistance(value: unknown, allowed: number[]): value is number {
+  return typeof value === 'number' && allowed.includes(value);
 }
 
 function validRow(value: unknown): value is ArmySupplyRow {
@@ -50,6 +53,7 @@ function validRow(value: unknown): value is ArmySupplyRow {
     Number.isSafeInteger(value.building) &&
     Number(value.building) >= 0 &&
     typeof value.count === 'string' &&
+    value.count.length <= SUPPLY_COUNT_INPUT_LIMIT &&
     typeof value.confirmed === 'boolean'
   );
 }
@@ -79,7 +83,8 @@ export function decodeArmySupply(search: string): SupplyRead {
     const { stance, planned, walk, farm, rows } = plan;
     if (stance !== '' && stance !== 'current' && stance !== 'plan') return { ...malformed, returnTo };
     if (!Array.isArray(planned) || planned.length > 200 || planned.some((id) => !Number.isSafeInteger(id) || id <= 0)) return { ...malformed, returnTo };
-    if (new Set(planned).size !== planned.length || !validDistance(walk) || !validDistance(farm)) return { ...malformed, returnTo };
+    if (new Set(planned).size !== planned.length || !validDistance(walk, SUPPLY_WALK_DISTANCES) || !validDistance(farm, SUPPLY_FARM_DISTANCES))
+      return { ...malformed, returnTo };
     if (!Array.isArray(rows) || rows.length !== source.rows.length || !rows.every(validRow)) return { ...malformed, returnTo };
     return { kind: 'valid', source, sourceQuery: rawSource, settings: { stance, planned, walk, farm, rows } };
   } catch {

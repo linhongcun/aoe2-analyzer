@@ -11,7 +11,7 @@ import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { decodeArmyCost } from './armyCostCodec';
-import { decodeArmySupply, encodeArmySupply } from './armySupplyCodec';
+import { decodeArmySupply, encodeArmySupply, SUPPLY_COUNT_INPUT_LIMIT, SUPPLY_FARM_DISTANCES, SUPPLY_WALK_DISTANCES } from './armySupplyCodec';
 import { ProductionPageTop } from './ProductionModeNav';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
 import './armySupply.css';
@@ -139,7 +139,7 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
               <label>
                 木金石单程距离
                 <select value={settings.walk} onChange={(event) => update({ ...settings, walk: Number(event.target.value) })}>
-                  {[0, 1, 2, 3, 4, 5, 7, 10].map((distance) => (
+                  {SUPPLY_WALK_DISTANCES.map((distance) => (
                     <option key={distance} value={distance}>
                       {distance} 格
                     </option>
@@ -149,7 +149,7 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
               <label>
                 农田单程距离
                 <select value={settings.farm} onChange={(event) => update({ ...settings, farm: Number(event.target.value) })}>
-                  {[0, 0.5, 1, 2, 3, 5, 10].map((distance) => (
+                  {SUPPLY_FARM_DISTANCES.map((distance) => (
                     <option key={distance} value={distance}>
                       {distance} 格
                     </option>
@@ -326,7 +326,7 @@ function SupplyRow({
           type="checkbox"
           aria-label={label + ' 确认形态'}
           disabled={!buildings.length}
-          checked={setup.confirmed}
+          checked={buildings.length > 0 && setup.confirmed}
           onChange={(event) => update({ confirmed: event.target.checked })}
         />
         确认该具体形态可训练
@@ -354,7 +354,7 @@ function SupplyRow({
           <input
             type="text"
             inputMode="numeric"
-            maxLength={8}
+            maxLength={SUPPLY_COUNT_INPUT_LIMIT}
             aria-label={label + ' 建筑座数'}
             aria-describedby={issue ? id + '-issue' : undefined}
             aria-invalid={!!setup.count && !validCount}
