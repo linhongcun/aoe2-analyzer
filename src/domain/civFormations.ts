@@ -1,7 +1,7 @@
 import { buildingAge } from './availabilityAge';
 import type { FormationSource } from './civFormationsSource.mjs';
 import { resolveFormationSource } from './civFormationsSource.mjs';
-import type { Building, Tech, Trees, Unit } from './types';
+import type { Building, Cost, Tech, Trees, Unit } from './types';
 import { techAvailable, unitAvailable } from './unitAvailability';
 
 type FormationAge = 2 | 3 | 4;
@@ -26,6 +26,7 @@ interface FormationResearch {
   effect: string;
   caveat?: string;
   optional?: true;
+  trainingPrice?: { before: Cost; after: Cost };
 }
 
 interface FormationEntity extends EntityRef {
@@ -96,7 +97,7 @@ interface Formation {
   status: FormationStatus;
   playtest: FormationPlaytest;
   composition: FormationComposition;
-  presentation?: 'age-progression';
+  presentation?: 'age-progression' | 'separate-support';
   age: FormationAge;
   patch: FormationPatch;
   revised: string;
@@ -197,7 +198,7 @@ function projectEntity(catalog: FormationCatalog, civ: string, ref: FormationEnt
   const row = availableEntity(catalog, civ, ref, routeAge, ref.role);
   if (row?.kind !== 'unit' || !ref.research) return row;
   const tech = catalog.core.techById[ref.research.tech];
-  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return row;
+  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return ref.research.trainingPrice ? null : row;
   return { ...row, research: { ...ref.research, tech } };
 }
 

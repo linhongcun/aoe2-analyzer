@@ -5941,5 +5941,115 @@
         }
       }
     ]
+  },
+  {
+    "civ": "Persians",
+    "lead": "进入帝王时代后，以萨瓦尔掩护弩手和手推炮。根据主力补员与城堡产能决定是否投入战象。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/4202736a10ea200426b053adc026b4990459e6de/role/game-strategy.md#L251-L257",
+      "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1176",
+      "boundary": "原讨论记录认可范围。固定目录和费用模型用于核对研究与训练。"
+    },
+    "routes": [
+      {
+        "id": "persian-savar-crossbow-bombard",
+        "title": "萨瓦尔＋弩手＋手推炮",
+        "status": "approved",
+        "playtest": "unreported",
+        "composition": "combined",
+        "presentation": "separate-support",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-20",
+        "condition": "进入帝王时代推进。先研究波斯步弓手，弩手才免金。主力能持续补员并承担研究与攻城投入时再考虑推进。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1813,
+            "age": 4,
+            "historicalName": "萨瓦尔",
+            "role": "掩护弩手与手推炮，帮助后排维持输出。"
+          },
+          {
+            "kind": "unit",
+            "id": 24,
+            "age": 3,
+            "historicalName": "弩手",
+            "role": "完成波斯步弓手研究后以木材补员，提供远程输出。",
+            "research": {
+              "tech": 488,
+              "effect": "完成波斯步弓手（卡曼达兰）研究后，弩手训练仍耗木材。",
+              "caveat": "研究费和每名弩手的训练费分别计算。",
+              "trainingPrice": {
+                "before": { "Wood": 25, "Gold": 45 },
+                "after": { "Wood": 50, "Gold": 0 }
+              }
+            }
+          },
+          {
+            "kind": "unit",
+            "id": 36,
+            "age": 4,
+            "historicalName": "手推炮",
+            "role": "拆建筑。有萨瓦尔掩护时随主力推进。"
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 488,
+            "age": 3,
+            "historicalName": "波斯步弓手",
+            "role": "取得弩手免金训练的研究条件。"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "label": "条件补充 · 非默认主力",
+            "condition": "城堡有余力、主力能持续补员时，可用战象补强前排。额外食物和黄金也要能持续投入。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 239,
+                "age": 3,
+                "historicalName": "战象",
+                "role": "普通战象每头 170 食物、85 黄金，从城堡训练并占用城堡队列。攒兵时先维持已有部队的补员和阵线。"
+              }
+            ]
+          }
+        ],
+        "adjustments": [],
+        "evidence": {
+          "recognition": "维护者在原讨论认可萨瓦尔、免金弩与手推炮主路，并保留战象为条件选项。",
+          "playtest": "原讨论未报告实战使用。",
+          "scope": "按固定目录核对实体，用同文明同时代的模型比较单名弩手训练费用。",
+          "recordedVersion": "DE 188329，原讨论未记录站点构建。",
+          "sourceLines": [
+            251,
+            253,
+            255,
+            257
+          ],
+          "links": [
+            {
+              "label": "固定单位目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/units.json"
+            },
+            {
+              "label": "固定科技目录",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/techs.json"
+            },
+            {
+              "label": "弩手单价模型核对",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/tests/unit/duelTrainingCost943.test.ts#L48-L66"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

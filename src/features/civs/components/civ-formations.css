@@ -243,6 +243,29 @@
   font-size: 13px;
 }
 
+.formation-training-price {
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.formation-training-price h5 {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+
+.formation-training-price dl {
+  display: grid;
+  gap: 4px;
+}
+
+.formation-training-price dl > div,
+.formation-training-price dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+
 .formation-fold {
   margin-top: 8px;
   border-top: 1px solid var(--civ-line);
