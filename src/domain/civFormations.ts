@@ -53,6 +53,8 @@ interface FormationSupplement {
     | 'upgrade'
     | 'conditional-evaluation';
   condition?: string;
+  label?: string;
+  requires?: EntityRef[];
   entities: FormationEntity[];
 }
 
@@ -110,6 +112,7 @@ export interface CivFormationContent {
   lead: string;
   source: FormationSource;
   routes: Formation[];
+  routeGroups?: { title: string; note: string; routes: { id: string; label: string }[] }[];
 }
 
 interface FormationCatalog {
@@ -239,6 +242,7 @@ export function projectFormation(
 
   const supplementViews: FormationSupplementView[] = [];
   for (const group of route.supplements) {
+    if (group.requires?.some((ref) => !availableEntity(catalog, civ, ref, route.age))) continue;
     const entities = group.entities.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
     if (group.mode === 'position-variant' && entities.some((entity) => entity === null)) continue;
     const availableEntities = entities.filter((entity): entity is FormationEntityView => entity !== null);

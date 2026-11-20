@@ -333,7 +333,7 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
     Saxons: 1,
     Teutons: 3,
     Franks: 3,
-    Vietnamese: 1,
+    Vietnamese: 3,
     Lithuanians: 1,
     Poles: 3,
     Bulgarians: 1,
@@ -349,9 +349,84 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
   };
   for (const [civ, count] of Object.entries(routes)) {
     await page.goto(`./#/civ/${civ}#formations`);
-    await expect(page.locator(formations).locator('.formation-list > article')).toHaveCount(count);
+    await expect(page.locator(formations).locator('.formation-list article')).toHaveCount(count);
   }
 });
+
+for (const width of [1280, 360]) {
+  test(`#1172 ${width} 越南两条主路与守点、宝伞链接及返回`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/civ/Vietnamese#formations');
+    const section = page.locator(formations);
+    const main = section.getByRole('group', { name: '两条主路' });
+    const holding = section.getByRole('group', { name: '守家与资源点' });
+    const mobileTitle = page.locator('#formation-vietnamese-light-cav-rattan');
+    const frontTitle = page.locator('#formation-vietnamese-elephant-skirmisher');
+    const garrison = holding.getByRole('article');
+    const mobile = main.getByRole('article').filter({ has: mobileTitle });
+    const front = main.getByRole('article').filter({ has: frontTitle });
+    await expect(section.getByRole('article')).toHaveCount(3);
+    await expect(main.getByRole('article')).toHaveCount(2);
+    await expect(main).toContainText('按条件择一，不同时必出');
+    await expect(holding).toContainText('仅防守 · 非主力');
+    const mobileBox = await mobile.boundingBox();
+    const frontBox = await front.boundingBox();
+    const garrisonBox = await garrison.boundingBox();
+    expect(mobileBox && frontBox && garrisonBox).toBeTruthy();
+    if (width === 1280) {
+      expect(mobileBox!.y).toBeCloseTo(frontBox!.y);
+      expect(mobileBox!.width).toBeCloseTo(frontBox!.width);
+      expect(mobileBox!.x + mobileBox!.width).toBeLessThan(frontBox!.x);
+    } else {
+      expect(mobileBox!.x).toBeCloseTo(frontBox!.x);
+      expect(mobileBox!.y + mobileBox!.height).toBeLessThan(frontBox!.y);
+    }
+    expect(frontBox!.y + frontBox!.height).toBeLessThan(garrisonBox!.y);
+    await expect(mobile).toContainText('各自生产建筑');
+    await expect(front).toContainText('两边能持续补员');
+    for (const card of [mobile, front]) {
+      await expect(card.getByLabel('路线状态')).toHaveText('讨论认可未说明实战使用');
+      await expect(card.getByText(/敌方攻城器有护卫|发现带护卫的攻城器/)).toBeVisible();
+      await expect(card.getByRole('heading', { name: '按需攻城支援 · 非固定组成' })).toBeVisible();
+    }
+    await expect(mobile.getByRole('link', { name: /^藤弓兵/ })).toHaveAttribute('href', '#/unit/1129?civ=Vietnamese');
+    await expect(front.getByRole('link', { name: /^象兵/ })).toContainText('基础生命 250');
+    await expect(front.getByRole('link', { name: /^精锐象兵/ })).toContainText('基础生命 300');
+    const chatras = front.getByRole('link', { name: /^宝伞/ });
+    await expect(chatras).toHaveAttribute('href', '#/tech/628?civ=Vietnamese');
+    await expect(chatras.locator('.num.nw')).toHaveText('+100');
+
+    const jump = section.getByRole('navigation', { name: '阵容路线' }).getByRole('link', { name: '正面主路', exact: true });
+    await jump.press('Enter');
+    await expect(frontTitle).toBeFocused();
+    await onScreenBelowNav(frontTitle);
+    await front.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Enter');
+    await front.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
+    await expect(front.getByText('收起来源与核对', { exact: true })).toBeVisible();
+    await expect(front.getByText('原讨论未说明实战使用。接敌与运营条件属于分析。')).toBeVisible();
+    await expect(front.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://github.com/linhongcun/aoe2-analyzer/issues/1172');
+    await expect(mobile.locator('details[open]')).toHaveCount(0);
+
+    await chatras.click();
+    await expect(page).toHaveURL(/#\/tech\/628\?civ=Vietnamese$/);
+    await expect(page.getByRole('heading', { level: 1, name: /宝伞/ })).toBeVisible();
+    await page.goBack();
+    await expect(page).toHaveURL(/#\/civ\/Vietnamese#formation-vietnamese-elephant-skirmisher$/);
+    await expect(chatras).toBeFocused();
+    await expect(front.locator('details[open]')).toHaveCount(2);
+    await onScreenBelowNav(chatras);
+    await page.reload();
+    await expect(front.locator('details[open]')).toHaveCount(0);
+    await onScreenBelowNav(frontTitle);
+    await garrison.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Enter');
+    await expect(garrison.getByText(/已撤回/)).toBeVisible();
+    await expect(garrison.getByText(/理论面板/)).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.goto('./#/civ/Spanish#formations');
+    await expect(section.getByRole('heading', { name: /机动主路|正面主路|火矛驻塔/ })).toHaveCount(0);
+    await expect(section.getByRole('article')).toHaveCount(3);
+  });
+}
 
 for (const width of [360, 1280]) {
   test(`#1139 ${width} choice、progression、来源与条件候选`, async ({ page }) => {

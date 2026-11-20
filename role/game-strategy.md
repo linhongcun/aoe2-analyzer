@@ -174,7 +174,7 @@
 | [撒克逊人](#撒克逊人) | 前线箭塔＋精锐扈从＋少量巨投（待实战验证）                 | 射手压力优先扈从；骑兵压力下补长戟，城堡按产能需要                |
 | [条顿](#条顿)         | 条件：游侠或精锐条顿骑士＋精锐掷矛；长戟＋火枪             | 农田费用 -40% 支撑补兵与转型；按对手选主力，少量攻城器另配        |
 | [法兰克](#法兰克)     | 游侠＋掷矛／骑马弩＋轻骑／掷斧＋轻骑（条件路线）           | 按对手与偏好选路；游侠怕骆驼，掷斧路线怕骑兵                      |
-| [越南](#越南)         | 火矛驻塔只作防守补充，不作主力                             | 塔缺建筑学；反弓、反骑另用藤弓兵和象兵                            |
+| [越南](#越南)         | 轻骑藤弓机动／象兵帝掷推进，火矛驻塔守点                   | 按通道、掩护和补兵能力选主路                                      |
 | [立陶宛](#立陶宛)     | 精锐烈堤司＋精锐掷矛手＋少量攻城器                         | 掷矛按任务驻山城堡中心输出，村民继续工作；烈堤司在外围机动        |
 | [波兰](#波兰)         | 条件：战锤兵＋波兰翼骑兵／劲弩＋波兰翼骑兵／折扣骑士海     | 择一主路并配少量攻城器；检查食物、城堡产能与远程火力下的接敌      |
 | [保加利亚](#保加利亚) | 前线营垒＋保加利亚骑兵＋少量攻城器（实战用过）             | 主力单一、操作量低；对游侠直接对拼，不另配双手剑士和长戟兵        |
@@ -621,6 +621,24 @@
 
 ### 越南
 
+维护者认可机动和正面两条主路。按经济、产能和敌军择一。原记录未说明这两套是否实战使用，接敌与运营是有条件的判断。[讨论与范围](https://github.com/linhongcun/aoe2-analyzer/issues/1172)
+
+#### 一、机动主路 · 轻型骑兵＋精锐藤弓兵
+
+- 有侧翼通道、能拉开距离时选。城堡时代可先用[藤弓兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1129?civ=Vietnamese)，帝王时代再升[精锐藤弓兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1131?civ=Vietnamese)。[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Vietnamese)探路、转场和保护退路，藤弓保持射程。防守时先护侧翼与撤退路线。
+- 马厩用食物续轻骑，城堡用木材和黄金续藤弓。轻骑与精锐藤弓各有独立研究投入。能维持两边补兵再承担升级。需要拆固定目标时评估[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Vietnamese)，它与藤弓共用城堡队列，先确认城堡能分出产能。
+- 敌方攻城器有护卫时，先看通道、对方护卫、己方掩护与撤退条件。无法安全接近就放弃切入或改走另一线。帝王时代只有已研究[化学](https://linhongcun.github.io/aoe2-analyzer/#/tech/47?civ=Vietnamese)、攻城武器厂有产能、己方可护卫且射线通畅，才评估用[手推炮](https://linhongcun.github.io/aoe2-analyzer/#/unit/36?civ=Vietnamese)反炮。
+- 侧翼封死或退路会被骑兵截断时，机动优势难发挥。根据目标选择攻城支援，优先维持主路所需兵力。
+
+#### 二、正面主路 · 象兵＋帝王掷矛手
+
+- 需要稳步推进且能护住前排时选。帝王时代以[象兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1132?civ=Vietnamese)承压、[帝王掷矛手](https://linhongcun.github.io/aoe2-analyzer/#/unit/1155?civ=Vietnamese)压制远程。防守时象兵守入口、掷矛手在后减压，追击会拉散阵形时及时停下。
+- 城堡时代可留下已有的普通象兵或[精锐掷矛手](https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Vietnamese)。马厩用食物和黄金补象兵，靶场用食物与木材补掷矛手，两者都耗食物。两边有持续补员能力后，再安排帝王掷矛手升级、[精锐象兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1134?civ=Vietnamese)升级与宝伞各自的研究投入。精锐象兵升级按经济选择。
+- DE 188329 中普通象兵基础生命为 250，精锐象兵为 300。[宝伞](https://linhongcun.github.io/aoe2-analyzer/#/tech/628?civ=Vietnamese)在城堡研究，两种形态均获得 100 生命。以上数值可查[固定单位目录](https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/units.json)和[固定科技效果](https://github.com/linhongcun/aoe2-analyzer/blob/c53d960070d8066e72f7209da089d2ee5963f001/data/game/effects.json)。
+- 长戟兵成群、后方有僧侣或通道狭窄时，先稳住前排。敌方攻城器有护卫时先看护卫、接近通道和己方掩护。无法安全接近或攻城掩护不足就停止推进或换路。有固定拆除目标且城堡能让出队列时可用巨型投石机。反炮候选同样取决于化学、攻城武器厂产能、掩护和射线。
+
+#### 三、守家与资源点 · 火矛驻塔
+
 **用户判断**：hongcun 认为越南的火矛驻塔只是凑合能用。它有大型箭塔和射箭槽，4 个精锐火矛兵同样达到 5 箭上限，但没有建筑学，满科技塔只有 2475 生命；没有鼓风炉，精锐火矛兵 12 攻，轻型骑兵 9 攻，对手推炮每击只有 3。塔、火矛兵、轻骑兵都没有文明加成，不作为主力推荐，只用来守家或守资源点。
 
 没有鼓风炉这一点，在火矛兵驻塔输出时不起作用（同[高丽](#高丽)的机制推断，待实战验证）；出塔近战和轻骑兵清炮仍受影响，不改变“凑合可用”的定位。
@@ -633,9 +651,13 @@
 | 骑士、游侠成群 | 精锐象兵（胜法兰克游侠，剩 168/420），火矛兵和长戟兵辅助               |
 | 手推炮         | 用自己的手推炮反制；轻型骑兵清炮很慢                                   |
 
+旧记录中的 420 是 DE 188329 精锐象兵在[血统](https://linhongcun.github.io/aoe2-analyzer/#/tech/435?civ=Vietnamese)与[宝伞](https://linhongcun.github.io/aoe2-analyzer/#/tech/628?civ=Vietnamese)均已生效时的理论面板（300＋20＋100）。剩余生命来自旧接触 PK 记录。
+
 驻军预览中，精锐藤弓兵要 5 个才达 5 箭上限，帝王掷矛手 5 个只增加 1 箭，都不比火矛兵强。
 
 来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Vietnamese)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=&army=1903%3A5%3Ae)、[藤弓对劲弩](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=1)、[象兵对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+
+已撤回「火矛＋帝王掷矛手」的野战搭配。有护卫的攻城器会限制这套搭配的接敌。
 
 ### 立陶宛
 

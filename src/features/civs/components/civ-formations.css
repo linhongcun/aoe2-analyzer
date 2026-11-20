@@ -61,6 +61,24 @@
   margin-top: 16px;
 }
 
+.formation-route-group-title {
+  color: var(--civ-ink);
+  font-weight: 700;
+}
+
+.formation-route-group-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  align-items: start;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.formation-route-group-cards :is(.formation-columns, .formation-grid) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
 .formation-jumps,
 .formation-source-links,
 .formation-card-heading {

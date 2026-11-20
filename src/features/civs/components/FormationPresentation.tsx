@@ -1,4 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import type { CivFormationContent, FormationView } from '../../../domain/civFormations';
+import { formationAnchor } from './useFormationNavigation';
 
 const FORMATION_NUMBER = String.raw`[+\-−]?\d+(?:\.\d+)?`;
 const FORMATION_UNIT = String.raw`(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个村民|个|名|人|兵|箭|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料|食|木|金|石|血|攻|甲|F|G|W|S|s)`;
@@ -53,5 +56,49 @@ export function FormationFold({ id, label, closeLabel, children }: { id: string;
       </summary>
       <div className="formation-fold-body">{children}</div>
     </details>
+  );
+}
+
+export function FormationRoutes({
+  groups = [],
+  routes,
+  renderCard,
+}: {
+  groups?: CivFormationContent['routeGroups'];
+  routes: FormationView[];
+  renderCard: (id: string, view: FormationView, grouped: boolean) => ReactNode;
+}) {
+  const { pathname, search } = useLocation();
+  const cards = routes
+    .filter((view) => view.status !== 'draft')
+    .map((view) => (view.status === 'unverified' ? { id: view.id, label: '路线依据待核实', view } : { id: view.route.id, label: view.route.title, view }));
+  const groupLabels = new Map(groups.flatMap(({ routes }) => routes.map(({ id, label }) => [id, label] as const)));
+  const card = ({ id, view }: (typeof cards)[number]) => renderCard(id, view, groupLabels.has(id));
+  return (
+    <>
+      {cards.length > 1 && (
+        <nav className="formation-jumps" aria-label="阵容路线">
+          {cards.map(({ id, label }) => (
+            <Link key={id} to={{ pathname, search, hash: `#${formationAnchor(id)}` }} state={{ focusFormation: true }}>
+              <FormationText text={groupLabels.get(id) ?? label} />
+            </Link>
+          ))}
+        </nav>
+      )}
+      <div className="formation-list">
+        {groups.map(({ title, note, routes }) => {
+          const members = cards.filter(({ id }) => routes.some((route) => route.id === id));
+          if (!members.length) return null;
+          return (
+            <div key={title} className="formation-route-group" role="group" aria-label={title}>
+              <p className="formation-route-group-title">{title}</p>
+              <p className="formation-meta">{note}</p>
+              <div className="formation-route-group-cards">{members.map(card)}</div>
+            </div>
+          );
+        })}
+        {cards.filter(({ id }) => !groupLabels.has(id)).map(card)}
+      </div>
+    </>
   );
 }

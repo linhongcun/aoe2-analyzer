@@ -34,6 +34,11 @@ export function formationProblems(content, contract) {
     const expectedIds = expectedCiv.routes.map(({ id }) => id);
     if (new Set(ids).size !== ids.length) add(`${path}/routes`, '路线 ID 重复');
     if (!sameArray([...ids].sort(), [...expectedIds].sort())) add(`${path}/routes`, '路线集合与独立发布契约不一致');
+    if (civ.routeGroups) {
+      const grouped = civ.routeGroups.flatMap((group) => group.routes.map(({ id }) => id));
+      const published = civ.routes.filter(({ status }) => status !== 'draft').map(({ id }) => id);
+      if (!sameArray(grouped.sort(), published.sort())) add(`${path}/routeGroups`, '分组必须为每条发布路线指定唯一入口');
+    }
     const routeById = new Map(civ.routes.map((route) => [route.id, route]));
     for (const [j, route] of civ.routes.entries()) {
       const contractRoute = expectedCiv.routes.find((item) => item.id === route.id);
@@ -51,7 +56,11 @@ export function formationProblems(content, contract) {
       if (!sameArray(choices, contractRoute.choices)) add(`${routePath}/choices`, '路线选择与独立发布契约不一致');
       if (route.choiceLabel !== contractRoute.choiceLabel) add(`${routePath}/choiceLabel`, '选择组标题与独立发布契约不一致');
       if (!sameArray(entityRefs(route.prerequisites), contractRoute.prerequisites)) add(`${routePath}/prerequisites`, '路线前置或时代与独立发布契约不一致');
-      const supplements = (route.supplements ?? []).map(({ mode, entities }) => ({ mode, entities: entityRefs(entities) }));
+      const supplements = (route.supplements ?? []).map(({ mode, entities, requires }) => ({
+        mode,
+        ...(requires ? { requires: entityRefs(requires) } : {}),
+        entities: entityRefs(entities),
+      }));
       if (!sameArray(supplements, contractRoute.supplements)) add(`${routePath}/supplements`, '补充/选择分类与独立发布契约不一致');
       const adjustments = (route.adjustments ?? []).map(({ id, requires = [] }) => ({
         id,

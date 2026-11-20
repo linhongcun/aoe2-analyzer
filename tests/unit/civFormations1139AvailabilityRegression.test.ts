@@ -242,7 +242,7 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     if (missing.status === 'current') expect(missing.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 331))).toBe(false);
 
     expect(civFormationContent).toHaveLength(31);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(46);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(48);
     const saxons = route('Saxons', 'saxons-retainer-tower');
     expect(createHash('sha256').update(JSON.stringify(saxons)).digest('hex')).toBe('8c48661503d9674e06757b033fd0c90d5c8a9f14f6a3a6f14952ac250d0e02e6');
   });
