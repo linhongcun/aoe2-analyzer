@@ -171,6 +171,7 @@
     "tests/e2e/mechanism652.spec.ts": 19289,
     "tests/e2e/mixedArmy241.spec.ts": 24048,
     "tests/e2e/mixedDuel1054.spec.ts": 5600,
+    "tests/e2e/mixedTrainingTransfer1194.spec.ts": 4500,
     "tests/e2e/mobile361-359-366.spec.ts": 24514,
     "tests/e2e/mobileDrawer774.spec.ts": 12000,
     "tests/e2e/mountedCrossbowPresets441.spec.ts": 26723,

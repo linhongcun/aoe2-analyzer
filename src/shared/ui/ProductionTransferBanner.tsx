@@ -10,7 +10,7 @@ export function ProductionTransferBanner() {
   const location = useLocation();
   const navigate = useNavigate();
   const value = readProductionTransfer(location.state);
-  if (!value) return null;
+  if (!value || (value.source === 'mixed-duel' && value.search !== location.search)) return null;
   return (
     <aside className="production-transfer" role="status" data-testid="production-transfer">
       <Icon name="info" />
@@ -18,6 +18,8 @@ export function ProductionTransferBanner() {
         <strong>
           {value.source === 'duel' ? (
             <>已带入单位 PK 的 {value.side.toUpperCase()} 方</>
+          ) : value.source === 'mixed-duel' ? (
+            <>已带入混编 PK 的 {value.side.toUpperCase()} 方</>
           ) : value.count ? (
             <>
               已带入{value.source === 'total' ? '训练总价' : '持续生产'}的 <span className="num nw">{value.count} 种兵种</span>
@@ -31,6 +33,15 @@ export function ProductionTransferBanner() {
             {civByEn(value.civ)?.zh ?? value.civ}、{AGE_ZH[value.age]}、{value.unit} <span className="num nw">× {value.qty}</span>
             ，以及影响训练单价的已选科技。另一方、对战模式和战斗结果没有带入。
           </p>
+        ) : value.source === 'mixed-duel' ? (
+          <>
+            <p>
+              {civByEn(value.civ)?.zh ?? value.civ} · {AGE_ZH[value.age]} · <span className="num nw">{value.count} 行</span>
+            </p>
+            <p>计入单价：{value.pricing.join('、') || '目录训练价与适用的文明折扣'}</p>
+            {value.unlocks.length > 0 && <p>训练解锁条件：{value.unlocks.join('、')}</p>}
+            <p>未带入：{[...value.omitted, '另一方', '战斗结果'].join('、')}。合计只含训练费。</p>
+          </>
         ) : (
           <>
             {value.count > 0 && (

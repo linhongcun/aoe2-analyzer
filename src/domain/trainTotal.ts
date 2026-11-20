@@ -53,6 +53,7 @@ export interface TrainTotalLine {
   cost: Cost | null;
   subtotal: Cost | null;
   notes: string[];
+  pricingProblems?: string[];
 }
 export interface TrainTotalTechChoice {
   id: number;
@@ -184,7 +185,8 @@ function quoteRow(config: TrainTotalConfig, unit: Unit, inputs: UnitCostTech[], 
   const notes: string[] = [];
   const name = civZh(config.civ);
   for (const line of priced.discount.applied) notes.push(`已计入：${name} ${line.text}`);
-  for (const line of priced.discount.unsupported) notes.push(`折扣未计入：${line.text || line.label}`);
+  const pricingProblems = priced.discount.unsupported.map((line) => `折扣未计入：${line.text || line.label}`);
+  notes.push(...pricingProblems);
   const byId = new Map(inputs.map((item) => [item.id, item]));
   const applied = new Set<number>();
   const stepped: UnitCostTech[] = [];
@@ -205,14 +207,15 @@ function quoteRow(config: TrainTotalConfig, unit: Unit, inputs: UnitCostTech[], 
   const undecoded = new Set<number>();
   for (const item of priced.undecoded) {
     undecoded.add(item.techId);
-    notes.push(`未能完整计入：${item.tech}，单价未改。`);
+    const note = `未能完整计入：${item.tech}，单价未改。`;
+    pricingProblems.push(note);
+    notes.push(note);
   }
   for (const choice of selected) {
     if (choice.panel !== 'cost' || !choice.selected || choice.invalidReason || applied.has(choice.id) || undecoded.has(choice.id)) continue;
     notes.push(`已选${choice.zh}，不作用于该单位，单价未改。`);
   }
-  const incomplete = priced.discount.unsupported.length > 0 || priced.undecoded.length > 0;
-  return { cost: priced.cost, notes, applied: [...applied], incomplete };
+  return { cost: priced.cost, notes, applied: [...applied], pricingProblems };
 }
 
 export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalConfig): TrainTotalEvaluation {
@@ -390,11 +393,22 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
       return;
     }
     const quote = quoteRow(config, unit, active, costs);
-    if (quote.incomplete) incomplete = true;
+    if (quote.pricingProblems.length) incomplete = true;
     for (const id of quote.applied) appliedSomewhere.add(id);
     const subtotal = scale(quote.cost, count);
     addCost(total, subtotal);
-    lines.push({ ...base, unit, qtyValue: count, status: 'ok', reason: '', summary: '', cost: quote.cost, subtotal, notes: quote.notes });
+    lines.push({
+      ...base,
+      unit,
+      qtyValue: count,
+      status: 'ok',
+      reason: '',
+      summary: '',
+      cost: quote.cost,
+      subtotal,
+      notes: quote.notes,
+      ...(quote.pricingProblems.length ? { pricingProblems: quote.pricingProblems } : {}),
+    });
   });
   for (const choice of costs) {
     if (appliedSomewhere.has(choice.id)) {

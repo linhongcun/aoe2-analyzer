@@ -10,6 +10,7 @@ import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import { resolveMixedSide } from '../logic/mixedDuel';
+import { mixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
 import { radioKeyboard } from './radioKeyboard';
@@ -22,7 +23,7 @@ type Notice = { kind: 'status' | 'error'; text: string };
 export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const [params, setParams] = useSearchParams();
   const raw = params.toString();
-  const { input, errors: protocolErrors } = useMemo(() => decodeMixedDuel(params), [params]);
+  const { input, errors: protocolErrors, sharedErrors, sideErrors } = useMemo(() => decodeMixedDuel(params), [params]);
   const core = resources.core.data,
     trees = resources.trees.data;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
@@ -39,6 +40,22 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const loadError = resources.core.error || resources.trees.error;
   const ready = !!core && !!ctx && !loadError;
   const canCompute = ready && !protocolErrors.length && !dataMismatch && !view?.error && !!view?.a?.army && !!view.b?.army;
+  const training = useMemo(() => {
+    if (!core || !trees || !view?.a || !view.b) return null;
+    const from = (side: 'a' | 'b') => {
+      const messages = !ready
+        ? ['资料尚未就绪。']
+        : sharedErrors.length
+          ? sharedErrors
+          : dataMismatch
+            ? ['请先确认使用当前固定数据重新校验。']
+            : sideErrors[side];
+      return messages.length
+        ? { errors: messages.map((message) => ({ field: '', message })) }
+        : mixedTrainingTransfer({ core, trees }, input[side], side, view[side]!);
+    };
+    return { a: from('a'), b: from('b') };
+  }, [core, trees, view, ready, sharedErrors, dataMismatch, sideErrors, input]);
   const [outcome, setOutcome] = useState<{ signature: string; result: MixedFightResult } | null>(null);
   const [busy, setBusy] = useState(false);
   const [hasRun, setHasRun] = useState(false);
@@ -93,7 +110,6 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       }
       setOutcome({ signature: raw, result });
       setBusy(false);
-      requestAnimationFrame(() => resultHeading.current?.focus());
     }, 30);
   };
   const exit = (mode: ExitMode) => {
@@ -139,6 +155,9 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     }
   };
   const result = canCompute && outcome?.signature === raw ? outcome.result : null;
+  useLayoutEffect(() => {
+    if (result) resultHeading.current?.focus();
+  }, [result]);
   const stale = !result && !busy && hasRun;
   return (
     <section id="duel" className="pane mixed-duel" data-testid="mixed-duel">
@@ -245,7 +264,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           </ul>
         </section>
       )}
-      {core && view?.a && view.b && (
+      {core && view?.a && view.b && training && (
         <fieldset disabled={!ready || !!protocolErrors.length || busy} className="mix-editor-fieldset">
           <legend className="sr-only">双方混编配置</legend>
           <div className="mix-sides">
@@ -257,6 +276,8 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
                 view={view[key]!}
                 core={core}
                 ctx={ctx!}
+                transfer={training[key]}
+                focusField={focusField}
                 onChange={(value, message) => {
                   update({ ...input, [key]: value });
                   if (message) requestAnimationFrame(() => setNotice({ kind: 'status', text: message }));
@@ -305,7 +326,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       {result && result.status !== 'error' && view?.a && view.b && (
         <MixedResult result={result} input={input} a={view.a} b={view.b} headingRef={resultHeading} onEdit={() => focusField('mix-a-civ')} onShare={share} />
       )}
-      <p className="note mix-footer">混编不提供拐点、盈亏平衡、训练总价或单兵种回放；需要这些功能时请返回单兵种。</p>
+      <p className="note mix-footer">拐点、盈亏平衡和单兵种回放可在单兵种模式查看。</p>
       <p className="note mix-footer">
         固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL} · 不等同于实战结果
       </p>

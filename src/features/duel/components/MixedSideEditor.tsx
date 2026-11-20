@@ -9,6 +9,8 @@ import { civBonusNotes, type SimContext } from '../../../domain/simulator';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
 import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
+import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
+import { MixedTrainingAction } from './MixedTrainingAction';
 import { UnitPicker } from './UnitPicker';
 
 export function MixedSideEditor({
@@ -17,6 +19,8 @@ export function MixedSideEditor({
   view,
   core,
   ctx,
+  transfer,
+  focusField,
   onChange,
 }: {
   side: 'a' | 'b';
@@ -24,6 +28,8 @@ export function MixedSideEditor({
   view: MixedSideView;
   core: Core;
   ctx: SimContext;
+  transfer: MixedTrainingTransfer;
+  focusField: (id: string) => void;
   onChange: (next: MixedSideInput, announcement?: string) => void;
 }) {
   const prefix = `mix-${side}`,
@@ -105,6 +111,7 @@ export function MixedSideEditor({
           {fieldErrors('age')}
         </div>
       </div>
+      <MixedTrainingAction side={side} input={input} transfer={transfer} focusField={focusField} />
       <p className="note">本方共用科技 / 团队效果；修改上下文不会自动替换单位或删除科技。</p>
       <div className="bar mix-presets" aria-label={`${label}科技预设`}>
         <button type="button" onClick={() => preset('none')}>

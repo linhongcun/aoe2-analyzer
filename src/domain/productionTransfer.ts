@@ -22,6 +22,7 @@ export interface TransferSkippedRow {
 
 export type ProductionTransferNotice =
   | { source: 'duel'; side: 'a' | 'b'; civ: string; age: number; unit: string; qty: string }
+  | { source: 'mixed-duel'; side: 'a' | 'b'; civ: string; age: number; count: number; search: string; pricing: string[]; unlocks: string[]; omitted: string[] }
   | { source: 'total' | 'production'; count: number; skipped: TransferSkippedRow[] };
 
 export interface ProductionTransfer<T> {
