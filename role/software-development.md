@@ -180,6 +180,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+**修正加成译文时，检查同屏的手写引文和静态分享说明。** 女真加成从文明目录读取，阿拉伯天梯的新手理由却手写了一份原文，改完目录后一行里仍出现两个兵名。已有测试只核对加成有一小段被引用，因此未发现差异。修正这类译文时，搜索旧原文的手写副本，对需要保持逐字引用的位置断言完整加成，并重生成拼音索引和静态分享元数据。验收时打开实际消费页面核对对应字段。[PR #1271](https://github.com/linhongcun/aoe2-analyzer/pull/1271)
+
 **并行扩展 DAT 字段时，为整合后的精简数据分配独立缓存版本。** `dat_source.parse()` 按缓存版本和原文件哈希复用 JSON。同一个 DAT 可以生成两种字段集合。隔离复现中，将只有范围攻击字段的缓存置于相同键下，1911 的范围字段仍正确，准确度散布却缺失。整合时用新缓存键从固定 DAT 重建，再按 ID 核对两个分支的字段和已有字段。目录与 DAT 表分别取数时，也要核对索引是否在目标数组长度内；生成器回归应覆盖超界和显式零，缺行保留为未知。[缓存复现实验](https://github.com/linhongcun/aoe2-analyzer/pull/1255#issuecomment-7062230038) · [整合验证](https://github.com/linhongcun/aoe2-analyzer/pull/1255#issuecomment-7062213993) · [缺行回归](https://github.com/linhongcun/aoe2-analyzer/commit/ea842d3f6d6ef1087e2bb63c79fd65ed46f92a7e)
 
 **合并名称的详情需核对每个模式下的实际操作。** 科技 408 把随机地图的「间谍」研究和弑君模式的「叛徒」付费指令放在同一条目，后者可反复付费使用。目录中的重复研究字段只说明科技规则。给合并条目写文案时，先核对名称对应的动作和模式，再分别验证研究限制与指令说明。[PR #1254 的评审与修复](https://github.com/linhongcun/aoe2-analyzer/pull/1254#discussion_r4652304525)
