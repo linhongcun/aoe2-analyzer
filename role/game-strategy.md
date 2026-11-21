@@ -141,8 +141,8 @@
 | 明确文明能做什么   | 文明页 `#/civ/<英文名>`（如 [Sicilians](https://linhongcun.github.io/aoe2-analyzer/#/civ/Sicilians)），卡片内有完整科技树入口                                                                                                                                                                                                                      | 加成、特色科技、可用兵种与缺失                         | 不必去站外查科技树；有效值仍要到单位页看                                                                                                          |
 | 单位面板与克制     | 单位页 `#/unit/<id>?civ=<英文名>`（如 [精锐近卫军](https://linhongcun.github.io/aoe2-analyzer/#/unit/761?civ=Goths)）                                                                                                                                                                                                                              | 该文明下属性、费用、进攻侧克制加成、护甲类别、如何获得 | 只显示“我克制谁”；“谁克制我”需反查（需求见 [#1053](https://github.com/linhongcun/aoe2-analyzer/issues/1053)）                                     |
 | 科技费用与效果     | 科技页 `#/tech/<id>`（如 [锁子甲](https://linhongcun.github.io/aoe2-analyzer/#/tech/757)）                                                                                                                                                                                                                                                         | 费用、研究时间、效果                                   | 多兵种共享科技是否已研究要自己核对                                                                                                                |
-| 驻军增箭           | 建筑页驻军标签 `#/building/<id>?tab=garrison&gv=2&civ=…&age=…&army=<单位id>:<数量>:e`（如 [高丽弩手驻大型箭塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=&army=24%3A5%3Ae)、[西西里城楼](https://linhongcun.github.io/aoe2-analyzer/#/building/1665?civ=Sicilians&age=4&tab=garrison)） | 实际容量、箭矢上限、满容量理论箭数、单一单位阈值表     | 公开公式理论值、未与客户端逐项对账，不是齐射伤害或胜负；入口只在建筑页（需求见 [#1051](https://github.com/linhongcun/aoe2-analyzer/issues/1051)） |
-| “能不能对砍/打赢”  | [单位 PK](https://linhongcun.github.io/aoe2-analyzer/#/duel)：1v1、N vs M、等资源，含 DPS、击杀数、回放，可复制链接                                                                                                                                                                                                                                | 两兵种在指定文明、时代、科技下的结算                   | 不模拟走位、射程；每方只有一种单位（需求见 [#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054)）                                     |
+| 驻军增箭           | 建筑页驻军标签 `#/building/<id>?tab=garrison&gv=2&civ=…&age=…&army=<单位id>:<数量>:e`（如 [高丽劲弩手驻大型箭塔（含射箭槽）](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437,608&army=492:5:e)、[西西里城楼](https://linhongcun.github.io/aoe2-analyzer/#/building/1665?civ=Sicilians&age=4&tab=garrison)） | 实际容量、箭矢上限、满容量理论箭数、单一单位阈值表     | 公开公式理论值、未与客户端逐项对账，不是齐射伤害或胜负；入口只在建筑页（需求见 [#1051](https://github.com/linhongcun/aoe2-analyzer/issues/1051)） |
+| “能不能对砍/打赢”  | [单位 PK](https://linhongcun.github.io/aoe2-analyzer/#/duel)：1v1、N vs M、等资源，含 DPS、击杀数、回放，可复制链接                                                                                                                                                                                                                                | 两兵种在指定文明、时代、科技下的结算                   | 1v1 按接触结算；群战含一维接敌、射程先手与占位，未模拟二维走位和溅射（需求见 [#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054)）                                     |
 | 训练费             | [训练总价](https://linhongcun.github.io/aoe2-analyzer/#/production?mode=train-total)                                                                                                                                                                                                                                                               | 同文明同时代多兵种数量的训练资源合计                   | 不含研究、升级、建筑、住房                                                                                                                        |
 | 产能与持续消耗     | [持续生产](https://linhongcun.github.io/aoe2-analyzer/#/production)                                                                                                                                                                                                                                                                                | 生产建筑数、每分钟产量与消耗、村民分配                 | 不是按实战损失补兵的战斗模拟                                                                                                                      |
 | 单兵成型研究费     | [科技模拟器](https://linhongcun.github.io/aoe2-analyzer/#/simulator)                                                                                                                                                                                                                                                                               | 一名单位勾选科技后的属性与累计研究费                   | 多兵种共享科技会重复计入，需手工去重（需求见 [#1052](https://github.com/linhongcun/aoe2-analyzer/issues/1052)）                                   |
@@ -186,7 +186,7 @@
 | [马普切](#马普切)     | 科那＋掷石绳骑兵（黄金可持续时）                           | 按金流与接敌条件择路；击败敌军产金为仅文本且掷石绳适用未核实      |
 | [穆伊斯卡](#穆伊斯卡) | 神庙护卫＋投石手                                           | 投石手补反步兵；弓手压力下再评估掷矛，不把长戟兵当可用选项        |
 | [图皮](#图皮)         | 择一：蔷琵＋投石手或黑檀木＋长戟；巨投按需                 | 按敌军择路；弩炮面前分散，清护卫后可试运兵接战                    |
-| [日本](#日本)         | 精锐武士＋轻骑兵＋少量巨投；箭塔支点按需                   | 射手压力补掷矛/重装骑射手；独特单位文明武士拉满；攻城器靠免金轻骑 |
+| [日本](#日本)         | 精锐武士＋轻骑兵＋少量巨投；箭塔支点按需                   | 射手压力补掷矛/重装骑射手；独特单位文明武士拉满；有安全接敌路径时用轻骑清攻城器 |
 | [西班牙](#西班牙)     | 条件：征服者＋翼骑／游侠＋掷矛／火枪＋长戟                 | 按金流、对手与已有兵力择路；无劲弩线                              |
 | [格鲁吉亚](#格鲁吉亚) | 精锐莫纳斯帕＋箭塔（斯万箭塔科技）；巨投按需               | 箭塔控阵地、骑兵护建与侧袭；掷矛手、长戟兵按对手选择              |
 | [魏](#魏)             | 帝王翼骑兵＋鲜卑掠骑兵；成军后可加曹操                     | 明光铠强化翼骑前排；训练资源分开，升级和研究仍耗金                |
@@ -211,7 +211,7 @@
 | 组成                   | 作用                       | 关键特点                                                                                               |
 | ---------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------ |
 | 相互支援的前线大型箭塔 | 阵地支点和固定远程火力     | [长城](https://linhongcun.github.io/aoe2-analyzer/#/tech/462)让塔生命 +30%，满科技 3539.25，四家里最厚 |
-| 精锐火矛兵             | 驻塔增箭，出塔反骑、清冲车 | 4 个达 5 箭上限；14 攻、5/5 甲，移动速度有文明加成                                                     |
+| 精锐火矛兵             | 驻塔增箭，出塔反骑、清冲车 | 含射箭槽时 4 个为 3/5 箭；14 攻、5/5 甲，移动速度有文明加成                                                     |
 | 轻型骑兵               | 成队清对方手推炮，冲弓手   | 80 食、不耗金；没有翼骑兵，满科技 80 血、11 攻                                                         |
 | 巨投                   | 拆防御                     | 中国没有手推炮和攻城技师，反制对方的炮只能靠轻骑兵接近                                                 |
 
@@ -232,11 +232,13 @@
 
 | 不默认加入               | 原因                                                                                                                                      |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 劲弩手专门作驻军         | 预览中 5 个只有 4 箭，火矛兵 4 个就到 5 箭上限                                                                                            |
-| 为量产精锐诸葛弩多修城堡 | 城堡 650 石，约等于 5 座塔的石料，还和火矛兵争黄金。已有城堡和诸葛弩时，3 个精锐诸葛弩驻塔就达 5 箭上限，可以让诸葛弩驻塔、火矛兵留在塔外 |
+| 劲弩手专门作驻军         | 已有远程兵可按科技择优进塔。火矛兵能出塔反骑和清冲车，可省去专门为驻塔新开的远程线。                                                                                            |
+| 为量产精锐诸葛弩多修城堡 | 城堡 650 石，约等于 5 座塔的石料，还和火矛兵争黄金。已有城堡和诸葛弩可复用。无射箭槽时 3 个精锐诸葛弩是 5/5 箭；含射箭槽时 3 个是 4/5 箭、4 个才达 5/5 箭，此时可让现有诸葛弩驻塔、火矛兵留在塔外 |
 | 重装骑士                 | 耗黄金，没有游侠，和轻骑兵一样怕长戟                                                                                                      |
 
-来源与版本：[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Chinese)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=&army=1903%3A5%3Ae)、[5 精锐诸葛弩驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=&army=559%3A5%3Ae)、[5 劲弩驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=&army=492%3A5%3Ae)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Chinese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+原兵种与接触 PK 核对：[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Chinese)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Chinese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+
+帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 3 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=559:3:e)、[含射箭槽 · 3 个精锐诸葛弩 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=559:3:e)、[无射箭槽 · 4 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=559:4:e)、[含射箭槽 · 4 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=559:4:e)、[无射箭槽 · 4 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=1903:4:e)、[含射箭槽 · 4 个精锐火矛兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=1903:4:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
 ### 印度斯坦
 
@@ -531,7 +533,7 @@
 | 组成               | 作用                             | 关键特点                                                                                           |
 | ------------------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
 | 相互支援的前线箭塔 | 主要固定远程火力与掩体           | 采石加速、免费塔升级、邑城支持阵地；驻军仍占人口，建塔仍耗石                                       |
-| 精锐火矛兵         | 驻塔增箭，出塔清冲车，保护塔和炮 | 享受步兵木材折扣；当前指定链接中 4 个达 5 箭上限，同条件 5 劲弩仅 4 箭；出塔清冲车时驻军火力会减少 |
+| 精锐火矛兵         | 驻塔增箭，出塔清冲车，保护塔和炮 | 享受步兵木材折扣；含射箭槽时，4 个火矛 3/5 箭、5 个火矛 4/5 箭，5 个劲弩也是 4/5 箭；出塔清冲车时驻军火力会减少 |
 | 少量手推炮或巨投   | 反攻城、拆关键防御               | 按目标与已有基础选；不因塔能输出就省掉拆城堡手段                                                   |
 | 施工维修村民       | 落成、维持新支点                 | 先取得施工空间，保留撤退与维修资源，不能把成型防线当作施工中的保护                                 |
 
@@ -554,18 +556,22 @@
 
 | 不默认加入                 | 原因                                                                                                                     |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| 弩手专门作驻军             | 本轮指定预览中火矛更易达到箭上限，且出塔可清冲车，因此省去专门的弩手升级线；已有弩手仍可利用，不代表野外远程职责也被替代 |
+| 弩手专门作驻军             | 无射箭槽时 5 个劲弩为 5/5 箭，5 个火矛为 4/5 箭。已有劲弩可复用；用火矛可兼顾出塔清冲车、反骑并省去专门的弩手升级线。 |
 | 战车与火矛同时从零大量扩产 | 分散黄金、升级和城堡产能；已有战车基础时可继续原本获认可的精锐战车＋长戟＋少量炮路线，不必强转塔阵                       |
 | 火箭推车固定配套           | 条件性范围伤害与额外升级，针对具体敌军再考虑；不沿用高丽旧投石车线的假设                                                 |
 | 翼骑常驻                   | 弱骑兵线与额外科技投入，不能只因需要机动就默认加入                                                                       |
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Koreans)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Koreans)、[4 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=&army=1903%3A4%3Ae)、[5 劲弩驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=&army=492%3A5%3Ae)、[土耳其炮属性](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=36.Turks.4.f.&b=36.Koreans.4.f.&m=1)，v0.77.102 · DE 188329 · 84988dd。箭数属于健康建筑有合法目标时的理论预览，未逐项客户端核实，不代表齐射伤害或战损比。免费弓兵护甲不免除火矛与长戟的步兵护甲、兵种升级；驻军增箭不继承单位的反步兵加成。
+原兵种与火炮核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Koreans)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Koreans)、[土耳其炮属性](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=36.Turks.4.f.&b=36.Koreans.4.f.&m=1)，v0.77.102 · DE 188329 · 84988dd。箭数属于健康建筑有合法目标时的理论预览，未逐项客户端核实，不代表齐射伤害或战损比。免费弓兵护甲不免除火矛与长戟的步兵护甲、兵种升级；驻军增箭不继承单位的反步兵加成。
+
+帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 4 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437&army=1903:4:e)、[含射箭槽 · 4 个精锐火矛兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437,608&army=1903:4:e)、[无射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437&army=1903:5:e)、[含射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437,608&army=1903:5:e)、[无射箭槽 · 5 个劲弩手 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437&army=492:5:e)、[含射箭槽 · 5 个劲弩手 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437,608&army=492:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
 ### 火矛驻塔的跨文明复用
 
 **筛选**：能训练火矛兵的只有高丽、中国、女真、契丹、越南（[精锐火矛兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903)页“可用文明 5/56”）。hongcun 的筛选规则是先看有没有大型箭塔和射箭槽，两者都缺就提前放弃，不再分析配套兵种。[契丹](https://linhongcun.github.io/aoe2-analyzer/#/civ/Khitans)只到警戒箭塔，也没有长戟兵、手推炮和建筑学，按此排除。
 
-其余四家大型箭塔目录价都是 125 石、35 木，驻军预览中都是 4 个精锐火矛兵达到 5 箭上限；差别在塔、火矛兵和配套。
+其余四家大型箭塔目录价都是 125 石、35 木。按下列帝王科技，含射箭槽时 4 个精锐火矛兵为 3/5 箭，5 个为 4/5 箭。选火矛是为了出塔清冲车、反骑，并省去额外的远程线；已有远程兵时按科技和可用兵力选驻军。
+
+**驻军科技口径**：无射箭槽时选箭羽（199）、锥子箭（200）、护腕（201）、化学（47），可研究扳指（437）的文明也选扳指，女真没有扳指。含射箭槽时在同一组合上加射箭槽（608），本文称这组为满科技塔。下文撒克逊人也用这两档。射箭槽提高单箭火力门槛，读数是本轮总箭数与箭矢上限，选入更多科技后总箭数可能下降。
 
 | 文明          | 满科技大型箭塔                                | 满科技精锐火矛兵                             | 轻骑兵线                          | 拆防御与反攻城                       | 定位                           |
 | ------------- | --------------------------------------------- | -------------------------------------------- | --------------------------------- | ------------------------------------ | ------------------------------ |
@@ -584,7 +590,7 @@
 - 高丽、越南不能研究鼓风炉，精锐火矛兵 12 攻。驻塔时打的是塔箭远程输出，不靠近战攻击，这个缺口在驻塔时不起作用；出塔近战时仍在。属机制推断，待实战验证，详见[高丽](#高丽)。
 - 女真不能研究步兵钢甲，精锐火矛兵 4/4 甲。火矛兵驻在塔里不挨打，这个缺口在驻塔时不起作用；出塔时仍在。翼骑兵吃到骑乘单位攻击速度 +25% 的文明加成，承担塔外机动。属机制推断，待实战验证，详见[女真](#女真)。
 
-**边界**：塔的属性来自建筑页科技模拟器的“满科技”，箭数是驻军预览的理论值，未与客户端逐项对账（[#1062](https://github.com/linhongcun/aoe2-analyzer/issues/1062)）；只有高丽火矛驻塔“会放箭”由用户进游戏观察过。下文 PK 都是接触 1v1，不模拟射程、走位和混编。接触 PK 中四家的单个轻骑兵线单位都输给手推炮（女真、中国每击 5，越南、高丽每击 3），清炮要成队，还受护卫和地形限制。四家精锐火矛兵都输给冠军剑士。女真和中国的阵容是用户认可的方案加站内机制核对，hongcun 尚未实战使用，没有混编模拟或实战胜率证明。
+**边界**：塔的属性来自建筑页科技模拟器的“满科技”，箭数按驻军预览链接实际勾选的科技计算，未与客户端逐项对账（[#1062](https://github.com/linhongcun/aoe2-analyzer/issues/1062)）；只有高丽火矛驻塔“会放箭”由用户进游戏观察过。下文 PK 都是接触 1v1，不模拟射程、走位和混编。接触 PK 中四家的单个轻骑兵线单位都输给手推炮（女真、中国每击 5，越南、高丽每击 3），清炮要成队，还受护卫和地形限制。四家精锐火矛兵都输给冠军剑士。女真和中国的阵容是用户认可的方案加站内机制核对，hongcun 尚未实战使用，没有混编模拟或实战胜率证明。
 
 来源与版本：[高丽塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Koreans&tab=sim)、[女真塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Jurchens&tab=sim)、[中国塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Chinese&tab=sim)、[越南塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Vietnamese&tab=sim)（打开后选“满科技”）、[女真翼骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=36.Teutons.4.f.&m=1)、[中国轻骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=36.Teutons.4.f.&m=1)、[越南轻骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=36.Teutons.4.f.&m=1)、[城堡](https://linhongcun.github.io/aoe2-analyzer/#/building/82)，v0.77.105 · DE 188329 · cd9382c。
 
@@ -597,7 +603,7 @@
 | 组成                   | 作用                       | 关键特点                                                                                                                                       |
 | ---------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | 相互支援的前线大型箭塔 | 阵地支点和固定远程火力     | [强化堡垒](https://linhongcun.github.io/aoe2-analyzer/#/tech/996)让防御工事和城镇中心每分钟恢复 500 生命值；站内只有文字说明，没有计入任何数值 |
-| 精锐火矛兵             | 驻塔增箭，出塔反骑、清冲车 | 4 个达 5 箭上限；PK 页计入文明攻击速度加成后 14 攻、间隔 1.6 秒                                                                                |
+| 精锐火矛兵             | 驻塔增箭，出塔反骑、清冲车 | 含射箭槽时 4 个为 3/5 箭、5 个为 4/5 箭；PK 页计入文明攻击速度加成后 14 攻、间隔 1.6 秒                                                                                |
 | 翼骑兵                 | 成队清对方手推炮，冲弓手   | 80 食、不耗金；同样计入攻击速度加成，95 血、间隔 1.52 秒                                                                                       |
 | 少量手推炮或巨投       | 拆防御，反制对方攻城器     | 按目标与已有基础选，不要求两种同时铺开                                                                                                         |
 
@@ -621,11 +627,13 @@
 | 不默认加入       | 原因                                                                                                  |
 | ---------------- | ----------------------------------------------------------------------------------------------------- |
 | 精锐铁浮屠常驻   | 要靠城堡产能，多修一座城堡就少约 5 座塔的石料；还和火矛兵争黄金，接触 PK 输给游侠。对方步兵成群时再补 |
-| 掷弹兵专门作驻军 | 5 个才达 5 箭上限，火矛兵 4 个就够；还要另开靶场产能，耗食物和黄金。已有掷弹兵时可以利用              |
-| 精锐掷矛手驻塔   | 预览中 5 个只增加 1 箭                                                                                |
+| 掷弹兵专门作驻军 | 5 个在两档科技下均为 3/5 箭，已有掷弹兵时可按需复用。专为驻塔新开靶场会占产能、耗食物和黄金。              |
+| 精锐掷矛手驻塔   | 优先保留其塔外反射手职责，已有剩余兵力时再按实际科技核对驻塔收益。                                                                                |
 | 科技树缺口       | 没有骑士线、冠军剑士、劲弩手、火枪手和投石车线，远程固定火力主要靠塔和驻军                            |
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1903%3A5%3Ae)、[5 掷弹兵驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1911%3A5%3Ae)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。[DE 188329 固定效果表](https://github.com/linhongcun/aoe2-analyzer/blob/993810111b1c090942c847e22ffae37e99a20ce8/data/game/effects.json)的科技 994 包含普通与精锐火矛兵。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
+原兵种、接触 PK 与科技核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。[DE 188329 固定效果表](https://github.com/linhongcun/aoe2-analyzer/blob/993810111b1c090942c847e22ffae37e99a20ce8/data/game/effects.json)的科技 994 包含普通与精锐火矛兵。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
+
+帝王大型箭塔用箭羽、锥子箭、护腕、化学，女真无扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 4 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1903:4:e)、[含射箭槽 · 4 个精锐火矛兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1903:4:e)、[无射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1903:5:e)、[含射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1903:5:e)、[无射箭槽 · 5 个掷弹兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1911:5:e)、[含射箭槽 · 5 个掷弹兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1911:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
 ### 撒克逊人
 
@@ -636,10 +644,10 @@
 | 组成                     | 作用                     | 关键特点                                                        |
 | ------------------------ | ------------------------ | --------------------------------------------------------------- |
 | 前线箭塔（后期大型箭塔） | 前线固定火力与施工落点   | 城堡时代起，箭塔基础箭数从 1 增至 2；城堡基础箭数从 5 增至 10。 |
-| 扈从部队（后期精锐）     | 保护塔区，按需驻军或出击 | 驻军可增箭；扈从偏应对射手。                                    |
+| 扈从部队（后期精锐）     | 保护塔区，按需驻军或出击 | 扈从偏应对射手。精锐目录价 80 木、35 金、零食物，未计控制城镇中心或城堡带来的步兵折扣。和箭塔、巨投争木，食物可留给其他兵种。                                    |
 | 少量巨投                 | 拆防御                   | 由城堡生产，跟随塔线从后方推进。                                |
 
-无额外驻军科技的[箭塔驻军预览](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=&army=2706:5:e)中，5 个精锐扈从使塔显示 2+4=6 箭；这是该输入下的理论箭数，不是伤害或胜率，且未完整模拟扈从投枪的充能状态。
+按上文的帝王驻军科技，5 个精锐扈从两档都是 4/6 箭，5 个劲弩手从无射箭槽的 6/6 箭变为含射箭槽的 5/6 箭。原零自选科技的输入中，5 个精锐扈从是 2+4=6 箭。预览只计理论箭数，扈从投枪充能未完整模拟。
 
 与火矛驻塔路线相比，两者都能驻塔增箭；扈从偏反射手，火矛偏反骑兵，不能把火矛出塔反骑的职责套给扈从。
 
@@ -671,8 +679,13 @@
 | 僧侣核心             | 独特科技提高招降射程与训练速度，可针对昂贵单位，但微操负担高，作为可选方案。             |
 | 额外城堡只为折扣     | 箭塔不计入步兵折扣；额外城堡消耗石料、会挤占箭塔投入，只在确需产能时增建。               |
 | 手推炮               | 撒克逊人不能训练手推炮；以巨投或安全出击寻找反攻城窗口，不把无法生产的单位列作默认手段。 |
+| 翼骑兵 | 马厩训练，每个 80 食物。已有马厩产能、食物宽裕且有安全接敌路径时，可评估补机动或清理攻城器。为条件候选，实战待验证。 |
+| 精锐瓦兰吉卫队 | 兵营区域兵种，目录价 65 食物、45 金，未计步兵折扣。能在与单位战斗时产金，适于反骑和打建筑；按地面接战任务、食金与兵营产能评估，实战待验证。 |
 
-来源与版本：[撒克逊人](https://linhongcun.github.io/aoe2-analyzer/#/civ/Saxons)、[扈从部队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2705?civ=Saxons)、[精锐扈从部队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2706?civ=Saxons)、[盾墙](https://linhongcun.github.io/aoe2-analyzer/#/tech/1464?civ=Saxons)、[箭塔驻军预览](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=&army=2706:5:e)。数据版本 DE 188329；站点版本和构建本次未记录。
+原兵种与科技核对：[撒克逊人](https://linhongcun.github.io/aoe2-analyzer/#/civ/Saxons)、[扈从部队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2705?civ=Saxons)、[精锐扈从部队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2706?civ=Saxons)、[盾墙](https://linhongcun.github.io/aoe2-analyzer/#/tech/1464?civ=Saxons)。数据版本 DE 188329；站点版本和构建本次未记录。
+
+帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 5 个精锐扈从部队 4/6 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437&army=2706:5:e)、[含射箭槽 · 5 个精锐扈从部队 4/6 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437,608&army=2706:5:e)、[无射箭槽 · 5 个劲弩手 6/6 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437&army=492:5:e)、[含射箭槽 · 5 个劲弩手 5/6 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437,608&army=492:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
+兵种目录：[精锐扈从部队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2706?civ=Saxons)、[翼骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/441?civ=Saxons)、[精锐瓦兰吉卫队](https://linhongcun.github.io/aoe2-analyzer/#/unit/2704?civ=Saxons)。
 
 ### 条顿
 
@@ -780,7 +793,7 @@
 
 **拆固定目标**：需要时评估[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Vietnamese)。机动线中它与藤弓共用城堡队列，正面线也要先确认城堡能让出产能。
 
-**火矛驻塔的边界**：越南有大型箭塔和射箭槽，4 个精锐火矛兵可达 5 箭上限。没有建筑学，满科技塔只有 2475 生命。没有鼓风炉，精锐火矛兵 12 攻，轻型骑兵 9 攻、对手推炮每击只有 3。缺鼓风炉在火矛兵驻塔输出时不起作用（同[高丽](#高丽)的机制推断，待实战验证），出塔近战和轻骑清炮仍受影响，不改变守点的定位。
+**火矛驻塔的边界**：越南有大型箭塔和射箭槽。含射箭槽时同驻 5 人，精锐藤弓为 5/5 箭、精锐火矛为 4/5 箭；4 个精锐藤弓在无射箭槽时为 5/5 箭，加射箭槽后为 4/5 箭。已有藤弓时可以先派藤弓驻塔，让火矛留在塔外清冲车和反骑。没有建筑学，满科技塔只有 2475 生命。没有鼓风炉，精锐火矛兵 12 攻，轻型骑兵 9 攻、对手推炮每击只有 3。缺鼓风炉在火矛兵驻塔输出时不起作用（同[高丽](#高丽)的机制推断，待实战验证），出塔近战和轻骑清炮仍受影响，不改变守点的定位。
 
 **二、按对手调整**
 
@@ -802,9 +815,11 @@
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | 「火矛＋帝王掷矛手」野战搭配（已撤回）       | 有护卫的攻城器会限制这套搭配的接敌。                                                             |
 | 把火矛驻塔当主路                             | 塔、火矛兵、轻骑兵没有文明加成，塔缺建筑学，出塔近战和轻骑清炮仍受缺鼓风炉影响，保留为守点补充。 |
-| 用精锐藤弓兵或帝王掷矛手替换火矛作为更强驻军 | 驻军预览中，精锐藤弓兵要 5 个才达 5 箭上限，帝王掷矛手 5 个只增加 1 箭，都不比火矛兵强。         |
+| 为守点专门扩产精锐藤弓兵 | 已有藤弓可按科技复用；只有守点需求时，先评估城堡产能和现成兵力。火矛出塔还能清冲车、反骑。 |
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Vietnamese)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=&army=1903%3A5%3Ae)、[藤弓对劲弩](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=1)、[象兵对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+原兵种对位核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Vietnamese)、[藤弓对劲弩](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=1)、[象兵对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+
+帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 4 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1131:4:e)、[含射箭槽 · 4 个精锐藤弓兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1131:4:e)、[无射箭槽 · 5 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1131:5:e)、[含射箭槽 · 5 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1131:5:e)、[无射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1903:5:e)、[含射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1903:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
 ### 立陶宛
 
@@ -1349,12 +1364,12 @@
 
 | 组成                           | 作用                                       | 关键特点                                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 精锐日本武士                   | 主力近战输出                               | 步兵攻速 +33% 后攻击间隔约 1.43s；对独特单位 +12 额外伤害；45F/30G。等资源 PK 胜日本重装骑士（[1:3.92](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=283.Japanese.4.f.&m=r&bud=5000)）与西班牙游侠（[1:2.22](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=r&bud=5000)）。 |
-| 轻型骑兵                       | 免金清攻城器、反弓、反僧侣                 | 80 食物零黄金。等资源 PK 对重型弩炮 [1:12.19](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=542.Japanese.4.f.&m=r&bud=4000)、对手推炮 [1:19.13](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=36.Bohemians.4.f.&m=r&bud=8000)；接触模型未模拟弹道穿透与溅射，实战损耗更高。                   |
+| 精锐日本武士                   | 主力近战输出                               | 步兵攻速 +33% 后攻击间隔约 1.43s；对独特单位 +12 额外伤害；45F/30G。[帝王满科技接触 1v1](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=1) 中，西班牙游侠胜，剩 103/180 生命。 |
+| 轻型骑兵                       | 免金清攻城器、反弓、反僧侣                 | 80 食物零黄金。切重型弩炮或手推炮要看接敌路径、退路和守在攻城器旁的护卫。                   |
 | 少量巨型投石机                 | 专职拆防御                                 | 独特科技弹射器提高攻击与拆装速度；攻城线无手推炮、最高只到中型投石车。                                                                                                                                                                                                                                                                            |
 | 前线箭塔（按需，后期大型箭塔） | 巩固战线，克制敌方步兵与射手，缓解我方压力 | 射箭孔（独特科技）使箭塔额外箭矢：大型箭塔＋射箭孔基础箭数 1→3，驻 5 劲弩预览总箭数 6（上限 7）；缺建筑学与加热射击，硬度不及高丽。                                                                                                                                                                                                               |
 
-**进攻**：武士贴身输出，轻骑切攻城器与后排，巨投拆防御；轻骑与武士同为近战混编，轻骑先接触吸引火力。
+**进攻**：武士贴身输出，轻骑寻找安全路径切攻城器与后排，巨投拆防御。
 
 **防守**：武士 1/1 甲怕射手，用精锐掷矛手或前线箭塔（射箭孔额外箭矢）掩护远程压力；箭塔巩固战线、压制敌方步兵与射手，给武士和轻骑争取输出空间；轻骑拦截突入的攻城器。
 
@@ -1362,10 +1377,10 @@
 
 | 对方兵力       | 调整                                                                          |
 | -------------- | ----------------------------------------------------------------------------- |
-| 骑士、游侠成群 | 武士照打（等资源交换划算）；缺金时补长戟填线                                  |
+| 骑士、游侠成群 | 按敌方重骑规模评估加长戟。日本满科技长戟兵享步兵攻速 +33%，免金、由兵营生产，可减轻武士城堡队列的压力。武士能同时接战的数量受地形、碰撞面和人口限制。                                  |
 | 劲弩、弓手文明 | 精锐掷矛＋轻骑清后排；可评估重装骑射手（日本骑射对远程 +2，掷矛除外）         |
 | 独特单位文明   | 精锐武士拉满，+12 克制加成是质变                                              |
-| 弩炮、手推炮群 | 轻骑分波冲脸；有前排护卫时武士先接敌、轻骑绕侧，不直接撞阵                    |
+| 弩炮、手推炮群 | 先看接敌路径、退路与护卫。有安全侧翼时可让武士牵制前排、轻骑择机切入；护卫封住接敌路线时放弃。                    |
 | 巨投、炮塔阵地 | 只能巨投对拆（无手推炮）；轻骑偷袭                                            |
 | 步兵海         | 武士可对砍；压力过大时火枪手（靶场全科技）备选                                |
 | 我方战线受压   | 前线起箭塔（后期大型箭塔＋射箭孔）巩固阵地，驻军或掷矛辅助输出，武士/轻骑回防 |
@@ -1374,8 +1389,8 @@
 
 | 不默认加入 | 原因                                                                                                                    |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 救赎僧侣   | 修道院几乎全科技、雕版印刷后射程持平手推炮，但招降要接敌、30 血易死、微操负担高；轻骑已覆盖反攻城职责（hongcun 否决）。 |
-| 中型投石车 | 射程 8 压弩炮 7 且有溅射，但 135 黄金与武士抢金线；反攻城职责由免金轻骑覆盖（hongcun 改用轻骑）。                       |
+| 救赎僧侣   | 修道院几乎全科技、雕版印刷后射程持平手推炮，但招降要接敌、30 血易死、微操负担高；hongcun 选择轻骑承担可接近目标的反攻城职责。 |
+| 中型投石车 | 射程 8 压弩炮 7 且有溅射，但 135 黄金与武士抢金线；hongcun 改用免金轻骑处理可接近的目标。                       |
 | 冠军剑士   | 与武士职责重叠且 1v1 略输；例外是无城堡时冠军更省金（20G vs 30G）且不依赖城堡产能。                                     |
 | 重装骑士   | 缺骑兵钢甲、翼骑兵和游侠，骑兵线投入大上限低；例外是顺风局已有骑士。                                                    |
 | 劲弩手     | 靶场全科技但无文明加成；可作"劲弩＋长戟＋巨投"的远程备选路线，不进步兵主力的默认配置。                                  |
@@ -1383,7 +1398,9 @@
 
 **经济备注**：磨坊、伐木场、采矿场费用 -50% 利于快速扩张；缺轮作使后期食物线偏弱——轻骑（80F）与长戟（35F）省金但耗食，按农田经济控制规模。缺翼骑兵，轻骑封顶即最终形态；缺建筑学与加热射击，塔防硬度不如高丽。
 
-来源与版本：[日本](https://linhongcun.github.io/aoe2-analyzer/#/civ/Japanese)、[精锐日本武士](https://linhongcun.github.io/aoe2-analyzer/#/unit/560?civ=Japanese)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Japanese)、[长戟兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Japanese)、[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Japanese)、[射箭孔](https://linhongcun.github.io/aoe2-analyzer/#/tech/484?civ=Japanese)、[弹射器](https://linhongcun.github.io/aoe2-analyzer/#/tech/59?civ=Japanese)。数据版本 DE 188329；站点版本和构建本次未记录。
+来源与版本：[日本](https://linhongcun.github.io/aoe2-analyzer/#/civ/Japanese)、[精锐日本武士](https://linhongcun.github.io/aoe2-analyzer/#/unit/560?civ=Japanese)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Japanese)、[长戟兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Japanese)、[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Japanese)、[射箭孔](https://linhongcun.github.io/aoe2-analyzer/#/tech/484?civ=Japanese)、[弹射器](https://linhongcun.github.io/aoe2-analyzer/#/tech/59?civ=Japanese)。原配置记录使用 DE 188329，原讨论未记录站点版本和构建。
+
+**PK 核对边界**：1v1 为接触单挑，v0.99.0 · DE 188329 · 531df91 复核结果为西班牙游侠剩 103/180。当前等资源群战计入一维接敌、射程先手和近战占位。二维包抄、实际走位、弩炮穿透和溅射仍未覆盖；预算也未约束实际人口或反映混编护卫。v0.97.30 · 9938101 的全员集火比值仅在[原始历史记录](https://github.com/linhongcun/aoe2-analyzer/issues/1265)中保留。以上换兵取舍依赖战场条件，暂无实测胜率。
 
 ### 魏
 

@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
@@ -228,7 +227,7 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     }
   });
 
-  it('keeps the Aztec trebuchet optional and Saxon text byte-for-byte aligned with 9f3b43a', async () => {
+  it('keeps the Aztec trebuchet and both Saxon candidates optional', async () => {
     const core = await loadCore();
     const trees = await loadTrees();
     const aztec = route('Aztecs', 'aztecs-eagle-skirmisher');
@@ -244,6 +243,11 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     expect(civFormationContent).toHaveLength(33);
     expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(50);
     const saxons = route('Saxons', 'saxons-retainer-tower');
-    expect(createHash('sha256').update(JSON.stringify(saxons)).digest('hex')).toBe('8c48661503d9674e06757b033fd0c90d5c8a9f14f6a3a6f14952ac250d0e02e6');
+    expect(saxons.required.map(({ id }) => id)).toEqual([235, 2706, 331]);
+    expect(saxons.prerequisites).toEqual([]);
+    expect(saxons.supplements.map(({ mode, entities }) => [mode, entities.map(({ id }) => id)])).toEqual([
+      ['conditional', [441]],
+      ['conditional', [2704]],
+    ]);
   });
 });

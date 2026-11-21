@@ -6,8 +6,10 @@ import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
-const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153';
-const SOURCE_LINES = [1153, 1157, 1159, 1160, 1161, 1162, 1164, 1166, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1184, 1185, 1186, 1187, 1188, 1189, 1191, 1193];
+const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L1359-L1403';
+const SOURCE_LINES = [
+  1359, 1361, 1367, 1368, 1369, 1370, 1372, 1374, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1392, 1393, 1394, 1395, 1396, 1397, 1399, 1401, 1403,
+];
 const rightArrow = String.fromCodePoint(0x2192);
 const japaneseCiv = () => civFormationContent.find(({ civ }) => civ === 'Japanese')!;
 const japaneseRoute = () => {
@@ -128,10 +130,15 @@ describe('#1139 Japanese formation support', () => {
     const scope = entry.evidence.scope;
 
     expect(scope).not.toContain('固定策略记录来源行');
-    expect(scope).toContain('等资源 PK 比值来自独立接触模型');
-    expect(scope).toContain('不是混编实战胜率');
-    for (const ratio of ['1:3.92', '1:2.22', '1:12.19', '1:19.13']) expect(scope).toContain(ratio);
-    expect(scope).toContain('未模拟弹道穿透与溅射');
+    expect(scope).toContain('西班牙游侠胜，剩 103/180 生命');
+    expect(scope).toContain('一维接敌、射程先手和近战占位');
+    expect(scope).toContain('未模拟二维包抄、走位、弹道穿透与溅射');
+    expect(scope).toContain('v0.97.30 · 9938101');
+    expect(scope).toContain('暂无实测胜率');
+    expect(scope).not.toMatch(/1:(?:3\.92|2\.22|12\.19|19\.13)/);
+    expect(adjustment('first').text).toContain('按敌方重骑规模评估补长戟');
+    expect(adjustment('first').text).toContain('步兵攻速 +33%，免金、由兵营训练');
+    expect(adjustment('fourth').text).toContain('接敌路径、退路和护卫');
     expect(scope).toContain(`1${rightArrow}3`);
     expect(scope).toContain('驻 5 个劲弩手总 6 箭（上限 7）');
     expect(scope).toContain('不是招募配方或每箭伤害');
