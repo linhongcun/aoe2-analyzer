@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Link, UNSAFE_NavigationContext, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
+import { entityCivLink } from '../../../domain/civRoute';
 import { civNote, dupPeers } from '../../../domain/dupNames';
 import { baseUnit } from '../../../domain/family';
 import { isChampiUnit } from '../../../domain/champiCounters';
@@ -13,6 +14,7 @@ import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../
 import type { Trees, Unit } from '../../../domain/types';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
 import { discountView, replaceUnitCiv, unitTypeLabel, unitWorkspaceOpen, upgradeNotes, withUnitTab } from '../../../domain/unitDetailView';
+import { trainingSites } from '../../../domain/unitTrainingSites';
 import { AgeImg, CivChip, CostView, DlcBadge, UnitIcon } from '../../../shared/ui/art';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { CivPicker } from '../../../shared/ui/CivPicker';
@@ -47,6 +49,7 @@ import { readReverseCounterSession, reverseCounterSessionKey } from '../reverseC
 import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnSource, sameUnitSimLocation } from '../unitSimReturnProvenance';
 import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import { UpgradeLine } from './UpgradeLine';
+import { UnitTrainingConditions } from './UnitTrainingConditions';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -140,7 +143,14 @@ export default function UnitDetail() {
   const insights = unitInsights(u.id);
   const bonuses = Object.fromEntries(u.atks.filter(([name]) => name !== '近战' && name !== '穿刺'));
   const armorClasses = u.armc.filter(([name]) => !/^类别\d+$/.test(name));
-  const building = core.buildingById[u.b];
+  const training = trainingSites(u, context?.en);
+  const site = training?.kind === 'available' ? training.primary : null;
+  const buildingId = site?.building ?? u.b;
+  const building = core.buildingById[buildingId];
+  const trainingBuilding =
+    training?.kind !== 'unavailable' ? (
+      <BuildingTag id={buildingId} zh={site ? (building?.zh ?? '资料待核') : u.bz} building={building} civ={site?.civ} />
+    ) : null;
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
@@ -226,7 +236,7 @@ export default function UnitDetail() {
               <AgeImg age={displayAge} />
               {AGE_ZH[displayAge] ?? displayAge}
             </span>
-            <BuildingTag id={u.b} zh={u.bz} building={building} />
+            {trainingBuilding}
             <DlcBadge i={u.dlc} />
           </div>
           {u.id === 93 && (
@@ -310,12 +320,13 @@ export default function UnitDetail() {
       <section className="ud-section" id="unit-obtain" aria-label="如何获得与升级">
         <h2>如何获得与升级</h2>
         <p className="ud-obtain">
-          <BuildingTag id={u.b} zh={u.bz} building={building} />
+          {trainingBuilding}
           <span className="num nw">
             <Icon name="clock" />
             {u.tt}秒
           </span>
         </p>
+        <UnitTrainingConditions training={training} core={core} />
         {showPrior && u.up && (
           <p>
             从上一级升级为{u.zh}：<CostView c={u.up[0]} />{' '}
@@ -349,7 +360,7 @@ export default function UnitDetail() {
                     </span>
                   </span>
                 ) : (
-                  <Link className="ud-node" to={`/unit/${x.id}`}>
+                  <Link className="ud-node" to={entityCivLink('unit', x.id, site?.civ)}>
                     <UnitIcon u={x} />
                     <span>
                       <span className="ud-node-name">{x.zh}</span>

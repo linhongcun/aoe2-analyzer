@@ -1,10 +1,12 @@
 import json,glob,re,os,urllib.request
+from collections import Counter
 from unit_types import unit_type
 import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));U=d['data']['Unit']
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
 CL={1:'步兵',3:'穿刺',4:'近战',5:'战象',8:'骑兵',11:'所有建筑',13:'石质防御',15:'弓手',16:'船只',17:'冲车',18:'树木',19:'独特单位',20:'攻城武器',21:'标准建筑',22:'城墙/城门',23:'火药单位',25:'僧侣',26:'城堡',27:'长矛兵',28:'骑射手',29:'冲击步兵',30:'骆驼',32:'雇佣兵',34:'渔船',35:'马穆鲁克',36:'英雄/国王',39:'村民',2:'重型战舰',31:'特殊近战',37:'重型攻城武器',38:'掷矛手',41:'喷火船',60:'远程战船'}
 BN={}
 units={}
+monk_buildings={}
 for f in sorted(glob.glob(T+'trees/*.json')):
     civ=civn[os.path.basename(f)[:-5]];t=json.load(open(f))
     for b in t['buildings']: BN[b['building_id']]=(z.get(str(b['name_string_id']),b['name']).replace('<br>',''),b['name'])
@@ -22,7 +24,14 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               arms=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Amount'] or a['Class'] in(3,4)],
               armc=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Class'] not in(3,4)],
               desc=hz,civs=[],cls=sorted(a['Class'] for a in u['Armours']))
-        if x['node_status']!='NotAvailable': units[i]['civs'].append(civ) if civ not in units[i]['civs'] else None
+        if x['node_status']!='NotAvailable':
+            if civ not in units[i]['civs']: units[i]['civs'].append(civ)
+            if i==125: monk_buildings[civ]=x['building_id']
+if monk_buildings:
+    # #1230: pick the widest available same-ID training location. The DAT
+    # first slot omits the Fortified Church substitution in two civs.
+    counts=Counter(monk_buildings.values())
+    units[125]['b']=min(counts, key=lambda building: (-counts[building],building))
 UU=d['data']['unit_upgrades']
 # #38 双射程：aoe2techtree 只给对单位射程；对建筑射程差值取自固定 .dat（蓄力远程 ChargeType，Range − DisplayedRange）
 import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))

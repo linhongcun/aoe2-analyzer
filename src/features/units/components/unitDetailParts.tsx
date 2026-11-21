@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
+import { entityCivLink } from '../../../domain/civRoute';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -119,10 +120,10 @@ export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: b
   );
 }
 
-export function BuildingTag({ id, zh, building }: { id: number; zh: string; building?: { pic: number } }) {
+export function BuildingTag({ id, zh, building, civ }: { id: number; zh: string; building?: { pic: number }; civ?: string }) {
   if (!building) return <span className="ud-tag">{zh}</span>;
   return (
-    <Link className="ud-tag" to={`/building/${id}`}>
+    <Link className="ud-tag" to={entityCivLink('building', id, civ)}>
       <BuildingIcon b={building} />
       {zh}
     </Link>

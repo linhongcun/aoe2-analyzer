@@ -313,6 +313,20 @@
 .bd-row .ulink:hover {
   text-decoration: underline;
 }
+.bd-training-forms,
+.bd-training-condition {
+  width: 100%;
+}
+.bd-training-condition {
+  margin: 0;
+  color: var(--color-text-2);
+  font-size: 13px;
+}
+.bd-training-condition a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .bd-flag {
   display: inline-flex;
   align-items: center;
