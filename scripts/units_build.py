@@ -82,6 +82,11 @@ for u in units.values():
         assert u['age']>=a,(u['id'],u['en'],u['age'],a)  # 升级单位时代不得低于升级科技时代
     u['bz']=BN.get(u['b'],('?','?'))[0];u['ben']=BN.get(u['b'],('?','?'))[1]
     if u['from_'] not in units: u['from_']=None
+    source_unit = _DU[u['id']] if u['id'] < len(_DU) else None
+    if source_unit:
+        for field in ('BlastDamage', 'BlastAttackLevel', 'FriendlyFireDamage'):
+            if field in source_unit:
+                u[field[0].lower() + field[1:]] = source_unit[field]
     dd=rngBd(u['id'])
     if dd:  # 插在 rng 之后，保持字段顺序
         it=list(u.items());it.insert([k for k,_ in it].index('rng')+1,('rngBd',dd));u.clear();u.update(it)

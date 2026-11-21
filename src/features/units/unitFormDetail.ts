@@ -18,6 +18,9 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           attackDelaySeconds: alternate.attackDelaySeconds,
           frameDelay: alternate.frameDelay,
           garrisonCapacity: alternate.garrisonCapacity,
+          blastDamage: undefined,
+          blastAttackLevel: undefined,
+          friendlyFireDamage: undefined,
         }
       : catalogTarget;
   return { owner, alternate, rawTarget };

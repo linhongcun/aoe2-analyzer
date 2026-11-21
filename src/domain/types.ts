@@ -93,6 +93,10 @@ export interface Unit {
   /** 由固定 DAT 读取的落点散布原值；缺失与显式零分别处理。 */
   accuracyDispersion?: number;
   blast: number;
+  /** 固定 DAT 目录模板：次要目标系数／编码、对象层级、受方友方范围伤害倍率。 */
+  blastDamage?: number;
+  blastAttackLevel?: number;
+  friendlyFireDamage?: number;
   /** 固定目录的 GarrisonCapacity 原值，缺字段时为未知。 */
   garrisonCapacity?: number;
   atks: [string, number][];

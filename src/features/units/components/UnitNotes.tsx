@@ -4,10 +4,23 @@ import { Linked } from '../../../shared/ui/widgets';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import { DetailSource } from '../../../shared/ui/DetailBlocks';
 import { AccuracyBoundaryNote } from './AccuracyBoundaryNote';
+import { UnitBlast } from './UnitBlast';
 import { splashDescription } from './SplashMechanics';
 import { FormDescriptionSource, type FormRelation } from './UnitForms';
 
-export function UnitNotes({ u, relation, techs, invalid }: { u: Unit; relation: FormRelation | null; techs: Tech[]; invalid: boolean }) {
+export function UnitNotes({
+  u,
+  catalog,
+  relation,
+  techs,
+  invalid,
+}: {
+  u: Unit;
+  catalog: Unit[];
+  relation: FormRelation | null;
+  techs: Tech[];
+  invalid: boolean;
+}) {
   const alternate = relation?.alternate ? relation.form : undefined;
   const bonuses = Object.fromEntries(u.atks.filter(([name]) => name !== '近战' && name !== '穿刺'));
   const armorClasses = u.armc.filter(([name]) => !/^类别\d+$/.test(name));
@@ -68,10 +81,14 @@ export function UnitNotes({ u, relation, techs, invalid }: { u: Unit; relation: 
           ，不是「永远打不中」。掩护模式用于覆盖更广区域、降低单点精准度；此数值为目录原始记录，不代表实战命中率为零，也不用于单位 PK 期望命中计算。
         </p>
       )}
-      {!!u.blast && (
-        <p>
-          溅射范围 <span className="num nw">{u.blast}</span>
-        </p>
+      {alternate ? (
+        !!u.blast && (
+          <p>
+            溅射范围 <span className="num nw">{u.blast}</span>
+          </p>
+        )
+      ) : (
+        <UnitBlast unit={u} catalog={catalog} />
       )}
       <h3>说明</h3>
       <p className="ud-desc">
