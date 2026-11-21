@@ -103,7 +103,15 @@ export function BattleReplay({
           </select>
         </label>
       </div>
-      <p className="note">首击在 0 秒同时结算；1v1 展示期望生命，群战展示存活数。回放沿用结果卡计算，不模拟走位和射程。</p>
+      <p className="note">
+        {unit === '生命' ? (
+          <>
+            首击在 <span className="num nw">0 秒</span>同时结算。<span className="num nw">1v1</span> 回放展示期望生命。
+          </>
+        ) : (
+          '回放展示本场模拟的存活数变化。'
+        )}
+      </p>
     </section>
   );
 }

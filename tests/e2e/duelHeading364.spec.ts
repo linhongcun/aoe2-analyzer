@@ -68,22 +68,18 @@ for (const item of MODES) {
   }
 }
 
-test('#1142 标准群战胜负与平局显示精确说明并位于结果之后分享之前', async ({ page }) => {
-  const cases = [
-    'a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4',
-    'a=4.Britons.2..&b=7.Franks.2..&m=n&na=4&nb=4',
-    'a=7.Franks.2..&b=7.Franks.2..&m=n&na=4&nb=4',
-  ];
-  const expected = '接触战估算：双方在第 0 秒同时出手，按集火计算。 不计射程带来的接敌前先手、走位 / 风筝及近战包围空间。';
+test('群战接敌摘要显示在胜负之后和分享之前', async ({ page }) => {
+  const cases = ['a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4', 'a=4.Britons.2..&b=7.Franks.2..&m=n&na=4&nb=4', 'a=7.Franks.2..&b=7.Franks.2..&m=n&na=4&nb=4'];
+
   for (const query of cases) {
     const width = query === cases[0] ? 360 : 1280;
     await page.setViewportSize({ width, height: 900 });
     await go(page, query);
     const note = page.locator('[data-t="duel-contact-boundary"]');
     await expect(note).toBeVisible();
-    expect((await note.innerText()).replace(/\s+/g, ' ').trim()).toBe(expected);
-    await expect(note.locator('strong')).toHaveText('接触战估算：');
-    await expect(note.locator('.num.nw')).toHaveText('0 秒');
+    await expect(note.getByRole('heading', { name: '空间接触面与接敌先手模型（一维近似）' })).toBeVisible();
+    await expect(note).toContainText('不能据此判断实战胜率');
+    await expect(note.locator('.num.nw').first()).toBeVisible();
     const metrics = await note.evaluate((element) => {
       const number = element.querySelector('.num.nw')!;
       return {
@@ -110,7 +106,7 @@ test('#1142 标准群战胜负与平局显示精确说明并位于结果之后�
   }
 });
 
-test('#1142 深色主题说明继续使用表面和次级文字令牌', async ({ page }) => {
+test('群战摘要使用深色主题表面和次级文字令牌', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
   await go(page, 'a=7.Franks.2..&b=4.Britons.2..&m=n&na=4&nb=4');
   const colors = await page.locator('[data-t="duel-contact-boundary"]').evaluate((note) => {
@@ -129,10 +125,14 @@ test('#1142 深色主题说明继续使用表面和次级文字令牌', async ({
   expect(colors.color).toBe(colors.expectedColor);
 });
 
-test('#1142 1v1、等资源、等采集及无结果状态不显示标准群战说明', async ({ page }) => {
-  for (const item of [MODES[0], MODES[2], MODES[3], MODES[4], MODES[5]]) {
+test('单挑无接敌摘要，等资源及等采集时间使用相同接敌模型', async ({ page }) => {
+  for (const item of [MODES[0], MODES[4], MODES[5]]) {
     await go(page, item.query, item.unavailable);
     await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
+  }
+  for (const item of [MODES[2], MODES[3]]) {
+    await go(page, item.query);
+    await expect(page.locator('[data-t="duel-contact-boundary"]')).toBeVisible();
   }
   await go(page, 'a=569.Britons.4.f.&b=359.Japanese.4.f.&m=n&na=4&nb=4', true);
   await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
@@ -216,3 +216,26 @@ for (const [route, children] of [
     }
   });
 }
+
+test('群战使用真实固定数据展示近战容量、攻城先手及最小射程', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await go(page, 'a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=r&bud=5000');
+  const notes = page.locator('[data-t="duel-contact-boundary"]');
+  const cards = notes.locator('.contact-card');
+  await expect(cards).toHaveCount(2);
+  await expect(cards.nth(0)).toContainText(/最多 (?:[1-5]?\d|6[0-5]) \/ 66 人/);
+  await expect(cards.nth(1)).toContainText(/最多 (?:[1-2]?\d|3[0-6]) \/ 37 人/);
+  await expect(notes).not.toContainText('射程先手窗口');
+  await expect(page.locator('#duel-res')).toContainText('回放展示本场模拟的存活数变化。');
+  for (const [id, civ] of [
+    [542, 'Japanese'],
+    [36, 'Spanish'],
+  ] as const) {
+    await go(page, `a=546.Japanese.4.f.&b=${id}.${civ}.4.f.&m=n&na=50&nb=16`);
+    await expect(notes).toContainText('B 方射程先手窗口');
+    await expect(notes).toContainText(/\d+ 轮齐射/);
+    await expect(notes).toContainText('低于最小射程时无法开火');
+    await expect(notes).toContainText('近战开始接敌于');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+});

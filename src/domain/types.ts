@@ -101,6 +101,9 @@ export interface Unit {
   acc: number;
   /** 由固定 DAT 读取的落点散布原值；缺失与显式零分别处理。 */
   accuracyDispersion?: number;
+  /** 固定 DAT 的 X/Y 碰撞半径（格），用于群战接敌近似。 */
+  collisionRadiusX?: number;
+  collisionRadiusY?: number;
   /** 固定 DAT 的显示用间隔（秒）；仅收录与目录基础间隔不同的读数。 */
   displayedReloadTime?: number;
   blast: number;

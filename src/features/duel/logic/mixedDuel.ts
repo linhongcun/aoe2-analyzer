@@ -110,8 +110,8 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     }
     row.resolved = result;
     const reason = mixedFighterError(result.F);
-    if (reason || !u.atks.some(([, n]) => n > 0) || !Number.isFinite(result.S.acc) || result.S.acc < 0 || result.S.acc > 100) {
-      fail(`unit-${i}`, `第 ${i + 1} 行${u.zh}不支持混编持续攻击：${reason ?? '原始攻击或命中率无效'}；请删除或更换`);
+    if (reason || !Number.isFinite(result.S.acc) || result.S.acc < 0 || result.S.acc > 100) {
+      fail(`unit-${i}`, `的${u.zh}${reason ?? '命中率无效'}`);
     }
   });
   return {

@@ -62,8 +62,8 @@ function GoldLine({ k, gold, showSide }: { k: 'a' | 'b'; gold: VarangianGold; sh
   );
 }
 
-export function VgNotes({ sides }: { sides: VgSide[] }) {
-  const groups = sides.map((s) => ({ ...s, notes: varangianPkNotes(s.unitId, s.civ, s.age, s.rof) })).filter((g) => g.notes.length > 0);
+export function VgNotes({ sides, group = false }: { sides: VgSide[]; group?: boolean }) {
+  const groups = sides.map((s) => ({ ...s, notes: varangianPkNotes(s.unitId, s.civ, s.age, s.rof, group) })).filter((g) => g.notes.length > 0);
   const gold = sides.flatMap((s) => {
     const g = varangianGold(s.unitId, s.civ, s.seconds);
     return g ? [{ k: s.k, gold: g }] : [];

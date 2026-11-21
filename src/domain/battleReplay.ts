@@ -1,4 +1,4 @@
-import type { DuelResult, Fighter, GroupResult } from './duel';
+import type { DuelResult, Fighter, GroupOutcome } from './duel';
 
 export interface ReplayFrame {
   time: number;
@@ -6,8 +6,8 @@ export interface ReplayFrame {
   b: number;
 }
 
-/** 群战沿用引擎事件采样，末帧时间保留计算值，避免百分秒取整越过滑块终点。 */
-export function groupReplay(result: GroupResult): ReplayFrame[] {
+/** 群战沿用引擎事件采样，并标出模拟终点。 */
+export function groupReplay(result: GroupOutcome): ReplayFrame[] {
   const frames = result.timeline.map(([time, a, b]) => ({ time: Math.min(time, result.duration), a, b }));
   frames.push({ time: result.duration, a: result.aAlive, b: result.bAlive });
   return frames;

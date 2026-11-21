@@ -207,7 +207,7 @@ export function MixedSideEditor({
           ))}
         </div>
       </details>
-      <p className="note mix-queue-note">从上到下依次受击；调序也影响本方同刻攻击解析，不代表前排保护。</p>
+      <p className="note mix-queue-note">从上到下依次受击。最前一行清空后，下一行顶上。</p>
       <div id={`${prefix}-rows`} tabIndex={-1}>
         {fieldErrors('rows')}
         {input.rows.map((row, i) => {
@@ -347,9 +347,7 @@ export function MixedSideEditor({
                 ) : (
                   <p className="note">请先修正本行单位与共享上下文，暂不展示有效属性。</p>
                 )}
-                <p className="note">
-                  未计入：走位、射程接敌、溅射、特殊技能、治疗、招降、弹道和阵型协同；所有存活单位均从开局同时参战。战斗沿用本站伤害类别、护甲与远程命中期望公式。
-                </p>
+                <p className="note">以本行接敌距离判断出手资格。前排近战受占位限制，后排远程在射程内可以出手。战斗沿用本站伤害类别、护甲与远程命中期望公式。</p>
                 {!!view.errors.length && <p className="mix-field-error">本方配置尚有错误，以上仅供修正时核对；不可据此生成战果。</p>}
               </details>
             </div>

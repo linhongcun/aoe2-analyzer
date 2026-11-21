@@ -73,6 +73,7 @@ describe('#383 瓦兰吉卫队产金', () => {
     const a = side(2704, 'Byzantines');
     const b = side(567, 'Teutons');
     const g = groupFight(a.F, 2, b.F, 1);
+    if (g.status === 'error') throw Error(g.reason);
     const before = { winner: g.winner, duration: g.duration, hpLeft: g.hpLeft, aAlive: g.aAlive, bAlive: g.bAlive };
     const seconds = sideEngagementSeconds(g.timeline, 'a');
     expect(seconds).toBeGreaterThan(0);

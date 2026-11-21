@@ -1,10 +1,11 @@
 /** #25 PK 盈亏平衡点（v3 样稿：https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/mockups/issue25-v3/）。只负责展示，计算见 domain/breakEven.ts */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { breakEven, BREAK_EVEN_CAP, type BreakEvenResult } from '../../../domain/breakEven';
+import { breakEvenSteps, type BreakEvenResult } from '../../../domain/breakEven';
 import type { Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
 import { useShareLink } from '../../../shared/ui/useShareLink';
+import { CONTACT_MODEL, STOP_LABELS } from './ContactSummary';
 
 const r1 = (x: number) => String(Math.round(x * 10) / 10);
 
@@ -25,9 +26,29 @@ export interface BreakEvenProps {
 
 export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
   const route = useLocation();
-  const compute = () => ({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name, summary });
-  // URL 带 be=1（分享链接）时首次渲染即计算
-  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string } | null>(() => (auto ? compute() : null));
+  const [job, setJob] = useState(() => (auto ? { sig, a, b, nb, summary } : null));
+  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string } | null>(null);
+  if (job && job.sig !== sig) setJob(null);
+  const pending = job?.sig === sig;
+  useEffect(() => {
+    if (!job || job.sig !== sig) return;
+    const steps = breakEvenSteps(job.a, job.b, job.nb);
+    let timer: ReturnType<typeof setTimeout>;
+    const batch = () => {
+      const until = performance.now() + 8;
+      do {
+        const step = steps.next();
+        if (step.done) {
+          setRes({ sig: job.sig, r: step.value, aName: job.a.name, bName: job.b.name, summary: job.summary });
+          setJob(null);
+          return;
+        }
+      } while (performance.now() < until);
+      timer = setTimeout(batch, 0);
+    };
+    timer = setTimeout(batch, 0);
+    return () => clearTimeout(timer);
+  }, [job, sig]);
   const {
     copy: copyLink,
     copied,
@@ -40,18 +61,26 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
     failureMessage: '自动复制失败，请手动复制下方完整链接。',
   });
   const run = () => {
-    setRes(compute());
+    setJob({ sig, a, b, nb, summary });
     onComputed();
   };
   const stale = !!res && res.sig !== sig;
   const copy = () => copyLink(location.href);
+  if (pending)
+    return (
+      <p className="note" role="status">
+        正在计算盈亏平衡点…
+      </p>
+    );
   if (!res)
     return (
       <div className="be-entry" data-t="be-entry">
         <button type="button" className="be-pri" onClick={run}>
           <Icon name="scale" /> 算盈亏平衡
         </button>
-        <small className="note">{nb === 1 ? '几个 A 能打过 1 个 B' : `A 至少要多少个才能打赢 B × ${nb}`}</small>
+        <small className="note">
+          A 至少要多少个才能打赢 <span className="num nw">B × {nb}</span>
+        </small>
       </div>
     );
   const { r, aName, bName } = res;
@@ -74,62 +103,85 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
         <h2 className="be-title">
           <Icon name="scale" /> 盈亏平衡点
         </h2>
-        {r.n !== null ? (
+        {r.interrupted ? (
+          <div className="be-cap" role="status">
+            <b>盈亏平衡计算中止</b>
+            <span>
+              A 方 <span className="num nw">{r.interrupted.n} 个单位</span>一档未完成。
+              {r.interrupted.result.status === 'error'
+                ? r.interrupted.result.reason
+                : r.interrupted.result.status === 'timeout' || r.interrupted.result.status === 'limit'
+                  ? STOP_LABELS[r.interrupted.result.status]
+                  : null}
+            </span>
+          </div>
+        ) : r.n !== null ? (
           <p className="be-hero">
             <b className="be-n" data-t="be-n">
               {r.n}
             </b>
             <span>
-              个{aName}，才能打赢 {r.nb} 个{bName}
+              <span className="num nw">个{aName}</span>，才能打赢 <span className="num nw">{r.nb} 个</span>
+              {bName}
             </span>
           </p>
         ) : (
           <div className="be-cap" data-t="be-cap">
-            <b>{r.cap} 个以内都打不赢</b>
+            <b>
+              <span className="num nw">{r.cap} 个</span>以内未找到稳定获胜门槛
+            </b>
             <span>
-              A 用 {r.cap} 个{aName}仍打不赢 {r.nb} 个{bName}。下面是 {r.cap} 个时的战损。
+              下方显示 A 方 <span className="num nw">{r.cap} 个单位</span>时的战损。
             </span>
           </div>
         )}
         {r.n !== null && (
           <p className="be-sub" data-t="be-sub">
-            {r.n} 个及以上都能赢
+            从 <span className="num nw">{r.n} 个</span>到 <span className="num nw">{r.cap} 个</span>均能获胜
           </p>
         )}
-        <p className="note be-sum">{sumText} · 集火模型</p>
-        <div className="be-tw">
-          <table className="stat be-tab">
-            <thead>
-              <tr>
-                <td>A 数量</td>
-                <td>结果</td>
-                <td>A 剩余</td>
-                <td>B 剩余</td>
-                <td>用时</td>
-              </tr>
-            </thead>
-            <tbody>
-              {r.rows.map((x) => (
-                <tr key={x.n} className={x.n === r.n ? 'on' : undefined} data-n={x.n}>
-                  <td>{x.n}</td>
-                  <td className={x.win ? 'be-w' : 'be-l'}>
-                    <Icon name={x.win ? 'check' : 'x'} /> {x.win ? 'A 胜' : 'A 负（含平局）'}
-                  </td>
-                  <td>{x.r.aAlive}</td>
-                  <td>{x.r.bAlive}</td>
-                  <td>{r1(x.r.duration)} 秒</td>
+        <p className="note be-sum">
+          {sumText} · {CONTACT_MODEL}
+        </p>
+        {!!r.rows.length && (
+          <div className="be-tw">
+            <table className="stat be-tab">
+              <thead>
+                <tr>
+                  <td>A 数量</td>
+                  <td>结果</td>
+                  <td>A 剩余</td>
+                  <td>B 剩余</td>
+                  <td>用时</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {r.rows.map((x) => (
+                  <tr key={x.n} className={x.n === r.n ? 'on' : undefined} data-n={x.n}>
+                    <td className="num nw">{x.n}</td>
+                    <td className={x.win ? 'be-w' : 'be-l'}>
+                      <Icon name={x.win ? 'check' : 'x'} /> {x.win ? 'A 胜' : 'A 负（含平局）'}
+                    </td>
+                    <td className="num nw">{x.r.aAlive}</td>
+                    <td className="num nw">{x.r.bAlive}</td>
+                    <td className="num nw">{r1(x.r.duration)} 秒</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         <p className="be-how">
-          怎么算的：B 固定 {r.nb} 个，A 从 1 个起逐个加到 {r.cap} 个，用和群战相同的集火模型，找出 A <b>严格获胜</b>的最少数量；平局算没打赢。
+          B 方固定 <span className="num nw">{r.nb} 个</span>，从 <span className="num nw">1 个</span>起逐档计算 A 方。
+          取从该数量起、直到计算上限每一档都能获胜的最少数量。平局不算获胜。
         </p>
         {r.n !== null && (
           <div className="be-act">
             <button type="button" className="be-pri" disabled={stale} onClick={() => onOpen(r.n!, r.nb)}>
-              <Icon name="arrow-right" /> 在 N vs M 中打开 {r.n} vs {r.nb}
+              <Icon name="arrow-right" /> 在 N vs M 中打开{' '}
+              <span className="num nw">
+                {r.n} vs {r.nb}
+              </span>
             </button>
             <button type="button" className="be-sec" onClick={copy}>
               {copied ? '已复制' : '复制链接'}

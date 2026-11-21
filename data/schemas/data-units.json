@@ -178,6 +178,8 @@
         "type": "number",
         "minimum": 0
       },
+      "collisionRadiusX": { "type": "number", "exclusiveMinimum": 0 },
+      "collisionRadiusY": { "type": "number", "exclusiveMinimum": 0 },
       "blastDamage": { "type": "number" },
       "blastAttackLevel": { "type": "integer", "minimum": 0 },
       "friendlyFireDamage": { "type": "number", "minimum": 0 },
@@ -339,6 +341,10 @@
           "required": ["action", "value1", "value2"]
         }
       }
+    },
+    "dependentRequired": {
+      "collisionRadiusX": ["collisionRadiusY"],
+      "collisionRadiusY": ["collisionRadiusX"]
     },
     "required": [
       "id",

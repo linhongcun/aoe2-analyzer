@@ -22,7 +22,16 @@ const seq =
   (_a, na): GroupResult => {
     const c = s[na - 1];
     const winner = c === 'W' ? 'a' : c === 'D' ? 'draw' : 'b';
-    return { winner, aAlive: 0, bAlive: 0, hpLeft: 0, duration: na, timeline: [] };
+    return {
+      status: winner === 'draw' ? 'draw' : 'win',
+      contact: { a: [], b: [], meleeAt: null, firstStrike: null, firstFire: null },
+      winner,
+      aAlive: 0,
+      bAlive: 0,
+      hpLeft: 0,
+      duration: na,
+      timeline: [],
+    };
   };
 
 describe('breakEven 缺口：非单调 / 平局 / 上限', () => {

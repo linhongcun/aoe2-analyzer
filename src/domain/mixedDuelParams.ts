@@ -1,4 +1,4 @@
-import { MIXED_RULE } from './mixedFight';
+import { LEGACY_MIXED_RULE, MIXED_RULE } from './mixedFight';
 
 export interface MixedRowInput {
   uid: string;
@@ -31,6 +31,7 @@ export function decodeMixedDuel(params: URLSearchParams): {
   errors: string[];
   sharedErrors: string[];
   sideErrors: Record<'a' | 'b', string[]>;
+  legacy: boolean;
 } {
   const sharedErrors: string[] = [];
   const sideErrors = { a: [] as string[], b: [] as string[] };
@@ -44,7 +45,7 @@ export function decodeMixedDuel(params: URLSearchParams): {
   }
   if (params.get('m') !== 'mix') sharedErrors.push('混编模式标识无效');
   const rule = params.get('rule') ?? '';
-  if (rule !== MIXED_RULE) sharedErrors.push(`规则版本不受支持：${rule || '缺失'}`);
+  if (rule !== MIXED_RULE && rule !== LEGACY_MIXED_RULE) sharedErrors.push(`规则版本不受支持：${rule || '缺失'}`);
   const data = params.get('data') ?? '';
   if (!data) sharedErrors.push('缺少链接数据版本标识');
   const side = (key: 'a' | 'b'): MixedSideInput => {
@@ -84,7 +85,8 @@ export function decodeMixedDuel(params: URLSearchParams): {
     return { civ: scalar(obj.civ), age: scalar(obj.age), techs: list('techs'), team: list('team'), rows };
   };
   const input = { rule, data, a: side('a'), b: side('b') };
-  return { input, errors: [...sharedErrors, ...sideErrors.a, ...sideErrors.b], sharedErrors, sideErrors };
+  const errors = [...sharedErrors, ...sideErrors.a, ...sideErrors.b];
+  return { input, errors, sharedErrors, sideErrors, legacy: rule === LEGACY_MIXED_RULE && !errors.length };
 }
 
 export function encodeMixedDuel(input: MixedDuelInput): URLSearchParams {

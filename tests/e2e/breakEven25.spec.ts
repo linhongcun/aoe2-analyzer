@@ -42,10 +42,10 @@ for (const w of WIDTHS) {
   test.describe(`盈亏平衡 @${w}`, () => {
     test.use({ viewport: { width: w, height: 900 } });
 
-    test('N vs M：点「算盈亏平衡」得出 16，三档 15 负 / 16 胜 / 17 胜，无横向溢出', async ({ page }) => {
+    test('N vs M：点「算盈亏平衡」得出 21，三档 20 负 / 21 胜 / 22 胜，无横向溢出', async ({ page }) => {
       await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10`);
       await page.getByRole('button', { name: '算盈亏平衡' }).click();
-      await expect(page.locator('[data-t=be-n]')).toHaveText('16');
+      await expect(page.locator('[data-t=be-n]')).toHaveText('21');
       await expect(page.locator('#duel-be')).toContainText('个长戟兵，才能打赢 10 个游侠');
       const rows = page.locator('.be-tab tbody tr');
       await expect(rows).toHaveCount(3);
@@ -53,22 +53,22 @@ for (const w of WIDTHS) {
       await expect(rows.nth(1)).toContainText('A 胜');
       await expect(rows.nth(2)).toContainText('A 胜');
       await expect(page).toHaveURL(/be=1/);
-      await expect(page.locator('[data-t=be-sub]')).toHaveText('16 个及以上都能赢');
+      await expect(page.locator('[data-t=be-sub]')).toHaveText('从 21 个到 200 个均能获胜');
       await noHScroll(page);
       // 「在 N vs M 中打开」后，主 PK 结果与第 N 档一致
-      await page.getByRole('button', { name: /在 N vs M 中打开 16 vs 10/ }).click();
+      await page.getByRole('button', { name: /在 N vs M 中打开 21 vs 10/ }).click();
       await expect(page.locator('#duel-res .duel-win')).toContainText('A · 长戟兵 获胜');
     });
 
-    test('N−1 档与手动 N vs M 一致：15 vs 10 游侠获胜', async ({ page }) => {
-      await page.goto(`./#/duel?${AB}&m=n&na=15&nb=10`);
+    test('N−1 档与手动 N vs M 一致：20 vs 10 游侠获胜', async ({ page }) => {
+      await page.goto(`./#/duel?${AB}&m=n&na=20&nb=10`);
       await expect(page.locator('#duel-res .duel-win')).toContainText('B · 游侠 获胜');
     });
 
-    test('1v1 入口：2 个长戟兵才能打赢 1 个游侠；改参数后旧结果变灰', async ({ page }) => {
+    test('1v1 入口：3 个长戟兵才能打赢 1 个游侠；改参数后旧结果变灰', async ({ page }) => {
       await page.goto(`./#/duel?${AB}&m=1`);
       await page.getByRole('button', { name: '算盈亏平衡' }).click();
-      await expect(page.locator('[data-t=be-n]')).toHaveText('2');
+      await expect(page.locator('[data-t=be-n]')).toHaveText('3');
       await expect(page.locator('#duel-be')).toContainText('才能打赢 1 个游侠');
       await page.getByRole('radio', { name: '无科技' }).first().click();
       await expect(page.locator('[data-t=be-stale]')).toContainText('参数已变，请重新计算');
@@ -82,12 +82,12 @@ for (const w of WIDTHS) {
 
     test('分享链接 be=1 打开即显示结果', async ({ page }) => {
       await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
-      await expect(page.locator('[data-t=be-n]')).toHaveText('16');
+      await expect(page.locator('[data-t=be-n]')).toHaveText('21');
     });
 
-    test('上限：200 个无科技村民打不赢 200 个满科技游侠，显示「200 个以内都打不赢」', async ({ page }) => {
+    test('上限：200 个无科技村民打不赢 200 个满科技游侠，显示「200 个以内未找到稳定获胜门槛」', async ({ page }) => {
       await page.goto('./#/duel?a=83.Franks.4..&b=569.Franks.4.f.&m=n&na=10&nb=200&be=1');
-      await expect(page.locator('[data-t=be-cap] b')).toHaveText('200 个以内都打不赢');
+      await expect(page.locator('[data-t=be-cap] b')).toHaveText('200 个以内未找到稳定获胜门槛');
       await expect(page.locator('[data-t=be-n]')).toHaveCount(0);
       await expect(page.locator('.be-tab tbody tr')).toHaveCount(1);
       await expect(page.locator('.be-tab tbody tr')).toContainText('A 负（含平局）');
@@ -96,7 +96,7 @@ for (const w of WIDTHS) {
 
     test('切换模式：结果清空，URL 去掉 be=1', async ({ page }) => {
       await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
-      await expect(page.locator('[data-t=be-n]')).toHaveText('16');
+      await expect(page.locator('[data-t=be-n]')).toHaveText('21');
       await page.getByRole('radio', { name: '1v1' }).click();
       await expect(page.locator('[data-t=be-n]')).toHaveCount(0);
       await expect(page.locator('[data-t=be-entry]')).toBeVisible();
@@ -119,7 +119,7 @@ for (const w of WIDTHS) {
       await page.goto('./#/duel?a=83.Franks.4..&b=569.Franks.4.f.&m=n&na=10&nb=200&be=1');
       await page.reload();
       const cap = page.locator('[data-t=be-cap] b');
-      await expect(cap).toHaveText('200 个以内都打不赢');
+      await expect(cap).toHaveText('200 个以内未找到稳定获胜门槛');
       await expect(cap).toHaveCSS('color', mutedRgb);
       expect(await cap.evaluate((e) => getComputedStyle(e).color)).not.toBe(await tokenRgb(page, '--color-bad'));
       expect(await cap.evaluate((e) => getComputedStyle(e).fontSize)).not.toBe('16px');

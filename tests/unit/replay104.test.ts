@@ -1,14 +1,27 @@
 import { expect, it } from 'vitest';
 import { groupReplay, oneReplay, replayAt } from '../../src/domain/battleReplay';
 import { duel, groupFight, type Fighter } from '../../src/domain/duel';
-const f: Fighter = { name: 'test', hp: 30, attack: { 近战: 6 }, armor: { 近战: 1 }, rof: 1.7, acc: 1, ranged: false, rng: 0, cost: {} };
+const f: Fighter = {
+  name: 'test',
+  hp: 30,
+  attack: { 近战: 6 },
+  armor: { 近战: 1 },
+  rof: 1.7,
+  acc: 1,
+  ranged: false,
+  rng: 0,
+  cost: {},
+  contact: { radiusX: 0.25, radiusY: 0.25, speed: 1, minRange: 0, firstHitDelay: 0, repeatableAttack: true },
+};
 it.each([
   [1, 1],
   [7, 10],
   [200, 199],
 ])('群战 %s 对 %s 终点与结果卡一致', (a, b) => {
   const result = groupFight(f, a, { ...f, rof: 1.3 }, b);
+  if (result.status === 'error') throw Error(result.reason);
   const frames = groupReplay(result);
+  expect(replayAt(frames, 0)).toMatchObject({ a, b });
   expect(frames.at(-1)).toEqual({ time: result.duration, a: result.aAlive, b: result.bAlive });
   expect(replayAt(frames, result.duration)).toEqual(frames.at(-1));
   expect(replayAt(frames, 0).time).toBe(0);

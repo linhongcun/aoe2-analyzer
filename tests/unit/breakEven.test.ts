@@ -32,22 +32,22 @@ describe('breakEven 口径', () => {
     expect(BREAK_EVEN_DEFAULT_B).toBe(10);
     expect(BREAK_EVEN_CAP).toBe(200);
   });
-  it('场景 1：16 个拜占庭长戟兵才能打赢 10 个法兰克游侠（满科技）', () => {
+  it('场景 1：21 个拜占庭长戟兵才能打赢 10 个法兰克游侠（满科技）', () => {
     const r = breakEven(halb, pala, 10);
-    expect(r.n).toBe(16);
+    expect(r.n).toBe(21);
     expect(r.rows.map((x) => [x.n, x.win])).toEqual([
-      [15, false],
-      [16, true],
-      [17, true],
+      [20, false],
+      [21, true],
+      [22, true],
     ]);
   });
-  it('场景 1 · 1v1：2 个长戟兵才能打赢 1 个游侠，N−1 档负', () => {
+  it('场景 1 · 1v1：3 个长戟兵才能打赢 1 个游侠，N−1 档负', () => {
     const r = breakEven(halb, pala, 1);
-    expect(r.n).toBe(2);
+    expect(r.n).toBe(3);
     expect(r.rows[0]!.r.winner).toBe('b');
   });
-  it('场景 2：城堡时代 11 个法兰克骑士才能打赢 10 个柏柏尔骆驼', () => {
-    expect(breakEven(knight, camel, 10).n).toBe(11);
+  it('场景 2：城堡时代 12 个法兰克骑士才能打赢 10 个柏柏尔骆驼', () => {
+    expect(breakEven(knight, camel, 10).n).toBe(12);
   });
   it('三档结果与直接调用 groupFight 完全相同', () => {
     for (const [a, b] of [
@@ -85,10 +85,30 @@ describe('breakEven 口径', () => {
     expect(breakEven(halb, pala, 10).unstableBelow).toBe(false);
     expect(breakEven(knight, camel, 10).unstableBelow).toBe(false);
   });
+  it('遇到未完成档位时返回中止原因，不再把该档计为败局', () => {
+    const simulated: number[] = [];
+    const fake: FightFn = (a, n, b, nb) => {
+      simulated.push(n);
+      return n === 3 ? { status: 'error', reason: '缺少有效碰撞数据', winner: null } : groupFight(a, n, b, nb);
+    };
+    const r = breakEven(halb, pala, 1, 10, fake);
+    expect(simulated).toEqual([1, 2, 3]);
+    expect(r).toMatchObject({ n: null, capReached: false, rows: [], interrupted: { n: 3, result: { status: 'error' } } });
+    expect(breakEven(halb, pala, 201).interrupted?.result.status).toBe('error');
+  });
   it('非单调（注入的战斗结果）：N 取末尾全胜后缀起点，unstableBelow 为 true', () => {
     // 合成胜负序列：3、5 胜，4 负，7 起全胜 -> N = 7，零星胜档 3、5
     const wins = new Set([3, 5, 7, 8, 9, 10]);
-    const fake: FightFn = (_a, na) => ({ winner: wins.has(na) ? 'a' : 'b', aAlive: 0, bAlive: 0, hpLeft: 0, duration: na, timeline: [] });
+    const fake: FightFn = (_a, na) => ({
+      status: 'win',
+      contact: { a: [], b: [], meleeAt: null, firstStrike: null, firstFire: null },
+      winner: wins.has(na) ? 'a' : 'b',
+      aAlive: 0,
+      bAlive: 0,
+      hpLeft: 0,
+      duration: na,
+      timeline: [],
+    });
     const r = breakEven(halb, pala, 10, 10, fake);
     expect(r.n).toBe(7);
     expect(r.isolatedWins).toEqual([3, 5]);
@@ -100,7 +120,16 @@ describe('breakEven 口径', () => {
     ]);
   });
   it('上限内无法取胜时不给不稳定提示', () => {
-    const fake: FightFn = (_a, na) => ({ winner: na === 2 ? 'a' : 'b', aAlive: 0, bAlive: 0, hpLeft: 0, duration: 0, timeline: [] });
+    const fake: FightFn = (_a, na) => ({
+      status: 'win',
+      contact: { a: [], b: [], meleeAt: null, firstStrike: null, firstFire: null },
+      winner: na === 2 ? 'a' : 'b',
+      aAlive: 0,
+      bAlive: 0,
+      hpLeft: 0,
+      duration: 0,
+      timeline: [],
+    });
     const r = breakEven(halb, pala, 10, 5, fake);
     expect(r.n).toBeNull();
     expect(r.unstableBelow).toBe(false);

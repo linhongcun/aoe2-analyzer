@@ -1,4 +1,4 @@
-import type { DuelResult, GroupResult } from '../../../domain/duel';
+import type { DuelResult, GroupOutcome } from '../../../domain/duel';
 import { r1, type Resolved } from '../logic/duelSide';
 
 export function OneTimeline({ A, B, result }: { A: Resolved; B: Resolved; result: DuelResult }) {
@@ -36,13 +36,19 @@ export function OneTimeline({ A, B, result }: { A: Resolved; B: Resolved; result
   );
 }
 
-export function GroupTimeline({ result, na, nb }: { result: GroupResult; na: number; nb: number }) {
+export function GroupTimeline({ result, na, nb }: { result: GroupOutcome; na: number; nb: number }) {
   const T = Math.max(result.duration, 0.01),
     W = 600,
     H = 120,
     M = Math.max(na, nb);
   const path = (i: 1 | 2) =>
-    result.timeline.map(([t, a, b], j) => `${j ? 'L' : 'M'}${((t / T) * W).toFixed(1)},${(H - ((i === 1 ? a : b) / M) * H).toFixed(1)}`).join(' ');
+    result.timeline
+      .map(([t, a, b], j) => {
+        const x = ((t / T) * W).toFixed(1);
+        const y = (H - ((i === 1 ? a : b) / M) * H).toFixed(1);
+        return j ? `H${x}V${y}` : `M${x},${y}`;
+      })
+      .join(' ') + `H${((result.duration / T) * W).toFixed(1)}`;
   return (
     <>
       <h3 className="duel-timeline-title">存活数量随时间变化</h3>
