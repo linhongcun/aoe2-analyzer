@@ -178,6 +178,10 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+**并行扩展 DAT 字段时，为整合后的精简数据分配独立缓存版本。** `dat_source.parse()` 按缓存版本和原文件哈希复用 JSON。同一个 DAT 可以生成两种字段集合。隔离复现中，将只有范围攻击字段的缓存置于相同键下，1911 的范围字段仍正确，准确度散布却缺失。整合时用新缓存键从固定 DAT 重建，再按 ID 核对两个分支的字段和已有字段。[缓存复现实验](https://github.com/linhongcun/aoe2-analyzer/pull/1255#issuecomment-7062230038) · [整合验证](https://github.com/linhongcun/aoe2-analyzer/pull/1255#issuecomment-7062213993)
+
+**合并名称的详情需核对每个模式下的实际操作。** 科技 408 把随机地图的「间谍」研究和弑君模式的「叛徒」付费指令放在同一条目，后者可反复付费使用。目录中的重复研究字段只说明科技规则。给合并条目写文案时，先核对名称对应的动作和模式，再分别验证研究限制与指令说明。[PR #1254 的评审与修复](https://github.com/linhongcun/aoe2-analyzer/pull/1254#discussion_r4652304525)
+
 **在拼音生成后核对目录中的大整数。** 两个单位的恢复速率在 Python 导出时均为 `3199999949781598208`，原拼音脚本读写整份 JSON 后写成了 `3199999949781598000`。在 JavaScript 中把两边都转成 `Number` 再比较，会漏掉这个差异。新增可能超出安全整数范围的字段时，用 Python 整数或其他无损解析器按 ID 比较固定源与最终提交的 JSON，并运行拼音的 `--check` 验证重跑稳定。[PR #1250](https://github.com/linhongcun/aoe2-analyzer/pull/1250)
 
 **从目录入口和静态分享地址分别验证替代形态。** 保加利亚骑兵的目录去重保留城堡训练记录 1225／1227，落马关系却在营垒记录 1254／1255。新增形态时，沿目录实际保留的记录走到对应档位，再打开复制的 `/unit/<id>/` 地址核对生产构建生成了该页。前者能发现训练记录与形态归属不同造成的断链，后者能发现静态页面登记遗漏。[目录入口复核](https://github.com/linhongcun/aoe2-analyzer/pull/1251#discussion_r4651359756) · [PR #1251](https://github.com/linhongcun/aoe2-analyzer/pull/1251)
