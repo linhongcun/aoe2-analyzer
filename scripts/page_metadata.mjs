@@ -68,6 +68,19 @@ for (const [file, type] of [
           type === 'unit' ? '基础属性，未计文明与科技加成。' : type === 'tech' ? '资源总量为各资源数量相加，未计文明折扣。' : '基础属性，未计文明与科技加成。',
       },
     );
+    if (type === 'unit' && x.form) {
+      const form = x.form;
+      add(`/unit/${form.id}`, form.zh, `${form.zh}（${form.en}）：形态基础属性与获取方式。数据版本 DE ${dataBuild}。`, {
+        stats: [
+          ['基础生命', form.hp],
+          ['基础攻击', form.atk],
+          ['基础射程', form.rng],
+        ],
+        icon: `img/units/${x.pic}.webp`,
+        kind: 'unit',
+        note: '非独立训练单位。基础属性未计文明与科技加成。',
+      });
+    }
   }
 for (const c of read('civs')) {
   add(`/civ/${c.en}`, c.zh, `${c.zh}（${c.en}）：文明加成、特色单位、科技与开局建议。`, {

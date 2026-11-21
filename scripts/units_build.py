@@ -5,6 +5,23 @@ from catalog_description import clean_description
 from unit_types import unit_type
 import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));U=d['data']['Unit']
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
+def combat_stats(row):
+    def pairs(records, accept):
+        return [[CL.get(a['Class'], '类别%d' % a['Class']), a['Amount']] for a in records if accept(a)]
+    stats = dict(hp=row['HP'], atk=row['Attack'], ma=row['MeleeArmor'], pa=row['PierceArmor'],
+                 rng=row['Range'], minr=row['MinRange'], spd=row['Speed'], los=row['LineOfSight'],
+                 rof=row['ReloadTime'], acc=row['AccuracyPercent'], blast=row['BlastWidth'],
+                 atks=pairs(row['Attacks'], lambda a: a['Amount']),
+                 arms=pairs(row['Armours'], lambda a: a['Amount'] or a['Class'] in (3, 4)),
+                 armc=pairs(row['Armours'], lambda a: a['Class'] not in (3, 4)),
+                 cls=sorted(a['Class'] for a in row['Armours']))
+    for key, field, types in [('attackDelaySeconds', 'AttackDelaySeconds', (int, float)),
+                              ('frameDelay', 'FrameDelay', (int,)), ('garrisonCapacity', 'GarrisonCapacity', (int,))]:
+        value = row.get(field)
+        if type(value) in types and 0 <= value < math.inf:
+            stats[key] = value
+    return stats
+
 BN={}
 units={}
 monk_buildings={}
@@ -19,20 +36,12 @@ for f in sorted(glob.glob(T+'trees/*.json')):
             hz=clean_description(z.get(str(u['LanguageNameId']+21000)),('生产','建造','创建'))
             units[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=unit_type(i,x['node_type']),age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
               from_=x['link_id'] if x['link_node_type'] in('Unit','UniqueUnit','RegionalUnit','UnitUpgrade') else None,
-              cost=u['Cost'],hp=u['HP'],atk=u['Attack'],ma=u['MeleeArmor'],pa=u['PierceArmor'],rng=u['Range'],minr=u['MinRange'],spd=u['Speed'],los=u['LineOfSight'],rof=u['ReloadTime'],tt=u['TrainTime'],acc=u['AccuracyPercent'],blast=u['BlastWidth'],
-              atks=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Attacks'] if a['Amount']],
-              arms=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Amount'] or a['Class'] in(3,4)],
-              armc=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Class'] not in(3,4)],
-              desc=hz,civs=[],cls=sorted(a['Class'] for a in u['Armours']))
-            attack_delay = u.get('AttackDelaySeconds')
-            if type(attack_delay) in (int, float) and 0 <= attack_delay < math.inf:
-                units[i]['attackDelaySeconds'] = attack_delay
-            frame_delay = u.get('FrameDelay')
-            if type(frame_delay) is int and frame_delay >= 0:
-                units[i]['frameDelay'] = frame_delay
-            capacity = u.get('GarrisonCapacity')
-            if type(capacity) is int and capacity >= 0:
-                units[i]['garrisonCapacity'] = capacity
+              cost=u['Cost'],tt=u['TrainTime'],**combat_stats(u),desc=hz,civs=[])
+        if civ == 'Bengalis' and i in (1759, 1761):
+            key = str(x['help_string_id'] - 79000)
+            if not e[key].strip() or not z[key].strip():
+                raise ValueError(f'Missing bilingual Ratha help for {i}: {key}')
+            units[i]['desc'] = clean_description(z[key], ('生产', '建造', '创建'))
         if x['node_status']!='NotAvailable':
             if civ not in units[i]['civs']: units[i]['civs'].append(civ)
             if i==125: monk_buildings[civ]=x['building_id']
@@ -68,6 +77,26 @@ for u in units.values():
     dd=rngBd(u['id'])
     if dd:  # 插在 rng 之后，保持字段顺序
         it=list(u.items());it.insert([k for k,_ in it].index('rng')+1,('rngBd',dd));u.clear();u.update(it)
+# Only these five non-trainable forms have verified sources and detail pages.
+for owner, target, kind, zh_suffix, en_suffix in [
+    (1759, 1738, 'weapon', '近战', 'Melee'), (1761, 1740, 'weapon', '近战', 'Melee'),
+    (1962, 1980, 'barrage', '掩护', 'Barrage'),
+    (1254, 1252, 'dismount', '下马', 'Dismounted'), (1255, 1253, 'dismount', '下马', 'Dismounted'),
+]:
+    source, alternate = U[str(owner)], U[str(target)]
+    if target in units:
+        raise ValueError(f'Form {target} unexpectedly has a training node')
+    if kind == 'dismount':
+        valid = _DU[owner]['BloodUnitID'] == target
+    else:
+        valid = (source['Trait'] & 8 and alternate['Trait'] & 8
+                 and source['TraitPiece'] == target and alternate['TraitPiece'] == owner)
+    if not valid:
+        raise ValueError(f'Form relation changed: {owner} to {target}')
+    entry = units[owner]
+    entry['form'] = dict(id=target, kind=kind, en=f"{entry['en']} ({en_suffix})",
+                         zh=f"{entry['zh']}（{zh_suffix}）", **combat_stats(alternate))
+
 # images
 os.makedirs('public/img/units',exist_ok=True)
 from PIL import Image;import io
