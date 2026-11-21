@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { breakEven } from '../../src/domain/breakEven';
 import { countForBudget, groupFight, type Fighter } from '../../src/domain/duel';
+import type { TechSpec } from '../../src/domain/duelState';
 import { mixedFight, type MixedFighter, type MixedFightResult } from '../../src/domain/mixedFight';
 import { makeSimContext } from '../../src/domain/simulator';
 import { resolve, isUnavail } from '../../src/features/duel/logic/duelSide';
@@ -96,8 +97,22 @@ describe('接触面与接敌先手', () => {
     expect(second.b.total.hp).toBe(78);
   });
 
+  it('敌方前排缩窄时，重新排到后一层的同一单位保留攻击冷却', () => {
+    const a = [row(1, 2, { rng: 1 })];
+    const b = [row(2, 4, { hp: 5, acc: 0 })];
+    const duringCooldown = valid(mixedFight(a, b, { maxTime: 1 }));
+    expect(duringCooldown.timeline).toEqual([
+      [0, 2, 4],
+      [0.5, 2, 2],
+      [1, 2, 2],
+    ]);
+    const finished = valid(mixedFight(a, b, { maxTime: 1.5 }));
+    expect(finished).toMatchObject({ status: 'win', winner: 'a', duration: 1.5 });
+    expect(finished.timeline.at(-1)).toEqual([1.5, 2, 0]);
+  });
+
   it('交战单位秒按每次结算后变化的近战容量累计', () => {
-    const fighter = { hp: 5, attack: { 近战: 5 }, rof: 1 };
+    const fighter = { hp: 5, attack: { 近战: 5 }, rof: 1, contact: { ...contact, firstHitDelay: 1 } };
     const result = valid(mixedFight([row(1, 9, fighter)], [row(2, 9, fighter)]));
     expect(result.status).toBe('draw');
     expect(result.timeline.slice(1).map(([, a, b]) => [a, b])).toEqual([
@@ -107,8 +122,8 @@ describe('接触面与接敌先手', () => {
       [1, 1],
       [0, 0],
     ]);
-    expect(result.contact.a[0]!.meleeUnitSeconds).toBeCloseTo(6, 8);
-    expect(result.contact.b[0]!.meleeUnitSeconds).toBeCloseTo(6, 8);
+    expect(result.contact.a[0]!.meleeUnitSeconds).toBeCloseTo(9, 8);
+    expect(result.contact.b[0]!.meleeUnitSeconds).toBeCloseTo(9, 8);
   });
 
   it('短射程近战逐层保留转火距离，较深层的攻击不能命中下一行', () => {
@@ -208,13 +223,24 @@ describe('接触面与接敌先手', () => {
 });
 
 const ctx = makeSimContext(CORE.techs, trees);
-function get(uid: number, civ: string) {
-  const r = resolve(ctx, CORE.unitById, { uid, civ, age: 4, ageSet: true, techs: 'f', team: [] }, uid);
+function get(uid: number, civ: string, techs: TechSpec = 'f') {
+  const r = resolve(ctx, CORE.unitById, { uid, civ, age: 4, ageSet: true, techs, team: [] }, uid);
   if (isUnavail(r)) throw Error('fixture unavailable');
   return r;
 }
 
 describe('固定数据实战单位与有界性能', () => {
+  it('蒙古精锐草原枪兵击毁冲车后转列，不提前攻击剩余冲车', () => {
+    const a = get(1372, 'Mongols', []).F;
+    const b = get(1258, 'Teutons', []).F;
+    const result = groupFight(a, 2, b, 2);
+    if (result.status === 'error') throw new Error(result.reason);
+    const destroyed = result.timeline.findIndex(([, , alive]) => alive === 1);
+    expect(destroyed).toBeGreaterThan(0);
+    const firstDestruction = result.timeline[destroyed]![0];
+    expect(result.timeline[destroyed + 1]![0] - firstDestruction).toBeCloseTo(a.rof, 8);
+  });
+
   it('等资源日本武士 66 对游侠 37 的双方都不会全员同时接敌，不预设胜方', () => {
     const a = get(560, 'Japanese'),
       b = get(569, 'Spanish');

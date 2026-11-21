@@ -82,14 +82,19 @@ interface RowState extends ArmyRow {
   delay: number;
   alive: number;
   headHp: number;
+  canFightAtMultipleDepths: boolean;
   clocks: AttackClock[];
 }
 interface RankInRange {
-  depth: number;
+  first: number;
   count: number;
   distance: number;
   leaving: boolean;
-  clock: AttackClock;
+}
+interface RankShots {
+  count: number;
+  distance: number;
+  clocks: AttackClock[];
 }
 interface Formation {
   rows: RowState[];
@@ -138,17 +143,17 @@ function summarize(rows: RowState[]): ArmyResult {
 }
 const survivors = (rows: RowState[]) => rows.reduce((count, row) => count + row.alive, 0);
 
-function applyAttacks(shots: RankInRange[][], source: Formation, target: Formation, gap: number, damage: number[][]) {
+function applyAttacks(shots: RankShots[][], source: Formation, target: Formation, damage: number[][]) {
   let to = 0;
   attackRows: for (const [from, ranks] of shots.entries()) {
     const attacker = source.rows[from]!;
-    for (const { count, depth } of ranks) {
+    for (const { count, distance } of ranks) {
       for (let n = 0; n < count; n++) {
         while (target.rows[to] && !target.rows[to]!.alive) to++;
         const row = target.rows[to];
         if (!row) return;
-        const distance = gap + source.setback[from]! + depth + target.setback[to]!;
-        if (distance - attacker.fighter.rng > EPS || distance + EPS < attacker.minRange) continue attackRows;
+        const targetDistance = distance + target.setback[to]!;
+        if (targetDistance - attacker.fighter.rng > EPS || targetDistance + EPS < attacker.minRange) continue attackRows;
         const hit = damage[from]![to]!;
         if (!hit) continue attackRows;
         row.headHp -= hit;
@@ -205,6 +210,7 @@ export function contactFight(
         delay: f.firstHitDelay,
         alive: row.count,
         headHp: row.fighter.hp,
+        canFightAtMultipleDepths: !row.fighter.ranged && row.fighter.rng + EPS >= 2 * f.radiusX!,
         clocks: [],
       };
     });
@@ -261,13 +267,14 @@ export function contactFight(
         const { ranged, rng } = row.fighter;
         const diameter = 2 * row.radiusX;
         const setback = side.setback[row.index]!;
-        const width = ranged ? Math.max(1, row.alive) : meleeAcross(row, target.front);
+        const width = ranged ? row.alive : Math.min(row.alive, meleeAcross(row, target.front));
         const ranks =
           row.alive && (ranged || row === side.front)
             ? Math.min(Math.ceil(row.alive / width), ranged ? 1 : 1 + Math.floor((Math.max(0, rng - setback) + EPS) / diameter))
             : 0;
-        let rank = 0;
-        for (; rank < ranks; rank++) {
+        // 同一阵容行按顺序损失单位，幸存单位的时钟不随敌方接触面变窄而换位。
+        const firstSurvivor = row.canFightAtMultipleDepths ? row.count - row.alive : 0;
+        for (let rank = 0; rank < ranks; rank++) {
           const depth = rank * diameter;
           const offset = setback + depth;
           const distance = gap + offset;
@@ -277,17 +284,17 @@ export function contactFight(
             break;
           }
           const remaining = distance - row.minRange;
-          if (remaining < -EPS) {
-            const clock = row.clocks[rank];
-            if (clock) clock.aimAt = null;
-            continue;
-          }
+          if (remaining < -EPS) continue;
           const canCrossMin = speed > 0 && row.minRange - offset > EPS;
           if (canCrossMin && remaining > EPS) schedule(remaining / speed);
-          const clock = (row.clocks[rank] ??= { aimAt: null, cycleStart: 0, cycles: 0 });
-          eligible.push({ depth, count: Math.min(width, row.alive - rank * width), distance, leaving: canCrossMin && Math.abs(remaining) <= EPS, clock });
+          const first = firstSurvivor + rank * width;
+          eligible.push({ first, count: Math.min(width, row.alive - rank * width), distance, leaving: canCrossMin && Math.abs(remaining) <= EPS });
         }
-        for (let i = rank; i < row.clocks.length; i++) {
+        const last = eligible.at(-1);
+        const from = eligible[0]?.first ?? row.clocks.length;
+        const to = last ? last.first + last.count : row.clocks.length;
+        for (let i = firstSurvivor; i < row.clocks.length; i++) {
+          if (i >= from && i < to) continue;
           const clock = row.clocks[i];
           if (clock) clock.aimAt = null;
         }
@@ -316,20 +323,28 @@ export function contactFight(
     }
     const leavingOpening = opening && !(opening.side === 'a' ? rangedReady(A, inA, false) : rangedReady(B, inB, false));
     const shots = (from: Formation, canAttack: typeof inA) =>
-      from.rows.map((row) =>
-        canAttack[row.index]!.filter(({ clock, distance, leaving }) => {
-          // 各纵深分别瞄准。刚补入的层在上一批结算结束后才能开始前摇。
-          clock.aimAt ??= time === lastAttack ? time + Math.max(row.delay, 2 * EPS) : time + row.delay;
-          const due = Math.max(clock.aimAt, clock.cycleStart + clock.cycles * row.fighter.rof);
-          if (withinHorizon(due) && due - time <= EPS) return true;
-          // 即将穿过最小射程时，等待更近的移动或换行事件。
-          if (!leaving && (!speed || distance - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
-          return false;
-        }),
-      );
+      from.rows.map((row) => {
+        const ready: RankShots[] = [];
+        for (const { first, count, distance, leaving } of canAttack[row.index]!) {
+          const clocks: AttackClock[] = [];
+          // 只有能分多层出手的近战需要独立时钟。单层单位仍按同一出手批次计算。
+          const length = row.canFightAtMultipleDepths ? count : 1;
+          for (let i = first; i < first + length; i++) {
+            const clock = (row.clocks[i] ??= { aimAt: null, cycleStart: 0, cycles: 0 });
+            // 进入射程时开始前摇。换位或重新瞄准仍受该单位原有的冷却限制。
+            clock.aimAt ??= time === lastAttack ? time + Math.max(row.delay, 2 * EPS) : time + row.delay;
+            const due = Math.max(clock.aimAt, clock.cycleStart + clock.cycles * row.fighter.rof);
+            if (withinHorizon(due) && due - time <= EPS) clocks.push(clock);
+            // 即将穿过最小射程时，等待更近的移动或换行事件。
+            else if (!leaving && (!speed || distance - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
+          }
+          if (clocks.length) ready.push({ count: row.canFightAtMultipleDepths ? clocks.length : count, distance, clocks });
+        }
+        return ready;
+      });
     const aShots = shots(left, inA),
       bShots = shots(right, inB);
-    const countShots = (ranks: RankInRange[]) => ranks.reduce((total, rank) => total + rank.count, 0);
+    const countShots = (ranks: RankShots[]) => ranks.reduce((total, rank) => total + rank.count, 0);
     const volleySize = [...aShots, ...bShots].reduce((n, ranks) => n + countShots(ranks), 0);
     if (volleySize) {
       if (events >= maxEvents || attacks + volleySize > maxAttacks) return finish('limit');
@@ -350,21 +365,23 @@ export function contactFight(
           const ranks = volley[i]!;
           const fired = countShots(ranks);
           if (!fired) return;
-          for (const { clock } of ranks) {
-            const cooldown = clock.cycleStart + clock.cycles * row.fighter.rof;
-            if (clock.aimAt! > cooldown) {
-              clock.cycleStart = clock.aimAt!;
-              clock.cycles = 0;
+          for (const { clocks } of ranks) {
+            for (const clock of clocks) {
+              const cooldown = clock.cycleStart + clock.cycles * row.fighter.rof;
+              if (clock.aimAt! > cooldown) {
+                clock.cycleStart = clock.aimAt!;
+                clock.cycles = 0;
+              }
+              clock.cycles++;
             }
-            clock.cycles++;
           }
           const key = row.fighter.ranged ? 'maxRanged' : 'maxMelee';
           rows[i]![key] = Math.max(rows[i]![key], fired);
         });
       }
       // 冻结两边出手人数后再逐击结算。同一时刻阵亡仍保留这次出手。
-      applyAttacks(aShots, left, right, gap, ab);
-      applyAttacks(bShots, right, left, gap, ba);
+      applyAttacks(aShots, left, right, ab);
+      applyAttacks(bShots, right, left, ba);
       // 退到下一行后，前排之间的距离按阵线实际推进重新计算。
       const previousDepth = (side: Formation) => side.setback[side.rows.findIndex((row) => row.alive)] ?? 0;
       gap += previousDepth(left) + previousDepth(right);
