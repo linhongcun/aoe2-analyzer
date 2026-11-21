@@ -54,6 +54,7 @@ test('每个目标直链的属性、边界与窄屏版式', async ({ page }) => 
     await expect(page.locator('#unit-sim')).toContainText('不开放科技模拟器');
     await expect(page.locator('#unit-obtain,#unit-gather,#unit-garrison,#unitciv,[data-t="catalog-cost"],[data-t="reverse-counter-pk"]')).toHaveCount(0);
     await expect(page.locator('#unit-reverse-counters')).toBeAttached();
+    await page.locator('.ud-icon img').scrollIntoViewIfNeeded();
     await expect.poll(() => page.locator('.ud-icon img').evaluate((img) => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if (id === 1980) {
