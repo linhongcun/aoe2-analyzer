@@ -30,6 +30,9 @@ for f in sorted(glob.glob(T+'trees/*.json')):
             frame_delay = u.get('FrameDelay')
             if type(frame_delay) is int and frame_delay >= 0:
                 units[i]['frameDelay'] = frame_delay
+            capacity = u.get('GarrisonCapacity')
+            if type(capacity) is int and capacity >= 0:
+                units[i]['garrisonCapacity'] = capacity
         if x['node_status']!='NotAvailable':
             if civ not in units[i]['civs']: units[i]['civs'].append(civ)
             if i==125: monk_buildings[civ]=x['building_id']

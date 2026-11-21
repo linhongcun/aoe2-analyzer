@@ -42,6 +42,7 @@ import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
 import { VillagerGather } from './VillagerGather';
 import UnitGarrison from './UnitGarrison';
+import { UnitTransportCapacity } from './UnitTransportCapacity';
 import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
 import { ReverseCounters } from './ReverseCounters';
 import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafety';
@@ -289,6 +290,7 @@ export default function UnitDetail() {
         <div className="ud-stats">
           <h2>目录基础属性</h2>
           <CatalogStats u={u} base={base} elite={isE} />
+          <UnitTransportCapacity unit={u} civ={context} />
         </div>
         <div className="ud-cost-col">
           <h2>目录造价</h2>
