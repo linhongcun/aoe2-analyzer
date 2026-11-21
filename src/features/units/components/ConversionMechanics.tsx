@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   baselineChanceText,
   baselineIntervalText,
@@ -64,12 +63,7 @@ export function ConversionMechanics({
   techs: readonly ConversionTechSource[];
   source?: DatFile;
 }) {
-  const location = useLocation();
   const shown = showsConversion(unitId);
-  useEffect(() => {
-    if (!shown || location.hash !== `#${CONVERSION_ANCHOR}`) return;
-    document.getElementById(CONVERSION_ANCHOR)?.scrollIntoView({ block: 'start' });
-  }, [shown, location.hash]);
   const unit = units[unitId];
   if (!shown || !unit) return null;
   const facts = conversionFacts(techs, source);

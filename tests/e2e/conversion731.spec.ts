@@ -166,6 +166,7 @@ test('目标基础抗性、孟加拉文明修正和替代形态边界', async ({
   await expect(panel.locator('.ud-cr-stat dd:first-of-type')).toHaveText(['0', '+2', '+2']);
   await panel.getByRole('link', { name: /查看僧侣招降机制/ }).click();
   await expect(page.locator('[data-conversion=caster-tasks]')).toContainText('5 / 9');
+  await expect.poll(() => page.locator('#conversion').evaluate((el) => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(180);
   await page.goto('./#/unit/1738');
   await expect(page.locator('#unit h1')).toContainText('近战');
   await expect(panel).toHaveCount(0);

@@ -34,6 +34,7 @@ import { unitSiegeHref } from '../siegeEntry';
 import { resolveUnitForm } from '../unitFormDetail';
 import { UnitNotes } from './UnitNotes';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
+import { CONVERSION_ANCHOR, MONK_ID } from '../conversion';
 import { ConversionMechanics } from './ConversionMechanics';
 import { FishingGather } from './FishingGather';
 import { ScoutAgeChanges } from './ScoutAgeChanges';
@@ -102,8 +103,9 @@ export default function UnitDetail() {
     if (workspace) document.getElementById('unit-sim')?.scrollIntoView({ block: 'start' });
     else if (tab === 'rel') document.getElementById('unit-related')?.scrollIntoView({ block: 'start' });
     else if (tab === 'history' && !entityHistory.empty) document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
+    else if (u?.id === MONK_ID && loc.hash === '#' + CONVERSION_ANCHOR) document.getElementById(CONVERSION_ANCHOR)?.scrollIntoView({ block: 'start' });
     else scrollTo(0, 0);
-  }, [u?.id, workspace, tab, hasSavedReverseReaderLocation, entityHistory.empty]);
+  }, [u?.id, workspace, tab, loc.hash, hasSavedReverseReaderLocation, entityHistory.empty]);
 
   if (!core)
     return (
