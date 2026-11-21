@@ -38,9 +38,57 @@ export function EliteDelta({ n, hp, lower }: { n: number | undefined; hp?: boole
   );
 }
 
+function CatalogAttackTiming({ u, base, elite }: { u: Unit; base: Unit; elite: boolean }) {
+  const packed = u.id === 331;
+  const hasAttack = u.atk > 0 || u.atks.some(([, amount]) => amount > 0);
+  const canShowInterval = packed || hasAttack;
+  const delay = u.attackDelaySeconds;
+  const hasDelay = typeof delay === 'number' && Number.isFinite(delay) && delay >= 0;
+  const repeats = canShowInterval && u.rof > 0;
+  return (
+    <div className="ud-attack-timing" role="group" aria-label="目录基础攻击计时">
+      {hasAttack && !packed && (
+        <StatTile
+          icon="sword"
+          stat="attack-delay"
+          label="出手前摇"
+          value={hasDelay ? <span className="num nw">{delay} 秒</span> : <span className="ud-stat-reason">暂无数据</span>}
+          sub={hasDelay ? '从攻击动作开始到出手，不含弹道飞行时间。' : '当前形态未收录前摇秒数。'}
+        />
+      )}
+      <StatTile
+        icon="clock"
+        stat="rof"
+        label={packed ? '攻击间隔（展开态）' : '攻击间隔'}
+        value={
+          repeats ? (
+            <span className="num nw">
+              {u.rof}
+              {packed ? '秒' : ' 秒'}
+            </span>
+          ) : (
+            <span className="ud-stat-reason" data-t={canShowInterval ? 'rof-reason' : undefined}>
+              {canShowInterval ? DPS_UNAVAILABLE_REASON : '不适用：无普通攻击'}
+            </span>
+          )
+        }
+        sub={
+          repeats ? (
+            <>
+              {!packed && <div>连续攻击时，两次出手的间隔。</div>}
+              <EliteDelta n={elite && base.rof > 0 ? u.rof - base.rof : undefined} lower />
+            </>
+          ) : undefined
+        }
+      />
+    </div>
+  );
+}
+
 export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: boolean }) {
   return (
     <div className="ud-stat-grid">
+      <CatalogAttackTiming u={u} base={base} elite={elite} />
       <StatTile
         icon="heart"
         stat="hp"
@@ -100,21 +148,6 @@ export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: b
         label="视野"
         value={<span className="num nw">{u.los}</span>}
         sub={<EliteDelta n={elite ? u.los - base.los : undefined} />}
-      />
-      <StatTile
-        icon="clock"
-        stat="rof"
-        label={u.id === 331 ? '攻击间隔（展开态）' : '攻击间隔'}
-        value={
-          u.rof > 0 ? (
-            <span className="num nw">{u.rof}秒</span>
-          ) : (
-            <span className="ud-stat-reason" data-t="rof-reason">
-              {DPS_UNAVAILABLE_REASON}
-            </span>
-          )
-        }
-        sub={<EliteDelta n={elite && u.rof > 0 && base.rof > 0 ? u.rof - base.rof : undefined} lower />}
       />
     </div>
   );

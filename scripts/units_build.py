@@ -1,4 +1,4 @@
-import json,glob,re,os,urllib.request
+import json,glob,re,math,os,urllib.request
 from collections import Counter
 from unit_types import unit_type
 import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));U=d['data']['Unit']
@@ -24,6 +24,12 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               arms=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Amount'] or a['Class'] in(3,4)],
               armc=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Class'] not in(3,4)],
               desc=hz,civs=[],cls=sorted(a['Class'] for a in u['Armours']))
+            attack_delay = u.get('AttackDelaySeconds')
+            if type(attack_delay) in (int, float) and 0 <= attack_delay < math.inf:
+                units[i]['attackDelaySeconds'] = attack_delay
+            frame_delay = u.get('FrameDelay')
+            if type(frame_delay) is int and frame_delay >= 0:
+                units[i]['frameDelay'] = frame_delay
         if x['node_status']!='NotAvailable':
             if civ not in units[i]['civs']: units[i]['civs'].append(civ)
             if i==125: monk_buildings[civ]=x['building_id']
