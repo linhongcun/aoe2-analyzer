@@ -98,6 +98,10 @@
       "blast": {
         "type": "number"
       },
+      "garrisonCapacity": {
+        "type": "integer",
+        "minimum": 0
+      },
       "atks": {
         "type": "array",
         "items": {

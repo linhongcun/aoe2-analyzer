@@ -58,6 +58,8 @@ export interface Unit {
   tt: number;
   acc: number;
   blast: number;
+  /** 固定目录的 GarrisonCapacity 原值，缺字段时为未知。 */
+  garrisonCapacity?: number;
   atks: [string, number][];
   arms: [string, number][];
   desc: string;
