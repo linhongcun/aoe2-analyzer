@@ -265,6 +265,18 @@
 
 评审时拿同一版本的提示逐条对照实际路线：能说清「在哪一步、什么前提下、行动有何不同」才归入该步。验收既查迁入处的前提和行动，也查没有对应步骤的提示仍能找到；不为搬完清单编一条新路线。
 
+### 单一页面没复现源数据错译，不代表全站不可见
+
+在[数据与策略纠错评审](https://github.com/linhongcun/aoe2-analyzer/issues/1264)里，波希米亚的 `Bohemians.it` 在 `data/game/civs.json` 中把胡斯革新写反成「消耗黄金，而不消耗食物」，但运营复核文明页和科技详情页均未复现——因为文明详情已改为直接展示 `tech.desc`。
+
+原因是同一数据字段常被多个页面复用，单页改用新数据源后，旧字段仍可能在其他入口直接渲染：全仓核对消费端后发现[文明对比页](../src/features/compare/components/Compare.tsx)的「帝王科技」行仍直接读 `civ.it`。以后裁定一条源数据错译是否“玩家不可见”前，先按字段名全仓检索组件、搜索/拼音索引、对比页与元数据生成，确认全部消费端后再定优先级与修复路径，不因主详情页已绕过就降级忽略。
+
+### 批量修订共享内容源时，先拆清格式、纠错与内容边界
+
+同一批评审的[事实纠错](https://github.com/linhongcun/aoe2-analyzer/issues/1264)、[三批阵容修订](https://github.com/linhongcun/aoe2-analyzer/issues/1265)（含 [#1266](https://github.com/linhongcun/aoe2-analyzer/issues/1266)、[#1267](https://github.com/linhongcun/aoe2-analyzer/issues/1267)）与[策略文档格式规范化](https://github.com/linhongcun/aoe2-analyzer/issues/1268)同时触及 `role/game-strategy.md` 和 `data/content/civ-formations.json`，且越南、波斯、印度斯坦、马来、波希米亚、中国、女真跨单重叠。运营核实显示，既有线上阵容的固定来源行指向历史提交，仅重排 `main` 上的文档不会打断既有链接。
+
+原因是若未分开「文档阅读结构」与「线上固定来源契约」，在纯格式单里顺手刷新 JSON 来源会把纯文档交付拖成涉网交付，并让后续内容单反复冲突返工。以后批量评审共享同一内容源的事项时，先核对固定契约是否真的因主干重排失效；未失效时让纯格式单不动 JSON 保持纯仓库交付，在每张单的非目标里点名重叠对象的归属单号，并写出建议集成顺序（事实纠错 → 纯格式统一 → 分批内容修订）。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
