@@ -29,6 +29,7 @@ describe('#886 科技树身份与缺列', () => {
     expect(treeNodeIdentity('u', 2700, 'RegionalUnit')).toEqual({ group: 'regional', label: '区域单位' });
     expect(treeNodeIdentity('u', 2701, 'RegionalUnit')).toEqual({ group: 'regional', label: '区域单位' });
     expect(treeNodeIdentity('u', 691, core.unitById[691]!.type)).toBeNull();
+    expect(treeNodeIdentity('u', 691, null)).toBeNull();
     expect(treeNodeIdentity('t', 3, '')).toBeNull();
     expect(treeNodeIdentity('b', 1189, null)).toEqual({ group: 'unique', label: '独特建筑' });
     expect(treeNodeIdentity('b', 1021, null)).toEqual({ group: 'unique', label: '独特建筑' });
