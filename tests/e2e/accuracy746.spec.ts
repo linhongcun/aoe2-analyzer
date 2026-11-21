@@ -58,7 +58,7 @@ test('#746 远程准确度与弹道学分开，近战和射程 1 不写这条', 
 
   await page.goto('./#/unit/331');
   await expect(page.locator('#unit h1')).toContainText('巨型投石机');
-  const other = page.getByRole('region', { name: '其他属性', exact: true });
+  const other = page.locator('#unit-notes');
   await expect(other).toContainText('目录打包记录的准确度，不代表展开命中率');
   await expect(boundary(page).locator('[data-accuracy=percent]')).toHaveText('92%');
   await expect(boundary(page)).toContainText('单位 PK 未模拟弹道和走位');
@@ -122,3 +122,28 @@ for (const width of [360, 375, 390, 1280])
         expect((await new AxeBuilder({ page }).include('[aria-label="准确度与弹道学"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       expect(errors, errors.join('\n')).toEqual([]);
     });
+
+test('远程散布的单位、来源、零值与双列窄屏', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const panel = page.getByRole('region', { name: '准确度与落点散布' });
+  for (const [id, accuracy, dispersion] of [
+    [46, '50%', '0.75'],
+    [39, '50%', '0.33'],
+    [866, '100%', '0.75'],
+    [281, '100%', '0'],
+  ] as const) {
+    await page.goto('./#/unit/' + id);
+    await expect(panel.locator('[data-accuracy=percent]')).toHaveText(accuracy);
+    await expect(panel.locator('[data-accuracy=dispersion] dd').first()).toHaveText(dispersion);
+    const boxes = await panel.locator('dd:first-of-type').evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().top));
+    expect(boxes[0]).toBe(boxes[1]);
+    await expect(panel.getByRole('link', { name: '固定版本 DAT' })).toHaveAttribute('href', /auto-mods\/blob\/[a-f0-9]{40}\/dat\/empires2_x2_p1.dat$/);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+  await expect(panel).toContainText('固定源显式记录为 0');
+  await page.goto('./#/unit/1962');
+  await expect(panel).toBeVisible();
+  await page.goto('./#/unit/1980');
+  await expect(panel).toHaveCount(0);
+  await expect(page.locator('.ud-form-warn')).toContainText('目录准确度为 0%');
+});

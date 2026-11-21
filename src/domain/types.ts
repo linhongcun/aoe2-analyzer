@@ -90,6 +90,8 @@ export interface Unit {
   frameDelay?: number;
   tt: number;
   acc: number;
+  /** 由固定 DAT 读取的落点散布原值；缺失与显式零分别处理。 */
+  accuracyDispersion?: number;
   blast: number;
   /** 固定目录的 GarrisonCapacity 原值，缺字段时为未知。 */
   garrisonCapacity?: number;

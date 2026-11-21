@@ -71,6 +71,10 @@ def rngBd(i):
     if not x or not x.get('ChargeType') or not x.get('DisplayedRange'): return 0
     v=round(x['Range']-x['DisplayedRange'],2);return int(v) if float(v).is_integer() else v
 for u in units.values():
+    dat_unit = _DU[u['id']] if u['id'] < len(_DU) else None
+    dispersion = dat_unit.get('AccuracyDispersion') if dat_unit else None
+    if type(dispersion) in (int, float) and 0 <= dispersion < math.inf:
+        u['accuracyDispersion'] = dispersion
     g=UU.get(str(u['id']));u['up']=[g['Cost'],g['ResearchTime']] if g else None
     if g:
         a=techAge(g['ID'])

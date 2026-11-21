@@ -107,6 +107,29 @@ describe('准确度与弹道学 #746', () => {
     expect(pending).not.toContain('%');
   });
 
+  it('散布面板分别呈现原始读数、显式零和无数据', () => {
+    const samples = [
+      [46, 50, '0.75'],
+      [39, 50, '0.33'],
+      [866, 100, '0.75'],
+      [281, 100, '0'],
+      [1001, 0, '0.6'],
+    ] as const;
+    for (const [id, acc, spread] of samples) {
+      const page = html(createElement(AccuracyBoundaryNote, { unit: unit(id), techs }));
+      expect(page).toContain(`data-accuracy="percent">${acc}%</span>`);
+      expect(page).toMatch(new RegExp(`data-accuracy="dispersion".*?<dd><span class="num nw">${spread.replace('.', '\\.')}</span></dd>`));
+    }
+    const ranged = units.filter(catalogAccuracyFeedsExpectedHit);
+    expect(ranged.filter((u) => (u.accuracyDispersion ?? 0) > 0)).toHaveLength(73);
+    expect(ranged.filter((u) => u.accuracyDispersion === 0)).toHaveLength(32);
+    for (const spread of [undefined, -1, Number.NaN, Infinity]) {
+      const page = html(createElement(AccuracyBoundaryNote, { unit: { ...unit(46), accuracyDispersion: spread }, techs }));
+      expect(page).toContain('暂无数据');
+      expect(page).not.toContain('固定源显式记录');
+    }
+  });
+
   it('弹道学页区分目录准确度，并链到 PK 模型边界', () => {
     const page = html(createElement(BallisticsBoundaryNote, { techs }));
     expect(page).toContain('aria-label="准确度与弹道学"');
