@@ -20,6 +20,7 @@ import ChargeAttack710 from './ChargeAttack710';
 import { ConversionTechLink } from './ConversionTechLink';
 import { MarketFeeTechLinks } from './MarketFeeTechLinks';
 import TechAffects from './TechAffects';
+import { TechRepeatableRule } from './TechRepeatableRule';
 import '../../../shared/ui/contextLinks.css';
 import './tech-detail.css';
 
@@ -203,6 +204,10 @@ export default function TechDetail() {
             </Link>
           </p>
         )}
+        <TechRepeatableRule
+          repeatable={tech.repeatable}
+          researchScope={tech.id === 408 ? '本条的研究规则只指随机地图的「间谍」。弑君模式的「叛徒」是可以反复付费使用的指令。' : undefined}
+        />
       </section>
 
       {entries.length > 0 && <TechAffects tech={tech} entries={entries} units={core.units} unitById={core.unitById} fam={core.fam} techs={core.techs} />}

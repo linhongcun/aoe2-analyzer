@@ -16,6 +16,8 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               pre=x['link_id'] if x['link_node_type']=='Research' else None,cost=g['Cost'],rt=g['ResearchTime'],
               desc=clean_description(z.get(desc_id),('研究','Research','升级到')).strip(),
               descEn=clean_description(e.get(desc_id),('研究','Research','Upgrade to')).strip(),civs=[])
+            if isinstance(g.get('Repeatable'), bool):
+                techs[i]['repeatable'] = g['Repeatable']
         if x['node_status']!='NotAvailable': techs[i]['civs'].append(civ) if civ not in techs[i]['civs'] else None
 # #12 主研究建筑：aoe2techtree 的 building_id 取自首个文明树（按文件名排序，亚美尼亚在前），
 # 会得到骡车 1808 / 强化教堂 1806 这类文明专属替代建筑。改用固定 .dat 的 ResearchAt 首项（通用建筑）。
