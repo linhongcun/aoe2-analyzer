@@ -51,6 +51,10 @@ export interface Unit {
   spd: number;
   los: number;
   rof: number;
+  /** 目录基础出手前摇（秒）。可缺失，零是有效读数。 */
+  attackDelaySeconds?: number;
+  /** 同一目录形态的上游原始帧值。 */
+  frameDelay?: number;
   tt: number;
   acc: number;
   blast: number;

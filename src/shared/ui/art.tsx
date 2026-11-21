@@ -1,5 +1,6 @@
 /** 游戏美术图标（文明/单位/科技/属性/DLC），本地 public/img */
 import { Link } from 'react-router-dom';
+import { entityCivLink } from '../../domain/civRoute';
 import type { Building, Civ, Cost, Tech, Unit } from '../../domain/types';
 import type { FamilyEntry } from '../../domain/family';
 import { DLCS } from '../../domain/dlc';
@@ -17,10 +18,11 @@ export const TechIcon = ({ t, big }: { t: Tech; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`techs/${t.pic}.webp`)} alt="" loading="lazy" />
 );
 /** 单位链接；传入 elite 时表示“普通+精锐”合并条目，名称后带「精锐」小标 */
-export const UnitLink = ({ u, elite }: { u: Unit; elite?: Unit }) => (
-  <Link className="ulink" to={`/unit/${u.id}`} title={elite ? `${u.zh} / ${elite.zh}` : undefined}>
+export const UnitLink = ({ u, elite, civ, civLabel }: { u: Unit; elite?: Unit; civ?: string; civLabel?: string }) => (
+  <Link className="ulink" to={entityCivLink('unit', u.id, civ)} title={elite ? `${u.zh} / ${elite.zh}` : undefined}>
     <UnitIcon u={u} />
     {u.zh}
+    {civLabel && `（${civLabel}）`}
     {elite && <EliteBadge />}
   </Link>
 );

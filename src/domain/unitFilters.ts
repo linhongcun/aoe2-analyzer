@@ -42,7 +42,7 @@ export function unitMatches(u: Unit, filters: UnitFilters): boolean {
 }
 
 /** 保留单位系列的既有顺序和数量口径；仅精锐版命中时，卡片代表也选精锐版。 */
-export function filterUnitFamilies(list: readonly Unit[], families: Families, filters: UnitFilters): FamilyEntry[] {
+export function filterUnitFamilies(list: readonly Unit[], families: Families, filters: UnitFilters, preferForm?: (id: number) => number): FamilyEntry[] {
   const forms = new Map<string, Unit[]>();
   for (const u of list) {
     const key = families.baseOf[u.id]?.en ?? u.en;
@@ -54,8 +54,10 @@ export function filterUnitFamilies(list: readonly Unit[], families: Families, fi
     const group = forms.get(families.baseOf[u.id]?.en ?? u.en)!;
     const matches = group.filter((form) => unitMatches(form, filters));
     // 同名生产记录或少见的第二条精锐记录也必须参与筛选。
-    const selected = matches.find((form) => !families.baseOf[form.id]) ?? matches[0];
-    if (!selected) return [];
+    const matched = matches.find((form) => !families.baseOf[form.id]) ?? matches[0];
+    if (!matched) return [];
+    const preferredId = preferForm?.(matched.id);
+    const selected = matches.find((form) => form.id === preferredId) ?? matched;
     if (families.baseOf[selected.id]) return [{ u: selected }];
     const eligible = group.filter((form) => available(form, filters));
     const elite = eligible.find((form) => form.id === families.eliteOf[selected.id]?.id) ?? eligible.find((form) => !!families.baseOf[form.id]);

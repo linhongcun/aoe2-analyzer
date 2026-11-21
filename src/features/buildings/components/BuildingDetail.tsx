@@ -17,6 +17,7 @@ import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH } from '../../../domain/ratings';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import type { Tech, Unit } from '../../../domain/types';
+import { trainingAtBuilding } from '../../../domain/unitTrainingSites';
 import { GARRISON_HOST_IDS as garrisonHosts } from '../../../data/garrisonHosts';
 import { AgeImg, BuildingIcon, CivChip, CostView, DlcBadgeL } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
@@ -57,6 +58,7 @@ export default function BuildingDetail() {
   const host = !!b && garrisonHosts.includes(b.id);
   const view = buildingSurface(tab, host);
   const civ = b ? buildingCiv(params.get('civ'), b.civs) : null;
+  const requestedCiv = civByEn(params.get('civ') ?? '');
   const pendingScroll = useRef<string | null>(null);
 
   useEffect(() => {
@@ -104,6 +106,7 @@ export default function BuildingDetail() {
 
   const units = b.units.map((unitId) => core.unitById[unitId]).filter((unit): unit is Unit => !!unit);
   const produced = productionEntries(units, core.fam);
+  const unavailableTrainingCiv = !civ && requestedCiv && units.some((unit) => trainingAtBuilding(unit, b.id)) ? requestedCiv : null;
   const techs = b.techs.map((techId) => core.techById[techId]).filter((tech): tech is Tech => !!tech);
   const mark = buildingIdentityMark(b.id);
   const ageName = AGE_ZH[b.age] ?? String(b.age);
@@ -197,7 +200,11 @@ export default function BuildingDetail() {
       <div className="bd-civ">
         <CivPicker id="building-civ" label="选择文明" value={civ ?? ''} onChange={setCiv} allowed={b.civs} none="未指定文明" />
         <p className="bd-kicker" data-t="civ-scope">
-          {civ ? '这是目录含有情况，不是完整的科技树可用性。' : '未指定文明，展示全文明目录并集。'}
+          {unavailableTrainingCiv
+            ? `${unavailableTrainingCiv.zh}没有这座建筑。可选择拥有该建筑的文明。`
+            : civ
+              ? '这是目录含有情况，不是完整的科技树可用性。'
+              : '未指定文明，展示全文明目录并集。'}
         </p>
       </div>
 
@@ -315,7 +322,15 @@ export default function BuildingDetail() {
 
       {view.surface === 'overview' && (
         <>
-          <BuildingCatalog key={`${b.id}-units`} id="building-prod" title="生产" empty="这座建筑不生产单位" units={produced} civ={civ} />
+          <BuildingCatalog
+            key={`${b.id}-units`}
+            id="building-prod"
+            title="生产"
+            empty="这座建筑不生产单位"
+            units={produced}
+            civ={civ}
+            unitTraining={{ building: b.id, requestedCiv: requestedCiv?.en, techs: core.techById }}
+          />
           <BuildingCatalog key={`${b.id}-techs`} id="building-tech" title="研究" empty="这座建筑不研究科技" techs={techs} civ={civ} />
           <section className="bd-section" id="building-notes" aria-label="适用说明">
             <h2>适用说明</h2>

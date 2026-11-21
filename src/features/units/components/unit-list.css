@@ -391,6 +391,11 @@
   margin-right: 3px;
   vertical-align: -3px;
 }
+#units .unit-training-condition {
+  display: block;
+  color: var(--color-text-2);
+  overflow-wrap: anywhere;
+}
 #units .unit-cost {
   display: flex;
   flex-wrap: wrap;
