@@ -225,7 +225,7 @@
 | ------------------ | ---------------------------------------------------------------------------------------------------- |
 | 骑士、游侠成群     | 火矛兵和长戟兵一起顶；接触 PK 中火矛兵胜重装骑士（剩 19/85），输给法兰克游侠（对方剩 48/192）        |
 | 长戟兵多           | 轻骑兵不撞长戟（输）；由火矛兵和精锐诸葛弩处理（诸葛弩胜长戟兵，剩 22/50）                           |
-| 冠军剑士等步兵成群 | 火矛兵、精锐诸葛弩贴身都输；依托塔箭消耗，重型弩炮或重型火箭推车打密集步兵属待验证设想，本轮没有核对 |
+| 冠军剑士等步兵成群 | 火矛兵、精锐诸葛弩贴身都输；可依托塔箭消耗。DE 188329 固定数据中，火箭术（52）使重型弩炮（542）、重型火箭推车（1907）的攻击及所列克制项乘 1.25，也作用于楼船（1948），未列诸葛弩。两种攻城器打密集步兵的实战效果仍待验证。 |
 | 弓手成群           | 轻骑兵冲（胜劲弩手，剩 65.6/80）                                                                     |
 
 **三、为什么不出**
@@ -477,7 +477,7 @@
 
 **防守**：火矛兵驻塔放箭，冲车和骑兵靠近时出塔清掉，翼骑兵在塔外拦手推炮。
 
-**步兵钢甲缺口与攻速加成（hongcun，2026-11-15，机制推断，待实战验证）**：女真不能研究[步兵钢甲](https://linhongcun.github.io/aoe2-analyzer/#/tech/77?civ=Jurchens)，满科技精锐火矛兵 4/4 甲，中国是 5/5。hongcun 指出火矛兵驻在塔里输出，不在塔外挨打，所以这个护甲缺口在驻塔时不起作用；出塔反骑、清冲车时仍是 4/4，缺口还在。塔外的机动任务交给翼骑兵，文明加成写明骑乘单位攻击速度 +25%，翼骑兵间隔 1.52 秒，正好用上这条加成；它对火矛兵是否生效未经客户端核对（见本节末“来源与版本”），翼骑兵属于骑乘单位，没有这个疑问（v0.77.105 · DE 188329）。
+**步兵钢甲缺口与攻速加成（hongcun，2026-11-15，机制推断，待实战验证）**：女真不能研究[步兵钢甲](https://linhongcun.github.io/aoe2-analyzer/#/tech/77?civ=Jurchens)，满科技精锐火矛兵 4/4 甲，中国是 5/5。hongcun 指出火矛兵驻在塔里输出，不在塔外挨打，所以这个护甲缺口在驻塔时不起作用；出塔反骑、清冲车时仍是 4/4，缺口还在。翼骑兵承担塔外机动任务，站内 PK 计入骑乘单位攻速加成后间隔 1.52 秒。DE 188329 固定效果表的科技 994 将攻击速度 +25% 加成应用于火矛兵（1901）与精锐火矛兵（1903）；尚未在客户端逐帧计时。
 
 **二、按对手调整**
 
@@ -497,7 +497,7 @@
 | 精锐掷矛手驻塔   | 预览中 5 个只增加 1 箭                                                                                |
 | 科技树缺口       | 没有骑士线、冠军剑士、劲弩手、火枪手和投石车线，远程固定火力主要靠塔和驻军                            |
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1903%3A5%3Ae)、[5 掷弹兵驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1911%3A5%3Ae)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。文明页的加成原文是“骑乘单位和火枪骑兵的攻击速度 +25%”，PK 页把它计入了精锐火矛兵和翼骑兵；游戏内是否对火矛兵生效没有用客户端核对。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
+来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[5 火矛驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1903%3A5%3Ae)、[5 掷弹兵驻塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=&army=1911%3A5%3Ae)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。[DE 188329 固定效果表](https://github.com/linhongcun/aoe2-analyzer/blob/993810111b1c090942c847e22ffae37e99a20ce8/data/game/effects.json)的科技 994 包含普通与精锐火矛兵。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
 
 ### 撒克逊人
 
@@ -796,7 +796,7 @@
 | 重装骑士           | 60 食、75 金，和主力争黄金、定位重复，而且不能从营垒生产；保加利亚没有游侠。这一条是站内数据推断                                                                                    |
 | 为量产主力多修城堡 | 营垒 350 石也能生产保加利亚骑兵，无驻军时预览同样是 5 箭；城堡 650 石，生命和射程更高（目录值 4800 对 2600、射程 8 对 7）。第一座城堡仍要修，马镫和巨投都靠它。这一条是站内数据推断 |
 
-科技树缺口：没有冠军剑士、游侠、弩手和劲弩手、火枪手、手推炮，也没有射箭槽、炮塔和围墙。
+科技树缺口：没有冠军剑士、游侠、弩手和劲弩手、火枪手、手推炮，也没有射箭槽和炮塔。保加利亚可造木栅栏（72）和石墙（117），无法研究墙体升级垛墙（科技 194、建筑 155）和城堡科技围墙（379，Hoardings）。
 
 来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Bulgarians)、[营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?civ=Bulgarians&age=4)、[20 村民驻营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=&army=83:20:e)（预览 15 箭）、[精锐保加利亚骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1227?civ=Bulgarians)（精锐升级 1000 食、750 金），v0.77.105 · DE 188329。营垒和城堡的生命、射程是目录基础值，没有叠加科技；驻军箭数是站内理论值，未与客户端核对；PK 是接触 1v1，不模拟射程、走位、混编和保加利亚骑兵下马。
 
@@ -1026,7 +1026,8 @@
 
 | 组成     | 作用                     | 关键特点                                                                         |
 | -------- | ------------------------ | -------------------------------------------------------------------------------- |
-| 神庙护卫 | 近战对付骑兵、建筑和步兵 | 页面称持续作战会提高攻击速度，不适于攻击民兵系；机制描述不等于已量化的群战结果。 |
+| 神庙护卫（2586） | 城堡时代近战反骑 | 基础生命 100、攻击 11、近防/远防 1/1、对骑兵额外伤害 +5。持续作战会提高攻击速度，群战收益未量化。 |
+| 精锐神庙护卫（2587） | 帝王时代可升级的形态 | 基础生命 115、攻击 14、近防/远防 2/2、对骑兵额外伤害 +8、对标准建筑额外伤害 +2。帝王实战效果待验证。 |
 | 投石手   | 远程处理步兵／民兵系     | 与神庙护卫共享食物，但主要耗木材而非黄金；不是投石车，也不负责攻城。             |
 
 **进攻**：神庙护卫按近战职责接敌，投石手对付护卫附近的步兵；让其避开弓手火力，不因能打建筑就无保护推进。
@@ -1048,7 +1049,7 @@
 | 格查战士   | 需要额外黄金且承担不同的远程职责；除非确有其目标和投入条件，不用它替换默认投石手／神庙护卫组合。 |
 | 长戟兵     | 穆伊斯卡科技树没有长戟兵；不要把不可训练的兵种写成对骑兵的应急补队。                             |
 
-**机制与来源**：文明护甲、移动加成及瓦拉卡斯对投石手的强化可作为补充条件；神庙护卫的持续作战攻速说明不代表实战量化。[穆伊斯卡文明页](https://linhongcun.github.io/aoe2-analyzer/#/civ/Muisca)、[神庙护卫](https://linhongcun.github.io/aoe2-analyzer/#/unit/2586)、[投石手](https://linhongcun.github.io/aoe2-analyzer/#/unit/185?civ=Muisca)、[格查战士](https://linhongcun.github.io/aoe2-analyzer/#/unit/2562)。文明页版本 **v0.78.0 · DE 188329 · 构建 e3104cc**。
+**机制与来源**：文明护甲、移动加成及瓦拉卡斯对投石手的强化可作为补充条件。穆伊斯卡缺鼓风炉（75）和射手锁甲（219）。神庙护卫的持续作战攻速说明不代表实战量化。[穆伊斯卡文明页](https://linhongcun.github.io/aoe2-analyzer/#/civ/Muisca)、[神庙护卫](https://linhongcun.github.io/aoe2-analyzer/#/unit/2586)、[精锐神庙护卫](https://linhongcun.github.io/aoe2-analyzer/#/unit/2587)、[投石手](https://linhongcun.github.io/aoe2-analyzer/#/unit/185?civ=Muisca)、[格查战士](https://linhongcun.github.io/aoe2-analyzer/#/unit/2562)。文明页版本 **v0.78.0 · DE 188329 · 构建 e3104cc**。
 
 ### 图皮
 

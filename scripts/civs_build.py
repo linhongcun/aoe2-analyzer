@@ -18,9 +18,17 @@ def parse(h):
 out=[]
 for k,v in d['civs'].items():
     ez=parse(e[str(v['help_string_id'])]);zz=parse(z[str(v['help_string_id'])]);r=R[k]
+    corrections=CORRECTIONS.get(k,{})
+    bonuses=zz[3]
+    for index,correction in corrections.get('bon',{}).items():
+        i=int(index)
+        if not 0<=i<len(bonuses) or bonuses[i]!=correction['original']:
+            raise ValueError(f'{k} bonus {index} source changed; review civ_text_corrections.json')
+        bonuses[i]=correction['corrected']
+
     def nm(i):
         text=zz[2][i]
-        correction=CORRECTIONS.get(k,{}).get('ct' if i==0 else 'it')
+        correction=corrections.get('ct' if i==0 else 'it')
         if correction:
             # 原文明介绍必须完全匹配；上游有更新时须重新审查，不能静默覆盖新文本。
             if text!=correction['original']:
@@ -37,5 +45,5 @@ for k,v in d['civs'].items():
                 help_text=z[str(correction['help_string_id'])].split('<br>',1)[1]
                 text=name+' ('+strip(help_text).removesuffix('。')+')'
         return text+'｜'+ez[2][i].split(' (')[0]
-    out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=zz[3],bonEn=ez[3],tb=zz[4],tbEn=ez[4],s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
+    out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=bonuses,bonEn=ez[3],tb=zz[4],tbEn=ez[4],s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
 json.dump(out,open('data/game/civs.json','w'),ensure_ascii=False);print('civs',len(out))
