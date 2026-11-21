@@ -110,6 +110,10 @@ for owner, target, kind, zh_suffix, en_suffix in [
     entry['form'] = dict(id=target, kind=kind, en=f"{entry['en']} ({en_suffix})",
                          zh=f"{entry['zh']}（{zh_suffix}）", **combat_stats(alternate))
 
+# Only the Bengali elephant bonus (technology 846, effect 865) is in scope.
+from unit_conversion import add_conversion_data
+add_conversion_data(units, _DAT)
+
 # images
 os.makedirs('public/img/units',exist_ok=True)
 from PIL import Image;import io

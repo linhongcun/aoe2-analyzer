@@ -28,7 +28,7 @@ async function expectMechanism(page: Page, anchor: boolean) {
   await expect(target).toBeVisible();
   await expect(target.locator('[data-conversion=interval]')).toHaveText('5–9 秒');
   await expect(target.locator('[data-conversion=chance]')).toHaveText('40%');
-  await expect(target.locator('[data-conversion=baseline-status]')).toHaveText('待确认（无站内 DAT）');
+  await expect(target.locator('[data-conversion=baseline-status]')).toContainText('固定 DAT 的通用任务行未单独证明此概率');
   await expect(target.locator('[data-conversion=devotion-min]')).toHaveText('+1');
   await expect(target.locator('[data-conversion=devotion-max]')).toHaveText('+1');
   await expect(target.locator('[data-conversion=faith-min]')).toHaveText('+4');
@@ -37,9 +37,9 @@ async function expectMechanism(page: Page, anchor: boolean) {
   await expect(target).toContainText('单位被敌人僧侣招降的困难度增加 50%');
   await expect(target).toContainText('平均时间的近似说法，不是另一套数值');
   await expect(target).toContainText('当前站内增量与 Update 99311 的记载相同');
-  await expect(target.locator('[data-conversion=resistance]')).toHaveText('部分单位另有抗性。待确认。');
+  await expect(target.locator('[data-conversion=resistance]')).toContainText('目标单位可能自带基础招降抗性');
   await expect(target).not.toContainText('斥候');
-  await expect(target).not.toContainText('+3');
+  await expect(target).toContainText('+3 / +1');
   await expect(target).not.toContainText('150');
   await expect(target).not.toContainText('推荐');
   await expect(target).not.toContainText('该不该');
@@ -137,3 +137,37 @@ for (const width of [360, 375, 390, 1280])
         expect((await new AxeBuilder({ page }).include('[aria-label="游戏说明"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       expect(errors, errors.join('\n')).toEqual([]);
     });
+
+test('目标基础抗性、孟加拉文明修正和替代形态边界', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const panel = page.getByRole('region', { name: '目标招降抗性' });
+  for (const [id, expected] of [
+    [38, ['0', '0', '0']],
+    [2586, ['0', '+4', '+4']],
+    [2587, ['0', '+4', '+4']],
+    [1132, ['0', '+2', '+2']],
+  ] as const) {
+    await page.goto('./#/unit/' + id);
+    await expect(panel.locator('.ud-cr-stat dd:first-of-type')).toHaveText([...expected]);
+    await expect(panel).toContainText('另列，不合成总耗时');
+  }
+  const civ = page.locator('#unitciv'),
+    bonus = panel.locator('[data-conversion-target=bengali]');
+  await expect(bonus).toContainText('仅孟加拉文明适用');
+  await civ.click();
+  await page.locator('[role="option"][data-civ="Bengalis"]').click();
+  await expect(bonus).toContainText('当前已选：孟加拉');
+  await expect(bonus).toContainText('最短招降时间修正 +3');
+  await expect(bonus).toContainText('最长招降时间修正 +1');
+  await expect(bonus).toContainText('额外伤害 -25%');
+  await civ.click();
+  await page.locator('[role="option"][data-civ="Khmer"]').click();
+  await expect(bonus).toHaveCount(0);
+  await expect(panel.locator('.ud-cr-stat dd:first-of-type')).toHaveText(['0', '+2', '+2']);
+  await panel.getByRole('link', { name: /查看僧侣招降机制/ }).click();
+  await expect(page.locator('[data-conversion=caster-tasks]')).toContainText('5 / 9');
+  await expect.poll(() => page.locator('#conversion').evaluate((el) => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(180);
+  await page.goto('./#/unit/1738');
+  await expect(page.locator('#unit h1')).toContainText('近战');
+  await expect(panel).toHaveCount(0);
+});

@@ -1,6 +1,6 @@
 /**
  * 招降机制（issue 731）。
- * 基准间隔与概率只引用官方 Update 99311；站内没有对应字段。
+ * 基准间隔与概率引用官方 Update 99311；通用任务行另列时间参数。
  * 虔诚 / 信念的最短、最长增量只读 effects.json 资源 178 / 179，不手写游戏数字。
  */
 import { DAT, type DatFile, type DatTech } from './datEffects';

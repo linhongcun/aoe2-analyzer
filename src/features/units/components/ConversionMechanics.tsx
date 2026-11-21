@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   baselineChanceText,
   baselineIntervalText,
@@ -16,6 +15,8 @@ import {
 } from '../conversion';
 import { DAT, type DatFile } from '../../../domain/datEffects';
 import { DetailSection } from '../../../shared/ui/DetailBlocks';
+import { CasterResistance, CasterTasks } from './CasterTasks';
+import type { Unit } from '../../../domain/types';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 
 const numerals = (text: string) =>
@@ -51,14 +52,20 @@ function TechDelta({ tech, field }: { tech: ConversionTech; field: 'devotion' | 
   );
 }
 
-export function ConversionMechanics({ unitId, techs, source = DAT }: { unitId: number; techs: readonly ConversionTechSource[]; source?: DatFile }) {
-  const location = useLocation();
+export function ConversionMechanics({
+  unitId,
+  units,
+  techs,
+  source = DAT,
+}: {
+  unitId: number;
+  units: Readonly<Record<number, Unit>>;
+  techs: readonly ConversionTechSource[];
+  source?: DatFile;
+}) {
   const shown = showsConversion(unitId);
-  useEffect(() => {
-    if (!shown || location.hash !== `#${CONVERSION_ANCHOR}`) return;
-    document.getElementById(CONVERSION_ANCHOR)?.scrollIntoView({ block: 'start' });
-  }, [shown, location.hash]);
-  if (!shown) return null;
+  const unit = units[unitId];
+  if (!shown || !unit) return null;
   const facts = conversionFacts(techs, source);
   return (
     <div id={unitId === MONK_ID ? CONVERSION_ANCHOR : undefined}>
@@ -82,7 +89,7 @@ export function ConversionMechanics({ unitId, techs, source = DAT }: { unitId: n
           </div>
         </dl>
         <p className="note" data-conversion="baseline-status">
-          待确认（无站内 DAT）
+          概率来自官方更新记录，固定 DAT 的通用任务行未单独证明此概率。
         </p>
         {facts.devotion ? <TechDelta tech={facts.devotion} field="devotion" /> : <p data-conversion="devotion-pending">虔诚的最短、最长增量待确认。</p>}
         {facts.faith ? <TechDelta tech={facts.faith} field="faith" /> : <p data-conversion="faith-pending">信念的最短、最长增量待确认。</p>}
@@ -90,9 +97,8 @@ export function ConversionMechanics({ unitId, techs, source = DAT }: { unitId: n
           最短与最长增量来自 effects.json 资源 <span className="num nw">178</span>（最短）和资源 <span className="num nw">179</span>（最长）。
           {facts.matchesOfficial ? '当前站内增量与 Update 99311 的记载相同。' : '当前增量以站内数据为准。'}
         </p>
-        <p className="note" data-conversion="resistance">
-          部分单位另有抗性。待确认。
-        </p>
+        <CasterResistance guardian={units[2586]} elephant={units[1132]} />
+        <CasterTasks unit={unit} />
         <p className="note">
           数据版本：DE <span className="num nw">{DATA_SOURCES.patch?.build ?? '待确认'}</span>。游戏内「更难」百分比只作平均时间的近似说法。
         </p>

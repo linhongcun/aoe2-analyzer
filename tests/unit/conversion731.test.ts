@@ -2,6 +2,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { describe, expect, it } from 'vitest';
+import rawUnits from '../../src/data/raw/units';
+import type { Unit } from '../../src/domain/types';
 import rawTechs from '../../src/data/raw/techs';
 import {
   baselineChanceText,
@@ -14,12 +16,15 @@ import {
   UPDATE_99311,
 } from '../../src/features/units/conversion';
 import { DAT, type DatFile } from '../../src/domain/datEffects';
+import { ConversionTarget } from '../../src/features/units/components/ConversionTarget';
+import type { Tech } from '../../src/domain/types';
 import { ConversionMechanics } from '../../src/features/units/components/ConversionMechanics';
 import { ConversionTechLink } from '../../src/features/techs/components/ConversionTechLink';
 
 const techs = rawTechs as { id: number; zh: string; en: string; desc: string }[];
+const units = Object.fromEntries((rawUnits as Unit[]).map((unit) => [unit.id, unit]));
 const html = (unitId: number, source?: DatFile) =>
-  renderToStaticMarkup(createElement(StaticRouter, { location: `/unit/${unitId}` }, createElement(ConversionMechanics, { unitId, techs, source })));
+  renderToStaticMarkup(createElement(StaticRouter, { location: `/unit/${unitId}` }, createElement(ConversionMechanics, { unitId, units, techs, source })));
 
 describe('招降机制 #731', () => {
   it('虔诚与信念的最短最长只来自资源 178/179', () => {
@@ -73,25 +78,25 @@ describe('招降机制 #731', () => {
     expect(conversionFacts(techs.map((tech) => (tech.id === 46 ? { ...tech, desc: '  ' } : tech))).devotion).toBeNull();
   });
 
-  it('说明块引用官方补丁与站内增量，不写抗性数字', () => {
+  it('说明块引用官方补丁、施术者任务与不同来源的修正', () => {
     const page = html(125);
     expect(page).toContain('aria-label="招降机制"');
     expect(page).toContain('id="conversion"');
     expect(page).toContain('5–9 秒');
     expect(page).toContain('40%');
-    expect(page).toContain('待确认（无站内 DAT）');
+    expect(page).toContain('固定 DAT 的通用任务行未单独证明此概率。');
     expect(page).toMatch(/data-conversion="devotion-min">\s*\+1\s*</);
     expect(page).toMatch(/data-conversion="devotion-max">\s*\+1\s*</);
     expect(page).toMatch(/data-conversion="faith-min">\s*\+4\s*</);
     expect(page).toMatch(/data-conversion="faith-max">\s*\+4\s*</);
     expect(page).toContain('平均时间的近似说法，不是另一套数值');
     expect(page).toContain('当前站内增量与 Update 99311 的记载相同');
-    expect(page).toContain('部分单位另有抗性。待确认。');
+    expect(page).toContain('目标单位可能自带基础招降抗性');
     expect(page).toContain(UPDATE_99311.url);
     expect(page).toContain('href="/tech/46"');
     expect(page).toContain('href="/tech/45"');
     expect(page).not.toContain('斥候');
-    expect(page).not.toContain('+3');
+    expect(page).toContain('+3 / +1');
     expect(page).not.toContain('150');
     expect(page).not.toMatch(/推荐|该不该|应该出/);
     const link = renderToStaticMarkup(createElement(StaticRouter, { location: '/tech/46' }, createElement(ConversionTechLink)));
@@ -99,4 +104,15 @@ describe('招降机制 #731', () => {
     expect(link).toContain('href="/unit/125#conversion"');
     expect(link).toContain('查看招降间隔与概率');
   });
+});
+
+it('招降抗性的缺失格与真实零值分别展示', () => {
+  const unit = { ...units[38]!, conversionResistance: { chanceMod: 0, minTimeMod: 2 } };
+  const markup = renderToStaticMarkup(
+    createElement(StaticRouter, { location: '/unit/38' }, createElement(ConversionTarget, { unit, techs: rawTechs as Tech[] })),
+  );
+  expect(markup).toContain('部分抗性字段缺失');
+  expect(markup).toContain('暂无数据');
+  expect(markup).toContain('+2');
+  expect(markup).not.toContain('目标基础无额外抗性');
 });
