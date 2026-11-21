@@ -223,10 +223,17 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
 }
-.ud-stat-grid {
+.ud-stat-grid,
+.ud-attack-timing {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
+}
+.ud-stat-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.ud-attack-timing {
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
 }
 .ud-stat {
   min-width: 0;

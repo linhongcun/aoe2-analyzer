@@ -81,6 +81,14 @@
       "rof": {
         "type": "number"
       },
+      "attackDelaySeconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "frameDelay": {
+        "type": "integer",
+        "minimum": 0
+      },
       "tt": {
         "type": "number"
       },
