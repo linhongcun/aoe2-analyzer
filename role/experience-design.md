@@ -198,11 +198,37 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 画完「单位 → 建筑」后，再从该文明的建筑反查同一形态。例如从哥特兵营点精锐近卫军，应回到兵营分支（761），不是同名的城堡分支（555）。审稿时对照两端的文明、建筑、形态和条件文案；图能说明预期去向，不能代替实现后的往返测试。
 
+<a id="issue-design-images"></a>
+
 ### 完成态设计图用 GitHub Issue 原生附件上传，不再合入代码仓库
 
 [#1216 科技树用色](https://github.com/linhongcun/aoe2-analyzer/issues/1216) 曾沿用 [#1200](https://github.com/linhongcun/aoe2-analyzer/issues/1200) / [PR #1215](https://github.com/linhongcun/aoe2-analyzer/pull/1215) 做法开启纯图片 PR（[PR #1242](https://github.com/linhongcun/aoe2-analyzer/pull/1242)，已关闭），拟将设计稿 PNG 合入 `docs/design/mockups/`。维护者明确要求停止把设计图合进仓库：二进制设计稿会持续撑大代码库体积、引入与源码无关的历史记录，还会增加多余的 PR 或主干构建。
 
-以后本地渲染并逐张目视核对设计图后，在已登录 GitHub 的浏览器中打开原 Issue（本地可经维护者主动授权的 Chrome 远程调试复用其登录态，不绕过认证、不另存凭据），通过编辑区或评论区的「Paste, drop, or click to add files」上传 PNG，取得 `https://github.com/user-attachments/assets/...` 链接后清空未发送草稿，将图片以 Markdown 嵌入 Issue 正文并保存。注意这类原生附件在**尚未保存**进公开 Issue 正文或评论前对匿名请求会返回 404；须在保存正文之后再逐张核验返回 `200 image/png`、确认可正常查看，随后再交接下一阶段。
+选一种上传方式即可。不论用哪种工具，先重读原 Issue，确认你可以编辑当前阶段的正文。在仓库外准备并逐张查看覆盖主界面和重要状态的图片；公开仓库不要上传含私密信息的图。
+
+**网页：直接在正文贴图。** 在已登录的浏览器打开原 Issue，选正文右上角的「… → Edit」，把光标放在「体验设计」小节。将 PNG 拖入、粘贴或点击编辑框底部选择文件；等上传占位文字变成附件引用，给每张图写明它展示的状态，再保存正文。若从评论编辑框上传，只取 GitHub 生成的附件引用放入正文，清空未发送的评论草稿。保存前核对正文没有他人更新。用远程调试协助操作须经浏览器使用者主动授权，不导出登录凭据。见 [GitHub 网页附件说明](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)。
+
+**命令行：把本地图片嵌在指定段落。** 已认证的 CLI 不依赖网页的登录状态。先用 `gh issue edit --help` 确认有 `--attach`；若没有，升级[官方 GitHub CLI](https://cli.github.com/) 或改用网页。CLI 上传要求账号对仓库有推送权限；能改正文不等于当前凭据能上传附件。自动化平台可从密钥管理器注入 `GH_TOKEN`，不要把令牌写进脚本、Issue 或日志。
+
+1. 用 `gh issue view ISSUE-URL --json body --jq .body` 读取当前**完整正文**（将 `ISSUE-URL` 换为原单网址），另存为 UTF-8 的 `body.md`。在同一工作目录放好两张图，只编辑正文的设计小节，例如：
+
+   ```markdown
+   ![桌面：未选择文明时的基础容量](./desktop.png)
+
+   ![窄屏：选定文明后另列运载量加成](./mobile.png)
+   ```
+
+2. 保存前再次比对远端正文；若有人更新，先把设计小节合进最新正文，不能用旧稿覆盖。确认后在该目录运行（替换网址和文件名）：
+
+   ```sh
+   gh issue edit ISSUE-URL --body-file body.md --attach ./desktop.png --attach ./mobile.png
+   ```
+
+   每个 `--attach` 对应一张图，路径与 Markdown 引用一致，CLI 会原位替换为 GitHub 附件地址并保留替代文字。`--body-file` 替换的是整篇正文，不是追加一个小节。若命令报错，先重读原单：可能已有部分图片上传并写入正文。保留已成功的链接，只补失败的图；若凭据被拒，改用获授权的账号或网页，不扩大令牌权限来试错。见[官方附图说明](https://docs.github.com/en/github-cli/github-cli/attaching-files-with-github-cli)和 [`gh issue edit` 手册](https://cli.github.com/manual/gh_issue_edit)。
+
+**保存后，以读者身份验收。** 重读正文，逐张对照数量、顺序和图注；保留稳定附件引用（如 `github.com/user-attachments/assets/…`），不要留下本地路径或下载时跳转的临时签名地址。公开仓库用未登录窗口打开原 Issue，私有仓库用有读取权限的账号；滚动到每张图，确认能加载、能看清相应状态。#1216 在保存前匿名访问曾返回 404；应以保存后的页面为准。遇到空白或疑似错图，检查实际图片请求（PNG 应返回成功状态及 `image/png`）和解码后的尺寸，必要时比对原图字节。只有 HTTP 200 或编辑预览，不能证明读者看得到图。
+
+可对照 [#1051 的五张完成态图](https://github.com/linhongcun/aoe2-analyzer/issues/1051)（使用官方 CLI v2.104.0 上传）和 [#1220 的四张容量状态图](https://github.com/linhongcun/aoe2-analyzer/issues/1220)（公开原单逐图核验）。这里确认的是设计图已交付，不是应用已实现或玩法已实测。
 
 ## 开始和交付清单
 
@@ -222,7 +248,7 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 4. 浮层写了焦点、键盘关闭和回焦。费用、长中文和图标的对齐按上面的网格案例检查过。
 5. issue 含范围、不改项和验收。本地包没有被写成 GitHub 附件。
 6. 没有替产品排期，没有把设计通过写成引擎或现网通过。
-7. 完成态设计图已直接嵌入同一 Issue 正文、能查看并覆盖主要界面和重要状态；没有把本地路径或 ZIP 当作已附图。
+7. 完成态设计图已[直接嵌入同一 Issue 正文](#issue-design-images)、能查看并覆盖主要界面和重要状态；没有把本地路径或 ZIP 当作已附图。
 
 ## 依据与核对
 
