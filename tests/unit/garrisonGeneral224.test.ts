@@ -3,6 +3,7 @@ import { loadCore, loadTrees } from '../../src/data';
 import { calculateGarrison, garrisonTechs } from '../../src/domain/garrison';
 import {
   calculateGeneralGarrison,
+  explainGeneralGarrison,
   GENERAL_GARRISON_DATA,
   getGarrisonCandidates,
   getGarrisonBuildings,
@@ -81,6 +82,44 @@ describe('#224 general garrison model', () => {
     expect(one).toMatchObject({ usedSlots: 2, garrisonPower: 4.5, totalProjectiles: 5 });
     const two = calc(82, { rows: [row(83), row(4, '2')] });
     expect(two).toMatchObject({ usedSlots: 3, garrisonPower: 6.5, totalProjectiles: 6 });
+  });
+  it('#1262 exposes the exact floor and the effective secondary attack used by the shot model', () => {
+    const threshold = 2.5;
+    const unit = GENERAL_GARRISON_DATA.units[1903]!;
+    const input = config({ civ: 'Jurchens', rows: [row(1903)] });
+    for (const [difference, expected] of [
+      [5e-10, 3],
+      [2e-9, 2],
+    ] as const) {
+      const result = explainGeneralGarrison(ctx, ctx.core.buildingById[235]!, input, {
+        ...GENERAL_GARRISON_DATA,
+        units: { ...GENERAL_GARRISON_DATA.units, [unit.id]: { ...unit, firepower: -threshold * (3 - difference) } },
+      });
+      expect(result).toMatchObject({
+        errors: [],
+        buildingThreshold: { attack: 5, reload: 2, source: 'secondary' },
+        buildingPower: threshold,
+        totalProjectiles: 1 + expected,
+        firingSteps: {
+          quotient: 3 - difference,
+          wholeSlots: expected,
+          uncappedProjectiles: 1 + expected,
+          nextThreshold: { slots: expected + 1, power: threshold * (expected + 1) },
+        },
+      });
+    }
+  });
+  it('#1262 derives the next cannon shot after the primary weapon minimum', () => {
+    const result = explainGeneralGarrison(ctx, ctx.core.buildingById[236]!, config({ civ: 'Teutons', rows: [row(5, '5')] }));
+    expect(result).toMatchObject({
+      errors: [],
+      buildingThreshold: { attack: 120, reload: 6, source: 'primary' },
+      baseProjectiles: 1,
+      extraProjectiles: 0,
+      totalProjectiles: 1,
+      nextAt: 9,
+      firingSteps: { wholeSlots: 1, uncappedProjectiles: 1, primaryMinimum: true, nextThreshold: { slots: 2, power: 40 } },
+    });
   });
   it('matches the legacy villager engine across every available civilization, age and full relevant-tech preset', () => {
     let compared = 0;

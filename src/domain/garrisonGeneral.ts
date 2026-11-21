@@ -49,6 +49,8 @@ export interface GarrisonRowResult extends GeneralGarrisonRow {
   powerTotal: number | null;
   reason: string;
 }
+type GarrisonPowerSource = 'fixed' | 'pierce-plus-fixed' | 'pierce' | 'multi-projectile' | 'relic' | 'zero-factor' | 'storage' | 'unknown';
+type GarrisonContribution = { power: number | null; powerSource: GarrisonPowerSource; reason: string };
 type GarrisonStat =
   | 'attack'
   | 'reload'
@@ -157,6 +159,17 @@ export interface GeneralGarrisonResult {
   singleUnitSaturationAt: number | null;
   nextAt: number | null;
   maxAtCapacity: number | null;
+}
+interface GarrisonExplanation {
+  rows: (GarrisonRowResult & { powerSource: GarrisonPowerSource })[];
+  buildingThreshold: { attack: number; reload: number; source: 'secondary' | 'primary' | 'building' } | null;
+  firingSteps: {
+    quotient: number;
+    wholeSlots: number;
+    uncappedProjectiles: number;
+    primaryMinimum: boolean;
+    nextThreshold: { slots: number; power: number } | null;
+  } | null;
 }
 
 const unique = (ids: number[]) => [...new Set(ids)].sort((a, b) => a - b);
@@ -403,34 +416,43 @@ export function toggleGeneralGarrisonTech(
 
 /** Unit contribution is not target damage. It uses the current pinned pierce/reload/firepower fields. */
 export function unitGarrisonPower(unit: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>): { power: number | null; reason: string } {
-  if (!Number.isFinite(unit.firepower) || !Number.isFinite(unit.attack)) return { power: null, reason: '驻军贡献字段无效。' };
-  if (unit.firepower === 0) return { power: 0, reason: '该单位的驻军火力系数为 0，不增加弹丸。' };
+  const { power, reason } = describeUnitGarrisonPower(unit, units);
+  return { power, reason };
+}
+
+function describeUnitGarrisonPower(unit: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>): GarrisonContribution {
+  if (!Number.isFinite(unit.firepower) || !Number.isFinite(unit.attack)) return { power: null, powerSource: 'unknown', reason: '驻军贡献字段无效。' };
+  if (unit.firepower === 0) return { power: 0, powerSource: 'zero-factor', reason: '该单位的驻军火力系数为 0，不增加弹丸。' };
+  const invalidReload = { power: null, powerSource: 'unknown', reason: '该单位的攻击间隔无效，无法计算驻军贡献。' } as const;
   if (unit.firepower < 0) {
-    if (unit.attack === 0) return { power: -unit.firepower, reason: '按数据中的固定驻军火力计入。' };
-    if (!(unit.reload > 0)) return { power: null, reason: '该单位的攻击间隔无效，无法计算驻军贡献。' };
-    return { power: unit.attack / unit.reload - unit.firepower, reason: '穿刺秒伤加上数据中的固定驻军火力。' };
+    if (unit.attack === 0) return { power: -unit.firepower, powerSource: 'fixed', reason: '按数据中的固定驻军火力计入。' };
+    if (!(unit.reload > 0)) return invalidReload;
+    return { power: unit.attack / unit.reload - unit.firepower, powerSource: 'pierce-plus-fixed', reason: '穿刺秒伤加上数据中的固定驻军火力。' };
   }
-  if (!(unit.reload > 0)) return { power: null, reason: '该单位的攻击间隔无效，无法计算驻军贡献。' };
+  if (!(unit.reload > 0)) return invalidReload;
   const extra = Math.max(0, unit.total - 1);
   if (extra > 0) {
-    if (unit.secondaryProjectile === -1) return { power: null, reason: '当前多弹丸形式尚未建模；容量与入驻方式仍可查看。' };
+    if (unit.secondaryProjectile === -1) return { power: null, powerSource: 'unknown', reason: '当前多弹丸形式尚未建模；容量与入驻方式仍可查看。' };
     const projectile = units[unit.secondaryProjectile];
-    if (!projectile || !Number.isFinite(projectile.attack)) return { power: null, reason: '副弹丸数据缺失，容量有效，但暂不计算该单位的弹丸贡献。' };
+    if (!projectile || !Number.isFinite(projectile.attack))
+      return { power: null, powerSource: 'unknown', reason: '副弹丸数据缺失，容量有效，但暂不计算该单位的弹丸贡献。' };
     return {
       power: (unit.firepower * (unit.attack + 0.8 * extra * projectile.attack)) / unit.reload,
+      powerSource: 'multi-projectile',
       reason: '主弹丸与副弹丸按文档模型折算，再应用固定版本火力系数。',
     };
   }
-  return { power: (unit.attack * unit.firepower) / unit.reload, reason: '按穿刺攻击、攻击间隔和驻军火力系数折算。' };
+  return { power: (unit.attack * unit.firepower) / unit.reload, powerSource: 'pierce', reason: '按穿刺攻击、攻击间隔和驻军火力系数折算。' };
 }
 
-function relicGarrisonPower(buildingId: number, building: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>) {
-  if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, reason: '圣物存放只计容量，不增加弹丸。' };
+function relicGarrisonPower(buildingId: number, building: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>): GarrisonContribution {
+  if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, powerSource: 'storage', reason: '圣物存放只计容量，不增加弹丸。' };
   const villager = units[VILLAGER_UNIT_ID];
   const power = villager ? unitGarrisonPower(villager, units).power : null;
   const maxProjectiles = building.projectile >= 0 ? Math.max(1, building.max) : Math.max(0, building.max - 1);
   return {
     power,
+    powerSource: power === null ? 'unknown' : 'relic',
     reason: power === null ? '村民驻军贡献数据缺失或无效，暂不计算圣物弹丸贡献。' : `强化教堂中每个圣物 +1 支箭，与村民合计上限 ${maxProjectiles}。`,
   };
 }
@@ -440,6 +462,21 @@ export function calculateGeneralGarrison(
   b: Building,
   config: GeneralGarrisonConfig,
   data = GENERAL_GARRISON_DATA,
+): GeneralGarrisonResult {
+  return calculateGarrison(ctx, b, config, data);
+}
+
+export function explainGeneralGarrison(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data = GENERAL_GARRISON_DATA) {
+  const explanation: GarrisonExplanation = { rows: [], buildingThreshold: null, firingSteps: null };
+  return { ...calculateGarrison(ctx, b, config, data, explanation), ...explanation };
+}
+
+function calculateGarrison(
+  ctx: GeneralGarrisonContext,
+  b: Building,
+  config: GeneralGarrisonConfig,
+  data: GeneralGarrisonData,
+  explanation?: GarrisonExplanation,
 ): GeneralGarrisonResult {
   const out: GeneralGarrisonResult = {
     errors: [],
@@ -497,12 +534,12 @@ export function calculateGeneralGarrison(
     if (!validCount) out.errors.push(`驻军数量须为 0–${B.capacity} 的整数。`);
     const countValue = validCount ? Number(row.count) : 0;
     out.usedSlots += countValue;
-    const contribution =
+    const contribution: GarrisonContribution =
       row.entry === 'deposit'
         ? relicGarrisonPower(b.id, B, state.units)
         : unit
-          ? unitGarrisonPower(unit, state.units)
-          : { power: null, reason: '单位数据缺失。' };
+          ? describeUnitGarrisonPower(unit, state.units)
+          : { power: null, powerSource: 'unknown', reason: '单位数据缺失。' };
     const total = contribution.power === null ? null : contribution.power * countValue;
     if (countValue > 0) power = power === null || total === null ? null : power + total;
     if (total === null && countValue > 0) out.warnings.push(contribution.reason);
@@ -510,7 +547,7 @@ export function calculateGeneralGarrison(
       out.warnings.push(`多弹丸驻军按公开公式估算，未完成 DE ${DATA_PATCH_BUILD} 客户端对账。`);
     if (unit && countValue > 0 && [6, 7].includes(unit.chargeType)) out.warnings.push('充能单位按普通未充能齐射估算，不计临时最大弹丸数与战斗充能状态。');
     if (row.unitId === 434 && countValue > 0) out.warnings.push('国王驻军仅适用于包含国王的对局模式。');
-    out.rows.push({
+    const rowResult: GarrisonRowResult = {
       ...row,
       zh: unit?.zh ?? `单位 ${row.unitId}`,
       canEnter: item?.canEnter ?? false,
@@ -520,7 +557,9 @@ export function calculateGeneralGarrison(
       powerEach: contribution.power,
       powerTotal: total,
       reason: contribution.reason,
-    });
+    };
+    out.rows.push(rowResult);
+    explanation?.rows.push({ ...rowResult, powerSource: contribution.powerSource });
   }
   out.remainingSlots = Math.max(0, B.capacity - out.usedSlots);
   if (out.usedSlots > B.capacity) out.errors.push(`驻军总数 ${out.usedSlots} 超过容量 ${B.capacity}。`);
@@ -541,7 +580,10 @@ export function calculateGeneralGarrison(
     return out;
   }
   out.mode = b.id === 236 ? 'cannon' : 'arrows';
-  out.buildingPower = (hasSecondary ? (state.units[B.secondaryProjectile]?.attack ?? B.attack) : B.attack) / B.reload;
+  const secondaryAttack = hasSecondary ? state.units[B.secondaryProjectile]?.attack : undefined;
+  const attack = secondaryAttack ?? B.attack;
+  const buildingPower = attack / B.reload;
+  out.buildingPower = buildingPower;
   if (hasSecondary && state.units[B.secondaryProjectile]?.attack !== B.attack)
     out.warnings.push('建筑副弹丸攻击与建筑面板不同；本模型按副弹丸火力计算阈值，未完成固定版本客户端对账。');
   if (!(out.buildingPower > 0) || !Number.isFinite(out.buildingPower)) {
@@ -550,10 +592,12 @@ export function calculateGeneralGarrison(
     out.totalProjectiles = null;
     return out;
   }
-  const countShots = (p: number) => {
-    const slots = Math.min(B.max, B.total + Math.floor(p / out.buildingPower! + 1e-9));
-    return hasPrimary ? Math.max(1, slots) : Math.max(0, slots - 1);
-  };
+  if (explanation)
+    explanation.buildingThreshold = { attack, reload: B.reload, source: secondaryAttack !== undefined ? 'secondary' : hasSecondary ? 'building' : 'primary' };
+  const wholeSlotsFor = (quotient: number) => Math.floor(quotient + 1e-9);
+  const projectilesFor = (slots: number) => (hasPrimary ? Math.max(1, slots) : Math.max(0, slots - 1));
+  const cappedProjectiles = (wholeSlots: number) => projectilesFor(Math.min(B.max, B.total + wholeSlots));
+  const countShots = (power: number) => cappedProjectiles(wholeSlotsFor(power / buildingPower));
   out.baseProjectiles = countShots(0);
   out.maxProjectiles = hasPrimary ? Math.max(1, B.max) : Math.max(0, B.max - 1);
   if (power === null) {
@@ -561,8 +605,22 @@ export function calculateGeneralGarrison(
     out.totalProjectiles = null;
     return out;
   }
-  out.totalProjectiles = countShots(power);
+  const quotient = power / buildingPower;
+  const wholeSlots = wholeSlotsFor(quotient);
+  out.totalProjectiles = cappedProjectiles(wholeSlots);
   out.extraProjectiles = out.totalProjectiles - out.baseProjectiles;
+  if (explanation) {
+    // A primary weapon can start at one shot even when its initial slot count is zero.
+    // Without a primary weapon, one slot is reserved and does not fire.
+    const nextSlots = out.totalProjectiles + (hasPrimary ? 1 : 2) - B.total;
+    explanation.firingSteps = {
+      quotient,
+      wholeSlots,
+      uncappedProjectiles: projectilesFor(B.total + wholeSlots),
+      primaryMinimum: hasPrimary && B.total === 0,
+      nextThreshold: out.totalProjectiles < out.maxProjectiles ? { slots: nextSlots, power: nextSlots * buildingPower } : null,
+    };
+  }
   if (unique(out.rows.map((r) => r.unitId)).length === 1 && out.rows[0]?.powerEach !== null) {
     const row = out.rows[0]!;
     out.singleUnitId = row.unitId;

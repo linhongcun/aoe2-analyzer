@@ -392,3 +392,153 @@ for (const width of [360, 375, 390, 1280])
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: info.outputPath(`garrison224-${theme}-${width}.png`), fullPage: true });
     });
+
+const firepower = (page: Page) => page.getByRole('region', { name: '驻军火力计算原理' });
+const selectAllTechs = (page: Page) => page.getByRole('button', { name: '全选当前时代可用相关科技' });
+const clearTechs = (page: Page) => page.getByRole('button', { name: '清空自选科技' });
+const selectedTechIds = (page: Page) => new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('gtechs')?.split(',').filter(Boolean);
+
+test('#1262 女真科技快捷全选、前置联动与分享还原', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto(url(235, 'Jurchens', 4, '1903:5:e'));
+  await expect(total(page)).toHaveText('5');
+  await expect(clearTechs(page)).toBeDisabled();
+  await expect(panel(page)).toContainText('当前未自选相关科技');
+  await expect(panel(page)).toContainText('单兵贡献 4.5 · 本行小计 22.5（4.5 × 5）');
+  await expect(firepower(page)).toContainText('副弹丸攻击 8 ÷ 攻击间隔 2 秒 = 4');
+  await expect(firepower(page)).toContainText('理论 6 箭，受本建筑 5 箭上限截断');
+  await selectAllTechs(page).focus();
+  await page.keyboard.press('Enter');
+  await expect(selectAllTechs(page)).toBeDisabled();
+  await expect(panel(page)).toContainText('已自选 7 / 7 项');
+  expect(selectedTechIds(page)?.sort()).toEqual(['199', '200', '201', '233', '47', '608', '997']);
+  await expect(total(page)).toHaveText('4');
+  await expect(firepower(page)).toContainText('副弹丸攻击 15 ÷ 攻击间隔 2 秒 = 7.5');
+  await expect(firepower(page)).toContainText('基础 1 + 驻军 3 = 4 箭');
+  await expect(firepower(page)).toContainText('距下一箭：需合计火力 30');
+  await page.getByRole('button', { name: '复制驻军方案' }).click();
+  await expect(panel(page)).toContainText('驻军方案链接已复制');
+  const shared = await page.evaluate(() => navigator.clipboard.readText());
+  const reopened = await context.newPage();
+  await reopened.goto(shared);
+  await expect(total(reopened)).toHaveText('4');
+  await expect(selectAllTechs(reopened)).toBeDisabled();
+  await reopened.close();
+  await page.getByRole('checkbox', { name: '箭羽', exact: true }).uncheck();
+  for (const name of ['锥子箭', '护腕']) await expect(page.getByRole('checkbox', { name, exact: true })).not.toBeChecked();
+  await expect(panel(page)).toContainText('已自选部分科技');
+  await clearTechs(page).click();
+  await expect(total(page)).toHaveText('5');
+  expect(selectedTechIds(page)).toEqual([]);
+});
+
+test('#1262 中国单兵阈值与混编合计在窄屏保留计算与读数', async ({ page }) => {
+  await page.goto(url(235, 'Chinese', 4, '559:5:e'));
+  await expect(total(page)).toHaveText('5');
+  await expect(result(page)).toContainText('达到箭矢上限3 个');
+  await expect(firepower(page)).toContainText('29.4');
+  await selectAllTechs(page).click();
+  await expect(result(page)).toContainText('达到箭矢上限4 个');
+  await expect(firepower(page)).toContainText('44.25');
+  await expect(total(page)).toHaveText('5');
+
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
+  await page.goto(url(235, 'Chinese', 4, '559:2:e,492:2:e,567:1:e', '52,437,199,200,201,233,47,608'));
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const card = firepower(page);
+  const table = card.getByRole('table', { name: '各单位驻军火力' });
+  await expect(table.getByRole('row', { name: /精锐诸葛弩/ })).toContainText(/8\.85.*17\.7.*多弹丸模型估算/);
+  await expect(table.getByRole('row', { name: /劲弩手/ })).toContainText(/5\.88.*11\.76.*穿刺攻速折算/);
+  await expect(table.getByRole('row', { name: /冠军剑士/ })).toContainText('系数为 0，不加弹丸');
+  await expect(card).toContainText('29.46 ÷ 7.5 ≈ 3.93');
+  await expect(card).toContainText('当前差 0.54');
+  await expect(total(page)).toHaveText('4');
+  expect(await card.locator('.num.nw').evaluateAll((items) => items.every((item) => item.getClientRects().length === 1))).toBe(true);
+  const clearButton = (await clearTechs(page).boundingBox())!;
+  expect(clearButton.height).toBeGreaterThanOrEqual(44);
+  expect(clearButton.width).toBeGreaterThanOrEqual(44);
+  const violations = await new AxeBuilder({ page }).include('[data-testid="garrison-preview"]').withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(violations.violations).toEqual([]);
+});
+
+test('#1262 空、零与待核实保留各自读数', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto(url(235, 'Jurchens', 4, '1903:0:e'));
+  await expect(panel(page)).toContainText('本行小计 0（4.5 × 0）');
+  await expect(result(page)).toContainText('空驻军不增加箭矢');
+  await expect(firepower(page)).toContainText('0 ÷ 4 = 0 箭');
+  await page.goto(url(82, 'Shu', 3, '1962:2:e'));
+  await expect(panel(page)).toContainText('单兵贡献 待核实 · 本行小计 待核实');
+  await expect(total(page)).toHaveText('待核实');
+  await expect(firepower(page)).toContainText('副弹丸攻击 11 ÷ 攻击间隔 2 秒 = 5.5');
+  await expect(firepower(page)).toContainText('因「战车」的驻军火力贡献尚未核实');
+  await quantity(page).fill('0');
+  await expect(total(page)).toHaveText('5');
+  await expect(panel(page)).toContainText('单兵贡献 待核实 · 本行小计 待核实');
+  await page.goto(url(235, 'Chinese', 4, '567:1:e'));
+  await expect(panel(page)).toContainText('单兵贡献 0 · 本行小计 0（火力系数为 0）');
+  await expect(firepower(page)).toContainText('当前容量内无法再增加箭矢');
+  await expect(firepower(page)).not.toContainText('容量已满');
+});
+
+test('#1262 仍需火力时，极小的差值不会显示为零', async ({ page }) => {
+  await page.goto(url(79, 'Dravidians', 3, '6:2:e'));
+  await expect(total(page)).toHaveText('1');
+  await expect(firepower(page)).toContainText('当前差 小于 0.01');
+  await expect(firepower(page)).toContainText('再驻 1 个即增加');
+  await quantity(page).fill('3');
+  await expect(total(page)).toHaveText('2');
+});
+
+test('#1262 炮塔、强化教堂与非射击模式使用各自口径', async ({ page }) => {
+  await page.goto(url(236, 'Turks', 4, '5:5:e'));
+  await selectAllTechs(page).click();
+  expect(selectedTechIds(page)).not.toContain('47');
+  await expect(page.getByRole('checkbox', { name: '化学（免费）' })).toBeChecked();
+  await expect(panel(page)).toContainText('免费自动生效 1 项（化学）');
+  await expect(firepower(page)).toContainText('4.93 × 5 人 ≈ 24.64');
+  await expect(firepower(page)).toContainText('主弹丸攻击 124 ÷ 攻击间隔 6 秒 ≈ 20.67');
+  await expect(firepower(page)).toContainText('基础 1 + 驻军 0 = 1 发');
+  await expect(firepower(page)).not.toContainText(/箭矢|上限截断/);
+  await clearTechs(page).click();
+  await expect(page.getByRole('checkbox', { name: '化学（免费）' })).toBeChecked();
+  await page.goto(url(236, 'Teutons', 4, '5:1:e'));
+  await expect(firepower(page)).toContainText('需合计火力 40（2 × 20）');
+  await page.goto(url(1806, 'Armenians', 4, '285:3:d,83:2:e'));
+  await selectAllTechs(page).click();
+  await expect(firepower(page)).toContainText('圣物（存放）');
+  await expect(firepower(page)).toContainText('村民（进入）');
+  await expect(firepower(page)).toContainText('22.5 ÷ 4.5 = 5.00');
+  await expect(total(page)).toHaveText('5');
+  await page.goto(url(1806, 'Armenians', 4));
+  await expect(firepower(page)).toContainText('仅保留建筑自身基础 0 箭');
+  await page.goto(url(70, 'Khmer', 1, '83:3:e'));
+  await expect(panel(page)).toContainText('无可选相关科技');
+  await expect(selectAllTechs(page)).toHaveCount(0);
+  await expect(firepower(page)).toHaveCount(0);
+  await page.goto(url(68, 'Gurjaras', 2, '594:3:e'));
+  await expect(result(page)).toContainText('特殊存放或经济用途');
+  await expect(firepower(page)).toHaveCount(0);
+  await expect(panel(page)).not.toContainText('单兵贡献');
+});
+
+test('#1262 逐项切换和全选仅把自选科技写入链接', async ({ page }) => {
+  await page.goto(url(45, 'Bohemians', 2));
+  await page.getByRole('checkbox', { name: '箭羽', exact: true }).check();
+  expect(selectedTechIds(page)).toEqual(['199']);
+  await expect(result(page)).toBeVisible();
+  await page.getByRole('combobox', { name: '驻军时代' }).selectOption('1');
+  expect(selectedTechIds(page)).toEqual([]);
+  await expect(page.getByRole('checkbox', { name: '箭羽', exact: true })).toHaveCount(0);
+  await page.goto(url(109, 'Koreans', 4));
+  await selectAllTechs(page).click();
+  await expect(selectAllTechs(page)).toBeDisabled();
+  await expect(page.getByRole('checkbox', { name: '炮塔（免费）', exact: true })).toBeChecked();
+  expect(selectedTechIds(page)).not.toContain('64');
+  await expect(result(page)).toBeVisible();
+  await clearTechs(page).click();
+  await expect(page.getByRole('checkbox', { name: '炮塔', exact: true })).not.toBeChecked();
+  expect(selectedTechIds(page)).toEqual([]);
+});
