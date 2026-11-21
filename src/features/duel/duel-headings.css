@@ -15,18 +15,6 @@
   font-size: var(--fs-sm);
   font-weight: 400;
 }
-#duel .duel-contact-boundary {
-  margin: var(--space-3) 0;
-  padding: var(--space-3);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-2);
-  color: var(--color-text-2);
-  font-size: 14px;
-  line-height: 1.65;
-}
-#duel .duel-contact-boundary-line {
-  display: block;
-}
 #duel .upgrade-title {
   margin: 1em 0;
   font-size: 1.17em;

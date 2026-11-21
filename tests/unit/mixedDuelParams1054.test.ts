@@ -19,7 +19,13 @@ describe('#1054 strict mixed configuration protocol', () => {
   it('all context, row order, form IDs and quantities round-trip without local state', () => {
     const input = sample(),
       query = encodeMixedDuel(input);
-    expect(decodeMixedDuel(new URLSearchParams(query.toString()))).toEqual({ input, errors: [], sharedErrors: [], sideErrors: { a: [], b: [] } });
+    expect(decodeMixedDuel(new URLSearchParams(query.toString()))).toEqual({
+      input,
+      errors: [],
+      legacy: false,
+      sharedErrors: [],
+      sideErrors: { a: [], b: [] },
+    });
     expect(query.get('m')).toBe('mix');
     expect(input.a.rows[0]?.uid).toBe('359');
   });
@@ -31,7 +37,14 @@ describe('#1054 strict mixed configuration protocol', () => {
       { uid: '93', qty: '-2' },
       { uid: '567', qty: 'Infinity' },
     ];
-    expect(decodeMixedDuel(encodeMixedDuel(input))).toEqual({ input, errors: [], sharedErrors: [], sideErrors: { a: [], b: [] } });
+    expect(decodeMixedDuel(encodeMixedDuel(input))).toEqual({ input, errors: [], legacy: false, sharedErrors: [], sideErrors: { a: [], b: [] } });
+  });
+  it('valid queue-v1 input is marked for explicit upgrade without rewriting the payload', () => {
+    const input = { ...sample(), rule: 'queue-v1', data: 'previous-data' };
+    const params = encodeMixedDuel(input);
+    expect(decodeMixedDuel(params)).toMatchObject({ input, legacy: true, errors: [] });
+    params.set('ma', '{');
+    expect(decodeMixedDuel(params)).toMatchObject({ legacy: false, errors: ['A 方链接 JSON 格式损坏'] });
   });
   it('distinguishes unusable shared and single-side configuration without discarding the healthy side', () => {
     const q = encodeMixedDuel(sample());

@@ -6,45 +6,12 @@
  *   所有匹配类别贡献非负时，本场可等价简化为 max(1, Σ_c max(0, 攻击_c − 护甲_c))。
  * 近似：首次攻击在 t=0 发生（无出手前摇数据）；远程按命中率取期望；忽略射程、走位、地形、冲锋攻击与特殊能力。
  */
-import type { Cost, StatSet, Unit } from './types';
-import { damageRows, hitCount, totalDamage } from './damageCore';
+import type { Cost } from './types';
+import { hitCount } from './damageCore';
+import { damagePerHit, expectedHit, type Fighter } from './duelFighter';
+import { contactFight, FIGHT_TIME, type ContactSummary, type FightEnd, type Timeline } from './contactFight';
 
-export interface Fighter {
-  name: string;
-  hp: number;
-  /** 攻击类别 → 数值（含主攻击 近战/穿刺） */
-  attack: Record<string, number>;
-  /** 护甲类别 → 数值（含 近战/穿刺） */
-  armor: Record<string, number>;
-  /** 攻击间隔（秒） */
-  rof: number;
-  /** 命中率 0..1 */
-  acc: number;
-  ranged: boolean;
-  rng: number;
-  cost: Cost;
-}
-
-export function fighterFrom(u: Unit, S: StatSet): Fighter {
-  const pierce = u.atks.some(([n]) => n === '穿刺') || (!u.atks.some(([n]) => n === '近战') && u.rng > 1);
-  const attack: Record<string, number> = { [pierce ? '穿刺' : '近战']: S.atk };
-  Object.entries(S.bonus).forEach(([k, v]) => (attack[k] = v));
-  const armor: Record<string, number> = { 近战: S.ma, 穿刺: S.pa };
-  Object.entries(S.armc).forEach(([k, v]) => (armor[k] = v));
-  return { name: u.zh, hp: S.hp, attack, armor, rof: S.rof, acc: Math.min(100, Math.max(0, S.acc)) / 100, ranged: u.rng > 1, rng: S.rng, cost: u.cost };
-}
-
-/** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
-export function damageByClass(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>) {
-  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
-  return damageRows(a.attack, d.armor, { allowInvalid: true }).rows;
-}
-/** 单次命中伤害（不含命中率） */
-export function damagePerHit(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>): number {
-  return totalDamage(damageByClass(a, d));
-}
-/** 期望每次攻击伤害（远程乘命中率；近战命中率视为 100%） */
-export const expectedHit = (a: Fighter, d: Fighter) => damagePerHit(a, d) * (a.ranged ? a.acc : 1);
+export { damageByClass, damagePerHit, expectedHit, fighterFrom, type Fighter } from './duelFighter';
 
 export interface OneWay {
   dmg: number;
@@ -105,66 +72,36 @@ export function duel(a: Fighter, b: Fighter): DuelResult {
   return { ab, ba, winner: aWins ? 'a' : 'b', remaining: Math.round(remaining * 10) / 10, duration: T };
 }
 
-export interface GroupResult {
-  winner: 'a' | 'b' | 'draw';
-  aAlive: number;
-  bAlive: number;
-  /** 胜方剩余总生命 */
-  hpLeft: number;
-  duration: number;
-  /** 采样：[t, A 存活数, B 存活数] */
-  timeline: [number, number, number][];
-}
-/**
- * N vs M：离散事件模拟。集火（所有单位攻击对方队列中第一个存活单位），
- * 首击 t=0；同一时刻的伤害同时结算（因此可能产生过量伤害 overkill，与实战相近）。
- * 远程按命中率取期望伤害。忽略近战单位的包围/空间限制。
- */
-export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT = 600): GroupResult {
-  const A = Array.from({ length: na }, () => a.hp),
-    B = Array.from({ length: nb }, () => b.hp);
-  const dA = expectedHit(a, b),
-    dB = expectedHit(b, a);
-  let t = 0,
-    nextA = 0,
-    nextB = 0;
-  const alive = (X: number[]) => X.filter((h) => h > 1e-9).length;
-  const timeTolerance = 1e-9;
-  const timeline: [number, number, number][] = [[0, na, nb]];
-  while (alive(A) && alive(B) && t <= maxT) {
-    const nextT = Math.min(nextA, nextB);
-    if (nextT > maxT && nextT - maxT >= timeTolerance) {
-      t = maxT;
-      break;
+export type GroupResult =
+  | {
+      status: FightEnd;
+      winner: 'a' | 'b' | 'draw' | null;
+      aAlive: number;
+      bAlive: number;
+      hpLeft: number;
+      duration: number;
+      timeline: Timeline;
+      contact: ContactSummary;
     }
-    t = Math.min(nextT, maxT);
-    const aAtk = Math.abs(t - nextA) < timeTolerance,
-      bAtk = Math.abs(t - nextB) < timeTolerance;
-    const nA = alive(A),
-      nB = alive(B);
-    // 同时结算：先算出双方本轮伤害，再施加
-    const hitB = aAtk ? nA : 0,
-      hitA = bAtk ? nB : 0;
-    const apply = (X: number[], n: number, d: number) => {
-      // 集火：每一击都打向当前（伤害施加前）第一个存活目标；伤害施加时若目标已死则转移到下一个（overkill 只在同一单位最后一击内产生）
-      for (let i = 0; i < n; i++) {
-        const j = X.findIndex((h) => h > 1e-9);
-        if (j < 0) break;
-        X[j]! -= d;
-      }
-    };
-    if (hitB) apply(B, hitB, dA);
-    if (hitA) apply(A, hitA, dB);
-    if (aAtk) nextA += a.rof > 0 ? a.rof : maxT + 1;
-    if (bAtk) nextB += b.rof > 0 ? b.rof : maxT + 1;
-    timeline.push([Math.min(maxT, Math.round(t * 100) / 100), alive(A), alive(B)]);
-    if (t >= maxT) break;
-  }
-  const aAlive = alive(A),
-    bAlive = alive(B);
-  const winner = aAlive && !bAlive ? 'a' : bAlive && !aAlive ? 'b' : 'draw';
-  const hpLeft = (winner === 'a' ? A : winner === 'b' ? B : []).filter((h) => h > 0).reduce((s, h) => s + h, 0);
-  return { winner, aAlive, bAlive, hpLeft, duration: t, timeline };
+  | { status: 'error'; reason: string; winner: null };
+
+export type GroupOutcome = Exclude<GroupResult, { status: 'error' }>;
+
+/** 群战和混编共用接敌、前排容量与同刻伤害结算。 */
+export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTime = FIGHT_TIME): GroupResult {
+  const result = contactFight([{ uid: 1, count: na, fighter: a }], [{ uid: 1, count: nb, fighter: b }], { maxTime });
+  if (result.status === 'error') return { ...result, winner: null };
+  const winner = result.status === 'win' ? result.winner : result.status === 'draw' ? 'draw' : null;
+  return {
+    status: result.status,
+    winner,
+    aAlive: result.a.total.alive,
+    bAlive: result.b.total.alive,
+    hpLeft: winner === 'a' || winner === 'b' ? result[winner].total.hp : 0,
+    duration: result.duration,
+    timeline: result.timeline,
+    contact: result.contact,
+  };
 }
 
 export const costSum = (c: Cost) => Object.values(c).reduce((s, v) => s + (v ?? 0), 0);

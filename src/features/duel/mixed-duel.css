@@ -38,12 +38,6 @@
 .mixed-duel .note {
   font-size: var(--fs-sm);
 }
-.mix-ideal {
-  display: inline-block;
-  margin-bottom: var(--space-4);
-  color: var(--color-accent);
-  background: var(--color-accent-soft);
-}
 .mix-mode {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-4);
@@ -361,15 +355,10 @@
   font-size: var(--fs-sm);
   font-weight: 600;
 }
-.mix-result-rules {
-  border-radius: var(--radius-md);
-  background: var(--color-surface-2);
-  padding: var(--space-4);
-  margin: var(--space-5) 0;
-  font-size: var(--fs-sm);
-}
-.mix-result-rules p {
-  margin: var(--space-2) 0 0;
+@media (max-width: 600px) {
+  .mix-upgrade button {
+    width: 100%;
+  }
 }
 .mix-army-result {
   margin-bottom: var(--space-6);

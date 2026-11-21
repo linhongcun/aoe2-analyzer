@@ -1,7 +1,6 @@
 import ShareImage from '../../../shared/ui/ShareImage';
 import { duel, groupFight, costSum } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { sideEngagementSeconds } from '../../../domain/generateResource';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { CostView } from '../../../shared/ui/art';
@@ -10,6 +9,7 @@ import { CounterSummary } from './CounterSummary';
 import { BattleReplay } from './BattleReplay';
 import { VgNotes } from './VgNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
+import { GroupContact, STOP_LABELS } from './ContactSummary';
 import { r1, type Resolved } from '../logic/duelSide';
 
 export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
@@ -87,40 +87,38 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   );
 }
 
-export function Group({
-  A,
-  B,
-  na,
-  nb,
-  bud,
-  showContactBoundary,
-}: {
-  A: Resolved;
-  B: Resolved;
-  na: number;
-  nb: number;
-  bud: number;
-  showContactBoundary: boolean;
-}) {
+export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb: number; bud: number }) {
   const g = groupFight(A.F, na, B.F, nb);
-  const wn = g.winner === 'draw' ? '平局 / 同归于尽' : `${g.winner === 'a' ? 'A' : 'B'} · ${(g.winner === 'a' ? A : B).u.zh} 获胜`;
+  if (g.status === 'error')
+    return (
+      <div id="duel-res" className="posbox" role="alert">
+        <h2>群战结果未生成</h2>
+        <p>{g.reason}</p>
+      </div>
+    );
+  const wn =
+    g.status === 'timeout' || g.status === 'limit'
+      ? STOP_LABELS[g.status]
+      : g.winner === 'draw'
+        ? '平局 / 同归于尽'
+        : `${g.winner === 'a' ? 'A' : 'B'} · ${(g.winner === 'a' ? A : B).u.zh} 获胜`;
   return (
     <div id="duel-res" className="posbox">
-      <h2 className={'duel-win w-' + g.winner}>
-        <Icon name="trophy" /> {wn}
+      <h2 className={'duel-win w-' + (g.winner ?? 'draw')}>
+        <Icon name={g.status === 'win' ? 'trophy' : 'info'} /> {wn}
         <small className="note">
           {' '}
-          · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {formatHp(g.hpLeft)}
+          · 用时 <span className="num nw">{r1(g.duration)} 秒</span>
+          {g.status === 'win' && (
+            <>
+              {' '}
+              · 剩余 <span className="num nw">{g.winner === 'b' ? g.bAlive : g.aAlive} 个单位</span>、总生命{' '}
+              <span className="num nw">{formatHp(g.hpLeft)}</span>
+            </>
+          )}
         </small>
       </h2>
-      {showContactBoundary ? (
-        <p className="duel-contact-boundary" data-t="duel-contact-boundary">
-          <span className="duel-contact-boundary-line">
-            <strong>接触战估算：</strong>双方在第 <span className="num nw">0 秒</span>同时出手，按集火计算。
-          </span>
-          <span className="duel-contact-boundary-line">不计射程带来的接敌前先手、走位 / 风筝及近战包围空间。</span>
-        </p>
-      ) : null}
+      <GroupContact value={g.contact} a={{ fighter: A.F, count: na, ...g.contact.a[0]! }} b={{ fighter: B.F, count: nb, ...g.contact.b[0]! }} />
       <ShareImage
         title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
         stats={[
@@ -128,12 +126,23 @@ export function Group({
           ['A 存活', g.aAlive],
           ['B 存活', g.bAlive],
         ]}
-        note="群战不模拟走位、围墙与城镇中心火力；完整参数见链接。"
+        note="一维接敌与占位近似，结果用于比较方案。"
       />
       {bud > 0 && (
         <p className="note">
-          预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.training.price.cost)}，投入 {na * costSum(A.training.price.cost)}），B {B.u.zh} × {nb}（单价{' '}
-          {costSum(B.training.price.cost)}，投入 {nb * costSum(B.training.price.cost)}）
+          预算 <span className="num nw">{bud}</span>：
+          {(
+            [
+              ['A', A, na],
+              ['B', B, nb],
+            ] as const
+          ).map(([key, side, count]) => (
+            <span key={key}>
+              {' '}
+              {key} {side.u.zh} <span className="num nw">× {count}</span>（单价 <span className="num nw">{costSum(side.training.price.cost)}</span>，投入{' '}
+              <span className="num nw">{count * costSum(side.training.price.cost)}</span>）
+            </span>
+          ))}
         </p>
       )}
       <CounterSummary a={A.F} b={B.F} />
@@ -141,10 +150,10 @@ export function Group({
         <tbody>
           <tr>
             <td>数量</td>
-            <td>
+            <td className="num nw">
               A {na}，剩 {g.aAlive}
             </td>
-            <td>
+            <td className="num nw">
               B {nb}，剩 {g.bAlive}
             </td>
           </tr>
@@ -152,14 +161,14 @@ export function Group({
       </table>
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
       <VgNotes
+        group
         sides={[
-          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: sideEngagementSeconds(g.timeline, 'a') },
-          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: sideEngagementSeconds(g.timeline, 'b') },
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: g.contact.a[0]!.meleeUnitSeconds },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: g.contact.b[0]!.meleeUnitSeconds },
         ]}
       />
       <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />
       <GroupTimeline result={g} na={na} nb={nb} />
-      <p className="note">集火模型：每方所有单位攻击对方第一个存活单位，同时刻伤害同时结算，单位死亡后多余伤害转给下一个目标。</p>
     </div>
   );
 }

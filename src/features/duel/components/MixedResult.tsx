@@ -2,12 +2,14 @@ import type { RefObject } from 'react';
 import { civByEn } from '../../../data';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
+import { FIGHT_CAP, FIGHT_TIME } from '../../../domain/contactFight';
 import type { MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE_LABEL, type MixedFightResult, type MixedArmyResult } from '../../../domain/mixedFight';
 import { AGE_ZH } from '../../../domain/ratings';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
 import type { MixedSideView } from '../logic/mixedDuel';
+import { CONTACT_BOUNDARY, MixedContact, STOP_LABELS } from './ContactSummary';
 
 export function MixedRules() {
   return (
@@ -16,24 +18,22 @@ export function MixedRules() {
         <Icon name="info" />
         {MIXED_RULE_LABEL}
       </strong>
-      <p>
-        每方第 1 行先受击，消灭后移至下一行。所有兵种从开局同时参战。
-        <br />
-        <b>无走位、射程、溅射，不解释前排保护。</b>
-      </p>
+      <p>按行序受击，最前一行清空后由下一行顶上。前排近战能同时出手的人数受占位限制。后排远程进入射程后可以越过己方前排输出。</p>
       <details>
         <summary>查看完整规则</summary>
         <ul>
           <li>
-            各个体初始满血、首次出手在 <span className="num nw">0 游戏秒</span>，之后按本行独立攻击间隔出手。
+            每方 <span className="num nw">1–3 行</span>，最多 <span className="num nw">{FIGHT_CAP} 个单位</span>。
           </li>
+          <li>前排按移速接近。进入射程后开始首击前摇，之后按攻击间隔出手。缺少目录前摇时按零处理。低于最小射程时无法开火。</li>
+          <li>后排近战等前排清空后才能接敌。先进入射程的一方可能有接敌前的齐射窗口。</li>
           <li>同一时刻先快照双方存活攻击者，故该时刻被击杀的单位仍能完成本次攻击；之后不再出手。</li>
-          <li>同刻攻击按本方行顺序和稳定个体顺序逐击解析，逐击重选当前队首目标，切换目标也重新取对应伤害。单击超额伤害丢弃，不穿透、不转移、不溅射。</li>
+          <li>同刻攻击按本方行顺序逐击结算。清空前排后，仅对还在射程内的下一行继续结算，按新目标计算每击伤害。单击超出的伤害丢弃。</li>
           <li>沿用本站伤害类别、护甲和远程命中率期望；占比只是单位数量占比，不是人口、资源或攻击权重。</li>
           <li>
-            上限 <span className="num nw">600 游戏秒</span>，包含边界时刻的攻击；届时双方仍存活则超时、无胜者，不按剩余单位强行判胜。
+            达到 <span className="num nw">{FIGHT_TIME} 游戏秒</span>时限或事件、攻击计算上限时停止。双方仍存活时显示存活数量，暂无胜者。
           </li>
-          <li>不包含接敌、移动、阵型、治疗、招降、增援与特殊技能；结果不是实战强弱、组合协同或胜率预测。</li>
+          <li>{CONTACT_BOUNDARY}</li>
         </ul>
       </details>
     </aside>
@@ -58,13 +58,13 @@ export function MixedResult({
   onShare: () => void;
 }) {
   const title =
-    result.status === 'win' ? `${result.winner.toUpperCase()} 方在此规则下获胜` : result.status === 'draw' ? '双方同刻全部阵亡' : '达到时限，暂无胜者';
-  const order = (view: MixedSideView) => view.rows.map((r) => r.unit?.zh ?? '未知单位').join(' / ');
+    result.status === 'win' ? `${result.winner.toUpperCase()} 方在此规则下获胜` : result.status === 'draw' ? '双方同刻全部阵亡' : STOP_LABELS[result.status];
+  const lines = (view: MixedSideView, side: 'a' | 'b') => view.army!.map((row, i) => ({ ...row, ...result.contact[side][i]! }));
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
         <div>
-          <p className="mix-eyebrow">混编结果 · 理想模型</p>
+          <p className="mix-eyebrow">混编结果 · {MIXED_RULE_LABEL}</p>
           <h2 id="mix-result-title" ref={headingRef} tabIndex={-1}>
             {title}
           </h2>
@@ -72,20 +72,13 @@ export function MixedResult({
         <span className="tag num nw">用时 {formatHp(result.duration)} 游戏秒</span>
       </div>
       <p role="status">
-        {result.status === 'timeout'
-          ? '双方仍有存活单位，未按剩余兵力判胜。'
+        {result.status === 'timeout' || result.status === 'limit'
+          ? '下方显示停止时的存活数量。'
           : result.status === 'draw'
             ? '本次事件内双方攻击均完成，结果为同时全灭。'
-            : '仅适用于本次输入及指定队列规则。'}
+            : '结果对应本次配置。'}
       </p>
-      <div className="mix-result-rules">
-        <strong>{MIXED_RULE_LABEL}</strong>
-        <p>无走位、射程、溅射，不解释前排保护。</p>
-        <p>
-          A 受击顺序：{order(a)}
-          <br />B 受击顺序：{order(b)}
-        </p>
-      </div>
+      <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} />
       <ArmyResult side="a" value={result.a} view={a} input={input} />
       <ArmyResult side="b" value={result.b} view={b} input={input} />
       <div className="bar mix-result-actions">
@@ -109,7 +102,13 @@ export function MixedResult({
               {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'} / 团队效果：
               {s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'}
               <br />
-              单位与数量：{s.rows.map((r, i) => `${view.rows[i]?.unit?.zh}（ID ${r.uid}）× ${r.qty}`).join('；')}
+              单位与数量：
+              {s.rows.map((r, i) => (
+                <span key={r.uid}>
+                  {i > 0 && '；'}
+                  {view.rows[i]?.unit?.zh}（<span className="num nw">ID {r.uid}</span>）<span className="num nw">× {r.qty}</span>
+                </span>
+              ))}
             </p>
           );
         })}

@@ -87,17 +87,3 @@ export function varangianGold(unitId: number, civ: string, engagementUnitSeconds
     resource,
   };
 }
-
-/**
- * 群战时间线里，一侧活着的单位·秒。
- * 相邻两点之间用前一点的存活数（该点结算之后、下一次结算之前）。
- */
-export function sideEngagementSeconds(timeline: readonly (readonly [number, number, number])[], side: 'a' | 'b'): number {
-  let sum = 0;
-  for (let i = 0; i < timeline.length - 1; i++) {
-    const cur = timeline[i]!;
-    const nxt = timeline[i + 1]!;
-    sum += (side === 'a' ? cur[1] : cur[2]) * (nxt[0] - cur[0]);
-  }
-  return sum;
-}

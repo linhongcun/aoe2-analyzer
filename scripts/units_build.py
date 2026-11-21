@@ -81,6 +81,10 @@ for u in units.values():
     dispersion = dat_unit.get('AccuracyDispersion') if dat_unit else None
     if type(dispersion) in (int, float) and 0 <= dispersion < math.inf:
         u['accuracyDispersion'] = dispersion
+    if dat_unit:
+        radii = (dat_unit.get('CollisionSizeX'), dat_unit.get('CollisionSizeY'))
+        if all(type(radius) in (int, float) and 0 < radius < math.inf for radius in radii):
+            u['collisionRadiusX'], u['collisionRadiusY'] = radii
     g=UU.get(str(u['id']));u['up']=[g['Cost'],g['ResearchTime']] if g else None
     if g:
         a=techAge(g['ID'])

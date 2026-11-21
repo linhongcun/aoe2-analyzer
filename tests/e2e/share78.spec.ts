@@ -81,10 +81,11 @@ test('#1142 固定4v4 PK刷新及分享图尺寸、输入与恢复链接', async
       counts: root.querySelector('.duel-tab')?.innerText,
       cost: root.querySelector('[data-t="pk-trade"]')?.innerText,
       replay: root.querySelector('[data-t="battle-replay"]')?.innerText,
-      groupModel: root.querySelector(':scope > p.note')?.innerText,
+      groupModel: root.querySelector<HTMLElement>('.contact-summary')?.innerText,
       model: document.querySelector('#duel-model')?.innerText,
     }));
   const before = await capture();
+  expect(before.groupModel).toContain('空间接触面与接敌先手模型（一维近似）');
   await page.reload();
   await expect(page.locator('#duel-res')).toBeVisible();
   expect(await capture()).toEqual(before);

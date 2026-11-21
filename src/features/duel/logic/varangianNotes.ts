@@ -25,7 +25,7 @@ function formatSeconds(rof: number): string {
  * 一方是瓦兰吉卫队系时，列出本场对该文明生效的相关加成。
  * 其他文明不列出瓦兰吉人专属的攻速、产金和哥瑟砍。
  */
-export function varangianPkNotes(unitId: number, civ: string, age: number, rof?: number): VgNote[] {
+export function varangianPkNotes(unitId: number, civ: string, age: number, rof?: number, group = false): VgNote[] {
   if (!VG_IDS.has(unitId)) return [];
   const notes: VgNote[] = [];
   if (civ === 'Varangians') {
@@ -67,8 +67,8 @@ export function varangianPkNotes(unitId: number, civ: string, age: number, rof?:
       id: 'danes-spd',
       civ,
       label: '移动速度 +10%',
-      status: 'uncounted',
-      reason: '单位 PK 不计移动速度',
+      status: group ? 'counted' : 'uncounted',
+      reason: group ? '已反映在接敌移动速度' : '单挑不计移动速度',
     });
     if (age >= 3) {
       notes.push({

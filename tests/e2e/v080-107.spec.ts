@@ -29,14 +29,14 @@ async function textLines(root: import('@playwright/test').Locator, needle: strin
   }, needle);
 }
 
-test('#107 N vs M 10v10 法兰克游侠 vs 日本长戟兵：交换比（A : B）1 : 1.48，合计 405 / 600 加分项', async ({ page }) => {
+test('#107 N vs M 10v10 法兰克游侠 vs 日本长戟兵：交换比（A : B）1 : 0.49，合计 1215 / 600 加分项', async ({ page }) => {
   await page.goto('#/duel?a=569.Franks.4.f.&b=359.Japanese.4.f.&m=n&na=10&nb=10');
   const t = trade(page);
   await expect(t).toBeVisible();
   await expect(t).toContainText('交换比（A : B）');
-  await expect(t).toContainText('1 : 1.48');
-  await expect(t).toContainText('A 每损失 1 资源，B 损失 1.48');
-  for (const n of ['405', '600', '180', '225', '350', '250']) await expect(t).toContainText(n);
+  await expect(t).toContainText('1 : 0.49');
+  await expect(t).toContainText('A 每损失 1 资源，B 损失 0.49');
+  for (const n of ['1215', '600', '540', '675', '350', '250']) await expect(t).toContainText(n);
   await expect(t).toContainText('只计阵亡单位');
   await expect(t).toContainText('金按 1:1 计入');
   // 分项沿用 CostView：图标 + 数字，无「食」字；图标 title 为食物/木材/黄金
@@ -50,8 +50,8 @@ test('#107 N vs M 10v10 法兰克游侠 vs 日本长戟兵：交换比（A : B�
       .locator('.res')
       .filter({ has: page.locator('img[title="食物"]') })
       .first(),
-  ).toHaveText('180');
-  await expect(t.locator('.res').filter({ has: page.locator('img[title="黄金"]') })).toHaveText('225');
+  ).toHaveText('540');
+  await expect(t.locator('.res').filter({ has: page.locator('img[title="黄金"]') })).toHaveText('675');
   await expect(
     t
       .locator('.res')
@@ -60,21 +60,21 @@ test('#107 N vs M 10v10 法兰克游侠 vs 日本长戟兵：交换比（A : B�
   ).toHaveText('350');
   await expect(t.locator('.res').filter({ has: page.locator('img[title="木材"]') })).toHaveText('250');
   await expect(t).not.toContainText(/食\d|木\d|金\d/);
-  await expect(t).toContainText('阵亡 3');
+  await expect(t).toContainText('阵亡 9');
   await expect(t).toContainText('阵亡 10');
 });
-test('#107 等资源 3000 拜占庭长戟兵 vs 法兰克游侠：按折后取整价 A 损失 405（食物图标 234），交换比 1 : 7.33', async ({ page }) => {
+test('#107 等资源 3000 拜占庭长戟兵 vs 法兰克游侠：按折后取整价 A 损失 2790（食物图标 1612），交换比 1 : 1.06', async ({ page }) => {
   await page.goto('#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=r&bud=3000');
   const t = trade(page);
-  for (const n of ['405', '234', '171', '2970', '1 : 7.33']) await expect(t).toContainText(n);
-  await expect(t).not.toContainText('236.25');
+  for (const n of ['2790', '1612', '1178', '2970', '1 : 1.06']) await expect(t).toContainText(n);
+  await expect(t).not.toContainText('1627.5');
   await expect(t.locator('.res img[title="食物"]').first()).toBeVisible();
   await expect(
     t
       .locator('.res')
       .filter({ has: page.locator('img[title="食物"]') })
       .first(),
-  ).toHaveText('234');
+  ).toHaveText('1612');
   await expect(t).not.toContainText(/食\d|木\d|金\d/);
 });
 test('#107 B 方零损失显示「B 无阵亡」，不出「每损失」小字，两条注明照常显示', async ({ page }) => {
@@ -118,21 +118,21 @@ test('#107 交换比数字在 360 宽下不换行', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('#/duel?a=569.Franks.4.f.&b=359.Japanese.4.f.&m=n&na=10&nb=10');
   const v = trade(page).locator('[data-t="pk-trade-value"]');
-  await expect(v).toHaveText('1 : 1.48');
+  await expect(v).toHaveText('1 : 0.49');
   const lh = await v.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight) || el.getBoundingClientRect().height);
   expect((await v.boundingBox())!.height).toBeLessThanOrEqual(lh * 1.5);
 });
-test('#107 360 宽下 A、B 损失各占一行，「A 损失 405」与每个图标加数字组不换行', async ({ page }) => {
+test('#107 360 宽下 A、B 损失各占一行，「A 损失 1215」与每个图标加数字组不换行', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('#/duel?a=569.Franks.4.f.&b=359.Japanese.4.f.&m=n&na=10&nb=10');
   const t = trade(page);
   await expect(t).toBeVisible();
-  // Steve issuecomment-6205888142：A、B 各占一行；「A 损失 405」「B 损失 600」各自不换行
-  const aLoss = await textLines(t, 'A 损失 405');
+  // Steve issuecomment-6205888142：A、B 各占一行；「A 损失 1215」「B 损失 600」各自不换行
+  const aLoss = await textLines(t, 'A 损失 1215');
   const bLoss = await textLines(t, 'B 损失 600');
-  expect(aLoss.found, '应找到「A 损失 405」').toBe(true);
+  expect(aLoss.found, '应找到「A 损失 1215」').toBe(true);
   expect(bLoss.found, '应找到「B 损失 600」').toBe(true);
-  expect(aLoss.lines, '「A 损失 405」应只占一行').toBe(1);
+  expect(aLoss.lines, '「A 损失 1215」应只占一行').toBe(1);
   expect(bLoss.lines, '「B 损失 600」应只占一行').toBe(1);
   expect(aLoss.top, 'A 与 B 损失应各占一行').not.toBe(bLoss.top);
   // 每个 CostView 的「图标 + 数字」组不换行（图标与数字 top 可能差 1px，用高度 / scrollWidth 判）

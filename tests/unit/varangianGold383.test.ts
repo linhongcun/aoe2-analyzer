@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { duel, fighterFrom, groupFight } from '../../src/domain/duel';
-import { sideEngagementSeconds, varangianGold } from '../../src/domain/generateResource';
+import { varangianGold } from '../../src/domain/generateResource';
 import { presetUpTo, simTechs, simulate } from '../../src/domain/simulator';
 import { ctx, units } from './helpers';
 
@@ -49,34 +49,29 @@ describe('#383 瓦兰吉卫队产金', () => {
     expect(varangianGold(2704, 'Varangians', Number.NaN)).toBeNull();
   });
 
-  it('群战按存活时间累加，不改胜负', () => {
-    expect(
-      sideEngagementSeconds(
-        [
-          [0, 2, 1],
-          [3, 1, 1],
-          [6, 1, 0],
-        ],
-        'a',
-      ),
-    ).toBe(9);
-    expect(
-      sideEngagementSeconds(
-        [
-          [0, 2, 1],
-          [3, 1, 1],
-          [6, 1, 0],
-        ],
-        'b',
-      ),
-    ).toBe(6);
+  it('群战使用可接敌单位的累计时间计算默认产金', () => {
     const a = side(2704, 'Byzantines');
     const b = side(567, 'Teutons');
     const g = groupFight(a.F, 2, b.F, 1);
+    if (g.status === 'error') throw Error(g.reason);
     const before = { winner: g.winner, duration: g.duration, hpLeft: g.hpLeft, aAlive: g.aAlive, bAlive: g.bAlive };
-    const seconds = sideEngagementSeconds(g.timeline, 'a');
+    const seconds = g.contact.a[0]!.meleeUnitSeconds;
     expect(seconds).toBeGreaterThan(0);
     expect(varangianGold(2704, 'Byzantines', seconds)!.autoMul).toBe(1);
     expect(g).toMatchObject(before);
+  });
+
+  it('固定数据的 25 对 25 群战只计五个可接敌的瓦兰吉卫队，直到模拟时限', () => {
+    const u = units.find((entry) => entry.id === 2704)!;
+    const fighter = fighterFrom(u, simulate(ctx, u, 'Varangians', 4, new Set(), new Set()));
+    const result = groupFight(fighter, 25, fighter, 25, 1);
+    if (result.status === 'error') throw new Error(result.reason);
+    expect(result).toMatchObject({ status: 'timeout', aAlive: 25, bAlive: 25 });
+    expect(result.contact.meleeAt).not.toBeNull();
+    const expected = 5 * (1 - result.contact.meleeAt!);
+    for (const row of [result.contact.a[0]!, result.contact.b[0]!]) {
+      expect(row.meleeUnitSeconds).toBeCloseTo(expected, 9);
+      expect(varangianGold(2704, 'Varangians', row.meleeUnitSeconds)!.gold).toBeCloseTo(expected * 0.015909 * 50 * 1.3333);
+    }
   });
 });

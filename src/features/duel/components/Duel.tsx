@@ -30,6 +30,7 @@ import { AgeComparison } from './AgeComparison';
 import { UpgradeComparison } from './UpgradeComparison';
 import { Side } from './DuelSelection';
 import { OneVOne, Group } from './DuelResults';
+import { CONTACT_BOUNDARY } from './ContactSummary';
 import { resolve, isUnavail, type SideState, type Resolved } from '../logic/duelSide';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
@@ -207,7 +208,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
         : mode === 't'
           ? Math.max(1, countForTime(realCostOf({ ...s.disc, cost: s.training.price.cost, exact: s.training.price.exact }, s.age, s.civ).rc.total, vils, mins))
           : mode === 'n'
-            ? n
+            ? Math.floor(n)
             : 1;
   const cntA = cnt(A, na),
     cntB = cnt(B, nb);
@@ -357,15 +358,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
       ) : mode === '1' ? (
         <OneVOne key={[fmtSide(A.spec), fmtSide(B.spec)].join('|')} A={A} B={B} />
       ) : (
-        <Group
-          key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')}
-          A={A}
-          B={B}
-          na={cntA}
-          nb={cntB}
-          bud={mode === 'r' ? bud : 0}
-          showContactBoundary={mode === 'n'}
-        />
+        <Group key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')} A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
       )}
       <UpgradeComparison
         ctx={ctx}
@@ -398,10 +391,16 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
         <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
           {damageFormula}
         </span>
-        （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
-        同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
-        {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
-        群战为集火模型，不考虑近战包围空间；{DUEL_COST_MODEL}结果用于比较强弱趋势，不等同于实战。
+        （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。远程按命中率取期望伤害。
+        {mode === '1' ? (
+          <>
+            双方 <span className="num nw">t=0</span> 同时出手；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
+            {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
+          </>
+        ) : (
+          CONTACT_BOUNDARY
+        )}
+        {DUEL_COST_MODEL}
       </p>
     </section>
   );

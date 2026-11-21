@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fmtSide, type Mode } from '../../../domain/duelState';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
-import { mixedFight, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
+import { mixedFight, MIXED_RULE, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
 import { makeSimContext } from '../../../domain/simulator';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
@@ -13,6 +13,7 @@ import { resolveMixedSide } from '../logic/mixedDuel';
 import { mixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
+import { CONTACT_BOUNDARY } from './ContactSummary';
 import { radioKeyboard } from './radioKeyboard';
 import '../mixed-duel.css';
 
@@ -23,7 +24,7 @@ type Notice = { kind: 'status' | 'error'; text: string };
 export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const [params, setParams] = useSearchParams();
   const raw = params.toString();
-  const { input, errors: protocolErrors, sharedErrors, sideErrors } = useMemo(() => decodeMixedDuel(params), [params]);
+  const { input, errors: protocolErrors, sharedErrors, sideErrors, legacy } = useMemo(() => decodeMixedDuel(params), [params]);
   const core = resources.core.data,
     trees = resources.trees.data;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
@@ -39,23 +40,25 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const dataMismatch = input.data !== DATA_VERSION;
   const loadError = resources.core.error || resources.trees.error;
   const ready = !!core && !!ctx && !loadError;
-  const canCompute = ready && !protocolErrors.length && !dataMismatch && !view?.error && !!view?.a?.army && !!view.b?.army;
+  const canCompute = ready && !legacy && !protocolErrors.length && !dataMismatch && !view?.error && !!view?.a?.army && !!view.b?.army;
   const training = useMemo(() => {
     if (!core || !trees || !view?.a || !view.b) return null;
     const from = (side: 'a' | 'b') => {
       const messages = !ready
         ? ['资料尚未就绪。']
-        : sharedErrors.length
-          ? sharedErrors
-          : dataMismatch
-            ? ['请先确认使用当前固定数据重新校验。']
-            : sideErrors[side];
+        : legacy
+          ? ['请先载入新规则。']
+          : sharedErrors.length
+            ? sharedErrors
+            : dataMismatch
+              ? ['请先确认使用当前固定数据重新校验。']
+              : sideErrors[side];
       return messages.length
         ? { errors: messages.map((message) => ({ field: '', message })) }
         : mixedTrainingTransfer({ core, trees }, input[side], side, view[side]!);
     };
     return { a: from('a'), b: from('b') };
-  }, [core, trees, view, ready, sharedErrors, dataMismatch, sideErrors, input]);
+  }, [core, trees, view, ready, legacy, sharedErrors, dataMismatch, sideErrors, input]);
   const [outcome, setOutcome] = useState<{ signature: string; result: MixedFightResult } | null>(null);
   const [busy, setBusy] = useState(false);
   const [hasRun, setHasRun] = useState(false);
@@ -66,10 +69,12 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const shareRequest = useRef(0);
   const originFocus = useRef<HTMLElement | null>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
+  const configError = useRef<HTMLElement>(null);
+  const upgradeFocus = useRef<string | null>(null);
   const [scope, setScope] = useState({ raw, core, trees, loadError });
   if (scope.raw !== raw || scope.core !== core || scope.trees !== trees || scope.loadError !== loadError) {
     setScope({ raw, core, trees, loadError });
-    setOutcome(null);
+    if (outcome?.signature !== raw) setOutcome(null);
     setBusy(false);
     setExitMode(null);
     setShareFallback('');
@@ -94,6 +99,15 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     element.focus();
     element.scrollIntoView({ block: 'center', behavior: 'smooth' });
   };
+  const calculate = (a: Parameters<typeof mixedFight>[0], b: Parameters<typeof mixedFight>[1], signature: string) => {
+    let result: MixedFightResult;
+    try {
+      result = mixedFight(a, b);
+    } catch {
+      result = { status: 'error', reason: '运算异常，未生成有效结果。请更换配置后重试。' };
+    }
+    setOutcome({ signature, result });
+  };
   const compute = () => {
     if (!canCompute || !view?.a?.army || !view.b?.army) return;
     const a = view.a.army,
@@ -102,15 +116,19 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     setHasRun(true);
     setOutcome(null);
     timer.current = setTimeout(() => {
-      let result: MixedFightResult;
-      try {
-        result = mixedFight(a, b);
-      } catch {
-        result = { status: 'error', reason: '运算异常，未生成有效结果；请更换配置后重试' };
-      }
-      setOutcome({ signature: raw, result });
+      calculate(a, b, raw);
       setBusy(false);
     }, 30);
+  };
+  const upgrade = () => {
+    if (!legacy || !ready) return;
+    const next = { ...input, rule: MIXED_RULE, data: DATA_VERSION };
+    const signature = encodeMixedDuel(next).toString();
+    update(next);
+    if (view?.a?.army && view.b?.army) {
+      setHasRun(true);
+      calculate(view.a.army, view.b.army, signature);
+    } else upgradeFocus.current = signature;
   };
   const exit = (mode: ExitMode) => {
     const a = input.a.rows[0],
@@ -157,12 +175,15 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const result = canCompute && outcome?.signature === raw ? outcome.result : null;
   useLayoutEffect(() => {
     if (result) resultHeading.current?.focus();
-  }, [result]);
+    if (upgradeFocus.current === raw) {
+      upgradeFocus.current = null;
+      configError.current?.focus();
+    }
+  }, [raw, result]);
   const stale = !result && !busy && hasRun;
   return (
     <section id="duel" className="pane mixed-duel" data-testid="mixed-duel">
-      <ListHead level={1} title="混编对战" desc="按数量配置两支军队，在指定理想规则下比较结果。" />
-      <span className="tag mix-ideal">理想模型</span>
+      <ListHead level={1} title="混编对战" desc="按行序配置两支军队，比较占位和射程先手对战损的影响。" />
       <div className="bar fbar" role="radiogroup" aria-label="模式" onKeyDown={radioKeyboard}>
         {(
           [
@@ -195,6 +216,20 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
         </button>
       </div>
       <MixedRules />
+      {legacy && (
+        <section className="mix-warning mix-upgrade" aria-labelledby="mix-upgrade-title">
+          <h2 id="mix-upgrade-title">旧混编规则已停用</h2>
+          <p>已保留双方文明、时代、科技和单位顺序。继续后将按「{MIXED_RULE_LABEL}」重新计算。</p>
+          {dataMismatch && (
+            <p>
+              这次也会使用当前游戏数据（<span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span>）。
+            </p>
+          )}
+          <button type="button" className="pri" disabled={!ready} onClick={upgrade}>
+            按新规则载入并计算
+          </button>
+        </section>
+      )}
       {notice && (
         <p role={notice.kind === 'error' ? 'alert' : 'status'} className={notice.kind === 'error' ? 'mix-error' : 'mix-info'}>
           {notice.text}
@@ -217,7 +252,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           </button>
         </section>
       )}
-      {dataMismatch && !protocolErrors.length && (
+      {dataMismatch && !legacy && !protocolErrors.length && (
         <section className="mix-warning" role="alert">
           <h2>链接数据版本与当前站点不同</h2>
           <p>不能回放旧数据战果。确认后保留输入，并使用当前固定数据重新校验和计算。</p>
@@ -243,15 +278,15 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           <Loading />
         ))}
       {view?.error && (
-        <p role="alert" className="mix-error">
+        <section role="alert" tabIndex={-1} ref={configError} className="mix-error">
           {view.error}
           <button type="button" onClick={resources.retry}>
             重试资料
           </button>
-        </p>
+        </section>
       )}
       {!!fields.length && ready && (
-        <section className="mix-error" aria-label="配置错误" role="alert">
+        <section className="mix-error" aria-label="配置错误" role="alert" tabIndex={-1} ref={configError}>
           <h2>请修正配置后再计算</h2>
           <ul>
             {fields.map((error, i) => (
@@ -289,7 +324,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       )}
       <div className="mix-calculate">
         <div>
-          <strong>{canCompute ? '双方配置已就绪' : '配置尚未就绪'}</strong>
+          <strong>{canCompute ? '双方配置已就绪' : legacy ? '等待按新规则重算' : '配置尚未就绪'}</strong>
           <p className="note">占比由数量派生，仅用于阅读，不参与伤害分配。</p>
         </div>
         <button type="button" className="pri" disabled={!canCompute || busy} onClick={compute}>
@@ -301,7 +336,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           复制当前配置链接
         </button>
       </div>
-      {!canCompute && <p className="note">配置尚未有效，修正上述字段、资料或版本问题后才能分享。</p>}
+      {!canCompute && !legacy && <p className="note">配置尚未有效，修正上述字段、资料或版本问题后才能分享。</p>}
       {shareFallback && canCompute && (
         <label className="mix-share-fallback">
           完整混编配置链接（可选择复制）
@@ -311,7 +346,13 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       <div className="mix-result-anchor" aria-live="polite" aria-atomic="true">
         {!result && (
           <p className="mix-info" role="status">
-            {busy ? '正在计算，结果尚未生成。' : stale ? '配置已变化，请重新计算。' : '尚未计算；修改配置后旧结果立即失效，请重新计算。'}
+            {legacy
+              ? '按新规则计算后，结果会显示在这里。'
+              : busy
+                ? '正在计算，结果尚未生成。'
+                : stale
+                  ? '配置已变化，请重新计算。'
+                  : '尚未计算；修改配置后旧结果立即失效，请重新计算。'}
           </p>
         )}
         {result?.status === 'error' && (
@@ -328,8 +369,9 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       )}
       <p className="note mix-footer">拐点、盈亏平衡和单兵种回放可在单兵种模式查看。</p>
       <p className="note mix-footer">
-        固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL} · 不等同于实战结果
+        固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL}
       </p>
+      <p className="note mix-footer">{CONTACT_BOUNDARY}</p>
       {exitMode && (
         <ExitConfirm
           onCancel={closeConfirm}

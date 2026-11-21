@@ -23,6 +23,7 @@ const testFighter = (overrides: Partial<Fighter> = {}): Fighter => ({
   ranged: false,
   rng: 0,
   cost: {},
+  contact: { radiusX: 0.25, radiusY: 0.25, speed: 1, minRange: 0, firstHitDelay: 0, repeatableAttack: true },
   ...overrides,
 });
 
@@ -47,11 +48,14 @@ describe('已知对局（满科技）', () => {
     expect(r.ba.hits).toBe(6); // 192 / 37
     expect(r.winner).toBe('a');
   });
-  it('但等资源（3000）下长戟兵胜：Fandom 将长戟兵列为圣骑士的成本效益克制', () => {
+  it('等资源比较使用预算数量和近战容量', () => {
     const p = F('Paladin', 'Franks'),
       h = F('Halberdier', 'Japanese');
     const g = groupFight(p, countForBudget(p.cost, 3000), h, countForBudget(h.cost, 3000));
-    expect(g.winner).toBe('b');
+    expect(g.status).not.toBe('error');
+    if (g.status === 'error') throw Error(g.reason);
+    expect(g.timeline[0]).toEqual([0, countForBudget(p.cost, 3000), countForBudget(h.cost, 3000)]);
+    expect(g.contact.b[0]!.maxMelee).toBeLessThan(countForBudget(h.cost, 3000));
   });
   it('劲弩手 vs 精锐掷矛手：掷矛手几乎免疫（劲弩手每击 10−8 = 2），掷矛手获胜', () => {
     // Fandom Skirmisher：+4 对弓手（精锐），高穿刺护甲，弓兵的克制
@@ -78,81 +82,37 @@ describe('已知对局（满科技）', () => {
 });
 
 describe('N vs M', () => {
-  it('1v1 群战模型与 duel 一致', () => {
-    const a = F('Champion', 'Japanese'),
-      b = F('Hussar', 'Magyars');
-    const g = groupFight(a, 1, b, 1);
-    expect(g.winner).toBe('a');
-    expect(g.duration).toBeCloseTo(duel(a, b).duration);
-  });
-  it('数量优势：10 个无科技长戟兵击败 2 个满科技圣骑士', () => {
-    const g = groupFight(F('Paladin', 'Franks'), 2, F('Halberdier', 'Japanese', false), 10);
-    expect(g.winner).toBe('b');
-    expect(g.timeline.at(-1)![1]).toBe(0);
+  it('一人群战仍按接敌和前摇计时，单挑首击口径保持独立', () => {
+    const a = testFighter({ attack: { 近战: 10 } });
+    const b = testFighter({ attack: { 近战: 10 } });
+    expect(duel(a, b)).toMatchObject({ winner: 'draw', duration: 0 });
+    expect(groupFight(a, 1, b, 1)).toMatchObject({ winner: 'draw', duration: 0.5 });
   });
   it('等资源数量', () => {
     expect(countForBudget({ Food: 60, Gold: 75 }, 1000)).toBe(7);
   });
-
-  it('零攻击间隔的真实爆破兵镜像只结算首击，不在601秒虚构第二击', () => {
-    const petard = F('Petard', 'Franks', false);
-    expect(petard.rof).toBe(0);
-    const result = groupFight(petard, 1, petard, 1);
-    expect(result).toMatchObject({ winner: 'draw', duration: 600, aAlive: 1, bAlive: 1 });
-    expect(result.timeline.every(([time]) => time <= 600)).toBe(true);
+  it('真实爆破兵与僧侣没有群战可重复普攻，给出明确错误', () => {
+    for (const f of [F('Petard', 'Franks', false), F('Monk', 'Franks', false)]) {
+      expect(groupFight(f, 1, testFighter(), 1)).toEqual({
+        status: 'error',
+        winner: null,
+        reason: `A 方的${f.name}没有可重复的普通攻击。请更换该单位后重算。`,
+      });
+    }
   });
-
-  it('单侧零攻击间隔不重复攻击，未决结果用满模拟时限', () => {
-    const petard = F('Petard', 'Franks', false);
-    const target = testFighter({ hp: 50, ranged: true, acc: 0, rof: 1000 });
-    const result = groupFight(petard, 1, target, 1);
-    expect(result).toMatchObject({ winner: 'draw', duration: 600, aAlive: 1, bAlive: 1 });
-    expect(result.timeline.at(-1)).toEqual([0, 1, 1]);
-  });
-
-  it('正攻击间隔恰在模拟时限内时仍结算，且保留t=0首击', () => {
-    const a = testFighter({ hp: 10, rof: 600 });
-    const b = testFighter({ hp: 2, rof: 1000 });
-    const result = groupFight(a, 1, b, 1);
-    expect(result).toMatchObject({ winner: 'a', duration: 600, aAlive: 1, bAlive: 0, hpLeft: 9 });
-    expect(result.timeline).toContainEqual([600, 1, 0]);
-  });
-
-  it('小数攻击间隔的数学时限边界攻击仍结算，时间线不越界', () => {
+  it('接敌后的分数攻击间隔按数学时限结算，时间线不越界', () => {
     const a = testFighter({ rof: 0.1 });
-    const b = testFighter({ hp: 4, ranged: true, acc: 0, rof: 1000 });
-    const result = groupFight(a, 1, b, 1, 0.3);
-    expect(result).toMatchObject({ winner: 'a', duration: 0.3, aAlive: 1, bAlive: 0 });
-    expect(result.timeline).toContainEqual([0.3, 1, 0]);
-    expect(result.timeline.every(([time]) => time <= 0.3)).toBe(true);
+    const b = testFighter({ hp: 4, rof: 1000 });
+    const result = groupFight(a, 1, b, 1, 0.8);
+    expect(result).toMatchObject({ winner: 'a', duration: 0.8, aAlive: 1, bAlive: 0 });
+    if (result.status === 'error') throw Error(result.reason);
+    expect(result.timeline.at(-1)).toEqual([0.8, 1, 0]);
+    expect(result.timeline.every(([time]) => time <= 0.8)).toBe(true);
   });
-
-  it('默认模拟时限下小数累积不会丢失第751击', () => {
-    const a = testFighter({ rof: 0.8 });
-    const b = testFighter({ hp: 751, ranged: true, acc: 0, rof: 1000 });
-    const result = groupFight(a, 1, b, 1);
-    expect(result).toMatchObject({ winner: 'a', duration: 600, aAlive: 1, bAlive: 0 });
-    expect(result.timeline).toHaveLength(752);
-    expect(result.timeline).toContainEqual([600, 1, 0]);
-    expect(result.timeline.every(([time]) => time <= 600)).toBe(true);
-  });
-
-  it.each([
-    [600, 600.000001],
-    [0, 0.000001],
-  ])('超过 maxT=%s 的下一击不结算，双方保留存活状态', (maxT, nextAttack) => {
-    const a = testFighter({ hp: 10, rof: nextAttack });
-    const b = testFighter({ hp: 2, rof: 1000, ranged: true, acc: 0 });
-    const result = groupFight(a, 1, b, 1, maxT);
-    expect(result).toMatchObject({ winner: 'draw', duration: maxT, aAlive: 1, bAlive: 1 });
-    expect(result.timeline.every(([time]) => time <= maxT)).toBe(true);
-  });
-
-  it('maxT为0时仍在t=0同时结算双方致命首击', () => {
-    const a = testFighter({ hp: 1 });
-    const b = testFighter({ hp: 1 });
-    const result = groupFight(a, 1, b, 1, 0);
-    expect(result).toMatchObject({ winner: 'draw', duration: 0, aAlive: 0, bAlive: 0 });
-    expect(result.timeline.at(-1)).toEqual([0, 0, 0]);
+  it('超过时限及未接敌时不结算，双方保留存活状态', () => {
+    const a = testFighter({ rof: 0.500001 });
+    const b = testFighter({ rof: 1000, hp: 2 });
+    expect(groupFight(a, 1, b, 1, 1)).toMatchObject({ status: 'timeout', winner: null, duration: 1, aAlive: 1, bAlive: 1 });
+    expect(groupFight(a, 1, b, 1, 0)).toMatchObject({ status: 'timeout', winner: null, duration: 0, aAlive: 1, bAlive: 1 });
   });
 });

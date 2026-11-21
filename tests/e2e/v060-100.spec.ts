@@ -44,13 +44,13 @@ test.describe('#100 对决卡标题时代与 URL 一致', () => {
 
 // ───────────── Steve 10/13 23:04 补充口径 + Jony 定稿 PR #111 ─────────────
 test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
-  test('锚点改用 .4.：法兰克骑士 vs 柏柏尔骆驼 ×10时，N = 11（数值不变，守护）', async ({ page }) => {
+  test('帝王满科技：法兰克骑士对 10 个柏柏尔骆驼，稳定获胜门槛为 12', async ({ page }) => {
     await page.goto('#/duel?a=38.Franks.4.f.&b=329.Berbers.4.f.&m=n&na=10&nb=10&be=1');
-    await expect(page.locator('[data-t=be-n]')).toHaveText('11');
+    await expect(page.locator('[data-t=be-n]')).toHaveText('12');
   });
-  test('锚点 .4.：拜占庭长戟 vs 法兰克圣骑士 ×10时，N = 16（守护）', async ({ page }) => {
+  test('帝王满科技：拜占庭长戟兵对 10 个法兰克游侠，稳定获胜门槛为 21', async ({ page }) => {
     await page.goto('#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=n&na=10&nb=10&be=1');
-    await expect(page.locator('[data-t=be-n]')).toHaveText('16');
+    await expect(page.locator('[data-t=be-n]')).toHaveText('21');
   });
   // 城堡时代「满科技」= 该文明城堡时代及以前能研究的科技全算，帝王科技不算（Steve 10/13）。
   // 推导（基础值 data/game/units.json，来自 .dat；科技效果为 .dat 数值；文明可研究性见 data/game/techs.json 的 civs）：

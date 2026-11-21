@@ -33,10 +33,10 @@ test('#1054 编辑、行序、计算、结果失效、完整链接恢复和模�
   await page.getByRole('button', { name: '计算混编结果', exact: true }).click();
   await expect(page.getByTestId('mixed-result')).toBeVisible();
   await expect(page.locator('[data-t="duel-contact-boundary"]')).toHaveCount(0);
-  await expect(page.getByTestId('mixed-result')).toContainText('无走位、射程、溅射，不解释前排保护。');
+  await expect(page.getByTestId('mixed-result')).toContainText('本场接触面与接敌摘要');
   await expect(page.getByTestId('mixed-result').getByRole('table')).toHaveCount(2);
   await expect(page.getByTestId('mixed-result')).toContainText('本方合计');
-  await expect(page.getByRole('heading', { name: /方在此规则下获胜|双方同刻全部阵亡|达到时限/ })).toBeFocused();
+  await expect(page.getByRole('heading', { name: /方在此规则下获胜|双方同刻全部阵亡|达到模拟时限/ })).toBeFocused();
   await page.locator('#mix-a-qty-1').fill('14');
   await expect(page.getByTestId('mixed-result')).toHaveCount(0);
   await expect(page.getByText('配置已变化，请重新计算。', { exact: true })).toBeVisible();
@@ -285,4 +285,71 @@ test('#1054 资料失败保留严格链接，局部重试恢复后不复活旧�
   expect(page.url()).toBe(before);
   await expect(page.locator('#mix-a-qty-0')).toHaveValue('20');
   await expect(page.getByTestId('mixed-result')).toHaveCount(0);
+});
+
+test('旧混编规则同版本显式重算、键盘聚焦结果，复制新链接完整复算', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
+  await enter(page);
+  const original = query(page.url());
+  await replace(page, (q) => q.set('rule', 'queue-v1'));
+  const legacy = page.getByRole('region', { name: '旧混编规则已停用' });
+  await expect(legacy).toBeVisible();
+  await expect(legacy).not.toContainText('也会使用当前游戏数据');
+  await expect(page.getByRole('button', { name: '计算混编结果', exact: true })).toBeDisabled();
+  await expect(page.getByTestId('mix-share')).toBeDisabled();
+  await expect(page.getByText('按新规则计算后，结果会显示在这里。', { exact: true })).toBeVisible();
+  const upgrade = legacy.getByRole('button', { name: '按新规则载入并计算' });
+  expect((await upgrade.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const rule = page.locator('.mix-rules summary');
+  await rule.press('Enter');
+  await expect(page.locator('.mix-rules details')).toHaveAttribute('open', '');
+  await upgrade.press('Enter');
+  const result = page.getByTestId('mixed-result');
+  await expect(result.getByRole('heading', { level: 2 })).toBeFocused();
+  await expect(legacy).toHaveCount(0);
+  for (const field of ['ma', 'mb', 'data']) expect(query(page.url()).get(field)).toBe(original.get(field));
+  expect(query(page.url()).get('rule')).toBe('frontline-v2');
+
+  await page.getByTestId('mix-share').click();
+  await expect(page.getByText('混编配置链接已复制；打开链接后请重新计算。')).toBeVisible();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied).toBe(page.url());
+  const output = await result.innerText();
+  const tab = await context.newPage();
+  await tab.goto(copied);
+  await expect(tab.getByTestId('mixed-result')).toHaveCount(0);
+  await tab.getByRole('button', { name: '计算混编结果', exact: true }).click();
+  await expect(tab.getByTestId('mixed-result')).toHaveText(output, { useInnerText: true });
+  await tab.close();
+});
+
+test('旧规则与旧数据并存且配置无效时保留字段，升级后聚焦可纠错提示', async ({ page }) => {
+  await enter(page);
+  const expected = query(page.url());
+  const invalid = JSON.parse(expected.get('ma')!);
+  invalid.rows[0].qty = '201';
+  invalid.techs.push('9999999');
+  await replace(page, (q) => {
+    q.set('rule', 'queue-v1');
+    q.set('data', 'older-pinned-data');
+    q.set('ma', JSON.stringify(invalid));
+  });
+  const legacy = page.getByRole('region', { name: '旧混编规则已停用' });
+  await expect(legacy).toContainText('这次也会使用当前游戏数据');
+  await legacy.getByRole('button', { name: '按新规则载入并计算' }).click();
+  expect(query(page.url()).get('rule')).toBe('frontline-v2');
+  expect(query(page.url()).get('data')).toBe(expected.get('data'));
+  expect(JSON.parse(query(page.url()).get('ma')!)).toEqual(invalid);
+  const errors = page.getByRole('alert', { name: '配置错误' });
+  await expect(errors).toBeFocused();
+  await expect(errors).toContainText('9999999');
+  await expect(page.locator('#mix-a-qty-0')).toHaveValue('201');
+  await expect(page.getByTestId('mixed-result')).toHaveCount(0);
+  await expect(page.getByTestId('mix-share')).toBeDisabled();
+  await replace(page, (q) => q.set('rule', 'unknown-rule'));
+  await expect(page.getByRole('heading', { name: '混编链接失效，未回退为默认对决' })).toBeVisible();
+  await expect(legacy).toHaveCount(0);
 });

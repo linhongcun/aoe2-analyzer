@@ -4,7 +4,7 @@ import { encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../sr
 
 const source = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as Parameters<typeof mixedDataVersion>[0];
 const fixture: MixedDuelInput = {
-  rule: 'queue-v1',
+  rule: 'frontline-v2',
   data: mixedDataVersion(source),
   a: {
     civ: 'Gurjaras',

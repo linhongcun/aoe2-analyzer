@@ -1,0 +1,35 @@
+.contact-summary {
+  border: 1px solid var(--line);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+  min-width: 0;
+}
+.contact-summary h3 {
+  margin: 0 0 10px;
+}
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 8px;
+}
+.contact-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  min-width: 0;
+  padding: 10px;
+}
+.contact-card h4 {
+  margin: 0 0 4px;
+}
+.contact-summary p {
+  overflow-wrap: anywhere;
+  margin: 4px 0;
+}
+.contact-summary > p {
+  margin-top: 8px;
+}
