@@ -279,7 +279,7 @@
 
 ### 跨页带文明跳计算器时，先约定目标页的合法初始实体
 
-在[对局助手跨工具联动评审](https://github.com/linhongcun/aoe2-analyzer/issues/1284)里，从 `#/matchup` 带入双方文明跳转 `#/duel` 时，[Duel.tsx](../src/features/duel/components/Duel.tsx) 默认 A/B 单位是游侠与长戟兵；如果只替换双方文明而不约束目标页初始单位，选到无骑士或无长戟文明（如阿兹特克、玛雅）一跳进去就会直接撞上「该文明无法训练此单位」的报错死路。
+在[对局助手跨工具联动评审](https://github.com/linhongcun/aoe2-analyzer/issues/1284)里，从 `#/matchup` 带入双方文明跳转 `#/duel` 时，[Duel.tsx](../src/features/duel/components/Duel.tsx) 默认 A/B 单位是游侠与长戟兵；如果只替换双方文明而不约束目标页初始单位，选到无游侠或无长戟文明（如阿兹特克、玛雅）一跳进去就会落入「造不了该单位」的不可用态（见 [DuelSelection.tsx](../src/features/duel/components/DuelSelection.tsx)），无法直接出属性与战斗结果。
 
 原因是跨页只传上下文文明却没有对齐目标计算器的实体可用性契约；而为了避死路又容易滑向违背 [#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 的“自动推荐最优对抗兵种”。以后裁定带文明跳转计算工具时，PRD 须同时写清三件事：哪些下游工具确实与文明相关、哪些本就独立不硬传参；目标页按确定性规则落到该文明真实可用的合法初始实体（验收必附缺兵文明反例）；并明示初始单位只是可算占位而非最优推荐。
 
