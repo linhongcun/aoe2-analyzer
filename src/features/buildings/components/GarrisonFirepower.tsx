@@ -329,6 +329,7 @@ export function GarrisonFirepower({
   const mixed = rows.length > 1;
   const attackSource = buildingThreshold ? attackSources[buildingThreshold.source] : null;
   const next = empty ? null : firingSteps?.nextThreshold;
+  const shortfall = next && garrisonPower !== null ? next.power - garrisonPower : null;
   const badge =
     garrisonPower === null ? (
       <>
@@ -421,10 +422,18 @@ export function GarrisonFirepower({
               <Power value={buildingPower} />
             </p>
           )}
-          {next && garrisonPower !== null && (
+          {next && shortfall !== null && (
             <p className="garrison-fire-note">
               距下一{shortProjectile}：需合计火力 <Power value={next.power} />（<GarrisonNumber>{next.slots}</GarrisonNumber> × <Power value={buildingPower} />
-              ），当前差 <Power value={next.power - garrisonPower} />；
+              ），当前差{' '}
+              {shortfall > 0 && formatPower(shortfall) === 0 ? (
+                <>
+                  小于 <GarrisonNumber>0.01</GarrisonNumber>
+                </>
+              ) : (
+                <Power value={shortfall} />
+              )}
+              ；
               {remainingSlots ? (
                 <>
                   剩余容量 <GarrisonNumber>{remainingSlots} 格</GarrisonNumber>。

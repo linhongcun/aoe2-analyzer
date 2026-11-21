@@ -483,6 +483,15 @@ test('#1262 空、零与待核实保留各自读数', async ({ page }) => {
   await expect(firepower(page)).not.toContainText('容量已满');
 });
 
+test('#1262 仍需火力时，极小的差值不会显示为零', async ({ page }) => {
+  await page.goto(url(79, 'Dravidians', 3, '6:2:e'));
+  await expect(total(page)).toHaveText('1');
+  await expect(firepower(page)).toContainText('当前差 小于 0.01');
+  await expect(firepower(page)).toContainText('再驻 1 个即增加');
+  await quantity(page).fill('3');
+  await expect(total(page)).toHaveText('2');
+});
+
 test('#1262 炮塔、强化教堂与非射击模式使用各自口径', async ({ page }) => {
   await page.goto(url(236, 'Turks', 4, '5:5:e'));
   await selectAllTechs(page).click();
