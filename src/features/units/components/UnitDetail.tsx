@@ -448,7 +448,7 @@ export default function UnitDetail() {
         />
       )}
 
-      <UnitNotes u={u} relation={relation} techs={core.techs} invalid={!!targetProjection?.invalidFields.length} />
+      <UnitNotes u={u} catalog={core.units} relation={relation} techs={core.techs} invalid={!!targetProjection?.invalidFields.length} />
 
       <ReverseCounters
         key={reverseCounterSessionKey(u.id, context?.en ?? '', loc) ?? `${u.id}:${context?.en ?? ''}`}

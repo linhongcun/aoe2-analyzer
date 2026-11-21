@@ -177,6 +177,9 @@
         "type": "number",
         "minimum": 0
       },
+      "blastDamage": { "type": "number" },
+      "blastAttackLevel": { "type": "integer", "minimum": 0 },
+      "friendlyFireDamage": { "type": "number", "minimum": 0 },
       "blast": {
         "type": "number"
       },

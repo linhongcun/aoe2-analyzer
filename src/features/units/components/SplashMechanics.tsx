@@ -3,11 +3,11 @@ import type { Unit } from '../../../domain/types';
 import { DetailSection } from '../../../shared/ui/DetailBlocks';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 
-const scoped = (id: number) => [280, 550, 588].includes(id);
+export const hasSplashHelp = (id: number) => [280, 550, 588].includes(id);
 
 /** 只清这三条说明的平衡空括号及水平邻接空隙；不重排换行和有义内容。 */
 export function splashDescription(unit: Pick<Unit, 'id' | 'desc'>): string {
-  if (!scoped(unit.id)) return unit.desc;
+  if (!hasSplashHelp(unit.id)) return unit.desc;
   return unit.desc.replace(/[ \t]*(?:(?:\([ \t]*\)|（[ \t]*）)[ \t]*)+/g, (empty: string, offset: number, source: string) => {
     const before = source[offset - 1],
       after = source[offset + empty.length];
@@ -16,7 +16,7 @@ export function splashDescription(unit: Pick<Unit, 'id' | 'desc'>): string {
 }
 
 export function SplashMechanics({ unit }: { unit: Pick<Unit, 'id' | 'blast' | 'minr'> }) {
-  if (!scoped(unit.id)) return null;
+  if (!hasSplashHelp(unit.id)) return null;
   const radiusKnown = Number.isFinite(unit.blast) && unit.blast > 0;
   const minimumKnown = Number.isFinite(unit.minr) && unit.minr >= 0;
   const source = DATA_SOURCES.sources.aoe2techtree!;

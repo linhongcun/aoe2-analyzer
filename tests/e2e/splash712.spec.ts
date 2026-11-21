@@ -40,7 +40,7 @@ test('#712 PC1280三单位半径/最小射程与描述原生链接', async ({ pa
       '不代表不会被其他落点的溅射波及',
     ])
       await expect(target).toContainText(phrase);
-    const desc = page.locator('#unit .desc');
+    const desc = page.locator('#unit-notes .ud-desc');
     await expect(desc).not.toContainText(/\([ \t]*\)|（[ \t]*）/);
     for (const word of ['大学', '修道院', ...(id === 588 ? [] : ['攻城武器厂'])]) {
       await expect(desc).toContainText(`(${word})`);
@@ -54,7 +54,7 @@ test('#712 PC1280三单位半径/最小射程与描述原生链接', async ({ pa
   await page.goto('./#/unit/331');
   await expect(page.locator('#unit h1')).toContainText('巨型投石机');
   await expect(region(page)).toHaveCount(0);
-  await expect(page.locator('#unit .desc')).toContainText('打包后可移动，展开后可攻击');
+  await expect(page.locator('#unit-notes .ud-desc')).toContainText('打包后可移动，展开后可攻击');
 });
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark'] as const)
