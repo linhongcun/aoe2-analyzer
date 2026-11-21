@@ -16,7 +16,7 @@
     "tests/e2e/civFormations1176.spec.ts": 7500,
     "tests/e2e/civFormations1177.spec.ts": 4000,
     "tests/e2e/formationInsights1200.spec.ts": 7500,
-    "tests/e2e/unitTrainingSites1230.spec.ts": 6000,
+    "tests/e2e/unitTrainingSites1230.spec.ts": 7500,
     "tests/e2e/civFormations1144.spec.ts": 12000,
     "tests/e2e/civFormationsHistoricalDisclosure1139.spec.ts": 1600,
     "tests/e2e/treeUnavailable1119.spec.ts": 36500,

@@ -37,8 +37,8 @@ describe('#1230 training sites', () => {
     expect([priest.b, ...priest.civs]).toEqual([1806, 'Armenians']);
     expect(trainingSites(priest, 'Armenians')).toEqual({ kind: 'available', primary: { building: 1806, civ: 'Armenians' } });
     expect(trainingSites(priest, 'Georgians')).toEqual({ kind: 'unavailable' });
-    expect(trainingAtBuilding(priest, 1806)).toEqual({ civs: ['Armenians'] });
-    expect(trainingAtBuilding(priest, 104)).toEqual({ civs: [] });
+    expect(trainingAtBuilding(priest, 1806)).toEqual({ civs: ['Armenians'], onlyInOwner: true });
+    expect(trainingAtBuilding(priest, 104)).toEqual({ civs: [], onlyInOwner: true });
   });
 
   it.each([

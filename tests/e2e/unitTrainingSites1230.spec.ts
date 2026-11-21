@@ -76,6 +76,33 @@ test('#1230 390px 强化教堂的文明反查、牧师战士和无效文明', as
   await expectNoOverflow(page);
 });
 
+test('#1230 建筑目录并集保留其他文明的同名单位，精确过滤时隐藏', async ({ page }) => {
+  for (const { building, ordinary, elite, tech } of [
+    { building: 82, ordinary: 41, elite: 555 },
+    { building: 12, ordinary: 759, elite: 761, tech: 16 },
+  ]) {
+    await page.goto(`./#/building/${building}?civ=Britons`);
+    const products = page.locator('#building-prod');
+    await products.getByRole('searchbox', { name: '查找生产的名称或拼音' }).fill('Huskarl');
+    const onlyContained = products.getByRole('checkbox', { name: '只看目录含有' });
+    const row = products.locator('.bd-row').filter({ hasText: '近卫军' });
+    await expect(onlyContained).not.toBeChecked();
+    await expect(row).toHaveAttribute('data-membership', 'out');
+    await expect(row.getByText('目录不含', { exact: true })).toBeVisible();
+    await expect(row.getByRole('link', { name: '近卫军（哥特）', exact: true })).toHaveAttribute('href', `#/unit/${ordinary}?civ=Goths`);
+    await expect(row.getByRole('link', { name: '精锐近卫军（哥特）', exact: true })).toHaveAttribute('href', `#/unit/${elite}?civ=Goths`);
+    if (tech) {
+      await expect(row.getByRole('link', { name: '无政府', exact: true })).toHaveAttribute('href', `#/tech/${tech}?civ=Goths`);
+    } else {
+      await expect(row.locator('.bd-training-condition')).toHaveCount(0);
+    }
+    await onlyContained.check();
+    await expect(row).toHaveCount(0);
+    await onlyContained.uncheck();
+    await expect(row).toBeVisible();
+  }
+});
+
 for (const spec of [
   {
     civ: 'Goths',

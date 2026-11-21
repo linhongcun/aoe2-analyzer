@@ -90,7 +90,7 @@ export function trainingSites(unit: Pick<Unit, 'id' | 'civs'>, civ?: string): Tr
 }
 
 /** Scope this reverse row to the buildings and entity IDs that actually train the unit. */
-export function trainingAtBuilding(unit: Pick<Unit, 'id' | 'civs'>, building: number): { civs: string[]; tech?: number } | null {
+export function trainingAtBuilding(unit: Pick<Unit, 'id' | 'civs'>, building: number): { civs: string[]; tech?: number; onlyInOwner?: true } | null {
   if (!trainingSites(unit)) return null;
   const variant = variants.get(unit.id);
   const tech = variant?.alternate === unit.id ? variant.tech : undefined;
@@ -99,5 +99,9 @@ export function trainingAtBuilding(unit: Pick<Unit, 'id' | 'civs'>, building: nu
     if (sites?.kind !== 'available') return false;
     return tech === undefined ? sites.primary.building === building : sites.conditional?.building === building;
   });
-  return { civs, ...(tech === undefined ? {} : { tech }) };
+  return {
+    civs,
+    ...(tech === undefined ? {} : { tech }),
+    ...(unit.id === WARRIOR_PRIEST ? { onlyInOwner: true } : {}),
+  };
 }

@@ -60,17 +60,19 @@ function unitLine(entry: FamilyEntry, civ: string | null, query: string, context
   }
 
   const selected = context.requestedCiv ?? civ;
-  const contexts = selected ? [selected] : training.civs.length <= 2 ? training.civs : [undefined];
+  const ownerInScope = selected && training.civs.includes(selected) ? selected : undefined;
+  const contexts = ownerInScope ? [ownerInScope] : training.civs.length <= 2 ? training.civs : [undefined];
+  const showInScope = !selected || !!ownerInScope || (civ !== null && !training.onlyInOwner);
   const tech = training.tech === undefined ? undefined : context.techs[training.tech];
   return {
     ...base,
-    match: base.match && training.civs.length > 0 && (!selected || training.civs.includes(selected)),
+    match: base.match && training.civs.length > 0 && showInScope,
     membership: rowMembership([training.civs], selected),
     owners: ownerText(training.civs),
     node: (
       <>
         {contexts.map((owner) => {
-          const label = !selected && contexts.length > 1 && owner ? (civByEn(owner)?.zh ?? owner) : undefined;
+          const label = !ownerInScope && (selected || contexts.length > 1) && owner ? (civByEn(owner)?.zh ?? owner) : undefined;
           return (
             <div className="bd-training-forms" key={owner ?? 'all'}>
               <UnitLink u={u} civ={owner} civLabel={label} />
@@ -84,7 +86,7 @@ function unitLine(entry: FamilyEntry, civ: string | null, query: string, context
           <p className="bd-training-condition">
             {tech ? (
               <>
-                研究 <Link to={entityCivLink('tech', tech.id, selected ?? training.civs[0])}>{tech.zh}</Link> 后可训练
+                研究 <Link to={entityCivLink('tech', tech.id, ownerInScope ?? training.civs[0])}>{tech.zh}</Link> 后可训练
               </>
             ) : (
               '需研究相应科技'
