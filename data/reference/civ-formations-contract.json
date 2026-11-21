@@ -464,6 +464,21 @@
             {
               "mode": "conditional",
               "entities": [{ "kind": "unit", "id": 207, "age": 4 }]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1747,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 1749,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -479,7 +494,9 @@
           "sourceLines": [238, 240, 242],
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/e419a6c935782b679e0ca284094172ac22d931ef/role/game-strategy.md#L246",
-            "https://github.com/linhongcun/aoe2-analyzer/blob/c5aa0bcf258146ce9bb915c42ee5375b68b087c7/data/game/effects.json"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c5aa0bcf258146ce9bb915c42ee5375b68b087c7/data/game/effects.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"
           ]
         }
       ]
@@ -536,13 +553,18 @@
             {
               "id": "turks-hussar-handcannon-adjustment-fourth",
               "requires": []
+            },
+            {
+              "id": "turks-hussar-handcannon-strong-archers",
+              "requires": []
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277]
+          "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277],
+          "evidenceLinks": ["https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"]
         },
         {
           "id": "turks-existing-line-choice",
@@ -644,6 +666,21 @@
                   "id": 61
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2703,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 2704,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -664,7 +701,11 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312]
+          "sourceLines": [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+          ]
         }
       ]
     },
@@ -835,6 +876,21 @@
                   "age": 4
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1123,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 1125,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -847,7 +903,11 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355",
             "discussion": "https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac"
           },
-          "sourceLines": [355, 356, 357]
+          "sourceLines": [355, 356, 357],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"
+          ]
         },
         {
           "id": "malay-two-handed-swordsman-sustain",
@@ -902,7 +962,8 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356",
             "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
           },
-          "sourceLines": [355, 356, 357]
+          "sourceLines": [355, 356, 357],
+          "evidenceLinks": ["https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"]
         }
       ]
     },
@@ -2160,7 +2221,12 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674]
+          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"
+          ]
         }
       ]
     },
@@ -3707,7 +3773,10 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1069?civ=Shu",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1070?civ=Shu",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Shu",
-            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Shu"
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Shu",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json"
           ]
         }
       ]

@@ -4,6 +4,7 @@ import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
 import { projectFormation } from '../../src/domain/civFormations';
 import { parseUnitPath, simulate } from '../../src/domain/simulator';
+import { techAvailable } from '../../src/domain/unitAvailability';
 import { ctx, unit } from './helpers';
 
 const civs = ['Wei', 'Shu', 'Wu'];
@@ -97,6 +98,22 @@ describe('#1144 三国阵容', () => {
     const unitById = { ...resources.core.unitById };
     delete unitById[1942];
     expect(siege({ ...resources, core: { ...resources.core, unitById } })).toBeUndefined();
+  });
+
+  it('#1267 蜀的白毦面板区分普通、精锐与可用近战科技', async () => {
+    const resources = await catalog();
+    const view = project('Shu', resources);
+    if (view.status !== 'current') throw new Error(view.status);
+
+    const available = [67, 68, 75].filter((id) => techAvailable(resources, 'Shu', id, 4));
+    expect(available).toEqual([67]);
+    expect(techAvailable(resources, 'Shu', 435, 4)).toBe(false);
+    const normal = resources.core.unitById[1959]!;
+    const elite = resources.core.unitById[1961]!;
+    expect([normal.atk, elite.atk, simulate(ctx, elite, 'Shu', 4, new Set(available), new Set()).atk]).toEqual([7, 8, 9]);
+    expect(view.route.limitation).toContain('马厩缺血统，另限制轻型骑兵与黑光铠骑兵的生命上限');
+    expect(view.route.alternatives).toContain('普通白毦兵基础 7 攻，精锐基础 8 攻，蜀帝王满科技为 9 攻（锻造 +1）');
+    expect(view.route.alternatives).toContain('按减速、反骑和盘蛇阵就近扛线的职责评估');
   });
 
   it('#1177 条件分支按对象的实际可用性分别投影，保留魏的主轴', async () => {

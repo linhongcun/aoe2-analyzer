@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 import formationContract from '../../data/reference/civ-formations-contract.json';
 import { civFormationContent } from '../../src/data/civFormations';
 import { DATA_PATCH } from '../../src/data/sources';
-import { loadCore, loadTrees } from '../../src/data';
+import { civByEn, loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
+import { techAvailable } from '../../src/domain/unitAvailability';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318';
@@ -164,6 +165,19 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect(contractRoute('Lithuanians', lithuanian.id).source.content).toBe(LITHUANIAN_SOURCE_URL);
     expect(lithuanian.evidence.sourceLines).toEqual(LITHUANIAN_SOURCE_LINES);
     expect(contractRoute('Lithuanians', lithuanian.id).sourceLines).toEqual(LITHUANIAN_SOURCE_LINES);
+  });
+
+  it('#1267 立陶宛将圣物攻击加成、科技缺口和波兰翼骑兵取舍分开', async () => {
+    const civ = 'Lithuanians';
+    const core = await loadCore();
+    const trees = await loadTrees();
+    const lithuanian = route(civ, 'lithuanians-leitis-skirmisher');
+    expect(core.unitById[1707]?.zh).toBe('波兰翼骑兵');
+    expect([75, 77].map((id) => techAvailable({ core, trees }, civ, id, 4))).toEqual([false, false]);
+    expect(civByEn(civ)?.bon).toContain('每驻守一件圣物，骑士系和烈堤司的攻击力 +1 (最高 +4)');
+    expect(lithuanian.limitation).toContain('缺鼓风炉和步兵钢甲，分别少了末级近战攻击和步兵护甲');
+    expect(lithuanian.limitation).toContain('波兰翼骑兵和长戟兵没有这项加攻');
+    expect(lithuanian.adjustments[7]?.when).toContain('有波兰翼骑兵投入');
   });
 
   it('missing optional catalog entries only hide their advice and leave each primary route current', async () => {

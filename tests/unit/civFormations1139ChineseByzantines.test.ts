@@ -78,6 +78,7 @@ describe('#1139 中国与拜占庭路线边界', () => {
     expect(byzantines.limitation).toContain('不是通用反游侠单位');
     expect(byzantines.limitation).toContain('缺血统与鼓风炉');
     expect(byzantines.limitation).toContain('不含射程、走位或践踏');
+    expect(byzantines.limitation).toContain('步兵、骑兵和射手的铁匠铺攻防科技各有投入');
     expect(byzantines.limitation).not.toMatch(/长矛系费用减免|不耗黄金|正面反骑|反弓/);
     expect(byzantines.evidence.playtest).toContain('不推断已验证或未验证');
     expect(byzantines.evidence.recordedVersion).toContain('v0.77.102 · DE 188329 · 84988dd');
@@ -94,6 +95,7 @@ describe('#1139 中国与拜占庭路线边界', () => {
     expect([mangonel.when, mangonel.text, mangonel.fallback, byzantines.supplements[2]!.condition].join(' ')).not.toMatch(/\b(?:280|331)\b/);
     expect(logistics.requires).toEqual([{ kind: 'tech', id: 61, age: 4 }]);
     expect(logistics.fallback).toContain('不暗示科技已研究');
+    expect(logistics.text).toContain('甲胄骑兵和瓦兰吉卫队均可造成践踏伤害；实际伤害未测');
     expect(byzantines.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])])).toEqual([
       ['conditional', [[330, undefined]]],
       [
@@ -105,6 +107,13 @@ describe('#1139 中国与拜占庭路线边界', () => {
       ],
       ['conditional-evaluation', [[280, 4]]],
       ['mechanism-support', [[61, undefined]]],
+      [
+        'conditional',
+        [
+          [2703, 3],
+          [2704, 4],
+        ],
+      ],
     ]);
     expect(contract.supplements.map(({ mode, entities }) => [mode, entities.map((entity) => [entity.id, optionalEntityAge(entity)])])).toEqual(
       byzantines.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])]),
@@ -126,6 +135,24 @@ describe('#1139 中国与拜占庭路线边界', () => {
     expect(contractRoute('Byzantines', byzantines.id).source.content).toBe(BYZANTINE_SOURCE_URL);
     expect(byzantines.evidence.sourceLines).toEqual(BYZANTINE_SOURCE_LINES);
     expect(contractRoute('Byzantines', byzantines.id).sourceLines).toEqual(BYZANTINE_SOURCE_LINES);
+  });
+
+  it('#1267 瓦兰吉两形态按时代由兵营提供，仍是独立的条件候选', async () => {
+    const { routes, source } = byCiv('Byzantines');
+    const route = routes[0]!;
+    const core = await loadCore();
+    const trees = await loadTrees();
+    const view = projectFormation(route, 'Byzantines', DATA_PATCH, { core, trees }, routes, source);
+    if (view.status !== 'current') throw new Error(view.status);
+
+    const candidate = view.supplements.find(({ entities }) => entities.some(({ entity }) => entity.id === 2703));
+    expect(candidate?.condition).toContain('只作条件候选');
+    expect(candidate?.entities.map(({ age, entity }) => [entity.id, age, 'b' in entity && entity.b])).toEqual([
+      [2703, 3, 12],
+      [2704, 4, 12],
+    ]);
+    expect(core.techById[61]?.desc).toContain('甲胄骑兵和瓦兰吉卫队可造成践踏伤害');
+    expect(view.required.map(({ entity }) => entity.id)).toEqual([553, 359, 6]);
   });
 
   it('缺少可选实体时只回退对应建议，主路仍可用且其他选择保留', async () => {
