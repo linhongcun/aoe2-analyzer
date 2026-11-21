@@ -235,6 +235,36 @@
   grid-column: 1 / -1;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
 }
+.ud-rof-diff {
+  grid-column: 1 / -1;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-link);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+}
+.ud-rof-diff-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.ud-rof-diff-title .ic {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+.ud-rof-diff strong,
+.ud-rof-diff a {
+  color: var(--color-link);
+}
+.ud-rof-diff p {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+}
 .ud-capacity {
   margin-top: 8px;
   padding: var(--space-3);

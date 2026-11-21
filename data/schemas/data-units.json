@@ -173,6 +173,7 @@
       "acc": {
         "type": "number"
       },
+      "displayedReloadTime": { "type": "number" },
       "accuracyDispersion": {
         "type": "number",
         "minimum": 0

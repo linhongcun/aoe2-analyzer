@@ -13,6 +13,7 @@ import { Icon, type IconName } from '../../../shared/ui/Icon';
 import { RangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Basis } from '../../../shared/ui/RealCost';
+import { DisplayedReloadNote } from './DisplayedReloadNote';
 
 export function StatTile({ icon, label, value, sub, stat }: { icon: IconName; label: string; value: ReactNode; sub?: ReactNode; stat: string }) {
   return (
@@ -38,9 +39,8 @@ export function EliteDelta({ n, hp, lower }: { n: number | undefined; hp?: boole
   );
 }
 
-function CatalogAttackTiming({ u, base, elite }: { u: Unit; base: Unit; elite: boolean }) {
+function CatalogAttackTiming({ u, base, elite, hasAttack }: { u: Unit; base: Unit; elite: boolean; hasAttack: boolean }) {
   const packed = u.id === 331;
-  const hasAttack = u.atk > 0 || u.atks.some(([, amount]) => amount > 0);
   const canShowInterval = packed || hasAttack;
   const delay = u.attackDelaySeconds;
   const hasDelay = typeof delay === 'number' && Number.isFinite(delay) && delay >= 0;
@@ -86,9 +86,11 @@ function CatalogAttackTiming({ u, base, elite }: { u: Unit; base: Unit; elite: b
 }
 
 export function CatalogStats({ u, base, elite, meleeForm }: { u: Unit; base: Unit; elite: boolean; meleeForm?: boolean }) {
+  const hasAttack = u.atk > 0 || u.atks.some(([, amount]) => amount > 0);
   return (
     <div className="ud-stat-grid">
-      <CatalogAttackTiming u={u} base={base} elite={elite} />
+      <CatalogAttackTiming u={u} base={base} elite={elite} hasAttack={hasAttack} />
+      <DisplayedReloadNote unit={u} hasAttack={hasAttack} />
       <StatTile
         icon="heart"
         stat="hp"

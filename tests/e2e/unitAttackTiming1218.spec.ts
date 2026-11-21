@@ -60,3 +60,64 @@ test('#1218 显式零、无普通攻击和打包态有各自的显示口径', as
   await expect(interval.locator('.num.nw')).toHaveText('10秒');
   await expect(delay).toHaveCount(0);
 });
+
+test('#1231 铁浮屠的目录间隔与显示字段整宽对照，僧侣保留无普通攻击', async ({ page }) => {
+  for (const [id, width, theme] of [
+    [1908, 1280, 'light'],
+    [1910, 390, 'light'],
+    [125, 390, 'dark'],
+    [775, 360, 'dark'],
+  ] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`./#/unit/${id}`);
+    await page.evaluate((value) => {
+      localStorage.setItem('aoe2-theme', value);
+    }, theme);
+    await page.reload();
+    const { stats, timing, delay, interval } = attackTiming(page);
+    const note = stats.locator('.ud-stat-grid > .ud-attack-timing + .ud-rof-diff');
+    await expect(note).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+    if (id === 1908 || id === 1910) {
+      await expect(interval).toContainText('2.15 秒');
+      await expect(interval).toContainText('连续攻击时，两次出手的间隔。');
+      await expect(note).toContainText('固定 DAT 显示用字段：1.8 秒');
+      const first = (await delay.boundingBox())!;
+      const second = (await interval.boundingBox())!;
+      expect(first.y).toBe(second.y);
+      expect(first.width).toBeCloseTo(second.width, 0);
+    } else {
+      await expect(delay).toHaveCount(0);
+      await expect(interval).toContainText('不适用：无普通攻击');
+      await expect(note).toContainText('基础 1.6 秒 / 显示用 1.0 秒');
+      await expect(note).toContainText('均不代表招降或治疗速度');
+    }
+    await expect(note).toContainText('未经同版客户端实测');
+    await expect(note.locator('.num.nw').filter({ hasText: 'DE 188329' })).toHaveCount(1);
+    const grid = (await timing.boundingBox())!;
+    const strip = (await note.boundingBox())!;
+    expect(strip.width).toBe(grid.width);
+    expect(strip.y - grid.y - grid.height).toBeCloseTo(8, 0);
+    expect(
+      await note.locator('.num.nw').evaluateAll((nodes) => nodes.every((node) => new Set(Array.from(node.getClientRects(), (rect) => rect.top)).size === 1)),
+    ).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await note.getByRole('link', { name: '数据说明' }).click();
+    await expect(page).toHaveURL(/#\/about-data$/u);
+  }
+});
+
+test('#1231 同值单位无对照条，楼船保留两种射程与最小射程', async ({ page }) => {
+  const { stats, interval } = attackTiming(page);
+  for (const id of [38, 1948]) {
+    await page.goto(`./#/unit/${id}`);
+    await expect(interval).toContainText(id === 38 ? '1.8 秒' : '5.5 秒');
+    await expect(stats.locator('.ud-rof-diff')).toHaveCount(0);
+    if (id === 1948) {
+      const range = stats.locator('[data-stat="rng"]');
+      await expect(range.locator('.ud-stat-val')).toHaveText('10');
+      await expect(range).toContainText('对建筑 13');
+      await expect(range).toContainText('最小射程 3');
+    }
+  }
+});

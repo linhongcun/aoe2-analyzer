@@ -72,6 +72,12 @@ def rngBd(i):
     v=round(x['Range']-x['DisplayedRange'],2);return int(v) if float(v).is_integer() else v
 for u in units.values():
     dat_unit = _DU[u['id']] if u['id'] < len(_DU) else None
+    displayed = dat_unit.get('DisplayedReloadTime') if dat_unit else None
+    interval = u['rof']
+    if (type(displayed) in (int, float) and math.isfinite(displayed)
+            and type(interval) in (int, float) and math.isfinite(interval)
+            and abs(interval - displayed) > 1e-5):
+        u['displayedReloadTime'] = displayed
     dispersion = dat_unit.get('AccuracyDispersion') if dat_unit else None
     if type(dispersion) in (int, float) and 0 <= dispersion < math.inf:
         u['accuracyDispersion'] = dispersion
