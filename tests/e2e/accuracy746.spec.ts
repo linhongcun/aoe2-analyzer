@@ -135,7 +135,7 @@ test('远程散布的单位、来源、零值与双列窄屏', async ({ page }) 
     await page.goto('./#/unit/' + id);
     await expect(panel.locator('[data-accuracy=percent]')).toHaveText(accuracy);
     await expect(panel.locator('[data-accuracy=dispersion] dd').first()).toHaveText(dispersion);
-    const boxes = await panel.locator('dt').evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().top));
+    const boxes = await panel.locator('dd:first-of-type').evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().top));
     expect(boxes[0]).toBe(boxes[1]);
     await expect(panel.getByRole('link', { name: '固定版本 DAT' })).toHaveAttribute('href', /auto-mods\/blob\/[a-f0-9]{40}\/dat\/empires2_x2_p1.dat$/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

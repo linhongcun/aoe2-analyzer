@@ -52,6 +52,12 @@
   white-space: nowrap;
 }
 @media (max-width: 600px) {
+  .ud-acc-card {
+    padding: var(--space-2);
+  }
+  .ud-acc-card dt {
+    font-size: 14px;
+  }
   .ud-acc-card dd:first-of-type {
     font-size: 20px;
   }
