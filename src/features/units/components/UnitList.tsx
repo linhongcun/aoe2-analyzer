@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { civByEn } from '../../../data';
+import { civByEn, type Core } from '../../../data';
 import { useCore } from '../../../data/hooks';
+import { entityCivLink } from '../../../domain/civRoute';
 import { DLCS } from '../../../domain/dlc';
 import { formatHp } from '../../../domain/hpFormat';
 import { collapse } from '../../../domain/family';
@@ -9,6 +10,8 @@ import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { AGE_ZH } from '../../../domain/ratings';
 import { filterUnitFamilies } from '../../../domain/unitFilters';
 import { UNIT_ROLE_ZH, type UnitRole } from '../../../domain/unitRoles';
+import { catalogueTrainingUnit, trainingSites } from '../../../domain/unitTrainingSites';
+import type { Unit } from '../../../domain/types';
 import { CostView, UnitIcon, img } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -31,8 +34,30 @@ const TYPE_ZH: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通
 
 const statClass = (value: number) => (value === 0 ? 'num nw is-zero' : 'num nw');
 
-function unitHref(id: number, civ: string) {
-  return civ ? `/unit/${id}?civ=${encodeURIComponent(civ)}` : `/unit/${id}`;
+function TrainingLabel({ unit, civ, core }: { unit: Unit; civ: string; core: Core }) {
+  const training = trainingSites(unit, civ);
+  const available = training?.kind === 'available' ? training : null;
+  const { primary, conditional, exceptions } = available ?? {};
+  const prefix = exceptions?.length ? '通常：' : !civ && !conditional && primary?.civ ? `${civByEn(primary.civ)?.zh ?? primary.civ}：` : '';
+  const name = primary ? (core.buildingById[primary.building]?.zh ?? '资料待核') : unit.bz || '—';
+  const tech = conditional && core.techById[conditional.tech];
+  const needsResearch = conditional ? `研究${tech ? tech.zh : '相应科技'}后：${core.buildingById[conditional.building]?.zh ?? '资料待核'}` : null;
+  const exception = exceptions?.[0];
+  const note =
+    exceptions && exception
+      ? `${exceptions.map(({ civ: owner }) => (owner ? (civByEn(owner)?.zh ?? owner) : '')).join('、')}：${core.buildingById[exception.building]?.zh ?? '资料待核'}`
+      : needsResearch;
+  return (
+    <span className="unit-meta mini">
+      {prefix}
+      {name} ·{' '}
+      <span className="unit-age nw">
+        {AGE_ZH[unit.age] && <img src={img(`ages/${unit.age}.webp`)} alt="" />}
+        {AGE_ZH[unit.age] ?? ''}
+      </span>
+      {note && <span className="unit-training-condition">{note}</span>}
+    </span>
+  );
 }
 
 export default function UnitList() {
@@ -50,7 +75,7 @@ export default function UnitList() {
   const focusedInPanel = useRef(false);
   const all = core ? projectUnitDisplayAges(core.units, civ) : [];
   const fams = core ? collapse(all, core.fam) : [];
-  const r = core ? filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc, civ, role }) : [];
+  const r = core ? filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc, civ, role }, catalogueTrainingUnit) : [];
   const dirty = Boolean(q || t || a || dlc || civ || role);
   const secondaryCount = [t, a, dlc].filter(Boolean).length;
   const reset = () => {
@@ -241,7 +266,7 @@ export default function UnitList() {
             <span />
           </div>
           {r.map(({ u, elite }) => (
-            <Link key={u.id} className="unit-row" to={unitHref(u.id, civ)} data-unit-id={u.id}>
+            <Link key={u.id} className="unit-row" to={entityCivLink('unit', u.id, civ)} data-unit-id={u.id}>
               <span className="unit-id">
                 <UnitIcon u={u} />
                 <span className="unit-names">
@@ -254,13 +279,7 @@ export default function UnitList() {
                 </span>
               </span>
               <span className="unit-mid">
-                <span className="unit-meta mini">
-                  {u.bz || '—'} ·{' '}
-                  <span className="unit-age nw">
-                    {AGE_ZH[u.age] && <img src={img(`ages/${u.age}.webp`)} alt="" />}
-                    {AGE_ZH[u.age] ?? ''}
-                  </span>
-                </span>
+                <TrainingLabel unit={u} civ={civ} core={core} />
                 <span className="unit-dot" aria-hidden="true">
                   ·
                 </span>

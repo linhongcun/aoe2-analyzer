@@ -16,3 +16,7 @@ export function civEnCasePath(catalog: readonly { en: string }[], en: string, su
   if (!matched || matched.en === en) return undefined;
   return `/civ/${matched.en}${suffix}`;
 }
+
+export function entityCivLink(kind: 'building' | 'tech' | 'unit', id: number, civ?: string | null): string {
+  return `/${kind}/${id}${civ ? `?civ=${encodeURIComponent(civ)}` : ''}`;
+}

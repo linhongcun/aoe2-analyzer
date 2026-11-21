@@ -345,11 +345,17 @@
   margin-bottom: var(--space-4);
 }
 .ud-obtain,
+.ud-training-condition,
 .ud-gather {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
   align-items: center;
+}
+.ud-training-requirement {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 .ud-obtain svg,
 .ud-gather svg {

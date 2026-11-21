@@ -1,5 +1,7 @@
 import { useState, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
+import { entityCivLink } from '../../../domain/civRoute';
 import {
   applyCatalogView,
   catalogGroup,
@@ -10,6 +12,7 @@ import {
 } from '../../../domain/buildingDetailView';
 import type { FamilyEntry } from '../../../domain/family';
 import type { Tech, Unit } from '../../../domain/types';
+import { trainingAtBuilding } from '../../../domain/unitTrainingSites';
 import { TechLink, UnitLink } from '../../../shared/ui/art';
 
 const GROUP_LABEL: Record<CatalogGroup, string> = { common: '通用', unique: '独特', regional: '区域' };
@@ -24,6 +27,12 @@ interface Line {
   owners: string;
 }
 
+interface UnitTrainingContext {
+  building: number;
+  requestedCiv?: string;
+  techs: Readonly<Record<number, Tech>>;
+}
+
 function ownerText(civs: readonly string[] | undefined): string {
   if (!civs?.length || civs.length > 4) return '';
   return civs.map((name) => civByEn(name)?.zh ?? name).join('、');
@@ -33,6 +42,62 @@ function named(entry: FamilyEntry): Pick<Unit, 'zh' | 'en' | 'py' | 'pyi'>[] {
   return [entry.u, ...(entry.elite ? [entry.elite] : [])];
 }
 
+function unitLine(entry: FamilyEntry, civ: string | null, query: string, context?: UnitTrainingContext): Line {
+  const { u, elite } = entry;
+  const base = {
+    key: `u${u.id}`,
+    group: catalogGroup(u.type),
+    match: catalogQueryMatch(named(entry), query),
+    owners: ownerText(u.civs),
+  };
+  const training = context && trainingAtBuilding(u, context.building);
+  if (!context || !training) {
+    return {
+      ...base,
+      membership: rowMembership(elite ? [u.civs, elite.civs] : [u.civs], civ),
+      node: <UnitLink u={u} elite={elite} />,
+    };
+  }
+
+  const selected = context.requestedCiv ?? civ;
+  const ownerInScope = selected && training.civs.includes(selected) ? selected : undefined;
+  const contexts = ownerInScope ? [ownerInScope] : training.civs.length <= 2 ? training.civs : [undefined];
+  const showInScope = !selected || !!ownerInScope || (civ !== null && !training.onlyInOwner);
+  const tech = training.tech === undefined ? undefined : context.techs[training.tech];
+  return {
+    ...base,
+    match: base.match && training.civs.length > 0 && showInScope,
+    membership: rowMembership([training.civs], selected),
+    owners: ownerText(training.civs),
+    node: (
+      <>
+        {contexts.map((owner) => {
+          const label = !ownerInScope && (selected || contexts.length > 1) && owner ? (civByEn(owner)?.zh ?? owner) : undefined;
+          return (
+            <div className="bd-training-forms" key={owner ?? 'all'}>
+              <UnitLink u={u} civ={owner} civLabel={label} />
+              {elite && trainingAtBuilding(elite, context.building)?.civs.some((name) => !owner || name === owner) && (
+                <UnitLink u={elite} civ={owner} civLabel={label} />
+              )}
+            </div>
+          );
+        })}
+        {training.tech !== undefined && (
+          <p className="bd-training-condition">
+            {tech ? (
+              <>
+                研究 <Link to={entityCivLink('tech', tech.id, ownerInScope ?? training.civs[0])}>{tech.zh}</Link> 后可训练
+              </>
+            ) : (
+              '需研究相应科技'
+            )}
+          </p>
+        )}
+      </>
+    ),
+  };
+}
+
 export function BuildingCatalog({
   id,
   title,
@@ -40,6 +105,7 @@ export function BuildingCatalog({
   units,
   techs,
   civ,
+  unitTraining,
 }: {
   id: string;
   title: string;
@@ -47,18 +113,12 @@ export function BuildingCatalog({
   units?: readonly FamilyEntry[];
   techs?: readonly Tech[];
   civ: string | null;
+  unitTraining?: UnitTrainingContext;
 }) {
   const [query, setQuery] = useState('');
   const [onlyContained, setOnlyContained] = useState(false);
   const lines: Line[] = units
-    ? units.map((entry) => ({
-        key: `u${entry.u.id}`,
-        group: catalogGroup(entry.u.type),
-        membership: rowMembership(entry.elite ? [entry.u.civs, entry.elite.civs] : [entry.u.civs], civ),
-        match: catalogQueryMatch(named(entry), query),
-        node: <UnitLink u={entry.u} elite={entry.elite} />,
-        owners: ownerText(entry.u.civs),
-      }))
+    ? units.map((entry) => unitLine(entry, civ, query, unitTraining))
     : (techs ?? []).map((tech) => ({
         key: `t${tech.id}`,
         group: catalogGroup(tech.type),
