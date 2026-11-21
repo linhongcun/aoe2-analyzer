@@ -119,6 +119,8 @@ npm run lint:layers -- --strict
 
 数字不换行：`base.css` 的 `body` 已有 `font-variant-numeric: tabular-nums`；`.nw` 是 `white-space: nowrap`。各页还在自己的 CSS 里给 `.num` 再设 tabular-nums，`base.css` 没有一条全局的 `.num {}`。数值和「数字+单位」仍用 `.num` 和 `.nw` 包住。360 宽下「1个村民」折成两行，按仓库约定算缺陷。
 
+用 Chromium 检查数字与单位是否同一行时，同一个行内元素可能返回多个矩形。例如「1.8 秒」在桌面和手机测试中有两个左右相邻的矩形，顶边相同。读取元素的 `getClientRects()`，检查矩形的 `top` 是否只有一个值，就能区分字体分段与实际折行。[#1231 的浏览器回归测试](https://github.com/linhongcun/aoe2-analyzer/blob/b79b857b78d5f7e34c73e9d0ddbc0e336505cb8c/tests/e2e/unitAttackTiming1218.spec.ts#L101-L103)
+
 可点区域的设计要求是不小于 44×44，字号不小于 12px。这是做界面时要满足的条件。它不是每份 PR 的四宽截图门禁。Playwright 默认视口在 `playwright.config.ts`：1280×900。只在这次布局确实依赖某个宽度时，再把视口设到那个宽度。
 
 ## 6. 按风险选测试，以及 CI 实际跑什么
