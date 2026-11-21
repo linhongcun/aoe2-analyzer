@@ -59,8 +59,12 @@ for (const { civ, route, rows } of towerEvidenceCases) {
     if (civ === 'Saxons') {
       await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
       await expect(card).toContainText('80 木、35 金、零食物');
-      await expect(card.getByRole('link', { name: /^翼骑兵 / })).toHaveAttribute('href', '#/unit/441?civ=Saxons');
-      await expect(card.getByRole('link', { name: /^精锐瓦兰吉卫队 / })).toHaveAttribute('href', '#/unit/2704?civ=Saxons');
+      const hussar = card.getByRole('link', { name: /^翼骑兵 / });
+      await expect(hussar).toHaveAttribute('href', '#/unit/441?civ=Saxons');
+      await expect(hussar).toContainText('80 食物');
+      const varangian = card.getByRole('link', { name: /^精锐瓦兰吉卫队 / });
+      await expect(varangian).toHaveAttribute('href', '#/unit/2704?civ=Saxons');
+      await expect(varangian).toContainText('65 食物、45 金');
     }
 
     for (const [unit, id, count, without, withSlits] of rows) {
