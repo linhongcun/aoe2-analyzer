@@ -19,7 +19,7 @@ describe('#1144 三国阵容', () => {
   it.each([
     ['Wei', 4, 'combined', [441, 1952], [4, 4], [1062], [], [1954, 359], '1198-L1234'],
     ['Shu', 4, 'progression', [24, 492], [3, 4], [], [], [359, 1942], '1236-L1270'],
-    ['Wu', 3, 'choice', [], [], [], [1968, 6], [359, 1942], '1272-L1310'],
+    ['Wu', 3, 'choice', [], [], [], [1968, 6], [359, 1942, 1946], '1272-L1310'],
   ] as const)(
     '%s 只发布一条条件路线，并按时代解析实体及固定来源',
     async (civ, age, composition, required, ages, prerequisites, choices, supplements, lines) => {

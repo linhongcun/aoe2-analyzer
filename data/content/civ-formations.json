@@ -294,7 +294,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-22",
         "condition": "能控制并保护施工位置，有石料与村民投入。不在暴露地点强行前置。",
         "required": [
           {
@@ -351,14 +351,14 @@
             ]
           }
         ],
-        "reason": "骑兵护施工与侧翼，箭塔支援进入塔区的交战。先取得区域控制，再按需推进。",
-        "limitation": "箭塔静态且可被绕开。射程外攻城器是威胁，石料、施工保护和城堡队列都要取舍。",
+        "reason": "骑兵护施工与侧翼，箭塔支援进入塔区的交战。先取得区域控制，再按需推进。 有保护施工的条件时优先争高地，高海拔战斗中单位和建筑受伤 −15%。阿兹瑙里骑兵（924）使骑兵人口占用 −20%，可在人口吃紧时给护施工和侧翼留出人口。",
+        "limitation": "箭塔静态且可被绕开。射程外攻城器是威胁，石料、施工保护和城堡队列都要取舍。 减人口为科技机制，满人口阵容战果未模拟。",
         "attack": "先争取能保护施工的位置，骑兵护建、守侧翼。安全路径与护卫未解决时，不强行侧袭攻城器。",
         "defense": "塔区守关键路口，莫纳斯帕保留机动应对侧翼。敌军仍可绕行或从射程外施压。",
         "adjustments": [
           {
             "when": "塔区外的弓手与骑射手",
-            "text": "条件补精锐掷矛手作机动反远程支援，不固定纳入主组合。",
+            "text": "条件补精锐掷矛手作机动反远程支援，不固定纳入主组合。 格鲁吉亚缺射手锁甲，掷矛手脱离塔区时留好撤退距离。",
             "id": "ranged",
             "requires": [
               {
@@ -371,12 +371,7 @@
             "when": "骆驼与强反骑",
             "text": "压力大时补长戟兵保护塔与施工队，莫纳斯帕避开正面硬接。",
             "id": "camels",
-            "requires": [
-              {
-                "kind": "unit",
-                "id": 359
-              }
-            ],
+            "requires": [{ "kind": "unit", "id": 359 }],
             "fallback": "莫纳斯帕避开反骑正面。"
           },
           {
@@ -412,7 +407,29 @@
           "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
           "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
           "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
-          "sourceLines": []
+          "sourceLines": [],
+          "links": [
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "DE 188329 固定科技说明",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Georgians#techtree"
+            },
+            {
+              "label": "阿兹瑙里骑兵（924）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/924?civ=Georgians"
+            }
+          ]
         }
       }
     ]
@@ -2511,7 +2528,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-22",
         "condition": "路线按条件选择，不是强制与其他路混编。",
         "required": [
           {
@@ -2534,10 +2551,36 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录骑马弩与轻骑的资源分工、折扣估算边界、受保护攻城器风险及按需攻城支援。",
           "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616],
+          "links": [
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定效果表",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks#techtree"
+            },
+            {
+              "label": "便携弯弩装置（1452）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1452?civ=Franks"
+            },
+            {
+              "label": "含便携弯弩装置的模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/1452,39,199,211,200,212,47/?civ=Franks&tab=sim"
+            },
+            {
+              "label": "只取消便携弯弩装置的模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim"
+            }
+          ]
         },
         "reason": "重装骑马弩持续输出，轻骑提供机动掩护；骑马弩目录费用为 65 黄金 + 40 木材，轻骑为 80 食物，训练资源相对分工。王家敕令骑兵黄金折扣仅作估算，并非目录已应用价格；免费磨坊科技只节省升级投入，不意味着无限补兵。",
-        "limitation": "骑马弩持续占用木材与黄金，轻骑占用食物；王家敕令折扣不能写成已应用价格。轻骑接近受保护的敌方攻城器有被护卫拦截的风险；免费磨坊科技不消除补兵成本。",
+        "limitation": "骑马弩持续占用木材与黄金，轻骑占用食物；王家敕令折扣不能写成已应用价格。轻骑接近受保护的敌方攻城器有被护卫拦截的风险；免费磨坊科技不消除补兵成本。 缺护腕、扳指、射手锁甲、血统和帕提亚战术。重装骑马弩兵（2701）含便携弯弩装置（1452）的帝王满科技模拟为 66 血、11 攻、4/2 甲、射程 7、攻击间隔 2.50 秒；只取消该科技时射程 6。低远甲、慢攻速使正面换射吃亏，优先选能拉扯和撤退的地形。",
         "attack": "骑马弩持续远程输出，轻骑提供机动掩护并寻找安全侧翼；受保护的敌方攻城器不保证能被轻骑切入。",
         "defense": "骑马弩依托安全射程输出，轻骑保留机动掩护，避免在反骑护卫前硬切。",
         "adjustments": [
@@ -2602,8 +2645,20 @@
             "mode": "choice",
             "condition": "帝王时代按目标从当前可用攻城支援中按需少量另配，不设固定比例。",
             "entities": [
-              { "kind": "unit", "id": 36, "historicalName": "手推炮", "role": "按需攻城器选择", "age": 4 },
-              { "kind": "unit", "id": 331, "historicalName": "巨型投石机", "role": "按需攻城器选择", "age": 4 }
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "按需攻城器选择",
+                "age": 4
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "按需攻城器选择",
+                "age": 4
+              }
             ]
           }
         ],
@@ -4121,6 +4176,166 @@
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
+      },
+      {
+        "id": "aztecs-garland-infantry",
+        "title": "帝王条件候选：荣冠战争步兵＋精锐鹰勇士",
+        "status": "candidate",
+        "playtest": "unreported",
+        "composition": "choice",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-22",
+        "condition": "帝王陆地战中，能维持步兵补员和精锐鹰勇士的机动金线时考虑。条件候选，未实战验证。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 752,
+            "age": 4,
+            "historicalName": "精锐鹰勇士",
+            "role": "侧袭、追击或处理可安全接近的攻城器。避免硬接重骑或冠军剑士。"
+          }
+        ],
+        "choiceLabel": "前排按对手与产能择一",
+        "choices": [
+          {
+            "id": "aztecs-garland-champion",
+            "title": "沿用兵营剑士线",
+            "preconditions": [
+              "已有剑士线投入",
+              "兵营能持续补员"
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 567,
+                "age": 4,
+                "historicalName": "冠军剑士",
+                "role": "稳住正面，给鹰勇士留侧翼空间。"
+              }
+            ]
+          },
+          {
+            "id": "aztecs-garland-jaguar",
+            "title": "敌军以步兵为主",
+            "preconditions": [
+              "能腾出城堡产能"
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 726,
+                "age": 4,
+                "historicalName": "精锐豹勇士",
+                "role": "帝王满科技模拟 27 攻，对步兵类别另有 +6；实际伤害随目标变化。"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 24,
+            "age": 4,
+            "historicalName": "荣冠战争",
+            "role": "步兵攻击 +4。"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "label": "重投支援（按需）",
+            "condition": "成群远程或攻城器卡住正面，且能保护攻城武器",
+            "requires": [
+              { "kind": "unit", "id": 588, "age": 4 },
+              { "kind": "tech", "id": 377, "age": 4 }
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4,
+                "historicalName": "重型投石车",
+                "role": "带攻城技师时满科技模拟射程 9。照看己方前排和落点。"
+              },
+              {
+                "kind": "tech",
+                "id": 377,
+                "age": 4,
+                "historicalName": "攻城技师",
+                "role": "提高远程攻城武器的射程。"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "label": "僧侣支援（按需）",
+            "condition": "遇少量昂贵重骑或其他可招降目标，且有站位和操作空间",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 125,
+                "age": 4,
+                "historicalName": "僧侣",
+                "role": "每研究一项修道院科技，僧侣 +5 生命。"
+              }
+            ]
+          }
+        ],
+        "reason": "荣冠战争强化步兵正面，精锐鹰勇士保留机动侧翼。重投与僧侣分别补区域压制和招降。",
+        "limitation": "重投与僧侣都耗黄金，按对手和产能选择，先保证前排和鹰勇士补员。未验证混编伤害、招降成功率或对局结果。",
+        "attack": "步兵稳住正面，精锐鹰勇士观察侧翼和攻城器护卫。有安全接近路径时才切入。",
+        "defense": "步兵护住重投或僧侣，精锐鹰勇士留机动空间，避免和重骑硬换。",
+        "alternatives": "保留鹰勇士＋精锐掷矛手作为反弓、反长枪与侧袭时的另一条限定候选。",
+        "evidence": {
+          "recognition": "根据 DE 188329 机制整理的帝王条件候选，未记录为维护者讨论认可路线。",
+          "playtest": "未报告实战使用，本次未进行阵容实战验证。",
+          "scope": "核对科技可用性、机制说明与满科技单兵面板。",
+          "recordedVersion": "DE 188329",
+          "sourceLines": [
+            1059,
+            1061,
+            1063
+          ],
+          "links": [
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "DE 188329 固定科技说明",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Aztecs#techtree"
+            },
+            {
+              "label": "荣冠战争（24）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/24?civ=Aztecs"
+            },
+            {
+              "label": "精锐豹勇士满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/726/Aztecs/4/24,602,215,67,74,68,76,75,77/?civ=Aztecs&tab=sim"
+            },
+            {
+              "label": "重型投石车满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/588/Aztecs/4/47,377/?civ=Aztecs&tab=sim"
+            }
+          ]
+        },
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/015d283715b52a5921326437a5425f6ce197a37b/role/game-strategy.md#L1059-L1063",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1266",
+          "boundary": "固定文档说明候选及适用条件，原 Issue 授权补齐候选；战术效果仍待实战验证。"
+        }
       }
     ]
   },
@@ -4413,7 +4628,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-22",
         "condition": "金流能持续支持科那与掷石绳骑兵两条金线并承受损失时，采用该主路；不把人海当无限补兵。",
         "required": [
           {
@@ -4473,12 +4688,42 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录用户将骑兵路线纳入取舍的个人偏好（不推导非骑兵经济更差），以及科那与掷石绳骑兵在可持续双金流下的分工、接敌与反制边界及按需投入。",
+          "scope": "记录用户将骑兵路线纳入取舍的个人偏好（不推导非骑兵经济更差），以及科那与掷石绳骑兵在可持续双金流下的分工、接敌与反制边界及按需投入。 DE 188329 的突袭只让掷石绳骑兵、投石手和掷矛手造成穿透伤害；逐目标伤害未验证。",
           "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a",
-          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]
+          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980],
+          "links": [
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定科技说明",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Mapuche#techtree"
+            },
+            {
+              "label": "突袭（1379）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1379?civ=Mapuche"
+            },
+            {
+              "label": "精锐科那满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2568/Mapuche/4/67,68,75/?civ=Mapuche&tab=sim"
+            },
+            {
+              "label": "精锐掷石绳骑兵满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2571/Mapuche/4/199,211,200,212,219,47/?civ=Mapuche&tab=sim"
+            }
+          ]
         },
         "reason": "科那负责近战处理步兵与步弓手，掷石绳骑兵在距离外应对骑兵并提供减速；前者耗食物与黄金，后者耗木材与黄金，两线分担食物和木材、共同需要黄金，只有金流能支撑两线并承受损失时采用。",
-        "limitation": "科那不适于攻击长矛兵系、骆驼和僧侣，仍需安全接敌；掷石绳骑兵不适于攻击步弓手、掷矛手和近程单位，蓄力减速不保证对所有骑兵占优。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。",
+        "limitation": "科那不适于攻击长矛兵系、骆驼和僧侣，仍需安全接敌；掷石绳骑兵不适于攻击步弓手、掷矛手和近程单位，蓄力减速不保证对所有骑兵占优。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。 缺骑兵鳞甲、骑兵锁甲、骑兵钢甲、血统、畜牧、护腕、扳指和帕提亚战术。帝王满科技模拟中，精锐科那为 0/5 甲。科那可对受伤目标造成递增伤害，城堡科技突袭（1379）不含科那。 精锐掷石绳骑兵的帝王满科技模拟为 65 血、射程 7、攻击间隔 2.00 秒。",
         "attack": "科那在安全接敌后处理步兵与步弓手，掷石绳骑兵保留距离应对骑兵并减速；为两线安排护卫和撤退空间。",
         "defense": "避免掷石绳骑兵进入弓手、掷矛手或近战单位的有效攻击；科那遇长矛兵系、骆驼或僧侣时不强接，按局势改位或脱离。",
         "adjustments": [
@@ -4498,6 +4743,13 @@
             "id": "mapuche-kona-bolas-adjustment-third",
             "when": "步弓手、掷矛手",
             "text": "科那可处理步弓手；掷石绳骑兵不适于攻击步弓手和掷矛手，须保护其远程输出，避免安排正面接战。"
+          },
+          {
+            "id": "mapuche-halberdier-support",
+            "when": "重骑压阵且需要守线",
+            "text": "可补满步兵攻防的长戟兵护住后排。帝王步兵、投石手和掷矛手 +15 生命。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "先依托已有部队和阵地守线，避免科那硬接反骑兵力。"
           }
         ],
         "alternatives": "双金不是自动排除本路的理由；若金流、战损或持续产能不足以支撑两线，重新评估其他条件路线，不为偏好硬撑。",
@@ -4518,7 +4770,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-22",
         "condition": "黄金吃紧或确有反步兵缺口时，按实际金流与持续补兵能力选择；科那仍耗黄金，科那与投石手两种单位共用食物。",
         "required": [
           {
@@ -4553,12 +4805,42 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录黄金紧张或实际反步兵缺口下的科那与投石手条件路线、共享食物、黄金投入及接敌边界。",
+          "scope": "记录黄金紧张或实际反步兵缺口下的科那与投石手条件路线、共享食物、黄金投入及接敌边界。 DE 188329 的突袭只让掷石绳骑兵、投石手和掷矛手造成穿透伤害；逐目标伤害未验证。",
           "recordedVersion": "v0.78.3 · DE 188329 · 构建 40c323a",
-          "sourceLines": [952, 956, 959, 963, 970, 977, 980]
+          "sourceLines": [952, 956, 959, 963, 970, 977, 980],
+          "links": [
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定科技说明",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Mapuche#techtree"
+            },
+            {
+              "label": "突袭（1379）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1379?civ=Mapuche"
+            },
+            {
+              "label": "精锐科那满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2568/Mapuche/4/67,68,75/?civ=Mapuche&tab=sim"
+            },
+            {
+              "label": "精锐掷石绳骑兵满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2571/Mapuche/4/199,211,200,212,219,47/?civ=Mapuche&tab=sim"
+            }
+          ]
         },
         "reason": "科那处理步兵与步弓手，投石手承担反步兵职责；两种单位共用食物，科那仍耗黄金。在黄金吃紧或反步兵职责确有需要时，可按实际金流与持续补兵能力评估本路。",
-        "limitation": "科那需安全接敌，且不适于攻击长矛兵系、骆驼和僧侣；投石手承担反步兵职责，但持续补兵仍需资源，不表示它能反骑或反攻城。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。",
+        "limitation": "科那需安全接敌，且不适于攻击长矛兵系、骆驼和僧侣；投石手承担反步兵职责，但持续补兵仍需资源，不表示它能反骑或反攻城。击杀产金适用范围未完全说明；布图马普折扣仅文本、未编码，不作固定收入或已应用折后价。 缺骑兵鳞甲、骑兵锁甲、骑兵钢甲、血统、畜牧、护腕、扳指和帕提亚战术。帝王满科技模拟中，精锐科那为 0/5 甲。科那可对受伤目标造成递增伤害，城堡科技突袭（1379）不含科那。",
         "attack": "科那只在安全接敌后处理步兵与步弓手，投石手按实际反步兵缺口补位；风险过高时保留距离和撤退空间。",
         "defense": "科那遇长矛兵系、骆驼或僧侣时不强接；投石手仅按反步兵缺口投入，不将其写成其他职责的支援。",
         "adjustments": [
@@ -4578,6 +4860,13 @@
             "id": "mapuche-kona-slinger-adjustment-third",
             "when": "步弓手、掷矛手",
             "text": "科那按页面描述可处理步弓手；投石手不据此推作反弓职责，按安全接敌条件保持距离。"
+          },
+          {
+            "id": "mapuche-halberdier-support",
+            "when": "重骑压阵且需要守线",
+            "text": "可补满步兵攻防的长戟兵护住后排。帝王步兵、投石手和掷矛手 +15 生命。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "先依托已有部队和阵地守线，避免科那硬接反骑兵力。"
           }
         ],
         "alternatives": "科那仍耗黄金且与投石手共用食物；金流无法支持持续补兵时，不把本路线视为低金或无代价方案。",
@@ -5635,7 +5924,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-20",
+        "revised": "2026-11-22",
         "id": "wu-ranged-by-opponent",
         "title": "按敌选择远程主力",
         "composition": "choice",
@@ -5706,10 +5995,24 @@
                 }
               }
             ]
+          },
+          {
+            "mode": "conditional",
+            "label": "骑兵补位（条件候选，未实战验证）",
+            "condition": "远程威胁持续、己方缺前排或有安全侧翼时。先确认金流能持续补员，避开长戟阵。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1946,
+                "age": 4,
+                "historicalName": "重装黑光铠骑兵",
+                "role": "可承担前排或侧袭。可用全套骑兵铁匠铺科技、血统和畜牧，帝王攻击 +2，满科技模拟为 110 血、18 攻、7/7 甲。每分钟恢复 30 生命是帝王步兵加成，黑光铠骑兵不享受。"
+              }
+            ]
           }
         ],
         "reason": "两种远程分别应对步兵和成群步弓，不强制双线；已有弓群可作无城堡时的过渡。",
-        "limitation": "火焰弓受城堡产能限制；补枪和攻城都看实际触发条件，不必同时投入。",
+        "limitation": "火焰弓受城堡产能限制；补枪和攻城都看实际触发条件，不必同时投入。 远程缺射手锁甲和扳指；精锐火焰弓箭手（1970）的帝王满科技攻击间隔为 3.50 秒。",
         "attack": "按敌军切换远程主力；只有推进目标明确才投入攻城器并安排护卫。",
         "defense": "避免远程集中吃范围伤害，敌骑有切入路径时优先保护后排。",
         "adjustments": [
@@ -5727,13 +6030,7 @@
             "id": "wu-ranged-by-opponent-cavalry",
             "when": "敌骑能切到我方后排",
             "text": "才补长戟保护远程；我方能侧袭不是补枪理由。",
-            "requires": [
-              {
-                "kind": "unit",
-                "id": 359,
-                "age": 4
-              }
-            ],
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
             "fallback": "若长戟资料暂不可用，先减少后排暴露。"
           },
           {
@@ -5803,6 +6100,26 @@
             {
               "label": "固定版本科技资料",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/techs.json"
+            },
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Wu#techtree"
+            },
+            {
+              "label": "精锐火焰弓满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1970/Wu/4/199,211,200,212,201,47/?civ=Wu&tab=sim"
+            },
+            {
+              "label": "重装黑光满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim"
             }
           ]
         }
@@ -5830,7 +6147,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-20",
+        "revised": "2026-11-22",
         "condition": "延续已有步弓群，再按敌军和战线补兵。",
         "required": [
           {
@@ -5892,13 +6209,7 @@
           {
             "mode": "support",
             "condition": "推进固定防御时",
-            "requires": [
-              {
-                "kind": "unit",
-                "id": 331,
-                "age": 4
-              }
-            ],
+            "requires": [{ "kind": "unit", "id": 331, "age": 4 }],
             "entities": [
               {
                 "kind": "unit",
@@ -5912,7 +6223,7 @@
                 "id": 461,
                 "age": 4,
                 "historicalName": "战狼号",
-                "role": "投入巨投时可考虑研究。"
+                "role": "投入巨投时可考虑研究；科技说明为爆炸伤害和更高准确度。普通巨型投石机（331）的满科技模拟为射程 17、准确度 92%，战狼号对它标为仅文本。结构化准确度 100% 的条目只列牵引抛石机。"
               }
             ]
           },
@@ -5978,6 +6289,24 @@
             "id": "britons-few-scorpions-or-skirmishers",
             "when": "少量弩炮或掷矛手",
             "text": "只有当前确有射程优势且有操作空间，才逐个远程点杀。"
+          },
+          {
+            "id": "britons-warwolf-against-massed-ranged",
+            "when": "成群弩炮或掷矛手，且本就计划用巨投推进",
+            "text": "不列颠无重型投石车，成群目标仍可按作战空间选投石车线。有阵地掩护且能承担城堡研究时，可评估战狼号巨投对固定或不易散开的目标施压；未实战验证对密集移动兵力的效率。条件候选。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "age": 4
+              },
+              {
+                "kind": "tech",
+                "id": 461,
+                "age": 4
+              }
+            ],
+            "fallback": "按地形和操作空间考虑已有投石车线。"
           }
         ],
         "evidence": {
@@ -6011,6 +6340,26 @@
             {
               "label": "查看固定数据版本",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/data/sources/data_sources.json"
+            },
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定效果表",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Britons#techtree"
+            },
+            {
+              "label": "战狼号（461）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/461?civ=Britons"
+            },
+            {
+              "label": "普通巨投满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/331/Britons/4/47,377/?civ=Britons&tab=sim"
             }
           ]
         }
@@ -6038,7 +6387,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-20",
+        "revised": "2026-11-22",
         "condition": "进入帝王时代推进时，须能持续补员并承担研究与攻城投入。",
         "required": [
           {
@@ -6053,7 +6402,7 @@
             "id": 24,
             "age": 3,
             "historicalName": "弩手",
-            "role": "补充远程输出。",
+            "role": "免金填线，优先清长戟，把黄金留给萨瓦尔和攻城。",
             "research": {
               "tech": 488,
               "effect": "此后弩手以木材补员（木代金）。研究费和每名弩手的训练费分别计算。",
@@ -6062,8 +6411,14 @@
                 "exception": "研究前仍需黄金。木代金后，弩手训练仍耗木材。"
               },
               "trainingPrice": {
-                "before": { "Wood": 25, "Gold": 45 },
-                "after": { "Wood": 50, "Gold": 0 }
+                "before": {
+                  "Wood": 25,
+                  "Gold": 45
+                },
+                "after": {
+                  "Wood": 50,
+                  "Gold": 0
+                }
               }
             }
           },
@@ -6100,7 +6455,36 @@
             ]
           }
         ],
-        "adjustments": [],
+        "adjustments": [
+          {
+            "id": "persian-heavy-cavalry-archer",
+            "when": "慢速近战部队，有可拉扯的开阔地",
+            "text": "已有骑射群时可考虑帝王升级重装骑射手，保留机动牵制。波斯城堡时代可研究帕提亚战术；碰到成群掷矛手或弩炮时避免硬接。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 474, "age": 4 }],
+            "fallback": "先保留能持续补员的阵线，利用地形拉开距离。"
+          },
+          {
+            "id": "persian-hand-cannoneer",
+            "when": "成群重装步兵压线，弩手清线来不及",
+            "text": "化学已就绪、后排能得到保护且金流允许时，考虑火枪手补反步兵输出。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 5, "age": 4 }],
+            "fallback": "保留后排和撤退空间，避免小股弩手硬扛重装步兵。"
+          },
+          {
+            "id": "persian-heavy-camel",
+            "when": "敌方重骑持续冲阵",
+            "text": "已有马厩和金流时，补重装骆驼兵专门反骑，萨瓦尔继续护后排。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 330, "age": 4 }],
+            "fallback": "先收紧队形保护弩手和炮。"
+          },
+          {
+            "id": "persian-halberdier",
+            "when": "敌骑反复切后排，黄金紧或需要守窄口",
+            "text": "依托已有兵营补长戟兵保护弩手和炮，避免让长戟离开后排追骑。条件候选，未实战验证。",
+            "requires": [{ "kind": "unit", "id": 359, "age": 4 }],
+            "fallback": "缩短阵线并防止敌骑绕后。"
+          }
+        ],
         "evidence": {
           "recognition": "维护者在原讨论认可萨瓦尔、免金弩与手推炮主路，并保留战象为条件选项。",
           "playtest": "原讨论未报告实战使用。",
@@ -6124,9 +6508,31 @@
             {
               "label": "弩手单价模型核对",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/tests/unit/duelTrainingCost943.test.ts#L48-L66"
+            },
+            {
+              "label": "DE 188329 固定科技树",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"
+            },
+            {
+              "label": "DE 188329 固定文明加成",
+              "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json"
+            },
+            {
+              "label": "科技树可用性核对",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#techtree"
+            },
+            {
+              "label": "弩手满科技模拟",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/24/Persians/4/437,199,211,200,212,219,47/?civ=Persians&tab=sim"
+            },
+            {
+              "label": "帕提亚战术（436）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/436?civ=Persians"
             }
           ]
-        }
+        },
+        "limitation": "弩手无劲弩手升级和护腕，帝王满科技模拟为 35 血、8 攻、射程 7。遇到高远甲前排时，重新分配后排输出，别让免金弩手独自撑帝王输出。",
+        "defense": "萨瓦尔护住后排，弩手在其掩护下优先清长戟，手推炮留给攻城任务。"
       }
     ]
   }

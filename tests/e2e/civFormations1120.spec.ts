@@ -339,7 +339,7 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
     Bulgarians: 1,
     Magyars: 1,
     Bohemians: 1,
-    Aztecs: 1,
+    Aztecs: 2,
     Incas: 2,
     Mayans: 1,
     Mapuche: 2,
