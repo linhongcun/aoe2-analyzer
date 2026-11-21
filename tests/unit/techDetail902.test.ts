@@ -9,6 +9,7 @@ import { civStatus } from '../../src/domain/civStatus';
 import { BUILDING_EFFECTS, GENERIC_FX, TECH_EFFECTS } from '../../src/domain/effects';
 import { applyTechCivFilter, effectSummary, listedGroupCount, techEffectEntries, techTypeMark, type TechEffectEntry } from '../../src/domain/techDetailView';
 import type { Unit } from '../../src/domain/types';
+import { TechRepeatableRule } from '../../src/features/techs/components/TechRepeatableRule';
 import TechDetail from '../../src/features/techs/components/TechDetail';
 import { techEffectText } from '../../src/features/techs/techEffectText';
 
@@ -209,5 +210,23 @@ describe('#902 科技详情按源码规则呈现', () => {
     expect(trained).toContain('+50% 训练速度');
     expect(trained).not.toContain('建造速度');
     expect(techEffectText(884, '建造速度 +50%')).toBe('训练速度 +50%');
+  });
+});
+
+describe('256 倍科技特殊规则', () => {
+  it.each([
+    [22, true],
+    [8, false],
+    [93, false],
+  ] as const)('科技 %d 在研究区保留固定源标记', (id, repeatable) => {
+    expect(core.techById[id]?.repeatable).toBe(repeatable);
+    const research = markup('/tech/' + id).match(/<section[^>]*id="tech-research"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+    expect(visible(research ?? '')).toContain(`256 倍模式：${repeatable ? '可重复研究' : '不可重复研究'}`);
+  });
+  it.each([undefined, null, 0, 'false'])('缺失或非布尔源值 %s 走未知态', (repeatable) => {
+    const rule = createElement(TechRepeatableRule, { repeatable });
+    const html = renderToStaticMarkup(createElement(StaticRouter, { location: '/tech/22' }, rule));
+    expect(visible(html)).toContain('256 倍模式：暂无源值');
+    expect(visible(html)).toContain('不作可／不可重复判断');
   });
 });

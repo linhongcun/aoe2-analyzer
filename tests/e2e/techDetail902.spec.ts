@@ -1,10 +1,7 @@
 // #902 科技详情。只覆盖规格点名的行为和有限代表页，不是全站验收，也不证明未上传的结构图。
 import { expect, test, type Page } from '@playwright/test';
-import { mkdirSync } from 'node:fs';
 import civs from '../../data/game/civs.json' with { type: 'json' };
 import techs from '../../data/game/techs.json' with { type: 'json' };
-
-const shots = '/opt/cursor/artifacts/tech-902';
 
 async function open(page: Page, hash: string) {
   await page.goto('./#' + hash);
@@ -17,10 +14,6 @@ async function setTheme(page: Page, value: 'light' | 'dark') {
   await expect(page.locator('html')).toHaveAttribute('data-theme', value);
   await expect(page.locator('#tech h1')).toBeVisible();
 }
-
-test.beforeAll(() => {
-  mkdirSync(shots, { recursive: true });
-});
 
 test('血统默认概览先读到纯文字摘要，1280 浅色和深色', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
@@ -41,10 +34,10 @@ test('血统默认概览先读到纯文字摘要，1280 浅色和深色', async 
   const listBox = await page.locator('[data-t="affect-objects"]').first().boundingBox();
   expect(costBox!.y).toBeLessThan(summaryBox!.y);
   expect(summaryBox!.y).toBeLessThan(listBox!.y);
-  await page.screenshot({ path: `${shots}/bloodlines-1280-light.png` });
+  await page.screenshot({ path: test.info().outputPath('bloodlines-1280-light.png') });
   await setTheme(page, 'dark');
   await expect(summary).toHaveText('+20 生命值（作用于下方完整名单）');
-  await page.screenshot({ path: `${shots}/bloodlines-1280-dark.png` });
+  await page.screenshot({ path: test.info().outputPath('bloodlines-1280-dark.png') });
 });
 
 test('390 血统图标与标题并列，费用时间两列，完整名单不挤进首屏', async ({ page }) => {
@@ -67,7 +60,7 @@ test('390 血统图标与标题并列，费用时间两列，完整名单不挤�
   const list = await page.locator('[data-t="affect-objects"]').first().boundingBox();
   expect(list!.y + list!.height).toBeGreaterThan(844);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-  await page.screenshot({ path: `${shots}/bloodlines-390-light.png` });
+  await page.screenshot({ path: test.info().outputPath('bloodlines-390-light.png') });
 });
 
 test('英皇侍卫两条分开，中型战船只有说明，1452 保留区域与视野', async ({ page }) => {
@@ -161,4 +154,31 @@ test('旧 tab 定位标题且避开顶栏，驯化术保持通用，目录关联
   await expect(page.locator('#tech-links')).toContainText('钓线');
   await expect(page.locator('#tech-links')).not.toContainText('必须');
   await expect(page.locator('#tech').getByRole('button', { name: '复制链接', exact: true })).toBeVisible();
+});
+
+test('256 倍模式的条件随状态保留，窄屏可访问两条来源链接', async ({ page }) => {
+  for (const [id, width, theme, label] of [
+    [22, 1280, 'light', '可重复研究'],
+    [8, 390, 'dark', '不可重复研究'],
+    [93, 360, 'light', '不可重复研究'],
+  ] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await open(page, '/tech/' + id);
+    await setTheme(page, theme);
+    const rule = page.getByRole('region', { name: '256 倍科技特殊规则' });
+    await expect(rule.locator('.td-rep-badge')).toHaveText('256 倍模式：' + label);
+    await expect(rule).toContainText('普通对局');
+    await expect(rule).toContainText('不推算叠加后的属性、费用或研究时间');
+    await expect(page.locator('.td-tags')).not.toContainText('256 倍');
+    await expect(page.locator('.td-research-grid')).not.toContainText('256 倍');
+    const source = rule.getByRole('link', { name: '规则说明' });
+    await expect(source).toHaveAttribute('href', 'https://github.com/SiegeEngineers/aoe2techtree/issues/122#issuecomment-1540319367');
+    await source.focus();
+    await page.keyboard.press('Tab');
+    const about = rule.getByRole('link', { name: '数据说明' });
+    await expect(about).toBeFocused();
+    await expect(about).toHaveAttribute('href', /#\/about-data$/);
+    if (id === 93) await expect(page.locator('[data-ballistics="track"]')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
 });

@@ -120,6 +120,8 @@ export interface Tech {
   pre: number | null;
   cost: Cost;
   rt: number;
+  /** 固定源中的 256 倍科技模式标记；缺失表示未知。 */
+  repeatable?: boolean;
   desc: string;
   descEn: string;
   civs: string[];
