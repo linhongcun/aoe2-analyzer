@@ -195,6 +195,55 @@ test('已选文明时模拟器给出引擎结果，驻军不是空页', async ({
   await expect(page.locator('#building')).not.toContainText('暂未计算');
 });
 
+test('#1219 炮塔攻击与船只和骆驼加成分别显示，空表和零各自保留', async ({ page }) => {
+  const attacks = page.getByRole('region', { name: '攻击明细' });
+  await open(page, '/building/236');
+  await expect(page.locator('#building-civ')).toHaveAttribute('data-value', '');
+  await expect(attacks.locator('.bd-attack-base')).toHaveText('基础穿刺攻击120');
+  await expect(attacks.locator('.bd-attack-targets > div')).toHaveText(['船只+40', '骆驼+1']);
+  await expect(attacks).not.toContainText('+120');
+  await expect(attacks).not.toContainText('雇佣兵');
+  await expect(attacks).toContainText('类别加成不是实际伤害');
+  await expect(page.locator('.bd-stat-grid [data-stat="atk"]')).toHaveCount(0);
+  const base = await attacks.locator('.bd-attack-base').boundingBox();
+  const extra = await attacks.locator('.bd-attack-targets').boundingBox();
+  expect(base!.x + base!.width).toBeLessThan(extra!.x);
+
+  await open(page, '/building/12');
+  await expect(attacks).toContainText('目录未列出攻击项');
+  await expect(attacks.locator('dd')).toHaveCount(0);
+  await open(page, '/building/109');
+  await expect(attacks.locator('.bd-attack-base')).toHaveText('基础穿刺攻击5');
+  await expect(attacks).toContainText('仅有基础攻击');
+  await expect(attacks.locator('.bd-attack-targets')).toHaveCount(0);
+  await open(page, '/building/1665');
+  await expect(attacks.locator('.bd-attack-base')).toHaveText('基础穿刺攻击0');
+  await expect(attacks).toContainText('额外类别值均为 0');
+  await expect(attacks.locator('.bd-attack-targets')).toHaveCount(0);
+});
+
+test('#1219 窄屏选中国后三阶箭塔保留目录数值与单列布局', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
+  const attacks = page.getByRole('region', { name: '攻击明细' });
+  for (const [id, range] of [
+    [79, 5],
+    [234, 7],
+    [235, 8],
+  ]) {
+    await open(page, `/building/${id}?civ=Chinese`);
+    await expect(page.locator('#building-civ')).toHaveAttribute('data-value', 'Chinese');
+    await expect(page.locator('#building-core')).toContainText('目录基础值，不随所选文明变化，未计文明加成与科技');
+    await expect(attacks.locator('.bd-attack-base')).toHaveText(`基础穿刺攻击${range}`);
+    await expect(attacks.locator('.bd-attack-targets > div')).toHaveText(['长矛兵+2', `船只+${range}`, '骆驼+1']);
+    const base = await attacks.locator('.bd-attack-base').boundingBox();
+    const extra = await attacks.locator('.bd-attack-targets').boundingBox();
+    expect(base!.x).toBe(extra!.x);
+    expect(base!.y + base!.height).toBeLessThan(extra!.y);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  }
+});
+
 test('1280 浅色深色和 390 只看城堡市场靶场的代表页', async ({ page }) => {
   mkdirSync(shots, { recursive: true });
   await page.setViewportSize({ width: 1280, height: 900 });
