@@ -154,6 +154,11 @@
       "rof": {
         "type": "number"
       },
+      "chargeType": { "type": "integer" },
+      "chargeEvent": { "type": "integer" },
+      "maxCharge": { "type": "number", "minimum": 0 },
+      "rechargeRate": { "type": "number", "minimum": 0 },
+      "rechargeDuration": { "type": "number", "minimum": 0 },
       "attackDelaySeconds": {
         "type": "number",
         "minimum": 0

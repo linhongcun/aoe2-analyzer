@@ -42,6 +42,7 @@ import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
 import { VillagerGather } from './VillagerGather';
 import UnitGarrison from './UnitGarrison';
+import { UnitCharge } from './UnitCharge';
 import { UnitTransportCapacity } from './UnitTransportCapacity';
 import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
 import { ReverseCounters } from './ReverseCounters';
@@ -329,7 +330,14 @@ export default function UnitDetail() {
         <div className="ud-stats">
           <h2>目录基础属性</h2>
           <CatalogStats u={u} base={base} elite={isE && !alternate} meleeForm={!!alternate && alternate.kind !== 'barrage'} />
-          {alternate ? <FormDifference owner={owner} form={alternate} /> : <UnitTransportCapacity unit={u} civ={context} />}
+          {alternate ? (
+            <FormDifference owner={owner} form={alternate} />
+          ) : (
+            <>
+              <UnitTransportCapacity unit={u} civ={context} />
+              <UnitCharge unit={u} base={isE ? base : undefined} />
+            </>
+          )}
         </div>
         {alternate ? (
           <FormAccess href={formHref} owner={owner} form={alternate} elite={isE} />

@@ -5,6 +5,7 @@
  * 多音字按游戏内词义定读音，pinyin-pro 词库不对的在 FIX 里修。用法：node scripts/pinyin_build.mjs [--check]
  */
 import fs from 'node:fs';
+import { parse, parseNumberAndBigInt, stringify } from 'lossless-json';
 import { customPinyin, pinyin } from 'pinyin-pro';
 import ts from 'typescript';
 
@@ -35,8 +36,9 @@ let stale = 0;
 for (const f of ['civs', 'units', 'techs', 'buildings']) {
   const p = `data/game/${f}.json`;
   const raw = fs.readFileSync(p, 'utf8');
-  const rows = JSON.parse(raw).map((r) => ({ ...r, ...toPy(r.zh) }));
-  const out = JSON.stringify(rows, null, raw.includes('\n  ') ? 2 : undefined) + (raw.endsWith('\n') ? '\n' : '');
+  // 拼音标注会重写整份目录。保留整数原值（非常规充能速率可能超过 JS 安全整数）。
+  const rows = parse(raw, null, parseNumberAndBigInt).map((r) => ({ ...r, ...toPy(r.zh) }));
+  const out = stringify(rows, null, raw.includes('\n  ') ? 2 : undefined) + (raw.endsWith('\n') ? '\n' : '');
   if (out !== raw) {
     stale++;
     if (!check) fs.writeFileSync(p, out);
