@@ -7,12 +7,14 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URLS = {
-  'saxons-retainer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L491',
+  'saxons-retainer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L638-L688',
   'mayans-plumed-archer-halberdier': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914',
   'aztecs-eagle-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844',
 } as const;
 const SOURCE_LINES = {
-  'saxons-retainer-tower': [491, 493, 495, 496, 497, 499, 501, 503, 505, 507, 515, 516, 517, 518, 519, 525, 526, 527, 528, 529, 530, 532],
+  'saxons-retainer-tower': [
+    638, 642, 646, 647, 648, 650, 652, 654, 656, 658, 662, 666, 667, 668, 669, 670, 676, 677, 678, 679, 680, 681, 682, 683, 685, 687, 688,
+  ],
   'mayans-plumed-archer-halberdier': [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944],
   'aztecs-eagle-skirmisher': [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873],
 } as const;
@@ -90,6 +92,23 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     const tower = route('Saxons', 'saxons-retainer-tower');
     const project = (core = resources.core) => projectFormation(tower, 'Saxons', DATA_PATCH, { core, trees: resources.trees }, saxons.routes, saxons.source);
 
+    const candidates = [441, 2704];
+    for (const missing of [[], [441], [2704], candidates]) {
+      const view = project(missing.reduce(removeUnit, resources.core));
+      expect(view.status).toBe('current');
+      if (view.status !== 'current') continue;
+      expect(view.required.map(({ entity }) => entity.id)).toEqual([235, 2706, 331]);
+      expect(view.supplements.map(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual(
+        candidates.filter((id) => !missing.includes(id)).map((id) => [id]),
+      );
+      const { reason, limitation, attack, defense, alternatives, evidence } = view.route;
+      const visibleCopy = JSON.stringify({ reason, limitation, attack, defense, alternatives, evidence, adjustments: view.adjustments });
+      for (const id of missing) expect(visibleCopy).not.toContain(resources.core.unitById[id]!.zh);
+    }
+    expect(resources.core.unitById[441]!.cost).toEqual({ Food: 80 });
+    expect(resources.core.unitById[2704]!.cost).toEqual({ Food: 65, Gold: 45 });
+    expect(resources.core.unitById[2706]!.cost).toEqual({ Wood: 80, Gold: 35 });
+
     for (const adjustmentId of ['saxons-retainer-tower-adjustment-second', 'saxons-retainer-tower-adjustment-third']) {
       expectFallback(project(removeUnit(resources.core, 359)), tower, adjustmentId);
     }
@@ -136,8 +155,10 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     expect(tower.defense).not.toContain('按压力补长戟');
     expect(tower.alternatives).not.toContain('低成本成群步兵时仍可比较');
     expect(tower.alternatives).toContain('确需低成本成群步兵时见下方调整');
-    expect(tower.limitation).toContain('5 个精锐扈从显示 2+4=6 箭');
-    expect(tower.limitation).toContain('不代表伤害或胜率');
+    expect(tower.limitation).toContain('原零自选科技条件下，5 个精锐扈从显示 2+4=6 箭');
+    expect(tower.limitation).toContain('含射箭槽时为 4/6 箭');
+    expect(tower.limitation).toContain('伤害及胜率超出预览范围');
+    expect(tower.limitation).toContain('80 木、35 金、零食物，未计控制城镇中心或城堡所带来的步兵折扣');
     expect(tower.limitation).toContain('未完整模拟投枪充能');
     expect(tower.limitation).toContain('不会加倍驻军增箭');
     expect(tower.limitation).toContain('最多 20%；箭塔不计');

@@ -521,11 +521,12 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   await card.locator('summary').filter({ hasText: '来源与核对' }).click();
   const version = card.locator('.formation-evidence > div').filter({ hasText: '记录时版本' });
   await expect(version.locator('.num.nw').filter({ hasText: 'v0.77.105' })).toHaveCount(1);
-  await expect(version.locator('.num.nw').filter({ hasText: '188329' })).toHaveCount(2);
-  await expect(card.locator('time.num.nw')).toContainText('2026-11-18');
+  await expect(version.locator('.num.nw').filter({ hasText: '188329' })).toHaveCount(3);
+  await expect(version.locator('.num.nw').filter({ hasText: 'v0.99.0' })).toHaveCount(1);
+  await expect(card.locator('time.num.nw')).toContainText('2026-11-22');
   await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
     'href',
-    'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386',
+    'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L527-L566',
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
@@ -544,8 +545,8 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   const japanese = page.locator(formations).locator('.formation-list > article').filter({ has: japaneseHeading });
   await expect(japanese).toBeVisible();
   await japanese.locator('summary').filter({ hasText: '来源与核对' }).click();
-  const japaneseScope = japanese.locator('.formation-evidence > div').filter({ hasText: '武士/轻骑的等资源 PK 比值' });
-  for (const token of ['45F/30G', '1.43 秒', '1:12.19', '80F']) {
+  const japaneseScope = japanese.locator('.formation-evidence > div').filter({ hasText: '一维接敌、射程先手和近战占位' });
+  for (const token of ['45F/30G', '1.43 秒', '103/180 生命', '80F']) {
     await expect(japaneseScope.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

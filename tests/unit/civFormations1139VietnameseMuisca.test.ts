@@ -8,9 +8,9 @@ import { DAT } from '../../src/domain/datEffects';
 import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
-const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L620';
+const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L774-L822';
 const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984';
-const VIETNAMESE_SOURCE_LINES = [620, 622, 624, 626, 628, 629, 630, 632, 634];
+const VIETNAMESE_SOURCE_LINES = [774, 784, 788, 796, 800, 804, 805, 808, 810, 816, 817, 818, 820, 822];
 const MUISCA_SOURCE_LINES = [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
@@ -72,6 +72,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(vietnamese.limitation).toContain('没有建筑学');
     expect(vietnamese.limitation).toContain('没有鼓风炉');
     expect(vietnamese.limitation).toContain('火矛驻塔输出（机制推断，待实战验证）');
+    expect(vietnamese.limitation).toContain('含射箭槽时同驻 5 人，精锐藤弓兵 5/5 箭、精锐火矛兵 4/5 箭');
     expect(vietnamese.limitation).toContain('影响塔外近战和轻骑清炮');
     expect(vietnamese.limitation).toContain('无文明专属加成');
     expect(vietnamese.limitation).toContain('塔仅守家或守资源点，不作主力');
