@@ -246,13 +246,13 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 在 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227)、[#1228](https://github.com/linhongcun/aoe2-analyzer/issues/1228)、[#1229](https://github.com/linhongcun/aoe2-analyzer/issues/1229) 核对小号提示卡与徽章配色时，按 [`tokens.css`](../src/shared/styles/tokens.css) 现值实算：浅色 `--color-accent`（`#a65a14`）在纯白 `--color-surface` 上为 `5.13:1`，但叠到半透明 `--color-accent-soft`（`#a65a141f`）上时，在 `--color-surface` 复合底色上降至 `4.36:1`，在 `--color-surface-2`（`#f5f5f7`）复合底色上降至 `4.02:1`，均低于 WCAG 2.1 正文 AA `4.5:1`。[`scripts/contrast.py`](../scripts/contrast.py) 只查脚本里写死的色对，不会替半透明底色与父表面的复合结果兜底。
 
-用半透明 `*-soft` 令牌承载 12–13px 正文或徽章前，先按实际父底色做 Alpha 合成再算对比度；需要双主题稳过 AA 的次级说明条与标签，优先用不透明实底令牌（如 `--color-surface`、`--color-surface-2`、`--color-link-soft`、`--color-warn-soft`）配 `--color-link` / `--color-warn` / `--color-text` / `--color-muted`（当前令牌下均 ≥ `4.64:1`）。
+用半透明 `*-soft` 令牌承载 12–13px 正文或徽章前，先按实际父底色做 Alpha 合成再算对比度；需要双主题稳过 AA 的次级说明条与标签，优先选用不透明实底令牌的对应组合：中性底（`--color-surface`、`--color-surface-2`）配 `--color-text` / `--color-muted` / `--color-link` / `--color-warn`（当前令牌下双主题均 ≥ `4.77:1`），或同语义配对 `--color-link` 配 `--color-link-soft`（浅 `4.82:1`、深 `4.99:1`）、`--color-warn` 配 `--color-warn-soft`（浅 `4.64:1`、深 `6.71:1`）。
 
-### 多状态截稿脚本逐页新建页面，模拟缺失态用 `null` 哨兵
+### 多状态截稿脚本逐页新建页面，模拟缺失态用显式分支判别
 
-[#1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225) 与 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227) 用本地 Playwright 渲染完成态设计图时出现过两类返工：① 复用同一个页面在 `HashRouter` 不同对象间切换并注入样式／节点，前一个对象手动插入的 DOM 会残留在下一张截图中；② 用空值合并（`??`）模拟字段缺失态时传入 `undefined`，静默回退成了真实数据，导致缺失态漏画。此外，局部元素截图时顶栏 `position: sticky` 可能压住元素顶部。
+[#1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225) 与 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227) 用本地 Playwright 渲染完成态设计图时出现过两类返工：① 复用同一个页面在 `HashRouter` 不同对象间切换并注入样式／节点，前一个对象手动插入的 DOM 会残留在下一张截图中；② 用空值合并（`??`）把模拟覆写值回落到真实数据时，无论传入 `undefined` 还是 `null` 都会静默回落成真实数据，导致缺失态漏画。此外，局部元素截图时顶栏 `position: sticky` 可能压住元素顶部。
 
-本地批量截稿脚本为每个状态单独创建并关闭 `context.newPage()`，局部截图时临时将顶栏设为 `position: static`，模拟字段缺失统一使用显式 `null`（而非 `undefined`）哨兵；渲染结束后必须逐张打开 PNG 目视复核，再执行 `--attach` 上传。
+本地批量截稿脚本为每个状态单独创建并关闭 `context.newPage()`，局部截图时临时将顶栏设为 `position: static`，模拟字段缺失改用显式哨兵与显式分支（例如用 `override === null` 或 `'override' in opts` 区分「刻意模拟缺失」与「沿用真实值」，不对哨兵直接写 `??`）；渲染结束后必须逐张打开 PNG 目视复核，再执行 `--attach` 上传。
 
 ## 开始和交付清单
 
