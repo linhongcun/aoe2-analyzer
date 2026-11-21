@@ -396,3 +396,58 @@ test('#954 科技树在文明详情里，旧地址转向，节点带文明', asy
   await expect(page).toHaveURL(/#\/civs$/);
   expect(errors).toEqual([]);
 });
+
+for (const theme of ['light', 'dark'] as const) {
+  test(`#1216 单位图例、卡片和对照焦点在 ${theme} 主题一致`, async ({ page }) => {
+    await page.addInitScript((preference) => localStorage.setItem('aoe2-theme', preference), theme);
+    await page.goto('./#/civ/Bengalis#techtree');
+    const legend = page.locator('.tleg');
+    await expect(legend.locator(':scope > span')).toHaveText(['可用', '不可用', '独特单位', '区域单位', '独特科技／建筑', '区域科技／建筑']);
+    const unique = theme === 'light' ? 'rgb(111, 45, 168)' : 'rgb(192, 124, 240)';
+    const regional = theme === 'light' ? 'rgb(59, 76, 202)' : 'rgb(131, 147, 248)';
+    const amber = theme === 'light' ? 'rgb(166, 90, 20)' : 'rgb(240, 164, 84)';
+    for (const [group, color, ids] of [
+      ['uq', unique, [1759, 1761]],
+      ['rg', regional, [873, 875]],
+    ] as const) {
+      const swatch = legend.locator(`.tl1.unit-identity.${group}`);
+      await expect(swatch).toHaveCSS('border-color', color);
+      const fill = await swatch.evaluate((el) => getComputedStyle(el).backgroundColor);
+      for (const id of ids) {
+        const cell = page.locator(`a.tcell[href*="/unit/${id}?"]`);
+        await expect(cell).toHaveCSS('border-color', color);
+        await expect(cell).toHaveCSS('background-color', fill);
+        await expect(cell.locator('.tmark')).toHaveCSS('background-color', color);
+        await cell.hover();
+        await expect(cell).toHaveCSS('border-color', color);
+      }
+    }
+    await expect(page.locator('a.tcell[href*="/tech/833?"]')).toHaveCSS('border-color', amber);
+    await pickCiv(page, 'civ-tt-cmp', 'Dravidians');
+    const ratha = page.locator('a.tcell[href*="/unit/1759?"]');
+    await expect(ratha).toHaveCSS('outline-width', '3px');
+    await expect(ratha).toHaveCSS('box-shadow', 'none');
+    const greenRing = await ratha.evaluate((el) => getComputedStyle(el).outlineColor);
+    await page.keyboard.press('Tab');
+    await ratha.focus();
+    await expect(ratha).toHaveCSS('outline-width', '2px');
+    await expect(ratha).toHaveCSS('outline-offset', '5px');
+    expect(await ratha.evaluate((el) => getComputedStyle(el).boxShadow)).toContain(greenRing);
+
+    await page.goto('./#/civ/Portuguese#techtree');
+    await pickCiv(page, 'civ-tt-cmp', 'Franks');
+    const otherOnly = page.locator('a.tcell[href*="/unit/2701?"]');
+    await expect(otherOnly).toHaveClass(/onlyB/);
+    await expect(otherOnly).toHaveCSS('opacity', '1');
+    await expect(otherOnly.locator('img')).toHaveCSS('filter', 'grayscale(1)');
+    await expect(otherOnly.locator('.tmark')).toHaveCSS('background-color', regional);
+    const redRing = await otherOnly.evaluate((el) => getComputedStyle(el).outlineColor);
+    await page.keyboard.press('Tab');
+    await otherOnly.focus();
+    await expect(otherOnly).toHaveCSS('outline-offset', '5px');
+    expect(await otherOnly.evaluate((el) => getComputedStyle(el).boxShadow)).toContain(redRing);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(legend.locator(':scope > span').first()).toHaveCSS('white-space', 'nowrap');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

@@ -70,6 +70,57 @@
   height: 10px;
 }
 
+.tleg > span {
+  white-space: nowrap;
+}
+.tl1.uq,
+.tl1.rg {
+  margin-right: 7px;
+}
+.unit-identity.uq {
+  --unit-border: var(--color-tree-unit-uq);
+  --unit-bg: var(--color-tree-unit-uq-bg);
+  --unit-shadow: 0 0 8px var(--color-tree-unit-uq-glow);
+}
+.unit-identity.rg {
+  --unit-border: var(--color-tree-unit-rg);
+  --unit-bg: var(--color-tree-unit-rg-bg);
+  --unit-shadow: none;
+}
+.unit-identity .tmark {
+  background: var(--unit-border);
+}
+.tcell.unit-identity:not(.na),
+.tl1.unit-identity {
+  background: var(--unit-bg);
+  border-color: var(--unit-border);
+  box-shadow: var(--unit-shadow);
+}
+.tcell.unit-identity:not(.na):hover {
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+.tcell.unit-identity.onlyA {
+  --diff-ring: var(--c-up);
+}
+.tcell.unit-identity.onlyB {
+  --diff-ring: var(--color-bad);
+  opacity: 1;
+}
+.tcell.unit-identity:is(.onlyA, .onlyB):not(:focus-visible) {
+  box-shadow: none;
+}
+.tcell.unit-identity:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+  z-index: 4;
+}
+.tcell.unit-identity:is(.onlyA, .onlyB):focus-visible {
+  box-shadow:
+    0 0 0 1px var(--color-surface),
+    0 0 0 4px var(--diff-ring);
+  outline-offset: 5px;
+}
+
 .tbld .tbld-name {
   display: block;
   line-height: var(--lh-tight);
