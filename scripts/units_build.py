@@ -37,6 +37,10 @@ for f in sorted(glob.glob(T+'trees/*.json')):
             units[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=unit_type(i,x['node_type']),age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
               from_=x['link_id'] if x['link_node_type'] in('Unit','UniqueUnit','RegionalUnit','UnitUpgrade') else None,
               cost=u['Cost'],tt=u['TrainTime'],**combat_stats(u),desc=hz,civs=[])
+            # Keep catalog charge data separate from the non-trainable alternate form records.
+            for field in ('ChargeType', 'ChargeEvent', 'MaxCharge', 'RechargeRate', 'RechargeDuration'):
+                if field in u:
+                    units[i][field[0].lower() + field[1:]] = u[field]
         if civ == 'Bengalis' and i in (1759, 1761):
             key = str(x['help_string_id'] - 79000)
             if not e[key].strip() or not z[key].strip():

@@ -2,7 +2,7 @@
   "name": "aoe2-analyzer",
   "private": true,
   "license": "MIT",
-  "version": "0.97.24",
+  "version": "0.97.25",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -62,6 +62,7 @@
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
+    "lossless-json": "4.3.0",
     "pinyin-pro": "3.29.5",
     "postcss": "^8.5.30",
     "prettier": "^3.9.9",
