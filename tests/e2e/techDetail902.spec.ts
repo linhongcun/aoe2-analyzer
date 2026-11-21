@@ -134,12 +134,12 @@ test('筛选只改名单，无法研究不退回全量，地址里的文明不�
 
 test('旧 tab 定位标题且避开顶栏，驯化术保持通用，目录关联不写必须', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  for (const [tab, target] of [
-    ['affects', '#affects'],
-    ['civs', '#tech-civs'],
-    ['history', '#tech-history'],
+  for (const [id, tab, target] of [
+    [22, 'affects', '#affects'],
+    [22, 'civs', '#tech-civs'],
+    [463, 'history', '#tech-history'],
   ] as const) {
-    await open(page, `/tech/22?tab=${tab}`);
+    await open(page, `/tech/${id}?tab=${tab}`);
     await expect(page).toHaveURL(new RegExp(`tab=${tab}`));
     const top = await page.locator(target).evaluate((el) => el.getBoundingClientRect().top);
     const nav = await page.locator('header.topbar').evaluate((el) => el.getBoundingClientRect().bottom);
