@@ -28,6 +28,7 @@ import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
 import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { Linked, Loading } from '../../../shared/ui/widgets';
+import { BuildingAttackDetails } from './BuildingAttackDetails';
 import { BuildingCatalog } from './BuildingCatalog';
 import BuildingSimulator from './BuildingSimulator';
 import { FoodAmount } from './FoodAmount';
@@ -211,7 +212,7 @@ export default function BuildingDetail() {
       <section className="bd-core" id="building-core" aria-label="目录基础属性与造价">
         <div>
           <h2>目录基础属性</h2>
-          <p className="bd-kicker">目录基础值，未计文明加成与科技。</p>
+          <p className="bd-kicker">目录基础值，不随所选文明变化，未计文明加成与科技。</p>
           <div className="bd-stat-grid">
             <Stat icon="heart" stat="hp" label="生命" value={formatHp(b.hp)} />
             <Stat icon="shield" stat="ma" label="近战护甲" value={String(b.ma)} />
@@ -221,7 +222,6 @@ export default function BuildingDetail() {
             {b.pop ? <Stat icon="home" stat="pop" label="人口" value={String(b.pop)} id={POP_ANCHOR} /> : null}
             {attack && (
               <>
-                <Stat icon="sword" stat="atk" label="攻击" value={String(b.atk)} />
                 <Stat
                   icon="crosshair"
                   stat="rng"
@@ -237,6 +237,7 @@ export default function BuildingDetail() {
               </>
             )}
           </div>
+          <BuildingAttackDetails atk={b.atk} atks={b.atks} />
         </div>
         <div className="bd-cost-col">
           <h2>目录造价</h2>

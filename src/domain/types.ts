@@ -141,6 +141,12 @@ export type Effect =
 export type UnitPred = (u: Unit) => boolean;
 
 export type BuildingType = 'military' | 'economy' | 'defense' | 'other';
+export interface BuildingAttackClass {
+  classId: number;
+  amount: number;
+  label?: string;
+}
+
 export interface Building {
   /** issue 123 全拼 / 首字母，构建时生成 */
   py?: string;
@@ -160,6 +166,8 @@ export interface Building {
   bt: number;
   gar: number;
   atk: number;
+  /** 目录攻击类别。缺字段表示无来源，空数组表示来源明确为空。 */
+  atks?: BuildingAttackClass[];
   rng: number;
   /** 对建筑射程；仅当与 rng 不同时存在 */
   rngB?: number;

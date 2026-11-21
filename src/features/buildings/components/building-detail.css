@@ -201,6 +201,56 @@
   font-size: 13px;
   font-weight: 400;
 }
+.bd-attack {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+.bd-attack-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.bd-attack-grid:has(> :only-child) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.bd-attack-base,
+.bd-attack-targets {
+  margin: 0;
+}
+.bd-attack-base > div + div {
+  margin-top: var(--space-2);
+}
+.bd-attack-base dd {
+  margin-inline: 0;
+  margin-bottom: 0;
+}
+.bd-attack-label {
+  margin: 0 0 var(--space-1);
+  font-size: 14px;
+}
+.bd-attack-targets > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-block: var(--space-1);
+  border-bottom: 1px solid var(--color-border);
+}
+.bd-attack-targets > div:last-child {
+  border-bottom: 0;
+}
+.bd-attack-targets dd {
+  margin: 0;
+  font-weight: 600;
+}
+.bd-attack-targets dt .bd-kicker {
+  display: block;
+}
+@media (max-width: 600px) {
+  .bd-attack-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .bd-cost .res,
 .bd-time {
   margin-top: 8px;

@@ -48,6 +48,19 @@
       "atk": {
         "type": "number"
       },
+      "atks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "classId": { "type": "integer" },
+            "amount": { "type": "number" },
+            "label": { "$ref": "common.defs.json#/$defs/nonEmptyString" }
+          },
+          "required": ["classId", "amount"],
+          "additionalProperties": false
+        }
+      },
       "rng": {
         "type": "number"
       },
