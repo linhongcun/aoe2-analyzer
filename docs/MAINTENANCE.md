@@ -101,6 +101,8 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 通用原则见 [体验设计指南](design/DESIGN-SYSTEM.md)；具体需求、设计图与交接记录在原 Issue 正文，不以本地短稿或勘误替代。
 
+Issue 相关设计图、问题截图和走查对比图使用 [GitHub Issue 原生附件](../role/experience-design.md#issue-design-images)上传并嵌入原 Issue 正文。禁止提交到代码仓库或另开纯图片 PR。`npm run lint` 按[图片目录边界](DATA-LAYOUT.md#文档与数据的边界)检查仓库图片。
+
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。
 - **无障碍**：文字对比度 WCAG AA；可点区域 ≥ **44×44**；文字不小于 12px。

@@ -6,6 +6,8 @@
 
 游戏行为以代码、生成/内容数据和测试为准；当前需求、规格、授权、设计与交接保留在原 Issue。面向玩家的版本更新摘要统一记入根目录 [CHANGELOG.md](CHANGELOG.md)，当前发布流程见 [docs/RELEASING.md](docs/RELEASING.md)。仓库文档用于架构、贡献、构建/测试/发布流程和可复现来源规则，Markdown 只放 `docs/`（及 `role/`、`.github/` 和根目录约定文件），只给人看：代码、测试和 CI 读 `data/` 下的 JSON，不读 Markdown 正文，边界见 [docs/DATA-LAYOUT.md](docs/DATA-LAYOUT.md)；不新增一次性功能机制手册或逐版本范围、验收、审阅与发布档案。实际复核证据以对应 PR 为准，部署与正式发布结果以 GitHub Actions、tag 和 Release 记录为准；退役的历史说明通过 Git 历史查看，不另建归档目录。
 
+Issue 相关图片（完成态设计图、问题截图、走查对比图等）统一使用 GitHub Issue 原生附件上传并嵌入原 Issue 正文。禁止把这类图片提交到代码仓库或另开纯图片 PR。上传与读者验收见 [体验设计接手指南](role/experience-design.md#issue-design-images)。
+
 ## 角色
 
 hongcun lin 决定产品范围与维护授权；执行代理负责规格、实现与验证，实现者之外的独立代理复核代码、测试和界面。历史团队角色、署名和具名审阅结论以原始 Issue、PR 和 Git 记录为准；后续交付不依赖该团队人员签字。

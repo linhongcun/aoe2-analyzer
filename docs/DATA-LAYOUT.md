@@ -1,6 +1,6 @@
 # data/ 目录
 
-仓库中受版本控制的数据集中放在 `data/`，只放 `.json`。源码和生成工具仍在 `src/`、`scripts/`，图片仍由 `public/img/` 提供，测试代码、图片基线与快照仍留在 `tests/`。
+仓库中受版本控制的数据集中放在 `data/`，只放 `.json`。源码和生成工具仍在 `src/`、`scripts/`，游戏图标由 `public/img/` 提供，测试代码、图片基线与快照仍留在 `tests/`。
 
 ## 文档与数据的边界
 
@@ -9,7 +9,9 @@ Markdown 只给人看，放在 `docs/`；代码、测试和 CI 要用的内容�
 - 生成器先把结果写进 JSON 记录，再把同一份记录排成 `docs/` 下的 Markdown。两份都提交，生成器的 `--check` 核对排版与记录一致。
 - 代码、测试和 CI 读 JSON 字段，不读 Markdown 正文，也不对它跑正则。需要新字段时加进 JSON 记录。
 - 例外只有两类：发版脚本按 Keep a Changelog 解析根目录 `CHANGELOG.md`；检查文档本身的脚本（死链、索引）。
-- `npm run lint` 里的 [`scripts/check-docs-boundary.mjs`](../scripts/check-docs-boundary.mjs) 检查 Markdown 的位置、`data/` 的文件类型和代码里的 Markdown 读取，例外在该脚本里逐条登记。
+- Issue 相关设计图、问题截图和走查对比图统一使用 [GitHub Issue 原生附件](../role/experience-design.md#issue-design-images)上传并嵌入原 Issue 正文。禁止提交到代码仓库或另开纯图片 PR。
+- 仓库内 `.png`、`.jpg`、`.jpeg`、`.webp`、`.gif`、`.svg`、`.avif`、`.ico` 文件（后缀不区分大小写）只允许放在 `public/img/`、`src/features/civs/assets/` 和 `tests/e2e/__baselines__/`。
+- `npm run lint` 里的 [`scripts/check-docs-boundary.mjs`](../scripts/check-docs-boundary.mjs) 检查图片目录、Markdown 的位置、`data/` 的文件类型和代码里的 Markdown 读取，例外在该脚本里逐条登记。
 
 | 记录（机器读）                                | 排版（给人看）                                         | 生成器                                             |
 | --------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |

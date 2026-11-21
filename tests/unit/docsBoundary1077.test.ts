@@ -27,6 +27,34 @@ describe('#1077 Markdown 只放文档目录，data/ 只放 JSON', () => {
   });
 });
 
+describe('Issue 1259 图片只能放在允许的资产与基线目录', () => {
+  it.each([
+    'docs/design/mockups/x.png',
+    'role/x.webp',
+    '.github/x.png',
+    'feedback.JPG',
+    'public/img-extra/x.jpeg',
+    'src/features/civs/assets-extra/x.gif',
+    'tests/e2e/__baselines__-extra/x.svg',
+    'tests/e2e/artifacts/x.avif',
+    'scripts/x.ico',
+  ])('通过边界检查拦截 %s，并提示使用原生附件', (path) => {
+    const problems = checkDocsBoundary({ files: [path] });
+    expect(problems).toEqual([expect.stringContaining(`${path}：`)]);
+    expect(problems[0]).toContain('GitHub Issue 原生附件');
+  });
+
+  it('放行运行时素材、测试基线和非图片源码', () => {
+    const files = [
+      'public/img/units/354.webp',
+      'src/features/civs/assets/backgrounds/文明 图.WEBP',
+      'tests/e2e/__baselines__/pre-redesign/x.png',
+      'src/icon.svg.ts',
+    ];
+    expect(misplaced(files)).toEqual([]);
+  });
+});
+
 describe('#1077 代码不读 Markdown 正文', () => {
   it.each([
     ['tests/unit/a.test.ts', "expect(readFileSync('docs/reports/EFFECTS-AUDIT.md', 'utf8')).toMatch(/小计/);"],
