@@ -72,3 +72,20 @@ test('每个目标直链的属性、边界与窄屏版式', async ({ page }) => 
   await page.goto('./#/unit/1226');
   await expect(page.getByText(/当前目录和历史档案均未找到此项/)).toBeVisible();
 });
+
+test('城堡训练记录可查同档落马资料，形态往返保留文明', async ({ page }) => {
+  await page.goto('./#/unit/1225?civ=Bulgarians');
+  await page.getByRole('link', { name: '前往营垒保加利亚骑兵资料查看下马形态' }).click();
+  await expect(page).toHaveURL(/#\/unit\/1254\?civ=Bulgarians$/);
+  await page.getByRole('link', { name: '查看下马步兵' }).click();
+  await expect(page).toHaveURL(/#\/unit\/1252\?civ=Bulgarians$/);
+  await expect(page.locator('#unitciv')).toHaveCount(0);
+  await page.getByRole('link', { name: '返回骑乘原资料' }).click();
+  await expect(page).toHaveURL(/#\/unit\/1254\?civ=Bulgarians$/);
+  await page.goto('./#/unit/1227');
+  await expect(page.getByRole('link', { name: '前往营垒精锐保加利亚骑兵资料查看下马形态' })).toHaveAttribute('href', '#/unit/1255');
+  await page.goto('./#/unit/1740?civ=Bengalis');
+  await page.getByRole('link', { name: '查看原单位的相关科技' }).click();
+  await expect(page).toHaveURL(/#\/unit\/1761\?civ=Bengalis&tab=rel$/);
+  await expect(page.locator('#unit-related a[href="#/tech/833"]')).toHaveText('派');
+});

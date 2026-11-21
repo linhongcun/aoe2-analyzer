@@ -51,7 +51,7 @@ import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnS
 import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
-import { FormAccess, FormBar, FormDifference } from './UnitForms';
+import { CastleKonnikReference, FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -126,7 +126,8 @@ export default function UnitDetail() {
   const base = baseUnit(owner, core.fam);
   const elite = core.fam.eliteOf[base.id];
   const isE = owner.id !== base.id;
-  const relation = owner.form ? { owner, form: owner.form, alternate: !!alternate, elite: isE, otherTier: (isE ? base : elite)?.form } : null;
+  const formHref = (id: number) => entityCivLink('unit', id, (pathToken ? pathCiv : queryCiv)?.en);
+  const relation = owner.form ? { owner, form: owner.form, alternate: !!alternate, elite: isE, href: formHref, otherTier: (isE ? base : elite)?.form } : null;
   const showUpgrade = elite && (!alternate || alternate.kind === 'weapon');
   const typeLabel = unitTypeLabel(u.type);
   const canTrain = !!context && u.civs.includes(context.en);
@@ -137,7 +138,7 @@ export default function UnitDetail() {
   const avail = status ? (id: number) => status['u' + id] === 1 : undefined;
   const line = trees && !alternate ? upgradeLine(u, core.units, core.unitById, avail) : [];
   const notes = trees && !alternate ? upgradeNotes(line, core.units, avail) : [];
-  const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, context?.en) : null;
+  const rel = !alternate && trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, context?.en) : null;
   const peers = alternate ? [] : dupPeers(base, core.units);
   const conf =
     alternate || peers.length
@@ -263,7 +264,7 @@ export default function UnitDetail() {
                 role="radio"
                 aria-checked={!isE}
                 className={isE ? undefined : 'on'}
-                to={alternate && base.form ? '/unit/' + base.form.id : swap(base.id)}
+                to={alternate && base.form ? formHref(base.form.id) : swap(base.id)}
                 replace
               >
                 普通
@@ -272,7 +273,7 @@ export default function UnitDetail() {
                 role="radio"
                 aria-checked={isE}
                 className={isE ? 'on' : undefined}
-                to={alternate && elite.form ? '/unit/' + elite.form.id : swap(elite.id)}
+                to={alternate && elite.form ? formHref(elite.form.id) : swap(elite.id)}
                 replace
               >
                 精锐
@@ -284,6 +285,7 @@ export default function UnitDetail() {
       </div>
 
       {relation && <FormBar {...relation} />}
+      <CastleKonnikReference unit={u} href={formHref} />
 
       <nav className="ud-jump" aria-label="本页章节">
         {JUMPS.filter(
@@ -330,7 +332,7 @@ export default function UnitDetail() {
           {alternate ? <FormDifference owner={owner} form={alternate} /> : <UnitTransportCapacity unit={u} civ={context} />}
         </div>
         {alternate ? (
-          <FormAccess owner={owner} form={alternate} elite={isE} />
+          <FormAccess href={formHref} owner={owner} form={alternate} elite={isE} />
         ) : (
           <div className="ud-cost-col">
             <h2>目录造价</h2>
@@ -494,7 +496,7 @@ export default function UnitDetail() {
           </div>
         )}
         <h3>相关科技</h3>
-        {rel ? <RelatedTechs items={rel} civ={context?.en} /> : treeWaiting}
+        {alternate ? <FormRelatedTechLink ownerHref={formHref(owner.id)} /> : rel ? <RelatedTechs items={rel} civ={context?.en} /> : treeWaiting}
         <h3>
           可用文明（<span className="num nw">{u.civs.length}</span>/<span className="num nw">{civs.length}</span>）
         </h3>
@@ -511,7 +513,7 @@ export default function UnitDetail() {
           <section className="ud-section" id="unit-sim">
             <h2>科技模拟器</h2>
             <p>当前形态仅用于查阅目录基础属性，不开放科技模拟器。请返回原单位使用模拟器与单位 PK。</p>
-            <Link className="ud-btn" to={'/unit/' + owner.id}>
+            <Link className="ud-btn" to={formHref(owner.id)}>
               回到原单位
             </Link>
           </section>
