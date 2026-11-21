@@ -39,8 +39,10 @@ describe('单位详情视图（#895）', () => {
   });
 
   it('缺 type 不猜测，已知四类才翻译', () => {
-    expect(unitTypeLabel(unit('Elite Cannon Galleon').type)).toBeNull();
-    expect(unit('Elite Cannon Galleon').type).toBeFalsy();
+    expect(unitTypeLabel(null)).toBeNull();
+    expect(unitTypeLabel(undefined)).toBeNull();
+    expect(unitTypeLabel(unit('Cannon Galleon').type)).toBe('通用单位');
+    expect(unitTypeLabel(unit('Elite Cannon Galleon').type)).toBe('升级单位');
     expect(unitTypeLabel('UniqueUnit')).toBe('独特单位');
     expect(unitTypeLabel('RegionalUnit')).toBe('区域单位');
     expect(unitTypeLabel('Unit')).toBe('通用单位');

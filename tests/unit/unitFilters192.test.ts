@@ -24,6 +24,10 @@ describe('#192 单位筛选选择实际命中的形态', () => {
     expect(select({ query: '近卫军' })).toEqual([{ u: byId[759], elite: byId[761] }]);
     expect(select({ query: '近卫军', age: '3' })).toEqual([{ u: byId[759], elite: byId[761] }]);
   });
+  it('#1226 按目录类别筛选炮舰的实际形态', () => {
+    expect(select({ query: '炮舰', type: 'Unit' })).toEqual([{ u: byId[420], elite: byId[691] }]);
+    expect(select({ query: '炮舰', type: 'UnitUpgrade' })).toEqual([{ u: byId[691] }]);
+  });
   it('精锐名称与城堡时代不能跨形态拼成命中', () => {
     expect(select({ query: '精锐近卫军', age: '3' })).toEqual([]);
   });

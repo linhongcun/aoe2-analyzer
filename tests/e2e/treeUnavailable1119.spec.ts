@@ -91,7 +91,7 @@ test('#1119 一次展开日本全部组、全文复制、对照隔离与切文�
   await expect(root.locator('.tsum-group')).toHaveCount(9);
   await expect(root.locator('.tsum-item')).toHaveCount(27);
   await expect(root.locator('.tsum-group h4').filter({ hasText: '马厩' })).toHaveCount(0);
-  await expect(root.locator('[data-summary-key$="u691"]')).toContainText('单位');
+  await expect(root.locator('[data-summary-key$="u691"]')).toContainText('单位升级');
   await expect(root.getByRole('status')).toBeEmpty();
   await root.getByRole('button', { name: '收起汇总' }).click();
   await expect(toggle(page)).toBeFocused();

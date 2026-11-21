@@ -51,13 +51,13 @@ describe('#1119 当前树不可用项', () => {
       [68, ['t12']],
     ]);
   });
-  it('阿兹特克没有马厩，空type的精锐炮舰保留为单位', () => {
+  it('阿兹特克没有马厩，精锐炮舰列为不可用的单位升级', () => {
     const summary = unavailableSummary(trees, core, 'Aztecs')!;
     expect(summary.groups).toHaveLength(9);
     expect(summary.count).toBe(27);
     expect(summary.groups.some((g) => g.id === 101)).toBe(false);
     expect(summary.groups.flatMap((g) => g.items).find((x) => x.id === 691 && x.kind === 'u')).toMatchObject({
-      type: '单位',
+      type: '单位升级',
       identity: null,
       name: core.unitById[691]!.zh,
     });

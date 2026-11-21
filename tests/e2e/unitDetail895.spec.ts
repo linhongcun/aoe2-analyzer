@@ -371,7 +371,7 @@ test('代表单位与特殊边界只按已核口径出现', async ({ page }) => 
 
   await open(page, '/unit/691');
   await expect(page.locator('#unit h1')).toContainText('精锐炮舰');
-  await expect(page.locator('[data-t="unit-type"]')).toHaveCount(0);
+  await expect(page.locator('[data-t="unit-type"]')).toHaveText('升级单位');
 
   await open(page, '/unit/93');
   await expect(page.locator('[data-t="display-age"]')).toContainText('封建时代');
