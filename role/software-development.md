@@ -178,6 +178,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+**浅克隆仓库且 SSH 22 端口被阻断时，经 HTTPS 单分支拉取并加 `--no-tags`。** 本机仓库为浅克隆（`git rev-parse --is-shallow-repository` 为 `true`，含 `.git/shallow`）且 `origin` 配置为 SSH（`git@github.com:linhongcun/aoe2-analyzer.git`）。代理断开 22 端口时，直接 `git pull` 会报 `Connection closed ... port 22`；若只临时切 HTTPS 跑不限分支的 `git pull`，拉取全部远端分支和标签时 pack delta 会引用浅边界之外的缺失对象，报 `Could not read ...` 与 `pack has ... unresolved deltas`。以后不改仓库的 `remote.origin.url`，拉取目标分支改用 `git -c url."https://github.com/".insteadOf="git@github.com:" fetch --no-tags origin <branch>` 再快进合并（如 `git merge --ff-only origin/main`）；在 `gh` 已配置 HTTPS 凭据的前提下，推送分支遇同一 SSH 阻断也对单条 `git push` 加相同的 `-c url."https://github.com/".insteadOf="git@github.com:"` 参数。该做法仅用于受限网络或浅克隆同步，不解除浅克隆历史，也不修改远端配置。
+
 **测请求乱序，先确认有两个不同的请求。** 实体详情共用 `loadCivUpdates()` 的待完成请求；只延迟响应再切换科技，两个页面等的是同一个 Promise，测不到旧响应晚归。历史回归先让首次加载失败，挂起重试请求，再切换科技，确认新请求已发出并先返回。随后分别让旧请求成功、失败，两种情况下都检查当前科技仍无记录、没有旧错误。测试共享加载器时还要检查：旧请求失败不能清掉新请求的缓存。[Issue #1149](https://github.com/linhongcun/aoe2-analyzer/issues/1149) / [PR #1166](https://github.com/linhongcun/aoe2-analyzer/pull/1166)
 
 **跨工具带入，用目标工具的手填结果作对照。** 混编 PK 能接受带「布图马普」的阵容，但训练总价无法完整换算该科技；只检查来源合法或链接能打开，会漏掉计价条件。把生成的链接交给训练总价解码、计价，逐行与同条件手填方案比较形态、数量、单价，再核对总价。负例只改一方的条件：不能完整计价的一方应点明原因，不删行凑小计；另一合法方仍能独立带入。[Issue #1194](https://github.com/linhongcun/aoe2-analyzer/issues/1194) / [PR #1212](https://github.com/linhongcun/aoe2-analyzer/pull/1212)
