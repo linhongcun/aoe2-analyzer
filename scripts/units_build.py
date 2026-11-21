@@ -1,6 +1,7 @@
 import json,glob,re,math,os,urllib.request
 from collections import Counter
 from attack_classes import ATTACK_CLASS_NAMES as CL
+from catalog_description import clean_description
 from unit_types import unit_type
 import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));U=d['data']['Unit']
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
@@ -15,8 +16,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
         i=x['node_id'];u=U.get(str(i))
         if not u: continue
         if i not in units:
-            hz=re.sub(r'<[^>]+>','\n',z.get(str(u['LanguageNameId']+21000),'')).replace('‹cost›','').split('‹')[0]
-            hz=re.sub(r'\n+','\n',hz).strip();hz=re.sub(r'^生产\n[^\n]*\n\s*\(\s*\)\n','',hz)
+            hz=clean_description(z.get(str(u['LanguageNameId']+21000)),('生产','建造','创建'))
             units[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=unit_type(i,x['node_type']),age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
               from_=x['link_id'] if x['link_node_type'] in('Unit','UniqueUnit','RegionalUnit','UnitUpgrade') else None,
               cost=u['Cost'],hp=u['HP'],atk=u['Attack'],ma=u['MeleeArmor'],pa=u['PierceArmor'],rng=u['Range'],minr=u['MinRange'],spd=u['Speed'],los=u['LineOfSight'],rof=u['ReloadTime'],tt=u['TrainTime'],acc=u['AccuracyPercent'],blast=u['BlastWidth'],
