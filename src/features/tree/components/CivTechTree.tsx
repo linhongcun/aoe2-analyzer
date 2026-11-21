@@ -34,16 +34,28 @@ function Legend({ mine, other }: { mine: string; other: string | null }) {
         不可用
       </span>
       <span>
+        <i className="tl1 unit-identity uq">
+          <Mark group="unique" />
+        </i>
+        独特单位
+      </span>
+      <span>
+        <i className="tl1 unit-identity rg">
+          <Mark group="regional" />
+        </i>
+        区域单位
+      </span>
+      <span>
         <i className="tl1 uq">
           <Mark group="unique" />
         </i>
-        独特
+        独特科技／建筑
       </span>
       <span>
         <i className="tl1 rg">
           <Mark group="regional" />
         </i>
-        区域
+        区域科技／建筑
       </span>
       {other && (
         <>
@@ -221,7 +233,14 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
               const o = get(c.k, c.id)!;
               const ident = treeNodeIdentity(c.k, c.id, c.k === 'b' ? null : o.type);
               const title = `${o.zh} ${o.en}${ident ? `\n${ident.label}` : ''}\n${costText(o.cost)}${c.k === 't' ? '，' + (o as { rt: number }).rt + 's' : ''}${c.avail ? '' : '\n（该文明不可用）'}`;
-              const cls = ['tcell', c.avail ? '' : 'na', ident?.group === 'unique' ? 'uq' : '', ident?.group === 'regional' ? 'rg' : '', c.diff]
+              const cls = [
+                'tcell',
+                c.k === 'u' && ident ? 'unit-identity' : '',
+                c.avail ? '' : 'na',
+                ident?.group === 'unique' ? 'uq' : '',
+                ident?.group === 'regional' ? 'rg' : '',
+                c.diff,
+              ]
                 .filter(Boolean)
                 .join(' ');
               const to = `/${dir[c.k][0]}/${c.id}${civQuery}`;
