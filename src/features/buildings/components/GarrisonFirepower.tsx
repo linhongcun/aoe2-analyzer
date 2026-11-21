@@ -18,7 +18,11 @@ const sourceLabels: Record<GarrisonRowResult['powerSource'], string> = {
 };
 
 const attackSources = { secondary: '副弹丸', primary: '主弹丸', building: '建筑面板' };
-const formatPower = (power: number) => String(Number(power.toFixed(2)));
+const formatPower = (power: number) => Number(power.toFixed(2));
+
+function formulaRelation(displayed: number, fromDisplayedOperands: number, modelValue: number) {
+  return Math.max(Math.abs(displayed - fromDisplayedOperands), Math.abs(displayed - modelValue)) < 1e-10 ? '=' : '≈';
+}
 
 export function GarrisonNumber({ children }: { children: ReactNode }) {
   return <span className="num nw">{children}</span>;
@@ -232,7 +236,8 @@ function FiringSteps({ result, projectile, shortProjectile }: { result: Explaine
           第 <GarrisonNumber>1</GarrisonNumber> 步 · {mixed ? '先合计再除' : '除门槛'}
         </h4>
         <strong>
-          <Power value={garrisonPower} /> ÷ <Power value={buildingPower} /> {Number(quotient) === steps.quotient ? '=' : '≈'}{' '}
+          <Power value={garrisonPower} /> ÷ <Power value={buildingPower} />{' '}
+          {formulaRelation(Number(quotient), formatPower(garrisonPower) / formatPower(buildingPower), steps.quotient)}{' '}
           <GarrisonNumber>{quotient}</GarrisonNumber>
         </strong>
         <p>{mixed ? '各行小计先相加，不逐行单独取整' : `驻军总火力除以当前单${shortProjectile}门槛`}</p>
@@ -353,6 +358,7 @@ export function GarrisonFirepower({
       </div>
       <p className="garrison-fire-note">
         <GarrisonNumber>DE {__DATA_SOURCES__.patch.build}</GarrisonNumber> 驻军火力模型数值，用于换算驻军增加的{projectile}数，不是对敌单位的实际伤害。
+        读数最多显示两位小数，取整按模型原值计算。
         {rows.some((row) => row.powerSource === 'multi-projectile') && '多弹丸单位按公开公式估算。'}
         {church && (
           <>
@@ -382,7 +388,7 @@ export function GarrisonFirepower({
             rows[0] && (
               <p>
                 {rows[0].zh}
-                {rows[0].powerEach === null ? (
+                {rows[0].powerEach === null || rows[0].powerTotal === null ? (
                   <>
                     （<GarrisonNumber>{rows[0].countValue} 个</GarrisonNumber>）：
                     <Contribution row={rows[0]} />
@@ -394,7 +400,8 @@ export function GarrisonFirepower({
                     <GarrisonNumber>
                       {rows[0].countValue} {rows[0].entry === 'deposit' ? '个' : '人'}
                     </GarrisonNumber>{' '}
-                    = <Power value={rows[0].powerTotal} />
+                    {formulaRelation(formatPower(rows[0].powerTotal), formatPower(rows[0].powerEach) * rows[0].countValue, rows[0].powerTotal)}{' '}
+                    <Power value={rows[0].powerTotal} />
                   </>
                 )}
               </p>
@@ -409,7 +416,8 @@ export function GarrisonFirepower({
           {buildingThreshold && buildingPower !== null && (
             <p>
               本建筑按{attackSource}计算：{attackSource}攻击 <Power value={buildingThreshold.attack} /> ÷ 攻击间隔{' '}
-              <GarrisonNumber>{formatPower(buildingThreshold.reload)} 秒</GarrisonNumber> {Number(formatPower(buildingPower)) === buildingPower ? '=' : '≈'}{' '}
+              <GarrisonNumber>{formatPower(buildingThreshold.reload)} 秒</GarrisonNumber>{' '}
+              {formulaRelation(formatPower(buildingPower), formatPower(buildingThreshold.attack) / formatPower(buildingThreshold.reload), buildingPower)}{' '}
               <Power value={buildingPower} />
             </p>
           )}

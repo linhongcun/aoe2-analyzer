@@ -489,6 +489,7 @@ test('#1262 炮塔、强化教堂与非射击模式使用各自口径', async ({
   expect(selectedTechIds(page)).not.toContain('47');
   await expect(page.getByRole('checkbox', { name: '化学（免费）' })).toBeChecked();
   await expect(panel(page)).toContainText('免费自动生效 1 项（化学）');
+  await expect(firepower(page)).toContainText('4.93 × 5 人 ≈ 24.64');
   await expect(firepower(page)).toContainText('主弹丸攻击 124 ÷ 攻击间隔 6 秒 ≈ 20.67');
   await expect(firepower(page)).toContainText('基础 1 + 驻军 0 = 1 发');
   await expect(firepower(page)).not.toContainText(/箭矢|上限截断/);
