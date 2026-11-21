@@ -47,6 +47,9 @@
       "rt": {
         "type": "number"
       },
+      "repeatable": {
+        "type": "boolean"
+      },
       "desc": {
         "type": "string"
       },
