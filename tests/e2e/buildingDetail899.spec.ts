@@ -1,8 +1,5 @@
 // #899 建筑详情。只覆盖规格点名的行为和 82/84/87 有限代表页，不是 38 座建筑验收，也不证明静态结构图。
 import { expect, test, type Page } from '@playwright/test';
-import { mkdirSync } from 'node:fs';
-
-const shots = '/opt/cursor/artifacts/building-899';
 
 async function open(page: Page, hash: string) {
   await page.goto('./#' + hash);
@@ -244,8 +241,7 @@ test('#1219 窄屏选中国后三阶箭塔保留目录数值与单列布局', as
   }
 });
 
-test('1280 浅色深色和 390 只看城堡市场靶场的代表页', async ({ page }) => {
-  mkdirSync(shots, { recursive: true });
+test('1280 浅色深色和 390 只看城堡市场靶场的代表页', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   for (const mode of ['light', 'dark'] as const) {
     for (const id of [82, 84, 87]) {
@@ -255,7 +251,7 @@ test('1280 浅色深色和 390 只看城堡市场靶场的代表页', async ({ p
       const cost = await page.locator('[data-t="catalog-cost"]').boundingBox();
       expect(hp!.y).toBeLessThan(900);
       expect(cost!.y).toBeLessThan(900);
-      await page.screenshot({ path: `${shots}/${id}-1280-${mode}.png`, fullPage: false });
+      await page.screenshot({ path: testInfo.outputPath(`${id}-1280-${mode}.png`), fullPage: false });
     }
   }
   await page.setViewportSize({ width: 390, height: 844 });
@@ -265,6 +261,6 @@ test('1280 浅色深色和 390 只看城堡市场靶场的代表页', async ({ p
     const hp = await page.locator('[data-stat="hp"]').boundingBox();
     expect(hp!.y).toBeLessThan(844);
     await expect(page.locator('.bd-jump')).toBeHidden();
-    await page.screenshot({ path: `${shots}/${id}-390-light.png`, fullPage: false });
+    await page.screenshot({ path: testInfo.outputPath(`${id}-390-light.png`), fullPage: false });
   }
 });
