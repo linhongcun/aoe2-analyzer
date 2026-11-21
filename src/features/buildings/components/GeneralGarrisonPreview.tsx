@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import {
-  calculateGeneralGarrison,
+  explainGeneralGarrison,
   getFreeGarrisonTechs,
   getGarrisonCandidates,
   getGarrisonBuildingAge,
@@ -20,6 +20,8 @@ import type { Building } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Loading } from '../../../shared/ui/widgets';
 import { useShareLink } from '../../../shared/ui/useShareLink';
+import { GarrisonContributionBar, GarrisonFirepower, GarrisonFiringStatus, GarrisonNumber } from './GarrisonFirepower';
+import { GarrisonTechStatus } from './GarrisonTechStatus';
 import './garrison.css';
 import './garrisonGeneral.css';
 import { healingLink } from '../../../domain/garrisonHealing';
@@ -49,11 +51,13 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
   const [params, setParams] = useSearchParams();
   const { config, errors: parseErrors } = readGeneralGarrison(params, b);
   const minAge = getGarrisonBuildingAge(b, config.civ, ctx.trees);
-  const result = calculateGeneralGarrison(ctx, b, config);
+  const result = explainGeneralGarrison(ctx, b, config);
   const errors = [...new Set([...parseErrors, ...result.errors])];
   const available = getGarrisonTechs(ctx, b, config);
   const free = new Set(getFreeGarrisonTechs(ctx, b, config));
   const selected = new Set([...config.techs, ...free]);
+  const availableManual = available.filter((tech) => !free.has(tech.id));
+  const automatic = [...free].flatMap((id) => (ctx.core.techById[id] ? [ctx.core.techById[id]] : []));
   const candidates = getGarrisonCandidates(ctx, b, config);
   const compatible = candidates.filter((u) => u.canEnter || u.canCreate || u.canDeposit);
   const {
@@ -76,6 +80,12 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
   const shareUrl = sharePageUrl(`/building/${b.id}`, keepWorkspace(writeGeneralGarrison(config)).toString(), document.baseURI);
   const update = (next: GeneralGarrisonConfig) => {
     if (!parseErrors.length) setParams(keepWorkspace(writeGeneralGarrison(next)), { replace: true });
+  };
+  const updateTechs = (ids: number[]) => {
+    const next = { ...config, techs: ids.filter((id) => !free.has(id)) };
+    // A selection can also unlock a free technology via its prerequisites.
+    const nextFree = new Set(getFreeGarrisonTechs(ctx, b, next));
+    update({ ...next, techs: next.techs.filter((id) => !nextFree.has(id)) });
   };
   const reset = () =>
     setParams(
@@ -182,6 +192,7 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
         {config.rows.map((row, i) => {
           const choices = rowEntries(row.unitId, i);
           const known = candidates.find((u) => u.id === row.unitId);
+          const contribution = result.rows[i];
           const change = (patch: Partial<typeof row>) => update({ ...config, rows: config.rows.map((r, n) => (n === i ? { ...r, ...patch } : r)) });
           return (
             <div className="garrison-army-row" key={i}>
@@ -234,8 +245,9 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
               <button type="button" aria-label={`移除驻军单位 ${i + 1}`} onClick={() => update({ ...config, rows: config.rows.filter((_, n) => n !== i) })}>
                 移除
               </button>
+              {firing && contribution && <GarrisonContributionBar row={contribution} />}
               <p className="note garrison-row-note">
-                <GarrisonNote text={`${known?.reason ?? ''} ${firing ? (result.rows[i]?.reason ?? '') : ''}`} />
+                <GarrisonNote text={`${known?.reason ?? ''} ${firing ? (contribution?.reason ?? '') : ''}`} />
               </p>
             </div>
           );
@@ -252,25 +264,25 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
       <fieldset className="garrison-techs" disabled={parseErrors.length > 0}>
         <legend>影响驻军的已研究科技</legend>
         <p className="note">只选择已完成的科技；前置联动，免费科技自动生效。建筑形态视为已解锁，单位按所选时代筛选。</p>
-        <div className="garrison-tech-grid">
-          {available.map((t) => (
-            <label key={t.id}>
-              <input
-                type="checkbox"
-                checked={selected.has(t.id)}
-                disabled={free.has(t.id)}
-                onChange={() => update({ ...config, techs: toggleGeneralGarrisonTech(ctx, b, config, t.id) })}
-              />
-              <span>
-                {t.zh}
-                {free.has(t.id) ? '（免费）' : ''}
-              </span>
-            </label>
-          ))}
-        </div>
-        <button type="button" onClick={() => update({ ...config, techs: [] })}>
-          清空自选科技
-        </button>
+        <GarrisonTechStatus age={AGE_ZH[config.age] ?? '无效时代'} available={availableManual} free={automatic} selected={selected} onSelect={updateTechs} />
+        {available.length > 0 && (
+          <div className="garrison-tech-grid">
+            {available.map((t) => (
+              <label key={t.id}>
+                <input
+                  type="checkbox"
+                  checked={selected.has(t.id)}
+                  disabled={free.has(t.id)}
+                  onChange={() => updateTechs(toggleGeneralGarrisonTech(ctx, b, config, t.id))}
+                />
+                <span>
+                  {t.zh}
+                  {free.has(t.id) ? '（免费）' : ''}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
         {config.techs
           .filter((id) => !available.some((t) => t.id === id))
           .map((id) => (
@@ -297,15 +309,21 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
           <dl className="garrison-numbers garrison-capacity">
             <div>
               <dt>实际驻扎容量</dt>
-              <dd data-testid="garrison-capacity">{result.capacity}</dd>
+              <dd data-testid="garrison-capacity" className="num nw">
+                {result.capacity}
+              </dd>
             </div>
             <div>
               <dt>已占用容量</dt>
-              <dd data-testid="garrison-used">{result.usedSlots}</dd>
+              <dd data-testid="garrison-used" className="num nw">
+                {result.usedSlots}
+              </dd>
             </div>
             <div>
               <dt>剩余容量</dt>
-              <dd data-testid="garrison-remaining">{result.remainingSlots}</dd>
+              <dd data-testid="garrison-remaining" className="num nw">
+                {result.remainingSlots}
+              </dd>
             </div>
           </dl>
           {firing ? (
@@ -313,45 +331,40 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
               <dl className="garrison-numbers">
                 <div>
                   <dt>基础{projectile}（无驻军）</dt>
-                  <dd data-testid="garrison-base">{result.baseProjectiles}</dd>
+                  <dd data-testid="garrison-base" className="num nw">
+                    {result.baseProjectiles}
+                  </dd>
                 </div>
                 <div>
                   <dt>驻军增加的{projectile}</dt>
-                  <dd data-testid="garrison-extra">{result.extraProjectiles ?? '待核实'}</dd>
+                  <dd data-testid="garrison-extra" className="num nw">
+                    {result.extraProjectiles ?? '待核实'}
+                  </dd>
                 </div>
                 <div className="garrison-total">
                   <dt>本轮总{projectile}数</dt>
-                  <dd data-testid="garrison-total">{result.totalProjectiles ?? '待核实'}</dd>
+                  <dd data-testid="garrison-total" className="num nw">
+                    {result.totalProjectiles ?? '待核实'}
+                  </dd>
                 </div>
               </dl>
-              <p className="garrison-status" role="status">
-                {result.totalProjectiles === null
-                  ? '当前组合存在未核实机制，保留容量结果，暂不显示弹丸总数。'
-                  : result.totalProjectiles === 0
-                    ? result.usedSlots === 0
-                      ? '空驻军时不会开火。'
-                      : '当前驻军组合不会使建筑开火。'
-                    : `可发射 ${result.totalProjectiles} ${shortProjectile}。`}{' '}
-                {result.totalProjectiles !== null &&
-                  (result.totalProjectiles >= result.maxProjectiles
-                    ? `已达${projectile}上限。`
-                    : result.singleUnitId !== null
-                      ? result.nextAt === null
-                        ? `当前容量内无法再增加${projectile}。`
-                        : `再驻 ${result.nextAt - result.usedSlots} 个${singleVillager ? '村民' : (result.rows[0]?.zh ?? '单位')}，总驻军 ${result.nextAt} ${singleVillager ? '人' : '个'}时会增加${projectile}。`
-                      : '混合驻军先合计贡献，再统一向下取整。')}
-              </p>
+              <GarrisonFiringStatus result={result} projectile={projectile} shortProjectile={shortProjectile} singleVillager={singleVillager} />
+              <GarrisonFirepower result={result} building={b} projectile={projectile} shortProjectile={shortProjectile} />
               <dl className="garrison-facts">
                 <div>
                   <dt>实际驻扎容量</dt>
                   <dd>
-                    {result.capacity} {singleVillager ? '人' : '格'}
+                    <GarrisonNumber>
+                      {result.capacity} {singleVillager ? '人' : '格'}
+                    </GarrisonNumber>
                   </dd>
                 </div>
                 <div>
                   <dt>{projectile}上限</dt>
                   <dd>
-                    {result.maxProjectiles} {shortProjectile}
+                    <GarrisonNumber>
+                      {result.maxProjectiles} {shortProjectile}
+                    </GarrisonNumber>
                   </dd>
                 </div>
                 {result.singleUnitId !== null && (
@@ -359,12 +372,22 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                     <div>
                       <dt>该单位满容量总{projectile}数</dt>
                       <dd>
-                        {result.maxAtCapacity ?? '待核实'} {shortProjectile}
+                        <GarrisonNumber>
+                          {result.maxAtCapacity ?? '待核实'} {shortProjectile}
+                        </GarrisonNumber>
                       </dd>
                     </div>
                     <div>
                       <dt>达到{projectile}上限</dt>
-                      <dd>{result.singleUnitSaturationAt === null ? '容量内无法达到' : `${result.singleUnitSaturationAt} ${singleVillager ? '人' : '个'}`}</dd>
+                      <dd>
+                        {result.singleUnitSaturationAt === null ? (
+                          '容量内无法达到'
+                        ) : (
+                          <GarrisonNumber>
+                            {result.singleUnitSaturationAt} {singleVillager ? '人' : '个'}
+                          </GarrisonNumber>
+                        )}
+                      </dd>
                     </div>
                   </>
                 )}
@@ -383,10 +406,14 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                       {result.thresholds.map((x) => (
                         <tr key={x.count}>
                           <td>
-                            {x.count} {singleVillager ? '人' : '个'}
+                            <GarrisonNumber>
+                              {x.count} {singleVillager ? '人' : '个'}
+                            </GarrisonNumber>
                           </td>
                           <td>
-                            {x.totalProjectiles} {shortProjectile}
+                            <GarrisonNumber>
+                              {x.totalProjectiles} {shortProjectile}
+                            </GarrisonNumber>
                           </td>
                         </tr>
                       ))}
@@ -401,11 +428,16 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                     return (
                       <li key={`${row.unitId}-${row.entry}`}>
                         {row.zh}（{ENTRY_LABEL[row.entry]}）：
-                        {next
-                          ? `再加 ${next.additionalUnits} 个，总弹丸变为 ${next.totalProjectiles}。`
-                          : row.powerEach === null
-                            ? '贡献尚待核实。'
-                            : '当前剩余容量内无法增加弹丸。'}
+                        {next ? (
+                          <>
+                            再加 <GarrisonNumber>{next.additionalUnits} 个</GarrisonNumber>，总弹丸变为 <GarrisonNumber>{next.totalProjectiles}</GarrisonNumber>
+                            。
+                          </>
+                        ) : row.powerEach === null ? (
+                          '贡献尚待核实。'
+                        ) : (
+                          '当前剩余容量内无法增加弹丸。'
+                        )}
                       </li>
                     );
                   })}
