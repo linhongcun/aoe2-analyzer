@@ -18,6 +18,7 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           up: null,
           rngBd: undefined,
           accuracyDispersion: undefined,
+          displayedReloadTime: undefined,
           attackDelaySeconds: alternate.attackDelaySeconds,
           frameDelay: alternate.frameDelay,
           garrisonCapacity: alternate.garrisonCapacity,
