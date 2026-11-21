@@ -198,6 +198,12 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 画完「单位 → 建筑」后，再从该文明的建筑反查同一形态。例如从哥特兵营点精锐近卫军，应回到兵营分支（761），不是同名的城堡分支（555）。审稿时对照两端的文明、建筑、形态和条件文案；图能说明预期去向，不能代替实现后的往返测试。
 
+### 完成态设计图用 GitHub Issue 原生附件上传，不再合入代码仓库
+
+[#1216 科技树用色](https://github.com/linhongcun/aoe2-analyzer/issues/1216) 曾沿用 [#1200](https://github.com/linhongcun/aoe2-analyzer/issues/1200) / [PR #1215](https://github.com/linhongcun/aoe2-analyzer/pull/1215) 做法开启纯图片 PR（[PR #1242](https://github.com/linhongcun/aoe2-analyzer/pull/1242)，已关闭），拟将设计稿 PNG 合入 `docs/design/mockups/`。维护者明确要求停止把设计图合进仓库：二进制设计稿会持续撑大代码库体积、引入与源码无关的历史记录，还会增加多余的 PR 或主干构建。
+
+以后本地渲染并逐张目视核对设计图后，在已登录 GitHub 的浏览器中打开原 Issue（本地可经维护者主动授权的 Chrome 远程调试复用其登录态，不绕过认证、不另存凭据），通过编辑区或评论区的「Paste, drop, or click to add files」上传 PNG，取得 `https://github.com/user-attachments/assets/...` 链接后清空未发送草稿，将图片以 Markdown 嵌入 Issue 正文并保存。注意这类原生附件在**尚未保存**进公开 Issue 正文或评论前对匿名请求会返回 404；须在保存正文之后再逐张核验返回 `200 image/png`、确认可正常查看，随后再交接下一阶段。
+
 ## 开始和交付清单
 
 开始前：
