@@ -222,6 +222,8 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 事件驱动模型不能先把每次间隔量化再累乘。[#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054) / [PR #1104](https://github.com/linhongcun/aoe2-analyzer/pull/1104) 的 TRD 首评发现，逐次舍入会拆散本应同刻的攻击，改变攻击者快照与战果。以后从原始间隔和事件序号计算绝对时间，先排除严格超过模型上限的事件，再按既定容差归组；用固定数据反例、边界和单行退化对照锁住语义，不改旧公式或放宽断言来掩盖差异。具体规则和独立复核保留在原 Issue，不把模型结论当作游戏实战胜率。
 
+**位置决定攻击距离，冷却跟随存活单位。** 短射程近战原用纵深层保存攻击时钟。敌方伤亡使前排缩窄，同一单位换到新层后会提前再次攻击。多层移动时用稳定的存活编号保留该单位的攻击冷却，实际离开射程时才清除瞄准状态。同刻结算前冻结出手人数和距离。测试应让首击改变阵面，并验证冷却结束前双方存活数未再次变化，再用固定数据复算。[PR #1275](https://github.com/linhongcun/aoe2-analyzer/pull/1275)
+
 复制确认等瞬时反馈必须有配置归属，成功也不能统一用错误播报。[#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054) 首次上线后，复制成功再同标签打开坏链接，旧确认残留且仍是 `alert`；只在编辑回调清状态，覆盖不到外部导航和延迟 Promise。[修复 PR #1105](https://github.com/linhongcun/aoe2-analyzer/pull/1105) 显式区分 `status` 与错误，配置或资料变化时清反馈，异步成功、失败均核对当前 URL 和请求号；仅比 URL 无法覆盖离开再返回原地址。以后把连续导航、延迟成功/失败和返回原配置纳入直接回归，并在真实发布后短验连续操作，不只看初始成功页。[修复后 main CI](https://github.com/linhongcun/aoe2-analyzer/actions/runs/44018895234) 与 [v0.82.1](https://github.com/linhongcun/aoe2-analyzer/releases/tag/v0.82.1) 已通过，线上补验证据及未验边界见原 Issue；请求失效只阻止旧反馈回写，不撤回系统剪贴板操作。
 
 跨工具复用集合或模型前，要核对它服务的计算范围和动作语义。[#1009](https://github.com/linhongcun/aoe2-analyzer/issues/1009) / [PR #1096](https://github.com/linhongcun/aoe2-analyzer/pull/1096) 的首次方案只传 PK 的 `side.sel`，独立复核用显式解锁科技复现了遗漏：战斗/费用选择集合不一定保留纯训练解锁项。以后区分解析后的数值选择和显式解锁来源，先筛源有效选择及目标允许项，再判断形态；不要凭预设补源未选科技，也不要把支持度或数量合法性当成形态可选性。定向用例锁住这些语义，导航与历史行为同时以本节前面的当前实现为准，避免沿用旧「切模式清空行」假设。同样，[#1051](https://github.com/linhongcun/aoe2-analyzer/issues/1051) / [PR #1099](https://github.com/linhongcun/aoe2-analyzer/pull/1099) 把最早训练时代当成最早外部进入时代，初始已有单位因此被推迟；空行对照还可能改变模型自动纳入的科技，不能替代带精确目标行的零数量探测。以后先明确目标动作，用公开 API 有界验证配置，遇早期未知不跳过；摘要和链接共用最终配置，并对初始单位、负例、未知及容量异常保留定向回归。
