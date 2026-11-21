@@ -10,6 +10,7 @@
     "tests/e2e/upgradeLine1150.spec.ts": 6000,
     "tests/e2e/entityHistoryInline1149.spec.ts": 21000,
     "tests/e2e/civFormations1120.spec.ts": 10500,
+    "tests/e2e/civFormations1265.spec.ts": 9000,
     "tests/e2e/civFormations1173.spec.ts": 4000,
     "tests/e2e/civFormations1174.spec.ts": 5000,
     "tests/e2e/civFormations1175.spec.ts": 4000,

@@ -8,13 +8,13 @@ import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URLS = {
   'koreans-war-wagon-halberdier': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L415',
-  'koreans-fire-lancer-garrison': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L386',
-  'jurchens-fire-lancer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L452',
+  'koreans-fire-lancer-garrison': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L527-L566',
+  'jurchens-fire-lancer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L597-L636',
 } as const;
 const SOURCE_LINES = {
   'koreans-war-wagon-halberdier': [171, 415, 419],
-  'koreans-fire-lancer-garrison': [386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419],
-  'jurchens-fire-lancer-tower': [452, 454, 456, 457, 458, 459, 461, 463, 464, 465, 471, 472, 473, 474, 480, 481, 482, 483, 485],
+  'koreans-fire-lancer-garrison': [527, 531, 535, 536, 537, 538, 540, 542, 544, 550, 551, 552, 553, 559, 560, 561, 562, 564, 566],
+  'jurchens-fire-lancer-tower': [597, 601, 605, 606, 607, 608, 610, 612, 614, 620, 621, 622, 623, 629, 630, 631, 632, 634, 636],
 } as const;
 
 const byCiv = (name: string) => civFormationContent.find(({ civ }) => civ === name)!;
@@ -194,13 +194,14 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(tower.alternatives).not.toContain('对方步兵成群时再补');
     expect(tower.alternatives).not.toContain('已有掷弹兵时可以利用');
     expect(tower.alternatives).not.toContain('由依赖调整表达');
-    expect(tower.adjustments[4]!.text).toContain('不新开靶场量产驻军线');
+    expect(tower.adjustments[4]!.text).toContain('省掉专为驻塔新开的靶场线');
     expect(tower.limitation).toContain('驻塔时不受护甲缺口影响仅为机制推断');
     expect(tower.limitation).toContain('火矛出塔仍是 4/4');
     expect(tower.limitation).toContain('科技 994 将攻击速度 +25% 加成应用于火矛兵（1901）与精锐火矛兵（1903）');
     expect(tower.limitation).toContain('尚未在客户端逐帧计时');
-    expect(tower.evidence.scope).toContain('4 个火矛与 5 个掷弹兵分别达到 5 箭上限');
-    expect(tower.evidence.scope).toContain('理论驻军箭数比较，不是胜率或自动招募配方');
+    expect(tower.evidence.scope).toContain('女真无扳指');
+    expect(tower.evidence.scope).toContain('4 个精锐火矛兵 3/5 箭、5 个为 4/5 箭');
+    expect(tower.evidence.scope).toContain('5 个掷弹兵在两档均为 3/5 箭');
 
     const bastionsSupport = tower.supplements.find(({ mode }) => mode === 'mechanism-support')!;
     expect(bastionsSupport.condition).toContain('不是路线前置');

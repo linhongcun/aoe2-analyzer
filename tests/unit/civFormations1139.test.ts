@@ -103,8 +103,10 @@ describe('#1139 文明路线契约与投影', () => {
     expect(garrison.evidence.playtest).toContain('用户只观察到火矛驻塔会放箭');
     expect(garrison.evidence.playtest).toContain('新组合仍待实战验证');
     expect(garrison.evidence.playtest).toContain('没有逐箭计数、伤害或胜率验证');
-    expect(garrison.evidence.recordedVersion).toBe('章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）');
-    expect(garrison.evidence.sourceLines).toEqual([386, 390, 391, 392, 393, 395, 397, 399, 405, 406, 407, 408, 414, 415, 416, 417, 419]);
+    expect(garrison.evidence.recordedVersion).toBe(
+      '章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）；驻军预览复核：v0.99.0 · DE 188329 · 531df91',
+    );
+    expect(garrison.evidence.sourceLines).toEqual([527, 531, 535, 536, 537, 538, 540, 542, 544, 550, 551, 552, 553, 559, 560, 561, 562, 564, 566]);
     expect(garrison.evidence.scope).not.toContain('来源行');
     expect(garrison.required[0]!.role).toBe('主要固定远程火力与掩体');
     expect(garrison.required[1]!.role).toBe('驻塔增箭、出塔清冲车并保护塔和炮');
@@ -130,7 +132,7 @@ describe('#1139 文明路线契约与投影', () => {
       4,
       [235, 1903, 441],
     ]);
-    expect(jurchens.evidence.recordedVersion).toBe('v0.77.105 · DE 188329 · cd9382c');
+    expect(jurchens.evidence.recordedVersion).toBe('v0.77.105 · DE 188329 · cd9382c；驻军预览复核：v0.99.0 · DE 188329 · 531df91');
     expect(jurchens.evidence.scope).toContain('描述前线箭塔、驻塔火矛和翼骑主路');
     expect(jurchens.evidence.scope).not.toContain('来源行');
   });

@@ -6,9 +6,9 @@ import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
-const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L200';
+const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L205-L241';
 const BYZANTINE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283';
-const CHINESE_SOURCE_LINES = [200, 204, 206, 208, 209, 210, 211, 213, 215, 221, 222, 223, 224, 228, 230, 231, 232, 234];
+const CHINESE_SOURCE_LINES = [205, 209, 213, 214, 215, 216, 218, 220, 226, 227, 228, 229, 235, 236, 237, 239, 241];
 const BYZANTINE_SOURCE_LINES = [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
@@ -42,9 +42,9 @@ describe('#1139 中国与拜占庭路线边界', () => {
     expect(chinese.reason).toContain('原来的诸葛弩路线是实战用过的打法');
     expect(chinese.alternatives).not.toContain('已有城堡和诸葛弩时');
     expect(chinese.alternatives).not.toContain('3 个精锐诸葛弩驻塔');
-    expect(castleReuse.text).toContain('预览中3个精锐诸葛弩驻塔达到5箭上限');
-    expect(castleReuse.text).toContain('复用既有兵力');
-    expect(castleReuse.text).toContain('不另开诸葛弩生产线');
+    expect(castleReuse.text).toContain('无射箭槽时 3 个精锐诸葛弩是 5/5 箭');
+    expect(castleReuse.text).toContain('含射箭槽时 3 个是 4/5 箭，4 个才达 5/5 箭');
+    expect(castleReuse.text).toContain('沿用现有城堡产能');
     expect(castleReuse.text).toContain('不反复前推城堡');
     expect(castleReuse.requires).toEqual([
       { kind: 'building', id: 82, age: 4 },
