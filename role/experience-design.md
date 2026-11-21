@@ -230,6 +230,30 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 可对照 [#1051 的五张完成态图](https://github.com/linhongcun/aoe2-analyzer/issues/1051)（使用官方 CLI v2.104.0 上传）和 [#1220 的四张容量状态图](https://github.com/linhongcun/aoe2-analyzer/issues/1220)（公开原单逐图核验）。这里确认的是设计图已交付，不是应用已实现或玩法已实测。
 
+### 设稿前先对照最新 `main` 实况，不沿用提报时的旧构建快照
+
+[#1231 攻击间隔显示字段](https://github.com/linhongcun/aoe2-analyzer/issues/1231) 运营复核时（构建 `e56a150`）僧侣 `125` 与传教士 `775` 的「攻击间隔」仍显示 `1.6 秒`；进入体验设计时，[#1218](https://github.com/linhongcun/aoe2-analyzer/issues/1218) 已在 `main` 上把无普通攻击单位的该格主值改为「不适用：无普通攻击」。需求提报记录的是当时线上快照，流转期间同一挂点可能已被前序单改动；若照旧表画稿，会把已合入的修正意外回退。
+
+设稿与渲染完成态图前，先拉取最新 `origin/main` 核对目标组件与实渲页面，把本单新增说明叠在现行主态之上（例如保留「不适用：无普通攻击」主值，再紧邻展示静态字段对账），并在交接正文写明与旧提报基线的差异。
+
+### `auto-fit` 网格内不放整宽子项，多组数值分开包 `.nw`
+
+[#1231](https://github.com/linhongcun/aoe2-analyzer/issues/1231) 初稿先把双来源说明条放进「攻击间隔」单卡，390 窄屏两列下说明被挤成窄竖条、桌面左侧「出手前摇」空出大块留白；改放到 `.ud-attack-timing` 内部并设 `grid-column: 1 / -1` 后，桌面端「出手前摇」与「攻击间隔」又收缩到左侧两列、右侧留下两列空洞。原因是 `.ud-attack-timing` 使用 `grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr))`，内部出现跨越全行的子项后，CSS Grid 不会折叠尾部空轨。
+
+整宽补充说明条应作为 `auto-fit` 子网格的同级兄弟挂在父级固定列网格（如 `.ud-stat-grid`）内再设 `grid-column: 1 / -1`，既保持上方并列卡片等高对称，又让 390／360 窄屏自然整宽展开。同时，同一标题含多组数值（如 `基础 1.6 秒 / 显示用 1.0 秒`）时，每组「数字 + 单位」分别包 `.nw`，不要把整句包进同一个 `.nw`，允许在分隔符处换行而不拆断数字与单位。
+
+### 半透明 `*-soft` 底色要按实际父底色合成后再核对比度
+
+在 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227)、[#1228](https://github.com/linhongcun/aoe2-analyzer/issues/1228)、[#1229](https://github.com/linhongcun/aoe2-analyzer/issues/1229) 核对小号提示卡与徽章配色时，按 [`tokens.css`](../src/shared/styles/tokens.css) 现值实算：浅色 `--color-accent`（`#a65a14`）在纯白 `--color-surface` 上为 `5.13:1`，但叠到半透明 `--color-accent-soft`（`#a65a141f`）上时，在 `--color-surface` 复合底色上降至 `4.36:1`，在 `--color-surface-2`（`#f5f5f7`）复合底色上降至 `4.02:1`，均低于 WCAG 2.1 正文 AA `4.5:1`。[`scripts/contrast.py`](../scripts/contrast.py) 只查脚本里写死的色对，不会替半透明底色与父表面的复合结果兜底。
+
+用半透明 `*-soft` 令牌承载 12–13px 正文或徽章前，先按实际父底色做 Alpha 合成再算对比度；需要双主题稳过 AA 的次级说明条与标签，优先用不透明实底令牌（如 `--color-surface`、`--color-surface-2`、`--color-link-soft`、`--color-warn-soft`）配 `--color-link` / `--color-warn` / `--color-text` / `--color-muted`（当前令牌下均 ≥ `4.64:1`）。
+
+### 多状态截稿脚本逐页新建页面，模拟缺失态用 `null` 哨兵
+
+[#1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225) 与 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227) 用本地 Playwright 渲染完成态设计图时出现过两类返工：① 复用同一个页面在 `HashRouter` 不同对象间切换并注入样式／节点，前一个对象手动插入的 DOM 会残留在下一张截图中；② 用空值合并（`??`）模拟字段缺失态时传入 `undefined`，静默回退成了真实数据，导致缺失态漏画。此外，局部元素截图时顶栏 `position: sticky` 可能压住元素顶部。
+
+本地批量截稿脚本为每个状态单独创建并关闭 `context.newPage()`，局部截图时临时将顶栏设为 `position: static`，模拟字段缺失统一使用显式 `null`（而非 `undefined`）哨兵；渲染结束后必须逐张打开 PNG 目视复核，再执行 `--attach` 上传。
+
 ## 开始和交付清单
 
 开始前：
