@@ -115,9 +115,9 @@
     "py": "congfengjianshidaikaishibubingshengmingzhi",
     "pyi": "cfjsdksbbsmz"
   },
-  "从封建时代开始，骑乘单位和火枪骑兵的攻击速度 +25%": {
-    "py": "congfengjianshidaikaishiqichengdanweihehuoqiangqibingdegongjisudu",
-    "pyi": "cfjsdksqcdwhhqqbdgjsd"
+  "从封建时代开始，骑乘单位和火矛兵的攻击速度 +25%": {
+    "py": "congfengjianshidaikaishiqichengdanweihehuomaobingdegongjisudu",
+    "pyi": "cfjsdksqcdwhhmbdgjsd"
   },
   "伐木场科技免费": {
     "py": "famuchangkejimianfei",

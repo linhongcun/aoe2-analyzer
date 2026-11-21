@@ -2891,6 +2891,16 @@
           "prerequisites": [],
           "supplements": [
             {
+              "mode": "upgrade",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2587,
+                  "age": 4
+                }
+              ]
+            },
+            {
               "mode": "conditional-evaluation",
               "entities": [
                 {

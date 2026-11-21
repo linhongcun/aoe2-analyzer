@@ -164,6 +164,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(muisca.required.map(({ id }) => id)).toEqual([2586, 185]);
     expect(muisca.prerequisites).toEqual([]);
     expect(muisca.required[0]!.role).toContain('近战/反骑');
+    expect(muisca.required[0]!.role).toContain('城堡时代普通形态');
     expect(muisca.required[1]!.role).toContain('远程反步兵/民兵');
     expect(muisca.required[1]!.role).toContain('非投石车');
     expect(muisca.reason).toContain('Slinger（投石手）');
@@ -172,13 +173,16 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(muisca.limitation).toContain('未量化为群战结果');
     expect(muisca.limitation).toContain('不适于攻击民兵系');
     expect(muisca.limitation).toContain('没有长戟兵补队');
+    expect(muisca.limitation).toContain('缺鼓风炉（75）和射手锁甲（219）');
     expect(muisca.alternatives).toContain('不用它替换默认投石手／神庙护卫组合');
 
     const optional = muisca.supplements.flatMap(({ entities }) => entities);
     expect(muisca.supplements.map(({ mode, entities }) => [mode, entities.map(({ id, age }) => [id, age])])).toEqual([
+      ['upgrade', [[2587, 4]]],
       ['conditional-evaluation', [[6, 3]]],
       ['conditional-evaluation', [[331, 4]]],
     ]);
+    expect(muisca.supplements[0]!.condition).toContain('帝王实战效果待验证');
     expect([...muisca.required, ...muisca.prerequisites, ...optional].some(({ id }) => id === 2562)).toBe(false);
     expect([...muisca.required, ...muisca.prerequisites].some(({ id }) => id === 6 || id === 331)).toBe(false);
     expect(muisca.adjustments[2]!.text).toContain('确有反弓缺口');
@@ -210,7 +214,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(withoutSkirmisher.status).toBe('current');
     if (withoutSkirmisher.status === 'current') {
       expect(withoutSkirmisher.required.map(({ entity }) => entity.id)).toEqual([2586, 185]);
-      expect(withoutSkirmisher.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([331]);
+      expect(withoutSkirmisher.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([2587, 331]);
       expect(withoutSkirmisher.adjustments.find(({ id }) => id === muisca.adjustments[3]!.id)?.text).toBe(muisca.adjustments[3]!.text);
     }
 
@@ -219,7 +223,7 @@ describe('#1139 越南与穆伊斯卡条件支援边界', () => {
     expect(withoutTrebuchet.status).toBe('current');
     if (withoutTrebuchet.status === 'current') {
       expect(withoutTrebuchet.required.map(({ entity }) => entity.id)).toEqual([2586, 185]);
-      expect(withoutTrebuchet.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([6]);
+      expect(withoutTrebuchet.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([2587, 6]);
       expect(withoutTrebuchet.adjustments.find(({ id }) => id === muisca.adjustments[2]!.id)?.text).toBe(muisca.adjustments[2]!.text);
     }
   });

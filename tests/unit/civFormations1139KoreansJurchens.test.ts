@@ -197,8 +197,8 @@ describe('#1139 Koreans and Jurchens optional support', () => {
     expect(tower.adjustments[4]!.text).toContain('不新开靶场量产驻军线');
     expect(tower.limitation).toContain('驻塔时不受护甲缺口影响仅为机制推断');
     expect(tower.limitation).toContain('火矛出塔仍是 4/4');
-    expect(tower.limitation).toContain('是否适用于火矛未由客户端核对');
-    expect(tower.limitation).toContain('翼骑属于骑乘单位，不存在同一疑问');
+    expect(tower.limitation).toContain('科技 994 将攻击速度 +25% 加成应用于火矛兵（1901）与精锐火矛兵（1903）');
+    expect(tower.limitation).toContain('尚未在客户端逐帧计时');
     expect(tower.evidence.scope).toContain('4 个火矛与 5 个掷弹兵分别达到 5 箭上限');
     expect(tower.evidence.scope).toContain('理论驻军箭数比较，不是胜率或自动招募配方');
 

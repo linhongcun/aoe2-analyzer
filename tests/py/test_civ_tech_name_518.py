@@ -11,10 +11,11 @@ ROOT = Path(__file__).resolve().parents[2]
 ORIGINAL = '加固堡垒 (防御工事每分钟恢复 500 生命值)'
 CASTLE_EN = 'Fortified Bastions'
 IMPERIAL_ZH = '霹雳炸弹 (保留帝王科技说明)'
+BONUS_ORIGINAL = '从封建时代开始，骑乘单位和火枪骑兵的攻击速度 +25%'
 
 
 class JurchensTechName(unittest.TestCase):
-    def generate(self, original=ORIGINAL, name='强化<br>\n堡垒'):
+    def generate(self, original=ORIGINAL, name='强化<br>\n堡垒', bonus=BONUS_ORIGINAL):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / 'data/sources').mkdir(parents=True)
@@ -22,14 +23,14 @@ class JurchensTechName(unittest.TestCase):
             cache = root / 'cache'
             cache.mkdir()
             zh = {
-                '1': f'文明说明<br>\n<b>独特单位：</b>单位<br>\n<b>独特科技：</b><br>\n• {original}<br>\n• {IMPERIAL_ZH}<br>\n<b>团队加成：</b>团队说明',
+                '1': f'文明说明<br>\n• 保留第一条<br>\n• {bonus}<br>\n<b>独特单位：</b>单位<br>\n<b>独特科技：</b><br>\n• {original}<br>\n• {IMPERIAL_ZH}<br>\n<b>团队加成：</b>团队说明',
                 '2': '女真',
             }
             if name is not None:
                 zh['17466'] = name
             # 不提供28466：只统一名称不能借用科技帮助说明扩大文明介绍范围。
             en = {
-                '1': f'Civilization<br>\n<b>Unique Unit:</b>Unit<br>\n<b>Unique Tech:</b><br>\n• {CASTLE_EN} (original description)<br>\n• Thunderclap Bombs (original imperial description)<br>\n<b>Team Bonus:</b>Team',
+                '1': f'Civilization<br>\n• First bonus<br>\n• Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age<br>\n<b>Unique Unit:</b>Unit<br>\n<b>Unique Tech:</b><br>\n• {CASTLE_EN} (original description)<br>\n• Thunderclap Bombs (original imperial description)<br>\n<b>Team Bonus:</b>Team',
                 '2': 'Jurchens',
             }
             data = {'civs': {'Jurchens': {'help_string_id': 1, 'name_string_id': 2}}}
@@ -59,6 +60,20 @@ class JurchensTechName(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('unique-tech source changed', result.stderr)
         self.assertIsNone(output)
+
+    def test_corrects_only_the_matched_chinese_bonus(self):
+        result, output = self.generate()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(output[0]['bon'], ['保留第一条', '从封建时代开始，骑乘单位和火矛兵的攻击速度 +25%'])
+        self.assertEqual(output[0]['bonEn'], ['First bonus', 'Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age'])
+
+    def test_changed_or_missing_bonus_requires_source_review(self):
+        for bonus in (BONUS_ORIGINAL + '来源已修订', ''):
+            with self.subTest(bonus=bonus):
+                result, output = self.generate(bonus=bonus)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('Jurchens bonus 1 source changed', result.stderr)
+                self.assertIsNone(output)
 
     def test_missing_reference_name_is_rejected(self):
         result, output = self.generate(name=None)

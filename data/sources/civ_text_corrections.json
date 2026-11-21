@@ -15,6 +15,23 @@
       "name_only": true,
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
       "note": "#518：文明介绍120201的译名与科技996的名称17466不一致；仅统一名称为强化堡垒，保留原介绍的括号说明与英文。"
+    },
+    "bon": {
+      "1": {
+        "original": "从封建时代开始，骑乘单位和火枪骑兵的攻击速度 +25%",
+        "corrected": "从封建时代开始，骑乘单位和火矛兵的攻击速度 +25%",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1264：文明介绍120201的英文为 Fire Lancers；DE 188329 科技994作用于火矛兵1901与精锐火矛兵1903。"
+      }
+    }
+  },
+  "Bohemians": {
+    "it": {
+      "original": "胡斯革新 (僧侣和修道院科技消耗黄金，而不消耗食物)",
+      "name_string_id": 17351,
+      "help_string_id": 28351,
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
+      "note": "#1264：文明介绍120188颠倒了食物和黄金；采用同版本科技785的名称与研究说明。"
     }
   }
 }
