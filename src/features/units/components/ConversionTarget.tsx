@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Tech, Unit } from '../../../domain/types';
+import { DATA_PATCH, SOURCE_PINS } from '../../../data/sources';
 import { Icon } from '../../../shared/ui/Icon';
 import { baselineIntervalText, CONVERSION_ANCHOR, conversionFacts, DEVOTION_ID, FAITH_ID, formatSigned, MONK_ID } from '../conversion';
 import './unit-conversion.css';
@@ -97,6 +98,14 @@ export function ConversionTarget({ unit, civ, techs }: { unit: Unit; civ?: strin
         <Link to={'/unit/' + MONK_ID + '#' + CONVERSION_ANCHOR}>
           查看僧侣招降机制（基准 <span className="num nw">{baselineIntervalText()}</span>）
         </Link>
+      </p>
+      <p className="note ud-cr-links">
+        基础抗性与文明层数据来源：<a href={`https://github.com/${SOURCE_PINS.dat.repo}/blob/${SOURCE_PINS.dat.commit}/${SOURCE_PINS.dat.path}`}>固定 DE DAT</a>
+        （
+        <span className="num nw">
+          DE {DATA_PATCH.build}，{DATA_PATCH.date}
+        </span>
+        ）。
       </p>
     </section>
   );

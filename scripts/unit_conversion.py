@@ -16,8 +16,8 @@ def add_conversion_data(units, dat):
         mods[attr] = command['D']
     source_units = dat['Civs'][1]['Units']
     for uid, unit in units.items():
-        target = source_units[uid] or {}
-        if 'ConversionResistance' in target:
+        target = source_units[uid] if 0 <= uid < len(source_units) else None
+        if target and 'ConversionResistance' in target:
             unit['conversionResistance'] = target['ConversionResistance']
         if 'Bengalis' in unit['civs'] and uid in changes:
             mods = changes[uid]
