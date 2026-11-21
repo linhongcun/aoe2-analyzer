@@ -19,11 +19,11 @@ export const FORBIDDEN_PHRASES = Object.freeze(['实现未做', '仍 OPEN', '不
 
 const isExternal = (target) => /^(https?:|mailto:|#)/i.test(target);
 const isInlinePath = (value) =>
-  (value.startsWith('data/') || value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') || value.startsWith('mockups/')) &&
+  ['data/', 'src/', 'scripts/', 'docs/'].some((prefix) => value.startsWith(prefix)) &&
   !value.includes('<') &&
   !value.includes('*') &&
   !value.includes(' ') &&
-  (/[./]$/.test(value) || /\.(md|json|css|ts|tsx|mjs|png)$/.test(value));
+  (/[./]$/.test(value) || /\.(md|json|css|ts|tsx|mjs)$/.test(value));
 
 /**
  * @param {{root?: string, readmePath?: string, requiredEntries?: readonly string[], forbidden?: readonly string[]}} [options]
@@ -55,8 +55,7 @@ export function checkDesignIndex(options = {}) {
   for (const match of readme.matchAll(/`([^`]+)`/g)) {
     const value = (match[1] ?? '').trim();
     if (!value || !isInlinePath(value)) continue;
-    const inlineBase = value.startsWith('data/') || value.startsWith('src/') || value.startsWith('scripts/') || value.startsWith('docs/') ? root : base;
-    if (!existsSync(resolve(inlineBase, value))) problems.push(`内联路径不存在: ${value}`);
+    if (!existsSync(resolve(root, value))) problems.push(`内联路径不存在: ${value}`);
   }
 
   for (const entry of requiredEntries) {

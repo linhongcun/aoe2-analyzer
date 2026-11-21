@@ -7,6 +7,7 @@
  * 2. 读取：scripts/、tests/、src/ 和根目录配置里的代码不读 Markdown 正文。需要的字段由生成器写进 data/ 的 JSON，
  *    Markdown 是那份 JSON 的排版。例外逐条登记在 READERS（检查文档本身的脚本、核对自己排版的生成器）和
  *    READABLE（CHANGELOG.md，发版脚本按 Keep a Changelog 解析）。
+ * 3. 图片：仓库只允许指定目录下的运行时图片和测试基线。Issue 图片使用 GitHub Issue 原生附件。
  *
  * 读取检查按行匹配源码，能拦住直接写出路径的读法和「先赋值再读」的写法，不解析语法树。
  * 只读；`npm run lint` 调用。
@@ -32,6 +33,8 @@ export const READERS = Object.freeze({
 
 const CODE = /\.(?:ts|tsx|mts|mjs|cjs|js|py)$/;
 const CODE_ROOTS = ['scripts/', 'tests/', 'src/'];
+const IMAGE = /\.(?:png|jpe?g|webp|gif|svg|avif|ico)$/i;
+const IMAGE_HOMES = ['public/img/', 'src/features/civs/assets/', 'tests/e2e/__baselines__/'];
 const READ_CALL = /\b(?:readFileSync|readFile|read_text|read_bytes|open|read|text|load)\s*\(|git\(\s*['"]show['"]/;
 const LITERAL = /(['"`])((?:(?!\1)[^\\\n])*?\.md)\1/g;
 /** 路径直接赋给一个名字：`const DOC = 'docs/X.md'`、`DOC = 'docs/X.md'`。 */
@@ -47,7 +50,9 @@ const isCode = (path) => CODE.test(path) && (CODE_ROOTS.some((root) => path.star
 export function misplaced(files) {
   const problems = [];
   for (const path of files) {
-    if (path.endsWith('.md') && !ROOT_MARKDOWN.includes(path) && !MARKDOWN_HOMES.some((home) => path.startsWith(home)))
+    if (IMAGE.test(path) && !IMAGE_HOMES.some((home) => path.startsWith(home))) {
+      problems.push(`${path}：仓库图片只允许放在 ${IMAGE_HOMES.join('、')}。Issue 图片请用 GitHub Issue 原生附件嵌入原 Issue 正文。`);
+    } else if (path.endsWith('.md') && !ROOT_MARKDOWN.includes(path) && !MARKDOWN_HOMES.some((home) => path.startsWith(home)))
       problems.push(`${path}：Markdown 只能放在 docs/（或 role/、.github/、根目录四份约定文件）`);
     else if (path.startsWith('data/') && !path.endsWith('.json')) problems.push(`${path}：data/ 只放 .json`);
   }
@@ -82,7 +87,7 @@ export function checkDocsBoundary(options = {}) {
   const root = options.root ?? process.cwd();
   const files =
     options.files ??
-    execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
+    execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
   const read = options.read ?? ((path) => readFileSync(join(root, path), 'utf8'));
   const problems = misplaced(files);
   for (const path of files) {
@@ -102,11 +107,11 @@ function main(argv = process.argv.slice(2)) {
   const root = argv[0] === '--root' && argv[1] ? resolve(argv[1]) : process.cwd();
   const problems = checkDocsBoundary({ root });
   if (problems.length) {
-    console.error(`文档与数据边界检查失败（${problems.length} 项）。Markdown 只给人看；代码要用的内容写进 data/ 下的 JSON：`);
+    console.error(`文档与数据边界检查失败（${problems.length} 项）。`);
     for (const problem of problems) console.error(`- ${problem}`);
     return 1;
   }
-  console.log('文档与数据边界：Markdown 位置与代码读取通过');
+  console.log('文档与数据边界：Markdown 位置与代码读取、data/ 文件类型、图片位置通过');
   return 0;
 }
 

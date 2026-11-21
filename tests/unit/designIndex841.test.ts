@@ -51,10 +51,19 @@ describe('docs/design 索引检查（issue 841）', () => {
     }
   });
 
-  it('行内路径不存在时失败', () => {
-    const root = fixture('# Index\n`mockups/missing/`\n', []);
+  it('从仓库根目录解析行内路径并报告缺失项', () => {
+    const root = fixture('# Index\n`docs/design/target.md`\n`docs/design/missing.md`\n');
     try {
-      expect(checkDesignIndex({ root, requiredEntries: [], forbidden: [] }).join('\n')).toContain('内联路径不存在: mockups/missing/');
+      expect(checkDesignIndex({ root, requiredEntries: [], forbidden: [] })).toEqual(['内联路径不存在: docs/design/missing.md']);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('跳过历史设计图的行内路径文字', () => {
+    const root = fixture('# Index\n`mockups/issue-1200/`\n`docs/design/example.png`\n', []);
+    try {
+      expect(checkDesignIndex({ root, requiredEntries: [], forbidden: [] })).toEqual([]);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
