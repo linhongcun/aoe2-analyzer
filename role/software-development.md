@@ -178,6 +178,10 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
 
+**在拼音生成后核对目录中的大整数。** 两个单位的恢复速率在 Python 导出时均为 `3199999949781598208`，原拼音脚本读写整份 JSON 后写成了 `3199999949781598000`。在 JavaScript 中把两边都转成 `Number` 再比较，会漏掉这个差异。新增可能超出安全整数范围的字段时，用 Python 整数或其他无损解析器按 ID 比较固定源与最终提交的 JSON，并运行拼音的 `--check` 验证重跑稳定。[PR #1250](https://github.com/linhongcun/aoe2-analyzer/pull/1250)
+
+**从目录入口和静态分享地址分别验证替代形态。** 保加利亚骑兵的目录去重保留城堡训练记录 1225／1227，落马关系却在营垒记录 1254／1255。新增形态时，沿目录实际保留的记录走到对应档位，再打开复制的 `/unit/<id>/` 地址核对生产构建生成了该页。前者能发现训练记录与形态归属不同造成的断链，后者能发现静态页面登记遗漏。[目录入口复核](https://github.com/linhongcun/aoe2-analyzer/pull/1251#discussion_r4651359756) · [PR #1251](https://github.com/linhongcun/aoe2-analyzer/pull/1251)
+
 **浅克隆仓库且 SSH 22 端口被阻断时，经 HTTPS 单分支拉取并加 `--no-tags`。** 本机仓库为浅克隆（`git rev-parse --is-shallow-repository` 为 `true`，含 `.git/shallow`）且 `origin` 配置为 SSH（`git@github.com:linhongcun/aoe2-analyzer.git`）。代理断开 22 端口时，直接 `git pull` 会报 `Connection closed ... port 22`；若只临时切 HTTPS 跑不限分支的 `git pull`，拉取全部远端分支和标签时 pack delta 会引用浅边界之外的缺失对象，报 `Could not read ...` 与 `pack has ... unresolved deltas`。以后不改仓库的 `remote.origin.url`，拉取目标分支改用 `git -c url."https://github.com/".insteadOf="git@github.com:" fetch --no-tags origin <branch>` 再快进合并（如 `git merge --ff-only origin/main`）；在 `gh` 已配置 HTTPS 凭据的前提下，推送分支遇同一 SSH 阻断也对单条 `git push` 加相同的 `-c url."https://github.com/".insteadOf="git@github.com:"` 参数。该做法仅用于受限网络或浅克隆同步，不解除浅克隆历史，也不修改远端配置。
 
 **测请求乱序，先确认有两个不同的请求。** 实体详情共用 `loadCivUpdates()` 的待完成请求；只延迟响应再切换科技，两个页面等的是同一个 Promise，测不到旧响应晚归。历史回归先让首次加载失败，挂起重试请求，再切换科技，确认新请求已发出并先返回。随后分别让旧请求成功、失败，两种情况下都检查当前科技仍无记录、没有旧错误。测试共享加载器时还要检查：旧请求失败不能清掉新请求的缓存。[Issue #1149](https://github.com/linhongcun/aoe2-analyzer/issues/1149) / [PR #1166](https://github.com/linhongcun/aoe2-analyzer/pull/1166)
