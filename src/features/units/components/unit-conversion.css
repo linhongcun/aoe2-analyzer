@@ -1,0 +1,98 @@
+.ud-cr-box,
+.ud-caster-tasks {
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.ud .ud-cr-box h3,
+.ud .ud-caster-tasks h3,
+.ud-cr-civ h4 {
+  margin-top: 0;
+}
+.ud-cr-grid,
+.ud-caster-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+.ud-caster-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ud-cr-stat,
+.ud-caster-card,
+.ud-cr-civ {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+.ud-cr-stat dt,
+.ud-cr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.ud-cr-stat dt,
+.ud-cr-stat dd:first-of-type {
+  font-weight: 700;
+}
+.ud-cr-stat dd {
+  margin: var(--space-1) 0 0;
+}
+.ud-cr-stat dd:first-of-type {
+  font-size: 20px;
+}
+.ud-cr-note {
+  color: var(--color-muted);
+  font-size: 13px;
+}
+.ud-cr-badge {
+  font-size: 13px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+}
+.ud-cr-badge.is-resist {
+  color: var(--color-link);
+  background: var(--color-link-soft);
+}
+.ud-cr-badge.is-neutral {
+  color: var(--color-text-2);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+.ud-cr-badge.is-warn {
+  color: var(--color-warn);
+  background: var(--color-warn-soft);
+}
+.ud-cr-badge.is-civ {
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+.ud-cr-civ {
+  border-left: 3px solid var(--color-accent);
+}
+.ud-cr-links a,
+.ud-caster-tasks a,
+.ud [data-conversion='resistance'] a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+  color: var(--color-link);
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .ud-cr-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ud-cr-stat:last-child {
+    grid-column: 1 / -1;
+  }
+  .ud-caster-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -448,7 +448,7 @@ export default function UnitDetail() {
         />
       )}
 
-      <UnitNotes u={u} catalog={core.units} relation={relation} techs={core.techs} invalid={!!targetProjection?.invalidFields.length} />
+      <UnitNotes civ={context?.en} u={u} catalog={core.units} relation={relation} techs={core.techs} invalid={!!targetProjection?.invalidFields.length} />
 
       <ReverseCounters
         key={reverseCounterSessionKey(u.id, context?.en ?? '', loc) ?? `${u.id}:${context?.en ?? ''}`}
@@ -472,7 +472,7 @@ export default function UnitDetail() {
       <TrebuchetStates unit={u} />
       <ScoutAgeChanges unit={u} />
       <AgeCounterBonuses unitId={u.id} unitById={core.unitById} />
-      <ConversionMechanics unitId={u.id} techs={core.techs} />
+      <ConversionMechanics unitId={u.id} units={core.unitById} techs={core.techs} />
       <SplashMechanics unit={u} />
       <VillagerGather unitId={u.id} />
       <FishingGather unitId={u.id} />

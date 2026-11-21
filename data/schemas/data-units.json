@@ -287,6 +287,56 @@
       "pyi": {
         "type": "string",
         "pattern": "^[a-z]*$"
+      },
+      "conversionResistance": {
+        "type": "object",
+        "properties": {
+          "chanceMod": {
+            "type": "number"
+          },
+          "minTimeMod": {
+            "type": "number"
+          },
+          "maxTimeMod": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "bengaliConversion": {
+        "type": "object",
+        "properties": {
+          "minTimeMod": {
+            "type": "number"
+          },
+          "maxTimeMod": {
+            "type": "number"
+          },
+          "bonusDamageReduction": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["minTimeMod", "maxTimeMod", "bonusDamageReduction"]
+      },
+      "casterTasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "number"
+            },
+            "value1": {
+              "type": "number"
+            },
+            "value2": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["action", "value1", "value2"]
+        }
       }
     },
     "required": [

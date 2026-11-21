@@ -90,6 +90,9 @@ def unit(u):
                 'FriendlyFireDamage': t.friendly_fire_damage} if t else {}),
             'BloodUnitID': u.blood_unit_id,
             'AccuracyDispersion': t.accuracy_dispersion if t else None,
+            **({'ConversionResistance': {'chanceMod': u.creatable.conversion_chance_mod,
+                                         'minTimeMod': u.creatable.min_conversion_time_mod,
+                                         'maxTimeMod': u.creatable.max_conversion_time_mod}} if u.creatable else {}),
             'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
             'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
             'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
@@ -128,6 +131,10 @@ out = {
              'ResearchAt': [[r.location_id, r.research_time] for r in t.research_locations if r.location_id >= 0],
              'Cost': [[c.type, c.amount, c.flag] for c in t.resource_costs if c.type >= 0 and c.amount]} for t in d.techs],
   'Tasks': {str(i): tasks(i) for i in sorted(TASK_UNITS)},
+  'CasterTasks': {str(i): [{'action': t.action_type, 'value1': t.work_value_1, 'value2': t.work_value_2}
+                           for t in d.civs[1].units[i].bird.tasks
+                           if t.action_type in (104, 105) and t.class_id == -1 and t.unit_id == -1]
+                  for i in (125, 775) if i < len(d.civs[1].units) and d.civs[1].units[i] and d.civs[1].units[i].bird},
   'Effects': [{'Name': e.name, 'EffectCommands': [{'Type': c.type, 'A': c.a, 'B': c.b, 'C': c.c, 'D': c.d} for c in e.effect_commands]} for e in d.effects],
   'Civs': [{'Name': c.name, 'TechTreeID': c.tech_tree_id, 'TeamBonusID': c.team_bonus_id, 'Units': [unit(u) for u in c.units] if i < 2 else None} for i, c in enumerate(d.civs)],
   # 建筑建成时触发的科技（Building.tech_id），所有文明合并：升级时代前置建筑判定用（#3 根因 3）
@@ -140,7 +147,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v14.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v17.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

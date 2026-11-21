@@ -52,7 +52,16 @@ export type UnitForm = Pick<
   | 'garrisonCapacity'
 > & { kind: 'weapon' | 'barrage' | 'dismount' };
 
+export interface ConversionResistance {
+  chanceMod?: number;
+  minTimeMod?: number;
+  maxTimeMod?: number;
+}
+
 export interface Unit {
+  conversionResistance?: ConversionResistance;
+  bengaliConversion?: { minTimeMod: number; maxTimeMod: number; bonusDamageReduction: number };
+  casterTasks?: { action: number; value1: number; value2: number }[];
   form?: UnitForm;
   /** issue 123 全拼 / 首字母，构建时生成 */
   py?: string;
