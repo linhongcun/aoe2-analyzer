@@ -307,7 +307,7 @@
 | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
 | [普通战象](https://linhongcun.github.io/aoe2-analyzer/#/unit/239?civ=Persians) | 每头需 170 食物、85 黄金，并占用城堡训练队列。攒兵前先维持已有部队的补员和阵线，有剩余城堡产能和额外食物、黄金时再考虑投入。 |
 
-来源与版本：[认可范围](https://github.com/linhongcun/aoe2-analyzer/issues/1176)、[波斯步弓手](https://linhongcun.github.io/aoe2-analyzer/#/tech/488?civ=Persians)、[固定单名训练费用模型](https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/src/domain/unitCost.ts)、[科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#techtree)、[弩手满科技模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/24/Persians/4/437,199,211,200,212,219,47/?civ=Persians&tab=sim)、[帕提亚战术](https://linhongcun.github.io/aoe2-analyzer/#/tech/436?civ=Persians)，DE 188329。
+来源与版本：[认可范围](https://github.com/linhongcun/aoe2-analyzer/issues/1176)、[波斯步弓手](https://linhongcun.github.io/aoe2-analyzer/#/tech/488?civ=Persians)、[固定单名训练费用模型](https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/src/domain/unitCost.ts)、[科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#techtree)、[弩手满科技模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/24/Persians/4/437,199,211,200,212,219,47/?civ=Persians&tab=sim)、[波斯城堡时代帕提亚加成](https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#bonuses)，DE 188329。
 
 ### 土耳其
 

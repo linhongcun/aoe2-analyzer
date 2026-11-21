@@ -48,6 +48,10 @@ describe('#1266 七个文明阵容的机制与条件边界', () => {
     const status = civStatus(catalog.trees, 'Persians');
     expect([status.u492, status.t201]).toEqual([0, 0]);
     expect(civByEn('Persians')!.bon).toContain('在城堡时代可使用帕提亚战术');
+    expect(route.evidence.links).toContainEqual({
+      label: '波斯城堡时代帕提亚加成',
+      href: 'https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#bonuses',
+    });
     expect(imperial('Persians', 24)).toMatchObject({ hp: 35, atk: 8, rng: 7 });
     const project = (core = catalog.core) => projectFormation(route, 'Persians', DATA_PATCH, { core, trees: catalog.trees }, routes, source);
     const view = project();
