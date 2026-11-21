@@ -173,6 +173,10 @@
       "acc": {
         "type": "number"
       },
+      "accuracyDispersion": {
+        "type": "number",
+        "minimum": 0
+      },
       "blast": {
         "type": "number"
       },

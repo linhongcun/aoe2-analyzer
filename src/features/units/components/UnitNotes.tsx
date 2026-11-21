@@ -1,3 +1,4 @@
+import { catalogAccuracyFeedsExpectedHit } from '../../../domain/accuracyBoundary';
 import type { Unit, Tech } from '../../../domain/types';
 import { Linked } from '../../../shared/ui/widgets';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
@@ -54,17 +55,18 @@ export function UnitNotes({ u, relation, techs, invalid }: { u: Unit; relation: 
           本单位类别资料部分无法解析；已跳过异常值，不会补成 0。
         </p>
       )}
-      <p>
-        准确度 <span className="num nw">{u.acc}%</span>
-      </p>
-      {u.id === 331 && <p className="ud-kicker">目录打包记录的准确度，不代表展开命中率。</p>}
-      {alternate?.kind === 'barrage' ? (
+      {!alternate && catalogAccuracyFeedsExpectedHit(u) ? (
+        <AccuracyBoundaryNote unit={u} techs={techs} />
+      ) : (
+        <p>
+          准确度 <span className="num nw">{u.acc}%</span>
+        </p>
+      )}
+      {alternate?.kind === 'barrage' && (
         <p className="ud-form-warn">
           目录准确度为 <span className="num nw">{u.acc}%</span>
           ，不是「永远打不中」。掩护模式用于覆盖更广区域、降低单点精准度；此数值为目录原始记录，不代表实战命中率为零，也不用于单位 PK 期望命中计算。
         </p>
-      ) : (
-        !alternate && <AccuracyBoundaryNote unit={u} techs={techs} />
       )}
       {!!u.blast && (
         <p>
