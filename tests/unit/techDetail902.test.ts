@@ -223,6 +223,12 @@ describe('256 倍科技特殊规则', () => {
     const research = markup('/tech/' + id).match(/<section[^>]*id="tech-research"[^>]*>([\s\S]*?)<\/section>/)?.[1];
     expect(visible(research ?? '')).toContain(`256 倍模式：${repeatable ? '可重复研究' : '不可重复研究'}`);
   });
+  it('间谍的研究标记和弑君模式的叛徒指令有各自的适用范围', () => {
+    const spies = render('/tech/408');
+    expect(spies).toContain('256 倍模式：不可重复研究');
+    expect(spies).toContain('只指随机地图的「间谍」。弑君模式的「叛徒」是可以反复付费使用的指令。');
+    expect(render('/tech/8')).not.toContain('弑君模式的「叛徒」');
+  });
   it.each([undefined, null, 0, 'false'])('缺失或非布尔源值 %s 走未知态', (repeatable) => {
     const rule = createElement(TechRepeatableRule, { repeatable });
     const html = renderToStaticMarkup(createElement(StaticRouter, { location: '/tech/22' }, rule));

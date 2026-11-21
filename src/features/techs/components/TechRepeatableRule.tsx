@@ -34,7 +34,7 @@ const states = {
   },
 } as const;
 
-export function TechRepeatableRule({ repeatable }: { repeatable?: unknown }) {
+export function TechRepeatableRule({ repeatable, researchScope }: { repeatable?: unknown; researchScope?: string }) {
   const state = repeatable === true ? 'repeatable' : repeatable === false ? 'once' : 'unknown';
   const { icon, label, description } = states[state];
   return (
@@ -51,7 +51,10 @@ export function TechRepeatableRule({ repeatable }: { repeatable?: unknown }) {
           </span>
         </span>
       </header>
-      <p>{description}</p>
+      <p>
+        {researchScope}
+        {description}
+      </p>
       <p className="td-special-boundary">
         仅反映固定源标记；不承诺可研究满 <span className="num nw">256 次</span>，不推算叠加后的属性、费用或研究时间，也不涵盖地图触发器。
       </p>
