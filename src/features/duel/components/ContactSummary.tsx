@@ -61,7 +61,7 @@ function Opening({ value }: { value: Contact }) {
       ) : (
         <p>双方无射程先手窗口。</p>
       )}
-      {value.firstFire && value.firstFire !== 'both' && <p>{value.firstFire.toUpperCase()} 方率先开火。</p>}
+      {value.firstFire && value.firstFire !== 'both' && <p>{value.firstFire.toUpperCase()} 方率先出手。</p>}
       <ContactTime value={value} />
     </>
   );

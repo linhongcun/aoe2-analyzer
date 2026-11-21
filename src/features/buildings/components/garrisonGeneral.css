@@ -41,6 +41,9 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+.garrison-preview span.num.nw {
+  display: inline-block;
+}
 .garrison-capacity {
   margin-bottom: var(--space-4);
 }
@@ -57,6 +60,185 @@
 .garrison-next {
   padding-left: var(--space-5);
 }
+.garrison-tech-status,
+.garrison-contribution,
+.garrison-fire-heading,
+.garrison-tech-summary,
+.garrison-tech-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+.garrison-tech-status,
+.garrison-contribution {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  font-size: 13px;
+}
+.garrison-tech-status,
+.garrison-fire-heading {
+  justify-content: space-between;
+}
+.garrison-tech-status + .garrison-tech-grid {
+  margin-top: var(--space-3);
+}
+.garrison-tech-summary {
+  color: var(--color-text-2);
+}
+.garrison-tech-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+.garrison-tech-actions button:not(:disabled):hover {
+  border-color: var(--color-accent);
+}
+.garrison-tech-actions .garrison-tech-select:not(:disabled) {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.garrison-tech-actions button:disabled {
+  opacity: 1;
+  color: var(--color-muted);
+  background: var(--color-surface-2);
+  cursor: default;
+}
+.garrison-badge {
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+.garrison-badge-good {
+  color: var(--color-good);
+  background: var(--color-good-soft);
+}
+.garrison-badge-link {
+  color: var(--color-link);
+  background: var(--color-link-soft);
+}
+.garrison-badge-warn {
+  color: var(--color-warn);
+  background: var(--color-warn-soft);
+}
+.garrison-badge-neutral {
+  color: var(--color-text-2);
+  background: var(--color-tag);
+  border: 1px solid var(--color-border);
+}
+.garrison-contribution {
+  grid-column: 1 / -1;
+}
+.garrison-firepower {
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: 13px;
+}
+.garrison-firepower p {
+  margin: var(--space-2) 0 0;
+}
+.garrison-fire-note {
+  color: var(--color-muted);
+}
+.garrison-firepower .garrison-fire-heading h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+.garrison-fire-metrics,
+.garrison-fire-steps {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+}
+.garrison-fire-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.garrison-fire-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 0;
+  list-style: none;
+}
+.garrison-fire-metrics > div,
+.garrison-fire-steps > li {
+  min-width: 0;
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.garrison-fire-metrics h4,
+.garrison-fire-steps h4 {
+  margin: 0 0 var(--space-1);
+  font-size: 12px;
+}
+.garrison-fire-metrics h4 {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+.garrison-fire-value {
+  display: block;
+  font-size: var(--fs-num-xl);
+  line-height: 1.2;
+}
+.garrison-fire-steps h4 {
+  color: var(--color-link);
+}
+.garrison-fire-steps strong {
+  font-size: 14px;
+}
+.garrison-firepower .garrison-fire-unknown,
+.garrison-firepower .garrison-fire-empty {
+  margin-top: var(--space-3);
+}
+.garrison-fire-unknown {
+  padding: var(--space-3);
+  color: var(--color-text);
+  background: var(--color-warn-soft);
+  border-left: 3px solid var(--color-warn);
+  border-radius: var(--radius-sm);
+}
+.garrison-contribution-table {
+  width: 100%;
+  margin-top: var(--space-2);
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.garrison-contribution-table :is(th, td) {
+  padding: var(--space-1);
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+.garrison-contribution-table tr > :nth-child(n + 2):nth-child(-n + 4) {
+  text-align: right;
+  white-space: nowrap;
+}
+.garrison-contribution-table thead th {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+@media (max-width: 760px) {
+  .garrison-fire-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .garrison-fire-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 600px) {
   .garrison-general-controls {
     grid-template-columns: minmax(0, 1fr);
@@ -66,5 +248,10 @@
   }
   .garrison-army-row > label:first-child {
     grid-column: 1 / -1;
+  }
+}
+@media (max-width: 440px) {
+  .garrison-fire-steps {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
