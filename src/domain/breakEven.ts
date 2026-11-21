@@ -23,7 +23,7 @@ export interface BreakEvenResult {
   n: number | null;
   nb: number;
   cap: number;
-  /** cap 内无法取胜（cap 档不胜） */
+  /** cap 档未得到已验证胜局，因此没有全胜后缀 */
   capReached: boolean;
   /** N−1 / N / N+1（N=1 不含 N−1；N+1 超过 cap 时不含）；capReached 时只有 cap 一档 */
   rows: BreakEvenRow[];
@@ -31,7 +31,8 @@ export interface BreakEvenResult {
   isolatedWins: number[];
   /** 少于 N 时也有获胜的数量（目前界面不显示，Steve 裁定；由单测守住搜索逻辑） */
   unstableBelow: boolean;
-  interrupted?: { n: number; result: GroupResult };
+  interrupted?: { n: number; result: Extract<GroupResult, { status: 'error' }> };
+  incomplete?: { n: number; status: 'timeout' | 'limit' };
 }
 
 /** 战斗函数签名与 groupFight 一致；仅供测试注入（例如构造非单调结果），生产调用一律用默认的 groupFight */
@@ -40,25 +41,27 @@ export type FightFn = (a: Fighter, na: number, b: Fighter, nb: number) => GroupR
 export function* breakEvenSteps(a: Fighter, b: Fighter, nb: number, cap = BREAK_EVEN_CAP, fight: FightFn = groupFight): Generator<void, BreakEvenResult> {
   const C = Number.isFinite(cap) ? Math.max(1, Math.min(BREAK_EVEN_CAP, Math.floor(cap))) : BREAK_EVEN_CAP;
   const res: GroupOutcome[] = [];
+  let incomplete: BreakEvenResult['incomplete'];
   for (let n = 1; n <= C; n++) {
     const result = fight(a, n, b, nb);
-    if (result.status === 'error' || result.status === 'timeout' || result.status === 'limit') {
+    if (result.status === 'error') {
       return { n: null, nb, cap: C, capReached: false, rows: [], isolatedWins: [], unstableBelow: false, interrupted: { n, result } };
     }
+    if (result.status === 'timeout' || result.status === 'limit') incomplete ??= { n, status: result.status };
     res.push(result);
     yield;
   }
-  const win = (n: number) => res[n - 1]!.winner === 'a';
+  const win = (n: number) => res[n - 1]!.status === 'win' && res[n - 1]!.winner === 'a';
   const row = (n: number): BreakEvenRow => ({ n, win: win(n), r: res[n - 1]! });
   if (!win(C)) {
     const isolatedWins = res.map((_, i) => i + 1).filter(win);
-    return { n: null, nb, cap: C, capReached: true, rows: [row(C)], isolatedWins, unstableBelow: false };
+    return { n: null, nb, cap: C, capReached: true, rows: [row(C)], isolatedWins, unstableBelow: false, incomplete };
   }
   let N = C;
   while (N > 1 && win(N - 1)) N--;
   const rows = [N - 1, N, N + 1].filter((n) => n >= 1 && n <= C).map(row);
   const isolatedWins = res.map((_, i) => i + 1).filter((n) => n < N && win(n));
-  return { n: N, nb, cap: C, capReached: false, rows, isolatedWins, unstableBelow: isolatedWins.length > 0 };
+  return { n: N, nb, cap: C, capReached: false, rows, isolatedWins, unstableBelow: isolatedWins.length > 0, incomplete };
 }
 
 export function breakEven(a: Fighter, b: Fighter, nb: number, cap = BREAK_EVEN_CAP, fight: FightFn = groupFight): BreakEvenResult {

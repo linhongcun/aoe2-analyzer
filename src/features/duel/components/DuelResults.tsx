@@ -1,7 +1,6 @@
 import ShareImage from '../../../shared/ui/ShareImage';
 import { duel, groupFight, costSum } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { sideEngagementSeconds } from '../../../domain/generateResource';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { CostView } from '../../../shared/ui/art';
@@ -164,8 +163,8 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
       <VgNotes
         group
         sides={[
-          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: sideEngagementSeconds(g.timeline, 'a', g.contact.meleeAt ?? g.duration) },
-          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: sideEngagementSeconds(g.timeline, 'b', g.contact.meleeAt ?? g.duration) },
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: g.contact.a[0]!.meleeUnitSeconds },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: g.contact.b[0]!.meleeUnitSeconds },
         ]}
       />
       <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />

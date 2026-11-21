@@ -76,16 +76,44 @@ describe('接触面与接敌先手', () => {
 
   it('短近战射程在贴身后增加能出手的纵深人数', () => {
     const defender = [row(2, 16, { hp: 100, rof: 1000 })];
-    const plain = valid(mixedFight([row(1, 16)], defender, { maxTime: 3 }));
-    const reach = valid(mixedFight([row(1, 16, { rng: 1 })], defender, { maxTime: 3 }));
+    // 各层入射程相隔 0.25 秒，与冷却相同，贴身时三层确实同刻出手。
+    const plain = valid(mixedFight([row(1, 16, { rof: 0.25 })], defender, { maxTime: 1 }));
+    const reach = valid(mixedFight([row(1, 16, { rng: 1, rof: 0.25 })], defender, { maxTime: 1 }));
     expect(plain.contact.a[0]!.maxMelee).toBe(4);
     expect(reach.contact.a[0]!.maxMelee).toBe(12);
     expect(reach.contact.meleeAt).toBeLessThan(plain.contact.meleeAt! + 1e-10);
   });
 
+  it('短射程近战每层须从各自进入射程起完成前摇', () => {
+    const fighter = { rng: 1, hp: 10, attack: { 近战: 2 }, contact: { ...contact, firstHitDelay: 0.65 } };
+    const a = [row(1, 9, fighter)];
+    const b = [row(2, 9, fighter)];
+    const first = valid(mixedFight(a, b, { maxTime: 1.15 }));
+    expect(first).toMatchObject({ status: 'timeout', a: { total: { alive: 9, hp: 84 } }, b: { total: { alive: 9, hp: 84 } } });
+    expect(first.contact.a[0]!.maxMelee).toBe(3);
+    const second = valid(mixedFight(a, b, { maxTime: 1.4 }));
+    expect(second.a.total.hp).toBe(78);
+    expect(second.b.total.hp).toBe(78);
+  });
+
+  it('交战单位秒按每次结算后变化的近战容量累计', () => {
+    const fighter = { hp: 5, attack: { 近战: 5 }, rof: 1 };
+    const result = valid(mixedFight([row(1, 9, fighter)], [row(2, 9, fighter)]));
+    expect(result.status).toBe('draw');
+    expect(result.timeline.slice(1).map(([, a, b]) => [a, b])).toEqual([
+      [6, 6],
+      [4, 4],
+      [2, 2],
+      [1, 1],
+      [0, 0],
+    ]);
+    expect(result.contact.a[0]!.meleeUnitSeconds).toBeCloseTo(6, 8);
+    expect(result.contact.b[0]!.meleeUnitSeconds).toBeCloseTo(6, 8);
+  });
+
   it('短射程近战逐层保留转火距离，较深层的攻击不能命中下一行', () => {
-    const a = [row(1, 3, { rng: 1, hp: 100, rof: 0.5, attack: { 近战: 1 } })];
-    const b = [row(2, 1, { hp: 2 }), row(3, 1, { hp: 2 })];
+    const a = [row(1, 3, { rng: 1, hp: 100, rof: 0.25, attack: { 近战: 1 } })];
+    const b = [row(2, 1, { hp: 4 }), row(3, 1, { hp: 2 })];
     const r = valid(mixedFight(a, b, { maxTime: 1 }));
     expect(r.timeline.at(-1)).toEqual([1, 3, 1]);
     expect(r.contact.a[0]!.maxMelee).toBe(3);

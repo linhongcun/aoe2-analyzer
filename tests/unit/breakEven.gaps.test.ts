@@ -75,6 +75,15 @@ describe('breakEven 缺口：非单调 / 平局 / 上限', () => {
     expect(r.capReached).toBe(true);
     expect(r.rows.map((x) => x.n)).toEqual([200]);
   });
+
+  it('计算上限档没有已验证胜局时保留未完成状态', () => {
+    const r = breakEven(halb, pala, 10, 5, (a, na, b, nb) => {
+      const result = seq('WWWWW')(a, na, b, nb);
+      return result.status !== 'error' && na === 5 ? { ...result, status: 'limit', winner: null } : result;
+    });
+    expect(r).toMatchObject({ n: null, capReached: true, incomplete: { n: 5, status: 'limit' }, isolatedWins: [1, 2, 3, 4] });
+    expect(r.rows[0]).toMatchObject({ n: 5, win: false, r: { status: 'limit', winner: null } });
+  });
 });
 
 describe('breakEven 缺口：民兵平局（真实 groupFight）', () => {
@@ -85,4 +94,16 @@ describe('breakEven 缺口：民兵平局（真实 groupFight）', () => {
     expect(r.rows[0]!.r.winner).toBe('draw');
     expect(r.rows[0]!.win).toBe(false);
   });
+});
+
+it('精锐龟甲船 1 对 1 超时仍能确认 2 到 200 的稳定胜档', () => {
+  const ship = unit('Elite Turtle Ship');
+  const fighter = fighterFrom(ship, simulate(ctx, ship, 'Koreans', 4, new Set(), new Set()));
+  const r = breakEven(fighter, fighter, 1);
+  expect(r).toMatchObject({ n: 2, cap: 200, capReached: false, incomplete: { n: 1, status: 'timeout' } });
+  expect(r.rows.map(({ n, r }) => [n, r.status, r.winner])).toEqual([
+    [1, 'timeout', null],
+    [2, 'win', 'a'],
+    [3, 'win', 'a'],
+  ]);
 });

@@ -9,6 +9,17 @@ const AB = 'a=359.Byzantines.4.f.&b=569.Franks.4.f.';
 const noHScroll = async (page: Page) =>
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
 
+test('精锐龟甲船低档超时仍显示已验证的稳定胜档', async ({ page }) => {
+  await page.goto('./#/duel?a=832.Koreans.4..&b=832.Koreans.4..&m=n&na=2&nb=1');
+  await page.getByRole('button', { name: '算盈亏平衡' }).click();
+  const result = page.getByRole('region', { name: '盈亏平衡点' });
+  await expect(result.locator('[data-t="be-n"]')).toHaveText('2');
+  await expect(result).toContainText('到 200 个均能获胜');
+  const incomplete = result.locator('tr[data-n="1"]');
+  await expect(incomplete).toContainText('达到模拟时限，暂无胜者');
+  await expect(incomplete).not.toContainText('A 负');
+});
+
 for (const w of WIDTHS) {
   test.describe(`盈亏平衡缺口 @${w}`, () => {
     test.use({ viewport: { width: w, height: 900 } });

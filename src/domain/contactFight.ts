@@ -28,6 +28,7 @@ export interface ArmyResult {
 interface RowContact {
   maxMelee: number;
   maxRanged: number;
+  meleeUnitSeconds: number;
 }
 export interface ContactSummary {
   /** 第一次有近战够到对方前排的时间。 */
@@ -67,6 +68,11 @@ export function contactFighterError(f: Fighter): string | null {
   return null;
 }
 
+interface AttackClock {
+  aimAt: number | null;
+  cycleStart: number;
+  cycles: number;
+}
 interface RowState extends ArmyRow {
   index: number;
   radiusX: number;
@@ -76,9 +82,14 @@ interface RowState extends ArmyRow {
   delay: number;
   alive: number;
   headHp: number;
-  aimAt: number | null;
-  cycleStart: number;
-  cycles: number;
+  clocks: AttackClock[];
+}
+interface RankInRange {
+  depth: number;
+  count: number;
+  distance: number;
+  leaving: boolean;
+  clock: AttackClock;
 }
 interface Formation {
   rows: RowState[];
@@ -104,12 +115,6 @@ function meleeAcross(row: RowState, target: RowState): number {
   return Math.max(1, Math.floor((Math.sqrt(target.alive) * target.radiusY) / row.radiusY + EPS));
 }
 
-function meleeCapacity(row: RowState, target: RowState, distance: number): number {
-  // 用折算宽度和可达纵深估计并发人数，不为个体建立平面位置。
-  const ranks = 1 + Math.floor((Math.max(0, row.fighter.rng - distance) + EPS) / (2 * row.radiusX));
-  return Math.min(row.alive, meleeAcross(row, target) * ranks);
-}
-
 function summarize(rows: RowState[]): ArmyResult {
   const values = rows.map((r) => ({
     uid: r.uid,
@@ -133,25 +138,24 @@ function summarize(rows: RowState[]): ArmyResult {
 }
 const survivors = (rows: RowState[]) => rows.reduce((count, row) => count + row.alive, 0);
 
-function applyAttacks(shots: number[], source: Formation, target: Formation, gap: number, damage: number[][]) {
+function applyAttacks(shots: RankInRange[][], source: Formation, target: Formation, gap: number, damage: number[][]) {
   let to = 0;
-  // 每个近战纵深位置由结算前的敌方接触面决定。
-  const lanes = source.rows.map((row) => meleeAcross(row, target.front));
-  for (const [from, count] of shots.entries()) {
+  attackRows: for (const [from, ranks] of shots.entries()) {
     const attacker = source.rows[from]!;
-    for (let n = 0; n < count; n++) {
-      while (target.rows[to] && !target.rows[to]!.alive) to++;
-      const row = target.rows[to];
-      if (!row) return;
-      const depth = attacker.fighter.ranged ? 0 : Math.floor(n / lanes[from]!) * (2 * attacker.radiusX);
-      const distance = gap + source.setback[from]! + depth + target.setback[to]!;
-      if (distance - attacker.fighter.rng > EPS || distance + EPS < attacker.minRange) break;
-      const hit = damage[from]![to]!;
-      if (!hit) break;
-      row.headHp -= hit;
-      if (row.headHp <= EPS) {
-        row.alive--;
-        row.headHp = row.fighter.hp;
+    for (const { count, depth } of ranks) {
+      for (let n = 0; n < count; n++) {
+        while (target.rows[to] && !target.rows[to]!.alive) to++;
+        const row = target.rows[to];
+        if (!row) return;
+        const distance = gap + source.setback[from]! + depth + target.setback[to]!;
+        if (distance - attacker.fighter.rng > EPS || distance + EPS < attacker.minRange) continue attackRows;
+        const hit = damage[from]![to]!;
+        if (!hit) continue attackRows;
+        row.headHp -= hit;
+        if (row.headHp <= EPS) {
+          row.alive--;
+          row.headHp = row.fighter.hp;
+        }
       }
     }
   }
@@ -201,9 +205,7 @@ export function contactFight(
         delay: f.firstHitDelay,
         alive: row.count,
         headHp: row.fighter.hp,
-        aimAt: null,
-        cycleStart: 0,
-        cycles: 0,
+        clocks: [],
       };
     });
   const A = make(a);
@@ -219,7 +221,7 @@ export function contactFight(
     events = 0,
     attacks = 0;
   const timeline: Timeline = [[0, survivors(A), survivors(B)]];
-  const blank = (rows: RowState[]) => rows.map(() => ({ maxMelee: 0, maxRanged: 0 }));
+  const blank = (rows: RowState[]) => rows.map(() => ({ maxMelee: 0, maxRanged: 0, meleeUnitSeconds: 0 }));
   const contact: ContactSummary = { meleeAt: null, firstStrike: null, firstFire: null, a: blank(A), b: blank(B) };
   let opening: { side: Side; time: number; volleys: number } | null = null;
   let openingClosed = false;
@@ -253,31 +255,55 @@ export function contactFight(
       if (va) schedule((gap - (left.front.fighter.ranged ? left.front.fighter.rng : 0)) / speed);
       if (vb) schedule((gap - (right.front.fighter.ranged ? right.front.fighter.rng : 0)) / speed);
     }
-    const eligibility = (side: Formation) =>
+    const eligibility = (side: Formation, target: Formation) =>
       side.rows.map((row) => {
-        if (!row.alive || (!row.fighter.ranged && row !== side.front)) return { inRange: false, leaving: false };
-        const distance = gap + side.setback[row.index]!;
-        if (distance - row.fighter.rng > EPS) {
-          // 后排的纵深可能比自身射程还长，此时等前排换行才有机会出手。
-          if (speed && row.fighter.rng + EPS >= side.setback[row.index]!) schedule((distance - row.fighter.rng) / speed);
-          return { inRange: false, leaving: false };
+        const eligible: RankInRange[] = [];
+        const { ranged, rng } = row.fighter;
+        const diameter = 2 * row.radiusX;
+        const setback = side.setback[row.index]!;
+        const width = ranged ? Math.max(1, row.alive) : meleeAcross(row, target.front);
+        const ranks =
+          row.alive && (ranged || row === side.front)
+            ? Math.min(Math.ceil(row.alive / width), ranged ? 1 : 1 + Math.floor((Math.max(0, rng - setback) + EPS) / diameter))
+            : 0;
+        let rank = 0;
+        for (; rank < ranks; rank++) {
+          const depth = rank * diameter;
+          const offset = setback + depth;
+          const distance = gap + offset;
+          if (distance - rng > EPS) {
+            // 纵深按距离递增，只需排期下一层的入射程事件。
+            if (speed && rng + EPS >= offset) schedule((distance - rng) / speed);
+            break;
+          }
+          const remaining = distance - row.minRange;
+          if (remaining < -EPS) {
+            const clock = row.clocks[rank];
+            if (clock) clock.aimAt = null;
+            continue;
+          }
+          const canCrossMin = speed > 0 && row.minRange - offset > EPS;
+          if (canCrossMin && remaining > EPS) schedule(remaining / speed);
+          const clock = (row.clocks[rank] ??= { aimAt: null, cycleStart: 0, cycles: 0 });
+          eligible.push({ depth, count: Math.min(width, row.alive - rank * width), distance, leaving: canCrossMin && Math.abs(remaining) <= EPS, clock });
         }
-        const remaining = distance - row.minRange;
-        const canCrossMin = speed > 0 && row.minRange - side.setback[row.index]! > EPS;
-        if (canCrossMin && remaining > EPS) schedule(remaining / speed);
-        return { inRange: remaining >= -EPS, leaving: canCrossMin && Math.abs(remaining) <= EPS };
+        for (let i = rank; i < row.clocks.length; i++) {
+          const clock = row.clocks[i];
+          if (clock) clock.aimAt = null;
+        }
+        return eligible;
       });
-    const inA = eligibility(left),
-      inB = eligibility(right);
+    const inA = eligibility(left, right),
+      inB = eligibility(right, left);
     if (
       contact.meleeAt === null &&
-      ((!left.front.fighter.ranged && inA[left.front.index]!.inRange) || (!right.front.fighter.ranged && inB[right.front.index]!.inRange))
+      ((!left.front.fighter.ranged && inA[left.front.index]!.length) || (!right.front.fighter.ranged && inB[right.front.index]!.length))
     )
       contact.meleeAt = time;
-    const aReady = inA.some((r) => r.inRange),
-      bReady = inB.some((r) => r.inRange);
+    const aReady = inA.some((ranks) => ranks.length),
+      bReady = inB.some((ranks) => ranks.length);
     const rangedReady = (rows: RowState[], amounts: typeof inA, includeBoundary: boolean) =>
-      rows.some((row, i) => row.fighter.ranged && amounts[i]!.inRange && (includeBoundary || !amounts[i]!.leaving));
+      rows.some((row, i) => row.fighter.ranged && amounts[i]!.some((rank) => includeBoundary || !rank.leaving));
     if (!openingClosed) {
       if (opening) {
         const aLeads = opening.side === 'a';
@@ -289,34 +315,31 @@ export function contactFight(
       }
     }
     const leavingOpening = opening && !(opening.side === 'a' ? rangedReady(A, inA, false) : rangedReady(B, inB, false));
-    const shots = (from: Formation, to: Formation, canAttack: typeof inA) =>
-      from.rows.map((row) => {
-        if (!canAttack[row.index]!.inRange) {
-          row.aimAt = null;
-          return 0;
-        }
-        // 刚递补的单位在上一批结算结束后才能开始前摇。
-        row.aimAt ??= time === lastAttack ? time + Math.max(row.delay, 2 * EPS) : time + row.delay;
-        const due = Math.max(row.aimAt, row.cycleStart + row.cycles * row.fighter.rof);
-        const distance = gap + from.setback[row.index]!;
-        if (withinHorizon(due) && due - time <= EPS) {
-          return row.fighter.ranged ? row.alive : meleeCapacity(row, to.front, distance);
-        }
-        // 预计在出手前穿过最小射程时，等待更近的移动/换行事件，不安排这发攻击。
-        if (!canAttack[row.index]!.leaving && (!speed || distance - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
-        return 0;
-      });
-    const aShots = shots(left, right, inA),
-      bShots = shots(right, left, inB);
-    const volleySize = [...aShots, ...bShots].reduce((n, shots) => n + shots, 0);
+    const shots = (from: Formation, canAttack: typeof inA) =>
+      from.rows.map((row) =>
+        canAttack[row.index]!.filter(({ clock, distance, leaving }) => {
+          // 各纵深分别瞄准。刚补入的层在上一批结算结束后才能开始前摇。
+          clock.aimAt ??= time === lastAttack ? time + Math.max(row.delay, 2 * EPS) : time + row.delay;
+          const due = Math.max(clock.aimAt, clock.cycleStart + clock.cycles * row.fighter.rof);
+          if (withinHorizon(due) && due - time <= EPS) return true;
+          // 即将穿过最小射程时，等待更近的移动或换行事件。
+          if (!leaving && (!speed || distance - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
+          return false;
+        }),
+      );
+    const aShots = shots(left, inA),
+      bShots = shots(right, inB);
+    const countShots = (ranks: RankInRange[]) => ranks.reduce((total, rank) => total + rank.count, 0);
+    const volleySize = [...aShots, ...bShots].reduce((n, ranks) => n + countShots(ranks), 0);
     if (volleySize) {
       if (events >= maxEvents || attacks + volleySize > maxAttacks) return finish('limit');
       events++;
       attacks += volleySize;
-      const aFired = aShots.some(Boolean),
-        bFired = bShots.some(Boolean);
+      const aFired = aShots.some((ranks) => ranks.length),
+        bFired = bShots.some((ranks) => ranks.length);
       contact.firstFire ??= aFired && bFired ? 'both' : aFired ? 'a' : 'b';
-      if (opening && (opening.side === 'a' ? aShots : bShots).some((n, i) => n > 0 && (opening!.side === 'a' ? A : B)[i]!.fighter.ranged)) opening.volleys++;
+      if (opening && (opening.side === 'a' ? aShots : bShots).some((ranks, i) => ranks.length && (opening!.side === 'a' ? A : B)[i]!.fighter.ranged))
+        opening.volleys++;
       if (leavingOpening) closeOpening();
       lastAttack = time;
       for (const [army, volley, rows] of [
@@ -324,14 +347,17 @@ export function contactFight(
         [B, bShots, contact.b],
       ] as const) {
         army.forEach((row, i) => {
-          const fired = volley[i]!;
+          const ranks = volley[i]!;
+          const fired = countShots(ranks);
           if (!fired) return;
-          const cooldown = row.cycleStart + row.cycles * row.fighter.rof;
-          if (row.aimAt! > cooldown) {
-            row.cycleStart = row.aimAt!;
-            row.cycles = 0;
+          for (const { clock } of ranks) {
+            const cooldown = clock.cycleStart + clock.cycles * row.fighter.rof;
+            if (clock.aimAt! > cooldown) {
+              clock.cycleStart = clock.aimAt!;
+              clock.cycles = 0;
+            }
+            clock.cycles++;
           }
-          row.cycles++;
           const key = row.fighter.ranged ? 'maxRanged' : 'maxMelee';
           rows[i]![key] = Math.max(rows[i]![key], fired);
         });
@@ -357,15 +383,23 @@ export function contactFight(
       ).find(([, row]) => row.speed <= 0 && gap - row.fighter.rng > EPS);
       if (unreachable) return error(`${unreachable[0]} 方的${unreachable[1].fighter.name}无法移动接敌`);
     }
-    if (!withinHorizon(nextTime)) {
-      time = maxTime;
-      return finish('timeout');
-    }
+    const timeout = !withinHorizon(nextTime);
     nextTime = Math.min(nextTime, maxTime);
-    if (events >= maxEvents || !(nextTime > time)) return finish('limit');
-    events++;
-    gap = Math.max(0, gap - speed * (nextTime - time));
+    if (!timeout && (events >= maxEvents || !(nextTime > time))) return finish('limit');
+    const elapsed = nextTime - time;
+    for (const [front, eligible, rows] of [
+      [left.front, inA, contact.a],
+      [right.front, inB, contact.b],
+    ] as const) {
+      if (front.fighter.ranged) continue;
+      for (const { count, leaving } of eligible[front.index]!) {
+        if (!leaving) rows[front.index]!.meleeUnitSeconds += count * elapsed;
+      }
+    }
+    gap = Math.max(0, gap - speed * elapsed);
     time = nextTime;
+    if (timeout) return finish('timeout');
+    events++;
   }
   return finish(survivors(A) || survivors(B) ? 'win' : 'draw');
 }

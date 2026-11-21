@@ -27,10 +27,11 @@ function keepNums(text: string) {
   );
 }
 
-function goldReason(g: VarangianGold): string {
+function goldReason(g: VarangianGold, group: boolean): string {
   const ratio = formatRatio(g.autoMul === 1 ? varangianListedRatio() : g.autoMul);
-  if (g.autoMul === 1) return `按本场交战时间估算，不按攻击次数。用默认产金，不含瓦兰吉人 ×${ratio}。`;
-  return `按本场交战时间估算，不按攻击次数。这个文明约为默认的 ×${ratio}。`;
+  const estimate = group ? '按可接敌的单位与时间估算，不按攻击次数。' : '按本场交战时间估算，不按攻击次数。';
+  if (g.autoMul === 1) return `${estimate}用默认产金，不含瓦兰吉人 ×${ratio}。`;
+  return `${estimate}这个文明约为默认的 ×${ratio}。`;
 }
 
 function Line({ k, civ, note, showSide }: { k: 'a' | 'b'; civ: string; note: VgNote; showSide: boolean }) {
@@ -48,7 +49,7 @@ function Line({ k, civ, note, showSide }: { k: 'a' | 'b'; civ: string; note: VgN
   );
 }
 
-function GoldLine({ k, gold, showSide }: { k: 'a' | 'b'; gold: VarangianGold; showSide: boolean }) {
+function GoldLine({ k, gold, showSide, group }: { k: 'a' | 'b'; gold: VarangianGold; showSide: boolean; group: boolean }) {
   const side = showSide ? `${k.toUpperCase()} · ` : '';
   const shown = String(Math.round(gold.gold * 10) / 10);
   return (
@@ -56,7 +57,7 @@ function GoldLine({ k, gold, showSide }: { k: 'a' | 'b'; gold: VarangianGold; sh
       <Icon name="check" className="ic" />
       <span>
         {side}本场产生黄金 <span className="nw">约 {shown}</span>
-        <small className="note">{keepNums(goldReason(gold))}</small>
+        <small className="note">{keepNums(goldReason(gold, group))}</small>
       </span>
     </div>
   );
@@ -72,7 +73,7 @@ export function VgNotes({ sides, group = false }: { sides: VgSide[]; group?: boo
   const showSide = groups.length > 1 || gold.length > 1;
   return (
     <div className="pk-vg" data-t="pk-vg">
-      {gold.length > 0 && gold.map((g) => <GoldLine key={g.k} k={g.k} gold={g.gold} showSide={showSide} />)}
+      {gold.length > 0 && gold.map((g) => <GoldLine key={g.k} k={g.k} gold={g.gold} showSide={showSide} group={group} />)}
       {groups.length > 0 && <h3 className="pk-vg-title">相关加成是否计入</h3>}
       {groups.flatMap((g) => g.notes.map((note) => <Line key={`${g.k}-${note.id}`} k={g.k} civ={g.civ} note={note} showSide={showSide} />))}
     </div>

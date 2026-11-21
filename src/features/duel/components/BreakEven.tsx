@@ -108,11 +108,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
             <b>盈亏平衡计算中止</b>
             <span>
               A 方 <span className="num nw">{r.interrupted.n} 个单位</span>一档未完成。
-              {r.interrupted.result.status === 'error'
-                ? r.interrupted.result.reason
-                : r.interrupted.result.status === 'timeout' || r.interrupted.result.status === 'limit'
-                  ? STOP_LABELS[r.interrupted.result.status]
-                  : null}
+              {r.interrupted.result.reason}
             </span>
           </div>
         ) : r.n !== null ? (
@@ -121,7 +117,9 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
               {r.n}
             </b>
             <span>
-              <span className="num nw">个{aName}</span>，才能打赢 <span className="num nw">{r.nb} 个</span>
+              <span className="num nw">个{aName}</span>
+              {r.incomplete ? '起已确认能打赢 ' : '，才能打赢 '}
+              <span className="num nw">{r.nb} 个</span>
               {bName}
             </span>
           </p>
@@ -140,6 +138,11 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
             从 <span className="num nw">{r.n} 个</span>到 <span className="num nw">{r.cap} 个</span>均能获胜
           </p>
         )}
+        {r.incomplete && (
+          <p className="note">
+            A 方 <span className="num nw">{r.incomplete.n} 个单位</span>一档{STOP_LABELS[r.incomplete.status]}。
+          </p>
+        )}
         <p className="note be-sum">
           {sumText} · {CONTACT_MODEL}
         </p>
@@ -156,24 +159,28 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
                 </tr>
               </thead>
               <tbody>
-                {r.rows.map((x) => (
-                  <tr key={x.n} className={x.n === r.n ? 'on' : undefined} data-n={x.n}>
-                    <td className="num nw">{x.n}</td>
-                    <td className={x.win ? 'be-w' : 'be-l'}>
-                      <Icon name={x.win ? 'check' : 'x'} /> {x.win ? 'A 胜' : 'A 负（含平局）'}
-                    </td>
-                    <td className="num nw">{x.r.aAlive}</td>
-                    <td className="num nw">{x.r.bAlive}</td>
-                    <td className="num nw">{r1(x.r.duration)} 秒</td>
-                  </tr>
-                ))}
+                {r.rows.map((x) => {
+                  const status = x.r.status;
+                  const unfinished = status === 'timeout' || status === 'limit';
+                  return (
+                    <tr key={x.n} className={x.n === r.n ? 'on' : undefined} data-n={x.n}>
+                      <td className="num nw">{x.n}</td>
+                      <td className={unfinished ? undefined : x.win ? 'be-w' : 'be-l'}>
+                        <Icon name={unfinished ? 'info' : x.win ? 'check' : 'x'} /> {unfinished ? STOP_LABELS[status] : x.win ? 'A 胜' : 'A 负（含平局）'}
+                      </td>
+                      <td className="num nw">{x.r.aAlive}</td>
+                      <td className="num nw">{x.r.bAlive}</td>
+                      <td className="num nw">{r1(x.r.duration)} 秒</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
         <p className="be-how">
           B 方固定 <span className="num nw">{r.nb} 个</span>，从 <span className="num nw">1 个</span>起逐档计算 A 方。
-          取从该数量起、直到计算上限每一档都能获胜的最少数量。平局不算获胜。
+          取从该数量起、直到计算上限每一档都能获胜的最少数量。平局及未分出胜负的档位不计为胜局。
         </p>
         {r.n !== null && (
           <div className="be-act">
