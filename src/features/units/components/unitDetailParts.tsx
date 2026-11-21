@@ -85,7 +85,7 @@ function CatalogAttackTiming({ u, base, elite }: { u: Unit; base: Unit; elite: b
   );
 }
 
-export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: boolean }) {
+export function CatalogStats({ u, base, elite, meleeForm }: { u: Unit; base: Unit; elite: boolean; meleeForm?: boolean }) {
   return (
     <div className="ud-stat-grid">
       <CatalogAttackTiming u={u} base={base} elite={elite} />
@@ -101,7 +101,7 @@ export function CatalogStats({ u, base, elite }: { u: Unit; base: Unit; elite: b
         stat="atk"
         label={u.id === 331 ? '攻击力（展开态）' : '攻击力'}
         value={<span className="num nw">{u.atk}</span>}
-        sub={<EliteDelta n={elite ? u.atk - base.atk : undefined} />}
+        sub={meleeForm ? '近战攻击' : <EliteDelta n={elite ? u.atk - base.atk : undefined} />}
       />
       <StatTile
         icon="shield"

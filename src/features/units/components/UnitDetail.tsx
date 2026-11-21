@@ -18,7 +18,7 @@ import { trainingSites } from '../../../domain/unitTrainingSites';
 import { AgeImg, CivChip, CostView, DlcBadge, UnitIcon } from '../../../shared/ui/art';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
+import { CopyPageLink } from '../../../shared/ui/DetailBlocks';
 import { Icon } from '../../../shared/ui/Icon';
 import { TreeSummaryReturn } from '../../../shared/ui/TreeSummaryReturn';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
@@ -26,18 +26,18 @@ import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
 import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
-import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import Simulator from '../../../shared/ui/sim/Simulator';
-import { Linked, Loading } from '../../../shared/ui/widgets';
+import { Loading } from '../../../shared/ui/widgets';
 import { minus } from '../../../shared/utils/minus';
 import { unitDisplayAge } from '../displayAge';
 import { unitSiegeHref } from '../siegeEntry';
-import { AccuracyBoundaryNote } from './AccuracyBoundaryNote';
+import { resolveUnitForm } from '../unitFormDetail';
+import { UnitNotes } from './UnitNotes';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
 import { ConversionMechanics } from './ConversionMechanics';
 import { FishingGather } from './FishingGather';
 import { ScoutAgeChanges } from './ScoutAgeChanges';
-import { SplashMechanics, splashDescription } from './SplashMechanics';
+import { SplashMechanics } from './SplashMechanics';
 import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
 import { VillagerGather } from './VillagerGather';
@@ -51,6 +51,7 @@ import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnS
 import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
+import { CastleKonnikReference, FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
 import './unit-detail.css';
 
 const JUMPS = [
@@ -77,10 +78,10 @@ export default function UnitDetail() {
   const pathToken = rt?.civ;
   const pathCiv = pathToken ? civByEn(pathToken) : undefined;
   const queryCiv = civByEn(params.get('civ') ?? '');
-  const context = pathToken ? pathCiv : queryCiv;
+  const { owner, alternate, rawTarget } = resolveUnitForm(core, rt?.id);
+  const context = alternate ? undefined : pathToken ? pathCiv : queryCiv;
   const me = civByEn(params.get('me') ?? '');
   const opp = civByEn(params.get('opp') ?? '');
-  const rawTarget = core && rt ? core.unitById[rt.id] : undefined;
   const targetProjection = rawTarget ? projectUnitForDetail(rawTarget) : null;
   const u = targetProjection?.unit;
   const entityHistory = useEntityHistory(u ? 'unit/' + u.id : undefined, tab === 'history');
@@ -119,12 +120,15 @@ export default function UnitDetail() {
       </section>
     );
   if (!rt) return <UnitList />;
-  if (!u) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
+  if (!u || !owner) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
 
   const displayAge = unitDisplayAge(u, context?.en ?? '');
-  const base = baseUnit(u, core.fam);
+  const base = baseUnit(owner, core.fam);
   const elite = core.fam.eliteOf[base.id];
-  const isE = u.id !== base.id;
+  const isE = owner.id !== base.id;
+  const formHref = (id: number) => entityCivLink('unit', id, (pathToken ? pathCiv : queryCiv)?.en);
+  const relation = owner.form ? { owner, form: owner.form, alternate: !!alternate, elite: isE, href: formHref, otherTier: (isE ? base : elite)?.form } : null;
+  const showUpgrade = elite && (!alternate || alternate.kind === 'weapon');
   const typeLabel = unitTypeLabel(u.type);
   const canTrain = !!context && u.civs.includes(context.en);
   const quote = canTrain && context ? discountedCost(u, context.en, priceAge(u.age, rt.age ?? null)) : null;
@@ -132,19 +136,18 @@ export default function UnitDetail() {
   const gatherCost = discount.kind === 'price' ? discount.cost : u.cost;
   const status = context && trees ? civStatus(trees, context.en) : null;
   const avail = status ? (id: number) => status['u' + id] === 1 : undefined;
-  const line = trees ? upgradeLine(u, core.units, core.unitById, avail) : [];
-  const notes = trees ? upgradeNotes(line, core.units, avail) : [];
-  const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, context?.en) : null;
-  const peers = dupPeers(base, core.units);
-  const conf = peers.length
-    ? []
-    : confusablesOf(base.id)
-        .map((c) => ({ u: core.unitById[c.other], reason: c.reason }))
-        .filter((c) => c.u);
+  const line = trees && !alternate ? upgradeLine(u, core.units, core.unitById, avail) : [];
+  const notes = trees && !alternate ? upgradeNotes(line, core.units, avail) : [];
+  const rel = !alternate && trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, context?.en) : null;
+  const peers = alternate ? [] : dupPeers(base, core.units);
+  const conf =
+    alternate || peers.length
+      ? []
+      : confusablesOf(base.id)
+          .map((c) => ({ u: core.unitById[c.other], reason: c.reason }))
+          .filter((c) => c.u);
   const insights = unitInsights(u.id);
-  const bonuses = Object.fromEntries(u.atks.filter(([name]) => name !== '近战' && name !== '穿刺'));
-  const armorClasses = u.armc.filter(([name]) => !/^类别\d+$/.test(name));
-  const training = trainingSites(u, context?.en);
+  const training = alternate ? null : trainingSites(u, context?.en);
   const site = training?.kind === 'available' ? training.primary : null;
   const buildingId = site?.building ?? u.b;
   const building = core.buildingById[buildingId];
@@ -222,7 +225,7 @@ export default function UnitDetail() {
         <div className="ud-id-main">
           <h1>
             {u.zh}
-            {(peers.length > 0 || conf.length > 0) && <span className="civnote">{civNote(u, cz)}</span>}
+            {(relation || peers.length > 0 || conf.length > 0) && <span className="civnote">{civNote(u, cz)}</span>}
           </h1>
           <p className="ud-en">
             {u.en} · id <span className="num nw">{u.id}</span>
@@ -231,13 +234,21 @@ export default function UnitDetail() {
             {typeLabel && (
               <span className="ud-tag" data-t="unit-type">
                 {typeLabel}
+                {alternate && (alternate.kind === 'dismount' ? ' · 下马替身' : ' · 切换形态')}
               </span>
             )}
             <span className="ud-tag" data-t="display-age">
               <AgeImg age={displayAge} />
-              {AGE_ZH[displayAge] ?? displayAge}
+              {alternate?.kind === 'dismount' ? (
+                (isE ? '精锐档' : '普通档') + '（随骑乘档位）'
+              ) : (
+                <>
+                  {AGE_ZH[displayAge] ?? displayAge}
+                  {alternate && (alternate.kind === 'barrage' ? '（无精锐档）' : isE ? '（精锐档）' : '（普通档）')}
+                </>
+              )}
             </span>
-            {trainingBuilding}
+            {alternate ? <span className="ud-tag">非独立训练单位</span> : trainingBuilding}
             <DlcBadge i={u.dlc} />
           </div>
           {u.id === 93 && (
@@ -247,12 +258,24 @@ export default function UnitDetail() {
           )}
         </div>
         <div className="ud-id-actions">
-          {elite && (
+          {showUpgrade && elite && (
             <div className="eseg" role="radiogroup" aria-label="普通或精锐">
-              <Link role="radio" aria-checked={!isE} className={isE ? undefined : 'on'} to={swap(base.id)} replace>
+              <Link
+                role="radio"
+                aria-checked={!isE}
+                className={isE ? undefined : 'on'}
+                to={alternate && base.form ? formHref(base.form.id) : swap(base.id)}
+                replace
+              >
                 普通
               </Link>
-              <Link role="radio" aria-checked={isE} className={isE ? 'on' : undefined} to={swap(elite.id)} replace>
+              <Link
+                role="radio"
+                aria-checked={isE}
+                className={isE ? 'on' : undefined}
+                to={alternate && elite.form ? formHref(elite.form.id) : swap(elite.id)}
+                replace
+              >
                 精锐
               </Link>
             </div>
@@ -261,8 +284,16 @@ export default function UnitDetail() {
         </div>
       </div>
 
+      {relation && <FormBar {...relation} />}
+      <CastleKonnikReference unit={u} href={formHref} />
+
       <nav className="ud-jump" aria-label="本页章节">
-        {JUMPS.filter(([id]) => (id !== 'unit-garrison' || !workspace) && (id !== 'unit-history' || !entityHistory.empty)).map(([id, label]) => (
+        {JUMPS.filter(
+          ([id]) =>
+            (!alternate || (id !== 'unit-obtain' && id !== 'unit-garrison' && id !== 'unit-sim')) &&
+            (id !== 'unit-garrison' || !workspace) &&
+            (id !== 'unit-history' || !entityHistory.empty),
+        ).map(([id, label]) => (
           <button
             key={id}
             type="button"
@@ -277,8 +308,16 @@ export default function UnitDetail() {
       </nav>
 
       <div className="ud-civ">
-        <CivPicker id="unitciv" label="选择文明" value={context?.en ?? ''} onChange={setCiv} none="不指定" />
-        <p className="ud-kicker">目录基础值，未计文明加成与科技。</p>
+        {!alternate && <CivPicker id="unitciv" label="选择文明" value={context?.en ?? ''} onChange={setCiv} none="不指定" />}
+        <p className="ud-kicker">
+          目录基础值，未计文明加成与科技。
+          {alternate &&
+            (alternate.kind === 'weapon'
+              ? '训练与文明模拟请回到原单位。'
+              : alternate.kind === 'barrage'
+                ? '本形态不进单位 PK 或科技模拟器。'
+                : '下马后不可单独升级，档位由骑乘单位是否升级精锐决定。')}
+        </p>
         {context && !canTrain && (
           <p className="ud-kicker" data-t="cannot-train">
             该文明无法训练本单位
@@ -286,104 +325,110 @@ export default function UnitDetail() {
         )}
       </div>
 
-      <section className="ud-core" id="unit-core" aria-label="目录基础属性与造价">
+      <section className="ud-core" id="unit-core" aria-label={alternate ? '目录基础属性与获取方式' : '目录基础属性与造价'}>
         <div className="ud-stats">
           <h2>目录基础属性</h2>
-          <CatalogStats u={u} base={base} elite={isE} />
-          <UnitTransportCapacity unit={u} civ={context} />
+          <CatalogStats u={u} base={base} elite={isE && !alternate} meleeForm={!!alternate && alternate.kind !== 'barrage'} />
+          {alternate ? <FormDifference owner={owner} form={alternate} /> : <UnitTransportCapacity unit={u} civ={context} />}
         </div>
-        <div className="ud-cost-col">
-          <h2>目录造价</h2>
-          <p className="ud-kicker">目录造价，未计文明折扣。</p>
-          <div className="ud-cost" data-t="catalog-cost">
-            <CostView c={u.cost} />
-          </div>
-          {(u.id === 1759 || u.id === 1761) && (u.cost.Food ?? 0) === 0 && <p className="ud-kicker">训练不消耗食物。</p>}
-          {discount.kind === 'price' && (
-            <div className="ud-discount" data-t="discount-price">
-              <span>折后训练价</span>
-              <CostView c={discount.cost} />
-              {discount.applied.map((a) => (
-                <span key={`${a.idx ?? 'x'}-${a.techs.join('-')}-${a.label}`} className="ud-discount-line">
-                  {minus(`已计入：${a.label} -${a.pct}%${a.res ? `，仅${a.res.map((r) => RES_ZH[r] ?? r).join('、')}` : ''}`)}
-                </span>
-              ))}
+        {alternate ? (
+          <FormAccess href={formHref} owner={owner} form={alternate} elite={isE} />
+        ) : (
+          <div className="ud-cost-col">
+            <h2>目录造价</h2>
+            <p className="ud-kicker">目录造价，未计文明折扣。</p>
+            <div className="ud-cost" data-t="catalog-cost">
+              <CostView c={u.cost} />
             </div>
-          )}
-          {discount.kind === 'unapplied' && (
-            <p className="ud-discount" data-t="discount-unapplied">
-              折扣未计入
-            </p>
-          )}
-        </div>
+            {(u.id === 1759 || u.id === 1761) && (u.cost.Food ?? 0) === 0 && <p className="ud-kicker">训练不消耗食物。</p>}
+            {discount.kind === 'price' && (
+              <div className="ud-discount" data-t="discount-price">
+                <span>折后训练价</span>
+                <CostView c={discount.cost} />
+                {discount.applied.map((a) => (
+                  <span key={`${a.idx ?? 'x'}-${a.techs.join('-')}-${a.label}`} className="ud-discount-line">
+                    {minus(`已计入：${a.label} -${a.pct}%${a.res ? `，仅${a.res.map((r) => RES_ZH[r] ?? r).join('、')}` : ''}`)}
+                  </span>
+                ))}
+              </div>
+            )}
+            {discount.kind === 'unapplied' && (
+              <p className="ud-discount" data-t="discount-unapplied">
+                折扣未计入
+              </p>
+            )}
+          </div>
+        )}
       </section>
       {u.id === 331 && <p className="ud-kicker">目录护甲、准确度和移动是打包记录；攻击、射程和攻击间隔是展开记录。科技模拟器不切换这两态。</p>}
 
-      <section className="ud-section" id="unit-obtain" aria-label="如何获得与升级">
-        <h2>如何获得与升级</h2>
-        <p className="ud-obtain">
-          {trainingBuilding}
-          <span className="num nw">
-            <Icon name="clock" />
-            {u.tt}秒
-          </span>
-        </p>
-        <UnitTrainingConditions training={training} core={core} />
-        {showPrior && u.up && (
-          <p>
-            从上一级升级为{u.zh}：<CostView c={u.up[0]} />{' '}
+      {!alternate && (
+        <section className="ud-section" id="unit-obtain" aria-label="如何获得与升级">
+          <h2>如何获得与升级</h2>
+          <p className="ud-obtain">
+            {trainingBuilding}
             <span className="num nw">
               <Icon name="clock" />
-              {u.up[1]}秒
+              {u.tt}秒
             </span>
           </p>
-        )}
-        {showEliteResearch && elite?.up && (
-          <p id="ediff">
-            精锐升级研究：
-            <CostView c={elite.up[0]} />{' '}
-            <span className="num nw">
-              <Icon name="clock" />
-              {elite.up[1]}秒
-            </span>
-          </p>
-        )}
-        {trees ? (
-          <UpgradeLine>
-            {line.map((x, index) => (
-              <span key={x.id} className="ud-line-step">
-                {index > 0 && <Icon name="chevron-right" className="ic ud-line-connector" />}
-                {x.id === u.id ? (
-                  <span className="ud-node is-current" aria-current="true">
-                    <UnitIcon u={x} />
-                    <span>
-                      <span className="ud-node-name">{x.zh}</span>
-                      {nodeCiv(x, trees)}
-                    </span>
-                  </span>
-                ) : (
-                  <Link className="ud-node" to={entityCivLink('unit', x.id, site?.civ)}>
-                    <UnitIcon u={x} />
-                    <span>
-                      <span className="ud-node-name">{x.zh}</span>
-                      {nodeCiv(x, trees)}
-                    </span>
-                  </Link>
-                )}
+          <UnitTrainingConditions training={training} core={core} />
+          {showPrior && u.up && (
+            <p>
+              从上一级升级为{u.zh}：<CostView c={u.up[0]} />{' '}
+              <span className="num nw">
+                <Icon name="clock" />
+                {u.up[1]}秒
               </span>
-            ))}
-          </UpgradeLine>
-        ) : (
-          treeWaiting
-        )}
-        {notes.map((note) => (
-          <p key={note.id} className="ud-kicker" data-t="upgrade-note">
-            {note.kind === 'fork' ? `另有独特升级：${note.zh}${forkCivs(note.id)}` : `该文明没有${note.zh}这一升级形态`}
-          </p>
-        ))}
-      </section>
+            </p>
+          )}
+          {showEliteResearch && elite?.up && (
+            <p id="ediff">
+              精锐升级研究：
+              <CostView c={elite.up[0]} />{' '}
+              <span className="num nw">
+                <Icon name="clock" />
+                {elite.up[1]}秒
+              </span>
+            </p>
+          )}
+          {trees ? (
+            <UpgradeLine>
+              {line.map((x, index) => (
+                <span key={x.id} className="ud-line-step">
+                  {index > 0 && <Icon name="chevron-right" className="ic ud-line-connector" />}
+                  {x.id === u.id ? (
+                    <span className="ud-node is-current" aria-current="true">
+                      <UnitIcon u={x} />
+                      <span>
+                        <span className="ud-node-name">{x.zh}</span>
+                        {nodeCiv(x, trees)}
+                      </span>
+                    </span>
+                  ) : (
+                    <Link className="ud-node" to={entityCivLink('unit', x.id, site?.civ)}>
+                      <UnitIcon u={x} />
+                      <span>
+                        <span className="ud-node-name">{x.zh}</span>
+                        {nodeCiv(x, trees)}
+                      </span>
+                    </Link>
+                  )}
+                </span>
+              ))}
+            </UpgradeLine>
+          ) : (
+            treeWaiting
+          )}
+          {notes.map((note) => (
+            <p key={note.id} className="ud-kicker" data-t="upgrade-note">
+              {note.kind === 'fork' ? `另有独特升级：${note.zh}${forkCivs(note.id)}` : `该文明没有${note.zh}这一升级形态`}
+            </p>
+          ))}
+        </section>
+      )}
 
-      {!workspace && (
+      {!alternate && !workspace && (
         <UnitGarrison
           core={core}
           trees={trees}
@@ -395,66 +440,7 @@ export default function UnitDetail() {
         />
       )}
 
-      <section className="ud-section" id="unit-notes" aria-label="适用加成、护甲与说明">
-        <h2>适用加成、护甲与说明</h2>
-        {u.id === 331 && <p className="ud-kicker">下列攻击加成按已核同的展开攻击字段列出。</p>}
-        <div className="ud-combat">
-          {Object.keys(bonuses).length > 0 && <BonusTable B={bonuses} headingLevel={3} title="本单位对其他单位的攻击加成" />}
-          {(u.arms.length > 0 || armorClasses.length > 0) && (
-            <div className="ud-armor">
-              {u.arms.length > 0 && (
-                <div>
-                  <h3>护甲</h3>
-                  <ul className="ud-arms">
-                    {u.arms.map(([name, value]) => (
-                      <li key={name}>
-                        {name} <span className="num nw">{value}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {armorClasses.length > 0 && (
-                <>
-                  {u.id === 331 && (
-                    <p className="ud-kicker" data-t="trebuchet-armor">
-                      下列为目录打包记录的护甲类别，不代表展开态。
-                    </p>
-                  )}
-                  <ArmorClasses list={u.armc} headingLevel={3} />
-                </>
-              )}
-            </div>
-          )}
-          <button
-            type="button"
-            className="ud-reverse-jump"
-            onClick={() => document.getElementById('unit-reverse-counters')?.scrollIntoView({ block: 'start' })}
-          >
-            查看对本单位有类别加成的单位
-          </button>
-        </div>
-        {!!targetProjection?.invalidFields.length && (
-          <p className="ud-kicker" role="status" data-t="unit-category-warning">
-            本单位类别资料部分无法解析；已跳过异常值，不会补成 0。
-          </p>
-        )}
-        <p>
-          准确度 <span className="num nw">{u.acc}%</span>
-        </p>
-        {u.id === 331 && <p className="ud-kicker">目录打包记录的准确度，不代表展开命中率。</p>}
-        <AccuracyBoundaryNote unit={u} techs={core.techs} />
-        {!!u.blast && (
-          <p>
-            溅射范围 <span className="num nw">{u.blast}</span>
-          </p>
-        )}
-        <h3>说明</h3>
-        <p className="ud-desc">
-          <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : splashDescription(u)} nl />
-        </p>
-        <DetailSource note={null} />
-      </section>
+      <UnitNotes u={u} relation={relation} techs={core.techs} invalid={!!targetProjection?.invalidFields.length} />
 
       <ReverseCounters
         key={reverseCounterSessionKey(u.id, context?.en ?? '', loc) ?? `${u.id}:${context?.en ?? ''}`}
@@ -483,7 +469,7 @@ export default function UnitDetail() {
       <VillagerGather unitId={u.id} />
       <FishingGather unitId={u.id} />
       {insights.length > 0 && <InsightSlot items={insights} />}
-      <GatherLine u={u} cost={gatherCost} age={rt.age} civ={canTrain && context ? context.en : ''} />
+      {!alternate && <GatherLine u={u} cost={gatherCost} age={rt.age} civ={canTrain && context ? context.en : ''} />}
 
       <section className="ud-section" id="unit-related" aria-label="相关">
         <h2>相关</h2>
@@ -510,7 +496,7 @@ export default function UnitDetail() {
           </div>
         )}
         <h3>相关科技</h3>
-        {rel ? <RelatedTechs items={rel} civ={context?.en} /> : treeWaiting}
+        {alternate ? <FormRelatedTechLink ownerHref={formHref(owner.id)} /> : rel ? <RelatedTechs items={rel} civ={context?.en} /> : treeWaiting}
         <h3>
           可用文明（<span className="num nw">{u.civs.length}</span>/<span className="num nw">{civs.length}</span>）
         </h3>
@@ -522,40 +508,52 @@ export default function UnitDetail() {
         </div>
       </section>
 
-      <section className="ud-section" id="unit-sim" aria-label="科技模拟器">
-        <div className="ud-sim-entry">
-          <div>
+      {alternate ? (
+        workspace && (
+          <section className="ud-section" id="unit-sim">
             <h2>科技模拟器</h2>
-            <p>
-              这里给出当前设置下的近似模拟值。已建模科技与部分文明加成计入；独特科技与未建模效果可能只显示文本、不计入。累计研究费用汇总在工作区里，不是训练价。
-            </p>
-          </div>
-          {workspace ? (
-            <button type="button" className="ud-btn" onClick={closeSim}>
-              返回概览
-            </button>
-          ) : (
-            <button type="button" className="ud-btn" onClick={openSim}>
-              打开科技模拟器 <Icon name="arrow-right" />
-            </button>
-          )}
-        </div>
-        {workspace && (
-          <div className="ud-workspace" data-t="workspace-open">
-            {showEngine ? (
-              <Simulator key={u.id} u={u} route={simulatorRoute} navigationAdapter={simNavigationAdapter} />
-            ) : invalidCombatProjection ? (
-              <p role="alert" data-t="workspace-invalid-target">
-                本单位攻击或护甲类别资料异常，已停用模拟器；不会用清理后的零值代替原始数据。
+            <p>当前形态仅用于查阅目录基础属性，不开放科技模拟器。请返回原单位使用模拟器与单位 PK。</p>
+            <Link className="ud-btn" to={formHref(owner.id)}>
+              回到原单位
+            </Link>
+          </section>
+        )
+      ) : (
+        <section className="ud-section" id="unit-sim" aria-label="科技模拟器">
+          <div className="ud-sim-entry">
+            <div>
+              <h2>科技模拟器</h2>
+              <p>
+                这里给出当前设置下的近似模拟值。已建模科技与部分文明加成计入；独特科技与未建模效果可能只显示文本、不计入。累计研究费用汇总在工作区里，不是训练价。
               </p>
+            </div>
+            {workspace ? (
+              <button type="button" className="ud-btn" onClick={closeSim}>
+                返回概览
+              </button>
             ) : (
-              <p>该文明无法训练本单位，因此不给出该文明的近似模拟值。</p>
+              <button type="button" className="ud-btn" onClick={openSim}>
+                打开科技模拟器 <Icon name="arrow-right" />
+              </button>
             )}
           </div>
-        )}
-      </section>
+          {workspace && (
+            <div className="ud-workspace" data-t="workspace-open">
+              {showEngine ? (
+                <Simulator key={u.id} u={u} route={simulatorRoute} navigationAdapter={simNavigationAdapter} />
+              ) : invalidCombatProjection ? (
+                <p role="alert" data-t="workspace-invalid-target">
+                  本单位攻击或护甲类别资料异常，已停用模拟器；不会用清理后的零值代替原始数据。
+                </p>
+              ) : (
+                <p>该文明无法训练本单位，因此不给出该文明的近似模拟值。</p>
+              )}
+            </div>
+          )}
+        </section>
+      )}
 
-      {(siegeHref || (me && opp)) && (
+      {!alternate && (siegeHref || (me && opp)) && (
         <nav className="ud-tools" aria-label="本页相关工具">
           {me && opp && (
             <Link className="ud-btn" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>

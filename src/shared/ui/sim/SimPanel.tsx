@@ -86,6 +86,7 @@ export function BonusTable({
   cmpLabel,
   headingLevel,
   title,
+  signedBase = false,
 }: {
   B: Record<string, number>;
   S?: Record<string, number>;
@@ -93,6 +94,7 @@ export function BonusTable({
   cmpLabel?: string;
   headingLevel?: 3 | 4;
   title?: string;
+  signedBase?: boolean;
 }) {
   const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const cur = S ?? B;
@@ -126,7 +128,10 @@ export function BonusTable({
                 <tr key={k}>
                   <td>对 {k}</td>
                   <td>
-                    {b}{' '}
+                    <span className="num nw">
+                      {signedBase && b > 0 ? '+' : ''}
+                      {b}
+                    </span>{' '}
                     {S && s !== b && (
                       <span className={s > b ? 'up' : 'dn'}>
                         {s > b ? '+' : ''}

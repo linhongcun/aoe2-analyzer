@@ -26,7 +26,34 @@ export interface Civ {
   /** 派生：DLC 序号 */
   dlc: number | null;
 }
+/** Alternate battle state, nested under its trainable catalog unit. */
+export type UnitForm = Pick<
+  Unit,
+  | 'id'
+  | 'en'
+  | 'zh'
+  | 'hp'
+  | 'atk'
+  | 'ma'
+  | 'pa'
+  | 'rng'
+  | 'minr'
+  | 'spd'
+  | 'los'
+  | 'rof'
+  | 'acc'
+  | 'blast'
+  | 'atks'
+  | 'arms'
+  | 'armc'
+  | 'cls'
+  | 'attackDelaySeconds'
+  | 'frameDelay'
+  | 'garrisonCapacity'
+> & { kind: 'weapon' | 'barrage' | 'dismount' };
+
 export interface Unit {
+  form?: UnitForm;
   /** issue 123 全拼 / 首字母，构建时生成 */
   py?: string;
   pyi?: string;

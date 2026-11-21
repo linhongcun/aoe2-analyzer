@@ -6,6 +6,79 @@
   "items": {
     "type": "object",
     "properties": {
+      "form": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/items/properties/id"
+          },
+          "en": {
+            "$ref": "#/items/properties/en"
+          },
+          "zh": {
+            "$ref": "#/items/properties/zh"
+          },
+          "hp": {
+            "$ref": "#/items/properties/hp"
+          },
+          "atk": {
+            "$ref": "#/items/properties/atk"
+          },
+          "ma": {
+            "$ref": "#/items/properties/ma"
+          },
+          "pa": {
+            "$ref": "#/items/properties/pa"
+          },
+          "rng": {
+            "$ref": "#/items/properties/rng"
+          },
+          "minr": {
+            "$ref": "#/items/properties/minr"
+          },
+          "spd": {
+            "$ref": "#/items/properties/spd"
+          },
+          "los": {
+            "$ref": "#/items/properties/los"
+          },
+          "rof": {
+            "$ref": "#/items/properties/rof"
+          },
+          "acc": {
+            "$ref": "#/items/properties/acc"
+          },
+          "blast": {
+            "$ref": "#/items/properties/blast"
+          },
+          "atks": {
+            "$ref": "#/items/properties/atks"
+          },
+          "arms": {
+            "$ref": "#/items/properties/arms"
+          },
+          "armc": {
+            "$ref": "#/items/properties/armc"
+          },
+          "cls": {
+            "$ref": "#/items/properties/cls"
+          },
+          "attackDelaySeconds": {
+            "$ref": "#/items/properties/attackDelaySeconds"
+          },
+          "frameDelay": {
+            "$ref": "#/items/properties/frameDelay"
+          },
+          "garrisonCapacity": {
+            "$ref": "#/items/properties/garrisonCapacity"
+          },
+          "kind": {
+            "enum": ["weapon", "barrage", "dismount"]
+          }
+        },
+        "required": ["id", "en", "zh", "hp", "atk", "ma", "pa", "rng", "minr", "spd", "los", "rof", "acc", "blast", "atks", "arms", "armc", "cls", "kind"],
+        "additionalProperties": false
+      },
       "id": {
         "type": "integer",
         "minimum": 0
