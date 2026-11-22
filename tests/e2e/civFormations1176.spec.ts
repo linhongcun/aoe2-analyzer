@@ -28,7 +28,7 @@ for (const width of [1280, 360]) {
     await expect(support).toContainText('城堡有余力、主力能持续补员');
     await expect(support.locator('.num.nw')).toHaveText(['170 食物', '85 黄金']);
     await expect(support).toContainText('占用城堡队列');
-    await expect(card.locator('details')).toHaveCount(1);
+    await expect(card.locator('details')).toHaveCount(2);
     await expect(card.locator('details[open]')).toHaveCount(0);
     const mainBox = await main.boundingBox();
     const supportBox = await support.boundingBox();
@@ -56,7 +56,10 @@ for (const width of [1280, 360]) {
       await expect(page).toHaveURL(new RegExp(`#/civ/Persians#${anchor}$`));
       await expect(entry).toBeFocused();
     }
-    await card.locator('summary').press('Space');
+    await card.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Space');
+    await expect(card).toContainText('无劲弩手');
+    await expect(card).toContainText('重装骑射手');
+    await card.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
     await expect(card.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://github.com/linhongcun/aoe2-analyzer/issues/1176');
     await page.goto('./#/civ/Hindustanis#formations');
     await expect(page.locator('#formations').getByRole('heading', { name: '火枪手＋翼骑兵＋少量手推炮' })).toBeVisible();

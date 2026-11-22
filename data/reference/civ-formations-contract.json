@@ -258,21 +258,11 @@
           "adjustments": [
             {
               "id": "ranged",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 6
-                }
-              ]
+              "requires": [{ "kind": "unit", "id": 6 }]
             },
             {
               "id": "camels",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 359
-                }
-              ]
+              "requires": [{ "kind": "unit", "id": 359 }]
             },
             {
               "id": "siege",
@@ -292,7 +282,14 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": []
+          "sourceLines": [],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Georgians#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/924?civ=Georgians"
+          ]
         }
       ]
     },
@@ -1658,7 +1655,15 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L588",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616]
+          "sourceLines": [579, 581, 583, 588, 591, 593, 595, 603, 614, 616],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1452?civ=Franks",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/1452,39,199,211,200,212,47/?civ=Franks&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim"
+          ]
         },
         {
           "id": "franks-throwing-axeman-light-cav",
@@ -1682,8 +1687,16 @@
             {
               "mode": "choice",
               "entities": [
-                { "kind": "unit", "id": 36, "age": 4 },
-                { "kind": "unit", "id": 331, "age": 4 }
+                {
+                  "kind": "unit",
+                  "id": 36,
+                  "age": 4
+                },
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
               ]
             }
           ],
@@ -2655,6 +2668,107 @@
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
           "sourceLines": [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873]
+        },
+        {
+          "id": "aztecs-garland-infantry",
+          "status": "candidate",
+          "playtest": "unreported",
+          "composition": "choice",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 752,
+              "age": 4
+            }
+          ],
+          "choices": [
+            {
+              "id": "aztecs-garland-champion",
+              "preconditions": [
+                "已有剑士线投入",
+                "兵营能持续补员"
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 567,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "aztecs-garland-jaguar",
+              "preconditions": [
+                "能腾出城堡产能"
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 726,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 24,
+              "age": 4
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "conditional",
+              "requires": [
+                { "kind": "unit", "id": 588, "age": 4 },
+                { "kind": "tech", "id": 377, "age": 4 }
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 588,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 377,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 125,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/015d283715b52a5921326437a5425f6ce197a37b/role/game-strategy.md#L1059-L1063",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1266"
+          },
+          "sourceLines": [
+            1059,
+            1061,
+            1063
+          ],
+          "choiceLabel": "前排按对手与产能择一",
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Aztecs#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/24?civ=Aztecs",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/726/Aztecs/4/24,602,215,67,74,68,76,75,77/?civ=Aztecs&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/588/Aztecs/4/47,377/?civ=Aztecs&tab=sim"
+          ]
         }
       ]
     },
@@ -2856,11 +2970,22 @@
             },
             {
               "mode": "conditional",
-              "entities": [{ "kind": "unit", "id": 185 }]
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 185
+                }
+              ]
             },
             {
               "mode": "as-needed",
-              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -2875,13 +3000,26 @@
             {
               "id": "mapuche-kona-bolas-adjustment-third",
               "requires": []
+            },
+            {
+              "id": "mapuche-halberdier-support",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L948",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]
+          "sourceLines": [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Mapuche#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1379?civ=Mapuche",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2568/Mapuche/4/67,68,75/?civ=Mapuche&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2571/Mapuche/4/199,211,200,212,219,47/?civ=Mapuche&tab=sim"
+          ]
         },
         {
           "id": "mapuche-kona-slinger",
@@ -2904,7 +3042,13 @@
           "supplements": [
             {
               "mode": "as-needed",
-              "entities": [{ "kind": "unit", "id": 331, "age": 4 }]
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -2919,13 +3063,26 @@
             {
               "id": "mapuche-kona-slinger-adjustment-third",
               "requires": []
+            },
+            {
+              "id": "mapuche-halberdier-support",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             }
           ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L959",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [952, 956, 959, 963, 970, 977, 980]
+          "sourceLines": [952, 956, 959, 963, 970, 977, 980],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Mapuche#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1379?civ=Mapuche",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2568/Mapuche/4/67,68,75/?civ=Mapuche&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2571/Mapuche/4/199,211,200,212,219,47/?civ=Mapuche&tab=sim"
+          ]
         }
       ]
     },
@@ -3611,6 +3768,16 @@
                   "research": 1081
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1946,
+                  "age": 4
+                }
+              ]
             }
           ],
           "adjustments": [
@@ -3624,13 +3791,7 @@
             },
             {
               "id": "wu-ranged-by-opponent-cavalry",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 359,
-                  "age": 4
-                }
-              ]
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
             },
             {
               "id": "wu-ranged-by-opponent-push",
@@ -3670,7 +3831,12 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1942?civ=Wu",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1080?civ=Wu",
             "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/units.json",
-            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/techs.json"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c2b95c85ea60028f45ad04859511c1b6c309ad9c/data/game/techs.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Wu#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1970/Wu/4/199,211,200,212,201,47/?civ=Wu&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim"
           ]
         }
       ]
@@ -3732,13 +3898,7 @@
             },
             {
               "mode": "support",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 331,
-                  "age": 4
-                }
-              ],
+              "requires": [{ "kind": "unit", "id": 331, "age": 4 }],
               "entities": [
                 {
                   "kind": "unit",
@@ -3799,6 +3959,21 @@
             {
               "id": "britons-few-scorpions-or-skirmishers",
               "requires": []
+            },
+            {
+              "id": "britons-warwolf-against-massed-ranged",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 461,
+                  "age": 4
+                }
+              ]
             }
           ],
           "source": {
@@ -3828,7 +4003,12 @@
             1352
           ],
           "evidenceLinks": [
-            "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/data/sources/data_sources.json"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/9dd3d907001c32417967a83154fb2de3d7523be0/data/sources/data_sources.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Britons#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/461?civ=Britons",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/331/Britons/4/47,377/?civ=Britons&tab=sim"
           ]
         }
       ]
@@ -3882,7 +4062,24 @@
               ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "persian-heavy-cavalry-archer",
+              "requires": [{ "kind": "unit", "id": 474, "age": 4 }]
+            },
+            {
+              "id": "persian-hand-cannoneer",
+              "requires": [{ "kind": "unit", "id": 5, "age": 4 }]
+            },
+            {
+              "id": "persian-heavy-camel",
+              "requires": [{ "kind": "unit", "id": 330, "age": 4 }]
+            },
+            {
+              "id": "persian-halberdier",
+              "requires": [{ "kind": "unit", "id": 359, "age": 4 }]
+            }
+          ],
           "source": {
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/4202736a10ea200426b053adc026b4990459e6de/role/game-strategy.md#L251-L257",
             "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1176"
@@ -3896,7 +4093,12 @@
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/units.json",
             "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/techs.json",
-            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/tests/unit/duelTrainingCost943.test.ts#L48-L66"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/tests/unit/duelTrainingCost943.test.ts#L48-L66",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#techtree",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/24/Persians/4/437,199,211,200,212,219,47/?civ=Persians&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#bonuses"
           ]
         }
       ]
