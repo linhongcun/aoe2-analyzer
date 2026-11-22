@@ -295,13 +295,50 @@ a.hcard:hover {
   min-height: 56px;
   border-radius: var(--radius-sm);
 }
+.cmdk-list li.cmdk-sec {
+  min-height: auto;
+  padding: 6px 10px 4px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: default;
+}
 .cmdk-list li.on {
-  background: var(--color-surface-2);
+  background: var(--color-route-current);
+  color: var(--color-on-route-current);
+}
+.cmdk-list li.on .note,
+.cmdk-list li.on small,
+.cmdk-list li.on .civnote {
+  color: var(--color-text-2);
 }
 .cmdk-t {
   min-width: 0;
 }
 .cmdk-list .tag {
+  flex: none;
+}
+.cmdk-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.cmdk-foot-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cmdk-foot-keys .ic {
+  width: 13px;
+  height: 13px;
   flex: none;
 }
 .sim-summary {

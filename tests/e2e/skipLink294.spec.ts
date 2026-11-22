@@ -98,14 +98,27 @@ for (const scrolled of [0, 600])
     expect(next.gap).toBeGreaterThanOrEqual(0);
   });
 
-for (const width of [390, 1280])
-  test(`@${width}：数据版本徽章读出的名称包含看得见的版本文字（窄屏文字隐藏时也一样）`, async ({ page }) => {
+for (const width of [1031, 1280])
+  test(`@${width}：数据版本徽章读出的名称包含看得见的版本文字（中屏胶囊形态也一样）`, async ({ page }) => {
     await open(page, '/market', 1280);
-    const visible = (await page.locator('.verbadge span').textContent())!.trim();
+    const visible = (await page.locator('.verbadge .verbadge-full').textContent())!.trim();
     await page.setViewportSize({ width, height: 800 });
+    await expect(page.locator('.verbadge')).toBeVisible();
     await expect(page.locator('.verbadge')).toHaveAccessibleName(new RegExp(visible.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     await expect(page.locator('.verbadge')).toHaveAccessibleName(/来源/);
   });
+
+test('@390：窄屏数据版本入口收进导航抽屉且读出完整版本与来源', async ({ page }) => {
+  await open(page, '/market', 1280);
+  const visible = (await page.locator('.verbadge .verbadge-full').textContent())!.trim();
+  await page.setViewportSize({ width: 390, height: 800 });
+  await expect(page.locator('header.topbar > .verbadge')).toBeHidden();
+  await page.getByRole('button', { name: '菜单', exact: true }).click();
+  const drawerLink = page.locator('nav.mainnav .drawer-data-link');
+  await expect(drawerLink).toBeVisible();
+  await expect(drawerLink).toHaveAccessibleName(new RegExp(visible.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  await expect(drawerLink).toHaveAccessibleName(/来源/);
+});
 
 test('深色 @390：跳到主内容链接聚焦时有焦点环', async ({ page }) => {
   await open(page, '/market', 390, 'dark');

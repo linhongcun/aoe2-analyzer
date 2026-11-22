@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const groups = ['新手入门', '对局计划', '经济计算', '资料'];
+const groups = ['对局计划', '经济计算', '资料', '新手入门'];
 
 async function noOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -18,7 +18,7 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/');
       const home = page.locator('#home');
-      await expect(home.getByRole('heading', { level: 2 })).toHaveText(groups);
+      await expect(home.locator('.home-group-title')).toHaveText(groups);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await noOverflow(page);
       expect(
@@ -39,13 +39,9 @@ for (const width of [360, 375, 390, 1280])
       // 菜单分组名不用标题元素，避免页头的隐藏面板打乱页面标题层级。
       // #774 起手机抽屉里这些标题是可折叠的 summary，桌面仍是平铺分组标题，文案一致。
       await expect(panel.locator('.tools-group-title')).toHaveText(groups);
-      // 首页所有模块卡片在桌面菜单和手机抽屉（百科 + 折叠的工具组）都有对应入口。
-      // #774：手机抽屉的工具组默认折叠，因此按 nav.mainnav 的 DOM 链接并集核对；桌面仍只看工具面板。
-      const paths = await home.locator('a.hcard').evaluateAll((links) => links.map((link) => link.getAttribute('href')).sort());
-      const entryHrefs =
-        width < 900
-          ? await page.locator('nav.mainnav a').evaluateAll((links) => links.map((link) => link.getAttribute('href')))
-          : await panel.locator('a').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+      // 首页所有已上线模块入口在顶栏百科 + 去重后的工具面板并集中完整覆盖（Issue 1282）。
+      const paths = await home.locator('a[href^="#/"]').evaluateAll((links) => links.map((link) => link.getAttribute('href')).sort());
+      const entryHrefs = await page.locator('nav.mainnav a:not(.drawer-data-link)').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
       expect([...new Set(entryHrefs)].filter((href) => href !== '#/').sort()).toEqual(paths);
       // 手机抽屉先展开全部组，才能检查每组链接文字不折行（桌面本来就全展开）。
       if (width < 900) for (const group of await panel.locator('details').all()) await group.locator('summary').click();

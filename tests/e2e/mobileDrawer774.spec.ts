@@ -40,13 +40,13 @@ test('#774 @360 抽屉变短、外观在首屏、工具只展开当前组', asyn
   expect(await nav.evaluate((element) => element.scrollHeight), '抽屉 scrollHeight 应 < 1500').toBeLessThan(1500);
   await expect(page.getByRole('button', { name: '工具', exact: true })).toHaveAttribute('aria-expanded', 'true');
 
-  // 只展开当前页所在组：/hotkeys → 新手入门。
+  // 只展开当前页所在组：/hotkeys → 新手入门（Issue 1282 排在第 4 组）。
   const groups = toolsGroups(page);
   await expect(groups).toHaveCount(4);
-  await expect(groups.nth(0)).toHaveJSProperty('open', true);
-  for (const index of [1, 2, 3]) await expect(groups.nth(index)).toHaveJSProperty('open', false);
-  await expect(groups.nth(0).locator('summary')).toContainText('新手入门');
-  await expect(groups.nth(0).locator('a[href="#/hotkeys"]')).toBeVisible();
+  await expect(groups.nth(3)).toHaveJSProperty('open', true);
+  for (const index of [0, 1, 2]) await expect(groups.nth(index)).toHaveJSProperty('open', false);
+  await expect(groups.nth(3).locator('summary')).toContainText('新手入门');
+  await expect(groups.nth(3).locator('a[href="#/hotkeys"]')).toBeVisible();
 
   // 外观段在首屏内可见（不必滚动），并且能立即切换主题。
   const appearance = page.getByRole('radiogroup', { name: '外观', exact: true });
@@ -62,7 +62,7 @@ test('#774 @360 其余工具组可折叠、键盘可操作', async ({ page }) =>
   await page.setViewportSize({ width: 360, height: 900 });
   await openDrawer(page, '/hotkeys');
   const groups = toolsGroups(page);
-  const other = groups.nth(1);
+  const other = groups.nth(0);
   await expect(other).toHaveJSProperty('open', false);
   await other.locator('summary').focus();
   await page.keyboard.press('Enter');
@@ -71,17 +71,17 @@ test('#774 @360 其余工具组可折叠、键盘可操作', async ({ page }) =>
   await page.keyboard.press('Space');
   await expect(other).toHaveJSProperty('open', false);
   // 当前组不受影响。
-  await expect(groups.nth(0)).toHaveJSProperty('open', true);
+  await expect(groups.nth(3)).toHaveJSProperty('open', true);
 });
 
 test('#774 @360 /market 只默认展开经济计算组', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 900 });
   await openDrawer(page, '/market');
   const groups = toolsGroups(page);
-  await expect(groups.nth(2)).toHaveJSProperty('open', true);
-  await expect(groups.nth(2)).toContainText('经济计算');
-  await expect(groups.nth(2).getByRole('link', { name: '市场买卖', exact: true })).toHaveAttribute('aria-current', 'page');
-  for (const index of [0, 1, 3]) await expect(groups.nth(index)).toHaveJSProperty('open', false);
+  await expect(groups.nth(1)).toHaveJSProperty('open', true);
+  await expect(groups.nth(1)).toContainText('经济计算');
+  await expect(groups.nth(1).getByRole('link', { name: '市场买卖', exact: true })).toHaveAttribute('aria-current', 'page');
+  for (const index of [0, 2, 3]) await expect(groups.nth(index)).toHaveJSProperty('open', false);
 });
 
 test('#774 @360 工具面板不再重复上方「百科」的 4 项', async ({ page }) => {
@@ -90,22 +90,23 @@ test('#774 @360 工具面板不再重复上方「百科」的 4 项', async ({ p
   // 百科组里的 4 项仍在抽屉上方。
   for (const [label, href] of WIKI_NAV) await expect(page.locator('nav.mainnav a', { hasText: label }).first()).toHaveAttribute('href', href);
   // 展开「资料」组后，工具面板内不应再出现这 4 项。
-  await toolsGroups(page).nth(3).locator('summary').click();
-  await expect(toolsGroups(page).nth(3)).toHaveJSProperty('open', true);
+  await toolsGroups(page).nth(2).locator('summary').click();
+  await expect(toolsGroups(page).nth(2)).toHaveJSProperty('open', true);
   for (const [, href] of WIKI_NAV) await expect(page.locator(`#tools-menu a[href="${href}"]`), `${href} 不应在工具面板重复`).toHaveCount(0);
   await expect(page.locator('nav.mainnav a[href="#/civs"]')).toHaveCount(1);
 });
 
-test('#774 @1280 桌面工具下拉保持原结构（4 组 37 项、平铺无折叠、含百科重复项）', async ({ page }) => {
+test('#774 / Issue 1282 @1280 桌面工具下拉同步去重（4 组 25 项、平铺无折叠、剔除顶栏 6 百科项）', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/hotkeys');
   await page.getByRole('button', { name: '工具', exact: true }).click();
   const panel = page.locator('#tools-menu');
   await expect(panel).toBeVisible();
-  await expect(panel.locator('.tools-group-title')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
+  await expect(panel.locator('.tools-group-title')).toHaveText(['对局计划', '经济计算', '资料', '新手入门']);
   await expect(panel.locator('details')).toHaveCount(0);
-  await expect(panel.getByRole('link')).toHaveCount(37);
-  await expect(panel.locator('a[href="#/civs"]')).toHaveCount(1);
+  await expect(panel.getByRole('link')).toHaveCount(25);
+  await expect(panel.locator('a[href="#/civs"]')).toHaveCount(0);
+  await expect(panel.locator('a[href="#/bonuses"]')).toHaveCount(1);
   // 桌面不渲染抽屉里的外观段（外观仍在页头主题按钮）。
   await expect(page.locator('#tools-menu .drawer-appearance')).toHaveCount(0);
 });

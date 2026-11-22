@@ -51,13 +51,20 @@ for (const path of ['/', '/about-data', '/hotkeys']) {
     await tabTo(page, tools);
     if ((await tools.getAttribute('aria-expanded')) !== 'true') await page.keyboard.press('Enter');
     const summaries = page.locator('#tools-menu summary');
+    const lastGroup = page.locator('#tools-menu details').last();
+    const drawerDataLink = page.locator('nav.mainnav .drawer-data-link');
     for (let index = 0; index < 4; index++) await tabTo(page, summaries.nth(index));
+    // /hotkeys 所在「新手入门」为末组，默认展开；其余路径末组默认收起（Issue 1282）。
+    if (await lastGroup.evaluate((el) => (el as HTMLDetailsElement).open)) await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    await expect(drawerDataLink).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(close).toBeFocused();
     await page.keyboard.press('Shift+Tab');
+    await expect(drawerDataLink).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
     await expect(summaries.last()).toBeFocused();
     await page.keyboard.press('Enter');
-    const lastGroup = page.locator('#tools-menu details').last();
     await page.keyboard.press('Tab');
     await expect(lastGroup.getByRole('link').first()).toBeFocused();
     await page.keyboard.press('ArrowUp');
@@ -66,6 +73,8 @@ for (const path of ['/', '/about-data', '/hotkeys']) {
     await expect(summaries.first()).toBeFocused();
     await page.keyboard.press('End');
     await expect(lastGroup.getByRole('link').last()).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(drawerDataLink).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(close).toBeFocused();
     await page.keyboard.press('Escape');

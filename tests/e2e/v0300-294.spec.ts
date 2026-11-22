@@ -81,23 +81,27 @@ const look = (loc: Locator) =>
     return { onScreen, ring, paint: [s.backgroundColor, s.borderColor, s.borderWidth, s.color, s.textDecorationLine, s.opacity].join('|') };
   });
 
-test.describe('#294 数据版本徽章有 accessible name（不靠 title）', () => {
-  for (const w of WIDTHS)
-    test(`@${w}：去掉 title 后 .verbadge 的 accessible name 仍说明数据版本 / 来源，不含 emoji`, async ({ page }) => {
+test.describe('#294 / Issue 1282 数据版本入口有 accessible name（不靠 title）', () => {
+  for (const w of [1031, 1280])
+    test(`@${w}：去掉 title 后顶栏 .verbadge 的 accessible name 仍说明数据版本 / 来源，不含 emoji`, async ({ page }) => {
       await go(page, '/market', w);
-      const b = page.locator('.verbadge');
+      const b = page.locator('header.topbar > .verbadge');
       await expect(b).toBeVisible();
       await b.evaluate((el) => el.removeAttribute('title'));
       await expect(b).toHaveAccessibleName(/数据版本|来源|关于数据/);
-      const name = await b.evaluate((el) => {
-        const ids = el.getAttribute('aria-labelledby');
-        if (ids)
-          return ids
-            .split(/\s+/)
-            .map((id) => document.getElementById(id)?.textContent ?? '')
-            .join(' ');
-        return el.getAttribute('aria-label') ?? el.textContent ?? '';
-      });
+      const name = await b.evaluate((el) => el.getAttribute('aria-label') ?? el.textContent ?? '');
+      expect(EMOJI.test(name), name).toBe(false);
+    });
+  for (const w of NARROW)
+    test(`@${w}：窄屏隐藏顶栏孤立图标，抽屉底部数据入口的 accessible name 说明数据版本 / 来源，不含 emoji`, async ({ page }) => {
+      await go(page, '/market', w);
+      await expect(page.locator('header.topbar > .verbadge')).toBeHidden();
+      await page.getByRole('button', { name: '菜单', exact: true }).click();
+      const b = page.locator('nav.mainnav .drawer-data-link');
+      await expect(b).toBeVisible();
+      await b.evaluate((el) => el.removeAttribute('title'));
+      await expect(b).toHaveAccessibleName(/数据版本|来源|关于数据/);
+      const name = await b.evaluate((el) => el.getAttribute('aria-label') ?? el.textContent ?? '');
       expect(EMOJI.test(name), name).toBe(false);
     });
 });
@@ -181,13 +185,22 @@ test.describe('#294 跳到主内容链接', () => {
     });
 });
 
-test.describe('#294 对照：窄屏顶栏控件热区', () => {
+test.describe('#294 / Issue 1282 对照：中窄屏控件热区', () => {
+  test('@1031：中屏数据版本胶囊热区 ≥68×44', async ({ page }) => {
+    await go(page, '/market', 1031);
+    const b = (await page.locator('header.topbar > .verbadge').boundingBox())!;
+    expect(b.width).toBeGreaterThanOrEqual(68);
+    expect(b.height).toBeGreaterThanOrEqual(44);
+  });
   for (const w of NARROW)
-    test(`@${w}：数据版本徽章、菜单按钮热区 ≥44×44 [Steve 2026-10-22 确认]`, async ({ page }) => {
+    test(`@${w}：菜单按钮与抽屉底部数据入口热区 ≥44×44 [Steve 2026-10-22 确认]`, async ({ page }) => {
       await go(page, '/market', w);
-      for (const loc of [page.locator('.verbadge'), page.getByRole('button', { name: '菜单', exact: true })]) {
-        const b = (await loc.boundingBox())!;
-        expect(Math.min(b.width, b.height)).toBeGreaterThanOrEqual(44);
-      }
+      await expect(page.locator('header.topbar > .verbadge')).toBeHidden();
+      const menuBtn = page.getByRole('button', { name: '菜单', exact: true });
+      const mb = (await menuBtn.boundingBox())!;
+      expect(Math.min(mb.width, mb.height)).toBeGreaterThanOrEqual(44);
+      await menuBtn.click();
+      const db = (await page.locator('nav.mainnav .drawer-data-link').boundingBox())!;
+      expect(Math.min(db.width, db.height)).toBeGreaterThanOrEqual(44);
     });
 });

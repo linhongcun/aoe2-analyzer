@@ -59,7 +59,7 @@ for (const width of [360, 375, 390, 1280]) {
 
 test('#204 站内入口和文明时代科技解锁', async ({ page }) => {
   await page.goto('./#/');
-  await page.locator('#home .hcard[data-k="production"]').click();
+  await page.locator('#home a[href="#/production"]').click();
   await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
   await page.getByRole('combobox', { name: '生产文明', exact: true }).selectOption('Bohemians');
   await expect(page.getByRole('combobox', { name: '需求 1 单位', exact: true }).locator('option[value="5"]')).toHaveCount(0);
@@ -82,12 +82,12 @@ for (const width of [390, 1280])
     if (width < 600) await page.getByRole('button', { name: '菜单', exact: true }).click();
     await page.getByRole('button', { name: '工具', exact: true }).click();
     const menu = page.locator('#tools-menu');
-    // #774 起手机抽屉的工具组是可折叠 summary（默认只展开当前组），桌面仍是平铺 region。
-    const planning = width < 600 ? menu.locator('details').nth(1) : menu.locator('section[aria-labelledby="tools-planning"]');
+    // #774 / Issue 1282：手机抽屉工具组默认折叠，分组顺序为对局计划(0) → 经济计算(1) → 资料(2) → 新手入门(3)。
+    const planning = width < 600 ? menu.locator('details').nth(0) : menu.locator('section[aria-labelledby="tools-planning"]');
     if (width < 600) await planning.locator('summary').click();
     await expect(planning.getByRole('link').first()).toContainText('开局流程');
-    await expect(menu.locator('.tools-group-title')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
-    if (width < 600) await menu.locator('details').nth(2).locator('summary').click();
+    await expect(menu.locator('.tools-group-title')).toHaveText(['对局计划', '经济计算', '资料', '新手入门']);
+    if (width < 600) await menu.locator('details').nth(1).locator('summary').click();
     await menu.getByRole('link', { name: /持续生产/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
     await expect(menu).toBeHidden();
