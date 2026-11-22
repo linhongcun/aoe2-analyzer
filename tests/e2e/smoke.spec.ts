@@ -643,7 +643,7 @@ test('#27 火焰骆驼：攻击间隔「—」+ 原因小字；击杀用时「�
 test('#38 PK 火焰弓箭手满科技：对建筑射程随射程科技变为 12', async ({ page }) => {
   await page.goto('./#/duel?a=1968.Wu.4.f.');
   const a = page.locator('#duel-a');
-  await a.getByRole('radio', { name: '满科技', exact: true }).click();
+  await a.getByRole('radio', { name: '帝王满科技', exact: true }).click();
   await expect(a.locator('[data-t="range-building"] .rngb-full')).toHaveText('对建筑 12');
   await a.getByRole('radio', { name: '无科技', exact: true }).click();
   await expect(a.locator('[data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');

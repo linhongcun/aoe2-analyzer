@@ -23,7 +23,7 @@ test('#998 模式与比法单选键盘、Tab 和输入隔离', async ({ page }) 
   await expect(mode.getByRole('radio', { name: 'N vs M', exact: true })).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('Shift+Tab');
   await selected(mode, 'N vs M');
-  await page.keyboard.press('End');
+  await page.keyboard.press('ArrowRight');
   await selected(mode, '等资源');
   await expect(page).toHaveURL(/m=r/);
   const comparison = page.getByRole('radiogroup', { name: '比法', exact: true });
@@ -37,6 +37,13 @@ test('#998 模式与比法单选键盘、Tab 和输入隔离', async ({ page }) 
   await mode.getByRole('radio', { name: '等资源', exact: true }).focus();
   await page.keyboard.press('Home');
   await selected(mode, '1v1');
+  await page.keyboard.press('End');
+  const mixedMode = page.getByRole('radiogroup', { name: '模式', exact: true });
+  await expect(page).toHaveURL(/m=mix/);
+  await selected(mixedMode, '混编');
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveURL(/m=1/);
+  await selected(page.getByRole('radiogroup', { name: '模式', exact: true }), '1v1');
 });
 
 test('#998 A/B 精锐与科技预设分组隔离，自定义科技不误选', async ({ page }) => {
@@ -52,12 +59,12 @@ test('#998 A/B 精锐与科技预设分组隔离，自定义科技不误选', as
   await expect(bElite.getByRole('radio', { name: '普通', exact: true })).toHaveAttribute('aria-checked', 'true');
   const preset = a.getByRole('radiogroup', { name: '科技预设', exact: true });
   const bPreset = b.getByRole('radiogroup', { name: '科技预设', exact: true });
-  await preset.getByRole('radio', { name: '满科技', exact: true }).focus();
+  await preset.getByRole('radio', { name: '帝王满科技', exact: true }).focus();
   await page.keyboard.press('ArrowRight');
   await selected(preset, '无科技');
-  await expect(bPreset.getByRole('radio', { name: '满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+  await expect(bPreset.getByRole('radio', { name: '帝王满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('ArrowRight');
-  await selected(preset, '当前时代满科技');
+  await selected(preset, '当前时代满');
   await a.locator('details.duel-tech summary').click();
   await a.locator('label.simt input:checked:not(:disabled)').first().uncheck();
   await expect(preset.locator('[aria-checked="true"]')).toHaveCount(0);
@@ -67,7 +74,7 @@ test('#998 A/B 精锐与科技预设分组隔离，自定义科技不误选', as
   expect(page.url()).toBe(customUrl);
   await expect(preset.locator('[aria-checked="true"]')).toHaveCount(0);
   await page.keyboard.press('End');
-  await selected(preset, '满科技');
+  await selected(preset, '帝王满科技');
 });
 
 test('#998 同家族精锐变体保留精锐单选入口', async ({ page }) => {

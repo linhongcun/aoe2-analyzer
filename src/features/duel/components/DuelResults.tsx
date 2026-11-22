@@ -1,5 +1,6 @@
+import type { Ref, RefObject } from 'react';
 import ShareImage from '../../../shared/ui/ShareImage';
-import { duel, groupFight, costSum } from '../../../domain/duel';
+import { duel, groupFight, costSum, type DuelResult, type GroupResult } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
@@ -9,12 +10,26 @@ import { CounterSummary } from './CounterSummary';
 import { BattleReplay } from './BattleReplay';
 import { VgNotes } from './VgNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
-import { GroupContact, STOP_LABELS } from './ContactSummary';
+import { GroupContact } from './ContactSummary';
 import { r1, type Resolved } from '../logic/duelSide';
+import { summarizeGroup, summarizeOneVOne } from '../logic/duelSummary';
 
-export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
-  const r = duel(A.F, B.F);
-  const wn = r.winner === 'draw' ? '平局（同时击杀）' : `${r.winner === 'a' ? 'A' : 'B'} · ${(r.winner === 'a' ? A : B).u.zh} 获胜`;
+export function OneVOne({
+  A,
+  B,
+  result,
+  resultElRef,
+  headingRef,
+}: {
+  A: Resolved;
+  B: Resolved;
+  result?: DuelResult;
+  resultElRef?: Ref<HTMLDivElement>;
+  headingRef?: RefObject<HTMLHeadingElement>;
+}) {
+  const r = result ?? duel(A.F, B.F);
+  const summary = summarizeOneVOne(A, B, r);
+  const wn = summary.headline;
   const fmtTime = (ow: typeof r.ab) => (ow.time === null ? '—' : r1(ow.time) + 's');
   const fmtDps = (ow: typeof r.ab) => (ow.dps === null || !Number.isFinite(ow.dps) ? '—' : (Math.round(ow.dps * 100) / 100).toString());
   const rows: [string, string, string, string?][] = [
@@ -26,13 +41,16 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   ];
   const dpsReason = r.ab.dpsReason || r.ba.dpsReason;
   return (
-    <div id="duel-res" className="posbox">
-      <h2 className={'duel-win w-' + r.winner}>
-        <Icon name="trophy" /> {wn}
+    <div id="duel-res" className="posbox" ref={resultElRef}>
+      <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
+        <Icon name={summary.icon} /> {wn}
         {r.winner !== 'draw' && (
           <small className="note">
             {' '}
-            · 用时 {r1(r.duration)}s · 剩余生命 {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
+            · 用时 <span className="num nw">{r1(r.duration)}s</span> · 剩余生命{' '}
+            <span className="num nw">
+              {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
+            </span>
           </small>
         )}
       </h2>
@@ -87,25 +105,41 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   );
 }
 
-export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb: number; bud: number }) {
-  const g = groupFight(A.F, na, B.F, nb);
+export function Group({
+  A,
+  B,
+  na,
+  nb,
+  bud,
+  result,
+  resultElRef,
+  headingRef,
+}: {
+  A: Resolved;
+  B: Resolved;
+  na: number;
+  nb: number;
+  bud: number;
+  result?: GroupResult;
+  resultElRef?: Ref<HTMLDivElement>;
+  headingRef?: RefObject<HTMLHeadingElement>;
+}) {
+  const g = result ?? groupFight(A.F, na, B.F, nb);
   if (g.status === 'error')
     return (
-      <div id="duel-res" className="posbox" role="alert">
-        <h2>群战结果未生成</h2>
+      <div id="duel-res" className="posbox" role="alert" ref={resultElRef}>
+        <h2 ref={headingRef} tabIndex={-1}>
+          群战结果未生成
+        </h2>
         <p>{g.reason}</p>
       </div>
     );
-  const wn =
-    g.status === 'timeout' || g.status === 'limit'
-      ? STOP_LABELS[g.status]
-      : g.winner === 'draw'
-        ? '平局 / 同归于尽'
-        : `${g.winner === 'a' ? 'A' : 'B'} · ${(g.winner === 'a' ? A : B).u.zh} 获胜`;
+  const summary = summarizeGroup(A, B, g)!;
+  const wn = summary.headline;
   return (
-    <div id="duel-res" className="posbox">
-      <h2 className={'duel-win w-' + (g.winner ?? 'draw')}>
-        <Icon name={g.status === 'win' ? 'trophy' : 'info'} /> {wn}
+    <div id="duel-res" className="posbox" ref={resultElRef}>
+      <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
+        <Icon name={summary.icon} /> {wn}
         <small className="note">
           {' '}
           · 用时 <span className="num nw">{r1(g.duration)} 秒</span>

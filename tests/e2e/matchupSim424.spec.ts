@@ -179,7 +179,7 @@ async function candidate657(card: Locator, candidateId: number, champiId: number
       `${number657(side.stats.spd)} 格/秒`,
     ]);
   }
-  const query = new URLSearchParams({ a: `${a.unit.id}.${me}.${age}.c.`, b: `${b.unit.id}.${opp}.${age}.c.`, m: '1' });
+  const query = new URLSearchParams({ a: `${a.unit.id}.${me}.${age}.c.`, b: `${b.unit.id}.${opp}.${age}.c.`, m: '1', me, opp });
   await expect(row.getByRole('link', { name: '打开本时代 PK', exact: true })).toHaveAttribute('href', `#/duel?${query}`);
   return row;
 }

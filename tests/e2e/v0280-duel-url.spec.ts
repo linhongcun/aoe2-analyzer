@@ -90,7 +90,7 @@ async function configured657(page: Page, item: (typeof references657)[number]) {
     await expect(panel.locator('.duel-head')).toContainText(civZh);
     await expect(panel.locator('.duel-age')).toHaveText(item.ageZh);
     await expect(page.locator(`#duel-${key}-civ`)).toHaveAttribute('data-value', civ);
-    await expect(panel.getByRole('radio', { name: '当前时代满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+    await expect(panel.getByRole('radio', { name: '当前时代满', exact: true })).toHaveAttribute('aria-checked', 'true');
     await expect(panel.locator(`#duel-${key}-age`)).toHaveValue(String(item.age));
     const selected = await panel
       .locator('.simt:has(a[href*="#/tech/"]) input:checked')
@@ -175,6 +175,9 @@ test.describe('#657 current 蔷琵native参考和恢复', () => {
     await page.goto(`./#/duel?${dirty}`);
     await expect(page.locator('#duel-res')).toBeVisible();
     const root = page.getByTestId('champi-presets');
+    const fold = root.locator('details.duel-champi-fold');
+    await expect(fold).not.toHaveAttribute('open', '');
+    await fold.locator('summary').click();
     await expect(root.locator('.champi-reference-card')).toHaveCount(2);
     await expect(root.locator('.champi-reference-context')).toContainText('参考：穆伊斯卡对法兰克，不代表你当前的对手；当前时代满科技、无团队加成、接触 1v1');
     expect(new URL(page.url()).hash).toBe(`#/duel?${dirty}`);
@@ -200,6 +203,7 @@ test.describe('#657 current 蔷琵native参考和恢复', () => {
         await page.goto('./#/duel?a=38.Franks.3..&b=38.Byzantines.3..&m=1');
         await expect(page.locator('#duel-res')).toBeVisible();
         const before = page.url();
+        await page.getByTestId('champi-presets').locator('summary').click();
         const card = reference657(page, item.key);
         await card.getByRole('button', { name: /^复制链接：/ }).click();
         await expect(card.getByRole('status')).toHaveText('参考对照链接已复制。');
@@ -244,6 +248,7 @@ test.describe('#657 current 蔷琵native参考和恢复', () => {
       await expect(page.locator('#duel-res')).toBeVisible();
       const before = page.url(),
         base = await page.evaluate(() => document.baseURI);
+      await page.getByTestId('champi-presets').locator('summary').click();
       for (const item of references657) {
         const card = reference657(page, item.key);
         await card.getByRole('button', { name: /^复制链接：/ }).click();

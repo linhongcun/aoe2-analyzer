@@ -60,14 +60,14 @@ test('#943 未支持费用科技默认未选，手选只记录', async ({ page }
   const card = page.locator('#duel-a');
   await expect(card.locator('[data-t="pk-miss"]')).toContainText('未计入：布图马普，本站尚不支持，当前价格不是完整效果后的最终价');
   await expect(card.locator('[data-t="pk-miss-state"]')).toHaveText('未选择');
-  await expect(card.getByRole('radio', { name: '满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+  await expect(card.getByRole('radio', { name: '帝王满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
   const before = await priceText(page, 'a');
   await card.locator('details.duel-tech summary').click();
   const box = card.locator('label.simt').filter({ has: page.getByRole('link', { name: '布图马普', exact: true }) });
   await expect(box.locator('input')).not.toBeChecked();
   await box.locator('input').check();
   await expect(card.locator('[data-t="pk-miss-state"]')).toHaveText('已选择，仅记录');
-  await expect(card.getByRole('radio', { name: '满科技', exact: true })).toHaveAttribute('aria-checked', 'false');
+  await expect(card.getByRole('radio', { name: '帝王满科技', exact: true })).toHaveAttribute('aria-checked', 'false');
   expect(await priceText(page, 'a')).toBe(before);
   await expect(card.locator('[data-t="pk-cost-more"]')).toContainText('仅记录，训练价未套用该效果');
 });

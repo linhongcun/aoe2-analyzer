@@ -10,6 +10,7 @@ import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
+import { unitAvailable } from '../../../domain/unitAvailability';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
@@ -30,6 +31,8 @@ import { encodeTrainTotal } from '../../../domain/trainTotal';
 import { productionTransferState } from '../../../shared/utils/productionTransferState';
 import '../../../shared/ui/productionTransfer.css';
 
+const AGES = [1, 2, 3, 4] as const;
+
 export function Side({
   k,
   side,
@@ -47,7 +50,7 @@ export function Side({
   count: number;
   /** 等资源预算；0 = 不显示派出数量和训练投入 */
   bud: number;
-  /** #88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
+  /** issue 88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
   time: [number, number] | null;
   context: ProductionContext;
 }) {
@@ -65,39 +68,52 @@ export function Side({
       }),
     [context, k, side, count],
   );
-  const entry = (
-    <div className="duel-transfer">
-      <Link
-        className="duel-transfer-link"
-        to={'/production?' + encodeTrainTotal(transfer.config)}
-        state={productionTransferState(transfer.notice)}
-        replace={false}
-      >
-        <Icon name="calculator" />算 {k.toUpperCase()} 方训练总价
-        <Icon name="arrow-right" />
-      </Link>
-      <span className="note">
-        带入{civByEn(side.civ)?.zh ?? side.civ}、{AGE_ZH[side.age]}、{side.u.zh} <span className="num nw">× {count}</span>
-      </span>
-    </div>
+  const transferLink = (
+    <Link
+      className="duel-transfer-link"
+      to={'/production?' + encodeTrainTotal(transfer.config)}
+      state={productionTransferState(transfer.notice)}
+      replace={false}
+    >
+      <Icon name="calculator" />
+      <span>算 {k.toUpperCase()} 方训练总价</span>
+      {count > 1 && <span className="num nw">（× {count}）</span>}
+      <Icon name="arrow-right" />
+    </Link>
   );
-  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} entry={entry} />;
+  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
   const eliteSelected = isElite(u, core.fam);
-  const preset = Array.isArray(spec.techs) ? (spec.techs.length ? '' : 'none') : spec.techs;
+  const preset = Array.isArray(spec.techs) ? (spec.techs.length ? '' : 'none') : spec.techs === 'f' && side.age < 4 ? 'c' : spec.techs;
   const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
+  const onAgeChange = (nextAge: number) => {
+    const nextTechs: SideSpec['techs'] = Array.isArray(spec.techs)
+      ? spec.techs.filter((id) => {
+          const tech = core.techById[id];
+          return !!tech && tech.age <= nextAge;
+        })
+      : spec.techs === 'f' && nextAge < 4
+        ? 'c'
+        : spec.techs;
+    onChange({ ...spec, age: nextAge, ageSet: true, techs: nextTechs });
+  };
   return (
     <div className={`duel-side side-${k}`} id={`duel-${k}`}>
       <div className="duel-head">
         <UnitIcon u={u} big />
-        <div>
+        <div className="duel-head-main">
           <h2 className="duel-side-title">
-            {k.toUpperCase()} · {u.zh} {count > 1 && <span className="tag">× {count}</span>}
+            <span>
+              {k.toUpperCase()} · {u.zh}
+            </span>
+            {count > 1 && <span className="tag duel-count-pill num nw">× {count}</span>}
           </h2>
           <small className="note duel-meta">
-            {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+            <span>
+              {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+            </span>
             <PkCost cost={side.training.price.cost} base={side.training.before} />
           </small>
         </div>
@@ -106,7 +122,6 @@ export function Side({
         <TrainingPrice quote={side.training} sel={side.sel} bud={bud} count={count} />
         <CostDiscountBlock unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} />
       </div>
-      {entry}
       {time && (
         <RealCostBlock
           headingLevel={3}
@@ -119,145 +134,179 @@ export function Side({
           min={time[1]}
         />
       )}
-      <div className="bar">
-        <UnitPicker
-          id={`duel-${k}-unit`}
-          label={`${k.toUpperCase()} 方单位`}
-          value={u}
-          civ={side.civ}
-          list={fams}
-          onChange={(x) => onChange({ ...spec, uid: x.id })}
-        />
-        {elite && (
-          <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={u.id === base.id}
-              tabIndex={u.id === base.id ? 0 : -1}
-              className={u.id === base.id ? 'on' : undefined}
-              onClick={() => onChange({ ...spec, uid: base.id })}
-            >
-              普通
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={eliteSelected}
-              tabIndex={eliteSelected ? 0 : -1}
-              className={eliteSelected ? 'on' : undefined}
-              onClick={() => onChange({ ...spec, uid: elite.id })}
-            >
-              精锐
-            </button>
-          </span>
-        )}
+      <div className="duel-pickers">
+        <div className="duel-unit-slot">
+          <UnitPicker
+            id={`duel-${k}-unit`}
+            label={`${k.toUpperCase()} 方单位`}
+            value={u}
+            civ={side.civ}
+            list={fams}
+            onChange={(x) => onChange({ ...spec, uid: x.id })}
+          />
+          {elite && (
+            <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={u.id === base.id}
+                tabIndex={u.id === base.id ? 0 : -1}
+                className={u.id === base.id ? 'on' : undefined}
+                onClick={() => onChange({ ...spec, uid: base.id })}
+              >
+                普通
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={eliteSelected}
+                tabIndex={eliteSelected ? 0 : -1}
+                className={eliteSelected ? 'on' : undefined}
+                onClick={() => onChange({ ...spec, uid: elite.id })}
+              >
+                精锐
+              </button>
+            </span>
+          )}
+        </div>
+        <div className="duel-civ-slot">
+          <CivPicker
+            id={`duel-${k}-civ`}
+            label={`${k.toUpperCase()} 方文明`}
+            value={side.civ}
+            allowed={u.civs}
+            compactTrigger
+            onChange={(c) => onChange({ ...spec, civ: c })}
+          />
+        </div>
       </div>
-      <div className="bar">
-        <CivPicker id={`duel-${k}-civ`} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />
-      </div>
-      <div className="bar duel-presets" role="radiogroup" aria-label="科技预设" onKeyDown={radioKeyboard}>
-        {(
-          [
-            ['none', '无科技', () => onChange({ ...spec, techs: [] })],
-            ['c', '当前时代满科技', () => onChange({ ...spec, techs: 'c' })],
-            ['f', '满科技', () => onChange({ ...spec, techs: 'f', age: 4, ageSet: true })],
-          ] as const
-        ).map(([id, l, f]) => (
-          <button
-            key={id}
-            role="radio"
-            aria-checked={preset === id}
-            tabIndex={preset === id || (!preset && id === 'none') ? 0 : -1}
-            className={preset === id ? 'on' : undefined}
-            onClick={f}
-          >
-            {l}
-          </button>
-        ))}
-      </div>
-      <table className="stat duel-stats">
-        <tbody>
+      <div className="duel-age-presets">
+        <select
+          id={`duel-${k}-age`}
+          className="duel-age-select"
+          aria-label={`${k.toUpperCase()} 方时代`}
+          value={side.age}
+          onChange={(e) => onAgeChange(Number(e.target.value))}
+        >
+          {AGES.map((age) => (
+            <option key={age} value={age} disabled={!unitAvailable(context, side.civ, u.id, age) && age !== side.age}>
+              {AGE_ZH[age]}
+            </option>
+          ))}
+        </select>
+        <div className="duel-presets" role="radiogroup" aria-label="科技预设" onKeyDown={radioKeyboard}>
           {(
             [
-              ['hp', '生命值', formatHp(side.F.hp)],
-              [u.rng > 1 ? 'patk' : 'atk', '攻击', r1(side.S.atk) + (side.F.ranged ? '（穿刺）' : '（近战）')],
-              ['marm', '护甲', `${r1(side.S.ma)} / ${r1(side.S.pa)}`],
-              [
-                'rof',
-                '攻击间隔',
-                side.S.rof > 0 ? (
-                  (Math.round(side.S.rof * 100) / 100).toString() + 's'
-                ) : (
-                  <>
-                    —
-                    <small className="note rof-reason" data-t="rof-reason">
-                      {DPS_UNAVAILABLE_REASON}
-                    </small>
-                  </>
-                ),
-              ],
-              [
-                'range',
-                '射程',
-                <>
-                  {r1(side.S.rng)}
-                  <RangeB u={side.S} compact />
-                </>,
-              ],
-              ['', '命中率', Math.round(side.F.acc * 100) + '%'],
+              ['none', '无科技', () => onChange({ ...spec, techs: [] })],
+              ['c', '当前时代满', () => onChange({ ...spec, techs: 'c' })],
+              ['f', '帝王满科技', () => onChange({ ...spec, techs: 'f', age: 4, ageSet: true })],
             ] as const
-          ).map(([ic, n, v]) => (
-            <tr key={n}>
-              <td>
-                <StatIcon k={ic} t={n} />
-                {n}
-              </td>
-              <td>
-                <b>{v}</b>
-              </td>
-            </tr>
+          ).map(([id, l, f]) => (
+            <button
+              key={id}
+              type="button"
+              role="radio"
+              aria-checked={preset === id}
+              tabIndex={preset === id || (!preset && id === 'none') ? 0 : -1}
+              className={preset === id ? 'on' : undefined}
+              onClick={f}
+            >
+              {l}
+            </button>
           ))}
-        </tbody>
-      </table>
-      <details className="duel-tech">
-        <summary>科技详情（已选 {side.sel.size} 项，可逐项勾选）</summary>
-        {!side.training.costs.length && <p className="note">{EMPTY_TRAINING_TECH}</p>}
-        <SimPanel
-          headingLevel={2}
-          embedded={`duel-${k}`}
-          civs={u.civs}
-          minAge={
-            side.earlyAgeMarker?.unitId === u.id && side.earlyAgeMarker.civ === side.civ && side.earlyAgeMarker.age === side.age
-              ? side.earlyAgeMarker.age
-              : u.age
-          }
-          civ={side.civ}
-          age={side.age}
-          sel={side.sel}
-          team={new Set(spec.team)}
-          cmp=""
-          avail={[
-            ...side.avail,
-            ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
-          ]}
-          selectableWithoutEffect={new Set(side.training.costs.map((item) => item.tech.id))}
-          presetExtra={(scope) => {
-            const limit = scope === 'all' ? 4 : scope;
-            return new Set(side.training.costs.filter((item) => item.supported && item.tech.age <= limit).map((item) => item.tech.id));
-          }}
-          techById={core.techById}
-          rows={rows}
-          base={baseStats(u)}
-          cur={side.S}
-          cmpStats={null}
-          civNotes={civBonusNotes(u, side.civ)}
-          armorClasses={Object.entries(side.S.armc)}
-          teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
-          go={(civ, age, sel, team) => onChange({ uid: u.id, civ, age, techs: [...sel], team: [...team] })}
-          setCmp={() => {}}
-        />
-      </details>
+        </div>
+      </div>
+      <dl className="duel-stats">
+        {(
+          [
+            ['hp', '生命值', <span className="num nw">{formatHp(side.F.hp)}</span>],
+            [
+              u.rng > 1 ? 'patk' : 'atk',
+              '攻击',
+              <>
+                <span className="num nw">{r1(side.S.atk)}</span>
+                {side.F.ranged ? '（穿刺）' : '（近战）'}
+              </>,
+            ],
+            ['marm', '护甲', <span className="num nw">{`${r1(side.S.ma)} / ${r1(side.S.pa)}`}</span>],
+            [
+              'rof',
+              '攻击间隔',
+              side.S.rof > 0 ? (
+                <span className="num nw">{`${Math.round(side.S.rof * 100) / 100}s`}</span>
+              ) : (
+                <>
+                  —
+                  <small className="note rof-reason" data-t="rof-reason">
+                    {DPS_UNAVAILABLE_REASON}
+                  </small>
+                </>
+              ),
+            ],
+            [
+              'range',
+              '射程',
+              <>
+                <span className="num nw">{r1(side.S.rng)}</span>
+                <RangeB u={side.S} compact />
+              </>,
+            ],
+            ['', '命中率', <span className="num nw">{`${Math.round(side.F.acc * 100)}%`}</span>],
+          ] as const
+        ).map(([ic, n, v]) => (
+          <div className="duel-stat-cell" key={n}>
+            <dt>
+              <StatIcon k={ic} t={n} />
+              {n}
+            </dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="duel-card-foot">
+        <details className="duel-tech">
+          <summary>
+            科技详情（已选 <span className="num nw">{side.sel.size} 项</span>）
+          </summary>
+          {!side.training.costs.length && <p className="note">{EMPTY_TRAINING_TECH}</p>}
+          <SimPanel
+            hideAge
+            headingLevel={2}
+            embedded={`duel-${k}`}
+            civs={u.civs}
+            minAge={
+              side.earlyAgeMarker?.unitId === u.id && side.earlyAgeMarker.civ === side.civ && side.earlyAgeMarker.age === side.age
+                ? side.earlyAgeMarker.age
+                : u.age
+            }
+            civ={side.civ}
+            age={side.age}
+            sel={side.sel}
+            team={new Set(spec.team)}
+            cmp=""
+            avail={[
+              ...side.avail,
+              ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
+            ]}
+            selectableWithoutEffect={new Set(side.training.costs.map((item) => item.tech.id))}
+            presetExtra={(scope) => {
+              const limit = scope === 'all' ? 4 : scope;
+              return new Set(side.training.costs.filter((item) => item.supported && item.tech.age <= limit).map((item) => item.tech.id));
+            }}
+            techById={core.techById}
+            rows={rows}
+            base={baseStats(u)}
+            cur={side.S}
+            cmpStats={null}
+            civNotes={civBonusNotes(u, side.civ)}
+            armorClasses={Object.entries(side.S.armc)}
+            teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
+            go={(civ, age, sel, team) => onChange({ uid: u.id, civ, age, ageSet: true, techs: [...sel], team: [...team] })}
+            setCmp={() => {}}
+          />
+        </details>
+        {transferLink}
+      </div>
     </div>
   );
 }
@@ -268,13 +317,13 @@ function UnavailSide({
   side,
   fams,
   onChange,
-  entry,
+  transferLink,
 }: {
   k: 'a' | 'b';
   side: Unavail;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
-  entry: React.ReactNode;
+  transferLink: React.ReactNode;
 }) {
   const { u, spec, sub } = side;
   const civZh = civByEn(side.civ)?.zh ?? side.civ;
@@ -283,11 +332,11 @@ function UnavailSide({
     <div className={`duel-side side-${k} is-unavail`} id={`duel-${k}`} data-unavailable="true">
       <div className="duel-head">
         <UnitIcon u={u} big />
-        <div>
+        <div className="duel-head-main">
           <h2 className="duel-side-title">
             {k.toUpperCase()} · {u.zh}
           </h2>
-          <small className="note">
+          <small className="note duel-meta">
             {civZh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
           </small>
         </div>
@@ -308,20 +357,29 @@ function UnavailSide({
           </button>
         </div>
       </div>
-      {entry}
-      <div className="bar">
-        <UnitPicker
-          id={`duel-${k}-unit`}
-          label={`${k.toUpperCase()} 方单位`}
-          value={u}
-          civ={side.civ}
-          list={fams}
-          onChange={(x) => onChange({ ...spec, uid: x.id })}
-        />
+      <div className="duel-pickers">
+        <div className="duel-unit-slot">
+          <UnitPicker
+            id={`duel-${k}-unit`}
+            label={`${k.toUpperCase()} 方单位`}
+            value={u}
+            civ={side.civ}
+            list={fams}
+            onChange={(x) => onChange({ ...spec, uid: x.id })}
+          />
+        </div>
+        <div className="duel-civ-slot">
+          <CivPicker
+            id={civId}
+            label={`${k.toUpperCase()} 方文明`}
+            value={side.civ}
+            allowed={u.civs}
+            compactTrigger
+            onChange={(c) => onChange({ ...spec, civ: c })}
+          />
+        </div>
       </div>
-      <div className="bar">
-        <CivPicker id={civId} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />
-      </div>
+      <div className="duel-card-foot duel-card-foot-unavail">{transferLink}</div>
     </div>
   );
 }

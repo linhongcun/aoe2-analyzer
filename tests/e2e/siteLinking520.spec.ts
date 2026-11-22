@@ -8,7 +8,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const PAIR = './#/matchup?me=Mongols&opp=Chinese';
-const DUEL = './#/duel?a=4.Mongols.2..&b=74.Chinese.2..&m=n&na=2&nb=3';
+const DUEL = './#/duel?a=4.Mongols.2..&b=74.Chinese.2..&m=n&na=2&nb=3&me=Mongols&opp=Chinese';
 const ALLY_BUILDS = './#/builds?civ=Mongols&from=matchup&opp=Chinese';
 const OPP_BUILDS = './#/builds?civ=Chinese&from=matchup&me=Mongols';
 const INVALID_NOTE = '链接中的文明无效，已用上次选择';
@@ -265,6 +265,10 @@ test('#520 #/duel 回对局助手还原 me/opp，双方文明与开局可进', a
   await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
   await clickLink(contextBar(page).getByRole('link', { name: '回对局助手', exact: true }));
   await expectMatchupPair(page, 'Mongols', 'Chinese');
+
+  await page.goto('./#/duel');
+  await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: '对阵相关入口' })).toHaveCount(0);
 });
 
 test('#520 #/builds 文明名回文明页，from=matchup 回助手，查看全部开局保留 civ', async ({ page }) => {
