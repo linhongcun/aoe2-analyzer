@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.19] - 2026-11-22
+
+### 更新说明
+
+修复建筑、单位与科技三类详情页顶部图标错位与裁切问题：在桌面端打开营垒、步弓手、软甲等详情页时，左侧图标现在会按原比例端正铺满图标框内缘，不再挤在左上角并在右下留出大片空边；在手机窄屏下图标也会随外框完整缩放显示，不再向右下溢出被裁切。单位 PK 页面的阵营头图标尺寸与布局保持不变。
+
+### 修复
+
+- #1345：在 `src/features/buildings/components/building-detail.css`、`src/features/units/components/unit-detail.css` 与 `src/features/techs/components/tech-detail.css` 中将页头图标选择器提升为 `.bd-icon > img.uico.big` / `.ud-icon > img.uico.big` / `.td-icon > img.uico.big` 以压过 `base.css` 的 `.uico.big`（统一采用 `display: block; width: 100%; height: 100%; margin: 0; border: 0; border-radius: 0; object-fit: contain;`），并将窄屏断点组合选择器中的 `img` 拆出，避免按外框尺寸溢出 `2px`；保持 `base.css` `.uico.big` 原样以确保 `#/duel` 阵营头 `64×64` 不回归，并新增 `tests/e2e/detailHeaderIcons1345.spec.ts`（同步登记 `scripts/ci-browser-weights.json`）覆盖桌面 1280 与窄屏 390 四边留白、原比例及 PK 阵营头回归校验。
+
 ## [0.99.18] - 2026-11-22
 
 ### 更新说明
