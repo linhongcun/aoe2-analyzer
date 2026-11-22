@@ -1,9 +1,10 @@
-import { DAT, toEffects } from '../../../domain/datEffects';
+import { DAT, toEffects, type DatEco } from '../../../domain/datEffects';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { PRODUCTION_UNLOCK_TECH_IDS, productionBuildings, type ProductionContext } from '../../../domain/production';
 import type { ProductionTransferNotice } from '../../../domain/productionTransfer';
 import { emptyTrainTotal, encodeTrainTotal, evaluateTrainTotal } from '../../../domain/trainTotal';
+import type { Unit } from '../../../domain/types';
 import { isUnitCostAttribute } from '../../../domain/unitCost';
 import type { MixedFieldError, MixedSideView } from './mixedDuel';
 
@@ -11,14 +12,41 @@ type MixedNotice = Extract<ProductionTransferNotice, { source: 'mixed-duel' }>;
 export type MixedTrainingTransfer = { errors: MixedFieldError[] } | { to: string; notice: MixedNotice };
 
 const unlockIds: readonly number[] = PRODUCTION_UNLOCK_TECH_IDS;
-// The fixed effect table also records these combat attributes in its eco section.
-const combatAttributes = new Set([10, 22, 24, 102, 107, 108, 109]);
+// Pinned .dat (empires2_x2_p1.dat, DE Update 188329) + UGC Guide combat attributes in eco:
+// 10 monk faith recharge, 22 blast width, 24 bonus damage resistance,
+// 63 Combat Ability (type_50.break_off_combat bitfield), 102/107 projectiles, 108 garrison heal, 109 HP regen.
+const combatAttributes = new Set([10, 22, 24, 63, 102, 107, 108, 109]);
+// Pinned .dat + UGC Guide non-pricing operational attributes:
+// 13 Work Rate (bird.work_rate: pack/unpack, heal, gather, trade, building train/research speed),
+// 14 Carry Capacity (unit.resource_capacity).
+const nonPricingAttributes = new Set([13, 14]);
+// Pinned .dat + UGC Guide non-pricing player resources:
+// 203 Map Reveal (0 normal / 1 explored / 2 all visible; Portuguese Circumnavigation 1404 sets -1).
+const nonPricingResources = new Set([203]);
+
+export function hasUnsupportedTransferResourceOrCost(eco: readonly DatEco[]): boolean {
+  return eco.some((effect) => (effect.res !== undefined && !nonPricingResources.has(effect.res)) || (isUnitCostAttribute(effect.a) && !effect.t?.length));
+}
+
+export function isUnclassifiedTransferEcoEffect(
+  effect: DatEco,
+  armyUnitIds: ReadonlySet<number>,
+  unitById: Readonly<Record<number, Unit | undefined>>,
+): boolean {
+  if (effect.res !== undefined) return !nonPricingResources.has(effect.res);
+  if (isUnitCostAttribute(effect.a)) return !effect.t?.length;
+  if (effect.a !== undefined && (combatAttributes.has(effect.a) || nonPricingAttributes.has(effect.a))) return false;
+  // Attribute effects whose explicit catalog unit targets are all outside this side's army cannot alter its training price.
+  if (effect.a !== undefined && effect.t?.length && effect.t.every((target) => Boolean(unitById[target]) && !armyUnitIds.has(target))) return false;
+  return true;
+}
 
 export function mixedTrainingTransfer(context: ProductionContext, input: MixedSideInput, side: 'a' | 'b', view: MixedSideView): MixedTrainingTransfer {
   if (!view.army) return { errors: view.errors };
   const age = Number(input.age);
   const ids = input.techs.map(Number);
   const units = view.army.map(({ uid }) => context.core.unitById[uid]!);
+  const armyUnitIds = new Set(units.map((unit) => unit.id));
   const rows = view.army.map(({ uid }, index) => ({ unit: uid, qty: input.rows[index]!.qty }));
   const errors: MixedFieldError[] = [];
   const pricing: number[] = [];
@@ -29,7 +57,7 @@ export function mixedTrainingTransfer(context: ProductionContext, input: MixedSi
   for (const id of ids) {
     const tech = context.core.techById[id]!;
     const data = DAT.techs[tech.en];
-    if (data?.id !== id || data.eco.some((effect) => effect.res !== undefined || (isUnitCostAttribute(effect.a) && !effect.t?.length))) {
+    if (data?.id !== id || hasUnsupportedTransferResourceOrCost(data.eco)) {
       fail('techs', `${tech.zh}的条件无法完整换算为训练计价。`);
       continue;
     }
@@ -42,11 +70,8 @@ export function mixedTrainingTransfer(context: ProductionContext, input: MixedSi
         return withTech.length > 0 && withoutTech.length === 0;
       });
     const unclassifiedEffect =
-      data.eco.some((effect) => {
-        if (isUnitCostAttribute(effect.a) || (effect.a !== undefined && combatAttributes.has(effect.a))) return false;
-        // Building work rate affects throughput, not the unit price.
-        return effect.a !== 13 || !effect.t?.length || !effect.t.every((target) => context.core.buildingById[target]);
-      }) || data.rules.some((rule) => toEffects(rule.fx).length !== rule.fx.length);
+      data.eco.some((effect) => isUnclassifiedTransferEcoEffect(effect, armyUnitIds, context.core.unitById)) ||
+      data.rules.some((rule) => toEffects(rule.fx).length !== rule.fx.length);
     if (unclassifiedEffect) {
       fail('techs', `${tech.zh}有尚未核实的训练条件。`);
     } else if (priceEffect || unlock) {

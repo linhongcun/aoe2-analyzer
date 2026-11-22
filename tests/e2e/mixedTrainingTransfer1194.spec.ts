@@ -139,3 +139,80 @@ test('#1194 无效侧定位并保留输入，另一方独立，失效版本暂�
   await expect(a).toBeVisible();
   await expect(b).toBeVisible();
 });
+
+test('#1334 日本巨型投石机与亚美尼亚牧师战士点「满科技」预设后可一键带入训练总价', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  const cases = [
+    {
+      label: '日本巨型投石机',
+      civ: 'Japanese',
+      uid: '331',
+      qty: '5',
+      omitted: '弹射器（不改变本方训练单价或解锁）',
+      resources: [
+        ['Wood', '1,000'],
+        ['Gold', '1,000'],
+      ] as const,
+    },
+    {
+      label: '亚美尼亚牧师战士',
+      civ: 'Armenians',
+      uid: '1811',
+      qty: '5',
+      omitted: '费雷特斯（不改变本方训练单价或解锁）',
+      resources: [
+        ['Food', '200'],
+        ['Gold', '250'],
+      ] as const,
+    },
+    {
+      label: '不列颠箭船',
+      civ: 'Britons',
+      uid: '539',
+      qty: '5',
+      omitted: '鱼鳞式建造法（不改变本方训练单价或解锁）',
+      resources: [
+        ['Wood', '360'],
+        ['Gold', '150'],
+      ] as const,
+    },
+    {
+      label: '不列颠村民',
+      civ: 'Britons',
+      uid: '83',
+      qty: '5',
+      omitted: '独轮推车（不改变本方训练单价或解锁）',
+      resources: [['Food', '250']] as const,
+    },
+  ];
+
+  for (const item of cases) {
+    await open(page, {
+      ...fixture,
+      a: { civ: item.civ, age: '4', techs: [], team: [], rows: [{ uid: item.uid, qty: item.qty }] },
+    });
+    const sideA = page.locator('section.mix-side.side-a');
+    await sideA.getByRole('button', { name: '满科技', exact: true }).click();
+    await expect(sideA.getByRole('complementary', { name: '暂不能带入 A 方' }), item.label).toHaveCount(0);
+    const link = action(page, 'A');
+    await expect(link, item.label).toBeVisible();
+    await link.click();
+
+    const summary = page.getByTestId('production-transfer');
+    await expect(summary, item.label).toContainText('已带入混编 PK 的 A 方');
+    await expect(summary, item.label).toContainText(item.omitted);
+    const result = page.getByTestId('train-total-result');
+    await expect(result, item.label).not.toContainText('部分训练费用');
+    for (const [res, amount] of item.resources) {
+      await expect(result.getByTestId(`train-total-resource-${res}`), `${item.label}:${res}`).toContainText(amount);
+    }
+  }
+
+  expect(errors).toEqual([]);
+});
