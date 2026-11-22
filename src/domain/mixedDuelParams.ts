@@ -10,6 +10,7 @@ export interface MixedSideInput {
   techs: string[];
   team: string[];
   rows: MixedRowInput[];
+  kite?: boolean;
 }
 export interface MixedDuelInput {
   rule: string;
@@ -61,8 +62,9 @@ export function decodeMixedDuel(params: URLSearchParams): {
       fail('配置须为对象');
       return emptyMixedSide();
     }
-    if (Object.keys(obj).some((k) => !['civ', 'age', 'techs', 'team', 'rows'].includes(k))) fail('配置含未知字段');
+    if (Object.keys(obj).some((k) => !['civ', 'age', 'techs', 'team', 'rows', 'kite'].includes(k))) fail('配置含未知字段');
     for (const k of ['civ', 'age']) if (typeof obj[k] !== 'string') fail(`${k} 字段格式无效`);
+    if ('kite' in obj && typeof obj.kite !== 'boolean') fail('kite 字段须为布尔值');
     const list = (key: 'techs' | 'team') => {
       const value = obj[key];
       if (!Array.isArray(value)) {
@@ -82,15 +84,28 @@ export function decodeMixedDuel(params: URLSearchParams): {
         fail(`第 ${i + 1} 行字段格式无效`);
       return { uid: scalar(row.uid), qty: scalar(row.qty) };
     });
-    return { civ: scalar(obj.civ), age: scalar(obj.age), techs: list('techs'), team: list('team'), rows };
+    const out: MixedSideInput = { civ: scalar(obj.civ), age: scalar(obj.age), techs: list('techs'), team: list('team'), rows };
+    if (obj.kite === true) out.kite = true;
+    return out;
   };
   const input = { rule, data, a: side('a'), b: side('b') };
   const errors = [...sharedErrors, ...sideErrors.a, ...sideErrors.b];
   return { input, errors, sharedErrors, sideErrors, legacy: rule === LEGACY_MIXED_RULE && !errors.length };
 }
 
+function serializeMixedSide(side: MixedSideInput): MixedSideInput {
+  const { kite, ...rest } = side;
+  return kite === true ? { ...rest, kite: true } : rest;
+}
+
 export function encodeMixedDuel(input: MixedDuelInput): URLSearchParams {
-  return new URLSearchParams({ m: 'mix', rule: input.rule, data: input.data, ma: JSON.stringify(input.a), mb: JSON.stringify(input.b) });
+  return new URLSearchParams({
+    m: 'mix',
+    rule: input.rule,
+    data: input.data,
+    ma: JSON.stringify(serializeMixedSide(input.a)),
+    mb: JSON.stringify(serializeMixedSide(input.b)),
+  });
 }
 
 export function mixedDataVersion(sources: { patch?: { build: number }; sources?: Record<string, { commit: string; sha256?: string }> }): string {

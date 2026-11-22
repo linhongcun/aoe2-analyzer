@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { formatMeleeCaption, isLargeAggregate, type BattleReplayModel, type BattleReplaySnapshot } from '../../../domain/battleReplay';
 import { formatHp } from '../../../domain/hpFormat';
+import { computeRetreatCapLines } from '../logic/duelKiteView';
 
 interface BattleStageSvgProps {
   model: BattleReplayModel;
@@ -42,6 +43,7 @@ export function BattleStageSvg({ model, snap, isCompact, isNarrow }: BattleStage
   const xA = clamp(toX(snap.aPos), padL, W - padR);
   const xB = clamp(toX(snap.bPos), padL, W - padR);
   const contactLineX = model.trace.contactX !== null ? clamp(toX(model.trace.contactX), padL, W - padR) : null;
+  const retreatCapLines = computeRetreatCapLines(model);
 
   const aFrontMeta = model.a.rows[snap.aFrontRow];
   const bFrontMeta = model.b.rows[snap.bFrontRow];
@@ -266,8 +268,14 @@ export function BattleStageSvg({ model, snap, isCompact, isNarrow }: BattleStage
     );
   };
 
-  // 底部摘要提示（接敌人数 / 射程先手窗口）
+  // 底部摘要提示（接敌人数 / 拉扯 / 脱离接战 / 射程先手窗口）
   const bottomCaption = (() => {
+    if (snap.phase === 'disengaged') {
+      return `双方脱离接战（间距 ${r1(snap.gap)} 格）`;
+    }
+    if (snap.phase === 'kiting') {
+      return `远程拉扯后撤 · 间距 ${r1(snap.gap)} 格`;
+    }
     if (snap.phase === 'melee') {
       return formatMeleeCaption(model, snap);
     }
@@ -358,6 +366,25 @@ export function BattleStageSvg({ model, snap, isCompact, isNarrow }: BattleStage
             />
           </g>
         )}
+
+        {/* 40 格退距上限参照线（仅触底或已触发拉扯且落入遍历包络时绘制，严禁撑宽标尺） */}
+        {retreatCapLines.map((line) => {
+          const lx = clamp(toX(line.x), padL, W - padR);
+          return (
+            <g key={`cap-${line.side}`} data-t="replay-retreat-cap" data-side={line.side} data-hit={line.hit ? 'true' : 'false'}>
+              <line
+                x1={lx}
+                y1={rulerY + 6}
+                x2={lx}
+                y2={footY - 22}
+                stroke={line.hit ? 'var(--color-warn)' : 'var(--color-muted)'}
+                strokeWidth={1.5}
+                strokeDasharray="4 3"
+                strokeOpacity={0.85}
+              />
+            </g>
+          );
+        })}
 
         {/* 0 接敌/碰撞参考线（纯远程对射 contactX === null 不绘红线） */}
         {contactLineX !== null && (

@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import { useMemo, type RefObject } from 'react';
 import { civByEn } from '../../../data';
 import { fighterUsesAssumeHit } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
@@ -11,10 +11,12 @@ import { AGE_ZH } from '../../../domain/ratings';
 import type { Tech, Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
+import { mixedSideCanKite, standingOpeningDelta } from '../logic/duelKiteView';
 import type { Resolved } from '../logic/duelSide';
 import type { MixedSideView } from '../logic/mixedDuel';
 import { BattleReplay } from './BattleReplay';
 import { CONTACT_BOUNDARY, MixedContact, STOP_LABELS } from './ContactSummary';
+import { DisengagedNotice } from './KiteSummaryCard';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
 
 function selectedTechsOf(side: Resolved): Tech[] {
@@ -143,29 +145,61 @@ export function MixedResult({
     { civZh: civByEn(input.a.civ)?.zh ?? input.a.civ, rows: a.army! },
     { civZh: civByEn(input.b.civ)?.zh ?? input.b.civ, rows: b.army! },
   );
+  const standingDeltaVolleys = useMemo(() => standingOpeningDelta(a.army!, b.army!, result.contact), [a.army, b.army, result.contact]);
   const sideKey = (s: MixedDuelInput['a']) =>
-    `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
+    `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}][k=${s.kite ? 1 : 0}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
   const replayKey = `${sideKey(input.a)}|${sideKey(input.b)}|${result.duration}`;
+  const isDisengaged = result.status === 'disengaged';
+  const rangedInfo = (army: NonNullable<MixedSideView['army']>) => {
+    const r = army.find((row) => row.fighter.ranged) ?? army[0]!;
+    const maxRng = army.reduce((m, row) => (row.fighter.ranged ? Math.max(m, row.fighter.rng) : m), r.fighter.rng);
+    return { name: r.fighter.name, rng: maxRng };
+  };
+  const aInfo = rangedInfo(a.army!);
+  const bInfo = rangedInfo(b.army!);
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
         <div>
           <p className="mix-eyebrow">混编结果 · {MIXED_RULE_LABEL}</p>
           <h2 id="mix-result-title" ref={headingRef} tabIndex={-1}>
-            {title}
+            {isDisengaged && <Icon name="info" />} {title}
+            {isDisengaged && (
+              <small className="note">
+                {' '}
+                · A 剩余{' '}
+                <span className="num nw">
+                  {result.a.total.alive} / {result.a.total.initial}
+                </span>{' '}
+                · B 剩余{' '}
+                <span className="num nw">
+                  {result.b.total.alive} / {result.b.total.initial}
+                </span>
+              </small>
+            )}
           </h2>
         </div>
         <span className="tag num nw">用时 {formatHp(result.duration)} 游戏秒</span>
       </div>
-      <p role="status">
-        {result.status === 'timeout' || result.status === 'limit'
-          ? '下方显示停止时的存活数量。'
-          : result.status === 'draw'
-            ? '本次事件内双方攻击均完成，结果为同时全灭。'
-            : '结果对应本次配置。'}
-      </p>
+      {isDisengaged && result.contact.kite ? (
+        <DisengagedNotice
+          aName={aInfo.name}
+          aRng={aInfo.rng}
+          bName={bInfo.name}
+          bRng={bInfo.rng}
+          disengagedAt={result.contact.kite.disengagedAt ?? result.duration}
+        />
+      ) : (
+        <p role="status">
+          {result.status === 'timeout' || result.status === 'limit'
+            ? '下方显示停止时的存活数量。'
+            : result.status === 'draw'
+              ? '本次事件内双方攻击均完成，结果为同时全灭。'
+              : '结果对应本次配置。'}
+        </p>
+      )}
       <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />
-      <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} />
+      <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} standingDeltaVolleys={standingDeltaVolleys} />
       <BattleReplay key={replayKey} model={replayModel} unitById={unitById} />
       <ArmyResult side="a" value={result.a} view={a} input={input} />
       <ArmyResult side="b" value={result.b} view={b} input={input} />
@@ -184,11 +218,13 @@ export function MixedResult({
         {(['a', 'b'] as const).map((key) => {
           const s = input[key],
             view = key === 'a' ? a : b;
+          const showMode = mixedSideCanKite(view) || s.kite === true;
           return (
             <p key={key}>
               {key.toUpperCase()}：{civByEn(s.civ)?.zh ?? s.civ} / {AGE_ZH[+s.age]} / 科技：
               {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'} / 团队效果：
               {s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'}
+              {showMode && <> / 作战模式：{s.kite === true ? '边走边射（拉扯）' : '站桩输出'}</>}
               <br />
               单位与数量：
               {s.rows.map((r, i) => (

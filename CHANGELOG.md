@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.32] - 2026-11-23
+
+### 更新说明
+
+单位 PK（1v1、N vs M、等资源、等采集时间、临界点）与混编模拟现已支持为远程单位独立切换「站桩输出（默认）」与「边走边射（拉扯）」作战模式：按游戏目录真实出手前摇与攻击间隔估算理论移动窗口，单方累计后撤上限 40 格（触底后停步接战并显式告警），并同步在结果摘要卡、先手齐射对比、战斗过程回放舞台（含 40 格退距参照线与关键节点跳转）及分享链接（`ka=1` / `kb=1`、混编 `kite: true`）中完整呈现；双方同时边走边射拉开超出射程时明确终止为「双方脱离接战，暂无胜者」；混编存在前排近战挡线期间后排保持站桩协同，前排清空后自动转入拉扯。
+
+### 新增
+
+- #1295：新增纯领域模块 `src/domain/contactKite.ts`、`src/domain/contactValidate.ts` 与 `src/domain/oneReplay.ts`，扩展 `contactFight.ts`、`contactReplayTrace.ts`、`battleReplay.ts`、`duel.ts`、`duelParams.ts`、`mixedDuelParams.ts` 与 `breakEven.ts`，实现基于目录 `attackDelaySeconds`、`rof`、`spd`、`rng`、`minr` 的一维边走边射状态机、40 格有界退距、双拉扯脱离接战终态（`disengaged`）、混编前排清空分段转拉扯及 URL/分享协议扩展；新增 `RangedModeToggle.tsx`、`KiteSummaryCard.tsx`、`duelKiteView.ts` 与 `ranged-kite.css` 并接入 `Duel.tsx`、`DuelSelection.tsx`、`DuelResults.tsx`、`ContactSummary.tsx`、`BreakEven.tsx`、`BattleStageSvg.tsx`、`MixedDuel.tsx`、`MixedSideEditor.tsx`、`MixedResult.tsx`、`duelSummary.ts` 与 `duelSwap.ts`；新增 `tests/unit/rangedKite1295.test.ts` 与 `tests/e2e/rangedKite1295.spec.ts`（登记至 `scripts/ci-browser-weights.json`），同步补充 `tests/unit/duelRedesign1279.test.ts` 的 `ka`/`kb` 互换测试。
+
 ## [0.99.31] - 2026-11-23
 
 ### 更新说明

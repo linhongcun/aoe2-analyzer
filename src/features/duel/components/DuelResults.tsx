@@ -1,6 +1,7 @@
-import type { Ref, RefObject } from 'react';
+import { useMemo, type Ref, type RefObject } from 'react';
 import { civByEn } from '../../../data';
 import ShareImage from '../../../shared/ui/ShareImage';
+import type { KiteOptions } from '../../../domain/contactKite';
 import {
   groupFight,
   oneVOneFight,
@@ -22,6 +23,8 @@ import { BattleReplay } from './BattleReplay';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
 import { GroupContact } from './ContactSummary';
+import { DisengagedNotice, KITE_CONTACT_BOUNDARY, KiteSummaryCard } from './KiteSummaryCard';
+import { hasAnyKiteEnabled, standingOpeningDelta } from '../logic/duelKiteView';
 import { r1, type Resolved } from '../logic/duelSide';
 import { summarizeGroup, summarizeOneVOne } from '../logic/duelSummary';
 
@@ -46,17 +49,19 @@ function selectedTechsOf(side: Resolved): Tech[] {
 export function OneVOne({
   A,
   B,
+  kite,
   result,
   resultElRef,
   headingRef,
 }: {
   A: Resolved;
   B: Resolved;
+  kite?: KiteOptions;
   result?: OneVOneResult;
   resultElRef?: Ref<HTMLDivElement>;
   headingRef?: RefObject<HTMLHeadingElement>;
 }) {
-  const r = result ?? oneVOneFight(A.F, B.F);
+  const r = result ?? oneVOneFight(A.F, B.F, kite ? { kite } : {});
   const summary = summarizeOneVOne(A, B, r);
   const wn = summary.headline;
   const aNoAttack = !r.ab.canAttack;
@@ -102,11 +107,21 @@ export function OneVOne({
   const foeUnit = aNoAttack ? B.u : A.u;
   const firstStrike = isContact ? r.contact.firstStrike : null;
   const hasFirstStrike = Boolean(firstStrike && firstStrike.volleys > 0);
-  const shareRemaining = isContact && (r.status === 'timeout' || r.status === 'limit') ? `A ${formatHp(r.aHp)} / B ${formatHp(r.bHp)}` : formatHp(r.remaining);
+  const oneKite = isContact ? r.contact.kite : undefined;
+  const hasKite = hasAnyKiteEnabled(oneKite);
+  const isDisengaged = isContact && r.status === 'disengaged';
+  const shareRemaining =
+    isContact && (r.status === 'timeout' || r.status === 'limit' || r.status === 'disengaged')
+      ? `A ${formatHp(r.aHp)} / B ${formatHp(r.bHp)}`
+      : formatHp(r.remaining);
   const shareNote = isContact
-    ? assumeHitA || assumeHitB
-      ? '一维接敌与射程先手模型（1 vs 1）；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
-      : '一维接敌与射程先手模型（1 vs 1）；完整文明和科技参数见链接。'
+    ? hasKite
+      ? assumeHitA || assumeHitB
+        ? '一维接敌与边走边射（单方退距上限 40 格）；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
+        : '一维接敌与边走边射（单方退距上限 40 格）；完整文明和科技参数见链接。'
+      : assumeHitA || assumeHitB
+        ? '一维接敌与射程先手模型（1 vs 1）；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
+        : '一维接敌与射程先手模型（1 vs 1）；完整文明和科技参数见链接。'
     : assumeHitA || assumeHitB
       ? '忽略射程拉扯与操作；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
       : '忽略射程拉扯与操作；完整文明和科技参数见链接。';
@@ -133,6 +148,12 @@ export function OneVOne({
                   ）
                 </>
               )}
+            </small>
+          ) : r.status === 'disengaged' ? (
+            <small className="note">
+              {' '}
+              · 用时 <span className="num nw">{r1(r.duration)} 秒</span> · A 剩余 <span className="num nw">{r.aHp > 0 ? 1 : 0} / 1</span> · B 剩余{' '}
+              <span className="num nw">{r.bHp > 0 ? 1 : 0} / 1</span>
             </small>
           ) : r.status === 'timeout' || r.status === 'limit' ? (
             <small className="note">
@@ -161,6 +182,9 @@ export function OneVOne({
           )
         )}
       </h2>
+      {isDisengaged && oneKite && (
+        <DisengagedNotice aName={A.u.zh} aRng={A.F.rng} bName={B.u.zh} bRng={B.F.rng} disengagedAt={oneKite.disengagedAt ?? r.duration} />
+      )}
       {singleNoAttack && (
         <aside className="pk-callout is-info" data-t="pk-no-attack" role="region" aria-label="无普通攻击说明">
           <p className="pk-callout-title">
@@ -184,6 +208,12 @@ export function OneVOne({
           { rowKey: 'b', k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: isContact ? r.contact.b[0]!.meleeUnitSeconds : r.duration },
         ]}
       />
+      {hasKite && oneKite && (
+        <section className="contact-summary kite-one-summary" data-t="duel-kite-summary" aria-label="拉扯与后撤摘要">
+          <KiteSummaryCard kite={oneKite} headingLevel={3} />
+          <p className="note">{KITE_CONTACT_BOUNDARY}</p>
+        </section>
+      )}
       {oneModel ? <BattleReplay model={oneModel} unitById={unitById} /> : !isContact ? <BattleReplay fallback={{ reason: r.fallbackReason }} /> : null}
       <ShareImage
         title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
@@ -193,11 +223,17 @@ export function OneVOne({
                 ['模拟结果', wn],
                 ['双方数量', '1 / 1'],
               ]
-            : [
-                ['模拟用时', `${r1(r.duration)} 秒`],
-                ['剩余生命', shareRemaining],
-                ['双方数量', '1 / 1'],
-              ]
+            : isDisengaged && oneKite
+              ? [
+                  ['模拟用时', `${r1(r.duration)} 秒`],
+                  ['双方剩余', `A ${r.aHp > 0 ? 1 : 0}/1 · B ${r.bHp > 0 ? 1 : 0}/1`],
+                  ['累计后撤', `A ${oneKite.a.retreated.toFixed(1)} 格 · B ${oneKite.b.retreated.toFixed(1)} 格`],
+                ]
+              : [
+                  ['模拟用时', `${r1(r.duration)} 秒`],
+                  ['剩余生命', shareRemaining],
+                  ['双方数量', '1 / 1'],
+                ]
         }
         note={shareNote}
       />
@@ -257,6 +293,7 @@ export function Group({
   na,
   nb,
   bud,
+  kite,
   result,
   resultElRef,
   headingRef,
@@ -266,11 +303,16 @@ export function Group({
   na: number;
   nb: number;
   bud: number;
+  kite?: KiteOptions;
   result?: GroupResult;
   resultElRef?: Ref<HTMLDivElement>;
   headingRef?: RefObject<HTMLHeadingElement>;
 }) {
-  const g = result ?? groupFight(A.F, na, B.F, nb, { recordReplay: true });
+  const g = result ?? groupFight(A.F, na, B.F, nb, { recordReplay: true, ...(kite ? { kite } : {}) });
+  const standingDeltaVolleys = useMemo(
+    () => (g.status !== 'error' ? standingOpeningDelta([{ uid: A.u.id, count: na, fighter: A.F }], [{ uid: B.u.id, count: nb, fighter: B.F }], g.contact) : 0),
+    [A, B, na, nb, g],
+  );
   if (g.status === 'error')
     return (
       <div id="duel-res" className="posbox" role="alert" ref={resultElRef}>
@@ -280,7 +322,7 @@ export function Group({
         <p>{g.reason}</p>
       </div>
     );
-  const summary = summarizeGroup(A, B, g)!;
+  const summary = summarizeGroup(A, B, g, { na, nb })!;
   const wn = summary.headline;
   const groupModel = buildGroupReplay(
     g,
@@ -288,6 +330,15 @@ export function Group({
     { uid: B.u.id, fighter: B.F, count: nb, civZh: civByEn(B.civ)?.zh ?? B.civ },
   );
   const unitById = { [A.u.id]: A.u, [B.u.id]: B.u };
+  const hasKite = hasAnyKiteEnabled(g.contact.kite);
+  const isDisengaged = g.status === 'disengaged';
+  const groupShareNote = hasKite
+    ? fighterUsesAssumeHit(A.F) || fighterUsesAssumeHit(B.F)
+      ? '一维接敌与边走边射（单方退距上限 40 格）；目录准确度 0% 单位按每击命中主目标估算，结果用于比较方案。'
+      : '一维接敌与边走边射（单方退距上限 40 格），结果用于比较方案。'
+    : fighterUsesAssumeHit(A.F) || fighterUsesAssumeHit(B.F)
+      ? '一维接敌与占位近似；目录准确度 0% 单位按每击命中主目标估算，结果用于比较方案。'
+      : '一维接敌与占位近似，结果用于比较方案。';
   return (
     <div id="duel-res" className="posbox" ref={resultElRef}>
       <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
@@ -302,8 +353,24 @@ export function Group({
               <span className="num nw">{formatHp(g.hpLeft)}</span>
             </>
           )}
+          {isDisengaged && (
+            <>
+              {' '}
+              · A 剩余{' '}
+              <span className="num nw">
+                {g.aAlive} / {na}
+              </span>{' '}
+              · B 剩余{' '}
+              <span className="num nw">
+                {g.bAlive} / {nb}
+              </span>
+            </>
+          )}
         </small>
       </h2>
+      {isDisengaged && g.contact.kite && (
+        <DisengagedNotice aName={A.u.zh} aRng={A.F.rng} bName={B.u.zh} bRng={B.F.rng} disengagedAt={g.contact.kite.disengagedAt ?? g.duration} />
+      )}
       <DuelUnmodeledNotes
         group
         entries={[
@@ -315,7 +382,12 @@ export function Group({
           { rowKey: 'b', k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: g.contact.b[0]!.meleeUnitSeconds },
         ]}
       />
-      <GroupContact value={g.contact} a={{ fighter: A.F, count: na, ...g.contact.a[0]! }} b={{ fighter: B.F, count: nb, ...g.contact.b[0]! }} />
+      <GroupContact
+        value={g.contact}
+        a={{ fighter: A.F, count: na, ...g.contact.a[0]! }}
+        b={{ fighter: B.F, count: nb, ...g.contact.b[0]! }}
+        standingDeltaVolleys={standingDeltaVolleys}
+      />
       <BattleReplay model={groupModel} unitById={unitById} />
       <ShareImage
         title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
@@ -324,11 +396,7 @@ export function Group({
           ['A 存活', g.aAlive],
           ['B 存活', g.bAlive],
         ]}
-        note={
-          fighterUsesAssumeHit(A.F) || fighterUsesAssumeHit(B.F)
-            ? '一维接敌与占位近似；目录准确度 0% 单位按每击命中主目标估算，结果用于比较方案。'
-            : '一维接敌与占位近似，结果用于比较方案。'
-        }
+        note={groupShareNote}
       />
       {bud > 0 && (
         <p className="note">

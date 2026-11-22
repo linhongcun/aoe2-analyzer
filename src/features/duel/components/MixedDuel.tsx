@@ -5,6 +5,7 @@ import { fmtSide, type Mode } from '../../../domain/duelState';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { mixedFight, MIXED_RULE, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
+import { isKiteEligible, type KiteOptions } from '../../../domain/contactKite';
 import { makeSimContext } from '../../../domain/simulator';
 import { Icon } from '../../../shared/ui/Icon';
 import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
@@ -20,6 +21,8 @@ import { DuelModeBar, type TopMode } from './DuelModeBar';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
 import { CONTACT_BOUNDARY } from './ContactSummary';
+import { KITE_CONTACT_BOUNDARY } from './KiteSummaryCard';
+import { hasAnyKiteEnabled, mixedSideCanKite } from '../logic/duelKiteView';
 import '../mixed-duel.css';
 
 const DATA_VERSION = mixedDataVersion(DATA_SOURCES);
@@ -114,10 +117,15 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     element.focus();
     element.scrollIntoView({ block: 'center', behavior: 'smooth' });
   };
-  const calculate = (a: Parameters<typeof mixedFight>[0], b: Parameters<typeof mixedFight>[1], signature: string) => {
+  const kiteOpt = (src: MixedDuelInput): KiteOptions | undefined => {
+    const aOn = src.a.kite === true && Boolean(view?.a && mixedSideCanKite(view.a));
+    const bOn = src.b.kite === true && Boolean(view?.b && mixedSideCanKite(view.b));
+    return aOn || bOn ? { a: aOn, b: bOn } : undefined;
+  };
+  const calculate = (a: Parameters<typeof mixedFight>[0], b: Parameters<typeof mixedFight>[1], signature: string, kite?: KiteOptions) => {
     let result: MixedFightResult;
     try {
-      result = mixedFight(a, b, { recordReplay: true });
+      result = mixedFight(a, b, { recordReplay: true, ...(kite ? { kite } : {}) });
     } catch {
       result = { status: 'error', reason: '运算异常，未生成有效结果。请更换配置后重试。' };
     }
@@ -127,11 +135,12 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     if (!canCompute || !view?.a?.army || !view.b?.army) return;
     const a = view.a.army,
       b = view.b.army;
+    const kite = kiteOpt(input);
     setBusy(true);
     setHasRun(true);
     setOutcome(null);
     timer.current = setTimeout(() => {
-      calculate(a, b, raw);
+      calculate(a, b, raw, kite);
       setBusy(false);
     }, 30);
   };
@@ -142,7 +151,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     update(next);
     if (view?.a?.army && view.b?.army) {
       setHasRun(true);
-      calculate(view.a.army, view.b.army, signature);
+      calculate(view.a.army, view.b.army, signature, kiteOpt(next));
     } else upgradeFocus.current = signature;
   };
   const exit = (mode: ExitMode, viaKeyboard = false) => {
@@ -188,6 +197,10 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     if (pendingModeFocusRef) pendingModeFocusRef.current = viaKeyboard ? mode : null;
     pendingKeyboardExit.current = false;
     const next = new URLSearchParams({ m: mode, a: side('a'), b: side('b'), ...(requireQty ? { na: a.qty, nb: b.qty } : {}) });
+    const firstA = view?.a?.rows[0]?.resolved?.F;
+    const firstB = view?.b?.rows[0]?.resolved?.F;
+    if (input.a.kite === true && firstA && isKiteEligible(firstA)) next.set('ka', '1');
+    if (input.b.kite === true && firstB && isKiteEligible(firstB)) next.set('kb', '1');
     if (preservedSource?.me) next.set('me', preservedSource.me);
     if (preservedSource?.opp) next.set('opp', preservedSource.opp);
     if (preservedSource?.practice) next.set('practice', preservedSource.practice);
@@ -421,7 +434,9 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
       <p className="note mix-footer">
         固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL}
       </p>
-      <p className="note mix-footer">{CONTACT_BOUNDARY}</p>
+      <p className="note mix-footer">
+        {result && result.status !== 'error' && hasAnyKiteEnabled(result.contact.kite) ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}
+      </p>
       {core && view?.a && view.b && <CivArtCredit civs={[input.a.civ, input.b.civ]} />}
       {exitMode && (
         <ExitConfirm

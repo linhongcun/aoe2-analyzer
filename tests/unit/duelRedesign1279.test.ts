@@ -94,6 +94,20 @@ describe('issue 1279 swapSingleDuelParams', () => {
     expect(restored.get('a')).toBe('569.Aztecs.4.f.');
     expect(restored.get('b')).toBe('359.Japanese.4.f.');
   });
+
+  it('issue 1295: swaps ka/kb kite flags cleanly and restores on second swap', () => {
+    const single = swapRoundTrip('a=474.Magyars.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1');
+    expect(single.swapped.has('ka')).toBe(false);
+    expect(single.swapped.get('kb')).toBe('1');
+    expect(single.restored.get('ka')).toBe('1');
+    expect(single.restored.has('kb')).toBe(false);
+
+    const both = swapRoundTrip('a=474.Magyars.4.f.&b=492.Britons.4.f.&m=n&na=30&nb=42&ka=1&kb=1');
+    expect(both.swapped.get('ka')).toBe('1');
+    expect(both.swapped.get('kb')).toBe('1');
+    expect(both.restored.get('ka')).toBe('1');
+    expect(both.restored.get('kb')).toBe('1');
+  });
 });
 
 describe('issue 1279 swapMixedDuelInput', () => {

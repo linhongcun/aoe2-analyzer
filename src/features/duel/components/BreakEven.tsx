@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { breakEvenSteps, type BreakEvenResult } from '../../../domain/breakEven';
-import { fighterUsesAssumeHit, type Fighter } from '../../../domain/duel';
+import type { KiteOptions } from '../../../domain/contactKite';
+import { fighterUsesAssumeHit, groupFight, type Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
 import { useShareLink } from '../../../shared/ui/useShareLink';
 import { CONTACT_MODEL, STOP_LABELS } from './ContactSummary';
@@ -20,19 +21,21 @@ export interface BreakEvenProps {
   sig: string;
   /** URL 带 be=1 时打开即计算 */
   auto: boolean;
+  kite?: KiteOptions;
   onComputed: () => void;
   onOpen: (na: number, nb: number) => void;
 }
 
-export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
+export function BreakEven({ a, b, nb, summary, sig, auto, kite, onComputed, onOpen }: BreakEvenProps) {
   const route = useLocation();
-  const [job, setJob] = useState(() => (auto ? { sig, a, b, nb, summary } : null));
+  const [job, setJob] = useState(() => (auto ? { sig, a, b, nb, summary, kite } : null));
   const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string; assumeHitSides: string[] } | null>(null);
   if (job && job.sig !== sig) setJob(null);
   const pending = job?.sig === sig;
   useEffect(() => {
     if (!job || job.sig !== sig) return;
-    const steps = breakEvenSteps(job.a, job.b, job.nb);
+    const fight = job.kite ? (fa: Fighter, na: number, fb: Fighter, nbCount: number) => groupFight(fa, na, fb, nbCount, { kite: job.kite }) : groupFight;
+    const steps = breakEvenSteps(job.a, job.b, job.nb, undefined, fight);
     let timer: ReturnType<typeof setTimeout>;
     const batch = () => {
       const until = performance.now() + 8;
@@ -62,7 +65,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
     failureMessage: '自动复制失败，请手动复制下方完整链接。',
   });
   const run = () => {
-    setJob({ sig, a, b, nb, summary });
+    setJob({ sig, a, b, nb, summary, kite });
     onComputed();
   };
   const stale = !!res && res.sig !== sig;
@@ -162,7 +165,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
               <tbody>
                 {r.rows.map((x) => {
                   const status = x.r.status;
-                  const unfinished = status === 'timeout' || status === 'limit';
+                  const unfinished = status === 'timeout' || status === 'limit' || status === 'disengaged';
                   return (
                     <tr key={x.n} className={x.n === r.n ? 'on' : undefined} data-n={x.n}>
                       <td className="num nw">{x.n}</td>

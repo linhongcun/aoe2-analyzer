@@ -22,6 +22,12 @@ export function swapSingleDuelParams(sp: URLSearchParams, a: SideState, b: SideS
     if (rawNa !== null) next.set('nb', rawNa);
     else next.delete('nb');
   }
+  const rawKa = sp.get('ka');
+  const rawKb = sp.get('kb');
+  if (rawKb === '1') next.set('ka', '1');
+  else next.delete('ka');
+  if (rawKa === '1') next.set('kb', '1');
+  else next.delete('kb');
   return next;
 }
 
