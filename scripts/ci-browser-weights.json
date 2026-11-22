@@ -31,6 +31,7 @@
     "tests/e2e/accuracy746.spec.ts": 13500,
     "tests/e2e/age106.spec.ts": 4340,
     "tests/e2e/ageBuildings704.spec.ts": 12000,
+    "tests/e2e/ageAutoEffects1324.spec.ts": 9000,
     "tests/e2e/ageCounter708.spec.ts": 13500,
     "tests/e2e/aliases.spec.ts": 13670,
     "tests/e2e/arenaCastleGold757.spec.ts": 21000,

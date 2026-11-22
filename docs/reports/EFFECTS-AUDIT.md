@@ -30,7 +30,7 @@
 | 仅经济/费用类 .dat 结构化效果（文本展示） | 0                                   | 117                                  | 134                              |
 | 仅文本                                    | 215                                 | 67                                   | 44                               |
 | 数值编码的科技                            | 32                                  | 98                                   | **105**（.dat 105 + 手工 0）     |
-| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 13                               |
+| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 16                               |
 
 （手工 CivBonus 条目 45 个，按加成文本序号去重后 51 条。）
 
@@ -379,12 +379,15 @@ Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsv
 - 中国：396 `C-Bonus, +50% Demo HP` → 3 个目标 [{"op":"mul","s":"hp","v":1.5}]
 - 西班牙：-3 `Tech tree #3` → 1 个目标 [{"op":"mul","s":"bt","v":0.833331}]
 
-## 七、通用隐藏科技（所有文明，时代自动或组合触发）
+## 七、通用/限定文明隐藏科技（时代自动或组合触发）
 
 - 20 `Auto upgrade Scout Feudal Age`：时代 ≥ 2 → 3 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"atk","v":2},{"s":"los","v":2},{"s":"spd","v":0.35}]；1 个目标 [{"s":"los","v":1}]；1 个目标 [{"s":"atk","v":3},{"s":"bonus","v":2,"vs":"船只"},{"s":"bonus","v":2,"vs":"骆驼"},{"s":"bonus","v":4,"vs":"骑兵"},{"s":"los","v":1},{"s":"spd","v":0.25}]
 - 71 `Walls HP castle age`：时代 ≥ 3 → 2 个目标 [{"op":"mul","s":"hp","v":1.666667}]
 - 72 `Palisade Walls HP feudal age`：时代 ≥ 2 → 2 个目标 [{"op":"mul","s":"hp","v":1.66667}]
 - 90 `Tracking`：时代 ≥ 2 → 76 个目标 [{"s":"los","v":2}]
+- 102 `Castle Age`：时代 ≥ 3 → 4 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"atk","v":3},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]；1 个目标 [{"s":"atk","v":3},{"op":"mul","s":"bt","v":0.75},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]
+- 103 `Imperial Age`：时代 ≥ 4 → 4 个目标 [{"s":"los","v":2}]
+- 387 `Upgrade Eagle in Age3`：时代 ≥ 3，限 Aztecs / Mayans → 1 个目标 [{"s":"atk","v":3},{"s":"bonus","v":1,"vs":"船只"},{"s":"bonus","v":1,"vs":"骆驼"},{"s":"bonus","v":2,"vs":"骑兵"},{"op":"mul","s":"bt","v":0.76}]
 - 610 `Arrowslits (Guard tower)`：时代 ≥ 1，需 Arrowslits + Guard Tower → 4 个目标 [{"s":"atk","v":1}]
 - 611 `Arrowslits (Keep)`：时代 ≥ 1，需 Arrowslits + Keep → 4 个目标 [{"s":"atk","v":1}]
 - 669 `Thalassocracy + Fletching`：时代 ≥ 1，需 Fletching + Thalassocracy → 1 个目标 [{"s":"los","v":1},{"s":"rng","v":1}]；1 个目标 [{"s":"atk","v":1},{"s":"los","v":1},{"s":"rng","v":1}]

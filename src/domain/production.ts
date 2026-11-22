@@ -2,6 +2,8 @@
 import { ECO as eco } from '../data/eco';
 import { civByEn, type Core } from '../data';
 import { DAT, type DatEco } from './datEffects';
+import { matchingGenericFx } from './effects';
+import { AGE_ZH } from './ratings';
 import { unitCost } from './unitCost';
 import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
@@ -214,6 +216,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     if (economicText(text) && !gather.applied.some((x) => x.source === text)) warnings.push(`${text}：该文明经济机制未计入（已单独列明的基础属性加成除外）。`);
   if (civ && economicText(civ.tb)) warnings.push(`${civ.tb}：本文明团队经济机制未计入。`);
   const selectedTechs = selectedTechEffects(ctx, sel);
+  const selectedTechNames = new Set([...sel].map((id) => ctx.core.techById[id]?.en).filter((en): en is string => !!en));
   config.rows.forEach((row, index) => {
     const label = `需求 ${index + 1}`;
     const u = ctx.core.unitById[row.unit];
@@ -271,6 +274,20 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       for (const f of time) cycleOps.push({ kind: 'train', op: f.op, v: f.v });
       costTechs.push({ id: t.id, en: t.en, zh: t.zh });
       notes.push(t.zh);
+    }
+    for (const g of matchingGenericFx(u, false, config.age, (name) => selectedTechNames.has(name), config.civ)) {
+      let appliedGenericBt = false;
+      for (const f of g.fx) {
+        if (f.s !== 'bt') continue;
+        const op = f.op ?? 'add';
+        if (!['set', 'mul', 'add'].includes(op) || !Number.isFinite(f.v) || ((op === 'mul' || op === 'set') && f.v <= 0)) {
+          warnings.push(`${AGE_ZH[g.age] ?? `时代 ${g.age}`}自动训练时间修正：训练效果未核实，未计入。`);
+          continue;
+        }
+        cycleOps.push({ kind: 'train', op, v: f.v });
+        appliedGenericBt = true;
+      }
+      if (appliedGenericBt) notes.push(`${AGE_ZH[g.age] ?? `时代 ${g.age}`}自动训练时间修正`);
     }
     const priced = unitCost({ id: u.id, cost: data.cost }, config.civ, config.age, costTechs);
     notes.unshift(...priced.discount.applied.map((x) => x.text));

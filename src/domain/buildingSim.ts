@@ -63,7 +63,7 @@ export function simulateBuilding(ctx: SimContext, b: Building, civ: string, age:
   });
   applyEffects(
     S,
-    genericFx(b, true, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id)),
+    genericFx(b, true, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),
   );
   S.bt = Math.round(S.bt * 10) / 10;
   return S;

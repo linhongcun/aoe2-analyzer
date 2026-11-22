@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.24] - 2026-11-23
+
+### 更新说明
+
+补齐推进时代时部分单位漏算的自动属性强化：斥候骑兵系（斥候骑兵、轻型骑兵、翼骑兵、波兰翼骑兵）在封建、城堡、帝王时代视野现在依次按 6／8／10 自动递增；西西里城堡版与城楼版萨金特卫兵进入城堡时代后自动按 75 生命、8 攻击、4 近甲、2 穿甲计算（城楼版训练时间同步由 16 秒降至 12 秒）；玛雅与阿兹特克的鹰斥候进入城堡时代后自动应用一次攻击 +3、对骑兵 +2／船只 +1／骆驼 +1 及训练时间 ×0.76（玛雅 46 秒变为 34.96 秒，阿兹特克叠乘步兵训练加成约 30.4 秒），帝王时代不重复叠加，升级为鹰勇士或精锐鹰勇士及其他文明不受影响。单位科技模拟器、单位 PK、驻军回血与持续生产均已同步该口径（弗拉芒民兵在持续生产中也同步按已有城堡自动规则由 16 秒降至 14 秒）。
+
+### 修复
+
+- #1324：在 `scripts/effects_build.py` 导出固定 DE 188329 `.dat` 的时代科技 `102/103` 自身单位属性（排除建筑命令与 `C=13` 经济项）及严格全量 AND 区域单位解锁隐藏科技 `387`（`civs: ["Aztecs", "Mayans"]`），同步更新 `data/schemas/data-effects.json`、重生成 `data/game/effects.json` 与 `data/reports/effects-audit.json` / `docs/reports/EFFECTS-AUDIT.md`（第七节标注限定文明）；在 `src/domain/datEffects.ts` 与 `src/domain/effects.ts` 增加 `civs` 与 fail-closed `matchingGenericFx`，`simulator.ts` / `buildingSim.ts` 透传 `civ`，`production.ts` 接入匹配自动训练时间修正并校验 `bt` 合法性；核验 `#652` 仅 `448` 城堡视野 `6→8` 变动后刷新 `positionScenarioReview.json` / `routeReview.json` 7 文明指纹；新增 `tests/py/test_effects_age_auto1324.py`、`tests/unit/ageAutoEffects1324.test.ts` 与 `tests/e2e/ageAutoEffects1324.spec.ts`（已登记 `scripts/ci-browser-weights.json`）。
+
 ## [0.99.23] - 2026-11-23
 
 ### 更新说明

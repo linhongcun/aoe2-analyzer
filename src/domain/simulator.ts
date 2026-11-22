@@ -148,7 +148,7 @@ export function simulate(
     if (team.has(i) && f(u)) apply(ef(u), `团队加成：${note}`);
   });
   apply(
-    genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id)),
+    genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),
     '时代与单位特殊规则',
   );
   S.rof = S.rof / S.rofx;
