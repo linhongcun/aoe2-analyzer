@@ -134,6 +134,14 @@
   min-height: 44px;
 }
 
+.formation-source-links a {
+  max-width: 100%;
+}
+
+.formation-source-links a > span {
+  min-width: 0;
+}
+
 .formation-card {
   min-width: 0;
   padding: 24px;

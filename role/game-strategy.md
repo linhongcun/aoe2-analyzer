@@ -223,10 +223,10 @@
 
 | 对方兵力           | 调整                                                                                                 |
 | ------------------ | ---------------------------------------------------------------------------------------------------- |
-| 骑士、游侠成群     | 火矛兵和长戟兵一起顶；接触 PK 中火矛兵胜重装骑士（剩 19/85），输给法兰克游侠（对方剩 48/192）        |
+| 骑士、游侠成群     | 火矛兵和长戟兵一起顶；接触 1v1 中火矛兵胜重装骑士（剩 19/85），输给法兰克游侠（对方剩 48/192）；但等资源预算 3000 碰撞接敌群战中，33 个精锐火矛兵反胜 22 名法兰克游侠（剩 8/33、667 血；未计充能多箭齐射，仍属站桩模型） |
 | 长戟兵多           | 轻骑兵不撞长戟（输）；由火矛兵和精锐诸葛弩处理（诸葛弩胜长戟兵，剩 22/50）                           |
-| 冠军剑士等步兵成群 | 火矛兵、精锐诸葛弩贴身都输；可依托塔箭消耗。DE 188329 固定数据中，火箭术（52）使重型弩炮（542）、重型火箭推车（1907）的攻击及所列克制项乘 1.25，也作用于楼船（1948），未列诸葛弩。两种攻城器打密集步兵的实战效果仍待验证。 |
-| 弓手成群           | 轻骑兵冲（胜劲弩手，剩 65.6/80）                                                                     |
+| 冠军剑士等步兵成群 | 火矛兵、精锐诸葛弩贴身 1v1 都输，但等资源预算 3000 碰撞接敌群战中，40 个精锐诸葛弩即便未计多弹丸副弹也能凭 3 次先手齐射反胜 42 个日本冠军剑士（剩 24/40、1185 血）；其余可依托塔箭消耗。DE 188329 固定数据中，火箭术（52）使重型弩炮（542）、重型火箭推车（1907）的攻击及所列克制项乘 1.25，也作用于楼船（1948），未列诸葛弩。两种攻城器打密集步兵的实战效果仍待验证。 |
+| 弓手成群           | 贴身 1v1 中轻骑兵胜劲弩手（剩 65.6/80），但等资源预算 3000 碰撞接敌群战中，37 个轻型骑兵正面硬冲 42 个不列颠劲弩手全灭（对方凭 4 次先手齐射剩 26/42、1032 血，前排仅 5 个轻型骑兵可同时出手）；清成群长射程弓手须靠侧袭、阵地压迫或反弓配合，不可无脑正面硬冲。切炮方面，计入手推炮最小射程 5 后接敌 1v1 胜剩 43/80，预算 3000 下 37 个轻型骑兵对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害与护卫）。 |
 
 **三、为什么不出**
 
@@ -236,7 +236,7 @@
 | 为量产精锐诸葛弩多修城堡 | 城堡 650 石，约等于 5 座塔的石料，还和火矛兵争黄金。已有城堡和诸葛弩可复用。无射箭槽时 3 个精锐诸葛弩是 5/5 箭；含射箭槽时 3 个是 4/5 箭、4 个才达 5/5 箭，此时可让现有诸葛弩驻塔、火矛兵留在塔外 |
 | 重装骑士                 | 耗黄金，没有游侠，和轻骑兵一样怕长戟                                                                                                      |
 
-原兵种与接触 PK 核对：[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Chinese)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Chinese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+原兵种与接触 PK 核对：[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Chinese)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Chinese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯、二维包抄与护卫）：[33 火矛对 22 法兰克游侠（剩 8/33）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Chinese.4.f.&b=569.Franks.4.f.&m=r&bud=3000)、[40 诸葛弩对 42 日本冠军（剩 24/40）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=559.Chinese.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[37 轻骑对 42 不列颠劲弩（劲弩剩 26/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)。
 
 帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 3 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=559:3:e)、[含射箭槽 · 3 个精锐诸葛弩 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=559:3:e)、[无射箭槽 · 4 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=559:4:e)、[含射箭槽 · 4 个精锐诸葛弩 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=559:4:e)、[无射箭槽 · 4 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437&army=1903:4:e)、[含射箭槽 · 4 个精锐火矛兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Chinese&age=4&gtechs=199,200,201,47,437,608&army=1903:4:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
@@ -263,8 +263,8 @@
 | 对方兵力       | 调整                                                                                 |
 | -------------- | ------------------------------------------------------------------------------------ |
 | 重骑压力大     | 兵营缺长戟兵。黄金和升级投入可承受时，评估用帝王骆驼兵承担反骑，或用它替换部分骑兵。 |
-| 弓手成群       | 有城堡产能、能负担升级且能接近弓群时，评估古拉姆，帝王时代再按条件升精锐。           |
-| 威胁主力的步兵 | 火枪手处理步兵，翼骑兵继续承担掩护。                                                 |
+| 弓手成群       | 有城堡产能、能负担升级且能接近弓群时，评估古拉姆，帝王时代再按条件升精锐。碰撞接敌预算 3000 站桩对射中，31 个火枪手（9 射程）不敌 42 个不列颠劲弩手（全灭，对方剩 32/42），面对长射程弓手须靠翼骑、古拉姆或阵地配合。 |
+| 威胁主力的步兵 | 火枪手处理步兵，翼骑兵继续承担掩护。碰撞接敌预算 3000 站桩群战中，31 个火枪手（9 射程）由 1v1 贴脸落败反转为大胜 42 个日本冠军剑士（剩 19/31、734 血，3 次先手齐射；不含边走边射拉扯）。 |
 | 攻城器         | 手推炮远程牵制，翼骑兵有机会接近时再清理。                                           |
 
 **三、为什么不出**
@@ -274,7 +274,7 @@
 | 在基础组合上同时维持多条耗金主力 | 这套组合服务于节省黄金的局面，帝王骆驼兵按骑兵压力和投入条件选用。训练资源差额不能代替战力与成型时间比较。 |
 | 古拉姆／精锐古拉姆常驻           | 可用来反弓，但会另占城堡产能、黄金及升级投入。铁匠铺缺步兵钢甲，评估接战时按实际护甲和护卫判断。           |
 
-**机制核对入口**：[本站印度斯坦资料与科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Hindustanis)。本节属于用户认可的策略建议，不是混编模拟或助手实战记录；原讨论的完整站点版本与构建未记录。历史训练总价观察及其边界另见[运营案例](product-operations.md#印度斯坦混编要的是训练总价)。
+**机制核对入口**：[本站印度斯坦资料与科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Hindustanis)。本节属于用户认可的策略建议，不是混编模拟或助手实战记录；原讨论的完整站点版本与构建未记录。历史训练总价观察及其边界另见[运营案例](product-operations.md#印度斯坦混编要的是训练总价)。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯与护卫）：[31 火枪手对 42 日本冠军（剩 19/31）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Hindustanis.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[31 火枪手对 42 不列颠劲弩（劲弩剩 32/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Hindustanis.4.f.&b=492.Britons.4.f.&m=r&bud=3000)。
 
 短板和古拉姆候选按 DE 188329 的[固定科技树](https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json)与[单位目录](https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json)核对，候选取舍属于条件建议。
 
@@ -337,8 +337,8 @@
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 骑士、游侠成群       | 按 hongcun 经验补重装骆驼正面反骑，火枪处理护航步兵，翼骑保留侧翼任务。缺长枪兵、长戟兵，不能照搬长戟方案；采金加速帮助供应双金线，不增加矿中黄金总量 |
 | 长戟＋弓手或掷矛     | 火枪先清长戟，翼骑等缺口再接近远程兵                                                                                                                  |
-| 强弓成群             | 看敌方护卫和已有投入：高远程护甲翼骑找侧翼，有西帕希骑射基础可延续，接近受阻时再评估重型冲车或长射程手推炮的出手机会。                                |
-| 冠军、近卫军等步兵海 | 提高火枪比例，保持距离与兵量，翼骑掩护；不因接触 PK 输赢否定远程反步兵职责                                                                            |
+| 强弓成群             | 看敌方护卫和已有投入：碰撞接敌预算 3000 站桩对射中 31 个火枪手不敌 42 个不列颠劲弩手（全灭，对方剩 34/42），面对长射程强弓仍须靠高远程护甲翼骑找侧翼、延续已有西帕希骑射基础，或接近受阻时评估重型冲车与长射程手推炮的出手机会。 |
+| 冠军、近卫军等步兵海 | 提高火枪比例，保持距离与兵量，翼骑掩护；碰撞接敌预算 3000 群战已量化印证 31 个火枪手凭 2 次先手齐射反胜 42 个日本冠军剑士（剩 16/31、800 血；一维站桩模型，不含拉扯），不再被旧贴身 1v1 误导。 |
 | 攻城器有护卫         | 优先用长射程炮寻找射击机会，翼骑找侧翼空当，不假定能冲过护卫                                                                                          |
 
 **三、为什么不出**
@@ -350,7 +350,7 @@
 | 重装骑士           | 与翼骑职责重叠，又增黄金消耗；反骑缺口优先考虑重装骆驼                             |
 | 精锐掷矛手         | 靶场能训练封建时代的掷矛手，升级止于普通形态。面对强弓仍要比较现有兵力与接战条件。 |
 
-来源与版本：[文明及科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Turks)、[手推炮满科技属性](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=36.Turks.4.f.&b=36.Koreans.4.f.&m=1)，v0.77.102 · DE 188329 · 84988dd；攻城工具复核（v0.99.12 · DE 188329 · 66620c9）：炮属性不是拆建筑时间，目前仅无甲城堡与无甲大型箭塔已由固定数据核验——[2 炮拆无甲城堡](https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=2&bldg=82&civ=Turks)理想齐射 11 击 / 65 游戏秒（约 38.2 现实秒；单炮 224 伤 / 22 击 / 136.5 游戏秒），[单炮拆无甲大型箭塔](https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=1&bldg=235&civ=Turks)理想齐射 277 伤 / 9 击 / 52 游戏秒（约 30.6 现实秒，2 炮 5 击 / 26 游戏秒）；城镇中心、瞭望箭塔、石墙、城门，以及带石匠/建筑学或西班牙等攻速加成文明仍为“暂不计算 · 数据待补”，且理想齐射不含行进、飞行、维修与反击。本站 Hussar 为“翼骑兵”，不同于“波兰翼骑兵”。
+来源与版本：[文明及科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Turks)、[手推炮满科技属性](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=36.Turks.4.f.&b=36.Koreans.4.f.&m=1)，v0.77.102 · DE 188329 · 84988dd；攻城工具复核（v0.99.12 · DE 188329 · 66620c9）：炮属性不是拆建筑时间，目前仅无甲城堡与无甲大型箭塔已由固定数据核验——[2 炮拆无甲城堡](https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=2&bldg=82&civ=Turks)理想齐射 11 击 / 65 游戏秒（约 38.2 现实秒；单炮 224 伤 / 22 击 / 136.5 游戏秒），[单炮拆无甲大型箭塔](https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=1&bldg=235&civ=Turks)理想齐射 277 伤 / 9 击 / 52 游戏秒（约 30.6 现实秒，2 炮 5 击 / 26 游戏秒）；城镇中心、瞭望箭塔、石墙、城门，以及带石匠/建筑学或西班牙等攻速加成文明仍为“暂不计算 · 数据待补”，且理想齐射不含行进、飞行、维修与反击。本站 Hussar 为“翼骑兵”，不同于“波兰翼骑兵”。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯与护卫）：[31 火枪手对 42 日本冠军（剩 16/31）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Turks.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[31 火枪手对 42 不列颠劲弩（劲弩剩 34/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Turks.4.f.&b=492.Britons.4.f.&m=r&bud=3000)。
 
 掷矛升级上限和西帕希可用性按 [DE 188329 固定科技树](https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json)核对，强弓应对属于条件建议。
 
@@ -400,7 +400,7 @@
 
 | 组成                                   | 作用                                                 | 关键特点                                                                                            |
 | -------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| 轻骑兵（本站轻型骑兵）                 | 不耗金主体，掩护飞刀，清理可接近的弓手、僧侣、攻城器 | 死士覆盖轻骑；当前满科技工具有效值为 14 攻、80 生命、3/6 护甲，仍怕长戟；接触 PK 赢弓手不保证追得上 |
+| 轻骑兵（本站轻型骑兵）                 | 不耗金主体，掩护飞刀，清理可接近的弓手、僧侣、攻城器 | 死士覆盖轻骑；当前满科技工具有效值为 14 攻、80 生命、3/6 护甲，仍怕长戟；贴身 1v1 接触 PK 赢弓手不保证追得上，且碰撞接敌预算 3000 群战中 37 个轻型骑兵正面硬冲 42 个不列颠劲弩手全灭（对方凭 4 次先手齐射剩 21/42、807 血，前排仅 5 个轻型骑兵可同时出手） |
 | 精锐飞刀女兵                           | 处理长戟、步兵，配合轻骑机动                         | 目录射程 6、速度 1.25；属远程进行近战攻击的步兵，吃步兵护甲，与轻骑共享近战攻击科技，不是射手科技线 |
 | 巨投，按需少量手推炮                   | 拆防御；炮另承担反攻城                               | 保存攻城器，清野战兵不等于能拆城堡                                                                  |
 | 前线城镇中心及施工维修村民（阵地变体） | 固定火力、掩体、维修与前线产村民                     | 蛮王令空中心射箭，村民驻军继续增箭；飞刀可躲进去，但本次预览增箭为零                                |
@@ -414,9 +414,9 @@
 | 对方兵力       | 调整                                                                               |
 | -------------- | ---------------------------------------------------------------------------------- |
 | 骑士、游侠成群 | 补重装骆驼反骑，飞刀处理护航长戟；追加金线解决实际缺口，不因“只留一条金线”拒绝反骑 |
-| 长戟＋弓手     | 飞刀清长戟，轻骑等机会接近弓手，两队不脱节                                         |
+| 长戟＋弓手     | 飞刀清长戟，轻骑找侧翼机会接近弓手，两队不脱节；碰撞接敌预算 3000 群战中 37 个轻型骑兵正面硬冲 42 个不列颠劲弩手全灭（劲弩剩 21/42），不可无脑纯轻骑正面硬冲满编长射程弓手 |
 | 步兵集中       | 调高飞刀比例、利用射程，轻骑牵制绕后，避免飞刀被包围贴身                           |
-| 远程攻城器     | 轻骑找侧翼机会，按需用炮反制；不能只靠中心射程守住阵地                             |
+| 远程攻城器     | 计入手推炮最小射程 5 后，轻骑接敌 1v1 胜条顿手推炮剩 43/80、预算 3000 下 37 个轻型骑兵对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害与护卫）；实战轻骑找侧翼机会，按需用炮反制，不能只靠中心射程守住阵地 |
 
 **三、为什么不出**
 
@@ -429,7 +429,7 @@
 
 蛮王目录研究费为 **200 食、300 木**。城镇中心目录价为 **275 木、100 石**，不是两种资源互换；马里建筑折扣只作用于木材，目录价不当作折后价。当前链接输入（帝王、蛮王、未额外选箭系科技）：空中心 8 箭，5 村民 13 箭，10 村民达 18 箭上限；5 精锐飞刀仍为 8 箭。这些为理论预览，未与本版本客户端逐箭对账。8 村民、未选起重机、已建过首座中心时，施工工具显示理论 45 游戏秒，不含进场、阻挡、战斗或维修。
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Malians)、[死士](https://linhongcun.github.io/aoe2-analyzer/#/tech/577?civ=Malians)、[蛮王](https://linhongcun.github.io/aoe2-analyzer/#/tech/576?civ=Malians)、[精锐飞刀](https://linhongcun.github.io/aoe2-analyzer/#/unit/1015?civ=Malians)、[轻骑满科技](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Malians.4.f.&b=359.Franks.4.f.&m=1)、[中心目录](https://linhongcun.github.io/aoe2-analyzer/#/building/109?civ=Malians&age=4)、[村民驻军](https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Malians&age=4&gtechs=576&army=83%3A10%3Ae)、[飞刀驻军](https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Malians&age=4&gtechs=576&army=1015%3A5%3Ae)、[8 人施工](https://linhongcun.github.io/aoe2-analyzer/#/construction?cv=1&building=109&civ=Malians&age=4&techs=&builders=8&baseline=1&tc=1&task=&walk=3&farm=0)，v0.77.102 · DE 188329 · 84988dd。前线中心玩法来自用户经验，工具数值不证明整套战损比。
+来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Malians)、[死士](https://linhongcun.github.io/aoe2-analyzer/#/tech/577?civ=Malians)、[蛮王](https://linhongcun.github.io/aoe2-analyzer/#/tech/576?civ=Malians)、[精锐飞刀](https://linhongcun.github.io/aoe2-analyzer/#/unit/1015?civ=Malians)、[轻骑满科技](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Malians.4.f.&b=359.Franks.4.f.&m=1)、[中心目录](https://linhongcun.github.io/aoe2-analyzer/#/building/109?civ=Malians&age=4)、[村民驻军](https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Malians&age=4&gtechs=576&army=83%3A10%3Ae)、[飞刀驻军](https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Malians&age=4&gtechs=576&army=1015%3A5%3Ae)、[8 人施工](https://linhongcun.github.io/aoe2-analyzer/#/construction?cv=1&building=109&civ=Malians&age=4&techs=&builders=8&baseline=1&tc=1&task=&walk=3&farm=0)，v0.77.102 · DE 188329 · 84988dd。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯、溅射与护卫）：[37 轻骑对 42 不列颠劲弩（劲弩剩 21/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Malians.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Malians.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)。前线中心玩法来自用户经验，工具数值不证明整套战损比。
 
 ### 马来
 
@@ -453,7 +453,7 @@
 | 对方兵力                           | 调整                                                                                                       |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | 枪兵给象兵造成压力                 | 按压力配弩手支援，已有弩手和相关科技时可延续。                                                             |
-| 僧侣密集，或长戟等反骑护卫挡住象兵 | 象兵缺血统与后两级骑兵护甲。僧侣或长戟阻断接近时，先停推并处理反制，按能否重新接战决定是否继续补象或转线。 |
+| 僧侣密集，或长戟等反骑护卫挡住象兵 | 象兵缺血统与后两级骑兵护甲。碰撞接敌预算 3000 下，帝王 -35% 折扣可出 27 只精锐象兵，正面对 22 名西班牙游侠胜剩 5/27（1292 血；对 22 名法兰克游侠亦剩 4/27），但对 50 个法兰克长戟兵仍微负（长戟剩 4/50、210 血；以上未计象兵固有溅射伤害）。僧侣或长戟阻断接近时，先停推并处理反制，按能否重新接战决定是否继续补象或转线。 |
 | 骑兵压力                           | 帝王阶段按需增加长戟兵，缺金转双手剑士时也按这一条件配长戟。                                               |
 | 攻城威胁                           | 帝王阶段按需评估少量手推炮及攻城技师的投入。                                                               |
 | 范围伤害单位                       | 双手剑士和长戟兵都需接近展开，敌方范围伤害可能限制堆量。                                                   |
@@ -469,7 +469,7 @@
 
 **机制与来源**：[马来文明科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Malay?tab=techtree)列有劲弩手、双手剑士、长戟兵、手推炮和攻城技师，具体以仓库固定生成的[文明](../data/game/civs.json)、[单位](../data/game/units.json)、[科技](../data/game/techs.json)和[科技树](../data/game/trees.json)数据为准（[DE Update 188329](../data/sources/data_sources.json)）。强征兵役（Forced Levy）将民兵系黄金成本换为额外食物，研究本身仍耗食物与黄金。研究后双手剑士耗食物，长戟兵耗食物与木材，劲弩手和手推炮耗木材与黄金。马来步兵护甲升级免费，强征兵役仍须另行研究。早先查看的外部科技树未标游戏数据版本，原文没有引用其数值。
 
-象兵主路是[本轮会话](https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac)中的战术建议。未确认用户亲自实战过这套具体混编，本轮未做新模拟或实战验证。
+象兵主路是[本轮会话](https://app.devin.ai/sessions/96ed58fa60b84aa39c66ac6a213346ac)中的战术建议。未确认用户亲自实战过这套具体混编；碰撞接敌预算 3000 站桩群战复核（v0.99.15 · DE 188329 · d070ec71，未计象兵固有溅射伤害与拉扯，仍无实战验证）：[27 精锐象兵对 22 西班牙游侠（剩 5/27）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Malay.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)、[27 精锐象兵对 50 法兰克长戟（长戟剩 4/50）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Malay.4.f.&b=359.Franks.4.f.&m=r&bud=3000)。
 
 爪刀的费用与人口说明见 [DE 188329 固定单位目录](https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json)，人口紧张时的转线属于条件建议。
 
@@ -609,9 +609,9 @@
 - 高丽、越南不能研究鼓风炉，精锐火矛兵 12 攻。驻塔时打的是塔箭远程输出，不靠近战攻击，这个缺口在驻塔时不起作用；出塔近战时仍在。属机制推断，待实战验证，详见[高丽](#高丽)。
 - 女真不能研究步兵钢甲，精锐火矛兵 4/4 甲。火矛兵驻在塔里不挨打，这个缺口在驻塔时不起作用；出塔时仍在。翼骑兵吃到骑乘单位攻击速度 +25% 的文明加成，承担塔外机动。属机制推断，待实战验证，详见[女真](#女真)。
 
-**边界**：塔的属性来自建筑页科技模拟器的“满科技”，箭数按驻军预览链接实际勾选的科技计算，未与客户端逐项对账（[#1062](https://github.com/linhongcun/aoe2-analyzer/issues/1062)）；只有高丽火矛驻塔“会放箭”由用户进游戏观察过。下文 PK 都是接触 1v1，不模拟射程、走位和混编。接触 PK 中四家的单个轻骑兵线单位都输给手推炮（女真、中国每击 5，越南、高丽每击 3），清炮要成队，还受护卫和地形限制。四家精锐火矛兵都输给冠军剑士。女真和中国的阵容是用户认可的方案加站内机制核对，hongcun 尚未实战使用，没有混编模拟或实战胜率证明。
+**边界**：塔的属性来自建筑页科技模拟器的“满科技”，箭数按驻军预览链接实际勾选的科技计算，未与客户端逐项对账（[#1062](https://github.com/linhongcun/aoe2-analyzer/issues/1062)）；只有高丽火矛驻塔“会放箭”由用户进游戏观察过。旧贴脸 1v1（`m=1`）忽略手推炮最小射程 5，因而显示四家单个轻骑兵线单位都输给手推炮（女真、中国每击 5，越南、高丽每击 3）；按 `#1263` 碰撞接敌模型（v0.99.15 · DE 188329 · d070ec71）计入最小射程 5 后，接敌 1v1（`m=n&na=1&nb=1`）仅吃 1 次先手、贴脸后炮停火，四家全部反胜（女真翼骑剩 58/95、中国轻骑剩 43/80、越南轻骑剩 43/80、高丽翼骑剩 37/75），等资源预算 3000 群战对 6 个条顿手推炮均大胜（女真/中国/越南剩 35/37、高丽剩 34/37；但未计手推炮固有溅射伤害与护卫，且高丽/越南缺鼓风炉用时较慢，分别为 113.3 秒与 118.8 秒）。同时须注意：正面硬冲满编 42 个不列颠劲弩手时轻骑/翼骑会因先手 4 次齐射与前排 5 骑占位全灭，不可把 1v1 贴脸外推为正面硬冲长射程弓群。四家精锐火矛兵贴身 1v1 均输给冠军剑士。女真和中国的阵容是用户认可的方案加站内机制核对，hongcun 尚未实战使用，没有混编模拟或实战胜率证明。
 
-来源与版本：[高丽塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Koreans&tab=sim)、[女真塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Jurchens&tab=sim)、[中国塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Chinese&tab=sim)、[越南塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Vietnamese&tab=sim)（打开后选“满科技”）、[女真翼骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=36.Teutons.4.f.&m=1)、[中国轻骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=36.Teutons.4.f.&m=1)、[越南轻骑对手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=36.Teutons.4.f.&m=1)、[城堡](https://linhongcun.github.io/aoe2-analyzer/#/building/82)，v0.77.105 · DE 188329 · cd9382c。
+来源与版本：[高丽塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Koreans&tab=sim)、[女真塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Jurchens&tab=sim)、[中国塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Chinese&tab=sim)、[越南塔](https://linhongcun.github.io/aoe2-analyzer/#/building/235?civ=Vietnamese&tab=sim)（打开后选“满科技”）、[女真翼骑对手推炮（m=1）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=36.Teutons.4.f.&m=1)、[中国轻骑对手推炮（m=1）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=36.Teutons.4.f.&m=1)、[越南轻骑对手推炮（m=1）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=36.Teutons.4.f.&m=1)、[城堡](https://linhongcun.github.io/aoe2-analyzer/#/building/82)，v0.77.105 · DE 188329 · cd9382c；碰撞接敌预算 3000 切炮复核（v0.99.15 · DE 188329 · d070ec71）：[女真 37 翼骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)、[中国 37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Chinese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)、[越南 37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)。
 
 ### 女真
 
@@ -636,10 +636,10 @@
 
 | 对方兵力           | 调整                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
-| 骑士、游侠成群     | 火矛兵出塔接战，长戟兵补数量，翼骑兵不正面换；接触 PK 中火矛兵对法兰克游侠只剩 1/85 险胜，不能当作稳赢 |
+| 骑士、游侠成群     | 火矛兵出塔接战，长戟兵补数量，翼骑兵不正面换；接触 1v1 中火矛兵对法兰克游侠只剩 1/85 险胜，等资源预算 3000 碰撞接敌群战中 33 个精锐火矛兵胜 22 名法兰克游侠剩 12/33（950 血，未计充能多箭齐射；站桩模型，不能当作稳赢） |
 | 长戟兵多           | 火矛兵顶在前面（胜长戟兵，剩 64/85），翼骑兵不撞长戟（输）                                             |
 | 冠军剑士等步兵成群 | 火矛兵、翼骑兵贴身都输；补精锐铁浮屠（胜冠军剑士，剩 82/160），其余依托塔箭消耗                        |
-| 弓手成群           | 翼骑兵冲（胜劲弩手，剩 80.6/95），火矛兵留在塔里                                                       |
+| 弓手成群           | 贴身 1v1 中翼骑兵胜劲弩手（剩 80.6/95），但等资源预算 3000 碰撞接敌群战中 37 个翼骑兵正面硬冲 42 个不列颠劲弩手全灭（对方凭 4 次先手齐射剩 12/42、472 血，前排仅 5 个翼骑兵可同时出手）；清成群长射程弓手须靠侧袭、阵地压迫或高远甲配合，火矛兵留在塔里。切炮方面，计入手推炮最小射程 5 后接敌 1v1 剩 58/95，预算 3000 对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害与护卫）。 |
 
 **三、为什么不出**
 
@@ -650,7 +650,7 @@
 | 精锐掷矛手驻塔   | 优先保留其塔外反射手职责，已有剩余兵力时再按实际科技核对驻塔收益。                                                                                |
 | 科技树缺口       | 没有骑士线、冠军剑士、劲弩手、火枪手和投石车线，远程固定火力主要靠塔和驻军                            |
 
-原兵种、接触 PK 与科技核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。[DE 188329 固定效果表](https://github.com/linhongcun/aoe2-analyzer/blob/993810111b1c090942c847e22ffae37e99a20ce8/data/game/effects.json)的科技 994 包含普通与精锐火矛兵。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
+原兵种、接触 PK 与科技核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Jurchens)、[精锐火矛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1903?civ=Jurchens)、[火矛对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=1)、[铁浮屠对冠军](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1910.Jurchens.4.f.&b=567.Japanese.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。[DE 188329 固定效果表](https://github.com/linhongcun/aoe2-analyzer/blob/993810111b1c090942c847e22ffae37e99a20ce8/data/game/effects.json)的科技 994 包含普通与精锐火矛兵。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯、溅射与护卫）：[33 火矛对 22 法兰克游侠（剩 12/33）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1903.Jurchens.4.f.&b=569.Franks.4.f.&m=r&bud=3000)、[37 翼骑对 42 不列颠劲弩（劲弩剩 12/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[37 翼骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=441.Jurchens.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)。强化堡垒的回血在实战中够不够用也未验证。草原枪兵、重型火箭推车和霹雳炸弹本轮没有核对。
 
 帝王大型箭塔用箭羽、锥子箭、护腕、化学，女真无扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 4 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1903:4:e)、[含射箭槽 · 4 个精锐火矛兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1903:4:e)、[无射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1903:5:e)、[含射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1903:5:e)、[无射箭槽 · 5 个掷弹兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1911:5:e)、[含射箭槽 · 5 个掷弹兵 3/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1911:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
@@ -753,15 +753,15 @@
 
 **用户认可的条件方案（尚未说明是否实战用过）**：打法不是万金油，也非无敌；按对手、地形、经济和个人兴趣选路，不要求每局强补同一兵种。
 
-游侠＋掷矛与骑马弩＋轻骑是用户认可的两条主要候选，掷斧＋轻骑是凑合可用的情境／趣味路线。
+游侠＋掷矛与骑马弩＋轻骑是用户认可的两条主要候选，掷斧＋轻骑是凑合可用的情境／趣味路线。维护者明确记录战略判断：法兰克后期并非只能纯靠游侠，远程／准远程兵种（重装骑马弩机动拉扯路线，或精锐掷斧兵反步兵组件）是可行的战略路线与阵容组成部分。
 
 **经济背景（用户解释）**：hongcun 认为法兰克经济底子不错，免费磨坊（农田）科技可省下升级投入；因此更看重按局势与兴趣选路线。经济优势支撑补兵和转型，各路线仍有军事短板。采果工工作速度 +15%。
 
 | 条件方案                               | 作用                         | 关键取舍                                                                                           |
 | -------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- |
-| 游侠＋精锐掷矛手＋少量攻城器           | 重骑为主，掷矛应对射手与长戟 | 游侠 60 食物 + 75 黄金，掷矛 25 食物 + 35 木材；共用食物，资源并非完全分离；骆驼压力大时谨慎。     |
-| 重装骑马弩兵＋轻型骑兵＋少量攻城器     | 骑马弩持续输出，轻骑提供机动 | 骑马弩目录基础价 65 黄金 + 40 木材，研究王家敕令骑兵（1496）后为 39 黄金 + 40 木材（持续生产、训练总价与单位 PK 等资源模块已套用，单位详情页与科技模拟器暂未叠加科技折后价），轻骑 80 食物；木金与食物分开，作为持续补兵候选。低远甲、慢攻速，适合能安全拉扯和持续补兵的局面。 |
-| 精锐掷斧兵＋轻型骑兵＋少量手推炮或巨投 | 远程近战掷斧打步兵，轻骑机动 | 掷斧 55 食物 + 25 黄金，射程 6；与轻骑共用食物，怕骑兵，属于情境／兴趣方案，不当通用主力。         |
+| 游侠＋精锐掷矛手＋少量攻城器           | 重骑为主，掷矛应对射手与长戟 | 游侠 60 食物 + 75 黄金，掷矛 25 食物 + 35 木材；共用食物，资源并非完全分离；骆驼压力大时谨慎。碰撞接敌预算 3000 下，22 名游侠吃 4 次先手齐射冲穿 42 个不列颠劲弩手胜剩 10/22（1749.9 血），但 50 个精锐掷矛手因缺护腕与射手锁甲不敌 42 个不列颠劲弩手（全灭，对方剩 19/42）。 |
+| 重装骑马弩兵＋轻型骑兵＋少量攻城器     | 骑马弩持续输出，轻骑提供机动 | 骑马弩目录基础价 65 黄金 + 40 木材，研究王家敕令骑兵（1496）后为 39 黄金 + 40 木材（持续生产、训练总价与单位 PK 等资源模块已套用，单位详情页与科技模拟器暂未叠加科技折后价），轻骑 80 食物；木金与食物分开，作为维护者认可的后期远程战略路线。低远甲、慢攻速，碰撞接敌预算 3000 站桩对射 42 劲弩全灭（对方剩 30/42），站桩打 50 长戟（对方剩 2/50）与 42 冠军（对方剩 5/42）亦惜败，印证极度依赖机动拉扯与轻骑掩护。 |
+| 精锐掷斧兵＋轻型骑兵＋少量手推炮或巨投 | 远程近战掷斧打步兵，轻骑机动 | 掷斧 55 食物 + 25 黄金，射程 6；与轻骑共用食物，怕骑兵，属于按情境／兴趣选用的反步兵战略组件，不当通用主力。碰撞接敌预算 3000 下，37 个精锐掷斧兵凭 3 次先手齐射大胜 42 个日本冠军剑士（剩 25/37、1750 血）与 50 个法兰克长戟兵（剩 35/37、2426 血）。 |
 
 少量攻城器按局势另配，不设固定比例。
 
@@ -790,7 +790,7 @@
 
 **骑马弩上限**：缺护腕、扳指、射手锁甲、血统和帕提亚战术。重装骑马弩兵（2701）帝王满科技、含便携弯弩装置（1452）时，模拟器为 66 血、11 攻、4/2 甲、射程 7、攻击间隔 2.50 秒；只取消该科技时射程为 6。低远甲、慢攻速使这一路怕正面换射，轻骑的机动无法补掉这个短板。
 
-来源与版本：[含便携弯弩装置的模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/1452,39,199,211,200,212,47/?civ=Franks&tab=sim)、[不含该科技的模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim)、[法兰克科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks#techtree)、[法兰克文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks)、[游侠](https://linhongcun.github.io/aoe2-analyzer/#/unit/569?civ=Franks)、[精锐掷矛手](https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Franks)、[重装骑马弩兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701?civ=Franks)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Franks)、[精锐掷斧兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/531?civ=Franks)、[王家敕令骑兵](https://linhongcun.github.io/aoe2-analyzer/#/tech/1496?civ=Franks)、[翼骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/441?civ=Franks)、[血统](https://linhongcun.github.io/aoe2-analyzer/#/tech/435?civ=Franks)、[护腕](https://linhongcun.github.io/aoe2-analyzer/#/tech/201?civ=Franks)、[扳指](https://linhongcun.github.io/aoe2-analyzer/#/tech/437?civ=Franks)。数据版本 DE 188329；站点版本和构建本次未记录。
+来源与版本：[含便携弯弩装置的模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/1452,39,199,211,200,212,47/?civ=Franks&tab=sim)、[不含该科技的模拟](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim)、[法兰克科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks#techtree)、[法兰克文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks)、[游侠](https://linhongcun.github.io/aoe2-analyzer/#/unit/569?civ=Franks)、[精锐掷矛手](https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Franks)、[重装骑马弩兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/2701?civ=Franks)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Franks)、[精锐掷斧兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/531?civ=Franks)、[王家敕令骑兵](https://linhongcun.github.io/aoe2-analyzer/#/tech/1496?civ=Franks)、[翼骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/441?civ=Franks)、[血统](https://linhongcun.github.io/aoe2-analyzer/#/tech/435?civ=Franks)、[护腕](https://linhongcun.github.io/aoe2-analyzer/#/tech/201?civ=Franks)、[扳指](https://linhongcun.github.io/aoe2-analyzer/#/tech/437?civ=Franks)。数据版本 DE 188329；站点版本和构建本次未记录。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯与护卫）：[22 游侠对 42 劲弩（剩 10/22）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Franks.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[50 精锐掷矛对 42 劲弩（劲弩剩 19/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Franks.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[37 重装骑马弩对 42 劲弩（劲弩剩 30/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Franks.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[37 重装骑马弩对 50 长戟（长戟剩 2/50）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Franks.4.f.&b=359.Franks.4.f.&m=r&bud=3000)、[37 重装骑马弩对 42 冠军（冠军剩 5/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Franks.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[37 精锐掷斧对 42 冠军（剩 25/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=531.Franks.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[37 精锐掷斧对 50 长戟（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=531.Franks.4.f.&b=359.Franks.4.f.&m=r&bud=3000)。
 
 ### 越南
 
@@ -818,15 +818,15 @@
 
 **二、按对手调整**
 
-表中的接触 PK 数值是站内机制核对，未经用户实战确认。
+表中的接触 PK 与碰撞接敌群战数值是站内机制核对，未经用户实战确认。
 
 | 对方兵力               | 调整                                                                                                                                                                                                                                                                             |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 弓手成群               | 可选精锐藤弓兵（胜劲弩手，剩 43.5/48）或帝王掷矛手（胜劲弩手，剩 36.6/42）。                                                                                                                                                                                                     |
-| 骑士、游侠成群         | 可选精锐象兵（胜法兰克游侠，剩 168/420），火矛兵和长戟兵辅助。                                                                                                                                                                                                                   |
+| 弓手成群               | 可选精锐藤弓兵（接触 1v1 剩 43.5/48，预算 3000 群战 31 个精锐藤弓兵胜 42 个不列颠劲弩手剩 27/31）或帝王掷矛手（接触 1v1 剩 36.6/42，预算 3000 群战 50 个帝王掷矛手胜 42 个不列颠劲弩手剩 46/50）。同期 37 个轻型骑兵正面硬冲 42 个不列颠劲弩手全灭（劲弩剩 31/42），反弓须由藤弓/帝王掷矛承担或侧袭配合。 |
+| 骑士、游侠成群         | 可选精锐象兵（接触 1v1 胜法兰克游侠剩 168/420，预算 3000 群战 17 个精锐象兵胜 22 名法兰克游侠剩 3/17、980 血，未计象兵固有溅射伤害），火矛兵和长戟兵辅助。 |
 | 长戟兵成群或后方有僧侣 | 正面线先稳住前排。                                                                                                                                                                                                                                                               |
 | 有护卫的攻城器         | 先看通道、敌方护卫和己方掩护。机动线还要确认退路，无法安全接近就放弃切入或改走正面线。正面线无法安全接近或没有足够攻城掩护时停止推进或换路。                                                                                                                                     |
-| 手推炮                 | 可用己方手推炮反制，轻型骑兵清炮很慢。两条主路都只在帝王时代已研究[化学](https://linhongcun.github.io/aoe2-analyzer/#/tech/47?civ=Vietnamese)、攻城武器厂有产能、己方可护卫且射线通畅时评估用[手推炮](https://linhongcun.github.io/aoe2-analyzer/#/unit/36?civ=Vietnamese)反炮。 |
+| 手推炮                 | 计入手推炮最小射程 5 后轻骑接敌 1v1 胜剩 43/80、预算 3000 下 37 个轻型骑兵对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害与护卫），但缺鼓风炉用时 118.8 秒仍较慢；需要时可用己方手推炮反制。两条主路都只在帝王时代已研究[化学](https://linhongcun.github.io/aoe2-analyzer/#/tech/47?civ=Vietnamese)、攻城武器厂有产能、己方可护卫且射线通畅时评估用[手推炮](https://linhongcun.github.io/aoe2-analyzer/#/unit/36?civ=Vietnamese)反炮。 |
 
 旧记录中的 420 是 DE 188329 精锐象兵在[血统](https://linhongcun.github.io/aoe2-analyzer/#/tech/435?civ=Vietnamese)与[宝伞](https://linhongcun.github.io/aoe2-analyzer/#/tech/628?civ=Vietnamese)均已生效时的理论面板（300＋20＋100）。剩余生命来自旧接触 PK 记录。
 
@@ -838,7 +838,7 @@
 | 把火矛驻塔当主路                             | 塔、火矛兵、轻骑兵没有文明加成，塔缺建筑学，出塔近战和轻骑清炮仍受缺鼓风炉影响，保留为守点补充。 |
 | 为守点专门扩产精锐藤弓兵 | 已有藤弓可按科技复用；只有守点需求时，先评估城堡产能和现成兵力。火矛出塔还能清冲车、反骑。 |
 
-原兵种对位核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Vietnamese)、[藤弓对劲弩](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=1)、[象兵对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。
+原兵种对位核对：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Vietnamese)、[藤弓对劲弩](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=1)、[象兵对游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=1)，v0.77.105 · DE 188329 · cd9382c。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯、溅射与护卫）：[37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)、[37 轻骑对 42 不列颠劲弩（劲弩剩 31/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Vietnamese.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[31 精锐藤弓对 42 劲弩（剩 27/31）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1131.Vietnamese.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[50 帝王掷矛对 42 劲弩（剩 46/50）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1155.Vietnamese.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[17 精锐象兵对 22 法兰克游侠（剩 3/17）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1134.Vietnamese.4.f.&b=569.Franks.4.f.&m=r&bud=3000)。
 
 帝王大型箭塔用箭羽、锥子箭、护腕、化学、扳指，分无射箭槽、含射箭槽两档。驻军预览（每轮总箭数 / 箭矢上限）：[无射箭槽 · 4 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1131:4:e)、[含射箭槽 · 4 个精锐藤弓兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1131:4:e)、[无射箭槽 · 5 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1131:5:e)、[含射箭槽 · 5 个精锐藤弓兵 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1131:5:e)、[无射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437&army=1903:5:e)、[含射箭槽 · 5 个精锐火矛兵 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Vietnamese&age=4&gtechs=199,200,201,47,437,608&army=1903:5:e)。复核版本 v0.99.0 · DE 188329 · 531df91。
 
@@ -902,15 +902,15 @@
 
 **防守**：步兵或劲弩依托可互相支援的位置接战，骑兵保留机动拦截侧翼并保护攻城器；骑士路线遇到明确反骑阵容时，按敌军补支援或换路，不让主力反复硬撞。
 
-**资源与机制边界**：大庄园能提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。波兰翼骑兵有鼓风炉、缺骑兵钢甲，相比立陶宛同名单位偏进攻、群战而非防护；列克提克遗产提供践踏伤害，团队加成另给斥候骑兵系对远程士兵攻击力 +1。本站科技模拟器将践踏列为“仅文本”，普通单兵数值不代表完整群战表现，更不能证明混编胜率。
+**资源与机制边界**：大庄园能提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。波兰翼骑兵有鼓风炉、缺骑兵钢甲，相比立陶宛同名单位偏进攻、群战而非防护；列克提克遗产提供践踏伤害，团队加成另给斥候骑兵系对远程士兵攻击力 +1。本站科技模拟器将践踏列为“仅文本”，普通单兵数值不代表完整群战表现，更不能证明混编胜率。碰撞接敌预算 3000 群战实测进一步表明：缺骑兵钢甲的 37 个波兰翼骑兵正面硬冲 42 个不列颠劲弩手全灭（对方剩 25/42、980 血，未计列克提克遗产践踏伤害）；切炮方面，计入手推炮最小射程 5 后接敌 1v1 剩 63/100、预算 3000 对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害与护卫）。
 
 **二、按对手调整**
 
 | 对方兵力                     | 调整                                                                                                                 |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | 长戟等反骑部队护住后排       | 战锤路线由步兵先接，劲弩路线先远射清理；翼骑兵不承担硬冲反骑海的任务。骑士海路线不能只靠折扣继续硬拼                 |
-| 射手或火枪成群，后有反骑护卫 | 检查是否真有侧翼通路；战锤步行、翼骑缺末级甲，不能假定能顶住远程火力接近。必要时考虑劲弩路线，而非机械多开一条主力线 |
-| 受保护的攻城器               | 骑兵只在护卫和路径允许时侧切；不能因有机动单位就判定问题已解决，保护己方攻城器并避免整队挤在火力下                   |
+| 射手或火枪成群，后有反骑护卫 | 检查是否真有侧翼通路；战锤步行、翼骑缺末级甲（预算 3000 下 37 个波兰翼骑兵正面硬冲 42 个不列颠劲弩手全灭，对方剩 25/42，未计践踏伤害），不可无脑硬冲满编长射程弓手。必要时考虑劲弩路线，而非机械多开一条主力线 |
+| 受保护的攻城器               | 计入手推炮最小射程 5 后波兰翼骑兵接敌 1v1 剩 63/100、预算 3000 对 6 个条顿手推炮胜剩 35/37（未计溅射与护卫）；实战骑兵只在护卫和路径允许时侧切，不能因有机动单位就判定问题已解决，保护己方攻城器并避免整队挤在火力下 |
 
 **三、为什么不出**
 
@@ -920,7 +920,7 @@
 | 战锤＋翼骑路线固定补劲弩             | 它是远程清反骑、改善训练资源分工的替代路线，不是必出的第三主力；转型还要承担射手科技和产能投入 |
 | 只靠战锤兵拆城堡，不配攻城器         | 野战近战与安全拆防御不是同一任务；能敲建筑不等于可以省掉远程攻城手段                           |
 
-来源与版本：[本轮讨论与用户认可](https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab)；实际使用了[波兰文明与科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Poles)、[战锤兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1703?civ=Poles)、[劲弩手](https://linhongcun.github.io/aoe2-analyzer/#/unit/492?civ=Poles)、[贵族特权](https://linhongcun.github.io/aoe2-analyzer/#/tech/782)、[列克提克遗产](https://linhongcun.github.io/aoe2-analyzer/#/tech/783)、[大庄园说明](https://linhongcun.github.io/aoe2-analyzer/#/building/1734?civ=Poles)及[波兰](https://linhongcun.github.io/aoe2-analyzer/#/unit/1707?civ=Poles&tab=sim)、[立陶宛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1707?civ=Lithuanians&tab=sim)波兰翼骑兵的满科技模拟。观察版本 **v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1**；未做客户端混编实战或践踏伤害对账。
+来源与版本：[本轮讨论与用户认可](https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab)；实际使用了[波兰文明与科技树](https://linhongcun.github.io/aoe2-analyzer/#/civ/Poles)、[战锤兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1703?civ=Poles)、[劲弩手](https://linhongcun.github.io/aoe2-analyzer/#/unit/492?civ=Poles)、[贵族特权](https://linhongcun.github.io/aoe2-analyzer/#/tech/782)、[列克提克遗产](https://linhongcun.github.io/aoe2-analyzer/#/tech/783)、[大庄园说明](https://linhongcun.github.io/aoe2-analyzer/#/building/1734?civ=Poles)及[波兰](https://linhongcun.github.io/aoe2-analyzer/#/unit/1707?civ=Poles&tab=sim)、[立陶宛](https://linhongcun.github.io/aoe2-analyzer/#/unit/1707?civ=Lithuanians&tab=sim)波兰翼骑兵的满科技模拟。观察版本 **v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1**；碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，以下链接显式带入科技 783 列克提克遗产以展示践踏未建模提示，一维站桩不含拉扯与护卫）：[37 波兰翼骑兵对 42 不列颠劲弩（劲弩剩 25/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1707.Poles.4.39-67-68-75-81-82-435-783.&b=492.Britons.4.f.&m=r&bud=3000)、[37 波兰翼骑兵对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1707.Poles.4.39-67-68-75-81-82-435-783.&b=36.Teutons.4.f.&m=r&bud=3000)；未做客户端混编实战或践踏伤害对账。
 
 ### 保加利亚
 
@@ -945,7 +945,7 @@
 - 遇到对方游侠，直接用保加利亚骑兵对拼；实际体验下来并不弱，差不多。
 - 保加利亚打法单一，像滚雪球一样推进。单一也是优势：操作量降下来，才能操作得更好、更省心。
 
-**站内数据对照**：城堡时代满科技的保加利亚骑兵 120 血、14 攻、4/4 甲、间隔 1.8 秒，攻击比同时代法兰克骑士高 2，[接触 PK 获胜](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1225.Bulgarians.3.f.&b=38.Franks.3.f.&m=1)（剩 24/120）；对帝王满科技的西班牙重装骑士（140 血、16 攻、5/6 甲）骑马阶段落败（对方剩 59/140）。帝王满科技的精锐保加利亚骑兵 140 血、18 攻、5/6 甲、间隔 1.8 秒，胜重装骑士（剩 19/140）。这些结果都只算到骑兵阵亡，站内 PK 不模拟下马后的步兵阶段，所以比实战偏低。
+**站内数据对照**：城堡时代满科技的保加利亚骑兵 120 血、14 攻、4/4 甲、间隔 1.8 秒，攻击比同时代法兰克骑士高 2，[接触 PK 获胜](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1225.Bulgarians.3.f.&b=38.Franks.3.f.&m=1)（剩 24/120）；对帝王满科技的西班牙重装骑士（140 血、16 攻、5/6 甲）骑马阶段落败（对方剩 59/140）。帝王满科技的精锐保加利亚骑兵 140 血、18 攻、5/6 甲、间隔 1.8 秒，胜重装骑士（剩 19/140）。固定数据中营垒版[精锐保加利亚骑兵（ID 1255）](https://linhongcun.github.io/aoe2-analyzer/#/unit/1255?civ=Bulgarians)（及城堡版 1227）均已内嵌精锐下马步兵形态（ID 1253，基础 50 血、13 攻、2/2 甲、间隔 2.4 秒，非顶层单位）；站内 PK 均只算骑马阶段、尚未自动衔接 23 名下马步兵二阶段，因此实战万金油对拼表现高于下方仅骑马阶段读数。
 
 **二、按对手调整**
 
@@ -953,13 +953,13 @@
 
 | 对方兵力           | 调整                                                                                                                                                                                                                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 骑士、游侠成群     | 保加利亚骑兵直接对拼（hongcun 实战体验）。接触 PK 中精锐保加利亚骑兵对西班牙、匈奴游侠每击 13 对 13，[骑马阶段打完游侠剩 37/180](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1227.Bulgarians.4.f.&b=569.Spanish.4.f.&m=1)，下马后的步兵还能继续打；法兰克游侠有生命加成（192 血），剩 49/192，不宜只拿它当标准 |
-| 长戟兵多           | 继续用保加利亚骑兵，不为此另开兵种；接触 PK 胜法兰克长戟兵（剩 66/140）。长戟兵便宜得多，没有做同资源核算                                                                                                                                                                                                              |
-| 冠军剑士等步兵成群 | 继续用保加利亚骑兵；接触 PK 胜日本冠军剑士（剩 75/140）                                                                                                                                                                                                                                                                |
-| 弓手成群           | 保加利亚骑兵冲上去；接触 PK 胜不列颠劲弩手（剩 132.8/140），但没有模拟接近过程中挨的箭                                                                                                                                                                                                                                 |
-| 手推炮             | 保加利亚骑兵成队去清；接触 PK 胜条顿手推炮（剩 70/140），每挨一炮掉 35 血，没有模拟护卫和接近过程                                                                                                                                                                                                                      |
+| 骑士、游侠成群     | 保加利亚骑兵直接对拼（hongcun 实战体验）。接触 1v1 中精锐保加利亚骑兵对西班牙、匈奴游侠每击 13 对 13，[骑马阶段打完游侠剩 37/180](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1227.Bulgarians.4.f.&b=569.Spanish.4.f.&m=1)（法兰克游侠剩 49/192）；碰撞接敌预算 3000 群战中，23 个精锐保加利亚骑兵仅骑马阶段便将 22 名西班牙游侠打至仅剩 2/22（269 血；对 22 名法兰克游侠亦仅剩 2/22、384 血），尚不含 23 名下马步兵二阶段。 |
+| 长戟兵多           | 继续用保加利亚骑兵，不为此另开兵种；接触 1v1 胜法兰克长戟兵（剩 66/140），碰撞接敌预算 3000 群战中 23 个精锐保加利亚骑兵仅骑马阶段便将 50 个法兰克长戟兵打至仅剩 9/50（495 血），尚未计入 23 名下马步兵二阶段。 |
+| 冠军剑士等步兵成群 | 继续用保加利亚骑兵；接触 1v1 胜日本冠军剑士（剩 75/140），碰撞接敌预算 3000 群战中 23 个精锐保加利亚骑兵仅骑马阶段便将 42 个日本冠军剑士打至仅剩 3/42（210 血），尚未计入 23 名下马步兵二阶段。 |
+| 弓手成群           | 保加利亚骑兵冲上去；接触 1v1 胜不列颠劲弩手（剩 132.8/140），碰撞接敌预算 3000 群战中 23 个精锐保加利亚骑兵吃满 4 次先手齐射后骑马阶段依然险胜 42 个不列颠劲弩手（剩 1/23、24.8 血），尚不含下马步兵二阶段。 |
+| 手推炮             | 保加利亚骑兵成队去清；贴脸 1v1 胜条顿手推炮（剩 70/140，每炮掉 35 血）；计入手推炮最小射程 5 与群体排容纵深后，接敌 1v1 吃 1 次先手剩 105/140，碰撞接敌预算 3000 群战中 23 个精锐保加利亚骑兵吃 2 次先手齐射大胜 6 个条顿手推炮（剩 21/23、2940 血、用时 33.4 秒；未计手推炮固有溅射伤害、护卫与下马二阶段）。 |
 
-除“骑士、游侠成群”一行外，其余各行只有站内接触 PK，没有单独经 hongcun 实战确认。
+除“骑士、游侠成群”一行外，其余各行只有站内接触 1v1 与碰撞接敌预算 3000 群战模型，没有单独经 hongcun 实战确认。
 
 **三、为什么不出**
 
@@ -972,7 +972,7 @@
 
 科技树缺口：没有冠军剑士、游侠、弩手和劲弩手、火枪手、手推炮，也没有射箭槽和炮塔。保加利亚可造木栅栏（72）和石墙（117），无法研究墙体升级垛墙（科技 194、建筑 155）和城堡科技围墙（379，Hoardings）。
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Bulgarians)、[营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?civ=Bulgarians&age=4)、[帝王满科技 20 村民驻营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e)（理论预览 17/21 箭；[19 村民](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:19:e)即达 17/21 箭，村民单兵固定火力 4.50、塔门槛 7.00；旧空科技口径为 15/21 箭）、[精锐保加利亚骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/1227?civ=Bulgarians)（精锐升级 1000 食、750 金），v0.77.105 · DE 188329，驻军预览复核 v0.99.12 · DE 188329 · 66620c9。营垒和城堡的生命、射程是目录基础值，没有叠加科技；驻军箭数是站内理论值，未与客户端核对；PK 是接触 1v1，不模拟射程、走位、混编和保加利亚骑兵下马。
+来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Bulgarians)、[营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?civ=Bulgarians&age=4)、[帝王满科技 20 村民驻营垒](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e)（理论预览 17/21 箭；[19 村民](https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:19:e)即达 17/21 箭，村民单兵固定火力 4.50、塔门槛 7.00；旧空科技口径为 15/21 箭）、[营垒精锐保加利亚骑兵（含下马形态资料）](https://linhongcun.github.io/aoe2-analyzer/#/unit/1255?civ=Bulgarians)（精锐升级 1000 食、750 金），v0.77.105 · DE 188329，驻军预览复核 v0.99.12 · DE 188329 · 66620c9；碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，仅骑马阶段，一维站桩不含下马二阶段、拉扯与护卫）：[23 骑兵对 22 西班牙游侠（游侠剩 2/22）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)、[23 骑兵对 42 日本冠军（冠军剩 3/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[23 骑兵对 50 法兰克长戟（长戟剩 9/50）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=359.Franks.4.f.&m=r&bud=3000)、[23 骑兵对 42 不列颠劲弩（剩 1/23）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=492.Britons.4.f.&m=r&bud=3000)、[23 骑兵对 6 条顿手推炮（剩 21/23）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)。营垒和城堡的生命、射程是目录基础值，没有叠加科技；驻军箭数是站内理论值，未与客户端核对。
 
 ### 马扎尔
 
@@ -997,9 +997,9 @@
 - 只出骠骑，对方只需要出长戟兵就能克制；把重装骑射手直接加进组合，才更难被克制。
 - 补远程不考虑劲弩手，马扎尔对它没有任何额外优势。重装骑射手有两个优势：训练速度，以及独特科技增加攻击力和射程。
 
-**站内数据对照**：马扎尔翼骑兵满科技 95 血、11 攻、3/6 甲，68 食，马厩每个 30 秒；精锐马扎尔骠骑各项都高一档，并且对攻城武器有额外伤害。接触 PK 中骠骑[胜条顿手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=36.Teutons.4.f.&m=1)（剩 36/110），翼骑兵落败；拆凯尔特重型冲车骠骑 27 秒，翼骑兵 58.9 秒。等资源 3000 的群战里，37 个骠骑[胜 22 个西班牙游侠](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)（剩 19 个），但[对 50 个法兰克长戟兵全灭](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=359.Franks.4.f.&m=r&bud=3000)（长戟兵剩 36 个），对 42 个日本冠军剑士也全灭（冠军剑士剩 21 个）。重装骑射手一侧，马扎尔是 12 攻、8 射程，匈奴、土耳其是 11 攻、7 射程；马扎尔劲弩手 40 血、10 攻、8 射程，对长戟兵每击 9，重装骑射手每击 14。重装骑射手目录训练时间 30 秒，按 +25% 折算约 24 秒，这个数是按站内规则换算的，页面没有直接给出。
+**站内数据对照**：马扎尔翼骑兵满科技 95 血、11 攻、3/6 甲，68 食，马厩每个 30 秒；精锐马扎尔骠骑各项都高一档，并且对攻城武器有额外伤害。贴脸 1v1 中骠骑[胜条顿手推炮](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=36.Teutons.4.f.&m=1)（剩 36/110），翼骑兵落败；计入手推炮最小射程 5 后，接敌 1v1（`m=n&na=1&nb=1`）骠骑剩 73/110、翼骑兵亦反胜剩 58/95，预算 3000 群战中 37 名骠骑对 6 个条顿手推炮剩 35/37（用时 24.5 秒），44 个翼骑兵剩 42/44（用时 69.6 秒，清炮仍远慢于骠骑；均未计手推炮固有溅射伤害与护卫）。拆凯尔特重型冲车骠骑 27 秒，翼骑兵 58.9 秒。按 `#1263` 碰撞接敌引擎（v0.99.15 · DE 188329 · d070ec71）等资源预算 3000 重算：**37 名精锐马扎尔骠骑[对 22 名西班牙游侠反转全灭](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)（西班牙游侠胜剩 5/22、880 血，前排 4 对 6，修正旧零碰撞“剩 19”过期结论）**，[对 50 个法兰克长戟兵全灭](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=871.Magyars.4.f.&b=359.Franks.4.f.&m=r&bud=3000)（长戟兵剩 15/50、900 血），对 42 个日本冠军剑士亦全灭（冠军剑士剩 11/42、759 血）。重装骑射手一侧，马扎尔是 12 攻、8 射程，匈奴、土耳其是 11 攻、7 射程；马扎尔劲弩手 40 血、10 攻、8 射程，对长戟兵每击 9，重装骑射手每击 14。重装骑射手目录训练时间 30 秒，按 +25% 折算约 24 秒，这个数是按站内规则换算的，页面没有直接给出。
 
-群战是集火模型，不计包围空间和走位，人数多的一方结果偏好，不能当成实战胜率。PK 只算接触对打，不模拟射程和拉扯，重装骑射手对长戟兵、冠军剑士的接触结果都是落败，没有参考价值；“重装骑射手打长戟兵”来自 hongcun 的判断，站内工具验证不了。
+**碰撞接敌群战与混编复核（v0.99.15 · DE 188329 · d070ec71）**：新版引擎已计入碰撞体积、前排占位、射程先手与最小射程，“重装骑射手打长戟兵、骠骑不硬冲”的 hongcun 判断已获站桩接敌量化印证——接敌 1v1 中重装骑射手胜法兰克长戟兵（剩 43/80 血）；预算 3000 群战中，30 个重装骑射手凭 4 次先手齐射[大胜 50 个法兰克长戟兵（剩 24/30、1920 血）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Magyars.4.f.&b=359.Franks.4.f.&m=r&bud=3000)、[胜 42 个日本冠军剑士（剩 15/30、1187 血）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Magyars.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[胜 42 个不列颠劲弩手（剩 21/30、1629.6 血）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Magyars.4.f.&b=492.Britons.4.f.&m=r&bud=3000)。另附固定兵数混编对照组（非 3000 等资源，训练总价 2700 对 1800）：[混编 15 名骠骑 + 15 个重装骑射手对 30 个法兰克长戟兵](https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2281%22%2C%22199%22%2C%22211%22%2C%22435%22%2C%2239%22%2C%2268%22%2C%2282%22%2C%22200%22%2C%22212%22%2C%22437%22%2C%22514%22%2C%2247%22%2C%2275%22%2C%2280%22%2C%22201%22%2C%22219%22%2C%22436%22%2C%22515%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22871%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2274%22%2C%22602%22%2C%2268%22%2C%2276%22%2C%22215%22%2C%2275%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%5D%7D)大胜（剩 9/15 骠骑 + 15/15 重装骑射手全员存活，用时 15.8 秒）。以上仍属一维站桩模型、不含边走边射拉扯、二维包抄与护卫，不能当成实战胜率。
 
 机制推断（未经 hongcun 确认）：骠骑只花食物，重装骑射手花木材和黄金，两者费用不重叠；两者都是骑兵，目录移动速度 1.5 和 1.4，可以一起行动；这套比[保加利亚](#保加利亚)多一个兵种，骑射手还要拉扯，操作量更高。
 
@@ -1009,12 +1009,12 @@
 
 | 对方兵力           | 调整                                                                          |
 | ------------------ | ----------------------------------------------------------------------------- |
-| 骑士、游侠成群     | 骠骑靠数量换；单挑落败（西班牙游侠剩 100/180），等资源群战获胜                |
-| 长戟兵多           | 重装骑射手打，骠骑不硬冲（hongcun 的判断）                                    |
-| 冠军剑士等步兵成群 | 重装骑射手打；骠骑接触 PK 负日本冠军剑士（对方剩 4/70）                       |
-| 弓手、攻城器       | 骠骑直接冲；接触 PK 胜不列颠劲弩手（剩 99.2/110）、高棉重型弩炮（剩 101/110） |
+| 骑士、游侠成群     | 不可指望纯骠骑等资源正面硬换游侠：单挑落败（西班牙游侠剩 100/180），预算 3000 碰撞接敌群战亦反转落败（37 名骠骑全灭，西班牙游侠剩 5/22、880 血，前排 4 对 6）；应发挥免金换金拖后期与配合重装骑射手集火的价值。 |
+| 长戟兵多           | 重装骑射手打，骠骑不硬冲（hongcun 的判断，已获站内碰撞接敌站桩模型量化印证：预算 3000 下 30 骑射胜 50 长戟剩 24/30、纯 37 骠骑硬撞全灭（对方剩 15/50）；另附固定兵数混编 15+15 对 30 长戟胜剩 9/15 + 15/15（训练总价 2700 对 1800，非等资源））。 |
+| 冠军剑士等步兵成群 | 重装骑射手打（预算 3000 下 30 骑射胜 42 日本冠军剩 15/30）；骠骑接触 1v1 负日本冠军剑士（对方剩 4/70），预算 3000 群战 37 骠骑亦全灭（冠军剩 11/42）。 |
+| 弓手、攻城器       | 接触 1v1 骠骑胜不列颠劲弩手（剩 99.2/110）、高棉重型弩炮（剩 101/110）；预算 3000 群战中 37 骠骑顶 4 次齐射对 42 不列颠劲弩仅险胜剩 2/37（清满编长射程弓群宜靠侧袭或配合 30 骑射胜剩 21/30），切 6 条顿手推炮剩 35/37、切 20 高棉重型弩炮剩 33/37（注：未计手推炮固有溅射伤害、高棉科技 623 双箭弩额外弹矢、弩炮穿透与护卫；若核对高棉重型弩炮建议显式带科技 `542.Khmer.4.47-377-623.`）。 |
 
-除“长戟兵多”一行外，其余各行只有站内 PK，没有单独经 hongcun 实战确认。
+除“长戟兵多”一行外，其余各行只有站内 PK 与群战模型，没有单独经 hongcun 实战确认。
 
 **三、为什么不出**
 
@@ -1022,7 +1022,7 @@
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | 只出骠骑   | hongcun 指出这样浪费黄金，而且对方出长戟兵就能克制                                                                               |
 | 劲弩手     | hongcun 指出马扎尔对它没有任何额外优势；重装骑射手有训练速度和反曲弓两项                                                         |
-| 翼骑兵     | 同样只花食物，但各项都比骠骑差，接触 PK 打不过手推炮。这一条是站内数据推断，没有城堡或城堡产能不够时才用                         |
+| 翼骑兵     | 同样只花食物，但综合面板逊于骠骑；虽计入手推炮最小射程 5 后接敌 1v1 剩 58/95、预算 3000 下 44 翼骑切 6 条顿手推炮剩 42/44，但清炮耗时 69.6 秒仍远慢于骠骑的 24.5 秒，仅无城堡或城堡产能不够时用 |
 | 游侠       | 60 食、75 金，升级 1300 食、750 金，和重装骑射手争黄金。这一条是站内数据推断                                                     |
 | 箭塔阵地   | 没有大型箭塔、射箭槽和建筑学。因为没有塔线争石料，多修城堡生产骠骑不存在[女真](#女真)、[中国](#中国)那样的石料冲突，这一条是推断 |
 
@@ -1030,7 +1030,7 @@
 
 城堡时代的马扎尔骠骑满科技 100 血、12 攻、2/4 甲，[接触 PK 负法兰克骑士](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=869.Magyars.3.f.&b=38.Franks.3.f.&m=1)（对方剩 48/120），这套要到帝王时代才成型。“近战攻击升级免费”在站内只有文字，没有折算成节省的资源。
 
-来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Magyars)、[精锐马扎尔骠骑](https://linhongcun.github.io/aoe2-analyzer/#/unit/871?civ=Magyars)、[科维尼安军队](https://linhongcun.github.io/aoe2-analyzer/#/tech/514?civ=Magyars)、[反曲弓](https://linhongcun.github.io/aoe2-analyzer/#/tech/515?civ=Magyars)、[重装骑射手](https://linhongcun.github.io/aoe2-analyzer/#/unit/474?civ=Magyars)，DE 188329，2026-11-15 读取。
+来源与版本：[文明](https://linhongcun.github.io/aoe2-analyzer/#/civ/Magyars)、[精锐马扎尔骠骑](https://linhongcun.github.io/aoe2-analyzer/#/unit/871?civ=Magyars)、[科维尼安军队](https://linhongcun.github.io/aoe2-analyzer/#/tech/514?civ=Magyars)、[反曲弓](https://linhongcun.github.io/aoe2-analyzer/#/tech/515?civ=Magyars)、[重装骑射手](https://linhongcun.github.io/aoe2-analyzer/#/unit/474?civ=Magyars)，DE 188329，2026-11-15 读取；碰撞接敌群战与混编复核 v0.99.15 · DE 188329 · d070ec71。
 
 ### 波希米亚
 
@@ -1054,7 +1054,7 @@
 
 | 对方兵力                           | 调整                                                                                           |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 射手威胁施工                       | 先处理射手，按需用战车对射、掩护以取得施工窗口，已建成的塔可让部分火枪驻扎增箭。               |
+| 射手威胁施工                       | 先处理射手，按需用战车对射、掩护以取得施工窗口，已建成的塔可让部分火枪驻扎增箭。碰撞接敌预算 3000 站桩对射中，31 个火枪手不敌 42 个不列颠劲弩手（全灭，对方剩 36/42），面对长射程弓手须依托战车掩护、箭塔驻军或手推炮（同期对 42 个日本冠军剑士凭 2 次先手齐射反胜剩 10/31、372 血，不含边走边射拉扯）。 |
 | 远程攻城器或范围伤害单位           | 火枪、长戟和密集阵地都受范围伤害威胁，炮兵要主动处理共同威胁。                                 |
 | 昂贵骑兵、战象或可招降的高价值目标 | 可评估长戟＋僧侣＋炮，火枪按步兵压力配置。这一变招来自机制推导，尚未取得本次讨论中的实战验证。 |
 
@@ -1067,7 +1067,7 @@
 | 依赖胡斯派战车全向保护工人                                                        | 战车能给身后单位提供条件性的投射物掩护，施工机会受站位、来箭路径和侧面威胁约束。                                                 |
 | 默认转僧侣或研究[胡斯革新](https://linhongcun.github.io/aoe2-analyzer/#/tech/785) | 已有僧侣体系且能操作保护时，再比较把后续僧侣及修道院科技的黄金成本转为食物的收益。仍要计算特色科技本身、招降所需科技和农田负担。 |
 
-**机制与来源**：圣洁与狂热分别帮助村民的生命与移动，用户认可将其用于前线施工、生存与撤退，两项科技都必须实际研究才生效。[文明资料](https://linhongcun.github.io/aoe2-analyzer/#/civ/Bohemians)、[胡斯派战车](https://linhongcun.github.io/aoe2-analyzer/#/unit/1704?civ=Bohemians)、[榴弹炮](https://linhongcun.github.io/aoe2-analyzer/#/unit/1709?civ=Bohemians)，以及帝王满科技 5 火枪驻大型箭塔预览（v0.99.12 · DE 188329 · 66620c9，理论预览、不含每箭伤害、未与客户端逐箭核对；火枪单兵火力固定约 4.93、5 人合计约 24.64，不吃射箭科技，射箭槽使塔门槛由 6.00 升至 7.50）：[无射箭槽 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47&army=5:5:e)、[含射箭槽 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47,608&army=5:5:e)。
+**机制与来源**：圣洁与狂热分别帮助村民的生命与移动，用户认可将其用于前线施工、生存与撤退，两项科技都必须实际研究才生效。[文明资料](https://linhongcun.github.io/aoe2-analyzer/#/civ/Bohemians)、[胡斯派战车](https://linhongcun.github.io/aoe2-analyzer/#/unit/1704?civ=Bohemians)、[榴弹炮](https://linhongcun.github.io/aoe2-analyzer/#/unit/1709?civ=Bohemians)，以及帝王满科技 5 火枪驻大型箭塔预览（v0.99.12 · DE 188329 · 66620c9，理论预览、不含每箭伤害、未与客户端逐箭核对；火枪单兵火力固定约 4.93、5 人合计约 24.64，不吃射箭科技，射箭槽使塔门槛由 6.00 升至 7.50）：[无射箭槽 5/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47&army=5:5:e)、[含射箭槽 4/5 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47,608&army=5:5:e)。碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含拉扯与护卫）：[31 火枪手对 42 日本冠军（剩 10/31）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Bohemians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[31 火枪手对 42 不列颠劲弩（劲弩剩 36/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Bohemians.4.f.&b=492.Britons.4.f.&m=r&bud=3000)。
 
 ### 阿兹特克
 
@@ -1113,7 +1113,7 @@
 
 ### 印加
 
-**用户认可的条件方案（尚未说明是否实战用过）**：印加枪兵长＋精锐掷矛手，在能守住阵地、让步兵接战的条件下组织近战群体；不设固定兵数。普通与精锐印加枪兵长页面的目录射程均为 1，说明均称其“拥有更广的攻击范围”。hongcun 强调集中成形、保持阵型可利用射程 1 让编队发挥近战群战优势，不应只用“反骑”标签概括；不写同时攻击确数或必胜。这是用户的阵型判断，不是群体模拟。
+**用户认可的条件方案（尚未说明是否实战用过）**：印加枪兵长＋精锐掷矛手，在能守住阵地、让步兵接战的条件下组织近战群体；不设固定兵数。普通与精锐印加枪兵长页面的目录射程均为 1，说明均称其“拥有更广的攻击范围”。hongcun 强调集中成形、保持阵型可利用射程 1 让编队发挥近战群战优势，不应只用“反骑”标签概括；站内 `#1263` 碰撞接敌多排近战模拟（v0.99.15 · DE 188329 · d070ec71，等资源预算 3000）已量化印证其成群反杀游侠与冠军剑士的趋势，但仍属一维站桩模型、不写必胜。
 
 **反攻城补队的名称核对**：用户提出用受织物盾强化的机动步兵处理弩炮；讨论中称“鹰勇士”。按本次站点版本，印加可用的是蔷琵战士，精锐鹰勇士标为不可训练，故以精锐蔷琵战士记录该反攻城补队。此为按当前页面对照用户提出的职责，不表示用户确认了名称替换或已实战验证。
 
@@ -1135,7 +1135,7 @@
 
 | 对方兵力       | 调整                                                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 骑兵、普通步兵 | 先让已有枪兵长承担其页面说明的近战职责，不因兵种标签自动追加投石手。                                                             |
+| 骑兵、普通步兵 | 先让已有枪兵长承担其页面说明的近战职责，不因兵种标签自动追加投石手。站内碰撞接敌多排近战预算 3000 实测印证：38 名精锐印加枪兵长对 22 名西班牙游侠由接敌 1v1 落败（游侠剩 47/180）反胜剩 26/38（2028 血；对 22 名法兰克游侠剩 24/38、1920 血）；对 42 个日本冠军剑士由 1v1 惨败（冠军剩 30/70）反胜剩 10/38（722 血）；对 50 个法兰克长戟兵胜剩 32/38（2500 血）。另附固定兵数混编对照组（非 3000 等资源，训练总价 2620 对 2600）：20 名精锐印加枪兵长 + 20 个精锐掷矛手对不列颠 20 个长戟兵 + 20 个劲弩手胜（剩 9/20 + 20/20、1405.6 血、用时 29.5 秒；一维站桩不含二维包抄与拉扯）。 |
 | 弓手           | 由精锐掷矛手补充应对；枪兵长不要被当成反弓单位。                                                                                 |
 | 弩炮           | 可条件补精锐蔷琵战士反攻城；评估侧翼接敌，若考虑运输则先核对装载条件与路线，并安排护卫及撤退。织物盾的护甲加成不保证能安全接近。 |
 | 枪炮手         | 枪兵长页面列出的弱项；让枪兵长避免直接接敌，按局面维持掷矛支援、换位或撤退；不把反攻城补队当作对枪炮手的通用答案。               |
@@ -1146,7 +1146,7 @@
 | -------------------- | ---------------------------------------------------------------------------------------------- |
 | 投石手作为固定第三线 | 与枪兵长已有的步兵近战职责有重叠；只有现有编队仍缺少具体功能时再考虑，不因敌方有步兵自动加入。 |
 
-**机制与来源**：印加的军事单位食物折扣有助于持续投入，但不能推出无限补兵。[印加文明页](https://linhongcun.github.io/aoe2-analyzer/#/civ/Incas)、[普通印加枪兵长](https://linhongcun.github.io/aoe2-analyzer/#/unit/879?civ=Incas)、[精锐印加枪兵长](https://linhongcun.github.io/aoe2-analyzer/#/unit/881?civ=Incas)、[织物盾](https://linhongcun.github.io/aoe2-analyzer/#/tech/517?civ=Incas)、[精锐鹰勇士](https://linhongcun.github.io/aoe2-analyzer/#/unit/752?civ=Incas)、[精锐蔷琵战士](https://linhongcun.github.io/aoe2-analyzer/#/unit/2554?civ=Incas)。以上页面于 **v0.78.3 · DE 188329 · 构建 40c323a** 核对；鹰勇士页显示印加不可训练，织物盾效果适用于枪兵长、投石手和蔷琵战士，精锐蔷琵战士页列有对攻城武器 +3。
+**机制与来源**：印加的军事单位食物折扣有助于持续投入，但不能推出无限补兵。[印加文明页](https://linhongcun.github.io/aoe2-analyzer/#/civ/Incas)、[普通印加枪兵长](https://linhongcun.github.io/aoe2-analyzer/#/unit/879?civ=Incas)、[精锐印加枪兵长](https://linhongcun.github.io/aoe2-analyzer/#/unit/881?civ=Incas)、[织物盾](https://linhongcun.github.io/aoe2-analyzer/#/tech/517?civ=Incas)、[精锐鹰勇士](https://linhongcun.github.io/aoe2-analyzer/#/unit/752?civ=Incas)、[精锐蔷琵战士](https://linhongcun.github.io/aoe2-analyzer/#/unit/2554?civ=Incas)。以上页面于 **v0.78.3 · DE 188329 · 构建 40c323a** 核对；鹰勇士页显示印加不可训练，织物盾效果适用于枪兵长、投石手和蔷琵战士，精锐蔷琵战士页列有对攻城武器 +3。碰撞接敌多排近战单兵种预算 3000 与固定兵数混编复核（v0.99.15 · DE 188329 · d070ec71，一维站桩模型，不含二维包抄与拉扯）：[38 枪兵长对 22 西班牙游侠（剩 26/38）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=881.Incas.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)、[38 枪兵长对 22 法兰克游侠（剩 24/38）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=881.Incas.4.f.&b=569.Franks.4.f.&m=r&bud=3000)、[38 枪兵长对 42 日本冠军（剩 10/38）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=881.Incas.4.f.&b=567.Japanese.4.f.&m=r&bud=3000)、[38 枪兵长对 50 法兰克长戟（剩 32/38）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=881.Incas.4.f.&b=359.Franks.4.f.&m=r&bud=3000)、[混编 20 枪兵长 + 20 精锐掷矛对不列颠 20 长戟 + 20 劲弩（剩 9/20 + 20/20）](https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Incas%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2274%22%2C%22199%22%2C%22211%22%2C%22602%22%2C%2268%22%2C%2276%22%2C%22200%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%22516%22%2C%2247%22%2C%2275%22%2C%2277%22%2C%22201%22%2C%22219%22%2C%22517%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22881%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2274%22%2C%22199%22%2C%22211%22%2C%22602%22%2C%223%22%2C%2268%22%2C%2276%22%2C%22200%22%2C%22212%22%2C%22215%22%2C%2247%22%2C%2275%22%2C%2277%22%2C%22201%22%2C%22219%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2220%22%7D%5D%7D)。
 
 ### 玛雅
 
@@ -1411,10 +1411,10 @@
 
 | 对方兵力       | 调整                                                                          |
 | -------------- | ----------------------------------------------------------------------------- |
-| 骑士、游侠成群 | 按敌方重骑规模评估加长戟。日本满科技长戟兵享步兵攻速 +33%，免金、由兵营生产，可减轻武士城堡队列的压力。武士能同时接战的数量受地形、碰撞面和人口限制。                                  |
-| 劲弩、弓手文明 | 精锐掷矛＋轻骑清后排；可评估重装骑射手（日本骑射对远程 +2，掷矛除外）         |
+| 骑士、游侠成群 | 按敌方重骑规模评估加长戟。碰撞接敌预算 3000 群战中，40 个精锐日本武士对 22 名西班牙游侠由 1v1 落败转为险胜剩 1/40（52 血、188.5 秒；对 22 名法兰克游侠微负对方剩 1/22、38 血；未计武士充能特殊机制）。日本满科技长戟兵享步兵攻速 +33%，免金、由兵营生产，可减轻武士城堡队列的压力。武士能同时接战的数量受地形、碰撞面和人口限制。 |
+| 劲弩、弓手文明 | 精锐掷矛＋轻骑清后排；碰撞接敌预算 3000 群战中，37 个轻型骑兵因缺骑兵钢甲正面硬冲 42 个不列颠劲弩手全灭（劲弩剩 34/42、1328 血），切勿单靠纯轻骑正面硬冲满编长射程弓手，须以精锐掷矛手协同或寻找侧翼；可评估重装骑射手（日本骑射对远程 +2，掷矛除外）。 |
 | 独特单位文明   | 精锐武士拉满，+12 克制加成是质变                                              |
-| 弩炮、手推炮群 | 先看接敌路径、退路与护卫。有安全侧翼时可让武士牵制前排、轻骑择机切入；护卫封住接敌路线时放弃。                    |
+| 弩炮、手推炮群 | 计入手推炮最小射程 5 后，轻骑接敌 1v1 胜条顿手推炮剩 42/80、预算 3000 下 37 个轻型骑兵对 6 个条顿手推炮胜剩 35/37（未计手推炮固有溅射伤害）；实战仍先看接敌路径、退路与护卫，有安全侧翼时让武士牵制前排、轻骑择机切入，护卫封住接敌路线时放弃。 |
 | 巨投、炮塔阵地 | 只能巨投对拆（无手推炮）；轻骑偷袭                                            |
 | 步兵海         | 武士可对砍；压力过大时火枪手（靶场全科技）备选                                |
 | 我方战线受压   | 前线起箭塔（后期大型箭塔＋射箭孔）巩固阵地，驻军或掷矛辅助输出，武士/轻骑回防 |
@@ -1432,7 +1432,7 @@
 
 **经济备注**：磨坊、伐木场、采矿场费用 -50% 利于快速扩张；缺轮作使后期食物线偏弱——轻骑（80F）与长戟（35F）省金但耗食，按农田经济控制规模。缺翼骑兵，轻骑封顶即最终形态；缺建筑学与加热射击，塔防硬度不如高丽。
 
-来源与版本：[日本](https://linhongcun.github.io/aoe2-analyzer/#/civ/Japanese)、[精锐日本武士](https://linhongcun.github.io/aoe2-analyzer/#/unit/560?civ=Japanese)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Japanese)、[长戟兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Japanese)、[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Japanese)、[射箭孔](https://linhongcun.github.io/aoe2-analyzer/#/tech/484?civ=Japanese)、[弹射器](https://linhongcun.github.io/aoe2-analyzer/#/tech/59?civ=Japanese)、[含射箭槽 5 村民驻塔 6/7 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e)、[含射箭槽 5 劲弩手驻塔 6/7 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e)。原配置记录使用 DE 188329，原讨论未记录站点版本和构建；驻军预览复核 v0.99.12 · DE 188329 · 66620c9。
+来源与版本：[日本](https://linhongcun.github.io/aoe2-analyzer/#/civ/Japanese)、[精锐日本武士](https://linhongcun.github.io/aoe2-analyzer/#/unit/560?civ=Japanese)、[轻型骑兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/546?civ=Japanese)、[长戟兵](https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Japanese)、[巨型投石机](https://linhongcun.github.io/aoe2-analyzer/#/unit/331?civ=Japanese)、[射箭孔](https://linhongcun.github.io/aoe2-analyzer/#/tech/484?civ=Japanese)、[弹射器](https://linhongcun.github.io/aoe2-analyzer/#/tech/59?civ=Japanese)、[含射箭槽 5 村民驻塔 6/7 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e)、[含射箭槽 5 劲弩手驻塔 6/7 箭](https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e)。原配置记录使用 DE 188329，原讨论未记录站点版本和构建；驻军预览复核 v0.99.12 · DE 188329 · 66620c9；碰撞接敌预算 3000 群战复核（v0.99.15 · DE 188329 · d070ec71，一维站桩不含充能特殊机制、炮溅射与护卫）：[40 精锐武士对 22 西班牙游侠（剩 1/40）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=r&bud=3000)、[37 轻骑对 6 条顿手推炮（剩 35/37）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000)、[37 轻骑对 42 不列颠劲弩（劲弩剩 34/42）](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=492.Britons.4.f.&m=r&bud=3000)。
 
 **PK 核对边界**：1v1 为接触单挑，v0.99.0 · DE 188329 · 531df91 复核结果为西班牙游侠剩 103/180。当前等资源群战计入一维接敌、射程先手和近战占位。二维包抄、实际走位、弩炮穿透和溅射仍未覆盖；预算也未约束实际人口或反映混编护卫。v0.97.30 · 9938101 的全员集火比值仅在[原始历史记录](https://github.com/linhongcun/aoe2-analyzer/issues/1265)中保留。以上换兵取舍依赖战场条件，暂无实测胜率。
 

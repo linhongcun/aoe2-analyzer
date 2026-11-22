@@ -56,25 +56,30 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
 
     expect(main.evidence.playtest).toContain('报告使用过主组合');
     expect(main.evidence.playtest).toContain('与游侠的直接对拼');
-    expect(main.evidence.playtest).toContain('其他敌情只有站内接触 PK');
+    expect(main.evidence.playtest).toContain('其他敌情只有站内接触 1v1 与碰撞接敌等资源群战模型');
     expect(main.evidence.playtest).toContain('未单独经其实际对局确认');
     expect(main.evidence.scope).not.toContain('来源行');
     expect(main.evidence.scope).toContain(`ID1254${rightArrow}1255`);
     expect(main.evidence.scope).toContain('ID1225');
     expect(main.evidence.scope).toContain('20 个村民驻营垒理论预览 17/21 箭，19 个村民即达 17/21 箭');
-    expect(main.evidence.recordedVersion).toBe('v0.77.105 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9');
-    expect(main.evidence.links).toEqual([
-      {
-        label: '帝王满科技 · 20 个村民驻营垒 17/21 箭',
-        href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e',
-      },
-    ]);
+    expect(main.evidence.recordedVersion).toBe(
+      'v0.77.105 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71',
+    );
+    expect(main.evidence.links).toHaveLength(7);
+    expect(main.evidence.links?.[0]).toEqual({
+      label: '帝王满科技 · 20 个村民驻营垒 17/21 箭',
+      href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e',
+    });
+    expect(main.evidence.links?.[1]).toEqual({
+      label: '营垒精锐保加利亚骑兵（含下马形态资料）',
+      href: 'https://linhongcun.github.io/aoe2-analyzer/#/unit/1255?civ=Bulgarians',
+    });
     expect(main.reason).toContain('前线营垒');
     expect(main.reason).not.toMatch(/实战|接触 PK|每击/);
     expect(main.limitation).toContain('驻军箭数是站内理论预览、未与客户端核对');
     expect(main.limitation).toContain('未叠加科技的目录基础值');
-    expect(main.limitation).toContain('只算骑马阶段 1v1');
-    expect(main.limitation).toContain('不含下马、射程/走位或混编');
+    expect(main.limitation).toContain('均只算骑马阶段');
+    expect(main.limitation).toContain('不含拉扯、二维包抄或混编');
 
     expect(contract.adjustments[5]).toEqual({
       id: 'bulgarians-krepost-konnik-adjustment-sixth',
@@ -120,7 +125,7 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
       expect(adjustment.text).toContain('帝王精锐');
       expect(adjustment.text).toContain('接触');
       expect(adjustment.text).toContain('不含下马');
-      expect(adjustment.text).toContain('射程/走位');
+      expect(adjustment.text).toContain('拉扯/走位');
       expect(adjustment.text).toContain('混编');
       expect(adjustment.text).toMatch(/不是胜率|不能当实战胜率/);
       if (index > 0) expect(adjustment.text).toContain('仅站内模型，未单独经hongcun实战确认');
@@ -132,12 +137,16 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(comparisons[0]!.text).toContain('13 对 13');
     expect(comparisons[0]!.text).toContain('37/180');
     expect(comparisons[0]!.text).toContain('49/192');
+    expect(comparisons[0]!.text).toContain('2/22');
     expect(comparisons[1]!.text).toContain('66/140');
-    expect(comparisons[1]!.text).toContain('没有做同资源比较');
+    expect(comparisons[1]!.text).toContain('9/50');
     expect(comparisons[2]!.text).toContain('75/140');
+    expect(comparisons[2]!.text).toContain('3/42');
     expect(comparisons[3]!.text).toContain('132.8/140');
+    expect(comparisons[3]!.text).toContain('1/23');
     expect(comparisons[4]!.text).toContain('70/140');
     expect(comparisons[4]!.text).toContain('35 血');
+    expect(comparisons[4]!.text).toContain('21/23');
 
     const publicText = [main.title, main.condition, main.reason, main.limitation, main.attack, main.defense].join(' ');
     expect(publicText).not.toMatch(/37\/180|66\/140|75\/140|132\.8\/140|70\/140/);
@@ -160,38 +169,43 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(contract.required.map(({ kind, id }) => [kind, id])).toEqual(main.required.map(({ kind, id }) => [kind, id]));
     expect(main.evidence.playtest).toContain('主组合标为实战用过');
     expect(main.evidence.playtest).toContain('未提供具体对局或胜率');
-    expect(main.evidence.playtest).toContain('是 hongcun 判断');
-    expect(main.evidence.playtest).toContain('站内工具不能验证');
+    expect(main.evidence.playtest).toContain('来自 hongcun 判断');
+    expect(main.evidence.playtest).toContain('碰撞接敌站桩模型量化印证');
     expect(main.evidence.playtest).toContain('未单独经 hongcun 实战确认');
     expect(main.evidence.scope).not.toContain('来源行');
-    expect(main.evidence.recordedVersion).toBe('DE 188329 · 2026-11-15 读取；未记录站点版本/构建');
+    expect(main.evidence.recordedVersion).toBe('DE 188329 · 2026-11-15 读取；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71');
     expect(main.reason).toContain('城堡生产');
     expect(main.reason).toContain('重装骑射手提供远程输出');
     expect(main.limitation).toContain('帝王时代并完成科维尼安军队、反曲弓等研究后才成型');
     expect(main.limitation).toContain('城堡产能');
     expect(main.limitation).toContain('前后排多线操作');
-    expect(main.limitation).toContain('群战是集火模型');
-    expect(main.limitation).toContain('人数偏多的一方结果偏好');
+    expect(main.limitation).toContain('碰撞接敌群战已计入碰撞体积、前排占位、射程先手与最小射程');
+    expect(main.limitation).toContain('不含边走边射拉扯、二维包抄与护卫');
     expect(main.limitation).toContain('未折算节省资源');
     expect(main.limitation).not.toMatch(/110 血|15 攻|12 攻|8 射程|30 秒/);
 
     const [cavalry, halberdier, infantry, rangedSiege] = main.adjustments;
     expect(cavalry!.text).toContain('单挑接触 PK');
-    expect(cavalry!.text).toContain('等资源群战模型');
-    expect(cavalry!.text).toContain('不计包围空间和走位');
-    expect(cavalry!.text).toContain('人数偏多的一方结果偏好');
+    expect(cavalry!.text).toContain('碰撞接敌群战亦反转落败');
+    expect(cavalry!.text).toContain('5/22');
+    expect(cavalry!.text).toContain('880 血');
     expect(cavalry!.text).toContain('不能当胜率');
-    expect(cavalry!.text).toContain('仅站内模型，未单独经hongcun实战确认');
+    expect(cavalry!.text).toContain('未单独经 hongcun 实战确认');
     expect(halberdier!.text).toContain('hongcun 判断');
-    expect(halberdier!.text).toContain('站内 PK 不能验证');
-    expect(infantry!.text).toContain('接触 PK');
-    expect(infantry!.text).toContain('仅站内模型，未单独经hongcun实战确认');
-    expect(infantry!.text).toContain('不含射程拉扯、接近护卫或群战');
+    expect(halberdier!.text).toContain('24/30');
+    expect(halberdier!.text).toContain('9/15');
+    expect(halberdier!.text).toContain('15/15');
+    expect(halberdier!.text).toContain('不含边走边射拉扯');
+    expect(infantry!.text).toContain('接触 1v1');
+    expect(infantry!.text).toContain('未单独经 hongcun 实战确认');
+    expect(infantry!.text).toContain('不含拉扯与护卫');
     expect(infantry!.text).toContain('4/70');
-    expect(rangedSiege!.text).toContain('接触 PK');
-    expect(rangedSiege!.text).toContain('仅站内模型，未单独经hongcun实战确认');
-    expect(rangedSiege!.text).toContain('不模拟射程拉扯、接近或护卫');
-    expect(rangedSiege!.text).toContain('不能把“骠骑冲”当作已验证策略');
+    expect(infantry!.text).toContain('15/30');
+    expect(rangedSiege!.text).toContain('接触 1v1');
+    expect(rangedSiege!.text).toContain('未单独经 hongcun 实战确认');
+    expect(rangedSiege!.text).toContain('2/37');
+    expect(rangedSiege!.text).toContain('21/30');
+    expect(rangedSiege!.text).toContain('35/37');
     expect(main.adjustments).toHaveLength(4);
   });
 

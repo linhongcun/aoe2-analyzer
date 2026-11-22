@@ -130,7 +130,9 @@ function SourceLinks({ source, links }: { source: Source | null; links: Route['e
         </a>
         {links?.map(({ label, href }) => (
           <a key={href} href={href} target="_blank" rel="noreferrer">
-            <FormationText text={label} />
+            <span>
+              <FormationText text={label} />
+            </span>
           </a>
         ))}
       </div>

@@ -14,7 +14,13 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     const expectedSourceLines = [
       { civ: 'Sicilians', id: 'sicilians-serjeant-light-cavalry', lines: [13, 361, 363, 365, 366, 367, 368, 372], version: reviewedGarrisonVersion, links: 4 },
       { civ: 'Goths', id: 'goths-huskarl-halberdier', lines: [13, 376, 378, 380], version: reviewedVersion, links: 0 },
-      { civ: 'Bohemians', id: 'bohemians-handcannon-halberdier', lines: [13, 826, 830, 835, 838, 840], version: reviewedGarrisonVersion, links: 2 },
+      {
+        civ: 'Bohemians',
+        id: 'bohemians-handcannon-halberdier',
+        lines: [13, 826, 830, 835, 838, 840],
+        version: `${reviewedGarrisonVersion}；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71`,
+        links: 4,
+      },
     ];
 
     for (const { civ, id, lines, version, links } of expectedSourceLines) {
