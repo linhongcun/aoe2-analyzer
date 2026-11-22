@@ -87,11 +87,12 @@ describe('#1266 七个文明阵容的机制与条件边界', () => {
     expect(route.adjustments?.find(({ id }) => id === 'ranged')?.text).toContain('缺射手锁甲');
   });
 
-  it('不列颠普通巨投 17 射程和 92% 准确度来自既有模型，战狼号仅文本', () => {
+  it('不列颠普通巨投满科技 17 射程与战狼号 100% 准确度生效，取消战狼号保持 92% 基线', () => {
     const trebuchet = units.find(({ id }) => id === 331)!;
-    expect(imperial('Britons', 331)).toMatchObject({ rng: 17, acc: 92 });
-    expect(simTechs(ctx, trebuchet, 'Britons').find(({ t }) => t.id === 461)?.ef).toBeNull();
-    expect(DAT.techs.Warwolf!.rules.filter(({ fx }) => fx.some(({ s, v }) => s === 'acc' && v === 100)).map(({ t }) => t)).toEqual([[1942]]);
+    expect(imperial('Britons', 331)).toMatchObject({ rng: 17, acc: 100 });
+    expect(imperial('Britons', 331, 461)).toMatchObject({ rng: 17, acc: 92 });
+    expect(simTechs(ctx, trebuchet, 'Britons').find(({ t }) => t.id === 461)?.ef).toEqual([{ s: 'acc', op: 'set', v: 100 }]);
+    expect(DAT.techs.Warwolf!.rules.filter(({ fx }) => fx.some(({ s, v }) => s === 'acc' && v === 100)).map(({ t }) => t)).toEqual([[331, 1942]]);
     expect(civStatus(ctx.trees, 'Britons').u588).toBe(0);
     const route = formationContent('Britons').routes[0]!;
     expect(route.adjustments).toContainEqual(
