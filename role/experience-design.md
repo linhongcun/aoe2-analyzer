@@ -276,6 +276,12 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 整宽补充说明条应作为 `auto-fit` 子网格的同级兄弟挂在父级固定列网格（如 `.ud-stat-grid`）内再设 `grid-column: 1 / -1`，既保持上方并列卡片等高对称，又让 390／360 窄屏自然整宽展开。同时，同一标题含多组数值（如 `基础 1.6 秒 / 显示用 1.0 秒`）时，每组「数字 + 单位」分别包 `.nw`，不要把整句包进同一个 `.nw`，允许在分隔符处换行而不拆断数字与单位。
 
+### 框里的图片按内容区定尺寸，量绘制区而不是元素盒
+
+[#1345 详情页头图标](https://github.com/linhongcun/aoe2-analyzer/issues/1345#体验设计)里，三处页头给图片写的尺寸被 `.uico.big`（`0,2,0`）覆盖，图片在桌面贴在左上角，在窄屏溢出被裁。修优先级之外，原规则本身也有问题：建筑和科技页把图片写成框的外尺寸 `80px`，窄屏写成 `.bd-icon, .bd-icon img { width: 52px }` 这种组合选择器。全站是 `border-box`，框有 `1px` 边框，内容区只有外尺寸减 `2px`，照写也会溢出 `2px`。
+
+给带边框、带 `overflow: hidden` 的框放图片时，图片写 `width: 100%; height: 100%; display: block`，按内容区算，不要和框共用同一条尺寸规则。用新选择器压过 `.uico.big` 这类共用类时，要限定在目标容器内，不要改共用类本身，单位 PK 阵营头就依赖它的 `64px`。验收留白时，要按 `object-fit: contain` 算出图片实际绘制的区域，再量它到框内缘的四边距离；只量 `<img>` 元素盒，会漏掉非方图在盒内留下的空白。素材本身是带底色的整幅方图时，铺满框的内缘比再留一圈边好，窄屏也能多出约 `12px` 的图标尺寸。
+
 ### 半透明 `*-soft` 底色要按实际父底色合成后再核对比度
 
 在 [#1227](https://github.com/linhongcun/aoe2-analyzer/issues/1227)、[#1228](https://github.com/linhongcun/aoe2-analyzer/issues/1228)、[#1229](https://github.com/linhongcun/aoe2-analyzer/issues/1229) 核对小号提示卡与徽章配色时，按 [`tokens.css`](../src/shared/styles/tokens.css) 现值实算：浅色 `--color-accent`（`#a65a14`）在纯白 `--color-surface` 上为 `5.13:1`，但叠到半透明 `--color-accent-soft`（`#a65a141f`）上时，在 `--color-surface` 复合底色上降至 `4.36:1`，在 `--color-surface-2`（`#f5f5f7`）复合底色上降至 `4.02:1`，均低于 WCAG 2.1 正文 AA `4.5:1`。[`scripts/contrast.py`](../scripts/contrast.py) 只查脚本里写死的色对，不会替半透明底色与父表面的复合结果兜底。
