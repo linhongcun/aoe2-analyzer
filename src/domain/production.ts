@@ -10,6 +10,7 @@ import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameId
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { ratePerMinute } from './formatTime';
 import { toggleSelected } from './prereq';
+import { trainingAtBuilding } from './unitTrainingSites';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -117,7 +118,7 @@ export function toggleProductionTech(ctx: ProductionContext, config: ProductionC
   return [...effectiveProductionTechs(ctx, { ...config, techs: [...next] })];
 }
 
-/** 独立生产地点由该文明树格确认，附加地点还须具有 .dat 的训练记录。 */
+/** 独立生产地点由该文明树格确认；已按固定文明树登记的替换或条件地点共享 unitTrainingSites，其余地点沿用 .dat 训练记录。 */
 export function productionBuildings(ctx: ProductionContext, config: ProductionConfig, u: Unit): number[] {
   const data = eco.units[u.id];
   if (!data || !u.civs.includes(config.civ)) return [];
@@ -125,14 +126,15 @@ export function productionBuildings(ctx: ProductionContext, config: ProductionCo
   return (ctx.trees.t[config.civ] ?? [])
     .filter((block) => {
       const b = ctx.core.buildingById[block[0]];
-      if (!b || !b.civs.includes(config.civ) || !data.at.includes(b.id)) return false;
+      if (!b || !b.civs.includes(config.civ)) return false;
+      const site = trainingAtBuilding(u, b.id);
+      if (site ? !site.civs.includes(config.civ) : !data.at.includes(b.id)) return false;
       if (buildingAge(b, config.civ, ctx.trees) > config.age) return false;
       const cell = block[3].find((c) => c[2] === 'u' && c[3] === u.id && c[4] === 1);
       if (!cell) return false;
       // 训练时代包含文明提前解锁与长矛兵下限。
       if (trainingUnitAge(config.civ, u.id, u.age) > config.age) return false;
-      if ([759, 761].includes(u.id) && b.id === 12 && !selected.has(16)) return false;
-      if ([886, 887].includes(u.id) && b.id === 101 && !selected.has(483)) return false;
+      if (site?.tech !== undefined && !selected.has(site.tech)) return false;
       if (u.id === 1699 && !selected.has(755)) return false;
       // 化学的解锁对象来自固定 techs.json #47，单位形态升级不能替代该前置。
       if ([5, 36, 420, 691].includes(u.id) && !selected.has(47)) return false;
