@@ -12,7 +12,8 @@ const TRIGGER_GAP = 6;
 const DESKTOP_MAX_W = 448;
 const DESKTOP_MAX_H = 440;
 const FLIP_THRESHOLD = 320;
-const MIN_COMFORTABLE_H = 120;
+// 覆盖搜索头 + 文明过滤条 + 角色芯片 + 组标题 + 至少 1 条完整 44px 选项；两侧均不足时走安全视口回退
+const MIN_COMFORTABLE_H = 240;
 
 export type PopoverPlacement = 'bottom' | 'top' | 'sheet';
 

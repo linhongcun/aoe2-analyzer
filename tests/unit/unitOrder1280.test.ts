@@ -157,6 +157,14 @@ describe('Issue 1280 桌面固定弹层定位计算', () => {
     expect(Number(partialTop.style!.top) + Number(partialTop.style!.maxHeight)).toBeLessThanOrEqual(420 - 16);
   });
 
+  it('短桌面视口（1200×400 且触发器居中）两侧均不足 240px 时走安全视口回退而非压扁列表', () => {
+    const shortDesk = computeFixedPopoverLayout({ left: 40, top: 202, bottom: 246 }, 1200, 400);
+    expect(shortDesk.offscreen).toBe(false);
+    expect(shortDesk.placement).toBe('bottom');
+    expect(shortDesk.style!.top).toBe(64);
+    expect(shortDesk.style!.maxHeight).toBe(320);
+  });
+
   it('极矮视口仍安全夹紧不溢出', () => {
     const tiny = computeFixedPopoverLayout({ left: 1000, top: 100, bottom: 144 }, 1280, 220);
     expect(tiny.offscreen).toBe(false);

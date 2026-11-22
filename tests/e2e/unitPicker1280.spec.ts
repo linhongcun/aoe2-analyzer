@@ -213,3 +213,56 @@ test('#1280 #/units 默认前排通用单位、轻说明显隐、.unit-zh 宽度
   await expect(orderNote).toHaveCount(0);
   await expect(page.locator('#ugrid .unit-row')).toHaveCount(1);
 });
+
+test('#1280 短桌面视口 1200×400 触发器居中展开仍露出可点击选项，且切换文明往返后重置仅看可用', async ({ page }) => {
+  await page.setViewportSize({ width: 1200, height: 400 });
+  await page.goto('./#/duel?a=569.Franks.4.f.&b=359.Japanese.4.f.&m=1');
+  await expect(page.locator('#duel-res')).toBeVisible();
+
+  const trigger = page.locator('#duel-a-unit');
+  // 将触发器滚动至短视口中段（top ≈ 202, bottom ≈ 246），使上下两翼均不足 240px
+  await trigger.evaluate((el) => {
+    const docTop = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, Math.max(0, docTop - 202));
+  });
+  const trigBox = (await trigger.boundingBox())!;
+  expect(trigBox.y).toBeGreaterThanOrEqual(160);
+  expect(trigBox.y + trigBox.height).toBeLessThanOrEqual(280);
+
+  const { dialog } = await openDuelUnitPicker(page, 'a');
+  const panelBox = (await dialog.boundingBox())!;
+  expect(panelBox.y).toBeGreaterThanOrEqual(63.5);
+  expect(panelBox.y + panelBox.height).toBeLessThanOrEqual(400.5);
+
+  const listBox = (await dialog.locator('.up-list').boundingBox())!;
+  expect(listBox.height).toBeGreaterThanOrEqual(60);
+
+  // 真实点击选中村民（83，通用单位且多文明可用），确认面板不是被控件挤占至不可点
+  const villager = dialog.locator('[role="option"][data-unit="83"]');
+  await expect(villager).toBeVisible();
+  await villager.click();
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toHaveAttribute('data-value', '83');
+
+  // 切回正常桌面高度验证 Franks -> Britons -> Franks 往返后「仅看可用」被显式重置
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const firstOpen = await openDuelUnitPicker(page, 'a');
+  const frToggle = firstOpen.dialog.getByRole('button', { name: /仅看 法兰克可用/ });
+  await frToggle.click();
+  await expect(frToggle).toHaveAttribute('aria-pressed', 'true');
+  await page.keyboard.press('Escape');
+  await expect(firstOpen.dialog).toHaveCount(0);
+
+  await page.locator('#duel-a-civ').click();
+  const civDialog = page.getByRole('dialog', { name: 'A 方文明', exact: true });
+  await civDialog.locator('.cp-q').fill('不列颠');
+  await civDialog.locator('[role="option"]').first().click();
+
+  await page.locator('#duel-a-civ').click();
+  const civDialog2 = page.getByRole('dialog', { name: 'A 方文明', exact: true });
+  await civDialog2.locator('.cp-q').fill('法兰克');
+  await civDialog2.locator('[role="option"]').first().click();
+
+  const reopen = await openDuelUnitPicker(page, 'a');
+  await expect(reopen.dialog.getByRole('button', { name: /仅看 法兰克可用/ })).toHaveAttribute('aria-pressed', 'false');
+});

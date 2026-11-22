@@ -79,11 +79,14 @@ export function UnitPicker({
   describedBy,
   invalid,
 }: UnitPickerProps) {
+  const validCiv = resolveValidCiv(civ);
   const [open, setOpen] = useState(false);
   const [prevDisabled, setPrevDisabled] = useState(disabled);
+  const [prevCiv, setPrevCiv] = useState(validCiv);
+  const [prevAllowUnavailable, setPrevAllowUnavailable] = useState(allowUnavailable);
   const [q, setQ] = useState('');
   const [role, setRole] = useState<UnitRole | ''>('');
-  const [onlyAvailableCiv, setOnlyAvailableCiv] = useState<string | null>(null);
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
   const [act, setAct] = useState(0);
   const [renderLimit, setRenderLimit] = useState(INITIAL_RENDER_LIMIT);
 
@@ -96,6 +99,11 @@ export function UnitPicker({
       setRenderLimit(INITIAL_RENDER_LIMIT);
     }
   }
+  if (prevCiv !== validCiv || prevAllowUnavailable !== allowUnavailable) {
+    setPrevCiv(validCiv);
+    setPrevAllowUnavailable(allowUnavailable);
+    if (onlyAvailable) setOnlyAvailable(false);
+  }
 
   const btn = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -103,10 +111,8 @@ export function UnitPicker({
   const listRef = useRef<HTMLDivElement>(null);
   const lid = useId();
 
-  const validCiv = resolveValidCiv(civ);
   const civZh = validCiv ? (civByEn(validCiv)?.zh ?? validCiv) : undefined;
-  const onlyAvailable = Boolean(validCiv && allowUnavailable && onlyAvailableCiv === validCiv);
-  const effectiveOnlyAvailable = onlyAvailable;
+  const effectiveOnlyAvailable = Boolean(validCiv && allowUnavailable && onlyAvailable);
   const isOpen = open && !disabled;
 
   const model = useMemo(
@@ -182,14 +188,15 @@ export function UnitPicker({
   };
 
   const toggleOnlyAvailable = () => {
-    setOnlyAvailableCiv((prev) => (validCiv && prev === validCiv ? null : (validCiv ?? null)));
+    if (!validCiv || !allowUnavailable) return;
+    setOnlyAvailable((v) => !v);
     resetViewportAndFocus();
   };
 
   const clearAllFilters = () => {
     setQ('');
     setRole('');
-    setOnlyAvailableCiv(null);
+    setOnlyAvailable(false);
     resetViewportAndFocus();
     input.current?.focus();
   };

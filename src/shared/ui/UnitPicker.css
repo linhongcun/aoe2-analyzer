@@ -1,5 +1,5 @@
 /* 共享 UnitPicker 弹层与移动端底部抽屉样式（Issue 1280）；颜色全部走 tokens.css 令牌 */
-.up-panel {
+.cp-panel.up-panel {
   width: 448px;
   max-width: calc(100vw - 32px);
   border-color: var(--color-border);
@@ -29,7 +29,7 @@
 }
 
 .up-clear,
-.up-desktop-close {
+.cp-x.up-desktop-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -44,7 +44,7 @@
 }
 
 .up-clear:hover,
-.up-desktop-close:hover {
+.cp-x.up-desktop-close:hover {
   background: var(--color-surface-2);
   color: var(--color-text);
 }
@@ -194,7 +194,7 @@
   filter: grayscale(0.75);
 }
 
-.up-panel .up-name {
+.up-panel .cp-opt .up-name {
   gap: 2px;
   line-height: 1.3;
 }
@@ -348,11 +348,11 @@
 }
 
 @media (max-width: 899px) {
-  .up-mask {
+  .cp-mask.up-mask {
     background: var(--color-scrim);
   }
 
-  .up-panel {
+  .cp-panel.up-panel {
     width: auto;
     max-width: none;
     height: 78vh;
@@ -411,7 +411,7 @@
     color: var(--color-text-2);
   }
 
-  .up-desktop-close {
+  .cp-x.up-desktop-close {
     display: none;
   }
 
