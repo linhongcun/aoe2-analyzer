@@ -202,3 +202,77 @@ test('#1325 回归：切文明过滤超时代显式科技不污染混编、帝�
 
   expect(errors).toEqual([]);
 });
+
+test('#1325 回归：Side 与 UnavailSide 切文明按目标文明解析时代裁剪显式科技，不破坏升级对比且不复活旧科技', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  const hashA = () => new URLSearchParams(page.url().slice(page.url().indexOf('?') + 1)).get('a');
+
+  // 路径 A（Side.onCivChange）：城堡波斯骑射手（39）勾帕提亚战术（436）→ 选重装骑射手（474，抬升至帝王）→ 切契丹回到城堡且裁剪 436
+  await page.goto('./#/duel?a=39.Persians.3..&b=4.Britons.3..&m=1');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await page.locator('#duel-a details.duel-tech label', { hasText: '帕提亚战术' }).locator('input[type="checkbox"]').check();
+  expect(hashA()).toBe('39.Persians.3.436.');
+
+  await page.locator('#duel-a-unit').click();
+  const unitDialogA = page.getByRole('dialog', { name: 'A 方单位', exact: true });
+  await unitDialogA.getByRole('combobox').fill('Heavy Cavalry Archer');
+  await unitDialogA.locator('[data-unit="474"]').click();
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('帝王时代');
+  expect(hashA()).toBe('474.Persians.3.436.');
+
+  await page.locator('#duel-a-civ').click();
+  await page.getByRole('dialog', { name: 'A 方文明', exact: true }).locator('[data-civ="Khitans"]').click();
+  await expect(page.locator('#duel-a')).toContainText('契丹');
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('城堡时代');
+  await expect(page.locator('#duel-a-age')).toHaveValue('3');
+  expect(hashA()).toBe('474.Khitans.3..');
+  await expect(page.locator('#duel-a').getByRole('radio', { name: '无科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+
+  const upgradePanel = page.locator('[data-t="upgrade-comparison"]');
+  await ensureDetailsOpen(upgradePanel);
+  const saveBtn = upgradePanel.getByRole('button', { name: '保存为升级前', exact: true });
+  await expect(saveBtn).toBeEnabled();
+  await saveBtn.click();
+  await expect(upgradePanel).toContainText('尚无科技变化');
+  await upgradePanel.getByRole('button', { name: '清除比较', exact: true }).click();
+
+  // 随后升帝王不会幽灵复活帕提亚战术（436）
+  await page.locator('#duel-a-age').selectOption('4');
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('帝王时代');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await expect(page.locator('#duel-a details.duel-tech label', { hasText: '帕提亚战术' }).locator('input[type="checkbox"]')).not.toBeChecked();
+  expect(hashA()).toBe('474.Khitans.4..');
+
+  // 路径 B（UnavailSide 切文明）：城堡波希米亚步弓手（4）勾化学（47）→ 选波希米亚不可造的重装骑射手（474）→ 点「换个文明」切契丹
+  await page.goto('./#/duel?a=4.Bohemians.3..&b=4.Britons.3..&m=1');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await page.locator('#duel-a details.duel-tech label', { hasText: '化学' }).locator('input[type="checkbox"]').check();
+  expect(hashA()).toBe('4.Bohemians.3.47.');
+
+  await page.locator('#duel-a-unit').click();
+  const unitDialogB = page.getByRole('dialog', { name: 'A 方单位', exact: true });
+  await unitDialogB.getByRole('combobox').fill('Heavy Cavalry Archer');
+  await unitDialogB.locator('[data-unit="474"]').click();
+  await expect(page.locator('#duel-a[data-unavailable="true"]')).toBeVisible();
+  expect(hashA()).toBe('474.Bohemians.3.47.');
+
+  await page.locator('#duel-a').getByRole('button', { name: '换个文明', exact: true }).click();
+  await page.getByRole('dialog', { name: 'A 方文明', exact: true }).locator('[data-civ="Khitans"]').click();
+  await expect(page.locator('#duel-a[data-unavailable="true"]')).toHaveCount(0);
+  await expect(page.locator('#duel-a')).toContainText('契丹');
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('城堡时代');
+  await expect(page.locator('#duel-a-age')).toHaveValue('3');
+  expect(hashA()).toBe('474.Khitans.3..');
+  await expect(page.locator('#duel-a').getByRole('radio', { name: '无科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+
+  await ensureDetailsOpen(upgradePanel);
+  await expect(upgradePanel.getByRole('button', { name: '保存为升级前', exact: true })).toBeEnabled();
+
+  expect(errors).toEqual([]);
+});

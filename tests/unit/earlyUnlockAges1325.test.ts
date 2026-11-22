@@ -30,7 +30,7 @@ import { makeSimContext, presetUpTo, simTechs, type SimContext } from '../../src
 import { evaluateTrainTotal, type TrainTotalConfig } from '../../src/domain/trainTotal';
 import { techAvailable, unitAvailable } from '../../src/domain/unitAvailability';
 import { upgradePlan } from '../../src/domain/upgradeComparison';
-import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
+import { isUnavail, resolve, resolveSideAge, switchSideCiv } from '../../src/features/duel/logic/duelSide';
 import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 
 let ctx: ProductionContext;
@@ -486,5 +486,59 @@ describe('#1325 复核回归：显式科技时代过滤、蔷琵对照透传 civ
     expect(hcRows.find((r) => r.age === 3)?.a?.u.id).toBe(5);
     expect(hcRows.find((r) => r.age === 3)?.result).not.toBeNull();
     expect(hcRows.find((r) => r.age === 2)?.a).toBeNull();
+  });
+
+  it('Round 2 P1-1：Side 与 UnavailSide 切文明使用同源 resolveSideAge 裁剪显式科技，不沿用旧文明抬高后的 side.age', () => {
+    const byId = ctx.core.unitById;
+    const hca = byId[474]!;
+    const sideData = { byId, techById: ctx.core.techById, trees: ctx.trees };
+
+    // 路径 A（Side.onCivChange）：城堡波斯 39 勾 436（与合法封建科技 199）→ 切 474（波斯 side.age 被抬高到 4，但 spec.age 仍为 3）→ 切契丹
+    const persianHcaSpec = { uid: 474, civ: 'Persians', age: 3, ageSet: true, techs: [199, 436], team: [] };
+    const persianResolved = resolve(sim, byId, persianHcaSpec, 474);
+    expect(isUnavail(persianResolved)).toBe(false);
+    if (!isUnavail(persianResolved)) expect(persianResolved.age).toBe(4);
+
+    expect(resolveSideAge(sideData, 'Khitans', hca, persianHcaSpec.age, persianHcaSpec.ageSet)).toEqual({
+      age: 3,
+      earlyAgeMarker: { unitId: 474, civ: 'Khitans', age: 3 },
+    });
+    const khitanFromPersian = switchSideCiv(sideData, persianHcaSpec, hca, 'Khitans');
+    expect(khitanFromPersian.techs).toEqual([199]);
+    const khitanResolved = resolve(sim, byId, khitanFromPersian, 474);
+    expect(isUnavail(khitanResolved)).toBe(false);
+    if (isUnavail(khitanResolved)) throw new Error('Expected Khitans HCA available in Castle Age');
+    expect(khitanResolved.age).toBe(3);
+    expect(khitanResolved.sel.has(436)).toBe(false);
+    expect(khitanResolved.sel.has(199)).toBe(true);
+    expect(upgradePlan(sim, byId, khitanFromPersian).ok).toBe(true);
+    // 随后升帝王不会幽灵复活 436
+    const khitanImp = resolve(sim, byId, { ...khitanFromPersian, age: 4, ageSet: true }, 474);
+    if (isUnavail(khitanImp)) throw new Error('Expected Khitans HCA available in Imperial Age');
+    expect(khitanImp.sel.has(436)).toBe(false);
+
+    // 仅带 436 时切契丹后 techs 清空为 []
+    const khitanEmpty = switchSideCiv(sideData, { ...persianHcaSpec, techs: [436] }, hca, 'Khitans');
+    expect(khitanEmpty.techs).toEqual([]);
+    expect(upgradePlan(sim, byId, khitanEmpty).ok).toBe(true);
+
+    // 路径 B（UnavailSide 切文明）：城堡波希米亚 4 勾 47 → 切波希米亚不可造的 474（UnavailSide side.age=4, spec.age=3）→ 切契丹
+    const bohHcaSpec = { uid: 474, civ: 'Bohemians', age: 3, ageSet: true, techs: [47], team: [] };
+    const bohUnavail = resolve(sim, byId, bohHcaSpec, 474);
+    expect(isUnavail(bohUnavail)).toBe(true);
+    if (isUnavail(bohUnavail)) expect(bohUnavail.age).toBe(4);
+
+    const khitanFromUnavail = switchSideCiv(sideData, bohHcaSpec, hca, 'Khitans');
+    expect(khitanFromUnavail.techs).toEqual([]);
+    const khitanAfterUnavail = resolve(sim, byId, khitanFromUnavail, 474);
+    expect(isUnavail(khitanAfterUnavail)).toBe(false);
+    if (isUnavail(khitanAfterUnavail)) throw new Error('Expected Khitans HCA available after leaving UnavailSide');
+    expect(khitanAfterUnavail.age).toBe(3);
+    expect(khitanAfterUnavail.sel.has(47)).toBe(false);
+    expect(upgradePlan(sim, byId, khitanFromUnavail).ok).toBe(true);
+
+    // 非提前解锁文明（匈奴）或未显式指定时代（ageSet: false）均按 Math.max(u.age, spec.age) 解析为帝王
+    expect(resolveSideAge(sideData, 'Huns', hca, 3, true)).toEqual({ age: 4 });
+    expect(resolveSideAge(sideData, 'Khitans', hca, 3, false)).toEqual({ age: 4 });
   });
 });
