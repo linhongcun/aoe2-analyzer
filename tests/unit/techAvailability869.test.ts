@@ -4,24 +4,30 @@ import { auditSources, checkRepo, contractErrors, displayForbiddenArea, question
 import { AVAILABILITY_CHECK_LIMITS, AVAILABILITY_EXCEPTIONS, TECH_AVAILABILITY } from '../../src/domain/techAvailability';
 
 const ALL = ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'] as const;
-const ARMENIAN_75 = 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:75=1';
-const BOHEMIANS = 'civ-age:src/domain/production.ts:productionTechAge:Bohemians:literal:3:id===47';
+const ARMENIAN_567 = 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:567=3';
+const KHITANS_474 = 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Khitans:474=3';
+const BOHEMIANS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Bohemians:47=3';
+const JURCHENS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Jurchens:377=3';
+const PERSIANS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Persians:436=3';
 const BURGUNDIANS = 'civ-age:src/domain/production.ts:productionTechAge:Burgundians:max(literal:1,age-1):ecoTechs+isGatherTech';
 const DISPLAY = 'display-age:src/domain/availabilityAge.ts:displayUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
 const SPEARMAN_FLOOR = 'unit-civ:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
 const SPEARMAN_ARMENIAN = 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain';
 const KNOWN = [
+  BOHEMIANS,
+  JURCHENS,
+  PERSIANS,
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:358=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:359=3',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:473=3',
-  ARMENIAN_75,
+  ARMENIAN_567,
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:77=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Bohemians:5=3',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Burgundians:283=3',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:1258=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:422=3',
+  KHITANS_474,
   SPEARMAN_ARMENIAN,
-  BOHEMIANS,
   BURGUNDIANS,
   DISPLAY,
   SPEARMAN_FLOOR,
@@ -36,12 +42,17 @@ describe('#869 科技可用性例外必须点名', () => {
     const bySite = new Map(AVAILABILITY_EXCEPTIONS.map((item) => [item.site, item]));
     expect(bySite.get(BURGUNDIANS)?.role).toBe('tech-age');
     expect(bySite.get(BURGUNDIANS)?.differs).toEqual(['civStatus', 'techAvailable', 'simTechs']);
-    expect(bySite.get(BOHEMIANS)?.differs).toEqual(['civStatus', 'techAvailable', 'simTechs']);
+    for (const key of [BOHEMIANS, JURCHENS, PERSIANS]) {
+      expect(bySite.get(key)?.role).toBe('tech-age');
+      expect(bySite.get(key)?.differs).toEqual(['civStatus', 'simTechs']);
+      expect(result.sites.find((site) => site.key === key)?.usedBy).toEqual(['techAvailable', 'productionTechs']);
+    }
     expect(bySite.get(DISPLAY)?.role).toBe('display-only');
     expect(bySite.get(DISPLAY)?.differs).toEqual(ALL);
     expect(bySite.get(SPEARMAN_FLOOR)?.role).toBe('unit-age');
     expect(bySite.get(SPEARMAN_ARMENIAN)?.role).toBe('tech-age');
-    expect(bySite.get(ARMENIAN_75)?.differs).toEqual(ALL);
+    expect(bySite.get(ARMENIAN_567)?.differs).toEqual(ALL);
+    expect(bySite.get(KHITANS_474)?.differs).toEqual(ALL);
     expect(result.sites.find((site) => site.key === BURGUNDIANS)?.usedBy).toEqual(['productionTechs']);
     expect(result.sites.find((site) => site.kind === 'display-age')?.usedBy).toEqual([]);
     expect(result.sites.filter((site) => ['civStatus', 'techAvailable', 'simTechs'].includes(site.owner))).toEqual([]);

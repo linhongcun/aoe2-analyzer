@@ -3,6 +3,7 @@ import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { ARMC_CLASS_NOTE } from '../../../domain/affects';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
@@ -214,7 +215,7 @@ export default function SimPanel(p: SimPanelProps) {
     const t = p.techById[id]!;
     p.go(
       p.civ,
-      p.sel.has(id) ? p.age : Math.max(p.age, t.age),
+      p.sel.has(id) ? p.age : Math.max(p.age, militaryTechAge(p.civ, id, t.age)),
       toggleTech(
         id,
         p.sel,
@@ -253,7 +254,7 @@ export default function SimPanel(p: SimPanelProps) {
                 p.go(
                   p.civ,
                   a,
-                  [...p.sel].filter((i) => p.techById[i]!.age <= a),
+                  [...p.sel].filter((i) => militaryTechAge(p.civ, i, p.techById[i]!.age) <= a),
                   p.team,
                 );
               }}
@@ -277,7 +278,7 @@ export default function SimPanel(p: SimPanelProps) {
               key={a}
               onClick={() => {
                 const ag = Math.max(p.minAge, a);
-                p.go(p.civ, ag, withExtra(presetUpTo(p.avail, ag), ag), p.team);
+                p.go(p.civ, ag, withExtra(presetUpTo(p.avail, ag, p.civ), ag), p.team);
               }}
             >
               {AGE_ZH[a]!.slice(0, 2)}预设
@@ -309,7 +310,10 @@ export default function SimPanel(p: SimPanelProps) {
                 const checkable = !!ef || !!p.selectableWithoutEffect?.has(t.id);
                 const badge = p.costTechBadges?.get(t.id);
                 return (
-                  <label key={t.id} className={`simt${on ? ' on' : ''}${checkable ? '' : ' txt'}${t.age > p.age && !on ? ' late' : ''}`}>
+                  <label
+                    key={t.id}
+                    className={`simt${on ? ' on' : ''}${checkable ? '' : ' txt'}${militaryTechAge(p.civ, t.id, t.age) > p.age && !on ? ' late' : ''}`}
+                  >
                     {checkable ? <input type="checkbox" checked={on} onChange={() => toggle(t.id)} /> : <span className="tag">仅文本</span>}
                     <TechIcon t={t} />
                     <Link className="ulink tlink" to={`/tech/${t.id}`}>

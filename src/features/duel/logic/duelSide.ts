@@ -103,7 +103,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）。
   // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
-  const sel = selectTrainingIds(spec.techs, avail, age, costs);
+  const sel = selectTrainingIds(spec.techs, avail, age, costs, civ);
   const S = simulate(ctx, u, civ, age, sel, new Set(spec.team));
   const training = quoteTraining(u, civ, age, sel, costs, ok, earlyAgeMarker);
   return {

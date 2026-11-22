@@ -1,4 +1,5 @@
 /** issue 205：对同一对手比较科技方案；所有属性和战斗结果复用现有模拟器。 */
+import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { duel, fighterFrom, type Fighter } from './duel';
 import { TEAM_BONUSES } from './effects';
 import { civStatus, presetUpTo, simTechs, simulate, type SimContext } from './simulator';
@@ -41,7 +42,8 @@ export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: U
   if (!Object.hasOwn(ctx.trees.t, spec.civ)) return { ok: false, reason: '文明不存在，请重新选择文明。' };
   const status = civStatus(ctx.trees, spec.civ);
   if (!u.civs.includes(spec.civ) || !status['u' + u.id]) return { ok: false, reason: '所选文明不能生产该单位。' };
-  if (!Number.isInteger(spec.age) || spec.age < 1 || spec.age > 4 || spec.age < u.age) return { ok: false, reason: '所选时代无效，或尚未解锁该单位。' };
+  if (!Number.isInteger(spec.age) || spec.age < 1 || spec.age > 4 || spec.age < trainingUnitAge(spec.civ, u.id, u.age))
+    return { ok: false, reason: '所选时代无效，或尚未解锁该单位。' };
 
   const team = sortedUnique(spec.team);
   for (const id of team) {
@@ -51,7 +53,7 @@ export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: U
 
   const avail = simTechs(ctx, u, spec.civ);
   const numeric = new Set(avail.filter(({ ef }) => ef?.length).map(({ t }) => t.id));
-  const requested = spec.techs === 'f' || spec.techs === 'c' ? [...presetUpTo(avail, spec.age)] : sortedUnique(spec.techs);
+  const requested = spec.techs === 'f' || spec.techs === 'c' ? [...presetUpTo(avail, spec.age, spec.civ)] : sortedUnique(spec.techs);
   const techById = Object.fromEntries(ctx.techs.map((t) => [t.id, t])) as Record<number, Tech>;
   for (const id of requested) {
     if (!Number.isInteger(id) || !techById[id]) return { ok: false, reason: `科技 ID ${id} 无效。` };
@@ -66,7 +68,7 @@ export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: U
     const t = techById[id];
     if (!t) return `缺少必要前置科技 ${id}，无法比较。`;
     if (!status['t' + id]) return `${t.zh} 在所选文明中不可用。`;
-    if (t.age > spec.age) return `${t.zh} 在所选时代尚未解锁。`;
+    if (militaryTechAge(spec.civ, id, t.age) > spec.age) return `${t.zh} 在所选时代尚未解锁。`;
     visiting.add(id);
     if (t.pre !== null) {
       prerequisites.add(t.pre);

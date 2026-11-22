@@ -1,4 +1,5 @@
 import { civByEn, type Core } from '../../../data';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { applicableTrainingTechs } from '../../../domain/duelTrainingCost';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -55,7 +56,7 @@ export function canRecoverSingleDuelSide(ctx: SimContext, core: Core, input: Mix
   for (const raw of input.techs) {
     const id = positiveId(raw);
     const tech = id === null ? undefined : core.techById[id];
-    if (id === null || !tech || seenTechs.has(id) || tech.age > age || !status['t' + id]) return false;
+    if (id === null || !tech || seenTechs.has(id) || militaryTechAge(input.civ, id, tech.age) > age || !status['t' + id]) return false;
     seenTechs.add(id);
   }
   const seenTeam = new Set<number>();
@@ -126,7 +127,7 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     else {
       if (selected.has(id)) fail('techs', `科技 ID 重复：${raw}`);
       selected.add(id);
-      if (age && option.t.age > age) fail('techs', `科技${option.t.zh}高于本方时代`);
+      if (age && militaryTechAge(input.civ, option.t.id, option.t.age) > age) fail('techs', `科技${option.t.zh}高于本方时代`);
       for (const pre of prereqChain(option.t, core.techById)) {
         if (candidates.has(pre.id) && !input.techs.includes(String(pre.id))) fail('techs', `科技${option.t.zh}缺少可选前置${pre.zh}`);
       }

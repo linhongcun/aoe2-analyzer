@@ -6,6 +6,7 @@
  * 适用与是否已支持都在运行时判断：科技树点亮、目录文明、时代，以及 DAT.techs[en].eco
  * 里属性 100 / 103–106 且目标含当前单位。整项能否套用以 unitCost 的 applied / undecoded 为准。
  */
+import { militaryTechAge } from './availabilityAge';
 import { civStatus } from './civStatus';
 import { priceAge } from './costDiscount';
 import { DAT } from './datEffects';
@@ -71,7 +72,7 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
   const lit = civStatus(ctx.trees, civ);
   const found: TrainingCostTech[] = [];
   for (const tech of ctx.techs) {
-    if (tech.age > age || !tech.civs.includes(civ) || !lit['t' + tech.id] || !targetsUnit(tech, unit.id)) continue;
+    if (militaryTechAge(civ, tech.id, tech.age) > age || !tech.civs.includes(civ) || !lit['t' + tech.id] || !targetsUnit(tech, unit.id)) continue;
     const probe = unitCost(unit, civ, tier, [asInput(tech)]);
     const supported = probe.appliedTechs.some((item) => item.id === tech.id);
     const hasUndecoded = probe.undecoded.some((item) => item.techId === tech.id);
@@ -82,9 +83,9 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
 }
 
 /** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 仍只保留战斗科技或本题适用的费用科技。 */
-export function selectTrainingIds(techs: TechSpec, avail: readonly SimTech[], age: number, costs: readonly TrainingCostTech[]): Set<number> {
+export function selectTrainingIds(techs: TechSpec, avail: readonly SimTech[], age: number, costs: readonly TrainingCostTech[], civ = ''): Set<number> {
   if (techs === 'f' || techs === 'c') {
-    const sel = presetUpTo(avail, age);
+    const sel = presetUpTo(avail, age, civ);
     for (const item of costs) if (item.supported && !item.partial) sel.add(item.tech.id);
     return sel;
   }

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { applicableUnmodeledTechIds } from '../../../domain/duelUnmodeled';
 import { formatHp } from '../../../domain/hpFormat';
@@ -94,7 +95,7 @@ export function Side({
     const nextTechs: SideSpec['techs'] = Array.isArray(spec.techs)
       ? spec.techs.filter((id) => {
           const tech = core.techById[id];
-          return !!tech && tech.age <= nextAge;
+          return !!tech && militaryTechAge(side.civ, id, tech.age) <= nextAge;
         })
       : spec.techs === 'f' && nextAge < 4
         ? 'c'
@@ -297,7 +298,11 @@ export function Side({
             selectableWithoutEffect={new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id)])}
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
-              return new Set(side.training.costs.filter((item) => item.supported && !item.partial && item.tech.age <= limit).map((item) => item.tech.id));
+              return new Set(
+                side.training.costs
+                  .filter((item) => item.supported && !item.partial && militaryTechAge(side.civ, item.tech.id, item.tech.age) <= limit)
+                  .map((item) => item.tech.id),
+              );
             }}
             techById={core.techById}
             rows={rows}

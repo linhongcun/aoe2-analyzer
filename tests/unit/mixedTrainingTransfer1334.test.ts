@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { civs } from '../../src/data';
 import { CORE } from '../../src/data/core';
+import { militaryTechAge } from '../../src/domain/availabilityAge';
 import { DAT, toEffects, type DatEco } from '../../src/domain/datEffects';
 import type { MixedSideInput } from '../../src/domain/mixedDuelParams';
 import { makeSimContext } from '../../src/domain/simulator';
@@ -29,7 +30,7 @@ function presetInput(civ: string, age: number, uid: number, scope: 'full' | 'cur
   };
   const view = resolveMixedSide(simulation, CORE, base, 'a');
   const selected = view.techs
-    .filter((option) => (option.numeric || (option.cost && !option.partial)) && option.t.age <= targetAge)
+    .filter((option) => (option.numeric || (option.cost && !option.partial)) && militaryTechAge(civ, option.t.id, option.t.age) <= targetAge)
     .map((option) => String(option.t.id));
   return { ...base, techs: selected };
 }
@@ -261,7 +262,9 @@ describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧
           const view = resolveMixedSide(simulation, CORE, base, 'a');
           if (!view.army) continue;
           valid++;
-          const selected = view.techs.filter((t) => (t.numeric || (t.cost && !t.partial)) && t.t.age <= age).map((t) => t.t.id);
+          const selected = view.techs
+            .filter((t) => (t.numeric || (t.cost && !t.partial)) && militaryTechAge(civ.en, t.t.id, t.t.age) <= age)
+            .map((t) => t.t.id);
           const armyIds = new Set([unit.id]);
           if (selected.some((id) => legacyBlocksTech(id))) legacyBlocked++;
           if (selected.some((id) => currentBlocksTech(id, armyIds))) currentBlocked++;
@@ -271,8 +274,9 @@ describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧
     };
 
     expect(scanAge(4)).toEqual({ valid: 2292, legacyBlocked: 616, currentBlocked: 0 });
-    expect(scanAge(3)).toEqual({ valid: 1376, legacyBlocked: 391, currentBlocked: 0 });
+    // #1325：城堡新增亚美尼亚冠军剑士（567）与契丹重装骑射手（474）(+2 → 1378)，黑暗移除误放行的亚美尼亚武士（75）(-1 → 113)
+    expect(scanAge(3)).toEqual({ valid: 1378, legacyBlocked: 391, currentBlocked: 0 });
     expect(scanAge(2)).toEqual({ valid: 563, legacyBlocked: 56, currentBlocked: 0 });
-    expect(scanAge(1)).toEqual({ valid: 114, legacyBlocked: 0, currentBlocked: 0 });
+    expect(scanAge(1)).toEqual({ valid: 113, legacyBlocked: 0, currentBlocked: 0 });
   });
 });

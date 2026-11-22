@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { fmtSide, type Mode } from '../../../domain/duelState';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
@@ -168,7 +169,11 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
       const s = input[key];
       const age = +s.age;
       const techs = [
-        ...new Set(s.techs.map(positiveId).filter((id): id is number => id !== null && Boolean(core.techById[id]) && core.techById[id]!.age <= age)),
+        ...new Set(
+          s.techs
+            .map(positiveId)
+            .filter((id): id is number => id !== null && Boolean(core.techById[id]) && militaryTechAge(s.civ, id, core.techById[id]!.age) <= age),
+        ),
       ];
       const team = [
         ...new Set(

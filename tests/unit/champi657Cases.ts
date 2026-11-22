@@ -249,8 +249,11 @@ describe('#657 中立可用性提取保持旧入口和EARLY规则', () => {
     expect(oldTechAvailable).toBe(techAvailable);
   });
   it.each([
-    ['Armenians', 75, 1, true],
+    ['Armenians', 75, 1, false],
+    ['Armenians', 75, 2, true],
     ['Armenians', 77, 2, true],
+    ['Armenians', 567, 3, true],
+    ['Khitans', 474, 3, true],
     ['Britons', 77, 2, false],
     ['Bohemians', 5, 3, true],
     ['Cumans', 1258, 2, true],

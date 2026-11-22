@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { civByEn, type Core } from '../../../data';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -54,7 +55,10 @@ export function MixedSideEditor({
   const preset = (scope: 'none' | 'current' | 'full') => {
     const targetAge = scope === 'full' ? 4 : age;
     const options = resolveMixedSide(ctx, core, { ...input, age: String(targetAge) }, side).techs;
-    const selected = scope === 'none' ? [] : options.filter((t) => (t.numeric || (t.cost && !t.partial)) && t.t.age <= targetAge).map((t) => String(t.t.id));
+    const selected =
+      scope === 'none'
+        ? []
+        : options.filter((t) => (t.numeric || (t.cost && !t.partial)) && militaryTechAge(input.civ, t.t.id, t.t.age) <= targetAge).map((t) => String(t.t.id));
     onChange(
       { ...input, age: String(targetAge), techs: selected },
       `${label}已应用${scope === 'none' ? '无科技' : scope === 'full' ? '帝王时代满科技' : '当前时代科技'}预设`,
@@ -162,7 +166,7 @@ export function MixedSideEditor({
               <input
                 type="checkbox"
                 checked={input.techs.includes(String(t.id))}
-                disabled={t.age > age && !input.techs.includes(String(t.id))}
+                disabled={militaryTechAge(input.civ, t.id, t.age) > age && !input.techs.includes(String(t.id))}
                 onChange={() =>
                   onChange({
                     ...input,
@@ -170,7 +174,7 @@ export function MixedSideEditor({
                       ...toggleTech(
                         t.id,
                         new Set(input.techs.map(Number)),
-                        view.techs.filter((o) => o.t.age <= age).map((o) => o.t),
+                        view.techs.filter((o) => militaryTechAge(input.civ, o.t.id, o.t.age) <= age).map((o) => o.t),
                         core.techById,
                       ),
                     ].map(String),

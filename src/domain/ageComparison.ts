@@ -23,7 +23,7 @@ export function ageComparison(ctx: SimContext, byId: Record<number, Unit>, a: Ag
   const resolve = (side: AgeSide, age: number) => {
     const u = unitAtAge(byId, side.uid, side.civ, age);
     if (!u) return null;
-    const sel = presetUpTo(simTechs(ctx, u, side.civ), age);
+    const sel = presetUpTo(simTechs(ctx, u, side.civ), age, side.civ);
     const stats = simulate(ctx, u, side.civ, age, sel, new Set(side.team));
     return { u, stats, fighter: fighterFrom(u, stats) };
   };
