@@ -2,6 +2,7 @@
 import {
   createLucideIcon,
   ArrowLeft,
+  ArrowLeftRight,
   ArrowUp,
   ArrowDown,
   ArrowUpDown,
@@ -109,6 +110,7 @@ const ICONS = {
   link: Link,
   'circle-alert': CircleAlert,
   'arrow-left': ArrowLeft,
+  'arrow-left-right': ArrowLeftRight,
   'arrow-right': ArrowRight,
   'chevron-right': ChevronRight,
   'chevron-down': ChevronDown,

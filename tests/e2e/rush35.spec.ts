@@ -1,4 +1,7 @@
 import { expect, test } from '@playwright/test';
+
+const RUSH_LABELS = { militia: '民兵', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+
 for (const width of [360, 375, 390, 1280]) {
   test(`早期应对 ${width}`, async ({ page }, info) => {
     await page.setViewportSize({ width, height: 900 });
@@ -9,22 +12,23 @@ for (const width of [360, 375, 390, 1280]) {
     });
     await page.goto('./#/matchup?rush=scouts');
     const section = page.getByRole('region', { name: '可按当前文明核对的练习' });
+    const rushGroup = section.getByRole('radiogroup', { name: '对手打法', exact: true });
     const guide = page.getByRole('region', { name: '通用早期应对' });
     for (const [id, a, b] of [
       ['militia', '2', '3'],
       ['scouts', '2', '3'],
       ['archers', '4', '4'],
       ['towers', '6', '5'],
-    ]) {
-      await section.getByRole('combobox').selectOption(id!);
+    ] as const) {
+      await rushGroup.getByRole('radio', { name: RUSH_LABELS[id], exact: true }).click();
       await expect(page).toHaveURL(new RegExp(`rush=${id}`));
       await expect(guide).toContainText('城镇中心');
-      await section.getByRole('link', { name: /打开 PK 演练/ }).click();
+      await section.getByRole('link', { name: /PK 演练/ }).click();
       await expect(page.locator('#duel-res')).toBeVisible();
       await expect(page.locator('#duel-res .duel-tab')).toContainText(`A ${a}`);
       await expect(page.locator('#duel-res .duel-tab')).toContainText(`B ${b}`);
       await page.goBack();
-      await expect(section.getByRole('combobox')).toHaveValue(id!);
+      await expect(rushGroup.getByRole('radio', { name: RUSH_LABELS[id], exact: true })).toHaveAttribute('aria-checked', 'true');
     }
     await expect(section).toContainText('不模拟打塔');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

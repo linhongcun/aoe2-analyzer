@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+const RUSH_LABELS = { militia: '民兵', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+
 function hashParams(url: string) {
   const hash = url.slice(url.indexOf('#') + 1);
   const query = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
@@ -10,6 +12,11 @@ async function pick(page: Page, id: 'ma' | 'me', civ: string) {
   await page.locator(`#${id}`).click();
   await page.locator(`.cp-panel [data-civ="${civ}"]`).click();
   await expect(page.locator(`#${id}`)).toHaveAttribute('data-value', civ);
+}
+
+async function pickRush(page: Page, id: keyof typeof RUSH_LABELS) {
+  const group = page.getByRole('region', { name: '可按当前文明核对的练习', exact: true }).getByRole('radiogroup', { name: '对手打法', exact: true });
+  await group.getByRole('radio', { name: RUSH_LABELS[id], exact: true }).click();
 }
 
 async function expectTaskLayout(page: Page, desktop: boolean) {
@@ -36,7 +43,7 @@ async function expectTaskLayout(page: Page, desktop: boolean) {
   ]);
 }
 
-test('#939 默认对阵分清跟文明走的入口与通用参考', async ({ page }) => {
+test('#939 默认对阵分清跟文明走的入口、带参跳 PK/对比与通用参考', async ({ page }) => {
   await page.goto('./#/matchup');
   await expect(page.locator('#mres')).toBeVisible();
   await expectTaskLayout(page, true);
@@ -46,18 +53,23 @@ test('#939 默认对阵分清跟文明走的入口与通用参考', async ({ pag
   await expect(page.getByText('可复制地址栏链接分享这对阵')).toHaveCount(0);
   await expect(page.locator('.matchup-title')).toHaveCount(0);
   await expect(page.getByText('下面的开局、文明页和练习入口会带上这对文明。')).toBeVisible();
-  await expect(page.getByText('下面的开局、文明页和练习入口会带上这对文明。')).not.toContainText('单位 PK');
-  const pk = page.getByRole('link', { name: '单位 PK，不自动带入当前双方' });
-  await expect(pk).toHaveAttribute('href', '#/duel');
-  await expect(page.getByText('不自动带入当前双方', { exact: true })).toBeVisible();
+  const pk = page.locator('.mu-launch').getByRole('link', { name: '单位 PK', exact: true });
+  const pkParams = hashParams((await pk.getAttribute('href')) ?? '');
+  expect(pkParams.get('a')).toBe('569.Franks.4.f.');
+  expect(pkParams.get('b')).toBe('283.Britons.4.f.');
+  expect(pkParams.get('me')).toBe('Franks');
+  expect(pkParams.get('opp')).toBe('Britons');
+  await expect(page.locator('.mu-launch').getByRole('link', { name: '文明对比', exact: true })).toHaveAttribute('href', '#/compare?a=Franks&b=Britons');
+  await expect(page.locator('.mu-launch')).toContainText('非系统推荐，请按本局实际兵种切换');
   const follow = page.getByRole('navigation', { name: '跟这对文明走的开局与文明页' });
   await expect(follow.getByRole('link', { name: '我方开局', exact: true })).toHaveAttribute('href', /#\/builds\?/);
   await expect(follow.getByRole('link', { name: '我方开局', exact: true })).toHaveAttribute('href', /civ=Franks/);
   const practice = page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
-  await expect(practice.getByRole('link', { name: /打开 PK 演练：/ })).toBeVisible();
+  await expect(practice.getByRole('link', { name: /PK 演练：/ })).toBeVisible();
   await expect(practice.getByRole('link', { name: /参考开局：/ })).toBeVisible();
   const guide = page.getByRole('region', { name: '通用早期应对', exact: true });
-  await expect(guide).toContainText('下列四段是固定的通用稿，只随「对手打法」切换（当前：「民兵快攻」）');
+  await expect(guide).toContainText('通用示意 · 民兵快攻');
+  await expect(guide).toContainText('固定通用应对稿，只随上方对手打法切换');
   await expect(page.locator('#mres')).toContainText('通用类型反制');
   await expect(page.locator('#mres')).toContainText('也不是模型结论');
   await expect(page.locator('.matchup-counter-link').first()).toBeVisible();
@@ -73,11 +85,11 @@ test('#939 改打法只替换通用稿和练习入口，分享句只在地址已
   await page.goto('./#/matchup');
   await expect(page.locator('#mres')).toBeVisible();
   const practice = page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
-  await practice.getByRole('combobox').selectOption('scouts');
+  await pickRush(page, 'scouts');
   await expect(page).toHaveURL(/rush=scouts/);
   expect(hashParams(page.url()).has('me')).toBe(false);
-  await expect(page.getByRole('region', { name: '通用早期应对' })).toContainText('当前：「肉马」');
-  await expect(practice.getByRole('link', { name: /打开 PK 演练：/ })).toContainText('长矛兵');
+  await expect(page.getByRole('region', { name: '通用早期应对' })).toContainText('通用示意 · 肉马');
+  await expect(practice.getByRole('link', { name: /PK 演练：/ })).toContainText('长矛兵');
   await expect(page.getByText('可复制地址栏链接分享这对阵')).toHaveCount(0);
   await page.locator('#ma').click();
   await page.locator('.cp-panel [data-civ="Mongols"]').click();
@@ -85,7 +97,11 @@ test('#939 改打法只替换通用稿和练习入口，分享句只在地址已
   await expect(page).toHaveURL(/opp=Britons/);
   await expect(page).toHaveURL(/rush=scouts/);
   await expect(page.getByText('可复制地址栏链接分享这对阵')).toBeVisible();
-  await expect(page.getByRole('link', { name: '单位 PK，不自动带入当前双方' })).toHaveAttribute('href', '#/duel');
+  const pkParams = hashParams((await page.locator('.mu-launch').getByRole('link', { name: '单位 PK', exact: true }).getAttribute('href')) ?? '');
+  expect(pkParams.get('a')).toBe('283.Mongols.4.f.');
+  expect(pkParams.get('b')).toBe('283.Britons.4.f.');
+  expect(pkParams.get('me')).toBe('Mongols');
+  expect(pkParams.get('opp')).toBe('Britons');
 });
 
 test('#939 未选齐不渲染跟对阵走的入口，通用 PK 和早期稿仍在', async ({ page }) => {
@@ -94,7 +110,8 @@ test('#939 未选齐不渲染跟对阵走的入口，通用 PK 和早期稿仍�
   await expect(page.getByRole('navigation', { name: '跟这对文明走的开局与文明页' })).toHaveCount(0);
   await expect(page.getByRole('region', { name: '可按当前文明核对的练习' })).toHaveCount(0);
   await expect(page.locator('#mres')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: '单位 PK，不自动带入当前双方' })).toHaveAttribute('href', '#/duel');
+  await expect(page.locator('.mu-launch').getByRole('link', { name: '单位 PK（通用入口）' })).toHaveAttribute('href', '#/duel');
+  await expect(page.locator('.mu-launch').getByRole('button', { name: '文明对比' })).toBeDisabled();
   await expect(page.getByRole('region', { name: '通用早期应对' })).toContainText('何时开始应对');
   await expect(page.getByText('选定双方文明后，会按对手登记类型取出通用对照表')).toBeVisible();
   await expect(page.getByText('当前我方暂无可用的类型对照单位')).toHaveCount(0);
@@ -104,7 +121,7 @@ test('#939 无资格时不画演练入口，只显示真实不可用提示', asy
   await page.goto('./#/matchup?me=Franks&opp=Incas&rush=militia');
   await expect(page.locator('#mres')).toBeVisible();
   const practice = page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
-  await expect(practice.getByRole('link', { name: /打开 PK 演练/ })).toHaveCount(0);
+  await expect(practice.getByRole('link', { name: /PK 演练/ })).toHaveCount(0);
   await expect(practice).toContainText('对手印加在封建时代不可用民兵，当前演练不适用。');
 });
 
@@ -115,12 +132,12 @@ test('#939 390 宽不横向溢出，深色仍能读到两个分区', async ({ pa
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.locator('#mres')).toBeVisible();
   await expectTaskLayout(page, false);
-  await expect(page.getByRole('heading', { name: '通用参考', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '通用类型反制参考', exact: true })).toBeVisible();
   await expect(page.getByRole('region', { name: '可按当前文明核对的练习' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await pick(page, 'ma', 'Mayans');
   await pick(page, 'me', 'Britons');
-  await page.getByRole('region', { name: '可按当前文明核对的练习' }).getByRole('combobox').selectOption('archers');
+  await pickRush(page, 'archers');
   await expect(page.locator('#mres > p.note').filter({ hasText: /^弓手：/ })).not.toContainText(/骑兵|轻骑|骑射/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

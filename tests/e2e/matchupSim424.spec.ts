@@ -420,7 +420,7 @@ for (const width of [360, 375, 390, 1280])
         expect((await new AxeBuilder({ page }).include('[data-testid="matchup-data-error"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
         await pick(page, 'ma', 'Muisca');
         await pick(page, 'me', 'Franks');
-        await page.getByRole('combobox', { name: '对手打法' }).selectOption('towers');
+        await page.getByRole('radiogroup', { name: '对手打法', exact: true }).getByRole('radio', { name: '塔爆', exact: true }).click();
         const failedUrl = page.url();
         await page.screenshot({ path: info.outputPath(`champi-matchup-${chunk}-failure.png`), fullPage: true });
         await page.unroute(pattern);
@@ -431,7 +431,10 @@ for (const width of [360, 375, 390, 1280])
         expect(page.url()).toBe(failedUrl);
         await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Muisca');
         await expect(page.locator('#me')).toHaveAttribute('data-value', 'Franks');
-        await expect(page.getByRole('combobox', { name: '对手打法' })).toHaveValue('towers');
+        await expect(page.getByRole('radiogroup', { name: '对手打法', exact: true }).getByRole('radio', { name: '塔爆', exact: true })).toHaveAttribute(
+          'aria-checked',
+          'true',
+        );
         await expect(page.getByRole('alert')).toHaveCount(0);
         await candidate657(page.getByTestId('champi-age-3'), 38, 2552, 3, 'Muisca', 'Franks', true);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

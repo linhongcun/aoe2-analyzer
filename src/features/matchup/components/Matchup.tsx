@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import RushDefense, { RushReference } from './RushDefense';
+import RushDefense, { RushReference, RushSegmentedPicker } from './RushDefense';
 import './matchup-pair.css';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs, civByEn } from '../../../data';
+import { matchupComparePath, matchupDuelPath } from '../../../domain/matchupDuelSeed';
 import { TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
 import { unitPath } from '../../../domain/simRoute';
 import { UnitIcon } from '../../../shared/ui/art';
@@ -19,7 +20,9 @@ import ChampiAges from './ChampiAges';
 const LEDE = '选定双方文明，打开跟这对阵走的开局和练习。早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。';
 const PAIR_SCOPE = '下面的开局、文明页和练习入口会带上这对文明。';
 const SHARE_HINT = '可复制地址栏链接分享这对阵';
-const PK_NOTE = '不自动带入当前双方';
+const LAUNCH_READY_NOTE = '自动带入双方文明（进入单位 PK 时按各自可用起始单位预填，如无骑士文明自动避开不可用兵种；非系统推荐，请按本局实际兵种切换）。';
+const LAUNCH_MIRROR_NOTE = '自动带入双方文明（进入单位 PK 时按可用起始单位预填；非系统推荐，请按本局实际兵种切换）。双方文明相同时暂不进入文明对比。';
+const LAUNCH_INCOMPLETE_NOTE = '选定双方文明后可自动带入单位 PK 与文明对比；当前点击单位 PK 将打开通用入口。';
 const EMPTY_COUNTERS = '当前我方暂无可用的类型对照单位';
 const COUNTER_PENDING = '选定双方文明后，会按对手登记类型取出通用对照表，再只列出我方能造的单位。这里不生成针对某个对手的专属分析。';
 const SIM_LIMIT =
@@ -47,11 +50,28 @@ export default function Matchup() {
       opp = side === 'opp' ? en || null : (e?.en ?? null);
     setParams(params.has('pair') || !me || !opp ? writeExplicitMatchupPair(params, me, opp) : writeMatchupPair(params, me, opp));
   };
+  const swapDisabled = a?.en === e?.en;
+  const swap = () => {
+    if (a?.en === e?.en) return;
+    const nextMe = e?.en ?? null;
+    const nextOpp = a?.en ?? null;
+    setParams(params.has('pair') || !nextMe || !nextOpp ? writeExplicitMatchupPair(params, nextMe, nextOpp) : writeMatchupPair(params, nextMe, nextOpp));
+  };
   const both = Boolean(a && e);
+  const mirror = Boolean(both && a && e && a.en === e.en);
+  const duelHref = both && a && e ? matchupDuelPath(data, a.en, e.en) : null;
+  const compareHref = both && a && e ? matchupComparePath(a.en, e.en) : null;
   const counters = core && a && e ? filterCounterUnits(a.en, e.ty, core.units) : [];
   const lineCivs = core?.unitById[2550]?.civs;
   const champiPair = Array.isArray(lineCivs) && [a?.en, e?.en].some((civ) => civ && lineCivs.includes(civ));
   const typeNames = e ? e.ty.map((t) => TYPE_ZH[t]).join('、') || '（无登记类型）' : '';
+  const launchNote = !both
+    ? LAUNCH_INCOMPLETE_NOTE
+    : !data
+      ? `${error ? '资料加载失败，暂以通用入口打开单位 PK；' : '正在核对双方可用起始单位，就绪后自动带入单位 PK；'}${mirror ? '双方文明相同时暂不进入文明对比。' : '文明对比已可直接带入当前双方。'}`
+      : mirror
+        ? LAUNCH_MIRROR_NOTE
+        : LAUNCH_READY_NOTE;
   return (
     <section id="matchup" className={params.has('pair') || champiPair ? 'pane matchup-explicit' : 'pane'}>
       <ListHead level={1} title="对局助手" desc={LEDE} />
@@ -65,6 +85,10 @@ export default function Matchup() {
                 <label htmlFor="ma">我的文明</label>
                 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} />
               </div>
+              <button type="button" className="mu-swap" aria-label="互换我方与对手文明" disabled={swapDisabled} onClick={swap}>
+                <Icon name="arrow-left-right" />
+                <span>互换</span>
+              </button>
               <div className="mu-pick">
                 <label htmlFor="me">对手文明</label>
                 <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
@@ -104,15 +128,36 @@ export default function Matchup() {
                 </nav>
               </>
             )}
-            <p className="mu-pk">
-              <Link className="community-tool-entry mu-chip" to="/duel" aria-label="单位 PK，不自动带入当前双方">
-                <Icon name="swords" />
-                单位 PK
-              </Link>
-              <span className="mu-pk-note">{PK_NOTE}</span>
-            </p>
+            <div className="mu-launch">
+              <p className="mu-launch-title">{both && a && e ? `带入当前双方继续计算（${a.zh} 对 ${e.zh}）` : '带入双方继续计算'}</p>
+              <div className="mu-launch-actions">
+                {duelHref ? (
+                  <Link className="mu-launch-btn mu-launch-primary" to={duelHref}>
+                    <Icon name="swords" />
+                    <span>单位 PK</span>
+                  </Link>
+                ) : (
+                  <Link className="mu-launch-btn mu-launch-primary" to="/duel" aria-label="单位 PK（通用入口）">
+                    <Icon name="swords" />
+                    <span>单位 PK</span>
+                  </Link>
+                )}
+                {compareHref ? (
+                  <Link className="mu-launch-btn mu-launch-secondary" to={compareHref}>
+                    <Icon name="scale" />
+                    <span>文明对比</span>
+                  </Link>
+                ) : (
+                  <button type="button" className="mu-launch-btn mu-launch-secondary" disabled aria-disabled="true">
+                    <Icon name="scale" />
+                    <span>{mirror ? '文明对比（双方相同）' : '文明对比'}</span>
+                  </button>
+                )}
+              </div>
+              <p className="mu-launch-note">{launchNote}</p>
+            </div>
           </div>
-          {both && a && e && (
+          {both && a && e ? (
             <div className="mu-practice">
               <RushDefense own={a} enemy={e} data={data} loadError={error}>
                 {champiPair && core && data ? <ChampiAges core={core} trees={data.trees} me={a.en} opp={e.en} /> : null}
@@ -128,6 +173,11 @@ export default function Matchup() {
                   </p>
                 </div>
               )}
+            </div>
+          ) : (
+            <div className="mu-generic-rush">
+              <RushSegmentedPicker />
+              <RushReference own={a} data={data} />
             </div>
           )}
         </div>
@@ -173,73 +223,71 @@ export default function Matchup() {
         </nav>
       </section>
       <section className="mu-region mu-region-ref" aria-labelledby="mu-ref-title">
-        <p className="mu-kicker">通用参考</p>
-        <h2 id="mu-ref-title">通用参考</h2>
-        <div className="mu-reference-grid">
-          <RushReference own={a} data={data} />
-          {both && a && e && core && data ? (
-            <div id="mres" className="mu-ref-block">
-              <h3>通用类型反制</h3>
+        {both && a && e && core && data ? (
+          <div id="mres" className="mu-ref-block">
+            <h2 id="mu-ref-title">通用类型反制参考</h2>
+            <p className="mu-scope">
+              <span className="mu-tag">通用示意</span>
+              按对手登记类型（当前：{typeNames}）取出通用对照表，再只列出我方能造的单位。不是对{e.zh}的专属分析，也不是模型结论。
+            </p>
+            {e.ty.map((t) => (
+              <p key={t} className="note">
+                <b>{TYPE_ZH[t]}：</b>
+                {counterExtra(data, a.en, t)}
+              </p>
+            ))}
+            {counters.length === 0 ? (
+              <p className="note">{EMPTY_COUNTERS}</p>
+            ) : (
+              <ul className="matchup-counter-list">
+                {counters.map((u) => {
+                  const unit = core.units.find((x) => x.id === u.id);
+                  return (
+                    <li key={u.id}>
+                      <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
+                        {unit && <UnitIcon u={unit} />}
+                        <span>{u.nameZh}</span>
+                      </Link>
+                      {unit?.civs.includes(a.en) && (
+                        <Link
+                          className="community-tool-entry matchup-sim-link"
+                          to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
+                          aria-label={`${u.nameZh}：用${a.zh}模拟`}
+                        >
+                          用{a.zh}模拟
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            <details className="mu-fold">
+              <summary>
+                <span>模拟默认与 PK 限制</span>
+                <Icon name="chevron-down" className="ic mu-fold-chevron" />
+              </summary>
+              <p>{SIM_LIMIT}</p>
+              <p>
+                <Link to="/duel">查看 PK 模型能力与限制</Link>
+              </p>
+            </details>
+          </div>
+        ) : (
+          <div className="mu-ref-block">
+            <h2 id="mu-ref-title">通用类型反制参考</h2>
+            {both ? (
+              error ? null : (
+                <Loading />
+              )
+            ) : (
               <p className="mu-scope">
                 <span className="mu-tag">通用示意</span>
-                按对手登记类型（当前：{typeNames}）取出通用对照表，再只列出我方能造的单位。不是对{e.zh}的专属分析，也不是模型结论。
+                {COUNTER_PENDING}
               </p>
-              {e.ty.map((t) => (
-                <p key={t} className="note">
-                  <b>{TYPE_ZH[t]}：</b>
-                  {counterExtra(data, a.en, t)}
-                </p>
-              ))}
-              {counters.length === 0 ? (
-                <p className="note">{EMPTY_COUNTERS}</p>
-              ) : (
-                <ul className="matchup-counter-list">
-                  {counters.map((u) => {
-                    const unit = core.units.find((x) => x.id === u.id);
-                    return (
-                      <li key={u.id}>
-                        <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
-                          {unit && <UnitIcon u={unit} />}
-                          <span>{u.nameZh}</span>
-                        </Link>
-                        {unit?.civs.includes(a.en) && (
-                          <Link
-                            className="community-tool-entry matchup-sim-link"
-                            to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
-                            aria-label={`${u.nameZh}：用${a.zh}模拟`}
-                          >
-                            用{a.zh}模拟
-                          </Link>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-              <details className="mu-fold">
-                <summary>模拟默认与 PK 限制</summary>
-                <p>{SIM_LIMIT}</p>
-                <p>
-                  <Link to="/duel">查看 PK 模型能力与限制</Link>
-                </p>
-              </details>
-            </div>
-          ) : (
-            <div className="mu-ref-block">
-              <h3>通用类型反制</h3>
-              {both ? (
-                error ? null : (
-                  <Loading />
-                )
-              ) : (
-                <p className="mu-scope">
-                  <span className="mu-tag">通用示意</span>
-                  {COUNTER_PENDING}
-                </p>
-              )}
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </section>
     </section>
   );

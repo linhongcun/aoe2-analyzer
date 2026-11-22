@@ -1,10 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
 
+const RUSH_LABELS = { militia: '民兵', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+type RushKey = keyof typeof RUSH_LABELS;
+
 const pair = 'pair=explicit&me=Teutons&opp=Japanese';
 const battle = 'a=93.Teutons.2..&b=448.Japanese.2..&m=n&na=2&nb=3';
 const paramsOf = (address: string) => new URLSearchParams(new URL(address).hash.split('?')[1]);
 const guide = (page: Page) => page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
-const drill = (page: Page) => guide(page).getByRole('link', { name: /打开 PK 演练/ });
+const rushRadio = (page: Page, id: RushKey) =>
+  guide(page).getByRole('radiogroup', { name: '对手打法', exact: true }).getByRole('radio', { name: RUSH_LABELS[id], exact: true });
+const drill = (page: Page) => guide(page).getByRole('link', { name: /PK 演练/ });
 const returnLink = (page: Page) => page.getByRole('navigation', { name: '对阵相关入口' }).getByRole('link', { name: /回对局助手/ });
 
 async function expectScoutsBattle(page: Page) {
@@ -21,10 +26,10 @@ async function expectScoutsBattle(page: Page) {
 }
 
 async function expectScoutsMatchup(page: Page) {
-  await expect(guide(page).getByRole('combobox')).toHaveValue('scouts');
+  await expect(rushRadio(page, 'scouts')).toHaveAttribute('aria-checked', 'true');
   await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Teutons');
   await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
-  await expect(page.getByRole('region', { name: '通用早期应对' })).toContainText('当前：「肉马」');
+  await expect(page.getByRole('region', { name: '通用早期应对' })).toContainText('通用示意 · 肉马');
   await expect(guide(page).getByRole('link', { name: /参考开局/ })).toHaveAttribute('href', /bo=scouts-18/);
   expect(paramsOf(page.url()).get('pair')).toBe('explicit');
   expect(paramsOf(page.url()).get('rush')).toBe('scouts');
@@ -32,7 +37,7 @@ async function expectScoutsMatchup(page: Page) {
 
 test('#1193 页面返回和浏览器后退恢复原对局与肉马打法', async ({ page }) => {
   await page.goto(`./#/matchup?${pair}`);
-  await guide(page).getByRole('combobox').selectOption('scouts');
+  await rushRadio(page, 'scouts').click();
   await drill(page).click();
   await expectScoutsBattle(page);
   await expect(returnLink(page)).toContainText('条顿 对 日本 · 肉马');
@@ -80,11 +85,11 @@ test('#1193 复制到新标签与窄屏键盘返回保持来源，PK 数量可�
 
 test('#1193 默认演练照常返回，直接 PK 和坏来源走普通回程', async ({ page }) => {
   await page.goto(`./#/matchup?${pair}`);
-  await expect(guide(page).getByRole('combobox')).toHaveValue('militia');
+  await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
   await drill(page).click();
   await expect(returnLink(page)).toHaveAccessibleName('回对局助手');
   await returnLink(page).click();
-  await expect(guide(page).getByRole('combobox')).toHaveValue('militia');
+  await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
   await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Teutons');
   await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
 
@@ -95,12 +100,17 @@ test('#1193 默认演练照常返回，直接 PK 和坏来源走普通回程', a
     await expect(returnLink(page)).toHaveAttribute('href', '#/matchup?me=Teutons&opp=Japanese');
   }
   await returnLink(page).click();
-  await expect(guide(page).getByRole('combobox')).toHaveValue('militia');
-  await guide(page).getByRole('combobox').selectOption('scouts');
-  const general = page.getByRole('link', { name: '单位 PK，不自动带入当前双方' });
-  await expect(general).toHaveAttribute('href', '#/duel');
-  await general.click();
-  await expect(page.locator('#duel-a-civ')).toHaveAttribute('data-value', 'Franks');
+  await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
+  await rushRadio(page, 'scouts').click();
+  const launchPk = page.locator('.mu-launch').getByRole('link', { name: '单位 PK', exact: true });
+  const pkQuery = paramsOf(new URL((await launchPk.getAttribute('href'))!, page.url()).href);
+  expect(pkQuery.get('a')).toBe('569.Teutons.4.f.');
+  expect(pkQuery.get('b')).toBe('283.Japanese.4.f.');
+  expect(pkQuery.has('practice')).toBe(false);
+  await launchPk.click();
+  await expect(page.locator('#duel-a-civ')).toHaveAttribute('data-value', 'Teutons');
+  await expect(page.locator('#duel-b-civ')).toHaveAttribute('data-value', 'Japanese');
   await expect(returnLink(page)).toHaveAccessibleName('回对局助手');
+  await expect(returnLink(page)).toHaveAttribute('href', '#/matchup?me=Teutons&opp=Japanese');
   expect(paramsOf(page.url()).has('practice')).toBe(false);
 });

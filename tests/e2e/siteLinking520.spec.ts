@@ -108,7 +108,7 @@ function followNav(page: Page) {
 }
 
 function generalPk(page: Page) {
-  return page.getByRole('link', { name: '单位 PK，不自动带入当前双方' });
+  return page.locator('.mu-launch').getByRole('link', { name: /单位 PK/ });
 }
 
 function contextBar(page: Page) {
@@ -188,9 +188,14 @@ test('#520 情境 chips、开局参数与推荐单位链', async ({ page }) => {
   for (const name of ['我方开局', '对手开局', '我方文明', '对手文明']) await expect(chip(name)).toBeVisible();
   const pk = generalPk(page);
   await expect(pk).toBeVisible();
-  await expect(pk).toHaveAttribute('href', '#/duel');
-  expect(hashParams((await pk.getAttribute('href')) ?? '').has('a')).toBe(false);
-  expect(hashParams((await pk.getAttribute('href')) ?? '').has('b')).toBe(false);
+  expectQuery(await pk.getAttribute('href'), /^#\/duel\?/, {
+    a: '283.Mongols.4.f.',
+    b: '283.Chinese.4.f.',
+    m: '1',
+    me: 'Mongols',
+    opp: 'Chinese',
+  });
+  await expect(page.locator('.mu-launch').getByRole('link', { name: '文明对比', exact: true })).toHaveAttribute('href', '#/compare?a=Mongols&b=Chinese');
 
   expectQuery(await chip('我方开局').getAttribute('href'), /^#\/builds\?/, {
     civ: 'Mongols',
@@ -402,9 +407,13 @@ test('#520 往返保持 me/opp，开局页保持 civ', async ({ page }) => {
   await expectMatchupPair(page, 'Mongols', 'Chinese');
 
   const pk = generalPk(page);
-  await expect(pk).toHaveAttribute('href', '#/duel');
-  expect(hashParams((await pk.getAttribute('href')) ?? '').has('a')).toBe(false);
-  expect(hashParams((await pk.getAttribute('href')) ?? '').has('b')).toBe(false);
+  expectQuery(await pk.getAttribute('href'), /^#\/duel\?/, {
+    a: '283.Mongols.4.f.',
+    b: '283.Chinese.4.f.',
+    m: '1',
+    me: 'Mongols',
+    opp: 'Chinese',
+  });
 });
 
 for (const width of [360, 375, 390, 1280])
@@ -423,7 +432,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByRole('status')).toContainText(side === 'me' ? '请补选对手文明' : '请补选我方文明');
       await expect(page.locator('#mres,.rush-defense,.matchup-title,nav[aria-label="对阵相关入口"]')).toHaveCount(0);
       await expect(page.getByRole('navigation', { name: '跟这对文明走的开局与文明页' })).toHaveCount(0);
-      await expect(page.getByRole('link', { name: '单位 PK，不自动带入当前双方' })).toHaveAttribute('href', '#/duel');
+      await expect(page.locator('.mu-launch').getByRole('link', { name: '单位 PK（通用入口）' })).toHaveAttribute('href', '#/duel');
       await expect(page.getByRole('link', { name: side === 'me' ? '我方文明：蒙古' : '对手文明：日本', exact: true })).toHaveCount(0);
       await noHorizontalScroll(page);
       expect(errors).toEqual([]);
