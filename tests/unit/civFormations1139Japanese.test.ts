@@ -140,7 +140,17 @@ describe('#1139 Japanese formation support', () => {
     expect(adjustment('first').text).toContain('步兵攻速 +33%，免金、由兵营训练');
     expect(adjustment('fourth').text).toContain('接敌路径、退路和护卫');
     expect(scope).toContain(`1${rightArrow}3`);
-    expect(scope).toContain('驻 5 个劲弩手总 6 箭（上限 7）');
+    expect(scope).toContain('含射箭槽时驻 5 个村民与驻 5 个劲弩手，同为 6/7 箭（无射箭槽时 5 个劲弩手 7/7 箭、5 个村民仍 6/7 箭）');
+    expect(entry.evidence.links?.slice(-2)).toEqual([
+      {
+        label: '含射箭槽 · 5 个村民 6/7 箭',
+        href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e',
+      },
+      {
+        label: '含射箭槽 · 5 个劲弩手 6/7 箭',
+        href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e',
+      },
+    ]);
     expect(scope).toContain('不是招募配方或每箭伤害');
     expect(scope).toContain('固定记录列出的条件机制');
     expect(scope).toContain('不表示玩家当前已完成研究');

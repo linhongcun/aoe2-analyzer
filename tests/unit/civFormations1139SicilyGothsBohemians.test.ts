@@ -7,20 +7,22 @@ const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ ===
 const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
 const contractRoute = (civ: string, id: string) => formationContract.civs.find((entry) => entry.civ === civ)!.routes.find((entry) => entry.id === id)!;
 const reviewedVersion = '资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录';
+const reviewedGarrisonVersion = `${reviewedVersion}；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9`;
 
 describe('#1139 西西里、哥特与波西米亚内容回归', () => {
   it('将资料核对版本与原用户对局版本分别记录，并同步来源范围', () => {
     const expectedSourceLines = [
-      { civ: 'Sicilians', id: 'sicilians-serjeant-light-cavalry', lines: [13, 361, 363, 365, 366, 367, 368, 372] },
-      { civ: 'Goths', id: 'goths-huskarl-halberdier', lines: [13, 376, 378, 380] },
-      { civ: 'Bohemians', id: 'bohemians-handcannon-halberdier', lines: [13, 826, 830, 835, 838, 840] },
+      { civ: 'Sicilians', id: 'sicilians-serjeant-light-cavalry', lines: [13, 361, 363, 365, 366, 367, 368, 372], version: reviewedGarrisonVersion, links: 4 },
+      { civ: 'Goths', id: 'goths-huskarl-halberdier', lines: [13, 376, 378, 380], version: reviewedVersion, links: 0 },
+      { civ: 'Bohemians', id: 'bohemians-handcannon-halberdier', lines: [13, 826, 830, 835, 838, 840], version: reviewedGarrisonVersion, links: 2 },
     ];
 
-    for (const { civ, id, lines } of expectedSourceLines) {
+    for (const { civ, id, lines, version, links } of expectedSourceLines) {
       const evidence = route(civ, id).evidence;
       const contract = contractRoute(civ, id);
 
-      expect(evidence.recordedVersion).toBe(reviewedVersion);
+      expect(evidence.recordedVersion).toBe(version);
+      expect(evidence.links?.length ?? 0).toBe(links);
       expect(evidence.scope).not.toContain('来源行');
       expect(evidence.sourceLines).toEqual(lines);
       expect(contract.sourceLines).toEqual(lines);

@@ -59,12 +59,18 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     expect(mountedCrossbow.reason).toContain('40 木材');
     expect(mountedCrossbow.reason).toContain('80 食物');
     expect(mountedCrossbow.reason).toContain('王家敕令');
-    expect(mountedCrossbow.reason).toContain('并非目录已应用价格');
+    expect(mountedCrossbow.reason).toContain('折后为 39 黄金 + 40 木材');
+    expect(mountedCrossbow.reason).toContain('持续生产、训练总价与单位 PK 等资源模块已套用');
+    expect(mountedCrossbow.reason).toContain('单位详情页与科技模拟器暂未叠加科技折后价');
+    expect(mountedCrossbow.evidence.scope).toContain('王家敕令骑兵折后价适用范围');
+    expect(mountedCrossbow.evidence.recordedVersion).toContain('v0.99.12 · DE 188329 · 66620c9');
     expect(mountedCrossbow.limitation).toContain('受保护的敌方攻城器');
     expect(throwingAxeman.reason).toContain('按情境或兴趣选择');
     expect(throwingAxeman.limitation).toContain('共同消耗食物');
     expect(throwingAxeman.limitation).toContain('骑兵威胁');
     expect(paladin.alternatives).toContain('反复前推城堡也不作默认选择');
+    expect(paladin.alternatives).toContain('城堡时代 552.5 石料、帝王时代 487.5 石料');
+    expect(paladin.evidence.recordedVersion).toContain('v0.99.12 · DE 188329 · 66620c9');
 
     for (const entry of [paladin, mountedCrossbow]) {
       expect(entry.supplements).toEqual([]);

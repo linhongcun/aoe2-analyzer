@@ -288,7 +288,10 @@
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json",
             "https://linhongcun.github.io/aoe2-analyzer/#/civ/Georgians#techtree",
-            "https://linhongcun.github.io/aoe2-analyzer/#/tech/924?civ=Georgians"
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/924?civ=Georgians",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Georgians&age=4&gtechs=199,200,201,47,608,923&army=83:5:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Georgians&age=4&gtechs=199,200,201,47,608,923&army=24:5:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Georgians&age=4&gtechs=199,200,201,47,608,923&army=6:5:e"
           ]
         }
       ]
@@ -564,7 +567,9 @@
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
           "sourceLines": [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277],
-          "evidenceLinks": ["https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json"]
+          "evidenceLinks": ["https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
+          "https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=2&bldg=82&civ=Turks",
+          "https://linhongcun.github.io/aoe2-analyzer/#/siege?unit=36&n=1&bldg=235&civ=Turks"]
         },
         {
           "id": "turks-existing-line-choice",
@@ -1039,7 +1044,13 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372]
+          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1665?tab=garrison&gv=2&civ=Sicilians&age=4&gtechs=199,200,201,47&army=83:9:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1665?tab=garrison&gv=2&civ=Sicilians&age=4&gtechs=199,200,201,47,608&army=83:10:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1665?tab=garrison&gv=2&civ=Sicilians&age=4&gtechs=199,200,201,47,608&army=492:10:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1665?tab=garrison&gv=2&civ=Sicilians&age=4&gtechs=199,200,201,47&army=1659:10:e"
+          ]
         }
       ]
     },
@@ -1673,7 +1684,10 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L587",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616]
+          "sourceLines": [579, 581, 583, 587, 591, 593, 595, 601, 603, 609, 610, 611, 614, 616],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/effects.json"
+          ]
         },
         {
           "id": "franks-heavy-mounted-crossbow-light-cav",
@@ -1723,7 +1737,8 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/civ/Franks#techtree",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/1452?civ=Franks",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/1452,39,199,211,200,212,47/?civ=Franks&tab=sim",
-            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim"
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701/Franks/4/39,199,211,200,212,47/?civ=Franks&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1496?civ=Franks"
           ]
         },
         {
@@ -2491,7 +2506,10 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764]
+          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e"
+          ]
         }
       ]
     },
@@ -2678,7 +2696,11 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L826",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [13, 826, 830, 835, 838, 840]
+          "sourceLines": [13, 826, 830, 835, 838, 840],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47&army=5:5:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Bohemians&age=4&gtechs=199,200,201,47,608&army=5:5:e"
+          ]
         }
       ]
     },
@@ -3309,7 +3331,10 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1024",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+          "sourceLines": [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json"
+          ]
         },
         {
           "id": "tupi-blackwood-halberdier",
@@ -3397,7 +3422,10 @@
             "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1025",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]
+          "sourceLines": [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json"
+          ]
         }
       ]
     },
@@ -3553,7 +3581,9 @@
           ],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=1",
-            "https://github.com/linhongcun/aoe2-analyzer/issues/1265"
+            "https://github.com/linhongcun/aoe2-analyzer/issues/1265",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e"
           ]
         }
       ]
@@ -3905,7 +3935,8 @@
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
             "https://linhongcun.github.io/aoe2-analyzer/#/civ/Wu#techtree",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1970/Wu/4/199,211,200,212,201,47/?civ=Wu&tab=sim",
-            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim"
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim",
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/effects.json"
           ]
         }
       ]

@@ -61,7 +61,14 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(main.evidence.scope).not.toContain('来源行');
     expect(main.evidence.scope).toContain(`ID1254${rightArrow}1255`);
     expect(main.evidence.scope).toContain('ID1225');
-    expect(main.evidence.recordedVersion).toBe('v0.77.105 · DE 188329');
+    expect(main.evidence.scope).toContain('20 个村民驻营垒理论预览 17/21 箭，19 个村民即达 17/21 箭');
+    expect(main.evidence.recordedVersion).toBe('v0.77.105 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9');
+    expect(main.evidence.links).toEqual([
+      {
+        label: '帝王满科技 · 20 个村民驻营垒 17/21 箭',
+        href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e',
+      },
+    ]);
     expect(main.reason).toContain('前线营垒');
     expect(main.reason).not.toMatch(/实战|接触 PK|每击/);
     expect(main.limitation).toContain('驻军箭数是站内理论预览、未与客户端核对');

@@ -81,7 +81,7 @@ describe('#1144 三国阵容', () => {
         tech: { id: 1081, zh: '卧虎', age: 4, b: 82, bz: '城堡', cost: { Wood: 600, Gold: 300 }, rt: 40, civs: ['Wu'] },
         optional: true,
         effect: '牵引抛石机和楼船的巨型投石机武器可发射额外炮弹。',
-        caveat: '具体额外弹数未经核实。',
+        caveat: '固定数据记录为牵引抛石机与楼船弹丸数 +2；战斗模拟尚未计入多弹丸伤害，实战拆防效率待验证。',
       },
     });
     const route = byCiv('Wu').routes[0]!;
