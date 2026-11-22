@@ -1,6 +1,6 @@
 # 文明阵容经验与分析方法
 
-给接手项目、使用本站讨论玩法的人。这里保留 hongcun 分享或认可过的经验、形成这些判断的理由，以及何时需要调整；通过仓库维护，后续使用者不必依赖某位助手的私人记忆。入口与反馈职责见 [产品运营交接](product-operations.md)，产品范围和实现授权仍按 [CONTRIBUTING](../CONTRIBUTING.md)。
+给接手项目、使用本站讨论玩法的人。这里保留 hongcun 分享或认可过的经验、形成这些判断的理由，以及何时需要调整；通过仓库维护，后续使用者不必依赖某位助手的私人记忆。本文由独立于平台流水线之外的[游戏分析师](game-analyst.md)主维护（提交流程与红线见该指南）；平台体验核实与反馈受理见[产品运营交接](product-operations.md)，产品范围和实现授权仍按 [CONTRIBUTING](../CONTRIBUTING.md)。
 
 这些案例主要讨论陆地帝王中后期。帝王时代不等于缺金，基础配置也不等于每局必选。配比随对手、地图、已有兵力和经济改变。
 
@@ -154,7 +154,7 @@
 
 其他工具仍按问题选择：[文明对比](https://linhongcun.github.io/aoe2-analyzer/#/compare)、[驻军回血](https://linhongcun.github.io/aoe2-analyzer/#/garrison-healing)、[团队](https://linhongcun.github.io/aoe2-analyzer/#/team-fit)、[经济科技收益](https://linhongcun.github.io/aoe2-analyzer/#/eco-payoff)、[市场](https://linhongcun.github.io/aoe2-analyzer/#/market)、[圣物收益](https://linhongcun.github.io/aoe2-analyzer/#/relic-income)、[商路供给](https://linhongcun.github.io/aoe2-analyzer/#/trade-income)。首次引用记录输入与限制，不因已列入口就声称用过。
 
-工具不顺手或缺功能时，不要绕过去自己手算了事：按[产品运营交接](product-operations.md#用好工具再提需求)记录场景与证据，提需求 Issue。先用好已有工具，再反馈，再改进，这个循环是维护者对这个站的要求。
+工具不顺手或缺功能时，不要绕过去自己手算了事：游戏分析师与产品运营共用上表，均按[产品运营交接](product-operations.md#用好工具再提需求)的取证口径记录场景与证据，按仓库模板提需求 Issue 进入五阶段流程。先用好已有工具，再反馈，再改进，这个循环是维护者对这个站的要求。
 
 ## 已讨论的文明案例
 
