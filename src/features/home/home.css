@@ -6,8 +6,60 @@
   line-height: 1.55;
 }
 
+/* 首页 Hero 风格 B 低饱和古典油画远景横幅（issue 1314）：不设硬 max-height，避免文本放大或 901px 折行裁切搜索栏与焦点环。 */
 .home-mast {
-  padding-top: 8px;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background: var(--color-hero-surface);
+  box-shadow: var(--shadow-1);
+  padding: 24px 28px 26px;
+  min-height: 212px;
+}
+
+.home-mast-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+}
+
+.home-mast-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 82% 40%;
+  opacity: 0.92;
+}
+
+:root[data-theme='dark'] .home-mast-art {
+  filter: brightness(0.68) saturate(0.84) contrast(1.06);
+  opacity: 0.86;
+}
+
+.home-mast-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--color-hero-scrim-strong) 0%,
+    var(--color-hero-scrim-strong) 34%,
+    var(--color-hero-scrim-mid) 54%,
+    var(--color-hero-scrim-edge) 78%,
+    transparent 100%
+  );
+}
+
+.home-mast-content {
+  position: relative;
+  z-index: 1;
 }
 
 .home-kicker {
@@ -38,13 +90,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  width: min(40rem, 100%);
+  width: min(36rem, 100%);
   min-height: 52px;
   margin: 0;
   padding: 0 14px 0 18px;
   border: 0;
   border-radius: var(--radius-pill);
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   box-shadow: var(--shadow-2);
   color: var(--color-text);
   font-size: 16px;
@@ -80,7 +134,7 @@
 }
 
 .home-ref {
-  margin-top: 28px;
+  margin-top: 22px;
   min-width: 0;
 }
 
@@ -310,7 +364,32 @@
 
 @media (max-width: 900px) {
   .home-mast {
-    padding-top: 0;
+    border-radius: var(--radius-lg);
+    padding: 20px 18px;
+    min-height: 204px;
+  }
+
+  .home-mast-art {
+    object-position: 84% 34%;
+    opacity: 0.88;
+  }
+
+  :root[data-theme='dark'] .home-mast-art {
+    filter: brightness(0.78) saturate(0.86) contrast(1.08);
+    opacity: 0.88;
+  }
+
+  .home-mast-scrim {
+    background:
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--color-hero-scrim-edge) 28%,
+        var(--color-hero-scrim-mid) 44%,
+        var(--color-hero-scrim-strong) 74%,
+        var(--color-hero-scrim-strong) 100%
+      ),
+      linear-gradient(90deg, var(--color-hero-scrim-strong) 0%, var(--color-hero-scrim-mid) 44%, var(--color-hero-scrim-edge) 74%, transparent 100%);
   }
 
   .home-mast h1 {
@@ -322,6 +401,7 @@
   }
 
   .home-search {
+    width: 100%;
     min-height: 48px;
   }
 
@@ -414,5 +494,11 @@
 
   .home-ref-card:hover {
     transform: none;
+  }
+}
+
+@media print {
+  .home-mast-bg {
+    display: none;
   }
 }

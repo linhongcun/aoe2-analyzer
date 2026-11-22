@@ -30,7 +30,8 @@ export function SourceUsageStatement() {
       <a href="https://lucide.dev">Lucide</a>（ISC 许可，本地打包）。属性/资源图标来自 <a href="https://ageofempires.fandom.com/">Age of Empires Fandom Wiki</a>
       （CC BY-SA；游戏图像 © Microsoft）。DLC 列表与资料片图标来自 <a href="https://seicing.com/html/aoe2/index-aoe2.html">seicing.com</a>。文明图标来自{' '}
       <a href="https://github.com/denniske/aoe2companion">denniske/aoe2companion</a>，原始素材 © Microsoft / Age of Empires II。本站为非商业粉丝项目，依据{' '}
-      <a href="https://www.xbox.com/en-us/developers/rules">Microsoft 游戏内容使用规则</a> 使用，未获 Microsoft 认可或赞助。
+      <a href="https://www.xbox.com/en-us/developers/rules">Microsoft 游戏内容使用规则</a> 使用，未获 Microsoft 认可或赞助。首页氛围插画为本项目自制（AI
+      辅助生成）的装饰视觉，不属于 Microsoft 原版游戏素材。
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ImgHTMLAttributes, type ReactNode } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { civs, civByEn } from '../../../data';
 import { searchShortcutLabel } from '../../../domain/platform';
@@ -9,6 +9,9 @@ import { Icon } from '../../../shared/ui/Icon';
 import { HOME_AGE_PICS, HOME_BUILDING_PICS, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_UNIT_PICS } from '../homeReference';
 import { hasLegacyStartQuery } from '../legacyStartQuery';
 import '../home.css';
+
+// React 18.3.1 DOMProperty 尚未收录 fetchPriority，传小写属性兼顾类型严格、零开发态警告与原生高优先级抓取（升级 React 19 后可改回 fetchPriority="high"；issue 1314）。
+const HERO_ART_PRIORITY = { fetchpriority: 'high' } as unknown as ImgHTMLAttributes<HTMLImageElement>;
 
 function wikiEntry(key: keyof typeof HOME_REFERENCE_COPY): Section {
   const section = WIKI.find((item) => item.key === key);
@@ -62,23 +65,29 @@ export default function Home() {
   return (
     <section id="home" className="pane home-page">
       <section className="home-mast" aria-labelledby="site-title">
-        <p className="home-kicker">资料与计算</p>
-        <h1 id="site-title">帝国时代 II 分析器</h1>
-        <p className="home-lede">查阅文明、单位与科技，并使用计算工具。</p>
-        <button
-          type="button"
-          className="home-search"
-          data-testid="home-search"
-          aria-label="全局搜索"
-          aria-keyshortcuts="Control+K Meta+K"
-          onClick={() => requestGlobalSearch()}
-          onPointerEnter={() => preloadGlobalSearch()}
-          onFocus={() => preloadGlobalSearch()}
-        >
-          <Icon name="search" />
-          <span>搜索文明、单位、科技、开局…</span>
-          <kbd>{searchShortcutLabel()}</kbd>
-        </button>
+        <div className="home-mast-bg" aria-hidden="true">
+          <img className="home-mast-art" src={img('atmosphere/home-hero.webp')} alt="" width={1376} height={768} decoding="async" {...HERO_ART_PRIORITY} />
+          <div className="home-mast-scrim" />
+        </div>
+        <div className="home-mast-content">
+          <p className="home-kicker">资料与计算</p>
+          <h1 id="site-title">帝国时代 II 分析器</h1>
+          <p className="home-lede">查阅文明、单位与科技，并使用计算工具。</p>
+          <button
+            type="button"
+            className="home-search"
+            data-testid="home-search"
+            aria-label="全局搜索"
+            aria-keyshortcuts="Control+K Meta+K"
+            onClick={() => requestGlobalSearch()}
+            onPointerEnter={() => preloadGlobalSearch()}
+            onFocus={() => preloadGlobalSearch()}
+          >
+            <Icon name="search" />
+            <span>搜索文明、单位、科技、开局…</span>
+            <kbd>{searchShortcutLabel()}</kbd>
+          </button>
+        </div>
       </section>
 
       <section className="home-ref" aria-labelledby="home-ref-title">

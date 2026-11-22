@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.16] - 2026-11-22
+
+### 更新说明
+
+首页顶部横幅新增低饱和中世纪古典油画远景插画（风格 B：左侧晨雾留白保护文字与搜索栏，右侧呈现山丘石砌城堡、麦田与远景骑兵剪影），在浅色与深色主题下通过渐变遮罩柔和融底、在手机窄屏自动聚焦石堡主体，桌面首屏仍完整可见全局搜索与全部四张资料卡（文明、单位、建筑、科技），原版游戏单位、科技、建筑与文明图标零替换；同时在站点「资料来源与使用声明」及说明文档中清晰注明首页氛围插画为本站自制装饰视觉，不属于 Microsoft 原版游戏素材。
+
+### 新增
+
+- #1314：新增本地压缩 WebP 氛围图 `public/img/atmosphere/home-hero.webp`（`1376×768`，`50.82 KiB`），在 `src/shared/styles/tokens.css` 增补 `--color-hero-*` 浅/深主题遮罩语义令牌；在 `src/features/home/components/Home.tsx` 与 `src/features/home/home.css` 接入 `img('atmosphere/home-hero.webp')` 响应式氛围横幅（含独立层叠上下文、无硬高裁切与打印隐藏）；同步更新 `src/shared/ui/SiteInfo.tsx` 与 `README.md` 版权边界声明，新增 `tests/e2e/homeHero1314.spec.ts`（登记至 `scripts/ci-browser-weights.json`）并补强 `tests/unit/home876.test.ts` 与 `tests/unit/siteInfo1153.test.ts`。
+
 ## [0.99.15] - 2026-11-22
 
 ### 更新说明
