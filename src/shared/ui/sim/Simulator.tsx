@@ -1,4 +1,5 @@
 import { useCore } from '../../../data/hooks';
+import { EARLY_UNIT_AGES } from '../../../domain/availabilityAge';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
 import { buildSimEffectiveCost, costTechBadgeMap, presetCostTechIds } from '../../../domain/simEffectiveCost';
@@ -25,7 +26,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
   return (
     <SimPanel
       civs={u.civs}
-      minAge={u.age}
+      minAge={(Object.hasOwn(EARLY_UNIT_AGES, S.civ) ? EARLY_UNIT_AGES[S.civ]?.[u.id] : undefined) ?? u.age}
       civ={S.civ}
       age={S.age}
       sel={S.sel}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { parsePath, resolvePath, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../data/hooks';
+import { EARLY_UNIT_AGES, militaryTechAge } from '../../domain/availabilityAge';
 import { decideSimCanonical, makeSimContext, simTechs, unitHashLocation, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
 import { applicableSimCostTechs, mergeSimCostTechs, type SimCostTech } from '../../domain/simEffectiveCost';
 import type { Unit } from '../../domain/types';
@@ -60,11 +61,12 @@ export function useSimState(u: Unit, rt: SimRoute, navigationAdapter?: SimNaviga
       rt.civ ??
       ((session.lastCiv && u.civs.includes(session.lastCiv) && session.lastCiv) || (session.lastSim?.uid === u.id ? session.lastSim.civ : '') || u.civs[0]!);
     if (!u.civs.includes(civ)) civ = u.civs[0]!;
-    const age = Math.max(u.age, Math.min(4, rt.age || 4));
+    const minAge = (Object.hasOwn(EARLY_UNIT_AGES, civ) ? EARLY_UNIT_AGES[civ]?.[u.id] : undefined) ?? u.age;
+    const age = Math.max(minAge, Math.min(4, rt.age || 4));
     const costTechs = applicableSimCostTechs(ctx, u, civ);
     const costTechIds = new Set(costTechs.map((item) => item.tech.id));
     const avail = mergeSimCostTechs(simTechs(ctx, u, civ), costTechs);
-    const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && x.t.age <= age).map((x) => x.t.id));
+    const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
     return { ctx, civ, age, sel: new Set(rt.ids.filter((i) => ok.has(i))), team: new Set(rt.team), avail, costTechs, cmp };
   }, [ctx, u, rt.civ, rt.age, idsKey, teamKey, cmp]); // eslint-disable-line react-hooks/exhaustive-deps
   const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => {

@@ -144,7 +144,7 @@ describe('#205 科技闭包与基础费用', () => {
 
   it.each(['f', 'c'] as const)('展开 %s 预设，仅选择当前时代数值科技', (preset) => {
     const result = plan(side(preset));
-    const expected = [...presetUpTo(simTechs(ctx, byId[38]!, 'Byzantines'), 3)].sort((a, b) => a - b);
+    const expected = [...presetUpTo(simTechs(ctx, byId[38]!, 'Byzantines'), 3, 'Byzantines')].sort((a, b) => a - b);
     expect(result.spec.techs).toEqual(expected);
     expect(result.S).toEqual(simulate(ctx, byId[38]!, 'Byzantines', 3, new Set(expected), new Set()));
     expect(result.techs.every((t) => t.age <= 3)).toBe(true);

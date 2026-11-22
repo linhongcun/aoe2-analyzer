@@ -11,7 +11,7 @@ import { ctx, unit } from './helpers';
 const F = (en: string, civ: string, age: number): Fighter => {
   const u = unit(en);
   const av = simTechs(ctx, u, civ);
-  return fighterFrom(u, simulate(ctx, u, civ, age, age === 4 ? allNumeric(av) : presetUpTo(av, age), new Set()));
+  return fighterFrom(u, simulate(ctx, u, civ, age, age === 4 ? allNumeric(av) : presetUpTo(av, age, civ), new Set()));
 };
 const halb = F('Halberdier', 'Byzantines', 4),
   pala = F('Paladin', 'Franks', 4),

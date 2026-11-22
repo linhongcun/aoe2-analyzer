@@ -16,7 +16,7 @@ const techByEn = Object.fromEntries(techs.map((t) => [t.en, t]));
 function fighterFull(uid: number, civ: string, age = 4) {
   const u = byId[uid]!;
   const avail = simTechs(ctx, u, civ);
-  const S = simulate(ctx, u, civ, age, presetUpTo(avail, age), new Set());
+  const S = simulate(ctx, u, civ, age, presetUpTo(avail, age, civ), new Set());
   return { u, S, F: fighterFrom(u, S) };
 }
 

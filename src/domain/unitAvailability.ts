@@ -1,5 +1,5 @@
 import type { Tech, Trees, Unit } from './types';
-import { availableUnitAge, treeRowAge } from './availabilityAge';
+import { availableUnitAge, EARLY_MILITARY_TECH_AGES, treeRowAge } from './availabilityAge';
 
 interface AvailabilityData {
   core: { unitById: Record<number, Unit>; techById: Record<number, Tech> };
@@ -25,8 +25,11 @@ export function unitAvailable(data: UnitAvailabilityData, civ: string, id: numbe
   return availableUnitAge(civ, id, unit.age, rowAge) <= age;
 }
 
-/** 问目录文明与目录/树行时代。不代替另外三套，也不读生产口径的手写提前。例外见 techAvailability.ts。 */
+/** 问目录文明与目录/树行时代（含已登记的军事科技提前，不含勃艮第采集科技的生产口径提前）。不代替另外三套。例外见 techAvailability.ts。 */
 export function techAvailable(data: AvailabilityData, civ: string, id: number, age: number): boolean {
   const tech = data.core.techById[id];
-  return !!tech?.civs.includes(civ) && [1, 2, 3, 4].includes(age) && Math.max(tech.age, treeAge(data, civ, 't', id)) <= age;
+  const rowAge = treeAge(data, civ, 't', id);
+  if (!tech?.civs.includes(civ) || !Number.isFinite(rowAge) || ![1, 2, 3, 4].includes(age)) return false;
+  const early = Object.hasOwn(EARLY_MILITARY_TECH_AGES, civ) ? EARLY_MILITARY_TECH_AGES[civ]?.[id] : undefined;
+  return (early ?? Math.max(tech.age, rowAge)) <= age;
 }

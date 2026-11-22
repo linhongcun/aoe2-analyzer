@@ -4,6 +4,7 @@
  * 不把研究费、升级费或示意数量写进结果。
  */
 import { civByEn } from '../data';
+import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { priceAge } from './costDiscount';
 import { applicableTrainingTechs, type TrainingCostTech } from './duelTrainingCost';
 import {
@@ -325,9 +326,10 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
   for (const id of config.techs) {
     if (UNLOCK_IDS.includes(id) || found.has(id)) continue;
     const tech = ctx.core.techById[id];
+    const need = tech ? militaryTechAge(config.civ, tech.id, tech.age) : null;
     let invalidReason = `科技 ${id} 无法识别，已停止计入。`;
     if (tech && (!civLegal(config.civ) || !tech.civs.includes(config.civ))) invalidReason = `${tech.zh}在当前文明不可用，已停止计入。`;
-    else if (tech && (age == null || tech.age > age)) invalidReason = `${tech.zh}在当前时代不可用，已停止计入。${AGE_ZH[tech.age] ?? ''}起可研究。`;
+    else if (tech && (age == null || need! > age)) invalidReason = `${tech.zh}在当前时代不可用，已停止计入。${AGE_ZH[need!] ?? ''}起可研究。`;
     else if (tech) invalidReason = `${tech.zh}在当前条件下不可用，已停止计入。`;
     costs.push({
       id,
@@ -397,7 +399,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
         reason = `需要已研究${gate.name}才能训练。${gate.name}在当前时代不可用，已停止计入。${AGE_ZH[gate.need] ?? ''}起可研究。研究费用不计。未计入下面的小计。`;
       else if (gate && gate.selectable) reason = `需要已研究${gate.name}才能训练，研究费用不计。未计入下面的小计。`;
       else if (gate) reason = `需要已研究${gate.name}才能训练。当前还不能研究${gate.name}。研究费用不计。未计入下面的小计。`;
-      else if (unit.age > age!) reason = '当前时代尚未到达该形态，未计入下面的小计。';
+      else if (trainingUnitAge(config.civ, unit.id, unit.age) > age!) reason = '当前时代尚未到达该形态，未计入下面的小计。';
       lines.push({
         ...base,
         unit,

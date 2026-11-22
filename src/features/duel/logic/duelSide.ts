@@ -1,9 +1,10 @@
 import { civByEn } from '../../../data';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
 import { simTechs, simulate, type SimContext } from '../../../domain/simulator';
-import type { StatSet, Trees, Unit } from '../../../domain/types';
+import type { StatSet, Tech, Trees, Unit } from '../../../domain/types';
 import type { SideSpec } from '../../../domain/duelState';
 import { unitAvailable } from '../../../domain/unitAvailability';
 import { substituteIn } from './substitute';
@@ -66,6 +67,64 @@ function unitAvailabilityTreeSafe(trees: unknown, civ: string): trees is Trees {
   );
 }
 
+export interface ResolvedSideAge {
+  age: number;
+  earlyAgeMarker?: TrainingAgeMarker;
+}
+
+/**
+ * 与 resolve() 同源的目标文明实际时代解析：
+ * 仅在显式指定时代（ageSet === true）且目标文明科技树允许该单位提前解锁时保留请求时代，
+ * 否则回退到 Math.max(u.age, requestedAge)。不复用切换前旧文明被抬高后的 side.age。
+ */
+export function resolveSideAge(
+  data: { byId: Record<number, Unit>; trees: unknown },
+  civ: string,
+  u: Unit,
+  requestedAge: number,
+  ageSet?: boolean,
+): ResolvedSideAge {
+  if (
+    !!civByEn(civ) &&
+    u.civs.includes(civ) &&
+    ageSet === true &&
+    Number.isInteger(requestedAge) &&
+    requestedAge >= 1 &&
+    requestedAge <= 4 &&
+    requestedAge < u.age &&
+    unitAvailabilityTreeSafe(data.trees, civ)
+  ) {
+    try {
+      if (unitAvailable({ core: { unitById: data.byId }, trees: data.trees }, civ, u.id, requestedAge)) {
+        return { age: requestedAge, earlyAgeMarker: { unitId: u.id, civ, age: requestedAge } };
+      }
+    } catch {
+      return { age: Math.max(u.age, requestedAge) };
+    }
+  }
+  return { age: Math.max(u.age, requestedAge) };
+}
+
+export function filterExplicitTechsForAge(techs: SideSpec['techs'], techById: Record<number, Tech>, civ: string, age: number): SideSpec['techs'] {
+  return Array.isArray(techs)
+    ? techs.filter((id) => {
+        const tech = techById[id];
+        return !!tech && militaryTechAge(civ, id, tech.age) <= age;
+      })
+    : techs;
+}
+
+/** 切文明时按目标文明实际解析出的时代裁剪显式科技，避免沿用旧文明被抬高后的 side.age 残留超时代科技。 */
+export function switchSideCiv(
+  data: { byId: Record<number, Unit>; techById: Record<number, Tech>; trees: unknown },
+  spec: SideSpec,
+  u: Unit,
+  nextCiv: string,
+): SideSpec {
+  const { age: nextAge } = resolveSideAge(data, nextCiv, u, spec.age, spec.ageSet);
+  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge) };
+}
+
 export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number): SideState {
   const requestedUnit = byId[spec.uid];
   let u = requestedUnit;
@@ -76,34 +135,16 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     return { unavail: true, spec, u, civ: spec.civ, age: Math.max(u.age, spec.age), sub: s !== null && s !== u.id ? byId[s]! : null };
   }
   const civ = u.civs.includes(spec.civ) ? spec.civ : u.civs[0]!;
-  let earlyAgeMarker: TrainingAgeMarker | undefined;
-  if (
-    requestedUnit === u &&
-    requestedUnit?.id === spec.uid &&
-    !!civByEn(spec.civ) &&
-    requestedUnit.civs.includes(spec.civ) &&
-    spec.ageSet === true &&
-    Number.isInteger(spec.age) &&
-    spec.age >= 1 &&
-    spec.age <= 4 &&
-    spec.age < requestedUnit.age &&
-    unitAvailabilityTreeSafe(ctx.trees, spec.civ)
-  ) {
-    try {
-      if (unitAvailable({ core: { unitById: byId }, trees: ctx.trees }, spec.civ, requestedUnit.id, spec.age)) {
-        earlyAgeMarker = { unitId: requestedUnit.id, civ: spec.civ, age: spec.age };
-      }
-    } catch {
-      earlyAgeMarker = undefined;
-    }
-  }
-  const age = earlyAgeMarker?.age ?? Math.max(u.age, spec.age);
+  const { age, earlyAgeMarker } =
+    requestedUnit === u && requestedUnit?.id === spec.uid
+      ? resolveSideAge({ byId, trees: ctx.trees }, spec.civ, u, spec.age, spec.ageSet)
+      : { age: Math.max(u.age, spec.age), earlyAgeMarker: undefined };
   const avail = simTechs(ctx, u, civ);
   const ok = new Set(avail.map((x) => x.t.id));
   // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）。
   // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
-  const sel = selectTrainingIds(spec.techs, avail, age, costs);
+  const sel = selectTrainingIds(spec.techs, avail, age, costs, civ);
   const S = simulate(ctx, u, civ, age, sel, new Set(spec.team));
   const training = quoteTraining(u, civ, age, sel, costs, ok, earlyAgeMarker);
   return {

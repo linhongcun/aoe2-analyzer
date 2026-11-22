@@ -29,9 +29,12 @@ describe('#469 actual typed unit and technology availability', () => {
     expect(unitAvailable(data, 'Britons', 93, 1)).toBe(false);
     expect(unitAvailable(data, 'Britons', 93, 2)).toBe(true);
     expect(unitAvailable(data, 'Armenians', 93, 1)).toBe(true);
-    // Existing shared early-unit overrides remain authoritative over layout rows.
-    expect(unitAvailable(data, 'Armenians', 75, 1)).toBe(true);
+    // #1325: Armenians Man-at-Arms (75) is Feudal in trees.json (not Dark); Champion (567) & Khitans HCA (474) are Castle.
+    expect(unitAvailable(data, 'Armenians', 75, 1)).toBe(false);
+    expect(unitAvailable(data, 'Armenians', 75, 2)).toBe(true);
     expect(unitAvailable(data, 'Armenians', 77, 2)).toBe(true);
+    expect(unitAvailable(data, 'Armenians', 567, 3)).toBe(true);
+    expect(unitAvailable(data, 'Khitans', 474, 3)).toBe(true);
     expect(unitAvailable(data, 'Britons', 77, 2)).toBe(false);
   });
 

@@ -75,7 +75,7 @@ describe('#943 单位 PK 训练价', () => {
   it('显式 id 可计入或撤销，非波斯误选不改价；战斗属性不因费用科技改变', () => {
     const priced = side(crossbow.id, 'Persians', 4, [kamandaran.id]);
     expect(priced.training.price.cost).toMatchObject({ Wood: 50, Gold: 0 });
-    const combatOnly = presetUpTo(priced.avail, 4);
+    const combatOnly = presetUpTo(priced.avail, 4, 'Persians');
     expect(combatOnly.has(kamandaran.id)).toBe(false);
     const revoked = side(crossbow.id, 'Persians', 4, [...combatOnly]);
     expect(revoked.training.price.cost).toMatchObject({ Wood: 25, Gold: 45 });

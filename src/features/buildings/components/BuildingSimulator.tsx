@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { buildingHasAttack } from '../../../domain/buildingDetailView';
 import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
@@ -37,7 +38,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const costTechs = applicableSimCostTechs(ctx, b, civ);
   const costTechIds = new Set(costTechs.map((item) => item.tech.id));
   const avail = mergeSimCostTechs(buildingSimTechs(ctx, b, civ), costTechs);
-  const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && x.t.age <= age).map((x) => x.t.id));
+  const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
   const effectiveCost = buildSimEffectiveCost(b, 'building', civ, age, sel, costTechs);
   const cmp = b.civs.includes(q.get('cmp') ?? '') ? q.get('cmp')! : '';

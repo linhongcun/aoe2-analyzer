@@ -22,13 +22,13 @@ export const TECH_AVAILABILITY: Record<TechAvailabilityId, TechAvailabilityQuest
     consumer: 'src/features/tree/logic/layout.ts',
   },
   techAvailable: {
-    asks: '目录里有这个文明，且所选时代不低于科技目录时代与科技树行时代的较大值。不看经济语义，也不使用生产口径里的手写提前。',
+    asks: '目录里有这个文明，且所选时代不低于科技最早可用时代（含已登记的军事科技提前，否则取目录时代与科技树行时代的较大值）。不看经济语义，也不使用勃艮第采集科技的生产口径提前。',
     definedIn: 'src/domain/unitAvailability.ts',
     exportName: 'techAvailable',
     consumer: 'src/features/matchup/availability.ts',
   },
   productionTechs: {
-    asks: '科技树格子点亮，时代走 productionTechAge，并且这条科技有经济或生产语义。勃艮第采集科技提前一级，波希米亚化学另写为城堡时代。',
+    asks: '科技树格子点亮，时代走 productionTechAge，并且这条科技有经济或生产语义。勃艮第采集科技提前一级，军事科技提前（含波希米亚化学）共享 EARLY_MILITARY_TECH_AGES。',
     definedIn: 'src/domain/production.ts',
     exportName: 'productionTechs',
     consumer: 'src/features/production/Production.tsx',
@@ -52,12 +52,6 @@ export interface AvailabilityException {
 
 export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
   {
-    site: 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:75=1',
-    role: 'unit-age',
-    differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
-    because: '单位 75（Armenians）提前到时代 1，只供单位可用性与训练时代。四套科技判定不读这张表。',
-  },
-  {
     site: 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:77=2',
     role: 'unit-age',
     differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
@@ -68,6 +62,12 @@ export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
     role: 'unit-age',
     differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
     because: '单位 473（Armenians）提前到时代 3，只供单位可用性与训练时代。四套科技判定不读这张表。',
+  },
+  {
+    site: 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:567=3',
+    role: 'unit-age',
+    differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
+    because: '单位 567（Armenians 冠军剑士）提前到时代 3，只供单位可用性与训练时代。四套科技判定不读这张表。',
   },
   {
     site: 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Armenians:358=2',
@@ -106,16 +106,37 @@ export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
     because: '单位 5（Bohemians）提前到时代 3，只供单位可用性与训练时代。四套科技判定不读这张表。',
   },
   {
+    site: 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Khitans:474=3',
+    role: 'unit-age',
+    differs: ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'],
+    because: '单位 474（Khitans 重装骑射手）提前到时代 3，只供单位可用性与训练时代。四套科技判定不读这张表。',
+  },
+  {
+    site: 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Bohemians:47=3',
+    role: 'tech-age',
+    differs: ['civStatus', 'simTechs'],
+    because:
+      '波希米亚化学（科技 47）在文明树为城堡时代（3），目录时代为 4；供 techAvailable 与 productionTechAge 等时代判断，civStatus 与 simTechs 不按时代过滤。',
+  },
+  {
+    site: 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Jurchens:377=3',
+    role: 'tech-age',
+    differs: ['civStatus', 'simTechs'],
+    because:
+      '女真攻城技师（科技 377）在文明树为城堡时代（3），目录时代为 4；供 techAvailable 与 productionTechAge 等时代判断，civStatus 与 simTechs 不按时代过滤。',
+  },
+  {
+    site: 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Persians:436=3',
+    role: 'tech-age',
+    differs: ['civStatus', 'simTechs'],
+    because:
+      '波斯帕提亚战术（科技 436）在文明树为城堡时代（3），目录时代为 4；供 techAvailable 与 productionTechAge 等时代判断，civStatus 与 simTechs 不按时代过滤。',
+  },
+  {
     site: 'civ-age:src/domain/production.ts:productionTechAge:Burgundians:max(literal:1,age-1):ecoTechs+isGatherTech',
     role: 'tech-age',
     differs: ['civStatus', 'techAvailable', 'simTechs'],
     because: '生产口径对采集科技使用目录时代减一，最低为黑暗。科技树点亮、目录与树行时代、模拟器规则都不读这条提前。',
-  },
-  {
-    site: 'civ-age:src/domain/production.ts:productionTechAge:Bohemians:literal:3:id===47',
-    role: 'tech-age',
-    differs: ['civStatus', 'techAvailable', 'simTechs'],
-    because: '生产口径把波希米亚化学（科技 47）写成时代 3。techs.json 里该科技的目录时代是 4。另外三套不使用这个手写时代。',
   },
   {
     site: 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain',

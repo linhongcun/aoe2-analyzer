@@ -1,5 +1,6 @@
 import { civByEn } from '../data';
 import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand } from '../data/armyResearch';
+import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { AGE_BY_TECH } from './gameIds';
 import { productionBuildings, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from './production';
 import { makeSimContext, simTechs, civStatus } from './simulator';
@@ -246,7 +247,7 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
   const numeric = new Map(simTechs(sim, u, civ).map((entry) => [entry.t.id, entry.ef]));
   const tree = civStatus(sim.trees, civ);
   return sim.techs
-    .filter((t) => t.age <= age && t.civs.includes(civ) && tree['t' + t.id])
+    .filter((t) => militaryTechAge(civ, t.id, t.age) <= age && t.civs.includes(civ) && tree['t' + t.id])
     .filter(
       (t) =>
         numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
@@ -306,7 +307,9 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
             ...config,
             rows: config.rows.length
               ? config.rows
-              : ctx.core.units.filter((u) => u.civs.includes(config.civ) && u.age <= age).map((u) => ({ unit: u.id, qty: '1' })),
+              : ctx.core.units
+                  .filter((u) => u.civs.includes(config.civ) && trainingUnitAge(config.civ, u.id, u.age) <= age)
+                  .map((u) => ({ unit: u.id, qty: '1' })),
           },
           false,
         ),

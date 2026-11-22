@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { applicableUnmodeledTechIds } from '../../../domain/duelUnmodeled';
 import { formatHp } from '../../../domain/hpFormat';
@@ -25,7 +26,7 @@ import { CostDiscountBlock } from './CostDiscount';
 import { PkCost } from './PkCost';
 import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
-import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
+import { filterExplicitTechsForAge, isUnavail, r1, switchSideCiv, type SideState, type Unavail } from '../logic/duelSide';
 import { radioKeyboard } from './radioKeyboard';
 import { duelToTrainTotal } from '../../../domain/productionTransfer';
 import type { ProductionContext } from '../../../domain/production';
@@ -83,7 +84,7 @@ export function Side({
       <Icon name="arrow-right" />
     </Link>
   );
-  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} />;
+  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} context={context} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
@@ -92,15 +93,14 @@ export function Side({
   const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
   const onAgeChange = (nextAge: number) => {
     const nextTechs: SideSpec['techs'] = Array.isArray(spec.techs)
-      ? spec.techs.filter((id) => {
-          const tech = core.techById[id];
-          return !!tech && tech.age <= nextAge;
-        })
+      ? filterExplicitTechsForAge(spec.techs, core.techById, side.civ, nextAge)
       : spec.techs === 'f' && nextAge < 4
         ? 'c'
         : spec.techs;
     onChange({ ...spec, age: nextAge, ageSet: true, techs: nextTechs });
   };
+  const onCivChange = (nextCiv: string) =>
+    onChange(switchSideCiv({ byId: context.core.unitById, techById: context.core.techById, trees: context.trees }, spec, u, nextCiv));
   const civObj = civByEn(side.civ);
   return (
     <div className={`duel-side side-${k} civ-art-host`} id={`duel-${k}`}>
@@ -176,14 +176,7 @@ export function Side({
           )}
         </div>
         <div className="duel-civ-slot">
-          <CivPicker
-            id={`duel-${k}-civ`}
-            label={`${k.toUpperCase()} 方文明`}
-            value={side.civ}
-            allowed={u.civs}
-            compactTrigger
-            onChange={(c) => onChange({ ...spec, civ: c })}
-          />
+          <CivPicker id={`duel-${k}-civ`} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} compactTrigger onChange={onCivChange} />
         </div>
       </div>
       <div className="duel-age-presets">
@@ -280,11 +273,7 @@ export function Side({
             headingLevel={2}
             embedded={`duel-${k}`}
             civs={u.civs}
-            minAge={
-              side.earlyAgeMarker?.unitId === u.id && side.earlyAgeMarker.civ === side.civ && side.earlyAgeMarker.age === side.age
-                ? side.earlyAgeMarker.age
-                : u.age
-            }
+            minAge={AGES.find((a) => unitAvailable(context, side.civ, u.id, a)) ?? u.age}
             civ={side.civ}
             age={side.age}
             sel={side.sel}
@@ -297,7 +286,11 @@ export function Side({
             selectableWithoutEffect={new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id)])}
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
-              return new Set(side.training.costs.filter((item) => item.supported && !item.partial && item.tech.age <= limit).map((item) => item.tech.id));
+              return new Set(
+                side.training.costs
+                  .filter((item) => item.supported && !item.partial && militaryTechAge(side.civ, item.tech.id, item.tech.age) <= limit)
+                  .map((item) => item.tech.id),
+              );
             }}
             techById={core.techById}
             rows={rows}
@@ -324,12 +317,14 @@ function UnavailSide({
   fams,
   onChange,
   transferLink,
+  context,
 }: {
   k: 'a' | 'b';
   side: Unavail;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   transferLink: React.ReactNode;
+  context: ProductionContext;
 }) {
   const { u, spec, sub } = side;
   const civObj = civByEn(side.civ);
@@ -389,7 +384,7 @@ function UnavailSide({
             value={side.civ}
             allowed={u.civs}
             compactTrigger
-            onChange={(c) => onChange({ ...spec, civ: c })}
+            onChange={(c) => onChange(switchSideCiv({ byId: context.core.unitById, techById: context.core.techById, trees: context.trees }, spec, u, c))}
           />
         </div>
       </div>

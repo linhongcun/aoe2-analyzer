@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.23] - 2026-11-23
+
+### 更新说明
+
+修复单位 PK、混编 PK、持续生产、训练总价与阵容新增费用对部分文明提前解锁时代判断错误的问题：契丹重装骑射手与亚美尼亚冠军剑士现在在城堡时代即可正常参与 PK、持续生产、训练总价与阵容新增费用（契丹城堡半价重装升级 450 食物 250 黄金与训练行同时通过）；亚美尼亚武士更正为封建时代解锁、黑暗时代不再误放行；城堡时代下波希米亚化学、女真攻城技师（享女真木材折扣后 500 食物 150 木材）与波斯帕提亚战术可在阵容新增费用中正常勾选并计入研究费，并在单位/混编 PK 的「当前时代满 / 当前时代科技」预设中自动生效。普通文明的对应时代、既有 8 项提前单位、波希米亚火枪手的化学前置、长矛兵规则以及勃艮第经济科技保持不变。
+
+### 修复
+
+- #1325：在 `src/domain/availabilityAge.ts` 修正 `EARLY_UNIT_AGES`（移除误录的亚美尼亚武士 `75:1`、补齐亚美尼亚冠军剑士 `567:3` 与契丹重装骑射手 `474:3`）并新增 `EARLY_MILITARY_TECH_AGES` / `militaryTechAge`（波希米亚化学 `47:3`、女真攻城技师 `377:3`、波斯帕提亚战术 `436:3`，不含勃艮第 16 项经济科技）；同步更新 `armyCost.ts`、`simulator.ts`（`presetUpTo`）、`duelTrainingCost.ts`、`trainTotal.ts`、`unitAvailability.ts`、`production.ts`、`techAvailability.ts` 与 PK/模拟器适配层，保持 `#869` 四套科技可用性分离并通过 `npm run availability:check`；新增 56 文明全量防漂移单测 `tests/unit/earlyUnlockAges1325.test.ts` 与浏览器 E2E `tests/e2e/earlyUnlockAges1325.spec.ts`（登记至 `scripts/ci-browser-weights.json`）。
+
 ## [0.99.22] - 2026-11-23
 
 ### 更新说明

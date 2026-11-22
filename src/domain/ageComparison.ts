@@ -1,14 +1,19 @@
+import { trainingUnitAge } from './availabilityAge';
 import { duel, fighterFrom } from './duel';
 import { presetUpTo, simTechs, simulate, type SimContext } from './simulator';
-import type { Unit } from './types';
+import type { Trees, Unit } from './types';
+import { unitAvailable } from './unitAvailability';
 
 /** 回溯所选版本的前置单位，不猜测旁支或文明替代单位。 */
-export function unitAtAge(byId: Record<number, Unit>, id: number, civ: string, age: number): Unit | null {
+export function unitAtAge(byId: Record<number, Unit>, id: number, civ: string, age: number, trees?: Trees): Unit | null {
   let u = byId[id];
   const seen = new Set<number>();
   while (u && !seen.has(u.id)) {
     seen.add(u.id);
-    if (u.age <= age && u.civs.includes(civ)) return u;
+    const available = trees
+      ? unitAvailable({ core: { unitById: byId }, trees }, civ, u.id, age)
+      : u.civs.includes(civ) && trainingUnitAge(civ, u.id, u.age) <= age;
+    if (available) return u;
     u = u.from_ === null ? undefined : byId[u.from_];
   }
   return null;
@@ -21,9 +26,9 @@ export interface AgeSide {
 }
 export function ageComparison(ctx: SimContext, byId: Record<number, Unit>, a: AgeSide, b: AgeSide) {
   const resolve = (side: AgeSide, age: number) => {
-    const u = unitAtAge(byId, side.uid, side.civ, age);
+    const u = unitAtAge(byId, side.uid, side.civ, age, ctx.trees);
     if (!u) return null;
-    const sel = presetUpTo(simTechs(ctx, u, side.civ), age);
+    const sel = presetUpTo(simTechs(ctx, u, side.civ), age, side.civ);
     const stats = simulate(ctx, u, side.civ, age, sel, new Set(side.team));
     return { u, stats, fighter: fighterFrom(u, stats) };
   };

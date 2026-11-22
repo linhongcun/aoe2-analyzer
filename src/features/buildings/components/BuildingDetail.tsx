@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'rea
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
+import { militaryTechAge } from '../../../domain/availabilityAge';
 import {
   buildingCiv,
   buildingConstructionEntry,
@@ -149,7 +150,7 @@ export default function BuildingDetail() {
         .map(Number)
         .filter((tid) => {
           const tech = core.techById[tid];
-          return !!tech && tech.age <= nextAge;
+          return !!tech && militaryTechAge(civ ?? '', tid, tech.age) <= nextAge;
         });
       patch[key] = kept.length ? kept.join(',') : null;
     }

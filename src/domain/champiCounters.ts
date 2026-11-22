@@ -186,7 +186,7 @@ function sideFor(ctx: ChampiContext, sim: SimContext, civ: string, id: number, a
     return { state: 'unverified', reason: '单位关键属性或类别资料缺失，暂不能计算。' };
   if (!unitAvailable(ctx, civ, id, age)) return { state: 'unavailable', reason: '此文明在本时代不能训练该单位。' };
   const avail = simTechs(sim, unit, civ);
-  const sel = presetUpTo(avail, age);
+  const sel = presetUpTo(avail, age, civ);
   const stats = simulate(sim, unit, civ, age, sel, new Set());
   if (!validStats(stats) || !object(stats.bonus) || !Object.values(stats.bonus).every(Number.isFinite))
     return { state: 'unverified', reason: '当前模拟属性不可核对，暂不能计算。' };

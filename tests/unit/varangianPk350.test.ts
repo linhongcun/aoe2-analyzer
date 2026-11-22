@@ -6,7 +6,7 @@ import { ctx, units } from './helpers';
 
 const side = (id: number, civ: string, age = 4) => {
   const u = units.find((x) => x.id === id)!;
-  const S = simulate(ctx, u, civ, age, presetUpTo(simTechs(ctx, u, civ), age), new Set());
+  const S = simulate(ctx, u, civ, age, presetUpTo(simTechs(ctx, u, civ), age, civ), new Set());
   return { u, S, F: fighterFrom(u, S) };
 };
 

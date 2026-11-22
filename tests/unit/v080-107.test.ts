@@ -13,7 +13,7 @@ function side(uid: number, civ: string, age: number) {
   const avail = simTechs(ctx, u, civ);
   const ok = new Set(avail.map((x) => x.t.id));
   const a = Math.max(u.age, age);
-  const S = simulate(ctx, u, civ, a, presetUpTo(avail, a), new Set());
+  const S = simulate(ctx, u, civ, a, presetUpTo(avail, a, civ), new Set());
   const disc = discountedCost(u, civ, priceAge(u.age, age), { techIds: ok });
   return { disc, F: { ...fighterFrom(u, S), cost: disc.cost } };
 }

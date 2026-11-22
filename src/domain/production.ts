@@ -5,7 +5,7 @@ import { DAT, type DatEco } from './datEffects';
 import { unitCost } from './unitCost';
 import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
-import { buildingAge, trainingUnitAge } from './availabilityAge';
+import { buildingAge, EARLY_MILITARY_TECH_AGES, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { ratePerMinute } from './formatTime';
@@ -47,11 +47,10 @@ const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as con
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
 const unique = (s: string[]) => [...new Set(s)];
 
-/** 勃艮第采集科技与波希米亚化学的时代只属于生产口径，须在 techAvailability.ts 点名。 */
+/** 勃艮第采集科技的提前时代只属于生产口径，军事科技提前（含波希米亚化学）共享 EARLY_MILITARY_TECH_AGES，均须在 techAvailability.ts 点名。 */
 export function productionTechAge(t: Tech, civ: string) {
   if (civ === 'Burgundians' && eco.ecoTechs[t.id] && isGatherTech(t)) return Math.max(1, t.age - 1);
-  if (civ === 'Bohemians' && t.id === 47) return 3;
-  return t.age;
+  return Object.hasOwn(EARLY_MILITARY_TECH_AGES, civ) ? (EARLY_MILITARY_TECH_AGES[civ]?.[t.id] ?? t.age) : t.age;
 }
 function isGatherTech(t: Tech) {
   return (eco.ecoTechs[t.id]?.effects ?? []).some(
