@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""WCAG 2.1 对比度检查：docs/design/DESIGN-SYSTEM.md 中规定的每一组前景/背景。
+"""WCAG 2.1 对比度检查：role/experience-design.md 与 src/shared/styles/tokens.css 对应的前景/背景色对。
 正文 >= 4.5；大字（>=24px，或 >=18.66px 粗体）与 UI 组件/图形 >= 3.0。任一不达标即非零退出。
 用法：python3 scripts/contrast.py
 """

@@ -55,6 +55,23 @@ describe('Issue 1259 图片只能放在允许的资产与基线目录', () => {
   });
 });
 
+describe('#1304 已退役的 docs/design/ 目录禁止回流', () => {
+  it.each(['docs/design/README.md', 'docs/design/notes.md', 'docs/design/spec.json', 'docs/design/nested/deep/file.md', 'docs/design/.gitkeep'])(
+    '通过边界检查拦截 %s 并指向 role/experience-design.md',
+    (path) => {
+      const problems = checkDocsBoundary({ files: [path] });
+      expect(problems).toEqual([expect.stringContaining(`${path}：`)]);
+      expect(problems[0]).toContain('docs/design/ 已退役');
+      expect(problems[0]).toContain('role/experience-design.md');
+      expect(problems[0]).toContain('GitHub Issue 原生附件');
+    },
+  );
+
+  it('不误拦相似前缀路径', () => {
+    expect(misplaced(['docs/design-notes.md', 'docs/designer/notes.md'])).toEqual([]);
+  });
+});
+
 describe('#1077 代码不读 Markdown 正文', () => {
   it.each([
     ['tests/unit/a.test.ts', "expect(readFileSync('docs/reports/EFFECTS-AUDIT.md', 'utf8')).toMatch(/小计/);"],

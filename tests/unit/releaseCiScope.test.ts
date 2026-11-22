@@ -26,7 +26,7 @@ describe('#427 按实际变更选择验证范围', () => {
         change('src/shared/styles/editorial.css', '/* 给旧图标留白 */ .card { display: grid }', '.card { display: grid }'),
         change('tests/e2e/v0290-326.spec.ts'),
         change('tests/e2e/civDlcFilters.spec.ts'),
-        change('docs/design/civ-card-dlc-425.md'),
+        change('docs/README.md'),
         change('CHANGELOG.md'),
         change('package.json', packageText('0.33.0'), packageText('0.33.1')),
         change('package-lock.json', lockText('0.33.0'), lockText('0.33.1')),

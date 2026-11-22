@@ -3,7 +3,7 @@
  * 文档与数据的边界（#1077）：Markdown 只给人看，机器读 JSON。
  *
  * 1. 位置：跟踪的 *.md 只能在 docs/、role/、.github/，或是根目录的 README / AGENTS / CONTRIBUTING / CHANGELOG；
- *    data/ 下只放 .json。
+ *    已退役的 docs/design/ 目录禁止新增任何文件；data/ 下只放 .json。
  * 2. 读取：scripts/、tests/、src/ 和根目录配置里的代码不读 Markdown 正文。需要的字段由生成器写进 data/ 的 JSON，
  *    Markdown 是那份 JSON 的排版。例外逐条登记在 READERS（检查文档本身的脚本、核对自己排版的生成器）和
  *    READABLE（CHANGELOG.md，发版脚本按 Keep a Changelog 解析）。
@@ -23,7 +23,6 @@ export const ROOT_MARKDOWN = Object.freeze(['README.md', 'AGENTS.md', 'CONTRIBUT
 export const READABLE = Object.freeze(['CHANGELOG.md']);
 /** 可以读 Markdown 的代码文件，以及理由。 */
 export const READERS = Object.freeze({
-  'scripts/check-design-index.mjs': '检查 docs/design/README.md 自身的死链和必需条目',
   'scripts/check-docs-boundary.mjs': '本检查',
   'scripts/effects_audit.ts': '--check 把重新排版的结果与 docs/reports/EFFECTS-AUDIT.md 整份比对',
   'scripts/history_build.py': '--check 把重新排版的结果与 docs/reports/HISTORY-DATA.md 整份比对',
@@ -52,6 +51,8 @@ export function misplaced(files) {
   for (const path of files) {
     if (IMAGE.test(path) && !IMAGE_HOMES.some((home) => path.startsWith(home))) {
       problems.push(`${path}：仓库图片只允许放在 ${IMAGE_HOMES.join('、')}。Issue 图片请用 GitHub Issue 原生附件嵌入原 Issue 正文。`);
+    } else if (path.startsWith('docs/design/')) {
+      problems.push(`${path}：docs/design/ 已退役，体验设计原则与交接统一维护在 role/experience-design.md，Issue 图片请使用 GitHub Issue 原生附件。`);
     } else if (path.endsWith('.md') && !ROOT_MARKDOWN.includes(path) && !MARKDOWN_HOMES.some((home) => path.startsWith(home)))
       problems.push(`${path}：Markdown 只能放在 docs/（或 role/、.github/、根目录四份约定文件）`);
     else if (path.startsWith('data/') && !path.endsWith('.json')) problems.push(`${path}：data/ 只放 .json`);

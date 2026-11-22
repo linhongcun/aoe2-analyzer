@@ -1,6 +1,6 @@
 # 软件开发经验与维护交接
 
-给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，Issue 阶段与同一正文交接见 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)，视觉规格见 [docs/design/README.md](../docs/design/README.md)，目录分层的长表见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
+给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，Issue 阶段与同一正文交接见 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)，体验设计原则与交接见 [experience-design.md](experience-design.md)，目录分层的长表见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
 
 核对基准是 2026-11-13 的 `main` `0db9c30924dc5a2acaa66d3924d2f655fc17a6c2`（页脚短 SHA `0db9c30`，`package.json` 版本 `0.77.92`）。命令都对照过 `package.json`、工作流或配置文件。没在这次核对里跑过的检查，下面会标明。
 

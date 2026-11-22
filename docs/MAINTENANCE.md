@@ -99,7 +99,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ## 6. 设计硬规则（摘要）
 
-通用原则见 [体验设计指南](design/DESIGN-SYSTEM.md)；具体需求、设计图与交接记录在原 Issue 正文，不以本地短稿或勘误替代。
+通用原则见 [体验设计接手指南](../role/experience-design.md#体验设计原则)；具体需求、设计图与交接记录在原 Issue 正文，不以本地短稿或勘误替代。
 
 Issue 相关设计图、问题截图和走查对比图使用 [GitHub Issue 原生附件](../role/experience-design.md#issue-design-images)上传并嵌入原 Issue 正文。禁止提交到代码仓库或另开纯图片 PR。`npm run lint` 按[图片目录边界](DATA-LAYOUT.md#文档与数据的边界)检查仓库图片。
 
@@ -114,7 +114,7 @@ Issue 相关设计图、问题截图和走查对比图使用 [GitHub Issue 原�
 
 UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计”节；UX 在本阶段核对原产品范围、规格、可查看图片及重要状态后，直接交软件开发，不另设 PM 设计确认往返。只有纯 docs/data 且无 UI 时，产品可记录 UX 不适用、理由和范围后直接交软件开发；进入软件开发即获得既定范围内的开发授权。缺少可执行规格、图片、关键状态/文案或范围不符时，留在当前阶段记录具体缺项并在原 Issue 串行协调补齐；不得标记设计交付完成。软件开发阶段发现问题时留在该阶段记录阻塞并协调补齐，不回退、不扩范围。不得仅为阶段变化新建 Issue 或功能规格文档。具体交接见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
 
-当前体验设计原则、图标、令牌与角色分工以 [体验设计系统](design/DESIGN-SYSTEM.md)、[体验设计接手指南](../role/experience-design.md) 和 CONTRIBUTING 为准；不把未定义的历史方向标签作为现行规则。
+当前体验设计原则、图标、令牌与角色分工以 [体验设计接手指南](../role/experience-design.md) 和 CONTRIBUTING 为准；不把未定义的历史方向标签作为现行规则。
 
 ## 7. 测试规则
 

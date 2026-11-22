@@ -349,4 +349,4 @@
 
 ## 这份文档放在哪
 
-角色文档集中在 `role/`。设计交接在 [docs/design/README.md](../docs/design/README.md)，维护队列在 [MAINTENANCE.md](../docs/MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进设计索引或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。
+角色文档集中在 `role/`。体验设计原则与交接在 [experience-design.md](experience-design.md)，维护队列在 [MAINTENANCE.md](../docs/MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进体验设计指南或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。

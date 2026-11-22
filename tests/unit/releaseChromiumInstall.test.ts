@@ -11,7 +11,7 @@ import { testCommand } from '../../scripts/ci-run.mjs';
 const pr = { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' };
 const change = (path: string) => ({ path });
 it('#659 a docs pull request requires site smoke and Chromium from its actual release unit tests', () => {
-  const plan = applyBrowserPolicy(planChanges([change('docs/design/README.md')]), pr);
+  const plan = applyBrowserPolicy(planChanges([change('docs/README.md')]), pr);
   expect(plan).toMatchObject({ scope: 'maintenance', full: false, browser: 'capped', e2e: ['tests/e2e/smoke.spec.ts'], data: false });
   expect(plan.unit).toEqual(['tests/unit/release*.test.ts']);
   expect(unitLaunchesChromium(plan)).toBe(true);
