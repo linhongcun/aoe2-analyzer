@@ -209,6 +209,7 @@
     "tests/e2e/portuguese197.spec.ts": 17629,
     "tests/e2e/practice216.spec.ts": 41610,
     "tests/e2e/production204.spec.ts": 10844,
+    "tests/e2e/fortifiedChurchProduction1326.spec.ts": 6000,
     "tests/e2e/armySupply1195.spec.ts": 8500,
     "tests/e2e/productionTransfer1009.spec.ts": 16500,
     "tests/e2e/production963.spec.ts": 12000,
