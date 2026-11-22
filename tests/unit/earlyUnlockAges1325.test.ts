@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { civs, loadCore, loadTrees } from '../../src/data';
 import { ECO as eco } from '../../src/data/eco';
+import { ageComparison, unitAtAge } from '../../src/domain/ageComparison';
 import { armyResearchChoices, evaluateArmyCost } from '../../src/domain/armyCost';
 import { emptyArmyCost } from '../../src/domain/armyCostConfig';
 import {
@@ -12,6 +13,9 @@ import {
   trainingUnitAge,
   treeRowAge,
 } from '../../src/domain/availabilityAge';
+import { analyzeChampi } from '../../src/domain/champiCounters';
+import { duel } from '../../src/domain/duel';
+import { parseSide } from '../../src/domain/duelState';
 import {
   calculateProduction,
   decodeProduction,
@@ -374,5 +378,113 @@ describe('#1325 验收 3–5：3 项军事科技提前解锁（阵容费用、PK
 
     // 非目标守卫：realCost 勃艮第不因本次改动提前启用封建经济科技
     expect(gatherModel(1, 'Burgundians').rate).toEqual(gatherModel(1, 'Franks').rate);
+  });
+});
+
+describe('#1325 复核回归：显式科技时代过滤、蔷琵对照透传 civ、各时代对比提前解锁单位', () => {
+  it('P1-1：单兵 PK 显式携带超时代军事科技时按目标文明时代过滤，不泄露属性且切入混编无报错', () => {
+    // 城堡波希米亚步弓手（4）显式选化学（47）合法；切到不列颠后过滤掉 47，不增加攻击，切入混编无错误
+    const boh = resolve(sim, ctx.core.unitById, { uid: 4, civ: 'Bohemians', age: 3, ageSet: true, techs: [47], team: [] }, 4);
+    const britWith47 = resolve(sim, ctx.core.unitById, { uid: 4, civ: 'Britons', age: 3, ageSet: true, techs: [47], team: [] }, 4);
+    const britBase = resolve(sim, ctx.core.unitById, { uid: 4, civ: 'Britons', age: 3, ageSet: true, techs: [], team: [] }, 4);
+    if (isUnavail(boh) || isUnavail(britWith47) || isUnavail(britBase)) throw new Error('Expected archers available');
+    expect(boh.sel.has(47)).toBe(true);
+    expect(britWith47.sel.has(47)).toBe(false);
+    expect(britWith47.S.atk).toBe(britBase.S.atk);
+    expect(boh.S.atk).toBe(britBase.S.atk + 1);
+    expect(
+      resolveMixedSide(sim, ctx.core, { civ: 'Britons', age: '3', techs: [...britWith47.sel].map(String), team: [], rows: [{ uid: '4', qty: '10' }] }, 'a')
+        .errors,
+    ).toEqual([]);
+
+    // 普通帝王科技（护腕 201）在城堡时代显式传入同样被拦截
+    const britBracer = resolve(sim, ctx.core.unitById, { uid: 4, civ: 'Britons', age: 3, ageSet: true, techs: [201], team: [] }, 4);
+    if (isUnavail(britBracer)) throw new Error('Expected Britons archer available');
+    expect(britBracer.sel.has(201)).toBe(false);
+    expect(britBracer.S.atk).toBe(britBase.S.atk);
+
+    // 女真攻城技师（377）切契丹、波斯帕提亚战术（436）切匈人在城堡时代同样过滤
+    const jur = resolve(sim, ctx.core.unitById, { uid: 1904, civ: 'Jurchens', age: 3, ageSet: true, techs: [377], team: [] }, 1904);
+    const khi = resolve(sim, ctx.core.unitById, { uid: 1904, civ: 'Khitans', age: 3, ageSet: true, techs: [377], team: [] }, 1904);
+    if (isUnavail(jur) || isUnavail(khi)) throw new Error('Expected Rocket Carts available');
+    expect(jur.sel.has(377)).toBe(true);
+    expect(khi.sel.has(377)).toBe(false);
+    expect(jur.S.rng).toBe(khi.S.rng + 1);
+
+    const per = resolve(sim, ctx.core.unitById, { uid: 39, civ: 'Persians', age: 3, ageSet: true, techs: [436], team: [] }, 39);
+    const hun = resolve(sim, ctx.core.unitById, { uid: 39, civ: 'Huns', age: 3, ageSet: true, techs: [436], team: [] }, 39);
+    if (isUnavail(per) || isUnavail(hun)) throw new Error('Expected Cavalry Archers available');
+    expect(per.sel.has(436)).toBe(true);
+    expect(hun.sel.has(436)).toBe(false);
+    expect(per.S.ma).toBe(hun.S.ma + 1);
+    expect(per.S.pa).toBe(hun.S.pa + 2);
+  });
+
+  it('P1-2：蔷琵对照在波希米亚城堡时代弩手（24）包含化学（47）且与 pkPath 解析结果一致', () => {
+    for (const opp of ['Muisca', 'Incas', 'Mapuche', 'Tupi']) {
+      const analysis = analyzeChampi(ctx, 'Bohemians', opp, 188329);
+      expect(analysis.state, opp).toBe('ready');
+      if (analysis.state !== 'ready') throw new Error(`Expected ready for Bohemians vs ${opp}`);
+      const castle = analysis.cards.find((card) => card.age === 3);
+      const xbow = castle?.candidates.find((row) => row.unitId === 24);
+      expect(xbow?.state, opp).toBe('ok');
+      if (!xbow || xbow.state !== 'ok') throw new Error(`Expected Crossbowman ok for Bohemians vs ${opp}`);
+
+      expect(xbow.a.civ).toBe('Bohemians');
+      expect(xbow.a.techIds, opp).toContain(47);
+
+      const query = new URLSearchParams(xbow.pkPath.split('?')[1]);
+      const aSpec = parseSide(query.get('a'), xbow.a.spec);
+      const bSpec = parseSide(query.get('b'), xbow.b.spec);
+      const aResolved = resolve(sim, ctx.core.unitById, aSpec, xbow.a.unit.id);
+      const bResolved = resolve(sim, ctx.core.unitById, bSpec, xbow.b.unit.id);
+      if (isUnavail(aResolved) || isUnavail(bResolved)) throw new Error('Expected pkPath sides available');
+
+      expect(xbow.a.stats, opp).toEqual(aResolved.S);
+      expect(xbow.b.stats, opp).toEqual(bResolved.S);
+      expect(xbow.result, opp).toEqual(duel(aResolved.F, bResolved.F));
+      const aCombatSel = [...aResolved.sel].filter((id) => aResolved.avail.some((item) => item.t.id === id && item.ef)).sort((x, y) => x - y);
+      expect(xbow.a.techIds, opp).toEqual(aCombatSel);
+    }
+  });
+
+  it('P1-3：unitAtAge 与 ageComparison 识别所有提前解锁单位并在未解锁时代正确回溯', () => {
+    const byId = ctx.core.unitById;
+    const cases: [number, string, [number | null, number | null, number | null, number | null]][] = [
+      [474, 'Khitans', [null, null, 474, 474]],
+      [474, 'Huns', [null, null, 39, 474]],
+      [567, 'Armenians', [74, 77, 567, 567]],
+      [75, 'Armenians', [74, 75, 75, 75]],
+      [5, 'Bohemians', [null, null, 5, 5]],
+      [283, 'Burgundians', [null, null, 283, 283]],
+      [422, 'Cumans', [null, 1258, 422, 422]],
+      [359, 'Armenians', [93, 358, 359, 359]],
+      [359, 'Franks', [null, 93, 358, 359]],
+    ];
+
+    for (const [uid, civ, expected] of cases) {
+      for (const age of [1, 2, 3, 4] as const) {
+        expect(unitAtAge(byId, uid, civ, age, ctx.trees)?.id ?? null, `${civ} u${uid} age ${age} (with trees)`).toBe(expected[age - 1]);
+        expect(unitAtAge(byId, uid, civ, age)?.id ?? null, `${civ} u${uid} age ${age} (without trees)`).toBe(expected[age - 1]);
+      }
+    }
+
+    const rows = ageComparison(sim, byId, { uid: 474, civ: 'Khitans', team: [] }, { uid: 567, civ: 'Armenians', team: [] });
+    expect(rows.map((r) => [r.age, r.a?.u.id ?? null, r.b?.u.id ?? null])).toEqual([
+      [1, null, 74],
+      [2, null, 77],
+      [3, 474, 567],
+      [4, 474, 567],
+    ]);
+    const castleRow = rows.find((r) => r.age === 3)!;
+    const khitanCastle = resolve(sim, byId, { uid: 474, civ: 'Khitans', age: 3, ageSet: true, techs: 'f', team: [] }, 474);
+    const armCastle = resolve(sim, byId, { uid: 567, civ: 'Armenians', age: 3, ageSet: true, techs: 'f', team: [] }, 567);
+    if (isUnavail(khitanCastle) || isUnavail(armCastle)) throw new Error('Expected castle early units available');
+    expect(castleRow.result).toEqual(duel(khitanCastle.F, armCastle.F));
+
+    const hcRows = ageComparison(sim, byId, { uid: 5, civ: 'Bohemians', team: [] }, { uid: 24, civ: 'Britons', team: [] });
+    expect(hcRows.find((r) => r.age === 3)?.a?.u.id).toBe(5);
+    expect(hcRows.find((r) => r.age === 3)?.result).not.toBeNull();
+    expect(hcRows.find((r) => r.age === 2)?.a).toBeNull();
   });
 });

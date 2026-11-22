@@ -13,7 +13,7 @@ function side(id: number, civ: string, age: number) {
   if (sides[key]) return sides[key];
   const unit = core.unitById[id];
   if (!unit) throw new Error(`Missing current unit ${id}`);
-  const selected = presetUpTo(simTechs(ctx, unit, civ), age);
+  const selected = presetUpTo(simTechs(ctx, unit, civ), age, civ);
   return (sides[key] = { key, unit, stats: simulate(ctx, unit, civ, age, selected, new Set()), selected: [...selected].sort((a, b) => a - b) });
 }
 

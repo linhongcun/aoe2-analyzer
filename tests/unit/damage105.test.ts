@@ -13,7 +13,7 @@ describe('逐击来源与战斗引擎一致', () => {
     [83, 'Incas'],
   ] as const)('%s %s 的来源按实际效果顺序累加', (id, civ) => {
     const u = units.find((u) => u.id === id)!;
-    const sel = presetUpTo(simTechs(ctx, u, civ), 4);
+    const sel = presetUpTo(simTechs(ctx, u, civ), 4, civ);
     const trace = damageSources(ctx, u, civ, 4, sel, new Set());
     expect(trace.fighter).toEqual(fighterFrom(u, simulate(ctx, u, civ, 4, sel, new Set())));
     for (const [stat, base, final] of [

@@ -21,7 +21,7 @@ it('各时代每一项战斗结果等于链接对应单位、文明和时代的�
       continue;
     }
     const standalone = (u: (typeof units)[number], civ: string) =>
-      fighterFrom(u, simulate(ctx, u, civ, row.age, presetUpTo(simTechs(ctx, u, civ), row.age), new Set()));
+      fighterFrom(u, simulate(ctx, u, civ, row.age, presetUpTo(simTechs(ctx, u, civ), row.age, civ), new Set()));
     expect(row.result).toEqual(duel(standalone(row.a.u, a.civ), standalone(row.b.u, b.civ)));
   }
 });

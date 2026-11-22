@@ -5,7 +5,7 @@ import { ctx, units } from './helpers';
 
 const fighter = (id: number, civ: string) => {
   const u = units.find((x) => x.id === id)!;
-  return fighterFrom(u, simulate(ctx, u, civ, 4, presetUpTo(simTechs(ctx, u, civ), 4), new Set()));
+  return fighterFrom(u, simulate(ctx, u, civ, 4, presetUpTo(simTechs(ctx, u, civ), 4, civ), new Set()));
 };
 
 describe('#168 生效克制与伤害同源', () => {

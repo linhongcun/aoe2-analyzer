@@ -10,7 +10,7 @@ import { ctx, techById, units } from './helpers';
 const formationContent = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const imperial = (civ: string, id: number, omit?: number) => {
   const unit = units.find((entry) => entry.id === id)!;
-  const selected = presetUpTo(simTechs(ctx, unit, civ), 4);
+  const selected = presetUpTo(simTechs(ctx, unit, civ), 4, civ);
   if (omit !== undefined) selected.delete(omit);
   return simulate(ctx, unit, civ, 4, selected, new Set());
 };

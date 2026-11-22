@@ -160,8 +160,8 @@ export function simulate(
 
 /** 所有可数值计入的科技 */
 export const allNumeric = (avail: readonly SimTech[]) => new Set(avail.filter((x) => x.ef).map((x) => x.t.id));
-/** 时代预设：该时代及之前的全部可计入科技（传入 civ 时识别已登记的军事科技提前解锁） */
-export const presetUpTo = (avail: readonly SimTech[], age: number, civ = '') =>
+/** 时代预设：该时代及之前的全部可计入科技（按 civ 识别已登记的军事科技提前解锁） */
+export const presetUpTo = (avail: readonly SimTech[], age: number, civ: string) =>
   new Set(avail.filter((x) => x.ef && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
 
 export function totalCost(avail: readonly SimTech[], sel: ReadonlySet<number>): { cost: Cost; time: number } {

@@ -29,7 +29,7 @@ const ok = (row: ChampiCandidate): Extract<ChampiCandidate, { state: 'ok' }> => 
 function engine(source: ChampiContext, civ: string, id: number, age: number) {
   const unit = source.core.unitById[id]!;
   const sim = makeSimContext(source.core.techs, source.trees);
-  const selected = presetUpTo(simTechs(sim, unit, civ), age);
+  const selected = presetUpTo(simTechs(sim, unit, civ), age, civ);
   const stats = simulate(sim, unit, civ, age, selected, new Set());
   return { stats, selected: [...selected].sort((a, b) => a - b), fighter: fighterFrom(unit, stats) };
 }

@@ -1,4 +1,9 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
+
+async function ensureDetailsOpen(details: Locator) {
+  await expect(details).toBeVisible();
+  if (!(await details.evaluate((el) => (el as HTMLDetailsElement).open))) await details.locator('summary').click();
+}
 
 function armyCostUrl(civ: string, age: string, rows: { unit: number; qty: string }[], targets: string[] = []): string {
   return (
@@ -126,6 +131,74 @@ test('#1325 验收 3 & 4：阵容新增费用三组城堡科技与契丹升级�
   await expect(page.locator('#duel-a details.duel-tech label', { hasText: '帕提亚战术' }).locator('input[type="checkbox"]')).toBeChecked();
   await page.locator('#duel-b details.duel-tech summary').click();
   await expect(page.locator('#duel-b details.duel-tech label', { hasText: '帕提亚战术' }).locator('input[type="checkbox"]')).not.toBeChecked();
+
+  expect(errors).toEqual([]);
+});
+
+test('#1325 回归：切文明过滤超时代显式科技不污染混编、帝王态提前解锁单位显示城堡预设且各时代对比不降级', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  // 1. P1-1：城堡时代波希米亚步弓手手动勾选化学（47）→ 切到不列颠后自动移除化学，不残留 +1 攻击，切入混编无「高于本方时代」报错
+  await page.goto('./#/duel?a=4.Bohemians.3..&b=4.Britons.3..&m=1');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  const chemA = page.locator('#duel-a details.duel-tech label', { hasText: '化学' }).locator('input[type="checkbox"]');
+  await chemA.check();
+  await expect(chemA).toBeChecked();
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('城堡时代');
+  await expect(page.locator('#duel-a .duel-stats')).toContainText('5（穿刺）');
+  await expect(page.locator('#duel-b .duel-stats')).toContainText('4（穿刺）');
+
+  await page.locator('#duel-a-civ').click();
+  await page.getByRole('dialog', { name: 'A 方文明', exact: true }).locator('[data-civ="Britons"]').click();
+  await expect(page.locator('#duel-a')).toContainText('不列颠');
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('城堡时代');
+  await expect(page.locator('#duel-a .duel-stats')).toContainText('4（穿刺）');
+  await expect(page.locator('#duel-a details.duel-tech label', { hasText: '化学' }).locator('input[type="checkbox"]')).not.toBeChecked();
+  const hashQuery = new URLSearchParams(page.url().slice(page.url().indexOf('?') + 1));
+  expect(hashQuery.get('a')).toBe('4.Britons.3..');
+
+  await page.getByRole('radiogroup', { name: '模式', exact: true }).getByRole('radio', { name: '混编', exact: true }).click();
+  await expect(page.getByTestId('mixed-duel')).toBeVisible();
+  await expect(page.getByRole('alert', { name: '配置错误' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '计算混编结果', exact: true })).toBeEnabled();
+
+  // 直接打开带超时代显式科技的链接（不列颠城堡步弓手带化学 47），也不应生效或带坏混编
+  await page.goto('./#/duel?a=4.Britons.3.47.&b=4.Britons.3..&m=1');
+  await expect(page.locator('#duel-a .duel-stats')).toContainText('4（穿刺）');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await expect(page.locator('#duel-a details.duel-tech label', { hasText: '化学' }).locator('input[type="checkbox"]')).not.toBeChecked();
+
+  // 2. P2-1 + P1-3：帝王时代查看契丹重装骑射手（474）与亚美尼亚冠军剑士（567）时，内嵌科技面板展示「城堡预设」，各时代对比城堡行不回溯低级单位
+  await page.goto('./#/duel?a=474.Khitans.4..&b=567.Armenians.4..&m=1');
+  await expect(page.locator('#duel-a')).toContainText('契丹');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await ensureDetailsOpen(page.locator('#duel-b details.duel-tech'));
+  const castlePresetA = page.locator('#duel-a details.duel-tech').getByRole('button', { name: '城堡预设', exact: true });
+  const castlePresetB = page.locator('#duel-b details.duel-tech').getByRole('button', { name: '城堡预设', exact: true });
+  await expect(castlePresetA).toBeVisible();
+  await expect(castlePresetB).toBeVisible();
+
+  await ensureDetailsOpen(page.locator('[data-t="age-comparison"]'));
+  const castleSection = page.locator('[data-t="age-comparison"] section[aria-label="城堡时代对比"]');
+  await expect(castleSection).toContainText('A · 重装骑射手');
+  await expect(castleSection).toContainText('B · 冠军剑士');
+  await expect(castleSection.getByRole('link', { name: '打开城堡时代对阵' })).toHaveAttribute('href', /a=474\.Khitans\.3\.f\..*b=567\.Armenians\.3\.f\./);
+
+  await castlePresetA.click();
+  await expect(page.locator('#duel-a .duel-age')).toHaveText('城堡时代');
+  await expect(page.locator('#duel-a-age')).toHaveValue('3');
+
+  // 对照：匈奴重装骑射手在帝王时代不应显示「城堡预设」
+  await page.goto('./#/duel?a=474.Huns.4..&b=567.Japanese.4..&m=1');
+  await expect(page.locator('#duel-a')).toContainText('匈奴');
+  await ensureDetailsOpen(page.locator('#duel-a details.duel-tech'));
+  await expect(page.locator('#duel-a details.duel-tech').getByRole('button', { name: '帝王预设', exact: true })).toBeVisible();
+  await expect(page.locator('#duel-a details.duel-tech').getByRole('button', { name: '城堡预设', exact: true })).toHaveCount(0);
 
   expect(errors).toEqual([]);
 });

@@ -36,6 +36,15 @@ import '../../../shared/ui/productionTransfer.css';
 
 const AGES = [1, 2, 3, 4] as const;
 
+function filterExplicitTechs(techs: SideSpec['techs'], techById: ProductionContext['core']['techById'], civ: string, age: number): SideSpec['techs'] {
+  return Array.isArray(techs)
+    ? techs.filter((id) => {
+        const tech = techById[id];
+        return !!tech && militaryTechAge(civ, id, tech.age) <= age;
+      })
+    : techs;
+}
+
 export function Side({
   k,
   side,
@@ -84,7 +93,7 @@ export function Side({
       <Icon name="arrow-right" />
     </Link>
   );
-  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} />;
+  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} context={context} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
@@ -93,14 +102,15 @@ export function Side({
   const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
   const onAgeChange = (nextAge: number) => {
     const nextTechs: SideSpec['techs'] = Array.isArray(spec.techs)
-      ? spec.techs.filter((id) => {
-          const tech = core.techById[id];
-          return !!tech && militaryTechAge(side.civ, id, tech.age) <= nextAge;
-        })
+      ? filterExplicitTechs(spec.techs, core.techById, side.civ, nextAge)
       : spec.techs === 'f' && nextAge < 4
         ? 'c'
         : spec.techs;
     onChange({ ...spec, age: nextAge, ageSet: true, techs: nextTechs });
+  };
+  const onCivChange = (nextCiv: string) => {
+    const nextAge = unitAvailable(context, nextCiv, u.id, side.age) ? side.age : Math.max(u.age, side.age);
+    onChange({ ...spec, civ: nextCiv, techs: filterExplicitTechs(spec.techs, core.techById, nextCiv, nextAge) });
   };
   const civObj = civByEn(side.civ);
   return (
@@ -177,14 +187,7 @@ export function Side({
           )}
         </div>
         <div className="duel-civ-slot">
-          <CivPicker
-            id={`duel-${k}-civ`}
-            label={`${k.toUpperCase()} 方文明`}
-            value={side.civ}
-            allowed={u.civs}
-            compactTrigger
-            onChange={(c) => onChange({ ...spec, civ: c })}
-          />
+          <CivPicker id={`duel-${k}-civ`} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} compactTrigger onChange={onCivChange} />
         </div>
       </div>
       <div className="duel-age-presets">
@@ -281,11 +284,7 @@ export function Side({
             headingLevel={2}
             embedded={`duel-${k}`}
             civs={u.civs}
-            minAge={
-              side.earlyAgeMarker?.unitId === u.id && side.earlyAgeMarker.civ === side.civ && side.earlyAgeMarker.age === side.age
-                ? side.earlyAgeMarker.age
-                : u.age
-            }
+            minAge={AGES.find((a) => unitAvailable(context, side.civ, u.id, a)) ?? u.age}
             civ={side.civ}
             age={side.age}
             sel={side.sel}
@@ -329,12 +328,14 @@ function UnavailSide({
   fams,
   onChange,
   transferLink,
+  context,
 }: {
   k: 'a' | 'b';
   side: Unavail;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   transferLink: React.ReactNode;
+  context: ProductionContext;
 }) {
   const { u, spec, sub } = side;
   const civObj = civByEn(side.civ);
@@ -394,7 +395,10 @@ function UnavailSide({
             value={side.civ}
             allowed={u.civs}
             compactTrigger
-            onChange={(c) => onChange({ ...spec, civ: c })}
+            onChange={(c) => {
+              const nextAge = unitAvailable(context, c, u.id, side.age) ? side.age : Math.max(u.age, side.age);
+              onChange({ ...spec, civ: c, techs: filterExplicitTechs(spec.techs, context.core.techById, c, nextAge) });
+            }}
           />
         </div>
       </div>
