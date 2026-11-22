@@ -1,13 +1,23 @@
+import type { FightEnd } from '../../../domain/contactFight';
 import type { KiteSummary, SideKiteSummary } from '../../../domain/contactKite';
 import { formatHp } from '../../../domain/hpFormat';
 import { Icon } from '../../../shared/ui/Icon';
 import '../ranged-kite.css';
 
-export const KITE_CONTACT_BOUNDARY =
-  '边走边射按目录真实出手前摇（停顿）与攻击间隔估算理论理想移动窗口，单方累计后撤上限 40 格（触底后接战）；缺失目录前摇按 0 秒处理。未计入地形障碍、包抄绕路、玩家微操失误、走位躲箭、攻城器拆装与转向。';
+export function KiteContactBoundary() {
+  return (
+    <>
+      边走边射按目录真实出手前摇（停顿）与攻击间隔估算理论理想移动窗口，单方累计后撤上限 <span className="num nw">40 格</span>
+      （触底后接战）；缺失目录前摇按 <span className="num nw">0 秒</span>
+      处理。未计入地形障碍、包抄绕路、玩家微操失误、走位躲箭、攻城器拆装与转向。
+    </>
+  );
+}
 
 const fmt1 = (v: number) => v.toFixed(1);
 const fmt2 = (v: number) => v.toFixed(2);
+const dualOutcomeLabel = (status?: FightEnd) =>
+  status === 'timeout' ? '双拉扯 · 达到时限' : status === 'limit' ? '双拉扯 · 达到上限' : status === 'draw' ? '双拉扯 · 同刻阵亡' : '双拉扯 · 分出胜负';
 
 export function DisengagedNotice({
   aName,
@@ -112,7 +122,17 @@ function SideEntry({ label, side, mixed }: { label: 'A' | 'B'; side: SideKiteSum
 }
 
 /** issue 1295：拉扯结果摘要卡；1v1 传 headingLevel=3（<h3>），群战/混编传 headingLevel=4（<h4>）。 */
-export function KiteSummaryCard({ kite, mixed = false, headingLevel = 4 }: { kite: KiteSummary; mixed?: boolean; headingLevel?: 3 | 4 }) {
+export function KiteSummaryCard({
+  kite,
+  mixed = false,
+  headingLevel = 4,
+  status,
+}: {
+  kite: KiteSummary;
+  mixed?: boolean;
+  headingLevel?: 3 | 4;
+  status?: FightEnd;
+}) {
   const aOn = kite.a.enabled;
   const bOn = kite.b.enabled;
   if (!aOn && !bOn) return null;
@@ -198,7 +218,7 @@ export function KiteSummaryCard({ kite, mixed = false, headingLevel = 4 }: { kit
                 已触及 <span className="num nw">40 格</span>退距上限
               </>
             ) : (
-              '双拉扯 · 分出胜负'
+              dualOutcomeLabel(status)
             )}
           </span>
           <SideEntry label="A" side={kite.a} mixed />
@@ -217,7 +237,7 @@ export function KiteSummaryCard({ kite, mixed = false, headingLevel = 4 }: { kit
               已触及 <span className="num nw">40 格</span>退距上限
             </>
           ) : (
-            '双拉扯 · 分出胜负'
+            dualOutcomeLabel(status)
           )}
         </span>
         <SideEntry label="A" side={kite.a} mixed={false} />

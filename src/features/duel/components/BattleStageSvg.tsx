@@ -479,6 +479,12 @@ export function BattleStageSvg({ model, snap, isCompact, isNarrow }: BattleStage
         <span className="br-legend-item">
           <i className="br-dot is-contact" /> 接触线
         </span>
+        {retreatCapLines.length > 0 && (
+          <span className="br-legend-item" data-t="replay-legend-retreat-cap">
+            <i className={`br-dot is-retreat-cap${retreatCapLines.some((l) => l.hit) ? ' is-hit' : ''}`} />
+            <span className="num nw">40 格</span>退距线
+          </span>
+        )}
       </div>
     </div>
   );

@@ -196,6 +196,17 @@
   border-top: 2px dashed var(--color-bad);
 }
 
+.br-dot.is-retreat-cap {
+  width: 12px;
+  height: 0;
+  border-radius: 0;
+  border-top: 2px dashed var(--color-muted);
+}
+
+.br-dot.is-retreat-cap.is-hit {
+  border-top-color: var(--color-warn);
+}
+
 /* 双栏当刻读数卡 */
 .br-sides {
   display: grid;

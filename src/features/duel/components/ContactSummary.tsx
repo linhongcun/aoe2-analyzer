@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
-import type { ContactSummary as Contact } from '../../../domain/contactFight';
+import type { ContactSummary as Contact, FightEnd } from '../../../domain/contactFight';
 import type { Fighter } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { hasAnyKiteEnabled } from '../logic/duelKiteView';
-import { KITE_CONTACT_BOUNDARY, KiteSummaryCard } from './KiteSummaryCard';
+import { KiteContactBoundary, KiteSummaryCard } from './KiteSummaryCard';
 import '../contact-summary.css';
 
 export const CONTACT_MODEL = '空间接触面与接敌先手模型（一维近似）';
@@ -106,14 +106,26 @@ function MeleeCount({ line }: { line: Line }) {
   );
 }
 
-export function GroupContact({ value, a, b, standingDeltaVolleys = 0 }: { value: Contact; a: Line; b: Line; standingDeltaVolleys?: number }) {
+export function GroupContact({
+  value,
+  status,
+  a,
+  b,
+  standingDeltaVolleys = 0,
+}: {
+  value: Contact;
+  status?: FightEnd;
+  a: Line;
+  b: Line;
+  standingDeltaVolleys?: number;
+}) {
   const ranged = a.fighter.ranged || b.fighter.ranged;
   const hasKite = hasAnyKiteEnabled(value.kite);
   return (
     <section className="contact-summary" data-t="duel-contact-boundary" aria-label={CONTACT_MODEL}>
       <h3>{CONTACT_MODEL}</h3>
       <div className="contact-cards">
-        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} headingLevel={4} />}
+        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} status={status} headingLevel={4} />}
         {ranged && value.firstStrike && (
           <Card title="接敌与远程先手">
             <Opening value={value} standingDeltaVolleys={standingDeltaVolleys} />
@@ -157,19 +169,31 @@ export function GroupContact({ value, a, b, standingDeltaVolleys = 0 }: { value:
         ))}
       </div>
       {(!ranged || !value.firstStrike) && <ContactTime value={value} />}
-      <p className="note">{hasKite ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}</p>
+      <p className="note">{hasKite ? <KiteContactBoundary /> : CONTACT_BOUNDARY}</p>
     </section>
   );
 }
 
-export function MixedContact({ value, a, b, standingDeltaVolleys = 0 }: { value: Contact; a: Line[]; b: Line[]; standingDeltaVolleys?: number }) {
+export function MixedContact({
+  value,
+  status,
+  a,
+  b,
+  standingDeltaVolleys = 0,
+}: {
+  value: Contact;
+  status?: FightEnd;
+  a: Line[];
+  b: Line[];
+  standingDeltaVolleys?: number;
+}) {
   const lines = [...a, ...b];
   const hasKite = hasAnyKiteEnabled(value.kite);
   return (
     <section className="contact-summary" aria-label="本场接触面与接敌摘要">
       <h3>本场接触面与接敌摘要</h3>
       <div className="contact-cards">
-        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} mixed headingLevel={4} />}
+        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} mixed status={status} headingLevel={4} />}
         {lines.some((line) => line.fighter.ranged) && (
           <Card title="接敌与远程先手">
             <Opening value={value} standingDeltaVolleys={standingDeltaVolleys} />
@@ -211,7 +235,7 @@ export function MixedContact({ value, a, b, standingDeltaVolleys = 0 }: { value:
           <p>B · {b.map((line) => line.fighter.name).join(' / ')}</p>
         </Card>
       </div>
-      <p className="note">{hasKite ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}</p>
+      <p className="note">{hasKite ? <KiteContactBoundary /> : CONTACT_BOUNDARY}</p>
     </section>
   );
 }
