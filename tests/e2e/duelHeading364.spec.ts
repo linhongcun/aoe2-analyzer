@@ -226,7 +226,7 @@ test('群战使用真实固定数据展示近战容量、攻城先手及最小�
   await expect(cards.nth(0)).toContainText(/最多 (?:[1-5]?\d|6[0-5]) \/ 66 人/);
   await expect(cards.nth(1)).toContainText(/最多 (?:[1-2]?\d|3[0-6]) \/ 37 人/);
   await expect(notes).not.toContainText('射程先手窗口');
-  await expect(page.locator('#duel-res')).toContainText('回放展示本场模拟的存活数变化。');
+  await expect(page.locator('#duel-res')).toContainText('一维接敌与占位近似回放，与本场模拟结算严格同源；不含二维绕路、高地与走位躲箭。');
   for (const [id, civ] of [
     [542, 'Japanese'],
     [36, 'Spanish'],

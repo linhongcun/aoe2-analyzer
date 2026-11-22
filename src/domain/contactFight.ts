@@ -1,4 +1,5 @@
 import { expectedHit, type Fighter } from './duelFighter';
+import { createTraceRecorder, type ContactReplayTrace } from './contactReplayTrace';
 
 export const FIGHT_CAP = 200;
 export const FIGHT_TIME = 600;
@@ -44,6 +45,7 @@ interface ResolvedFight {
   b: ArmyResult;
   timeline: Timeline;
   contact: ContactSummary;
+  replay?: ContactReplayTrace;
 }
 export type ContactResult =
   (ResolvedFight & ({ status: 'win'; winner: Side } | { status: 'draw' | 'timeout' | 'limit' })) | { status: 'error'; reason: string };
@@ -173,9 +175,9 @@ function applyAttacks(shots: RankShots[][], source: Formation, target: Formation
 export function contactFight(
   a: readonly ArmyRow[],
   b: readonly ArmyRow[],
-  options: { maxTime?: number; maxEvents?: number; maxAttacks?: number } = {},
+  options: { maxTime?: number; maxEvents?: number; maxAttacks?: number; recordReplay?: boolean } = {},
 ): ContactResult {
-  const { maxTime = FIGHT_TIME, maxEvents = EVENT_CAP, maxAttacks = ATTACK_CAP } = options;
+  const { maxTime = FIGHT_TIME, maxEvents = EVENT_CAP, maxAttacks = ATTACK_CAP, recordReplay = false } = options;
   const error = (reason: string): ContactResult => ({ status: 'error', reason });
   if (!Number.isFinite(maxTime) || maxTime < 0 || maxTime > FIGHT_TIME) return error('模拟时限无效');
   if (
@@ -227,6 +229,7 @@ export function contactFight(
 
   let gap = 1 + Math.max(...[...A, ...B].map((row) => row.fighter.rng));
   if (!Number.isFinite(gap + A.reduce((s, r) => s + 2 * r.radiusX, 0) + B.reduce((s, r) => s + 2 * r.radiusX, 0))) return error('接敌距离无法解析');
+  const recorder = recordReplay ? createTraceRecorder(gap) : null;
   let time = 0,
     events = 0,
     attacks = 0;
@@ -245,7 +248,8 @@ export function contactFight(
   const finish = (status: 'draw' | 'timeout' | 'limit' | 'win'): ContactResult => {
     closeOpening();
     if (timeline.at(-1)![0] !== time) timeline.push([time, survivors(A), survivors(B)]);
-    const result = { duration: time, a: summarize(A), b: summarize(B), timeline, contact };
+    const replay = recorder ? recorder.finalize(time, gap, A, B) : undefined;
+    const result: ResolvedFight = { duration: time, a: summarize(A), b: summarize(B), timeline, contact, ...(replay ? { replay } : {}) };
     return status === 'win' ? { ...result, status, winner: survivors(A) ? 'a' : 'b' } : { ...result, status };
   };
   const withinHorizon = (t: number) => t <= maxTime + Number.EPSILON * Math.max(1, maxTime) * 4;
@@ -337,8 +341,11 @@ export function contactFight(
     if (
       contact.meleeAt === null &&
       ((!left.front.fighter.ranged && inA[left.front.index]!.length) || (!right.front.fighter.ranged && inB[right.front.index]!.length))
-    )
+    ) {
       contact.meleeAt = time;
+      recorder?.noteTouch(gap);
+      recorder?.noteMeleeContact(time);
+    }
     const aReady = inA.some((ranks) => ranks.length),
       bReady = inB.some((ranks) => ranks.length);
     const rangedReady = (rows: RowState[], amounts: typeof inA, includeBoundary: boolean) =>
@@ -382,11 +389,15 @@ export function contactFight(
       if (events >= maxEvents || attacks + volleySize > maxAttacks) return finish('limit');
       events++;
       attacks += volleySize;
-      const aFired = aShots.some((ranks) => ranks.length),
-        bFired = bShots.some((ranks) => ranks.length);
+      const aFiredCount = aShots.reduce((n, ranks) => n + countShots(ranks), 0);
+      const bFiredCount = bShots.reduce((n, ranks) => n + countShots(ranks), 0);
+      const aFired = aFiredCount > 0,
+        bFired = bFiredCount > 0;
       contact.firstFire ??= aFired && bFired ? 'both' : aFired ? 'a' : 'b';
-      if (opening && (opening.side === 'a' ? aShots : bShots).some((ranks, i) => ranks.length && (opening!.side === 'a' ? A : B)[i]!.fighter.ranged))
+      if (opening && (opening.side === 'a' ? aShots : bShots).some((ranks, i) => ranks.length && (opening!.side === 'a' ? A : B)[i]!.fighter.ranged)) {
         opening.volleys++;
+        if (opening.volleys === 1) recorder?.noteOpeningStart(time, opening.side);
+      }
       if (leavingOpening) closeOpening();
       lastAttack = time;
       for (const [army, volley, rows] of [
@@ -411,12 +422,35 @@ export function contactFight(
           rows[i]![key] = Math.max(rows[i]![key], fired);
         });
       }
+      const prevAPos = recorder?.getAPos() ?? 0;
+      const prevBPos = recorder?.getBPos() ?? 0;
+      const prevAliveA = recorder ? A.map((r) => r.alive) : null;
+      const prevAliveB = recorder ? B.map((r) => r.alive) : null;
+      recorder?.addFired(aFiredCount, bFiredCount);
       // 冻结两边出手人数后再逐击结算。同一时刻阵亡仍保留这次出手。
       applyAttacks(aShots, left, right, ab);
       applyAttacks(bShots, right, left, ba);
       // 退到下一行后，前排之间的距离按阵线实际推进重新计算。
       const previousDepth = (side: Formation) => side.setback[side.rows.findIndex((row) => row.alive)] ?? 0;
-      gap += previousDepth(left) + previousDepth(right);
+      const aStep = previousDepth(left),
+        bStep = previousDepth(right);
+      gap += aStep + bStep;
+      if (recorder && prevAliveA && prevAliveB) {
+        for (const [side, rows, prevAlive, form, basePos] of [
+          ['a', A, prevAliveA, left, prevAPos],
+          ['b', B, prevAliveB, right, prevBPos],
+        ] as const) {
+          for (const row of rows) {
+            if (prevAlive[row.index]! > 0 && row.alive === 0) {
+              const nextAlive = rows.find((r) => r.index > row.index && r.alive > 0);
+              const stepDist = nextAlive ? form.setback[nextAlive.index]! - form.setback[row.index]! : 2 * row.radiusX;
+              const x = side === 'a' ? basePos - form.setback[row.index]! : basePos + form.setback[row.index]!;
+              recorder.noteRowCleared({ t: time, side, rowIndex: row.index, uid: row.uid, initial: row.count, stepDist, x });
+            }
+          }
+        }
+        recorder.onRowShift(aStep, bStep, gap);
+      }
       timeline.push([time, survivors(A), survivors(B)]);
       // 换前排可能改变射程、位移及接敌容量，下一轮用新行重新排期。
       continue;
@@ -436,6 +470,7 @@ export function contactFight(
     nextTime = Math.min(nextTime, maxTime);
     if (!timeout && (events >= maxEvents || !(nextTime > time))) return finish('limit');
     const elapsed = nextTime - time;
+    recorder?.recordSettled(time, gap, va, vb, A, left.setback, inA, B, right.setback, inB, opening);
     for (const [front, eligible, rows] of [
       [left.front, inA, contact.a],
       [right.front, inB, contact.b],
@@ -445,7 +480,9 @@ export function contactFight(
         if (!leaving) rows[front.index]!.meleeUnitSeconds += count * elapsed;
       }
     }
+    const prevGap = gap;
     gap = Math.max(0, gap - speed * elapsed);
+    recorder?.onAdvance(va, vb, speed, prevGap, elapsed, gap);
     time = nextTime;
     if (timeout) return finish('timeout');
     events++;

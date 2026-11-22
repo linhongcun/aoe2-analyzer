@@ -6,7 +6,7 @@ import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/use
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
 import { isChampiUnit } from '../../../domain/champiCounters';
-import { countForBudget, damageByClass, duel, groupFight } from '../../../domain/duel';
+import { countForBudget, damageByClass, groupFight, oneVOneFight } from '../../../domain/duel';
 import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
@@ -61,12 +61,7 @@ export default function Duel() {
   const [params] = useSearchParams();
   const mixed = isMixedDuelLink(params);
   const pendingModeFocusRef = useRef<TopMode | null>(null);
-  useEffect(
-    () => () => {
-      pendingModeFocusRef.current = null;
-    },
-    [],
-  );
+  useEffect(() => () => void (pendingModeFocusRef.current = null), []);
   const specA = parseSide(params.get('a'), DEF_A);
   const specB = parseSide(params.get('b'), DEF_B);
   const champiRelevant = isChampiUnit(specA.uid) || isChampiUnit(specB.uid) || specA.civ === 'Muisca' || specB.civ === 'Muisca';
@@ -100,8 +95,11 @@ function DuelStage({
 }) {
   const [resEl, setResEl] = useState<HTMLDivElement | null>(null);
   const resHeadingRef = useRef<HTMLHeadingElement>(null);
-  const oneResult = useMemo(() => (mode === '1' && !isUnavail(A) && !isUnavail(B) ? duel(A.F, B.F) : null), [mode, A, B]);
-  const groupResult = useMemo(() => (mode !== '1' && !isUnavail(A) && !isUnavail(B) ? groupFight(A.F, cntA, B.F, cntB) : null), [mode, A, B, cntA, cntB]);
+  const oneResult = useMemo(() => (mode === '1' && !isUnavail(A) && !isUnavail(B) ? oneVOneFight(A.F, B.F) : null), [mode, A, B]);
+  const groupResult = useMemo(
+    () => (mode !== '1' && !isUnavail(A) && !isUnavail(B) ? groupFight(A.F, cntA, B.F, cntB, { recordReplay: true }) : null),
+    [mode, A, B, cntA, cntB],
+  );
   const stickySummary = useMemo(() => {
     if (isUnavail(A) || isUnavail(B)) return null;
     if (mode === '1' && oneResult) return summarizeOneVOne(A, B, oneResult);
@@ -478,7 +476,8 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           的特殊远程攻击按每击命中主目标估算。
           {mode === '1' ? (
             <>
-              双方 <span className="num nw">t=0</span> 同时出手；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
+              1v1 有有效碰撞数据时按一维接敌与射程先手模拟（自爆或无普攻单位降级为 <span className="num nw">t=0</span>{' '}
+              静态对照）；不含走位/风筝、地形高低差、冲锋攻击、溅射、
               {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
             </>
           ) : (

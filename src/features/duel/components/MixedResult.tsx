@@ -3,15 +3,17 @@ import { civByEn } from '../../../data';
 import { fighterUsesAssumeHit } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
+import { buildMixedReplay } from '../../../domain/battleReplay';
 import { FIGHT_CAP, FIGHT_TIME } from '../../../domain/contactFight';
 import type { MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE_LABEL, type MixedFightResult, type MixedArmyResult } from '../../../domain/mixedFight';
 import { AGE_ZH } from '../../../domain/ratings';
-import type { Tech } from '../../../domain/types';
+import type { Tech, Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
 import type { Resolved } from '../logic/duelSide';
 import type { MixedSideView } from '../logic/mixedDuel';
+import { BattleReplay } from './BattleReplay';
 import { CONTACT_BOUNDARY, MixedContact, STOP_LABELS } from './ContactSummary';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
 
@@ -132,6 +134,18 @@ export function MixedResult({
         : [],
     ),
   );
+  const unitById: Record<number, Unit> = {};
+  for (const row of [...a.rows, ...b.rows]) {
+    if (row.unit) unitById[row.unit.id] = row.unit;
+  }
+  const replayModel = buildMixedReplay(
+    result,
+    { civZh: civByEn(input.a.civ)?.zh ?? input.a.civ, rows: a.army! },
+    { civZh: civByEn(input.b.civ)?.zh ?? input.b.civ, rows: b.army! },
+  );
+  const sideKey = (s: MixedDuelInput['a']) =>
+    `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
+  const replayKey = `${sideKey(input.a)}|${sideKey(input.b)}|${result.duration}`;
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
@@ -152,6 +166,7 @@ export function MixedResult({
       </p>
       <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />
       <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} />
+      <BattleReplay key={replayKey} model={replayModel} unitById={unitById} />
       <ArmyResult side="a" value={result.a} view={a} input={input} />
       <ArmyResult side="b" value={result.b} view={b} input={input} />
       <div className="bar mix-result-actions">

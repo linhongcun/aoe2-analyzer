@@ -1,4 +1,4 @@
-import type { DuelResult, GroupResult } from '../../../domain/duel';
+import type { DuelResult, GroupResult, OneVOneResult } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { r1, type Resolved } from './duelSide';
 
@@ -19,9 +19,9 @@ export interface DuelSummary {
   metrics: DuelSummaryMetric[];
 }
 
-/** issue 1279 / issue 1322：1v1 胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用。 */
-export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult): DuelSummary {
-  if (r.outcome === 'both-no-attack' || (!r.ab.canAttack && !r.ba.canAttack)) {
+/** issue 1279 / 1294 / 1322：1v1 胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用。 */
+export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult | OneVOneResult): DuelSummary {
+  if (('outcome' in r && r.outcome === 'both-no-attack') || (!r.ab.canAttack && !r.ba.canAttack)) {
     return {
       winner: 'draw',
       icon: 'info',
@@ -29,12 +29,40 @@ export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult): DuelS
       metrics: [{ prefix: '无法通过普通攻击分出胜负', value: '' }],
     };
   }
-  if (r.outcome === 'no-kill') {
+  if ('outcome' in r && r.outcome === 'no-kill') {
     return {
       winner: 'draw',
       icon: 'info',
       headline: '暂无法分出胜负',
       metrics: [],
+    };
+  }
+  if ('mode' in r && r.mode === 'contact') {
+    if (r.status === 'timeout' || r.status === 'limit') {
+      return {
+        winner: 'draw',
+        icon: 'info',
+        headline: GROUP_STOP_LABELS[r.status],
+        metrics: [{ prefix: '用时 ', value: `${r1(r.duration)} 秒` }],
+      };
+    }
+    if (r.status === 'draw' || r.winner === 'draw' || r.winner === null) {
+      return {
+        winner: 'draw',
+        icon: 'trophy',
+        headline: '平局（同时击杀）',
+        metrics: [{ prefix: '用时 ', value: `${r1(r.duration)} 秒` }],
+      };
+    }
+    const winnerSide = r.winner === 'a' ? a : b;
+    return {
+      winner: r.winner,
+      icon: 'trophy',
+      headline: `${r.winner === 'a' ? 'A' : 'B'} · ${winnerSide.u.zh} 获胜`,
+      metrics: [
+        { prefix: '用时 ', value: `${r1(r.duration)} 秒` },
+        { prefix: '剩余生命 ', value: `${formatHp(r.remaining)} / ${formatHp(winnerSide.F.hp)}` },
+      ],
     };
   }
   const winnerSide = r.winner === 'a' ? a : b;

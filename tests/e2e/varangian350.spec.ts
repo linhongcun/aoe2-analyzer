@@ -13,7 +13,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.goto(REPRO);
     const res = page.locator('#duel-res');
     await expect(res).toContainText('冠军剑士 获胜');
-    await expect(res).toContainText('用时 6s');
+    await expect(res).toContainText('用时 6.5 秒');
     await expect(res).toContainText('剩余生命 10 / 70');
     const lines = page.locator('[data-t="pk-vg-line"]');
     await expect(lines).toHaveCount(3);
@@ -54,7 +54,7 @@ test('#350 其他文明只列各自生效的加成', async ({ page }) => {
   await expect(byzGold).toContainText('不含瓦兰吉人');
 
   await page.goto('./#/duel?a=2704.Danes.4.f.&b=567.Teutons.4.f.&m=1');
-  await expect(page.locator('[data-id="danes-spd"]')).toContainText('未计入：丹麦人 移动速度 +10%');
+  await expect(page.locator('[data-id="danes-spd"]')).toContainText('已计入：丹麦人 移动速度 +10%');
   await expect(page.locator('[data-id="danes-hamask"]')).toContainText('哈马思克');
   await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('产生的黄金');
 

@@ -53,8 +53,11 @@ const SUPPRESS_BY_NOTE_ID: Record<string, string> = {
 };
 
 /** 汇总并去重瓦兰吉卫队产金行与加成说明行（纯函数，供组件渲染与单测共用）。 */
-export function prepareVgDisplay(sides: readonly VgSide[], options: { group?: boolean; suppressedTechs?: VgSuppressedTechs } = {}): VgDisplay {
-  const { group = false, suppressedTechs } = options;
+export function prepareVgDisplay(
+  sides: readonly VgSide[],
+  options: { group?: boolean; usesContact?: boolean; suppressedTechs?: VgSuppressedTechs } = {},
+): VgDisplay {
+  const { group = false, usesContact = group, suppressedTechs } = options;
   const gold: VgGoldEntry[] = [];
   for (const s of sides) {
     const g = varangianGold(s.unitId, s.civ, s.seconds);
@@ -65,7 +68,7 @@ export function prepareVgDisplay(sides: readonly VgSide[], options: { group?: bo
   const seenKey = new Set<string>();
   const reasonsBySideNote = new Map<string, Set<string>>();
   for (const s of sides) {
-    const notes = varangianPkNotes(s.unitId, s.civ, s.age, s.rof, group);
+    const notes = varangianPkNotes(s.unitId, s.civ, s.age, s.rof, group, usesContact);
     const suppressed = suppressedTechs?.[s.k];
     for (const note of notes) {
       const techEn = SUPPRESS_BY_NOTE_ID[note.id];
@@ -148,16 +151,18 @@ function GoldLine({ entry, showSide, group }: { entry: VgGoldEntry; showSide: bo
 export function VgNotes({
   sides,
   group = false,
+  usesContact,
   embedded = false,
   suppressedTechs,
 }: {
   sides: readonly VgSide[];
   group?: boolean;
+  usesContact?: boolean;
   /** true：嵌入未建模告警卡下方（小标题降级为 h4 避免跳级）；false：独立低噪卡片（h3） */
   embedded?: boolean;
   suppressedTechs?: VgSuppressedTechs;
 }) {
-  const display = prepareVgDisplay(sides, { group, suppressedTechs });
+  const display = prepareVgDisplay(sides, { group, usesContact: usesContact ?? group, suppressedTechs });
   if (!display.hasContent) return null;
   return (
     <div className={embedded ? 'pk-vg pk-unm-vg' : 'pk-vg'} data-t="pk-vg">

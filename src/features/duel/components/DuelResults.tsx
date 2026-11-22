@@ -1,18 +1,18 @@
 import type { Ref, RefObject } from 'react';
+import { civByEn } from '../../../data';
 import ShareImage from '../../../shared/ui/ShareImage';
 import {
-  duel,
   groupFight,
+  oneVOneFight,
   costSum,
-  fighterCanAttack,
   fighterUsesAssumeHit,
   NO_NORMAL_ATTACK_REASON,
   unitIsNonAttackingCaster,
-  type DuelResult,
   type GroupResult,
+  type OneVOneResult,
 } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { groupReplay, oneReplay } from '../../../domain/battleReplay';
+import { buildGroupReplay, buildOneVOneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { CostView } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
@@ -52,16 +52,16 @@ export function OneVOne({
 }: {
   A: Resolved;
   B: Resolved;
-  result?: DuelResult;
+  result?: OneVOneResult;
   resultElRef?: Ref<HTMLDivElement>;
   headingRef?: RefObject<HTMLHeadingElement>;
 }) {
-  const r = result ?? duel(A.F, B.F);
+  const r = result ?? oneVOneFight(A.F, B.F);
   const summary = summarizeOneVOne(A, B, r);
   const wn = summary.headline;
   const aNoAttack = !r.ab.canAttack;
   const bNoAttack = !r.ba.canAttack;
-  const bothNoAttack = r.outcome === 'both-no-attack' || (aNoAttack && bNoAttack);
+  const bothNoAttack = ('outcome' in r && r.outcome === 'both-no-attack') || (aNoAttack && bNoAttack);
   const singleNoAttack = (aNoAttack || bNoAttack) && !bothNoAttack;
   const hasCaster = unitIsNonAttackingCaster(A.u) || unitIsNonAttackingCaster(B.u);
 
@@ -76,8 +76,17 @@ export function OneVOne({
     );
   }
 
+  const isContact = r.mode === 'contact';
   const assumeHitA = fighterUsesAssumeHit(A.F);
   const assumeHitB = fighterUsesAssumeHit(B.F);
+  const unitById = { [A.u.id]: A.u, [B.u.id]: B.u };
+  const oneModel = isContact
+    ? buildOneVOneReplay(
+        r,
+        { uid: A.u.id, fighter: A.F, civZh: civByEn(A.civ)?.zh ?? A.civ },
+        { uid: B.u.id, fighter: B.F, civZh: civByEn(B.civ)?.zh ?? B.civ },
+      )
+    : null;
   const fmtTime = (ow: typeof r.ab) => (ow.time === null ? '—' : r1(ow.time) + 's');
   const fmtDps = (ow: typeof r.ab) => (ow.dps === null || !Number.isFinite(ow.dps) ? '—' : (Math.round(ow.dps * 100) / 100).toString());
   const rows: [string, string, string][] = [
@@ -91,22 +100,65 @@ export function OneVOne({
   const noSide = aNoAttack ? 'A' : 'B';
   const noUnit = aNoAttack ? A.u : B.u;
   const foeUnit = aNoAttack ? B.u : A.u;
-  const shareNote =
-    assumeHitA || assumeHitB
+  const firstStrike = isContact ? r.contact.firstStrike : null;
+  const hasFirstStrike = Boolean(firstStrike && firstStrike.volleys > 0);
+  const shareRemaining = isContact && (r.status === 'timeout' || r.status === 'limit') ? `A ${formatHp(r.aHp)} / B ${formatHp(r.bHp)}` : formatHp(r.remaining);
+  const shareNote = isContact
+    ? assumeHitA || assumeHitB
+      ? '一维接敌与射程先手模型（1 vs 1）；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
+      : '一维接敌与射程先手模型（1 vs 1）；完整文明和科技参数见链接。'
+    : assumeHitA || assumeHitB
       ? '忽略射程拉扯与操作；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
       : '忽略射程拉扯与操作；完整文明和科技参数见链接。';
   return (
     <div id="duel-res" className="posbox" ref={resultElRef}>
       <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
         <Icon name={summary.icon} /> {wn}
-        {r.outcome === 'win' && r.winner !== 'draw' && (
-          <small className="note">
-            {' '}
-            · 用时 <span className="num nw">{r1(r.duration)}s</span> · 剩余生命{' '}
-            <span className="num nw">
-              {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
-            </span>
-          </small>
+        {isContact ? (
+          r.status === 'win' && (r.winner === 'a' || r.winner === 'b') ? (
+            <small className="note">
+              {' '}
+              · {hasFirstStrike ? '含接近与先手用时' : '含接近用时'} <span className="num nw">{r1(r.duration)} 秒</span> · 剩余生命{' '}
+              <span className="num nw">
+                {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
+              </span>
+              {hasFirstStrike && firstStrike && (
+                <>
+                  （{firstStrike.side === r.winner ? '先手齐射' : '先手受击'} <span className="num nw">{firstStrike.volleys} 轮</span>
+                  {r.contact.meleeAt !== null && (
+                    <>
+                      ，<span className="num nw">{r1(r.contact.meleeAt)} 秒</span>近战接敌
+                    </>
+                  )}
+                  ）
+                </>
+              )}
+            </small>
+          ) : r.status === 'timeout' || r.status === 'limit' ? (
+            <small className="note">
+              {' '}
+              · 用时 <span className="num nw">{r1(r.duration)} 秒</span> · 剩余生命{' '}
+              <span className="num nw">
+                A {formatHp(r.aHp)} / B {formatHp(r.bHp)}
+              </span>
+            </small>
+          ) : (
+            <small className="note">
+              {' '}
+              · 用时 <span className="num nw">{r1(r.duration)} 秒</span>
+            </small>
+          )
+        ) : (
+          r.outcome === 'win' &&
+          r.winner !== 'draw' && (
+            <small className="note">
+              {' '}
+              · 用时 <span className="num nw">{r1(r.duration)}s</span> · 剩余生命{' '}
+              <span className="num nw">
+                {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
+              </span>
+            </small>
+          )
         )}
       </h2>
       {singleNoAttack && (
@@ -122,26 +174,28 @@ export function OneVOne({
         </aside>
       )}
       <DuelUnmodeledNotes
+        usesContact={isContact}
         entries={[
           { side: 'a', badge: 'A', unit: A.u, civ: A.civ, age: A.age, selectedTechs: selectedTechsOf(A), assumeHit: assumeHitA },
           { side: 'b', badge: 'B', unit: B.u, civ: B.civ, age: B.age, selectedTechs: selectedTechsOf(B), assumeHit: assumeHitB },
         ]}
         vgSides={[
-          { rowKey: 'a', k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: r.duration },
-          { rowKey: 'b', k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: r.duration },
+          { rowKey: 'a', k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: isContact ? r.contact.a[0]!.meleeUnitSeconds : r.duration },
+          { rowKey: 'b', k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: isContact ? r.contact.b[0]!.meleeUnitSeconds : r.duration },
         ]}
       />
+      {oneModel ? <BattleReplay model={oneModel} unitById={unitById} /> : !isContact ? <BattleReplay fallback={{ reason: r.fallbackReason }} /> : null}
       <ShareImage
         title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
         stats={
-          r.outcome === 'no-kill'
+          !isContact && r.outcome === 'no-kill'
             ? [
                 ['模拟结果', wn],
                 ['双方数量', '1 / 1'],
               ]
             : [
                 ['模拟用时', `${r1(r.duration)} 秒`],
-                ['剩余生命', formatHp(r.remaining)],
+                ['剩余生命', shareRemaining],
                 ['双方数量', '1 / 1'],
               ]
         }
@@ -182,19 +236,17 @@ export function OneVOne({
           ))}
         </tbody>
       </table>
+      {isContact && (
+        <p className="note" data-t="duel-tab-note">
+          上表「击杀用时」与 DPS 为无接近、无最小射程停火的单向静态理论值；本场实际交战用时与胜负见上方结果卡与回放。
+        </p>
+      )}
       {dpsReason && (
         <p className="note" data-t="dps-reason">
           {dpsReason}
         </p>
       )}
-      <BattleReplay frames={oneReplay(A.F, B.F, r)} duration={r.duration} a={A.u} b={B.u} maxA={A.F.hp} maxB={B.F.hp} unit="生命" />
       <OneTimeline A={A} B={B} result={r} />
-      {((fighterCanAttack(A.F) && A.F.ranged) || (fighterCanAttack(B.F) && B.F.ranged)) && (
-        <p className="note" data-t="duel-ranged-note">
-          <Icon name="triangle-alert" className="ic warn" /> 1v1 基础模式忽略射程与风筝：远程单位实战中可在接敌前先手输出（射程 {r1(A.S.rng)} / {r1(B.S.rng)}
-          ）。
-        </p>
-      )}
     </div>
   );
 }
@@ -218,7 +270,7 @@ export function Group({
   resultElRef?: Ref<HTMLDivElement>;
   headingRef?: RefObject<HTMLHeadingElement>;
 }) {
-  const g = result ?? groupFight(A.F, na, B.F, nb);
+  const g = result ?? groupFight(A.F, na, B.F, nb, { recordReplay: true });
   if (g.status === 'error')
     return (
       <div id="duel-res" className="posbox" role="alert" ref={resultElRef}>
@@ -230,6 +282,12 @@ export function Group({
     );
   const summary = summarizeGroup(A, B, g)!;
   const wn = summary.headline;
+  const groupModel = buildGroupReplay(
+    g,
+    { uid: A.u.id, fighter: A.F, count: na, civZh: civByEn(A.civ)?.zh ?? A.civ },
+    { uid: B.u.id, fighter: B.F, count: nb, civZh: civByEn(B.civ)?.zh ?? B.civ },
+  );
+  const unitById = { [A.u.id]: A.u, [B.u.id]: B.u };
   return (
     <div id="duel-res" className="posbox" ref={resultElRef}>
       <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
@@ -258,6 +316,7 @@ export function Group({
         ]}
       />
       <GroupContact value={g.contact} a={{ fighter: A.F, count: na, ...g.contact.a[0]! }} b={{ fighter: B.F, count: nb, ...g.contact.b[0]! }} />
+      <BattleReplay model={groupModel} unitById={unitById} />
       <ShareImage
         title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
         stats={[
@@ -303,7 +362,6 @@ export function Group({
         </tbody>
       </table>
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
-      <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />
       <GroupTimeline result={g} na={na} nb={nb} />
     </div>
   );

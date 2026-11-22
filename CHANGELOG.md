@@ -18,6 +18,20 @@
 
 ## [Unreleased]
 
+## [0.99.29] - 2026-11-23
+
+### 更新说明
+
+单位 PK（1v1、N vs M、等资源、等采集时间）与混编模拟现已接入统一的战斗过程可视化回放舞台：无需离开结果页，即可沿真实战场距离轴直观查看双方从初始间距接近、远程先手齐射、近战接敌与 1 射程多排输出、最小射程盲区停火到混编前排清空换行的完整交战过程，并支持播放/暂停、0.5× / 1× / 2× / 4× 倍速切换、时间轴拖拽与关键节点一键跳转。1v1 对阵在双方具备有效碰撞数据时同步改用与群战一致的一维接敌与射程先手模型（例如中国轻骑单挑条顿手推炮会呈现先手受击 1 轮、5.27 秒突入盲区、8.3 秒近战接敌的全过程）；无普通攻击或自爆单位仍自动降级为静态对照卡，200 vs 200 等大规模编队与窄屏视图会自动切换为紧凑聚合呈现。
+
+### 新增
+
+- #1294：在 `src/domain/contactReplayTrace.ts` 与 `src/domain/contactFight.ts` 增加按需逐帧轨迹录制器（`recordReplay` 零行为漂移，记录阵型位置、速度、逐行存活/活跃/纵深/最小射程停火、先手齐射与换行清空事件）；在 `src/domain/battleReplay.ts` 构建 1v1 / 群战 / 混编统一回放模型（`buildOneVOneReplay` / `buildGroupReplay` / `buildMixedReplay` / `extractReplayMarkers` / `deriveReplayPhase` / `replayAt` / `sampleContactHitTimes`，同时保留 `#1322` `oneReplay` 与数组版 `replayAt` 重载）；新增 `BattleReplay.tsx`、`BattleStageSvg.tsx`、`BattleReplaySides.tsx`、`BattleReplayControls.tsx` 与 `battle-replay.css` 实现同源 SVG 战场舞台、节点跳转、倍速与键盘交互及无障碍/降级卡片；新增 `tests/unit/battleReplay1294.test.ts` 与 `tests/e2e/battleReplay1294.spec.ts`（登记至 `scripts/ci-browser-weights.json`）。
+
+### 变更
+
+- #1294：在 `src/domain/duel.ts` 新增 `oneVOneFight` 统一 1v1 接敌模拟与静态降级入口，并扩展 `groupFight` 支持 `GroupFightOptions`；在 `Duel.tsx`、`DuelResults.tsx`、`DuelTimeline.tsx`、`DuelUnmodeledNotes.tsx`、`MixedResult.tsx`、`MixedDuel.tsx` 与 `duelSummary.ts` 接入 1v1 / 群战 / 混编回放舞台，完整保留 `#1322` 无普通攻击与 0% 目录准确度口径，并同步更新 `replay104`、`duelRedesign1279`、`duelZeroDamageMonk1322` 与相关既有单测及 E2E 断言。
+
 ## [0.99.28] - 2026-11-23
 
 ### 更新说明
