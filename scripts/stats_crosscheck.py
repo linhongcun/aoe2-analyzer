@@ -7,6 +7,7 @@
 import json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from attack_classes import ATTACK_CLASS_NAMES
 from dat_source import load
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,6 +41,26 @@ def dat_stats(u, main):
     return s
 
 
+def attack_class_name(entry):
+    """提取攻击类别名称，兼容单位 [名称, 数值] 与建筑 {classId, amount, label?}。"""
+    if isinstance(entry, dict):
+        class_id = entry.get('classId')
+        if type(class_id) is int and class_id in ATTACK_CLASS_NAMES:
+            return ATTACK_CLASS_NAMES[class_id]
+        return entry.get('label')
+    return entry[0]
+
+
+def main_attack_class(obj, is_building):
+    """确定与 .dat 比对 atk 的主攻击类别（4 近战 / 3 穿刺）。"""
+    names = [attack_class_name(a) for a in obj.get('atks') or []]
+    if '近战' in names:
+        return 4
+    if '穿刺' in names:
+        return 3
+    return 3 if is_building and obj.get('atk') else None
+
+
 def main(units=None, blds=None, d=None):
     d = d or load(); U = d['Civs'][1]['Units']
     units = units if units is not None else json.load(open(ROOT / 'data/game/units.json'))
@@ -48,9 +69,7 @@ def main(units=None, blds=None, d=None):
     for o, isb in [(x, False) for x in units] + [(x, True) for x in blds]:
         u = U[o['id']] if o['id'] < len(U) else None
         if not u: diffs.append((o['en'], 'missing', None, None)); continue
-        names = [a[0] for a in o.get('atks', [])]
-        main = 4 if '近战' in names else 3 if '穿刺' in names else (3 if isb and o.get('atk') else None)
-        ds = dat_stats(u, main)
+        ds = dat_stats(u, main_attack_class(o, isb))
         if o.get('rngBd'):
             o = {**o, 'rngB': round(o['rng'] + o['rngBd'], 2)}
             ds['rngB'] = round(building_range(u), 2)
