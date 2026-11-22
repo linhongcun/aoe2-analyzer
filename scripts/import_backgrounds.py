@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""按固定来源导入文明详情装饰插画，不涉及游戏数据或图标管线。
+"""按固定来源导入文明背景素描插画，不涉及游戏数据或图标管线。
 
 python3 scripts/import_backgrounds.py [--check]
 依赖 Pillow 12.3.0 / libwebp 1.6.0；游戏美术 © Microsoft。
@@ -14,7 +14,7 @@ import sys
 import urllib.request
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSETS = ROOT / 'src/features/civs/assets/backgrounds'
+ASSETS = ROOT / 'src/shared/assets/civ-backgrounds'
 REFERENCE = ROOT / 'data/reference/civs'
 
 

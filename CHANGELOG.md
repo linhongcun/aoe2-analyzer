@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.17] - 2026-11-22
+
+### 更新说明
+
+文明对比、对局助手与单位 PK 的阵营头现已复用站内现有的 56 张文明历史素描原画，零新增素材体积即可在选文明与对阵时一眼辨识阵营氛围：A/B 双方卡头右侧柔和透出对应文明素描（B 方自动水平镜像形成对峙感，方图与宽图按原比例自适应裁切，浅色与深色主题分别适配正片叠底与反色滤色）；对局助手未选文明时以虚线空态留白且零插画噪音，单位 PK 不可用单位一侧自动弱化素描浓度，混编对战则在各阵营头展示当前文明素描；各页底部统一附一条「文明背景插画 · AoE2 Companion · © Microsoft」来源署名，选择器与浮层交互、数字不折行及浅/深主题可读性均保持稳定。
+
+### 新增
+
+- #1313：将 56 张透明底无损文明素描 WebP 无损迁至共享目录 `src/shared/assets/civ-backgrounds/`，新增共享入口 `src/shared/utils/civBackgrounds.ts` 与通用氛围层组件 `CivArtLayer`、`CivArtCredit` 及 `civ-art-layer.css`（支持 `card` / `head-band` 双变体、方图/宽图双比例、B 方镜像、不可用态降饱和弱化与 `:has(.cp-panel/.pk-pop)` 弹层层级提升），并在 `#/compare`、`#/matchup` 与 `#/duel`（单兵及混编）落地阵营头氛围层与页底单一来源署名；同步更新边界校验脚本、`README.md`、`docs/DATA-LAYOUT.md`、单测及新增 `tests/e2e/civSketchReuse1313.spec.ts`（登记至 `scripts/ci-browser-weights.json`）。
+
 ## [0.99.16] - 2026-11-22
 
 ### 更新说明

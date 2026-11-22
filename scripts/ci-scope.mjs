@@ -775,7 +775,7 @@ export function planChanges(changes) {
       path === 'data/reference/civs/backgrounds.source.json' ||
       path === 'data/reference/civs/backgrounds.json' ||
       path === 'scripts/import_backgrounds.py' ||
-      path.startsWith('src/features/civs/assets/backgrounds/')
+      path.startsWith('src/shared/assets/civ-backgrounds/')
     ) {
       full = data = true;
     } else if (path === 'src/shared/ui/PatchHistory.tsx') {

@@ -7,10 +7,12 @@ import { civByEn } from '../../../data';
 import { RATING_BASIS, RATING_FILE_VERIFIED_AT } from '../../../data/ratingBasis';
 import { resolveCompareQuery, selectCompareCivilization, swapCompareCivilizations } from '../../../domain/compare';
 import { parseCompareFact } from '../../../domain/compareFactFormat';
-import { AXES } from '../../../domain/ratings';
+import { AXES, TYPE_ZH } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { PAGES } from '../../../shared/nav/pageRegistry';
 import { CivIcon } from '../../../shared/ui/art';
+import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
+import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
@@ -54,6 +56,7 @@ const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb'][] = [
   ['团队加成', 'tb'],
 ];
 const cell = (c: Civ, k: (typeof ROWS)[number][1]) => c[k];
+const civTypeLabel = (c: Civ) => c.ty.map((t) => TYPE_ZH[t]).join(' · ');
 const comparePage = PAGES.find((item) => item.key === 'compare');
 
 /** issue 772：坏参数/缺参的说明；地址栏被 replace 成完整参数后靠 location.state 保留一次。 */
@@ -185,10 +188,14 @@ export default function Compare() {
       <ListHead title={comparePage?.label ?? '文明对比'} desc={COMPARE_LEDE} />
       <div className="compare-toolbar">
         <div className="compare-pickers">
-          <div className="compare-field">
-            <span className="compare-field-label" aria-hidden="true">
-              文明 A
-            </span>
+          <div className="compare-field compare-field-a civ-art-host">
+            <CivArtLayer civ={a.en} side="a" />
+            <div className="compare-field-head">
+              <span className="civ-side-badge is-a" aria-hidden="true">
+                文明 A
+              </span>
+              {civTypeLabel(a) && <span className="compare-field-type">{civTypeLabel(a)}</span>}
+            </div>
             <CivPicker id="ca" label="文明 A" value={a.en} onChange={(en) => selectCivilization('a', en)} />
           </div>
           <button
@@ -202,10 +209,14 @@ export default function Compare() {
             <Icon name="arrow-left-right" />
             <span className="compare-swap-label">互换</span>
           </button>
-          <div className="compare-field">
-            <span className="compare-field-label" aria-hidden="true">
-              文明 B
-            </span>
+          <div className="compare-field compare-field-b civ-art-host">
+            <CivArtLayer civ={b.en} side="b" mirror />
+            <div className="compare-field-head">
+              <span className="civ-side-badge is-b" aria-hidden="true">
+                文明 B
+              </span>
+              {civTypeLabel(b) && <span className="compare-field-type">{civTypeLabel(b)}</span>}
+            </div>
             <CivPicker id="cb" label="文明 B" value={b.en} onChange={(en) => selectCivilization('b', en)} />
           </div>
         </div>
@@ -263,7 +274,9 @@ export default function Compare() {
             <article className={`compare-opening-card compare-opening-card-${side}`} data-testid={`compare-opening-${side}`} key={side}>
               <h3 className="compare-opening-heading">
                 <CivIcon c={civ} />
-                <span>文明 {side === 'a' ? 'A' : 'B'} · {civ.zh}</span>
+                <span>
+                  文明 {side === 'a' ? 'A' : 'B'} · {civ.zh}
+                </span>
               </h3>
               <p className="compare-opening-steps">
                 <Steps s={civ.op} />
@@ -333,6 +346,7 @@ export default function Compare() {
           {RATING_BASIS.positions.source}
         </p>
       </div>
+      <CivArtCredit civs={[a.en, b.en]} />
     </section>
   );
 }
