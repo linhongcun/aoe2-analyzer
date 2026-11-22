@@ -13,6 +13,7 @@ export interface TrainingLine {
   id: number;
   text: string;
   state?: 'off' | 'recorded';
+  partial?: boolean;
 }
 
 const fmtNum = (n: number) => {
@@ -43,14 +44,39 @@ export function trainingLines(quote: TrainingQuote, sel: ReadonlySet<number>): {
   for (const item of quote.costs) {
     if (item.supported && sel.has(item.tech.id)) {
       const detail = deltaText(deltaById.get(item.tech.id)?.changes ?? []);
-      lines.push({
-        kind: 'applied',
-        id: item.tech.id,
-        text: detail ? `已计入：${item.tech.zh}（${detail}）` : `已计入：${item.tech.zh}`,
-      });
-      notes.push(`一次研究：${item.tech.zh} ${researchBill(item.tech)}。这笔费用不摊进每名训练价，也不从派出预算里扣除。`);
+      if (item.partial) {
+        lines.push({
+          kind: 'applied',
+          id: item.tech.id,
+          partial: true,
+          text: detail
+            ? `已计入：${item.tech.zh}（${detail}）；另含未解码效果，当前价格非完整最终价`
+            : `已计入：${item.tech.zh}；另含未解码效果，当前价格非完整最终价`,
+        });
+        notes.push(`一次研究：${item.tech.zh} ${researchBill(item.tech)}。这笔费用不摊进每名训练价，也不从派出预算里扣除。`);
+        notes.push(`「${item.tech.zh}」另含未解码的条件或资源触发效果，该部分未计入本页估算，当前价格非完整效果后的最终价。`);
+      } else {
+        lines.push({
+          kind: 'applied',
+          id: item.tech.id,
+          text: detail ? `已计入：${item.tech.zh}（${detail}）` : `已计入：${item.tech.zh}`,
+        });
+        notes.push(`一次研究：${item.tech.zh} ${researchBill(item.tech)}。这笔费用不摊进每名训练价，也不从派出预算里扣除。`);
+      }
     } else if (item.supported) {
-      lines.push({ kind: 'available', id: item.tech.id, text: `可计入未勾选：${item.tech.zh}` });
+      if (item.partial) {
+        lines.push({
+          kind: 'available',
+          id: item.tech.id,
+          partial: true,
+          text: `可计入未勾选：${item.tech.zh}（另含未解码效果，满科技不自动勾选）`,
+        });
+        notes.push(
+          `${item.tech.zh}的已解码费用折扣可手动勾选计入，但另含未解码的条件或资源触发效果，满科技不会自动勾选。其研究费用为 ${researchBill(item.tech)}；这笔费用不摊进每名训练价，也不从派出预算里扣除。`,
+        );
+      } else {
+        lines.push({ kind: 'available', id: item.tech.id, text: `可计入未勾选：${item.tech.zh}` });
+      }
     } else {
       const recorded = sel.has(item.tech.id);
       lines.push({

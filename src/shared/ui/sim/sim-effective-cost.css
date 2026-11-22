@@ -1,0 +1,189 @@
+/* 模拟器有效训练/建造价卡片、差额胶囊与科技行费用徽标（issue 1297）。仅使用 tokens.css 语义令牌。 */
+.sim-ordered-cost {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sim-ordered-cost .res {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-right: 0;
+  font-variant-numeric: tabular-nums;
+}
+.sim-ordered-cost .si {
+  margin-right: 0;
+}
+.sim-eff-plain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.sim-eff-cost {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.sim-eff-cost.is-good {
+  border-left: 4px solid var(--color-good);
+}
+.sim-eff-cost.is-warn {
+  border-left: 4px solid var(--color-warn);
+}
+.sim-eff-cost.is-available {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-2);
+}
+.sim-eff-avail-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+.sim-eff-avail-label {
+  font-weight: 600;
+}
+.sim-eff-avail-hint {
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+.sim-eff-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.sim-eff-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.sim-eff-scope {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-tag);
+  color: var(--color-text-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+.sim-eff-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+}
+.sim-eff-main {
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.sim-eff-base {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.sim-eff-base s {
+  text-decoration: line-through;
+}
+.sim-delta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin-top: var(--space-2);
+}
+.sim-delta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+.sim-delta-pill.is-good {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+.sim-delta-pill.is-warn {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}
+.sim-eff-source {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin: var(--space-2) 0 0;
+  color: var(--color-good);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.sim-eff-source .ic {
+  margin-top: 2px;
+}
+.sim-eff-hint {
+  margin: var(--space-2) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.sim-eff-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.sim-eff-warn .ic {
+  margin-top: 2px;
+}
+.sim-summary-note {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.sim-cost-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.sim-cost-badge.is-good {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+.sim-cost-badge.is-warn {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}

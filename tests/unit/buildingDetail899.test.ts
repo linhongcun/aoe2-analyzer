@@ -135,10 +135,12 @@ describe('建筑详情视图（#899）', () => {
     expect(catalogQueryMatch([archer], '房屋')).toBe(false);
   });
 
-  it('建筑详情不调用单位训练折后价，也不把暂未计算写成结果', () => {
+  it('建筑详情走统一建筑折后口径，不直接硬编码单位折扣，也不把暂未计算写成结果', () => {
     const detail = readFileSync('src/features/buildings/components/BuildingDetail.tsx', 'utf8');
     const simulator = readFileSync('src/features/buildings/components/BuildingSimulator.tsx', 'utf8');
+    expect(detail).toContain('buildingDiscountView');
     expect(detail).not.toMatch(/discountedCost|costDiscount/);
+    expect(detail).not.toContain('features/duel');
     expect(detail).not.toMatch(/civs\.length\s*<=\s*4/);
     expect(detail + simulator).not.toContain('暂未计算');
     expect(simulator).not.toContain('b.civs[0]');

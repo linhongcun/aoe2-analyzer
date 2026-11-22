@@ -20,6 +20,8 @@ export interface TrainingCostTech {
   tech: Tech;
   /** unitCost 能套用。false 表示适用但整项被排除，勾选只作记录。 */
   supported: boolean;
+  /** 已套用可解码费用条目，但同科技仍含未解码资源/条件标记（缺省表示无未解码部分）。 */
+  partial?: boolean;
 }
 
 export interface TrainingDelta {
@@ -72,17 +74,18 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
     if (tech.age > age || !tech.civs.includes(civ) || !lit['t' + tech.id] || !targetsUnit(tech, unit.id)) continue;
     const probe = unitCost(unit, civ, tier, [asInput(tech)]);
     const supported = probe.appliedTechs.some((item) => item.id === tech.id);
-    const unsupported = probe.undecoded.some((item) => item.techId === tech.id);
-    if (supported || unsupported) found.push({ tech, supported });
+    const hasUndecoded = probe.undecoded.some((item) => item.techId === tech.id);
+    if (supported && hasUndecoded) found.push({ tech, supported: true, partial: true });
+    else if (supported || hasUndecoded) found.push({ tech, supported });
   }
   return found;
 }
 
-/** f / c 扩展费用科技；显式 id 仍只保留战斗科技或本题适用的费用科技。 */
+/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 仍只保留战斗科技或本题适用的费用科技。 */
 export function selectTrainingIds(techs: TechSpec, avail: readonly SimTech[], age: number, costs: readonly TrainingCostTech[]): Set<number> {
   if (techs === 'f' || techs === 'c') {
     const sel = presetUpTo(avail, age);
-    for (const item of costs) if (item.supported) sel.add(item.tech.id);
+    for (const item of costs) if (item.supported && !item.partial) sel.add(item.tech.id);
     return sel;
   }
   const allowed = new Set([...avail.map((item) => item.t.id), ...costs.map((item) => item.tech.id)]);

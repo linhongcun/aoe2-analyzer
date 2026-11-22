@@ -4,6 +4,7 @@ import { useCore, useTrees } from '../../../data/hooks';
 import { buildingHasAttack } from '../../../domain/buildingDetailView';
 import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
+import { applicableSimCostTechs, buildSimEffectiveCost, costTechBadgeMap, mergeSimCostTechs, presetCostTechIds } from '../../../domain/simEffectiveCost';
 import type { Building } from '../../../domain/types';
 import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
@@ -33,9 +34,12 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     );
   const minAge = getGarrisonBuildingAge(b, civ, ctx.trees);
   const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
-  const avail = buildingSimTechs(ctx, b, civ);
-  const ok = new Set(avail.filter((x) => x.ef).map((x) => x.t.id));
+  const costTechs = applicableSimCostTechs(ctx, b, civ);
+  const costTechIds = new Set(costTechs.map((item) => item.tech.id));
+  const avail = mergeSimCostTechs(buildingSimTechs(ctx, b, civ), costTechs);
+  const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && x.t.age <= age).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
+  const effectiveCost = buildSimEffectiveCost(b, 'building', civ, age, sel, costTechs);
   const cmp = b.civs.includes(q.get('cmp') ?? '') ? q.get('cmp')! : '';
   const write = (c: string, a: number, s: Iterable<number>, cm: string) => {
     const p = new URLSearchParams(loc.search);
@@ -114,6 +118,11 @@ export default function BuildingSimulator({ b }: { b: Building }) {
         team={new Set()}
         cmp={cmp}
         avail={avail}
+        selectableWithoutEffect={costTechIds}
+        presetExtra={(scope) => presetCostTechIds(costTechs, scope)}
+        costTechBadges={costTechBadgeMap(costTechs)}
+        effectiveCost={effectiveCost}
+        researchCostNote="一次性研究投入，不计入单座建造价"
         techById={core.techById}
         rows={rows}
         statHeadings={{ base: '目录基础', current: '当前设置下的近似模拟值', full: () => '对照' }}

@@ -4,9 +4,12 @@
  */
 import { buildingMark } from './civBuildings';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from './construction';
+import type { AppliedLine } from './costDiscount';
 import { collapse, type Families, type FamilyEntry } from './family';
 import { norm, pyMatch } from './search';
-import type { Unit } from './types';
+import { diffEntityCost, type CostDelta } from './simEffectiveCost';
+import type { Cost, Unit } from './types';
+import { UNIT_COST_RESOURCES, unitCost } from './unitCost';
 
 export type BuildingAnchor = 'prod' | 'tech' | 'civs' | 'history';
 export type BuildingSurface = 'overview' | 'sim' | 'garrison';
@@ -128,5 +131,73 @@ export function applyCatalogView<T extends CatalogViewRow>(rows: readonly T[], o
     union: rows.length,
     shown: matched.filter((row) => row.membership === 'in'),
     unknown: matched.filter((row) => row.membership === 'unknown'),
+  };
+}
+
+/** 建筑详情文明折后价取价时代：仅接受 1-4，钳位到不低于目录时代，缺省或非法值回落目录时代。 */
+export function parseBuildingDiscountAge(catalogAge: number, rawAge: string | null): number {
+  if (rawAge && /^[1-4]$/.test(rawAge)) return Math.max(catalogAge, Number(rawAge));
+  return catalogAge;
+}
+
+export type BuildingDiscountView =
+  | { kind: 'omit' }
+  | { kind: 'unapplied'; selectedAge: number; ages: number[]; variesByAge: boolean }
+  | {
+      kind: 'price';
+      selectedAge: number;
+      ages: number[];
+      variesByAge: boolean;
+      base: Cost;
+      cost: Cost;
+      deltas: CostDelta[];
+      applied: AppliedLine[];
+      activeAtSelectedAge: boolean;
+      firstDiscountAge: number;
+    };
+
+function discountSignature(cost: Cost, applied: readonly AppliedLine[]): string {
+  const amounts = UNIT_COST_RESOURCES.map((res) => `${res}:${cost[res] ?? ''}`).join(',');
+  const labels = applied.map((line) => `${line.idx ?? 'x'}:${line.pct}:${line.res?.join('/') ?? 'all'}`).join(';');
+  return `${amounts}|${labels}`;
+}
+
+/**
+ * 建筑详情顶部文明被动折后造价视图（issue 1297）。
+ * 扫描 [b.age..4] 统一走 unitCost(b, civ, age, [])，兼顾不列颠城镇中心等高时代起效的跨时代折扣。
+ */
+export function buildingDiscountView(b: { id: number; age: number; cost: Cost }, civ: string | null, rawAge: string | null): BuildingDiscountView {
+  if (!civ) return { kind: 'omit' };
+  const startAge = Math.max(1, Math.min(4, b.age));
+  const ages: number[] = [];
+  for (let age = startAge; age <= 4; age++) ages.push(age);
+  const probes = new Map(ages.map((age) => [age, unitCost(b, civ, age, [])]));
+  const hasAnyDiscount = ages.some((age) => {
+    const probe = probes.get(age)!;
+    return probe.discount.applied.length > 0 || probe.discount.unsupported.length > 0;
+  });
+  if (!hasAnyDiscount) return { kind: 'omit' };
+
+  const selectedAge = parseBuildingDiscountAge(startAge, rawAge);
+  const signatures = new Set(ages.map((age) => discountSignature(probes.get(age)!.cost, probes.get(age)!.discount.applied)));
+  const variesByAge = signatures.size > 1;
+  const active = probes.get(selectedAge) ?? probes.get(startAge)!;
+
+  if (active.discount.unsupported.length > 0) {
+    return { kind: 'unapplied', selectedAge, ages, variesByAge };
+  }
+
+  const firstDiscountAge = ages.find((age) => probes.get(age)!.discount.applied.length > 0) ?? startAge;
+  return {
+    kind: 'price',
+    selectedAge,
+    ages,
+    variesByAge,
+    base: b.cost,
+    cost: active.cost,
+    deltas: diffEntityCost(b.cost, active.cost),
+    applied: active.discount.applied,
+    activeAtSelectedAge: active.discount.applied.length > 0,
+    firstDiscountAge,
   };
 }

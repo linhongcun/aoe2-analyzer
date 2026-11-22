@@ -105,27 +105,65 @@ describe('#943 单位 PK 训练价', () => {
     expect(countForBudget(withTech.training.price.cost, 1000)).toBe(20);
   });
 
-  it('布图马普满科技默认未选，手选只记录且价格不变', () => {
+  it('布图马普为部分解码：满科技默认未选，手选折算并常显未解码边界；非法操作仍整项跳过', () => {
     const costs = applicableTrainingTechs(ctx, bolas, 'Mapuche', 4);
     const item = costs.find((row) => row.tech.id === butalmapu.id);
-    expect(item?.supported).toBe(false);
+    expect(item).toEqual({ tech: butalmapu, supported: true, partial: true });
+
     const full = side(bolas.id, 'Mapuche', 4, 'f');
     expect(full.sel.has(butalmapu.id)).toBe(false);
     expect(full.training.price.cost).toEqual({ Wood: 50, Gold: 55 });
-    const off = trainingLines(full.training, full.sel).lines.find((line) => line.id === butalmapu.id);
-    expect(off).toMatchObject({
-      state: 'off',
-      text: '未计入：布图马普，本站尚不支持，当前价格不是完整效果后的最终价',
+    const offView = trainingLines(full.training, full.sel);
+    expect(offView.lines.find((line) => line.id === butalmapu.id)).toEqual({
+      kind: 'available',
+      id: butalmapu.id,
+      partial: true,
+      text: '可计入未勾选：布图马普（另含未解码效果，满科技不自动勾选）',
     });
+    const offNote = offView.notes.find((line) => line.includes('布图马普'));
+    expect(offNote).toContain('满科技不会自动勾选');
+    expect(offNote).toContain(`${butalmapu.cost.Food} 食物`);
+    expect(offNote).toContain(`${butalmapu.rt} 秒`);
 
-    const recorded = side(bolas.id, 'Mapuche', 4, [butalmapu.id]);
-    expect(recorded.training.price.cost).toEqual(full.training.price.cost);
-    expect(trainingLines(recorded.training, recorded.sel).lines.find((line) => line.id === butalmapu.id)?.state).toBe('recorded');
-    const note = trainingLines(full.training, full.sel).notes.find((line) => line.includes('布图马普'));
-    expect(note).toContain('满科技不会自动勾选');
-    expect(note).toContain('未选择不等于已研究');
-    expect(note).toContain(`${butalmapu.cost.Food} 食物`);
-    expect(note).toContain(`${butalmapu.rt} 秒`);
+    const picked = side(bolas.id, 'Mapuche', 4, [butalmapu.id]);
+    expect(picked.training.price.cost).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(picked.training.price.cost.Food).toBeUndefined();
+    expect(picked.training.price.cost.Stone).toBeUndefined();
+    const onView = trainingLines(picked.training, picked.sel);
+    expect(onView.lines.find((line) => line.id === butalmapu.id)).toEqual({
+      kind: 'applied',
+      id: butalmapu.id,
+      partial: true,
+      text: '已计入：布图马普（木材 −7.5，黄金 −8）；另含未解码效果，当前价格非完整最终价',
+    });
+    expect(onView.notes.some((line) => line.includes('另含未解码的条件或资源触发效果'))).toBe(true);
+
+    // 临时注入无战斗效果的非法 op 科技，锁住完全未支持科技的回退与文案边界。
+    const hussite = techByEn('Hussite Reforms');
+    const prevDat = DAT.techs[hussite.en];
+    DAT.techs[hussite.en] = {
+      id: hussite.id,
+      combat: false,
+      rules: [],
+      eco: [{ a: 103, op: 'div', v: 2, t: [byId[5]!.id] }],
+    };
+    try {
+      const unsupportedCosts = applicableTrainingTechs(ctx, byId[5]!, 'Bohemians', 4);
+      expect(unsupportedCosts).toContainEqual({ tech: hussite, supported: false });
+      const offSide = side(5, 'Bohemians', 4, 'f');
+      expect(offSide.sel.has(hussite.id)).toBe(false);
+      expect(trainingLines(offSide.training, offSide.sel).lines.find((line) => line.id === hussite.id)).toMatchObject({
+        kind: 'unsupported',
+        state: 'off',
+        text: `未计入：${hussite.zh}，本站尚不支持，当前价格不是完整效果后的最终价`,
+      });
+      const recSide = side(5, 'Bohemians', 4, [hussite.id]);
+      expect(recSide.training.price.cost).toEqual(offSide.training.price.cost);
+      expect(trainingLines(recSide.training, recSide.sel).lines.find((line) => line.id === hussite.id)?.state).toBe('recorded');
+    } finally {
+      if (prevDat) DAT.techs[hussite.en] = prevDat;
+      else delete DAT.techs[hussite.en];
+    }
   });
 
   it('已计入短句和一次研究说明来自数据，页脚不再写旧句', () => {

@@ -291,7 +291,7 @@ export function Side({
             selectableWithoutEffect={new Set(side.training.costs.map((item) => item.tech.id))}
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
-              return new Set(side.training.costs.filter((item) => item.supported && item.tech.age <= limit).map((item) => item.tech.id));
+              return new Set(side.training.costs.filter((item) => item.supported && !item.partial && item.tech.age <= limit).map((item) => item.tech.id));
             }}
             techById={core.techById}
             rows={rows}

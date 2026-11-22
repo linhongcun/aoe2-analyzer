@@ -6,11 +6,13 @@ import { ARMC_CLASS_NOTE } from '../../../domain/affects';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
+import type { SimCostBadgeKind, SimEffectiveCostView } from '../../../domain/simEffectiveCost';
 import type { NumStat, StatSet, Tech } from '../../../domain/types';
 import { CostView, StatIcon, TechIcon } from '../art';
 import { Icon } from '../Icon';
 import { fmtStat } from '../../utils/simFormat';
 import { DATA_SOURCES } from '../../utils/dataInfo';
+import { SimEffectiveCost } from './SimEffectiveCost';
 
 export type StatRow = [NumStat, string, string];
 export interface SimPanelProps {
@@ -44,6 +46,12 @@ export interface SimPanelProps {
   presetExtra?: (scope: 'all' | number) => ReadonlySet<number>;
   /** 隐藏面板内时代下拉（单位 PK 由表层时代下拉承载唯一 id 时使用）。 */
   hideAge?: boolean;
+  /** 模拟器有效训练/建造价视图（单位与建筑详情模拟器传入，与累计研究费严格隔离）。 */
+  effectiveCost?: SimEffectiveCostView;
+  /** 费用科技行徽标映射（影响造价 / 含未解码效果）。 */
+  costTechBadges?: ReadonlyMap<number, SimCostBadgeKind>;
+  /** 累计研究费用卡片副说明（如「一次性研究投入，不计入单兵训练价」）。 */
+  researchCostNote?: string;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -299,6 +307,7 @@ export default function SimPanel(p: SimPanelProps) {
               {l.map(({ t, ef }) => {
                 const on = p.sel.has(t.id);
                 const checkable = !!ef || !!p.selectableWithoutEffect?.has(t.id);
+                const badge = p.costTechBadges?.get(t.id);
                 return (
                   <label key={t.id} className={`simt${on ? ' on' : ''}${checkable ? '' : ' txt'}${t.age > p.age && !on ? ' late' : ''}`}>
                     {checkable ? <input type="checkbox" checked={on} onChange={() => toggle(t.id)} /> : <span className="tag">仅文本</span>}
@@ -306,6 +315,16 @@ export default function SimPanel(p: SimPanelProps) {
                     <Link className="ulink tlink" to={`/tech/${t.id}`}>
                       {t.zh}
                     </Link>
+                    {(badge === 'cost' || badge === 'partial') && (
+                      <span className="sim-cost-badge is-good nw" data-t="sim-cost-badge">
+                        影响造价
+                      </span>
+                    )}
+                    {(badge === 'partial' || badge === 'undecoded') && (
+                      <span className="sim-cost-badge is-warn nw" data-t="sim-undecoded-badge">
+                        含未解码效果
+                      </span>
+                    )}
                     <small>{AGE_ZH[t.age]!.slice(0, 2)}</small>
                     <span className="simc">
                       <CostView c={t.cost} /> <StatIcon k="time" t="研究时间" />
@@ -336,9 +355,15 @@ export default function SimPanel(p: SimPanelProps) {
           </div>
         </div>
         <div>
+          {p.effectiveCost && <SimEffectiveCost view={p.effectiveCost} headingLevel={p.headingLevel} />}
           <section className="sim-summary" aria-label="累计研究">
             <div>
               <Subheading className={p.headingLevel === undefined ? undefined : 'sim-summary-title'}>累计研究费用（{p.sel.size} 项）</Subheading>
+              {p.researchCostNote && (
+                <p className="sim-summary-note" data-t="sim-summary-note">
+                  {p.researchCostNote}
+                </p>
+              )}
               <div className="sim-summary-cost">
                 <CostView c={tot.cost} />
               </div>

@@ -1,6 +1,7 @@
 import { useCore } from '../../../data/hooks';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
+import { buildSimEffectiveCost, costTechBadgeMap, presetCostTechIds } from '../../../domain/simEffectiveCost';
 import type { Unit } from '../../../domain/types';
 import { Loading } from '../widgets';
 import { useSimState, type SimNavigationAdapter } from '../../hooks/useSimState';
@@ -20,6 +21,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
   const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
   const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team);
   const C = S.cmp ? simulate(S.ctx, u, S.cmp, 4, allNumeric(simTechs(S.ctx, u, S.cmp)), new Set()) : null;
+  const effectiveCost = buildSimEffectiveCost(u, 'unit', S.civ, S.age, S.sel, S.costTechs);
   return (
     <SimPanel
       civs={u.civs}
@@ -30,6 +32,11 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
       team={S.team}
       cmp={S.cmp}
       avail={S.avail}
+      selectableWithoutEffect={new Set(S.costTechs.map((item) => item.tech.id))}
+      presetExtra={(scope) => presetCostTechIds(S.costTechs, scope)}
+      costTechBadges={costTechBadgeMap(S.costTechs)}
+      effectiveCost={effectiveCost}
+      researchCostNote="一次性研究投入，不计入单兵训练价"
       techById={core.techById}
       rows={rows}
       base={baseStats(u)}

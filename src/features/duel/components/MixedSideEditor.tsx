@@ -51,7 +51,7 @@ export function MixedSideEditor({
   const preset = (scope: 'none' | 'current' | 'full') => {
     const targetAge = scope === 'full' ? 4 : age;
     const options = resolveMixedSide(ctx, core, { ...input, age: String(targetAge) }, side).techs;
-    const selected = scope === 'none' ? [] : options.filter((t) => (t.numeric || t.cost) && t.t.age <= targetAge).map((t) => String(t.t.id));
+    const selected = scope === 'none' ? [] : options.filter((t) => (t.numeric || (t.cost && !t.partial)) && t.t.age <= targetAge).map((t) => String(t.t.id));
     onChange(
       { ...input, age: String(targetAge), techs: selected },
       `${label}已应用${scope === 'none' ? '无科技' : scope === 'full' ? '帝王时代满科技' : '当前时代科技'}预设`,
@@ -142,7 +142,7 @@ export function MixedSideEditor({
                 </button>
               </p>
             ))}
-          {view.techs.map(({ t, numeric, cost, rows }) => (
+          {view.techs.map(({ t, numeric, cost, partial, rows }) => (
             <label key={t.id} className="mix-check">
               <input
                 type="checkbox"
@@ -166,7 +166,13 @@ export function MixedSideEditor({
                 {t.zh}
                 <small>
                   {AGE_ZH[t.age]} · 适用第 {rows.map((i) => i + 1).join('、')} 行 ·{' '}
-                  {numeric ? '匹配行数值计入' : cost ? '仅费用记录，不影响混编战果' : '文本效果未计入战斗'}
+                  {numeric
+                    ? '匹配行数值计入'
+                    : partial
+                      ? '部分费用已解码，另含未解码效果（不影响混编战果；带入训练费用时将保守拦截）'
+                      : cost
+                        ? '仅费用记录，不影响混编战果'
+                        : '文本效果未计入战斗'}
                 </small>
               </span>
             </label>

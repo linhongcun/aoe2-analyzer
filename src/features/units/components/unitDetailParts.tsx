@@ -191,7 +191,7 @@ export function CatalogCostColumn({
   return (
     <div className="ud-cost-col">
       <h2>目录造价与训练</h2>
-      <p className="ud-kicker">目录造价，未计文明折扣。</p>
+      <p className="ud-kicker">目录造价，未计文明折扣。不含下方模拟器科技改价。</p>
       <div className="ud-cost" data-t="catalog-cost">
         <CostView c={u.cost} />
       </div>
@@ -205,6 +205,7 @@ export function CatalogCostColumn({
               {minus(`已计入：${a.label} -${a.pct}%${a.res ? `，仅${a.res.map((r) => RES_ZH[r] ?? r).join('、')}` : ''}`)}
             </span>
           ))}
+          <p className="ud-discount-scope">仅含文明被动折扣，不含下方科技模拟器内的科技改价。</p>
         </div>
       )}
       {discount.kind === 'unapplied' && (

@@ -60,20 +60,21 @@ describe('单位费用叠加（#858）', () => {
     expect(cleared.cost.Gold).toBe(0);
   });
 
-  it('未解码资源整项不套用，并列入列表', () => {
+  it('按单条过滤：合法费用乘数可放行、未解码资源标记仍列入列表，非法操作整项跳过', () => {
     const base = { id: 4, cost: { Wood: 25, Gold: 45 } };
-    const blocked = unitCost(base, 'Persians', 3, [
+    const partial = unitCost(base, 'Persians', 3, [
       probe([
         { res: 33, op: 'set', v: 51 },
         { a: 105, op: 'mul', v: 0.5, t: [4] },
       ]),
     ]);
-    expect(blocked.exact).toEqual({ Wood: 25, Gold: 45 });
-    expect(blocked.cost).toEqual(blocked.exact);
-    expect(blocked.appliedTechs).toEqual([]);
-    expect(blocked.undecoded).toEqual([{ techId: 1, tech: '探针', reason: '含未解码的资源或条件效果', res: 33, op: 'set' }]);
+    expect(partial.exact).toEqual({ Wood: 25, Gold: 22.5 });
+    expect(partial.cost).toEqual({ Wood: 25, Gold: 22.5 });
+    expect(partial.appliedTechs).toEqual([{ id: 1, zh: '探针' }]);
+    expect(partial.undecoded).toEqual([{ techId: 1, tech: '探针', reason: '含未解码的资源或条件效果', res: 33, op: 'set' }]);
     const badOp = unitCost(base, 'Persians', 3, [probe([{ a: 104, op: 'div', v: 2, t: [4] }])]);
     expect(badOp.cost).toEqual({ Wood: 25, Gold: 45 });
+    expect(badOp.appliedTechs).toEqual([]);
     expect(badOp.undecoded).toEqual([{ techId: 1, tech: '探针', reason: '费用效果操作未解码', attr: 104, op: 'div' }]);
   });
 

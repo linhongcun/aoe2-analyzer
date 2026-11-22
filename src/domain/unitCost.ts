@@ -3,7 +3,9 @@
  *
  * 基础价取 discountedCost 的 exact。已选科技的费用效果按出现顺序做 set / mul / add，
  * 每一步资源都用 Math.max(0, …) 归零，显示价统一 roundHalfPrice。
- * 带资源标记或无法解码的费用操作整项不套用，并列入 undecoded。
+ * issue 1297：按单条 effect 过滤——含 res 标记的条目记入 undecoded，同科技内合法的
+ * 费用效果仍可放行；遇到无法解码的费用操作（op）时跳过该科技的费用效果并列入 undecoded。
+ * 乘法与非正向加法遇到不存在的资源键（undefined）时跳过，不凭空写出 0 键。
  *
  * 开局模拟仍先把文明效果收成 costAdd / costMul，再调用 applyAggregatedResource。
  * 那条路径的取整也在这里：legacy 文明用 Math.round，其余用 roundHalfPrice。
@@ -102,7 +104,10 @@ function applyCostEffect(exact: Cost, effect: UnitCostEffect) {
   const which = COST_ATTR[effect.a!];
   if (!which) return;
   const keys = which === 'all' ? UNIT_COST_RESOURCES : [which];
-  for (const key of keys) exact[key] = Math.max(0, applyEffectValue(exact[key] ?? 0, effect.op, effect.v));
+  for (const key of keys) {
+    if (exact[key] === undefined && (effect.op === 'mul' || (effect.op === 'add' && effect.v <= 0))) continue;
+    exact[key] = Math.max(0, applyEffectValue(exact[key] ?? 0, effect.op, effect.v));
+  }
 }
 
 export function unitCost(
@@ -119,10 +124,7 @@ export function unitCost(
   for (const tech of techs) {
     const effects = techEffects(tech);
     const markers = effects.filter((effect) => effect.res !== undefined);
-    if (markers.length) {
-      for (const effect of markers) undecoded.push({ techId: tech.id, tech: tech.zh, reason: '含未解码的资源或条件效果', res: effect.res, op: effect.op });
-      continue;
-    }
+    for (const effect of markers) undecoded.push({ techId: tech.id, tech: tech.zh, reason: '含未解码的资源或条件效果', res: effect.res, op: effect.op });
     const costEffects = effects.filter((effect) => isUnitCostAttribute(effect.a) && effect.t?.includes(u.id));
     const invalid = costEffects.filter((effect) => !COST_OPS.has(effect.op));
     if (invalid.length) {
