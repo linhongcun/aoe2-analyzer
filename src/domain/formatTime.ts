@@ -35,3 +35,6 @@ export function formatClock(seconds: number, { rounding = 'floor', hours = false
 
 /** 每秒数量 → 每分钟数量；seconds 非正时返回 0，避免 Infinity 进入 UI。 */
 export const ratePerMinute = (count: number, seconds: number): number => (seconds > 0 ? (count * SECONDS_PER_MINUTE) / seconds : 0);
+
+/** 生产与聚落训练秒数/倍率通用格式：最多两位小数并去掉尾随零。 */
+export const formatProductionNumber = (value: number): string => value.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });

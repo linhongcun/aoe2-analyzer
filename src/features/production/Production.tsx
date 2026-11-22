@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { Fragment, lazy, Suspense, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
@@ -20,6 +20,7 @@ import {
   effectiveProductionTechs,
   encodeProduction,
   freeProductionTechs,
+  mapucheSettlementFooterSummary,
   productionBuildings,
   productionTechs,
   productionUnits,
@@ -129,6 +130,27 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
         });
       }}
     />
+  );
+}
+
+function AppliedText({ items }: { items: readonly string[] }) {
+  return (
+    <>
+      {items.map((item, idx) => (
+        <Fragment key={item}>
+          {idx > 0 && '；'}
+          {item.split(/(×\d+(?:\.\d+)?)/g).map((part, partIdx) =>
+            partIdx % 2 === 1 ? (
+              <span className="num nw" key={partIdx}>
+                {part}
+              </span>
+            ) : (
+              part
+            ),
+          )}
+        </Fragment>
+      ))}
+    </>
   );
 }
 
@@ -332,7 +354,17 @@ function ProductionBody({
                         <b className="production-number">{num(line.perMinute)} 个 / 分钟</b>
                       </div>
                       {line.count === 0 && <span className="note">已暂停</span>}
-                      {line.applied.length > 0 && <small>已计入：{line.applied.join('；')}</small>}
+                      {line.applied.length > 0 && (
+                        <small>
+                          已计入：
+                          <AppliedText items={line.applied} />
+                        </small>
+                      )}
+                      {line.rowWarnings.map((note) => (
+                        <small key={note} className="production-line-warn">
+                          {note}
+                        </small>
+                      ))}
                       <small>
                         {result.resources
                           .filter((r) => line.spend[r.key] > 0)
@@ -404,6 +436,25 @@ function ProductionBody({
         </section>
       </ToolGrid>
       <ToolFooter related={{ links: related }}>
+        {(() => {
+          const settlementSummary = config.civ === 'Mapuche' ? mapucheSettlementFooterSummary() : null;
+          if (!settlementSummary) return null;
+          return (
+            <p data-testid="production-mapuche-settlement-note">
+              马普切在聚落训练掷矛手系、长矛兵系时，训练时间按时代倍率计算：封建时代 <span className="num nw">×{num(settlementSummary.feudal)}</span>
+              ，城堡时代累计 <span className="num nw">×{num(settlementSummary.castle)}</span>，帝王时代累计
+              {settlementSummary.imperialApproxOne ? (
+                <span className="num nw">约 ×{num(settlementSummary.imperial)}</span>
+              ) : (
+                <>
+                  {' '}
+                  <span className="num nw">×{num(settlementSummary.imperial)}</span>
+                </>
+              )}
+              ；征招不作用于聚落。兵营、靶场不受这些倍率影响。
+            </p>
+          );
+        })()}
         <p>
           <strong>计算口径与未计入项。</strong>
           每条产量等于建筑数乘每分钟秒数，再除以实际训练时间。实际时间按单位训练倍率和建筑工作效率计算；同资源先合计，再除以每村民的有效分钟采集量。

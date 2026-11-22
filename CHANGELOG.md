@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.27] - 2026-11-23
+
+### 更新说明
+
+持续生产与单位详情现在支持马普切在聚落训练掷矛手、精锐掷矛手、长矛兵、长枪兵与长戟兵：持续生产中选中马普切时，这 5 个单位除靶场/兵营外还可选「聚落」，训练时间按时代自动套用聚落倍率（封建 ×2.15，城堡累计 ×1.61，帝王累计约 ×1；如封建聚落掷矛手 55.9 秒、长矛兵 47.3 秒，城堡聚落精锐掷矛手 35.47 秒，帝王聚落长戟兵 22 秒），且仅作用于聚落行、不计入征招加速（勾选征招时在聚落行内明确提示）；单位详情页同步展示聚落训练地点及分时代聚落训练秒数，其他文明仍不可在聚落训练。
+
+### 新增
+
+- #1340：在 `src/domain/unitTrainingSites.ts` 新增聚落附加训练地点模型（`SETTLEMENT = 2556`、`MAPUCHE_SETTLEMENT_UNITS` 5 个单位、`TrainingSites.additional` 与 `trainingAtBuilding`），同步接通持续生产、训练总价、阵容新增费用、队伍方案与聚落建筑页；在 `src/domain/production.ts` 单点计算马普切聚落三时代训练倍率（科技 `1405–1407`，仅作用于聚落行）、隔离征招并输出行内提醒（`rowWarnings`）、导出 fail-closed 页底口径汇总 `mapucheSettlementFooterSummary` 与单位详情分时代秒数 `mapucheSettlementUnitTimes`，并移除两条旧「暂不可选」提示；更新 `Production.tsx`、`production.css`、`UnitDetail.tsx`、`UnitTrainingConditions.tsx` 与 `unit-detail-1283.css` 实现正式界面与 360px 零折行；新增 `tests/unit/mapucheSettlementProduction1340.test.ts` 与 `tests/e2e/mapucheSettlementProduction1340.spec.ts`（已登记 `scripts/ci-browser-weights.json`），更新 `tests/unit/fortifiedChurchProduction1326.test.ts` 与 `tests/e2e/unitDetail895.spec.ts`。
+
 ## [0.99.26] - 2026-11-23
 
 ### 更新说明

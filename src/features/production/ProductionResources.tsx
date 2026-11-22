@@ -1,7 +1,8 @@
+import { formatProductionNumber } from '../../domain/formatTime';
 import type { ProductionResult } from '../../domain/production';
 import { RES_ZH } from '../../domain/ratings';
 
-export const formatProductionNumber = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
+export { formatProductionNumber };
 
 export function ProductionResources({ resources }: { resources: ProductionResult['resources'] }) {
   return (

@@ -158,8 +158,13 @@ export default function UnitDetail() {
     training?.kind !== 'unavailable' ? (
       <BuildingTag id={buildingId} zh={site ? (building?.zh ?? '资料待核') : u.bz} building={building} civ={site?.civ} />
     ) : null;
-  const trainingBuildingLabel =
+  const extraBuildings =
+    context && training?.kind === 'available'
+      ? (training.additional ?? []).filter((extra) => extra.civ === context.en).map((extra) => core.buildingById[extra.building]?.zh ?? '资料待核')
+      : [];
+  const baseBuildingLabel =
     training?.kind === 'unavailable' ? '当前文明不可训练' : site ? (building?.zh ?? '资料待核') : (building?.zh ?? u.bz.replace(/\s+/g, ''));
+  const trainingBuildingLabel = extraBuildings.length ? [baseBuildingLabel, ...extraBuildings].join('、') : baseBuildingLabel;
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
@@ -360,7 +365,7 @@ export default function UnitDetail() {
               {u.tt}秒
             </span>
           </p>
-          <UnitTrainingConditions training={training} core={core} />
+          <UnitTrainingConditions training={training} core={core} unit={u} civ={context?.en} />
           {showPrior && u.up && (
             <p>
               从上一级升级为{u.zh}：<CostView c={u.up[0]} />{' '}

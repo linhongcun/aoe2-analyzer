@@ -10,9 +10,9 @@ import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, EARLY_MILITARY_TECH_AGES, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
-import { ratePerMinute } from './formatTime';
+import { formatProductionNumber, ratePerMinute } from './formatTime';
 import { toggleSelected } from './prereq';
-import { trainingAtBuilding } from './unitTrainingSites';
+import { MAPUCHE_CIV, MAPUCHE_SETTLEMENT_UNITS, SETTLEMENT, trainingAtBuilding } from './unitTrainingSites';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -175,6 +175,76 @@ function relevantTechEffects(t: Tech): DatEco[] {
   return (DAT.techs[t.en]?.eco ?? []).filter((e) => e.a !== undefined && (costAttrs[e.a] || e.a === 101 || e.a === 13));
 }
 
+const MAPUCHE_SETTLEMENT_TECH_IDS: readonly number[] = [1405, 1406, 1407];
+const CONSCRIPTION_TECH_ID = 315;
+
+function mapucheSettlementMultipliers(
+  unitId: number,
+  age: number,
+  rows = eco.civEco[MAPUCHE_CIV] ?? [],
+): { ops: TrainingCycleOp[]; cumulative: number; applied: boolean; invalidNames: string[] } {
+  const ops: TrainingCycleOp[] = [];
+  const invalidNames: string[] = [];
+  let cumulative = 1;
+  let applied = false;
+  const settlementRows = rows
+    .filter((r) => r.tech !== undefined && MAPUCHE_SETTLEMENT_TECH_IDS.includes(r.tech) && r.age <= age)
+    .sort((a, b) => a.age - b.age || (a.tech ?? 0) - (b.tech ?? 0));
+  for (const r of settlementRows) {
+    const relevant = r.effects.filter((e) => e.kind === 'attr' && e.attr === 'trainTime' && e.target === `unit:${unitId}`);
+    if (!relevant.length) continue;
+    if (relevant.some((e) => e.op !== 'mul' || !Number.isFinite(e.v) || (e.v ?? 0) <= 0)) {
+      invalidNames.push(r.name);
+      continue;
+    }
+    for (const e of relevant) {
+      ops.push({ kind: 'train', op: 'mul', v: e.v! });
+      cumulative *= e.v!;
+    }
+    applied = true;
+  }
+  return { ops, cumulative, applied, invalidNames };
+}
+
+/** 马普切聚落三时代累计倍率汇总；对全部 5 个聚落单位核验完整一致，缺失、非法或不一致时 fail-closed 返回 null。 */
+export function mapucheSettlementFooterSummary(
+  rows = eco.civEco[MAPUCHE_CIV] ?? [],
+): { feudal: number; castle: number; imperial: number; imperialApproxOne: boolean } | null {
+  let ref: [number, number, number] | null = null;
+  for (const { id } of MAPUCHE_SETTLEMENT_UNITS) {
+    const vals: number[] = [];
+    for (const age of [2, 3, 4] as const) {
+      const res = mapucheSettlementMultipliers(id, age, rows);
+      if (res.invalidNames.length > 0 || !res.applied || res.ops.length !== age - 1 || !Number.isFinite(res.cumulative) || res.cumulative <= 0) {
+        return null;
+      }
+      vals.push(res.cumulative);
+    }
+    const tuple = vals as [number, number, number];
+    if (!ref) ref = tuple;
+    else if (tuple.some((v, i) => Math.abs(v - ref![i]!) > 1e-12)) return null;
+  }
+  if (!ref) return null;
+  const [feudal, castle, imperial] = ref;
+  return { feudal, castle, imperial, imperialApproxOne: Math.abs(imperial - 1) > 1e-9 && Math.abs(imperial - 1) < 0.005 };
+}
+
+/** 马普切聚落各可用时代（不含科技）的实际训练秒数，与持续生产同源同浮点顺序。 */
+export function mapucheSettlementUnitTimes(unit: Pick<Unit, 'id' | 'age'>): { age: number; seconds: number }[] {
+  const data = eco.units[unit.id];
+  if (!data) return [];
+  const base = data.timeAt?.[SETTLEMENT] ?? data.trainTime;
+  const minAge = trainingUnitAge(MAPUCHE_CIV, unit.id, unit.age);
+  const out: { age: number; seconds: number }[] = [];
+  for (let age = minAge; age <= 4; age++) {
+    const { ops, invalidNames } = mapucheSettlementMultipliers(unit.id, age);
+    if (invalidNames.length > 0) continue;
+    const seconds = trainingCycle(base, ops).seconds;
+    if (Number.isFinite(seconds) && seconds > 0) out.push({ age, seconds });
+  }
+  return out;
+}
+
 export interface ProductionLine {
   unit: Unit;
   building: number;
@@ -184,6 +254,7 @@ export interface ProductionLine {
   perMinute: number;
   spend: Record<GatherRes, number>;
   applied: string[];
+  rowWarnings: string[];
 }
 export interface ProductionResult {
   lines: ProductionLine[];
@@ -217,6 +288,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
   if (civ && economicText(civ.tb)) warnings.push(`${civ.tb}：本文明团队经济机制未计入。`);
   const selectedTechs = selectedTechEffects(ctx, sel);
   const selectedTechNames = new Set([...sel].map((id) => ctx.core.techById[id]?.en).filter((en): en is string => !!en));
+  const conscriptionTargetsSettlement = DAT.techs.Conscription?.eco.some((e) => e.a === 13 && e.t?.includes(SETTLEMENT)) ?? false;
   config.rows.forEach((row, index) => {
     const label = `需求 ${index + 1}`;
     const u = ctx.core.unitById[row.unit];
@@ -230,19 +302,17 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     }
     const data = eco.units[u.id]!;
     const notes: string[] = [];
+    const rowWarnings: string[] = [];
     const base = data.timeAt?.[row.building] ?? data.trainTime;
     const cycleOps: TrainingCycleOp[] = [];
     const targetBuilding = buildingTarget(row.building, config.age);
     for (const r of eco.civEco[config.civ] ?? []) {
       if (r.age > config.age) continue;
+      if (config.civ === MAPUCHE_CIV && r.tech !== undefined && MAPUCHE_SETTLEMENT_TECH_IDS.includes(r.tech)) continue;
       const relevant = r.effects.filter(
         (e) => e.kind === 'attr' && ((e.attr === 'trainTime' && matches(e, u)) || (e.attr === 'workRate' && e.target === `unit:${targetBuilding}`)),
       );
       if (!relevant.length) continue;
-      if (config.civ === 'Mapuche' && [1405, 1406, 1407].includes(r.tech ?? 0)) {
-        warnings.push('马普切聚落专用训练倍率未计入；兵营和靶场使用普通训练时间，聚落生产暂不可选。');
-        continue;
-      }
       const needed = (r.requires ?? []).filter((id) => !!ctx.core.techById[id] && !isAgeTech(id));
       if (needed.some((id) => !sel.has(id))) continue;
       if (relevant.some((e) => e.op !== 'mul' || !Number.isFinite(e.v) || (e.v ?? 0) <= 0)) {
@@ -251,6 +321,12 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       }
       for (const e of relevant) cycleOps.push({ kind: e.attr === 'trainTime' ? 'train' : 'work', op: 'mul', v: e.v! });
       notes.push(r.source === 'team' ? '本文明团队训练加成' : r.name);
+    }
+    if (config.civ === MAPUCHE_CIV && row.building === SETTLEMENT) {
+      const settlement = mapucheSettlementMultipliers(u.id, config.age);
+      for (const name of settlement.invalidNames) warnings.push(`${name}：训练效果未核实，未计入。`);
+      cycleOps.push(...settlement.ops);
+      if (settlement.applied) notes.push(`聚落训练时间 ×${formatProductionNumber(settlement.cumulative)}（马普切，至${AGE_ZH[config.age]}累计）`);
     }
     const costTechs: { id: number; en: string; zh: string }[] = [];
     for (const t of selectedTechs) {
@@ -289,6 +365,9 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       }
       if (appliedGenericBt) notes.push(`${AGE_ZH[g.age] ?? `时代 ${g.age}`}自动训练时间修正`);
     }
+    if (row.building === SETTLEMENT && sel.has(CONSCRIPTION_TECH_ID) && !conscriptionTargetsSettlement) {
+      rowWarnings.push('征招不作用于聚落，本行训练时间未加快。');
+    }
     const priced = unitCost({ id: u.id, cost: data.cost }, config.civ, config.age, costTechs);
     notes.unshift(...priced.discount.applied.map((x) => x.text));
     warnings.push(...priced.discount.unsupported.map((x) => `${x.text || '文明训练费用折扣'}：折扣未计入。`));
@@ -301,7 +380,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     const count = +row.count,
       perMinute = ratePerMinute(count, seconds);
     const spend = Object.fromEntries(PRODUCTION_RES.map((r) => [r, (cost[r] ?? 0) * perMinute])) as Record<GatherRes, number>;
-    lines.push({ unit: u, building: row.building, count, cost, seconds, perMinute, spend, applied: unique(notes) });
+    lines.push({ unit: u, building: row.building, count, cost, seconds, perMinute, spend, applied: unique(notes), rowWarnings: unique(rowWarnings) });
   });
   const resources = PRODUCTION_RES.map((key) => {
     const spend = errors.length ? 0 : lines.reduce((total, l) => total + l.spend[key], 0);
@@ -309,7 +388,6 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     const villagers = income > 0 && Number.isFinite(income) ? spend / income : 0;
     return { key, spend, income, villagers, rounded: Math.ceil(villagers - 1e-9) };
   });
-  if (config.civ === 'Mapuche') warnings.push('聚落生产的训练地点和倍率尚未完整核实，暂不可选。');
   if (sel.has(14) || sel.has(13) || sel.has(12)) warnings.push('磨坊科技的农田食物容量收益未计入；本模型不计农田补种，重犁携带量效果仍按数据计入。');
   return { lines, errors, warnings: unique(warnings), applied: unique(applied), resources, total: resources.reduce((n, r) => n + r.rounded, 0), techs: sel };
 }
