@@ -1,38 +1,24 @@
 import { useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { civs, civByEn } from '../../data';
+import { civByEn } from '../../data';
 import { ARMY_RESEARCH } from '../../data/armyResearch';
 import { armyResearchChoices, evaluateArmyCost, researchKey } from '../../domain/armyCost';
 import { ARMY_RESEARCH_STATES as STATES } from '../../domain/armyResearchEvidence';
 import { ARMY_COST_DATA, emptyArmyCost, type ArmyCostConfig } from '../../domain/armyCostConfig';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../domain/production';
-import { AGE_ZH, RES_ZH } from '../../domain/ratings';
-import type { Cost } from '../../domain/types';
+import { AGE_ZH } from '../../domain/ratings';
 import { CostView, UnitIcon } from '../../shared/ui/art';
+import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { SHARE_STATUS_PROPS, useShareLink } from '../../shared/ui/useShareLink';
-import { ProductionPageTop } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
 import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import { decodeArmyCost, encodeArmyCost } from './armyCostCodec';
+import { ArmyResultsPanel } from './ArmyResultsPanel';
 import { ArmyUnitPicker } from './ArmyUnitPicker';
 import { armySupplyHref } from './armySupplyCodec';
-import { ArmyLedger } from './ArmyLedger';
 import './armyCost.css';
-
-const RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
-function ResourceGrid({ cost, primary = false }: { cost: Cost; primary?: boolean }) {
-  return (
-    <div className={'army-resources' + (primary ? ' army-primary' : '')}>
-      {RES.map((r) => (
-        <div key={r}>
-          <span>{RES_ZH[r]}</span>
-          <strong className="num">{(cost[r] ?? 0).toLocaleString('zh-CN', { maximumFractionDigits: 2 })}</strong>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function ArmyCost({ context, loadingError }: { context: ProductionContext | null; loadingError: boolean }) {
   const location = useLocation();
@@ -145,7 +131,8 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
       <ToolPageHeader
         title={PRODUCTION_MODE_LABELS.army}
         description="从当前科技出发，核对一套阵容还要投入多少资源。"
-        top={<ProductionPageTop crumb={PRODUCTION_MODE_LABELS.army} />}
+        top={<ProductionCrumbs crumb={PRODUCTION_MODE_LABELS.army} />}
+        subnav={<ProductionModeNav />}
         dock={
           <div className="army-actions">
             <button type="button" className="btn" disabled={!config || decoded.dataChanged} onClick={copy}>
@@ -230,17 +217,17 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
           <div className="army-context army-card">
             <h2>文明与时代</h2>
             <div className="army-fields">
-              <label>
-                文明
-                <select value={config.civ} onChange={(e) => update({ ...config, civ: e.target.value })}>
-                  {!civByEn(config.civ) && <option value={config.civ}>无效文明：{config.civ}</option>}
-                  {civs.map((c) => (
-                    <option key={c.en} value={c.en}>
-                      {c.zh}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="army-field">
+                <label htmlFor="army-civ">文明</label>
+                <CivPicker
+                  id="army-civ"
+                  label="阵容文明"
+                  value={config.civ}
+                  emptyText={!civByEn(config.civ) ? `无效文明：${config.civ}` : undefined}
+                  invalid={!civByEn(config.civ)}
+                  onChange={(nextCiv) => update({ ...config, civ: nextCiv })}
+                />
+              </div>
               <label>
                 已到达时代
                 <select value={config.age} onChange={(e) => update({ ...config, age: e.target.value })}>
@@ -389,6 +376,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   {picker !== null && (
                     <ArmyUnitPicker
                       units={units}
+                      civ={civByEn(config.civ) ? config.civ : undefined}
                       onClose={closePicker}
                       onSelect={(u) => {
                         const index = picker;
@@ -466,84 +454,12 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   <p className="note">可选强化默认不勾选；形态必需由系统补入，并说明原因。</p>
                 </section>
               </div>
-              <div className="army-results">
-                <section className="army-card">
-                  <h2 ref={resultRef} tabIndex={-1}>
-                    {result?.partial ? '已核实项目小计' : '本期新增费用合计'}
-                  </h2>
-                  {result?.blocked.length ? (
-                    <div role="alert">
-                      {result.blocked.map((e) => (
-                        <p key={e}>{e}</p>
-                      ))}
-                    </div>
-                  ) : null}
-                  {!result?.hasValue ? (
-                    <p className="note">
-                      {config.rows.length || config.targets.length ? '当前没有可完整计入的项目，请查看各项原因。' : '添加兵种并核对研究状态后查看费用。'}
-                    </p>
-                  ) : (
-                    <>
-                      <p className="note">{result.partial ? '仅包含已核实部分，不能代表整套阵容。' : '训练费与一次性研究费分别列示，再按资源相加。'}</p>
-                      <ResourceGrid cost={result.total} primary />
-                      <h3>训练费</h3>
-                      <ResourceGrid cost={result.trainingTotal} />
-                      <p className="note">按「已完成＋本次目标达成后」的有效单价计算。</p>
-                      <h3>一次性研究 / 升级费</h3>
-                      <ResourceGrid cost={result.researchTotal} />
-                      <p className="note">按实际研究动作去重，不乘训练数量。</p>
-                      {!result.partial && result.ledger.length > 0 && result.ledger.every((e) => ['done', 'inferred-done', 'free'].includes(e.status)) && (
-                        <p className="note">
-                          所有必要和目标研究均已完成；新增研究费为 <span className="num">0</span>。
-                        </p>
-                      )}
-                    </>
-                  )}
-                  <p className="army-boundary">
-                    <Icon name="info" />
-                    <span>共享研究只计一次；不同兵种线的升级与独立护甲研究分别计费。</span>
-                  </p>
-                </section>
-                <section className="army-card">
-                  <h2>研究账本</h2>
-                  <p className="note">名称仅用于显示，按同一个实际研究动作计费。</p>
-                  {result?.ledger.map((entry) => (
-                    <ArmyLedger
-                      key={entry.key}
-                      entry={entry}
-                      entries={result.ledger}
-                      config={config}
-                      onRemove={() =>
-                        update({ ...config, done: config.done.filter((k) => k !== entry.key), targets: config.targets.filter((k) => k !== entry.key) })
-                      }
-                    />
-                  ))}
-                  {!result?.ledger.length && <p className="note">暂无研究动作。</p>}
-                </section>
-                {result?.partial && (
-                  <section className="army-card">
-                    <h2>未计入清单</h2>
-                    <ul>
-                      {result.training.lines.map(
-                        (line, i) =>
-                          line.status !== 'ok' && (
-                            <li key={i}>
-                              第 <span className="num">{i + 1}</span> 行：{line.reason.replace(/研究费用不计。?/g, '')}
-                            </li>
-                          ),
-                      )}
-                      {result.ledger
-                        .filter((e) => e.status === 'invalid')
-                        .map((e) => (
-                          <li key={e.key}>
-                            {e.name}：{e.reason}
-                          </li>
-                        ))}
-                    </ul>
-                    <p className="note">修正输入、移除无效项或更换目标后自动重新核算。</p>
-                  </section>
-                )}
-              </div>
+              <ArmyResultsPanel
+                config={config}
+                result={result}
+                resultRef={resultRef}
+                onRemoveResearch={(key) => update({ ...config, done: config.done.filter((k) => k !== key), targets: config.targets.filter((k) => k !== key) })}
+              />
             </div>
           )}
         </>

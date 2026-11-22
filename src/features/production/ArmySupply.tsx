@@ -13,7 +13,7 @@ import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { decodeArmyCost } from './armyCostCodec';
 import { decodeArmySupply, encodeArmySupply, SUPPLY_COUNT_INPUT_LIMIT, SUPPLY_FARM_DISTANCES, SUPPLY_WALK_DISTANCES } from './armySupplyCodec';
-import { ProductionPageTop } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
 import './armySupply.css';
 
@@ -26,7 +26,7 @@ export default function ArmySupply({ context, loadingError }: { context: Product
   const returnTo = decoded.kind === 'valid' ? '/production?' + decoded.sourceQuery : decoded.returnTo;
   return (
     <section className="pane production-page" data-testid="army-supply-page">
-      <ToolPageHeader title={PRODUCTION_MODE_LABELS.legacy} top={<ProductionPageTop />} />
+      <ToolPageHeader title={PRODUCTION_MODE_LABELS.legacy} top={<ProductionCrumbs />} subnav={<ProductionModeNav />} />
       {returnTo && <SupplyReturn to={returnTo} />}
       {decoded.kind === 'invalid' ? (
         <p role="alert">{decoded.reason}</p>
@@ -88,7 +88,8 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
     <section className="pane production-page army-supply" data-testid="army-supply-page">
       <ToolPageHeader
         title={PRODUCTION_MODE_LABELS.legacy}
-        top={<ProductionPageTop />}
+        top={<ProductionCrumbs />}
+        subnav={<ProductionModeNav />}
         description="在原阵容的基础上确认科技口径、形态和专用生产建筑。"
         dock={<CalcDock note={share.status} resultId="army-supply-result-title" actions={[{ label: '复制方案链接', icon: 'copy', onClick: copy }]} />}
       />

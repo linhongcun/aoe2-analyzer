@@ -76,22 +76,17 @@ export function ProductionModeNav({ transfer }: { transfer?: ProductionModeTrans
   );
 }
 
-/** 页头两行：面包屑，然后是生产模式。 */
-export function ProductionPageTop({ crumb, flat = false, transfer }: { crumb?: string; flat?: boolean; transfer?: ProductionModeTransfer }) {
-  return (
-    <>
-      {flat ? (
-        <nav className="crumbs" aria-label="面包屑">
-          <Link to="/">
-            <Icon name="home" /> 首页
-          </Link>
-          <Icon name="chevron-right" />
-          <span>{crumb}</span>
-        </nav>
-      ) : (
-        <Breadcrumbs current={crumb} />
-      )}
-      <ProductionModeNav transfer={transfer} />
-    </>
+/** 生产页组面包屑：支持扁平（首页 / 页名）或沿栏目默认面包屑（Issue 1281）。 */
+export function ProductionCrumbs({ crumb, flat = false }: { crumb?: string; flat?: boolean }) {
+  return flat ? (
+    <nav className="crumbs" aria-label="面包屑">
+      <Link to="/">
+        <Icon name="home" /> 首页
+      </Link>
+      <Icon name="chevron-right" />
+      <span>{crumb}</span>
+    </nav>
+  ) : (
+    <Breadcrumbs current={crumb} />
   );
 }

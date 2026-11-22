@@ -1,0 +1,83 @@
+/* 数量步进器（Issue 1281）：单层胶囊外框、44x44 按钮热区、内框无双圆角、双主题 AA 对比度。 */
+.qty-stepper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 134px;
+  min-height: 44px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.qty-stepper.is-invalid {
+  border-color: var(--color-bad);
+}
+
+.qty-stepper:focus-within {
+  border-color: var(--color-link);
+}
+
+.qty-stepper > .qty-stepper-btn {
+  flex: 0 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.qty-stepper > .qty-stepper-btn:first-child {
+  border-right: 1px solid var(--color-border);
+}
+
+.qty-stepper > .qty-stepper-btn:last-child {
+  border-left: 1px solid var(--color-border);
+}
+
+.qty-stepper > .qty-stepper-btn:hover:not(:disabled) {
+  background: var(--color-control);
+}
+
+.qty-stepper > .qty-stepper-btn:disabled {
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.qty-stepper > input.qty-stepper-input {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-align: center;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  box-sizing: border-box;
+}
+
+.qty-stepper.is-invalid > input.qty-stepper-input {
+  background: var(--color-bad-soft);
+}
+
+/* 特异性高于 .train-total-page :focus-visible (0,2,0)，确保内缩焦点环不被 overflow: hidden 裁切 */
+.qty-stepper > .qty-stepper-btn:focus-visible,
+.qty-stepper > input.qty-stepper-input:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: -2px;
+}

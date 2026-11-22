@@ -1,25 +1,25 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { civs, civByEn } from '../../data';
+import { civByEn } from '../../data';
 import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
-import { defaultTrainUnit, evaluateTrainTotal, type TrainTotalConfig, type TrainTotalTechChoice } from '../../domain/trainTotal';
-import { AGE_ZH, RES_ZH } from '../../domain/ratings';
-import type { Tech } from '../../domain/types';
-import { CostView, RK, StatIcon, TechIcon, UnitIcon } from '../../shared/ui/art';
+import { defaultTrainUnit, evaluateTrainTotal, TRAIN_TOTAL_QTY_MAX, type TrainTotalConfig } from '../../domain/trainTotal';
+import { AGE_ZH } from '../../domain/ratings';
+import { CostView } from '../../shared/ui/art';
+import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
+import { UnitPicker } from '../../shared/ui/UnitPicker';
 import { useShareLink } from '../../shared/ui/useShareLink';
-import { ProductionPageTop } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
+import { QtyStepper } from './QtyStepper';
 import { decodeTrainTotal, encodeTrainTotal, legacyHrefFromTotal } from './trainTotalCodec';
-import { TRAIN_TOTAL_DESCRIPTION, TRAIN_TOTAL_FOOTER, TRAIN_TOTAL_PENDING, TRAIN_TOTAL_TITLE, pendingTrainQuantity, trainTotalSummary } from './trainTotalCopy';
+import { TRAIN_TOTAL_DESCRIPTION, TRAIN_TOTAL_FOOTER, TRAIN_TOTAL_TITLE, pendingTrainQuantity, trainTotalSummary } from './trainTotalCopy';
+import { TechCheck, TrainTotalResult } from './TrainTotalResult';
 import { trainTotalToProduction } from '../../domain/productionTransfer';
 import { productionTransferState, readProductionTransfer, withoutProductionTransfer } from '../../shared/utils/productionTransferState';
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import './trainTotal.css';
-
-const RESOURCES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
-const amount = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
 
 export function TrainTotalLinkError({ errors }: { errors: string[] }) {
   return (
@@ -27,7 +27,8 @@ export function TrainTotalLinkError({ errors }: { errors: string[] }) {
       <ToolPageHeader
         title={TRAIN_TOTAL_TITLE}
         description={TRAIN_TOTAL_DESCRIPTION}
-        top={<ProductionPageTop crumb={TRAIN_TOTAL_TITLE} flat />}
+        top={<ProductionCrumbs crumb={TRAIN_TOTAL_TITLE} flat />}
+        subnav={<ProductionModeNav />}
         dock={
           <nav className="calc-dock" aria-label="方案操作">
             <div className="calc-dock-actions">
@@ -88,8 +89,12 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
   };
   const blocked = result.blocked.length > 0;
   const civName = civByEn(config.civ)?.zh;
-  const options =
-    config.age == null || !civName ? [] : productionUnits(context, { civ: config.civ, age: config.age, techs: config.techs, walk: 0, farm: 0, rows: [] });
+  const options = useMemo(
+    () =>
+      config.age == null || !civName ? [] : productionUnits(context, { civ: config.civ, age: config.age, techs: config.techs, walk: 0, farm: 0, rows: [] }),
+    [context, config.civ, config.age, config.techs, civName],
+  );
+  const unitEntries = useMemo(() => options.map((u) => ({ u })), [options]);
   const unlocks = result.techs.filter((tech) => tech.panel === 'unlock');
   const costs = result.techs.filter((tech) => tech.panel === 'cost');
   const excluded = result.lines.filter((line) => line.status !== 'ok');
@@ -98,7 +103,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
       <ToolPageHeader
         title={TRAIN_TOTAL_TITLE}
         description={TRAIN_TOTAL_DESCRIPTION}
-        top={<ProductionPageTop crumb={TRAIN_TOTAL_TITLE} flat transfer={transfer} />}
+        top={<ProductionCrumbs crumb={TRAIN_TOTAL_TITLE} flat />}
+        subnav={<ProductionModeNav transfer={transfer} />}
         dock={
           <nav className="calc-dock" aria-label="方案操作">
             {share.status && (
@@ -148,17 +154,17 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
       <div className="train-total-setup">
         <section className="train-total-settings" aria-labelledby="train-total-settings-title">
           <h2 id="train-total-settings-title">文明与时代</h2>
-          <label>
-            文明
-            <select aria-label="训练总价文明" value={config.civ} onChange={(event) => write({ ...config, civ: event.target.value })}>
-              {!civName && <option value={config.civ}>无效文明：{config.civ}</option>}
-              {civs.map((item) => (
-                <option key={item.en} value={item.en}>
-                  {item.zh}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className="train-total-field">
+            <label htmlFor="train-total-civ">文明</label>
+            <CivPicker
+              id="train-total-civ"
+              label="训练总价文明"
+              value={config.civ}
+              emptyText={!civName ? `无效文明：${config.civ}` : undefined}
+              invalid={!civName}
+              onChange={(civ) => write({ ...config, civ })}
+            />
+          </div>
           <label>
             时代
             <select
@@ -206,6 +212,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 const row = config.rows[index];
                 if (!row) return null;
                 const waiting = pendingTrainQuantity(line);
+                const rowAvailable = row.unit > 0 && options.some((unit) => unit.id === row.unit);
+                const unavailableText = row.unit > 0 && !rowAvailable ? `当前不可用：${line.unit?.zh ?? row.unit}` : undefined;
                 return (
                   <article
                     className={`train-total-row${waiting ? ' is-waiting' : line.status === 'ok' ? '' : ' is-bad'}`}
@@ -217,37 +225,35 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                       {line.status === 'pending' ? ' · 待选' : ''}
                       {waiting ? ' · 待填写数量' : ''}
                     </h3>
-                    <label>
-                      单位形态
-                      <select
-                        aria-label={`兵种 ${index + 1} 单位`}
-                        aria-invalid={line.status === 'unavail' || line.status === 'pending'}
-                        value={row.unit}
-                        onChange={(event) => editRow(config, index, { unit: Number(event.target.value) }, write)}
-                      >
-                        <option value={0}>请选择单位</option>
-                        {row.unit > 0 && !options.some((unit) => unit.id === row.unit) && (
-                          <option value={row.unit}>当前不可用：{line.unit?.zh ?? row.unit}</option>
-                        )}
-                        {options.map((unit) => (
-                          <option key={unit.id} value={unit.id}>
-                            {unit.zh}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      训练数量
-                      <input
-                        aria-label={`兵种 ${index + 1} 训练数量`}
-                        aria-invalid={waiting ? undefined : line.status === 'badqty'}
-                        placeholder="填写 1–1000"
-                        type="text"
-                        inputMode="numeric"
-                        value={row.qty}
-                        onChange={(event) => editRow(config, index, { qty: event.target.value }, write)}
+                    <div className="train-total-field">
+                      <label htmlFor={`train-total-unit-${index}`}>单位形态</label>
+                      <UnitPicker
+                        id={`train-total-unit-${index}`}
+                        label={`兵种 ${index + 1} 单位`}
+                        value={line.unit ?? undefined}
+                        rawValue={row.unit}
+                        civ={civName ? config.civ : undefined}
+                        allowUnavailable={false}
+                        list={unitEntries}
+                        invalid={line.status === 'unavail' || line.status === 'pending'}
+                        unavailableText={unavailableText}
+                        onChange={(unit) => editRow(config, index, { unit: unit.id }, write)}
                       />
-                    </label>
+                    </div>
+                    <div className="train-total-field">
+                      <label htmlFor={`train-total-qty-${index}`}>训练数量</label>
+                      <QtyStepper
+                        id={`train-total-qty-${index}`}
+                        value={row.qty}
+                        bounds={{ min: 1, max: TRAIN_TOTAL_QTY_MAX }}
+                        inputLabel={`兵种 ${index + 1} 训练数量`}
+                        decrementLabel={`兵种 ${index + 1} 数量减 1`}
+                        incrementLabel={`兵种 ${index + 1} 数量加 1`}
+                        placeholder="填写 1–1000"
+                        invalid={waiting ? undefined : line.status === 'badqty'}
+                        onChange={(qty) => editRow(config, index, { qty }, write)}
+                      />
+                    </div>
                     {line.unlockSelectable && line.needUnlockId != null && (
                       <button
                         type="button"
@@ -303,7 +309,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
           </section>
         </div>
         <div className="train-total-results">
-          <Result config={config} decodedWarnings={decoded.warnings} result={result} summary={summary} excluded={excluded} write={write} />
+          <TrainTotalResult config={config} decodedWarnings={decoded.warnings} result={result} summary={summary} excluded={excluded} write={write} />
           <section className="train-total-techs" aria-labelledby="train-total-techs-title">
             <h2 id="train-total-techs-title">影响训练单价的科技</h2>
             <p className="note">
@@ -345,155 +351,6 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
         })}
       </ToolFooter>
     </section>
-  );
-}
-
-function Result({
-  decodedWarnings,
-  result,
-  summary,
-  excluded,
-  config,
-  write,
-}: {
-  decodedWarnings: string[];
-  result: ReturnType<typeof evaluateTrainTotal>;
-  summary: ReturnType<typeof trainTotalSummary>;
-  excluded: ReturnType<typeof evaluateTrainTotal>['lines'];
-  config: TrainTotalConfig;
-  write: (next: TrainTotalConfig) => void;
-}) {
-  const blocked = result.blocked.length > 0;
-  return (
-    <section className="train-total-summary" aria-labelledby="train-total-result-title" data-testid="train-total-result">
-      <div className="train-total-summary-top">
-        <h2 id="train-total-result-title" className="calc-dock-target" tabIndex={-1}>
-          {summary.title}
-          {summary.marks.map((mark) => (
-            <span className={mark === '部分训练费用' ? 'train-total-mark is-partial' : 'train-total-mark is-estimate'} key={mark}>
-              {mark}
-            </span>
-          ))}
-        </h2>
-        {summary.count && <strong className="nw num">{summary.count}</strong>}
-      </div>
-      {summary.scopes.map((scope) => (
-        <p className="train-total-scope" key={scope}>
-          {scope}
-        </p>
-      ))}
-      {blocked && (
-        <div role="alert">
-          {result.blocked.map((error) => (
-            <p key={error}>{error}</p>
-          ))}
-        </div>
-      )}
-      {(decodedWarnings.length > 0 || (!blocked && (excluded.length > 0 || result.invalidTechIds.length > 0))) && (
-        <div className="train-total-alert" role="status">
-          {decodedWarnings.map((warning) => (
-            <p key={warning}>{warning}</p>
-          ))}
-          {result.invalidTechIds.length > 0 && <p>有科技在当前条件下不可用，已停止计入。可手动移除，不会自动取消勾选。</p>}
-          {excluded.map((line) => (
-            <p key={line.summary}>
-              {pendingTrainQuantity(line) ? (
-                <>
-                  <span className="nw num">第 {result.lines.indexOf(line) + 1} 行</span>还没有填写训练数量，未计入下面的小计。
-                </>
-              ) : (
-                line.summary
-              )}
-            </p>
-          ))}
-          {result.lines.some((line) => line.status === 'unavail') && (
-            <button
-              type="button"
-              className="btn"
-              onClick={() => write({ ...config, rows: config.rows.filter((_, index) => result.lines[index]?.status !== 'unavail') })}
-            >
-              移除不可用行
-            </button>
-          )}
-          {result.invalidTechIds.length > 0 && (
-            <button type="button" className="btn" onClick={() => write({ ...config, techs: config.techs.filter((id) => !result.invalidTechIds.includes(id)) })}>
-              移除不可用科技
-            </button>
-          )}
-        </div>
-      )}
-      {summary.empty && (
-        <p className="train-total-empty" data-testid="train-total-empty">
-          {summary.empty}
-        </p>
-      )}
-      {summary.none && (
-        <p className="train-total-empty" data-testid="train-total-none">
-          {result.lines.every(pendingTrainQuantity) ? TRAIN_TOTAL_PENDING : <>{summary.none}不展示合计数字。可改回文明或时代、勾选所需科技，或移除不可用行。</>}
-        </p>
-      )}
-      {summary.showCards && (
-        <div className="train-total-resources">
-          {RESOURCES.map((key) => (
-            <div className="train-total-resource" key={key} data-testid={'train-total-resource-' + key}>
-              <span>
-                <StatIcon k={RK[key] ?? key.toLowerCase()} t={RES_ZH[key]} />
-                {RES_ZH[key]}
-              </span>
-              <strong className="nw num">{amount(result.total[key] ?? 0)}</strong>
-            </div>
-          ))}
-        </div>
-      )}
-      {summary.showCards && (
-        <ul className="train-total-lines">
-          {result.lines.flatMap((line, index) => {
-            if (line.status !== 'ok' || !line.unit || !line.cost || !line.subtotal) return [];
-            return [
-              <li key={index}>
-                <UnitIcon u={line.unit} />
-                <div>
-                  <div>
-                    {line.unit.zh} <span className="nw">× {line.qtyValue}</span>
-                  </div>
-                  <div className="train-total-mini">
-                    <span>
-                      单价 <CostView c={line.cost} />
-                    </span>
-                    <span>
-                      小计 <CostView c={line.subtotal} />
-                    </span>
-                  </div>
-                  {line.notes.map((note) => (
-                    <div key={note}>{note}</div>
-                  ))}
-                </div>
-              </li>,
-            ];
-          })}
-        </ul>
-      )}
-    </section>
-  );
-}
-
-function TechCheck({ choice, onToggle }: { choice: TrainTotalTechChoice; onToggle: () => void }) {
-  const tech = choice.tech;
-  return (
-    <label className={choice.invalidReason ? 'train-total-tech is-invalid' : 'train-total-tech'}>
-      <input
-        type="checkbox"
-        aria-label={choice.zh}
-        checked={choice.selected}
-        disabled={choice.free || (!choice.selected && !choice.selectable)}
-        onChange={onToggle}
-      />
-      {tech && <TechIcon t={tech as Tech} />}
-      <span>
-        {choice.zh}
-        {choice.hint && <small>{choice.hint}</small>}
-      </span>
-    </label>
   );
 }
 

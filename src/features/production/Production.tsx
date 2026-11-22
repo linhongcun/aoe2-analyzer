@@ -1,12 +1,13 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { civs } from '../../data';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { CivPicker } from '../../shared/ui/CivPicker';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
+import { UnitPicker } from '../../shared/ui/UnitPicker';
 import { tradeIncomeProductionHref } from '../../domain/tradeIncome';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
@@ -31,8 +32,10 @@ import { useShareLink } from '../../shared/ui/useShareLink';
 import { productionMode, PRODUCTION_MODE_LABELS, selectedProductionMode } from '../../domain/productionMode';
 import { decodeTrainCompare } from './trainCompareCodec';
 import { ProductionCompareError } from './ProductionCompareError';
-import { ProductionPageTop, ProductionModeNav } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
+import { ProductionTechs } from './ProductionTechs';
 import { ProductionTrainCompare } from './ProductionTrainCompare';
+import { QtyStepper } from './QtyStepper';
 import { TrainTotal, TrainTotalLinkError } from './TrainTotal';
 import { useProductionContext } from './useProductionContext';
 import { isDefaultProduction, productionToTrainTotal } from '../../domain/productionTransfer';
@@ -68,7 +71,7 @@ export default function Production() {
     <ProductionCompareError key={location.search} errors={errors} />
   ) : error ? (
     <section className="pane train-compare-page">
-      <ToolPageHeader title={title} top={<ProductionPageTop />} />
+      <ToolPageHeader title={title} top={<ProductionCrumbs />} subnav={<ProductionModeNav />} />
       <p role="alert">生产资料加载失败，请刷新页面重试。</p>
       <button className="btn" type="button" onClick={() => window.location.reload()}>
         刷新重试
@@ -76,7 +79,7 @@ export default function Production() {
     </section>
   ) : !context ? (
     <section className="pane train-compare-page">
-      <ToolPageHeader title={title} top={<ProductionPageTop />} />
+      <ToolPageHeader title={title} top={<ProductionCrumbs />} subnav={<ProductionModeNav />} />
       <Loading />
       <p className="note" role="status">
         正在加载文明、单位与生产资料。
@@ -155,12 +158,12 @@ function ProductionBody({
     };
   }, [ctx, config, location.search]);
   const result = calculateProduction(ctx, config);
-  const units = productionUnits(ctx, config),
-    available = productionTechs(ctx, config),
+  const units = useMemo(() => productionUnits(ctx, config), [ctx, config]);
+  const unitEntries = useMemo(() => units.map((u) => ({ u })), [units]);
+  const available = productionTechs(ctx, config),
     free = freeProductionTechs(ctx, config);
   const errors = [...linkErrors, ...result.errors];
   const selected = effectiveProductionTechs(ctx, config);
-  const groups = [...new Set(available.map((t) => t.bz.replace(/\n/g, '')))];
   const editRow = (index: number, fields: Partial<ProductionRow>) =>
     update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
   const related = [
@@ -176,7 +179,8 @@ function ProductionBody({
       <ToolPageHeader
         title={PRODUCTION_MODE_LABELS.legacy}
         description="从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。"
-        top={<ProductionPageTop transfer={transfer} />}
+        top={<ProductionCrumbs />}
+        subnav={<ProductionModeNav transfer={transfer} />}
         dock={
           <CalcDock
             note={shareStatus}
@@ -196,16 +200,10 @@ function ProductionBody({
       <ToolGrid>
         <div className="production-conditions">
           <div className="production-settings">
-            <label>
-              文明
-              <select aria-label="生产文明" value={config.civ} onChange={(e) => update({ ...config, civ: e.target.value })}>
-                {civs.map((c) => (
-                  <option key={c.en} value={c.en}>
-                    {c.zh}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="production-field">
+              <label htmlFor="production-civ">文明</label>
+              <CivPicker id="production-civ" label="生产文明" value={config.civ} onChange={(civ) => update({ ...config, civ })} />
+            </div>
             <label>
               时代
               <select aria-label="生产时代" value={config.age} onChange={(e) => update({ ...config, age: Number(e.target.value) })}>
@@ -256,7 +254,9 @@ function ProductionBody({
             {config.rows.map((row, index) => {
               const unit = ctx.core.unitById[row.unit];
               const buildings = unit ? productionBuildings(ctx, config, unit) : [];
+              const rowUnitAvailable = units.some((u) => u.id === row.unit);
               const line = result.lines.find((l) => l.unit.id === row.unit && l.building === row.building && l.count === +row.count);
+              const countInvalid = !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT;
               return (
                 <article className="production-row" key={index} data-testid="production-row">
                   <div className="production-section-title">
@@ -271,25 +271,24 @@ function ProductionBody({
                       删除
                     </button>
                   </div>
-                  <label>
-                    单位
-                    <select
-                      aria-label={`需求 ${index + 1} 单位`}
-                      value={row.unit}
-                      onChange={(e) => {
-                        const id = Number(e.target.value),
-                          u = ctx.core.unitById[id]!;
-                        editRow(index, { unit: id, building: productionBuildings(ctx, config, u)[0]! });
+                  <div className="production-field">
+                    <label htmlFor={`production-unit-${index}`}>单位</label>
+                    <UnitPicker
+                      id={`production-unit-${index}`}
+                      label={`需求 ${index + 1} 单位`}
+                      value={unit}
+                      rawValue={row.unit}
+                      civ={config.civ}
+                      allowUnavailable={false}
+                      list={unitEntries}
+                      invalid={!rowUnitAvailable}
+                      unavailableText={rowUnitAvailable ? undefined : `当前不可用：${unit?.zh ?? row.unit}`}
+                      onChange={(u) => {
+                        if (u.id === row.unit) return;
+                        editRow(index, { unit: u.id, building: productionBuildings(ctx, config, u)[0]! });
                       }}
-                    >
-                      {!units.some((u) => u.id === row.unit) && <option value={row.unit}>当前不可用：{unit?.zh ?? row.unit}</option>}
-                      {units.map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.zh}（{u.bz.replace(/\n/g, '')}）
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                    />
+                  </div>
                   <div className="production-row-controls">
                     <label>
                       专用生产建筑
@@ -304,17 +303,19 @@ function ProductionBody({
                         ))}
                       </select>
                     </label>
-                    <label>
-                      建筑数量
-                      <input
-                        aria-label={`需求 ${index + 1} 建筑数量`}
-                        type="text"
-                        inputMode="numeric"
+                    <div className="production-field">
+                      <label htmlFor={`production-count-${index}`}>建筑数量</label>
+                      <QtyStepper
+                        id={`production-count-${index}`}
                         value={row.count}
-                        onChange={(e) => editRow(index, { count: e.target.value })}
-                        aria-invalid={!/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT}
+                        bounds={{ min: 0, max: BUILDING_LIMIT }}
+                        inputLabel={`需求 ${index + 1} 建筑数量`}
+                        decrementLabel={`需求 ${index + 1} 建筑数减 1`}
+                        incrementLabel={`需求 ${index + 1} 建筑数加 1`}
+                        invalid={countInvalid}
+                        onChange={(count) => editRow(index, { count })}
                       />
-                    </label>
+                    </div>
                   </div>
                   {line && (
                     <div className="production-line-result">
@@ -344,8 +345,16 @@ function ProductionBody({
               );
             })}
           </section>
+          <ProductionTechs
+            available={available}
+            free={free}
+            selected={selected}
+            onSelectEco={(techs) => update({ ...config, techs })}
+            onClear={() => update({ ...config, techs: [] })}
+            onToggle={(id) => update({ ...config, techs: toggleProductionTech(ctx, config, id) })}
+          />
         </div>
-        <section className="production-summary" aria-labelledby="production-summary-title">
+        <section className="production-summary is-sticky" aria-labelledby="production-summary-title">
           <div className="production-section-title">
             <h2 id="production-summary-title" className="calc-dock-target" tabIndex={-1}>
               村民配置摘要
@@ -394,49 +403,6 @@ function ProductionBody({
           )}
         </section>
       </ToolGrid>
-      <section className="production-techs" aria-labelledby="production-techs-title">
-        <h2 id="production-techs-title">已研究科技</h2>
-        <div className="production-actions">
-          <button
-            type="button"
-            className="btn"
-            onClick={() => update({ ...config, techs: available.filter((t) => !!ecoGatherIds.has(t.id)).map((t) => t.id) })}
-          >
-            经济科技全研究
-          </button>
-          <button type="button" className="btn" onClick={() => update({ ...config, techs: [] })}>
-            清空手动选择
-          </button>
-        </div>
-        <p className="note">
-          免费科技自动生效；前置联动选择。本文明团队训练加成自动计入，其他盟友加成未计入。选择单位形态视为已经完成其升级；下列科技控制额外训练地点、费用和生产速度。
-        </p>
-        <div className="production-tech-groups">
-          {groups.map((group) => (
-            <fieldset className="production-tech-group" key={group}>
-              <legend>{group}</legend>
-              {available
-                .filter((t) => t.bz.replace(/\n/g, '') === group)
-                .map((t) => (
-                  <label key={t.id} className="production-checkbox">
-                    <input
-                      type="checkbox"
-                      aria-label={t.zh}
-                      checked={selected.has(t.id)}
-                      disabled={free.has(t.id)}
-                      onChange={() => update({ ...config, techs: toggleProductionTech(ctx, config, t.id) })}
-                    />
-                    <span>
-                      {t.zh}
-                      {free.has(t.id) && <small>免费，已计入</small>}
-                    </span>
-                  </label>
-                ))}
-            </fieldset>
-          ))}
-        </div>
-        {!available.length && <p className="note">当前时代没有可选的相关科技。</p>}
-      </section>
       <ToolFooter related={{ links: related }}>
         <p>
           <strong>计算口径与未计入项。</strong>
@@ -456,6 +422,3 @@ function ProductionBody({
     </section>
   );
 }
-
-// 仅用于预设分组；实际效果仍全部读取固定数据，并由领域层校验文明和时代。
-const ecoGatherIds = new Set([12, 13, 14, 55, 182, 202, 203, 213, 221, 249, 278, 279]);

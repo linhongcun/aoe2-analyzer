@@ -3,7 +3,7 @@ import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PRODUCTION_MODE_LABELS, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
 import { CompareNumberText } from './CompareNumberText';
-import { ProductionPageTop } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
 
 export function ProductionCompareError({ errors }: { errors: string[] }) {
   const location = useLocation(),
@@ -11,7 +11,7 @@ export function ProductionCompareError({ errors }: { errors: string[] }) {
   const [raw, setRaw] = useState(location.search);
   return (
     <section className="pane train-compare-page">
-      <ToolPageHeader title={PRODUCTION_MODE_LABELS.compare} top={<ProductionPageTop crumb={PRODUCTION_MODE_LABELS.compare} />} />
+      <ToolPageHeader title={PRODUCTION_MODE_LABELS.compare} top={<ProductionCrumbs crumb={PRODUCTION_MODE_LABELS.compare} />} subnav={<ProductionModeNav />} />
       <div role="alert">
         <p>对照链接无法完整恢复，未生成结果。</p>
         <ul>

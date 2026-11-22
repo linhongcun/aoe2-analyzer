@@ -13,7 +13,7 @@ test('#978 空方案默认帝王且不预填科技或兵种', async ({ page }) =
   await expect(page.getByRole('heading', { level: 1, name: '训练总价' })).toBeVisible();
   await expect(page.locator('header.tool-head')).toContainText('计算同一文明、同一时代下，多种单位形态的训练总价。不含研究费用。');
   await expect(page.getByRole('navigation', { name: '生产模式' }).getByRole('link', { name: '训练总价', exact: true })).toHaveAttribute('aria-current', 'page');
-  await expect(page.getByLabel('训练总价文明')).toHaveValue('Franks');
+  await expect(page.locator('#train-total-civ')).toHaveAttribute('data-value', 'Franks');
   await expect(page.getByLabel('训练总价时代')).toHaveValue('4');
   await expect(page.getByTestId('train-total-row')).toHaveCount(0);
   await expect(page.getByTestId('train-total-empty')).toHaveText('添加兵种并填写训练数量后查看合计。');
@@ -80,10 +80,10 @@ test('#978 数量按训练价相加，化学只解锁，切换和返回各自保
   await page.getByRole('button', { name: '添加兵种', exact: true }).click();
   await expect(page.getByTestId('train-total-row')).toHaveCount(1);
   await expect(page.getByLabel('兵种 1 训练数量')).toHaveValue('1');
-  const unitField = await page.getByLabel('兵种 1 单位', { exact: true }).boundingBox();
-  const quantityField = await page.getByLabel('兵种 1 训练数量', { exact: true }).boundingBox();
+  const unitField = await page.locator('#train-total-unit-0').boundingBox();
+  const quantityField = await page.locator('[data-testid="train-total-row"] .qty-stepper').first().boundingBox();
   expect(unitField!.x + unitField!.width).toBeLessThanOrEqual(quantityField!.x);
-  expect(unitField!.y).toBe(quantityField!.y);
+  expect(Math.abs(unitField!.y - quantityField!.y)).toBeLessThanOrEqual(2);
   const food = page.getByTestId('train-total-resource-Food');
   await expect(food).toBeVisible();
   const once = (await food.innerText()).replace(/\s/g, '');
@@ -101,7 +101,7 @@ test('#978 数量按训练价相加，化学只解锁，切换和返回各自保
   await expect(page).toHaveURL(kept);
   await page.getByRole('navigation', { name: '生产模式' }).getByRole('link', { name: '持续生产', exact: true }).click();
   await expect(page).not.toHaveURL(/units=/);
-  await expect(page.getByLabel('生产文明')).toHaveValue('Franks');
+  await expect(page.locator('#production-civ')).toHaveAttribute('data-value', 'Franks');
   await page.goBack();
   await expect(page).toHaveURL(kept);
   await expect(page.getByLabel('兵种 1 训练数量')).toHaveValue('2');

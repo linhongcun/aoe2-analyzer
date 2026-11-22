@@ -160,6 +160,7 @@ export function ToolPageHeader({
   description,
   crumb,
   top,
+  subnav,
   actions,
   more,
   dock,
@@ -175,6 +176,8 @@ export function ToolPageHeader({
   crumb?: string;
   /** 替换默认面包屑，例如团队分段。 */
   top?: ReactNode;
+  /** 主标题与说明下方的同组子模式导航（Issue 1281）。 */
+  subnav?: ReactNode;
   actions?: ToolHeadAction[];
   more?: ToolHeadAction[];
   /** 已有 CalcDock，整体放进右侧操作组。 */
@@ -210,6 +213,7 @@ export function ToolPageHeader({
             </div>
           )}
         </div>
+        {subnav && <div className="tool-head-subnav">{subnav}</div>}
       </header>
       {related && <ToolRelated label={related.label} links={related.links} flush={flush} />}
     </>

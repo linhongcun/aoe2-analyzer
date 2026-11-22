@@ -5,7 +5,7 @@ import type { ProductionContext } from '../../domain/production';
 import { CostView } from '../../shared/ui/art';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
-import { ProductionPageTop } from './ProductionModeNav';
+import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
 import { commitUrl } from '../../shared/utils/dataInfo';
 import { encodeTrainCompare, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
 import { PRODUCTION_MODE_LABELS, TRAIN_COMPARE_ENTRY } from '../../domain/productionMode';
@@ -47,7 +47,8 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
       <ToolPageHeader
         title={PRODUCTION_MODE_LABELS.compare}
         description="同一单位形态、同一座马厩，比较已选文明的训练间隔与费用。"
-        top={<ProductionPageTop crumb={PRODUCTION_MODE_LABELS.compare} />}
+        top={<ProductionCrumbs crumb={PRODUCTION_MODE_LABELS.compare} />}
+        subnav={<ProductionModeNav />}
         actions={[
           { label: '复制对照链接', icon: 'copy', disabled: changed || !!result.errors.length, onClick: () => void share() },
           {

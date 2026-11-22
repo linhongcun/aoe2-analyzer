@@ -40,14 +40,35 @@
 .army-fields,
 .army-editor-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
 }
-.army-cost-page label {
+.army-cost-page label,
+.army-field {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   min-width: 0;
+}
+.army-cost-page .civpick {
+  width: 100%;
+  min-width: 0;
+}
+.army-cost-page .cp-trigger {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+.army-cost-page .cp-trigger .cp-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.army-cost-page .cp-trigger > .ico,
+.army-cost-page .cp-trigger > .cp-noico,
+.army-cost-page .cp-trigger > .ic {
+  flex-shrink: 0;
 }
 .army-cost-page input,
 .army-cost-page select {
@@ -209,6 +230,31 @@
   margin: var(--space-3) 0;
   gap: var(--space-2);
 }
+.army-picker-options [data-unit-option] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  text-align: left;
+}
+.army-picker-options [data-unit-option] .uico {
+  flex-shrink: 0;
+}
+.army-picker-options .up-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.army-picker-options .up-badge-py {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
 .army-warning {
   display: flex;
   gap: var(--space-2);
@@ -234,6 +280,11 @@
   }
   .army-context {
     max-width: none;
+  }
+}
+@media (max-width: 700px) {
+  .army-cost-page .cp-trigger small {
+    display: none;
   }
 }
 @media (max-width: 600px) {

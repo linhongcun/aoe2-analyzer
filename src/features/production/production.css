@@ -42,15 +42,19 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
 }
-.production-page label {
+.production-page label,
+.production-field {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   min-width: 0;
   font-size: var(--fs-sm);
 }
+.production-field > label {
+  display: block;
+}
 .production-page select,
-.production-page input[type='text'],
+.production-page input[type='text']:not(.qty-stepper-input),
 .production-manual input {
   width: 100%;
   min-width: 0;
@@ -59,6 +63,32 @@
   font-size: var(--fs-body);
   box-sizing: border-box;
   border-radius: var(--radius-pill);
+}
+.production-page .civpick {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.production-page .cp-trigger {
+  width: 100%;
+  min-height: 44px;
+  justify-content: space-between;
+  border-radius: var(--radius-pill);
+  padding: 6px var(--space-3);
+}
+.production-page .cp-trigger .cp-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+.production-page .cp-trigger > .ico,
+.production-page .cp-trigger > .uico,
+.production-page .cp-trigger > .cp-noico,
+.production-page .cp-trigger > .ic {
+  flex-shrink: 0;
 }
 .production-summary,
 .production-row,
@@ -102,9 +132,6 @@
 .production-techs {
   min-width: 0;
 }
-.production-techs {
-  margin-top: var(--space-6);
-}
 .production-row {
   margin-top: var(--space-4);
   display: grid;
@@ -112,7 +139,7 @@
 }
 .production-row-controls {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(156px, 1fr);
   gap: var(--space-3);
 }
 .production-delete {
@@ -141,7 +168,7 @@
 }
 .production-tech-groups {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: var(--space-3);
   align-items: start;
 }
@@ -193,6 +220,16 @@
 .production-manual {
   overflow-wrap: anywhere;
 }
+@media (min-width: 1024px) {
+  .production-page > .tool-grid > .production-summary.is-sticky {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-6));
+    align-self: start;
+    max-height: calc(100vh - var(--nav-h) - var(--space-10));
+    max-height: calc(100dvh - var(--nav-h) - var(--space-10));
+    overflow-y: auto;
+  }
+}
 @media (max-width: 700px) {
   .production-settings {
     gap: var(--space-3);
@@ -202,5 +239,8 @@
   }
   .production-row-controls {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .production-page .cp-trigger small {
+    display: none;
   }
 }

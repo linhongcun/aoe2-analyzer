@@ -44,6 +44,7 @@ export interface CivPickerProps {
   /** 关闭态只显示中文，英文放进 aria-label / title，避免窄按钮溢出。 */
   compactTrigger?: boolean;
   disabled?: boolean;
+  invalid?: boolean;
 }
 
 /** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
@@ -94,6 +95,7 @@ export function CivPicker({
   hideEmptyIcon,
   compactTrigger,
   disabled,
+  invalid,
 }: CivPickerProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
@@ -185,6 +187,7 @@ export function CivPicker({
     } else if (e.key === 'End') {
       setAct(opts.length - 1);
     } else if (e.key === 'Enter') {
+      if ((e.target as HTMLElement | null)?.closest('button')) return;
       e.preventDefault();
       // #73 以输入框此刻的文字为准，过滤没跑完时不选未匹配的文明
       const en = enterTarget(input.current?.value ?? q, q, opts, act, pool, !!none);
@@ -210,8 +213,9 @@ export function CivPicker({
         className="cp-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`${label}：${cur ? (compactTrigger ? `${cur.zh}（${cur.en}）` : cur.zh) : (none ?? '未选择')}`}
-        title={compactTrigger ? (cur ? `${cur.zh} ${cur.en}` : none) : undefined}
+        aria-label={`${label}：${cur ? (compactTrigger ? `${cur.zh}（${cur.en}）` : cur.zh) : (emptyText ?? none ?? '未选择')}`}
+        title={compactTrigger ? (cur ? `${cur.zh} ${cur.en}` : (emptyText ?? none)) : undefined}
+        aria-invalid={invalid || undefined}
         data-value={value}
         disabled={disabled}
         onClick={() => {
