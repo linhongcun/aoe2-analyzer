@@ -97,6 +97,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 | 开局步骤     | `data/game/build-orders`                  | 各文件自己的 `sources[].author` 与 `review.by`。清单不另指定一个人。主人证据抽自 `data/game/build-orders/scouts-18.json` |
 | 地图编辑文案 | `data/sources/map_catalog_meta.json`      | 无单独具名负责人。`source` 为 editorial 的句子是人工文案                                                                 |
 | 译名校正     | `data/sources/civ_text_corrections.json`  | 无单独具名负责人。对不上就改这张表或确认上游                                                                             |
+| 科技译名校正 | `data/sources/tech_text_corrections.json` | 无单独具名负责人。对不上就改这张表或确认上游                                                                             |
 | 对账例外     | `data/sources/stats_allowlist.json`       | 无单独具名负责人。每条必须有 reason。当前是空数组                                                                        |
 
 `src/domain/effects.manual.ts` 和 `src/domain/buildingEffects.manual.ts` 只是回退。`.dat` 已经有战斗规则时不要改它们。`src/domain/effects.ts` 在 `datCombat` 为真时直接返回，改了也不会进运行时。
@@ -106,6 +107,8 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 `scripts/data_update.py` 的 `run` 使用 `subprocess.run(..., check=True)`，外面没有 `try`。覆盖清单失败时退出文案是「数据更新覆盖清单未通过，已停止，未运行生成器」。
 
 `scripts/civs_build.py` 读 `data/sources/civ_text_corrections.json`。特色科技原文、名称或括号对不上就 `raise`，不能改成静默跳过或静默覆盖新文本。
+
+`scripts/techs_build.py` 读 `data/sources/tech_text_corrections.json`。科技说明原文、键名或规则字段对不上就在加载 `.dat` 与写盘前直接 `raise`，不能改成静默跳过或静默覆盖新文本。
 
 ## 补丁历史
 

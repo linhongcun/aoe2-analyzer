@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.21] - 2026-11-22
+
+### 更新说明
+
+修正软甲（Gambesons）科技中文说明中的兵种误译：将原句里的「火枪骑兵」更正为站内标准名称「火矛兵」（「民兵系、火矛兵和瓦兰吉卫队的远程护甲 +1。」），与同页作用对象列表和英文说明保持一致；英文说明、实际作用目标与穿刺护甲 +1 数值不变。
+
+### 修复
+
+- #1329：新增科技说明译名校正源表 `data/sources/tech_text_corrections.json`（含上游原文精确匹配守卫），在 `scripts/techs_build.py` 中对科技 `875`（软甲）简中 `desc` 施行 fail-closed 校正并重新生成 `data/game/techs.json`；同步在 `data/sources/data_update_coverage.json` 与 `docs/DATA-UPDATE.md` 登记，补充离线 Python 单测 `tests/py/test_tech_text_1329.py` 与 Vitest 单测 `tests/unit/techText1329.test.ts`。
+
 ## [0.99.20] - 2026-11-22
 
 ### 更新说明
