@@ -253,10 +253,22 @@
   flex-shrink: 0;
   margin-top: var(--space-1);
 }
+.mix-check > span {
+  min-width: 0;
+}
 .mix-check small {
   display: block;
   color: var(--color-muted);
   font-size: var(--fs-xs);
+}
+.mix-check-scope {
+  display: block;
+  min-width: 0;
+  margin-top: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-text);
 }
 .mix-queue-note {
   border-top: 1px solid var(--color-border);

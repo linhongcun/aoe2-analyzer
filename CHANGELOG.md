@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.30] - 2026-11-23
+
+### 更新说明
+
+修正科技模拟器、单位 PK（单兵种与混编）以及阵容新增费用对弹道学适用对象的判断：不再按「射程 > 1」粗判，改为按游戏原版弹丸数据逐单位核定。火枪手、手推炮、喷火船系、投石车系、龟甲船、掷斧兵、马穆鲁克、飞刀女兵、僧侣等 41 个实际不吃弹道学的单位不再误列弹道学；撒克逊扈从部队与精锐扈从部队现已纳入适用范围，并在科技模拟器与单位 PK 中明确标注「仅蓄力远程攻击适用。普通攻击不受影响。」（混编共用科技按受击行序动态指明适用行），同时在阵容新增费用中作为可选研究提供；步弓手、弩炮、远程箭船与楼船等 64 个常规适用单位保持原有弹道学条目不变。
+
+### 修复
+
+- #1328：在 `scripts/dat_source.py`（`dat.v21`）增导 `ChargeProjectile`、`ChargeEvent` 与 `RechargeRate`，新增共享纯推导模块 `scripts/projectile_scope.py`（含 `UnitCharge.tsx` 同源常规冷却蓄力谓词及 fail-closed 契约），由 `scripts/effects_build.py` 与 `scripts/army_research_build.py` 同源重生成 `data/game/effects.json`（顶层 `ballistics: { units(66), chargeOnly([2705, 2706]) }`，保留 `#746` `techs.Ballistics.rules/eco = []` 与 `#1324` 全部 16 条 `generic` 升时代自动效果）与 `data/game/army_research.json`（节点 `93` `combatUnits` 更新为 66 项并增 `chargeOnlyCombatUnits`），同步收紧 `data/schemas/data-effects.json` 与 `data/schemas/data-army-research.json`；新增 `src/domain/ballistics.ts` 并接入 `simulator.ts`、`SimPanel.tsx`、`editorial.css`、`mixedDuel.ts`、`MixedSideEditor.tsx` 与 `mixed-duel.css`，补齐离线 Python 单测 `tests/py/test_ballistics_scope1328.py`、Vitest 单测 `tests/unit/ballisticsScope1328.test.ts` 与 Playwright E2E `tests/e2e/ballisticsScope1328.spec.ts`（登记至 `scripts/ci-browser-weights.json`）。
+
 ## [0.99.29] - 2026-11-23
 
 ### 更新说明

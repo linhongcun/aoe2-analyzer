@@ -89,12 +89,17 @@ export interface DatCostDiscount {
   /** 生成器的整条对账结果。运行时按 costPolicy 分组决定，不拿这个总开关一刀切。 */
   ok: boolean;
 }
+export interface DatBallistics {
+  units: number[];
+  chargeOnly: number[];
+}
 export interface DatFile {
   costDiscounts: Record<string, DatCostDiscount[]>;
   meta: { newIds: number[]; sources: { id: string; repo: string; commit: string; file: string; patch: string; use: string }[] };
   techs: Record<string, DatTech>;
   civs: Record<string, DatCiv>;
   generic: DatGeneric[];
+  ballistics?: DatBallistics;
 }
 export const DAT = raw as unknown as DatFile;
 

@@ -382,6 +382,14 @@ a.hcard:hover {
   min-height: 44px;
   border-radius: var(--radius-sm);
 }
+.simt .sim-scope-note {
+  flex-basis: 100%;
+  min-width: 0;
+  margin: var(--space-1) 0 0 30px;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--color-text);
+}
 .duel-side {
   border-radius: var(--radius-lg);
   padding: var(--space-5);

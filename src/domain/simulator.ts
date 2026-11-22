@@ -1,6 +1,7 @@
 /** 科技模拟器效果引擎（纯函数，无 UI 依赖） */
 import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { militaryTechAge } from './availabilityAge';
+import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
 import { CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
 import { applyEffectValue } from './numericEffects';
 
@@ -12,6 +13,8 @@ export interface SimContext {
 export interface SimTech {
   t: Tech;
   ef: Effect[] | null;
+  scopeNote?: string;
+  chargeOnly?: boolean;
 }
 
 export function makeSimContext(techs: Tech[], trees: Trees): SimContext {
@@ -91,7 +94,14 @@ export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
   ctx.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && !r.some((x) => x.t.id === t.id)).forEach((t) => r.push({ t, ef: null }));
   TEXT_ONLY_TECHS.forEach((n) => {
     const t = ctx.techByEn[n];
-    if (t && st['t' + t.id] && (n !== 'Ballistics' || u.rng > 1)) r.push({ t, ef: null });
+    if (!t || !st['t' + t.id]) return;
+    if (n === 'Ballistics') {
+      const scope = ballisticsScope(u.id);
+      if (!scope) return;
+      r.push(scope === 'charge-only' ? { t, ef: null, scopeNote: BALLISTICS_CHARGE_ONLY_NOTE, chargeOnly: true } : { t, ef: null });
+      return;
+    }
+    r.push({ t, ef: null });
   });
   return r;
 }

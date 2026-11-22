@@ -52,6 +52,7 @@
           "upgrades": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "integer" } } },
           "enables": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
           "combatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+          "chargeOnlyCombatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
           "mods": { "$ref": "#/$defs/commands" }
         }
       }

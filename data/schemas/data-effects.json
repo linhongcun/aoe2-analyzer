@@ -204,9 +204,32 @@
         "type": "string",
         "minLength": 1
       }
+    },
+    "ballistics": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        },
+        "chargeOnly": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": ["units", "chargeOnly"],
+      "additionalProperties": false
     }
   },
-  "required": ["meta", "techs", "civs", "generic", "costDiscounts"],
+  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics"],
   "additionalProperties": false,
   "$defs": {
     "fx": {

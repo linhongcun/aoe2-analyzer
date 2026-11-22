@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
+import { formatMixedBallisticsScope } from '../../../domain/ballistics';
 import { fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
@@ -163,41 +164,55 @@ export function MixedSideEditor({
                 </button>
               </p>
             ))}
-          {view.techs.map(({ t, numeric, cost, partial, rows }) => (
-            <label key={t.id} className="mix-check">
-              <input
-                type="checkbox"
-                checked={input.techs.includes(String(t.id))}
-                disabled={militaryTechAge(input.civ, t.id, t.age) > age && !input.techs.includes(String(t.id))}
-                onChange={() =>
-                  onChange({
-                    ...input,
-                    techs: [
-                      ...toggleTech(
-                        t.id,
-                        new Set(input.techs.map(Number)),
-                        view.techs.filter((o) => militaryTechAge(input.civ, o.t.id, o.t.age) <= age).map((o) => o.t),
-                        core.techById,
-                      ),
-                    ].map(String),
-                  })
-                }
-              />
-              <span>
-                {t.zh}
-                <small>
-                  {AGE_ZH[t.age]} · 适用第 {rows.map((i) => i + 1).join('、')} 行 ·{' '}
-                  {numeric
-                    ? '匹配行数值计入'
-                    : partial
-                      ? '部分费用已解码，另含未解码效果（不影响混编战果；带入训练费用时将保守拦截）'
-                      : cost
-                        ? '仅费用记录，不影响混编战果'
-                        : '文本效果未计入战斗'}
-                </small>
-              </span>
-            </label>
-          ))}
+          {view.techs.map(({ t, numeric, cost, partial, rows, chargeOnlyRows }) => {
+            const scope = formatMixedBallisticsScope(rows, chargeOnlyRows ?? []);
+            return (
+              <label key={t.id} className="mix-check">
+                <input
+                  type="checkbox"
+                  checked={input.techs.includes(String(t.id))}
+                  disabled={militaryTechAge(input.civ, t.id, t.age) > age && !input.techs.includes(String(t.id))}
+                  onChange={() =>
+                    onChange({
+                      ...input,
+                      techs: [
+                        ...toggleTech(
+                          t.id,
+                          new Set(input.techs.map(Number)),
+                          view.techs.filter((o) => militaryTechAge(input.civ, o.t.id, o.t.age) <= age).map((o) => o.t),
+                          core.techById,
+                        ),
+                      ].map(String),
+                    })
+                  }
+                />
+                <span>
+                  {t.zh}
+                  <small>
+                    {AGE_ZH[t.age]} · 适用<span className="num nw">第 {rows.map((i) => i + 1).join('、')} 行</span> ·{' '}
+                    {numeric
+                      ? '匹配行数值计入'
+                      : partial
+                        ? '部分费用已解码，另含未解码效果（不影响混编战果；带入训练费用时将保守拦截）'
+                        : cost
+                          ? '仅费用记录，不影响混编战果'
+                          : '文本效果未计入战斗'}
+                  </small>
+                  {scope && (
+                    <span className="mix-check-scope" data-t="mix-scope-note">
+                      {scope.kind === 'rows' ? (
+                        <>
+                          <span className="num nw">第 {scope.rowNumbers} 行</span>仅蓄力远程攻击适用。
+                        </>
+                      ) : (
+                        scope.text
+                      )}
+                    </span>
+                  )}
+                </span>
+              </label>
+            );
+          })}
           {!view.techs.length && <p className="note">选择有效单位与文明后显示适用科技。</p>}
         </div>
         <div id={`${prefix}-team`} tabIndex={-1} className="mix-checklist" aria-label={`${label}团队效果`}>
