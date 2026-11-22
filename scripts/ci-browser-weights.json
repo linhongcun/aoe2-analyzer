@@ -101,6 +101,7 @@
     "tests/e2e/dataUpdate486.spec.ts": 11879,
     "tests/e2e/deepLinks772.spec.ts": 7500,
     "tests/e2e/detailCopy921.spec.ts": 4500,
+    "tests/e2e/detailHeaderIcons1345.spec.ts": 12000,
     "tests/e2e/detailJump976.spec.ts": 4500,
     "tests/e2e/dlcChips767.spec.ts": 7500,
     "tests/e2e/duelHeading364.spec.ts": 36132,
