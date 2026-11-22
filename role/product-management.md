@@ -233,6 +233,8 @@
 
 以后：需要拍板的题单独提出，放在批量汇总之前；会话里有点选式提问就用它。给推荐前先对照「开发执行」：保留旧模型、旧开关、旧链接口径的选项不默认标推荐，要推荐就写出它对玩家的独立价值；分期的选项写清分期期间哪几处口径会不一致。维护者选了替换或统一之后，先回源码查这个决定连带改了什么，再定稿。第一次查到盈亏平衡复用同一个群战函数、混编分享链接带规则版本；第二次查到 1v1 与群战不同源，见下文「跨模式统一展示前」一条。
 
+2026-11-22 [零准确度单位](https://github.com/linhongcun/aoe2-analyzer/issues/1322)那一问还暴露一处。我在推荐项的说明里写了「实战输出不会高于此」，维护者选了这一项。定稿时对照已有的多弹丸、溅射提示才发现，这句话对风琴炮和掷弹兵不成立：额外弹丸和溅射没有计入，实际可能更高。只好在 PRD 里把「上限」收窄到主弹对单个目标，并写明这是我对所选项的补充。选项说明里的事实句，提问前要像验收标准一样核一遍；维护者选的是整段话，不只是标题。
+
 ### 来源页的归属，不能代替条目归属
 
 [#1084](https://github.com/linhongcun/aoe2-analyzer/issues/1084) 的需求评审核对发现，城镇中心来源页的更新日志夹有村民自愈、研究科技得金等条目，瞭望箭塔页也有引入草药、异教的记录。建筑来源索引与本站目录的条目总数相同，名称却有采矿营地/采矿场、定居点/聚落等差异；条数对上并不能证明身份逐项对上。见[本轮来源与范围核对](https://app.devin.ai/sessions/429379609cbe4ad880517da084876cb9)。这些是来源内容的观察，不是已经证实的游戏机制。
@@ -283,6 +285,14 @@
 
 原因是我只核到「这一页读不读这个文件」，没核到「这一页读不读这个字段」。同一个文件里，`rules` 和 `eco` 各有各的读取方。以后写纯数据单，每条页面级验收先找到渲染它的组件和它读的字段；找不到，就写成数据层验收，或者承认有界面改动、不走 UX 不适用。修复会让一条记录从「仅文本」变成可计算、从空变成非空时，再按字段查一遍其余读取方（预设、带入、计价、搜索），把会跟着变的行为写进范围或非目标。上一条防的是漏掉读取方，这一条防的是假定有读取方。
 
+### 只改计算、不动界面的单子，UX 不适用要维护者点头
+
+2026-11-22 这批十条里，有五条修的是计算或可用性判断：[显式零值攻击类别](https://github.com/linhongcun/aoe2-analyzer/issues/1323)、[升时代自动效果](https://github.com/linhongcun/aoe2-analyzer/issues/1324)、[提前解锁时代](https://github.com/linhongcun/aoe2-analyzer/issues/1325)、[强化教堂训练](https://github.com/linhongcun/aoe2-analyzer/issues/1326)、[混编带入训练费用](https://github.com/linhongcun/aoe2-analyzer/issues/1334)。页面结构和文案都不变，没有东西可以出图。但它们要改 `src/domain` 的逻辑，而 [CONTRIBUTING](../CONTRIBUTING.md#issue-lifecycle) 允许不走体验设计的只有「纯 docs/data 且无 UI」。此前我按这条路交出去的 [#1264](https://github.com/linhongcun/aoe2-analyzer/issues/1264)、[#1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293)，评审时定的范围都是数据生成和文档。
+
+我没有自己把这五条算作纯数据，而是并成一个问题问维护者，维护者选了「直接交软件开发」。每条的体验设计节写了三件事：不适用的理由是无界面改动；依据是维护者当天对这五条的决定；实现中若发现要动界面或文案，留在开发阶段找设计补稿。
+
+这个决定只对那五条生效。当时另一个选项是提一条 docs Issue，把规则改成「无界面改动」，维护者没有选，规则原文没变。以后再遇到同类单子：先确认它一句文案、一个状态都不新增，办法见上一条，逐条验收找到渲染它的组件；确认之后仍要问，不拿这次的决定当先例；同一批的并成一问，列出单号。同类单子若反复出现，带上次数和单号，再问一次要不要改规则。
+
 ### 批量修订共享内容源时，先拆清格式、纠错与内容边界
 
 同一批评审的[事实纠错](https://github.com/linhongcun/aoe2-analyzer/issues/1264)、[三批阵容修订](https://github.com/linhongcun/aoe2-analyzer/issues/1265)（含 [#1266](https://github.com/linhongcun/aoe2-analyzer/issues/1266)、[#1267](https://github.com/linhongcun/aoe2-analyzer/issues/1267)）与[策略文档格式规范化](https://github.com/linhongcun/aoe2-analyzer/issues/1268)同时触及 `role/game-strategy.md` 和 `data/content/civ-formations.json`，且越南、波斯、印度斯坦、马来、波希米亚、中国、女真跨单重叠。运营核实显示，既有线上阵容的固定来源行指向历史提交，仅重排 `main` 上的文档不会打断既有链接。
@@ -312,6 +322,8 @@
 在[战斗可视化回放评审](https://github.com/linhongcun/aoe2-analyzer/issues/1294)里，维护者拍板将 1v1、群战、等资源与混编统一升级为同一套战线可视化舞台（含 1v1 展示双方接近、先手射击与近战对砍）。核查评审基线源码后发现，[duel.ts](../src/domain/duel.ts) 与 [battleReplay.ts](../src/domain/battleReplay.ts) 当时的 1v1 仍按 `t=0` 贴脸估算（忽略射程与接近），与群战/混编所用的 [contactFight.ts](../src/domain/contactFight.ts) 并不同源；同期[详情页折后价评审](https://github.com/linhongcun/aoe2-analyzer/issues/1297)里，生产/PK 已走 [unitCost.ts](../src/domain/unitCost.ts)，而单位与建筑详情页当时仍停留在 `discountedCost` 或原始 `b.cost`。
 
 原因是界面上看似只是「复用同一个展示组件」，实则不同模式背后可能挂着两套口径不同的领域函数；若不先对齐数据源就硬画统一视图，要么让动画/价格与实际结算结果自相矛盾，要么在实现阶段悄悄改变核心算法却缺少验收与降级规格。以后裁定跨模式统一展示或跨页对齐能力前，先逐模式核查底层领域函数是否同源：不同源时须在 PRD 中明确「统一切换同源引擎并写出不支持项的降级反例（如自爆或缺少碰撞数据的单位）」，或明示分口径展示，绝不允许界面呈现与结算脱节的装饰性过程。
+
+2026-11-22 在[升时代自动效果](https://github.com/linhongcun/aoe2-analyzer/issues/1324)里我又错了一次，方向相反。PRD 写「模拟器、PK、建筑驻军预览都经 `simulate` 套用这些效果」，交接后复查才发现[建筑驻军预览](../src/domain/garrisonGeneral.ts)有自己的属性计算，不经 `simulate`，只好在原 Issue 里带日期更正。写「这几处同源、修一处都生效」之前，每一处都要查到调用点；查不到的写成未核实，不列进范围。同一批的[强化教堂训练](https://github.com/linhongcun/aoe2-analyzer/issues/1326)和[弹道学适用](https://github.com/linhongcun/aoe2-analyzer/issues/1328)是逐个列了调用方才写的，没有出这个问题。
 
 ### 复用或新增氛围插画前，先核素材异构反例、分层门禁与复合对比度
 
