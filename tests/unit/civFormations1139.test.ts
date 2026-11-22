@@ -132,7 +132,9 @@ describe('#1139 文明路线契约与投影', () => {
       4,
       [235, 1903, 441],
     ]);
-    expect(jurchens.evidence.recordedVersion).toBe('v0.77.105 · DE 188329 · cd9382c；驻军预览复核：v0.99.0 · DE 188329 · 531df91');
+    expect(jurchens.evidence.recordedVersion).toBe(
+      'v0.77.105 · DE 188329 · cd9382c；驻军预览复核：v0.99.0 · DE 188329 · 531df91；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71',
+    );
     expect(jurchens.evidence.scope).toContain('描述前线箭塔、驻塔火矛和翼骑主路');
     expect(jurchens.evidence.scope).not.toContain('来源行');
   });
@@ -179,7 +181,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(progression.status).toBe('approved');
     expect(progression.playtest).toBe('unreported');
     expect(progression.evidence.playtest).toContain('未确认用户亲自实战这套具体混编');
-    expect(progression.evidence.playtest).toContain('本轮未做新模拟或实战验证');
+    expect(progression.evidence.playtest).toContain('已补充碰撞接敌等资源预算 3000 站桩模型对照，仍无实战验证');
     expect(progression.evidence.sourceLines).toEqual([355, 356, 357]);
     expect(progression.evidence.scope).not.toContain('来源行');
     const cavalrySupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 359))!;
