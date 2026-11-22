@@ -176,6 +176,7 @@
     "tests/e2e/maps559.spec.ts": 3777,
     "tests/e2e/maps935.spec.ts": 4500,
     "tests/e2e/mapuche197.spec.ts": 18522,
+    "tests/e2e/mapucheSettlementProduction1340.spec.ts": 12000,
     "tests/e2e/market215.spec.ts": 20948,
     "tests/e2e/marketFees745.spec.ts": 13500,
     "tests/e2e/marketRelicField1164.spec.ts": 45000,

@@ -278,7 +278,7 @@ describe('#1326 强化教堂生产计算（共享 unitTrainingSites 单一事实
     expect(productionBuildings(ctx, plan({ civ: 'Huns', age: 3 }), ctx.core.unitById[755]!)).toEqual([82]);
   });
 
-  it('验收 5：全量 56 文明对照——trees.json 中可训练的「单位—建筑」组合，除马普切聚落（2556）固定 5 条外生产计算全部认可', () => {
+  it('验收 5：全量 56 文明对照——trees.json 中全部可训练的「单位—建筑」组合均被生产计算认可（#1326 + #1340 零遗漏）', () => {
     expect(civs).toHaveLength(56);
     const missing: { civ: string; unit: number; building: number }[] = [];
 
@@ -303,12 +303,6 @@ describe('#1326 强化教堂生产计算（共享 unitTrainingSites 单一事实
     }
 
     missing.sort((a, b) => a.civ.localeCompare(b.civ) || a.building - b.building || a.unit - b.unit);
-    expect(missing).toEqual([
-      { civ: 'Mapuche', unit: 6, building: 2556 },
-      { civ: 'Mapuche', unit: 7, building: 2556 },
-      { civ: 'Mapuche', unit: 93, building: 2556 },
-      { civ: 'Mapuche', unit: 358, building: 2556 },
-      { civ: 'Mapuche', unit: 359, building: 2556 },
-    ]);
+    expect(missing).toEqual([]);
   });
 });

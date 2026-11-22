@@ -5,7 +5,22 @@ const WARRIOR_PRIEST = 1811;
 const MONASTERY = 104;
 const FORTIFIED_CHURCH = 1806;
 const CASTLE = 82;
+const ARCHERY_RANGE = 87;
+const BARRACKS = 12;
 const CHURCH_CIVS = ['Armenians', 'Georgians'] as const;
+
+export const SETTLEMENT = 2556;
+export const MAPUCHE_CIV = 'Mapuche';
+/** DE 188329 马普切文明树聚落（2556）格下列出的 5 个可训练单位及常规主训练建筑（不含 1155）。 */
+export const MAPUCHE_SETTLEMENT_UNITS = [
+  { id: 7, primary: ARCHERY_RANGE },
+  { id: 6, primary: ARCHERY_RANGE },
+  { id: 93, primary: BARRACKS },
+  { id: 358, primary: BARRACKS },
+  { id: 359, primary: BARRACKS },
+] as const;
+
+const mapucheSettlementById = new Map<number, number>(MAPUCHE_SETTLEMENT_UNITS.map(({ id, primary }) => [id, primary]));
 
 // DE 188329 的哥特与匈奴文明树把这些次要节点标为 ResearchRequired。
 // 普通、精锐及各建筑节点仍保留独立 ID。
@@ -48,6 +63,11 @@ interface ConditionalSite extends Site {
   tech: number;
 }
 
+interface AdditionalSite {
+  building: number;
+  civ: string;
+}
+
 type TrainingSites =
   | { kind: 'unavailable' }
   | {
@@ -55,6 +75,7 @@ type TrainingSites =
       primary: Site;
       exceptions?: Site[];
       conditional?: ConditionalSite;
+      additional?: AdditionalSite[];
     };
 
 /** Prefer the castle form of the matching ordinary or elite unit in the one-row catalogue. */
@@ -64,6 +85,17 @@ export function catalogueTrainingUnit(id: number): number {
 
 /** 只补充已经按固定文明树核对的训练地点。 */
 export function trainingSites(unit: Pick<Unit, 'id' | 'civs'>, civ?: string): TrainingSites | null {
+  const settlementPrimary = mapucheSettlementById.get(unit.id);
+  if (settlementPrimary !== undefined) {
+    if (civ && civ !== MAPUCHE_CIV) return null;
+    const hasMapuche = unit.civs.includes(MAPUCHE_CIV);
+    if (civ === MAPUCHE_CIV && !hasMapuche) return { kind: 'unavailable' };
+    return {
+      kind: 'available',
+      primary: civ ? { building: settlementPrimary, civ } : { building: settlementPrimary },
+      additional: hasMapuche ? [{ building: SETTLEMENT, civ: MAPUCHE_CIV }] : [],
+    };
+  }
   const variant = variants.get(unit.id);
   if (unit.id !== MONK && unit.id !== WARRIOR_PRIEST && !variant) return null;
   if (civ && !unit.civs.includes(civ)) return { kind: 'unavailable' };
@@ -91,6 +123,10 @@ export function trainingSites(unit: Pick<Unit, 'id' | 'civs'>, civ?: string): Tr
 
 /** Scope this reverse row to the buildings and entity IDs that actually train the unit. */
 export function trainingAtBuilding(unit: Pick<Unit, 'id' | 'civs'>, building: number): { civs: string[]; tech?: number; onlyInOwner?: true } | null {
+  if (mapucheSettlementById.has(unit.id)) {
+    if (building !== SETTLEMENT) return null;
+    return { civs: unit.civs.includes(MAPUCHE_CIV) ? [MAPUCHE_CIV] : [] };
+  }
   if (!trainingSites(unit)) return null;
   const variant = variants.get(unit.id);
   const tech = variant?.alternate === unit.id ? variant.tech : undefined;

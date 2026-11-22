@@ -128,6 +128,9 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+.production-page .num {
+  font-variant-numeric: tabular-nums;
+}
 .production-demands,
 .production-techs {
   min-width: 0;
@@ -159,6 +162,9 @@
 .production-line-result small {
   font-size: var(--fs-xs);
   color: var(--color-muted);
+}
+.production-line-result small.production-line-warn {
+  color: var(--color-warn);
 }
 .production-techs > h2 {
   margin-bottom: var(--space-4);

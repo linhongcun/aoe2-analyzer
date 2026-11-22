@@ -376,7 +376,9 @@ test('代表单位与特殊边界只按已核口径出现', async ({ page }) => 
   await open(page, '/unit/93');
   await expect(page.locator('[data-t="display-age"]')).toContainText('封建时代');
   await expect(page.locator('[data-t="spear-age"]')).toContainText('亚美尼亚可在黑暗时代训练长矛兵');
-  await expect(page.locator('#unit-obtain')).not.toContainText('封建时代');
+  await expect(page.locator('#unit-obtain .ud-obtain')).not.toContainText('封建时代');
+  await expect(page.locator('#unit-obtain .ud-obtain')).not.toContainText('黑暗时代');
+  await expect(page.locator('#unit-obtain')).not.toContainText('亚美尼亚可在黑暗时代训练长矛兵');
   await expect(page.locator('#unit-obtain')).not.toContainText('黑暗时代');
 
   await open(page, '/unit/38?civ=Aztecs');
