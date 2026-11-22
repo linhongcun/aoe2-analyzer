@@ -69,9 +69,9 @@ npm run lint:layers -- --strict
 
 这几条是游戏正确性边界。对不上数据时改代码或改说明，不要把缺的效果补成一个完整数字。
 
-**训练单价**只有一条叠加实现：`src/domain/unitCost.ts` 的 `unitCost`。它先走 `src/domain/costDiscount.ts` 的 `discountedCost`（常驻文明费用折扣），再按已选科技的费用效果做 set / mul / add。带资源标记或操作无法解码的费用效果整项不套用，放进返回值的 `undecoded`，单价不改。折扣对不上的项在 `discount.unsupported`。
+**训练单价**只有一条叠加实现：`src/domain/unitCost.ts` 的 `unitCost`。它先走 `src/domain/costDiscount.ts` 的 `discountedCost`（常驻文明费用折扣），再按已选科技的费用效果逐条做 set / mul / add：含资源标记（`res`）或操作无法解码的单条效果不套用、记入返回值的 `undecoded`，同科技内其余无条件费用效果仍正常套用（例如马普切「布图马普 1380」放行掷石绳骑兵 `-15%`，同时把 `res: 33` 留在 `undecoded`）。折扣对不上的项在 `discount.unsupported`。
 
-**费用科技是否适用**在运行时判断，不写死科技名单。`src/domain/duelTrainingCost.ts` 的 `applicableTrainingTechs` 要求：时代够、文明有、科技树点亮，并且 `DAT.techs[en].eco` 里属性 100 或 103–106 的目标包含当前单位。`supported === false` 表示效果打到了这个单位，但 `unitCost` 整项排除了；勾选只作记录，不改价。
+**费用科技是否适用**在运行时判断，不写死科技名单。`src/domain/duelTrainingCost.ts` 的 `applicableTrainingTechs` 要求：时代够、文明有、科技树点亮，并且 `DAT.techs[en].eco` 里属性 100 或 103–106 的目标包含当前单位。`supported === false` 表示该科技没有可套用的费用效果，勾选只作记录、不改价；`supported === true` 且 `partial === true` 表示部分费用效果已套用但仍有未解码条目，全站自动预设跳过 `partial`、仅允许手动或显式 URL 勾选并在界面明示未解码边界。
 
 **训练总价**已经在 `#/production?mode=train-total`，实现在 `src/domain/trainTotal.ts` 和 `src/features/production/`。同一文明、同一时代，多行「单位形态 × 训练数量」。已计入的行是当前单价乘数量，再相加。数量必须是 1–1000 的整数字符串，上限常量 `TRAIN_TOTAL_QTY_MAX`。无合法显式时代时默认帝王（`age=4`）。化学一类解锁科技只决定能不能选这个形态，研究费用不进合计。升级费、建造、住房也不进合计。
 
@@ -179,6 +179,20 @@ CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失�
 ## 8. 已经核对过的失败和后续上线
 
 本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
+
+**队列纵深模型须与实时存活数解耦，且不能用极小容差对 float32 半径取整截断排数。** `contactFight.ts` 若按动态 `ceil(sqrt(row.alive))` 分配排宽，每当 `alive` 跨过 `k² + 1 → k²`，前排停火区容量骤减，会把已停火单位向后瞬移重启开火（全量 29 个 `minr > 0` 单位出现 4,631 次战中反弹与 10 处 `na` 倒挂）；同时 `.dat` 碰撞半径为 float32（如 `0.20000000298023224`），用 `1e-9` 容差计算 `floor(rng / diameter)` 会因精度误差多截断整排。以后对带最小射程的群体纵深使用与存活数无关的固定逐排容量（如递增排容 `cap(r) = 2r + 1`），移除 `maxRanksByRange` 硬截断，并把全量目标单位 `na = 1..100` 单调性与减员零反弹测试纳入回归门禁。[Issue #1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) / [PR #1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321)
+
+**新增 `.dat` 衍生字段须核对原始语义、剥离副形态透传，混编同侧列表不得只用阵营作 React `key`。** `.dat` 字段不能粗粒度假设：`chargeType === 4/5` 是闪避/格挡护盾而非额外攻击、`chargeType === 1 && chargeEvent === 0`（日本武士）是加速冲锋、`chargeType ∈ {6, 7}` 须结合 `MaxTotalProjectiles > 1 && TotalProjectiles <= 1` 才区分多箭齐射与单发充能、`blast === 0 && blastDamage === -5` 是常规近战默认值而非溅射；给 `units.json` 增字段时须同步检查 `data/schemas/data-units.json`（`additionalProperties: false`）和 `unitFormDetail.ts`（避免 `...formOwner` 把主形态字段透传到副形态如 `1962 → 1980`），同时留意 `effects_build.py` 中建筑与单位异构字段（如 `atks` 数组 vs 字典）。混编允许同侧同时编入普通与精锐同系单位（如 `2703 + 2704` 瓦兰吉），组件 React `key` 必须带唯一行键 `rowKey`，不能只用 `'a' | 'b'`。[Issue #1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) / [PR #1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321) · [Issue #1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293) / [PR #1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318)
+
+**部分可解码费用科技须在全站预设中跳过，且费用叠加不得向不存在资源键写 `0`。** 按单条 effect 放行混合科技（如 `Butalmapu 1380`）后，`applyCostEffect` 遇到 `exact[key] === undefined` 在 `mul` 或非正 `add` 下必须直接跳过，否则 `a: 100` 会向原本不存在的资源写入幽灵 `0`（而原有资源合法降为 `0` 如波斯免金弓须保留显示）。全站自动预设只勾选 `supported && !partial`，跨单位合并保守保留 `partial = Boolean(prev.partial || item.partial)`，避免混编满科技跳转训练总价被 fail-closed 拦截。[Issue #1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) / [PR #1320](https://github.com/linhongcun/aoe2-analyzer/pull/1320)
+
+**跨工作区共用 `?age=` 时，快捷时代切换须按当前工作区隔离或联动裁剪超龄科技。** 建筑详情折后卡与驻军预览共用 `?age=`，在 `tab=garrison` 下直接降低 `?age=` 会残留帝王 `gtechs`（护腕 `201` / 化学 `47`），使驻军校验器立刻阻断计算并持久化到刷新；单位模拟器若未按 `x.t.age <= age` 过滤 `ok`，携带高时代费用科技直链（如 `#/unit/74/Malay/2/625?tab=sim`）还会导致左栏勾选、右栏未折价与空书名号文案分裂。以后在含严格校验的工作区内用局部状态隔离预览型时代切换，在可裁剪工作区降时代时同步过滤超龄科技，并保持单位/建筑两端模拟器的时代过滤口径一致，组件对空提示名加防御守卫。[Issue #1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) / [PR #1320](https://github.com/linhongcun/aoe2-analyzer/pull/1320)
+
+**跨模式切换回退须走完整合法性校验，辅助栏位须核对键盘焦点 DOM 顺序。** `#/duel` 混编退回单兵种时，若直接复用旧侧状态会把降时代前的帝王科技泄漏回单兵种，或令火骆驼、爆破兵、黑暗长枪等单位卡死在混编无法退出；吸顶结果栏若放在主选择区之后也会导致键盘 `Tab` 序列失真。以后统一经单一校验函数核对年代、科技树与目标模式约束后再恢复，跨模式保留来源回链使用已校验的 `location.state` 而不破坏严格 URL 协议，并用键盘 `Tab` 实测验证 DOM 焦点顺序。[Issue #1279](https://github.com/linhongcun/aoe2-analyzer/issues/1279) / [PR #1312](https://github.com/linhongcun/aoe2-analyzer/pull/1312)
+
+**修订阵容/策略文案须对照渲染器的 `.num.nw` 分词词表与共享去重不变量。** `FormationPresentation.tsx` 的 `<FormationText>` 同时处理正文与 `evidence.links[].label`，其 `.num.nw` 分词正则仅覆盖有限单位字表（不含 `弹/伤/击/炮/台/游戏秒`）。修改 `civ-formations.json` 时不能只看 Markdown 可读性，须用真实分词函数与 360 宽渲染核对零断行，并验证 `#1285` `dedupeFormationClauses` 共享子句数不被意外打散。[Issue #1299](https://github.com/linhongcun/aoe2-analyzer/issues/1299) / [PR #1319](https://github.com/linhongcun/aoe2-analyzer/pull/1319)
+
+**本机冷缓存下载固定 `.dat` 遇认证或证书报错时清理环境变量并指定系统 CA。** 在 macOS 本机无缓存运行 `npm run data` 或 `npm run effects` 拉取固定 `.dat` 时，若 shell 带有受限 `GITHUB_TOKEN` 或 Python 未指向系统根证书，会触发鉴权失败或 TLS 校验错误；临时 `unset GITHUB_TOKEN` 并设置 `SSL_CERT_FILE=/etc/ssl/cert.pem` 即可稳定复现与仓库一致的生成产物。[Issue #1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293) / [PR #1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318) · [Issue #1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) / [PR #1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321)
 
 **数值显示精度与模型精度分开。** 驻军炮塔的单兵显示为 4.93，五人合计显示为 24.64，把两项用等号连起来会显得算错。两名达罗毗荼精锐掷矛手距离下一箭还有微小正差值，两位小数也会将它显示为零。推导继续用模型原始值，显示值因舍入偏离等式时写「≈」，会舍入为零的正差值写「小于 0.01」。用固定数据核对显示公式，并验证实际增加一名单位后的弹丸数。[PR #1273](https://github.com/linhongcun/aoe2-analyzer/pull/1273)
 
