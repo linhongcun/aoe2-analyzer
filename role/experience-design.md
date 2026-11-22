@@ -15,9 +15,35 @@
 
 接手体验设计时用本文：先看哪份源码，一次交付交什么，以及哪几类界面错误会反复出现。Issue 生命周期、阶段和正文交接以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为准。
 
-当前可复用原则见[体验设计系统](../docs/design/DESIGN-SYSTEM.md)，全站文档入口见[docs/README.md](../docs/README.md)。产品范围、测试投入和实现队列分别见[CONTRIBUTING.md](../CONTRIBUTING.md)、[docs/TESTING.md](../docs/TESTING.md)和[docs/MAINTENANCE.md](../docs/MAINTENANCE.md)。当前事项的决定、规格、完成态设计图和交接写在同一 Issue 正文；实际 UX 交付必须嵌入可直接查看的设计图。只有纯 docs/data 且无 UI 时由产品经理记录 UX 不适用及理由。
+本文统一维护面向全站的可复用[体验设计原则](#体验设计原则)与体验设计交接规范，全站文档入口见 [docs/README.md](../docs/README.md)。产品范围、测试投入和实现队列分别见 [CONTRIBUTING.md](../CONTRIBUTING.md)、[docs/TESTING.md](../docs/TESTING.md) 和 [docs/MAINTENANCE.md](../docs/MAINTENANCE.md)。当前事项的决定、规格、完成态设计图和交接写在同一 Issue 正文；实际 UX 交付必须嵌入可直接查看的设计图。只有纯 docs/data 且无 UI 时由产品经理记录 UX 不适用及理由。
 
 本文是可复用的设计知识；阶段交接使用既有 Issue，不另增审批链。进入软件开发即获既定范围内的开发授权，不再另行索要实施许可。
+
+## 体验设计原则
+
+这是面向全站的当前可复用原则，不是每个功能的规格。当前目标、授权依据、交互细节和完成态设计图写在对应 Issue；UX 完成后直接交软件开发，进入该阶段即获既定范围内的开发授权，无需维护者另行批准。
+
+### 任务优先
+
+- 先让用户看清当前任务、配置输入、主要结果与可采取的下一步，再呈现次要说明。
+- 明确计算范围、数据来源和支持边界；未知、不支持、估算、空结果和错误不可用同一种成功文案表示。
+- 保留输入与结果之间的对应关系；提供来源、限制和可恢复错误时，让它们靠近相关结果。
+- 以桌面阅读为主，同时保证本次相关窄屏任务可用；不为所有页面强制相同宽度矩阵。
+
+### 层级与样式
+
+- 颜色、间距和其他已定义令牌以 [`src/shared/styles/tokens.css`](../src/shared/styles/tokens.css) 为单一来源；不要在页面复制颜色值或另建令牌表。
+- 默认主题为浅色；主题偏好 `light`、`dark`、`system` 及系统主题解析由 [`src/app/theme`](../src/app/theme/) 管理。组件应在两种已实现主题下读取令牌，不写未来阶段或个人设备推断。
+- 使用现有 [`ToolShell`](../src/shared/ui/ToolShell.tsx)、[`ToolPageHeader`](../src/shared/ui/ToolPageHeader.tsx)、[`CalcDock`](../src/shared/ui/CalcDock.tsx) 等共用结构时，先检查其实际职责和页面需求；新组件只有在重复任务明确时才抽到 [`src/shared/ui`](../src/shared/ui/)。
+- 数值和数字加单位使用现有 `.num` / `.nw` 约定，避免窄屏断行导致数值与单位错读。
+
+### 图标、状态与键盘
+
+- 界面动作图标使用 [`src/shared/ui/Icon.tsx`](../src/shared/ui/Icon.tsx) 登记的 Lucide 图标；游戏单位和文明形象使用仓库中的原版游戏美术，不以 emoji 替代任一类图标。
+- 为本次范围涉及的默认、已选、空、错误、未知和不支持状态给出清楚反馈；不要无条件扩展成全站状态矩阵。
+- 弹层、菜单与可编辑控件说明焦点入口、键盘关闭和关闭后的回焦；可点尺寸按当前组件与场景核对，项目可点区域参考和 WCAG 适用边界见下文「[这次要检查什么](#这次要检查什么)」。
+
+关于当前基线的描述应能在代码中找到对应令牌、组件或行为。未来目标若有意偏离现状，应写在当前 Issue 中；不要把尚未实现的目标写成现状，也不要把旧样稿当成现状。
 
 ## 从哪些文件看起
 
@@ -34,7 +60,7 @@
 | 工具页壳                               | [`src/shared/ui/ToolPageHeader.tsx`](../src/shared/ui/ToolPageHeader.tsx)、[`src/shared/ui/ToolShell.tsx`](../src/shared/ui/ToolShell.tsx) 的 `ToolGrid`                                                    |
 | 顶栏、焦点、窄屏抽屉                   | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css)                                                                          |
 | 对象更新历史                           | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches`                                                                                                      |
-| 可复用设计原则                         | [体验设计系统](../docs/design/DESIGN-SYSTEM.md)，具体需求和完成态设计图以原 Issue 为准                                                                                                                      |
+| 可复用设计原则                         | 本文[体验设计原则](#体验设计原则)，具体需求和完成态设计图以原 Issue 为准                                                                                                                                    |
 | 游戏数字从哪来                         | 生成数据与 [`data/sources/data_sources.json`](../data/sources/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                          |
 
 历史页面复核见 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003) 及[基线规格原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/support-tools-ui-20261113.md)；它记录当时的持续生产、施工和驻军治疗布局，不作为当前通用组件规范。
@@ -57,7 +83,7 @@
 
 **实际实现。** 现行皮肤是浅色编辑风。`tokens.css` 开头仍写「方向 C」。深色使用同一套语义令牌，写在 `:root[data-theme='dark']`。`useTheme` 把解析结果写到 `document.documentElement.dataset.theme`。偏好存在本机 `aoe2-theme`，不进分享链接。未存储或值无法识别时，`parseThemePreference` 得到 `light`；只有存成 `dark` 或 `system` 才走另外两条。深色与浅色使用同一组件，只换令牌。新稿两套都要能读。
 
-`DESIGN-SYSTEM.md` 映射表里的旧色（例如背景 `#120d08`）是换肤前的记录。本基线的 `tokens.css` 里没有这些旧色值，旧令牌名指向现在的语义色。看到「深色中世纪」时先对 `tokens.css`，再决定要不要改。现状已经是浅色编辑风加可切换深色，不能把旧皮肤当成必须恢复的现行皮肤。
+已退役旧设计系统映射表里的旧色（例如背景 `#120d08`）是换肤前的记录。本基线的 `tokens.css` 里没有这些旧色值，旧令牌名指向现在的语义色。看到「深色中世纪」时先对 `tokens.css`，再决定要不要改。现状已经是浅色编辑风加可切换深色，不能把旧皮肤当成必须恢复的现行皮肤。
 
 **实际实现。** 界面图标走 `Icon.tsx`。表里主体是 Lucide；GitHub 标记按该文件注释单独登记。玩家界面不用 emoji 或 Unicode 当图标。文明、单位、科技、时代和资源用 `art.tsx` 引用的原版图。
 
@@ -276,4 +302,6 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 ## 依据与核对
 
-当前复用原则见 [DESIGN-SYSTEM.md](../docs/design/DESIGN-SYSTEM.md)；实际组件、主题和令牌以代码为准。历史草案和复核记录仅说明当时的决策，不覆盖当前实现。外部规范须注明来源、核对范围和不适用项；引用本身不代表本站已验证。每次设计仍按当前 Issue 明确范围、证据和状态，不以历史规格或截图代替。
+当前可复用原则统一维护在本文「[体验设计原则](#体验设计原则)」；实际组件、主题和令牌以代码为准，系统架构见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)，开局模拟来源与扩展点见 [docs/BUILD-SIM-SOURCES.md](../docs/BUILD-SIM-SOURCES.md)。历史草案和复核记录仅说明当时的决策，不覆盖当前实现。外部规范须注明来源、核对范围和不适用项；引用本身不代表本站已验证。每次设计仍按当前 Issue 明确范围、证据和状态，不以历史规格或截图代替。
+
+机器可读来源、生成结果和验证证据统一存放于 [`data/evidence/`](../docs/DATA-LAYOUT.md)，原文件字节与固定哈希保持不变；历史证据中的旧路径字符串是来源记录，不作改写。历史记录中指向已退役设计文档的路径，可在清理基线 [362f1ed7a7acebbecb08f43dfa04684828eba923](https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design) 的 Git 历史中查阅。

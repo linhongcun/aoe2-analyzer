@@ -3,7 +3,7 @@
 按任务阅读：
 
 1. [系统架构](ARCHITECTURE.md)：产品边界、主要模块、数据流和扩展点。
-2. [体验设计原则](design/DESIGN-SYSTEM.md)与[体验设计接手指南](../role/experience-design.md)：可复用界面原则与 Issue 交接。
+2. [体验设计接手指南](../role/experience-design.md)：可复用界面设计原则、代码入口与 Issue 交接。
 3. [数据更新与来源](DATA-UPDATE.md)、[开局模拟边界](BUILD-SIM-COVERAGE.md)及[可复现来源说明](BUILD-SIM-SOURCES.md)。
 4. [测试规则](TESTING.md)、[发布流程](RELEASING.md)与[静态页面分享](SHARING.md)。
 5. [贡献与授权规则](../CONTRIBUTING.md)、[维护说明](MAINTENANCE.md)及[角色指南索引](../role/README.md)，包括[产品管理](../role/product-management.md)、[体验设计](../role/experience-design.md)、[软件开发](../role/software-development.md)、[产品运营](../role/product-operations.md)与独立的[游戏分析师](../role/game-analyst.md)。

@@ -52,7 +52,7 @@ it('#659 a high-risk pull request launches full Playwright even when the legacy 
   expect(testCommand(mixed, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   expect(testCommand(applyBrowserPolicy(full, mainPush), 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   expect(applyBrowserPolicy(selected, pr)).toEqual(selected);
-  const maintenance = applyBrowserPolicy(planChanges([change('docs/design/small.md')]), pr);
+  const maintenance = applyBrowserPolicy(planChanges([change('docs/TESTING.md')]), pr);
   expect(PR_CORE_SMOKE_E2E).toEqual(GATE_CORE_SMOKE_E2E);
   expect(maintenance.e2e).toEqual(GATE_CORE_SMOKE_E2E);
   expect(() => validatePlan({ ...maintenance, e2e: [] })).toThrow(/Invalid CI validation plan/);
