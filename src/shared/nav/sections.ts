@@ -1,5 +1,5 @@
 import type { IconName } from '../ui/Icon';
-import { PAGES, SECTION_GROUPS, type PageDef, type SectionGroup } from './pageRegistry';
+import { PAGES, SEARCH_QUICK_KEYS, SECTION_GROUPS, type PageDef, type PageLane, type SectionGroup } from './pageRegistry';
 
 export { SECTION_GROUPS };
 export type { SectionGroup };
@@ -7,6 +7,7 @@ export type { SectionGroup };
 /** 导航、首页、面包屑和搜索里的页面结果。字段从 pageRegistry 派生，不在这里另维护一份名单。 */
 export interface Section {
   key: string;
+  lane: PageLane;
   group: SectionGroup;
   path: string;
   label: string;
@@ -27,6 +28,7 @@ export interface Section {
 function toSection(page: PageDef): Section {
   return {
     key: page.key,
+    lane: page.lane!,
     group: page.group!,
     path: page.path,
     label: page.label!,
@@ -54,5 +56,12 @@ export const HOME_GROUPS = SECTION_GROUPS.map((group) => ({
   sections: ALL.filter((section) => section.status !== 'planned' && section.group === group.key),
 }));
 export const TOOL_GROUPS = HOME_GROUPS;
+
+/** 全局搜索空态直达的高频工具列表，与页面登记表同源。 */
+export const SEARCH_QUICK_SECTIONS: readonly Section[] = SEARCH_QUICK_KEYS.map((key) => {
+  const found = ALL.find((section) => section.key === key && section.status !== 'planned');
+  if (!found) throw new Error(`缺少全局搜索快捷入口 ${key}`);
+  return found;
+});
 
 export const sectionOf = (path: string) => ALL.find((s) => s.match.test(path));

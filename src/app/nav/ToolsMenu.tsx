@@ -9,7 +9,7 @@ function isMobileDrawer() {
 function toolsPath(path: string) {
   return !WIKI.some((s) => !s.hideNav && s.match.test(path)) && TOOL_GROUPS.some((group) => group.sections.some((s) => s.match.test(path)));
 }
-/** 抽屉上方「百科」已经列出未隐藏的 wiki 一级入口；抽屉里的工具面板不再重复它们（issue 774）。 */
+/** 顶栏与抽屉「百科」均已列出未隐藏的 wiki 一级入口，工具面板统一不再重复它们（Issue 1282）。 */
 const WIKI_NAV_KEYS = new Set(WIKI.filter((s) => !s.hideNav).map((s) => s.key));
 /** 当前页所在工具组：抽屉里默认只展开这一组。 */
 function currentGroupKey(path: string) {
@@ -104,7 +104,7 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
         }}
       >
         {TOOL_GROUPS.map((group) => {
-          const sections = drawerOpen ? group.sections.filter((s) => !WIKI_NAV_KEYS.has(s.key)) : group.sections;
+          const sections = group.sections.filter((s) => !WIKI_NAV_KEYS.has(s.key));
           if (drawerOpen)
             return (
               // issue 774 抽屉：只默认展开当前页所在组，其余组作为可折叠标题（键盘可用），并跳过与上方「百科」重复的项。
@@ -130,6 +130,12 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
             </section>
           );
         })}
+        {!drawerOpen && (
+          <div className="tools-footer">
+            <span>顶栏已提供「文明 / 单位 / 建筑 / 科技 / 地图 / 更新历史」，此处不再重复</span>
+            <span className="tools-footer-hint">Esc 关闭</span>
+          </div>
+        )}
       </div>
     </div>
   );

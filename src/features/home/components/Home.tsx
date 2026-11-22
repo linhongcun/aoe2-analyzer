@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { civs, civByEn } from '../../../data';
+import { searchShortcutLabel } from '../../../domain/platform';
 import { preloadGlobalSearch, requestGlobalSearch } from '../../../shared/search/globalSearch';
 import { HOME_GROUPS, WIKI, type Section } from '../../../shared/nav/sections';
 import { img } from '../../../shared/ui/art';
@@ -76,7 +77,7 @@ export default function Home() {
         >
           <Icon name="search" />
           <span>搜索文明、单位、科技、开局…</span>
-          <kbd>Ctrl K</kbd>
+          <kbd>{searchShortcutLabel()}</kbd>
         </button>
       </section>
 

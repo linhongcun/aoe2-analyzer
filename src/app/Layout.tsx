@@ -11,6 +11,7 @@ import { FEEDBACK_NOTE, SiteVersionInfo, SourceUsageStatement } from '../shared/
 import { PAGES } from '../shared/nav/pageRegistry';
 import { civs } from '../data';
 import { catalogCivByRouteEn } from '../domain/civRoute';
+import { searchShortcutLabel } from '../domain/platform';
 import CivAboutFeedback from '../features/civs/components/CivAboutFeedback';
 import { bindGlobalSearch } from '../shared/search/globalSearch';
 import { useTheme } from './theme/useTheme';
@@ -394,6 +395,18 @@ export function Layout({ children }: { children: ReactNode }) {
             ))}
             <ToolsMenu key={menu ? `drawer:${pathname}` : `bar:${pathname}`} path={pathname} drawerOpen={menu} />
           </div>
+          {menu && (
+            <div className="drawer-footer">
+              <NavLink
+                to="/about-data"
+                className={({ isActive }) => `drawer-data-link${isActive ? ' on' : ''}`}
+                aria-label={`关于数据（DE ${DATA_SOURCES.patch.build}），数据版本：${versionLabel(DATA_SOURCES)}，查看数据来源与补丁说明`}
+              >
+                <Icon name="database" />
+                <span>关于数据（DE {DATA_SOURCES.patch.build}）</span>
+              </NavLink>
+            </div>
+          )}
         </nav>
         <Link
           to="/about-data"
@@ -403,7 +416,10 @@ export function Layout({ children }: { children: ReactNode }) {
           aria-label={`数据版本：${versionLabel(DATA_SOURCES)}，查看数据来源与补丁说明`}
         >
           <Icon name="database" />
-          <span>数据版本：{versionLabel(DATA_SOURCES)}</span>
+          <span className="verbadge-full">数据版本：{versionLabel(DATA_SOURCES)}</span>
+          <span className="verbadge-short" aria-hidden="true">
+            数据
+          </span>
         </Link>
         {pathname !== '/' && (
           <button
@@ -415,7 +431,7 @@ export function Layout({ children }: { children: ReactNode }) {
           >
             <Icon name="search" />
             <span>搜索</span>
-            <kbd>Ctrl K</kbd>
+            <kbd>{searchShortcutLabel()}</kbd>
           </button>
         )}
         <a

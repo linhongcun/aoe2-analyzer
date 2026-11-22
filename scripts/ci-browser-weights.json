@@ -183,6 +183,7 @@
     "tests/e2e/mobile361-359-366.spec.ts": 24514,
     "tests/e2e/mobileDrawer774.spec.ts": 12000,
     "tests/e2e/mountedCrossbowPresets441.spec.ts": 26723,
+    "tests/e2e/navHome1282.spec.ts": 12000,
     "tests/e2e/navigation272.spec.ts": 10533,
     "tests/e2e/negativeBonus707.spec.ts": 15000,
     "tests/e2e/nomadReveal758.spec.ts": 9000,

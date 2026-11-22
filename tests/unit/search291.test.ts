@@ -12,27 +12,37 @@ const results: SearchItem[] = [
   { kind: 'page', id: 'civs', zh: '文明', en: 'Civilizations', href: '/civs', sub: '文明列表' },
   { kind: 'page', id: 'units', zh: '单位', en: 'Units', href: '/units', sub: '单位列表' },
 ];
-const render = (open = true) => renderToStaticMarkup(createElement(CommandPalette, { open, onClose: vi.fn() }));
+const render = (open = true, initialQuery?: string) => renderToStaticMarkup(createElement(CommandPalette, { open, initialQuery, onClose: vi.fn() }));
 
-describe('#291 全局搜索语义', () => {
+describe('#291 / Issue 1282 全局搜索语义与空态直达', () => {
   beforeEach(() => vi.mocked(search).mockReturnValue([]));
 
-  it('提供有名称的模态对话框与控制结果列表的组合框', () => {
-    const html = render();
-    expect(html).toMatch(/role="dialog"[^>]*aria-modal="true"[^>]*aria-label="全局搜索"/);
-    const listId = html.match(/<ul[^>]*id="([^"]+)"[^>]*role="listbox"/)?.[1];
+  it('空输入时展示 6 项常用工具直达并选中首项；无匹配查询时清空活动后代', () => {
+    const emptyHtml = render(true);
+    expect(emptyHtml).toMatch(/role="dialog"[^>]*aria-modal="true"[^>]*aria-label="全局搜索"/);
+    const listId = emptyHtml.match(/<ul[^>]*id="([^"]+)"[^>]*role="listbox"/)?.[1];
     expect(listId).toBeTruthy();
-    const input = html.match(/<input[^>]+>/)?.[0] ?? '';
-    expect(input).toContain('role="combobox"');
-    expect(input).toContain('aria-label="全局搜索"');
-    expect(input).toContain(`aria-controls="${listId}"`);
-    expect(input).toContain('aria-expanded="true"');
-    expect(input).not.toContain('aria-activedescendant');
+    const emptyOptions = [...emptyHtml.matchAll(/<li[^>]*role="option"[^>]*>/g)].map((match) => match[0]);
+    expect(emptyOptions).toHaveLength(6);
+    expect(emptyOptions[0]).toContain('aria-selected="true"');
+    const firstQuickId = emptyOptions[0]?.match(/id="([^"]+)"/)?.[1];
+    const emptyInput = emptyHtml.match(/<input[^>]+>/)?.[0] ?? '';
+    expect(emptyInput).toContain('role="combobox"');
+    expect(emptyInput).toContain('aria-label="全局搜索"');
+    expect(emptyInput).toContain(`aria-controls="${listId}"`);
+    expect(emptyInput).toContain('aria-expanded="true"');
+    expect(emptyInput).toContain(`aria-activedescendant="${firstQuickId}"`);
+    expect(emptyHtml).toContain('常用工具直达');
+
+    const missHtml = render(true, 'zzzz-no-result');
+    const missInput = missHtml.match(/<input[^>]+>/)?.[0] ?? '';
+    expect(missInput).not.toContain('aria-activedescendant');
+    expect(missHtml).toContain('无匹配结果');
   });
 
-  it('每个结果都是选项，当前选项 id 与组合框活动后代一致', () => {
+  it('每个搜索结果都是选项，当前选项 id 与组合框活动后代一致', () => {
     vi.mocked(search).mockReturnValue(results);
-    const html = render();
+    const html = render(true, '文明');
     const options = [...html.matchAll(/<li[^>]*role="option"[^>]*>/g)].map((match) => match[0]);
     expect(options).toHaveLength(2);
     expect(options[0]).toContain('aria-selected="true"');
