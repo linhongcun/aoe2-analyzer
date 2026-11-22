@@ -379,11 +379,11 @@ export function buildAudit() {
       .forEach((e) => P(`- ${c.zh}：${e.tech} \`${e.name}\` → ${e.rules.map((r) => `${r.t.length} 个目标 ${JSON.stringify(r.fx)}`).join('；')}`)),
   );
   P();
-  P('## 七、通用隐藏科技（所有文明，时代自动或组合触发）');
+  P('## 七、通用/限定文明隐藏科技（时代自动或组合触发）');
   P();
   DAT.generic.forEach((g) =>
     P(
-      `- ${g.tech} \`${g.name}\`：时代 ≥ ${g.age}${g.req.length ? `，需 ${g.req.join(' + ')}` : ''} → ${g.rules.map((r) => `${r.t.length} 个目标 ${JSON.stringify(r.fx)}`).join('；')}`,
+      `- ${g.tech} \`${g.name}\`：时代 ≥ ${g.age}${g.civs?.length ? `，限 ${g.civs.join(' / ')}` : ''}${g.req.length ? `，需 ${g.req.join(' + ')}` : ''} → ${g.rules.map((r) => `${r.t.length} 个目标 ${JSON.stringify(r.fx)}`).join('；')}`,
     ),
   );
   P();

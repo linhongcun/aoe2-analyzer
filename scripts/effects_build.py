@@ -176,6 +176,128 @@ def tech_cost_what(b):
     return {0: '食物', 1: '木材', 2: '石料', 3: '黄金', -1: '全部资源'}.get(b, '资源%d' % b)
 
 
+def global_disabled_techs(AT, AE):
+    """收集开局全局禁用隐藏科技（Civ=-1、不可研究、无前置、RequiredTechCount=0）中 Type=102 禁用的科技 ID。"""
+    disabled = set()
+    for t in AT:
+        if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0:
+            continue
+        rq = [r for r in t['RequiredTechs'] if r >= 0]
+        if rq or (t['RequiredTechCount'] or 0) != 0:
+            continue
+        eid = t['EffectID']
+        if eid >= len(AE):
+            continue
+        for c in AE[eid]['EffectCommands']:
+            if c['Type'] == 102:
+                tid = int(round(c['D']))
+                if tid >= 0:
+                    disabled.add(tid)
+    return disabled
+
+
+def regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens):
+    """解析被开局全局禁用、再由目录文明 TechTreeID 重新启用的纯目录非建筑单位解锁隐藏科技（如 433 鹰斥候解锁）。"""
+    disabled = global_disabled_techs(AT, AE)
+    reenabled = defaultdict(set)
+    for en in catalog_civ_ens:
+        ai = adat.get(en)
+        if ai is None or ai >= len(AC):
+            continue
+        eid = AC[ai]['TechTreeID']
+        if eid is None or eid < 0 or eid >= len(AE):
+            continue
+        for c in AE[eid]['EffectCommands']:
+            if c['Type'] == 8 and c['B'] == 12 and abs(float(c['D']) - 1.0) < 1e-9:
+                reenabled[c['A']].add(en)
+    unlocks = {}
+    for r in sorted(disabled):
+        if r < 0 or r >= len(AT):
+            continue
+        t = AT[r]
+        if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0:
+            continue
+        rq = [x for x in t['RequiredTechs'] if x >= 0]
+        need = t['RequiredTechCount'] or len(rq)
+        if not all(x in AGE_TECH or x == 104 for x in rq) or len(rq) != need:
+            continue
+        eid = t['EffectID']
+        if eid >= len(AE):
+            continue
+        cmds = AE[eid]['EffectCommands']
+        if not cmds or not all(c['Type'] == 2 and c['B'] == 1 and c['A'] in ours and not ours[c['A']].get('_b') for c in cmds):
+            continue
+        civ_list = sorted(reenabled.get(r, ()))
+        if not civ_list:
+            continue
+        unlock_age = max([AGE_TECH[x] for x in rq if x in AGE_TECH] or [1])
+        unlocks[r] = {'civs': civ_list, 'units': frozenset(c['A'] for c in cmds), 'age': unlock_age}
+    return unlocks
+
+
+def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds):
+    """导出通用与限定文明隐藏科技：时代科技自身单位属性（101/102/103）+ 常规/区域解锁隐藏科技。"""
+    unlocks = regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens)
+    generic = []
+    for i, t in enumerate(AT):
+        if i in AGE_TECH:
+            if t['EffectID'] < 0:
+                continue
+            cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
+            rules, _eco = compile_cmds(cmds)
+            unit_rules = [r for r in rules if not r.get('b')]
+            if not unit_rules:
+                continue
+            name = tech_by_id[i]['en'] if i in tech_by_id else t['Name']
+            generic.append({'tech': i, 'name': name, 'age': AGE_TECH[i], 'req': [], 'any': False, 'rules': unit_rules})
+            continue
+        if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or i in tech_by_id:
+            continue
+        rq = [r for r in t['RequiredTechs'] if r >= 0]
+        if not rq:
+            continue
+        ages = [AGE_TECH[r] for r in rq if r in AGE_TECH]
+        mine = [tech_by_id[r]['en'] for r in rq if r in tech_by_id and r not in AGE_TECH]
+        other = [r for r in rq if r not in AGE_TECH and r not in tech_by_id]
+        # 需要的前置数 = RequiredTechCount；只收录「我方可识别的前置」满足要求的条目
+        need = t['RequiredTechCount'] or len(rq)
+        if len(ages) + len(mine) >= need:
+            cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
+            rules, _eco = compile_cmds(cmds)
+            if not rules:
+                continue
+            generic.append({'tech': i, 'name': t['Name'], 'age': max(ages or [1]), 'req': mine, 'any': len(ages) + len(mine) > need, 'rules': rules})
+            continue
+        # 区域单位解锁隐藏前置（严格全量 AND，如 387 = 城堡时代 102 + 鹰斥候解锁 433）
+        unlock_reqs = [r for r in other if r in unlocks]
+        if not unlock_reqs or len(unlock_reqs) != len(other):
+            continue
+        if len(ages) + len(mine) + len(unlock_reqs) != need:
+            continue
+        civ_list = sorted(set.intersection(*(set(unlocks[r]['civs']) for r in unlock_reqs)))
+        if not civ_list:
+            continue
+        reg_ages = [unlocks[r]['age'] for r in unlock_reqs]
+        cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
+        rules, _eco = compile_cmds(cmds)
+        if not rules or any(r.get('b') for r in rules):
+            continue
+        unlocked_units = set().union(*(unlocks[r]['units'] for r in unlock_reqs))
+        rule_units = {uid for r in rules for uid in r['t']}
+        if not rule_units or not rule_units.issubset(unlocked_units):
+            continue
+        generic.append({
+            'tech': i,
+            'name': t['Name'],
+            'age': max(ages + reg_ages or [1]),
+            'req': mine,
+            'any': False,
+            'civs': civ_list,
+            'rules': rules,
+        })
+    return generic
+
+
 def main():
     A = load_dat()
     pc = fetch(SRC_C); lhc_src = pc.read_text() if pc else ''
@@ -348,25 +470,12 @@ def main():
         age, pre = age_req(t['id'])
         out['techs'][t['en']] = {'id': t['id'], 'combat': ok, 'rules': rules, 'eco': eco}
 
-    # ---- 通用隐藏科技（Civ=-1、不可研究）：时代自动效果（如 Tracking、城墙随时代加血）与组合效果（如 Arrowslits + Keep） ----
-    out['generic'] = []
-    for i, t in enumerate(AT):
-        if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or i in tech_by_id or i in AGE_TECH: continue
-        rq = [r for r in t['RequiredTechs'] if r >= 0]
-        if not rq: continue
-        ages = [AGE_TECH[r] for r in rq if r in AGE_TECH]
-        mine = [tech_by_id[r]['en'] for r in rq if r in tech_by_id and r not in AGE_TECH]
-        other = [r for r in rq if r not in AGE_TECH and r not in tech_by_id]
-        # 需要的前置数 = RequiredTechCount；只收录「我方可识别的前置」恰好满足数量的条目
-        need = t['RequiredTechCount'] or len(rq)
-        if len(ages) + len(mine) < need: continue
-        cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
-        rules, eco = compile_cmds(cmds)
-        if not rules: continue
-        out['generic'].append({'tech': i, 'name': t['Name'], 'age': max(ages or [1]), 'req': mine, 'any': len(ages) + len(mine) > need, 'rules': rules})
+    adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
+
+    # ---- 通用/限定文明隐藏科技（Civ=-1、不可研究）与时代科技自身单位属性（101/102/103） ----
+    out['generic'] = build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, [c['en'] for c in civs], a_cmds, compile_cmds)
 
     # ---- 文明：bonus techs + tech tree + team ----
-    adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
     for c in civs:
         en = c['en']
         ai = adat.get(en)

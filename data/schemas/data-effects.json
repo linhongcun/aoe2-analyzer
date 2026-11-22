@@ -173,6 +173,14 @@
           "any": {
             "type": "boolean"
           },
+          "civs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
           "rules": {
             "type": "array",
             "items": {

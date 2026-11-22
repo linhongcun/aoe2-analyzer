@@ -156,10 +156,10 @@ export function bonusCoverage() {
 /** .dat 数值与当前补丁文本的一致性（null = 无可比数值或无 .dat 数据） */
 export const DAT_FRESH = (civ: string, k: string): boolean | null => DAT.civs[civ]?.fresh[k]?.ok ?? null;
 
-// ---------------- 通用隐藏科技（所有文明） ----------------
+// ---------------- 通用/限定文明隐藏科技 ----------------
 /**
- * .dat 中 Civ=-1 的自动科技：时代触发（req 为空，如 Tracking、城墙随时代加血、侦察骑兵封建升级）
- * 与组合触发（如 Arrowslits + Keep 再 +1、Thalassocracy + 箭术系作用于港口）。
+ * .dat 中 Civ=-1 的自动科技：时代触发（req 为空，如 Tracking、城墙随时代加血、侦察骑兵/萨金特卫兵随时代强化）、
+ * 限定文明区域解锁触发（civs 非空，如鹰斥候城堡时代 387）与组合触发（如 Arrowslits + Keep 再 +1、Thalassocracy + 箭术系作用于港口）。
  * req 中与目标同名的科技视为已满足（建筑/单位本身就是该升级的产物，例如 Keep）。
  */
 export interface GenericFx {
@@ -167,14 +167,25 @@ export interface GenericFx {
   name: string;
   age: number;
   req: string[];
+  civs?: readonly string[];
   pred: (x: { id: number }) => boolean;
   fx: Effect[];
   b: boolean;
 }
 export const GENERIC_FX: GenericFx[] = DAT.generic.flatMap((g) =>
-  g.rules.map((r) => ({ tech: g.tech, name: g.name, age: g.age, req: g.req, pred: idPred(r.t), fx: toEffects(r.fx), b: !!r.b })).filter((x) => x.fx.length),
+  g.rules
+    .map((r) => ({
+      tech: g.tech,
+      name: g.name,
+      age: g.age,
+      req: g.req,
+      ...(g.civs ? { civs: g.civs } : {}),
+      pred: idPred(r.t),
+      fx: toEffects(r.fx),
+      b: !!r.b,
+    }))
+    .filter((x) => x.fx.length),
 );
-/** 在给定时代与已选科技下，对某单位/建筑生效的通用隐藏效果 */
 /** 升级线：拥有该建筑/单位即意味着已研究这些升级 */
 const IMPLIED: Record<string, string[]> = {
   Keep: ['Guard Tower', 'Keep'],
@@ -182,7 +193,15 @@ const IMPLIED: Record<string, string[]> = {
   'Fortified Wall': ['Fortified Wall'],
   'Bombard Tower': ['Bombard Tower'],
 };
-export function genericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean): Effect[] {
+/** 在给定时代、已选科技与文明下，对某单位/建筑生效的通用/限定文明隐藏效果条目；有 civs 限制且未传入文明时 fail-closed 不匹配 */
+export function matchingGenericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean, civ?: string): GenericFx[] {
   const imp = IMPLIED[x.en] ?? [x.en];
-  return GENERIC_FX.filter((g) => g.b === isBld && age >= g.age && g.pred(x) && g.req.every((r) => imp.includes(r) || has(r))).flatMap((g) => g.fx);
+  return GENERIC_FX.filter(
+    (g) =>
+      g.b === isBld && age >= g.age && (!g.civs || (civ !== undefined && g.civs.includes(civ))) && g.pred(x) && g.req.every((r) => imp.includes(r) || has(r)),
+  );
+}
+/** 在给定时代、已选科技与文明下，对某单位/建筑生效的通用/限定文明隐藏效果 */
+export function genericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean, civ?: string): Effect[] {
+  return matchingGenericFx(x, isBld, age, has, civ).flatMap((g) => g.fx);
 }

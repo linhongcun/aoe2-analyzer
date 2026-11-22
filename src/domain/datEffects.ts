@@ -71,6 +71,7 @@ export interface DatGeneric {
   age: number;
   req: string[];
   any: boolean;
+  civs?: string[];
   rules: DatRule[];
 }
 /** #24 结构化训练费用折扣（scripts/effects_build.py cost_discounts）：tiers 为该时代的累计乘数，由 .dat 费用效果算出 */
