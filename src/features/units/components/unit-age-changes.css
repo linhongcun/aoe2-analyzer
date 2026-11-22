@@ -1,0 +1,153 @@
+/* 单位详情「升时代自动变化」（Issue 1339）：独立样式表，仅用 tokens.css 语义令牌；显式高权重覆写后载入的 unit-detail.css 与 editorial-details.css。 */
+.ud .ud-age-changes .num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+.ud .ud-age-changes .ud-age-intro {
+  margin: 0 0 var(--space-3);
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ud .ud-age-changes .ud-age-pending {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-2);
+  font-size: var(--fs-body);
+}
+.ud .ud-age-changes .ud-age-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+}
+.ud .ud-age-changes .ud-age-card {
+  min-width: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+}
+.ud .ud-age-changes .ud-age-card-upgrade {
+  border: 1px solid transparent;
+  background: var(--color-surface-2);
+}
+.ud .ud-age-changes .ud-age-card-active {
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface);
+}
+.ud .ud-age-changes h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.ud .ud-age-changes .ud-age-card-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.ud .ud-age-changes .ud-age-rows {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  max-width: 520px;
+}
+.ud .ud-age-changes .ud-age-row {
+  display: grid;
+  grid-template-columns: minmax(5.5em, 1fr) minmax(0, auto) auto;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: 4px 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.ud .ud-age-changes .ud-age-label {
+  min-width: 0;
+  color: var(--color-text-2);
+}
+.ud .ud-age-changes .ud-age-val {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px 4px;
+  min-width: 0;
+  color: var(--color-text);
+}
+.ud .ud-age-changes .ud-age-val strong {
+  font-weight: 700;
+}
+.ud .ud-age-changes .ud-age-arrow {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-muted);
+  flex: none;
+}
+.ud .ud-age-changes .ud-age-arrow .ic {
+  width: 13px;
+  height: 13px;
+  vertical-align: middle;
+}
+.ud .ud-age-changes .ud-age-delta {
+  color: var(--color-link);
+  font-weight: 700;
+  text-align: right;
+}
+.ud .ud-age-changes .ud-age-source {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 400;
+  text-align: right;
+}
+.ud .ud-age-changes .ud-age-compact {
+  margin: var(--space-3) 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.ud .ud-age-changes .ud-age-compact-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.ud .ud-age-changes .ud-age-compact-title {
+  font-weight: 700;
+  color: var(--color-text);
+}
+.ud .ud-age-changes .ud-age-compact-stat {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+  min-width: 0;
+}
+.ud .ud-age-changes .ud-age-compact-delta {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+.ud .ud-age-changes .ud-age-compact-sub {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.ud .ud-age-changes .ud-age-footnote {
+  margin: var(--space-3) 0 var(--space-3);
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ud .ud-age-changes .community-tool-entry {
+  min-width: 44px;
+  min-height: 44px;
+}

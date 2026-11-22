@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.31] - 2026-11-23
+
+### 更新说明
+
+单位详情页的「升时代自动变化」区不再只对斥候骑兵显示黑暗至封建单段，改为按游戏数据自动覆盖全目录 82 个升时代会自动强化的单位，并完整展示封建、城堡与帝王三个时代的变化：斥候骑兵呈现黑暗至封建、封建至城堡、城堡至帝王三段变化；鹰斥候同时展示封建视野提升与城堡属性强化（在阿兹特克、玛雅等适用文明下同步列出城堡训练时间缩短）；城堡与城楼萨金特卫兵清晰区分「出现时已生效」与后续升时代变化；弗拉芒民兵、骆驼斥候、轻型骑兵与翼骑兵、运输船以及带自动视野加成的步兵单位均按各自变化项数量自适应显示为时代对照卡或单行紧凑横条，无升时代自动变化的单位保持省略。
+
+### 新增
+
+- #1339：新增纯领域模块 `src/domain/unitAgeChanges.ts`（直接按 `effects.json` `generic` 规则与文明/兵种条件动态解析全目录单位，无单位 ID 白名单，支持多时代累积、跨规则合并、零增量过滤与「出现时已生效 / 升级变化」分流）；新增通用展示组件 `src/features/units/components/UnitAgeChanges.tsx` 与独立样式表 `src/features/units/components/unit-age-changes.css`（三态呈现：时代卡片、紧凑横条与省略态，保持 `unit-detail.css` 798 行不扩增），替换原硬编码 `ScoutAgeChanges.tsx` 并接入 `UnitDetail.tsx`；新增 `tests/unit/unitAgeChanges1339.test.ts` 与 `tests/e2e/unitAgeChanges1339.spec.ts`（登记至 `scripts/ci-browser-weights.json`），同步更新 `automaticAge705` 与 `ageAutoEffects1324` 单测及 E2E 断言。
+
 ## [0.99.30] - 2026-11-23
 
 ### 更新说明

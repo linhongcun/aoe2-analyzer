@@ -9,7 +9,7 @@ import { calculateGarrisonHealing, DEFAULT_HEALING_CONFIG, maxHealingHp } from '
 import { calculateProduction, DEFAULT_PRODUCTION, type ProductionConfig, type ProductionContext } from '../../src/domain/production';
 import { makeSimContext, simulate, type SimContext } from '../../src/domain/simulator';
 import type { Trees } from '../../src/domain/types';
-import { scoutAgeChange } from '../../src/features/units/components/ScoutAgeChanges';
+import { unitAgeChanges } from '../../src/domain/unitAgeChanges';
 import { wallAgeChange } from '../../src/features/buildings/components/WallAgeChanges';
 
 let core: Core;
@@ -218,18 +218,20 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
     }
   });
 
-  it('不回归 #705 详情页自动变化面板与建筑模拟（102/103 建筑命令不渗入 buildingSim）', () => {
-    const scoutCard = scoutAgeChange(core.unitById[448]!, DAT.generic);
+  it('不回归详情页自动变化面板与建筑模拟（102/103 建筑命令不渗入 buildingSim）', () => {
+    const scoutCard = unitAgeChanges(core.unitById[448]!, undefined, { generic: DAT.generic });
     expect(scoutCard?.state).toBe('ready');
     if (scoutCard?.state === 'ready') {
-      expect(scoutCard.age).toBe(2);
-      expect(scoutCard.tech).toBe(20);
-      expect(scoutCard.before.atk).toBe(3);
-      expect(scoutCard.after.atk).toBe(5);
-      expect(scoutCard.before.los).toBe(4);
-      expect(scoutCard.after.los).toBe(6);
-      expect(scoutCard.before.spd).toBeCloseTo(1.2, 5);
-      expect(scoutCard.after.spd).toBeCloseTo(1.55, 5);
+      expect(scoutCard.upgradeStages.map((s) => s.age)).toEqual([2, 3, 4]);
+      const feudal = Object.fromEntries(scoutCard.upgradeStages[0]!.rows.map((r) => [r.key, r]));
+      expect(feudal.atk?.before).toBe(3);
+      expect(feudal.atk?.after).toBe(5);
+      expect(feudal.los?.before).toBe(4);
+      expect(feudal.los?.after).toBe(6);
+      expect(feudal.spd?.before).toBeCloseTo(1.2, 5);
+      expect(feudal.spd?.after).toBeCloseTo(1.55, 5);
+      expect(scoutCard.upgradeStages[1]!.rows[0]?.after).toBe(8);
+      expect(scoutCard.upgradeStages[2]!.rows[0]?.after).toBe(10);
     }
     const wall72 = wallAgeChange(core.buildingById[72]!, DAT.generic);
     const wall117 = wallAgeChange(core.buildingById[117]!, DAT.generic);

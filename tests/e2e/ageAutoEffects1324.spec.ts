@@ -72,10 +72,12 @@ test('#1324 科技模拟器：斥候视野 6/8/10、萨金特卫兵城堡 75/8/4
   await expect(page.locator('#duel-a .duel-stats')).toContainText('4 / 2');
   await expect(page.locator('#duel-b .duel-stats')).toContainText('7（近战）');
 
-  // 5. 单位详情 #705 升时代自动变化区不受影响
+  // 5. 单位详情升时代自动变化区与三时代视野同步（#1339）
   await page.goto('./#/unit/448');
   const panel = page.getByRole('region', { name: '升时代自动变化', exact: true });
-  await expect(panel.locator('[data-stat="los"] [data-t="stat-value"]')).toHaveText('6');
+  await expect(panel.locator('[data-age-card="upgrade"][data-age="2"] [data-age-stat="los"] [data-age-after]')).toHaveText('6');
+  await expect(panel.locator('[data-age-card="upgrade"][data-age="3"] [data-age-stat="los"] [data-age-after]')).toHaveText('8');
+  await expect(panel.locator('[data-age-card="upgrade"][data-age="4"] [data-age-stat="los"] [data-age-after]')).toHaveText('10');
 
   expect(errors).toEqual([]);
 });
