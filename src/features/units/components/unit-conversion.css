@@ -85,6 +85,65 @@
   color: var(--color-link);
   white-space: nowrap;
 }
+.ud-cr-compact-wrap {
+  margin-block: var(--space-4);
+}
+.ud-cr-compact {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.ud-cr-compact-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  min-height: 44px;
+  padding: 10px 14px;
+  cursor: pointer;
+  list-style: none;
+}
+.ud-cr-compact-summary::-webkit-details-marker {
+  display: none;
+}
+.ud-cr-compact-summary:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+.ud-cr-compact-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+  flex: 1 1 240px;
+}
+.ud-cr-compact-hint {
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.ud-cr-compact-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  color: var(--color-link);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ud-cr-compact-toggle .ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.ud-cr-compact-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--color-border);
+}
 @media (max-width: 600px) {
   .ud-cr-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

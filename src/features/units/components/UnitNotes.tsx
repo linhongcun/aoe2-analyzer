@@ -94,7 +94,7 @@ export function UnitNotes({
       ) : (
         <UnitBlast unit={u} catalog={catalog} />
       )}
-      {!alternate && <ConversionTarget unit={u} civ={civ} techs={techs} />}
+      {!alternate && <ConversionTarget key={u.id} unit={u} civ={civ} techs={techs} />}
       <h3>说明</h3>
       <p className="ud-desc">
         <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : splashDescription(u)} nl />

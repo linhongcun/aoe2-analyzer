@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Tech, Unit } from '../../../domain/types';
 import { DATA_PATCH, SOURCE_PINS } from '../../../data/sources';
@@ -13,26 +14,16 @@ const fields = [
 const known = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 
 export function ConversionTarget({ unit, civ, techs }: { unit: Unit; civ?: string; techs: Tech[] }) {
+  const [open, setOpen] = useState(false);
   const base = unit.conversionResistance;
   const partial = fields.some(([key]) => !known(base?.[key]));
   const zero = fields.every(([key]) => base?.[key] === 0);
   const bonus = !civ || civ === 'Bengalis' ? unit.bengaliConversion : undefined;
+  const compact = !partial && zero && !bonus;
   const facts = conversionFacts(techs);
-  return (
-    <section className="ud-cr-box" aria-label="目标招降抗性" data-conversion-target="panel">
-      <h3>目标单位基础抗性</h3>
-      <span className={'ud-cr-badge ' + (partial ? 'is-warn' : zero ? 'is-neutral' : 'is-resist')}>
-        <Icon name={partial ? 'triangle-alert' : zero ? 'info' : 'shield'} />
-        {partial ? (
-          '部分抗性字段缺失'
-        ) : zero ? (
-          <>
-            目标基础无额外抗性（<span className="num nw">0 / 0 / 0</span>）
-          </>
-        ) : (
-          '含目标基础抗性'
-        )}
-      </span>
+
+  const detailBody = (
+    <>
       <p>
         {partial
           ? '固定源缺少部分招降抗性修正字段，缺失项显示「暂无数据」且不会补成 0。'
@@ -107,6 +98,55 @@ export function ConversionTarget({ unit, civ, techs }: { unit: Unit; civ?: strin
         </span>
         ）。
       </p>
+    </>
+  );
+
+  if (compact) {
+    return (
+      <section className="ud-cr-compact-wrap" aria-label="目标招降抗性" data-conversion-target="panel" data-conversion-compact="true">
+        <details
+          className="ud-cr-compact"
+          open={open}
+          onToggle={(event) => {
+            if (event.currentTarget.open === open) return;
+            setOpen(event.currentTarget.open);
+          }}
+        >
+          <summary className="ud-cr-compact-summary">
+            <span className="ud-cr-compact-main">
+              <span className="ud-cr-badge is-neutral">
+                <Icon name="info" />
+                目标基础无额外招降抗性（<span className="num nw">0 / 0 / 0</span>）
+              </span>
+              <span className="ud-cr-compact-hint">零修正非免疫，实际仍受文明加成与修道院科技（虔诚/信念）影响</span>
+            </span>
+            <span className="ud-cr-compact-toggle">
+              {open ? '收起详情' : '展开详情'}
+              <Icon name={open ? 'chevron-up' : 'chevron-down'} />
+            </span>
+          </summary>
+          <div className="ud-cr-compact-body">{detailBody}</div>
+        </details>
+      </section>
+    );
+  }
+
+  return (
+    <section className="ud-cr-box" aria-label="目标招降抗性" data-conversion-target="panel">
+      <h3>目标单位基础抗性</h3>
+      <span className={'ud-cr-badge ' + (partial ? 'is-warn' : zero ? 'is-neutral' : 'is-resist')}>
+        <Icon name={partial ? 'triangle-alert' : zero ? 'info' : 'shield'} />
+        {partial ? (
+          '部分抗性字段缺失'
+        ) : zero ? (
+          <>
+            目标基础无额外抗性（<span className="num nw">0 / 0 / 0</span>）
+          </>
+        ) : (
+          '含目标基础抗性'
+        )}
+      </span>
+      {detailBody}
     </section>
   );
 }

@@ -89,7 +89,8 @@ test('#1191 驻军和模拟使用显式文明，复制后刷新及回退仍遵�
   for (const hash of [`#/unit/${ghulam}`, unitHash(ghulam, 'InvalidCiv')]) {
     await page.goto('./' + hash);
     await expect(page.locator('#unitciv')).toHaveAccessibleName('选择文明：不指定');
-    await expect(garrison).toContainText('选择文明后查看本单位的驻军结果。');
+    await expect(garrison).toContainText('选择文明后查看古拉姆的驻军建筑与火力结果');
+    await expect(garrison.locator('#garrison-civ')).toBeVisible();
     await expect(catalog).toHaveText(stats, { useInnerText: true });
     await expect(cost).toHaveText(baseCost, { useInnerText: true });
     expect(new URL(page.url()).hash).toBe(hash);

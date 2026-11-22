@@ -1,0 +1,100 @@
+/* 单位详情局部布局补充（Issue 1283）：射程帮助右上角定位、次级节奏标题、右栏训练速览与驻军就地选文明。 */
+.ud-stat.has-action {
+  position: relative;
+}
+.ud-stat.has-action .ud-stat-lab {
+  padding-right: 40px;
+}
+.ud .ud-stat.has-action > .range-help > .rl-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 44px;
+  height: 44px;
+}
+.ud .ud-stat.has-action > .range-help > .rl-pop {
+  left: 0;
+  right: auto;
+}
+.ud-timing-head {
+  grid-column: 1 / -1;
+  margin: 6px 0 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+.ud-train-summary {
+  display: grid;
+  gap: 8px;
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-line);
+}
+.ud-train-summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+.ud-train-summary dt {
+  color: var(--color-muted);
+}
+.ud-train-summary dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 600;
+  text-align: right;
+}
+.ud-train-summary dd .ic {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--color-text-2);
+}
+.ud-garrison-empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 16px;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.ud-garrison-empty-copy {
+  min-width: 0;
+}
+.ud-garrison-empty-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+@media (min-width: 900px) {
+  .ud-garrison-empty .cp-panel {
+    left: auto;
+    right: 0;
+  }
+}
+@media (max-width: 900px) {
+  .ud .ud-stat.has-action > .range-help > .rl-pop {
+    left: auto;
+    right: 0;
+    width: min(340px, calc(200% + 8px));
+  }
+  .ud .ud-stat.has-action > .range-help > .rl-pop::before {
+    left: auto;
+    right: 21px;
+  }
+}
+@media (max-width: 640px) {
+  .ud-garrison-empty {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

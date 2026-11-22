@@ -8,7 +8,7 @@ import { isChampiUnit } from '../../../domain/champiCounters';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { confusablesOf } from '../../../data/confusables';
 import { unitInsights } from '../../../domain/insights';
-import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
+import { AGE_ZH } from '../../../domain/ratings';
 import { unitRelatedTechs } from '../../../domain/relatedTechs';
 import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../../../domain/simulator';
 import type { Trees, Unit } from '../../../domain/types';
@@ -28,7 +28,6 @@ import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
 import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import { Loading } from '../../../shared/ui/widgets';
-import { minus } from '../../../shared/utils/minus';
 import { unitDisplayAge } from '../displayAge';
 import { unitSiegeHref } from '../siegeEntry';
 import { resolveUnitForm } from '../unitFormDetail';
@@ -45,7 +44,7 @@ import { VillagerGather } from './VillagerGather';
 import UnitGarrison from './UnitGarrison';
 import { UnitCharge } from './UnitCharge';
 import { UnitTransportCapacity } from './UnitTransportCapacity';
-import { BuildingTag, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
+import { BuildingTag, CatalogCostColumn, CatalogStats, GatherLine, RelatedTechs } from './unitDetailParts';
 import { ReverseCounters } from './ReverseCounters';
 import { projectUnitForDetail, useUnitDetailResources } from '../unitDetailSafety';
 import { readReverseCounterSession, reverseCounterSessionKey } from '../reverseCounterSession';
@@ -55,16 +54,17 @@ import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
 import { CastleKonnikReference, FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
 import './unit-detail.css';
+import './unit-detail-1283.css';
 
 const JUMPS = [
   ['unit-core', '属性'],
   ['unit-obtain', '如何获得'],
   ['unit-garrison', '驻军'],
   ['unit-notes', '说明'],
+  ['unit-reverse-counters', '反向查询'],
   ['unit-related', '相关'],
   ['unit-sim', '模拟器'],
   ['unit-history', '更新历史'],
-  ['unit-reverse-counters', '反向查询'],
 ] as const;
 
 export default function UnitDetail() {
@@ -158,6 +158,8 @@ export default function UnitDetail() {
     training?.kind !== 'unavailable' ? (
       <BuildingTag id={buildingId} zh={site ? (building?.zh ?? '资料待核') : u.bz} building={building} civ={site?.civ} />
     ) : null;
+  const trainingBuildingLabel =
+    training?.kind === 'unavailable' ? '当前文明不可训练' : site ? (building?.zh ?? '资料待核') : (building?.zh ?? u.bz.replace(/\s+/g, ''));
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
@@ -344,30 +346,7 @@ export default function UnitDetail() {
         {alternate ? (
           <FormAccess href={formHref} owner={owner} form={alternate} elite={isE} />
         ) : (
-          <div className="ud-cost-col">
-            <h2>目录造价</h2>
-            <p className="ud-kicker">目录造价，未计文明折扣。</p>
-            <div className="ud-cost" data-t="catalog-cost">
-              <CostView c={u.cost} />
-            </div>
-            {(u.id === 1759 || u.id === 1761) && (u.cost.Food ?? 0) === 0 && <p className="ud-kicker">训练不消耗食物。</p>}
-            {discount.kind === 'price' && (
-              <div className="ud-discount" data-t="discount-price">
-                <span>折后训练价</span>
-                <CostView c={discount.cost} />
-                {discount.applied.map((a) => (
-                  <span key={`${a.idx ?? 'x'}-${a.techs.join('-')}-${a.label}`} className="ud-discount-line">
-                    {minus(`已计入：${a.label} -${a.pct}%${a.res ? `，仅${a.res.map((r) => RES_ZH[r] ?? r).join('、')}` : ''}`)}
-                  </span>
-                ))}
-              </div>
-            )}
-            {discount.kind === 'unapplied' && (
-              <p className="ud-discount" data-t="discount-unapplied">
-                折扣未计入
-              </p>
-            )}
-          </div>
+          <CatalogCostColumn u={u} discount={discount} displayAge={displayAge} buildingLabel={trainingBuildingLabel} />
         )}
       </section>
       {u.id === 331 && <p className="ud-kicker">目录护甲、准确度和移动是打包记录；攻击、射程和攻击间隔是展开记录。科技模拟器不切换这两态。</p>}
@@ -444,6 +423,7 @@ export default function UnitDetail() {
           trees={trees}
           unitId={u.id}
           civ={context?.en ?? ''}
+          onSelectCiv={setCiv}
           error={resources.treesError}
           pending={resources.treesPending}
           retry={resources.retryTrees}

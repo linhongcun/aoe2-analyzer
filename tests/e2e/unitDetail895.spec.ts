@@ -391,7 +391,7 @@ test('代表单位与特殊边界只按已核口径出现', async ({ page }) => 
   await expect(page.locator('#unit')).not.toContainText('在现网打开');
 });
 
-test('1280 第一屏能看到身份、生命和目录造价，390 先读目录计时再读原属性', async ({ page }) => {
+test('1280 第一屏能看到身份、生命和目录造价，390 先读核心属性再读目录计时', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await open(page, '/unit/11');
   const hp = await page.locator('[data-stat="hp"]').boundingBox();
@@ -402,18 +402,19 @@ test('1280 第一屏能看到身份、生命和目录造价，390 先读目录�
   await page.setViewportSize({ width: 390, height: 844 });
   await open(page, '/unit/11');
   const timing = page.getByRole('group', { name: '目录基础攻击计时' });
-  await expect(timing).toBeInViewport({ ratio: 1 });
   const timingBox = await timing.boundingBox();
   for (const stat of ['hp', 'atk']) {
     const box = await page.locator(`[data-stat="${stat}"]`).boundingBox();
-    expect(box!.y).toBeGreaterThanOrEqual(timingBox!.y + timingBox!.height);
     expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+    expect(timingBox!.y).toBeGreaterThanOrEqual(box!.y + box!.height);
   }
   for (const stat of ['ma', 'pa']) {
     const armor = page.locator(`[data-stat="${stat}"]`);
     await armor.scrollIntoViewIfNeeded();
     await expect(armor).toBeInViewport({ ratio: 1 });
   }
+  await timing.scrollIntoViewIfNeeded();
+  await expect(timing).toBeInViewport({ ratio: 1 });
 });
 
 test('工作区给出引擎算出的近似模拟值', async ({ page }) => {

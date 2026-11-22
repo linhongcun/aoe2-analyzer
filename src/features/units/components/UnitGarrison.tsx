@@ -4,6 +4,7 @@ import { civByEn, type Core } from '../../../data';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { Trees } from '../../../domain/types';
 import { BuildingIcon } from '../../../shared/ui/art';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { unitGarrisonSummary, type UnitGarrisonHost } from '../garrisonSummary';
 
 function GarrisonHost({ row }: { row: UnitGarrisonHost }) {
@@ -72,6 +73,7 @@ export default function UnitGarrison({
   trees,
   unitId,
   civ,
+  onSelectCiv,
   error,
   pending,
   retry,
@@ -80,18 +82,28 @@ export default function UnitGarrison({
   trees: Trees | null;
   unitId: number;
   civ: string;
+  onSelectCiv?: (en: string) => void;
   error: boolean;
   pending: boolean;
   retry: () => void;
 }) {
   const summary = useMemo(() => (trees ? unitGarrisonSummary({ core, trees }, unitId, civ) : null), [core, trees, unitId, civ]);
   const civName = civByEn(civ)?.zh ?? civ;
-  const name = core.unitById[unitId]?.zh ?? '本单位';
+  const unit = core.unitById[unitId];
+  const name = unit?.zh ?? '本单位';
   return (
     <section className="ud-section" id="unit-garrison" aria-labelledby="unit-garrison-title">
       <h2 id="unit-garrison-title">驻军</h2>
       {!civ ? (
-        <p>选择文明后查看本单位的驻军结果。</p>
+        <div className="ud-garrison-empty">
+          <div className="ud-garrison-empty-copy">
+            <p className="ud-garrison-empty-title">选择文明后查看{name}的驻军建筑与火力结果</p>
+            <p className="ud-kicker">仅列出可训练{name}的文明；选中后将同步更新本页顶部文明上下文（?civ=）。</p>
+          </div>
+          {onSelectCiv && unit && unit.civs.length > 0 && (
+            <CivPicker id="garrison-civ" label="选择文明查看驻军" value="" allowed={unit.civs} onChange={onSelectCiv} emptyText="选择文明" />
+          )}
+        </div>
       ) : !summary ? (
         <div role={error ? 'alert' : 'status'}>
           <p>{error ? '科技树资料加载失败，目录资料仍可查看。' : '科技树资料加载中，目录资料仍可查看。'}</p>
