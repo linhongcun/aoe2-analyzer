@@ -1,0 +1,10 @@
+{
+  "875": {
+    "desc": {
+      "original": "民兵系、火枪骑兵和瓦兰吉卫队的远程护甲 +1。",
+      "corrected": "民兵系、火矛兵和瓦兰吉卫队的远程护甲 +1。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1329：软甲（875）英文说明为 Militia-line, Fire Lancers and Varangian Guards +1 pierce armor.；DE 188329 效果目标含火矛兵（1901）与精锐火矛兵（1903），简中原文将 Fire Lancers 误译为火枪骑兵。"
+    }
+  }
+}

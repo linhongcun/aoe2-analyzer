@@ -291,6 +291,14 @@
       "touch": "文明特色科技译名校正。原文对不上就改这张表或确认上游，不能改成跳过。"
     },
     {
+      "id": "tech-text-corrections",
+      "path": "data/sources/tech_text_corrections.json",
+      "evidenceFile": "scripts/techs_build.py",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "不能静默覆盖新文本",
+      "touch": "科技说明译名校正。原文对不上就改这张表或确认上游，不能改成跳过。"
+    },
+    {
       "id": "stats-allowlist",
       "path": "data/sources/stats_allowlist.json",
       "evidenceFile": "scripts/stats_crosscheck.py",
