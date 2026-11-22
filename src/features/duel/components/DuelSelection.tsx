@@ -13,7 +13,8 @@ import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
 import { unitAvailable } from '../../../domain/unitAvailability';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { StatIcon, UnitIcon } from '../../../shared/ui/art';
+import { CivIcon, StatIcon, UnitIcon } from '../../../shared/ui/art';
+import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
 import { RangeB } from '../../../shared/ui/RangeB';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
@@ -100,20 +101,24 @@ export function Side({
         : spec.techs;
     onChange({ ...spec, age: nextAge, ageSet: true, techs: nextTechs });
   };
+  const civObj = civByEn(side.civ);
   return (
-    <div className={`duel-side side-${k}`} id={`duel-${k}`}>
+    <div className={`duel-side side-${k} civ-art-host`} id={`duel-${k}`}>
+      <CivArtLayer civ={side.civ} side={k} variant="head-band" mirror={k === 'b'} />
       <div className="duel-head">
         <UnitIcon u={u} big />
         <div className="duel-head-main">
           <h2 className="duel-side-title">
-            <span>
-              {k.toUpperCase()} · {u.zh}
-            </span>
+            <span className={`civ-side-badge is-${k}`}>{k.toUpperCase()} 方</span>
+            <span>{u.zh}</span>
             {count > 1 && <span className="tag duel-count-pill num nw">× {count}</span>}
           </h2>
           <small className="note duel-meta">
-            <span>
-              {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+            <span className="duel-meta-civ">
+              {civObj && <CivIcon c={civObj} alt="" />}
+              <span>
+                {civObj?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+              </span>
             </span>
             <PkCost cost={side.training.price.cost} base={side.training.before} />
           </small>
@@ -327,18 +332,26 @@ function UnavailSide({
   transferLink: React.ReactNode;
 }) {
   const { u, spec, sub } = side;
-  const civZh = civByEn(side.civ)?.zh ?? side.civ;
+  const civObj = civByEn(side.civ);
+  const civZh = civObj?.zh ?? side.civ;
   const civId = `duel-${k}-civ`;
   return (
-    <div className={`duel-side side-${k} is-unavail`} id={`duel-${k}`} data-unavailable="true">
+    <div className={`duel-side side-${k} is-unavail civ-art-host`} id={`duel-${k}`} data-unavailable="true">
+      <CivArtLayer civ={side.civ} side={k} variant="head-band" mirror={k === 'b'} muted />
       <div className="duel-head">
         <UnitIcon u={u} big />
         <div className="duel-head-main">
           <h2 className="duel-side-title">
-            {k.toUpperCase()} · {u.zh}
+            <span className={`civ-side-badge is-${k}`}>{k.toUpperCase()} 方</span>
+            <span>{u.zh}</span>
           </h2>
           <small className="note duel-meta">
-            {civZh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+            <span className="duel-meta-civ">
+              {civObj && <CivIcon c={civObj} alt="" />}
+              <span>
+                {civZh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+              </span>
+            </span>
           </small>
         </div>
       </div>

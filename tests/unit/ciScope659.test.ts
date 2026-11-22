@@ -344,7 +344,7 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     'data/reference/civs/backgrounds.source.json',
     'data/reference/civs/backgrounds.json',
     'scripts/import_backgrounds.py',
-    'src/features/civs/assets/backgrounds/chinese.webp',
+    'src/shared/assets/civ-backgrounds/chinese.webp',
   ])('%s requires actual generation verification', (path) => {
     expect(planChanges([change(path)])).toMatchObject({ full: true, data: true });
   });

@@ -10,7 +10,7 @@ Markdown 只给人看，放在 `docs/`；代码、测试和 CI 要用的内容�
 - 代码、测试和 CI 读 JSON 字段，不读 Markdown 正文，也不对它跑正则。需要新字段时加进 JSON 记录。
 - 例外只有两类：发版脚本按 Keep a Changelog 解析根目录 `CHANGELOG.md`；检查文档本身的脚本（死链、索引）。
 - Issue 相关设计图、问题截图和走查对比图统一使用 [GitHub Issue 原生附件](../role/experience-design.md#issue-design-images)上传并嵌入原 Issue 正文。禁止提交到代码仓库或另开纯图片 PR。
-- 仓库内 `.png`、`.jpg`、`.jpeg`、`.webp`、`.gif`、`.svg`、`.avif`、`.ico` 文件（后缀不区分大小写）只允许放在 `public/img/`、`src/features/civs/assets/` 和 `tests/e2e/__baselines__/`。
+- 仓库内 `.png`、`.jpg`、`.jpeg`、`.webp`、`.gif`、`.svg`、`.avif`、`.ico` 文件（后缀不区分大小写）只允许放在 `public/img/`、`src/shared/assets/civ-backgrounds/` 和 `tests/e2e/__baselines__/`。
 - `npm run lint` 里的 [`scripts/check-docs-boundary.mjs`](../scripts/check-docs-boundary.mjs) 检查图片目录、Markdown 的位置、`data/` 的文件类型和代码里的 Markdown 读取，例外在该脚本里逐条登记。
 
 | 记录（机器读）                                | 排版（给人看）                                         | 生成器                                             |
@@ -45,7 +45,7 @@ Markdown 只给人看，放在 `docs/`；代码、测试和 CI 要用的内容�
 | `game/`        | 游戏数据与生成目录。生成流程见 [数据更新](DATA-UPDATE.md)；`src/data/` 保留同步、惰性与异步读取适配器。                                                                                                                                                                    |
 | `content/`     | 可编辑的站点内容。结构校验由 [`scripts/content-schema.mjs`](../scripts/content-schema.mjs) 和 [`scripts/content-schema-catalog.mjs`](../scripts/content-schema-catalog.mjs) 登记。                                                                                         |
 | `schemas/`     | JSON Schema 输入。策略代码与编译后的校验器仍在 `src/content/schema/`；用 `npm run content:validators` 生成并用 `--check` 验证。                                                                                                                                            |
-| `reference/`   | 经审阅的参考资料。`src/domain/routeProfiles.ts`、`src/domain/castleScenarioProfile.ts`、`src/domain/positionScenarios.ts` 与 `src/features/civs/backgrounds.ts` 读取对应 JSON，沿用现有领域与文明页面逻辑。                                                                |
+| `reference/`   | 经审阅的参考资料。`src/domain/routeProfiles.ts`、`src/domain/castleScenarioProfile.ts`、`src/domain/positionScenarios.ts` 与 `src/shared/utils/civBackgrounds.ts` 读取对应 JSON，沿用现有领域与共享文明背景逻辑。                                                          |
 | `sources/`     | 固定上游输入、来源清单与生成器元数据（历史补丁的人工核对输入见 [HISTORY-INPUTS.md](HISTORY-INPUTS.md)），处理规则见 [数据更新](DATA-UPDATE.md)。现有 `src/data/ratingBasis.ts` 与 `src/data/sources.ts` 会读取评分及来源清单。`.dat` 与下载缓存 `scripts/.cache/` 不提交。 |
 | `evidence/`    | 冻结的来源快照与机器证据。大小、历史指纹和验证命令见 [来源证据流程](BUILD-SIM-SOURCES.md)。运行时不得导入或打包这些证据。                                                                                                                                                  |
 | `fixtures/`    | 仅供测试使用的 JSON fixture，不是产品输入，不得进入运行时 bundle。                                                                                                                                                                                                         |

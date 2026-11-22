@@ -8,8 +8,8 @@ import { CivIllustrationCredit } from '../../src/features/civs/components/CivBac
 import { appVersion } from '../../src/shared/utils/feedback';
 import { DATA_SOURCES, versionLabel } from '../../src/shared/utils/dataInfo';
 
-vi.mock('../../src/features/civs/backgrounds', async (importOriginal) => {
-  const original = await importOriginal<typeof import('../../src/features/civs/backgrounds')>();
+vi.mock('../../src/shared/utils/civBackgrounds', async (importOriginal) => {
+  const original = await importOriginal<typeof import('../../src/shared/utils/civBackgrounds')>();
   return { ...original, civBackground: (civ: string) => (civ === 'MissingAsset' ? undefined : original.civBackground(civ)) };
 });
 

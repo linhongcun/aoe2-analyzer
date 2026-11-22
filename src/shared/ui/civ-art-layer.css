@@ -1,0 +1,181 @@
+/* 跨文明工具页共享文明素描氛围层与单一来源署名（issue 1313）；颜色全部复用 tokens.css 令牌 */
+
+:root {
+  --civ-art-opacity: 0.3;
+}
+
+:root[data-theme='dark'] {
+  --civ-art-opacity: 0.31;
+}
+
+@media (max-width: 680px) {
+  :root {
+    --civ-art-opacity: 0.27;
+  }
+
+  :root[data-theme='dark'] {
+    --civ-art-opacity: 0.28;
+  }
+}
+
+.civ-art-host {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
+
+.civ-art-host > :not(.civ-art-clip) {
+  position: relative;
+}
+
+.civ-art-host:has(.pk-pop) {
+  z-index: 18;
+}
+
+.civ-art-host:has(.cp-panel) {
+  z-index: 40;
+}
+
+@media (max-width: 899px) {
+  .civ-art-host:has(.cp-panel) {
+    z-index: 45;
+  }
+}
+
+.civ-art-clip {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.civ-art-clip.is-head-band {
+  bottom: auto;
+  height: 128px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.civ-art-clip.is-muted {
+  --civ-art-opacity: 0.16;
+}
+
+.civ-art-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 7%, transparent) 0%, transparent 56%);
+}
+
+.civ-art-clip[data-side='b'] .civ-art-glow {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-link) 7%, transparent) 0%, transparent 56%);
+}
+
+.civ-art-clip.is-head-band .civ-art-glow {
+  -webkit-mask-image: linear-gradient(180deg, var(--color-text) 0%, var(--color-text) 56%, transparent 100%);
+  mask-image: linear-gradient(180deg, var(--color-text) 0%, var(--color-text) 56%, transparent 100%);
+}
+
+.civ-art-mask {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(56%, 240px);
+  mix-blend-mode: multiply;
+  opacity: var(--civ-art-opacity);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--color-text) 48%);
+  mask-image: linear-gradient(90deg, transparent 0%, var(--color-text) 48%);
+}
+
+:root[data-theme='dark'] .civ-art-mask {
+  mix-blend-mode: screen;
+}
+
+.civ-art-clip.is-head-band .civ-art-mask {
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, var(--color-text) 48%), linear-gradient(180deg, var(--color-text) 0%, var(--color-text) 48%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, var(--color-text) 48%), linear-gradient(180deg, var(--color-text) 0%, var(--color-text) 48%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.civ-art-img {
+  position: absolute;
+  inset: 0;
+  background-image: var(--civ-art-url);
+  background-repeat: no-repeat;
+}
+
+.civ-art-clip[data-ratio='square'] .civ-art-img {
+  background-size: contain;
+  background-position: right 10px center;
+}
+
+.civ-art-clip[data-ratio='wide'] .civ-art-img {
+  background-size: cover;
+  background-position: center 24%;
+}
+
+.civ-art-clip[data-mirror='true'] .civ-art-img {
+  transform: scaleX(-1);
+}
+
+.civ-art-clip[data-ratio='square'][data-mirror='true'] .civ-art-img {
+  background-position: left 10px center;
+}
+
+.civ-art-clip.is-muted .civ-art-img {
+  filter: saturate(0.3);
+}
+
+:root[data-theme='dark'] .civ-art-img {
+  filter: invert(1) contrast(1.08);
+}
+
+:root[data-theme='dark'] .civ-art-clip.is-muted .civ-art-img {
+  filter: invert(1) contrast(1.08) saturate(0.3);
+}
+
+.civ-side-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.civ-side-badge.is-a {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}
+
+.civ-side-badge.is-b {
+  background: var(--color-link-soft);
+  color: var(--color-link);
+}
+
+.civ-art-credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+.civ-art-credit a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--color-link);
+}

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { civBackground } from '../backgrounds';
+import { civBackground } from '../../../shared/utils/civBackgrounds';
 import './civ-background.css';
 
 export function CivBackground({ civ, className = '', children }: { civ: string; className?: string; children: ReactNode }) {

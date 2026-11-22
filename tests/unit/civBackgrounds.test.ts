@@ -6,10 +6,12 @@ import { describe, expect, it, vi } from 'vitest';
 import civs from '../../src/data/raw/civs';
 import manifest from '../../data/reference/civs/backgrounds.json';
 import source from '../../data/reference/civs/backgrounds.source.json';
-import { civBackground } from '../../src/features/civs/backgrounds';
+import { CIV_ART_REPO_URL, civBackground, resolveSideArtCiv } from '../../src/shared/utils/civBackgrounds';
+import { CivArtCredit } from '../../src/shared/ui/CivArtCredit';
+import { CivArtLayer } from '../../src/shared/ui/CivArtLayer';
 import { CivBackground, CivIllustrationCredit } from '../../src/features/civs/components/CivBackground';
 
-const directory = new URL('../../src/features/civs/assets/backgrounds/', import.meta.url);
+const directory = new URL('../../src/shared/assets/civ-backgrounds/', import.meta.url);
 const assets: Record<string, (typeof source.assets)[keyof typeof source.assets]> = source.assets;
 
 describe('#662 文明背景与固定来源', () => {
@@ -19,7 +21,7 @@ describe('#662 文明背景与固定来源', () => {
       default: { ...manifest, assets: { ...manifest.assets, Wei: { ...manifest.assets.Wei, file: 'missing-local-resource.webp' } } },
     }));
     try {
-      const { civBackground: missingBackground } = await import('../../src/features/civs/backgrounds');
+      const { civBackground: missingBackground } = await import('../../src/shared/utils/civBackgrounds');
       const { CivIllustrationCredit: MissingCredit } = await import('../../src/features/civs/components/CivBackground');
       expect(manifest.assets.Wei).toBeDefined();
       expect(missingBackground('Wei')).toBeUndefined();
@@ -87,5 +89,43 @@ describe('#662 文明背景与固定来源', () => {
     expect(html).not.toContain('has-civ-art');
     expect(html).not.toContain('data-civ-background');
     expect(html).not.toContain('<a ');
+  });
+
+  it('56 文明比例准确分为 36 张方图与 20 张宽图，且共享组件处理单/空/多文明与单处署名', () => {
+    const ratios = civs.map((c) => civBackground(c.en)!.ratio);
+    expect(ratios.filter((r) => r === 'square')).toHaveLength(36);
+    expect(ratios.filter((r) => r === 'wide')).toHaveLength(20);
+    expect(civBackground('Franks')!.ratio).toBe('square');
+    expect(civBackground('Armenians')!.ratio).toBe('wide');
+
+    expect(resolveSideArtCiv([])).toBeUndefined();
+    expect(resolveSideArtCiv(['', null, undefined])).toBeUndefined();
+    expect(resolveSideArtCiv(['Unknown'])).toBeUndefined();
+    expect(resolveSideArtCiv(['Franks'])).toBe('Franks');
+    expect(resolveSideArtCiv(['Franks', 'Franks'])).toBe('Franks');
+    expect(resolveSideArtCiv(['Franks', 'Britons'])).toBeUndefined();
+    expect(resolveSideArtCiv(['Franks', 'Unknown'])).toBeUndefined();
+
+    const squareHtml = renderToStaticMarkup(createElement(CivArtLayer, { civ: 'Franks', side: 'a' }));
+    expect(squareHtml).toContain('data-civ-art="Franks"');
+    expect(squareHtml).toContain('data-ratio="square"');
+    expect(squareHtml).toContain('data-side="a"');
+    expect(squareHtml).toContain('aria-hidden="true"');
+    expect(squareHtml).not.toContain('data-mirror');
+
+    const headBandMirror = renderToStaticMarkup(createElement(CivArtLayer, { civ: 'Armenians', side: 'b', variant: 'head-band', mirror: true, muted: true }));
+    expect(headBandMirror).toContain('is-head-band');
+    expect(headBandMirror).toContain('is-muted');
+    expect(headBandMirror).toContain('data-ratio="wide"');
+    expect(headBandMirror).toContain('data-mirror="true"');
+    expect(renderToStaticMarkup(createElement(CivArtLayer, { civ: '', side: 'a' }))).toBe('');
+    expect(renderToStaticMarkup(createElement(CivArtLayer, { civ: 'Unknown', side: 'b' }))).toBe('');
+
+    const creditHtml = renderToStaticMarkup(createElement(CivArtCredit, { civs: ['Franks', 'Armenians'] }));
+    expect(creditHtml).toContain('文明背景插画');
+    expect(creditHtml).toContain(CIV_ART_REPO_URL);
+    expect(creditHtml).toContain('AoE2 Companion');
+    expect(creditHtml).toContain('© Microsoft');
+    expect(renderToStaticMarkup(createElement(CivArtCredit, { civs: [undefined, '', 'Unknown'] }))).toBe('');
   });
 });

@@ -6,8 +6,11 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs, civByEn } from '../../../data';
 import { matchupComparePath, matchupDuelPath } from '../../../domain/matchupDuelSeed';
 import { TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
+import type { Civ } from '../../../domain/types';
 import { unitPath } from '../../../domain/simRoute';
 import { UnitIcon } from '../../../shared/ui/art';
+import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
+import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -27,6 +30,7 @@ const EMPTY_COUNTERS = '当前我方暂无可用的类型对照单位';
 const COUNTER_PENDING = '选定双方文明后，会按对手登记类型取出通用对照表，再只列出我方能造的单位。这里不生成针对某个对手的专属分析。';
 const SIM_LIMIT =
   '以下单位链到模拟器时，默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。当前 PK 采用近似计算，忽略射程、走位/风筝、地形高低差、冲锋攻击和溅射；击杀时间不能证明能否贴脸或绕后。';
+const civTypeLabel = (c: Civ | undefined) => (c ? c.ty.map((t) => TYPE_ZH[t]).join(' · ') : '待选择');
 
 export default function Matchup() {
   const { data, error, retry } = useMatchupData();
@@ -81,16 +85,28 @@ export default function Matchup() {
         <div className={`mu-pair-layout${both ? ' mu-pair-ready' : ''}`}>
           <div className="mu-setup">
             <div className="mu-picks">
-              <div className="mu-pick">
-                <label htmlFor="ma">我的文明</label>
+              <div className={`mu-pick mu-pick-a civ-art-host${a ? '' : ' is-empty'}`}>
+                {a && <CivArtLayer civ={a.en} side="a" />}
+                <div className="mu-pick-head">
+                  <label htmlFor="ma" className="civ-side-badge is-a">
+                    我的文明
+                  </label>
+                  <span className="mu-pick-type">{civTypeLabel(a)}</span>
+                </div>
                 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} />
               </div>
               <button type="button" className="mu-swap" aria-label="互换我方与对手文明" disabled={swapDisabled} onClick={swap}>
                 <Icon name="arrow-left-right" />
                 <span>互换</span>
               </button>
-              <div className="mu-pick">
-                <label htmlFor="me">对手文明</label>
+              <div className={`mu-pick mu-pick-b civ-art-host${e ? '' : ' is-empty'}`}>
+                {e && <CivArtLayer civ={e.en} side="b" mirror />}
+                <div className="mu-pick-head">
+                  <label htmlFor="me" className="civ-side-badge is-b">
+                    对手文明
+                  </label>
+                  <span className="mu-pick-type">{civTypeLabel(e)}</span>
+                </div>
                 <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
               </div>
             </div>
@@ -289,6 +305,7 @@ export default function Matchup() {
           </div>
         )}
       </section>
+      <CivArtCredit civs={[a?.en, e?.en]} />
     </section>
   );
 }

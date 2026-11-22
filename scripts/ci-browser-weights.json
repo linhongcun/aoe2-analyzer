@@ -77,6 +77,7 @@
     "tests/e2e/civRegionalBuildings456.spec.ts": 17152,
     "tests/e2e/civRegionalUnits450.spec.ts": 27922,
     "tests/e2e/civRequirements206.spec.ts": 13434,
+    "tests/e2e/civSketchReuse1313.spec.ts": 18000,
     "tests/e2e/civTechName518.spec.ts": 7698,
     "tests/e2e/civText402.spec.ts": 10625,
     "tests/e2e/civUniqueBuildings463.spec.ts": 16690,

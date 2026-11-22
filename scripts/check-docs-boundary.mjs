@@ -33,7 +33,7 @@ export const READERS = Object.freeze({
 const CODE = /\.(?:ts|tsx|mts|mjs|cjs|js|py)$/;
 const CODE_ROOTS = ['scripts/', 'tests/', 'src/'];
 const IMAGE = /\.(?:png|jpe?g|webp|gif|svg|avif|ico)$/i;
-const IMAGE_HOMES = ['public/img/', 'src/features/civs/assets/', 'tests/e2e/__baselines__/'];
+const IMAGE_HOMES = ['public/img/', 'src/shared/assets/civ-backgrounds/', 'tests/e2e/__baselines__/'];
 const READ_CALL = /\b(?:readFileSync|readFile|read_text|read_bytes|open|read|text|load)\s*\(|git\(\s*['"]show['"]/;
 const LITERAL = /(['"`])((?:(?!\1)[^\\\n])*?\.md)\1/g;
 /** 路径直接赋给一个名字：`const DOC = 'docs/X.md'`、`DOC = 'docs/X.md'`。 */

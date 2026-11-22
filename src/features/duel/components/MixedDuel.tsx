@@ -6,6 +6,7 @@ import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, typ
 import { mixedFight, MIXED_RULE, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
 import { makeSimContext } from '../../../domain/simulator';
 import { Icon } from '../../../shared/ui/Icon';
+import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
@@ -416,6 +417,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
         固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL}
       </p>
       <p className="note mix-footer">{CONTACT_BOUNDARY}</p>
+      {core && view?.a && view.b && <CivArtCredit civs={[input.a.civ, input.b.civ]} />}
       {exitMode && (
         <ExitConfirm
           onCancel={closeConfirm}

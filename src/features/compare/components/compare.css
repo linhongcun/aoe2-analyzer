@@ -180,7 +180,7 @@
 
 .compare-pickers {
   display: flex;
-  align-items: flex-end;
+  align-items: stretch;
   gap: 10px;
   flex: 1;
   min-width: 0;
@@ -189,8 +189,10 @@
 .compare-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  gap: var(--space-3);
   min-width: 0;
+  min-height: 112px;
   flex: 1;
   padding: var(--space-3);
   background: var(--color-surface);
@@ -199,13 +201,22 @@
   border-radius: var(--radius-md);
 }
 
+.compare-field-b,
 .compare-field:last-child {
   border-top-color: var(--color-link);
 }
 
-.compare-field-label {
-  font-size: 12px;
-  line-height: 1.2;
+.compare-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.compare-field-type {
+  font-size: var(--fs-xs);
+  line-height: 1.4;
   color: var(--color-muted);
 }
 
@@ -273,11 +284,37 @@
   line-height: 1.45;
 }
 
+#compare .civpick {
+  width: 100%;
+  max-width: min(100%, 256px);
+  min-width: 0;
+}
+
 #compare .cp-trigger {
   min-height: 44px;
   box-sizing: border-box;
   border-radius: var(--radius-pill);
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#compare .cp-trigger .ico,
+#compare .cp-trigger .ic {
+  flex-shrink: 0;
+}
+
+#compare .cp-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 681px) and (max-width: 1024px) {
+  #compare .cp-trigger small {
+    display: none;
+  }
 }
 
 .compare-share {
@@ -427,6 +464,13 @@
   box-shadow: inset 3px 0 0 var(--color-link);
 }
 
+@media (min-width: 900px) {
+  #compare .compare-field-b .cp-panel {
+    left: auto;
+    right: 0;
+  }
+}
+
 @media (max-width: 760px) {
   .compare-board {
     grid-template-columns: 1fr;
@@ -453,61 +497,39 @@
   }
 }
 
-@media (max-width: 600px) {
-  .compare-field {
-    padding: 6px;
-  }
-
+@media (max-width: 680px) {
   .compare-facts {
     padding: var(--space-3);
   }
+
   .compare-toolbar {
     flex-direction: column;
     align-items: stretch;
   }
 
   .compare-pickers {
-    flex-wrap: nowrap;
-    gap: 6px;
-  }
-
-  .compare-swap {
-    width: 44px;
-    padding: 0;
-  }
-
-  .compare-swap-label {
-    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
   }
 
   .compare-field {
-    flex: 1 1 0;
+    min-height: 104px;
+    padding: var(--space-3);
+  }
+
+  .compare-swap {
+    width: 100%;
+    align-self: stretch;
   }
 
   #compare .civpick {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
+    max-width: min(100%, 248px);
   }
 
   #compare .cp-trigger {
-    max-width: 100%;
-    width: 100%;
-    padding: 6px 8px;
+    padding: 6px 10px;
     gap: 6px;
-    min-height: 44px;
-  }
-
-  #compare .cp-trigger .ico,
-  #compare .cp-trigger .ic {
-    flex-shrink: 0;
-  }
-
-  #compare .cp-name {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   #compare .cp-trigger small {

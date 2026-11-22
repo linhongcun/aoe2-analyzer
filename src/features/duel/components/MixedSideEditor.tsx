@@ -7,7 +7,10 @@ import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { civBonusNotes, type SimContext } from '../../../domain/simulator';
 import { CivPicker } from '../../../shared/ui/CivPicker';
+import { CivIcon } from '../../../shared/ui/art';
+import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
+import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
 import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
@@ -71,13 +74,25 @@ export function MixedSideEditor({
     const direction = delta < 0 ? (target > 0 ? 'up' : 'down') : target < next.length - 1 ? 'down' : 'up';
     focus(`${prefix}-${direction}-${target}`);
   };
+  const civObj = civByEn(input.civ);
+  const artCiv = resolveSideArtCiv([civObj?.en]);
   return (
-    <section className={`mix-side side-${side}`} aria-labelledby={`${prefix}-title`}>
+    <section className={`mix-side side-${side} civ-art-host`} aria-labelledby={`${prefix}-title`}>
+      <CivArtLayer civ={artCiv} side={side} variant="head-band" mirror={side === 'b'} />
       <header className="mix-side-head">
-        <h2 id={`${prefix}-title`}>
-          <span className="mix-letter">{side.toUpperCase()}</span> 方军队
-        </h2>
-        <span className="num nw">{view.total === null ? '数量待修正' : `${view.total} 个单位`}</span>
+        <div className="mix-side-head-main">
+          <h2 id={`${prefix}-title`}>
+            <span className={`civ-side-badge is-${side}`}>{side.toUpperCase()} 方</span>
+            <span>军队</span>
+          </h2>
+          {civObj && (
+            <p className="mix-side-civ">
+              <CivIcon c={civObj} alt="" />
+              <span>{civObj.zh}</span>
+            </p>
+          )}
+        </div>
+        <span className="mix-side-total num nw">{view.total === null ? '数量待修正' : `${view.total} 个单位`}</span>
       </header>
       <div className="mix-context">
         <div>

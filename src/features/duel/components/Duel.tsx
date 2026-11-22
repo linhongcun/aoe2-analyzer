@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import { civByEn } from '../../../data';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
+import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
 import { isChampiUnit } from '../../../domain/champiCounters';
 import { countForBudget, damageByClass, duel, groupFight } from '../../../domain/duel';
 import '../duel-headings.css';
@@ -69,17 +70,14 @@ export default function Duel() {
   const specA = parseSide(params.get('a'), DEF_A);
   const specB = parseSide(params.get('b'), DEF_B);
   const champiRelevant = isChampiUnit(specA.uid) || isChampiUnit(specB.uid) || specA.civ === 'Muisca' || specB.civ === 'Muisca';
-  return (
-    <>
-      {mixed ? (
-        <MixedDuel resources={resources} pendingModeFocusRef={pendingModeFocusRef} />
-      ) : (
-        <DuelCalculator resources={resources} pendingModeFocusRef={pendingModeFocusRef} />
-      )}
-      {!mixed && resources.core.data && resources.trees.data ? (
-        <ChampiReferences core={resources.core.data} trees={resources.trees.data} collapsible defaultOpen={champiRelevant} />
-      ) : null}
-    </>
+  const champi =
+    !mixed && resources.core.data && resources.trees.data ? (
+      <ChampiReferences core={resources.core.data} trees={resources.trees.data} collapsible defaultOpen={champiRelevant} />
+    ) : null;
+  return mixed ? (
+    <MixedDuel resources={resources} pendingModeFocusRef={pendingModeFocusRef} />
+  ) : (
+    <DuelCalculator resources={resources} pendingModeFocusRef={pendingModeFocusRef} after={champi} />
   );
 }
 
@@ -147,7 +145,9 @@ function DuelStage({
   );
 }
 
-function DuelCalculator({ resources, pendingModeFocusRef }: { resources: CoreTreesResources; pendingModeFocusRef: MutableRefObject<TopMode | null> }) {
+type DuelCalcProps = { resources: CoreTreesResources; pendingModeFocusRef: MutableRefObject<TopMode | null>; after?: ReactNode };
+
+function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps) {
   const core = resources.core.data,
     trees = resources.trees.data;
   const [sp, setSp] = useSearchParams();
@@ -325,166 +325,170 @@ function DuelCalculator({ resources, pendingModeFocusRef }: { resources: CoreTre
   };
 
   return (
-    <section id="duel" className="pane">
-      <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
-      {invalidLink && (
-        <p className="note" role="status">
-          链接中的单位或科技无效，已回退为默认对决；地址栏已写成实际使用的参数。
-        </p>
-      )}
-      {contextBar}
-      <DuelModeBar
-        active={eq ? 'r' : mode}
-        mixedDisabled={isUnavail(A) || isUnavail(B)}
-        mixedHint="请先修正不可用单位，再进入混编。"
-        onSelect={(nextMode, _trigger, viaKeyboard) => {
-          if (nextMode === 'mix') {
-            enterMixed(viaKeyboard);
-            return;
-          }
-          set({ m: nextMode }, ['be']);
-        }}
-      >
-        {mode === 'n' && (
-          <div className="duel-mode-extra">
+    <>
+      <section id="duel" className="pane">
+        <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
+        {invalidLink && (
+          <p className="note" role="status">
+            链接中的单位或科技无效，已回退为默认对决；地址栏已写成实际使用的参数。
+          </p>
+        )}
+        {contextBar}
+        <DuelModeBar
+          active={eq ? 'r' : mode}
+          mixedDisabled={isUnavail(A) || isUnavail(B)}
+          mixedHint="请先修正不可用单位，再进入混编。"
+          onSelect={(nextMode, _trigger, viaKeyboard) => {
+            if (nextMode === 'mix') {
+              enterMixed(viaKeyboard);
+              return;
+            }
+            set({ m: nextMode }, ['be']);
+          }}
+        >
+          {mode === 'n' && (
+            <div className="duel-mode-extra">
+              <label>
+                A 数量 <input id="duel-na" type="number" min={1} max={200} value={na} onChange={(e) => set({ na: e.target.value })} style={{ width: 64 }} />
+              </label>
+              <label>
+                B 数量 <input id="duel-nb" type="number" min={1} max={200} value={nb} onChange={(e) => set({ nb: e.target.value })} style={{ width: 64 }} />
+              </label>
+            </div>
+          )}
+          {mode === 'r' && (
+            <div className="duel-mode-extra">
+              <label>
+                资源预算{' '}
+                <input id="duel-bud" type="number" min={100} step={500} value={bud} onChange={(e) => set({ bud: e.target.value })} style={{ width: 90 }} />
+              </label>
+            </div>
+          )}
+        </DuelModeBar>
+        {eq && (
+          <div className="rc-seg">
+            <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={mode === 'r'}
+                tabIndex={mode === 'r' ? 0 : -1}
+                className={mode === 'r' ? 'on' : undefined}
+                onClick={() => set({ m: 'r' }, ['vil', 'min'])}
+              >
+                等资源
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={mode === 't'}
+                tabIndex={mode === 't' ? 0 : -1}
+                className={mode === 't' ? 'on' : undefined}
+                onClick={() => set({ m: 't' })}
+              >
+                <Icon name="clock" className="ic" />
+                等采集时间
+              </button>
+            </span>
+          </div>
+        )}
+        {mode === 't' && (
+          <div className="rc-budget" data-t="rc-budget">
+            <span>
+              村民时间 <b data-t="rc-budget-text">{`${vils} 个村民 × ${fmtClock(mins * 60)}`}</b>
+            </span>
             <label>
-              A 数量 <input id="duel-na" type="number" min={1} max={200} value={na} onChange={(e) => set({ na: e.target.value })} style={{ width: 64 }} />
+              村民 <input id="duel-vil" type="number" min={1} max={200} value={vils} onChange={(e) => set({ vil: e.target.value })} />
             </label>
             <label>
-              B 数量 <input id="duel-nb" type="number" min={1} max={200} value={nb} onChange={(e) => set({ nb: e.target.value })} style={{ width: 64 }} />
+              分钟 <input id="duel-min" type="number" min={1} max={120} value={mins} onChange={(e) => set({ min: e.target.value })} />
             </label>
           </div>
         )}
-        {mode === 'r' && (
-          <div className="duel-mode-extra">
-            <label>
-              资源预算{' '}
-              <input id="duel-bud" type="number" min={100} step={500} value={bud} onChange={(e) => set({ bud: e.target.value })} style={{ width: 90 }} />
-            </label>
+        <DuelStage A={A} B={B} mode={mode} cntA={cntA} cntB={cntB} bud={bud}>
+          <div className="duel-sides">
+            <Side
+              k="a"
+              side={A}
+              fams={fams}
+              onChange={(s) => upd('a', s)}
+              count={cntA}
+              bud={mode === 'r' ? bud : 0}
+              time={mode === 't' ? [vils, mins] : null}
+              context={productionContext!}
+            />
+            <button
+              type="button"
+              className="duel-swap"
+              aria-label="互换 A、B 双方"
+              onClick={() => setSp(swapSingleDuelParams(sp, A, B, { mode, na, nb, bud, vils, mins }), { replace: true })}
+            >
+              <Icon name="arrow-left-right" />
+              <span className="duel-swap-short" aria-hidden="true">
+                互换
+              </span>
+              <span className="duel-swap-long" aria-hidden="true">
+                互换 A / B 双方
+              </span>
+            </button>
+            <Side
+              k="b"
+              side={B}
+              fams={fams}
+              onChange={(s) => upd('b', s)}
+              count={cntB}
+              bud={mode === 'r' ? bud : 0}
+              time={mode === 't' ? [vils, mins] : null}
+              context={productionContext!}
+            />
           </div>
-        )}
-      </DuelModeBar>
-      {eq && (
-        <div className="rc-seg">
-          <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={mode === 'r'}
-              tabIndex={mode === 'r' ? 0 : -1}
-              className={mode === 'r' ? 'on' : undefined}
-              onClick={() => set({ m: 'r' }, ['vil', 'min'])}
-            >
-              等资源
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={mode === 't'}
-              tabIndex={mode === 't' ? 0 : -1}
-              className={mode === 't' ? 'on' : undefined}
-              onClick={() => set({ m: 't' })}
-            >
-              <Icon name="clock" className="ic" />
-              等采集时间
-            </button>
-          </span>
-        </div>
-      )}
-      {mode === 't' && (
-        <div className="rc-budget" data-t="rc-budget">
-          <span>
-            村民时间 <b data-t="rc-budget-text">{`${vils} 个村民 × ${fmtClock(mins * 60)}`}</b>
-          </span>
-          <label>
-            村民 <input id="duel-vil" type="number" min={1} max={200} value={vils} onChange={(e) => set({ vil: e.target.value })} />
-          </label>
-          <label>
-            分钟 <input id="duel-min" type="number" min={1} max={120} value={mins} onChange={(e) => set({ min: e.target.value })} />
-          </label>
-        </div>
-      )}
-      <DuelStage A={A} B={B} mode={mode} cntA={cntA} cntB={cntB} bud={bud}>
-        <div className="duel-sides">
-          <Side
-            k="a"
-            side={A}
-            fams={fams}
-            onChange={(s) => upd('a', s)}
-            count={cntA}
-            bud={mode === 'r' ? bud : 0}
-            time={mode === 't' ? [vils, mins] : null}
-            context={productionContext!}
-          />
-          <button
-            type="button"
-            className="duel-swap"
-            aria-label="互换 A、B 双方"
-            onClick={() => setSp(swapSingleDuelParams(sp, A, B, { mode, na, nb, bud, vils, mins }), { replace: true })}
-          >
-            <Icon name="arrow-left-right" />
-            <span className="duel-swap-short" aria-hidden="true">
-              互换
-            </span>
-            <span className="duel-swap-long" aria-hidden="true">
-              互换 A / B 双方
-            </span>
-          </button>
-          <Side
-            k="b"
-            side={B}
-            fams={fams}
-            onChange={(s) => upd('b', s)}
-            count={cntB}
-            bud={mode === 'r' ? bud : 0}
-            time={mode === 't' ? [vils, mins] : null}
-            context={productionContext!}
-          />
-        </div>
-      </DuelStage>
-      <UpgradeComparison
-        ctx={ctx}
-        byId={core.unitById}
-        params={sp}
-        available={!isUnavail(A) && !isUnavail(B)}
-        onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES?.patch?.build ?? '') })}
-        onClear={() => set({}, ['base', 'fixed', 'basev'])}
-        onNormalize={(values) => set(values)}
-      />
-      {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
-      {!isUnavail(A) && !isUnavail(B) && <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ }} b={{ ...B.spec, civ: B.civ }} />}
-      {!eq && !isUnavail(A) && !isUnavail(B) && (
-        // issue 25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
-        <BreakEven
-          key={mode}
-          a={A.F}
-          b={B.F}
-          nb={cntB}
-          summary={`${beSide(A)} vs ${beSide(B)}`}
-          sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB].join('|')}
-          auto={sp.get('be') === '1'}
-          onComputed={() => set({ be: '1' })}
-          onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'])}
+        </DuelStage>
+        <UpgradeComparison
+          ctx={ctx}
+          byId={core.unitById}
+          params={sp}
+          available={!isUnavail(A) && !isUnavail(B)}
+          onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES?.patch?.build ?? '') })}
+          onClear={() => set({}, ['base', 'fixed', 'basev'])}
+          onNormalize={(values) => set(values)}
         />
-      )}
-      <p className="note duel-note" id="duel-model">
-        <Icon name="triangle-alert" className="ic warn" />
-        近似模型：
-        <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
-          {damageFormula}
-        </span>
-        （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。远程按命中率取期望伤害。
-        {mode === '1' ? (
-          <>
-            双方 <span className="num nw">t=0</span> 同时出手；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
-            {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
-          </>
-        ) : (
-          CONTACT_BOUNDARY
+        {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
+        {!isUnavail(A) && !isUnavail(B) && <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ }} b={{ ...B.spec, civ: B.civ }} />}
+        {!eq && !isUnavail(A) && !isUnavail(B) && (
+          // issue 25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
+          <BreakEven
+            key={mode}
+            a={A.F}
+            b={B.F}
+            nb={cntB}
+            summary={`${beSide(A)} vs ${beSide(B)}`}
+            sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB].join('|')}
+            auto={sp.get('be') === '1'}
+            onComputed={() => set({ be: '1' })}
+            onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'])}
+          />
         )}
-        {DUEL_COST_MODEL}
-      </p>
-    </section>
+        <p className="note duel-note" id="duel-model">
+          <Icon name="triangle-alert" className="ic warn" />
+          近似模型：
+          <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
+            {damageFormula}
+          </span>
+          （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。远程按命中率取期望伤害。
+          {mode === '1' ? (
+            <>
+              双方 <span className="num nw">t=0</span> 同时出手；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
+              {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
+            </>
+          ) : (
+            CONTACT_BOUNDARY
+          )}
+          {DUEL_COST_MODEL}
+        </p>
+      </section>
+      {after}
+      <CivArtCredit civs={[A.civ, B.civ]} />
+    </>
   );
 }
 
