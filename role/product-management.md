@@ -291,9 +291,9 @@
 
 ### 拆角色或改规范文档时，同时核查权限闭环、跨文件锚点与索引口径
 
-在[产品运营与游戏分析师角色拆分评审](https://github.com/linhongcun/aoe2-analyzer/issues/1302)里，将独立于五阶段之外的「游戏分析师」从产品运营中拆出并接管 [game-strategy.md](game-strategy.md) 时，发现两处单看目标文件容易漏掉的断层：一是 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 与 [MAINTENANCE](../docs/MAINTENANCE.md) 原把纯文档 PR 例外挂钩于「完成阶段交接后」，若只移除产品运营对攻略文档的写入句而不为非流水线角色补明纯文档 PR 范围、红线和标题规则，会直接造成权限空白；二是全仓反查后才发现 [game-strategy.md](game-strategy.md) 仍引用 [印度斯坦训练总价案例](product-operations.md#印度斯坦混编要的是训练总价)，且根目录 `README.md`、`docs/README.md` 与 `role/README.md` 存在「四个角色的交接」、遗漏运营入口和「八文明案例」等跨文档漂移。
+在[产品运营与游戏分析师角色拆分评审](https://github.com/linhongcun/aoe2-analyzer/issues/1302)里，拟将独立于五阶段之外的「游戏分析师」从产品运营中拆出并接管 [game-strategy.md](game-strategy.md) 时，发现两处单看目标文件容易漏掉的断层：一是 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 与 [MAINTENANCE](../docs/MAINTENANCE.md) 当时均将纯文档回写 PR 例外挂钩于阶段交接之后，若只移除产品运营对攻略文档的写入句而不为非流水线角色补明纯文档 PR 范围、红线和标题规则，会直接造成权限空白；二是全仓反查后才发现 [game-strategy.md](game-strategy.md) 仍引用 [印度斯坦训练总价案例](product-operations.md#印度斯坦混编要的是训练总价)，且评审基线中 `README.md`、`docs/README.md` 与 `role/README.md` 存在「四个角色的交接」、遗漏产品运营入口和「八文明案例」等跨文档漂移。
 
-原因是规范与角色文档往往通过隐性权限前提和页内锚点互相咬合，局部删改会打破闭环。以后评审角色拆分、模板改名或流程规范调整前，固定完成三项反查：核对新旧角色对应的 PR 触发条件与 [PR 标题校验](../scripts/check-pr-title.mjs) 是否形成无死角闭环（同时写清严禁触碰代码、`data/` 与核心规范的红线）；按文件名与 `#锚点` 全仓检索外部引用，把必须保留的标题锚点写进验收标准；一并核查 `README.md`、`docs/README.md`、`AGENTS.md`、`role/README.md` 索引口径，并与同文件在研开放单约定集成顺序。
+原因是规范与角色文档往往通过隐性权限前提和页内锚点互相咬合，局部删改会打破闭环。以后评审已获维护者授权的角色拆分、模板改名或流程规范调整前，固定完成三项反查：核对新旧角色对应的 PR 触发条件与 [PR 标题校验](../scripts/check-pr-title.mjs) 是否形成无死角闭环（同时写清严禁触碰代码、`data/` 与核心规范的红线）；按文件名与 `#锚点` 全仓检索外部引用，把必须保留的标题锚点写进验收标准；一并核查 `README.md`、`docs/README.md`、`AGENTS.md`、`role/README.md` 索引口径，并与同文件在研开放单约定集成顺序。
 
 ## 7. 接手第一轮，以及以后
 
