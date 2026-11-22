@@ -37,6 +37,8 @@ export interface SimEffectiveCostView {
   deltas: CostDelta[];
   appliedSources: string[];
   availableTechNames: string[];
+  /** 未选费用科技全部高于当前模拟时代时，记录其中最早起效时代；否则为 null。 */
+  availableRequiresAge: number | null;
   availablePartialOnly: boolean;
   availableHint: string | null;
   undecodedTechNames: string[];
@@ -133,7 +135,8 @@ export function buildSimEffectiveCost(
   costTechs: readonly SimCostTech[],
 ): SimEffectiveCostView {
   const tier = Math.max(entity.age, age);
-  const selectedTechs = costTechs.filter((item) => sel.has(item.tech.id) && item.tech.age <= age).map((item) => asCostInput(item.tech));
+  const isActiveSelected = (item: SimCostTech) => sel.has(item.tech.id) && item.tech.age <= age;
+  const selectedTechs = costTechs.filter(isActiveSelected).map((item) => asCostInput(item.tech));
   const priced = unitCost(entity, civ, tier, selectedTechs);
   const deltas = diffEntityCost(entity.cost, priced.cost);
   const civZh = civByEn(civ)?.zh ?? civ;
@@ -144,20 +147,22 @@ export function buildSimEffectiveCost(
     ...priced.appliedTechs.map((item) => item.zh),
   ];
   const undecodedTechNames = [...new Set(priced.undecoded.map((item) => item.tech))];
-  const unsupportedDiscountLabels = priced.discount.unsupported.map((item) => item.label || item.text).filter(Boolean);
-  const unselected = costTechs.filter((item) => !sel.has(item.tech.id));
+  const unsupportedDiscountLabels = [...new Set(priced.discount.unsupported.map((item) => item.label || item.text || `${civZh}未解码文明折扣`))];
+  const unselected = costTechs.filter((item) => !isActiveSelected(item));
+  const availableNow = unselected.filter((item) => item.tech.age <= age);
   const availableTechNames = unselected.map((item) => item.tech.zh);
+  const availableRequiresAge = availableNow.length === 0 && unselected.length > 0 ? Math.min(...unselected.map((item) => item.tech.age)) : null;
   const availablePartialOnly = unselected.length > 0 && unselected.every((item) => item.partial);
 
   let kind: SimEffectiveCostKind;
   if (deltas.length > 0 && undecodedTechNames.length > 0) kind = 'changed-with-undecoded';
   else if (deltas.length > 0) kind = 'changed';
-  else if (undecodedTechNames.length > 0) kind = 'undecoded-only';
+  else if (undecodedTechNames.length > 0 || unsupportedDiscountLabels.length > 0) kind = 'undecoded-only';
   else if (costTechs.length > 0) kind = 'available';
   else kind = 'plain';
 
   const availableHint =
-    (kind === 'changed' || kind === 'changed-with-undecoded') && availableTechNames.length > 0
+    (kind === 'changed' || kind === 'changed-with-undecoded' || kind === 'undecoded-only') && availableTechNames.length > 0
       ? `另有可选降价科技：${availableTechNames.join('、')}（勾选后叠加生效）`
       : null;
 
@@ -169,6 +174,7 @@ export function buildSimEffectiveCost(
     deltas,
     appliedSources,
     availableTechNames,
+    availableRequiresAge,
     availablePartialOnly,
     availableHint,
     undecodedTechNames,

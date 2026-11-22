@@ -1,17 +1,27 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { buildingDiscountView, parseBuildingDiscountAge } from '../../src/domain/buildingDetailView';
 import { buildingSimTechs } from '../../src/domain/buildingSim';
 import { DAT } from '../../src/domain/datEffects';
 import { duelToTrainTotal } from '../../src/domain/productionTransfer';
-import { applicableSimCostTechs, buildSimEffectiveCost, costTechBadgeMap, mergeSimCostTechs, presetCostTechIds } from '../../src/domain/simEffectiveCost';
+import {
+  applicableSimCostTechs,
+  buildSimEffectiveCost,
+  costTechBadgeMap,
+  mergeSimCostTechs,
+  presetCostTechIds,
+  type SimEffectiveCostView,
+} from '../../src/domain/simEffectiveCost';
 import { makeSimContext, simTechs } from '../../src/domain/simulator';
-import { evaluateTrainTotal } from '../../src/domain/trainTotal';
+import { evaluateTrainTotal, mergeTrainTotalCostTech } from '../../src/domain/trainTotal';
 import { unitCost, type UnitCostTech } from '../../src/domain/unitCost';
 import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 import { mixedTrainingTransfer } from '../../src/features/duel/logic/mixedTrainingTransfer';
 import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 import { trainingLines } from '../../src/features/duel/logic/trainingCostView';
+import { SimEffectiveCost } from '../../src/shared/ui/sim/SimEffectiveCost';
 import { trees } from './helpers';
 
 const sim = makeSimContext(CORE.techs, trees);
@@ -350,5 +360,120 @@ describe('下游 partial 闭环（混编 PK、单兵交接、训练总价与 PK 
     expect(view.lines[0]).toMatchObject({ kind: 'applied', partial: true });
     expect(view.lines[0]?.text).toContain('另含未解码效果，当前价格非完整最终价');
     expect(simTechs(sim, CORE.unitById[2571]!, 'Mapuche').some((row) => row.t.id === 1380)).toBe(true);
+  });
+
+  it('trainTotal 跨单位合并费用科技候选保守保留 partial（不因后单位无 partial 而洗白）', () => {
+    const tech = CORE.techById[1380]!;
+    const a = mergeTrainTotalCostTech({ tech, supported: true, partial: true }, { tech, supported: true });
+    expect(a).toEqual({ tech, supported: true, partial: true });
+
+    const b = mergeTrainTotalCostTech({ tech, supported: true }, { tech, supported: true, partial: true });
+    expect(b).toEqual({ tech, supported: true, partial: true });
+
+    const c = mergeTrainTotalCostTech({ tech, supported: false }, { tech, supported: true, partial: true });
+    expect(c).toEqual({ tech, supported: true, partial: true });
+
+    const d = mergeTrainTotalCostTech({ tech, supported: true }, { tech, supported: true });
+    expect(d).toEqual({ tech, supported: true });
+    expect('partial' in d).toBe(false);
+
+    const first = { tech, supported: true, partial: true };
+    expect(mergeTrainTotalCostTech(undefined, first)).toBe(first);
+  });
+});
+
+describe('低时代超龄科技提示与未解码文明折扣告警防漏（P1-2 / P2-2）', () => {
+  it('马来民兵 74 封建时代传入 625：unselected 仍列出强征兵役并注明帝王时代起，空名防守绝不渲染空引号', () => {
+    const militia = CORE.unitById[74]!;
+    const malayTechs = applicableSimCostTechs(sim, militia, 'Malay');
+    const feudalView = buildSimEffectiveCost(militia, 'unit', 'Malay', 2, new Set([625]), malayTechs);
+    expect(feudalView.kind).toBe('available');
+    expect(feudalView.availableTechNames).toEqual(['强征兵役']);
+    expect(feudalView.availableRequiresAge).toBe(4);
+    const feudalHtml = renderToStaticMarkup(createElement(SimEffectiveCost, { view: feudalView }));
+    expect(feudalHtml).toContain('勾选「强征兵役」（帝王时代起）后生效');
+    expect(feudalHtml).not.toContain('「」');
+
+    // 防守性渲染：即使外部误传空的 availableTechNames 也不渲染「」
+    const emptyAvailView: SimEffectiveCostView = {
+      ...feudalView,
+      availableTechNames: [],
+      availableRequiresAge: null,
+    };
+    const emptyAvailHtml = renderToStaticMarkup(createElement(SimEffectiveCost, { view: emptyAvailView }));
+    expect(emptyAvailHtml).toContain('（与目录一致）');
+    expect(emptyAvailHtml).not.toContain('「」');
+  });
+
+  it('未解码文明折扣（含无 idx 回退标签）绝不被 plain/available 提前返回吞掉', () => {
+    const knight = CORE.unitById[38]!;
+    const knightTechs = applicableSimCostTechs(sim, knight, 'Franks');
+    const prevTable = DAT.costDiscounts.Franks;
+    try {
+      // 注入 1 条无法与文案匹配的文明折扣（带 idx=0）
+      DAT.costDiscounts.Franks = [
+        ...(prevTable ?? []),
+        {
+          idx: 0,
+          text: null,
+          ok: false,
+          techs: [99999],
+          groups: [{ units: [38], res: ['Gold'], tiers: { '4': 0.77 } }],
+        },
+      ];
+      const withIdxView = buildSimEffectiveCost(knight, 'unit', 'Franks', 4, new Set(), knightTechs);
+      expect(withIdxView.kind).toBe('undecoded-only');
+      expect(withIdxView.unsupportedDiscountLabels).toHaveLength(1);
+      const withIdxHtml = renderToStaticMarkup(createElement(SimEffectiveCost, { view: withIdxView }));
+      expect(withIdxHtml).toContain('data-t="sim-effective-unsupported-discount"');
+      expect(withIdxHtml).toContain('以下文明折扣暂未计入');
+
+      // 注入无 idx（idx: null）的文明折扣：仍走兜底标签并渲染告警
+      DAT.costDiscounts.Franks = [
+        ...(prevTable ?? []),
+        {
+          idx: null,
+          text: null,
+          ok: false,
+          techs: [99998],
+          groups: [{ units: [38], res: ['Gold'], tiers: { '4': 0.77 } }],
+        },
+      ];
+      const nullIdxView = buildSimEffectiveCost(knight, 'unit', 'Franks', 4, new Set(), knightTechs);
+      expect(nullIdxView.kind).toBe('undecoded-only');
+      expect(nullIdxView.unsupportedDiscountLabels).toEqual(['法兰克未解码文明折扣']);
+      const nullIdxHtml = renderToStaticMarkup(createElement(SimEffectiveCost, { view: nullIdxView }));
+      expect(nullIdxHtml).toContain('以下文明折扣暂未计入：法兰克未解码文明折扣。');
+    } finally {
+      if (prevTable) DAT.costDiscounts.Franks = prevTable;
+      else delete DAT.costDiscounts.Franks;
+    }
+
+    // 防守性渲染：即便外部手工构造 plain / available 视图附带 unsupportedDiscountLabels，组件也照常呈现告警
+    const baseView: SimEffectiveCostView = {
+      entityKind: 'unit',
+      kind: 'plain',
+      base: knight.cost,
+      cost: knight.cost,
+      deltas: [],
+      appliedSources: [],
+      availableTechNames: [],
+      availableRequiresAge: null,
+      availablePartialOnly: false,
+      availableHint: null,
+      undecodedTechNames: [],
+      unsupportedDiscountLabels: ['测试文明折扣'],
+    };
+    const plainWarnHtml = renderToStaticMarkup(createElement(SimEffectiveCost, { view: baseView }));
+    expect(plainWarnHtml).toContain('data-t="sim-effective-unsupported-discount"');
+    expect(plainWarnHtml).toContain('以下文明折扣暂未计入：测试文明折扣。');
+
+    const availWarnHtml = renderToStaticMarkup(
+      createElement(SimEffectiveCost, {
+        view: { ...baseView, kind: 'available', availableTechNames: ['测试科技'] },
+      }),
+    );
+    expect(availWarnHtml).toContain('data-t="sim-effective-unsupported-discount"');
+    expect(availWarnHtml).toContain('以下文明折扣暂未计入：测试文明折扣。');
   });
 });

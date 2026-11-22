@@ -62,8 +62,9 @@ export function useSimState(u: Unit, rt: SimRoute, navigationAdapter?: SimNaviga
     if (!u.civs.includes(civ)) civ = u.civs[0]!;
     const age = Math.max(u.age, Math.min(4, rt.age || 4));
     const costTechs = applicableSimCostTechs(ctx, u, civ);
+    const costTechIds = new Set(costTechs.map((item) => item.tech.id));
     const avail = mergeSimCostTechs(simTechs(ctx, u, civ), costTechs);
-    const ok = new Set(avail.map((x) => x.t.id));
+    const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && x.t.age <= age).map((x) => x.t.id));
     return { ctx, civ, age, sel: new Set(rt.ids.filter((i) => ok.has(i))), team: new Set(rt.team), avail, costTechs, cmp };
   }, [ctx, u, rt.civ, rt.age, idsKey, teamKey, cmp]); // eslint-disable-line react-hooks/exhaustive-deps
   const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => {

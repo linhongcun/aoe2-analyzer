@@ -65,6 +65,17 @@ test('#1297 单位模拟器接入科技折后价并三口径隔离（法兰克 2
   await expect(page.locator('[data-t="sim-effective-price"]')).toContainText('70');
   await expect(page.locator('[data-t="sim-effective-price"] [data-zero="true"]')).toContainText('0');
 
+  // 马来民兵 74 在封建时代带入帝王科技 625：左栏未勾选、累计研究费 0 项、右栏有效训练价不出现空「」且写明帝王时代起
+  await page.goto('./#/unit/74/Malay/2/625?tab=sim');
+  const row625 = page.locator('#sim label.simt').filter({ has: page.getByRole('link', { name: '强征兵役', exact: true }) });
+  await expect(row625.locator('input[type="checkbox"]')).not.toBeChecked();
+  await expect(page.locator('#sim .sim-summary')).toContainText('累计研究费用（0 项）');
+  const malayFeudalCard = page.locator('[data-t="sim-effective-cost"]');
+  await expect(malayFeudalCard).toHaveAttribute('data-state', 'available');
+  await expect(malayFeudalCard).toContainText('强征兵役');
+  await expect(malayFeudalCard).toContainText('帝王时代起');
+  expect(await malayFeudalCard.innerText()).not.toContain('「」');
+
   // 高丽战船 21：被动折扣 + 373 造船匠叠加态
   await page.goto('./#/unit/21/Koreans/4/?tab=sim');
   await expect(page.locator('[data-t="sim-effective-price"]')).toContainText('72');
@@ -163,6 +174,58 @@ test('#1297 建筑详情文明被动折后价、时代切换、上下同步与�
   const towerDetinets = page.locator('#sim label.simt').filter({ has: page.getByRole('link', { name: '罗斯堡垒', exact: true }) });
   await expect(towerDetinets.locator('input[type="checkbox"]')).not.toBeChecked();
   await expect(page.locator('#sim [data-t="sim-effective-cost"]')).toHaveAttribute('data-state', 'available');
+
+  // 建筑模拟器（tab=sim）点击顶部折后卡降时代时，同时裁剪 URL 中超时代的 ?techs=
+  await page.goto('./#/building/82?tab=sim&civ=Franks&age=4');
+  const hoardings = page.locator('#sim label.simt').filter({ has: page.getByRole('link', { name: '围墙', exact: true }) });
+  await hoardings.locator('input[type="checkbox"]').check();
+  await expect(page).toHaveURL(/techs=379/);
+  await disc.getByRole('radio', { name: '城堡时代', exact: true }).click();
+  await expect(page).toHaveURL(/age=3/);
+  await expect(page).not.toHaveURL(/379/);
+  await expect(hoardings.locator('input[type="checkbox"]')).not.toBeChecked();
+  await disc.getByRole('radio', { name: '帝王时代', exact: true }).click();
+  await expect(hoardings.locator('input[type="checkbox"]')).not.toBeChecked();
+});
+
+test('#1297 驻军预览态切顶部折后卡时代不破坏驻军科技与结果（含刷新复核）', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const disc = page.locator('[data-t="building-discount-price"]');
+
+  // 不列颠城镇中心 109：驻军勾选帝王科技 201 护腕后，切顶部折后卡至城堡时代，驻军结果与 URL 保持完整
+  await page.goto('./#/building/109?tab=garrison&civ=Britons&age=4');
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await page.locator('#building-garrison .garrison-tech-grid label').filter({ hasText: '护腕' }).locator('input[type="checkbox"]').check();
+  await expect(page).toHaveURL(/gtechs=.*201/);
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await disc.getByRole('radio', { name: '城堡时代', exact: true }).click();
+  await expect(disc).toHaveAttribute('data-age', '3');
+  await expect(disc.locator('[data-t="building-discount-amount"]')).toContainText('137.5');
+  await expect(disc.locator('[data-t="building-discount-amount"]')).toContainText('100');
+  await expect(page).toHaveURL(/age=4/);
+  await expect(page).toHaveURL(/gtechs=.*201/);
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await expect(page.locator('#building-garrison')).not.toContainText('暂不能计算');
+  await page.reload();
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await expect(page.locator('#building-garrison')).not.toContainText('暂不能计算');
+
+  // 法兰克城堡 82：驻军勾选帝王科技 47 化学后，切顶部折后卡至城堡时代，驻军结果与刷新均保持正常
+  await page.goto('./#/building/82?tab=garrison&civ=Franks&age=4');
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await page.locator('#building-garrison .garrison-tech-grid label').filter({ hasText: '化学' }).locator('input[type="checkbox"]').check();
+  await expect(page).toHaveURL(/gtechs=.*47/);
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await disc.getByRole('radio', { name: '城堡时代', exact: true }).click();
+  await expect(disc).toHaveAttribute('data-age', '3');
+  await expect(disc.locator('[data-t="building-discount-amount"]')).toContainText('552.5');
+  await expect(page).toHaveURL(/age=4/);
+  await expect(page).toHaveURL(/gtechs=.*47/);
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await expect(page.locator('#building-garrison')).not.toContainText('暂不能计算');
+  await page.reload();
+  await expect(page.locator('[data-testid="garrison-result"]')).toBeVisible();
+  await expect(page.locator('#building-garrison')).not.toContainText('暂不能计算');
 });
 
 test('#1297 马普切 2571 + 布图马普 1380 折后价与未解码边界提示（科那不误折价）', async ({ page }) => {

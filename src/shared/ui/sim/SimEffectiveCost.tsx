@@ -1,5 +1,5 @@
 /** 单位与建筑模拟器有效训练/建造价卡片，以及固定顺位有序金额渲染（issue 1297）。 */
-import { RES_ZH } from '../../../domain/ratings';
+import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import type { CostDelta, SimEffectiveCostView } from '../../../domain/simEffectiveCost';
 import type { Cost } from '../../../domain/types';
 import { UNIT_COST_RESOURCES } from '../../../domain/unitCost';
@@ -54,7 +54,15 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
   const title = isBuilding ? '当前模拟有效建造价' : '当前模拟有效训练价';
   const scopeTag = isBuilding ? '单座建造价 · 不含研究费' : '单兵训练价 · 不含研究费';
 
-  if (view.kind === 'plain') {
+  const unsupportedDiscountNotice =
+    view.unsupportedDiscountLabels.length > 0 ? (
+      <p className="sim-eff-warn" role="status" data-t="sim-effective-unsupported-discount">
+        <Icon name="triangle-alert" className="ic" />
+        <span>以下文明折扣暂未计入：{view.unsupportedDiscountLabels.join('、')}。</span>
+      </p>
+    ) : null;
+
+  if (view.kind === 'plain' && !unsupportedDiscountNotice) {
     return (
       <p className="sim-eff-plain" data-t="sim-effective-cost" data-state="plain">
         {shortLabel}与目录一致（
@@ -64,21 +72,27 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
   }
 
   if (view.kind === 'available') {
-    const names = view.availableTechNames.join('、');
-    const actionHint = view.availablePartialOnly ? `勾选「${names}」后按已解码费用生效，另含未解码效果` : `勾选「${names}」后生效`;
+    const names = view.availableTechNames.filter(Boolean).join('、');
+    const ageNote = view.availableRequiresAge ? `（${AGE_ZH[view.availableRequiresAge] ?? ''}起）` : '';
+    const actionHint = names
+      ? view.availablePartialOnly
+        ? `勾选「${names}」${ageNote}后按已解码费用生效，另含未解码效果`
+        : `勾选「${names}」${ageNote}后生效`
+      : null;
     return (
       <section className="sim-eff-cost is-available" data-t="sim-effective-cost" data-state="available" aria-label={title}>
         <p className="sim-eff-avail-line">
           <strong className="sim-eff-avail-label">{title}：</strong>
           <OrderedCost cost={view.base} />
-          <span className="sim-eff-avail-hint">（与目录一致；{actionHint}）</span>
+          <span className="sim-eff-avail-hint">{actionHint ? `（与目录一致；${actionHint}）` : '（与目录一致）'}</span>
         </p>
+        {unsupportedDiscountNotice}
       </section>
     );
   }
 
   const Heading = headingLevel === 2 ? 'h3' : 'h4';
-  const accentClass = view.kind === 'undecoded-only' ? 'is-warn' : 'is-good';
+  const accentClass = view.kind === 'undecoded-only' || view.kind === 'plain' ? 'is-warn' : 'is-good';
 
   return (
     <section className={`sim-eff-cost ${accentClass}`} data-t="sim-effective-cost" data-state={view.kind} aria-label={title}>
@@ -90,7 +104,7 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
         <span className="sim-eff-main">
           <OrderedCost cost={view.cost} base={view.base} />
         </span>
-        {view.kind === 'undecoded-only' ? (
+        {view.kind === 'undecoded-only' || view.kind === 'plain' ? (
           <span className="sim-eff-base">暂按目录基础价展示</span>
         ) : (
           <span className="sim-eff-base">
@@ -129,12 +143,7 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
           </span>
         </p>
       )}
-      {view.unsupportedDiscountLabels.length > 0 && (
-        <p className="sim-eff-warn" role="status">
-          <Icon name="triangle-alert" className="ic" />
-          <span>以下文明折扣暂未计入：{view.unsupportedDiscountLabels.join('、')}。</span>
-        </p>
-      )}
+      {unsupportedDiscountNotice}
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
@@ -64,6 +64,7 @@ export default function BuildingDetail() {
   const civ = b ? buildingCiv(params.get('civ'), b.civs) : null;
   const requestedCiv = civByEn(params.get('civ') ?? '');
   const pendingScroll = useRef<string | null>(null);
+  const [garrisonDiscountAge, setGarrisonDiscountAge] = useState<{ key: string; age: number } | null>(null);
 
   useEffect(() => {
     if (tab === 'garrison' && b && !host) nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, { tab: 'ov' }) }, { replace: true });
@@ -114,7 +115,10 @@ export default function BuildingDetail() {
   const techs = b.techs.map((techId) => core.techById[techId]).filter((tech): tech is Tech => !!tech);
   const mark = buildingIdentityMark(b.id);
   const ageName = AGE_ZH[b.age] ?? String(b.age);
-  const discount = buildingDiscountView(b, civ, params.get('age'));
+  const discountScopeKey = `${b.id}:${civ ?? ''}:${params.get('age') ?? ''}`;
+  const rawDiscountAge =
+    view.surface === 'garrison' ? (garrisonDiscountAge?.key === discountScopeKey ? String(garrisonDiscountAge.age) : params.get('age')) : params.get('age');
+  const discount = buildingDiscountView(b, civ, rawDiscountAge);
   const construction = buildingConstructionEntry(b.id, b.age, civ);
   const showSiege = siegeBuildingEntryVerified(b, core.unitById[SIEGE_DEFAULT_UNIT_ID]);
   const attack = buildingHasAttack(b);
@@ -125,9 +129,32 @@ export default function BuildingDetail() {
     : civ
       ? '查看科技效果。'
       : '查看科技效果。未指定文明时需先选择文明。';
-  const go = (patch: Record<string, string | null>) => nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, patch) });
-  const setDiscountAge = (nextAge: number) =>
-    nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, { age: String(nextAge) }) }, { replace: true });
+  const go = (patch: Record<string, string | null>) => {
+    if (garrisonDiscountAge && (patch.tab !== undefined || patch.civ !== undefined)) setGarrisonDiscountAge(null);
+    nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, patch) });
+  };
+  const setDiscountAge = (nextAge: number) => {
+    // 驻军预览工作区复用 ?age= 与 gtechs；在驻军态下切换顶部折后价时代只改局部视图，不改写驻军 URL，避免破坏已选驻军科技与结果。
+    if (view.surface === 'garrison') {
+      setGarrisonDiscountAge({ key: discountScopeKey, age: nextAge });
+      return;
+    }
+    const patch: Record<string, string | null> = { age: String(nextAge) };
+    for (const key of ['techs', 'gtechs'] as const) {
+      const raw = params.get(key);
+      if (raw === null) continue;
+      const kept = raw
+        .split(',')
+        .filter(Boolean)
+        .map(Number)
+        .filter((tid) => {
+          const tech = core.techById[tid];
+          return !!tech && tech.age <= nextAge;
+        });
+      patch[key] = kept.length ? kept.join(',') : null;
+    }
+    nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, patch) }, { replace: true });
+  };
   const setCiv = (en: string) => go({ civ: en || null });
   const scrollTo = (target: string) => {
     const node = document.getElementById(target);

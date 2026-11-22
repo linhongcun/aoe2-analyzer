@@ -226,6 +226,14 @@ function quoteRow(config: TrainTotalConfig, unit: Unit, inputs: UnitCostTech[], 
   return { cost: priced.cost, notes, applied: [...applied], pricingProblems };
 }
 
+/** 跨单位合并训练总价候选费用科技：保守保留 partial（任一单位为 partial 即保持 partial=true），与 mixedDuel 一致。 */
+export function mergeTrainTotalCostTech(prev: TrainingCostTech | undefined, item: TrainingCostTech): TrainingCostTech {
+  if (!prev) return item;
+  const supported = prev.supported || item.supported;
+  const partial = Boolean(prev.partial || item.partial);
+  return partial ? { tech: item.tech, supported, partial: true } : { tech: item.tech, supported };
+}
+
 export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalConfig): TrainTotalEvaluation {
   const blocked: string[] = [];
   if (!civLegal(config.civ)) blocked.push('文明无效，请重新选择。');
@@ -274,8 +282,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
     for (const unit of units) {
       for (const item of applicableTrainingTechs(sim, unit, config.civ, age!)) {
         if (UNLOCK_IDS.includes(item.tech.id)) continue;
-        const prev = found.get(item.tech.id);
-        if (!prev || (item.supported && !prev.supported) || (item.supported && prev.supported && !item.partial && prev.partial)) found.set(item.tech.id, item);
+        found.set(item.tech.id, mergeTrainTotalCostTech(found.get(item.tech.id), item));
       }
     }
   }
