@@ -234,8 +234,12 @@ test('群战使用真实固定数据展示近战容量、攻城先手及最小�
     await go(page, `a=546.Japanese.4.f.&b=${id}.${civ}.4.f.&m=n&na=50&nb=16`);
     await expect(notes).toContainText('B 方射程先手窗口');
     await expect(notes).toContainText(/\d+ 轮齐射/);
-    await expect(notes).toContainText('低于最小射程时无法开火');
+    await expect(notes).toContainText('贴脸时仅前排');
+    await expect(notes).toContainText('已按纵深排数区分停火');
     await expect(notes).toContainText('近战开始接敌于');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await go(page, `a=546.Japanese.4.f.&b=${id}.${civ}.4.f.&m=n&na=1&nb=1`);
+    await expect(notes).toContainText('低于最小射程时无法开火');
+    await expect(notes).not.toContainText('已按纵深排数区分停火');
   }
 });

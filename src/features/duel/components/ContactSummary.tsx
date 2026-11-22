@@ -25,16 +25,24 @@ function Card({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Reach({ fighter }: { fighter: Fighter }) {
+function Reach({ fighter, count }: { fighter: Fighter; count: number }) {
+  const minRange = fighter.contact?.minRange ?? 0;
   return (
     <>
       射程 <span className="num nw">{formatHp(fighter.rng)} 格</span>
-      {!!fighter.contact?.minRange && (
-        <>
-          {' '}
-          · 最小射程 <span className="num nw">{formatHp(fighter.contact.minRange)} 格</span>，低于最小射程时无法开火
-        </>
-      )}
+      {minRange > 0 &&
+        (count > 1 ? (
+          <>
+            {' '}
+            · 最小射程 <span className="num nw">{formatHp(minRange)} 格</span>（贴脸时仅前排 <span className="num nw">&lt; {formatHp(minRange)} 格</span>{' '}
+            停火，后排纵深仍可开火） <span className="contact-depth-badge">已按纵深排数区分停火</span>
+          </>
+        ) : (
+          <>
+            {' '}
+            · 最小射程 <span className="num nw">{formatHp(minRange)} 格</span>，低于最小射程时无法开火
+          </>
+        ))}
     </>
   );
 }
@@ -102,7 +110,7 @@ export function GroupContact({ value, a, b }: { value: Contact; a: Line; b: Line
                   最多 {line.maxRanged} / {line.count} 个
                 </p>
                 <p>
-                  <Reach fighter={line.fighter} />
+                  <Reach fighter={line.fighter} count={line.count} />
                 </p>
               </>
             ) : (
@@ -140,9 +148,9 @@ export function MixedContact({ value, a, b }: { value: Contact; a: Line[]; b: Li
             <Opening value={value} />
             {lines
               .filter(({ fighter }) => fighter.ranged)
-              .map(({ fighter }, i) => (
+              .map(({ fighter, count }, i) => (
                 <p key={i}>
-                  {fighter.name} · <Reach fighter={fighter} />
+                  {fighter.name} · <Reach fighter={fighter} count={count} />
                 </p>
               ))}
           </Card>

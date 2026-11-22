@@ -159,6 +159,8 @@
       "maxCharge": { "type": "number", "minimum": 0 },
       "rechargeRate": { "type": "number", "minimum": 0 },
       "rechargeDuration": { "type": "number", "minimum": 0 },
+      "totalProjectiles": { "type": "integer", "minimum": 2 },
+      "chargeMultiProjectiles": { "type": "boolean" },
       "attackDelaySeconds": {
         "type": "number",
         "minimum": 0

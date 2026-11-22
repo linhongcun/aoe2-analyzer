@@ -52,7 +52,7 @@ import { advanceUnitSimReturnState, createUnitSimReturnState, readUnitSimReturnS
 import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
-import { CastleKonnikReference, FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
+import { FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
 import './unit-detail.css';
 import './unit-detail-1283.css';
 
@@ -290,7 +290,6 @@ export default function UnitDetail() {
       </div>
 
       {relation && <FormBar {...relation} />}
-      <CastleKonnikReference unit={u} href={formHref} />
 
       <nav className="ud-jump" aria-label="本页章节">
         {JUMPS.filter(

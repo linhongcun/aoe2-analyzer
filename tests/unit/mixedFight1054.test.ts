@@ -261,15 +261,25 @@ describe('固定数据实战单位与有界性能', () => {
   it.each([
     [542, 'Japanese'],
     [36, 'Spanish'],
-  ] as const)('轻骑接近攻城器 %s 时，该方有先手但受最小射程限制', (uid, civ) => {
+  ] as const)('轻骑接近攻城器 %s 时，单门贴脸停火而群体 16 门按 4 排纵深区分停火', (uid, civ) => {
     const a = get(546, 'Japanese').F,
       b = get(uid, civ).F;
-    const result = valid(mixedFight([{ uid: 546, count: 50, fighter: a }], [{ uid, count: 16, fighter: b }]));
-    expect(result.contact.meleeAt).toBeGreaterThan(0);
-    expect(result.contact.firstStrike).toMatchObject({ side: 'b', volleys: expect.any(Number) });
-    expect(result.contact.firstStrike!.volleys).toBeGreaterThan(0);
-    expect(result.contact.firstFire).toBe('b');
-    expect(result.contact.firstStrike!.duration).toBeCloseTo((b.rng - b.contact!.minRange) / a.contact!.speed, 8);
+    const single = valid(mixedFight([{ uid: 546, count: 1, fighter: a }], [{ uid, count: 1, fighter: b }]));
+    expect(single.contact.meleeAt).toBeGreaterThan(0);
+    expect(single.contact.firstStrike).toMatchObject({ side: 'b', volleys: expect.any(Number) });
+    expect(single.contact.firstStrike!.volleys).toBeGreaterThan(0);
+    expect(single.contact.firstFire).toBe('b');
+    expect(single.contact.firstStrike!.duration).toBeCloseTo((b.rng - b.contact!.minRange) / a.contact!.speed, 8);
+
+    // 16 门按固定排容 1+3+5+7 展开为 4 排（最深排 offset = 3 × 2r = 3.0 格）
+    const group = valid(mixedFight([{ uid: 546, count: 50, fighter: a }], [{ uid, count: 16, fighter: b }]));
+    const backOffset = 3 * 2 * b.contact!.radiusX!;
+    const stopGap = Math.max(0, b.contact!.minRange - backOffset);
+    expect(group.contact.meleeAt).toBeGreaterThan(0);
+    expect(group.contact.firstStrike).toMatchObject({ side: 'b', volleys: expect.any(Number) });
+    expect(group.contact.firstStrike!.volleys).toBeGreaterThan(0);
+    expect(group.contact.firstFire).toBe('b');
+    expect(group.contact.firstStrike!.duration).toBeCloseTo((b.rng - stopGap) / a.contact!.speed, 8);
   });
 
   it('单行两种入口完全等价，交换双方对账，且输入不变', () => {
