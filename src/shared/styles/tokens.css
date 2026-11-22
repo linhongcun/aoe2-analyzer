@@ -62,6 +62,11 @@
   --color-timeline-band: #f4ebe3;
   --color-timeline-bad: #c4281c;
   --color-on-timeline-bad: #ffffff;
+  /* 首页 Hero 氛围横幅底面与渐变遮罩色阶（issue 1314） */
+  --color-hero-surface: #fbfbfd;
+  --color-hero-scrim-strong: #fbfbfdf5;
+  --color-hero-scrim-mid: #fbfbfdc2;
+  --color-hero-scrim-edge: #fbfbfd1f;
 
   /* —— 字体 —— */
   --font-sans: 'Inter', 'PingFang SC', 'HarmonyOS Sans SC', 'Noto Sans SC', 'Noto Sans CJK SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -171,6 +176,10 @@
   --color-timeline-band: #423428;
   --color-timeline-bad: #c4281c;
   --color-on-timeline-bad: #ffffff;
+  --color-hero-surface: #121214;
+  --color-hero-scrim-strong: #121214f5;
+  --color-hero-scrim-mid: #121214cc;
+  --color-hero-scrim-edge: #0c0c0e52;
   --shadow-1: 0 0 0 1px var(--color-border);
   --shadow-2: 0 0 0 1px var(--color-border);
   --shadow-3: 0 12px 40px #00000099;

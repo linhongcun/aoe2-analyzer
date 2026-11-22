@@ -34,6 +34,7 @@ describe('文明关于与反馈的共享内容', () => {
       'ISC 许可',
       'CC BY-SA',
       '未获 Microsoft 认可或赞助',
+      '首页氛围插画为本项目自制（AI 辅助生成）的装饰视觉，不属于 Microsoft 原版游戏素材。',
     ])
       expect(html).toContain(value);
   });

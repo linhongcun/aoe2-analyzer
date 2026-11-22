@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import buildings from '../../data/game/buildings.json';
 import civs from '../../data/game/civs.json';
 import techs from '../../data/game/techs.json';
@@ -50,5 +50,23 @@ describe('首页方向 B #876', () => {
     expect([101, 102, 103].map((id) => techPic.get(id))).toEqual([...HOME_AGE_PICS]);
     const buildingPic = new Map((buildings as { id: number; pic: number }[]).map((building) => [building.id, building.pic]));
     expect([109, 12, 82].map((id) => buildingPic.get(id))).toEqual([...HOME_BUILDING_PICS]);
+  });
+
+  it('#1314 首页 Hero 氛围插画 SSR 零报错且输出原生高优先级与无障碍属性', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const html = home();
+      expect(errorSpy).not.toHaveBeenCalled();
+      expect(html).toContain('class="home-mast-bg" aria-hidden="true"');
+      expect(html).toContain('class="home-mast-art"');
+      expect(html).toContain('img/atmosphere/home-hero.webp');
+      expect(html).toContain('alt=""');
+      expect(html).toContain('width="1376"');
+      expect(html).toContain('height="768"');
+      expect(html).toContain('decoding="async"');
+      expect(html).toContain('fetchpriority="high"');
+    } finally {
+      errorSpy.mockRestore();
+    }
   });
 });
