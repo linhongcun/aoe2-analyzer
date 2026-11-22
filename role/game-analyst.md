@@ -53,3 +53,56 @@
 - 具体文明阵容案例、跨文明专题与通用分析方法统一写进 [文明阵容经验与分析方法](game-strategy.md)，遵守 [怎样读与继续维护](game-strategy.md#怎样读与继续维护)。
 - 纯平台界面交互、入口可达性与反馈复现经验归属 [产品运营交接「用好工具再提需求」](product-operations.md#用好工具再提需求)，不写进本节。
 - 本节随后续分析与压测工作按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 持续积累。
+
+### 动笔前先做四项硬基线扫描，不顺着招牌标签下结论
+
+首轮复核 33 个已写文明时，有超过一半的文明漏掉了直接决定路线生死的科技短板、核心王牌或资源结构：例如马普切三级骑兵护甲与血统/畜牧/护腕/扳指全缺、法兰克重装骑马弩缺 5 项关键科技、波斯无劲弩无护腕、吴缺射手锁甲与扳指且漏掉重装黑光铠骑兵、格鲁吉亚漏掉帝王减人口科技「阿兹瑙里骑兵」、不列颠漏掉「战狼号」、撒克逊人漏看精锐扈从 80 木 35 金（零食物，与箭塔抢木却空出全部食物）、拜占庭与撒克逊人漏看兵营区域兵种瓦兰吉卫队（[#1266](https://github.com/linhongcun/aoe2-analyzer/issues/1266)、[#1267](https://github.com/linhongcun/aoe2-analyzer/issues/1267)）。
+
+原因是围绕某 1–2 个亮点单位展开讨论时，容易只查被提及单位的正面加成，忽略缺失科技、另一条帝王独特科技、新 DLC 区域兵种以及非典型造价带来的资源互补反转。以后分析任何新文明或重做文明前，固定先完成四项清点再讨论配兵：
+
+1. **缺失的帝王战斗科技**：逐项核对三大护甲、铸铁/鼓风炉、血统/畜牧、护腕/扳指/帕提亚、攻城技师/化学；
+2. **全部城堡/帝王独特科技与文明被动**：明确区分站内已建模与仅文本说明；
+3. **全部独特单位与区域兵种及其造价结构**：重点留意零食物或零黄金兵种对资源分配的改变；
+4. **同系多形态或升级档位差异**：区分普通/精锐（如神庙护卫）与切换形态（如保加利亚骑兵下马形态）。
+
+### 中英文说明与 `effects.json` 三方交叉核对，戳破错译导致的伪悬疑
+
+女真篇曾因官方中文简介把 `Fire Lancers` 译作「火枪骑兵」，长期将“火矛兵是否吃 +25% 攻速”标为未核实；同批还查出波希米亚「胡斯革新」中文说明将食物与黄金消耗写反（[#1264](https://github.com/linhongcun/aoe2-analyzer/issues/1264) / [#1271](https://github.com/linhongcun/aoe2-analyzer/pull/1271)），后续又出现软甲科技中文说明同类误译（[#1329](https://github.com/linhongcun/aoe2-analyzer/issues/1329)）。
+
+原因是只读中文文案而不回查英文原文和实际生效表，会把上游翻译错误误当成“游戏机制未核实”。以后遇到中文描述与直觉或数据冲突时，不直接标「未核实」绕过，立即三方对照：① 英文原文；② [effects.json](../data/game/effects.json) 实际生效的目标单位 ID 列表；③ 必要时核对 `.dat` 命令。实锤错译直接按数据错误模板提单修正，避免污染策略结论。
+
+### 独特科技必须实测“勾选后是否真生效”，警惕多形态 ID 与复合效果漏解码
+
+复核全部 33 文明独特科技时，发现不列颠「战狼号（`461`）」与日本「弹射器（`59`）」在 `effects.json` 中对本文明可用单位生效数为 0——根因是 `.dat` 中巨型投石机架设态（`42`）与目录打包态（`331`）分属两个 ID，构建管线未将 `42` 的科技命令映射回 `331`（[#1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293) / [#1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318)）；另查出马普切「布图马普（`1380`）」因同条效果混有团队资源标记 `res:33`，导致整个 `-15%` 费用乘数被费用引擎整项跳过（[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) / [#1320](https://github.com/linhongcun/aoe2-analyzer/pull/1320)）。
+
+原因是多形态单位（打包/架设、骑马/下马）和复合科技条目在数据管线或前端解码时最容易出现静默漏映射。以后分析含特殊机制或费用折扣的独特科技时，在模拟器或 PK 中实测勾选前后属性与费用是否按预期变化；若勾选无变化或目标单位归属异常，先查多形态 ID 映射与 `undecoded` 过滤，确认是数据或解码漏项后提单修复，切忌误判为“游戏内不生效”。
+
+### 区分领域引擎已计算与单页卡片未展示，定期清零过期「未核实」标注
+
+法兰克「王家敕令骑兵（`1496`）」与城堡 `-15%/-25%` 折扣其实早已在持续生产、训练总价与 PK 底层费用引擎中生效，只因旧版单位/建筑详情页顶部卡片只展示目录基础价，策略文档曾长期将其标成“仅文本、未核算”；同理，格鲁吉亚斯万箭塔驻军、土耳其手推炮拆石质建筑、图皮载具容量与吴「卧虎（`1081`）」额外弹数在数据更新后均已可查，旧文档却仍留着“暂不支持/未核实”（[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) / [#1320](https://github.com/linhongcun/aoe2-analyzer/pull/1320)、[#1299](https://github.com/linhongcun/aoe2-analyzer/issues/1299) / [#1319](https://github.com/linhongcun/aoe2-analyzer/pull/1319)）。
+
+原因是判断“本站是否支持”时只看了单一目录页，或工具升级后没有回清历史标注。以后确认某项折扣、容量或攻城数据是否已支持时，须跨查详情页、模拟器、PK、生产、攻城与驻军对应工具；确认已补齐后同步撤销文档和站内阵容里的过时「未核实」表述。
+
+### 建筑驻军测算锁定帝王满科技（对照含/不含射箭槽），严禁拿裸塔 `gtechs=` 下结论
+
+高丽、中国、女真、越南、撒克逊人，以及随后补查出的波希米亚、保加利亚、西西里共 8 个文明，曾先后因驻军预览链接保留空科技参数 `gtechs=` 而得出反转结论：在 DE 188329 下，帝王射箭科技与射箭槽会把大型箭塔单箭门槛从 `4.0` 推高到 `6.0` / `7.5`（斯万箭塔 `8.5`），精锐火矛兵（`4.5`）、精锐扈从（`3.5`）与火枪手不吃射箭科技，萨金特卫兵驻城楼火力更是 `0`，满科技下增箭效率大幅缩水，甚至反被满科技弓手或村民反超（[#1262](https://github.com/linhongcun/aoe2-analyzer/issues/1262) / [#1273](https://github.com/linhongcun/aoe2-analyzer/pull/1273)、[#1265](https://github.com/linhongcun/aoe2-analyzer/issues/1265) / [#1289](https://github.com/linhongcun/aoe2-analyzer/pull/1289)、[#1299](https://github.com/linhongcun/aoe2-analyzer/issues/1299) / [#1319](https://github.com/linhongcun/aoe2-analyzer/pull/1319)）。
+
+原因是 Genie 引擎同时存在“随射箭科技增长的动态驻军火力”与“固定驻军火力”，零科技裸塔会系统性高估固定火力单位的增箭比例。以后凡涉及帝王建筑驻军结论，一律使用驻军预览的「一键满科技」，同时对照**无射箭槽 / 含射箭槽**两档并核对单兵火力与单箭门槛；写入文档的复现链接必须显式携带完整 `gtechs=`。
+
+### 单位 PK 严禁拿 1v1 贴脸外推群战，反直觉结果先查模型前提与未建模提示卡
+
+旧版零碰撞全员集火模型按平方律放大数量优势，曾得出日本武士、马扎尔骠骑等资源硬换胜游侠的误导结论；切换至一维碰撞接敌与先手齐射后（[#1263](https://github.com/linhongcun/aoe2-analyzer/issues/1263) / [#1275](https://github.com/linhongcun/aoe2-analyzer/pull/1275)），马扎尔骠骑等资源打游侠、轻骑正面冲 11 射程不列颠劲弩直接反转落败，而轻骑切最小射程手推炮、重装骑射手打长戟、印加枪兵长 1 射程多排近战打冠军与游侠则反转获胜（[#1298](https://github.com/linhongcun/aoe2-analyzer/issues/1298)）。同轮压测还暴露出最小射程群体贴脸停火，以及多弹丸、充能、溅射/践踏、下马复活、拉扯风筝未计入造成的假弱或假强（[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) / [#1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321) 已修复群体停火并补齐未建模精准提示卡；战斗回放与边走边射拉扯在 [#1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294)、[#1295](https://github.com/linhongcun/aoe2-analyzer/issues/1295) 推进中）。
+
+原因是单挑接触、零碰撞集火与带占位/先手/拉扯的群战属于不同模型假设。以后评估主力野战对抗时：① 禁止用 1v1 贴脸数据推演成群远程与近战交换，必须结合等资源/混编的先手齐射与前排接敌宽度（`maxMelee`）综合判断；② 遇到反直觉结果先核对页面「未建模机制提示卡」和当前作战前提（站桩 vs 拉扯），分清“真打不过”与“引擎未建模”；③ 发现普遍且可工程化建模的模型缺口时，按模板提 BRD 推动引擎升级，不止步于口头免责。
+
+### 计算引擎大升级或游戏大补丁后，触发一次受影响旧文明定向回查
+
+两次全量复盘表明，每当站内核心引擎升级（驻军火力推导与一键满科技、碰撞接敌与先手齐射、最小射程排容修复）或底层 `.dat` 字段补齐后，既有文档中依赖旧引擎的策略结论和「未核实」标注都会成批失效（[#1265](https://github.com/linhongcun/aoe2-analyzer/issues/1265)、[#1298](https://github.com/linhongcun/aoe2-analyzer/issues/1298)、[#1299](https://github.com/linhongcun/aoe2-analyzer/issues/1299)）。
+
+以后不只往前推进未写文明，在两类节点固定触发一次定向回查：① 站内核心战斗/驻军/造价模型升级后（如 [#1295](https://github.com/linhongcun/aoe2-analyzer/issues/1295) 边走边射上线后，定向重测骑马弩、重装骑射手、征服者等高机动远程路线）；② 仓库固定数据升级至新 `DE Update` 后。
+
+### 多类问题按性质正交拆单，策略修订必须四处同源收口
+
+两轮复盘共拆出 15 个高命中率 Issue（[#1262](https://github.com/linhongcun/aoe2-analyzer/issues/1262)–[#1268](https://github.com/linhongcun/aoe2-analyzer/issues/1268)、[#1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293)–[#1300](https://github.com/linhongcun/aoe2-analyzer/issues/1300)），得以快速并行交付的关键是按性质正交切分：实锤数据/错译 Bug 单独成单（最快合入、无方案分歧）、计算引擎/页面工具升级与策略内容修订解耦、共享策略文件的修订按文明零重叠分批（每批约 6–7 个文明）。唯一留下的尾项是 `#1264`–`#1267` 并行改完正文后，顶部 33 文明汇总表漏同步 7 国且站内 JSON 残余部分旧口径（[#1300](https://github.com/linhongcun/aoe2-analyzer/issues/1300)）。
+
+以后提交涉及文明策略变更的 Issue 时，在范围与验收标准中固定要求四处同源对齐：[game-strategy.md](game-strategy.md) 顶部汇总表、文明正文、[civ-formations.json](../data/content/civ-formations.json) 与对应契约/单测；多批内容修订先合正文与数据，再统一收口格式或汇总表，降低合并冲突与漂移风险。
