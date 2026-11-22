@@ -1,6 +1,16 @@
 import type { Ref, RefObject } from 'react';
 import ShareImage from '../../../shared/ui/ShareImage';
-import { duel, groupFight, costSum, type DuelResult, type GroupResult } from '../../../domain/duel';
+import {
+  duel,
+  groupFight,
+  costSum,
+  fighterCanAttack,
+  fighterUsesAssumeHit,
+  NO_NORMAL_ATTACK_REASON,
+  unitIsNonAttackingCaster,
+  type DuelResult,
+  type GroupResult,
+} from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
@@ -49,21 +59,47 @@ export function OneVOne({
   const r = result ?? duel(A.F, B.F);
   const summary = summarizeOneVOne(A, B, r);
   const wn = summary.headline;
+  const aNoAttack = !r.ab.canAttack;
+  const bNoAttack = !r.ba.canAttack;
+  const bothNoAttack = r.outcome === 'both-no-attack' || (aNoAttack && bNoAttack);
+  const singleNoAttack = (aNoAttack || bNoAttack) && !bothNoAttack;
+  const hasCaster = unitIsNonAttackingCaster(A.u) || unitIsNonAttackingCaster(B.u);
+
+  if (bothNoAttack) {
+    return (
+      <div id="duel-res" className="posbox" data-t="duel-both-no-attack" ref={resultElRef}>
+        <h2 className="duel-win w-draw" ref={headingRef} tabIndex={-1}>
+          <Icon name={summary.icon} /> {wn}
+        </h2>
+        <p className="duel-no-atk-body">双方无法通过普通攻击分出胜负。{hasCaster ? '招降与治疗未计入。' : ''}</p>
+      </div>
+    );
+  }
+
+  const assumeHitA = fighterUsesAssumeHit(A.F);
+  const assumeHitB = fighterUsesAssumeHit(B.F);
   const fmtTime = (ow: typeof r.ab) => (ow.time === null ? '—' : r1(ow.time) + 's');
   const fmtDps = (ow: typeof r.ab) => (ow.dps === null || !Number.isFinite(ow.dps) ? '—' : (Math.round(ow.dps * 100) / 100).toString());
-  const rows: [string, string, string, string?][] = [
+  const rows: [string, string, string][] = [
     ['每击伤害', r1(r.ab.dmg), r1(r.ba.dmg)],
     ['期望每击（含命中率）', r1(r.ab.expDmg), r1(r.ba.expDmg)],
-    ['击杀所需次数', String(r.ab.hits), String(r.ba.hits)],
+    ['击杀所需次数', Number.isFinite(r.ab.hits) ? String(r.ab.hits) : '—', Number.isFinite(r.ba.hits) ? String(r.ba.hits) : '—'],
     ['击杀用时', fmtTime(r.ab), fmtTime(r.ba)],
     ['DPS', fmtDps(r.ab), fmtDps(r.ba)],
   ];
   const dpsReason = r.ab.dpsReason || r.ba.dpsReason;
+  const noSide = aNoAttack ? 'A' : 'B';
+  const noUnit = aNoAttack ? A.u : B.u;
+  const foeUnit = aNoAttack ? B.u : A.u;
+  const shareNote =
+    assumeHitA || assumeHitB
+      ? '忽略射程拉扯与操作；目录准确度 0% 单位按每击命中主目标估算；完整文明和科技参数见链接。'
+      : '忽略射程拉扯与操作；完整文明和科技参数见链接。';
   return (
     <div id="duel-res" className="posbox" ref={resultElRef}>
       <h2 className={'duel-win w-' + summary.winner} ref={headingRef} tabIndex={-1}>
         <Icon name={summary.icon} /> {wn}
-        {r.winner !== 'draw' && (
+        {r.outcome === 'win' && r.winner !== 'draw' && (
           <small className="note">
             {' '}
             · 用时 <span className="num nw">{r1(r.duration)}s</span> · 剩余生命{' '}
@@ -73,10 +109,22 @@ export function OneVOne({
           </small>
         )}
       </h2>
+      {singleNoAttack && (
+        <aside className="pk-callout is-info" data-t="pk-no-attack" role="region" aria-label="无普通攻击说明">
+          <p className="pk-callout-title">
+            <strong>
+              {noSide} 方{noUnit.zh}没有普通攻击
+            </strong>
+          </p>
+          <p className="pk-callout-body">
+            {foeUnit.zh}不会受{noUnit.zh}的普通攻击伤害。{unitIsNonAttackingCaster(noUnit) ? '招降与治疗未计入。' : ''}
+          </p>
+        </aside>
+      )}
       <DuelUnmodeledNotes
         entries={[
-          { side: 'a', badge: 'A', unit: A.u, civ: A.civ, age: A.age, selectedTechs: selectedTechsOf(A) },
-          { side: 'b', badge: 'B', unit: B.u, civ: B.civ, age: B.age, selectedTechs: selectedTechsOf(B) },
+          { side: 'a', badge: 'A', unit: A.u, civ: A.civ, age: A.age, selectedTechs: selectedTechsOf(A), assumeHit: assumeHitA },
+          { side: 'b', badge: 'B', unit: B.u, civ: B.civ, age: B.age, selectedTechs: selectedTechsOf(B), assumeHit: assumeHitB },
         ]}
         vgSides={[
           { rowKey: 'a', k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: r.duration },
@@ -85,12 +133,19 @@ export function OneVOne({
       />
       <ShareImage
         title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
-        stats={[
-          ['模拟用时', `${r1(r.duration)} 秒`],
-          ['剩余生命', formatHp(r.remaining)],
-          ['双方数量', '1 / 1'],
-        ]}
-        note="忽略射程拉扯与操作；完整文明和科技参数见链接。"
+        stats={
+          r.outcome === 'no-kill'
+            ? [
+                ['模拟结果', wn],
+                ['双方数量', '1 / 1'],
+              ]
+            : [
+                ['模拟用时', `${r1(r.duration)} 秒`],
+                ['剩余生命', formatHp(r.remaining)],
+                ['双方数量', '1 / 1'],
+              ]
+        }
+        note={shareNote}
       />
       <CounterSummary a={A.F} b={B.F} />
       <table className="stat duel-tab">
@@ -102,11 +157,27 @@ export function OneVOne({
           </tr>
         </thead>
         <tbody>
-          {rows.map(([n, a, b]) => (
+          {rows.map(([n, a, b], idx) => (
             <tr key={n}>
               <td>{n}</td>
-              <td>{a}</td>
-              <td>{b}</td>
+              {aNoAttack ? (
+                idx === 0 ? (
+                  <td rowSpan={rows.length} className="duel-no-atk-cell" data-t="duel-no-attack-a">
+                    {NO_NORMAL_ATTACK_REASON}
+                  </td>
+                ) : null
+              ) : (
+                <td className="num nw">{a}</td>
+              )}
+              {bNoAttack ? (
+                idx === 0 ? (
+                  <td rowSpan={rows.length} className="duel-no-atk-cell" data-t="duel-no-attack-b">
+                    {NO_NORMAL_ATTACK_REASON}
+                  </td>
+                ) : null
+              ) : (
+                <td className="num nw">{b}</td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -118,8 +189,8 @@ export function OneVOne({
       )}
       <BattleReplay frames={oneReplay(A.F, B.F, r)} duration={r.duration} a={A.u} b={B.u} maxA={A.F.hp} maxB={B.F.hp} unit="生命" />
       <OneTimeline A={A} B={B} result={r} />
-      {(A.F.ranged || B.F.ranged) && (
-        <p className="note">
+      {((fighterCanAttack(A.F) && A.F.ranged) || (fighterCanAttack(B.F) && B.F.ranged)) && (
+        <p className="note" data-t="duel-ranged-note">
           <Icon name="triangle-alert" className="ic warn" /> 1v1 基础模式忽略射程与风筝：远程单位实战中可在接敌前先手输出（射程 {r1(A.S.rng)} / {r1(B.S.rng)}
           ）。
         </p>
@@ -178,8 +249,8 @@ export function Group({
       <DuelUnmodeledNotes
         group
         entries={[
-          { side: 'a', badge: 'A', unit: A.u, civ: A.civ, age: A.age, selectedTechs: selectedTechsOf(A) },
-          { side: 'b', badge: 'B', unit: B.u, civ: B.civ, age: B.age, selectedTechs: selectedTechsOf(B) },
+          { side: 'a', badge: 'A', unit: A.u, civ: A.civ, age: A.age, selectedTechs: selectedTechsOf(A), assumeHit: fighterUsesAssumeHit(A.F) },
+          { side: 'b', badge: 'B', unit: B.u, civ: B.civ, age: B.age, selectedTechs: selectedTechsOf(B), assumeHit: fighterUsesAssumeHit(B.F) },
         ]}
         vgSides={[
           { rowKey: 'a', k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: g.contact.a[0]!.meleeUnitSeconds },
@@ -194,7 +265,11 @@ export function Group({
           ['A 存活', g.aAlive],
           ['B 存活', g.bAlive],
         ]}
-        note="一维接敌与占位近似，结果用于比较方案。"
+        note={
+          fighterUsesAssumeHit(A.F) || fighterUsesAssumeHit(B.F)
+            ? '一维接敌与占位近似；目录准确度 0% 单位按每击命中主目标估算，结果用于比较方案。'
+            : '一维接敌与占位近似，结果用于比较方案。'
+        }
       />
       {bud > 0 && (
         <p className="note">

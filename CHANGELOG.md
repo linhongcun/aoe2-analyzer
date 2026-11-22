@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.28] - 2026-11-23
+
+### 更新说明
+
+修正单位 PK 中目录准确度为 0% 的特殊远程单位被误算为零伤害，以及无普通攻击单位在单挑中产生虚假伤害的问题：火艨艟、喷火船、快速喷火船、龙舟、风琴炮、精锐风琴炮与掷弹兵在 6 种 PK 模式（1v1、N vs M、等资源、等采集时间、临界点、混编）下统一按主弹每击命中主目标估算输出上限，并在选人栏、结果区、伤害拆解与单位详情页同步说明口径（与额外弹丸、波及伤害提醒共存时清晰分条呈现）；僧侣、传教士、渔船、运输船、贸易船、攻城塔与贸易车在 1v1 中不再结算 1 点最低伤害，单方无普通攻击时对手保持满血，双方均无普通攻击时直接提示无法交战。
+
+### 修复
+
+- #1322：在 `src/domain/duelFighter.ts` 引入 `accuracyMode`（`catalog` / `assume-hit`）与 `canAttack` 攻击资格判定，统一 7 个 `acc === 0 && rng > 1` 特殊远程单位在 6 种 PK 模式下的主弹期望伤害口径，并取消 7 个无普通攻击单位的虚假最低伤害；在 `src/domain/duel.ts`、`contactFight.ts`、`battleReplay.ts`、`damageBreakdown.ts`、`accuracyBoundary.ts` 与 `src/features/duel/logic/duelSummary.ts` 补齐 `both-no-attack` / `no-kill` 结算与 `#1294` 单挑降级契约；同步更新单位 PK 选人/结果/拆解/时间轴/临界点/混编组件、样式与单位详情准确度说明（`AccuracyBoundaryNote.tsx`）；新增 `tests/unit/duelZeroDamageMonk1322.test.ts` 与 `tests/e2e/duelZeroDamageMonk1322.spec.ts`（登记至 `scripts/ci-browser-weights.json`），适配 `tests/unit/upgrades205.test.ts` 与 `tests/unit/champi657Cases.ts`。
+
 ## [0.99.27] - 2026-11-23
 
 ### 更新说明

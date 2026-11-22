@@ -35,6 +35,15 @@ export function catalogAccuracyFeedsExpectedHit(unit: { rng: number }): boolean 
   return unit.rng > 1;
 }
 
+/**
+ * issue 1322：有普通攻击、基础射程 > 1 且目录准确度为 0% 的特殊远程单位，
+ * PK 中不直接乘 0%，改为按每次主弹命中主目标估算（输出上限）。
+ */
+export function catalogAccuracyAssumesHit(unit: { rng: number; acc: number; atks?: readonly (readonly [string, number])[] }): boolean {
+  if (!(unit.rng > 1) || unit.acc !== 0) return false;
+  return unit.atks ? unit.atks.some(([, n]) => n > 0) : true;
+}
+
 export function ballisticsBoundary(techs: readonly CatalogTech[], dat: DatFile = DAT): BallisticsBoundary {
   const tech = techs.find((row) => row.id === BALLISTICS_TECH_ID);
   const entry = Object.values(dat.techs).find((row) => row.id === BALLISTICS_TECH_ID);

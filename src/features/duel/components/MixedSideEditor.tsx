@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
+import { fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -16,6 +17,7 @@ import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
+import '../unmodeled-notes.css';
 
 export function MixedSideEditor({
   side,
@@ -315,18 +317,49 @@ export function MixedSideEditor({
                 {r ? (
                   <>
                     <dl className="mix-stats">
-                      {[
-                        ['生命值', formatHp(r.F.hp)],
-                        ['攻击力', `${formatHp(r.S.atk)}（${r.F.ranged ? '穿刺' : '近战'}）`],
-                        ['护甲（近战 / 穿刺）', `${formatHp(r.S.ma)} / ${formatHp(r.S.pa)}`],
-                        ['攻击间隔', `${formatHp(r.F.rof)} 游戏秒`],
-                        ['命中率', `${formatHp(r.F.acc * 100)}%`],
-                      ].map(([name, value]) => (
-                        <div key={name}>
-                          <dt>{name}</dt>
-                          <dd className="num nw">{value}</dd>
+                      <div>
+                        <dt>生命值</dt>
+                        <dd className="num nw">{formatHp(r.F.hp)}</dd>
+                      </div>
+                      <div>
+                        <dt>攻击力</dt>
+                        <dd className={fighterCanAttack(r.F) ? 'num nw' : undefined}>
+                          {fighterCanAttack(r.F) ? `${formatHp(r.S.atk)}（${r.F.ranged ? '穿刺' : '近战'}）` : NO_NORMAL_ATTACK_REASON}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>护甲（近战 / 穿刺）</dt>
+                        <dd className="num nw">{`${formatHp(r.S.ma)} / ${formatHp(r.S.pa)}`}</dd>
+                      </div>
+                      <div>
+                        <dt>攻击间隔</dt>
+                        <dd className={fighterCanAttack(r.F) && r.F.rof > 0 ? 'num nw' : undefined}>
+                          {!fighterCanAttack(r.F) ? NO_NORMAL_ATTACK_REASON : r.F.rof > 0 ? `${formatHp(r.F.rof)} 游戏秒` : '—'}
+                        </dd>
+                      </div>
+                      {!fighterCanAttack(r.F) ? (
+                        <div>
+                          <dt>本场命中口径</dt>
+                          <dd>{NO_NORMAL_ATTACK_REASON}</dd>
                         </div>
-                      ))}
+                      ) : fighterUsesAssumeHit(r.F) ? (
+                        <div className="mix-acc-row" data-t={`mix-assume-hit-stat-${side}-${i}`}>
+                          <dt>
+                            <span>本场命中口径</span>
+                            <small className="note mix-acc-sub">
+                              目录准确度 <span className="num nw">0%</span>
+                            </small>
+                          </dt>
+                          <dd>
+                            <span className="pk-acc-pill nw">按每击命中估算</span>
+                          </dd>
+                        </div>
+                      ) : (
+                        <div>
+                          <dt>命中率</dt>
+                          <dd className="num nw">{`${formatHp(r.F.acc * 100)}%`}</dd>
+                        </div>
+                      )}
                     </dl>
                     {(
                       [
@@ -374,7 +407,10 @@ export function MixedSideEditor({
                 ) : (
                   <p className="note">请先修正本行单位与共享上下文，暂不展示有效属性。</p>
                 )}
-                <p className="note">以本行接敌距离判断出手资格。前排近战受占位限制，后排远程在射程内可以出手。战斗沿用本站伤害类别、护甲与远程命中期望公式。</p>
+                <p className="note">
+                  以本行接敌距离判断出手资格。前排近战受占位限制，后排远程在射程内可以出手。战斗沿用本站伤害类别、护甲与常规远程命中期望公式（目录准确度为{' '}
+                  <span className="num nw">0%</span> 的特殊远程攻击按每击命中主目标估算）。
+                </p>
                 {!!view.errors.length && <p className="mix-field-error">本方配置尚有错误，以上仅供修正时核对；不可据此生成战果。</p>}
               </details>
             </div>

@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { militaryTechAge } from '../../../domain/availabilityAge';
-import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
+import { DPS_UNAVAILABLE_REASON, fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { applicableUnmodeledTechIds } from '../../../domain/duelUnmodeled';
 import { formatHp } from '../../../domain/hpFormat';
 import { baseUnit, isElite } from '../../../domain/family';
@@ -33,6 +33,7 @@ import type { ProductionContext } from '../../../domain/production';
 import { encodeTrainTotal } from '../../../domain/trainTotal';
 import { productionTransferState } from '../../../shared/utils/productionTransferState';
 import '../../../shared/ui/productionTransfer.css';
+import '../unmodeled-notes.css';
 
 const AGES = [1, 2, 3, 4] as const;
 
@@ -220,18 +221,24 @@ export function Side({
           [
             ['hp', '生命值', <span className="num nw">{formatHp(side.F.hp)}</span>],
             [
-              u.rng > 1 ? 'patk' : 'atk',
+              fighterCanAttack(side.F) && u.rng > 1 ? 'patk' : 'atk',
               '攻击',
-              <>
-                <span className="num nw">{r1(side.S.atk)}</span>
-                {side.F.ranged ? '（穿刺）' : '（近战）'}
-              </>,
+              fighterCanAttack(side.F) ? (
+                <>
+                  <span className="num nw">{r1(side.S.atk)}</span>
+                  {side.F.ranged ? '（穿刺）' : '（近战）'}
+                </>
+              ) : (
+                <span data-t={`pk-no-atk-${k}`}>{NO_NORMAL_ATTACK_REASON}</span>
+              ),
             ],
             ['marm', '护甲', <span className="num nw">{`${r1(side.S.ma)} / ${r1(side.S.pa)}`}</span>],
             [
               'rof',
               '攻击间隔',
-              side.S.rof > 0 ? (
+              !fighterCanAttack(side.F) ? (
+                <span>{NO_NORMAL_ATTACK_REASON}</span>
+              ) : side.S.rof > 0 ? (
                 <span className="num nw">{`${Math.round(side.S.rof * 100) / 100}s`}</span>
               ) : (
                 <>
@@ -250,8 +257,21 @@ export function Side({
                 <RangeB u={side.S} compact />
               </>,
             ],
-            ['', '命中率', <span className="num nw">{`${Math.round(side.F.acc * 100)}%`}</span>],
-          ] as const
+            !fighterCanAttack(side.F)
+              ? ['', '本场命中口径', <span data-t={`pk-no-atk-acc-${k}`}>{NO_NORMAL_ATTACK_REASON}</span>]
+              : fighterUsesAssumeHit(side.F)
+                ? [
+                    '',
+                    '本场命中口径',
+                    <span className="duel-acc-assume" data-t={`pk-assume-hit-stat-${k}`}>
+                      <span className="pk-acc-pill nw">按每击命中估算</span>
+                      <small className="note duel-acc-sub">
+                        目录准确度 <span className="num nw">0%</span>
+                      </small>
+                    </span>,
+                  ]
+                : (['', '命中率', <span className="num nw">{`${Math.round(side.F.acc * 100)}%`}</span>] as const),
+          ] as readonly (readonly [string, string, ReactNode])[]
         ).map(([ic, n, v]) => (
           <div className="duel-stat-cell" key={n}>
             <dt>

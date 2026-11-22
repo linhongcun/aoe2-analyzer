@@ -19,8 +19,24 @@ export interface DuelSummary {
   metrics: DuelSummaryMetric[];
 }
 
-/** issue 1279：1v1 胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用。 */
+/** issue 1279 / issue 1322：1v1 胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用。 */
 export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult): DuelSummary {
+  if (r.outcome === 'both-no-attack' || (!r.ab.canAttack && !r.ba.canAttack)) {
+    return {
+      winner: 'draw',
+      icon: 'info',
+      headline: '双方均无普通攻击',
+      metrics: [{ prefix: '无法通过普通攻击分出胜负', value: '' }],
+    };
+  }
+  if (r.outcome === 'no-kill') {
+    return {
+      winner: 'draw',
+      icon: 'info',
+      headline: '暂无法分出胜负',
+      metrics: [],
+    };
+  }
   const winnerSide = r.winner === 'a' ? a : b;
   const headline = r.winner === 'draw' ? '平局（同时击杀）' : `${r.winner === 'a' ? 'A' : 'B'} · ${winnerSide.u.zh} 获胜`;
   const metrics: DuelSummaryMetric[] =

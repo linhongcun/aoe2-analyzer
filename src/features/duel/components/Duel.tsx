@@ -474,7 +474,8 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
             {damageFormula}
           </span>
-          （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。远程按命中率取期望伤害。
+          （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。常规远程按命中率取期望伤害。目录准确度为 <span className="num nw">0%</span>{' '}
+          的特殊远程攻击按每击命中主目标估算。
           {mode === '1' ? (
             <>
               双方 <span className="num nw">t=0</span> 同时出手；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、

@@ -8,30 +8,48 @@
  */
 import type { Cost } from './types';
 import { hitCount } from './damageCore';
-import { damagePerHit, expectedHit, type Fighter } from './duelFighter';
+import { damagePerHit, expectedHit, fighterCanAttack, type Fighter } from './duelFighter';
 import { contactFight, FIGHT_TIME, type ContactSummary, type FightEnd, type Timeline } from './contactFight';
 
-export { damageByClass, damagePerHit, expectedHit, fighterFrom, type Fighter } from './duelFighter';
+export {
+  damageByClass,
+  damagePerHit,
+  expectedHit,
+  fighterCanAttack,
+  fighterFrom,
+  fighterUsesAssumeHit,
+  unitHasNormalAttack,
+  unitIsNonAttackingCaster,
+  type Fighter,
+} from './duelFighter';
 
 export interface OneWay {
+  /** 攻击方是否具备普通攻击能力 */
+  canAttack: boolean;
   dmg: number;
   expDmg: number;
   hits: number;
-  /** 击杀耗时（秒）：首击在 t=0，此后每 rof 一次；rof≤0 时为 null */
+  /** 击杀耗时（秒）：首击在 t=0，此后每 rof 一次；无普通攻击或 rof≤0 时为 null */
   time: number | null;
-  /** 每秒伤害；rof≤0（爆炸单位等）时为 null，禁止 Infinity */
+  /** 每秒伤害；无普通攻击或 rof≤0（爆炸单位等）时为 null，禁止 Infinity */
   dps: number | null;
-  /** dps 无法计算时的原因文案 */
+  /** dps 无法计算时的原因文案（仅自爆等有普通攻击但无攻击间隔时设置） */
   dpsReason?: string;
 }
 export const DPS_UNAVAILABLE_REASON = '爆炸单位，无攻击间隔';
+export const NO_NORMAL_ATTACK_REASON = '无普通攻击';
+
 export function oneWay(a: Fighter, d: Fighter): OneWay {
+  if (!fighterCanAttack(a)) {
+    return { canAttack: false, dmg: 0, expDmg: 0, hits: Number.POSITIVE_INFINITY, time: null, dps: null };
+  }
   const dmg = damagePerHit(a, d),
     expDmg = expectedHit(a, d);
   const hits = hitCount(d.hp, expDmg);
   if (!(a.rof > 0)) {
     // 自爆等无攻击间隔：可算单次伤害，但 DPS/持续击杀时间无意义
     return {
+      canAttack: true,
       dmg,
       expDmg,
       hits: Number.isFinite(hits) ? hits : 0,
@@ -41,14 +59,18 @@ export function oneWay(a: Fighter, d: Fighter): OneWay {
       dpsReason: DPS_UNAVAILABLE_REASON,
     };
   }
-  return { dmg, expDmg, hits, time: (hits - 1) * a.rof, dps: expDmg / a.rof };
+  return { canAttack: true, dmg, expDmg, hits, time: (hits - 1) * a.rof, dps: expDmg / a.rof };
 }
+
+export type DuelOutcome = 'win' | 'draw' | 'both-no-attack' | 'no-kill';
 
 export interface DuelResult {
   ab: OneWay;
   ba: OneWay;
-  /** 'a' | 'b' | 'draw'（同时击杀） */
+  /** 'a' | 'b' | 'draw'（同时击杀或无法分出胜负；细分子状态见 outcome） */
   winner: 'a' | 'b' | 'draw';
+  /** 1v1 结算状态：win / draw（同时击杀）/ both-no-attack / no-kill（双方均无法完成击杀） */
+  outcome: DuelOutcome;
   /** 胜者剩余生命 */
   remaining: number;
   /** 战斗时长 */
@@ -58,18 +80,19 @@ export interface DuelResult {
 export function duel(a: Fighter, b: Fighter): DuelResult {
   const ab = oneWay(a, b),
     ba = oneWay(b, a);
+  if (!ab.canAttack && !ba.canAttack) return { ab, ba, winner: 'draw', outcome: 'both-no-attack', remaining: 0, duration: 0 };
   // 判定胜负时，单发即可击杀的自爆单位视为 0 时刻击杀（显示仍为「—」）
-  const tOf = (o: OneWay) => o.time ?? (o.dpsReason && o.hits === 1 ? 0 : Number.POSITIVE_INFINITY);
+  const tOf = (o: OneWay) => (o.canAttack ? (o.time ?? (o.dpsReason && o.hits === 1 ? 0 : Number.POSITIVE_INFINITY)) : Number.POSITIVE_INFINITY);
   const tA = tOf(ab),
     tB = tOf(ba);
-  if (!Number.isFinite(tA) && !Number.isFinite(tB)) return { ab, ba, winner: 'draw', remaining: 0, duration: 0 };
-  if (Math.abs(tA - tB) < 1e-9) return { ab, ba, winner: 'draw', remaining: 0, duration: Number.isFinite(tA) ? tA : 0 };
+  if (!Number.isFinite(tA) && !Number.isFinite(tB)) return { ab, ba, winner: 'draw', outcome: 'no-kill', remaining: 0, duration: 0 };
+  if (Math.abs(tA - tB) < 1e-9) return { ab, ba, winner: 'draw', outcome: 'draw', remaining: 0, duration: tA };
   const aWins = tA < tB;
   const [w, l, T] = aWins ? [a, ba, tA] : [b, ab, tB];
   const foeRof = aWins ? b.rof : a.rof;
-  const hitsTaken = foeRof > 0 ? Math.floor(T / foeRof - 1e-9) + 1 : l.hits > 0 ? 1 : 0;
+  const hitsTaken = !l.canAttack ? 0 : foeRof > 0 ? Math.floor(T / foeRof - 1e-9) + 1 : l.hits > 0 ? 1 : 0;
   const remaining = Math.max(0, w.hp - Math.min(hitsTaken, l.hits) * l.expDmg);
-  return { ab, ba, winner: aWins ? 'a' : 'b', remaining: Math.round(remaining * 10) / 10, duration: T };
+  return { ab, ba, winner: aWins ? 'a' : 'b', outcome: 'win', remaining: Math.round(remaining * 10) / 10, duration: T };
 }
 
 export type GroupResult =

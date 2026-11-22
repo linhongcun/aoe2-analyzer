@@ -16,12 +16,13 @@ export function OneTimeline({ A, B, result }: { A: Resolved; B: Resolved; result
           <div key={k} className={`tl-row tl-${k}`}>
             <span className="tl-l">{k.toUpperCase()}</span>
             <div className="tl-track">
-              <div className="tl-fill" style={{ width: `${(Math.min(w.time ?? result.duration, result.duration) / T) * 100}%` }} />
-              {s.F.rof > 0 &&
+              <div className="tl-fill" style={{ width: `${!w.canAttack ? 0 : (Math.min(w.time ?? result.duration, result.duration) / T) * 100}%` }} />
+              {w.canAttack &&
+                s.F.rof > 0 &&
                 Array.from({ length: Math.min(w.hits, 60) }, (_, i) => i * s.F.rof)
                   .filter((t) => t <= result.duration + 1e-9)
                   .map((t, i) => <i key={i} className="tl-hit" style={{ left: `${(t / T) * 100}%` }} />)}
-              {w.time !== null && w.time <= result.duration + 1e-9 && (
+              {w.canAttack && w.time !== null && w.time <= result.duration + 1e-9 && (
                 <b className="tl-kill" style={{ left: `${(w.time / T) * 100}%` }} title={`击杀 ${r1(w.time)}s`} />
               )}
             </div>
