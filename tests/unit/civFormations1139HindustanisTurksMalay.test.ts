@@ -5,6 +5,7 @@ import { DATA_PATCH } from '../../src/data/sources';
 import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
 import { DAT } from '../../src/domain/datEffects';
+import { techAvailable, unitAvailable } from '../../src/domain/unitAvailability';
 import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
@@ -91,6 +92,60 @@ describe('#1174 印度火铳', () => {
 });
 
 describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
+  it('#1267 印度斯坦保留条件帝王骆驼，古拉姆只供有城堡产能时评估', async () => {
+    const name = 'Hindustanis';
+    const { core, trees } = await makeCatalog();
+    const entry = route(name, 'hindustani-handcannon-hussar');
+    const view = project(entry, name, core, trees);
+    if (view.status !== 'current') throw new Error(view.status);
+    expect(unitAvailable({ core, trees }, name, 359, 4)).toBe(false);
+    expect(techAvailable({ core, trees }, name, 77, 4)).toBe(false);
+    expect(view.route.limitation).toContain('兵营缺长戟兵，铁匠铺缺步兵钢甲');
+    expect(view.adjustments[0]?.text).toContain('黄金与升级投入可承受时，评估用帝王骆驼兵承担反骑');
+    const ghulam = view.supplements.find(({ entities }) => entities.some(({ entity }) => entity.id === 1747));
+    expect(ghulam?.condition).toContain('已有城堡产能、能负担升级且能接近弓群');
+    expect(ghulam?.entities.map(({ entity, age }) => [entity.id, age])).toEqual([
+      [1747, 3],
+      [1749, 4],
+    ]);
+    expect(view.required.map(({ entity }) => entity.id)).toEqual([5, 441, 36]);
+  });
+
+  it('#1267 土耳其的掷矛上限和对手的长戟护卫分开', async () => {
+    const name = 'Turks';
+    const resources = await makeCatalog();
+    const entry = route(name, 'turks-hussar-handcannon');
+    expect(unitAvailable(resources, name, 7, 2)).toBe(true);
+    expect([6, 358, 359].map((id) => unitAvailable(resources, name, id, 4))).toEqual([false, false, false]);
+    expect(entry.limitation).toContain('己方靶场可训练封建掷矛手，缺精锐掷矛手升级');
+    expect(entry.adjustments.find(({ when }) => when === '长戟＋弓手或掷矛')?.text).toContain('火枪先清长戟');
+    expect(entry.adjustments.find(({ when }) => when === '强弓成群')?.text).toContain('敌方护卫和已有投入');
+  });
+
+  it('#1267 马来爪刀形态共用半人口与有金条件，免金双手剑士仍需强征兵役', async () => {
+    const name = 'Malay';
+    const { core, trees } = await makeCatalog();
+    const entry = route(name, 'malay-battle-elephant-progression');
+    const view = project(entry, name, core, trees);
+    if (view.status !== 'current') throw new Error(view.status);
+    const karambit = view.supplements.find(({ entities }) => entities.some(({ entity }) => entity.id === 1123));
+    expect(karambit?.condition).toContain('人口紧张但仍有黄金和城堡产能');
+    expect(karambit?.condition).toContain('半个人口，每名需 25 食物、15 黄金');
+    expect(karambit?.entities.map(({ entity, age }) => [entity.id, age])).toEqual([
+      [1123, 3],
+      [1125, 4],
+    ]);
+    for (const id of [1123, 1125]) {
+      expect(core.unitById[id]?.cost).toEqual({ Food: 25, Gold: 15 });
+      expect(core.unitById[id]?.desc).toContain('只占用半个人口');
+    }
+    expect(view.required.map(({ entity }) => entity.id)).toEqual([1132, 1134]);
+    expect(view.route.limitation).toContain('长戟等反骑护卫阻断接近时，先停推');
+    const swords = route(name, 'malay-two-handed-swordsman-sustain');
+    expect(swords.condition).toContain('黄金不足并完成强征兵役');
+    expect(swords.prerequisites.map(({ id }) => id)).toEqual([625]);
+  });
+
   it('保留路线身份、choice 与固定来源字面值', () => {
     for (const [name, id, sourceLines] of [
       ['Hindustanis', 'hindustani-handcannon-hussar', lines['hindustani-handcannon-hussar']],
