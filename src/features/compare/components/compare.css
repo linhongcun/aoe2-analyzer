@@ -97,6 +97,7 @@
 
 .compare-basis .num,
 .compare-score.num,
+#compare-facts .num,
 #cpos .num {
   font-family: var(--font-num);
   font-variant-numeric: tabular-nums;
@@ -208,11 +209,68 @@
   color: var(--color-muted);
 }
 
-.compare-vs {
+.compare-swap {
+  align-self: center;
   flex: none;
-  padding-bottom: 12px;
-  color: var(--color-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.compare-swap:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  background: var(--color-surface-2);
+}
+
+.compare-swap:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+.compare-swap:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+}
+
+.compare-fact-cell {
+  display: grid;
+  gap: 2px;
+}
+
+.compare-fact-main {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.compare-fact-en {
+  display: block;
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.compare-fact-desc {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-2);
+  line-height: 1.45;
 }
 
 #compare .cp-trigger {
@@ -397,7 +455,7 @@
 
 @media (max-width: 600px) {
   .compare-field {
-    padding: var(--space-2);
+    padding: 6px;
   }
 
   .compare-facts {
@@ -410,19 +468,39 @@
 
   .compare-pickers {
     flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .compare-swap {
+    width: 44px;
+    padding: 0;
+  }
+
+  .compare-swap-label {
+    display: none;
   }
 
   .compare-field {
     flex: 1 1 0;
   }
 
-  #compare .civpick,
-  #compare .cp-trigger {
+  #compare .civpick {
+    width: 100%;
+    min-width: 0;
     max-width: 100%;
   }
 
   #compare .cp-trigger {
+    max-width: 100%;
     width: 100%;
+    padding: 6px 8px;
+    gap: 6px;
+    min-height: 44px;
+  }
+
+  #compare .cp-trigger .ico,
+  #compare .cp-trigger .ic {
+    flex-shrink: 0;
   }
 
   #compare .cp-name {

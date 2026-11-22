@@ -9,6 +9,7 @@ import type {
   FormationView,
 } from '../../../domain/civFormations';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
+import type { SharedFormationClause } from '../../../domain/formationDedup';
 import { RESOURCE_IDS } from '../../../domain/resourceValue';
 import type { Cost } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
@@ -101,6 +102,23 @@ export function FormationFold({ id, label, closeLabel, children }: { id: string;
       </summary>
       <div className="formation-fold-body">{children}</div>
     </details>
+  );
+}
+
+export function SharedFormationNotice({ items }: { items: readonly SharedFormationClause[] }) {
+  if (!items.length) return null;
+  return (
+    <aside className="civ-formations-shared" aria-label="共同前提与适用限制">
+      <p className="civ-formations-shared-title">共同前提与适用限制（由多条路线相同限制自动汇总，以下路线卡片内不再重复）</p>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {!item.allRoutes && <span className="civ-formations-shared-scope">仅适用「{item.routeTitles.join('」「')}」：</span>}
+            <FormationText text={item.text} />
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 }
 

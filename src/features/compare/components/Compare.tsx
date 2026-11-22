@@ -5,11 +5,13 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink } from '../../../shared/ui/DetailBlocks';
 import { civByEn } from '../../../data';
 import { RATING_BASIS, RATING_FILE_VERIFIED_AT } from '../../../data/ratingBasis';
-import { resolveCompareQuery, selectCompareCivilization } from '../../../domain/compare';
+import { resolveCompareQuery, selectCompareCivilization, swapCompareCivilizations } from '../../../domain/compare';
+import { parseCompareFact } from '../../../domain/compareFactFormat';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { PAGES } from '../../../shared/nav/pageRegistry';
 import { CivIcon } from '../../../shared/ui/art';
+import { Icon } from '../../../shared/ui/Icon';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
@@ -118,6 +120,38 @@ export function CompareRatingDetail() {
   );
 }
 
+const FACT_NUM_RE = /([+＋−-]?\d+(?:\.\d+)?(?:\s*(?:%|生命值|生命|射程|近甲|穿甲|护甲|伤害|格|名|座|年|秒|分钟|点|倍|次|个|只|条|辆|枚|支|根|件|HP))?)/g;
+
+function FactNumberText({ text }: { text: string }) {
+  return text.split(FACT_NUM_RE).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
+function FactCell({ raw }: { raw: string }) {
+  const { main, en, desc } = parseCompareFact(raw);
+  if (!en && !desc) return <FactNumberText text={main} />;
+  return (
+    <div className="compare-fact-cell">
+      <span className="compare-fact-main">
+        <FactNumberText text={main} />
+      </span>
+      {en && <span className="compare-fact-en">{en}</span>}
+      {desc && (
+        <span className="compare-fact-desc">
+          <FactNumberText text={desc} />
+        </span>
+      )}
+    </div>
+  );
+}
+
 function scoreClass(own: number, other: number) {
   return `compare-score num nw${own > other ? ' compare-higher' : ''}`;
 }
@@ -141,6 +175,10 @@ export default function Compare() {
     const next = selectCompareCivilization(query, side, civ);
     if (next !== null) navigate({ pathname: '/compare', search: next });
   };
+  const swapCivilizations = () => {
+    const next = swapCompareCivilizations(query);
+    if (next !== null) navigate({ pathname: '/compare', search: next });
+  };
   const teamSearch = encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]));
   return (
     <section id="compare" className="pane">
@@ -153,7 +191,17 @@ export default function Compare() {
             </span>
             <CivPicker id="ca" label="文明 A" value={a.en} onChange={(en) => selectCivilization('a', en)} />
           </div>
-          <span className="compare-vs">VS</span>
+          <button
+            type="button"
+            className="compare-swap"
+            aria-label="互换 A、B 两个对比文明"
+            title={a.en === b.en ? 'A、B 文明相同时无需互换' : '互换 A、B 两个对比文明'}
+            disabled={a.en === b.en}
+            onClick={swapCivilizations}
+          >
+            <Icon name="arrow-left-right" />
+            <span className="compare-swap-label">互换</span>
+          </button>
           <div className="compare-field">
             <span className="compare-field-label" aria-hidden="true">
               文明 B
@@ -191,8 +239,12 @@ export default function Compare() {
             {ROWS.map(([label, key]) => (
               <tr key={key}>
                 <td>{label}</td>
-                <td className="compare-side-a">{cell(a, key)}</td>
-                <td className="compare-side-b">{cell(b, key)}</td>
+                <td className="compare-side-a">
+                  <FactCell raw={cell(a, key)} />
+                </td>
+                <td className="compare-side-b">
+                  <FactCell raw={cell(b, key)} />
+                </td>
               </tr>
             ))}
           </tbody>

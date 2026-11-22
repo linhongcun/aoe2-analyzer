@@ -1,0 +1,161 @@
+/* Issue 1285：文明详情页头快捷切文明、科技树横滑引导与 390px 窄屏排版细节。 */
+
+.civ-read header.civ-identity {
+  overflow: visible;
+}
+
+.civ-read .identity-art {
+  border-radius: 0 calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0;
+}
+
+.civ-read .civ-identity:has(.cp-panel) {
+  z-index: 10;
+}
+
+@media (max-width: 899px) {
+  .civ-read .civ-identity:has(.cp-panel) {
+    z-index: 60;
+  }
+}
+
+.civ-identity-actions .civpick {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.civ-identity-actions .cp-trigger {
+  min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.civ-identity-actions .cp-trigger .cp-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.civ-identity-actions .cp-trigger .ico,
+.civ-identity-actions .cp-trigger .ic {
+  flex-shrink: 0;
+}
+
+@media (min-width: 901px) {
+  .civ-identity-actions .cp-panel {
+    left: auto;
+    right: 0;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1080px) {
+  .civ-identity-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 280px;
+  }
+}
+
+.civ-tt-scrollbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  flex-wrap: wrap;
+  margin: 8px 0 6px;
+}
+
+.civ-tt-scroll-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--civ-ink-2);
+}
+
+.civ-tt-scroll-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.civ-tt-scroll-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--civ-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--civ-ink);
+  cursor: pointer;
+}
+
+.civ-tt-scroll-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  background: var(--color-surface-2);
+}
+
+.civ-tt-scroll-btn:focus-visible {
+  outline: 2px solid var(--civ-focus);
+  outline-offset: 2px;
+}
+
+.civ-tt-scroll-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+}
+
+.civ-techtree .civ-tt-frame.can-scroll-x:not(.is-start)::before {
+  content: '';
+  position: absolute;
+  top: 75px;
+  left: 51px;
+  bottom: 1px;
+  width: 48px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--color-surface) 18%, transparent);
+  z-index: 5;
+}
+
+.civ-techtree .civ-tt-frame.can-scroll-x:not(.is-end)::after {
+  width: 48px;
+  background: linear-gradient(90deg, transparent, var(--color-surface) 82%);
+}
+
+.civ-techtree .civ-tt-frame:not(.can-scroll-x)::after {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .civ-read {
+    margin: 8px calc(var(--space-4) * -1) 0;
+    padding: 16px 16px 24px;
+  }
+
+  .civ-read nav.civ-chapters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .civ-read nav.civ-chapters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .civ-read nav.civ-chapters a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+
+  .civ-read nav.civ-chapters.has-right-fade {
+    -webkit-mask-image: linear-gradient(90deg, var(--color-text) 0%, var(--color-text) calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, var(--color-text) 0%, var(--color-text) calc(100% - 28px), transparent 100%);
+  }
+}

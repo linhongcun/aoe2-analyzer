@@ -163,10 +163,10 @@ for (const width of [360, 390]) {
     await expect(page.locator('#insights')).toHaveCount(0);
     const layout = await chapterGeometry(chapters);
     expect(layout.count).toBe(7);
-    expect(layout.rows).toBeGreaterThan(1);
-    expect(layout.wrap).toBe('wrap');
-    expect(layout.overflow).toBe('visible');
-    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.width);
+    expect(layout.rows).toBe(1);
+    expect(layout.wrap).toBe('nowrap');
+    expect(layout.overflow).toBe('auto');
+    expect(layout.scrollWidth).toBeGreaterThan(layout.width);
     await expect
       .poll(() => page.locator('.civ-read').evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue('--civ-chapter-bar-height'))))
       .toBeCloseTo(layout.height, 1);
@@ -198,8 +198,8 @@ for (const width of [360, 390]) {
     await expect(chapters.locator('a')).toHaveText(['身份', '加成', '套件', '科技树', '历史', '推荐阵容', '打法解读', '工具']);
     const eightChapterLayout = await chapterGeometry(chapters);
     expect(eightChapterLayout.count).toBe(8);
-    expect(eightChapterLayout.rows).toBeGreaterThan(1);
-    expect(eightChapterLayout.scrollWidth).toBeLessThanOrEqual(eightChapterLayout.width);
+    expect(eightChapterLayout.rows).toBe(1);
+    expect(eightChapterLayout.scrollWidth).toBeGreaterThan(eightChapterLayout.width);
     await expect
       .poll(() => page.locator('.civ-read').evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue('--civ-chapter-bar-height'))))
       .toBeCloseTo(eightChapterLayout.height, 1);

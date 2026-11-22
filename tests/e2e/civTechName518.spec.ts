@@ -11,10 +11,11 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/civ/Jurchens?tab=tech');
-      const tech = page.getByRole('link', { name: '强化堡垒', exact: true });
+      const tech = page.getByTestId('civ-unique-techs').locator('a[href="#/tech/996"]');
       await expect(tech).toHaveAttribute('href', '#/tech/996');
+      await expect(tech).toContainText('强化堡垒');
       await expect(page.locator('main')).not.toContainText('加固堡垒');
-      await expect(tech.locator('..')).toContainText('防御工事每分钟恢复 500 生命值');
+      await expect(tech.locator('..')).toContainText('防御工事和城镇中心每分钟恢复 500 生命值');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`jurchens-tech-${width}-${theme}.png`), fullPage: true });
       await tech.click();
@@ -25,7 +26,10 @@ for (const width of [360, 375, 390, 1280])
       await page.getByRole('button', { name: /^文明 A：/ }).click();
       await page.locator('[role="option"][data-civ="Jurchens"]').click();
       const castle = page.locator('#compare-facts tr').filter({ has: page.getByRole('cell', { name: '城堡科技', exact: true }) });
-      await expect(castle.locator('td').nth(1)).toHaveText('强化堡垒 (防御工事每分钟恢复 500 生命值)｜Fortified Bastions');
+      const castleCell = castle.locator('td').nth(1);
+      await expect(castleCell.locator('.compare-fact-main')).toHaveText('强化堡垒');
+      await expect(castleCell.locator('.compare-fact-en')).toHaveText('Fortified Bastions');
+      await expect(castleCell.locator('.compare-fact-desc')).toHaveText('防御工事每分钟恢复 500 生命值');
       await expect(page.locator('#compare')).not.toContainText('加固堡垒');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);

@@ -11,6 +11,7 @@ import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../d
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Civ, Unit } from '../../../domain/types';
 import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
@@ -35,6 +36,7 @@ import { useCivBonusReturn } from './useCivBonusReturn';
 import { isFormationHash, readFormationReturn } from './useFormationNavigation';
 import './civ-read.css';
 import './civ-start-return.css';
+import './civ-detail-1285.css';
 
 const TAB_ANCHOR: Record<string, string> = {
   ov: 'identity',
@@ -130,7 +132,7 @@ function chapterFocusTarget(id: string): HTMLElement | null {
 
 function TechTreePending() {
   return (
-    <div className="civ-tt-frame is-end">
+    <div className="civ-tt-frame is-start is-end">
       <p className="civ-tt-skel" role="status">
         正在加载科技树…
       </p>
@@ -272,6 +274,34 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
   const chapterIds = useMemo(() => chapters.map(([id]) => id), [chapters]);
   const chapter = useActiveChapter(location.pathname, location.hash, chapterIds);
   const chapterFocusConsumed = useRef<string | null>(null);
+  const chaptersRef = useRef<HTMLElement>(null);
+  const [chaptersRightFade, setChaptersRightFade] = useState(false);
+  useEffect(() => {
+    const nav = chaptersRef.current;
+    if (!nav) return;
+    const syncFade = () => setChaptersRightFade(nav.scrollWidth > nav.clientWidth + 2 && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2);
+    syncFade();
+    nav.addEventListener('scroll', syncFade, { passive: true });
+    addEventListener('resize', syncFade);
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(syncFade);
+    observer?.observe(nav);
+    return () => {
+      nav.removeEventListener('scroll', syncFade);
+      removeEventListener('resize', syncFade);
+      observer?.disconnect();
+    };
+  }, [chapters, c.en]);
+  useEffect(() => {
+    const nav = chaptersRef.current;
+    if (!nav || nav.scrollWidth <= nav.clientWidth + 1) return;
+    const activeLink = nav.querySelector<HTMLElement>('a[aria-current="location"]');
+    if (!activeLink) return;
+    const maxLeft = Math.max(0, nav.scrollWidth - nav.clientWidth);
+    const desired = activeLink.offsetLeft + activeLink.offsetWidth - nav.clientWidth;
+    if (activeLink.offsetLeft < nav.scrollLeft) nav.scrollTo({ left: Math.max(0, activeLink.offsetLeft), behavior: 'auto' });
+    else if (desired > nav.scrollLeft) nav.scrollTo({ left: Math.min(maxLeft, desired), behavior: 'auto' });
+    setChaptersRightFade(nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2);
+  }, [chapter, chapters]);
   useEffect(() => {
     session.lastCiv = c.en;
     if (restoreOwner !== null) return;
@@ -357,6 +387,27 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           )}
         </div>
         <div className="civ-identity-actions">
+          <CivPicker
+            id="civ-head-switch"
+            label="切换文明"
+            value={c.en}
+            selectedPrefix="切换文明"
+            compactTrigger
+            onChange={(nextEn) => {
+              if (!nextEn || nextEn === c.en) return;
+              const preserved = new URLSearchParams();
+              if (listReturn.kind === 'filtered' || listReturn.kind === 'pending') {
+                const rawList = params.get('civList');
+                if (rawList) preserved.set('civList', rawList);
+              }
+              if (homeReturn) {
+                const rawReturn = params.get('returnTo');
+                if (rawReturn) preserved.set('returnTo', rawReturn);
+              }
+              const nextSearch = preserved.toString();
+              navigate({ pathname: `/civ/${nextEn}`, search: nextSearch ? `?${nextSearch}` : '' });
+            }}
+          />
           <CopyPageLink />
           {listReturn.kind !== 'pending' && (
             <Link
@@ -374,7 +425,7 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
           )}
         </div>
       </header>
-      <nav className="civ-chapters" aria-label="本页章节">
+      <nav ref={chaptersRef} className={`civ-chapters${chaptersRightFade ? ' has-right-fade' : ''}`} aria-label="本页章节">
         {chapters.map(([id, label]) => (
           <Link
             key={id}
