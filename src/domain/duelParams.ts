@@ -58,3 +58,23 @@ export function canonDuelParams(base: URLSearchParams, p: DuelParams): URLSearch
   }
   return canon;
 }
+
+export interface DuelKite {
+  a: boolean;
+  b: boolean;
+}
+
+/** issue 1295：解码远程边走边射（拉扯）URL 开关；缺省、'0' 或非法值一律按站桩（false）处理。 */
+export function decodeDuelKite(q: ParamReader): DuelKite {
+  return { a: q.get('ka') === '1', b: q.get('kb') === '1' };
+}
+
+/** issue 1295：规范化写回 ka/kb；默认站桩省略，加载未就绪或升级比较链接传 eligible=undefined 保留合法 ka/kb 不删。 */
+export function canonDuelKite(base: URLSearchParams, kite: DuelKite, eligible?: DuelKite): URLSearchParams {
+  const canon = new URLSearchParams(base);
+  if (kite.a && (!eligible || eligible.a)) canon.set('ka', '1');
+  else canon.delete('ka');
+  if (kite.b && (!eligible || eligible.b)) canon.set('kb', '1');
+  else canon.delete('kb');
+  return canon;
+}

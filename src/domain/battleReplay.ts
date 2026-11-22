@@ -13,9 +13,10 @@ import {
   type ReplaySide,
   type StageBounds,
 } from './contactReplayTrace';
-import type { DuelResult, Fighter, GroupOutcome, OneVOneResult } from './duel';
+import type { Fighter, GroupOutcome, OneVOneResult } from './duel';
+import { oneReplay, type ReplayFrame } from './oneReplay';
 
-export { computeStageBounds, MAX_TIMELINE_HITS, sampleContactHitTimes };
+export { computeStageBounds, MAX_TIMELINE_HITS, oneReplay, sampleContactHitTimes, type ReplayFrame };
 
 const EPS = 1e-9;
 
@@ -36,42 +37,6 @@ export function formatMeleeCaption(
   return anyRanged
     ? `活跃输出 ${snap.aActive} vs ${snap.bActive} · 峰值 ${model.aPeakActive} vs ${model.bPeakActive}`
     : `前排限宽 ${snap.aActive} vs ${snap.bActive} · 峰值 ${model.aPeakActive} vs ${model.bPeakActive}`;
-}
-
-export interface ReplayFrame {
-  time: number;
-  a: number;
-  b: number;
-}
-
-/** 1v1 静态回放帧：用于 issue 1322 无普攻/静态对照兼容单测与工具复用。 */
-export function oneReplay(a: Fighter, b: Fighter, result: DuelResult): ReplayFrame[] {
-  const times = new Set<number>([0]);
-  for (const [f, ow] of [
-    [a, result.ab],
-    [b, result.ba],
-  ] as const) {
-    if (!ow.canAttack || f.rof <= 0) continue;
-    for (let i = 1; i * f.rof < result.duration - EPS; i++) times.add(i * f.rof);
-  }
-  const hits = (f: Fighter, ow: DuelResult['ab'], t: number) => (!ow.canAttack ? 0 : f.rof > 0 ? Math.floor((t + EPS) / f.rof) + 1 : 1);
-  const frames = [...times]
-    .sort((x, y) => x - y)
-    .map((time) => ({
-      time,
-      a: Math.max(0, a.hp - hits(b, result.ba, time) * result.ba.expDmg),
-      b: Math.max(0, b.hp - hits(a, result.ab, time) * result.ab.expDmg),
-    }));
-  const noKill =
-    result.outcome === 'both-no-attack' ||
-    result.outcome === 'no-kill' ||
-    (result.ab.time === null && result.ba.time === null && (!result.ab.canAttack || result.ab.hits > 1) && (!result.ba.canAttack || result.ba.hits > 1));
-  frames.push({
-    time: result.duration,
-    a: result.winner === 'a' ? result.remaining : noKill ? frames[0]!.a : 0,
-    b: result.winner === 'b' ? result.remaining : noKill ? frames[0]!.b : 0,
-  });
-  return frames;
 }
 
 export type ReplayKind = 'one' | 'group' | 'mixed';
@@ -100,7 +65,7 @@ export interface ReplaySideMeta {
 
 export interface ReplayMarker {
   id: string;
-  kind: 'start' | 'opening-start' | 'min-range-enter' | 'melee-contact' | 'row-cleared' | 'end';
+  kind: 'start' | 'opening-start' | 'min-range-enter' | 'melee-contact' | 'row-cleared' | 'kite-start' | 'retreat-cap' | 'disengaged' | 'end';
   t: number;
   label: string;
   shortLabel: string;
@@ -236,11 +201,13 @@ export function extractReplayMarkers(trace: ContactReplayTrace, duration: number
   const markers: ReplayMarker[] = [{ id: 'start', kind: 'start', t: 0, label: '初始阵型 0s', shortLabel: '初始阵型' }];
   const safeDur = Math.max(0, duration);
   let openingEndSide: ReplaySide | undefined;
+  let hasDisengaged = false;
   const pushUnique = (marker: ReplayMarker) => {
     const safeT = Math.max(0, Math.min(safeDur, marker.t));
     if (safeT <= EPS && marker.kind !== 'start' && marker.kind !== 'end') return;
     if (safeT >= safeDur - EPS && marker.kind !== 'end') {
       if (marker.kind === 'opening-start') openingEndSide = marker.side;
+      if (marker.kind === 'disengaged') hasDisengaged = true;
       return;
     }
     if (markers.some((m) => m.kind === marker.kind && m.side === marker.side && m.rowIndex === marker.rowIndex)) return;
@@ -253,6 +220,26 @@ export function extractReplayMarkers(trace: ContactReplayTrace, duration: number
       pushUnique({ id: `minr-${ev.side}`, kind: 'min-range-enter', t: ev.t, label: `突入盲区 ${fmtMarkerSec(ev.t)}`, shortLabel: '突入盲区', side: ev.side });
     } else if (ev.kind === 'melee-contact') {
       pushUnique({ id: 'melee', kind: 'melee-contact', t: ev.t, label: `近战接敌 ${fmtMarkerSec(ev.t)}`, shortLabel: '近战接敌' });
+    } else if (ev.kind === 'kite-start') {
+      pushUnique({
+        id: `kite-${ev.side}`,
+        kind: 'kite-start',
+        t: ev.t,
+        label: `${ev.side.toUpperCase()} 转入拉扯 ${fmtMarkerSec(ev.t)}`,
+        shortLabel: `${ev.side.toUpperCase()} 拉扯`,
+        side: ev.side,
+      });
+    } else if (ev.kind === 'retreat-cap') {
+      pushUnique({
+        id: `cap-${ev.side}`,
+        kind: 'retreat-cap',
+        t: ev.t,
+        label: `${ev.side.toUpperCase()} 触及 40 格上限 ${fmtMarkerSec(ev.t)}`,
+        shortLabel: `${ev.side.toUpperCase()} 触底`,
+        side: ev.side,
+      });
+    } else if (ev.kind === 'disengaged') {
+      pushUnique({ id: 'disengaged', kind: 'disengaged', t: ev.t, label: `脱离接战 ${fmtMarkerSec(ev.t)}`, shortLabel: '脱离接战' });
     } else if (ev.kind === 'row-cleared') {
       const sideMeta = ev.side === 'a' ? a : b;
       if (kind === 'mixed' && sideMeta.rows.length > 1 && ev.rowIndex < sideMeta.rows.length - 1) {
@@ -272,9 +259,11 @@ export function extractReplayMarkers(trace: ContactReplayTrace, duration: number
   markers.sort((x, y) => x.t - y.t);
   if (safeDur > EPS) {
     markers.push(
-      openingEndSide !== undefined
-        ? { id: 'end', kind: 'end', t: safeDur, label: `先手终局 ${fmtMarkerSec(safeDur)}`, shortLabel: '先手终局', side: openingEndSide }
-        : { id: 'end', kind: 'end', t: safeDur, label: `终局 ${fmtMarkerSec(safeDur)}`, shortLabel: '终局' },
+      hasDisengaged
+        ? { id: 'end', kind: 'disengaged', t: safeDur, label: `脱离接战 ${fmtMarkerSec(safeDur)}`, shortLabel: '脱离接战' }
+        : openingEndSide !== undefined
+          ? { id: 'end', kind: 'end', t: safeDur, label: `先手终局 ${fmtMarkerSec(safeDur)}`, shortLabel: '先手终局', side: openingEndSide }
+          : { id: 'end', kind: 'end', t: safeDur, label: `终局 ${fmtMarkerSec(safeDur)}`, shortLabel: '终局' },
     );
   }
   return markers;
@@ -357,6 +346,10 @@ export function deriveReplayPhase(
   snap: Pick<BattleReplaySnapshot, 't' | 'gap' | 'vxA' | 'vxB' | 'openingSide' | 'openingVolley' | 'aFrontRow' | 'bFrontRow' | 'aRows' | 'bRows'>,
 ): ReplayPhaseInfo {
   const frames = model.trace.frames;
+  // TRD v4 §4.1 8 级顺序：'disengaged' → 'ended' → 'kiting' → 'row-shift' → 'opening' → 'melee' → 'ranged-exchange' → 'approach'
+  if (model.status === 'disengaged' && (!frames.length || snap.t >= model.duration - EPS)) {
+    return { phase: 'disengaged', label: '双方脱离接战', tone: 'link', icon: 'info' };
+  }
   if (!frames.length || snap.t >= model.duration - EPS) {
     if (model.status === 'timeout' || model.status === 'limit') {
       return { phase: 'ended', label: '模拟已停止', tone: 'link', icon: 'info' };
@@ -364,7 +357,7 @@ export function deriveReplayPhase(
     return { phase: 'ended', label: '战斗结束', tone: 'good', icon: 'check' };
   }
   if (model.trace.disengagedAt != null && snap.t >= model.trace.disengagedAt - EPS) {
-    return { phase: 'disengaged', label: '远程脱离接战', tone: 'link', icon: 'info' };
+    return { phase: 'disengaged', label: '双方脱离接战', tone: 'link', icon: 'info' };
   }
   if (snap.vxA < -EPS || snap.vxB > EPS) {
     return { phase: 'kiting', label: '远程拉扯后撤', tone: 'warn', icon: 'footprints' };

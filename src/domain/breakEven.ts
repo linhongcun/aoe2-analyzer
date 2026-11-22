@@ -32,7 +32,7 @@ export interface BreakEvenResult {
   /** 少于 N 时也有获胜的数量（目前界面不显示，Steve 裁定；由单测守住搜索逻辑） */
   unstableBelow: boolean;
   interrupted?: { n: number; result: Extract<GroupResult, { status: 'error' }> };
-  incomplete?: { n: number; status: 'timeout' | 'limit' };
+  incomplete?: { n: number; status: 'timeout' | 'limit' | 'disengaged' };
 }
 
 /** 战斗函数签名与 groupFight 一致；仅供测试注入（例如构造非单调结果），生产调用一律用默认的 groupFight */
@@ -47,7 +47,7 @@ export function* breakEvenSteps(a: Fighter, b: Fighter, nb: number, cap = BREAK_
     if (result.status === 'error') {
       return { n: null, nb, cap: C, capReached: false, rows: [], isolatedWins: [], unstableBelow: false, interrupted: { n, result } };
     }
-    if (result.status === 'timeout' || result.status === 'limit') incomplete ??= { n, status: result.status };
+    if (result.status === 'timeout' || result.status === 'limit' || result.status === 'disengaged') incomplete ??= { n, status: result.status };
     res.push(result);
     yield;
   }

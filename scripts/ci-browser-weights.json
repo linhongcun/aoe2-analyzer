@@ -220,6 +220,7 @@
     "tests/e2e/productionTransfer1009.spec.ts": 16500,
     "tests/e2e/production963.spec.ts": 12000,
     "tests/e2e/productionUi1281.spec.ts": 15000,
+    "tests/e2e/rangedKite1295.spec.ts": 18000,
     "tests/e2e/realCostUncounted.spec.ts": 8951,
     "tests/e2e/refactor288.spec.ts": 22906,
     "tests/e2e/referenceUi996.spec.ts": 3000,

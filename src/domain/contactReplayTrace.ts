@@ -56,6 +56,9 @@ export type ContactReplayEvent =
   | { kind: 'min-range-enter'; t: number; side: ReplaySide; minRange: number }
   | { kind: 'melee-contact'; t: number }
   | { kind: 'row-cleared'; t: number; side: ReplaySide; rowIndex: number; uid: number; initial: number; stepDist: number; x: number }
+  | { kind: 'kite-start'; t: number; side: ReplaySide }
+  | { kind: 'retreat-cap'; t: number; side: ReplaySide; x: number }
+  | { kind: 'disengaged'; t: number }
   | { kind: 'end'; t: number };
 
 export interface ContactReplayTrace {
@@ -83,11 +86,24 @@ export interface TraceRowInput {
 export interface TraceRankInput {
   count: number;
   leaving: boolean;
+  leavingMin?: boolean;
 }
 
 export interface TraceOpeningState {
   side: ReplaySide;
   volleys: number;
+}
+
+export interface TraceKiteFrame {
+  aRetreated?: number;
+  bRetreated?: number;
+  aRetreatCapHit?: boolean;
+  bRetreatCapHit?: boolean;
+}
+
+export interface TraceKiteFinal extends TraceKiteFrame {
+  retreatCap?: number;
+  disengagedAt?: number | null;
 }
 
 export interface TraceRecorder {
@@ -98,13 +114,16 @@ export interface TraceRecorder {
   noteOpeningStart(t: number, side: ReplaySide): void;
   noteMeleeContact(t: number): void;
   noteRowCleared(event: Omit<Extract<ContactReplayEvent, { kind: 'row-cleared' }>, 'kind'>): void;
+  noteKiteStart(t: number, side: ReplaySide): void;
+  noteRetreatCap(t: number, side: ReplaySide): number;
+  noteDisengaged(t: number): void;
   onRowShift(aStep: number, bStep: number, newGap: number): void;
-  onAdvance(va: number, vb: number, speed: number, prevGap: number, elapsed: number, newGap: number): void;
+  onAdvance(vxA: number, vxB: number, gapRate: number, prevGap: number, elapsed: number, newGap: number): void;
   recordSettled(
     t: number,
     gap: number,
-    va: number,
-    vb: number,
+    vxA: number,
+    vxB: number,
     aRows: readonly TraceRowInput[],
     aSetback: readonly number[],
     inA: readonly (readonly TraceRankInput[])[],
@@ -112,8 +131,9 @@ export interface TraceRecorder {
     bSetback: readonly number[],
     inB: readonly (readonly TraceRankInput[])[],
     opening: TraceOpeningState | null,
+    kiteFrame?: TraceKiteFrame,
   ): void;
-  finalize(t: number, gap: number, aRows: readonly TraceRowInput[], bRows: readonly TraceRowInput[]): ContactReplayTrace;
+  finalize(t: number, gap: number, aRows: readonly TraceRowInput[], bRows: readonly TraceRowInput[], kiteFinal?: TraceKiteFinal): ContactReplayTrace;
 }
 
 function activeFrontIndex(rows: readonly TraceRowInput[]): number {
@@ -139,7 +159,7 @@ function buildRowFrames(
     const active = sustained.reduce((sum, rank) => sum + rank.count, 0);
     const rankCount = sustained.length;
     const inMaxRng = eligible !== null && row.alive > 0 && row.fighter.ranged && row.minRange > 0 && gap + sb <= row.fighter.rng + EPS;
-    const hasMinRangeBlocked = inMaxRng && (gap + sb < row.minRange - EPS || ranks.some((rank) => rank.leaving));
+    const hasMinRangeBlocked = inMaxRng && (gap + sb < row.minRange - EPS || ranks.some((rank) => rank.leavingMin ?? rank.leaving));
     const silencedByMinRange = hasMinRangeBlocked && active === 0;
     const partialMinRangeSilence = hasMinRangeBlocked && active > 0 && active < row.alive;
     if (hasMinRangeBlocked && active < row.alive && onMinRangeBlocked) onMinRangeBlocked(row.minRange);
@@ -176,6 +196,9 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
   let openingStarted = false;
   let meleeNoted = false;
   const minRangeNoted = { a: false, b: false };
+  const kiteStartNoted = { a: false, b: false };
+  const retreatCapNoted = { a: false, b: false };
+  let disengagedNoted = false;
   const frames: ContactReplayFrame[] = [];
   const events: ContactReplayEvent[] = [];
 
@@ -218,6 +241,24 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
     noteRowCleared(event) {
       events.push({ kind: 'row-cleared', ...event });
     },
+    noteKiteStart(t, side) {
+      if (kiteStartNoted[side]) return;
+      kiteStartNoted[side] = true;
+      events.push({ kind: 'kite-start', t, side });
+    },
+    noteRetreatCap(t, side) {
+      const x = side === 'a' ? aPos : bPos;
+      if (!retreatCapNoted[side]) {
+        retreatCapNoted[side] = true;
+        events.push({ kind: 'retreat-cap', t, side, x });
+      }
+      return x;
+    },
+    noteDisengaged(t) {
+      if (disengagedNoted) return;
+      disengagedNoted = true;
+      events.push({ kind: 'disengaged', t });
+    },
     onRowShift(aStep, bStep, newGap) {
       if (aStep === 0 && bStep === 0) return;
       if (aStep > 0 && bStep === 0) aPos = bPos - newGap;
@@ -227,17 +268,19 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
         bPos = aPos + newGap;
       }
     },
-    onAdvance(va, vb, speed, prevGap, elapsed, newGap) {
-      if (speed === 0) return;
-      if (vb === 0) aPos = bPos - newGap;
-      else if (va === 0) bPos = aPos + newGap;
+    onAdvance(vxA, vxB, gapRate, prevGap, elapsed, newGap) {
+      const aMoves = Math.abs(vxA) > EPS;
+      const bMoves = Math.abs(vxB) > EPS;
+      if (!aMoves && !bMoves) return;
+      if (aMoves && !bMoves) aPos = bPos - newGap;
+      else if (!aMoves && bMoves) bPos = aPos + newGap;
       else {
-        const dtMove = Math.min(elapsed, prevGap / speed);
-        aPos += va * dtMove;
+        const dtMove = gapRate < 0 ? Math.min(elapsed, prevGap / -gapRate) : elapsed;
+        aPos += vxA * dtMove;
         bPos = aPos + newGap;
       }
     },
-    recordSettled(t, gap, va, vb, aRows, aSetback, inA, bRows, bSetback, inB, opening) {
+    recordSettled(t, gap, vxA, vxB, aRows, aSetback, inA, bRows, bSetback, inB, opening, kiteFrame) {
       noteTouch(gap);
       const aFired = pendingFiredA;
       const bFired = pendingFiredB;
@@ -260,8 +303,8 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
         aPos,
         bPos,
         gap,
-        vxA: va,
-        vxB: -vb,
+        vxA,
+        vxB,
         aFired,
         bFired,
         openingSide: opening?.side ?? null,
@@ -270,14 +313,23 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
         bFrontRow: activeFrontIndex(bRows),
         aRows: aRowFrames,
         bRows: bRowFrames,
+        ...(kiteFrame ?? {}),
       });
     },
-    finalize(t, gap, aRows, bRows) {
+    finalize(t, gap, aRows, bRows, kiteFinal) {
       noteTouch(gap);
       const aFired = pendingFiredA;
       const bFired = pendingFiredB;
       pendingFiredA = 0;
       pendingFiredB = 0;
+      const frameKite: TraceKiteFrame = kiteFinal
+        ? {
+            ...(kiteFinal.aRetreated !== undefined ? { aRetreated: kiteFinal.aRetreated } : {}),
+            ...(kiteFinal.bRetreated !== undefined ? { bRetreated: kiteFinal.bRetreated } : {}),
+            ...(kiteFinal.aRetreatCapHit !== undefined ? { aRetreatCapHit: kiteFinal.aRetreatCapHit } : {}),
+            ...(kiteFinal.bRetreatCapHit !== undefined ? { bRetreatCapHit: kiteFinal.bRetreatCapHit } : {}),
+          }
+        : {};
       recordFrame({
         t,
         aPos,
@@ -293,6 +345,7 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
         bFrontRow: activeFrontIndex(bRows),
         aRows: buildRowFrames(aRows, finalSetbacks(aRows), null, gap),
         bRows: buildRowFrames(bRows, finalSetbacks(bRows), null, gap),
+        ...frameKite,
       });
       events.push({ kind: 'end', t });
       return {
@@ -300,6 +353,8 @@ export function createTraceRecorder(initialGap: number): TraceRecorder {
         contactX: touchX ?? meleeMidX,
         frames,
         events,
+        ...(kiteFinal?.retreatCap !== undefined ? { retreatCap: kiteFinal.retreatCap } : {}),
+        ...(kiteFinal?.disengagedAt !== undefined ? { disengagedAt: kiteFinal.disengagedAt } : {}),
       };
     },
   };
@@ -319,7 +374,7 @@ export function computeStageBounds(trace: ContactReplayTrace): StageBounds {
     if (Number.isFinite(frame.bPos)) xs.push(frame.bPos);
   }
   for (const ev of trace.events) {
-    if (ev.kind === 'row-cleared' && Number.isFinite(ev.x)) xs.push(ev.x);
+    if ((ev.kind === 'row-cleared' || ev.kind === 'retreat-cap') && Number.isFinite(ev.x)) xs.push(ev.x);
   }
   if (trace.contactX !== null && Number.isFinite(trace.contactX)) xs.push(trace.contactX);
   const minX = Math.min(...xs);

@@ -10,6 +10,7 @@ import type { Cost } from './types';
 import { hitCount } from './damageCore';
 import { damagePerHit, expectedHit, fighterCanAttack, type Fighter } from './duelFighter';
 import { contactFight, contactFighterError, FIGHT_TIME, type ContactSummary, type FightEnd, type Timeline } from './contactFight';
+import type { KiteOptions } from './contactKite';
 import type { ContactReplayTrace } from './contactReplayTrace';
 
 export {
@@ -118,6 +119,7 @@ export type OneVOneResult =
 export interface GroupFightOptions {
   maxTime?: number;
   recordReplay?: boolean;
+  kite?: KiteOptions;
 }
 
 function cleanContactReason(raw: string): string {
@@ -144,6 +146,7 @@ export function oneVOneFight(a: Fighter, b: Fighter, options: GroupFightOptions 
   const result = contactFight([{ uid: 1, count: 1, fighter: a }], [{ uid: 2, count: 1, fighter: b }], {
     maxTime: options.maxTime ?? FIGHT_TIME,
     recordReplay: options.recordReplay ?? true,
+    ...(options.kite ? { kite: options.kite } : {}),
   });
   if (result.status === 'error') {
     const cause = cleanContactReason(result.reason);
@@ -196,6 +199,7 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTi
   const result = contactFight([{ uid: 1, count: na, fighter: a }], [{ uid: 1, count: nb, fighter: b }], {
     maxTime: opts.maxTime ?? FIGHT_TIME,
     recordReplay: opts.recordReplay ?? false,
+    ...(opts.kite ? { kite: opts.kite } : {}),
   });
   if (result.status === 'error') return { ...result, winner: null };
   const winner = result.status === 'win' ? result.winner : result.status === 'draw' ? 'draw' : null;

@@ -2,12 +2,18 @@ import type { ReactNode } from 'react';
 import type { ContactSummary as Contact } from '../../../domain/contactFight';
 import type { Fighter } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
+import { hasAnyKiteEnabled } from '../logic/duelKiteView';
+import { KITE_CONTACT_BOUNDARY, KiteSummaryCard } from './KiteSummaryCard';
 import '../contact-summary.css';
 
 export const CONTACT_MODEL = '空间接触面与接敌先手模型（一维近似）';
 export const CONTACT_BOUNDARY =
   '群战按一维近似模拟接敌与占位。未计入绕路包抄、阵型几何、地形高地、拉扯、弹道飞行、溅射、穿透、友军误伤、治疗和招降。可用于比较方案，不能据此判断实战胜率。';
-export const STOP_LABELS = { timeout: '达到模拟时限，暂无胜者', limit: '达到计算上限，暂无胜者' };
+export const STOP_LABELS = {
+  timeout: '达到模拟时限，暂无胜者',
+  limit: '达到计算上限，暂无胜者',
+  disengaged: '双方脱离接战，暂无胜者',
+} as const;
 
 interface Line {
   fighter: Fighter;
@@ -48,23 +54,40 @@ function Reach({ fighter, count }: { fighter: Fighter; count: number }) {
 }
 
 function ContactTime({ value }: { value: Contact }) {
+  if (value.meleeAt === null) return null;
+  const kite = value.kite;
+  const afterCap = Boolean(
+    kite &&
+    ((kite.a.capHit && kite.a.capHitAt !== null && value.meleeAt >= kite.a.capHitAt - 1e-9) ||
+      (kite.b.capHit && kite.b.capHitAt !== null && value.meleeAt >= kite.b.capHitAt - 1e-9)),
+  );
   return (
-    value.meleeAt !== null && (
-      <p>
-        近战开始接敌于 <span className="num nw">{formatHp(value.meleeAt)} 秒</span>
-      </p>
-    )
+    <p>
+      近战开始接敌于 <span className="num nw">{formatHp(value.meleeAt)} 秒</span>
+      {afterCap && '（触底后）'}
+    </p>
   );
 }
 
-function Opening({ value }: { value: Contact }) {
+function Opening({ value, standingDeltaVolleys = 0 }: { value: Contact; standingDeltaVolleys?: number }) {
   const opening = value.firstStrike;
   return (
     <>
       {opening ? (
         <p>
           <strong>{opening.side.toUpperCase()} 方射程先手窗口</strong> · <span className="num nw">{formatHp(opening.duration)} 秒</span> ·{' '}
-          {opening.volleys > 0 ? <span className="num nw">{opening.volleys} 轮齐射</span> : '接敌前未开火'}
+          {opening.volleys > 0 ? (
+            <>
+              <span className="num nw">{opening.volleys} 轮齐射</span>
+              {standingDeltaVolleys > 0 && (
+                <span className="kite-delta" data-t="kite-opening-delta">
+                  （较站桩 <span className="num nw">+{standingDeltaVolleys} 轮</span>）
+                </span>
+              )}
+            </>
+          ) : (
+            '接敌前未开火'
+          )}
         </p>
       ) : (
         <p>双方无射程先手窗口。</p>
@@ -83,15 +106,17 @@ function MeleeCount({ line }: { line: Line }) {
   );
 }
 
-export function GroupContact({ value, a, b }: { value: Contact; a: Line; b: Line }) {
+export function GroupContact({ value, a, b, standingDeltaVolleys = 0 }: { value: Contact; a: Line; b: Line; standingDeltaVolleys?: number }) {
   const ranged = a.fighter.ranged || b.fighter.ranged;
+  const hasKite = hasAnyKiteEnabled(value.kite);
   return (
     <section className="contact-summary" data-t="duel-contact-boundary" aria-label={CONTACT_MODEL}>
       <h3>{CONTACT_MODEL}</h3>
       <div className="contact-cards">
+        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} headingLevel={4} />}
         {ranged && value.firstStrike && (
           <Card title="接敌与远程先手">
-            <Opening value={value} />
+            <Opening value={value} standingDeltaVolleys={standingDeltaVolleys} />
           </Card>
         )}
         {(
@@ -132,20 +157,22 @@ export function GroupContact({ value, a, b }: { value: Contact; a: Line; b: Line
         ))}
       </div>
       {(!ranged || !value.firstStrike) && <ContactTime value={value} />}
-      <p className="note">{CONTACT_BOUNDARY}</p>
+      <p className="note">{hasKite ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}</p>
     </section>
   );
 }
 
-export function MixedContact({ value, a, b }: { value: Contact; a: Line[]; b: Line[] }) {
+export function MixedContact({ value, a, b, standingDeltaVolleys = 0 }: { value: Contact; a: Line[]; b: Line[]; standingDeltaVolleys?: number }) {
   const lines = [...a, ...b];
+  const hasKite = hasAnyKiteEnabled(value.kite);
   return (
     <section className="contact-summary" aria-label="本场接触面与接敌摘要">
       <h3>本场接触面与接敌摘要</h3>
       <div className="contact-cards">
+        {hasKite && value.kite && <KiteSummaryCard kite={value.kite} mixed headingLevel={4} />}
         {lines.some((line) => line.fighter.ranged) && (
           <Card title="接敌与远程先手">
-            <Opening value={value} />
+            <Opening value={value} standingDeltaVolleys={standingDeltaVolleys} />
             {lines
               .filter(({ fighter }) => fighter.ranged)
               .map(({ fighter, count }, i) => (
@@ -184,7 +211,7 @@ export function MixedContact({ value, a, b }: { value: Contact; a: Line[]; b: Li
           <p>B · {b.map((line) => line.fighter.name).join(' / ')}</p>
         </Card>
       </div>
-      <p className="note">{CONTACT_BOUNDARY}</p>
+      <p className="note">{hasKite ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}</p>
     </section>
   );
 }

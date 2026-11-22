@@ -28,6 +28,7 @@ import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
 import { filterExplicitTechsForAge, isUnavail, r1, switchSideCiv, type SideState, type Unavail } from '../logic/duelSide';
 import { radioKeyboard } from './radioKeyboard';
+import { RangedModeToggle } from './RangedModeToggle';
 import { duelToTrainTotal } from '../../../domain/productionTransfer';
 import type { ProductionContext } from '../../../domain/production';
 import { encodeTrainTotal } from '../../../domain/trainTotal';
@@ -46,6 +47,9 @@ export function Side({
   bud,
   time,
   context,
+  canKite = false,
+  kite = false,
+  onKiteChange,
 }: {
   k: 'a' | 'b';
   side: SideState;
@@ -57,6 +61,9 @@ export function Side({
   /** issue 88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
   time: [number, number] | null;
   context: ProductionContext;
+  canKite?: boolean;
+  kite?: boolean;
+  onKiteChange?: (kite: boolean) => void;
 }) {
   const core = useCore()!;
   const transfer = useMemo(
@@ -216,6 +223,7 @@ export function Side({
           ))}
         </div>
       </div>
+      {canKite && onKiteChange && <RangedModeToggle side={k} active={kite} onChange={onKiteChange} />}
       <dl className="duel-stats">
         {(
           [

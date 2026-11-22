@@ -5,6 +5,7 @@ import { r1, type Resolved } from './duelSide';
 export const GROUP_STOP_LABELS = {
   timeout: '达到模拟时限，暂无胜者',
   limit: '达到计算上限，暂无胜者',
+  disengaged: '双方脱离接战，暂无胜者',
 } as const;
 
 export interface DuelSummaryMetric {
@@ -38,6 +39,18 @@ export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult | OneVO
     };
   }
   if ('mode' in r && r.mode === 'contact') {
+    if (r.status === 'disengaged') {
+      return {
+        winner: 'draw',
+        icon: 'info',
+        headline: GROUP_STOP_LABELS.disengaged,
+        metrics: [
+          { prefix: '用时 ', value: `${r1(r.duration)} 秒` },
+          { prefix: 'A 剩余 ', value: `${r.aHp > 0 ? 1 : 0} / 1` },
+          { prefix: 'B 剩余 ', value: `${r.bHp > 0 ? 1 : 0} / 1` },
+        ],
+      };
+    }
     if (r.status === 'timeout' || r.status === 'limit') {
       return {
         winner: 'draw',
@@ -77,12 +90,12 @@ export function summarizeOneVOne(a: Resolved, b: Resolved, r: DuelResult | OneVO
   return { winner: r.winner, icon: 'trophy', headline, metrics };
 }
 
-/** issue 1279：群战/等资源胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用。 */
-export function summarizeGroup(a: Resolved, b: Resolved, g: GroupResult): DuelSummary | null {
+/** issue 1279 / 1295：群战/等资源胜负结论与简明指标单一真源，供结果卡与窄屏定位条共用（兼容 3/4 参调用）。 */
+export function summarizeGroup(a: Resolved, b: Resolved, g: GroupResult, counts?: { na: number; nb: number }): DuelSummary | null {
   if (g.status === 'error') return null;
   const winnerSide = g.winner === 'a' ? a : b;
   const headline =
-    g.status === 'timeout' || g.status === 'limit'
+    g.status === 'timeout' || g.status === 'limit' || g.status === 'disengaged'
       ? GROUP_STOP_LABELS[g.status]
       : g.winner === 'draw'
         ? '平局 / 同归于尽'
@@ -91,6 +104,9 @@ export function summarizeGroup(a: Resolved, b: Resolved, g: GroupResult): DuelSu
   if (g.status === 'win') {
     metrics.push({ prefix: '剩余 ', value: `${g.winner === 'b' ? g.bAlive : g.aAlive} 个单位` });
     metrics.push({ prefix: '总生命 ', value: formatHp(g.hpLeft) });
+  } else if (g.status === 'disengaged') {
+    metrics.push({ prefix: 'A 剩余 ', value: counts ? `${g.aAlive} / ${counts.na}` : String(g.aAlive) });
+    metrics.push({ prefix: 'B 剩余 ', value: counts ? `${g.bAlive} / ${counts.nb}` : String(g.bAlive) });
   }
   return { winner: g.winner ?? 'draw', icon: g.status === 'win' ? 'trophy' : 'info', headline, metrics };
 }

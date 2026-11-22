@@ -15,8 +15,10 @@ import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
 import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
+import { mixedSideCanKite, mixedSideHasMeleeFront } from '../logic/duelKiteView';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
+import { RangedModeToggle } from './RangedModeToggle';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
 import '../unmodeled-notes.css';
 
@@ -44,8 +46,17 @@ export function MixedSideEditor({
   const units = useMemo(() => core.units.filter((u) => u.civs.length).map((u) => ({ u })), [core]);
   const age = +input.age;
   const focus = (id: string) => requestAnimationFrame(() => document.getElementById(id)?.focus());
+  const emitChange = (next: MixedSideInput, announcement?: string) => {
+    if (next.kite === true && !mixedSideCanKite(resolveMixedSide(ctx, core, next, side))) {
+      const { kite: _dropped, ...rest } = next;
+      void _dropped;
+      onChange(rest, announcement);
+      return;
+    }
+    onChange(next, announcement);
+  };
   const changeRow = (index: number, value: Partial<MixedSideInput['rows'][number]>) =>
-    onChange({ ...input, rows: input.rows.map((r, i) => (i === index ? { ...r, ...value } : r)) });
+    emitChange({ ...input, rows: input.rows.map((r, i) => (i === index ? { ...r, ...value } : r)) });
   const errors = (field: string) => view.errors.filter((e) => e.field === `${prefix}-${field}`);
   const fieldErrors = (field: string) =>
     errors(field).length ? (
@@ -146,6 +157,14 @@ export function MixedSideEditor({
           满科技
         </button>
       </div>
+      {mixedSideCanKite(view) && (
+        <RangedModeToggle
+          side={side}
+          active={input.kite === true}
+          hasMeleeFront={mixedSideHasMeleeFront(view)}
+          onChange={(k) => onChange(k ? { ...input, kite: true } : { ...input, kite: undefined })}
+        />
+      )}
       <details className="mix-techs">
         <summary>
           自选科技与团队效果 <span className="num nw">（数值科技 {numeric} 项）</span>
@@ -280,7 +299,7 @@ export function MixedSideEditor({
                     type="button"
                     aria-label={`删除${label}第 ${i + 1} 行`}
                     onClick={() => {
-                      onChange({ ...input, rows: input.rows.filter((_, n) => n !== i) }, `${label}已删除第 ${i + 1} 行`);
+                      emitChange({ ...input, rows: input.rows.filter((_, n) => n !== i) }, `${label}已删除第 ${i + 1} 行`);
                       focus(input.rows.length > 1 ? `${prefix}-unit-${Math.min(i, input.rows.length - 2)}` : `${prefix}-add`);
                     }}
                   >
