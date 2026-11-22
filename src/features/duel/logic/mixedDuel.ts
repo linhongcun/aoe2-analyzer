@@ -20,6 +20,7 @@ export interface MixedTechOption {
   cost: boolean;
   partial?: boolean;
   rows: number[];
+  chargeOnlyRows?: number[];
 }
 export interface MixedRowView {
   unit?: Unit;
@@ -101,19 +102,30 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     const avail = simTechs(ctx, u, input.civ);
     const costs = applicableTrainingTechs(ctx, u, input.civ, age ?? 4);
     for (const item of [
-      ...avail.map(({ t, ef }) => ({ t, numeric: !!ef, cost: false, partial: false })),
-      ...costs.map(({ tech, supported, partial }) => ({ t: tech, numeric: false, cost: supported && !partial, partial: Boolean(partial) })),
+      ...avail.map(({ t, ef, chargeOnly }) => ({ t, numeric: !!ef, cost: false, partial: false, chargeOnly: !!chargeOnly })),
+      ...costs.map(({ tech, supported, partial }) => ({
+        t: tech,
+        numeric: false,
+        cost: supported && !partial,
+        partial: Boolean(partial),
+        chargeOnly: false,
+      })),
     ]) {
       if (!status['t' + item.t.id]) continue;
       const current = candidates.get(item.t.id);
       if (current) {
         if (!current.rows.includes(i)) current.rows.push(i);
+        if (item.chargeOnly) {
+          current.chargeOnlyRows ??= [];
+          if (!current.chargeOnlyRows.includes(i)) current.chargeOnlyRows.push(i);
+        }
         current.numeric ||= item.numeric;
         current.cost ||= item.cost;
         if (item.partial) current.partial = true;
       } else {
         const next: MixedTechOption = { t: item.t, numeric: item.numeric, cost: item.cost, rows: [i] };
         if (item.partial) next.partial = true;
+        if (item.chargeOnly) next.chargeOnlyRows = [i];
         candidates.set(item.t.id, next);
       }
     }

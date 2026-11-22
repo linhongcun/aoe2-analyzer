@@ -305,7 +305,7 @@ export default function SimPanel(p: SimPanelProps) {
           {Object.entries(groups).map(([g, l]) => (
             <div className="simg" key={g}>
               <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>{g}</Subheading>
-              {l.map(({ t, ef }) => {
+              {l.map(({ t, ef, scopeNote }) => {
                 const on = p.sel.has(t.id);
                 const checkable = !!ef || !!p.selectableWithoutEffect?.has(t.id);
                 const badge = p.costTechBadges?.get(t.id);
@@ -331,10 +331,19 @@ export default function SimPanel(p: SimPanelProps) {
                     )}
                     <small>{AGE_ZH[t.age]!.slice(0, 2)}</small>
                     <span className="simc">
-                      <CostView c={t.cost} /> <StatIcon k="time" t="研究时间" />
-                      {t.rt}s
+                      <CostView c={t.cost} />{' '}
+                      <span className="num nw">
+                        <StatIcon k="time" t="研究时间" />
+                        {t.rt}s
+                      </span>
                     </span>
-                    {!ef && t.desc && <div className="note">{t.desc}</div>}
+                    {!ef && scopeNote ? (
+                      <div className="sim-scope-note" data-t="sim-scope-note">
+                        {scopeNote}
+                      </div>
+                    ) : (
+                      !ef && t.desc && <div className="note">{t.desc}</div>
+                    )}
                   </label>
                 );
               })}

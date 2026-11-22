@@ -86,6 +86,9 @@ def unit(u):
             'Attacks': [[a.class_, a.amount] for a in t.attacks] if t else [], 'Armours': [[a.class_, a.amount] for a in t.armours] if t else [],
             'Range': t.max_range if t else 0, 'DisplayedRange': t.displayed_range if t else 0, 'ChargeType': u.creatable.charge_type if u.creatable else 0, 'MinRange': t.min_range if t else 0, 'Reload': t.reload_time if t else 0, 'Accuracy': t.accuracy_percent if t else 0,
             'Projectiles': [t.projectile_unit_id if t else -1, u.creatable.secondary_projectile_unit if u.creatable else -1],
+            'ChargeProjectile': u.creatable.charge_projectile_unit if u.creatable else -1,
+            'ChargeEvent': u.creatable.charge_event if u.creatable else 0,
+            'RechargeRate': u.creatable.recharge_rate if u.creatable else 0,
             'TotalProjectiles': round(u.creatable.total_projectiles, 4) if u.creatable else 0,
             'MaxTotalProjectiles': int(u.creatable.max_total_projectiles) if u.creatable else 0,
             'Transform': u.building.transform_unit if u.building else -1,
@@ -151,7 +154,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v20.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v21.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

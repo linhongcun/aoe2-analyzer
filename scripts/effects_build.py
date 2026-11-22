@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dat_source import DAT as DAT_SRC, load as load_dat  # noqa: E402
+from projectile_scope import guided_projectile_ids, split_projectile_units, transform_closure  # noqa: E402
 from res_names import RES_ZH as RES  # noqa: E402
 SRC_C = ('https://raw.githubusercontent.com/linhongcun/lhc-aoe2/6fdb912e95ce1ce837eb91b6c6ffc2945a74dc90/lib/data/unitTechFx.ts', 'lhc-unitTechFx.ts')
 
@@ -544,6 +545,19 @@ def main():
 
     # ---- #24 结构化训练费用折扣：仅由 .dat 费用效果（属性 100/103–106，乘法，非科技触发）逐时代累计得出 ----
     out['costDiscounts'] = cost_discounts(out, civs)
+
+    # ---- #1328 弹道学（科技 93）弹丸适用单位（与 army_research_build.py 共用同一推导模块） ----
+    dat_units = AC[1]['Units']
+    unit_forms = transform_closure(dat_units, [u['id'] for u in units])
+    ballistics_eid = AT[93]['EffectID']
+    ballistics_cmds = AE[ballistics_eid]['EffectCommands'] if 0 <= ballistics_eid < len(AE) else []
+    ballistics_units, ballistics_charge_only = split_projectile_units(
+        dat_units,
+        unit_forms,
+        units,
+        guided_projectile_ids(ballistics_cmds, attrs=(19,)),
+    )
+    out['ballistics'] = {'units': ballistics_units, 'chargeOnly': ballistics_charge_only}
 
     # .dat 中不存在的站内单位/建筑（应为空）：其科技/加成作用范围由运行时回退到手工判定
     U0 = AC[0]['Units']
