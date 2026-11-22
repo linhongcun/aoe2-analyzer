@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, type Core } from '../../../data';
 import { useCore } from '../../../data/hooks';
@@ -9,6 +9,7 @@ import { collapse } from '../../../domain/family';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { AGE_ZH } from '../../../domain/ratings';
 import { filterUnitFamilies } from '../../../domain/unitFilters';
+import { sortUnitFamilies } from '../../../domain/unitOrder';
 import { UNIT_ROLE_ZH, type UnitRole } from '../../../domain/unitRoles';
 import { catalogueTrainingUnit, trainingSites } from '../../../domain/unitTrainingSites';
 import type { Unit } from '../../../domain/types';
@@ -52,7 +53,7 @@ function TrainingLabel({ unit, civ, core }: { unit: Unit; civ: string; core: Cor
       {prefix}
       {name} ·{' '}
       <span className="unit-age nw">
-        {AGE_ZH[unit.age] && <img src={img(`ages/${unit.age}.webp`)} alt="" />}
+        {AGE_ZH[unit.age] && <img src={img(`ages/${unit.age}.webp`)} alt="" loading="lazy" decoding="async" />}
         {AGE_ZH[unit.age] ?? ''}
       </span>
       {note && <span className="unit-training-condition">{note}</span>}
@@ -73,9 +74,12 @@ export default function UnitList() {
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const focusedInPanel = useRef(false);
-  const all = core ? projectUnitDisplayAges(core.units, civ) : [];
-  const fams = core ? collapse(all, core.fam) : [];
-  const r = core ? filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc, civ, role }, catalogueTrainingUnit) : [];
+  const all = useMemo(() => (core ? projectUnitDisplayAges(core.units, civ) : []), [core, civ]);
+  const fams = useMemo(() => (core ? collapse(all, core.fam) : []), [core, all]);
+  const r = useMemo(
+    () => (core ? sortUnitFamilies(filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc, civ, role }, catalogueTrainingUnit), { civ }) : []),
+    [core, all, q, t, a, dlc, civ, role],
+  );
   const dirty = Boolean(q || t || a || dlc || civ || role);
   const secondaryCount = [t, a, dlc].filter(Boolean).length;
   const reset = () => {
@@ -222,6 +226,15 @@ export default function UnitList() {
             <p className="unit-count">
               <span id="ucnt">{`${r.length} / ${fams.length}`}</span> <span>个系列</span>
             </p>
+            {!dirty && (
+              <p className="unit-order-note">
+                默认顺序：通用单位优先（按建筑与时代）
+                <Icon name="arrow-right" />
+                区域单位
+                <Icon name="arrow-right" />
+                独特单位
+              </p>
+            )}
             {summary && <p className="catalog-filter-active">已选：{summary}</p>}
             {dirty && (
               <button

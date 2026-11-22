@@ -11,7 +11,7 @@ import { Icon } from '../../../shared/ui/Icon';
 import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
-import { UnitPicker } from './UnitPicker';
+import { UnitPicker } from '../../../shared/ui/UnitPicker';
 
 export function MixedSideEditor({
   side,
@@ -252,6 +252,8 @@ export function MixedSideEditor({
                     id={`${prefix}-unit-${i}`}
                     label={`${label}第 ${i + 1} 行单位`}
                     value={u}
+                    civ={input.civ}
+                    unavailableGroupTitle={civByEn(input.civ) ? `${civByEn(input.civ)!.zh}不可用（选择后需修改本方文明）` : undefined}
                     list={units}
                     invalid={!!errors(`unit-${i}`).length}
                     describedBy={errors(`unit-${i}`).length ? `${prefix}-unit-${i}-error` : `${prefix}-identity-${i}`}

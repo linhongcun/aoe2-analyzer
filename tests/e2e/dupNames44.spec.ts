@@ -63,7 +63,7 @@ test('#44 单位列表：两个楼船、两个战车都在，且带文明小字'
   await page.goto('./#units');
   await page.locator('#uq').fill('楼船');
   await expect(page.locator('#ugrid .unit-row')).toHaveCount(2);
-  await expect(page.locator('#ugrid .unit-row .civnote')).toHaveText(['达罗毗荼', '中国等 5 个文明']);
+  await expect(page.locator('#ugrid .unit-row .civnote')).toHaveText(['中国等 5 个文明', '达罗毗荼']);
   await page.locator('#uq').fill('翼骑兵');
   await expect(page.locator('#ugrid .unit-row .civnote')).toHaveCount(0);
 });
