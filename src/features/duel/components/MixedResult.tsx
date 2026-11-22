@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
 import { civByEn } from '../../../data';
+import { fighterUsesAssumeHit } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import { FIGHT_CAP, FIGHT_TIME } from '../../../domain/contactFight';
@@ -52,7 +53,10 @@ export function MixedRules() {
           <li>后排近战等前排清空后才能接敌。先进入射程的一方可能有接敌前的齐射窗口。</li>
           <li>同一时刻先快照双方存活攻击者，故该时刻被击杀的单位仍能完成本次攻击；之后不再出手。</li>
           <li>同刻攻击按本方行顺序逐击结算。清空前排后，仅对还在射程内的下一行继续结算，按新目标计算每击伤害。单击超出的伤害丢弃。</li>
-          <li>沿用本站伤害类别、护甲和远程命中率期望；占比只是单位数量占比，不是人口、资源或攻击权重。</li>
+          <li>
+            沿用本站伤害类别、护甲和常规远程命中率期望（目录准确度为 <span className="num nw">0%</span>{' '}
+            的特殊远程攻击按每击命中主目标估算）；占比只是单位数量占比，不是人口、资源或攻击权重。
+          </li>
           <li>
             达到 <span className="num nw">{FIGHT_TIME} 游戏秒</span>时限或事件、攻击计算上限时停止。双方仍存活时显示存活数量，暂无胜者。
           </li>
@@ -99,6 +103,7 @@ export function MixedResult({
               civ: row.resolved.civ,
               age: row.resolved.age,
               selectedTechs: selectedTechsOf(row.resolved),
+              assumeHit: fighterUsesAssumeHit(row.resolved.F),
             },
           ]
         : [],

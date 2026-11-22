@@ -16,19 +16,25 @@ export function groupReplay(result: GroupOutcome): ReplayFrame[] {
 /** 1v1 的攻击发生在各自攻击间隔的整倍数，使用结果卡的期望每击与终局生命。 */
 export function oneReplay(a: Fighter, b: Fighter, result: DuelResult): ReplayFrame[] {
   const times = new Set<number>([0]);
-  for (const fighter of [a, b]) {
-    if (fighter.rof <= 0) continue;
+  for (const [fighter, ow] of [
+    [a, result.ab],
+    [b, result.ba],
+  ] as const) {
+    if (!ow.canAttack || fighter.rof <= 0) continue;
     for (let i = 1; i * fighter.rof < result.duration - 1e-9; i++) times.add(i * fighter.rof);
   }
-  const hits = (f: Fighter, t: number) => (f.rof > 0 ? Math.floor((t + 1e-9) / f.rof) + 1 : 1);
+  const hits = (f: Fighter, ow: DuelResult['ab'], t: number) => (!ow.canAttack ? 0 : f.rof > 0 ? Math.floor((t + 1e-9) / f.rof) + 1 : 1);
   const frames = [...times]
     .sort((x, y) => x - y)
     .map((time) => ({
       time,
-      a: Math.max(0, a.hp - hits(b, time) * result.ba.expDmg),
-      b: Math.max(0, b.hp - hits(a, time) * result.ab.expDmg),
+      a: Math.max(0, a.hp - hits(b, result.ba, time) * result.ba.expDmg),
+      b: Math.max(0, b.hp - hits(a, result.ab, time) * result.ab.expDmg),
     }));
-  const noKill = result.ab.time === null && result.ba.time === null && result.ab.hits > 1 && result.ba.hits > 1;
+  const noKill =
+    result.outcome === 'both-no-attack' ||
+    result.outcome === 'no-kill' ||
+    (result.ab.time === null && result.ba.time === null && (!result.ab.canAttack || result.ab.hits > 1) && (!result.ba.canAttack || result.ba.hits > 1));
   frames.push({
     time: result.duration,
     a: result.winner === 'a' ? result.remaining : noKill ? frames[0]!.a : 0,

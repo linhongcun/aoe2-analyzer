@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { damageBreakdown, damageSources } from '../../../domain/damageBreakdown';
-import type { Fighter } from '../../../domain/duel';
+import { fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON, type Fighter } from '../../../domain/duel';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
 import { CostView } from '../../../shared/ui/art';
@@ -24,7 +24,10 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
   return (
     <details className="damage-breakdown" data-t="damage-breakdown">
       <summary>查看逐击伤害与加成来源</summary>
-      <p className="note">每类攻击只与同类护甲相减，再合计；负攻击可能扣减伤害，总伤害最低为 1。远程期望伤害另计命中率。</p>
+      <p className="note">
+        每类攻击只与同类护甲相减，再合计；负攻击可能扣减伤害，有普通攻击时总伤害最低为 <span className="num nw">1</span>
+        。常规远程期望伤害另计命中率；目录准确度为 <span className="num nw">0%</span> 的特殊远程攻击按每击命中主目标估算。
+      </p>
       {(
         [
           ['A', a, b],
@@ -38,26 +41,37 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
             <h3 className="damage-heading">
               {side} · {attacker.u.zh} 攻击 {defender.u.zh}
             </h3>
-            <ul className="damage-classes">
-              {d.rows.map((row) => (
-                <li key={row.category}>
-                  {row.category}：攻击 <b className="nw">{n(row.attack)}</b>，目标护甲 <b className="nw">{n(row.armor)}</b>，伤害{' '}
-                  <b className="nw">{n(row.damage)}</b>
-                </li>
-              ))}
-            </ul>
-            {d.minimum > 0 && (
-              <p>
-                最低伤害补足：<b className="nw">+{n(d.minimum)}</b>
-              </p>
+            {d.canAttack ? (
+              <>
+                <ul className="damage-classes">
+                  {d.rows.map((row) => (
+                    <li key={row.category}>
+                      {row.category}：攻击 <b className="nw">{n(row.attack)}</b>，目标护甲 <b className="nw">{n(row.armor)}</b>，伤害{' '}
+                      <b className="nw">{n(row.damage)}</b>
+                    </li>
+                  ))}
+                </ul>
+                {d.minimum > 0 && (
+                  <p>
+                    最低伤害补足：<b className="nw">+{n(d.minimum)}</b>
+                  </p>
+                )}
+                <p>
+                  每击伤害：
+                  <b className="nw" data-t={`damage-total-${side}`}>
+                    {n(d.total)}
+                  </b>
+                  ；期望每击：<b className="nw">{n(d.expected)}</b>
+                  {fighterUsesAssumeHit(attacker.F) && (
+                    <>
+                      （按每击命中主目标估算，目录准确度 <span className="num nw">0%</span>）
+                    </>
+                  )}
+                </p>
+              </>
+            ) : (
+              <p data-t={`damage-no-attack-${side}`}>{NO_NORMAL_ATTACK_REASON}（不造成普通攻击伤害）。</p>
             )}
-            <p>
-              每击伤害：
-              <b className="nw" data-t={`damage-total-${side}`}>
-                {n(d.total)}
-              </b>
-              ；期望每击：<b className="nw">{n(d.expected)}</b>
-            </p>
             <h4 className="damage-source-heading">{civByEn(attacker.civ)?.zh ?? attacker.civ} · 攻击与护甲来源</h4>
             <p>
               单位基础：攻击 <span className="nw">{attacker.u.atk}</span>，近战护甲 <span className="nw">{attacker.u.ma}</span>，穿刺护甲{' '}

@@ -116,6 +116,54 @@
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+.pk-unm-desc + .pk-unm-desc {
+  margin-top: var(--space-2);
+}
+.pk-unm-desc strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+/* issue 1322：按每击命中估算与单侧无普通攻击说明卡及口径胶囊 */
+.pk-callout {
+  margin: var(--space-3) 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  min-width: 0;
+}
+.pk-callout.is-info {
+  border-left: 4px solid var(--color-link);
+}
+.pk-callout-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1.45;
+}
+.pk-callout-title + .pk-callout-title {
+  margin-top: var(--space-1);
+}
+.pk-callout-body {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.pk-acc-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-link-soft);
+  color: var(--color-link);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.35;
+}
 .pk-unm-vg {
   margin-top: var(--space-3);
   padding-top: var(--space-3);

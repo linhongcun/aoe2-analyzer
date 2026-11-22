@@ -1,6 +1,6 @@
 /** issue 205：对同一对手比较科技方案；所有属性和战斗结果复用现有模拟器。 */
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
-import { duel, fighterFrom, type Fighter } from './duel';
+import { duel, fighterCanAttack, fighterFrom, type DuelOutcome, type Fighter } from './duel';
 import { TEAM_BONUSES } from './effects';
 import { civStatus, presetUpTo, simTechs, simulate, type SimContext } from './simulator';
 import type { Cost, StatSet, Tech, Unit } from './types';
@@ -161,4 +161,18 @@ export function upgradeComparison(
     cost,
     time,
   };
+}
+
+const isDecidedOutcome = (outcome: DuelOutcome) => outcome === 'win' || outcome === 'draw';
+
+/** 判断升级前后 1v1 比较是否可展示胜负、战斗时长与胜者剩余生命：所有可攻击方须有攻击间隔，且升级前后均存在确定胜负/平局。 */
+export function upgradeCombatAvailable(comparison: UpgradeComparison): boolean {
+  const attackingHaveRof = [comparison.before.F, comparison.current.F, comparison.opponent.F].every((f) => !fighterCanAttack(f) || f.rof > 0);
+  return (
+    attackingHaveRof &&
+    isDecidedOutcome(comparison.beforeResult.outcome) &&
+    isDecidedOutcome(comparison.currentResult.outcome) &&
+    Number.isFinite(comparison.beforeResult.duration) &&
+    Number.isFinite(comparison.currentResult.duration)
+  );
 }

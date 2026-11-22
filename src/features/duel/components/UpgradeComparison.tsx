@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { useShareLink } from '../../../shared/ui/useShareLink';
 import { civByEn } from '../../../data';
 import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
+import { fighterCanAttack } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
+import { upgradeCombatAvailable, upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
 import type { SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
 import { CostView, TechLink } from '../../../shared/ui/art';
@@ -13,7 +14,8 @@ import './upgrade-comparison.css';
 
 const fmt = (n: number | null) => (n === null || !Number.isFinite(n) ? '—' : String(Number(n.toFixed(3))));
 const showHp = (key: string, n: number | null) => ((key === 'a-hp' || key === 'remaining') && n !== null && Number.isFinite(n) ? formatHp(n) : fmt(n));
-const MODEL = '1v1 近似模型：首击同时发生，远程按命中率取期望；未模拟移速、射程、弹道、走位、地形和特殊能力的实战价值。结果不变不代表科技无用。';
+const MODEL =
+  '1v1 近似模型：首击同时发生，常规远程按命中率取期望（目录准确度 0% 的特殊远程按每击命中主目标估算）；未模拟移速、射程、弹道、走位、地形和特殊能力的实战价值。结果不变不代表科技无用。';
 const COST_NOTE = '基础研究费用：文明科研折扣、免费科技、返金与研究速度加成未计入；研究时长为逐项合计，不模拟并行研究。';
 type Plan = Extract<ReturnType<typeof upgradePlan>, { ok: true }>;
 const sideText = (p: Plan) => `${civByEn(p.spec.civ)?.zh ?? p.spec.civ} · ${p.u.zh} · ${['', '黑暗时代', '封建时代', '城堡时代', '帝王时代'][p.spec.age]}`;
@@ -112,12 +114,8 @@ export function UpgradeComparison({
     if (canSave && currentA?.ok && currentB?.ok) onSave(currentA.spec, currentB.spec);
   };
   const comparison = result?.ok ? result : null;
-  const combatAvailable =
-    comparison &&
-    [comparison.before.F, comparison.current.F, comparison.opponent.F].every((f) => f.rof > 0) &&
-    [comparison.beforeResult.ab.time, comparison.beforeResult.ba.time, comparison.currentResult.ab.time, comparison.currentResult.ba.time].every(
-      (time) => time !== null && Number.isFinite(time),
-    );
+  const combatAvailable = comparison ? upgradeCombatAvailable(comparison) : false;
+  const bothNoAttack = Boolean(comparison && comparison.beforeResult.outcome === 'both-no-attack' && comparison.currentResult.outcome === 'both-no-attack');
   const canonical = comparison
     ? {
         a: fmtSide(comparison.current.spec),
@@ -132,7 +130,7 @@ export function UpgradeComparison({
     const values = JSON.parse(canonicalString) as Record<string, string>;
     if (Object.entries(values).some(([key, value]) => params.get(key) !== value)) onNormalize(values);
   }, [canonicalString, params, onNormalize]);
-  type Row = { key: string; label: string; before: number | null; after: number | null; unit?: string };
+  type Row = { key: string; label: string; before: number | null; after: number | null; unit?: string; unavailableLabel?: string };
   const rows: Row[] = comparison
     ? [
         ...(
@@ -146,15 +144,24 @@ export function UpgradeComparison({
             ['rng', '射程（未模拟）'],
             ['spd', '移速（未模拟）'],
           ] as const
-        ).map(([key, label]) => ({
-          key: `a-${key}`,
-          label: `A ${label}`,
-          before: comparison.before.S[key],
-          after: comparison.current.S[key],
-          unit: key === 'rof' ? '秒' : key === 'acc' ? '%' : '',
-        })),
-        ...(['ab', 'ba'] as const).flatMap((direction) =>
-          (
+        ).map(([key, label]) => {
+          const attackStat = key === 'atk' || key === 'rof' || key === 'acc';
+          const beforeCan = !attackStat || fighterCanAttack(comparison.before.F);
+          const afterCan = !attackStat || fighterCanAttack(comparison.current.F);
+          return {
+            key: `a-${key}`,
+            label: `A ${label}`,
+            before: beforeCan ? comparison.before.S[key] : null,
+            after: afterCan ? comparison.current.S[key] : null,
+            unit: key === 'rof' ? '秒' : key === 'acc' ? '%' : '',
+            unavailableLabel: attackStat && !beforeCan && !afterCan ? '无普通攻击' : undefined,
+          };
+        }),
+        ...(['ab', 'ba'] as const).flatMap((direction) => {
+          const beforeDir = comparison.beforeResult[direction];
+          const afterDir = comparison.currentResult[direction];
+          const noAttack = !beforeDir.canAttack && !afterDir.canAttack;
+          return (
             [
               ['dmg', '每击伤害'],
               ['expDmg', '期望每击'],
@@ -165,23 +172,26 @@ export function UpgradeComparison({
           ).map(([key, label]) => ({
             key: `${direction}-${key === 'expDmg' ? 'exp' : key}`,
             label: `${direction === 'ab' ? 'A 打 B' : 'B 打 A'} ${label}`,
-            before: comparison.beforeResult[direction][key],
-            after: comparison.currentResult[direction][key],
+            before: beforeDir.canAttack ? beforeDir[key] : null,
+            after: afterDir.canAttack ? afterDir[key] : null,
             unit: key === 'time' ? '秒' : '',
-          })),
-        ),
+            unavailableLabel: noAttack ? '无普通攻击' : undefined,
+          }));
+        }),
         {
           key: 'duration',
           label: '战斗时长',
           before: combatAvailable ? comparison.beforeResult.duration : null,
           after: combatAvailable ? comparison.currentResult.duration : null,
           unit: '秒',
+          unavailableLabel: bothNoAttack ? '无普通攻击' : undefined,
         },
         {
           key: 'remaining',
           label: '胜者剩余生命',
           before: combatAvailable ? comparison.beforeResult.remaining : null,
           after: combatAvailable ? comparison.currentResult.remaining : null,
+          unavailableLabel: bothNoAttack ? '无普通攻击' : undefined,
         },
       ]
     : [];
@@ -251,7 +261,7 @@ export function UpgradeComparison({
                     </span>
                     <small className="upgrade-delta">
                       {row.before === null || row.after === null || !Number.isFinite(row.before) || !Number.isFinite(row.after)
-                        ? '未模拟'
+                        ? (row.unavailableLabel ?? '未模拟')
                         : row.after === row.before
                           ? '不变'
                           : `变化 ${row.after > row.before ? '+' : ''}${showHp(row.key, row.after - row.before)}${row.unit ?? ''}`}
@@ -267,13 +277,21 @@ export function UpgradeComparison({
                 <td>
                   <span data-t="upgrade-value">{combatAvailable ? winner(comparison.currentResult.winner) : '—'}</span>
                   <small className="upgrade-delta">
-                    {!combatAvailable ? '未模拟' : comparison.beforeResult.winner === comparison.currentResult.winner ? '不变' : '胜负改变'}
+                    {!combatAvailable
+                      ? bothNoAttack
+                        ? '无普通攻击'
+                        : '未模拟'
+                      : comparison.beforeResult.winner === comparison.currentResult.winner
+                        ? '不变'
+                        : '胜负改变'}
                   </small>
                 </td>
               </tr>
             </tbody>
           </table>
-          {!combatAvailable && <p className="note">爆炸单位缺少攻击间隔或期望伤害为零，无法比较胜负、战斗时长与剩余生命；保留可计算的每击指标。</p>}
+          {!combatAvailable && (
+            <p className="note">双方无普通攻击、爆炸单位缺少攻击间隔或无法完成击杀，无法比较胜负、战斗时长与剩余生命；保留可计算的每击指标。</p>
+          )}
           {!comparison.added.length && !comparison.removed.length && <p className="note">尚无科技变化。</p>}
           <div className="upgrade-investment">
             <section data-t="upgrade-added">

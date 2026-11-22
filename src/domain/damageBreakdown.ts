@@ -1,4 +1,4 @@
-import { damageByClass, damagePerHit, expectedHit, fighterFrom } from './duel';
+import { damageByClass, damagePerHit, expectedHit, fighterCanAttack, fighterFrom } from './duel';
 import { baseStats, simulate, type SimContext, type SimStep } from './simulator';
 import type { Unit } from './types';
 
@@ -37,7 +37,8 @@ export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number
 }
 
 export function damageBreakdown(a: ReturnType<typeof fighterFrom>, b: ReturnType<typeof fighterFrom>) {
+  if (!fighterCanAttack(a)) return { canAttack: false, rows: [], subtotal: 0, minimum: 0, total: 0, expected: 0 };
   const rows = damageByClass(a, b);
   const subtotal = rows.reduce((sum, row) => sum + row.damage, 0);
-  return { rows, subtotal, minimum: Math.max(0, 1 - subtotal), total: damagePerHit(a, b), expected: expectedHit(a, b) };
+  return { canAttack: true, rows, subtotal, minimum: Math.max(0, 1 - subtotal), total: damagePerHit(a, b), expected: expectedHit(a, b) };
 }

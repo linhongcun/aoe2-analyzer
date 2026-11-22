@@ -3,6 +3,7 @@ import { DATA_PATCH, SOURCE_PINS } from '../../../data/sources';
 import {
   ballisticsBoundary,
   ballisticsSentence,
+  catalogAccuracyAssumesHit,
   catalogAccuracyFeedsExpectedHit,
   DUEL_MODEL_PATH,
   PK_UNSIMULATED,
@@ -12,7 +13,7 @@ import type { Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import './unit-accuracy.css';
 
-type AccuracyReading = Pick<Unit, 'rng' | 'acc' | 'accuracyDispersion'> & { id?: number };
+type AccuracyReading = Pick<Unit, 'rng' | 'acc' | 'accuracyDispersion'> & { id?: number; atks?: Unit['atks'] };
 
 const dat = SOURCE_PINS.dat;
 const datUrl = `https://github.com/${dat.repo}/blob/${dat.commit}/${dat.path}`;
@@ -21,6 +22,7 @@ export function AccuracyBoundaryNote({ unit, techs }: { unit: AccuracyReading; t
   if (!catalogAccuracyFeedsExpectedHit(unit)) return null;
   const facts = ballisticsBoundary(techs);
   const known = Number.isFinite(unit.acc) && unit.acc >= 0 && unit.acc <= 100;
+  const assumesHit = known && catalogAccuracyAssumesHit(unit);
   const spread = unit.accuracyDispersion;
   const hasSpread = typeof spread === 'number' && Number.isFinite(spread) && spread >= 0;
 
@@ -44,7 +46,15 @@ export function AccuracyBoundaryNote({ unit, techs }: { unit: AccuracyReading; t
               )}
             </dd>
             <dd className="ud-acc-note">
-              {known ? '目录百分比读数；进入单位 PK 的期望命中。' : '目录准确度待确认，本页不把它写成 PK 期望命中。'}
+              {!known ? (
+                '目录准确度待确认，本页不把它写成 PK 期望命中。'
+              ) : assumesHit ? (
+                <>
+                  目录准确度 <span className="num nw">0%</span> 不表示打不中。单位 PK 把每次主弹都算作命中主目标，这是主弹对单个目标的输出上限。
+                </>
+              ) : (
+                '目录百分比读数；进入单位 PK 的期望命中。'
+              )}
               {unit.id === 331 && '目录打包记录的准确度，不代表展开命中率。'}
             </dd>
           </div>

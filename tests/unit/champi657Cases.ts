@@ -190,12 +190,23 @@ describe('#657 蔷琵有限同代接触对照', () => {
     expect(card.candidates.slice(1).every((row) => row.state === 'ok')).toBe(true);
     expect(card.main).not.toBeNull();
   });
-  it('零命中率造成非有限次数时不可算，合法负附加伤害仍能计算', () => {
-    const c = copy();
-    c.core.unitById[4]!.acc = 0;
-    const row = ready(c).cards[0]!.candidates[2]!;
-    expect(row.state).toBe('unverified');
-    expect(row).not.toHaveProperty('pkPath');
+  it('无普通攻击或无攻击间隔造成不可算时阻断，目录零准确度走按每击命中估算，合法负附加伤害仍能计算', () => {
+    const noAtk = copy();
+    noAtk.core.unitById[4]!.atks = [];
+    const noAtkRow = ready(noAtk).cards[0]!.candidates[2]!;
+    expect(noAtkRow.state).toBe('unverified');
+    expect(noAtkRow).not.toHaveProperty('pkPath');
+
+    const zeroRof = copy();
+    zeroRof.core.unitById[4]!.rof = 0;
+    const zeroRofRow = ready(zeroRof).cards[0]!.candidates[2]!;
+    expect(zeroRofRow.state).toBe('unverified');
+    expect(zeroRofRow).not.toHaveProperty('pkPath');
+
+    const zeroAcc = copy();
+    zeroAcc.core.unitById[4]!.acc = 0;
+    expect(ready(zeroAcc).cards[0]!.candidates[2]!.state).toBe('ok');
+
     expect(data.core.unitById[448]!.atks).toContainEqual(['村民', -3]);
     expect(ready().cards[0]!.candidates[1]!.state).toBe('ok');
   });

@@ -343,6 +343,20 @@
 .mix-stats dd {
   margin: 0;
 }
+.mix-stats > .mix-acc-row {
+  align-items: center;
+  flex-wrap: wrap;
+}
+.mix-stats > .mix-acc-row dt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mix-acc-sub {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  line-height: 1.35;
+}
 .mix-add {
   display: flex;
   align-items: center;

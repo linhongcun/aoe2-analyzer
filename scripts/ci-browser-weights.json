@@ -110,6 +110,7 @@
     "tests/e2e/duelRedesign1279.spec.ts": 24000,
     "tests/e2e/duelPreset372.spec.ts": 26649,
     "tests/e2e/duelTrainingCost943.spec.ts": 15000,
+    "tests/e2e/duelZeroDamageMonk1322.spec.ts": 15000,
     "tests/e2e/earlyUnlockAges1325.spec.ts": 12000,
     "tests/e2e/reverseCounters1053.spec.ts": 12000,
     "tests/e2e/dupNames44.spec.ts": 11394,

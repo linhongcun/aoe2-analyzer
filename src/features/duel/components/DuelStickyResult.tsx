@@ -83,7 +83,7 @@ export function DuelStickyResult({ summary, targetEl, headingRef }: DuelStickyRe
           {summary.metrics.map((metric, index) => (
             <span key={index} className="duel-sticky-metric">
               {metric.prefix}
-              <span className="num nw">{metric.value}</span>
+              {metric.value && <span className="num nw">{metric.value}</span>}
             </span>
           ))}
         </p>

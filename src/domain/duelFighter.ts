@@ -1,6 +1,8 @@
 import type { Cost, StatSet, Unit } from './types';
 import { damageRows, totalDamage } from './damageCore';
 
+export type AccuracyMode = 'catalog' | 'assume-hit';
+
 export interface Fighter {
   name: string;
   hp: number;
@@ -12,6 +14,10 @@ export interface Fighter {
   rof: number;
   /** 命中率 0..1 */
   acc: number;
+  /** 是否具备普通攻击能力；缺省按 attack 是否非空推导，以兼容手构测试对象。 */
+  canAttack?: boolean;
+  /** 远程命中口径：'assume-hit' 表示目录准确度 0% 的特殊远程攻击按每次主弹命中主目标估算。 */
+  accuracyMode?: AccuracyMode;
   ranged: boolean;
   rng: number;
   cost: Cost;
@@ -26,6 +32,28 @@ export interface Fighter {
   };
 }
 
+/** 目录单位是否具备普通攻击能力（与群战 repeatableAttack 同源）。 */
+export function unitHasNormalAttack(u: Pick<Unit, 'atks'>): boolean {
+  return u.atks.some(([, n]) => n > 0);
+}
+
+/** 无普通攻击的僧侣类施法单位（僧侣 125、传教士 775），用于补充招降与治疗未计入提示。 */
+export function unitIsNonAttackingCaster(u: Pick<Unit, 'atks' | 'armc'>): boolean {
+  return !unitHasNormalAttack(u) && u.armc.some(([n]) => n === '僧侣');
+}
+
+/** 参战对象是否具备普通攻击能力。 */
+export function fighterCanAttack(f: Pick<Fighter, 'canAttack' | 'attack' | 'contact'>): boolean {
+  if (f.canAttack !== undefined) return f.canAttack;
+  if (f.contact?.repeatableAttack === false && !Object.values(f.attack).some((n) => n > 0)) return false;
+  return Object.keys(f.attack).length > 0;
+}
+
+/** 参战对象是否采用「目录准确度 0% → 按每击命中估算」口径。 */
+export function fighterUsesAssumeHit(f: Pick<Fighter, 'canAttack' | 'attack' | 'contact' | 'ranged' | 'accuracyMode'>): boolean {
+  return fighterCanAttack(f) && f.ranged && f.accuracyMode === 'assume-hit';
+}
+
 /** 主攻击类别：先非零（近战优先于穿刺），次显式零值（近战优先于穿刺），兜底按射程判定。 */
 export function mainAttackType(u: Pick<Unit, 'atks' | 'rng'>): '近战' | '穿刺' {
   const hasNonZero = (name: '近战' | '穿刺') => u.atks.some(([n, v]) => n === name && v !== 0);
@@ -38,21 +66,29 @@ export function mainAttackType(u: Pick<Unit, 'atks' | 'rng'>): '近战' | '穿�
 }
 
 export function fighterFrom(u: Unit, S: StatSet): Fighter {
-  const main = mainAttackType(u);
-  const attack: Record<string, number> = { [main]: S.atk };
-  const secondaryName = main === '近战' ? '穿刺' : '近战';
-  const secondary = u.atks.find(([n]) => n === secondaryName);
-  if (secondary) attack[secondaryName] = secondary[1];
-  Object.entries(S.bonus).forEach(([k, v]) => (attack[k] = v));
+  const canAttack = unitHasNormalAttack(u);
+  const attack: Record<string, number> = {};
+  if (canAttack) {
+    const main = mainAttackType(u);
+    attack[main] = S.atk;
+    const secondaryName = main === '近战' ? '穿刺' : '近战';
+    const secondary = u.atks.find(([n]) => n === secondaryName);
+    if (secondary) attack[secondaryName] = secondary[1];
+    Object.entries(S.bonus).forEach(([k, v]) => (attack[k] = v));
+  }
   const armor: Record<string, number> = { 近战: S.ma, 穿刺: S.pa };
   Object.entries(S.armc).forEach(([k, v]) => (armor[k] = v));
+  const clampedAcc = Math.min(100, Math.max(0, S.acc));
+  const accuracyMode: AccuracyMode = canAttack && u.rng > 1 && u.acc === 0 && clampedAcc === 0 ? 'assume-hit' : 'catalog';
   return {
     name: u.zh,
     hp: S.hp,
     attack,
     armor,
     rof: S.rof,
-    acc: Math.min(100, Math.max(0, S.acc)) / 100,
+    acc: clampedAcc / 100,
+    canAttack,
+    accuracyMode,
     ranged: u.rng > 1,
     rng: S.rng,
     cost: u.cost,
@@ -62,19 +98,26 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
       speed: S.spd,
       minRange: S.minr,
       firstHitDelay: u.attackDelaySeconds ?? 0,
-      repeatableAttack: u.atks.some(([, n]) => n > 0),
+      repeatableAttack: canAttack,
     },
   };
 }
 
 /** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
-export function damageByClass(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>) {
+export function damageByClass(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact'>, d: Pick<Fighter, 'armor'>) {
+  if (!fighterCanAttack(a)) return [];
   // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
   return damageRows(a.attack, d.armor, { allowInvalid: true }).rows;
 }
-/** 单次命中伤害（不含命中率） */
-export function damagePerHit(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>): number {
+/** 单次命中伤害（不含命中率）；无普通攻击返回 0。 */
+export function damagePerHit(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact'>, d: Pick<Fighter, 'armor'>): number {
+  if (!fighterCanAttack(a)) return 0;
   return totalDamage(damageByClass(a, d));
 }
-/** 期望每次攻击伤害（远程乘命中率；近战命中率视为 100%） */
-export const expectedHit = (a: Fighter, d: Fighter) => damagePerHit(a, d) * (a.ranged ? a.acc : 1);
+/** 期望每次攻击伤害（无普通攻击为 0；近战与目录 0% 特殊远程按每击命中估算；常规远程乘命中率）。 */
+export function expectedHit(a: Fighter, d: Fighter): number {
+  if (!fighterCanAttack(a)) return 0;
+  const dmg = damagePerHit(a, d);
+  if (!a.ranged || a.accuracyMode === 'assume-hit') return dmg;
+  return dmg * a.acc;
+}

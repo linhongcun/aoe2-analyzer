@@ -45,7 +45,15 @@ export function AgeComparison({ ctx, byId, a, b }: { ctx: SimContext; byId: Reco
           </table>
           {row.result && row.a && row.b ? (
             <p>
-              <b>{row.result.winner === 'draw' ? '平局' : `${row.result.winner.toUpperCase()} 获胜`}</b>{' '}
+              <b>
+                {row.result.outcome === 'both-no-attack'
+                  ? '双方均无普通攻击'
+                  : row.result.outcome === 'no-kill'
+                    ? '暂无法分出胜负'
+                    : row.result.winner === 'draw'
+                      ? '平局'
+                      : `${row.result.winner.toUpperCase()} 获胜`}
+              </b>{' '}
               <Link
                 className="ulink"
                 to={`/duel?a=${fmtSide({ ...a, uid: row.a.u.id, age: row.age, techs: 'f' })}&b=${fmtSide({ ...b, uid: row.b.u.id, age: row.age, techs: 'f' })}&m=1`}

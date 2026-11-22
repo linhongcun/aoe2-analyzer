@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { duel, fighterFrom } from '../../src/domain/duel';
 import { TEAM_BONUSES } from '../../src/domain/effects';
 import { makeSimContext, presetUpTo, simTechs, simulate, type SimContext } from '../../src/domain/simulator';
-import { upgradeComparison, upgradePlan, type UpgradeSide } from '../../src/domain/upgradeComparison';
+import { upgradeCombatAvailable, upgradeComparison, upgradePlan, type UpgradeSide } from '../../src/domain/upgradeComparison';
 import type { Tech, Unit } from '../../src/domain/types';
 import { ctx, tech, techs, trees, units } from './helpers';
 
@@ -84,15 +84,19 @@ describe('#205 固定版本升级前后对比', () => {
     expect(result.time).toBe(0);
   });
 
-  it('保留零命中率和自爆单位的现有战斗语义', () => {
+  it('保留目录零准确度估算口径、无普通攻击与自爆单位的战斗语义', () => {
     const b = side();
     const organGun = side([], { uid: 1001, civ: 'Portuguese' });
     const ranged = comparison(organGun, organGun, b);
     expect(ranged.ok).toBe(true);
     if (!ranged.ok) return;
-    expect(ranged.beforeResult.ab.hits).toBe(Infinity);
-    expect(ranged.currentResult.ab.time).toBe(Infinity);
+    // #1322：风琴炮目录准确度 0% 改为按每击命中主目标估算（对 2 远程护甲 100 血骑士：每击 4、25 击、82.8 秒）
+    expect(ranged.beforeResult.ab.dmg).toBe(4);
+    expect(ranged.beforeResult.ab.expDmg).toBe(4);
+    expect(ranged.beforeResult.ab.hits).toBe(25);
+    expect(ranged.currentResult.ab.time).toBeCloseTo(24 * 3.45, 6);
     expect(ranged.currentResult).toEqual(ranged.beforeResult);
+    expect(upgradeCombatAvailable(ranged)).toBe(true);
     const petard = side([], { uid: 440 });
     const explosive = comparison(petard, petard, b);
     expect(explosive.ok).toBe(true);
@@ -100,6 +104,18 @@ describe('#205 固定版本升级前后对比', () => {
     expect(explosive.currentResult.ab.time).toBeNull();
     expect(explosive.currentResult.ab.dps).toBeNull();
     expect(explosive.currentResult).toEqual(explosive.beforeResult);
+    expect(upgradeCombatAvailable(explosive)).toBe(false);
+    const monk = side([], { uid: 125 });
+    const noAttack = comparison(monk, monk, b);
+    expect(noAttack.ok).toBe(true);
+    if (!noAttack.ok) return;
+    expect(noAttack.currentResult.ab.canAttack).toBe(false);
+    expect(noAttack.currentResult.ab.hits).toBe(Number.POSITIVE_INFINITY);
+    expect(noAttack.currentResult.ab.time).toBeNull();
+    expect(noAttack.currentResult.ab.dps).toBeNull();
+    expect(noAttack.currentResult.winner).toBe('b');
+    expect(noAttack.currentResult.remaining).toBe(100);
+    expect(upgradeCombatAvailable(noAttack)).toBe(true);
   });
 
   it('时代门控使数值差为零时，仍允许已支持的科技', () => {

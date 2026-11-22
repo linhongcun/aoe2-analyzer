@@ -49,7 +49,8 @@ export type ContactResult =
   (ResolvedFight & ({ status: 'win'; winner: Side } | { status: 'draw' | 'timeout' | 'limit' })) | { status: 'error'; reason: string };
 
 export function contactFighterError(f: Fighter): string | null {
-  if (f.contact?.repeatableAttack === false || f.rof <= 0 || !Object.values(f.attack).some((n) => n > 0)) return '没有可重复的普通攻击。请更换该单位后重算。';
+  if (f.canAttack === false || f.contact?.repeatableAttack === false || f.rof <= 0 || !Object.values(f.attack).some((n) => n > 0))
+    return '没有可重复的普通攻击。请更换该单位后重算。';
   if (!f.contact) return '缺少有效碰撞数据';
   const { radiusX, radiusY, speed, minRange, firstHitDelay } = f.contact;
   if (radiusX === undefined || radiusY === undefined || !(radiusX > 0 && radiusY > 0) || !Number.isFinite(8 * radiusX) || !Number.isFinite(30 * radiusY))

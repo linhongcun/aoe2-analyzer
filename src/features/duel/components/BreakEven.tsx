@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { breakEvenSteps, type BreakEvenResult } from '../../../domain/breakEven';
-import type { Fighter } from '../../../domain/duel';
+import { fighterUsesAssumeHit, type Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
 import { useShareLink } from '../../../shared/ui/useShareLink';
 import { CONTACT_MODEL, STOP_LABELS } from './ContactSummary';
@@ -27,7 +27,7 @@ export interface BreakEvenProps {
 export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
   const route = useLocation();
   const [job, setJob] = useState(() => (auto ? { sig, a, b, nb, summary } : null));
-  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string } | null>(null);
+  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string; assumeHitSides: string[] } | null>(null);
   if (job && job.sig !== sig) setJob(null);
   const pending = job?.sig === sig;
   useEffect(() => {
@@ -39,7 +39,8 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
       do {
         const step = steps.next();
         if (step.done) {
-          setRes({ sig: job.sig, r: step.value, aName: job.a.name, bName: job.b.name, summary: job.summary });
+          const assumeHitSides = [...(fighterUsesAssumeHit(job.a) ? [`A 方${job.a.name}`] : []), ...(fighterUsesAssumeHit(job.b) ? [`B 方${job.b.name}`] : [])];
+          setRes({ sig: job.sig, r: step.value, aName: job.a.name, bName: job.b.name, summary: job.summary, assumeHitSides });
           setJob(null);
           return;
         }
@@ -182,6 +183,12 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
           B 方固定 <span className="num nw">{r.nb} 个</span>，从 <span className="num nw">1 个</span>起逐档计算 A 方。
           取从该数量起、直到计算上限每一档都能获胜的最少数量。平局及未分出胜负的档位不计为胜局。
         </p>
+        {res.assumeHitSides.length > 0 && (
+          <p className="be-how" data-t="be-assume-hit">
+            {res.assumeHitSides.join('、')} · 按每击命中估算：目录准确度 <span className="num nw">0%</span>{' '}
+            不表示打不中。本场把每次主弹都算作命中主目标，这是主弹对单个目标的输出上限（同上方结果口径）。
+          </p>
+        )}
         {r.n !== null && (
           <div className="be-act">
             <button type="button" className="be-pri" disabled={stale} onClick={() => onOpen(r.n!, r.nb)}>
