@@ -2,6 +2,7 @@
 import { DAT, toEffects } from './datEffects';
 import { applyEffects, baseStats } from './simulator';
 import { damageRows, hitCount, totalDamage } from './damageCore';
+import { mainAttackType } from './duelFighter';
 import { buildingBase } from './buildingSim';
 import type { Building, Unit } from './types';
 import { verifiedSiegeInputs } from './siegeEvidence';
@@ -142,13 +143,16 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
     }
   }
   const attacks: Record<string, number> = { ...attacker.bonus };
-  for (const [category] of u.atks) {
-    if (category === '近战' || category === '穿刺') attacks[category] = attacker.atk;
+  const main = mainAttackType(u);
+  for (const [category, amount] of u.atks) {
+    if (category === '近战' || category === '穿刺') attacks[category] = category === main ? attacker.atk : amount;
   }
   // 旧 ram/331 简表路径保持既有模型；手推炮使用上方独立的完整类别证据。
   const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣']);
   const armors: Record<string, number> = { 近战: defender.ma, 穿刺: defender.pa, 所有建筑: defender.barm };
-  const filtered = Object.fromEntries(Object.entries(attacks).filter(([category]) => !irrelevant.has(category)));
+  const filtered = Object.fromEntries(
+    Object.entries(attacks).filter(([category, amount]) => !irrelevant.has(category) && (category in armors || amount !== 0)),
+  );
   const applied = damageRows(filtered, armors, { negativeAttack: false, missingArmor: 'error' });
   const bad = applied.problems[0];
   if (bad !== undefined) return unknown(bad === '石质防御' ? SIEGE_STONE_DEFENSE_REASON : `建筑缺少「${bad}」护甲的可核实数据。`);

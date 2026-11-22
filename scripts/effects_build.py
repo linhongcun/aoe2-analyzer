@@ -54,11 +54,17 @@ UNIT_FORM_ALIASES = {42: 331}
 
 
 def main_atk(o):
-    """站内单位的主攻击类别（4 近战 / 3 穿刺）；建筑固定按穿刺 3 处理。"""
+    """站内单位的主攻击类别（4 近战 / 3 穿刺）；建筑固定按穿刺 3 处理。先非零（近战优先于穿刺），再显式零值。"""
     if o.get('_b'):
         return 3
-    n = [x[0] for x in o.get('atks', [])]
-    return 4 if '近战' in n else 3 if '穿刺' in n else None
+    atks = o.get('atks', [])
+    nonzero = {x[0] for x in atks if x[1]}
+    if '近战' in nonzero:
+        return 4
+    if '穿刺' in nonzero:
+        return 3
+    names = {x[0] for x in atks}
+    return 4 if '近战' in names else 3 if '穿刺' in names else None
 
 
 def resolve_unit_alias(a, attr, op):

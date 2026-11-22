@@ -26,7 +26,7 @@ export function UnitNotes({
   invalid: boolean;
 }) {
   const alternate = relation?.alternate ? relation.form : undefined;
-  const bonuses = Object.fromEntries(u.atks.filter(([name]) => name !== '近战' && name !== '穿刺'));
+  const bonuses = Object.fromEntries(u.atks.filter(([name, amount]) => name !== '近战' && name !== '穿刺' && amount !== 0));
   const armorClasses = u.armc.filter(([name]) => !/^类别\d+$/.test(name));
   return (
     <section className="ud-section" id="unit-notes" aria-label="适用加成、护甲与说明">

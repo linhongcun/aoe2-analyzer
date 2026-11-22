@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.25] - 2026-11-23
+
+### 更新说明
+
+修正单位攻击数据导出遗漏显式零值攻击类别导致的负护甲伤害漏算：掷矛手与标枪骑兵现在会正确对拥有负骑射手护甲的目标触发额外伤害（如掷矛手对精锐骑象射手每击由 3 升至 7，含对骑射手 +4），弩炮、重型弩炮与诸葛弩系也会正确对拥有负近战护甲的冲车、攻城塔与攻城战象系触发额外近战伤害（如弩炮对攻城锤每击由 1 升至 4，含近战 +3）。全库基础属性共更正 28 组对阵的每击伤害与 4 组对重型冲车的伤害构成，单挑、群战与混编 PK 均采用同一口径；单位详情页不展示 +0 加成行，反向克制查询结果保持不变。
+
+### 修复
+
+- #1323：在 `scripts/attack_classes.py` 补齐类别 14「掠食动物」，重构 `scripts/units_build.py` 为可离线导入的纯函数 `attack_pairs`/`combat_stats` 与 `main()` 守卫，保留显式 `0` 攻击类别并对 9 个重复类别单位按非零优先保序去重（双非零抛错），定点重生成 `data/game/units.json`；在 `scripts/stats_crosscheck.py`、`scripts/effects_build.py` 与 `src/domain/duelFighter.ts` 统一两轮主攻击类别判定（先非零近战/穿刺、次显式零值），`fighterFrom` 保留显式副基础类，`src/domain/siege.ts` 复用 `mainAttackType` 并过滤非目标护甲的显式零值类别，`src/domain/reverseCounters.ts` 跳过有效零值攻击保持全库 248 单位反向克制零变更，`src/features/units/components/UnitNotes.tsx` 过滤 `0` 值避免 `+0` 与空表；新增 `tests/py/test_units_zero_attacks1323.py` 与 `tests/unit/explicitZeroAttacks1323.test.ts`。
+
 ## [0.99.24] - 2026-11-23
 
 ### 更新说明

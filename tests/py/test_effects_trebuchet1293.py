@@ -34,6 +34,11 @@ class EffectsTrebuchet1293(unittest.TestCase):
         }
         self.assertEqual(main_atk(building), 3)
         self.assertEqual(main_atk({'id': 331, 'atks': [['所有建筑', 250], ['穿刺', 200]]}), 3)
+        self.assertEqual(main_atk({'id': 279, 'atks': [['近战', 0], ['穿刺', 11]]}), 3)
+        self.assertEqual(main_atk({'id': 38, 'atks': [['穿刺', 0], ['近战', 10]]}), 4)
+        self.assertEqual(main_atk({'id': 999, 'atks': [['穿刺', 5], ['近战', 7]]}), 4)
+        self.assertEqual(main_atk({'id': 998, 'atks': [['穿刺', 0], ['近战', 0]]}), 4)
+        self.assertEqual(main_atk({'id': 997, 'atks': [['穿刺', 0]]}), 3)
         self.assertEqual(main_atk({'id': 38, 'atks': [['近战', 10]]}), 4)
         self.assertIsNone(main_atk({'id': 125, 'atks': []}))
 
