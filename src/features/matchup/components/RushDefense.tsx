@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { buildOrders } from '../../../data/buildOrders';
 import type { Civ } from '../../../domain/types';
+import { Icon } from '../../../shared/ui/Icon';
+import { radioKeyboard } from '../../../shared/ui/radioKeyboard';
 import { rushDrill, unavailableBuildUnits, unitAvailable, techAvailable, type MatchupData } from '../availability';
 import './rushDefense.css';
 import { matchupBuildPath } from '../../../domain/matchupRoute';
@@ -25,6 +27,38 @@ function CountText({ text }: { text: string }) {
   );
 }
 
+export function RushSegmentedPicker() {
+  const [params, setParams] = useSearchParams();
+  const guide = rushGuide(params.get('rush'));
+  const labelId = useId();
+  const select = (id: string) =>
+    setParams(
+      (p) => {
+        const n = new URLSearchParams(p);
+        n.set('rush', id);
+        return n;
+      },
+      { replace: true },
+    );
+  return (
+    <div className="mu-rush">
+      <span id={labelId} className="mu-rush-label">
+        对手打法
+      </span>
+      <div className="mu-rush-seg" role="radiogroup" aria-labelledby={labelId} onKeyDown={radioKeyboard}>
+        {guides.map((g) => {
+          const active = g.id === guide.id;
+          return (
+            <button key={g.id} type="button" role="radio" aria-checked={active} tabIndex={active ? 0 : -1} data-rush={g.id} onClick={() => select(g.id)}>
+              {g.shortLabel}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function RushReference({ own, data }: { own?: Civ; data: MatchupData | null }) {
   const [params] = useSearchParams();
   const guide = rushGuide(params.get('rush'));
@@ -37,23 +71,31 @@ export function RushReference({ own, data }: { own?: Civ; data: MatchupData | nu
         ? '本方防守单位或所需科技不可用，暂不提供出兵建议。'
         : '资料未确认本方单位可用，暂不提供出兵建议。';
   return (
-    <section className="mu-ref-block" aria-labelledby="mu-early-title">
+    <section className="mu-ref-block mu-early-ref" aria-labelledby="mu-early-title">
       <h3 id="mu-early-title">通用早期应对</h3>
       <p className="mu-scope">
-        <span className="mu-tag">通用示意</span>
-        下列四段是固定的通用稿，只随「对手打法」切换（当前：「{guide.name}
-        」），不按对手文明改写。请按侦察结果调整。若本方封建缺少对应防守单位或科技，不出那条出兵建议。
+        <span className="mu-tag">通用示意 · {guide.name}</span>
+        固定通用应对稿，只随上方对手打法切换，不按对手文明改写；请按侦察结果调整。若本方封建缺少对应防守单位或科技，不出那条出兵建议。
       </p>
       <div className="mu-guide">
-        <h4>何时开始应对</h4>
-        <p>{guide.cue}</p>
-        <h4>先出什么、出几个</h4>
-        <p>{ownAvailable || !own ? <CountText text={army} /> : army}</p>
-        <h4>补墙、箭塔与驻扎</h4>
-        <p>{guide.wall}</p>
+        <div className="mu-guide-col">
+          <h4>何时开始应对</h4>
+          <p>{guide.cue}</p>
+        </div>
+        <div className="mu-guide-col">
+          <h4>先出什么、出几个</h4>
+          <p>{ownAvailable || !own ? <CountText text={army} /> : army}</p>
+        </div>
+        <div className="mu-guide-col">
+          <h4>补墙、箭塔与驻扎</h4>
+          <p>{guide.wall}</p>
+        </div>
       </div>
       <details className="mu-fold">
-        <summary>来源与适用范围</summary>
+        <summary>
+          <span>来源与适用范围</span>
+          <Icon name="chevron-down" className="ic mu-fold-chevron" />
+        </summary>
         <ul>
           <li>
             <a href="https://www.ageofempires.com/learn-to-play/defending-your-empires-aoe2/" target="_blank" rel="noopener noreferrer">
@@ -90,7 +132,7 @@ export default function RushDefense({
   loadError: boolean;
   children?: ReactNode;
 }) {
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const guide = rushGuide(params.get('rush'));
   const drill = data ? rushDrill(data, own.en, enemy.en, guide) : null;
   const order = buildOrders.find((b) => b.id === guide.build)!;
@@ -98,30 +140,8 @@ export default function RushDefense({
   return (
     <section className="rush-defense" aria-labelledby="mu-practice-title">
       <h3 id="mu-practice-title">可按当前文明核对的练习</h3>
-      <p className="mu-scope">先选一种早期打法，再看这对文明能不能打开封建演练或参考开局。说明正文在下方通用参考里，四套稿只随对手打法切换。</p>
-      <div className="mu-rush">
-        <label htmlFor="mu-rush">对手打法</label>
-        <select
-          id="mu-rush"
-          value={guide.id}
-          onChange={(e) =>
-            setParams(
-              (p) => {
-                const n = new URLSearchParams(p);
-                n.set('rush', e.target.value);
-                return n;
-              },
-              { replace: true },
-            )
-          }
-        >
-          {guides.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <p className="mu-scope">先选一种早期打法，可即时查看下方通用应对要点，并核对当前双方是否适用封建演练或参考开局。</p>
+      <RushSegmentedPicker />
       {!data && (
         <p className="note" role={loadError ? undefined : 'status'}>
           {loadError ? '单位和科技资料加载失败，演练和开局入口暂不可用。' : '正在核对双方文明的单位和科技…'}
@@ -130,14 +150,20 @@ export default function RushDefense({
       <div className="mu-practice-links">
         {drill?.url && (
           <Link className="ulink" to={drill.url}>
-            打开 PK 演练：
-            <CountText text={guide.label} />
+            <Icon name="swords" />
+            <span>
+              PK 演练：
+              <CountText text={guide.label} />
+            </span>
           </Link>
         )}
         {data && blockedBuild.length === 0 && (
           <Link className="ulink" to={matchupBuildPath(own.en, enemy.en, 'me', guide.build)}>
-            参考开局：
-            <CountText text={order.name.zh} />
+            <Icon name="list-ordered" />
+            <span>
+              参考开局：
+              <CountText text={order.name.zh} />
+            </span>
           </Link>
         )}
       </div>
@@ -153,10 +179,14 @@ export default function RushDefense({
         </p>
       )}
       {guide.id === 'towers' && <p className="note">{TOWER_NOTE}</p>}
+      <RushReference own={own} data={data} />
       <p className="note">{BUILD_NOTE}</p>
       <p className="note">{COUNT_NOTE}</p>
       <details className="mu-fold">
-        <summary>演练限制</summary>
+        <summary>
+          <span>演练限制</span>
+          <Icon name="chevron-down" className="ic mu-fold-chevron" />
+        </summary>
         <p>{DRILL_LIMIT}</p>
       </details>
       {children}

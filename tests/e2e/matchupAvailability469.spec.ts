@@ -1,8 +1,13 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+const RUSH_LABELS = { militia: '民兵', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+type RushKey = keyof typeof RUSH_LABELS;
+
 const rush = (page: Page) => page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
-const duel = (page: Page) => rush(page).getByRole('link', { name: /打开 PK 演练/ });
+const rushGroup = (page: Page) => rush(page).getByRole('radiogroup', { name: '对手打法', exact: true });
+const rushRadio = (page: Page, id: RushKey) => rushGroup(page).getByRole('radio', { name: RUSH_LABELS[id], exact: true });
+const duel = (page: Page) => rush(page).getByRole('link', { name: /PK 演练/ });
 const build = (page: Page) => rush(page).getByRole('link', { name: /参考开局/ });
 const query = (href: string) => new URLSearchParams(href.split('?')[1]);
 const errors = new WeakMap<Page, { page: string[]; console: { text: string; url: string }[]; expectedFailedUrls: Set<string> }>();
@@ -31,13 +36,13 @@ async function pick(page: Page, id: 'ma' | 'me', civ: string) {
   await expect(page.locator(`#${id}`)).toHaveAttribute('data-value', civ);
 }
 
-async function matchup(page: Page, own = 'Franks', enemy = 'Britons', pressure = 'militia') {
+async function matchup(page: Page, own = 'Franks', enemy = 'Britons', pressure: RushKey = 'militia') {
   await page.goto(`./#/matchup?rush=${pressure}`);
   await expect(page.locator('#mres')).toBeVisible();
   await pick(page, 'ma', own);
   await pick(page, 'me', enemy);
-  await expect(rush(page).getByRole('combobox')).toHaveCount(1);
-  await expect(rush(page).getByRole('combobox')).toHaveValue(pressure);
+  await expect(rushGroup(page)).toHaveCount(1);
+  await expect(rushRadio(page, pressure)).toHaveAttribute('aria-checked', 'true');
 }
 
 test('#469 regression Franks versus Britons keeps the selected civilizations in both destination links', async ({ page }) => {
@@ -55,7 +60,7 @@ test('#469 regression Franks versus Britons keeps the selected civilizations in 
 test('#469 regression an Incas militia pressure cannot create a substituted current-matchup drill', async ({ page }) => {
   await matchup(page, 'Franks', 'Incas');
   await expect(duel(page)).toHaveCount(0);
-  await expect(rush(page).getByRole('combobox')).toHaveValue('militia');
+  await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
   await expect(rush(page)).toContainText('印加');
   await expect(rush(page)).toContainText(/不可用|无法|不适用/);
 });
@@ -83,10 +88,10 @@ test('#469 switching either civilization updates links and never replaces an una
   expect(params.get('a')).toBe('4.Britons.2..');
   expect(params.get('b')).toBe('74.Franks.2..');
   expect(query((await build(page).getAttribute('href'))!).get('civ')).toBe('Britons');
-  await rush(page).getByRole('combobox').selectOption('scouts');
+  await rushRadio(page, 'scouts').click();
   await pick(page, 'me', 'Mayans');
   await expect(duel(page)).toHaveCount(0);
-  await expect(rush(page).getByRole('combobox')).toHaveValue('scouts');
+  await expect(rushRadio(page, 'scouts')).toHaveAttribute('aria-checked', 'true');
   await expect(rush(page)).toContainText('玛雅');
   await expect(rush(page)).toContainText(/不可用|无法|不适用/);
   await pick(page, 'me', 'Franks');
@@ -177,7 +182,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(duel(page)).toHaveCount(1);
       await expect(build(page)).toHaveCount(1);
-      await touchTargets(rush(page).locator('a:visible, select:visible, summary:visible'));
+      await touchTargets(rush(page).locator('a:visible, button[role="radio"]:visible, summary:visible'));
       await nowrap(rush(page));
       await duel(page).focus();
       await duel(page).press('Tab');
@@ -186,23 +191,23 @@ for (const width of [360, 375, 390, 1280])
       expect((await new AxeBuilder({ page }).include('.rush-defense').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       await rush(page).screenshot({ path: info.outputPath(`rush469-legal-${width}-${theme}.png`) });
 
-      await rush(page).getByRole('combobox').selectOption('militia');
+      await rushRadio(page, 'militia').click();
       await pick(page, 'me', 'Incas');
       await expect(duel(page)).toHaveCount(0);
       await expect(rush(page)).toContainText('印加');
-      await expect(rush(page).getByRole('combobox')).toHaveValue('militia');
+      await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
       await nowrap(rush(page));
       await rush(page).screenshot({ path: info.outputPath(`rush469-unavailable-${width}-${theme}.png`) });
 
       await pick(page, 'ma', 'Mayans');
       await pick(page, 'me', 'Britons');
-      await rush(page).getByRole('combobox').selectOption('scouts');
+      await rushRadio(page, 'scouts').click();
       await expect(duel(page)).toHaveCount(1);
       await expect(build(page)).toHaveCount(0);
       await nowrap(rush(page));
       await rush(page).screenshot({ path: info.outputPath(`rush469-no-build-${width}-${theme}.png`) });
 
-      await rush(page).getByRole('combobox').selectOption('archers');
+      await rushRadio(page, 'archers').click();
       await expect(page.locator('#mres > p.note').filter({ hasText: /^弓手：/ })).not.toContainText(/骑兵|轻骑|骑射/);
       await page.screenshot({ path: info.outputPath(`matchup469-advice-${width}-${theme}.png`), fullPage: true });
     });
@@ -231,8 +236,8 @@ test('#469 pending data keeps selectable pressure but exposes no verified drill 
   expect(intercepted).toBe(true);
   await expect(duel(page)).toHaveCount(0);
   await expect(build(page)).toHaveCount(0);
-  await rush(page).getByRole('combobox').selectOption('towers');
-  await expect(rush(page).getByRole('combobox')).toHaveValue('towers');
+  await rushRadio(page, 'towers').click();
+  await expect(rushRadio(page, 'towers')).toHaveAttribute('aria-checked', 'true');
   await rush(page).screenshot({ path: info.outputPath('rush469-pending-360.png') });
   release();
   await expect(page.locator('#mres')).toBeVisible();
@@ -255,8 +260,8 @@ test('#469 a genuine data load failure is caught without creating verified fallb
   await expect(duel(page)).toHaveCount(0);
   await expect(build(page)).toHaveCount(0);
   await expect(page.locator('#mres')).toHaveCount(0);
-  await rush(page).getByRole('combobox').selectOption('towers');
-  await expect(rush(page).getByRole('combobox')).toHaveValue('towers');
+  await rushRadio(page, 'towers').click();
+  await expect(rushRadio(page, 'towers')).toHaveAttribute('aria-checked', 'true');
   await expect(duel(page)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('matchup469-load-failure-360.png'), fullPage: true });
 });

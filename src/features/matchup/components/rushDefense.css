@@ -13,34 +13,13 @@
 
 .rush-count {
   white-space: nowrap;
-}
-
-.mu-rush {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2) var(--space-3);
-  margin: 0 0 var(--space-2);
-}
-
-.mu-rush label {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--fs-sm);
-  color: var(--color-muted);
-}
-
-.rush-defense select {
-  min-height: 44px;
-  min-width: 44px;
-  max-width: 100%;
+  font-variant-numeric: tabular-nums;
 }
 
 .mu-practice-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-2);
   margin: 0 0 var(--space-1);
 }
 

@@ -4,13 +4,15 @@ import { describe, expect, it } from 'vitest';
 const page = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
 const rush = readFileSync('src/features/matchup/components/RushDefense.tsx', 'utf8');
 
-describe('#939 对局助手主页信息层级', () => {
-  it('跟文明走的入口和通用 PK 分开，文案逐字落在主页', () => {
+describe('#939 / #1284 对局助手主页信息层级与跨工具带参边界', () => {
+  it('跟文明走的带参入口、诚实非推荐说明与独立战术边界逐字落在主页', () => {
     expect(page).toContain('下面的开局、文明页和练习入口会带上这对文明。');
-    expect(page).toContain('不自动带入当前双方');
-    expect(page).toContain('aria-label="单位 PK，不自动带入当前双方"');
+    expect(page).toContain('matchupDuelPath');
+    expect(page).toContain('matchupComparePath');
+    expect(page).toContain('非系统推荐，请按本局实际兵种切换');
+    expect(page).toContain('双方文明相同时暂不进入文明对比。');
+    expect(page).toContain('选定双方文明后可自动带入单位 PK 与文明对比');
     expect(page).toContain('to="/duel"');
-    expect(page).not.toMatch(/to=\{`\/duel\?/);
     expect(page).not.toContain('以下正文不随');
     expect(page).not.toContain('推荐反制');
     expect(page).not.toContain('当前对局：');
@@ -25,12 +27,13 @@ describe('#939 对局助手主页信息层级', () => {
     expect(page).toContain('to="/team-plan"');
   });
 
-  it('练习资格与早期四稿仍调用现有函数，限制收入折叠', () => {
+  it('练习资格与早期四稿仍调用现有函数，使用分段单选组与折叠箭头', () => {
     expect(rush).toContain('rushDrill');
     expect(rush).toContain('unavailableBuildUnits');
     expect(rush).toContain('unitAvailable');
     expect(rush).toContain('techAvailable');
-    expect(rush).toContain('打开 PK 演练：');
+    expect(rush).toContain('role="radiogroup"');
+    expect(rush).toContain('PK 演练：');
     expect(rush).toContain('参考开局：');
     expect(rush).toContain('本方防守单位或所需科技不可用，暂不提供出兵建议。');
     expect(rush).toContain('此预设只比较村民近战，不模拟打塔。敌塔已完工时不适用。');
@@ -38,8 +41,9 @@ describe('#939 对局助手主页信息层级', () => {
     expect(rush).toContain('数量是本站的起步练习建议，需要按侦察结果增减。');
     expect(rush).toContain('演练限制');
     expect(rush).toContain('塔爆仅研究织布机（双方均须可用）');
-    expect(rush).toContain('下列四段是固定的通用稿，只随「对手打法」切换');
+    expect(rush).toContain('固定通用应对稿，只随上方对手打法切换，不按对手文明改写');
     expect(rush).toContain('来源与适用范围');
+    expect(rush).toContain('chevron-down');
     expect(rush).toContain('{ replace: true }');
     expect(page).toContain('filterCounterUnits');
     expect(page).toContain('counterExtra');

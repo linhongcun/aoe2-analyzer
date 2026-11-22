@@ -95,13 +95,7 @@ it('#520 query wins over sticky, picker writes both keys and a bare return remem
 it('#520 duel follows the canonical pair after automatic repair, then responds to new valid packs', async () => {
   await mount(h(Duel), '/duel?a=bad.Mongols.2..&b=74.Chinese.2..');
   expect(currentSearch).toContain('a=569.Franks'); // 既有 PK 自动修复仍工作。
-  expect(links()).toEqual([
-    '/matchup?me=Franks&opp=Chinese',
-    '/civ/Franks',
-    '/civ/Chinese',
-    '/builds?civ=Franks&from=duel',
-    '/builds?civ=Chinese&from=duel',
-  ]);
+  expect(links()).toEqual(['/matchup?me=Franks&opp=Chinese', '/civ/Franks', '/civ/Chinese', '/builds?civ=Franks&from=duel', '/builds?civ=Chinese&from=duel']);
   await act(async () => navigate('/duel?a=4.Mongols.2..&b=74.Chinese.2..'));
   expect(links()).toEqual([
     '/matchup?me=Mongols&opp=Chinese',
@@ -181,13 +175,17 @@ it('#672 explicit complete, clear, refill keeps rush and restores actual analysi
   expect(view.root.findAllByProps({ id: 'mres' })).toHaveLength(1);
   expect(rendered()).toContain('通用类型反制');
   expect(rendered()).toContain('也不是模型结论');
-  const pk = view.root.findByProps({ 'aria-label': '单位 PK，不自动带入当前双方' });
-  expect(pk.props.to ?? pk.props.href).toBe('/duel');
+  const pk = view.root.findByProps({ className: 'mu-launch-btn mu-launch-primary' });
+  expect(pk.props.to ?? pk.props.href).toBe('/duel?a=283.Mongols.4.f.&b=283.Chinese.4.f.&m=1&me=Mongols&opp=Chinese');
+  const cmp = view.root.findByProps({ className: 'mu-launch-btn mu-launch-secondary' });
+  expect(cmp.props.to ?? cmp.props.href).toBe('/compare?a=Mongols&b=Chinese');
   for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议', '骑兵(+']) expect(rendered()).not.toContain(gone);
   expect(links('跟这对文明走的开局与文明页')).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
   vi.clearAllMocks();
   await change('ma', '');
   noAnalysis();
+  const fallbackPk = view.root.findByProps({ 'aria-label': '单位 PK（通用入口）' });
+  expect(fallbackPk.props.to ?? fallbackPk.props.href).toBe('/duel');
   expect(new URLSearchParams(currentSearch).get('me')).toBeNull();
   expect(new URLSearchParams(currentSearch).get('opp')).toBe('Chinese');
   expect(new URLSearchParams(currentSearch).get('pair')).toBe('explicit');

@@ -1,7 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const message = '下列四段是固定的通用稿，只随「对手打法」切换';
+const RUSH_LABELS = { militia: '民兵', scouts: '肉马', archers: '步弓', towers: '塔爆' } as const;
+type RushKey = keyof typeof RUSH_LABELS;
+
+const message = '固定通用应对稿，只随上方对手打法切换，不按对手文明改写；请按侦察结果调整。';
 const practice = (page: Page) => page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
+const rushRadio = (page: Page, id: RushKey) =>
+  practice(page).getByRole('radiogroup', { name: '对手打法', exact: true }).getByRole('radio', { name: RUSH_LABELS[id], exact: true });
 const guide = (page: Page) => page.getByRole('region', { name: '通用早期应对', exact: true });
 const note = (page: Page) => guide(page).locator('p.mu-scope');
 
@@ -24,7 +29,7 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/matchup');
       await expect(page.locator('#mres')).toBeVisible();
       await pick(page, 'ma', 'Franks');
-      await expect(practice(page).getByRole('combobox')).toHaveValue('militia');
+      await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
       for (const [enemy, name] of [
         ['Mongols', '蒙古'],
         ['Britons', '不列颠'],
@@ -33,7 +38,7 @@ for (const width of [360, 375, 390, 1280])
         await expect(page.locator('#me')).toContainText(name);
         await expect(guide(page)).not.toContainText(`当前对局：法兰克 对 ${name}`);
         await expect(note(page)).toContainText(message);
-        await expect(practice(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveAttribute('href', new RegExp(`b=74\\.${enemy}\\.2\\.\\.`));
+        await expect(practice(page).getByRole('link', { name: /PK 演练/ })).toHaveAttribute('href', new RegExp(`b=74\\.${enemy}\\.2\\.\\.`));
       }
       const geometry = await note(page).evaluate((element) => {
         const rect = element.getBoundingClientRect();
@@ -54,18 +59,18 @@ for (const width of [360, 375, 390, 1280])
       expect(geometry.fits).toBe(true);
       expect(geometry.clippedText).toBe(false);
       await guide(page).screenshot({ path: info.outputPath(`rush507-${width}-${theme}.png`) });
-      for (const pressure of ['scouts', 'archers', 'towers']) {
-        await practice(page).getByRole('combobox').selectOption(pressure);
+      for (const pressure of ['scouts', 'archers', 'towers'] as const) {
+        await rushRadio(page, pressure).click();
         await expect(note(page)).toContainText(message);
       }
-      await practice(page).getByRole('combobox').selectOption('militia');
+      await rushRadio(page, 'militia').click();
       await pick(page, 'me', 'Incas');
       await expect(practice(page)).toContainText('对手印加在封建时代不可用民兵');
-      await expect(practice(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveCount(0);
+      await expect(practice(page).getByRole('link', { name: /PK 演练/ })).toHaveCount(0);
       await expect(note(page)).toContainText(message);
       await pick(page, 'ma', 'Mayans');
       await pick(page, 'me', 'Britons');
-      await practice(page).getByRole('combobox').selectOption('scouts');
+      await rushRadio(page, 'scouts').click();
       await expect(practice(page).getByRole('link', { name: /参考开局/ })).toHaveCount(0);
       await expect(practice(page)).toContainText('玛雅在该流程目标时代不可用');
       await expect(note(page)).toContainText(message);
@@ -91,5 +96,5 @@ test('#507 general scope remains visible while data loads and after a real data 
   }
   await expect(page.getByRole('alert')).toContainText('对局资料加载失败');
   await expect(note(page)).toContainText(message);
-  await expect(practice(page).getByRole('link', { name: /打开 PK 演练|参考开局/ })).toHaveCount(0);
+  await expect(practice(page).getByRole('link', { name: /PK 演练|参考开局/ })).toHaveCount(0);
 });

@@ -41,11 +41,13 @@ describe('#888 对局助手不再用评分推导强弱与打法', () => {
     expect(ratings).toContain('export function filterCounterUnits');
   });
 
-  it('仍保留类型反制、限度说明、快攻指南、蔷琵和深链', () => {
+  it('仍保留类型反制、限度说明、快攻指南、蔷琵、带参跳 PK 非推荐声明与深链', () => {
     expect(page).toContain('通用类型反制');
     expect(page).toContain('也不是模型结论');
     expect(page).toContain('当前我方暂无可用的类型对照单位');
-    expect(page).toContain('不自动带入当前双方');
+    expect(page).toContain('matchupDuelPath');
+    expect(page).toContain('matchupComparePath');
+    expect(page).toContain('非系统推荐，请按本局实际兵种切换');
     expect(page).toContain('to="/duel"');
     expect(page).toContain('<ChampiAges');
     expect(page).toContain('<RushDefense');
@@ -53,11 +55,10 @@ describe('#888 对局助手不再用评分推导强弱与打法', () => {
     expect(page).toContain('我方开局');
     expect(page).toContain('对手开局');
     expect(page).toContain('单位 PK');
+    expect(page).toContain('文明对比');
     expect(page).toContain('我方文明');
     expect(page).toContain('对手文明');
     expect(page).not.toContain('推荐反制');
-    expect(page).not.toContain('to="/duel?');
-    expect(page).not.toContain("to={'/duel?");
   });
 
   it('继续按本方单位可用性过滤反制，玛雅不会收到骑士和骆驼', () => {
