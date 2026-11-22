@@ -5,6 +5,7 @@ import { useCore } from '../../../data/hooks';
 import {
   buildingCiv,
   buildingConstructionEntry,
+  buildingDiscountView,
   buildingHasAttack,
   buildingIdentityMark,
   buildingSurface,
@@ -14,18 +15,20 @@ import {
 } from '../../../domain/buildingDetailView';
 import { BUILDING_TYPE_ZH } from '../../../domain/buildings';
 import { formatHp } from '../../../domain/hpFormat';
-import { AGE_ZH } from '../../../domain/ratings';
+import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import type { Tech, Unit } from '../../../domain/types';
 import { trainingAtBuilding } from '../../../domain/unitTrainingSites';
 import { GARRISON_HOST_IDS as garrisonHosts } from '../../../data/garrisonHosts';
-import { AgeImg, BuildingIcon, CivChip, CostView, DlcBadgeL } from '../../../shared/ui/art';
+import { AgeImg, BuildingIcon, CivChip, DlcBadgeL } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon, type IconName } from '../../../shared/ui/Icon';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { EntityHistoryInline } from '../../../shared/ui/EntityHistoryInline';
+import { radioKeyboard } from '../../../shared/ui/radioKeyboard';
+import { CostDeltaPills, OrderedCost } from '../../../shared/ui/sim/SimEffectiveCost';
 import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { Linked, Loading } from '../../../shared/ui/widgets';
 import { BuildingAttackDetails } from './BuildingAttackDetails';
@@ -111,6 +114,7 @@ export default function BuildingDetail() {
   const techs = b.techs.map((techId) => core.techById[techId]).filter((tech): tech is Tech => !!tech);
   const mark = buildingIdentityMark(b.id);
   const ageName = AGE_ZH[b.age] ?? String(b.age);
+  const discount = buildingDiscountView(b, civ, params.get('age'));
   const construction = buildingConstructionEntry(b.id, b.age, civ);
   const showSiege = siegeBuildingEntryVerified(b, core.unitById[SIEGE_DEFAULT_UNIT_ID]);
   const attack = buildingHasAttack(b);
@@ -122,6 +126,8 @@ export default function BuildingDetail() {
       ? '查看科技效果。'
       : '查看科技效果。未指定文明时需先选择文明。';
   const go = (patch: Record<string, string | null>) => nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, patch) });
+  const setDiscountAge = (nextAge: number) =>
+    nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, { age: String(nextAge) }) }, { replace: true });
   const setCiv = (en: string) => go({ civ: en || null });
   const scrollTo = (target: string) => {
     const node = document.getElementById(target);
@@ -241,9 +247,79 @@ export default function BuildingDetail() {
         </div>
         <div className="bd-cost-col">
           <h2>目录造价</h2>
+          <p className="bd-kicker">目录基础价，未计文明折扣与科技。</p>
           <div className="bd-cost" data-t="catalog-cost">
-            <CostView c={b.cost} />
+            <OrderedCost cost={b.cost} />
           </div>
+          {discount.kind === 'price' && (
+            <div className="bd-discount-card" data-t="building-discount-price" data-age={discount.selectedAge}>
+              <div className="bd-discount-head">
+                <span className="bd-discount-label">{civByEn(civ!)?.zh ?? civ}折后造价</span>
+                {discount.variesByAge ? (
+                  <div className="bd-age-seg" role="radiogroup" aria-label="折后造价时代" onKeyDown={radioKeyboard}>
+                    {discount.ages.map((ageOption) => {
+                      const checked = ageOption === discount.selectedAge;
+                      return (
+                        <button
+                          key={ageOption}
+                          type="button"
+                          role="radio"
+                          aria-checked={checked}
+                          tabIndex={checked ? 0 : -1}
+                          className={checked ? 'on' : undefined}
+                          onClick={() => setDiscountAge(ageOption)}
+                        >
+                          {AGE_ZH[ageOption]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <span className="bd-age-badge nw" data-t="building-discount-age">
+                    按{AGE_ZH[discount.selectedAge]}
+                  </span>
+                )}
+              </div>
+              {discount.activeAtSelectedAge ? (
+                <>
+                  <div className="bd-discount-price-row" data-t="building-discount-amount">
+                    <span className="bd-discount-main">
+                      <OrderedCost cost={discount.cost} base={discount.base} />
+                    </span>
+                    <span className="bd-discount-base">
+                      目录原价{' '}
+                      <s>
+                        <OrderedCost cost={discount.base} />
+                      </s>
+                    </span>
+                  </div>
+                  <div data-t="building-discount-deltas">
+                    <CostDeltaPills deltas={discount.deltas} />
+                  </div>
+                  <p className="bd-discount-source" data-t="building-discount-source">
+                    <Icon name="check" className="ic" />
+                    <span>
+                      已计入：
+                      {discount.applied
+                        .map((line) => `${line.label}（\u2212${line.pct}%${line.res ? `，仅${line.res.map((r) => RES_ZH[r] ?? r).join('、')}` : ''}）`)
+                        .join('、')}
+                      （{AGE_ZH[discount.selectedAge]}）
+                    </span>
+                  </p>
+                </>
+              ) : (
+                <p className="bd-discount-wait" data-t="building-discount-wait">
+                  <OrderedCost cost={discount.base} /> · {AGE_ZH[discount.selectedAge]}暂无此折扣，{AGE_ZH[discount.firstDiscountAge]}起生效。
+                </p>
+              )}
+              <p className="bd-discount-scope">仅含文明被动折扣，不含下方建筑科技模拟器内的科技改价。</p>
+            </div>
+          )}
+          {discount.kind === 'unapplied' && (
+            <p className="bd-discount-card is-warn" data-t="building-discount-unapplied">
+              文明折扣暂未计入，当前仍按目录原价展示。
+            </p>
+          )}
           <div className="bd-time" data-t="panel-time">
             <div className="bd-stat-lab">
               <Icon name="clock" />

@@ -98,3 +98,9 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.ud-discount-scope {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}

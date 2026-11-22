@@ -76,7 +76,7 @@ describe('#364 bounded Duel presentation plan', () => {
       'src/shared/ui/sim/SimPanel.tsx': [
         'src/features/buildings/components/BuildingSimulator.tsx',
         'src/features/duel/components/DuelSelection.tsx',
-        'src/features/units/components/UnitDetail.tsx',
+        'src/features/units/components/UnitNotes.tsx',
         'src/shared/ui/sim/Simulator.tsx',
       ],
       'src/shared/ui/RealCost.tsx': ['src/features/duel/components/DuelSelection.tsx', 'src/features/units/components/unitDetailParts.tsx'],

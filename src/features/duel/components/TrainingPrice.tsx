@@ -18,7 +18,12 @@ export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote
             </p>
           </div>
         ) : (
-          <p key={line.id} className={line.kind === 'applied' ? 'pk-bound' : 'pk-open'} data-t={line.kind === 'applied' ? 'pk-accounted' : 'pk-available'}>
+          <p
+            key={line.id}
+            className={line.kind === 'applied' ? (line.partial ? 'pk-bound is-partial' : 'pk-bound') : line.partial ? 'pk-open is-partial' : 'pk-open'}
+            data-t={line.kind === 'applied' ? 'pk-accounted' : 'pk-available'}
+            data-partial={line.partial ? 'true' : undefined}
+          >
             {line.text}
           </p>
         ),

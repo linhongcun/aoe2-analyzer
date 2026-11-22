@@ -18,6 +18,20 @@
 
 ## [Unreleased]
 
+## [0.99.14] - 2026-11-22
+
+### 更新说明
+
+单位详情、建筑详情与科技模拟器现已打通与单位 PK、持续生产一致的折后价计算口径：在单位科技模拟器勾选降价或资源置换科技（如法兰克「王家敕令骑兵」让重装骑马弩兵黄金从 65 降至 39、波斯「波斯步弓手」、马扎尔「科维尼安军队」、马来「强征兵役」、高丽/意大利叠加「造船匠」等）后，科技行不再误标「仅文本」，右栏会实时展示有效单兵训练价与差额，并与一次性累计研究费用严格分开；建筑详情页选择文明后直接展示文明被动折后造价（如法兰克城堡城堡时代 552.5 石 / 帝王时代 487.5 石、不列颠城镇中心跨时代切换），斯拉夫城堡与箭塔的建筑模拟器也已接入「罗斯堡垒」的石木置换折后建造价；同时经固定游戏数据核实，马普切「布图马普」对掷石绳骑兵（含精锐）的 -15% 费用折扣（42.5 木 47 金）现已可在模拟器与单位 PK 中手动勾选折算，并清晰提示该科技另含未解码的团队脚本效果。
+
+### 新增
+
+- #1297：新增 `src/domain/simEffectiveCost.ts` 与 `src/shared/ui/sim/SimEffectiveCost.tsx`（含固定顺位 `OrderedCost`、降为 `0` 的资源显式展示及 `.res.num.nw` 防折行），在单位与建筑科技模拟器接入全部 11 项费用科技、16 组被动+造船匠叠加来源及三口径隔离；在 `BuildingDetail.tsx` 与 `buildingDetailView.ts` 接入建筑文明被动折后卡与跨时代切换（法兰克城堡 / 不列颠城镇中心）；在 `BuildingSimulator.tsx` 按 `x.t.age <= age` 过滤 `?techs=` 保持降时代口径一致。
+
+### 修复
+
+- #1297：在 `src/domain/unitCost.ts` 将费用解码收窄为按单条 effect 过滤（放行 `Butalmapu 1380` 对 `2569/2571` 的无条件 `-15%` 费用乘数并保留 `res: 33` 在 `undecoded`），并修复 `applyCostEffect` 对 `op === 'mul'` 及非正向 `add` 遇 `undefined` 资源键写入幽灵 `0` 键的缺陷；全站下游（`duelTrainingCost`、`DuelSelection`、`trainingCostView`、`TrainingPrice`、`mixedDuel`、`MixedSideEditor`、`trainTotal`、`productionTransfer`）同步收口 `partial` 口径，自动预设跳过 `partial` 仅允许手动勾选并在 PK 卡头常显未解码边界；新增 `tests/unit/costDiscount1297.test.ts` 与 `tests/e2e/costDiscount1297.spec.ts`（登记至 `scripts/ci-browser-weights.json`），同步相关单测与 E2E 断言。
+
 ## [0.99.13] - 2026-11-22
 
 ### 更新说明

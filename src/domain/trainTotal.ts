@@ -67,6 +67,7 @@ export interface TrainTotalTechChoice {
   hint: string;
   appliedSomewhere: boolean;
   supported: boolean;
+  partial: boolean;
 }
 export interface TrainTotalEvaluation {
   blocked: string[];
@@ -204,10 +205,17 @@ function quoteRow(config: TrainTotalConfig, unit: Unit, inputs: UnitCostTech[], 
     applied.add(item.id);
     prev = next;
   }
+  const choiceById = new Map(selected.map((choice) => [choice.id, choice]));
   const undecoded = new Set<number>();
   for (const item of priced.undecoded) {
+    if (undecoded.has(item.techId)) continue;
     undecoded.add(item.techId);
-    const note = `未能完整计入：${item.tech}，单价未改。`;
+    const choice = choiceById.get(item.techId);
+    const note = applied.has(item.techId)
+      ? `已按可解码条目计入：${item.tech}；另含未解码资源或条件效果，结果仅为估算。`
+      : choice?.partial
+        ? `${item.tech}含未解码资源或条件效果，对本单位未改单价，结果仅为估算。`
+        : `未能完整计入：${item.tech}，单价未改。`;
     pricingProblems.push(note);
     notes.push(note);
   }
@@ -255,6 +263,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
       hint: [lead, when, invalidReason].filter(Boolean).join(''),
       appliedSomewhere: false,
       supported: true,
+      partial: false,
     });
   }
 
@@ -266,13 +275,14 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
       for (const item of applicableTrainingTechs(sim, unit, config.civ, age!)) {
         if (UNLOCK_IDS.includes(item.tech.id)) continue;
         const prev = found.get(item.tech.id);
-        if (!prev || (item.supported && !prev.supported)) found.set(item.tech.id, item);
+        if (!prev || (item.supported && !prev.supported) || (item.supported && prev.supported && !item.partial && prev.partial)) found.set(item.tech.id, item);
       }
     }
   }
   const free = open ? freeProductionTechs(ctx, { civ: config.civ, age: age! }) : new Set<number>();
   const costs: TrainTotalTechChoice[] = [];
   for (const item of found.values()) {
+    const partial = Boolean(item.partial);
     if (free.has(item.tech.id)) {
       costs.push({
         id: item.tech.id,
@@ -286,6 +296,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
         hint: '免费，已计入。研究费用不计。',
         appliedSomewhere: false,
         supported: item.supported,
+        partial,
       });
       continue;
     }
@@ -301,6 +312,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
       hint: '',
       appliedSomewhere: false,
       supported: item.supported,
+      partial,
     });
   }
   for (const id of config.techs) {
@@ -322,12 +334,17 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
       hint: invalidReason,
       appliedSomewhere: false,
       supported: false,
+      partial: false,
     });
   }
   for (const choice of costs) {
     if (choice.free || choice.invalidReason || choice.hint) continue;
-    if (!choice.selected) choice.hint = '可选。只作用于能够完整计入的单位，研究费用不计。';
+    if (!choice.selected)
+      choice.hint = choice.partial
+        ? '可选。部分费用条目可计入，另含未解码的条件或资源触发效果；研究费用不计。'
+        : '可选。只作用于能够完整计入的单位，研究费用不计。';
     else if (!choice.supported) choice.hint = '已选，费用效果未能完整计入，单价未改。研究费用不计。';
+    else if (choice.partial) choice.hint = '已选，部分费用条目可计入，另含未解码效果。研究费用不计。';
     else choice.hint = '已选。研究费用不计。';
   }
 
@@ -335,7 +352,7 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
   for (const choice of costs) if (choice.selected && !choice.invalidReason && choice.tech) active.push(asInput(choice.tech));
   const lines: TrainTotalLine[] = [];
   const total: Cost = {};
-  let incomplete = costs.some((choice) => choice.selected && !choice.invalidReason && !choice.supported);
+  let incomplete = costs.some((choice) => choice.selected && !choice.invalidReason && (!choice.supported || choice.partial));
   const appliedSomewhere = new Set<number>();
   config.rows.forEach((row, index) => {
     const unit = row.unit ? (ctx.core.unitById[row.unit] ?? null) : null;
@@ -413,9 +430,13 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
   for (const choice of costs) {
     if (appliedSomewhere.has(choice.id)) {
       choice.appliedSomewhere = true;
-      if (choice.selected && !choice.free && choice.supported && !choice.invalidReason) choice.hint = '已计入至少一行。研究费用不计。';
+      if (choice.selected && !choice.free && choice.supported && !choice.invalidReason) {
+        choice.hint = choice.partial ? '已按可解码条目计入至少一行，另含未解码效果，合计仅为估算。研究费用不计。' : '已计入至少一行。研究费用不计。';
+      }
     } else if (choice.selected && !choice.free && choice.supported && !choice.invalidReason) {
-      choice.hint = '已选，没有作用到当前已计入的单位。研究费用不计。';
+      choice.hint = choice.partial
+        ? '已选，可解码费用条目未作用到当前已计入的单位，另含未解码效果，合计仅为估算。研究费用不计。'
+        : '已选，没有作用到当前已计入的单位。研究费用不计。';
     }
   }
   const techs = [...unlocks, ...costs];

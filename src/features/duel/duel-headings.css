@@ -340,6 +340,13 @@
 #duel .pk-open {
   color: var(--color-text-2);
 }
+#duel .pk-bound.is-partial,
+#duel .pk-open.is-partial {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+}
 #duel .pk-miss {
   margin: var(--space-1) 0 0;
   padding: var(--space-2) var(--space-3);

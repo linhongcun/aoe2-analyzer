@@ -55,21 +55,27 @@ test('#943 1v1 显示训练价，不显示预算和派出数量', async ({ page 
   await expect(page.locator('#duel-b [data-t="pk-cost-more"]')).toContainText('40 秒');
 });
 
-test('#943 未支持费用科技默认未选，手选只记录', async ({ page }) => {
+test('#943 部分解码费用科技满科技默认未选，手选折算并常显未解码边界', async ({ page }) => {
   await page.goto(BOLAS);
   const card = page.locator('#duel-a');
-  await expect(card.locator('[data-t="pk-miss"]')).toContainText('未计入：布图马普，本站尚不支持，当前价格不是完整效果后的最终价');
-  await expect(card.locator('[data-t="pk-miss-state"]')).toHaveText('未选择');
+  await expect(card.locator('[data-t="pk-available"][data-partial="true"]')).toContainText('可计入未勾选：布图马普（另含未解码效果，满科技不自动勾选）');
   await expect(card.getByRole('radio', { name: '帝王满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
   const before = await priceText(page, 'a');
+  expect(before).toContain('50');
+  expect(before).toContain('55');
   await card.locator('details.duel-tech summary').click();
   const box = card.locator('label.simt').filter({ has: page.getByRole('link', { name: '布图马普', exact: true }) });
   await expect(box.locator('input')).not.toBeChecked();
   await box.locator('input').check();
-  await expect(card.locator('[data-t="pk-miss-state"]')).toHaveText('已选择，仅记录');
   await expect(card.getByRole('radio', { name: '帝王满科技', exact: true })).toHaveAttribute('aria-checked', 'false');
-  expect(await priceText(page, 'a')).toBe(before);
-  await expect(card.locator('[data-t="pk-cost-more"]')).toContainText('仅记录，训练价未套用该效果');
+  const after = await priceText(page, 'a');
+  expect(after).toContain('42.5');
+  expect(after).toContain('47');
+  await expect(card.locator('[data-t="pk-price"] [data-zero="true"]')).toHaveCount(0);
+  await expect(card.locator('[data-t="pk-accounted"][data-partial="true"]')).toContainText(
+    '已计入：布图马普（木材 −7.5，黄金 −8）；另含未解码效果，当前价格非完整最终价',
+  );
+  await expect(card.locator('[data-t="pk-cost-more"]')).toContainText('另含未解码的条件或资源触发效果');
 });
 
 test('#943 升级对比仍标基础价，无基准时默认折叠', async ({ page }) => {

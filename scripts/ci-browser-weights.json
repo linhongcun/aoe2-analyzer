@@ -94,6 +94,7 @@
     "tests/e2e/contentHeadings770.spec.ts": 42000,
     "tests/e2e/conversion731.spec.ts": 13500,
     "tests/e2e/copyConsistency775.spec.ts": 6000,
+    "tests/e2e/costDiscount1297.spec.ts": 15000,
     "tests/e2e/counter168.spec.ts": 5220,
     "tests/e2e/damage105.spec.ts": 3752,
     "tests/e2e/dataUpdate486.spec.ts": 11879,
