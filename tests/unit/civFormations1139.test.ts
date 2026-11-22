@@ -251,7 +251,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(main.limitation).toContain('火枪与翼骑仍争食物');
     expect(main.limitation).toContain('手推炮推进时需要保护');
     expect(main.limitation).toContain('炮的属性不等于拆石质建筑所需时间');
-    expect(main.limitation).toContain('石质建筑数据仍待核实');
+    expect(main.limitation).toContain('目前攻城工具仅核验无甲城堡（2 个手推炮 11 次 / 65 秒）与无甲大型箭塔（1 个手推炮 9 次 / 52 秒）');
+    expect(main.limitation).toContain('城镇中心、瞭望箭塔、石墙、城门及带石匠或建筑学配置仍待核实');
     expect(main.limitation).not.toMatch(/掩护、拦截|保存下来的输出核心|免费化学|14 射程|100 生命/);
     expect(main.alternatives).toBe('重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗。');
     expect(main.evidence.scope).not.toContain('来源行');

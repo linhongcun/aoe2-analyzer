@@ -110,7 +110,7 @@ describe('#1120 与 #1139 发布契约', () => {
     expect(georgians!.source).toEqual({
       content: 'https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
-      boundary: '穿透目标数、逐个伤害和驻军输出未核实，不扩写为范围溅射或混编输出。',
+      boundary: '穿透目标数与逐个伤害未核实，驻军箭数为站内理论预览、未与客户端逐项对账，不扩写为范围溅射或混编输出。',
     });
   });
 

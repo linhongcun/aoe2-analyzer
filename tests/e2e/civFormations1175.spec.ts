@@ -22,9 +22,10 @@ for (const width of [1280, 360]) {
     await expect(research.locator('small')).toHaveText('帝王时代 · 城堡研究');
 
     const effect = siege.getByText('牵引抛石机和楼船的巨型投石机武器可发射额外炮弹。', { exact: true });
+    const caveat = '固定数据记录为牵引抛石机与楼船弹丸数 +2；战斗模拟尚未计入多弹丸伤害，实战拆防效率待验证。';
     await expect(effect).toBeVisible();
-    await expect(siege.getByText('具体额外弹数未经核实。', { exact: true })).toBeVisible();
-    expect(await effect.evaluate((text) => text.nextElementSibling?.textContent)).toBe('具体额外弹数未经核实。');
+    await expect(siege.getByText(caveat, { exact: true })).toBeVisible();
+    expect(await effect.evaluate((text) => text.nextElementSibling?.textContent)).toBe(caveat);
     await expect(siege).toContainText('研究投入');
     for (const value of ['600 木材', '300 黄金', '40 游戏秒']) {
       const amount = siege.locator('.num.nw').filter({ hasText: value });

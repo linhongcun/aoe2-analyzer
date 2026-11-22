@@ -199,7 +199,8 @@ describe('#1139 Hindustanis, Turks, Malay optional dependencies', () => {
     expect(turks.alternatives).not.toContain('优先考虑重装骆驼');
     expect([turks.reason, turks.limitation, turks.attack, turks.defense, ...turks.required.map(({ role }) => role)].join(' ')).not.toMatch(/14射程|100生命/);
     expect(turks.evidence.recordedVersion).toContain('84988dd');
-    expect(turks.limitation).toContain('石质建筑数据仍待核实');
+    expect(turks.limitation).toContain('目前攻城工具仅核验无甲城堡');
+    expect(turks.limitation).toContain('城镇中心、瞭望箭塔、石墙、城门及带石匠或建筑学配置仍待核实');
   });
 
   it('Malay 弩手与攻城技师条件局部隐藏，保留两条劲弩条件组', async () => {

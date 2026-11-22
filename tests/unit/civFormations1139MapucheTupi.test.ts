@@ -21,8 +21,22 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     const expected = [
       ['Mapuche', 'mapuche-kona-bolas', 3, 'combined', [2566, 2569], 'v0.78.3 · DE 188329 · 构建 40c323a'],
       ['Mapuche', 'mapuche-kona-slinger', 3, 'combined', [2566, 185], 'v0.78.3 · DE 188329 · 构建 40c323a'],
-      ['Tupi', 'tupi-champi-slinger', 4, 'combined', [2554, 185], 'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对'],
-      ['Tupi', 'tupi-blackwood-halberdier', 4, 'combined', [2581, 359], 'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对'],
+      [
+        'Tupi',
+        'tupi-champi-slinger',
+        4,
+        'combined',
+        [2554, 185],
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9',
+      ],
+      [
+        'Tupi',
+        'tupi-blackwood-halberdier',
+        4,
+        'combined',
+        [2581, 359],
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9',
+      ],
     ] as const;
 
     for (const [civ, id, age, composition, required, version] of expected) {
@@ -130,7 +144,12 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     for (const candidate of [transport, blackwoodTransport]) {
       expect(candidate.entities.map(({ id }) => id)).toEqual([548, 1105]);
       expect(candidate.condition).toContain('仅为战术候选');
-      expect(candidate.condition).toContain('装载容量、兼容性及实战效果');
+      expect(candidate.condition).toContain('固定数据已核实载具装载容量，但载具兼容规则尚未接入驻军预览、实战效果仍待验证');
+      expect(candidate.condition).not.toMatch(/重型冲车|攻城塔|容量\s*\d+/);
+      expect(candidate.entities.map(({ id, role }) => [id, role])).toEqual([
+        [548, '重型冲车（容量 6）'],
+        [1105, '攻城塔（容量 10）'],
+      ]);
       expect(candidate.condition).toContain('接近、卸兵、护卫、资源与操作');
       expect(candidate.condition).toContain('不把运输长戟视作反攻城');
       expect(candidate).not.toHaveProperty('requires');
