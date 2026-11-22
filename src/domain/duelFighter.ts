@@ -26,9 +26,23 @@ export interface Fighter {
   };
 }
 
+/** 主攻击类别：先非零（近战优先于穿刺），次显式零值（近战优先于穿刺），兜底按射程判定。 */
+export function mainAttackType(u: Pick<Unit, 'atks' | 'rng'>): '近战' | '穿刺' {
+  const hasNonZero = (name: '近战' | '穿刺') => u.atks.some(([n, v]) => n === name && v !== 0);
+  if (hasNonZero('近战')) return '近战';
+  if (hasNonZero('穿刺')) return '穿刺';
+  const hasAny = (name: '近战' | '穿刺') => u.atks.some(([n]) => n === name);
+  if (hasAny('近战')) return '近战';
+  if (hasAny('穿刺')) return '穿刺';
+  return u.rng > 1 ? '穿刺' : '近战';
+}
+
 export function fighterFrom(u: Unit, S: StatSet): Fighter {
-  const pierce = u.atks.some(([n]) => n === '穿刺') || (!u.atks.some(([n]) => n === '近战') && u.rng > 1);
-  const attack: Record<string, number> = { [pierce ? '穿刺' : '近战']: S.atk };
+  const main = mainAttackType(u);
+  const attack: Record<string, number> = { [main]: S.atk };
+  const secondaryName = main === '近战' ? '穿刺' : '近战';
+  const secondary = u.atks.find(([n]) => n === secondaryName);
+  if (secondary) attack[secondaryName] = secondary[1];
   Object.entries(S.bonus).forEach(([k, v]) => (attack[k] = v));
   const armor: Record<string, number> = { 近战: S.ma, 穿刺: S.pa };
   Object.entries(S.armc).forEach(([k, v]) => (armor[k] = v));

@@ -51,9 +51,22 @@ def attack_class_name(entry):
     return entry[0]
 
 
+def attack_entry(entry):
+    """提取 (攻击类别名称, 数值)，兼容单位 [名称, 数值] 与建筑 {classId, amount, label?}。"""
+    if isinstance(entry, dict):
+        return attack_class_name(entry), entry.get('amount')
+    return entry[0], entry[1]
+
+
 def main_attack_class(obj, is_building):
-    """确定与 .dat 比对 atk 的主攻击类别（4 近战 / 3 穿刺）。"""
-    names = [attack_class_name(a) for a in obj.get('atks') or []]
+    """确定与 .dat 比对 atk 的主攻击类别（4 近战 / 3 穿刺）：先非零（近战优先于穿刺），再显式零值（近战优先于穿刺）。"""
+    entries = [attack_entry(a) for a in obj.get('atks') or []]
+    nonzero = {name for name, amount in entries if amount}
+    if '近战' in nonzero:
+        return 4
+    if '穿刺' in nonzero:
+        return 3
+    names = {name for name, _ in entries}
     if '近战' in names:
         return 4
     if '穿刺' in names:

@@ -254,6 +254,7 @@ export function reverseCounters(
         problems.add(INVALID_DATA);
         continue;
       }
+      if (attack === 0) continue;
       attacks.set(category, attack);
     }
     for (const [category, count] of attackCounts) {
