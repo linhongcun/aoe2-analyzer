@@ -141,13 +141,24 @@ for (const width of [360, 375, 390, 1280])
 test('目标基础抗性、孟加拉文明修正和替代形态边界', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const panel = page.getByRole('region', { name: '目标招降抗性' });
+  await page.goto('./#/unit/38');
+  await expect(panel).toHaveAttribute('data-conversion-compact', 'true');
+  const compactDetails = panel.locator('details.ud-cr-compact');
+  await expect(compactDetails).not.toHaveAttribute('open', '');
+  await expect(panel).toContainText('0 / 0 / 0');
+  await expect(panel).toContainText('零修正非免疫');
+  await panel.locator('summary.ud-cr-compact-summary').click();
+  await expect(compactDetails).toHaveAttribute('open', '');
+  await expect(panel.locator('.ud-cr-stat dd:first-of-type')).toHaveText(['0', '0', '0']);
+  await expect(panel).toContainText('另列，不合成总耗时');
+
   for (const [id, expected] of [
-    [38, ['0', '0', '0']],
     [2586, ['0', '+4', '+4']],
     [2587, ['0', '+4', '+4']],
     [1132, ['0', '+2', '+2']],
   ] as const) {
     await page.goto('./#/unit/' + id);
+    await expect(panel).not.toHaveAttribute('data-conversion-compact', 'true');
     await expect(panel.locator('.ud-cr-stat dd:first-of-type')).toHaveText([...expected]);
     await expect(panel).toContainText('另列，不合成总耗时');
   }

@@ -6,15 +6,19 @@ function attackTiming(page: Page) {
   return { stats, timing, delay: timing.locator('[data-stat="attack-delay"]'), interval: timing.locator('[data-stat="rof"]') };
 }
 
-test('#1218 目录将飞刀女兵出手前摇和攻击间隔分别显示在属性前面', async ({ page }) => {
+test('#1218 目录将飞刀女兵出手前摇和攻击间隔分别显示在核心属性之后', async ({ page }) => {
   await page.goto('./#/unit/1013');
-  const { stats, delay, interval } = attackTiming(page);
+  const { stats, timing, delay, interval } = attackTiming(page);
   await expect(delay.locator('.num.nw')).toHaveText('1 秒');
   await expect(interval.locator('.num.nw')).toHaveText('2 秒');
   await expect(delay).toContainText('从攻击动作开始到出手，不含弹道飞行时间。');
   await expect(interval).toContainText('连续攻击时，两次出手的间隔。');
   await expect(stats.locator('[data-stat="rof"]')).toHaveCount(1);
-  await expect(stats.locator('.ud-stat-grid > :first-child')).toHaveClass('ud-attack-timing');
+  const directStats = await stats.locator('.ud-stat-grid > [data-stat]').evaluateAll((els) => els.map((el) => el.getAttribute('data-stat')));
+  expect(directStats).toEqual(['hp', 'atk', 'ma', 'pa', 'spd', 'rng', 'los']);
+  const timingBox = (await timing.boundingBox())!;
+  const losBox = (await stats.locator('[data-stat="los"]').boundingBox())!;
+  expect(timingBox.y).toBeGreaterThanOrEqual(losBox.y + losBox.height);
   const left = await stats.locator('.ud-stats').boundingBox();
   const right = await stats.locator('.ud-cost-col').boundingBox();
   expect(right!.x).toBeGreaterThanOrEqual(left!.x + left!.width);
@@ -29,11 +33,11 @@ test('#1218 深色窄屏按单位形态更新前摇，小数和单位不拆行',
   await expect(delay.locator('.num.nw')).toHaveText('0.91 秒');
   await page.locator('#unit-obtain a[href="#/unit/474"]').click();
   await expect(page).toHaveURL(/#\/unit\/474/);
-  await expect(delay.locator('.num.nw')).toHaveText('0.897 秒');
+  await expect(delay.locator('.num.nw')).toHaveText('0.9 秒');
   await page.locator('#unitciv').click();
   await page.locator('[role="option"][data-civ="Mongols"]').click();
   await expect(page).toHaveURL(/474\?civ=Mongols$/u);
-  await expect(delay.locator('.num.nw')).toHaveText('0.897 秒');
+  await expect(delay.locator('.num.nw')).toHaveText('0.9 秒');
   await expect(delay.locator('.num.nw')).toHaveCSS('white-space', 'nowrap');
   await expect(interval.locator('.num.nw')).toHaveText('2 秒');
 

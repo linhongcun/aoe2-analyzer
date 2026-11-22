@@ -24,11 +24,11 @@ describe('#1218 目录前摇读数', () => {
     expect(markup).not.toContain('35 秒');
   });
 
-  it('仅缺帧值时保留原秒数及小数精度', () => {
+  it('仅缺帧值时保留秒数并按两位有效小数格式化', () => {
     const unit = { ...CORE.unitById[474]! };
     delete unit.frameDelay;
     const markup = stats(unit);
-    expect(markup).toContain('0.897 秒');
+    expect(markup).toContain('0.9 秒');
     expect(markup).not.toContain('暂无数据');
   });
 
