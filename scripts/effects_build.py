@@ -49,6 +49,71 @@ CL = {1: '步兵', 3: '穿刺', 4: '近战', 5: '战象', 8: '骑兵', 11: '所�
 BUILDER = {118}  # 建造者（男性 id；女性 212 为同值副本，只计一次）
 AGE_TECH = {101: 2, 102: 3, 103: 4}
 CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 'Mayan': 'Mayans', 'Indians': 'Hindustanis'}
+# 未导出多形态单位 ID → 目录规范单位 ID（#1293：展开态巨型投石机 42 ↔ 打包态目录记录 331）
+UNIT_FORM_ALIASES = {42: 331}
+
+
+def main_atk(o):
+    """站内单位的主攻击类别（4 近战 / 3 穿刺）；建筑固定按穿刺 3 处理。"""
+    if o.get('_b'):
+        return 3
+    n = [x[0] for x in o.get('atks', [])]
+    return 4 if '近战' in n else 3 if '穿刺' in n else None
+
+
+def resolve_unit_alias(a, attr, op):
+    """将未导出多形态单位 ID 映射为目录规范单位 ID；语义守卫不通过时返回 None。"""
+    if a not in UNIT_FORM_ALIASES:
+        return a
+    # 展开态 42 基础准确度为 15%，目录打包记录 331 为 92%（#711/#746）；
+    # 仅绝对赋值 set（如战狼号 =100）可无歧义落地，相对加值（如匈奴 +35）会产出 127% 失真。
+    if a == 42 and attr == 11 and op != 'set':
+        return None
+    return UNIT_FORM_ALIASES[a]
+
+
+def cmd_dedup_key(t, attr, d):
+    """属性修改命令的去重键：(归一化类型, 属性号, 攻防编码类别或 None)。"""
+    t_norm = t - 10 if 10 <= t <= 16 else t
+    cls_key = None
+    if attr in (8, 9):
+        dv = int(round(d))
+        cls_key = (dv // 256) if t_norm == 5 or dv >= 0 else ((-dv) // 256)
+    return (t_norm, attr, cls_key)
+
+
+def filter_aliased_cmds(cmds, ours, dcls):
+    """将未导出多形态属性命令改写为规范单位 ID；规范目标已有非别名直接/类别命中时去重跳过。
+    非属性命令（t_norm ∉ {0, 4, 5}）原样透传；返回新列表，不原地修改输入。"""
+    direct = set()
+    for c in cmds:
+        t, a, b, attr, d = c
+        t_norm = t - 10 if 10 <= t <= 16 else t
+        if t_norm not in (0, 4, 5) or a in UNIT_FORM_ALIASES:
+            continue
+        key = cmd_dedup_key(t, attr, d)
+        if a >= 0:
+            if a in ours:
+                direct.add((a, *key))
+        else:
+            for i in ours:
+                if dcls.get(i) == b:
+                    direct.add((i, *key))
+    out = []
+    for c in cmds:
+        t, a, b, attr, d = c
+        t_norm = t - 10 if 10 <= t <= 16 else t
+        if t_norm not in (0, 4, 5) or a not in UNIT_FORM_ALIASES:
+            out.append(c)
+            continue
+        op = {0: 'set', 4: 'add', 5: 'mul'}[t_norm]
+        mapped = resolve_unit_alias(a, attr, op)
+        if mapped is None or mapped not in ours:
+            continue
+        if (mapped, *cmd_dedup_key(t, attr, d)) in direct:
+            continue
+        out.append((t, mapped, b, attr, d))
+    return out
 
 
 def building_age_forms(A, catalog_ids):
@@ -125,11 +190,6 @@ def main():
     AT, AE, AC = A['Techs'], A['Effects'], A['Civs']
 
     dcls = {i: u['Class'] for i, u in enumerate(AC[0]['Units']) if u}
-    # 站内单位的主攻击类别（4 近战 / 3 穿刺）
-    def main_atk(o):
-        n = [x[0] for x in o.get('atks', [])]
-        if o.get('_b'): return 3
-        return 4 if '近战' in n else 3 if '穿刺' in n else None
 
 
     def targets(a, b):
@@ -217,6 +277,7 @@ def main():
 
     def compile_cmds(cmds):
         """命令列表 → 规则 [{t:[ids], fx:[...]}] + 经济项；同一单位多条命令合并（加法求和、乘法连乘）。"""
+        cmds = filter_aliased_cmds(cmds, ours, dcls)
         per = defaultdict(list); eco = []
         for c in cmds:
             fx, e = cmd_fx(c)
