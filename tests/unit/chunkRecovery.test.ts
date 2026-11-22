@@ -13,6 +13,7 @@ import {
   type ReloadStorageLike,
 } from '../../src/domain/chunkRecovery';
 import { ErrorBoundary } from '../../src/shared/ui/ErrorRecovery';
+import { installPreloadErrorRecovery, isMarkedPreloadError } from '../../src/shared/utils/chunkRecoveryBrowser';
 
 function memoryStorage(initial: Record<string, string> = {}): ReloadStorageLike & { dump(): Record<string, string> } {
   const map = new Map<string, string>(Object.entries(initial));
@@ -124,18 +125,23 @@ describe('chunkRecovery 领域逻辑（Issue 1278）', () => {
     });
   });
 
-  it('clearChunkReloadMarker 正确清理匹配、过期或损坏的标记，并保留未过期其他路径标记', () => {
+  it('clearChunkReloadMarker 保留同路径活跃窗口防循环标记，清理他路径、过期、损坏或手动重置的标记', () => {
     const t0 = 1_700_000_000_000;
     const store = memoryStorage({
       [CHUNK_RELOAD_STORAGE_KEY]: JSON.stringify({ path: '#/production', ts: t0 }),
     });
 
-    // 其他路径仍在有效窗口内时不误删
-    expect(clearChunkReloadMarker(store, '#/civs', t0 + 1000)).toBe(false);
+    // 同路径仍在有效窗口内时必须保留，避免嵌套懒加载分包在元数据提交后再次 404 形成死循环
+    expect(clearChunkReloadMarker(store, '#/production', t0 + 1000)).toBe(false);
     expect(store.getItem(CHUNK_RELOAD_STORAGE_KEY)).not.toBeNull();
 
-    // 匹配路径时清理
-    expect(clearChunkReloadMarker(store, '#/production', t0 + 1000)).toBe(true);
+    // 过期后同路径标记会被清理
+    expect(clearChunkReloadMarker(store, '#/production', t0 + CHUNK_RELOAD_WINDOW_MS)).toBe(true);
+    expect(store.getItem(CHUNK_RELOAD_STORAGE_KEY)).toBeNull();
+
+    // 切换到其他路由时清理旧路径标记
+    store.setItem(CHUNK_RELOAD_STORAGE_KEY, JSON.stringify({ path: '#/production', ts: t0 }));
+    expect(clearChunkReloadMarker(store, '#/civs', t0 + 1000)).toBe(true);
     expect(store.getItem(CHUNK_RELOAD_STORAGE_KEY)).toBeNull();
 
     // 损坏 JSON 也会被清理
@@ -148,6 +154,52 @@ describe('chunkRecovery 领域逻辑（Issue 1278）', () => {
     expect(clearChunkReloadMarker(store)).toBe(true);
     expect(store.getItem(CHUNK_RELOAD_STORAGE_KEY)).toBeNull();
     expect(clearChunkReloadMarker(throwingStorage())).toBe(false);
+  });
+
+  it('installPreloadErrorRecovery 放行带 payload 的错误由调用方/边界接管，仅对无 payload 信号或未捕获标记拒绝触发单次重载', () => {
+    const listeners = new Map<string, Set<EventListener>>();
+    const fakeWin = {
+      location: { hash: '#/relic-income', reload: vi.fn() },
+      addEventListener: (type: string, fn: EventListener) => {
+        const set = listeners.get(type) ?? new Set();
+        set.add(fn);
+        listeners.set(type, set);
+      },
+      removeEventListener: (type: string, fn: EventListener) => {
+        listeners.get(type)?.delete(fn);
+      },
+    } as unknown as Window;
+    const store = memoryStorage();
+    const reload = vi.fn();
+    const dispose = installPreloadErrorRecovery(fakeWin, reload, () => store);
+
+    // 1. Vite 携带 payload 的 preloadError：只标记不阻断、不直接刷新，留给页面 .catch() 或 ErrorBoundary
+    const payload = new TypeError('Failed to fetch dynamically imported module');
+    const preloadEvent = Object.assign(new Event('vite:preloadError', { cancelable: true }), { payload });
+    for (const fn of listeners.get('vite:preloadError') ?? []) fn(preloadEvent);
+    expect(preloadEvent.defaultPrevented).toBe(false);
+    expect(reload).not.toHaveBeenCalled();
+    expect(isMarkedPreloadError(payload)).toBe(true);
+
+    // 2. 若该错误无人捕获进入 unhandledrejection，则触发单次自动重载，第二次不再重载
+    const rej1 = Object.assign(new Event('unhandledrejection', { cancelable: true }), { reason: payload });
+    for (const fn of listeners.get('unhandledrejection') ?? []) fn(rej1);
+    expect(rej1.defaultPrevented).toBe(true);
+    expect(reload).toHaveBeenCalledTimes(1);
+
+    const rej2 = Object.assign(new Event('unhandledrejection', { cancelable: true }), { reason: payload });
+    for (const fn of listeners.get('unhandledrejection') ?? []) fn(rej2);
+    expect(rej2.defaultPrevented).toBe(false);
+    expect(reload).toHaveBeenCalledTimes(1);
+
+    // 3. 不带 payload 的直接 vite:preloadError 信号：切到新路径后触发单次重载
+    (fakeWin.location as { hash: string }).hash = '#/production';
+    const rawPreload = new Event('vite:preloadError', { cancelable: true });
+    for (const fn of listeners.get('vite:preloadError') ?? []) fn(rawPreload);
+    expect(rawPreload.defaultPrevented).toBe(true);
+    expect(reload).toHaveBeenCalledTimes(2);
+
+    dispose();
   });
 
   it('formatErrorDetail 输出单行摘要并兜底空消息', () => {
@@ -303,6 +355,58 @@ describe('ErrorBoundary 双壳与双态恢复渲染（Issue 1278）', () => {
     expect(onReload).not.toHaveBeenCalled();
     expect(text).toContain('请手动刷新页面以获取最新资源。');
     expect(text).not.toContain('系统已自动尝试重新加载');
+    spy.mockRestore();
+  });
+
+  it('状态 A 点击返回首页时先切换路由再重置边界，不会在旧坏路由上触发误重载', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const onReload = vi.fn();
+    const store = memoryStorage({
+      [CHUNK_RELOAD_STORAGE_KEY]: JSON.stringify({ path: '#/production', ts: Date.now() }),
+    });
+    let currentRoute = '/production';
+    let brokenRenders = 0;
+
+    function RouteHost() {
+      if (currentRoute === '/production') {
+        brokenRenders += 1;
+        throw new TypeError('Failed to fetch dynamically imported module');
+      }
+      return createElement('div', null, '安全首页');
+    }
+
+    let renderer!: TestRenderer.ReactTestRenderer;
+    act(() => {
+      renderer = TestRenderer.create(
+        createElement(
+          ErrorBoundary,
+          {
+            shell: 'route',
+            onReload,
+            onGoHome: () => {
+              currentRoute = '/';
+            },
+            getStorage: () => store,
+            getHashPath: () => (currentRoute === '/' ? '#/' : '#/production'),
+          },
+          createElement(RouteHost),
+        ),
+      );
+    });
+    const rendersBeforeClick = brokenRenders;
+    const homeButton = renderer.root
+      .findAllByType('button')
+      .find((button) => button.findAllByType('span').some((span) => span.children.join('') === '返回首页'));
+    expect(homeButton).toBeDefined();
+
+    act(() => {
+      homeButton!.props.onClick();
+    });
+
+    expect(onReload).not.toHaveBeenCalled();
+    expect(brokenRenders).toBe(rendersBeforeClick);
+    expect(store.getItem(CHUNK_RELOAD_STORAGE_KEY)).toBeNull();
+    expect(collectText(renderer)).toContain('安全首页');
     spy.mockRestore();
   });
 });

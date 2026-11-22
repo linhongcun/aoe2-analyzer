@@ -7,9 +7,13 @@ import {
   readChunkReloadState,
   type ReloadStorageLike,
 } from '../../domain/chunkRecovery';
-import { getCurrentHashPath, getSafeSessionStorage } from '../utils/chunkRecoveryBrowser';
+import { getCurrentHashPath, getSafeSessionStorage, isMarkedPreloadError } from '../utils/chunkRecoveryBrowser';
 import { Icon } from './Icon';
 import '../styles/error-recovery.css';
+
+function isChunkFailure(error: unknown): boolean {
+  return isChunkLoadError(error) || isMarkedPreloadError(error);
+}
 
 export type ErrorRecoveryShell = 'route' | 'standalone';
 export type ErrorRecoveryKind = 'chunk' | 'runtime';
@@ -165,7 +169,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   static getDerivedStateFromError(error: unknown): Partial<ErrorBoundaryState> {
     const hashPath = getCurrentHashPath();
-    if (!isChunkLoadError(error)) {
+    if (!isChunkFailure(error)) {
       return {
         hasError: true,
         error,
@@ -197,7 +201,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: unknown) {
-    if (!isChunkLoadError(error)) return;
+    if (!isChunkFailure(error)) return;
     const hashPath = this.props.getHashPath ? this.props.getHashPath() : this.state.hashPath;
     const storage = this.props.getStorage ? this.props.getStorage() : getSafeSessionStorage();
     const decision = decideChunkReload(storage, hashPath);
@@ -237,9 +241,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   private handleGoHome = () => {
     clearChunkReloadMarker(this.resolveStorage());
     if (this.props.onGoHome) {
-      this.setState(INITIAL_STATE, () => {
-        this.props.onGoHome?.();
-      });
+      // 先切换路由再与重置边界合批，避免在旧坏路由上重渲染触发二次崩溃或误重载（Issue 1278）。
+      this.props.onGoHome();
+      this.setState(INITIAL_STATE);
       return;
     }
     if (typeof window !== 'undefined' && window.location.hash !== '#/' && window.location.hash !== '') {

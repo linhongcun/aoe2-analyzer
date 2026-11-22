@@ -103,8 +103,9 @@ export function decideChunkReload(storage: ReloadStorageLike | null | undefined,
 
 /**
  * 清理自动重载标记：
- * - 不传 hash 时无条件清理（用户手动刷新或返回首页）；
- * - 传入 hash 时仅清理当前路径对应标记、损坏标记或已过期标记。
+ * - 不传 hash 时无条件清理（用户手动点击刷新或返回首页）；
+ * - 传入当前 hash 时，仅清理已过期、损坏或属于其他路径的旧标记；
+ *   当前路径处于 30 秒防循环窗口内的活跃标记必须保留，防止路由壳/元数据提交后、页内嵌套懒加载分包继续 404 时陷入死循环。
  */
 export function clearChunkReloadMarker(storage: ReloadStorageLike | null | undefined, hash?: string, now = Date.now()): boolean {
   if (!storage) return false;
@@ -117,7 +118,7 @@ export function clearChunkReloadMarker(storage: ReloadStorageLike | null | undef
     if (raw === null) return false;
     const record = parseReloadRecord(raw);
     const path = normalizeHashPath(hash);
-    if (!record || record.path === path || now - record.ts >= CHUNK_RELOAD_WINDOW_MS || now - record.ts < 0) {
+    if (!record || record.path !== path || now - record.ts >= CHUNK_RELOAD_WINDOW_MS || now - record.ts < 0) {
       storage.removeItem(CHUNK_RELOAD_STORAGE_KEY);
       return true;
     }

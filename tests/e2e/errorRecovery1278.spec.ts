@@ -28,6 +28,11 @@ test.describe('Issue 1278：懒加载分包 404 自动恢复与顶层 ErrorBound
     await expect(page.locator('[data-testid="production-page"]')).toBeVisible({ timeout: 15000 });
     expect(loadCount).toBe(2);
     await expect(page).toHaveURL(/#\/production\?civ=Franks$/);
+    // 跳转到其他正常页面后，旧路径的重试标记自动清理。
+    await page.evaluate(() => {
+      window.location.hash = '#/';
+    });
+    await expect(page.locator('#home')).toBeVisible();
     await expect.poll(() => page.evaluate((key) => window.sessionStorage.getItem(key), CHUNK_RELOAD_KEY)).toBeNull();
   });
 
@@ -88,12 +93,39 @@ test.describe('Issue 1278：懒加载分包 404 自动恢复与顶层 ErrorBound
         expect(rect.height).toBeGreaterThanOrEqual(44);
       }
 
-      // 点击返回首页恢复正常站点导航。
+      // 点击返回首页恢复正常站点导航：不得触发第 3 次整页重载，且重试标记已清理。
       await card.getByRole('button', { name: '返回首页', exact: true }).click();
       await expect(page.locator('#home')).toBeVisible();
       await expect(card).toHaveCount(0);
+      expect(loadCount).toBe(2);
+      await expect.poll(() => page.evaluate((key) => window.sessionStorage.getItem(key), CHUNK_RELOAD_KEY)).toBeNull();
     });
   }
+
+  test('断网状态下在状态 A 点击返回首页可无需重载直接进入主包首页', async ({ page, context }) => {
+    let loadCount = 0;
+    page.on('load', () => {
+      loadCount += 1;
+    });
+    await page.route(/\/assets\/Production-[^/]+\.js$/, async (route) => {
+      await route.fulfill({ status: 404, contentType: 'text/plain', body: 'Not Found' });
+    });
+
+    await page.goto('./#/production?civ=Franks&age=3');
+    const card = page.locator('[data-testid="error-recovery"]');
+    await expect(card).toBeVisible({ timeout: 15000 });
+    expect(loadCount).toBe(2);
+
+    await context.setOffline(true);
+    try {
+      await card.getByRole('button', { name: '返回首页', exact: true }).click();
+      await expect(page.locator('#home')).toBeVisible();
+      await expect(card).toHaveCount(0);
+      expect(loadCount).toBe(2);
+    } finally {
+      await context.setOffline(false);
+    }
+  });
 
   test('sessionStorage 不可用时安全降级直接展示状态 A 手动刷新文案', async ({ page }) => {
     await page.addInitScript(() => {
@@ -163,4 +195,47 @@ test.describe('Issue 1278：懒加载分包 404 自动恢复与顶层 ErrorBound
       await expect(card).toHaveCount(0);
     });
   }
+
+  test('嵌套子路由懒加载持续 404 时在元数据提交后仍只自动重载 1 次，不陷入死循环', async ({ page }) => {
+    let loadCount = 0;
+    page.on('load', () => {
+      loadCount += 1;
+    });
+    await page.route(/\/assets\/ArmyCost-[^/]+\.js$/, async (route) => {
+      await route.fulfill({ status: 404, contentType: 'text/plain', body: 'Not Found' });
+    });
+
+    await page.goto('./#/production?mode=army-cost');
+    const card = page.locator('[data-testid="error-recovery"]');
+    await expect(card).toBeVisible({ timeout: 15000 });
+    await expect(card).toHaveAttribute('data-error-kind', 'chunk');
+    await expect(card).toContainText('系统已自动尝试重新加载 1 次，仍未恢复。');
+    expect(loadCount).toBe(2);
+  });
+
+  test('业务页自带降级的数据分包持续 404 时保留局部重试界面且不触发死循环刷新', async ({ page }) => {
+    let loadCount = 0;
+    page.on('load', () => {
+      loadCount += 1;
+    });
+    let fail = true;
+    await page.route(/relic(?:_income|Income)(?:[-.]|\.json)/, async (route) => {
+      if (fail) {
+        await route.fulfill({ status: 404, contentType: 'text/plain', body: 'Not Found' });
+        return;
+      }
+      await route.continue();
+    });
+
+    await page.goto('./#/relic-income');
+    await expect(page.getByTestId('relic-income-page')).toBeVisible();
+    await expect(page.getByRole('alert')).toContainText('固定圣物数据加载失败');
+    await expect(page.getByRole('button', { name: '重试加载数据', exact: true })).toBeVisible();
+    expect(loadCount).toBe(1);
+
+    fail = false;
+    await page.getByRole('button', { name: '重试加载数据', exact: true }).click();
+    await expect(page.getByTestId('relic-rate-Gold')).toBeVisible();
+    expect(loadCount).toBe(1);
+  });
 });
