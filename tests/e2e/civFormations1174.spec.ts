@@ -32,6 +32,8 @@ for (const width of [1280, 360]) {
       '#/unit/441?civ=Hindustanis',
       '#/unit/36?civ=Hindustanis',
       '#/unit/207?civ=Hindustanis',
+      '#/unit/1747?civ=Hindustanis',
+      '#/unit/1749?civ=Hindustanis',
     ]);
     expect((await research.boundingBox())?.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
