@@ -36,7 +36,7 @@ import { AgeCounterBonuses } from './AgeCounterBonuses';
 import { CONVERSION_ANCHOR, MONK_ID } from '../conversion';
 import { ConversionMechanics } from './ConversionMechanics';
 import { FishingGather } from './FishingGather';
-import { ScoutAgeChanges } from './ScoutAgeChanges';
+import { UnitAgeChanges } from './UnitAgeChanges';
 import { SplashMechanics } from './SplashMechanics';
 import { TrebuchetStates } from './TrebuchetStates';
 import UnitList from './UnitList';
@@ -456,7 +456,7 @@ export default function UnitDetail() {
 
       {trees && isChampiUnit(u.id) ? <ChampiReferences core={core} trees={trees} variant="unit" /> : null}
       <TrebuchetStates unit={u} />
-      <ScoutAgeChanges unit={u} />
+      <UnitAgeChanges unit={u} civ={context?.en} />
       <AgeCounterBonuses unitId={u.id} unitById={core.unitById} />
       <ConversionMechanics unitId={u.id} units={core.unitById} techs={core.techs} />
       <SplashMechanics unit={u} />

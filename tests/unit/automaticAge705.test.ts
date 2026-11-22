@@ -3,25 +3,30 @@ import units from '../../src/data/raw/units';
 import buildings from '../../src/data/raw/buildings';
 import { DAT } from '../../src/domain/datEffects';
 import type { Building, Unit } from '../../src/domain/types';
-import { scoutAgeChange } from '../../src/features/units/components/ScoutAgeChanges';
 import { formatHp } from '../../src/domain/hpFormat';
+import { unitAgeChanges } from '../../src/domain/unitAgeChanges';
 import { wallAgeChange } from '../../src/features/buildings/components/WallAgeChanges';
 
 const scout = units.find((unit) => unit.id === 448)! as unknown as Unit;
+const knight = units.find((unit) => unit.id === 38)! as unknown as Unit;
 const wall = (id: number) => buildings.find((building) => building.id === id)! as unknown as Building;
 
-describe('有来源的局部自动时代投影 #705', () => {
-  it('侦察三项来自tech20，不受目录age=2裁切', () => {
-    const result = scoutAgeChange(scout);
+describe('有来源的局部自动时代投影 #705 / #1339', () => {
+  it('侦察骑兵三时代自动变化由数据规则驱动，封建/城堡/帝王连续推演', () => {
+    const result = unitAgeChanges(scout);
     expect(result?.state).toBe('ready');
     if (result?.state !== 'ready') throw new Error('missing scout rule');
-    expect(result.age).toBe(2);
-    expect(result.before.atk).toBe(3);
-    expect(result.after.atk).toBe(5);
-    expect(result.before.los).toBe(4);
-    expect(result.after.los).toBe(6);
-    expect(result.before.spd).toBe(1.2);
-    expect(result.after.spd).toBeCloseTo(1.55);
+    expect(result.earliestAge).toBe(1);
+    expect(result.upgradeStages.map((stage) => stage.age)).toEqual([2, 3, 4]);
+    const feudal = Object.fromEntries(result.upgradeStages[0]!.rows.map((row) => [row.key, row]));
+    expect(feudal.atk?.before).toBe(3);
+    expect(feudal.atk?.after).toBe(5);
+    expect(feudal.los?.before).toBe(4);
+    expect(feudal.los?.after).toBe(6);
+    expect(feudal.spd?.before).toBe(1.2);
+    expect(feudal.spd?.after).toBeCloseTo(1.55);
+    expect(result.upgradeStages[1]!.rows[0]?.after).toBe(8);
+    expect(result.upgradeStages[2]!.rows[0]?.after).toBe(10);
   });
 
   it.each([
@@ -46,7 +51,13 @@ describe('有来源的局部自动时代投影 #705', () => {
     rule.fx.find((effect) => effect.s === 'atk')!.v = 9;
     const changed = structuredClone(source);
     const beforeUnit = structuredClone(unit);
-    expect(scoutAgeChange(unit, source)).toMatchObject({ state: 'ready', before: { atk: 8 }, after: { atk: 17 } });
+    const res = unitAgeChanges(unit, undefined, { generic: source });
+    expect(res?.state).toBe('ready');
+    if (res?.state === 'ready') {
+      const atk = res.upgradeStages[0]!.rows.find((row) => row.key === 'atk')!;
+      expect(atk.before).toBe(8);
+      expect(atk.after).toBe(17);
+    }
     expect(source).toEqual(changed);
     expect(unit).toEqual(beforeUnit);
     expect(DAT.generic).toEqual(original);
@@ -64,22 +75,30 @@ describe('有来源的局部自动时代投影 #705', () => {
     expect(source).toEqual(beforeSource);
   });
 
-  it.each(['missing', 'research', 'any', 'type', 'partial'])('不把%s来源冒充自动规则', (kind) => {
+  it.each(['missing', 'research', 'any', 'type'] as const)('零白名单规则引擎不把 %s 来源冒充单位自动规则，返回 null', (kind) => {
     const source = structuredClone(DAT.generic).filter((entry) => entry.tech === 20);
     if (kind === 'missing') source.length = 0;
     if (kind === 'research') source[0]!.req = ['Fletching'];
     if (kind === 'any') source[0]!.any = true;
     const rule = source[0]?.rules.find((entry) => entry.t.includes(448));
     if (kind === 'type' && rule) rule.b = 1;
-    if (kind === 'partial' && rule) rule.fx = rule.fx.filter((effect) => effect.s !== 'spd');
-    expect(scoutAgeChange(scout, source)).toEqual({ state: 'pending' });
+    expect(unitAgeChanges(scout, undefined, { generic: source })).toBeNull();
   });
 
-  it('缺基底/来源待确认，未锁对象没有卡片', () => {
-    expect(scoutAgeChange({ ...scout, spd: Number.NaN })).toEqual({ state: 'pending' });
+  it('partial 仅保留数据中实际存在的属性项，损坏基底/非法规则才返回 pending', () => {
+    const source = structuredClone(DAT.generic).filter((entry) => entry.tech === 20);
+    const rule = source[0]!.rules.find((entry) => entry.t.includes(448))!;
+    rule.fx = rule.fx.filter((effect) => effect.s !== 'spd');
+    const partial = unitAgeChanges(scout, undefined, { generic: source });
+    expect(partial?.state).toBe('ready');
+    if (partial?.state === 'ready') {
+      expect(partial.upgradeStages[0]!.rows.map((row) => row.key)).toEqual(['atk', 'los']);
+    }
+
+    expect(unitAgeChanges({ ...scout, spd: Number.NaN })).toEqual({ state: 'pending' });
     expect(wallAgeChange({ ...wall(72), hp: Number.NaN })).toEqual({ state: 'pending' });
     expect(wallAgeChange(wall(72), [])).toEqual({ state: 'pending' });
-    expect(scoutAgeChange({ ...scout, id: 751 })).toBeNull();
+    expect(unitAgeChanges(knight)).toBeNull();
     expect(wallAgeChange(wall(70))).toBeNull();
   });
 
