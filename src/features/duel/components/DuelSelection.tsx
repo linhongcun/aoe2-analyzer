@@ -21,7 +21,7 @@ import { EMPTY_TRAINING_TECH } from '../logic/trainingCostView';
 import { CostDiscountBlock } from './CostDiscount';
 import { PkCost } from './PkCost';
 import { TrainingPrice } from './TrainingPrice';
-import { UnitPicker } from './UnitPicker';
+import { UnitPicker } from '../../../shared/ui/UnitPicker';
 import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
 import { radioKeyboard } from './radioKeyboard';
 import { duelToTrainTotal } from '../../../domain/productionTransfer';
@@ -120,7 +120,14 @@ export function Side({
         />
       )}
       <div className="bar">
-        <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
+        <UnitPicker
+          id={`duel-${k}-unit`}
+          label={`${k.toUpperCase()} 方单位`}
+          value={u}
+          civ={side.civ}
+          list={fams}
+          onChange={(x) => onChange({ ...spec, uid: x.id })}
+        />
         {elite && (
           <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
             <button
@@ -303,7 +310,14 @@ function UnavailSide({
       </div>
       {entry}
       <div className="bar">
-        <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
+        <UnitPicker
+          id={`duel-${k}-unit`}
+          label={`${k.toUpperCase()} 方单位`}
+          value={u}
+          civ={side.civ}
+          list={fams}
+          onChange={(x) => onChange({ ...spec, uid: x.id })}
+        />
       </div>
       <div className="bar">
         <CivPicker id={civId} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />

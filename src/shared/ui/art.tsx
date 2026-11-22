@@ -12,7 +12,7 @@ export const CivIcon = ({ c, alt }: { c: Pick<Civ, 'en'>; alt?: string }) => (
   <img className="ico" src={img(`civs/${c.en.toLowerCase()}.webp`)} alt={alt ?? c.en} loading="lazy" />
 );
 export const UnitIcon = ({ u, big }: { u: Unit; big?: boolean }) => (
-  <img className={big ? 'uico big' : 'uico'} src={img(`units/${u.pic}.webp`)} alt="" loading="lazy" />
+  <img className={big ? 'uico big' : 'uico'} src={img(`units/${u.pic}.webp`)} alt="" loading="lazy" decoding="async" />
 );
 export const TechIcon = ({ t, big }: { t: Tech; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`techs/${t.pic}.webp`)} alt="" loading="lazy" />
@@ -52,9 +52,9 @@ export const CivChip = ({ c, title }: { c: Civ; title?: string }) => (
   </Link>
 );
 
-/** 属性图标；k 为空时输出占位 */
+/** 属性图标；k 为空时输出占位（多页共享，不加全局 loading="lazy"） */
 export const StatIcon = ({ k, t }: { k: string; t?: string }) =>
-  k ? <img className="si" src={img(`stats/${k}.webp`)} alt={t ?? k} title={t ?? k} /> : <span className="si" />;
+  k ? <img className="si" src={img(`stats/${k}.webp`)} alt={t ?? k} title={t ?? k} decoding="async" /> : <span className="si" />;
 
 export const RK: Record<string, string> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
 export function CostView({ c }: { c: Cost }) {
