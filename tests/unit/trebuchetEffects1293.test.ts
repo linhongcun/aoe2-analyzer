@@ -104,7 +104,7 @@ describe('#1293 巨型投石机 331 在战狼号（461）与弹射器（59）中
     expect(zeroHits).toEqual([]);
   });
 
-  it('下游边界：unitCost / productionTechs / armyResearchChoices 无副作用，日本混编带 59 触发 fail-closed 且取消后可带入', () => {
+  it('下游边界：unitCost / productionTechs / armyResearchChoices 无副作用，日本混编带 59 经 #1334 放行入未带入且总价不变', () => {
     const warwolf = CORE.techById[461]!;
     const kataparuto = CORE.techById[59]!;
 
@@ -124,13 +124,17 @@ describe('#1293 巨型投石机 331 在战狼号（461）与弹射器（59）中
     expect(armyResearchChoices(prodCtx, { ...emptyArmyCost('Britons'), rows: [{ unit: 331, qty: '1' }] })).toContain(461);
     expect(armyResearchChoices(prodCtx, { ...emptyArmyCost('Japanese'), rows: [{ unit: 331, qty: '1' }] })).toContain(59);
 
-    // 日本混编带 59（弹射器含非建筑 a=13 工作效率）走现有 fail-closed 拦截；取消 59 后可正常带入训练总价
+    // #1334：弹射器（59）的 a=13 工作效率（拆装速度）与训练单价无关，放行入「未带入」且带入链接与不含 59 一致
     const withKata = { civ: 'Japanese', age: '4', techs: ['47', '377', '59'], team: [], rows: [{ uid: '331', qty: '2' }] };
-    const blocked = mixedTrainingTransfer(prodCtx, withKata, 'a', resolveMixedSide(sim, CORE, withKata, 'a'));
-    expect(blocked).toMatchObject({ errors: [{ field: 'mix-a-techs', message: expect.stringContaining('弹射器') }] });
+    const allowedWithKata = mixedTrainingTransfer(prodCtx, withKata, 'a', resolveMixedSide(sim, CORE, withKata, 'a'));
+    expect(allowedWithKata).toHaveProperty('to');
+    if (!('to' in allowedWithKata)) throw new Error(JSON.stringify(allowedWithKata.errors));
+    expect(allowedWithKata.notice.omitted).toContain('弹射器（不改变本方训练单价或解锁）');
 
     const withoutKata = { ...withKata, techs: ['47', '377'] };
-    const allowed = mixedTrainingTransfer(prodCtx, withoutKata, 'a', resolveMixedSide(sim, CORE, withoutKata, 'a'));
-    expect(allowed).toHaveProperty('to');
+    const allowedWithoutKata = mixedTrainingTransfer(prodCtx, withoutKata, 'a', resolveMixedSide(sim, CORE, withoutKata, 'a'));
+    expect(allowedWithoutKata).toHaveProperty('to');
+    if (!('to' in allowedWithoutKata)) throw new Error(JSON.stringify(allowedWithoutKata.errors));
+    expect(allowedWithKata.to).toBe(allowedWithoutKata.to);
   });
 });
