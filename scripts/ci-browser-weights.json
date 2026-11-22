@@ -112,6 +112,7 @@
     "tests/e2e/entityHistory435.spec.ts": 31634,
     "tests/e2e/entityHistory950.spec.ts": 6000,
     "tests/e2e/entry280.spec.ts": 6721,
+    "tests/e2e/errorRecovery1278.spec.ts": 9000,
     "tests/e2e/expenseSearch1189.spec.ts": 3000,
     "tests/e2e/favicon30.spec.ts": 1012,
     "tests/e2e/feedbackTap295.spec.ts": 14785,

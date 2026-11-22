@@ -1,11 +1,22 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { civs } from '../data';
+import { clearChunkReloadMarker } from '../domain/chunkRecovery';
 import { catalogCivByRouteEn } from '../domain/civRoute';
+import { getCurrentHashPath, getSafeSessionStorage } from '../shared/utils/chunkRecoveryBrowser';
 import { PAGE_REGISTRY, type RegisteredPage } from './pageRegistry';
 
 const PageMeta = lazy(() => import('../features/share/PageMeta'));
 const NotFound = lazy(() => import('../features/notFound/NotFound'));
+
+/** 当前路由的页面与元数据分包均提交后，清理已完成的自动重载标记（Issue 1278）。 */
+function ChunkRecoveryClearer() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    clearChunkReloadMarker(getSafeSessionStorage(), getCurrentHashPath());
+  }, [pathname, search]);
+  return null;
+}
 
 /** /tree/:civ 换成该文明详情的科技树章节。大小写按文明英文名对齐；认不出的名字交给文明详情。 */
 function TreeCivRedirect() {
@@ -26,6 +37,7 @@ function RegisteredRoute({ page }: { page: RegisteredPage }) {
       <Page />
       <Suspense fallback={null}>
         <PageMeta pattern={page.path} omitShareSearch={page.omitShareSearch === true} />
+        <ChunkRecoveryClearer />
       </Suspense>
     </>
   );
@@ -45,6 +57,7 @@ export function AppRoutes() {
             <NotFound />
             <Suspense fallback={null}>
               <PageMeta notFound />
+              <ChunkRecoveryClearer />
             </Suspense>
           </>
         }
