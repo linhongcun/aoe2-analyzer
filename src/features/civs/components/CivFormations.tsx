@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civFormationContent } from '../../../data/civFormations';
 import { DATA_PATCH } from '../../../data/sources';
+import { dedupeFormationClauses, type DedupedRouteText } from '../../../domain/formationDedup';
 import { AGE_ZH } from '../../../domain/ratings';
 import {
   currentFormationPatch,
@@ -20,6 +21,7 @@ import {
   FormationFold,
   FormationRoutes,
   FormationText,
+  SharedFormationNotice,
   renderFormationAgeProgression,
   renderFormationConditionalGroups,
 } from './FormationPresentation';
@@ -136,7 +138,19 @@ function EntityLine({
   );
 }
 
-function FormationCard({ view, civ, remember, grouped = false }: { view: FormationView; civ: string; remember: RememberEntity; grouped?: boolean }) {
+function FormationCard({
+  view,
+  civ,
+  remember,
+  grouped = false,
+  deduped,
+}: {
+  view: FormationView;
+  civ: string;
+  remember: RememberEntity;
+  grouped?: boolean;
+  deduped?: DedupedRouteText;
+}) {
   if (view.status === 'draft') return null;
   if (view.status === 'unverified') {
     const anchor = formationAnchor(view.id);
@@ -242,6 +256,8 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
       </p>
     </>
   );
+  const reasonText = deduped ? deduped.reason : route.reason;
+  const limitationText = deduped ? deduped.limitation : route.limitation;
   const conditionBranches = view.conditionBranches && <FormationConditionBranches id={`${anchor}-conditional-branches`} branches={view.conditionBranches} />;
   if (route.presentation === 'age-progression') {
     const continuations = view.supplements.filter((group) => group.mode === 'progression').flatMap((group) => group.entities);
@@ -251,9 +267,9 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
       <article className="formation-card">
         {heading}
         {renderFormationAgeProgression(view.required, continuations, entityLine)}
-        {route.reason && (
+        {reasonText && (
           <p className="formation-age-note">
-            <FormationText text={route.reason} />
+            <FormationText text={reasonText} />
           </p>
         )}
         {support.length > 0 && (
@@ -390,16 +406,16 @@ function FormationCard({ view, civ, remember, grouped = false }: { view: Formati
         </div>
         <div className="formation-analysis">
           {separateSupport && renderSupplements()}
-          {(route.reason || route.limitation) && (
+          {(reasonText || limitationText) && (
             <div className="formation-grid">
-              {route.reason && (
+              {reasonText && (
                 <p>
-                  <b>为什么这样配</b> <FormationText text={route.reason} />
+                  <b>为什么这样配</b> <FormationText text={reasonText} />
                 </p>
               )}
-              {route.limitation && (
+              {limitationText && (
                 <p className="formation-limitation">
-                  <b>主要短板</b> <FormationText text={route.limitation} />
+                  <b>主要短板</b> <FormationText text={limitationText} />
                 </p>
               )}
             </div>
@@ -444,6 +460,7 @@ function FormationSection({
   const retryReady = requestedRetry && !pending && !error;
   const title = useRef<HTMLHeadingElement>(null);
   const needsRetry = Boolean(retry && (pending || error));
+  const dedup = useMemo(() => dedupeFormationClauses(routes), [routes]);
   useEffect(() => {
     if (retryReady && document.activeElement === document.body) title.current?.focus({ preventScroll: true });
   }, [retryReady]);
@@ -460,10 +477,20 @@ function FormationSection({
           <p className="formation-meta">
             核对数据 <Version patch={DATA_PATCH} />
           </p>
+          <SharedFormationNotice items={dedup.shared} />
           <FormationRoutes
             groups={content.routeGroups}
             routes={routes}
-            renderCard={(id, view, grouped) => <FormationCard key={id} view={view} civ={civ} remember={remember} grouped={grouped} />}
+            renderCard={(id, view, grouped) => (
+              <FormationCard
+                key={id}
+                view={view}
+                civ={civ}
+                remember={remember}
+                grouped={grouped}
+                deduped={view.status === 'current' ? dedup.byRouteId[view.route.id] : undefined}
+              />
+            )}
           />
         </>
       )}

@@ -81,7 +81,7 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
   const gen = useRef(0);
   const [located, setLocated] = useState<number | null>(null);
   const [status, setStatus] = useState('');
-  const [atEnd, setAtEnd] = useState(false);
+  const [scrollState, setScrollState] = useState({ atStart: true, atEnd: false, canScrollX: false });
   const targets: JumpTarget[] = L.buildings.flatMap((b) => {
     const row = trees.b[b.bid];
     if (!row) return [];
@@ -100,16 +100,33 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
-    const sync = () => setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+    const sync = () => {
+      const canScrollX = el.scrollWidth > el.clientWidth + 2;
+      const atStart = !canScrollX || el.scrollLeft <= 2;
+      const atEnd = !canScrollX || el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+      setScrollState((prev) =>
+        prev.atStart === atStart && prev.atEnd === atEnd && prev.canScrollX === canScrollX ? prev : { atStart, atEnd, canScrollX },
+      );
+    };
     sync();
     el.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
     const observer = new ResizeObserver(sync);
     observer.observe(el);
     return () => {
       el.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
       observer.disconnect();
     };
   }, [civ.en, cmp]);
+
+  const scrollHorizontal = (direction: -1 | 1) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const step = Math.max(240, Math.round(scroller.clientWidth * 0.7));
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    scroller.scrollBy({ left: direction * step, behavior: reduce ? 'auto' : 'smooth' });
+  };
 
   const locate = (bid: number) => {
     const scroller = scrollerRef.current;
@@ -172,7 +189,35 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
           </ul>
         </div>
       )}
-      <div className={`civ-tt-frame${atEnd ? ' is-end' : ''}`}>
+      {scrollState.canScrollX && (
+        <div className="civ-tt-scrollbar" data-testid="civ-tt-scrollbar">
+          <p className="civ-tt-scroll-hint">
+            左右滑动或点左右按钮浏览全部 <span className="num nw">{L.buildings.length} 列</span>建筑科技树（
+            {scrollState.atStart ? '当前位于最左侧，右侧还有更多建筑列' : scrollState.atEnd ? '已到达最右侧' : '左右均有更多建筑列'}）
+          </p>
+          <div className="civ-tt-scroll-btns">
+            <button
+              type="button"
+              className="civ-tt-scroll-btn"
+              aria-label="向左滚动科技树"
+              disabled={scrollState.atStart}
+              onClick={() => scrollHorizontal(-1)}
+            >
+              <Icon name="chevron-left" />
+            </button>
+            <button
+              type="button"
+              className="civ-tt-scroll-btn"
+              aria-label="向右滚动科技树"
+              disabled={scrollState.atEnd}
+              onClick={() => scrollHorizontal(1)}
+            >
+              <Icon name="chevron-right" />
+            </button>
+          </div>
+        </div>
+      )}
+      <div className={`civ-tt-frame${scrollState.canScrollX ? ' can-scroll-x' : ''}${scrollState.atStart ? ' is-start' : ''}${scrollState.atEnd ? ' is-end' : ''}`}>
         <div
           className="tscroll"
           ref={scrollerRef}
@@ -293,7 +338,7 @@ function DiffLists({ trees, core, mine, other }: { trees: Trees; core: Core; min
 
 function Placeholder({ text, alert, onRetry }: { text: string; alert?: boolean; onRetry?: () => void }) {
   return (
-    <div className="civ-tt-frame is-end">
+    <div className="civ-tt-frame is-start is-end">
       <div className="civ-tt-skel" role={alert ? 'alert' : 'status'}>
         <p>{text}</p>
         {alert && onRetry && (

@@ -67,3 +67,13 @@ export function selectCompareCivilization(input: string | URLSearchParams, side:
   params.set(side, civilization);
   return '?' + params.toString();
 }
+
+/** 互换对比双文明并完整保留其余查询参数；双侧相同时返回 null 以免压入无变化历史记录（Issue 1285）。 */
+export function swapCompareCivilizations(input: string | URLSearchParams): string | null {
+  const resolved = resolveCompareQuery(input);
+  if (resolved.a === resolved.b) return null;
+  const params = new URLSearchParams(resolved.search);
+  params.set('a', resolved.b);
+  params.set('b', resolved.a);
+  return '?' + params.toString();
+}
