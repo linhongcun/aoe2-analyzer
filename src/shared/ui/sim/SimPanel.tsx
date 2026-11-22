@@ -330,7 +330,7 @@ export default function SimPanel(p: SimPanelProps) {
                       <CostView c={t.cost} /> <StatIcon k="time" t="研究时间" />
                       {t.rt}s
                     </span>
-                    {!checkable && <div className="note">{t.desc}</div>}
+                    {!ef && t.desc && <div className="note">{t.desc}</div>}
                   </label>
                 );
               })}

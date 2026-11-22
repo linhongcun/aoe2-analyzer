@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
+import { applicableUnmodeledTechIds } from '../../../domain/duelUnmodeled';
 import { formatHp } from '../../../domain/hpFormat';
 import { baseUnit, isElite } from '../../../domain/family';
 import type { collapse } from '../../../domain/family';
@@ -288,7 +289,7 @@ export function Side({
               ...side.avail,
               ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
             ]}
-            selectableWithoutEffect={new Set(side.training.costs.map((item) => item.tech.id))}
+            selectableWithoutEffect={new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id)])}
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
               return new Set(side.training.costs.filter((item) => item.supported && !item.partial && item.tech.age <= limit).map((item) => item.tech.id));

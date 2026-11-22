@@ -25,6 +25,8 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           blastDamage: undefined,
           blastAttackLevel: undefined,
           friendlyFireDamage: undefined,
+          totalProjectiles: undefined,
+          chargeMultiProjectiles: undefined,
         }
       : catalogTarget;
   return { owner, alternate, rawTarget };

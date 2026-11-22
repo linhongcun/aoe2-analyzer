@@ -18,6 +18,18 @@
 
 ## [Unreleased]
 
+## [0.99.15] - 2026-11-22
+
+### 更新说明
+
+修复单位 PK 群战中带最小射程的远程单位贴脸后全员同时停火的失真，并补齐全模式精准未建模机制提示：大团投石手、掷矛手等最小射程远程部队被近战贴脸时，现改为按阵型纵深排数区分停火——仅真正落入最小射程内的前排停火、后排纵深继续射击（例如 40 穆伊斯卡投石手对 42 日本冠军剑士不再贴脸全体停火，冠军剩余从 29 个降至 11 个），同时保持单门手推炮贴脸停火与大规模远程互射的准确结果；在单位 PK 全部模式（1v1、N vs M、等资源与混编）选中含充能、多弹丸、践踏溅射、下马二阶段或切换形态的单位（或手动勾选后勤学、皇家卫队、哥瑟砍等机制科技）时，结果区紧贴胜负标题展示对应的精准未建模提醒，并与瓦兰吉卫队产金/加成说明同卡整合去重，常规兵种零多余噪音；城堡版与营垒版保加利亚骑兵现均在单位资料与 PK 提示中直连下马步兵二阶段。
+
+### 修复
+
+- #1296：在 `scripts/dat_source.py`（升至 `dat.v20`）与 `scripts/units_build.py` 导出 21 个固有副弹丸/多弹丸单位的 `totalProjectiles`、6 个充能多箭齐射单位的 `chargeMultiProjectiles`，并补齐城堡版保加利亚骑兵（`1225`/`1227`）下马 `form`（同步清理 `UnitDetail.tsx` / `UnitForms.tsx` 过时绕行链接及 `unitFormDetail.ts` 对 `#/unit/1980` 的字段透传）。
+- #1296：在 `src/domain/contactFight.ts` 对 `ranged && minRange > 0` 采用固定递增排容 `cap(r) = 2r + 1`、移除 `maxRanksByRange` 硬截断并分离 `distance`/`minDist`，消除贴脸全员停火、减员停火回弹与 `na` 单调倒挂，同步升级 `ContactSummary.tsx` 与 `MixedResult.tsx` `<MixedRules>` 群体纵深文案。
+- #1296：新增纯领域模块 `src/domain/duelUnmodeled.ts` 与统一提示组件 `DuelUnmodeledNotes.tsx`（整合 `VgNotes.tsx` 并支持混编同侧 `2703 + 2704` 独立 `rowKey` 与加成去重），严格按固定数据判定全量 24 个充能单位分型与 5 类机制并杜绝 `blast = 0, blastDamage = -5` 误报；扩展单兵种 `DuelSelection.tsx` / `SimPanel.tsx` 机制科技可勾选性（不进 `f`/`c` 自动预设）；新增 Python、Vitest 与 Playwright 回归测试并登记至 `scripts/ci-browser-weights.json`。
+
 ## [0.99.14] - 2026-11-22
 
 ### 更新说明

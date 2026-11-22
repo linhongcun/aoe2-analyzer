@@ -6,10 +6,31 @@ import { FIGHT_CAP, FIGHT_TIME } from '../../../domain/contactFight';
 import type { MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE_LABEL, type MixedFightResult, type MixedArmyResult } from '../../../domain/mixedFight';
 import { AGE_ZH } from '../../../domain/ratings';
+import type { Tech } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
+import type { Resolved } from '../logic/duelSide';
 import type { MixedSideView } from '../logic/mixedDuel';
 import { CONTACT_BOUNDARY, MixedContact, STOP_LABELS } from './ContactSummary';
+import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
+
+function selectedTechsOf(side: Resolved): Tech[] {
+  const seen = new Set<number>();
+  const list: Tech[] = [];
+  for (const { t } of side.avail) {
+    if (side.sel.has(t.id) && !seen.has(t.id)) {
+      seen.add(t.id);
+      list.push(t);
+    }
+  }
+  for (const { tech } of side.training.costs) {
+    if (side.sel.has(tech.id) && !seen.has(tech.id)) {
+      seen.add(tech.id);
+      list.push(tech);
+    }
+  }
+  return list;
+}
 
 export function MixedRules() {
   return (
@@ -25,7 +46,9 @@ export function MixedRules() {
           <li>
             每方 <span className="num nw">1–3 行</span>，最多 <span className="num nw">{FIGHT_CAP} 个单位</span>。
           </li>
-          <li>前排按移速接近。进入射程后开始首击前摇，之后按攻击间隔出手。缺少目录前摇时按零处理。低于最小射程时无法开火。</li>
+          <li>
+            前排按移速接近。进入射程后开始首击前摇，之后按攻击间隔出手。缺少目录前摇时按零处理。单兵低于最小射程时无法开火；多人数远程行按纵深排数判定，仅贴脸低于最小射程的前排停火，后排纵深仍可开火。
+          </li>
           <li>后排近战等前排清空后才能接敌。先进入射程的一方可能有接敌前的齐射窗口。</li>
           <li>同一时刻先快照双方存活攻击者，故该时刻被击杀的单位仍能完成本次攻击；之后不再出手。</li>
           <li>同刻攻击按本方行顺序逐击结算。清空前排后，仅对还在射程内的下一行继续结算，按新目标计算每击伤害。单击超出的伤害丢弃。</li>
@@ -60,6 +83,50 @@ export function MixedResult({
   const title =
     result.status === 'win' ? `${result.winner.toUpperCase()} 方在此规则下获胜` : result.status === 'draw' ? '双方同刻全部阵亡' : STOP_LABELS[result.status];
   const lines = (view: MixedSideView, side: 'a' | 'b') => view.army!.map((row, i) => ({ ...row, ...result.contact[side][i]! }));
+  const unmodeledEntries = (
+    [
+      ['a', a],
+      ['b', b],
+    ] as const
+  ).flatMap(([side, view]) =>
+    view.rows.flatMap((row, i) =>
+      row.resolved
+        ? [
+            {
+              side,
+              badge: `${side.toUpperCase()}${i + 1}`,
+              unit: row.resolved.u,
+              civ: row.resolved.civ,
+              age: row.resolved.age,
+              selectedTechs: selectedTechsOf(row.resolved),
+            },
+          ]
+        : [],
+    ),
+  );
+  const vgSides = (
+    [
+      ['a', a],
+      ['b', b],
+    ] as const
+  ).flatMap(([side, view]) =>
+    view.rows.flatMap((row, i) =>
+      row.resolved
+        ? [
+            {
+              rowKey: `${side}-${i}-${row.resolved.u.id}`,
+              k: side,
+              rowLabel: `${side.toUpperCase()}${i + 1} · ${row.resolved.u.zh}`,
+              unitId: row.resolved.u.id,
+              civ: row.resolved.civ,
+              age: row.resolved.age,
+              rof: row.resolved.S.rof,
+              seconds: result.contact[side][i]!.meleeUnitSeconds,
+            },
+          ]
+        : [],
+    ),
+  );
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
@@ -78,6 +145,7 @@ export function MixedResult({
             ? '本次事件内双方攻击均完成，结果为同时全灭。'
             : '结果对应本次配置。'}
       </p>
+      <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />
       <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} />
       <ArmyResult side="a" value={result.a} view={a} input={input} />
       <ArmyResult side="b" value={result.b} view={b} input={input} />

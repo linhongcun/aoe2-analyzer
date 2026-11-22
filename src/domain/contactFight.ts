@@ -89,11 +89,13 @@ interface RankInRange {
   first: number;
   count: number;
   distance: number;
+  minDist: number;
   leaving: boolean;
 }
 interface RankShots {
   count: number;
   distance: number;
+  minDist: number;
   clocks: AttackClock[];
 }
 interface Formation {
@@ -147,13 +149,14 @@ function applyAttacks(shots: RankShots[][], source: Formation, target: Formation
   let to = 0;
   attackRows: for (const [from, ranks] of shots.entries()) {
     const attacker = source.rows[from]!;
-    for (const { count, distance } of ranks) {
+    for (const { count, distance, minDist } of ranks) {
       for (let n = 0; n < count; n++) {
         while (target.rows[to] && !target.rows[to]!.alive) to++;
         const row = target.rows[to];
         if (!row) return;
         const targetDistance = distance + target.setback[to]!;
-        if (targetDistance - attacker.fighter.rng > EPS || targetDistance + EPS < attacker.minRange) continue attackRows;
+        const targetMinDistance = minDist + target.setback[to]!;
+        if (targetDistance - attacker.fighter.rng > EPS || targetMinDistance + EPS < attacker.minRange) continue attackRows;
         const hit = damage[from]![to]!;
         if (!hit) continue attackRows;
         row.headHp -= hit;
@@ -210,7 +213,7 @@ export function contactFight(
         delay: f.firstHitDelay,
         alive: row.count,
         headHp: row.fighter.hp,
-        canFightAtMultipleDepths: !row.fighter.ranged && row.fighter.rng + EPS >= 2 * f.radiusX!,
+        canFightAtMultipleDepths: (!row.fighter.ranged && row.fighter.rng + EPS >= 2 * f.radiusX!) || (row.fighter.ranged && f.minRange > 0),
         clocks: [],
       };
     });
@@ -267,28 +270,56 @@ export function contactFight(
         const { ranged, rng } = row.fighter;
         const diameter = 2 * row.radiusX;
         const setback = side.setback[row.index]!;
-        const width = ranged ? row.alive : Math.min(row.alive, meleeAcross(row, target.front));
-        const ranks =
-          row.alive && (ranged || row === side.front)
-            ? Math.min(Math.ceil(row.alive / width), ranged ? 1 : 1 + Math.floor((Math.max(0, rng - setback) + EPS) / diameter))
-            : 0;
         // 同一阵容行按顺序损失单位，幸存单位的时钟不随敌方接触面变窄而换位。
         const firstSurvivor = row.canFightAtMultipleDepths ? row.count - row.alive : 0;
-        for (let rank = 0; rank < ranks; rank++) {
-          const depth = rank * diameter;
-          const offset = setback + depth;
-          const distance = gap + offset;
-          if (distance - rng > EPS) {
-            // 纵深按距离递增，只需排期下一层的入射程事件。
-            if (speed && rng + EPS >= offset) schedule((distance - rng) / speed);
-            break;
+        if (row.alive && ranged && row.minRange > 0) {
+          // issue 1296：多人数最小射程远程行按固定递增排容 2r+1 展开纵深，避免整排压在 0 格停火及减员回弹。
+          const engaged = gap + setback - rng <= EPS;
+          for (let rank = 0, placed = 0; placed < row.alive; rank++) {
+            const count = Math.min(2 * rank + 1, row.alive - placed);
+            const offset = setback + rank * diameter;
+            const minDist = gap + offset;
+            const distance = engaged ? Math.min(minDist, rng) : minDist;
+            if (distance - rng > EPS) {
+              if (speed && rng + EPS >= offset) schedule((minDist - rng) / speed);
+              break;
+            }
+            const remaining = minDist - row.minRange;
+            if (remaining >= -EPS) {
+              const canCrossMin = speed > 0 && row.minRange - offset > EPS;
+              if (canCrossMin && remaining > EPS) schedule(remaining / speed);
+              eligible.push({ first: firstSurvivor + placed, count, distance, minDist, leaving: canCrossMin && Math.abs(remaining) <= EPS });
+            }
+            placed += count;
           }
-          const remaining = distance - row.minRange;
-          if (remaining < -EPS) continue;
-          const canCrossMin = speed > 0 && row.minRange - offset > EPS;
-          if (canCrossMin && remaining > EPS) schedule(remaining / speed);
-          const first = firstSurvivor + rank * width;
-          eligible.push({ first, count: Math.min(width, row.alive - rank * width), distance, leaving: canCrossMin && Math.abs(remaining) <= EPS });
+        } else {
+          const width = ranged ? row.alive : Math.min(row.alive, meleeAcross(row, target.front));
+          const ranks =
+            row.alive && (ranged || row === side.front)
+              ? Math.min(Math.ceil(row.alive / width), ranged ? 1 : 1 + Math.floor((Math.max(0, rng - setback) + EPS) / diameter))
+              : 0;
+          for (let rank = 0; rank < ranks; rank++) {
+            const depth = rank * diameter;
+            const offset = setback + depth;
+            const distance = gap + offset;
+            if (distance - rng > EPS) {
+              // 纵深按距离递增，只需排期下一层的入射程事件。
+              if (speed && rng + EPS >= offset) schedule((distance - rng) / speed);
+              break;
+            }
+            const remaining = distance - row.minRange;
+            if (remaining < -EPS) continue;
+            const canCrossMin = speed > 0 && row.minRange - offset > EPS;
+            if (canCrossMin && remaining > EPS) schedule(remaining / speed);
+            const first = firstSurvivor + rank * width;
+            eligible.push({
+              first,
+              count: Math.min(width, row.alive - rank * width),
+              distance,
+              minDist: distance,
+              leaving: canCrossMin && Math.abs(remaining) <= EPS,
+            });
+          }
         }
         const last = eligible.at(-1);
         const from = eligible[0]?.first ?? row.clocks.length;
@@ -325,9 +356,9 @@ export function contactFight(
     const shots = (from: Formation, canAttack: typeof inA) =>
       from.rows.map((row) => {
         const ready: RankShots[] = [];
-        for (const { first, count, distance, leaving } of canAttack[row.index]!) {
+        for (const { first, count, distance, minDist, leaving } of canAttack[row.index]!) {
           const clocks: AttackClock[] = [];
-          // 只有能分多层出手的近战需要独立时钟。单层单位仍按同一出手批次计算。
+          // 只有能分多层出手的近战或最小射程远程行需要独立时钟。单层单位仍按同一出手批次计算。
           const length = row.canFightAtMultipleDepths ? count : 1;
           for (let i = first; i < first + length; i++) {
             const clock = (row.clocks[i] ??= { aimAt: null, cycleStart: 0, cycles: 0 });
@@ -336,9 +367,9 @@ export function contactFight(
             const due = Math.max(clock.aimAt, clock.cycleStart + clock.cycles * row.fighter.rof);
             if (withinHorizon(due) && due - time <= EPS) clocks.push(clock);
             // 即将穿过最小射程时，等待更近的移动或换行事件。
-            else if (!leaving && (!speed || distance - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
+            else if (!leaving && (!speed || minDist - speed * (due - time) + EPS >= row.minRange)) nextTime = Math.min(nextTime, due);
           }
-          if (clocks.length) ready.push({ count: row.canFightAtMultipleDepths ? clocks.length : count, distance, clocks });
+          if (clocks.length) ready.push({ count: row.canFightAtMultipleDepths ? clocks.length : count, distance, minDist, clocks });
         }
         return ready;
       });

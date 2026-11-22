@@ -93,6 +93,10 @@ export interface Unit {
   maxCharge?: number;
   rechargeRate?: number;
   rechargeDuration?: number;
+  /** issue 1296：固定 DAT 固有副弹丸/多弹丸总数（仅大于 1 且非纯视觉装饰时导出）。 */
+  totalProjectiles?: number;
+  /** issue 1296：固定 DAT 充能多弹丸齐射标记（chargeType 为 6/7 且上限大于 1、基础非固有齐射时导出）。 */
+  chargeMultiProjectiles?: boolean;
   /** 目录基础出手前摇（秒）。可缺失，零是有效读数。 */
   attackDelaySeconds?: number;
   /** 同一目录形态的上游原始帧值。 */

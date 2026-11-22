@@ -97,13 +97,26 @@ for u in units.values():
         for field in ('BlastDamage', 'BlastAttackLevel', 'FriendlyFireDamage'):
             if field in source_unit:
                 u[field[0].lower() + field[1:]] = source_unit[field]
+        tp = source_unit.get('TotalProjectiles', 0)
+        mtp = source_unit.get('MaxTotalProjectiles', 0)
+        sec = (source_unit.get('Projectiles') or [-1, -1])[1]
+        if type(tp) in (int, float) and math.isfinite(tp) and tp > 1:
+            sec_unit = _DU[sec] if 0 <= sec < len(_DU) else None
+            has_damage = sec < 0 or (sec_unit is not None and any(a[1] > 0 for a in (sec_unit.get('Attacks') or [])))
+            if has_damage:
+                u['totalProjectiles'] = int(round(tp))
+        if (u.get('chargeType') in (6, 7)
+                and type(mtp) in (int, float) and mtp > 1
+                and not (type(tp) in (int, float) and tp > 1)):
+            u['chargeMultiProjectiles'] = True
     dd=rngBd(u['id'])
     if dd:  # 插在 rng 之后，保持字段顺序
         it=list(u.items());it.insert([k for k,_ in it].index('rng')+1,('rngBd',dd));u.clear();u.update(it)
-# Only these five non-trainable forms have verified sources and detail pages.
+# Seven verified non-trainable forms have detail pages (including Castle and Krepost Konniks).
 for owner, target, kind, zh_suffix, en_suffix in [
     (1759, 1738, 'weapon', '近战', 'Melee'), (1761, 1740, 'weapon', '近战', 'Melee'),
     (1962, 1980, 'barrage', '掩护', 'Barrage'),
+    (1225, 1252, 'dismount', '下马', 'Dismounted'), (1227, 1253, 'dismount', '下马', 'Dismounted'),
     (1254, 1252, 'dismount', '下马', 'Dismounted'), (1255, 1253, 'dismount', '下马', 'Dismounted'),
 ]:
     source, alternate = U[str(owner)], U[str(target)]

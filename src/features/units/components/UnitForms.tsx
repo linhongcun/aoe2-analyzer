@@ -157,19 +157,6 @@ export function FormDescriptionSource({ owner, form, elite, alternate }: FormRel
   return alternate ? <p className="ud-kicker">复用自{form.kind === 'barrage' ? '蜀国战车' : owner.zh}的单位级说明。</p> : null;
 }
 
-export function CastleKonnikReference({ unit, href }: { unit: Unit; href: FormRelation['href'] }) {
-  // The directory opens the castle record; the verified dismount page starts at the Krepost record of that tier.
-  const krepost = unit.id === 1225 ? 1254 : unit.id === 1227 ? 1255 : undefined;
-  if (!krepost) return null;
-  return (
-    <p className="ud-form-bar">
-      <Link className="ud-btn" to={href(krepost)}>
-        前往营垒{unit.zh}资料查看下马形态
-      </Link>
-    </p>
-  );
-}
-
 export function FormRelatedTechLink({ ownerHref }: { ownerHref: string }) {
   const [pathname, query] = ownerHref.split('?');
   const params = new URLSearchParams(query);
