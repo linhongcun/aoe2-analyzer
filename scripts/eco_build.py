@@ -7,7 +7,7 @@
 - 通用经济科技（城镇中心/磨坊/伐木场/采矿场/市场/船坞）的效果
 - 各文明经济相关效果（文明科技树、加成科技、团队加成）：采集速率、携带量、移速、费用、训练/研究时间、资源
 用法：python3 scripts/eco_build.py"""
-import json, sys
+import json, math, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -160,12 +160,26 @@ def split_tree_effects(effects):
     return tree, free
 
 
+def _fishing_task_multiplier(tasks, predicate, label):
+    """Extract a single finite non-negative task multiplier from Fishing Ship tasks (fail-closed)."""
+    matches = [t for t in tasks if predicate(t)]
+    if len(matches) != 1:
+        raise ValueError('渔船任务 %s 期望唯一匹配 1 条，实际匹配 %d 条' % (label, len(matches)))
+    v = matches[0].get('Value')
+    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v) or v < 0:
+        raise ValueError('渔船任务 %s 倍率无效：%r' % (label, v))
+    return round(float(v), 6)
+
+
 def report_view(out, report):
     """把 eco.json 的村民原始值和对账记录（data/reports/eco-data.json）排成给人看的 Markdown。"""
     md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `data/game/eco.json`；对账记录在 `%s`，本页是它的排版。' % (report['source'], report['patch'], REPORT), '',
           '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
     for k, v in out['villager']['tasks'].items(): md.append('| %s | %d | %s | %s |' % (k, v['unit'], v['workRate'], v['carry']))
-    md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，携带 %s。' % (out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'], out['fishingShip']['workRate'], out['fishingShip']['carry']),
+    md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，深海倍率 %s，养鱼场倍率 %s，携带 %s。' % (
+        out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'],
+        out['fishingShip']['workRate'], out['fishingShip']['deepFishMultiplier'], out['fishingShip']['fishTrapMultiplier'], out['fishingShip']['carry'],
+    ),
            '', '猎物/家畜食物：' + '，'.join('%s（unit %d）%s' % (k, v['unit'], v['food']) for k, v in out['animals'].items()) + '。',
            '', '> work_rate 是纯采集速率；实际每分钟收入还取决于往返距离、放下资源时间等，模拟时需另建模型。', '',
            '## 与 aoe2techtree 对账（训练/建造/研究时间、费用）', '']
@@ -219,8 +233,14 @@ def main():
     # #42 哥特：猎物/家畜所含食物（unit 资源储量 type 0），猎物倍率 res 268 的基数从这里读，不写死
     G = d['Civs'][0]['Units']; out['animals'] = {k: {'unit': uid, 'en': G[uid]['Name'], 'food': G[uid]['Food']} for k, uid in (('boar', 48), ('deer', 65), ('sheep', 594))}
     out['fishingShip'] = task_rec(13) | {'trainTime': U[13]['TrainTime'], 'cost': cost(U[13]['Cost'])}
-    # Deep-sea fish use class 5 gather task (action 5); retain multiplier from pinned .dat.
-    out['fishingShip']['deepFishMultiplier'] = next(t['Value'] for t in d['Tasks']['13'] if t['Action'] == 5 and t['Class'] == 5)
+    fishing_tasks = d['Tasks']['13']
+    # Deep-sea fish (class 5) and fish trap (unit 199, ResOut 0) gather tasks (action 5); retain normalized multipliers from pinned .dat.
+    out['fishingShip']['deepFishMultiplier'] = _fishing_task_multiplier(
+        fishing_tasks, lambda t: t.get('Action') == 5 and t.get('Class') == 5, 'deepFishMultiplier',
+    )
+    out['fishingShip']['fishTrapMultiplier'] = _fishing_task_multiplier(
+        fishing_tasks, lambda t: t.get('Action') == 5 and t.get('Unit') == 199 and t.get('ResOut') == 0, 'fishTrapMultiplier',
+    )
     memo = {}
 
     def age_of(i, depth=0):
