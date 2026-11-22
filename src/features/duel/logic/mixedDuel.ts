@@ -32,6 +32,40 @@ export interface MixedSideView {
 }
 export const positiveId = (raw: string): number | null => (/^[1-9]\d*$/.test(raw) && Number.isSafeInteger(+raw) ? +raw : null);
 
+/**
+ * issue 1279：判断混编单侧是否具备切回单兵种模式的最小有效上下文（允许自爆单位与科技树时代滞后单位安全退出，不锁死退路）。
+ */
+export function canRecoverSingleDuelSide(ctx: SimContext, core: Core, input: MixedSideInput, requireQty: boolean): boolean {
+  const row0 = input.rows[0];
+  if (!row0) return false;
+  const uid = positiveId(row0.uid);
+  if (uid === null) return false;
+  const u = core.unitById[uid];
+  if (!u || !u.civs.length) return false;
+  if (!civByEn(input.civ) || !ctx.trees.t[input.civ]) return false;
+  const age = /^[1-4]$/.test(input.age) ? +input.age : null;
+  if (!age) return false;
+  if (requireQty) {
+    const qty = positiveId(row0.qty);
+    if (qty === null || qty > 200) return false;
+  }
+  const status = civStatus(ctx.trees, input.civ);
+  const seenTechs = new Set<number>();
+  for (const raw of input.techs) {
+    const id = positiveId(raw);
+    const tech = id === null ? undefined : core.techById[id];
+    if (id === null || !tech || seenTechs.has(id) || tech.age > age || !status['t' + id]) return false;
+    seenTechs.add(id);
+  }
+  const seenTeam = new Set<number>();
+  for (const raw of input.team) {
+    const id = /^(0|[1-9]\d*)$/.test(raw) && Number.isSafeInteger(+raw) ? +raw : -1;
+    if (!TEAM_BONUSES[id] || seenTeam.has(id)) return false;
+    seenTeam.add(id);
+  }
+  return true;
+}
+
 export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideInput, side: 'a' | 'b'): MixedSideView {
   const errors: MixedFieldError[] = [];
   const fail = (field: string, message: string) => errors.push({ field: `mix-${side}-${field}`, message: `${side.toUpperCase()} 方${message}` });

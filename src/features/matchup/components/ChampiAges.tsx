@@ -50,7 +50,21 @@ function ContactSide({ side, label, attack }: { side: ReadyCandidate['a']; label
   );
 }
 
-function CandidateResult({ candidate, candidateSide, core, main = false }: { candidate: Candidate; candidateSide: 'a' | 'b'; core: Core; main?: boolean }) {
+function CandidateResult({
+  candidate,
+  candidateSide,
+  core,
+  me,
+  opp,
+  main = false,
+}: {
+  candidate: Candidate;
+  candidateSide: 'a' | 'b';
+  core: Core;
+  me: string;
+  opp: string;
+  main?: boolean;
+}) {
   const candidateRole = candidateSide === 'a' ? '我方候选' : '对手候选';
   const rawName = core.unitById[candidate.unitId]?.zh;
   const candidateName = typeof rawName === 'string' && rawName.trim() ? rawName : '单位资料未核实';
@@ -83,7 +97,7 @@ function CandidateResult({ candidate, candidateSide, core, main = false }: { can
       <ContactSide side={candidate.a} label="我方 A" attack={candidate.result.ab} />
       <ContactSide side={candidate.b} label="对手 B" attack={candidate.result.ba} />
       <p className="champi-age-note">{ranged ? '未模拟射程先手与风筝。' : slower ? '候选速度较慢，接触优势不代表能追上。' : '从近身接触开始，不模拟追击。'}</p>
-      <Link className="champi-age-link" to={candidate.pkPath}>
+      <Link className="champi-age-link" to={`${candidate.pkPath}${candidate.pkPath.includes('?') ? '&' : '?'}${new URLSearchParams({ me, opp })}`}>
         <Icon name="swords" />
         打开本时代 PK
       </Link>
@@ -91,7 +105,7 @@ function CandidateResult({ candidate, candidateSide, core, main = false }: { can
   );
 }
 
-function ChampiAgeCard({ card, analysis, core }: { card: AgeCard; analysis: Analysis; core: Core }) {
+function ChampiAgeCard({ card, analysis, core, me, opp }: { card: AgeCard; analysis: Analysis; core: Core; me: string; opp: string }) {
   const champi = core.unitById[card.champiUnitId],
     civ = civByEn(card.champiCiv);
   const others = card.candidates.filter((candidate) => !card.main || candidate.unitId !== card.main.unitId);
@@ -118,7 +132,7 @@ function ChampiAgeCard({ card, analysis, core }: { card: AgeCard; analysis: Anal
         · {analysis.champiSide === 'a' ? '我方蔷琵线' : '对手蔷琵线'}
       </p>
       {card.main ? (
-        <CandidateResult candidate={card.main} candidateSide={analysis.candidateSide} core={core} main />
+        <CandidateResult candidate={card.main} candidateSide={analysis.candidateSide} core={core} me={me} opp={opp} main />
       ) : (
         <div className="champi-age-empty" role="status">
           <p>本卡三条候选中暂无本文明可用的已核对路线，不代表没有其他应对。</p>
@@ -130,7 +144,7 @@ function ChampiAgeCard({ card, analysis, core }: { card: AgeCard; analysis: Anal
       <details className="champi-age-more">
         <summary>查看本时代其余对照</summary>
         {others.map((candidate) => (
-          <CandidateResult key={candidate.unitId} candidate={candidate} candidateSide={analysis.candidateSide} core={core} />
+          <CandidateResult key={candidate.unitId} candidate={candidate} candidateSide={analysis.candidateSide} core={core} me={me} opp={opp} />
         ))}
       </details>
     </article>
@@ -163,7 +177,7 @@ export default function ChampiAges({ core, trees, me, opp }: { core: Core; trees
       </p>
       <div className="champi-age-grid">
         {analysis.cards.map((card) => (
-          <ChampiAgeCard key={card.age} card={card} analysis={analysis} core={core} />
+          <ChampiAgeCard key={card.age} card={card} analysis={analysis} core={core} me={me} opp={opp} />
         ))}
       </div>
       <p className="champi-age-note">

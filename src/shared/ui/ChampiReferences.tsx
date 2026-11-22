@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { civByEn, type Core } from '../../data';
 import { champiPresets } from '../../domain/champiCounters';
@@ -108,19 +108,33 @@ function ReferenceItem({ preset, build }: { preset: Preset; build: number | unde
   );
 }
 
-export default function ChampiReferences({ core, trees, variant = 'duel' }: { core: Core; trees: Trees; variant?: 'duel' | 'unit' }) {
+export default function ChampiReferences({
+  core,
+  trees,
+  variant = 'duel',
+  collapsible = false,
+  defaultOpen = true,
+}: {
+  core: Core;
+  trees: Trees;
+  variant?: 'duel' | 'unit';
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+}) {
   const rawBuild = DATA_SOURCES?.patch?.build;
   const build = typeof rawBuild === 'number' && Number.isInteger(rawBuild) && rawBuild > 0 ? rawBuild : undefined;
   const presets = useMemo(() => champiPresets({ core, trees }, build), [core, trees, build]);
   const a = civByEn('Muisca'),
     b = civByEn('Franks');
-  return (
-    <section
-      className={variant === 'unit' ? 'champi-unit-entry' : 'champi-presets'}
-      data-testid={variant === 'unit' ? 'champi-unit-entry' : 'champi-presets'}
-      aria-label="蔷琵线参考对照"
-    >
-      <h2>蔷琵线参考对照</h2>
+  const wantsOpen = Boolean(defaultOpen);
+  const [foldState, setFoldState] = useState(() => ({ wantsOpen, isOpen: wantsOpen }));
+  if (foldState.wantsOpen !== wantsOpen) {
+    setFoldState({ wantsOpen, isOpen: wantsOpen });
+  }
+  const isOpen = foldState.wantsOpen === wantsOpen ? foldState.isOpen : wantsOpen;
+
+  const body = (
+    <>
       <p className="champi-reference-context">
         参考：{a?.zh ?? '文明资料未核实'}对{b?.zh ?? '文明资料未核实'}，不代表你当前的对手；当前时代满科技、无团队加成、接触 <span className="num nw">1v1</span>
         。
@@ -144,6 +158,31 @@ export default function ChampiReferences({ core, trees, variant = 'duel' }: { co
           数据 <span className="num nw">DE {build}</span>；仅在资料已核对时提供结果与链接。
         </p>
       ) : null}
+    </>
+  );
+
+  const folded = variant === 'duel' && collapsible;
+  return (
+    <section
+      className={variant === 'unit' ? 'champi-unit-entry' : 'champi-presets'}
+      data-testid={variant === 'unit' ? 'champi-unit-entry' : 'champi-presets'}
+      aria-label="蔷琵线参考对照"
+    >
+      {folded ? (
+        <details className="duel-champi-fold" open={isOpen} onToggle={(event) => setFoldState({ wantsOpen, isOpen: event.currentTarget.open })}>
+          <summary className="duel-champi-summary">
+            <h2 className="champi-fold-title">蔷琵线参考对照</h2>
+            <span className="champi-fold-sub">{isOpen ? '（穆伊斯卡 vs 法兰克 · 点击收起）' : '（穆伊斯卡 vs 法兰克 · 默认折叠，点击展开）'}</span>
+            <Icon name="chevron-down" className="ic duel-champi-chevron" />
+          </summary>
+          <div className="duel-champi-body">{body}</div>
+        </details>
+      ) : (
+        <>
+          <h2>蔷琵线参考对照</h2>
+          {body}
+        </>
+      )}
     </section>
   );
 }

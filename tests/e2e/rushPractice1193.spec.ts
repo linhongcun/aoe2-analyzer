@@ -96,9 +96,12 @@ test('#1193 默认演练照常返回，直接 PK 和坏来源走普通回程', a
   for (const source of ['', '&practice=Teutons.Japanese.unknown']) {
     await page.goto(`./#/duel?${battle}${source}`);
     await expectScoutsBattle(page);
-    await expect(returnLink(page)).toHaveAccessibleName('回对局助手');
-    await expect(returnLink(page)).toHaveAttribute('href', '#/matchup?me=Teutons&opp=Japanese');
+    await expect(page.getByRole('navigation', { name: '对阵相关入口' })).toHaveCount(0);
   }
+  await page.goto(`./#/duel?${battle}&me=Teutons&opp=Japanese&practice=Teutons.Japanese.unknown`);
+  await expectScoutsBattle(page);
+  await expect(returnLink(page)).toHaveAccessibleName('回对局助手');
+  await expect(returnLink(page)).toHaveAttribute('href', '#/matchup?me=Teutons&opp=Japanese');
   await returnLink(page).click();
   await expect(rushRadio(page, 'militia')).toHaveAttribute('aria-checked', 'true');
   await rushRadio(page, 'scouts').click();

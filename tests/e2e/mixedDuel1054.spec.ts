@@ -52,13 +52,13 @@ test('#1054 编辑、行序、计算、结果失效、完整链接恢复和模�
   await page.getByRole('button', { name: 'A 方第 2 行上移', exact: true }).click();
   await expect(page.getByRole('button', { name: 'A 方第 1 行下移', exact: true })).toBeFocused();
   expect(JSON.parse(query(page.url()).get('ma')!).rows[0].uid).toBe('567');
-  await page.getByRole('radio', { name: '单兵种', exact: true }).click();
+  await page.getByRole('radio', { name: 'N vs M', exact: true }).click();
   const confirm = page.getByRole('dialog', { name: '切回单兵种？' });
   await expect(confirm).toBeVisible();
   await confirm.getByRole('button', { name: '取消，继续混编' }).click();
   await expect(confirm).toHaveCount(0);
-  await expect(page.getByRole('radio', { name: '单兵种', exact: true })).toBeFocused();
-  await page.getByRole('radio', { name: '单兵种', exact: true }).click();
+  await expect(page.getByRole('radio', { name: 'N vs M', exact: true })).toBeFocused();
+  await page.getByRole('radio', { name: 'N vs M', exact: true }).click();
   await confirm.getByRole('button', { name: '确认，仅保留各第一行' }).click();
   await expect(page.getByTestId('mixed-duel')).toHaveCount(0);
   expect(query(page.url()).get('a')?.split('.')[0]).toBe('567');
@@ -102,7 +102,7 @@ test('#1054 字段错误保留原值，三行上限与超额坏行可修正', as
   await page.getByRole('button', { name: '删除A 方第 2 行', exact: true }).click();
   await page.getByRole('button', { name: '删除A 方第 1 行', exact: true }).click();
   await expect(page.locator('#mix-a-add')).toBeFocused();
-  await page.getByRole('radio', { name: '单兵种', exact: true }).click();
+  await page.getByRole('radio', { name: 'N vs M', exact: true }).click();
   await expect(page.getByText('无法恢复单兵种：空军队没有可保留的第一行，请先添加单位。')).toBeVisible();
 });
 

@@ -109,3 +109,46 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+.champi-presets .duel-champi-fold {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.champi-presets .duel-champi-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  list-style: none;
+  cursor: pointer;
+}
+.champi-presets .duel-champi-summary::-webkit-details-marker {
+  display: none;
+}
+.champi-presets .duel-champi-summary::marker {
+  content: '';
+  display: none;
+}
+.champi-presets .duel-champi-fold > summary h2 {
+  margin-block: 0;
+  font-size: var(--fs-h3);
+}
+.champi-presets .champi-fold-sub {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.champi-presets .duel-champi-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-muted);
+  transition: transform 150ms ease;
+}
+.champi-presets .duel-champi-fold[open] > .duel-champi-summary .duel-champi-chevron {
+  transform: rotate(180deg);
+}
+.champi-presets .duel-champi-body {
+  padding: 0 var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-line);
+}

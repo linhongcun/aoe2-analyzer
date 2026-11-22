@@ -65,7 +65,7 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
   //   不算的帝王科技：高炉 Blast Furnace(+2 攻)、板甲 Plate Barding(+1/+2)。
   //   对照：同口径的帝王满科技为 骑士 120/14/5/6、骆驼 120/10/3/4（dd451de 页面现值）。
   const stats = async (page: Page, k: 'a' | 'b') => {
-    const t = (await page.locator(`#duel-${k} table.stat tr`).allInnerTexts()).map((x) => x.replace(/\s+/g, ' ')).join('|');
+    const t = (await page.locator(`#duel-${k} .duel-stats .duel-stat-cell`).allInnerTexts()).map((x) => x.replace(/\s+/g, ' ')).join('|');
     return {
       hp: t.match(/生命值 (\d+)/)?.[1],
       atk: t.match(/攻击 (\d+)（/)?.[1],

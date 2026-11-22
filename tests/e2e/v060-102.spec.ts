@@ -13,7 +13,7 @@ test.describe('#102 PK 反馈链接与当前对阵一致', () => {
   test('改对阵（模式/科技预设）后，反馈链接参数 = 地址栏 hash 参数（Steve 口径原文）', async ({ page }) => {
     await page.goto('#/duel?a=38.Franks.4.f.&b=329.Berbers.4.f.&m=r&bud=3000');
     await page.getByRole('radio', { name: '1v1' }).click();
-    await page.getByRole('radio', { name: '当前时代满科技' }).nth(1).click();
+    await page.getByRole('radio', { name: '当前时代满', exact: true }).nth(1).click();
     const fb = hashParams(await fbPage(page));
     const addr = hashParams(new URL(page.url()));
     expect(Object.fromEntries(fb)).toEqual(Object.fromEntries(addr));
@@ -32,7 +32,7 @@ test.describe('#102 PK 反馈链接与当前对阵一致', () => {
   test('只改了 A 侧时，反馈链接里 B 侧也要在（当前 hash 只写改动过的一侧）', async ({ page }) => {
     await page.goto('#/duel');
     await page.getByRole('radio', { name: '等资源' }).click();
-    await page.getByRole('radio', { name: '当前时代满科技' }).first().click();
+    await page.getByRole('radio', { name: '当前时代满', exact: true }).first().click();
     const fb = hashParams(await fbPage(page));
     for (const k of ['a', 'b', 'm', 'bud']) expect(fb.get(k), `反馈链接缺 ${k}`).toBeTruthy();
   });

@@ -1,6 +1,7 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { fmtSide, type Mode } from '../../../domain/duelState';
+import { TEAM_BONUSES } from '../../../domain/effects';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { mixedFight, MIXED_RULE, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
 import { makeSimContext } from '../../../domain/simulator';
@@ -9,20 +10,24 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
-import { resolveMixedSide } from '../logic/mixedDuel';
+import { readDuelSourceState } from '../logic/duelContext';
+import { canRecoverSingleDuelSide, positiveId, resolveMixedSide } from '../logic/mixedDuel';
 import { mixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
+import { swapMixedDuelInput } from '../logic/duelSwap';
+import { DuelModeBar, type TopMode } from './DuelModeBar';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
 import { CONTACT_BOUNDARY } from './ContactSummary';
-import { radioKeyboard } from './radioKeyboard';
 import '../mixed-duel.css';
 
 const DATA_VERSION = mixedDataVersion(DATA_SOURCES);
 type ExitMode = Exclude<Mode, 't'>;
 type Notice = { kind: 'status' | 'error'; text: string };
 
-export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
+export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreTreesResources; pendingModeFocusRef?: MutableRefObject<TopMode | null> }) {
   const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const preservedSource = readDuelSourceState(location.state);
   const raw = params.toString();
   const { input, errors: protocolErrors, sharedErrors, sideErrors, legacy } = useMemo(() => decodeMixedDuel(params), [params]);
   const core = resources.core.data,
@@ -68,6 +73,7 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const shareRequest = useRef(0);
   const originFocus = useRef<HTMLElement | null>(null);
+  const pendingKeyboardExit = useRef(false);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const configError = useRef<HTMLElement>(null);
   const upgradeFocus = useRef<string | null>(null);
@@ -87,9 +93,16 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
     },
     [raw, core, trees, loadError],
   );
+  useLayoutEffect(() => {
+    const target = pendingModeFocusRef?.current;
+    if (!target) return;
+    const button = document.querySelector<HTMLButtonElement>(`#duel [role="radiogroup"][aria-label="模式"] button[data-mode="${target}"]`);
+    pendingModeFocusRef.current = null;
+    button?.focus();
+  }, [pendingModeFocusRef]);
   const update = (next: MixedDuelInput) => {
     setNotice(null);
-    setParams(encodeMixedDuel(next), { replace: true });
+    setParams(encodeMixedDuel(next), { replace: true, ...(preservedSource ? { state: { duelSource: preservedSource } } : {}) });
   };
   const focusField = (id: string) => {
     const element = document.getElementById(id);
@@ -130,29 +143,66 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
       calculate(view.a.army, view.b.army, signature);
     } else upgradeFocus.current = signature;
   };
-  const exit = (mode: ExitMode) => {
+  const exit = (mode: ExitMode, viaKeyboard = false) => {
     const a = input.a.rows[0],
       b = input.b.rows[0];
-    if (!a || !b || !view?.a?.army || !view.b?.army || protocolErrors.length || dataMismatch) {
+    const requireQty = mode === 'n';
+    if (
+      !a ||
+      !b ||
+      !ready ||
+      !core ||
+      !ctx ||
+      protocolErrors.length ||
+      dataMismatch ||
+      !canRecoverSingleDuelSide(ctx, core, input.a, requireQty) ||
+      !canRecoverSingleDuelSide(ctx, core, input.b, requireQty)
+    ) {
+      if (pendingModeFocusRef) pendingModeFocusRef.current = null;
+      pendingKeyboardExit.current = false;
       setNotice({ kind: 'error', text: '无法恢复单兵种：请先为双方配置有效的第一行与共享上下文，再切换模式。' });
       return;
     }
     const side = (key: 'a' | 'b') => {
       const s = input[key];
-      return fmtSide({ uid: +s.rows[0]!.uid, civ: s.civ, age: +s.age, ageSet: true, techs: s.techs.map(Number), team: s.team.map(Number) });
+      const age = +s.age;
+      const techs = [
+        ...new Set(s.techs.map(positiveId).filter((id): id is number => id !== null && Boolean(core.techById[id]) && core.techById[id]!.age <= age)),
+      ];
+      const team = [
+        ...new Set(
+          s.team
+            .filter((item) => /^(0|[1-9]\d*)$/.test(item) && Number.isSafeInteger(+item))
+            .map(Number)
+            .filter((id) => Boolean(TEAM_BONUSES[id])),
+        ),
+      ];
+      return fmtSide({ uid: +s.rows[0]!.uid, civ: s.civ, age, ageSet: true, techs, team });
     };
-    setParams(new URLSearchParams({ m: mode, a: side('a'), b: side('b'), ...(mode === 'n' ? { na: a.qty, nb: b.qty } : {}) }));
+    if (pendingModeFocusRef) pendingModeFocusRef.current = viaKeyboard ? mode : null;
+    pendingKeyboardExit.current = false;
+    const next = new URLSearchParams({ m: mode, a: side('a'), b: side('b'), ...(requireQty ? { na: a.qty, nb: b.qty } : {}) });
+    if (preservedSource?.me) next.set('me', preservedSource.me);
+    if (preservedSource?.opp) next.set('opp', preservedSource.opp);
+    if (preservedSource?.practice) next.set('practice', preservedSource.practice);
+    setParams(next);
   };
-  const requestExit = (mode: ExitMode, trigger: HTMLElement) => {
+  const requestExit = (mode: ExitMode, trigger: HTMLElement, viaKeyboard = false) => {
     originFocus.current = trigger;
     if (!input.a.rows[0] || !input.b.rows[0]) {
+      if (pendingModeFocusRef) pendingModeFocusRef.current = null;
+      pendingKeyboardExit.current = false;
       setNotice({ kind: 'error', text: '无法恢复单兵种：空军队没有可保留的第一行，请先添加单位。' });
       return;
     }
-    if (input.a.rows.length > 1 || input.b.rows.length > 1) setExitMode(mode);
-    else exit(mode);
+    if (input.a.rows.length > 1 || input.b.rows.length > 1) {
+      pendingKeyboardExit.current = viaKeyboard;
+      setExitMode(mode);
+    } else exit(mode, viaKeyboard);
   };
   const closeConfirm = () => {
+    if (pendingModeFocusRef) pendingModeFocusRef.current = null;
+    pendingKeyboardExit.current = false;
     setExitMode(null);
     requestAnimationFrame(() => originFocus.current?.focus());
   };
@@ -184,37 +234,12 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
   return (
     <section id="duel" className="pane mixed-duel" data-testid="mixed-duel">
       <ListHead level={1} title="混编对战" desc="按行序配置两支军队，比较占位和射程先手对战损的影响。" />
-      <div className="bar fbar" role="radiogroup" aria-label="模式" onKeyDown={radioKeyboard}>
-        {(
-          [
-            ['1', '1v1'],
-            ['n', 'N vs M'],
-            ['r', '等资源'],
-          ] as const
-        ).map(([mode, label]) => (
-          <button
-            type="button"
-            key={mode}
-            role="radio"
-            aria-checked={mode === 'n'}
-            tabIndex={mode === 'n' ? 0 : -1}
-            className={mode === 'n' ? 'on' : undefined}
-            onClick={(e) => {
-              if (mode !== 'n') requestExit(mode, e.currentTarget);
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <div className="bar mix-mode" role="radiogroup" aria-label="军队配置" onKeyDown={radioKeyboard}>
-        <button type="button" role="radio" aria-checked="false" tabIndex={-1} onClick={(e) => requestExit('n', e.currentTarget)}>
-          单兵种
-        </button>
-        <button type="button" role="radio" aria-checked="true" className="on">
-          混编
-        </button>
-      </div>
+      <DuelModeBar
+        active="mix"
+        onSelect={(nextMode, trigger, viaKeyboard) => {
+          if (nextMode !== 'mix') requestExit(nextMode, trigger, viaKeyboard);
+        }}
+      />
       <MixedRules />
       {legacy && (
         <section className="mix-warning mix-upgrade" aria-labelledby="mix-upgrade-title">
@@ -303,22 +328,41 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
         <fieldset disabled={!ready || !!protocolErrors.length || busy} className="mix-editor-fieldset">
           <legend className="sr-only">双方混编配置</legend>
           <div className="mix-sides">
-            {(['a', 'b'] as const).map((key) => (
-              <MixedSideEditor
-                key={key}
-                side={key}
-                input={input[key]}
-                view={view[key]!}
-                core={core}
-                ctx={ctx!}
-                transfer={training[key]}
-                focusField={focusField}
-                onChange={(value, message) => {
-                  update({ ...input, [key]: value });
-                  if (message) requestAnimationFrame(() => setNotice({ kind: 'status', text: message }));
-                }}
-              />
-            ))}
+            <MixedSideEditor
+              side="a"
+              input={input.a}
+              view={view.a}
+              core={core}
+              ctx={ctx!}
+              transfer={training.a}
+              focusField={focusField}
+              onChange={(value, message) => {
+                update({ ...input, a: value });
+                if (message) requestAnimationFrame(() => setNotice({ kind: 'status', text: message }));
+              }}
+            />
+            <button type="button" className="mix-swap" aria-label="互换 A、B 双方" onClick={() => update(swapMixedDuelInput(input))}>
+              <Icon name="arrow-left-right" />
+              <span className="mix-swap-short" aria-hidden="true">
+                互换
+              </span>
+              <span className="mix-swap-long" aria-hidden="true">
+                互换 A / B 双方
+              </span>
+            </button>
+            <MixedSideEditor
+              side="b"
+              input={input.b}
+              view={view.b}
+              core={core}
+              ctx={ctx!}
+              transfer={training.b}
+              focusField={focusField}
+              onChange={(value, message) => {
+                update({ ...input, b: value });
+                if (message) requestAnimationFrame(() => setNotice({ kind: 'status', text: message }));
+              }}
+            />
           </div>
         </fieldset>
       )}
@@ -377,8 +421,9 @@ export function MixedDuel({ resources }: { resources: CoreTreesResources }) {
           onCancel={closeConfirm}
           onConfirm={() => {
             const target = exitMode;
-            closeConfirm();
-            exit(target);
+            const viaKeyboard = pendingKeyboardExit.current;
+            setExitMode(null);
+            exit(target, viaKeyboard);
           }}
         />
       )}

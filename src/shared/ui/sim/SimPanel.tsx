@@ -42,6 +42,8 @@ export interface SimPanelProps {
   selectableWithoutEffect?: ReadonlySet<number>;
   /** 满科技 / 时代预设在战斗科技之外再纳入的 id。缺省不改变预设。 */
   presetExtra?: (scope: 'all' | number) => ReadonlySet<number>;
+  /** 隐藏面板内时代下拉（单位 PK 由表层时代下拉承载唯一 id 时使用）。 */
+  hideAge?: boolean;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -232,28 +234,32 @@ export default function SimPanel(p: SimPanelProps) {
             文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, p.team)} allowed={p.civs} />{' '}
           </>
         )}
-        时代{' '}
-        <select
-          id={p.embedded ? p.embedded + '-age' : 'simage'}
-          value={p.age}
-          onChange={(e) => {
-            const a = +e.target.value;
-            p.go(
-              p.civ,
-              a,
-              [...p.sel].filter((i) => p.techById[i]!.age <= a),
-              p.team,
-            );
-          }}
-        >
-          {[1, 2, 3, 4]
-            .filter((a) => a >= p.minAge)
-            .map((a) => (
-              <option key={a} value={a}>
-                {AGE_ZH[a]}
-              </option>
-            ))}
-        </select>
+        {!p.hideAge && (
+          <>
+            时代{' '}
+            <select
+              id={p.embedded ? p.embedded + '-age' : 'simage'}
+              value={p.age}
+              onChange={(e) => {
+                const a = +e.target.value;
+                p.go(
+                  p.civ,
+                  a,
+                  [...p.sel].filter((i) => p.techById[i]!.age <= a),
+                  p.team,
+                );
+              }}
+            >
+              {[1, 2, 3, 4]
+                .filter((a) => a >= p.minAge)
+                .map((a) => (
+                  <option key={a} value={a}>
+                    {AGE_ZH[a]}
+                  </option>
+                ))}
+            </select>
+          </>
+        )}
         <button onClick={() => p.go(p.civ, 4, withExtra(allNumeric(p.avail), 'all'), p.team)}>满科技</button>
         <button onClick={() => p.go(p.civ, p.age, [], p.team)}>清空</button>
         {[2, 3, 4]

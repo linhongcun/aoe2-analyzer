@@ -48,7 +48,7 @@ test('#486 精锐与移速不变对照、PK 和当前版本来源', async ({ pag
     await expect(page.locator('#unit [data-stat="spd"] [data-t="stat-value"]')).toHaveText(speed);
   }
   await page.goto('./#/duel?a=873.Dravidians.3..&b=4.Britons.3..&m=n');
-  await expect(page.locator('#duel-a .duel-stats tr').filter({ hasText: '生命值' }).locator('td').last()).toHaveText('220.00');
+  await expect(page.locator('#duel-a .duel-stats .duel-stat-cell').filter({ hasText: '生命值' }).locator('dd')).toHaveText('220.00');
   await expect(page.locator('#duel-a .duel-head .res:has(img[alt="食物"])')).toHaveText('70');
   await page.goto('./#/about-data');
   await expect(page.locator('[data-t="data-version"]')).toHaveText('DE 188329（2026-10-28）');

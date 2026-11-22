@@ -172,8 +172,16 @@ export function UnitPicker({
   }, [isOpen, close]);
 
   useEffect(() => {
-    if (isOpen && model.opts.length) {
-      panel.current?.querySelector(`[data-idx="${act}"]`)?.scrollIntoView({ block: 'nearest' });
+    if (!isOpen || !model.opts.length) return;
+    const listEl = listRef.current;
+    const item = listEl?.querySelector<HTMLElement>(`[data-idx="${act}"]`);
+    if (!listEl || !item) return;
+    const listRect = listEl.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    if (itemRect.top < listRect.top) {
+      listEl.scrollTop -= listRect.top - itemRect.top;
+    } else if (itemRect.bottom > listRect.bottom) {
+      listEl.scrollTop += itemRect.bottom - listRect.bottom;
     }
   }, [act, isOpen, model.opts.length]);
 
