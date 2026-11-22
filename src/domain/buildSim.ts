@@ -96,7 +96,7 @@ export interface EcoData {
   slavicFarm?: SlavicFarm;
   khmerFarm?: KhmerFarm;
   khmerPrerequisites?: KhmerPrerequisites;
-  fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
+  fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number; fishTrapMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
   buildings: Record<string, { buildTime: number; cost: Cost; class?: number }>;

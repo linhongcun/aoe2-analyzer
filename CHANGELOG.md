@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.26] - 2026-11-23
+
+### 更新说明
+
+修正渔船详情页「基准采集」漏计前置科技钓线的问题，并补齐养鱼场理论采集速率：页面现在按「基准 → 钓线后 → 刺网后」三档展示无文明加成下的岸鱼、深海鱼、养鱼场理论工作速率与携带量（依次为 0.2400 / 0.4200 / 0.3480 / 15 食物、0.2640 / 0.4620 / 0.3828 / 20 食物、0.2904 / 0.5082 / 0.4211 / 25 食物；深海倍率 ×1.75、养鱼场倍率 ×1.45），同步提供钓线与刺网入口，并保留数据缺失时按依赖逐格显示「待确认」的防御行为。
+
+### 修复
+
+- #1327：在 `scripts/eco_build.py` 新增 fail-closed 单匹配归一化提取 `_fishing_task_multiplier` 并导出固定 `.dat` 养鱼场采集倍率 `fishingShip.fishTrapMultiplier = 1.45`（同时校验 `deepFishMultiplier = 1.75`），同步更新 `data/schemas/data-eco.json`、重生成 `data/game/eco.json` 与 `docs/reports/ECO-DATA.md`；在 `src/domain/fishingGatherFacts.ts`、`src/features/units/fishingGather.ts`、`src/features/units/components/FishingGather.tsx` 与新增 `fishing-gather.css` 实现三档升级路径计算、四位小数展示、全角版本日期 `<wbr />` 断行、360px 零折行与缺失态防御；新增 `tests/py/test_fishing_gather1327.py`，更新 `tests/unit/fishingGather735.test.ts` 与 `tests/e2e/fishingGather735.spec.ts`。
+
 ## [0.99.25] - 2026-11-23
 
 ### 更新说明

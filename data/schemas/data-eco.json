@@ -301,9 +301,12 @@
         },
         "deepFishMultiplier": {
           "type": "number"
+        },
+        "fishTrapMultiplier": {
+          "type": "number"
         }
       },
-      "required": ["unit", "workRate", "carry", "speed", "trainTime", "cost", "deepFishMultiplier"],
+      "required": ["unit", "workRate", "carry", "speed", "trainTime", "cost", "deepFishMultiplier", "fishTrapMultiplier"],
       "additionalProperties": false
     },
     "ecoTechs": {

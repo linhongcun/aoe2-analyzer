@@ -1,0 +1,148 @@
+/* 渔船详情「基准采集」三档展示（Issue 1327）：仅使用 tokens.css 语义令牌；提高标题选择器优先级以防后载入的 unit-detail.css 覆盖。 */
+.fg .num {
+  font-variant-numeric: tabular-nums;
+}
+.fg p.fg-lead {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-2);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+.fg-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+}
+.fg-card {
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.fg .fg-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 var(--space-3);
+}
+.fg .fg-head h3.fg-tier-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.fg .fg-head p.fg-tier-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.fg-rows {
+  margin: 0;
+}
+.fg-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--color-border);
+}
+.fg-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.fg-row:last-child {
+  padding-bottom: 0;
+}
+.fg-row dt {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+.fg-row dd {
+  margin: 0;
+  text-align: right;
+  line-height: 1.35;
+}
+.fg-val {
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 700;
+}
+.fg-carry {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.fg-unit {
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+}
+.fg-pending {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+}
+.fg p.fg-missing-note {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.fg-multipliers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  margin: 0 0 var(--space-2);
+}
+.fg-mul-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.fg-mul-item dt {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.fg-mul-item dd {
+  margin: 0;
+}
+.fg-mul-val {
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.fg p.fg-source {
+  margin: 0 0 var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+}
+.fg .fg-links {
+  margin: 0;
+  gap: var(--space-2);
+}
+.fg .fg-links .community-tool-entry {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+@media (max-width: 720px) {
+  .fg-tiers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fg .fg-head {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--space-2);
+  }
+}
