@@ -130,7 +130,7 @@ describe('#1139 Japanese formation support', () => {
     const scope = entry.evidence.scope;
 
     expect(scope).not.toContain('固定策略记录来源行');
-    expect(scope).toContain('西班牙游侠胜，剩 103/180 生命');
+    expect(scope).toContain('西班牙游侠胜，剩 92/180 生命');
     expect(scope).toContain('一维接敌、射程先手和近战占位');
     expect(scope).toContain('未模拟二维包抄、走位、弹道穿透与溅射');
     expect(scope).toContain('v0.97.30 · 9938101');

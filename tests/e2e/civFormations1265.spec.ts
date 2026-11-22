@@ -123,10 +123,10 @@ test('#1265 日本卡片按重骑规模建议长戟并保留游侠单挑入口',
   await expect(card).toContainText('一维接敌、射程先手和近战占位');
   await expect(card).toContainText('v0.97.30');
   await expect(card).not.toContainText(/1:(?:2\.22|3\.92|12\.19|19\.13)/);
-  const link = card.getByRole('link', { name: /帝王满科技接触 1\s*v\s*1 · 西班牙游侠剩 103\/180/ });
+  const link = card.getByRole('link', { name: /帝王满科技接触 1\s*v\s*1 · 西班牙游侠剩 92\/180/ });
   await expect(link).toBeVisible();
   const href = new URL((await link.getAttribute('href'))!);
   expect(new URLSearchParams(href.hash.split('?')[1]).get('m')).toBe('1');
   await page.goto(`./${href.hash}`);
-  await expect(page.getByText(/剩余生命\s+103\s*\/\s*180/)).toBeVisible();
+  await expect(page.getByText(/剩余生命\s+92\s*\/\s*180/)).toBeVisible();
 });

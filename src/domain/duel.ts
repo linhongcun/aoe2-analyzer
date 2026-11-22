@@ -9,7 +9,8 @@
 import type { Cost } from './types';
 import { hitCount } from './damageCore';
 import { damagePerHit, expectedHit, fighterCanAttack, type Fighter } from './duelFighter';
-import { contactFight, FIGHT_TIME, type ContactSummary, type FightEnd, type Timeline } from './contactFight';
+import { contactFight, contactFighterError, FIGHT_TIME, type ContactSummary, type FightEnd, type Timeline } from './contactFight';
+import type { ContactReplayTrace } from './contactReplayTrace';
 
 export {
   damageByClass,
@@ -95,6 +96,84 @@ export function duel(a: Fighter, b: Fighter): DuelResult {
   return { ab, ba, winner: aWins ? 'a' : 'b', outcome: 'win', remaining: Math.round(remaining * 10) / 10, duration: T };
 }
 
+export type OneVOneResult =
+  | {
+      mode: 'contact';
+      ab: OneWay;
+      ba: OneWay;
+      status: FightEnd;
+      winner: 'a' | 'b' | 'draw' | null;
+      duration: number;
+      remaining: number;
+      aHp: number;
+      bHp: number;
+      contact: ContactSummary;
+      replay?: ContactReplayTrace;
+    }
+  | (DuelResult & {
+      mode: 'static-fallback';
+      fallbackReason: string;
+    });
+
+export interface GroupFightOptions {
+  maxTime?: number;
+  recordReplay?: boolean;
+}
+
+function cleanContactReason(raw: string): string {
+  return raw
+    .replace(/。?请更换该单位后重算。?$/u, '')
+    .replace(/。?请调低数量、预算或采集时间后重算。?$/u, '')
+    .replace(/。+$/u, '');
+}
+
+/** #/duel 1v1 同源入口：可碰撞单位统一走 contactFight(1 vs 1)，缺碰撞或无普攻单位透传 duel() 优雅降级。 */
+export function oneVOneFight(a: Fighter, b: Fighter, options: GroupFightOptions = {}): OneVOneResult {
+  const errA = contactFighterError(a);
+  const errB = contactFighterError(b);
+  if (errA !== null || errB !== null) {
+    const parts: string[] = [];
+    if (errA !== null) parts.push(`A 方的${a.name}${cleanContactReason(errA)}`);
+    if (errB !== null) parts.push(`B 方的${b.name}${cleanContactReason(errB)}`);
+    return {
+      ...duel(a, b),
+      mode: 'static-fallback',
+      fallbackReason: `${parts.join('，')}，无法按一维接敌模型生成逐秒轨迹；下方保留原有 1v1 静态伤害与击杀对照结果。`,
+    };
+  }
+  const result = contactFight([{ uid: 1, count: 1, fighter: a }], [{ uid: 2, count: 1, fighter: b }], {
+    maxTime: options.maxTime ?? FIGHT_TIME,
+    recordReplay: options.recordReplay ?? true,
+  });
+  if (result.status === 'error') {
+    const cause = cleanContactReason(result.reason);
+    return {
+      ...duel(a, b),
+      mode: 'static-fallback',
+      fallbackReason: `${cause}，无法按一维接敌模型生成逐秒轨迹；下方保留原有 1v1 静态伤害与击杀对照结果。`,
+    };
+  }
+  const ab = oneWay(a, b);
+  const ba = oneWay(b, a);
+  const winner = result.status === 'win' ? result.winner : result.status === 'draw' ? 'draw' : null;
+  const aHp = result.a.total.hp;
+  const bHp = result.b.total.hp;
+  const remaining = winner === 'a' ? aHp : winner === 'b' ? bHp : 0;
+  return {
+    mode: 'contact',
+    ab,
+    ba,
+    status: result.status,
+    winner,
+    duration: result.duration,
+    remaining,
+    aHp,
+    bHp,
+    contact: result.contact,
+    ...(result.replay ? { replay: result.replay } : {}),
+  };
+}
+
 export type GroupResult =
   | {
       status: FightEnd;
@@ -105,14 +184,19 @@ export type GroupResult =
       duration: number;
       timeline: Timeline;
       contact: ContactSummary;
+      replay?: ContactReplayTrace;
     }
   | { status: 'error'; reason: string; winner: null };
 
 export type GroupOutcome = Exclude<GroupResult, { status: 'error' }>;
 
 /** 群战和混编共用接敌、前排容量与同刻伤害结算。 */
-export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTime = FIGHT_TIME): GroupResult {
-  const result = contactFight([{ uid: 1, count: na, fighter: a }], [{ uid: 1, count: nb, fighter: b }], { maxTime });
+export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTimeOrOptions: number | GroupFightOptions = FIGHT_TIME): GroupResult {
+  const opts: GroupFightOptions = typeof maxTimeOrOptions === 'number' ? { maxTime: maxTimeOrOptions } : maxTimeOrOptions;
+  const result = contactFight([{ uid: 1, count: na, fighter: a }], [{ uid: 1, count: nb, fighter: b }], {
+    maxTime: opts.maxTime ?? FIGHT_TIME,
+    recordReplay: opts.recordReplay ?? false,
+  });
   if (result.status === 'error') return { ...result, winner: null };
   const winner = result.status === 'win' ? result.winner : result.status === 'draw' ? 'draw' : null;
   return {
@@ -124,6 +208,7 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTi
     duration: result.duration,
     timeline: result.timeline,
     contact: result.contact,
+    ...(result.replay ? { replay: result.replay } : {}),
   };
 }
 

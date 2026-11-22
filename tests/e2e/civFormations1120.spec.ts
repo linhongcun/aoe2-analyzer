@@ -546,7 +546,7 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   await expect(japanese).toBeVisible();
   await japanese.locator('summary').filter({ hasText: '来源与核对' }).click();
   const japaneseScope = japanese.locator('.formation-evidence > div').filter({ hasText: '一维接敌、射程先手和近战占位' });
-  for (const token of ['45F/30G', '1.43 秒', '103/180 生命', '80F']) {
+  for (const token of ['45F/30G', '1.43 秒', '92/180 生命', '80F']) {
     await expect(japaneseScope.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

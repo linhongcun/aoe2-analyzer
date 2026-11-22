@@ -11,7 +11,10 @@ export function AgeComparison({ ctx, byId, a, b }: { ctx: SimContext; byId: Reco
   return (
     <details className="age-comparison" data-t="age-comparison">
       <summary>查看各时代强弱变化</summary>
-      <p className="note">保留所选文明与团队加成，使用每个时代的满科技；所选单位尚未解锁时回溯其前置版本。每行可打开对应的 1v1 对阵。</p>
+      <p className="note">
+        保留所选文明与团队加成，使用每个时代的满科技；所选单位尚未解锁时回溯其前置版本。各时代强弱表沿用传统静态站桩 1v1 模型；点击链接进入的 1v1
+        将按接敌、射程与最小射程重算，特殊远程/攻城对位结论可能不同。
+      </p>
       {rows.map((row) => (
         <section key={row.age} aria-label={`${AGE_ZH[row.age]}对比`}>
           <h3 className="age-heading">{AGE_ZH[row.age]}</h3>

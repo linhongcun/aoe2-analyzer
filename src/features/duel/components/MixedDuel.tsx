@@ -117,7 +117,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
   const calculate = (a: Parameters<typeof mixedFight>[0], b: Parameters<typeof mixedFight>[1], signature: string) => {
     let result: MixedFightResult;
     try {
-      result = mixedFight(a, b);
+      result = mixedFight(a, b, { recordReplay: true });
     } catch {
       result = { status: 'error', reason: '运算异常，未生成有效结果。请更换配置后重试。' };
     }
@@ -417,7 +417,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
       {result && result.status !== 'error' && view?.a && view.b && (
         <MixedResult result={result} input={input} a={view.a} b={view.b} headingRef={resultHeading} onEdit={() => focusField('mix-a-civ')} onShare={share} />
       )}
-      <p className="note mix-footer">拐点、盈亏平衡和单兵种回放可在单兵种模式查看。</p>
+      <p className="note mix-footer">拐点、盈亏平衡可在单兵种模式查看。</p>
       <p className="note mix-footer">
         固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL}
       </p>

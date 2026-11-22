@@ -42,11 +42,13 @@ export function DuelUnmodeledNotes({
   entries,
   vgSides,
   group = false,
+  usesContact,
   mixed = false,
 }: {
   entries: readonly DuelUnmodeledNoteEntry[];
   vgSides: readonly VgSide[];
   group?: boolean;
+  usesContact?: boolean;
   mixed?: boolean;
 }) {
   const items = collectDuelUnmodeled(entries);
@@ -65,7 +67,8 @@ export function DuelUnmodeledNotes({
   for (const item of items) {
     for (const techEn of item.techEns) suppressedTechs[item.side].add(techEn);
   }
-  const vg = prepareVgDisplay(vgSides, { group, suppressedTechs });
+  const effectiveContact = usesContact ?? group;
+  const vg = prepareVgDisplay(vgSides, { group, usesContact: effectiveContact, suppressedTechs });
 
   if (!items.length && !standaloneAssumeHit.length && !vg.hasContent) return null;
 
@@ -88,7 +91,7 @@ export function DuelUnmodeledNotes({
         {assumeHitCallout}
         {vg.hasContent && (
           <aside className="pk-unmodeled" role="region" aria-label="本场未计入机制与专项说明">
-            <VgNotes sides={vgSides} group={group} suppressedTechs={suppressedTechs} />
+            <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} suppressedTechs={suppressedTechs} />
           </aside>
         )}
       </>
@@ -150,7 +153,7 @@ export function DuelUnmodeledNotes({
             );
           })}
         </div>
-        {vg.hasContent && <VgNotes sides={vgSides} group={group} embedded suppressedTechs={suppressedTechs} />}
+        {vg.hasContent && <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} embedded suppressedTechs={suppressedTechs} />}
       </aside>
     </>
   );

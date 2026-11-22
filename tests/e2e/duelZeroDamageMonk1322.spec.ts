@@ -175,13 +175,12 @@ test('#1322 图 3 & 验收 4：僧侣/传教士/渔船单侧无普通攻击与�
     await expect(res.locator('.duel-tab')).toContainText('18s');
     await expect(res.locator('.duel-tab')).toContainText('1.6');
 
-    // 回放首帧与终局步弓手均保持 30 生命
+    // 回放区按 #1294 图 5 降级为静态对照卡，不绘制虚假接近动画与滑块
     const replay = res.locator('[data-t="battle-replay"]');
-    await expect(replay.locator('[data-t="replay-B"]')).toContainText('30 生命');
-    await replay.getByRole('slider').focus();
-    await replay.getByRole('slider').press('End');
-    await expect(replay.locator('[data-t="replay-B"]')).toContainText('30 生命');
-    await expect(replay.locator('[data-t="replay-A"]')).toContainText('0 生命');
+    await expect(replay.locator('[data-t="replay-phase"]')).toContainText('已降级为静态对照');
+    await expect(replay.locator('[data-t="replay-fallback"]')).toContainText('A 方的僧侣没有可重复的普通攻击');
+    await expect(replay.locator('[data-t="replay-stage-svg"]')).toHaveCount(0);
+    await expect(replay.getByRole('slider')).toHaveCount(0);
 
     // 时间线 A 行零进度、零攻击点
     await expect(res.locator('.tl-row.tl-a .tl-hit')).toHaveCount(0);
@@ -190,6 +189,7 @@ test('#1322 图 3 & 验收 4：僧侣/传教士/渔船单侧无普通攻击与�
     // 逐击伤害拆解
     await page.locator('[data-t="damage-breakdown"] summary').click();
     await expect(page.locator('[data-t="damage-no-attack-A"]')).toContainText('无普通攻击');
+    await expect(page.getByTestId('duel-sticky-result')).toHaveCount(0);
 
     await checkLayoutAndNumbers(page, '#duel', width);
     const axe = await new AxeBuilder({ page }).include('#duel').withTags(['wcag2a', 'wcag2aa']).analyze();
