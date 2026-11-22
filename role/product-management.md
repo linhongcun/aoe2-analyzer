@@ -301,6 +301,12 @@
 
 原因是界面上看似只是「复用同一个展示组件」，实则不同模式背后可能挂着两套口径不同的领域函数；若不先对齐数据源就硬画统一视图，要么让动画/价格与实际结算结果自相矛盾，要么在实现阶段悄悄改变核心算法却缺少验收与降级规格。以后裁定跨模式统一展示或跨页对齐能力前，先逐模式核查底层领域函数是否同源：不同源时须在 PRD 中明确「统一切换同源引擎并写出不支持项的降级反例（如自爆或缺少碰撞数据的单位）」，或明示分口径展示，绝不允许界面呈现与结算脱节的装饰性过程。
 
+### 复用或新增氛围插画前，先核素材异构反例、分层门禁与复合对比度
+
+在[文明素描原画复用评审](https://github.com/linhongcun/aoe2-analyzer/issues/1313)与[首页古典油画氛围评审](https://github.com/linhongcun/aoe2-analyzer/issues/1314)里，逐项核查后发现四类容易在设计与开发阶段返工的隐性约束：一是 [backgrounds.json](../data/reference/civs/backgrounds.json) 收录的 56 张文明素描并非同一比例（36 张近似 `1:1` 方图、20 张 `~1.89:1` 宽图），且 [backgrounds.source.json](../data/reference/civs/backgrounds.source.json) 存在 2 对上游共图文明（波希米亚/条顿、意大利/西西里），若盲目接入 `#/civs` 56 格列表还会触发约 4.20 MiB 流量负担；二是跨功能复用原有 `src/features/civs/assets/` 资产会同时触发 [check-layers.mjs](../scripts/check-layers.mjs) 的 `feature-to-feature` 与 `shared-upward` 双向限制，必须整体下沉共享层并同步 [check-docs-boundary.mjs](../scripts/check-docs-boundary.mjs) 白名单；三是 [check-colors.mjs](../scripts/check-colors.mjs) 禁止在非 `tokens.css` 写硬编码颜色或 `rgba()` 遮罩，且 [contrast.py](../scripts/contrast.py) 不校验「图片 + 遮罩 + 文字」复合对比度；四是新增至 `public/img/` 的运行时图片须经 `img()` 兼容 GitHub Pages 子路径。
+
+原因是静态素材改造表面只改视觉，实则牵动比例分布、网络体量、分层/颜色/图片边界门禁与双主题版权口径。以后评审复用或新增氛围插画需求前，先核素材清单的比例、体积与共图反例，在 PRD 中写清五件事：单页加载体量与列表页取舍；跨模块共享时的资产迁移与门禁清单；双主题遮罩走令牌/`mask-image` 并人工复核复合 WCAG AA 对比度（及桌面首屏高度与窄屏焦区）；并行视觉方案的页面归属互斥；自制/AI 氛围图与 Microsoft 原版游戏素材的版权区分声明。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
