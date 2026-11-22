@@ -32,9 +32,9 @@ test('#521 文明情境入口预填当前文明，单边对比和生产可刷新
   ])
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href!);
   await nav.getByRole('link', { name: '持续生产', exact: true }).click();
-  await expect(page.getByRole('combobox', { name: '生产文明', exact: true })).toHaveValue('Jurchens');
+  await expect(page.locator('#production-civ')).toHaveAttribute('data-value', 'Jurchens');
   await page.reload();
-  await expect(page.getByRole('combobox', { name: '生产文明', exact: true })).toHaveValue('Jurchens');
+  await expect(page.locator('#production-civ')).toHaveAttribute('data-value', 'Jurchens');
   await healthy(page);
   await page.goBack();
   await nav.getByRole('link', { name: '文明对比', exact: true }).click();

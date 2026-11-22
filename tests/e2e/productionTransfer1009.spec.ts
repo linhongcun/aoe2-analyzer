@@ -30,7 +30,7 @@ for (const mode of ['1', 'n', 'r', 't']) {
       await link.click();
       await expect(page.getByTestId('train-total-row')).toHaveCount(1);
       await expect(page.getByLabel('兵种 1 训练数量')).toHaveValue(count);
-      await expect(page.getByLabel('兵种 1 单位', { exact: true })).toHaveValue(side === 'a' ? '559' : '5');
+      await expect(page.locator('#train-total-unit-0')).toHaveAttribute('data-value', side === 'a' ? '559' : '5');
       await expect(banner(page)).toContainText(`已带入单位 PK 的 ${side.toUpperCase()} 方`);
       expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).has('m')).toBe(false);
       if (mode === 'r' && +count > 1000) {
@@ -46,7 +46,7 @@ for (const mode of ['1', 'n', 'r', 't']) {
 test('#1009 不可用 PK 保持形态，显式解锁有效而 f/c 不凭空补选', async ({ page }) => {
   await open(page, '/duel?a=291.Hindustanis.4.47.&b=5.Hindustanis.4.f.&m=n&na=30&nb=17');
   await page.getByRole('link', { name: '算 A 方训练总价' }).click();
-  await expect(page.getByLabel('兵种 1 单位', { exact: true })).toHaveValue('291');
+  await expect(page.locator('#train-total-unit-0')).toHaveAttribute('data-value', '291');
   await expect(page.getByTestId('train-total-row')).toContainText('本文明没有这个单位形态');
   await page.goBack();
   await page.getByRole('link', { name: '算 B 方训练总价' }).click();
@@ -58,9 +58,9 @@ test('#1009 B1 顺序合并，逐行未带入，全跳过保留文明时代与�
   await open(page, '/production?mode=train-total&civ=Chinese&age=4&units=559:30,291:5,559:abc,83:');
   const source = page.url();
   await modes(page).getByRole('link', { name: '持续生产', exact: true }).click();
-  await expect(page.getByLabel('需求 1 单位')).toHaveValue('559');
-  await expect(page.getByLabel('需求 2 单位')).toHaveValue('83');
-  await expect(page.getByLabel('需求 3 单位')).toHaveCount(0);
+  await expect(page.locator('#production-unit-0')).toHaveAttribute('data-value', '559');
+  await expect(page.locator('#production-unit-1')).toHaveAttribute('data-value', '83');
+  await expect(page.locator('#production-unit-2')).toHaveCount(0);
   await expect(page.getByLabel('需求 1 建筑数量')).toHaveValue('1');
   await expect(page.getByLabel('需求 2 建筑数量')).toHaveValue('1');
   await expect(banner(page)).toContainText('已带入训练总价的 2 种兵种');
@@ -71,9 +71,9 @@ test('#1009 B1 顺序合并，逐行未带入，全跳过保留文明时代与�
 
   await open(page, '/production?mode=train-total&civ=Chinese&age=3&units=359:2,0:');
   await modes(page).getByRole('link', { name: '持续生产', exact: true }).click();
-  await expect(page.getByLabel('生产文明')).toHaveValue('Chinese');
+  await expect(page.locator('#production-civ')).toHaveAttribute('data-value', 'Chinese');
   await expect(page.getByLabel('生产时代')).toHaveValue('3');
-  await expect(page.getByLabel('需求 1 单位')).toHaveValue('83');
+  await expect(page.locator('#production-unit-0')).toHaveAttribute('data-value', '83');
   await expect(banner(page)).toContainText('有 2 行没有带入');
   await expect(banner(page)).toContainText('待选行');
   await expect(banner(page)).toContainText('下面是默认方案');
@@ -189,5 +189,5 @@ test('#1009 资料延迟加载时不暴露会丢行的转换链接', async ({ pa
   release();
   await expect(modes(page).getByRole('link', { name: '训练总价', exact: true })).toBeVisible();
   await modes(page).getByRole('link', { name: '训练总价', exact: true }).click();
-  await expect(page.getByLabel('兵种 1 单位', { exact: true })).toHaveValue('559');
+  await expect(page.locator('#train-total-unit-0')).toHaveAttribute('data-value', '559');
 });

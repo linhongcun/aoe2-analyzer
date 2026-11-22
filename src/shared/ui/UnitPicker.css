@@ -1,4 +1,8 @@
 /* 共享 UnitPicker 弹层与移动端底部抽屉样式（Issue 1280）；颜色全部走 tokens.css 令牌 */
+.unitpick .cp-trigger[aria-invalid='true'] .uico {
+  filter: grayscale(0.75);
+}
+
 .cp-panel.up-panel {
   width: 448px;
   max-width: calc(100vw - 32px);

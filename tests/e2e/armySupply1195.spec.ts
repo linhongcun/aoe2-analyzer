@@ -104,7 +104,7 @@ test('#1195 损坏的交接链接无默认汇总，普通模式仍打开原界�
   await page.goto('./#' + ledger);
   await page.getByRole('navigation', { name: '生产模式' }).getByRole('link', { name: '持续生产', exact: true }).click();
   await expect(page).toHaveURL(/#\/production\?civ=Goths&age=4$/);
-  await expect(page.getByLabel('需求 1 单位')).toHaveValue('83');
+  await expect(page.locator('#production-unit-0')).toHaveAttribute('data-value', '83');
 });
 
 test('#1195 已完成与目标研究分别恢复到原账本', async ({ page }) => {

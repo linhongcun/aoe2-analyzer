@@ -17,11 +17,16 @@ function modeNav(page: Page) {
   return page.getByRole('navigation', { name: '生产模式' });
 }
 
+async function pickProductionCiv(page: Page, civ: string) {
+  await page.locator('#production-civ').click();
+  await page.getByRole('dialog', { name: '生产文明', exact: true }).locator(`[role="option"][data-civ="${civ}"]`).click();
+}
+
 test('#963 1280 首屏同时看到文明、需求和村民配置', async ({ page }) => {
   await page.setViewportSize(VIEW);
   await open(page);
-  const civ = page.getByLabel('生产文明', { exact: true });
-  const unit = page.getByLabel('需求 1 单位', { exact: true });
+  const civ = page.locator('#production-civ');
+  const unit = page.locator('#production-unit-0');
   const summary = page.locator('#production-summary-title');
   await expect(civ).toBeVisible();
   await expect(unit).toBeVisible();
@@ -34,16 +39,8 @@ test('#963 1280 首屏同时看到文明、需求和村民配置', async ({ page
   expect(unitY).toBeLessThan(844);
   expect(summaryY).toBeLessThan(844);
   expect(await page.locator('.tool-grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length)).toBe(2);
-  expect(
-    await page.locator('.production-summary').evaluate((element) => {
-      let node: Element | null = element;
-      while (node && node !== document.body) {
-        if (getComputedStyle(node).position === 'sticky') return true;
-        node = node.parentElement;
-      }
-      return false;
-    }),
-  ).toBe(false);
+  // Issue 1281：桌面端（>=1024px）右侧村民配置摘要随滚动吸顶
+  expect(await page.locator('.production-summary').evaluate((element) => getComputedStyle(element).position)).toBe('sticky');
   await expect(page.locator('.production-mode-nav')).toHaveCount(0);
   await expect(page.getByRole('button', { name: '跳到结果', exact: true })).toBeHidden();
   await expect(page.locator('.production-summary')).toContainText('先合计每种资源的开销，再分别向上取整。');
@@ -70,14 +67,16 @@ test('#963 ≥1024 隐藏跳到结果，更窄时单栏且条件在前', async (
   await page.setViewportSize({ width: 1000, height: 844 });
   await expect(page.getByRole('button', { name: '跳到结果', exact: true })).toBeVisible();
   expect(await page.locator('.tool-grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length)).toBe(1);
-  expect(await top(page.getByLabel('生产文明', { exact: true }))).toBeLessThan(await top(page.locator('#production-summary-title')));
+  expect(await page.locator('.production-summary').evaluate((element) => getComputedStyle(element).position)).toBe('static');
+  expect(await top(page.locator('#production-civ'))).toBeLessThan(await top(page.locator('#production-summary-title')));
 
   await page.setViewportSize({ width: 390, height: 844 });
   const h1 = await top(page.locator('header.tool-head h1'));
-  const civY = await top(page.getByLabel('生产文明', { exact: true }));
+  const civY = await top(page.locator('#production-civ'));
   const relatedY = await top(page.getByRole('navigation', { name: '相关工具' }));
   expect(civY).toBeGreaterThan(h1);
   expect(relatedY).toBeGreaterThan(civY);
+  expect(await page.locator('.production-summary').evaluate((element) => getComputedStyle(element).position)).toBe('static');
   const jump = page.getByRole('button', { name: '跳到结果', exact: true });
   const copy = page.getByRole('button', { name: '复制方案链接', exact: true });
   await expect(jump).toBeVisible();
@@ -95,13 +94,13 @@ test('#963 点当前模式保留参数，另一模式仍去原来的入口', asy
   const nav = modeNav(page);
   await expect(nav.getByRole('link', { name: '持续生产', exact: true })).toHaveAttribute('aria-current', 'page');
   await expect(nav.getByRole('link', { name: '跨文明训练对照', exact: true })).not.toHaveAttribute('aria-current', 'page');
-  await page.getByLabel('生产文明', { exact: true }).selectOption('Britons');
+  await pickProductionCiv(page, 'Britons');
   await expect(page).toHaveURL(/civ=Britons/);
   const kept = page.url();
   await expect(nav.getByRole('link', { name: '持续生产', exact: true })).toHaveAttribute('href', new URL(kept).hash);
   await nav.getByRole('link', { name: '持续生产', exact: true }).click();
   await expect(page).toHaveURL(kept);
-  await expect(page.getByLabel('生产文明', { exact: true })).toHaveValue('Britons');
+  await expect(page.locator('#production-civ')).toHaveAttribute('data-value', 'Britons');
 
   await nav.getByRole('link', { name: '跨文明训练对照', exact: true }).click();
   await expect(page).toHaveURL(new RegExp(TRAIN_COMPARE.replace('?', '\\?') + '$'));
@@ -132,17 +131,19 @@ test('#963 相关工具保留原文和地址，商路入口带入当前方案', 
     await expect(related.getByRole('link', { name: '另查固定圣物收益', exact: true })).toHaveAttribute('href', '#/relic-income');
     const source = new URLSearchParams((await trade.getAttribute('href'))!.split('?')[1]);
     expect(source.get('mode')).toBe('production');
-    expect(source.get('civ')).toBe(await page.getByLabel('生产文明', { exact: true }).inputValue());
+    const currentCiv = await page.locator('#production-civ').getAttribute('data-value');
+    expect(source.get('civ')).toBe(currentCiv);
     expect(source.get('age')).toBe(await page.getByLabel('生产时代', { exact: true }).inputValue());
     const plan = new URLSearchParams(source.get('source')!);
-    expect(plan.get('civ')).toBe(await page.getByLabel('生产文明', { exact: true }).inputValue());
+    expect(plan.get('civ')).toBe(currentCiv);
     expect(plan.get('age')).toBe(await page.getByLabel('生产时代', { exact: true }).inputValue());
     expect(plan.get('walk')).toBe(await page.getByLabel('木金石单程距离', { exact: true }).inputValue());
     expect(plan.get('farm')).toBe(await page.getByLabel('农田单程距离', { exact: true }).inputValue());
     const rows = await page.getByTestId('production-row').evaluateAll((nodes) =>
       nodes.map((node) => {
+        const unit = node.querySelector('.unitpick .cp-trigger')?.getAttribute('data-value') ?? '';
         const value = (label: string) => (node.querySelector(`[aria-label$="${label}"]`) as HTMLInputElement | HTMLSelectElement).value;
-        return `${value('单位')}:${value('建筑')}:${value('数量')}`;
+        return `${unit}:${value('建筑')}:${value('数量')}`;
       }),
     );
     expect(plan.get('rows')).toBe(rows.join(','));
@@ -152,7 +153,7 @@ test('#963 相关工具保留原文和地址，商路入口带入当前方案', 
   const knightsTotal = await page.getByTestId('production-total').innerText();
   await open(page);
   expect(await page.getByTestId('production-total').innerText()).not.toBe(knightsTotal);
-  await page.getByLabel('生产文明', { exact: true }).selectOption('Britons');
+  await pickProductionCiv(page, 'Britons');
   const canonical = new URL(page.url()).hash.slice(1).split('?')[1];
   const carried = new URLSearchParams((await trade.getAttribute('href'))!.split('?')[1]);
   expect(carried.get('source')).toBe(canonical);

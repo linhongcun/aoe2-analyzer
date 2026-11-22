@@ -37,6 +37,10 @@ export interface UnitPickerProps {
   disabled?: boolean;
   describedBy?: string;
   invalid?: boolean;
+  /** 不可用或未知单位时的警示文案（Issue 1281） */
+  unavailableText?: string;
+  /** 无对应 Unit 时兜底写入 data-value（如待选 0 或未知 ID） */
+  rawValue?: number | string;
 }
 
 function sliceRows(rows: readonly UnitPickerRow[], limit: number): UnitPickerRow[] {
@@ -78,6 +82,8 @@ export function UnitPicker({
   disabled,
   describedBy,
   invalid,
+  unavailableText,
+  rawValue,
 }: UnitPickerProps) {
   const validCiv = resolveValidCiv(civ);
   const [open, setOpen] = useState(false);
@@ -455,6 +461,8 @@ export function UnitPicker({
         )
       : null;
 
+  const triggerText = unavailableText ?? value?.zh ?? '请选择单位';
+  const dataValue = rawValue !== undefined ? String(rawValue) : value?.id !== undefined ? String(value.id) : undefined;
   return (
     <span className="civpick unitpick">
       <button
@@ -465,16 +473,16 @@ export function UnitPicker({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label={`${label}：${value?.zh ?? '请选择单位'}`}
+        aria-label={`${label}：${triggerText}`}
         aria-describedby={describedBy}
         aria-invalid={invalid || undefined}
-        data-value={value?.id}
+        data-value={dataValue}
         onClick={toggleOpen}
       >
         {value && <UnitIcon u={value} />}
         <span className="cp-name">
-          {value?.zh ?? '请选择单位'}
-          {value && <small> {value.en}</small>}
+          {triggerText}
+          {value && !unavailableText && <small> {value.en}</small>}
         </span>
         <Icon name="chevron-down" />
       </button>

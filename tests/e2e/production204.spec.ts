@@ -1,4 +1,17 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function pickCiv(page: Page, civ: string) {
+  await page.locator('#production-civ').click();
+  const dialog = page.getByRole('dialog', { name: '生产文明', exact: true });
+  await dialog.locator(`[role="option"][data-civ="${civ}"]`).click();
+}
+
+async function pickUnit(page: Page, index: number, query: string, unitId: string) {
+  await page.locator(`#production-unit-${index}`).click();
+  const dialog = page.getByRole('dialog', { name: `需求 ${index + 1} 单位`, exact: true });
+  await dialog.locator('.cp-q').fill(query);
+  await dialog.locator(`[role="option"][data-unit="${unitId}"]`).click();
+}
 
 for (const width of [360, 375, 390, 1280]) {
   test(`#204 @${width} 持续生产、分享还原、空和错误状态`, async ({ page, context }, info) => {
@@ -13,7 +26,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByRole('heading', { name: '村民配置摘要' })).toBeVisible();
     await page.getByRole('button', { name: '添加需求' }).click();
     await expect(page.getByTestId('production-row')).toHaveCount(2);
-    await page.getByRole('combobox', { name: '需求 2 单位', exact: true }).selectOption('38');
+    await pickUnit(page, 1, '骑士', '38');
     await page.getByRole('textbox', { name: '需求 2 建筑数量', exact: true }).fill('2');
     await page.getByRole('checkbox', { name: '双刃斧', exact: true }).check();
     await expect(page.getByTestId('production-resource-Gold')).not.toContainText('开销 0 / 分钟');
@@ -61,16 +74,20 @@ test('#204 站内入口和文明时代科技解锁', async ({ page }) => {
   await page.goto('./#/');
   await page.locator('#home a[href="#/production"]').click();
   await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
-  await page.getByRole('combobox', { name: '生产文明', exact: true }).selectOption('Bohemians');
-  await expect(page.getByRole('combobox', { name: '需求 1 单位', exact: true }).locator('option[value="5"]')).toHaveCount(0);
+  await pickCiv(page, 'Bohemians');
+  await page.locator('#production-unit-0').click();
+  const unitDialog = page.getByRole('dialog', { name: '需求 1 单位', exact: true });
+  await unitDialog.locator('.cp-q').fill('火枪手');
+  await expect(unitDialog.locator('[role="option"][data-unit="5"]')).toHaveCount(0);
+  await page.keyboard.press('Escape');
   await page.getByRole('checkbox', { name: '化学', exact: true }).check();
-  await page.getByRole('combobox', { name: '需求 1 单位', exact: true }).selectOption('5');
+  await pickUnit(page, 0, '火枪手', '5');
   await expect(page.getByRole('alert')).toHaveCount(0);
   await page.getByRole('combobox', { name: '生产时代', exact: true }).selectOption('2');
   await expect(page.getByRole('alert')).toContainText('不可用');
-  await page.getByRole('combobox', { name: '生产文明', exact: true }).selectOption('Vikings');
+  await pickCiv(page, 'Vikings');
   await page.getByRole('button', { name: '重置方案' }).click();
-  await page.getByRole('combobox', { name: '生产文明', exact: true }).selectOption('Vikings');
+  await pickCiv(page, 'Vikings');
   await expect(page.getByRole('checkbox', { name: '独轮推车', exact: true })).toBeChecked();
   await expect(page.getByRole('checkbox', { name: '独轮推车', exact: true })).toBeDisabled();
 });

@@ -64,4 +64,28 @@ test.describe('#73 CivPicker Enter 与过滤时序', () => {
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(new RegExp(`civ=${en}`));
   });
+
+  test('Tab 移到关闭按钮按 Enter 关闭弹层且不改变原文明（有匹配与无匹配）', async ({ page }) => {
+    await openPicker(page);
+    await page.keyboard.type('法兰克');
+    await expect(page.locator('.cp-opt[data-civ="Franks"]')).toBeVisible();
+    await page.keyboard.press('Tab');
+    const closeBtn = page.locator('.cp-panel .cp-x');
+    await expect(closeBtn).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.cp-panel')).toHaveCount(0);
+    await expect(page.locator('#tlciv')).toBeFocused();
+    expect(civParam(page)).toBeNull();
+
+    await page.locator('#tlciv').click();
+    await expect(page.locator('.cp-q')).toBeFocused();
+    await page.keyboard.type('zzzz');
+    await expect(page.locator('.cp-empty')).toBeVisible();
+    await page.keyboard.press('Tab');
+    await expect(closeBtn).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.cp-panel')).toHaveCount(0);
+    await expect(page.locator('#tlciv')).toBeFocused();
+    expect(civParam(page)).toBeNull();
+  });
 });

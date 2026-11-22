@@ -76,30 +76,61 @@
 .train-total-results .train-total-techs {
   margin-top: var(--space-4);
 }
-.train-total-workspace .train-total-row label {
+.train-total-workspace .train-total-row label,
+.train-total-workspace .train-total-row > .train-total-field {
   grid-column: auto;
 }
-.train-total-page :is(select, input[type='text']) {
+.train-total-page :is(select, input[type='text']:not(.qty-stepper-input)) {
   border-radius: var(--radius-pill);
 }
 .train-total-workspace .train-total-summary {
   border-top: 3px solid var(--color-accent);
 }
-.train-total-page label {
+.train-total-page label,
+.train-total-field {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   min-width: 0;
   font-size: var(--fs-sm);
 }
+.train-total-field > label {
+  display: block;
+}
 .train-total-page select,
-.train-total-page input[type='text'],
+.train-total-page input[type='text']:not(.qty-stepper-input),
 .train-total-manual input {
   width: 100%;
   min-width: 0;
   min-height: 44px;
   box-sizing: border-box;
   font-size: var(--fs-body);
+}
+.train-total-page .civpick {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.train-total-page .cp-trigger {
+  width: 100%;
+  min-height: 44px;
+  justify-content: space-between;
+  border-radius: var(--radius-pill);
+  padding: 6px var(--space-3);
+}
+.train-total-page .cp-trigger .cp-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+.train-total-page .cp-trigger > .ico,
+.train-total-page .cp-trigger > .uico,
+.train-total-page .cp-trigger > .cp-noico,
+.train-total-page .cp-trigger > .ic {
+  flex-shrink: 0;
 }
 .train-total-rows {
   display: grid;
@@ -139,7 +170,7 @@
 }
 .train-total-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(156px, 1fr);
   gap: var(--space-3);
   margin-top: var(--space-3);
 }
@@ -156,7 +187,8 @@
   justify-self: end;
   color: var(--color-bad);
 }
-.train-total-row label,
+.train-total-row > label,
+.train-total-row > .train-total-field,
 .train-total-flag,
 .train-total-mini,
 .train-total-row .btn:not(.train-total-delete) {
@@ -308,13 +340,37 @@
   margin-bottom: var(--space-4);
 }
 
+@media (min-width: 1024px) {
+  .train-total-results {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-6));
+    align-self: start;
+    max-height: calc(100vh - var(--nav-h) - var(--space-10));
+    max-height: calc(100dvh - var(--nav-h) - var(--space-10));
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 1023px) {
+  .train-total-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 700px) {
   .train-total-setup,
   .train-total-workspace {
     grid-template-columns: minmax(0, 1fr);
   }
-  .train-total-workspace .train-total-row label {
+  .train-total-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .train-total-workspace .train-total-row label,
+  .train-total-workspace .train-total-row > .train-total-field {
     grid-column: 1 / -1;
+  }
+  .train-total-page .cp-trigger small {
+    display: none;
   }
   .train-total-page header.tool-head .tool-head-actions {
     position: static;

@@ -818,6 +818,10 @@ table.ediff td.dn {
 .cp-trigger[aria-expanded='true'] {
   border-color: var(--color-accent);
 }
+.civpick .cp-trigger[aria-invalid='true'] {
+  border-color: var(--color-bad);
+  background: var(--color-bad-soft);
+}
 .cp-trigger .ico,
 .cp-opt .ico {
   width: 24px;
