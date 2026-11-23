@@ -25,6 +25,7 @@
   --color-tree-unit-uq-glow: #6f2da852;
   --color-tree-unit-rg: #3b4cca;
   --color-tree-unit-rg-bg: #e4e8fb;
+  --color-tree-tech-rg: #0b7285;
   --color-grip: #c7c7cc; /* 手机抽屉拖动条，装饰（#95） */
   --color-link: #0066cc; /* 链接 5.57:1 */
   --color-chevron: #aeaeb2; /* 行尾装饰箭头（不承载信息） */
@@ -149,6 +150,7 @@
   --color-tree-unit-uq-glow: #c07cf066;
   --color-tree-unit-rg: #8393f8;
   --color-tree-unit-rg-bg: #232a52;
+  --color-tree-tech-rg: #4fc3d9;
   --color-grip: #636366;
   --color-link: #4da3ff;
   --color-chevron: #636366;

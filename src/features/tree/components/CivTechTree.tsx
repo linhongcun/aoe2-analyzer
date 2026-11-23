@@ -18,10 +18,6 @@ import '../tree.css';
 
 const JUMP_MS = 1600;
 
-function Mark({ group }: { group: 'unique' | 'regional' }) {
-  return <span className={`tmark tmark-${group === 'unique' ? 'uq' : 'rg'}`} aria-hidden="true" />;
-}
-
 function Legend({ mine, other }: { mine: string; other: string | null }) {
   return (
     <div className="tleg">
@@ -34,27 +30,19 @@ function Legend({ mine, other }: { mine: string; other: string | null }) {
         不可用
       </span>
       <span>
-        <i className="tl1 unit-identity uq">
-          <Mark group="unique" />
-        </i>
+        <i className="tl1 unit-identity uq" />
         独特单位
       </span>
       <span>
-        <i className="tl1 unit-identity rg">
-          <Mark group="regional" />
-        </i>
+        <i className="tl1 unit-identity rg" />
         区域单位
       </span>
       <span>
-        <i className="tl1 uq">
-          <Mark group="unique" />
-        </i>
+        <i className="tl1 uq" />
         独特科技／建筑
       </span>
       <span>
-        <i className="tl1 rg">
-          <Mark group="regional" />
-        </i>
+        <i className="tl1 rg" />
         区域科技／建筑
       </span>
       {other && (
@@ -104,9 +92,7 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
       const canScrollX = el.scrollWidth > el.clientWidth + 2;
       const atStart = !canScrollX || el.scrollLeft <= 2;
       const atEnd = !canScrollX || el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
-      setScrollState((prev) =>
-        prev.atStart === atStart && prev.atEnd === atEnd && prev.canScrollX === canScrollX ? prev : { atStart, atEnd, canScrollX },
-      );
+      setScrollState((prev) => (prev.atStart === atStart && prev.atEnd === atEnd && prev.canScrollX === canScrollX ? prev : { atStart, atEnd, canScrollX }));
     };
     sync();
     el.addEventListener('scroll', sync, { passive: true });
@@ -196,28 +182,18 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
             {scrollState.atStart ? '当前位于最左侧，右侧还有更多建筑列' : scrollState.atEnd ? '已到达最右侧' : '左右均有更多建筑列'}）
           </p>
           <div className="civ-tt-scroll-btns">
-            <button
-              type="button"
-              className="civ-tt-scroll-btn"
-              aria-label="向左滚动科技树"
-              disabled={scrollState.atStart}
-              onClick={() => scrollHorizontal(-1)}
-            >
+            <button type="button" className="civ-tt-scroll-btn" aria-label="向左滚动科技树" disabled={scrollState.atStart} onClick={() => scrollHorizontal(-1)}>
               <Icon name="chevron-left" />
             </button>
-            <button
-              type="button"
-              className="civ-tt-scroll-btn"
-              aria-label="向右滚动科技树"
-              disabled={scrollState.atEnd}
-              onClick={() => scrollHorizontal(1)}
-            >
+            <button type="button" className="civ-tt-scroll-btn" aria-label="向右滚动科技树" disabled={scrollState.atEnd} onClick={() => scrollHorizontal(1)}>
               <Icon name="chevron-right" />
             </button>
           </div>
         </div>
       )}
-      <div className={`civ-tt-frame${scrollState.canScrollX ? ' can-scroll-x' : ''}${scrollState.atStart ? ' is-start' : ''}${scrollState.atEnd ? ' is-end' : ''}`}>
+      <div
+        className={`civ-tt-frame${scrollState.canScrollX ? ' can-scroll-x' : ''}${scrollState.atStart ? ' is-start' : ''}${scrollState.atEnd ? ' is-end' : ''}`}
+      >
         <div
           className="tscroll"
           ref={scrollerRef}
@@ -300,7 +276,6 @@ function TreeCanvas({ trees, core, civ, cmp, jumpSlot }: { trees: Trees; core: C
                   onClick={openNode}
                 >
                   <img src={img(`${dir[c.k][1]}/${o.pic}.webp`)} alt="" loading="lazy" />
-                  {ident ? <Mark group={ident.group} /> : null}
                 </Link>
               );
             })}
