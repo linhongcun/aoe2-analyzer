@@ -142,8 +142,8 @@ describe('#1322 单位 PK 零准确度特殊远程估算与无普通攻击单位
     expect(nm.duration).toBeCloseTo(11.2, 1);
 
     // 3) 等资源 (bud = 1200)
-    const naRes = countForBudget(fg.training.price.cost, 1200);
-    const nbRes = countForBudget(gal.training.price.cost, 1200);
+    const naRes = countForBudget(fg.training.price.cost, 1200)!;
+    const nbRes = countForBudget(gal.training.price.cost, 1200)!;
     const eqRes = groupFight(fg.F, naRes, gal.F, nbRes);
     expect(eqRes.status).toBe('win');
     if (eqRes.status === 'win') expect(eqRes.winner).toBe('a');

@@ -51,11 +51,13 @@ describe('已知对局（满科技）', () => {
   it('等资源比较使用预算数量和近战容量', () => {
     const p = F('Paladin', 'Franks'),
       h = F('Halberdier', 'Japanese');
-    const g = groupFight(p, countForBudget(p.cost, 3000), h, countForBudget(h.cost, 3000));
+    const na = countForBudget(p.cost, 3000)!,
+      nb = countForBudget(h.cost, 3000)!;
+    const g = groupFight(p, na, h, nb);
     expect(g.status).not.toBe('error');
     if (g.status === 'error') throw Error(g.reason);
-    expect(g.timeline[0]).toEqual([0, countForBudget(p.cost, 3000), countForBudget(h.cost, 3000)]);
-    expect(g.contact.b[0]!.maxMelee).toBeLessThan(countForBudget(h.cost, 3000));
+    expect(g.timeline[0]).toEqual([0, na, nb]);
+    expect(g.contact.b[0]!.maxMelee).toBeLessThan(nb);
   });
   it('劲弩手 vs 精锐掷矛手：掷矛手几乎免疫（劲弩手每击 10−8 = 2），掷矛手获胜', () => {
     // Fandom Skirmisher：+4 对弓手（精锐），高穿刺护甲，弓兵的克制

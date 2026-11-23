@@ -420,6 +420,16 @@
   font-size: var(--fs-h3);
   font-variant-numeric: tabular-nums;
 }
+#duel .pk-count-val {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+#duel .pk-under-one {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-warn);
+}
 #duel .ctx-bar {
   margin: var(--space-1) 0;
 }

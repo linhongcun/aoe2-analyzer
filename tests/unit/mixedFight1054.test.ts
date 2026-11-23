@@ -246,8 +246,8 @@ describe('固定数据实战单位与有界性能', () => {
       b = get(569, 'Spanish');
     expect([a.u.collisionRadiusX, a.u.collisionRadiusY]).toEqual([expect.closeTo(0.2), expect.closeTo(0.2)]);
     expect([b.u.collisionRadiusX, b.u.collisionRadiusY]).toEqual([0.25, 0.25]);
-    const na = countForBudget(a.training.price.cost, 5000),
-      nb = countForBudget(b.training.price.cost, 5000);
+    const na = countForBudget(a.training.price.cost, 5000)!,
+      nb = countForBudget(b.training.price.cost, 5000)!;
     expect([na, nb]).toEqual([66, 37]);
     const result = groupFight(a.F, na, b.F, nb);
     if (result.status === 'error') throw Error(result.reason);

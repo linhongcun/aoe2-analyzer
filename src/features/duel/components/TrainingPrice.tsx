@@ -3,9 +3,9 @@ import { costSum } from '../../../domain/duel';
 import type { TrainingQuote } from '../../../domain/duelTrainingCost';
 import { trainingLines } from '../logic/trainingCostView';
 
-export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote; sel: ReadonlySet<number>; bud: number; count: number }) {
+export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote; sel: ReadonlySet<number>; bud: number; count: number | null }) {
   const { lines, notes } = trainingLines(quote, sel);
-  const spent = count * costSum(quote.price.cost);
+  const spent = (count ?? 0) * costSum(quote.price.cost);
   if (!lines.length && !notes.length && bud <= 0) return null;
   return (
     <div>
@@ -40,8 +40,13 @@ export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote
         <div className="pk-budget" data-t="pk-budget">
           <div className="pk-brow">
             <span>派出数量</span>
-            <span data-t="pk-count">
-              <b className="num nw">{count}</b>
+            <span className="pk-count-val" data-t="pk-count">
+              <b className="num nw">{count ?? '—'}</b>
+              {count === 0 && (
+                <span className="pk-under-one num nw" data-t="pk-under-one">
+                  不足 1 个
+                </span>
+              )}
             </span>
           </div>
           <div className="pk-brow">

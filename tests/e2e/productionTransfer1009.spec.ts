@@ -9,7 +9,7 @@ async function open(page: Page, path: string) {
 
 for (const mode of ['1', 'n', 'r', 't']) {
   test(`#1009 PK ${mode} 两侧入口使用卡片实际派出数量`, async ({ page }) => {
-    await open(page, '/duel?a=559.Chinese.4..&b=5.Hindustanis.4.47.&m=' + mode + '&na=30&nb=17&bud=100000&vil=1&min=1');
+    await open(page, '/duel?a=559.Chinese.4..&b=5.Hindustanis.4.47.&m=' + mode + '&na=30&nb=17&bud=100000&vil=10&min=5');
     for (const side of ['a', 'b']) {
       const card = page.locator('#duel-' + side);
       const link = card.getByRole('link', { name: `算 ${side.toUpperCase()} 方训练总价` });

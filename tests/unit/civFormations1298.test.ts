@@ -119,8 +119,8 @@ describe('#1298 碰撞接敌 14 文明同步与链接领域回归', () => {
       const sideB = resolve(ctx, core.unitById, parseSide(params.get('b'), { uid: 1, civ: '', age: 4, techs: 'f', team: [] }), 1);
       expect([isUnavail(sideA), isUnavail(sideB)], label).toEqual([false, false]);
       if (isUnavail(sideA) || isUnavail(sideB)) continue;
-      const na = countForBudget(sideA.training.price.cost, decoded.bud);
-      const nb = countForBudget(sideB.training.price.cost, decoded.bud);
+      const na = countForBudget(sideA.training.price.cost, decoded.bud)!;
+      const nb = countForBudget(sideB.training.price.cost, decoded.bud)!;
       const result = groupFight(sideA.F, na, sideB.F, nb);
       expect(result.status, label).toBe('win');
       if (result.status !== 'win') continue;

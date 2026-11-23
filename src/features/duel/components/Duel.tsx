@@ -1,24 +1,24 @@
 /** 工具：单位 PK（1v1 / N vs M / 等资源 / 混编），URL 与结果协调。 */
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, type MutableRefObject, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
 import { isChampiUnit } from '../../../domain/champiCounters';
-import { countForBudget, damageByClass, groupFight, oneVOneFight } from '../../../domain/duel';
+import { damageByClass } from '../../../domain/duel';
+import { buildDuelBudgetErrorParts, DUEL_UNIT_REPLACED_NOTE, isDuelExcludedUnit, replaceDuelUnitId, resolveSideBudgetCount } from '../../../domain/duelBudget';
 import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
-import { fmtSide, parseSide, type Mode, type SideSpec } from '../../../domain/duelState';
+import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
 import { canonDuelKite, canonDuelParams, decodeDuelKite, decodeDuelParams } from '../../../domain/duelParams';
 import type { KiteOptions } from '../../../domain/contactKite';
 import { buildsPath } from '../../../domain/matchupRoute';
 import '../../../shared/ui/contextLinks.css';
-import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
+import { fmtClock, realCostOf } from '../../../domain/realCost';
 import { extractDuelSourceParams, readDuelMatchupContext } from '../logic/duelContext';
 import { buildEnterMixedParams, formatBreakEvenSide, rawUid, resolveDuelKiteEligibility, techFieldInvalid } from '../logic/duelKiteView';
-import { summarizeGroup, summarizeOneVOne } from '../logic/duelSummary';
 import { swapSingleDuelParams } from '../logic/duelSwap';
 import { DUEL_COST_MODEL } from '../logic/trainingCostView';
 import { Icon } from '../../../shared/ui/Icon';
@@ -28,14 +28,13 @@ import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { isMixedDuelLink } from '../../../domain/mixedDuelParams';
 import { DuelModeBar, type TopMode } from './DuelModeBar';
-import { DuelStickyResult } from './DuelStickyResult';
+import { DuelStage } from './DuelStage';
 import { MixedDuel } from './MixedDuel';
 import { BreakEven } from './BreakEven';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
 import { UpgradeComparison } from './UpgradeComparison';
 import { Side } from './DuelSelection';
-import { OneVOne, Group } from './DuelResults';
 import { CONTACT_BOUNDARY } from './ContactSummary';
 import { KiteContactBoundary } from './KiteSummaryCard';
 import { resolve, isUnavail, type SideState } from '../logic/duelSide';
@@ -44,6 +43,11 @@ const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] 
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
 const SIMPLE_DAMAGE = '伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))';
 const FULL_DAMAGE = '伤害 = max(1, Σ max(min(0, 攻击类别), 攻击类别 − 对应护甲类别))';
+
+function parseDuelSpec(raw: string | null, fallback: SideSpec, preserveExcluded: boolean): SideSpec {
+  const spec = parseSide(raw, fallback);
+  return preserveExcluded ? spec : { ...spec, uid: replaceDuelUnitId(spec.uid) };
+}
 
 export default function Duel() {
   const resources = useCoreTrees();
@@ -65,79 +69,6 @@ export default function Duel() {
   );
 }
 
-function DuelStage({
-  A,
-  B,
-  mode,
-  cntA,
-  cntB,
-  bud,
-  kite,
-  children,
-}: {
-  A: SideState;
-  B: SideState;
-  mode: Mode;
-  cntA: number;
-  cntB: number;
-  bud: number;
-  kite?: KiteOptions;
-  children: ReactNode;
-}) {
-  const [resEl, setResEl] = useState<HTMLDivElement | null>(null);
-  const resHeadingRef = useRef<HTMLHeadingElement>(null);
-  const kA = Number(Boolean(kite?.a));
-  const kB = Number(Boolean(kite?.b));
-  const oneResult = useMemo(() => (mode === '1' && !isUnavail(A) && !isUnavail(B) ? oneVOneFight(A.F, B.F, kite ? { kite } : {}) : null), [mode, A, B, kite]);
-  const groupResult = useMemo(
-    () => (mode !== '1' && !isUnavail(A) && !isUnavail(B) ? groupFight(A.F, cntA, B.F, cntB, { recordReplay: true, ...(kite ? { kite } : {}) }) : null),
-    [mode, A, B, cntA, cntB, kite],
-  );
-  const stickySummary = useMemo(() => {
-    if (isUnavail(A) || isUnavail(B)) return null;
-    if (mode === '1' && oneResult) return summarizeOneVOne(A, B, oneResult);
-    if (mode !== '1' && groupResult) return summarizeGroup(A, B, groupResult, { na: cntA, nb: cntB });
-    return null;
-  }, [mode, A, B, cntA, cntB, oneResult, groupResult]);
-  return (
-    <>
-      <DuelStickyResult summary={stickySummary} targetEl={resEl} headingRef={resHeadingRef} />
-      {children}
-      {isUnavail(A) || isUnavail(B) ? (
-        <div id="duel-pending" className="posbox duel-pending">
-          <p data-t="pk-pending">
-            <Icon name="info" className="ic" />
-            先在上面选好能造的单位或文明，再出对战结果。
-          </p>
-        </div>
-      ) : mode === '1' ? (
-        <OneVOne
-          key={[fmtSide(A.spec), fmtSide(B.spec), kA, kB].join('|')}
-          A={A}
-          B={B}
-          kite={kite}
-          result={oneResult ?? undefined}
-          resultElRef={setResEl}
-          headingRef={resHeadingRef}
-        />
-      ) : (
-        <Group
-          key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB, kA, kB].join('|')}
-          A={A}
-          B={B}
-          na={cntA}
-          nb={cntB}
-          bud={mode === 'r' ? bud : 0}
-          kite={kite}
-          result={groupResult ?? undefined}
-          resultElRef={setResEl}
-          headingRef={resHeadingRef}
-        />
-      )}
-    </>
-  );
-}
-
 type DuelCalcProps = { resources: CoreTreesResources; pendingModeFocusRef: MutableRefObject<TopMode | null>; after?: ReactNode };
 
 function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps) {
@@ -146,9 +77,12 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const [sp, setSp] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  // issue 772：坏单位 id / 乱码科技被宽松回退时给出明确提示，并把 evidence 放进 history state，
-  // 让地址栏被 replace 成实际参数后提示仍保留一次；之后用户改选/前往新链接自然清除。
-  const linkStateInvalid = (location.state as { duelLinkInvalid?: boolean } | null)?.duelLinkInvalid ?? false;
+  const hasUpgrade = ['base', 'fixed', 'basev'].some((key) => sp.has(key));
+  // issue 772 / issue 1368：坏单位 id / 乱码科技回退，或 1260 精锐钦察（库曼雇佣兵）替换为 1233 时给出明确提示，
+  // 并把标记放进 history state，让地址栏 replace 后提示保留一次；之后用户改动任意参数自然清除。
+  const linkState = location.state as { duelLinkInvalid?: boolean; duelUnitReplaced?: boolean } | null;
+  const linkStateInvalid = linkState?.duelLinkInvalid ?? false;
+  const linkStateReplaced = linkState?.duelUnitReplaced ?? false;
   const uidInvalid =
     !!core &&
     (['a', 'b'] as const).some((key) => {
@@ -158,6 +92,13 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
       return uid === null || !core.unitById[uid];
     });
   const invalidLink = linkStateInvalid || techFieldInvalid(sp.get('a')) || techFieldInvalid(sp.get('b')) || uidInvalid;
+  const unitReplacedInUrl =
+    !hasUpgrade &&
+    (['a', 'b'] as const).some((key) => {
+      const uid = rawUid(sp.get(key));
+      return uid !== null && isDuelExcludedUnit(uid);
+    });
+  const unitReplaced = linkStateReplaced || unitReplacedInUrl;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
   const productionContext = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
   const { mode, na, nb, bud, vils, mins } = decodeDuelParams(sp);
@@ -165,8 +106,14 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const eq = mode === 'r' || mode === 't';
   const aParam = sp.get('a');
   const bParam = sp.get('b');
-  const A = useMemo<SideState | null>(() => (core && ctx ? resolve(ctx, core.unitById, parseSide(aParam, DEF_A), DEF_A.uid) : null), [core, ctx, aParam]);
-  const B = useMemo<SideState | null>(() => (core && ctx ? resolve(ctx, core.unitById, parseSide(bParam, DEF_B), DEF_B.uid) : null), [core, ctx, bParam]);
+  const A = useMemo<SideState | null>(
+    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(aParam, DEF_A, hasUpgrade), DEF_A.uid) : null),
+    [core, ctx, aParam, hasUpgrade],
+  );
+  const B = useMemo<SideState | null>(
+    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(bParam, DEF_B, hasUpgrade), DEF_B.uid) : null),
+    [core, ctx, bParam, hasUpgrade],
+  );
   const set = (k: Record<string, string>, drop: string[] = []) => {
     const n = new URLSearchParams(sp);
     Object.entries(k).forEach(([a, b]) => n.set(a, b));
@@ -175,7 +122,6 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   };
   // issue 102：地址栏始终带完整的 a、b、m（等资源再带 bud，N vs M 再带 na/nb），反馈链接读地址栏即可复现当前对阵
   const canon = new URLSearchParams(sp);
-  const hasUpgrade = ['base', 'fixed', 'basev'].some((key) => sp.has(key));
   const uiKiteEligible = resolveDuelKiteEligibility(mode, A, B);
   const canonKiteEligible = hasUpgrade ? undefined : uiKiteEligible;
   // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
@@ -188,8 +134,8 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const fixSide = (spec: SideSpec, fallback: SideSpec) => (core && !core.unitById[spec.uid] ? fallback : civFix(spec, fallback.uid));
   // 比较链接的错误参数须保留并明确失效，不能经旧 PK 容错回退后变成有效比较。
   if (!hasUpgrade) {
-    canon.set('a', fmtSide(fixSide(parseSide(aParam, DEF_A), DEF_A)));
-    canon.set('b', fmtSide(fixSide(parseSide(bParam, DEF_B), DEF_B)));
+    canon.set('a', fmtSide(fixSide(parseDuelSpec(aParam, DEF_A, false), DEF_A)));
+    canon.set('b', fmtSide(fixSide(parseDuelSpec(bParam, DEF_B, false), DEF_B)));
     canon.set('m', mode);
   }
   const incoming = sp.toString();
@@ -198,12 +144,13 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
 
   useEffect(() => {
     if (canonStr === incoming) return;
-    const nextState = invalidLink ? { duelLinkInvalid: true } : undefined;
+    const nextState =
+      invalidLink || unitReplaced ? { ...(invalidLink ? { duelLinkInvalid: true } : {}), ...(unitReplaced ? { duelUnitReplaced: true } : {}) } : undefined;
     // setSearchParams 会丢掉 #duel-model。只在这个锚点上改用带 hash 的跳转，其它地址仍走原来的补齐。
     if (location.hash === '#duel-model')
       navigate({ pathname: location.pathname, search: `?${canonStr}`, hash: location.hash }, { replace: true, state: nextState });
     else setSp(new URLSearchParams(canonStr), { replace: true, state: nextState });
-  }, [canonStr, incoming, setSp, navigate, location.pathname, location.hash, invalidLink]);
+  }, [canonStr, incoming, setSp, navigate, location.pathname, location.hash, invalidLink, unitReplaced]);
 
   useEffect(() => {
     if (location.hash !== '#duel-model') return;
@@ -222,7 +169,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
     () =>
       core
         ? collapse(
-            core.units.filter((u) => u.civs.length),
+            core.units.filter((u) => u.civs.length && !isDuelExcludedUnit(u.id)),
             core.fam,
           )
         : [],
@@ -232,18 +179,21 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const effKiteB = Boolean(kite.b && uiKiteEligible?.b);
   const kiteOpt = useMemo<KiteOptions | undefined>(() => (effKiteA || effKiteB ? { a: effKiteA, b: effKiteB } : undefined), [effKiteA, effKiteB]);
 
-  const cnt = (s: SideState | null, n: number) =>
-    !s || isUnavail(s)
-      ? 1
-      : mode === 'r'
-        ? countForBudget(s.training.price.cost, bud)
-        : mode === 't'
-          ? Math.max(1, countForTime(realCostOf({ ...s.disc, cost: s.training.price.cost, exact: s.training.price.exact }, s.age, s.civ).rc.total, vils, mins))
-          : mode === 'n'
-            ? Math.floor(n)
-            : 1;
-  const cntA = cnt(A, na);
-  const cntB = cnt(B, nb);
+  const sideBudget = (s: SideState | null) => {
+    if (!s || isUnavail(s) || (mode !== 'r' && mode !== 't')) return null;
+    const unitSec = mode === 't' ? realCostOf({ ...s.disc, cost: s.training.price.cost, exact: s.training.price.exact }, s.age, s.civ).rc.total : 0;
+    return resolveSideBudgetCount(mode, s.training.price.cost, unitSec, { bud, vils, mins });
+  };
+  const budgetA = sideBudget(A);
+  const budgetB = sideBudget(B);
+  const cnt = (s: SideState | null, b: ReturnType<typeof sideBudget>, n: number): number | null =>
+    !s || isUnavail(s) ? 1 : b ? b.count : mode === 'n' ? Math.floor(n) : 1;
+  const cntA = cnt(A, budgetA, na);
+  const cntB = cnt(B, budgetB, nb);
+  const budgetErrorParts =
+    A && B && !isUnavail(A) && !isUnavail(B) && budgetA && budgetB
+      ? buildDuelBudgetErrorParts({ side: 'A', unitName: A.u.zh, resolved: budgetA }, { side: 'B', unitName: B.u.zh, resolved: budgetB }, { bud, vils, mins })
+      : null;
 
   const contextBar = matchupContext ? (
     <nav className="ctx-bar" aria-label="对阵相关入口">
@@ -312,6 +262,11 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
         {invalidLink && (
           <p className="note" role="status">
             链接中的单位或科技无效，已回退为默认对决；地址栏已写成实际使用的参数。
+          </p>
+        )}
+        {unitReplaced && (
+          <p className="note" role="status" data-t="duel-unit-replaced">
+            {DUEL_UNIT_REPLACED_NOTE}
           </p>
         )}
         {contextBar}
@@ -386,7 +341,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             </label>
           </div>
         )}
-        <DuelStage A={A} B={B} mode={mode} cntA={cntA} cntB={cntB} bud={bud} kite={kiteOpt}>
+        <DuelStage A={A} B={B} mode={mode} cntA={cntA} cntB={cntB} bud={bud} kite={kiteOpt} budgetErrorParts={budgetErrorParts}>
           <div className="duel-sides">
             <Side
               k="a"
@@ -447,9 +402,9 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             key={mode}
             a={A.F}
             b={B.F}
-            nb={cntB}
+            nb={cntB ?? 1}
             summary={`${formatBreakEvenSide(A, effKiteA)} vs ${formatBreakEvenSide(B, effKiteB)}`}
-            sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB, Number(effKiteA), Number(effKiteB)].join('|')}
+            sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB ?? 1, Number(effKiteA), Number(effKiteB)].join('|')}
             auto={sp.get('be') === '1'}
             kite={kiteOpt}
             onComputed={() => set({ be: '1' })}

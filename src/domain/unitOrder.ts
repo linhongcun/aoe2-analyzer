@@ -225,3 +225,24 @@ export function unitPickerEnterTarget(live: string, shown: string, opts: readonl
   if (!ql) return pool[0]?.u;
   return pool.find((entry) => unitEntryMatchesQuery(entry, live))?.u;
 }
+
+/** 分批挂载切片：仅在分组下存在可见选项时输出该分组标题，避免空分组头。 */
+export function sliceUnitPickerRows(rows: readonly UnitPickerRow[], limit: number): UnitPickerRow[] {
+  const out: UnitPickerRow[] = [];
+  let pendingHead: UnitPickerRow | null = null;
+  let rendered = 0;
+  for (const row of rows) {
+    if (row.kind === 'head') {
+      pendingHead = row;
+      continue;
+    }
+    if (rendered >= limit) break;
+    if (pendingHead) {
+      out.push(pendingHead);
+      pendingHead = null;
+    }
+    out.push(row);
+    rendered += 1;
+  }
+  return out;
+}

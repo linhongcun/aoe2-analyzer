@@ -217,5 +217,10 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxTi
 }
 
 export const costSum = (c: Cost) => Object.values(c).reduce((s, v) => s + (v ?? 0), 0);
-/** 等资源：预算内可生产的数量（食物、木材、黄金、石料 1:1 相加后下取整，至少 1）。调用方传入 unitCost 的显示价。 */
-export const countForBudget = (c: Cost, budget: number) => Math.max(1, Math.floor(budget / Math.max(1, costSum(c))));
+/** 等资源：预算内可生产的数量（食物、木材、黄金、石料 1:1 相加后下取整，预算不足返回 0；零造价返回 null 表示无法换算）。调用方传入 unitCost 的显示价。 */
+export function countForBudget(c: Cost, budget: number): number | null {
+  const unitCost = costSum(c);
+  if (!Number.isFinite(unitCost) || unitCost <= 0) return null;
+  if (!Number.isFinite(budget) || budget <= 0) return 0;
+  return Math.floor(budget / unitCost);
+}

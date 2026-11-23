@@ -77,8 +77,8 @@ test('#998 A/B 精锐与科技预设分组隔离，自定义科技不误选', as
   await selected(preset, '帝王满科技');
 });
 
-test('#998 同家族精锐变体保留精锐单选入口', async ({ page }) => {
-  await page.goto('#/duel?a=1260.Cumans.4.f.&m=1');
+test('#998 精锐单位保留精锐单选入口', async ({ page }) => {
+  await page.goto('#/duel?a=1233.Cumans.4.f.&m=1');
   const a = page.locator('#duel-a');
   const elite = a.getByRole('radiogroup', { name: '普通/精锐', exact: true });
   const eliteRadio = elite.getByRole('radio', { name: '精锐', exact: true });
