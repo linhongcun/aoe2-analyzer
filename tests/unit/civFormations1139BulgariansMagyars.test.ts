@@ -173,14 +173,16 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(main.evidence.playtest).toContain('碰撞接敌站桩模型量化印证');
     expect(main.evidence.playtest).toContain('未单独经 hongcun 实战确认');
     expect(main.evidence.scope).not.toContain('来源行');
-    expect(main.evidence.recordedVersion).toBe('DE 188329 · 2026-11-15 读取；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71');
+    expect(main.evidence.recordedVersion).toBe(
+      'DE 188329 · 2026-11-15 读取；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；拉扯复核：v0.99.34 · DE 188329 · 55613e4a',
+    );
     expect(main.reason).toContain('城堡生产');
     expect(main.reason).toContain('重装骑射手提供远程输出');
     expect(main.limitation).toContain('帝王时代并完成科维尼安军队、反曲弓等研究后才成型');
     expect(main.limitation).toContain('城堡产能');
     expect(main.limitation).toContain('前后排多线操作');
     expect(main.limitation).toContain('碰撞接敌群战已计入碰撞体积、前排占位、射程先手与最小射程');
-    expect(main.limitation).toContain('不含边走边射拉扯、二维包抄与护卫');
+    expect(main.limitation).toContain('后撤上限 40 格、不含二维包抄与护卫');
     expect(main.limitation).toContain('未折算节省资源');
     expect(main.limitation).not.toMatch(/110 血|15 攻|12 攻|8 射程|30 秒/);
 
@@ -195,10 +197,12 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(halberdier!.text).toContain('24/30');
     expect(halberdier!.text).toContain('9/15');
     expect(halberdier!.text).toContain('15/15');
-    expect(halberdier!.text).toContain('不含边走边射拉扯');
+    expect(halberdier!.text).toContain('30/30 满血零损');
+    expect(halberdier!.text).toContain('后撤上限 40 格、不含二维包抄与护卫');
     expect(infantry!.text).toContain('接触 1v1');
     expect(infantry!.text).toContain('未单独经 hongcun 实战确认');
-    expect(infantry!.text).toContain('不含拉扯与护卫');
+    expect(infantry!.text).toContain('28/30');
+    expect(infantry!.text).toContain('后撤上限 40 格、不含二维包抄与护卫');
     expect(infantry!.text).toContain('4/70');
     expect(infantry!.text).toContain('15/30');
     expect(rangedSiege!.text).toContain('接触 1v1');
@@ -211,23 +215,27 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
 
   it('为两条路线记录独立字面来源行和固定 URL 锚点', () => {
     const expected = [
-      ['Bulgarians', 'bulgarians-krepost-konnik', 718, [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764]],
+      [
+        'Bulgarians',
+        'bulgarians-krepost-konnik',
+        'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718',
+        [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764],
+      ],
       [
         'Magyars',
         'magyars-huszar-hca',
-        770,
-        [770, 774, 775, 776, 777, 779, 781, 783, 789, 791, 793, 801, 802, 803, 804, 806, 812, 813, 814, 815, 816, 820, 822],
+        'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L977-L1033',
+        [977, 981, 985, 986, 987, 988, 990, 992, 998, 1000, 1002, 1008, 1012, 1013, 1014, 1015, 1017, 1023, 1024, 1025, 1026, 1027, 1031, 1033],
       ],
     ] as const;
-    const url = (line: number) => `https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L${line}`;
 
-    for (const [civ, id, line, lines] of expected) {
+    for (const [civ, id, url, lines] of expected) {
       const entry = route(civ, id);
       const contract = contractRoute(civ, id);
       expect(entry.evidence.sourceLines).toEqual(lines);
       expect(contract.sourceLines).toEqual(lines);
-      expect(entry.source?.content).toBe(url(line));
-      expect(contract.source.content).toBe(url(line));
+      expect(entry.source?.content).toBe(url);
+      expect(contract.source.content).toBe(url);
     }
   });
 

@@ -19,15 +19,15 @@ const narrative = (entry: ReturnType<typeof route>) => [entry.reason, entry.limi
 describe('#1139 马普切与图皮路线边界及条件支援', () => {
   it('保留四路线状态、组成、时代、required 与固定版本', () => {
     const expected = [
-      ['Mapuche', 'mapuche-kona-bolas', 3, 'combined', [2566, 2569], 'v0.78.3 · DE 188329 · 构建 40c323a'],
-      ['Mapuche', 'mapuche-kona-slinger', 3, 'combined', [2566, 185], 'v0.78.3 · DE 188329 · 构建 40c323a'],
+      ['Mapuche', 'mapuche-kona-bolas', 3, 'combined', [2566, 2569], 'v0.78.3 · DE 188329 · 构建 40c323a；拉扯与展示复核：v0.99.34 · DE 188329 · 55613e4a'],
+      ['Mapuche', 'mapuche-kona-slinger', 3, 'combined', [2566, 185], 'v0.78.3 · DE 188329 · 构建 40c323a；展示与机制复核：v0.99.34 · DE 188329 · 55613e4a'],
       [
         'Tupi',
         'tupi-champi-slinger',
         4,
         'combined',
         [2554, 185],
-        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9',
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；拉扯复核：v0.99.34 · DE 188329 · 55613e4a',
       ],
       [
         'Tupi',
@@ -72,7 +72,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(konaBolas.limitation).toContain('不适于攻击步弓手、掷矛手和近程单位');
     expect(konaBolas.limitation).toContain('不保证对所有骑兵占优');
     expect(konaBolas.limitation).toContain('击杀产金适用范围未完全说明');
-    expect(konaBolas.limitation).toContain('布图马普折扣仅文本、未编码');
+    expect(konaBolas.limitation).toContain('布图马普（1380）支持手动勾选套用 -15% 折后价，但团队资源标记 res:33 仍未解码、全站自动预设跳过');
     expect([slingerSupport.entities[0]!.id, slingerSupport.entities[0]!.historicalName]).toEqual([185, '投石手']);
     expect(slingerSupport.condition).toContain('确有实际反步兵缺口');
     expect(slingerSupport.condition).toContain('已有双金主路仍能支撑追加补兵资源');
@@ -89,7 +89,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(konaSlinger.reason).toContain('黄金吃紧或反步兵职责确有需要');
     expect(konaSlinger.limitation).toContain('持续补兵仍需资源');
     expect(konaSlinger.limitation).toContain('击杀产金适用范围未完全说明');
-    expect(konaSlinger.limitation).toContain('布图马普折扣仅文本、未编码');
+    expect(konaSlinger.limitation).toContain('布图马普（1380）支持手动勾选套用 -15% 折后价，但团队资源标记 res:33 仍未解码、全站自动预设跳过');
     expect(narrative(konaSlinger)).not.toContain('掷石绳骑兵');
     expect(routeAdjustment.requires).toEqual([{ kind: 'route', id: 'mapuche-kona-bolas' }]);
     expect(routeAdjustment.text).toContain('持续支撑两条金线并承受损失');
@@ -215,21 +215,21 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
 
   it('来源行和固定版本URL锚点按四路线独立字面期望核对', () => {
     const expected = [
-      ['Mapuche', 'mapuche-kona-bolas', 948, [948, 952, 956, 957, 961, 963, 969, 970, 971, 978, 980]],
-      ['Mapuche', 'mapuche-kona-slinger', 959, [952, 956, 959, 963, 970, 977, 980]],
-      ['Tupi', 'tupi-champi-slinger', 1024, [1018, 1024, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]],
-      ['Tupi', 'tupi-blackwood-halberdier', 1025, [1018, 1025, 1027, 1029, 1031, 1033, 1039, 1040, 1041, 1042, 1048, 1049, 1050, 1052, 1054]],
+      ['Mapuche', 'mapuche-kona-bolas', 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
+      ['Mapuche', 'mapuche-kona-slinger', 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],
+      ['Tupi', 'tupi-champi-slinger', 'L1266', [1258, 1266, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296]],
+      ['Tupi', 'tupi-blackwood-halberdier', 'L1267', [1258, 1267, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296]],
     ] as const;
-    const url = (line: number) => `https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L${line}`;
+    const url = (anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#${anchor}`;
 
-    for (const [civ, id, line, lines] of expected) {
+    for (const [civ, id, anchor, lines] of expected) {
       const entry = route(civ, id);
       const contract = contractRoute(civ, id);
       expect(entry.evidence.scope).not.toContain('来源行');
       expect(entry.evidence.sourceLines).toEqual(lines);
       expect(contract.sourceLines).toEqual(lines);
-      expect(entry.source?.content).toBe(url(line));
-      expect(contract.source.content).toBe(url(line));
+      expect(entry.source?.content).toBe(url(anchor));
+      expect(contract.source.content).toBe(url(anchor));
     }
   });
 

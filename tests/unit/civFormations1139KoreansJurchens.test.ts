@@ -7,13 +7,13 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URLS = {
-  'koreans-war-wagon-halberdier': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L415',
-  'koreans-fire-lancer-garrison': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L527-L566',
+  'koreans-war-wagon-halberdier': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L579-L583',
+  'koreans-fire-lancer-garrison': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L546-L585',
   'jurchens-fire-lancer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L597-L636',
 } as const;
 const SOURCE_LINES = {
-  'koreans-war-wagon-halberdier': [171, 415, 419],
-  'koreans-fire-lancer-garrison': [527, 531, 535, 536, 537, 538, 540, 542, 544, 550, 551, 552, 553, 559, 560, 561, 562, 564, 566],
+  'koreans-war-wagon-halberdier': [172, 579, 583],
+  'koreans-fire-lancer-garrison': [546, 550, 554, 555, 556, 557, 559, 561, 563, 569, 570, 571, 572, 578, 579, 580, 581, 583, 585],
   'jurchens-fire-lancer-tower': [597, 601, 605, 606, 607, 608, 610, 612, 614, 620, 621, 622, 623, 629, 630, 631, 632, 634, 636],
 } as const;
 

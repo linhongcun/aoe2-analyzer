@@ -34,7 +34,7 @@ for (const width of [1120, 360]) {
     await expect(support.filter({ hasText: '成群弩炮或掷矛手' })).toContainText(/轻型投石车.*超出微操或战线空间/);
     await expect(card.getByText('只有当前确有射程优势且有操作空间，才逐个远程点杀。')).toBeVisible();
     await expect(card.locator('.formation-status')).toContainText(/讨论认可.*未说明实战使用.*混编胜率未测/);
-    await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute('href', /9dd3d907.*game-strategy\.md#L1313-L1352$/);
+    await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute('href', /415863b2.*game-strategy\.md#L1569-L1611$/);
     await expect(card.getByRole('link', { name: '查看固定数据版本' })).toHaveAttribute('href', /9dd3d907.*data_sources\.json$/);
     await expect(card.getByRole('heading', { name: '来源与核对' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
