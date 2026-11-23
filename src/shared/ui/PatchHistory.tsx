@@ -112,32 +112,7 @@ function HistoryValues({ entry }: { entry: PatchEntry }) {
   );
 }
 
-export function PatchHistory({
-  target,
-  hostedHeading = false,
-  labelRegion = hostedHeading,
-}: {
-  target: HistoryTarget;
-  hostedHeading?: boolean;
-  /** 宿主已经给出同名标题时不再给这块区域起同名。文明页沿用原来的区域名。 */
-  labelRegion?: boolean;
-}) {
-  const state = usePatchArchives();
-  if (!state.archives) return <HistoryLoading error={state.error} retry={state.retry} />;
-  return <HistoryTimeline archives={state.archives} target={target} hostedHeading={hostedHeading} labelRegion={labelRegion} />;
-}
-
-function HistoryTimeline({
-  archives,
-  target,
-  hostedHeading = false,
-  labelRegion = hostedHeading,
-}: {
-  archives: PatchArchive[];
-  target: HistoryTarget;
-  hostedHeading?: boolean;
-  labelRegion?: boolean;
-}) {
+function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; target: HistoryTarget }) {
   const [params, setParams] = useSearchParams();
   const records = historyFor(archives, target);
   const shown = filterHistory(records, params);
@@ -165,9 +140,9 @@ function HistoryTimeline({
   const samePage = (item: { targetType: string; targetId: number | string }) =>
     item.targetType === target.targetType && String(item.targetId) === String(target.targetId);
   return (
-    <section className="entity-history" data-testid="entity-history" {...(labelRegion ? { 'aria-label': '更新历史' } : {})}>
-      <div className={hostedHeading ? 'history-head history-head-hosted' : 'history-head'}>
-        {hostedHeading ? null : <h2>更新历史</h2>}
+    <section className="entity-history" data-testid="entity-history">
+      <div className="history-head">
+        <h2>更新历史</h2>
         <p className="history-count">
           已收录 <span className="num nw">{records.length} 条</span>
         </p>
