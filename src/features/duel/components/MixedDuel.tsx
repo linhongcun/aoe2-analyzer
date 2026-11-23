@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { militaryTechAge } from '../../../domain/availabilityAge';
+import { formatMixedUnitReplacedNote, sanitizeMixedDuelUnits } from '../../../domain/duelBudget';
 import { fmtSide, type Mode } from '../../../domain/duelState';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
@@ -18,6 +19,7 @@ import { canRecoverSingleDuelSide, positiveId, resolveMixedSide } from '../logic
 import { mixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { swapMixedDuelInput } from '../logic/duelSwap';
 import { DuelModeBar, type TopMode } from './DuelModeBar';
+import { MixedExitConfirm } from './MixedExitConfirm';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
 import { CONTACT_BOUNDARY } from './ContactSummary';
@@ -34,7 +36,21 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
   const location = useLocation();
   const preservedSource = readDuelSourceState(location.state);
   const raw = params.toString();
-  const { input, errors: protocolErrors, sharedErrors, sideErrors, legacy } = useMemo(() => decodeMixedDuel(params), [params]);
+  const { input: decodedInput, errors: protocolErrors, sharedErrors, sideErrors, legacy } = useMemo(() => decodeMixedDuel(params), [params]);
+  const sanitized = useMemo(
+    () => (protocolErrors.length ? { input: decodedInput, positions: [] as string[] } : sanitizeMixedDuelUnits(decodedInput)),
+    [decodedInput, protocolErrors.length],
+  );
+  const input = sanitized.input;
+  const linkStateReplaced = (location.state as { duelMixedUnitReplaced?: string[] } | null)?.duelMixedUnitReplaced;
+  const replacedPositions = sanitized.positions.length ? sanitized.positions : (linkStateReplaced ?? []);
+  useEffect(() => {
+    if (!sanitized.positions.length) return;
+    setParams(encodeMixedDuel(sanitized.input), {
+      replace: true,
+      state: { ...(preservedSource ? { duelSource: preservedSource } : {}), duelMixedUnitReplaced: sanitized.positions },
+    });
+  }, [sanitized, setParams, preservedSource]);
   const core = resources.core.data,
     trees = resources.trees.data;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
@@ -253,6 +269,11 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
   return (
     <section id="duel" className="pane mixed-duel" data-testid="mixed-duel">
       <ListHead level={1} title="混编对战" desc="按行序配置两支军队，比较占位和射程先手对战损的影响。" />
+      {replacedPositions.length > 0 && (
+        <p className="note" role="status" data-t="duel-unit-replaced">
+          {formatMixedUnitReplacedNote(replacedPositions)}
+        </p>
+      )}
       <DuelModeBar
         active="mix"
         onSelect={(nextMode, trigger, viaKeyboard) => {
@@ -439,7 +460,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
       </p>
       {core && view?.a && view.b && <CivArtCredit civs={[input.a.civ, input.b.civ]} />}
       {exitMode && (
-        <ExitConfirm
+        <MixedExitConfirm
           onCancel={closeConfirm}
           onConfirm={() => {
             const target = exitMode;
@@ -450,35 +471,5 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
         />
       )}
     </section>
-  );
-}
-
-function ExitConfirm({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    dialog.current?.showModal();
-  }, []);
-  return (
-    <dialog
-      className="mix-dialog"
-      ref={dialog}
-      aria-labelledby="mix-switch-title"
-      aria-describedby="mix-switch-desc"
-      onCancel={(e) => {
-        e.preventDefault();
-        onCancel();
-      }}
-    >
-      <h2 id="mix-switch-title">切回单兵种？</h2>
-      <p id="mix-switch-desc">仅保留双方当前第一行、数量和共享上下文；其余行与本次混编结果将丢弃。取消可继续编辑。</p>
-      <div className="bar">
-        <button type="button" autoFocus onClick={onCancel}>
-          取消，继续混编
-        </button>
-        <button type="button" className="pri" onClick={onConfirm}>
-          确认，仅保留各第一行
-        </button>
-      </div>
-    </dialog>
   );
 }

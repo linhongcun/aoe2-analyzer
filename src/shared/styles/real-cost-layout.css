@@ -1,4 +1,15 @@
 /* #6：在手机卡片内为完整的未建模原因留出空间，保留字号与单行规则。 */
+.rc-count-val {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+.rc-under-one {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-warn);
+}
 @media (max-width: 600px) {
   .pk-line.rc-unsupported {
     padding-inline: 2px;

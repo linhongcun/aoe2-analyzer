@@ -1,5 +1,6 @@
 import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
+import { isDuelExcludedUnit } from '../../../domain/duelBudget';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { applicableTrainingTechs } from '../../../domain/duelTrainingCost';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -82,11 +83,16 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     const uid = positiveId(row.uid);
     const u = uid === null ? undefined : core.unitById[uid];
     if (!u || !u.civs.length) fail(`unit-${i}`, `第 ${i + 1} 行单位无效：${row.uid || '未选择'}`);
+    else if (isDuelExcludedUnit(u.id))
+      fail(
+        `unit-${i}`,
+        `第 ${i + 1} 行「精锐钦察（库曼雇佣兵）」没有训练造价，单位 PK 不再提供；本方已存在城堡训练的精锐钦察或重复行，无法在不改动受击顺序的前提下自动替换，请删除该行或更换单位`,
+      );
     if (uid !== null && seen.has(uid)) fail(`unit-${i}`, `第 ${i + 1} 行单位重复；具体单位 ID 不能重复`);
     if (uid !== null) seen.add(uid);
     const qty = positiveId(row.qty);
     if (qty === null || qty > 200) fail(`qty-${i}`, `第 ${i + 1} 行数量须为 1–200 的正整数`);
-    if (u && civ && age) {
+    if (u && !isDuelExcludedUnit(u.id) && civ && age) {
       if (!u.civs.includes(input.civ)) fail(`unit-${i}`, `第 ${i + 1} 行${civ.zh}不可用${u.zh}，请更换单位或文明`);
       else if (!unitAvailable({ core, trees: ctx.trees }, input.civ, u.id, age))
         fail(`unit-${i}`, `第 ${i + 1} 行${u.zh}在本方时代不可用，请显式提高本方时代或更换单位`);
@@ -98,7 +104,7 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
   const candidates = new Map<number, MixedTechOption>();
   const status = civ ? civStatus(ctx.trees, input.civ) : {};
   rows.forEach(({ unit: u }, i) => {
-    if (!u || !civ || !u.civs.includes(input.civ)) return;
+    if (!u || isDuelExcludedUnit(u.id) || !civ || !u.civs.includes(input.civ)) return;
     const avail = simTechs(ctx, u, input.civ);
     const costs = applicableTrainingTechs(ctx, u, input.civ, age ?? 4);
     for (const item of [
@@ -154,7 +160,7 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
   }
   rows.forEach((row, i) => {
     const u = row.unit;
-    if (!u || !civ || !age || !unitAvailable({ core, trees: ctx.trees }, input.civ, u.id, age)) return;
+    if (!u || isDuelExcludedUnit(u.id) || !civ || !age || !unitAvailable({ core, trees: ctx.trees }, input.civ, u.id, age)) return;
     const applicable = [...selected].filter((id) => candidates.get(id)?.rows.includes(i));
     const result = resolve(ctx, core.unitById, { uid: u.id, civ: input.civ, age, ageSet: true, techs: applicable, team: [...team] }, u.id);
     if (isUnavail(result) || result.civ !== input.civ || result.age !== age || result.u.id !== u.id) {

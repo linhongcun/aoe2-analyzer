@@ -12,6 +12,7 @@ import {
   type GroupResult,
   type OneVOneResult,
 } from '../../../domain/duel';
+import type { DuelBudgetPart } from '../../../domain/duelBudget';
 import { formatHp } from '../../../domain/hpFormat';
 import { buildGroupReplay, buildOneVOneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
@@ -297,6 +298,7 @@ export function Group({
   bud,
   kite,
   result,
+  errorParts,
   resultElRef,
   headingRef,
 }: {
@@ -307,6 +309,7 @@ export function Group({
   bud: number;
   kite?: KiteOptions;
   result?: GroupResult;
+  errorParts?: readonly DuelBudgetPart[];
   resultElRef?: Ref<HTMLDivElement>;
   headingRef?: RefObject<HTMLHeadingElement>;
 }) {
@@ -321,7 +324,19 @@ export function Group({
         <h2 ref={headingRef} tabIndex={-1}>
           群战结果未生成
         </h2>
-        <p>{g.reason}</p>
+        <p>
+          {errorParts
+            ? errorParts.map((part, index) =>
+                part.num ? (
+                  <span key={index} className="num nw">
+                    {part.text}
+                  </span>
+                ) : (
+                  part.text
+                ),
+              )
+            : g.reason}
+        </p>
       </div>
     );
   const summary = summarizeGroup(A, B, g, { na, nb })!;

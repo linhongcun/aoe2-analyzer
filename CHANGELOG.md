@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.35] - 2026-11-23
+
+### 更新说明
+
+单位 PK（单兵种与混编）不再在单位选择器中列出零造价的免费召唤单位「精锐钦察（库曼雇佣兵）」，打开带该单位的旧分享链接会自动切换为战斗属性相同的城堡训练版精锐钦察并给出说明，不再在等资源模式下算出超上限报错；同时在单兵种与混编选择器中统一为同名单位补充生产建筑或英文后缀（如近卫军（兵营）/ 近卫军（城堡）、战车（城堡）/ 战车（攻城武器厂）），并统一等资源与等采集时间不足 1 个时的显示与计算口径，卡片标注「不足 1 个」且结果区说明原因。
+
+### 修复
+
+- #1368：将 `unitOptionLabel`（#271）迁至共享层 `src/domain/unitOptionLabel.ts`，供团队规划与单位 PK 单兵种/混编选择器共用完整候选列表区分同名单位；新增 `src/domain/duelBudget.ts` 并在 `Duel.tsx`、`MixedDuel.tsx`、`MixedSideEditor.tsx` 排除零造价精锐钦察 `1260`、自动改写单兵种与混编直达链接至 `1233` 并展示可清除的状态提示；修复 `src/domain/duel.ts` 的 `countForBudget`（零造价返回 `null`、预算不足返回 `0`），统一 `DuelStage.tsx`、`DuelResults.tsx`、`TrainingPrice.tsx` 与 `RealCost.tsx` 在等资源与等采集时间不足 1 个时的卡片「不足 1 个」标记与结果区「群战结果未生成」原因说明；更新 `tests/e2e/combatTools998.spec.ts` 并补齐单测 `tests/unit/duelKipchakZeroCost1368.test.ts` 与浏览器回归 `tests/e2e/duelKipchakZeroCost1368.spec.ts`。
+
 ## [0.99.34] - 2026-11-23
 
 ### 更新说明

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedBallisticsScope } from '../../../domain/ballistics';
+import { isDuelExcludedUnit } from '../../../domain/duelBudget';
 import { fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
@@ -9,6 +10,8 @@ import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { civBonusNotes, type SimContext } from '../../../domain/simulator';
+import type { Unit } from '../../../domain/types';
+import { unitOptionLabel } from '../../../domain/unitOptionLabel';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CivIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
@@ -43,7 +46,9 @@ export function MixedSideEditor({
 }) {
   const prefix = `mix-${side}`,
     label = `${side.toUpperCase()} 方`;
-  const units = useMemo(() => core.units.filter((u) => u.civs.length).map((u) => ({ u })), [core]);
+  const fullUnits = useMemo(() => core.units.filter((u) => u.civs.length && !isDuelExcludedUnit(u.id)), [core]);
+  const units = useMemo(() => fullUnits.map((u) => ({ u })), [fullUnits]);
+  const formatUnitLabel = useMemo(() => (unit: Unit) => unitOptionLabel({ core }, unit, fullUnits), [core, fullUnits]);
   const age = +input.age;
   const focus = (id: string) => requestAnimationFrame(() => document.getElementById(id)?.focus());
   const emitChange = (next: MixedSideInput, announcement?: string) => {
@@ -316,6 +321,7 @@ export function MixedSideEditor({
                     civ={input.civ}
                     unavailableGroupTitle={civByEn(input.civ) ? `${civByEn(input.civ)!.zh}不可用（选择后需修改本方文明）` : undefined}
                     list={units}
+                    formatLabel={formatUnitLabel}
                     invalid={!!errors(`unit-${i}`).length}
                     describedBy={errors(`unit-${i}`).length ? `${prefix}-unit-${i}-error` : `${prefix}-identity-${i}`}
                     onChange={(unit) => changeRow(i, { uid: String(unit.id) })}

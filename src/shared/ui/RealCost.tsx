@@ -106,7 +106,14 @@ export function RealCostBlock({
           <tr className="pk-count" data-t="rc-count">
             <td>派出数量</td>
             <td>
-              <b className="rc-big tl-num">{count}</b>
+              <span className="rc-count-val">
+                <b className="rc-big tl-num">{rc.total > 0 ? count : '—'}</b>
+                {rc.total > 0 && count === 0 && (
+                  <span className="rc-under-one num nw" data-t="pk-under-one">
+                    不足 1 个
+                  </span>
+                )}
+              </span>
             </td>
           </tr>
         </tbody>

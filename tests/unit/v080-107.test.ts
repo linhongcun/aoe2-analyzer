@@ -50,8 +50,8 @@ describe('#107 损失 = 阵亡数 × 折后单价（逐资源）', () => {
   it('等资源 3000 拜占庭长戟兵 x66 vs 法兰克游侠 x22：A 损失 2790（用取整后的 26/19，不是 26.25/18.75），B 损失 2970，交换比 1.06', () => {
     const A = side(359, 'Byzantines', 4),
       B = side(569, 'Franks', 4);
-    const na = countForBudget(A.disc.cost, 3000),
-      nb = countForBudget(B.disc.cost, 3000);
+    const na = countForBudget(A.disc.cost, 3000)!,
+      nb = countForBudget(B.disc.cost, 3000)!;
     expect([na, nb]).toEqual([66, 22]);
     const { g, t } = run(A, na, B, nb);
     expect([g.aAlive, g.bAlive]).toEqual([4, 0]);

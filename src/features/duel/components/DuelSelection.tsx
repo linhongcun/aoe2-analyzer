@@ -13,6 +13,8 @@ import { TEAM_BONUSES } from '../../../domain/effects';
 import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
 import { unitAvailable } from '../../../domain/unitAvailability';
+import { unitOptionLabel } from '../../../domain/unitOptionLabel';
+import type { Unit } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CivIcon, StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
@@ -55,7 +57,7 @@ export function Side({
   side: SideState;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
-  count: number;
+  count: number | null;
   /** 等资源预算；0 = 不显示派出数量和训练投入 */
   bud: number;
   /** issue 88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
@@ -66,20 +68,25 @@ export function Side({
   onKiteChange?: (kite: boolean) => void;
 }) {
   const core = useCore()!;
+  const fullUnits = useMemo(() => fams.map((entry) => entry.u), [fams]);
+  const formatUnitLabel = useMemo(() => (unit: Unit) => unitOptionLabel(context, unit, fullUnits), [context, fullUnits]);
+  const displayCount = count ?? 0;
   const transfer = useMemo(
     () =>
-      duelToTrainTotal(context, {
-        side: k,
-        unit: side.u,
-        civ: side.civ,
-        age: side.age,
-        count,
-        techs: side.spec.techs,
-        selected: isUnavail(side) ? undefined : side.sel,
-      }),
+      count !== null && count >= 1
+        ? duelToTrainTotal(context, {
+            side: k,
+            unit: side.u,
+            civ: side.civ,
+            age: side.age,
+            count,
+            techs: side.spec.techs,
+            selected: isUnavail(side) ? undefined : side.sel,
+          })
+        : null,
     [context, k, side, count],
   );
-  const transferLink = (
+  const transferLink = transfer ? (
     <Link
       className="duel-transfer-link"
       to={'/production?' + encodeTrainTotal(transfer.config)}
@@ -88,11 +95,12 @@ export function Side({
     >
       <Icon name="calculator" />
       <span>算 {k.toUpperCase()} 方训练总价</span>
-      {count > 1 && <span className="num nw">（× {count}）</span>}
+      {displayCount > 1 && <span className="num nw">（× {displayCount}）</span>}
       <Icon name="arrow-right" />
     </Link>
-  );
-  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} transferLink={transferLink} context={context} />;
+  ) : null;
+  if (isUnavail(side))
+    return <UnavailSide k={k} side={side} fams={fams} formatUnitLabel={formatUnitLabel} onChange={onChange} transferLink={transferLink} context={context} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
@@ -119,7 +127,7 @@ export function Side({
           <h2 className="duel-side-title">
             <span className={`civ-side-badge is-${k}`}>{k.toUpperCase()} 方</span>
             <span>{u.zh}</span>
-            {count > 1 && <span className="tag duel-count-pill num nw">× {count}</span>}
+            {displayCount > 1 && <span className="tag duel-count-pill num nw">× {displayCount}</span>}
           </h2>
           <small className="note duel-meta">
             <span className="duel-meta-civ">
@@ -156,6 +164,7 @@ export function Side({
             value={u}
             civ={side.civ}
             list={fams}
+            formatLabel={formatUnitLabel}
             onChange={(x) => onChange({ ...spec, uid: x.id })}
           />
           {elite && (
@@ -343,6 +352,7 @@ function UnavailSide({
   k,
   side,
   fams,
+  formatUnitLabel,
   onChange,
   transferLink,
   context,
@@ -350,6 +360,7 @@ function UnavailSide({
   k: 'a' | 'b';
   side: Unavail;
   fams: ReturnType<typeof collapse>;
+  formatUnitLabel: (unit: Unit) => string;
   onChange: (s: SideSpec) => void;
   transferLink: React.ReactNode;
   context: ProductionContext;
@@ -402,6 +413,7 @@ function UnavailSide({
             value={u}
             civ={side.civ}
             list={fams}
+            formatLabel={formatUnitLabel}
             onChange={(x) => onChange({ ...spec, uid: x.id })}
           />
         </div>

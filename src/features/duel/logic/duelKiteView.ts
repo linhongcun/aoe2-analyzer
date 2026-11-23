@@ -25,12 +25,14 @@ export const rawUid = (raw: string | null) => {
 };
 
 const clampMixedQty = (value: number) => String(Math.max(1, Math.min(200, Math.floor(value) || 10)));
+const budgetMixedQty = (value: number | null) =>
+  value !== null && Number.isFinite(value) && Math.floor(value) >= 1 ? String(Math.min(200, Math.floor(value))) : '';
 
 export function buildEnterMixedParams(
   a: Resolved,
   b: Resolved,
   mode: Mode,
-  counts: { na: number; nb: number; cntA: number; cntB: number },
+  counts: { na: number; nb: number; cntA: number | null; cntB: number | null },
   kite: DuelKite,
 ): URLSearchParams {
   const side = (s: Resolved, qty: string, kOn: boolean): MixedSideInput => ({
@@ -45,8 +47,8 @@ export function buildEnterMixedParams(
   return encodeMixedDuel({
     rule: MIXED_RULE,
     data: mixedDataVersion(DATA_SOURCES),
-    a: side(a, clampMixedQty(eq ? counts.cntA : counts.na), kite.a),
-    b: side(b, clampMixedQty(eq ? counts.cntB : counts.nb), kite.b),
+    a: side(a, eq ? budgetMixedQty(counts.cntA) : clampMixedQty(counts.na), kite.a),
+    b: side(b, eq ? budgetMixedQty(counts.cntB) : clampMixedQty(counts.nb), kite.b),
   });
 }
 

@@ -11,7 +11,7 @@ import { civNote, dupIdsIn } from '../../domain/dupNames';
 import type { FamilyEntry } from '../../domain/family';
 import { AGE_ZH } from '../../domain/ratings';
 import type { Unit } from '../../domain/types';
-import { buildUnitPickerModel, cleanBuildingName, resolveValidCiv, unitPickerEnterTarget, type UnitPickerRow } from '../../domain/unitOrder';
+import { buildUnitPickerModel, cleanBuildingName, resolveValidCiv, sliceUnitPickerRows, unitPickerEnterTarget } from '../../domain/unitOrder';
 import { UNIT_ROLE_ZH, type UnitRole } from '../../domain/unitRoles';
 import { EliteBadge, UnitIcon } from './art';
 import { Icon } from './Icon';
@@ -41,26 +41,8 @@ export interface UnitPickerProps {
   unavailableText?: string;
   /** 无对应 Unit 时兜底写入 data-value（如待选 0 或未知 ID） */
   rawValue?: number | string;
-}
-
-function sliceRows(rows: readonly UnitPickerRow[], limit: number): UnitPickerRow[] {
-  const out: UnitPickerRow[] = [];
-  let pendingHead: UnitPickerRow | null = null;
-  let rendered = 0;
-  for (const row of rows) {
-    if (row.kind === 'head') {
-      pendingHead = row;
-      continue;
-    }
-    if (rendered >= limit) break;
-    if (pendingHead) {
-      out.push(pendingHead);
-      pendingHead = null;
-    }
-    out.push(row);
-    rendered += 1;
-  }
-  return out;
+  /** 可选：自定义单位显示名（如单位 PK 同名区分后缀），同时用于选项主名与触发按钮 */
+  formatLabel?: (unit: Unit) => string;
 }
 
 function visibleFocusables(container: HTMLElement | null): HTMLElement[] {
@@ -84,6 +66,7 @@ export function UnitPicker({
   invalid,
   unavailableText,
   rawValue,
+  formatLabel,
 }: UnitPickerProps) {
   const validCiv = resolveValidCiv(civ);
   const [open, setOpen] = useState(false);
@@ -136,7 +119,7 @@ export function UnitPicker({
   );
 
   const dup = useMemo(() => dupIdsIn(model.opts.map((entry) => entry.u)), [model.opts]);
-  const visibleRows = useMemo(() => sliceRows(model.rows, renderLimit), [model.rows, renderLimit]);
+  const visibleRows = useMemo(() => sliceUnitPickerRows(model.rows, renderLimit), [model.rows, renderLimit]);
   const hasMore = model.opts.length > renderLimit;
 
   const close = useCallback((restoreFocus = true) => {
@@ -430,7 +413,7 @@ export function UnitPicker({
                       <UnitIcon u={entry.u} />
                       <span className="cp-name up-name">
                         <span className="up-main">
-                          <span className="up-zh">{entry.u.zh}</span>
+                          <span className="up-zh">{formatLabel ? formatLabel(entry.u) : entry.u.zh}</span>
                           {dup.has(entry.u.id) && <span className="civnote">{civNote(entry.u, (en) => civByEn(en)?.zh)}</span>}
                           {entry.elite && <EliteBadge />}
                           {isOwnUnique && <span className="up-badge up-badge-uq">独特单位</span>}
@@ -469,7 +452,7 @@ export function UnitPicker({
         )
       : null;
 
-  const triggerText = unavailableText ?? value?.zh ?? '请选择单位';
+  const triggerText = unavailableText ?? (value ? (formatLabel ? formatLabel(value) : value.zh) : '请选择单位');
   const dataValue = rawValue !== undefined ? String(rawValue) : value?.id !== undefined ? String(value.id) : undefined;
   return (
     <span className="civpick unitpick">

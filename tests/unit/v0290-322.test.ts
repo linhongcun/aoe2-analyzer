@@ -42,9 +42,9 @@ function compute(): Record<string, Row> {
           d.cost,
           d.exact,
           rc.total,
-          // 与 Duel.tsx:146 / :144 的派出数量同一口径
+          // 与旧金标准口径一致（#1368 起 countForBudget 不再钳制为至少 1，此处仅核对正数换算未漂移）
           TIME.map(([v, m]) => Math.max(1, countForTime(rc.total, v, m))),
-          BUDGET.map((b) => countForBudget(d.cost, b)),
+          BUDGET.map((b) => Math.max(1, countForBudget(d.cost, b) ?? 0)),
         ];
       }
     }
