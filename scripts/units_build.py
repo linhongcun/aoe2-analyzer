@@ -69,6 +69,55 @@ def combat_stats(row):
     return stats
 
 
+def derive_unmodeled_dat_fields(source_unit, dat_units):
+    """#1367：从固定 DAT 派生主投射物穿透、命中特效枚举与特殊战斗任务标记（fail-closed 直接键访问）。"""
+    out = {}
+    projectiles = source_unit['Projectiles']
+    p1 = projectiles[0] if projectiles else -1
+    if type(p1) is int and 0 <= p1 < len(dat_units) and dat_units[p1] is not None:
+        hit_mode = dat_units[p1]['ProjectileHitMode']
+        if type(hit_mode) is not int:
+            raise ValueError(f'Invalid ProjectileHitMode for projectile {p1}: {hit_mode!r}')
+        if hit_mode == 1:
+            out['projectilePassThrough'] = True
+
+    tasks = source_unit['CombatTasks']
+    if not isinstance(tasks, list):
+        raise ValueError(f'Invalid CombatTasks: {tasks!r}')
+
+    hit_kinds = set()
+    for task in tasks:
+        action = task['action']
+        attr = task['attr']
+        v1 = task['v1']
+        v2 = task['v2']
+        if action == 157:
+            attr_int = round(attr)
+            if abs(attr - attr_int) < 1e-6 and v2 > 0 and v1 < 0:
+                if attr_int == 109:
+                    hit_kinds.add('dot')
+                elif attr_int == 5:
+                    hit_kinds.add('slow')
+                elif attr_int == 10:
+                    hit_kinds.add('attack-speed')
+                else:
+                    hit_kinds.add('unknown')
+            else:
+                hit_kinds.add('unknown')
+        elif action == 160:
+            if abs(attr - 9) < 1e-6 and v1 > 0 and v2 > 0:
+                out['damagedTargetBonus'] = True
+        elif action == 158:
+            if v1 > 0 and v2 < 0:
+                out['lowHpTransform'] = True
+
+    if len(hit_kinds) == 1:
+        only = next(iter(hit_kinds))
+        if only != 'unknown':
+            out['onHitEffect'] = only
+    return out
+
+
 def main():
     cache_dir = os.environ['AOE_CACHE'] + '/'
     with open(cache_dir + 'data.json', encoding='utf-8') as f:
@@ -213,6 +262,7 @@ def main():
                 and not (type(tp) in (int, float) and tp > 1)
             ):
                 u['chargeMultiProjectiles'] = True
+            u.update(derive_unmodeled_dat_fields(source_unit, _DU))
         dd = rngBd(u['id'])
         if dd:  # 插在 rng 之后，保持字段顺序
             it = list(u.items())

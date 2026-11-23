@@ -112,6 +112,7 @@
     "tests/e2e/duelKipchakZeroCost1368.spec.ts": 15000,
     "tests/e2e/ignoreArmor1366.spec.ts": 12000,
     "tests/e2e/duelMinRangeUnmodeled1296.spec.ts": 15000,
+    "tests/e2e/duelUnmodeled1367.spec.ts": 15000,
     "tests/e2e/duelRedesign1279.spec.ts": 24000,
     "tests/e2e/duelPreset372.spec.ts": 26649,
     "tests/e2e/duelTrainingCost943.spec.ts": 15000,

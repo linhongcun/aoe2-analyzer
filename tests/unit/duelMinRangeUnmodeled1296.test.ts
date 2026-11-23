@@ -200,8 +200,12 @@ describe('#1296 未建模机制精准判定（全量 24 充能单位 + 5 类机�
       expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Bulgarians', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['阵亡下马步兵阶段']);
     }
 
-    // 蜀战车 1962：多弹丸 + 可切换形态；孟加拉战车 1759：可切换形态
-    expect(detectUnitUnmodeled({ unit: byId[1962]!, civ: 'Shu', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['多弹丸 / 副弹丸', '可切换形态']);
+    // 蜀战车 1962：多弹丸 + 可切换形态 + 直线穿透；孟加拉战车 1759：可切换形态
+    expect(detectUnitUnmodeled({ unit: byId[1962]!, civ: 'Shu', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual([
+      '多弹丸 / 副弹丸',
+      '可切换形态',
+      '直线穿透',
+    ]);
     expect(detectUnitUnmodeled({ unit: byId[1759]!, civ: 'Bengalis', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['可切换形态']);
 
     // 战象 558 & 象兵 1134：固有溅射

@@ -28,6 +28,10 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           friendlyFireDamage: undefined,
           totalProjectiles: undefined,
           chargeMultiProjectiles: undefined,
+          projectilePassThrough: undefined,
+          onHitEffect: undefined,
+          damagedTargetBonus: undefined,
+          lowHpTransform: undefined,
         }
       : catalogTarget;
   return { owner, alternate, rawTarget };

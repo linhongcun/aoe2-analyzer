@@ -33,6 +33,7 @@ function renderCoexistingMechanism(m: UnmodeledMechanism, key: string) {
   }
   return (
     <p key={key} className="pk-unm-desc">
+      <strong>{m.pill}：</strong>
       {m.detail}
     </p>
   );
@@ -119,7 +120,6 @@ export function DuelUnmodeledNotes({
           {items.map((item) => {
             const civZh = civByEn(item.civ)?.zh ?? item.civ;
             const hasAssumeHit = assumeHitKeys.has(`${item.side}:${item.unit.id}`);
-            const details = [...new Set(item.mechanisms.map((m) => m.detail))].join(' ');
             return (
               <div key={`${item.side}-${item.unit.id}`} className="pk-unm-item" data-t="pk-unmodeled-item" data-side={item.side} data-unit={item.unit.id}>
                 <div className="pk-unm-row">
@@ -132,7 +132,7 @@ export function DuelUnmodeledNotes({
                   </span>
                   <span className="pk-unm-pills">
                     {item.mechanisms.map((m, i) => (
-                      <span key={`${m.kind}-${m.techId ?? i}`} className="pk-unm-pill" data-kind={m.kind}>
+                      <span key={`${m.kind}-${m.techId ?? 'base'}-${i}`} className="pk-unm-pill" data-kind={m.kind}>
                         {m.pill}
                       </span>
                     ))}
@@ -144,10 +144,17 @@ export function DuelUnmodeledNotes({
                       <strong>主弹 · 按每击命中估算：</strong>
                       目录准确度 <span className="num nw">0%</span> 不表示打不中。本场把每次主弹都算作命中主目标，这是主弹对单个目标的输出上限。
                     </p>
-                    {item.mechanisms.map((m, i) => renderCoexistingMechanism(m, `${m.kind}-${m.techId ?? i}`))}
+                    {item.mechanisms.map((m, i) => renderCoexistingMechanism(m, `${m.kind}-${m.techId ?? 'base'}-${i}`))}
                   </>
+                ) : item.mechanisms.length === 1 ? (
+                  <p className="pk-unm-desc">{item.mechanisms[0]!.detail}</p>
                 ) : (
-                  <p className="pk-unm-desc">{details}</p>
+                  item.mechanisms.map((m, i) => (
+                    <p key={`${m.kind}-${m.techId ?? 'base'}-${i}`} className="pk-unm-desc">
+                      <strong>{m.pill}：</strong>
+                      {m.detail}
+                    </p>
+                  ))
                 )}
               </div>
             );

@@ -320,7 +320,9 @@ export function Side({
               ...side.avail,
               ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
             ]}
-            selectableWithoutEffect={new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id)])}
+            selectableWithoutEffect={
+              new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id, u.combatAbility ?? 0), ...side.sel])
+            }
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
               return new Set(
