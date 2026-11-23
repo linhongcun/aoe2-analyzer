@@ -344,8 +344,8 @@
 2026-11-23 这一批五单（[#1364](https://github.com/linhongcun/aoe2-analyzer/issues/1364)、[#1366](https://github.com/linhongcun/aoe2-analyzer/issues/1366)、[#1367](https://github.com/linhongcun/aoe2-analyzer/issues/1367)、[#1368](https://github.com/linhongcun/aoe2-analyzer/issues/1368)、[#1369](https://github.com/linhongcun/aoe2-analyzer/issues/1369)），产品运营一共列了 21 个「待产品经理拍板」项。逐项回源码和先例查过之后，真正要问维护者的只剩 2 个：科技树去角标后要不要保留「不能只靠颜色」的旧约定，以及单位 PK 里要不要保留零造价的精锐钦察 `1260`。其余的都有现成答案，举几例：
 
 - 「乌兹钢要不要纳入满科技预设」：[`presetUpTo`](../src/domain/simulator.ts) 只纳入有效果的科技。乌兹钢一旦建模就有了效果，自动进入预设，不用另定策略。
-- 「回血科技能不能勾选、进不进预设」：#1296 的 `applicableUnmodeledTechIds` 已经定过「可勾选、不改数值、不进预设」，沿用即可。
-- 「同名单位在选择器里怎么区分」：团队规划已有 #271 的 `unitOptionLabel` 规则，挪到共享层共用，不另写一套。
+- 「回血科技能不能勾选、进不进预设」：[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) 的 `applicableUnmodeledTechIds` 已经让这类科技可勾选、不改数值；它们没有效果，按上面的 `presetUpTo` 也不进预设。沿用即可。
+- 「同名单位在选择器里怎么区分」：团队规划已有 [#271](https://github.com/linhongcun/aoe2-analyzer/issues/271) 的 `unitOptionLabel` 规则，挪到共享层共用，不另写一套。
 - 「改策略文档后，固定来源指针沿用旧提交还是重签」：契约里本来就混用 9 个固定提交，可见以往是哪条改了正文才重签哪条。
 - 「要不要走体验设计」「覆盖范围列不列名单」：分别由 CONTRIBUTING 的 UX 不适用条件和上一条「覆盖范围按数据规则写」回答。
 
@@ -357,7 +357,7 @@
 2. 属于设计取舍的，写约束交体验设计。
 3. 只有影响玩家可见结果、且仓库里查不到依据的，才并成选择题问维护者。
 
-照先例定下的，也要再查一遍它会连带改变什么，例如乌兹钢进预设后，达罗毗荼的满科技结果全部会变，这要写进范围。
+照先例定下的，也要再查一遍它会连带改变什么，例如乌兹钢进预设后，达罗毗荼步兵和骑兵的满科技结果都会变，这要写进范围。
 
 ## 7. 接手第一轮，以及以后
 
