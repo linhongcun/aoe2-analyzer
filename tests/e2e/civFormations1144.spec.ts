@@ -1,21 +1,55 @@
 import { expect, test } from '@playwright/test';
 
 const cases = [
-  { civ: 'Wei', anchor: 'wei-hussar-xianbei', width: 390, unit: 441, summary: '帝王时代', adjustment: '骆驼或重骑突破屏障', source: '1198-L1234' },
-  { civ: 'Shu', anchor: 'shu-crossbow-arbalester', width: 360, unit: 24, summary: '已有成队步弓', adjustment: '经济、护卫与推进节奏', source: '1236-L1270' },
-  { civ: 'Wu', anchor: 'wu-ranged-by-opponent', width: 360, unit: 1968, summary: '没有城堡且已有弓群', adjustment: '敌骑能切到我方后排', source: '1272-L1310' },
+  {
+    civ: 'Wei',
+    anchor: 'wei-hussar-xianbei',
+    width: 390,
+    unit: 441,
+    cardCount: 1,
+    badge: /讨论认可.*实战未说明/,
+    summary: '帝王时代',
+    adjustment: '骆驼或重骑突破屏障',
+    sha: 'a348c548624a41da50735eebf166d23456ff56fa',
+    source: '1198-L1234',
+  },
+  {
+    civ: 'Shu',
+    anchor: 'shu-crossbow-arbalester',
+    width: 360,
+    unit: 24,
+    cardCount: 1,
+    badge: /讨论认可.*实战未说明/,
+    summary: '已有成队步弓',
+    adjustment: '经济、护卫与推进节奏',
+    sha: 'a348c548624a41da50735eebf166d23456ff56fa',
+    source: '1236-L1270',
+  },
+  {
+    civ: 'Wu',
+    anchor: 'wu-ranged-by-opponent',
+    width: 360,
+    unit: 492,
+    cardCount: 2,
+    badge: /讨论认可.*待实战验证/,
+    summary: '靶场量产劲弩手为主力',
+    adjustment: '敌骑能切到我方后排',
+    sha: 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8',
+    source: '1569-L1618',
+  },
 ] as const;
 
-for (const { civ, anchor, width, unit, summary, adjustment, source } of cases) {
+for (const { civ, anchor, width, unit, cardCount, badge, summary, adjustment, sha, source } of cases) {
   test(`#1144 ${civ} ${width}px：条件、详情、来源及同标签实体返回焦点`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     if (civ === 'Wu') await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
     const path = `#/civ/${civ}#formation-${anchor}`;
     await page.goto(`./${path}`);
-    const card = page.locator('#formations article');
+    await expect(page.locator('#formations article')).toHaveCount(cardCount);
+    const card = page.locator('#formations article').filter({ has: page.locator(`#formation-${anchor}`) });
     await expect(card).toHaveCount(1);
     await expect(card.locator('.formation-condition')).toContainText(summary);
-    await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);
+    await expect(card.getByLabel('路线状态')).toHaveText(badge);
     await expect(card.locator('details[open]')).toHaveCount(0);
     if (civ === 'Wei') {
       await expect(card.getByRole('link', { name: /^明光铠/ })).toHaveAttribute('href', '#/tech/1062?civ=Wei');
@@ -29,7 +63,7 @@ for (const { civ, anchor, width, unit, summary, adjustment, source } of cases) {
       await expect(card.getByRole('heading', { name: '按敌选择主力，不是同时必出' })).toBeVisible();
       const choices = card.locator('.formation-choice');
       await expect(choices).toHaveCount(2);
-      await expect(choices.nth(0)).toContainText('有城堡产能');
+      await expect(choices.nth(0)).toContainText('靶场直出无需城堡产能');
       await expect(choices.nth(1)).toContainText('精锐掷矛手');
       await expect(choices.nth(1)).not.toContainText('城堡产能');
       await expect(card.locator('.formation-supplements')).toContainText('敌骑能切到我方后排时');
@@ -42,7 +76,7 @@ for (const { civ, anchor, width, unit, summary, adjustment, source } of cases) {
     await expect(card.getByRole('heading', { name: '为什么不默认加入' })).toBeVisible();
     await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
       'href',
-      `https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L${source}`,
+      `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#L${source}`,
     );
     const evidence = card.locator('.formation-source-links').getByRole('link', {
       name: civ === 'Wei' ? '翼骑兵模拟（含明光铠）' : civ === 'Shu' ? '劲弩手固定科技配置' : '赤壁战术',

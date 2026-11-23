@@ -22,6 +22,7 @@ import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 
 const DOC_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
+const SUPERSEDED_BY_1385 = new Map<string, string>([['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8']]);
 const TARGET_CIVS = [
   'Spanish',
   'Hindustanis',
@@ -391,13 +392,14 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
 
     for (const civ of civFormationContent) {
       if (targetSet.has(civ.civ)) {
-        expect(civ.source.content, civ.civ).toContain(`/blob/${DOC_SHA}/role/game-strategy.md#L`);
+        const expectedSha = SUPERSEDED_BY_1385.get(civ.civ) ?? DOC_SHA;
+        expect(civ.source.content, civ.civ).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
         for (const r of civ.routes) {
           const key = `${civ.civ}/${r.id}`;
           if (civ.civ === 'Spanish' || civ.civ === 'Britons') {
             expect(r.source, key).toBeUndefined();
           } else {
-            expect(r.source?.content, key).toContain(`/blob/${DOC_SHA}/role/game-strategy.md#L`);
+            expect(r.source?.content, key).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
           }
           if (UNCHANGED_SUBROUTES.has(key)) {
             unchangedCount += 1;

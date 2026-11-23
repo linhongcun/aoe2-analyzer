@@ -18,24 +18,24 @@ const project = (civ: string, resources: Catalog, patch = DATA_PATCH) => {
 
 describe('#1144 三国阵容', () => {
   it.each([
-    ['Wei', 4, 'combined', [441, 1952], [4, 4], [1062], [], [1954, 359], '1198-L1234'],
-    ['Shu', 4, 'progression', [24, 492], [3, 4], [], [], [359, 1942], '1236-L1270'],
-    ['Wu', 3, 'choice', [], [], [], [1968, 6], [359, 1942, 1946], '1272-L1310'],
+    ['Wei', 1, 4, 'combined', 'unreported', [441, 1952], [4, 4], [1062], [], [1954, 359], 'a348c548624a41da50735eebf166d23456ff56fa', '1198-L1234'],
+    ['Shu', 1, 4, 'progression', 'unreported', [24, 492], [3, 4], [], [], [359, 1942], 'a348c548624a41da50735eebf166d23456ff56fa', '1236-L1270'],
+    ['Wu', 2, 4, 'choice', 'pending', [], [], [], [492, 6], [1970, 359, 1942], 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8', '1569-L1618'],
   ] as const)(
-    '%s 只发布一条条件路线，并按时代解析实体及固定来源',
-    async (civ, age, composition, required, ages, prerequisites, choices, supplements, lines) => {
-      expect(byCiv(civ).routes).toHaveLength(1);
+    '%s 发布主路线，并按时代解析实体及固定来源',
+    async (civ, routeCount, age, composition, playtest, required, ages, prerequisites, choices, supplements, sha, lines) => {
+      expect(byCiv(civ).routes).toHaveLength(routeCount);
       const view = project(civ, await catalog());
       expect(view.status).toBe('current');
       if (view.status !== 'current') throw new Error(view.status);
-      expect(view.route).toMatchObject({ age, composition, status: 'approved', playtest: 'unreported' });
+      expect(view.route).toMatchObject({ age, composition, status: 'approved', playtest });
       expect(view.required.map(({ entity }) => entity.id)).toEqual(required);
       expect(view.required.map(({ age }) => age)).toEqual(ages);
       expect(view.prerequisites.map(({ entity }) => entity.id)).toEqual(prerequisites);
       expect(view.choices.map(({ entities }) => entities[0]?.entity.id)).toEqual(choices);
       expect(view.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual(supplements);
       expect(view.adjustments.every(({ unavailable }) => !unavailable)).toBe(true);
-      expect(view.source?.content).toContain(`/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L${lines}`);
+      expect(view.source?.content).toContain(`/${sha}/role/game-strategy.md#L${lines}`);
     },
   );
 
@@ -85,8 +85,8 @@ describe('#1144 三国阵容', () => {
       },
     });
     const route = byCiv('Wu').routes[0]!;
-    expect(route.age).toBe(3);
-    expect(route.alternatives).toContain('赤壁战术强化火焰伤害，但未证实能替代牵引抛石机拆城堡。');
+    expect(route.age).toBe(4);
+    expect(route.alternatives).toContain('赤壁战术强化火焰伤害，但未证实能替代牵引抛石机拆城堡');
 
     const techById = { ...resources.core.techById };
     delete techById[1081];

@@ -1293,20 +1293,38 @@
         {
           "id": "koreans-war-wagon-halberdier",
           "status": "approved",
-          "playtest": "unreported",
-          "composition": "combined",
+          "playtest": "pending",
+          "composition": "choice",
           "age": 4,
           "required": [
-            {
-              "kind": "unit",
-              "id": 829
-            },
             {
               "kind": "unit",
               "id": 359
             }
           ],
-          "choices": [],
+          "choiceLabel": "远程核心按城堡产能与局面择一（不同时必出）",
+          "choices": [
+            {
+              "id": "koreans-war-wagon",
+              "preconditions": ["已有城堡产能", "需要高血量与 8 远甲抗弓对射"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 829
+                }
+              ]
+            },
+            {
+              "id": "koreans-arbalester",
+              "preconditions": ["无须等待城堡产能", "依托 −50% 木材折扣与免费弓甲铺量"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492
+                }
+              ]
+            }
+          ],
           "prerequisites": [],
           "supplements": [
             {
@@ -1315,19 +1333,46 @@
                 {
                   "kind": "unit",
                   "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 1907,
+                  "research": 445
                 }
               ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "koreans-war-wagon-halberdier-adjustment-siege",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1907,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 445,
+                  "age": 4
+                }
+              ]
+            }
+          ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L579-L583",
-            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L546-L596",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
           },
-          "sourceLines": [172, 579, 583],
+          "sourceLines": [172, 546, 550, 554, 555, 556, 558, 560, 582, 583, 584, 585, 592, 593, 594, 596],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=829.Koreans.4.f.&b=359.Franks.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=829.Koreans.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1"
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=829.Koreans.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=829.Koreans.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=829.Koreans.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Koreans.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Koreans.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1907?civ=Koreans",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/445?civ=Koreans"
           ]
         },
         {
@@ -1448,10 +1493,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L546-L585",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L546-L598",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [546, 550, 554, 555, 556, 557, 559, 561, 563, 569, 570, 571, 572, 578, 579, 580, 581, 583, 585],
+          "sourceLines": [546, 562, 566, 567, 568, 569, 571, 573, 575, 581, 582, 583, 585, 591, 592, 593, 594, 596, 598],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437&army=1903:4:e",
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=199,200,201,47,437,608&army=1903:4:e",
@@ -1466,6 +1511,122 @@
     {
       "civ": "Jurchens",
       "routes": [
+        {
+          "id": "jurchens-steppe-siege-field",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "choice",
+          "age": 4,
+          "required": [],
+          "choiceLabel": "前排主力按产能与对手择一（不同时必出）",
+          "choices": [
+            {
+              "id": "jurchens-field-steppe-lancer",
+              "preconditions": ["马厩量产，70 食 40 金", "发挥 1 射程多排近战与 1.60 秒攻速"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1372
+                }
+              ]
+            },
+            {
+              "id": "jurchens-field-iron-pagoda",
+              "preconditions": ["具备城堡产能", "需要高甲近战前排吸收近战伤害"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1910
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "support",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1911
+                },
+                {
+                  "kind": "unit",
+                  "id": 1907
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 377,
+                  "age": 3
+                },
+                {
+                  "kind": "tech",
+                  "id": 997,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                },
+                {
+                  "kind": "unit",
+                  "id": 36
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "jurchens-steppe-siege-field-halberdiers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1911,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "jurchens-steppe-siege-field-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L629-L679",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
+          },
+          "sourceLines": [174, 629, 633, 637, 638, 639, 640, 642, 644, 665, 666, 667, 668, 677, 679],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Jurchens.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Jurchens.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Jurchens.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1911.Jurchens.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1911.Jurchens.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1372?civ=Jurchens",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1907?civ=Jurchens",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/997?civ=Jurchens"
+          ]
+        },
         {
           "id": "jurchens-fire-lancer-tower",
           "status": "approved",
@@ -1572,10 +1733,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L597-L636",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L629-L681",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [597, 601, 605, 606, 607, 608, 610, 612, 614, 620, 621, 622, 623, 629, 630, 631, 632, 634, 636],
+          "sourceLines": [629, 646, 650, 651, 652, 653, 655, 657, 659, 665, 666, 667, 668, 674, 675, 676, 677, 679, 681],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47&army=1903:4:e",
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Jurchens&age=4&gtechs=199,200,201,47,608&army=1903:4:e",
@@ -1593,6 +1754,108 @@
     {
       "civ": "Saxons",
       "routes": [
+        {
+          "id": "saxons-mounted-crossbow-field",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "choice",
+          "age": 4,
+          "required": [],
+          "choiceLabel": "野战核心主力按局面择一（不同时必出）",
+          "choices": [
+            {
+              "id": "saxons-hmc-core",
+              "preconditions": ["发挥已写 33 文明唯一全科技满配优势", "需要高机动远程拉扯步兵与慢速目标"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2701
+                }
+              ]
+            },
+            {
+              "id": "saxons-varangian-core",
+              "preconditions": ["需要正面地面接战与作战产金", "不与巨型投石机争城堡训练队列"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2704
+                }
+              ]
+            },
+            {
+              "id": "saxons-arbalest-core",
+              "preconditions": ["靶场直出无城堡门槛", "需要低单价高攻速远程线"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 492
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 1452,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 1464,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "saxons-mounted-crossbow-field-ranged",
+              "requires": []
+            },
+            {
+              "id": "saxons-mounted-crossbow-field-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L683-L743",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
+          },
+          "sourceLines": [175, 683, 687, 691, 692, 693, 694, 696, 698, 724, 725, 727, 728, 735, 736, 739, 743],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Saxons.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Saxons.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Saxons.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Saxons.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Saxons.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701?civ=Saxons",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/1452?civ=Saxons"
+          ]
+        },
         {
           "id": "saxons-retainer-tower",
           "status": "approved",
@@ -1732,12 +1995,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L638-L688",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L683-L746",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [
-            638, 642, 646, 647, 648, 650, 652, 654, 656, 658, 662, 666, 667, 668, 669, 670, 676, 677, 678, 679, 680, 681, 682, 683, 685, 687, 688
-          ],
+          "sourceLines": [683, 700, 704, 705, 706, 708, 710, 712, 714, 716, 724, 725, 726, 727, 728, 734, 735, 736, 737, 738, 739, 740, 741, 743, 745, 746],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437&army=2706:5:e",
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Saxons&age=4&gtechs=199,200,201,47,437,608&army=2706:5:e",
@@ -3201,59 +3462,9 @@
       "civ": "Aztecs",
       "routes": [
         {
-          "id": "aztecs-eagle-skirmisher",
-          "status": "candidate",
-          "playtest": "unreported",
-          "composition": "combined",
-          "age": 3,
-          "required": [
-            {
-              "kind": "unit",
-              "id": 753
-            },
-            {
-              "kind": "unit",
-              "id": 6
-            }
-          ],
-          "choices": [],
-          "prerequisites": [],
-          "supplements": [
-            {
-              "mode": "as-needed",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 331,
-                  "age": 4
-                }
-              ]
-            }
-          ],
-          "adjustments": [
-            {
-              "id": "aztecs-eagle-skirmisher-adjustment-first",
-              "requires": []
-            },
-            {
-              "id": "aztecs-eagle-skirmisher-adjustment-second",
-              "requires": []
-            },
-            {
-              "id": "aztecs-eagle-skirmisher-adjustment-third",
-              "requires": []
-            }
-          ],
-          "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844",
-            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
-          },
-          "sourceLines": [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873]
-        },
-        {
           "id": "aztecs-garland-infantry",
-          "status": "candidate",
-          "playtest": "unreported",
+          "status": "approved",
+          "playtest": "pending",
           "composition": "choice",
           "age": 4,
           "required": [
@@ -3263,6 +3474,7 @@
               "age": 4
             }
           ],
+          "choiceLabel": "前排按对手与产能择一",
           "choices": [
             {
               "id": "aztecs-garland-champion",
@@ -3331,15 +3543,49 @@
                   "age": 4
                 }
               ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 24,
+                  "age": 3
+                },
+                {
+                  "kind": "unit",
+                  "id": 492,
+                  "age": 4
+                }
+              ]
             }
           ],
-          "adjustments": [],
+          "adjustments": [
+            {
+              "id": "aztecs-garland-infantry-heavy-cav",
+              "requires": []
+            },
+            {
+              "id": "aztecs-garland-infantry-ranged-siege",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 588,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 377,
+                  "age": 4
+                }
+              ]
+            }
+          ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/015d283715b52a5921326437a5425f6ce197a37b/role/game-strategy.md#L1059-L1063",
-            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1266"
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1111-L1153",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
           },
-          "sourceLines": [1059, 1061, 1063],
-          "choiceLabel": "前排按对手与产能择一",
+          "sourceLines": [183, 1111, 1113, 1115, 1123, 1124, 1125, 1126, 1128, 1130, 1140, 1141, 1142, 1151, 1153],
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
@@ -3347,8 +3593,61 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/civ/Aztecs#techtree",
             "https://linhongcun.github.io/aoe2-analyzer/#/tech/24?civ=Aztecs",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/726/Aztecs/4/24,602,215,67,74,68,76,75,77/?civ=Aztecs&tab=sim",
-            "https://linhongcun.github.io/aoe2-analyzer/#/unit/588/Aztecs/4/47,377/?civ=Aztecs&tab=sim"
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/588/Aztecs/4/47,377/?civ=Aztecs&tab=sim",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=567.Aztecs.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=726.Aztecs.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=752.Aztecs.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
           ]
+        },
+        {
+          "id": "aztecs-eagle-skirmisher",
+          "status": "candidate",
+          "playtest": "unreported",
+          "composition": "combined",
+          "age": 3,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 753
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-first",
+              "requires": []
+            },
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-second",
+              "requires": []
+            },
+            {
+              "id": "aztecs-eagle-skirmisher-adjustment-third",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1111-L1153",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [1111, 1115, 1132, 1134, 1140, 1143, 1144, 1150, 1153]
         }
       ]
     },
@@ -3471,6 +3770,95 @@
       "civ": "Mayans",
       "routes": [
         {
+          "id": "mayans-arbalester-eagle-field",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 492
+            },
+            {
+              "kind": "unit",
+              "id": 752,
+              "research": 4
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "research": 485
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mayans-arbalester-eagle-field-skirmisher",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "age": 4
+                },
+                {
+                  "kind": "tech",
+                  "id": 485,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "id": "mayans-arbalester-eagle-field-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1192-L1230",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
+          },
+          "sourceLines": [185, 1192, 1196, 1200, 1201, 1202, 1212, 1214, 1220, 1221, 1222, 1230],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Mayans.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Mayans.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=752.Mayans.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/485?civ=Mayans",
+            "https://linhongcun.github.io/aoe2-analyzer/#/tech/4?civ=Mayans"
+          ]
+        },
+        {
           "id": "mayans-plumed-archer-halberdier",
           "status": "approved",
           "playtest": "unreported",
@@ -3536,10 +3924,14 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1192-L1230",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944]
+          "sourceLines": [1192, 1204, 1208, 1209, 1210, 1212, 1214, 1220, 1221, 1222, 1228, 1230],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=765.Mayans.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/765?civ=Mayans"
+          ]
         }
       ]
     },
@@ -4532,19 +4924,20 @@
         {
           "id": "wu-ranged-by-opponent",
           "status": "approved",
-          "playtest": "unreported",
+          "playtest": "pending",
           "composition": "choice",
-          "age": 3,
+          "age": 4,
           "required": [],
+          "choiceLabel": "按敌选择主力，不是同时必出",
           "choices": [
             {
-              "id": "wu-fire-archer",
-              "preconditions": ["对方以步兵为主", "有城堡产能"],
+              "id": "wu-arbalester",
+              "preconditions": ["对方以步兵为主", "靶场直出无需城堡产能"],
               "entities": [
                 {
                   "kind": "unit",
-                  "id": 1968,
-                  "age": 3
+                  "id": 492,
+                  "age": 4
                 }
               ]
             },
@@ -4563,6 +4956,16 @@
           "prerequisites": [],
           "supplements": [
             {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1970,
+                  "age": 4
+                }
+              ]
+            },
+            {
               "mode": "as-needed",
               "entities": [
                 {
@@ -4580,16 +4983,6 @@
                   "id": 1942,
                   "age": 4,
                   "research": 1081
-                }
-              ]
-            },
-            {
-              "mode": "conditional",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 1946,
-                  "age": 4
                 }
               ]
             }
@@ -4639,12 +5032,15 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1272-L1310",
-            "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2"
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1569-L1618",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
           },
-          "sourceLines": [1272, 1274, 1280, 1281, 1282, 1283, 1284, 1286, 1288, 1294, 1295, 1296, 1297, 1298, 1304, 1305, 1306, 1307, 1308, 1310],
-          "choiceLabel": "按敌选择主力，不是同时必出",
+          "sourceLines": [1569, 1571, 1579, 1580, 1581, 1583, 1584, 1586, 1588, 1590, 1592, 1598, 1599, 1600, 1601, 1603, 1609, 1610, 1612, 1613, 1614, 1618],
           "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Wu.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1970.Wu.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1970.Wu.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/492?civ=Wu",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1968?civ=Wu",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/6?civ=Wu",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/359?civ=Wu",
@@ -4658,6 +5054,84 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1970/Wu/4/199,211,200,212,201,47/?civ=Wu&tab=sim",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim",
             "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/effects.json"
+          ]
+        },
+        {
+          "id": "wu-jian-heiguang-frontline",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "choice",
+          "age": 4,
+          "required": [],
+          "choiceLabel": "抗弓前排按资源与对手择一（不同时必出）",
+          "choices": [
+            {
+              "id": "wu-jian-swordsman",
+              "preconditions": ["敌方以成群步弓为主", "需要高远甲＋帝王每分钟回 30 血的步兵前排"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1974,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "wu-heavy-heiguang",
+              "preconditions": ["能承担双金补员且避开长戟阵", "需要机动骑兵承担前排或侧翼切入"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1946,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 359,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1942,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "wu-jian-heiguang-frontline-halberdiers",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "wu-ranged-by-opponent"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1569-L1618",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1385"
+          },
+          "sourceLines": [1569, 1573, 1582, 1586, 1590, 1592, 1599, 1601, 1602, 1611, 1616, 1618],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1974.Wu.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1946.Wu.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1974?civ=Wu",
+            "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946/Wu/4/435,39,67,81,68,82,75,80/?civ=Wu&tab=sim"
           ]
         }
       ]

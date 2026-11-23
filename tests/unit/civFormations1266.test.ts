@@ -65,15 +65,15 @@ describe('#1266 七个文明阵容的机制与条件边界', () => {
     expect(fallback.adjustments.filter(({ unavailable }) => unavailable).map(({ id }) => id)).toEqual(['persian-heavy-cavalry-archer']);
   });
 
-  it('吴的黑光是独立条件补位，帝王攻击与步兵回复各有对象', () => {
+  it('吴的黑光是独立抗弓前排条件选项，帝王攻击与步兵回复各有对象', () => {
     const status = civStatus(ctx.trees, 'Wu');
     expect([status.t219, status.t437]).toEqual([0, 0]);
     expect(imperial('Wu', 1970).rof).toBe(3.5);
     expect(imperial('Wu', 1946)).toMatchObject({ hp: 110, atk: 18, ma: 7, pa: 7 });
-    const blackLight = formationContent('Wu').routes[0]!.supplements.find(({ entities }) => entities.some(({ id }) => id === 1946));
+    const frontline = formationContent('Wu').routes.find(({ id }) => id === 'wu-jian-heiguang-frontline')!;
+    const blackLight = frontline.choices?.find(({ entities }) => entities.some(({ id }) => id === 1946));
+    expect(frontline).toMatchObject({ status: 'approved', playtest: 'pending' });
     expect(blackLight).toMatchObject({
-      mode: 'conditional',
-      label: expect.stringContaining('未实战验证'),
       entities: [{ id: 1946, age: 4, role: expect.stringMatching(/帝王攻击 \+2.*每分钟恢复 30 生命是帝王步兵加成/) }],
     });
   });
@@ -107,28 +107,28 @@ describe('#1266 七个文明阵容的机制与条件边界', () => {
     );
   });
 
-  it('阿兹特克两条候选分别保留来源和实战状态，重投不强制与僧侣同出', async () => {
+  it('阿兹特克帝王主路置顶并保留鹰＋掷矛限定候选，重投不强制与僧侣同出', async () => {
     const { routes, source } = formationContent('Aztecs');
-    const [original, imperialCandidate] = routes;
-    expect(original).toMatchObject({ id: 'aztecs-eagle-skirmisher', status: 'candidate', playtest: 'unreported', age: 3 });
-    expect(original!.source?.content).toContain('8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844');
-    expect(imperialCandidate).toMatchObject({ id: 'aztecs-garland-infantry', status: 'candidate', playtest: 'unreported', age: 4 });
-    expect(imperialCandidate!.source?.content).toMatch(/\/blob\/[a-f0-9]{40}\/role\/game-strategy\.md#L1059-L1063$/);
+    const [imperialMain, eagleCandidate] = routes;
+    expect(imperialMain).toMatchObject({ id: 'aztecs-garland-infantry', status: 'approved', playtest: 'pending', age: 4 });
+    expect(imperialMain!.source?.content).toMatch(/\/blob\/[a-f0-9]{40}\/role\/game-strategy\.md#L1111-L1153$/);
+    expect(eagleCandidate).toMatchObject({ id: 'aztecs-eagle-skirmisher', status: 'candidate', playtest: 'unreported', age: 3 });
+    expect(eagleCandidate!.source?.content).toMatch(/\/blob\/[a-f0-9]{40}\/role\/game-strategy\.md#L1111-L1153$/);
     expect(imperial('Aztecs', 726)).toMatchObject({ atk: 27, bonus: { 步兵: 6 } });
     expect(imperial('Aztecs', 588).rng).toBe(9);
     const core = await loadCore();
     const trees = await loadTrees();
-    const project = (currentCore = core) => projectFormation(imperialCandidate!, 'Aztecs', DATA_PATCH, { core: currentCore, trees }, routes, source);
+    const project = (currentCore = core) => projectFormation(imperialMain!, 'Aztecs', DATA_PATCH, { core: currentCore, trees }, routes, source);
     const view = project();
     if (view.status !== 'current') throw new Error(view.status);
     expect(view.required.map(({ entity }) => entity.id)).toEqual([752]);
     expect(view.choices.map(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([[567], [726]]);
     expect(view.prerequisites.map(({ entity }) => entity.id)).toEqual([24]);
-    expect(view.supplements.map(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([[588, 377], [125]]);
+    expect(view.supplements.map(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([[588, 377], [125], [24, 492]]);
     const unitById = { ...core.unitById };
     delete unitById[588];
     const withoutSiege = project({ ...core, unitById });
     if (withoutSiege.status !== 'current') throw new Error(withoutSiege.status);
-    expect(withoutSiege.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([125]);
+    expect(withoutSiege.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([125, 24, 492]);
   });
 });
