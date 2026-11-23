@@ -50,9 +50,6 @@ Object.entries(MANUAL_BUILDING_EFFECTS).forEach(([en, r]) => {
   BUILDING_EFFECTS[en] = r;
   TECH_SRC[en] ??= 'manual';
 });
-/** 科技的经济/费用类 .dat 效果 */
-export const techEco = (en: string): DatEco[] => DAT.techs[en]?.eco ?? [];
-
 // ---------------- 文明加成 ----------------
 export const CIV_BONUSES: Record<string, CivBonus[]> = {};
 export const BUILDING_CIV_BONUSES: Record<string, BCivBonus[]> = {};
