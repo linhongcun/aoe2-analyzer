@@ -1,12 +1,24 @@
 /**
- * issue 1296：单位 PK 未建模核心战斗机制检测（纯函数，无 React/UI 依赖）。
+ * issue 1296 / 1367：单位 PK 未建模核心战斗机制检测（纯函数，无 React/UI 依赖）。
  * 100% 由固定 DAT / units.json / effects.json 数据驱动，零硬编码单位或科技 ID 白名单。
  */
-import { DAT, type DatEco } from './datEffects';
+import { applyCombatAbilityEco, DAT, type DatEco } from './datEffects';
 import type { SimTech } from './simulator';
 import type { Tech, Unit } from './types';
 
-export type UnmodeledKind = 'charge' | 'multi-projectile' | 'splash' | 'dismount' | 'form-switch';
+export type UnmodeledKind =
+  | 'charge'
+  | 'multi-projectile'
+  | 'splash'
+  | 'dismount'
+  | 'form-switch'
+  | 'armor-strip'
+  | 'aura'
+  | 'on-hit'
+  | 'pass-through'
+  | 'damaged-bonus'
+  | 'low-hp-transform'
+  | 'regen';
 
 export interface UnmodeledMechanism {
   kind: UnmodeledKind;
@@ -40,10 +52,44 @@ export interface DuelUnmodeledEntry {
 }
 
 const EPS = 1e-9;
+const COMBAT_ABILITY_ARMOR_STRIP = 4;
+const COMBAT_ABILITY_AURA = 32 | 64;
+const COMBAT_ABILITY_ON_HIT = 128;
+
+/** 将 combatAbility 归约为非负整数位掩码，杜绝负数补码误匹配与非有限值扩散。 */
+export function normalizeCombatAbility(ca?: number): number {
+  return typeof ca === 'number' && Number.isFinite(ca) ? Math.max(0, Math.trunc(ca)) : 0;
+}
+
+/** 规范化未建模提示位签名（bit 4 / bit 32|64 合并 / bit 128），与运行时提示输出一一对应。 */
+function unmodeledCombatAbilitySig(ca: number): number {
+  const n = normalizeCombatAbility(ca);
+  return (n & COMBAT_ABILITY_ARMOR_STRIP ? 1 : 0) | (n & COMBAT_ABILITY_AURA ? 2 : 0) | (n & COMBAT_ABILITY_ON_HIT ? 4 : 0);
+}
+
+/**
+ * 独立于 StatSet 的生效 combatAbility 计算纯函数：
+ * 直接复用 issue 1366 的 applyCombatAbilityEco（Genie 整数算术 set/add/mul），
+ * 按 baseCa → 生效文明加成 → 已选科技顺序叠加后归约为非负整数位掩码。
+ */
+export function effectiveCombatAbility(baseCa: number | undefined, unitId: number, civ: string, age: number, selectedTechs: readonly Tech[]): number {
+  const selectedEn = new Set(selectedTechs.map((t) => t.en));
+  const activeCivBonuses = (DAT.civs[civ]?.bonus ?? []).filter(
+    (entry) => entry.age <= age && (!entry.req.length || entry.req.every((reqEn) => selectedEn.has(reqEn))),
+  );
+  let ca = normalizeCombatAbility(baseCa);
+  for (const entry of activeCivBonuses) {
+    ca = applyCombatAbilityEco(ca, entry.eco, unitId);
+  }
+  for (const tech of selectedTechs) {
+    ca = applyCombatAbilityEco(ca, DAT.techs[tech.en]?.eco, unitId);
+  }
+  return normalizeCombatAbility(ca);
+}
 
 /**
  * 针对单一属性号独立聚合 eco 效果净值，避免 a:102 与 a:107 混加错抵，
- * 并正确过滤类似 Druzhina 对 8 个远程步兵 +0.5 / -0.5 互相抵消的条目。
+ * 过滤 Druzhina 对远程步兵 +0.5/-0.5 抵消，并严格区分 set 0 与正值 set。
  */
 export function hasPositiveEcoAttr(eco: readonly DatEco[] | undefined, unitId: number, attr: number, minSet: number): boolean {
   if (!eco?.length) return false;
@@ -59,22 +105,39 @@ export function hasPositiveEcoAttr(eco: readonly DatEco[] | undefined, unitId: n
     else if (item.op === 'set') maxSet = maxSet === null ? item.v : Math.max(maxSet, item.v);
   }
   if (!matched) return false;
-  return addSum > EPS || mulProd > 1 + EPS || (maxSet !== null && maxSet >= minSet - EPS);
+  const setOk = maxSet !== null && (minSet > EPS ? maxSet >= minSet - EPS : maxSet > EPS);
+  return addSum > EPS || mulProd > 1 + EPS || setOk;
 }
 
 const hasPositiveSplash = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 22, EPS);
 const hasPositiveExtraProjectiles = (eco: readonly DatEco[] | undefined, unitId: number) =>
   hasPositiveEcoAttr(eco, unitId, 102, 1) || hasPositiveEcoAttr(eco, unitId, 107, 1);
+const hasPositiveRegen = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 109, EPS);
+
+function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitId: number, baseCombatAbility: number): boolean {
+  if (!eco?.length) return false;
+  const before = normalizeCombatAbility(baseCombatAbility);
+  const after = normalizeCombatAbility(applyCombatAbilityEco(before, eco, unitId));
+  return unmodeledCombatAbilitySig(after) !== unmodeledCombatAbilitySig(before);
+}
 
 /**
- * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）或额外弹矢（a:102/107）效果的科技 ID 集合，
+ * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）、额外弹矢（a:102/107）、生命回复（a:109）
+ * 或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
  * 供单兵种 SimPanel 开放勾选（与混编模式及 issue 943 费用科技一致；不进入 f/c 自动预设）。
  */
-export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number): Set<number> {
+export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number, baseCombatAbility = 0): Set<number> {
   const ids = new Set<number>();
   for (const { t } of avail) {
     const eco = DAT.techs[t.en]?.eco;
-    if (hasPositiveSplash(eco, unitId) || hasPositiveExtraProjectiles(eco, unitId)) ids.add(t.id);
+    if (
+      hasPositiveSplash(eco, unitId) ||
+      hasPositiveExtraProjectiles(eco, unitId) ||
+      hasPositiveRegen(eco, unitId) ||
+      changesUnmodeledCombatAbility(eco, unitId, baseCombatAbility)
+    ) {
+      ids.add(t.id);
+    }
   }
   return ids;
 }
@@ -135,6 +198,35 @@ function detectChargeMechanism(unit: Unit): UnmodeledMechanism | null {
     kind: 'charge',
     pill: '充能特殊机制',
     detail: '当前未计入该单位的充能特殊机制；实战表现可能偏离此处估算。',
+  };
+}
+
+function detectOnHitMechanism(effect: Unit['onHitEffect']): UnmodeledMechanism {
+  if (effect === 'dot') {
+    return {
+      kind: 'on-hit',
+      pill: '命中后持续伤害',
+      detail: '当前未计入命中后的持续伤害；实际输出通常高于此处估算。',
+    };
+  }
+  if (effect === 'slow') {
+    return {
+      kind: 'on-hit',
+      pill: '命中减速',
+      detail: '当前未计入命中后使目标减速；目标更难脱离或追击，实战表现通常高于此处估算。',
+    };
+  }
+  if (effect === 'attack-speed') {
+    return {
+      kind: 'on-hit',
+      pill: '越战越快',
+      detail: '当前按固定攻击间隔结算，未计入持续作战后攻击速度的提升；长时间缠斗时实际输出通常高于此处估算。',
+    };
+  }
+  return {
+    kind: 'on-hit',
+    pill: '命中特效',
+    detail: '当前未计入该单位命中时附带的特殊效果；实战表现可能偏离此处估算。',
   };
 }
 
@@ -217,6 +309,73 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
       kind: 'form-switch',
       pill: '可切换形态',
       detail: '仅按当前所选形态结算，未计入战斗中切换形态的效果。',
+    });
+  }
+
+  // 6–8. combatAbility 位驱动未建模机制（复用 issue 1366 完整位掩码与 a:63 算术叠加；排除 bit 1/2/8/16）
+  const effectiveCa = effectiveCombatAbility(unit.combatAbility, unit.id, civ, age, selectedTechs);
+  if ((effectiveCa & COMBAT_ABILITY_ARMOR_STRIP) !== 0) {
+    out.push({
+      kind: 'armor-strip',
+      pill: '撕裂护甲',
+      detail: '当前未计入每次攻击对目标护甲的削减；目标护甲越打越薄，实际输出通常高于此处估算。',
+    });
+  }
+  if ((effectiveCa & COMBAT_ABILITY_AURA) !== 0) {
+    out.push({
+      kind: 'aura',
+      pill: '光环 / 编队增益',
+      detail: '当前未计入附近友军之间的光环或编队增益；成群作战时实际表现通常强于此处估算。',
+    });
+  }
+  if ((effectiveCa & COMBAT_ABILITY_ON_HIT) !== 0) {
+    out.push(detectOnHitMechanism(unit.onHitEffect));
+  }
+
+  // 9. 直线穿透（主投射物 hit_mode === 1）
+  if (unit.projectilePassThrough === true) {
+    out.push({
+      kind: 'pass-through',
+      pill: '直线穿透',
+      detail: '当前只按主目标逐击结算，未计入投射物穿过主目标、命中同一直线上其他单位的伤害；对密集阵型的实际输出通常高于此处估算。',
+    });
+  }
+
+  // 10. 对受伤目标递增伤害（action_type === 160）
+  if (unit.damagedTargetBonus === true) {
+    out.push({
+      kind: 'damaged-bonus',
+      pill: '对伤员递增伤害',
+      detail: '当前未计入对已受伤目标的递增伤害；越打越痛，实际输出通常高于此处估算。',
+    });
+  }
+
+  // 11. 低血量破盾变形态（action_type === 158）
+  if (unit.lowHpTransform === true) {
+    out.push({
+      kind: 'low-hp-transform',
+      pill: '受伤后变形态',
+      detail: '当前未计入受到一定伤害后的形态变化（移动和攻击变强、护甲变弱）；实战表现可能偏离此处估算。',
+    });
+  }
+
+  // 12. 生命回复（effects.json a:109；同文明跨时代加成展平合并出 1 枚，已选科技逐项出胶囊）
+  const civEco = activeCivBonuses.flatMap((entry) => entry.eco);
+  if (hasPositiveRegen(civEco, unit.id)) {
+    out.push({
+      kind: 'regen',
+      pill: '生命回复',
+      detail: '当前未计入战斗中的生命回复（文明加成）；持久战中实际生存能力通常高于此处估算。',
+    });
+  }
+  for (const tech of selectedTechs) {
+    if (!hasPositiveRegen(DAT.techs[tech.en]?.eco, unit.id)) continue;
+    out.push({
+      kind: 'regen',
+      pill: `生命回复 · ${tech.zh}`,
+      detail: `当前未计入战斗中的生命回复（已选科技「${tech.zh}」；未勾选该科技时本项不会触发）；持久战中实际生存能力通常高于此处估算。`,
+      techId: tech.id,
+      techEn: tech.en,
     });
   }
 

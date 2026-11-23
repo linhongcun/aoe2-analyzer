@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.38] - 2026-11-23
+
+### 更新说明
+
+单位 PK（1v1、群战、等资源、等采集时间与混编）的「未计入机制提示卡」现已补齐由固定游戏数据驱动的多类高频特殊机制提示：包括撕裂护甲（奥布奇战锤兵）、光环与编队增益（百夫长、莫纳斯帕、曹操/刘备/孙坚）、按参数细分的命中特效（辽刀兵命中后持续伤害、白毦兵命中减速、神庙护卫越战越快及参数不明时的通用兜底）、主投射物直线穿透（弩炮系、重弩战象、飞轮刃投掷手、卡拉维尔战舰、楼船、战车）、科那对受伤目标递增伤害、吴国剑士受伤后变形态，以及基于文明加成或科技（马格里布骆驼、医疗部队，支持手动勾选且不进满科技预设、不改计算数值）的生命回复；同一单位命中两个及以上机制时改为逐条分段并加粗机制名，常规无特殊机制单位仍保持零提示。
+
+### 新增
+
+- #1367：升级 `scripts/dat_source.py` 缓存至 `dat.v23` 并新增 `action_type in (157, 158, 160)` 与主投射物 `hit_mode` 专用跨文明一致性校验（保持既有 `task_sig` 7 字段不变）；在 `scripts/units_build.py` 与 `data/schemas/data-units.json` 导出并约束 `projectilePassThrough`、`onHitEffect`、`damagedTargetBonus`、`lowHpTransform` 四个可选字段（同步在 `unitFormDetail.ts` 清空副形态未声明透传）；在 `src/domain/duelUnmodeled.ts` 复用 `#1366` 导出的 `combatAbility` 与 `applyCombatAbilityEco` 实现 `normalizeCombatAbility` / `effectiveCombatAbility`（跳过已建模的 bit 1/2 及 bit 8/16）、修复 `hasPositiveEcoAttr` 对 `set 0` 的边界判定、展平聚合文明 `a: 109` 生命回复并在 `applicableUnmodeledTechIds` 放行回血及改写未建模位科技（`DuelSelection.tsx` 传入 `u.combatAbility ?? 0`）；升级 `DuelUnmodeledNotes.tsx` 支持多机制逐条分段加粗与 `assumeHit` 并存；补齐 Python 数据测试 `tests/py/test_unit_unmodeled1367.py`、全目录 248 单位数据驱动单测 `tests/unit/duelUnmodeled1367.test.ts` 与浏览器回归 `tests/e2e/duelUnmodeled1367.spec.ts`。
+
 ## [0.99.37] - 2026-11-23
 
 ### 更新说明

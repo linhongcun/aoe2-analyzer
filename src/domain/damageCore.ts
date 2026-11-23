@@ -12,12 +12,12 @@ const ARMOR_IGNORE_CLASSES = ['近战', '穿刺'] as const;
 
 /** 生效 combatAbility 是否带 bit 1（无视护甲）。 */
 export function hasIgnoreArmor(ca?: number): boolean {
-  return typeof ca === 'number' && Number.isFinite(ca) && (Math.trunc(ca) & COMBAT_ABILITY_IGNORE_ARMOR) !== 0;
+  return typeof ca === 'number' && Number.isFinite(ca) && ca >= 0 && (Math.trunc(ca) & COMBAT_ABILITY_IGNORE_ARMOR) !== 0;
 }
 
 /** 生效 combatAbility 是否带 bit 2（抵抗无视护甲）。 */
 export function hasResistIgnoreArmor(ca?: number): boolean {
-  return typeof ca === 'number' && Number.isFinite(ca) && (Math.trunc(ca) & COMBAT_ABILITY_RESIST_IGNORE_ARMOR) !== 0;
+  return typeof ca === 'number' && Number.isFinite(ca) && ca >= 0 && (Math.trunc(ca) & COMBAT_ABILITY_RESIST_IGNORE_ARMOR) !== 0;
 }
 
 export interface IgnoreArmorEvaluation {

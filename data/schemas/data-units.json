@@ -220,6 +220,10 @@
         "type": "integer",
         "minimum": 0
       },
+      "projectilePassThrough": { "type": "boolean" },
+      "onHitEffect": { "type": "string", "enum": ["dot", "slow", "attack-speed"] },
+      "damagedTargetBonus": { "type": "boolean" },
+      "lowHpTransform": { "type": "boolean" },
       "atks": {
         "type": "array",
         "items": {

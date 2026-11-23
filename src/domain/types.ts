@@ -119,6 +119,14 @@ export interface Unit {
   garrisonCapacity?: number;
   /** 固定 DAT 属性 63（type_50.break_off_combat）完整位掩码（bit 1 无视护甲、bit 2 抵抗无视护甲等）。 */
   combatAbility?: number;
+  /** issue 1367：固定 DAT 主投射物直线穿透标记（Projectiles[0].hit_mode === 1）。 */
+  projectilePassThrough?: boolean;
+  /** issue 1367：固定 DAT 命中特效细分枚举（action_type 157 参数确定性映射；参数不明时省略并由运行时兜底）。 */
+  onHitEffect?: 'dot' | 'slow' | 'attack-speed';
+  /** issue 1367：固定 DAT 对受伤目标递增伤害标记（action_type 160，属性 9）。 */
+  damagedTargetBonus?: boolean;
+  /** issue 1367：固定 DAT 低血量破盾变形态标记（action_type 158，v2 < 0）。 */
+  lowHpTransform?: boolean;
   atks: [string, number][];
   arms: [string, number][];
   desc: string;
