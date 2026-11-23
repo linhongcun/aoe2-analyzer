@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.34] - 2026-11-23
+
+### 更新说明
+
+文明详情科技树中的独特与区域节点（含上方图例）已去掉右上角角标，改为仅用五种高区分度彩色边框表达身份，手机窄屏下头像不再被角标遮挡：独特单位保持紫色边框带光晕、区域单位保持蓝紫边框、独特科技/建筑保持琥珀边框带光晕，区域科技/建筑改用独立青蓝边框；不可用的独特/区域节点保留对应身份色边框与灰化头像；文明差异对照下独特科技同步收掉光晕，外层绿/红轮廓与内层身份边框可同时辨认；建筑列头、补充区文字标签与读屏无障碍文字保持不变。
+
+### 变更
+
+- #1364：移除 `src/features/tree/components/CivTechTree.tsx` 的 `Mark` 组件及图例/节点 `.tmark` 角标渲染，清理 `src/features/tree/tree.css` 全部 `.tmark*` 与 `.tl1.uq/.tl1.rg` 右边距规则；在 `src/shared/styles/tokens.css` 新增双主题令牌 `--color-tree-tech-rg`（浅 `#0b7285` / 深 `#4fc3d9`）并登记至 `scripts/contrast.py`；更新 `src/shared/styles/base.css` 与 `src/features/tree/tree.css`，使区域科技/建筑改用 `--color-tree-tech-rg`、不可用独特/区域格保留身份色边框与中性卡底、悬停保持身份色、对照态下所有独特格（含科技/建筑）收掉光晕且保留单位键盘聚焦双环；同步改写 `tests/e2e/treeJump886.spec.ts` 4 处旧 `.tmark` 断言，新增全量 56 文明身份类与双主题 ΔE00/WCAG 校验单测 `tests/unit/treeBorders1364.test.ts` 及专项浏览器回归 `tests/e2e/treeBorders1364.spec.ts`（登记至 `scripts/ci-browser-weights.json`）。
+
 ## [0.99.33] - 2026-11-23
 
 ### 更新说明

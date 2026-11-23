@@ -19,10 +19,12 @@ TEXT, LARGE, UI = 4.5, 3.0, 3.0
 THEMES = {
     'light': dict(bg='#fbfbfd', surface='#ffffff', surface2='#f5f5f7', control='#ececf0', tag='#f2f2f7',
                   text='#1d1d1f', muted='#636366', accent='#a65a14', link='#0066cc', good='#1f7a35',
-                  bad='#c4281c', warn='#a15c00', bad_soft='#fdeeec', on_accent='#ffffff'),
+                  bad='#c4281c', warn='#a15c00', bad_soft='#fdeeec', on_accent='#ffffff',
+                  tree_tech_rg='#0b7285'),
     'dark': dict(bg='#000000', surface='#1c1c1e', surface2='#2c2c2e', control='#2c2c2e', tag='#2c2c2e',
                  text='#f5f5f7', muted='#a1a1a6', accent='#f0a454', link='#4da3ff', good='#4cd964',
-                 bad='#ff6b5e', warn='#ffb340', bad_soft='#3a1714', on_accent='#000000'),
+                 bad='#ff6b5e', warn='#ffb340', bad_soft='#3a1714', on_accent='#000000',
+                 tree_tech_rg='#4fc3d9'),
 }
 # (前景, 背景列表, 阈值, 说明) —— 与规范 §2 / §5 对应
 PAIRS = [
@@ -37,6 +39,7 @@ PAIRS = [
     ('text', ['bad_soft'], TEXT, '卡点行正文'),
     ('accent', ['surface2'], UI, '评分进度条 / 时间轴琥珀色块（图形）'),
     ('muted', ['surface'], UI, '问号图标描边（UI 组件）'),
+    ('tree_tech_rg', ['bg', 'surface', 'surface2', 'control'], UI, '科技树区域科技/建筑边框（UI 组件）'),
 ]
 # 装饰性元素（aria-hidden，不承载信息）不参与检查：卡片右上角淡色大数字 #e8e8ed。
 

@@ -453,12 +453,11 @@ a {
   box-shadow: 0 0 8px var(--color-accent);
 }
 .tcell.rg {
-  border-color: var(--color-text-2);
+  border-color: var(--color-tree-tech-rg);
   box-shadow: none;
 }
 .tcell.na.uq,
 .tcell.na.rg {
-  border-color: var(--color-border);
   box-shadow: none;
 }
 .tcell.onlyA {
@@ -494,7 +493,7 @@ a {
   box-shadow: 0 0 6px var(--color-accent);
 }
 .tl1.rg {
-  border-color: var(--color-text-2);
+  border-color: var(--color-tree-tech-rg);
   box-shadow: none;
 }
 .tl1.na {

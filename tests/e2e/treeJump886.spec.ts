@@ -235,36 +235,48 @@ test('#886 独特与区域标识、不可用灰化只作用在图标上', async 
   await expect(ax).toHaveClass(/\buq\b/);
   await expect(ax).not.toHaveClass(/\brg\b/);
   expect(await ax.evaluate((el) => getComputedStyle(el).boxShadow)).not.toBe('none');
+  await expect(page.locator('.tmark')).toHaveCount(0);
   const galleon = page.locator('a.tcell[href*="/unit/691"]');
-  await expect(galleon.locator('.tmark')).toHaveCount(0);
   await expect(galleon).not.toHaveClass(/\buq\b/);
   await expect(galleon).not.toHaveClass(/\brg\b/);
+  await expect(galleon).toHaveCSS('border-color', 'rgb(229, 229, 234)');
 
   await page.goto('./#/civ/Portuguese#techtree');
   const heavy = page.locator('a.tcell[href*="/unit/2701"]');
   await expect(heavy).toHaveAttribute('aria-label', '重装骑马弩兵，区域单位');
   const crane = page.locator('a.tcell[href*="/tech/1452"]');
   await expect(crane).toHaveAttribute('aria-label', '便携弯弩装置，区域科技');
-  for (const cell of [heavy, crane]) {
+  const normalNaBorder = await page
+    .locator('a.tcell.na:not(.uq):not(.rg)')
+    .first()
+    .evaluate((el) => getComputedStyle(el).borderColor);
+  for (const [cell, border] of [
+    [heavy, 'rgb(59, 76, 202)'],
+    [crane, 'rgb(11, 114, 133)'],
+  ] as const) {
     await expect(cell).toHaveClass(/\bna\b/);
     await expect(cell).toHaveClass(/\brg\b/);
     await expect(cell).not.toHaveClass(/\buq\b/);
     const style = await cell.evaluate((el) => {
       const img = el.querySelector('img');
-      const mark = el.querySelector('.tmark');
       return {
+        marks: el.querySelectorAll('.tmark').length,
         cellOpacity: getComputedStyle(el).opacity,
         cellShadow: getComputedStyle(el).boxShadow,
+        cellBorder: getComputedStyle(el).borderColor,
+        cellBg: getComputedStyle(el).backgroundColor,
         imgOpacity: img ? getComputedStyle(img).opacity : '',
         imgFilter: img ? getComputedStyle(img).filter : '',
-        markOpacity: mark ? getComputedStyle(mark).opacity : '',
       };
     });
+    expect(style.marks).toBe(0);
     expect(Number(style.cellOpacity)).toBe(1);
     expect(style.cellShadow).toBe('none');
+    expect(style.cellBorder).toBe(border);
+    expect(style.cellBorder).not.toBe(normalNaBorder);
+    expect(style.cellBg).toBe('rgb(236, 236, 240)');
     expect(Number(style.imgOpacity)).toBeLessThan(0.5);
     expect(style.imgFilter).toContain('grayscale');
-    expect(Number(style.markOpacity)).toBe(1);
   }
   await expect(page.locator('.tother')).toContainText('大商站');
   await expect(page.locator('.tother')).toContainText('独特建筑');
@@ -406,6 +418,12 @@ for (const theme of ['light', 'dark'] as const) {
     const unique = theme === 'light' ? 'rgb(111, 45, 168)' : 'rgb(192, 124, 240)';
     const regional = theme === 'light' ? 'rgb(59, 76, 202)' : 'rgb(131, 147, 248)';
     const amber = theme === 'light' ? 'rgb(166, 90, 20)' : 'rgb(240, 164, 84)';
+    const techRg = theme === 'light' ? 'rgb(11, 114, 133)' : 'rgb(79, 195, 217)';
+    const controlBg = theme === 'light' ? 'rgb(236, 236, 240)' : 'rgb(44, 44, 46)';
+    await expect(page.locator('.tmark')).toHaveCount(0);
+    await expect(legend.locator('.tl1.uq:not(.unit-identity)')).toHaveCSS('margin-right', '4px');
+    await expect(legend.locator('.tl1.rg:not(.unit-identity)')).toHaveCSS('border-color', techRg);
+    await expect(legend.locator('.tl1.rg:not(.unit-identity)')).toHaveCSS('margin-right', '4px');
     for (const [group, color, ids] of [
       ['uq', unique, [1759, 1761]],
       ['rg', regional, [873, 875]],
@@ -417,13 +435,15 @@ for (const theme of ['light', 'dark'] as const) {
         const cell = page.locator(`a.tcell[href*="/unit/${id}?"]`);
         await expect(cell).toHaveCSS('border-color', color);
         await expect(cell).toHaveCSS('background-color', fill);
-        await expect(cell.locator('.tmark')).toHaveCSS('background-color', color);
+        await expect(cell.locator('.tmark')).toHaveCount(0);
         await cell.hover();
         await expect(cell).toHaveCSS('border-color', color);
       }
     }
-    await expect(page.locator('a.tcell[href*="/tech/833?"]')).toHaveCSS('border-color', amber);
+    const uniqueTech = page.locator('a.tcell[href*="/tech/833?"]');
+    await expect(uniqueTech).toHaveCSS('border-color', amber);
     await pickCiv(page, 'civ-tt-cmp', 'Dravidians');
+    await expect(uniqueTech).toHaveCSS('box-shadow', 'none');
     const ratha = page.locator('a.tcell[href*="/unit/1759?"]');
     await expect(ratha).toHaveCSS('outline-width', '3px');
     await expect(ratha).toHaveCSS('box-shadow', 'none');
@@ -440,7 +460,10 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(otherOnly).toHaveClass(/onlyB/);
     await expect(otherOnly).toHaveCSS('opacity', '1');
     await expect(otherOnly.locator('img')).toHaveCSS('filter', 'grayscale(1)');
-    await expect(otherOnly.locator('.tmark')).toHaveCSS('background-color', regional);
+    await expect(otherOnly.locator('.tmark')).toHaveCount(0);
+    await expect(otherOnly).toHaveCSS('border-color', regional);
+    await expect(otherOnly).toHaveCSS('background-color', controlBg);
+    await expect(otherOnly).toHaveCSS('box-shadow', 'none');
     const redRing = await otherOnly.evaluate((el) => getComputedStyle(el).outlineColor);
     await page.keyboard.press('Tab');
     await otherOnly.focus();
