@@ -72,11 +72,35 @@
           "garrisonCapacity": {
             "$ref": "#/items/properties/garrisonCapacity"
           },
+          "combatAbility": {
+            "$ref": "#/items/properties/combatAbility"
+          },
           "kind": {
             "enum": ["weapon", "barrage", "dismount"]
           }
         },
-        "required": ["id", "en", "zh", "hp", "atk", "ma", "pa", "rng", "minr", "spd", "los", "rof", "acc", "blast", "atks", "arms", "armc", "cls", "kind"],
+        "required": [
+          "id",
+          "en",
+          "zh",
+          "hp",
+          "atk",
+          "ma",
+          "pa",
+          "rng",
+          "minr",
+          "spd",
+          "los",
+          "rof",
+          "acc",
+          "blast",
+          "atks",
+          "arms",
+          "armc",
+          "cls",
+          "combatAbility",
+          "kind"
+        ],
         "additionalProperties": false
       },
       "id": {
@@ -189,6 +213,10 @@
         "type": "number"
       },
       "garrisonCapacity": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "combatAbility": {
         "type": "integer",
         "minimum": 0
       },
@@ -370,6 +398,7 @@
       "tt",
       "acc",
       "blast",
+      "combatAbility",
       "atks",
       "arms",
       "armc",

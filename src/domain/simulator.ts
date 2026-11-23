@@ -54,6 +54,7 @@ export function baseStats(u: Unit): StatSet {
     barm: 0,
     bonus,
     armc,
+    ca: u.combatAbility ?? 0,
     rofx: 1,
   };
 }

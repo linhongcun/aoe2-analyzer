@@ -559,6 +559,17 @@ def main():
     )
     out['ballistics'] = {'units': ballistics_units, 'chargeOnly': ballistics_charge_only}
 
+    # ---- #1366 目录单位基础 combatAbility（属性 63 位掩码；全量 248 目录单位，供 effects.ts 零耦合折叠 a:63） ----
+    combat_ability_base = {}
+    for u in sorted(units, key=lambda x: x['id']):
+        uid = u['id']
+        du = dat_units[uid] if 0 <= uid < len(dat_units) else None
+        ca = du.get('CombatAbility') if du else None
+        if type(ca) is not int or ca < 0:
+            raise ValueError(f'Missing or invalid CombatAbility for catalog unit {uid}: {ca!r}')
+        combat_ability_base[str(uid)] = ca
+    out['combatAbilityBase'] = combat_ability_base
+
     # .dat 中不存在的站内单位/建筑（应为空）：其科技/加成作用范围由运行时回退到手工判定
     U0 = AC[0]['Units']
     out['meta']['newIds'] = sorted(i for i in ours if i >= len(U0) or U0[i] is None)

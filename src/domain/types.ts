@@ -49,6 +49,7 @@ export type UnitForm = Pick<
   | 'attackDelaySeconds'
   | 'frameDelay'
   | 'garrisonCapacity'
+  | 'combatAbility'
 > & { kind: 'weapon' | 'barrage' | 'dismount' };
 
 export interface ConversionResistance {
@@ -116,6 +117,8 @@ export interface Unit {
   friendlyFireDamage?: number;
   /** 固定目录的 GarrisonCapacity 原值，缺字段时为未知。 */
   garrisonCapacity?: number;
+  /** 固定 DAT 属性 63（type_50.break_off_combat）完整位掩码（bit 1 无视护甲、bit 2 抵抗无视护甲等）。 */
+  combatAbility?: number;
   atks: [string, number][];
   arms: [string, number][];
   desc: string;
@@ -189,12 +192,15 @@ export interface StatSet {
   bonus: Record<string, number>;
   /** 护甲类别当前值（不含近战/穿刺）。来自单位 armc，可被 armc 效果修改。 */
   armc: Record<string, number>;
+  /** 生效 combatAbility（属性 63）位掩码，由基础值经 a:63 科技算术叠加得出。 */
+  ca: number;
   rofx: number;
 }
-export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx' | 'armc'>;
-/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成）；armc 为护甲类别加减 */
+export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx' | 'armc' | 'ca'>;
+/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成）；armc 为护甲类别加减；ca 为属性 63 位掩码算术改写 */
 export type Effect =
   | { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number }
+  | { s: 'ca'; op?: 'add' | 'mul' | 'set'; v: number }
   | { s: 'rof'; v: number }
   | { s: 'bonus'; vs: string; v: number; op?: 'add' | 'mul' }
   | { s: 'armc'; vs: string; v: number; op?: 'add' | 'mul' };

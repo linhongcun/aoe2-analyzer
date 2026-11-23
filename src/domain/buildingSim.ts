@@ -25,6 +25,7 @@ export function buildingBase(b: Building): StatSet {
     barm: b.barm,
     bonus: {},
     armc: {},
+    ca: 0,
     rofx: 1,
   };
 }

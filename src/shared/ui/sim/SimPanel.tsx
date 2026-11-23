@@ -1,9 +1,11 @@
 /** 通用科技模拟器面板（单位与建筑共用）：文明/时代选择、分组科技开关、预设、属性表、费用汇总、团队加成、对比列 */
+import { Fragment } from 'react';
 import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { ARMC_CLASS_NOTE } from '../../../domain/affects';
 import { militaryTechAge } from '../../../domain/availabilityAge';
+import { hasIgnoreArmor } from '../../../domain/damageCore';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
@@ -56,33 +58,49 @@ export interface SimPanelProps {
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
+  const showIgnoreArmor = hasIgnoreArmor(B.ca) || hasIgnoreArmor(S.ca) || (C !== null && hasIgnoreArmor(C.ca));
+  const ignoreArmorRow = showIgnoreArmor ? (
+    <tr key="ignore-armor" data-t="sim-ignore-armor">
+      <td>无视护甲</td>
+      <td className="nw">{hasIgnoreArmor(B.ca) ? '是' : '否'}</td>
+      <td className="nw">
+        <b>{hasIgnoreArmor(S.ca) ? '是' : '否'}</b>
+      </td>
+      {C && <td className="nw">{hasIgnoreArmor(C.ca) ? '是' : '否'}</td>}
+    </tr>
+  ) : null;
+  const hasAccRow = rows.some(([k]) => k === 'acc');
   return (
     <>
       {rows.map(([k, n, ic]) => {
         const d = S[k] - B[k],
           good = k === 'rof' || k === 'bt' || k === 'minr' ? d < 0 : d > 0;
         return (
-          <tr key={k}>
-            <td>
-              <StatIcon k={ic} t={n} />
-              {n}
-            </td>
-            <td>
-              {fmtStat(k, B[k])}{' '}
-              {Math.abs(d) > 1e-9 && (
-                <span className={good ? 'up' : 'dn'}>
-                  {d > 0 ? '+' : ''}
-                  {fmtStat(k, d).replace('s', '')}
-                </span>
-              )}
-            </td>
-            <td>
-              <b>{fmtStat(k, S[k])}</b>
-            </td>
-            {C && <td>{fmtStat(k, C[k])}</td>}
-          </tr>
+          <Fragment key={k}>
+            <tr>
+              <td>
+                <StatIcon k={ic} t={n} />
+                {n}
+              </td>
+              <td>
+                {fmtStat(k, B[k])}{' '}
+                {Math.abs(d) > 1e-9 && (
+                  <span className={good ? 'up' : 'dn'}>
+                    {d > 0 ? '+' : ''}
+                    {fmtStat(k, d).replace('s', '')}
+                  </span>
+                )}
+              </td>
+              <td>
+                <b>{fmtStat(k, S[k])}</b>
+              </td>
+              {C && <td>{fmtStat(k, C[k])}</td>}
+            </tr>
+            {k === 'acc' && ignoreArmorRow}
+          </Fragment>
         );
       })}
+      {!hasAccRow && ignoreArmorRow}
     </>
   );
 }

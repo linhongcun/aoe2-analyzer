@@ -248,7 +248,7 @@ describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧
     });
   });
 
-  it('验收 6：全量 56 文明扫描前后对比——科技分类拦截在帝王（2,291 组合）从 616 降至 0，城堡 391 降至 0，封建 56 降至 0，黑暗 0 降至 0', () => {
+  it('验收 6：全量 56 文明扫描前后对比——科技分类拦截在帝王（2,291 组合）从 631 降至 0，城堡 391 降至 0，封建 56 降至 0，黑暗 0 降至 0', () => {
     expect(civs).toHaveLength(56);
 
     const scanAge = (age: number) => {
@@ -274,7 +274,8 @@ describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧
     };
 
     // #1368：混编 PK 移除零造价库曼雇佣兵精锐钦察（1260）(-1 → 2291)
-    expect(scanAge(4)).toEqual({ valid: 2291, legacyBlocked: 616, currentBlocked: 0 });
+    // #1366：乌兹钢（832）纳入达罗毗荼 15 个步兵/骑兵单位帝王数值预设，旧基线未含属性 63 故 legacyBlocked 由 616 增至 631，currentBlocked 保持 0
+    expect(scanAge(4)).toEqual({ valid: 2291, legacyBlocked: 631, currentBlocked: 0 });
     // #1325：城堡新增亚美尼亚冠军剑士（567）与契丹重装骑射手（474）(+2 → 1378)，黑暗移除误放行的亚美尼亚武士（75）(-1 → 113)
     expect(scanAge(3)).toEqual({ valid: 1378, legacyBlocked: 391, currentBlocked: 0 });
     expect(scanAge(2)).toEqual({ valid: 563, legacyBlocked: 56, currentBlocked: 0 });

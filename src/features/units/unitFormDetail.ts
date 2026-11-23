@@ -22,6 +22,7 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           attackDelaySeconds: alternate.attackDelaySeconds,
           frameDelay: alternate.frameDelay,
           garrisonCapacity: alternate.garrisonCapacity,
+          combatAbility: alternate.combatAbility,
           blastDamage: undefined,
           blastAttackLevel: undefined,
           friendlyFireDamage: undefined,

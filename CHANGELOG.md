@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.37] - 2026-11-23
+
+### 更新说明
+
+单位 PK（1v1、群战与混编）、伤害拆解与单位科技模拟器现已正式支持游戏原生的「无视护甲」与「抵抗无视护甲」战斗机制：立陶宛烈堤司、亚美尼亚复合弓箭手、研究乌兹钢后的达罗毗荼步兵/骑兵等单位在攻击普通目标时不再扣除近战或穿刺护甲，攻击冲车、攻城塔、龟甲船等带抵抗标记的单位时则照常扣甲；结果区、伤害拆解与模拟器均同步给出清晰说明，并移除已建模的乌兹钢「仅文本」提示。
+
+### 新增
+
+- #1366：从固定 DE 188329 `.dat`（`dat.v22`）向 `data/game/units.json` 导出全量目录单位与副形态的 `combatAbility` 字段，并在 `data/game/effects.json` 顶层导出目录单位基础值 `combatAbilityBase`（零 `core.ts` 跨包耦合，保全文明详情等懒加载页拆包重试契约）；在 `damageCore.ts`、`duelFighter.ts`、`damageBreakdown.ts`、`effects.ts`、`simulator.ts` 接入 `combatAbility` bit 1（无视护甲）与 bit 2（抵抗无视护甲）计算及 `a: 63` 科技（乌兹钢 `832`）动态叠加；新增 `IgnoreArmorNotes.tsx` 并更新 `Duel.tsx`、`DuelResults.tsx`、`MixedResult.tsx`、`DamageBreakdown.tsx` 与 `SimPanel.tsx` 展示说明行与「无视护甲」属性行；补齐 Python 测试 `tests/py/test_combat_ability1366.py`、单测 `tests/unit/ignoreArmor1366.test.ts` 与浏览器回归 `tests/e2e/ignoreArmor1366.spec.ts`。
+
 ## [0.99.36] - 2026-11-23
 
 ### 更新说明

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { damageBreakdown, damageSources } from '../../../domain/damageBreakdown';
+import { hasIgnoreArmor } from '../../../domain/damageCore';
 import { fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON, type Fighter } from '../../../domain/duel';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
@@ -26,7 +27,8 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
       <summary>查看逐击伤害与加成来源</summary>
       <p className="note">
         每类攻击只与同类护甲相减，再合计；负攻击可能扣减伤害，有普通攻击时总伤害最低为 <span className="num nw">1</span>
-        。常规远程期望伤害另计命中率；目录准确度为 <span className="num nw">0%</span> 的特殊远程攻击按每击命中主目标估算。
+        。常规远程期望伤害另计命中率；目录准确度为 <span className="num nw">0%</span>{' '}
+        的特殊远程攻击按每击命中主目标估算。攻击方「无视护甲」时，目标的近战、穿刺护甲不扣；目标「抵抗无视护甲」时照扣。
       </p>
       {(
         [
@@ -46,11 +48,21 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                 <ul className="damage-classes">
                   {d.rows.map((row) => (
                     <li key={row.category}>
-                      {row.category}：攻击 <b className="nw">{n(row.attack)}</b>，目标护甲 <b className="nw">{n(row.armor)}</b>，伤害{' '}
-                      <b className="nw">{n(row.damage)}</b>
+                      {row.category}：攻击 <b className="nw">{n(row.attack)}</b>，目标护甲 <b className="nw">{n(row.armor)}</b>
+                      {row.ignored && <span className="nw">（已无视）</span>}，伤害 <b className="nw">{n(row.damage)}</b>
                     </li>
                   ))}
                 </ul>
+                {d.ignoreArmor.applied && (
+                  <p className="note" data-t={`damage-ignore-armor-${side}`}>
+                    本击无视目标的{d.ignoreArmor.categories.join('、')}护甲；其他类别护甲照扣。
+                  </p>
+                )}
+                {d.ignoreArmor.resisted && (
+                  <p className="note" data-t={`damage-ignore-armor-${side}`}>
+                    目标抵抗无视护甲，本击照常扣{d.ignoreArmor.categories.join('、')}护甲。
+                  </p>
+                )}
                 {d.minimum > 0 && (
                   <p>
                     最低伤害补足：<b className="nw">+{n(d.minimum)}</b>
@@ -76,6 +88,11 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
             <p>
               单位基础：攻击 <span className="nw">{attacker.u.atk}</span>，近战护甲 <span className="nw">{attacker.u.ma}</span>，穿刺护甲{' '}
               <span className="nw">{attacker.u.pa}</span>
+              {hasIgnoreArmor(attacker.u.combatAbility) && (
+                <>
+                  ；<span className="nw">攻击无视护甲</span>
+                </>
+              )}
             </p>
             <ul>
               {Object.entries(trace.base.attack)
@@ -97,15 +114,23 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                   {source.changes.map((change) => (
                     <span className="damage-change" key={change.stat}>
                       {change.stat}{' '}
-                      <span className="nw">
-                        {n(change.before)} 至 {n(change.after)}
-                      </span>
-                      （
-                      <span className="nw">
-                        {change.after >= change.before ? '+' : ''}
-                        {n(change.after - change.before)}
-                      </span>
-                      ）
+                      {change.kind === 'boolean' ? (
+                        <span className="nw">
+                          {change.before ? '开启' : '未开启'} 至 {change.after ? '开启' : '未开启'}
+                        </span>
+                      ) : (
+                        <>
+                          <span className="nw">
+                            {n(change.before)} 至 {n(change.after)}
+                          </span>
+                          （
+                          <span className="nw">
+                            {change.after >= change.before ? '+' : ''}
+                            {n(change.after - change.before)}
+                          </span>
+                          ）
+                        </>
+                      )}
                     </span>
                   ))}
                 </li>

@@ -3,6 +3,7 @@
  * 数据源与新鲜度见 effects.json 的 meta.sources 与 docs/reports/EFFECTS-AUDIT.md。
  */
 import raw from '../../data/game/effects.json';
+import { applyEffectValue } from './numericEffects';
 import type { Effect } from './types';
 
 export type DatOp = 'add' | 'mul' | 'set';
@@ -100,6 +101,7 @@ export interface DatFile {
   civs: Record<string, DatCiv>;
   generic: DatGeneric[];
   ballistics?: DatBallistics;
+  combatAbilityBase?: Record<string, number>;
 }
 export const DAT = raw as unknown as DatFile;
 
@@ -111,9 +113,36 @@ export function toEffects(fx: readonly DatFx[]): Effect[] {
     if (f.s === 'rof') out.push({ s: 'rof', v: f.v });
     else if (f.s === 'bonus' && f.vs) out.push(f.op === 'mul' ? { s: 'bonus', vs: f.vs, v: f.v, op: 'mul' } : { s: 'bonus', vs: f.vs, v: f.v });
     else if (f.s === 'armc' && f.vs) out.push(f.op === 'mul' ? { s: 'armc', vs: f.vs, v: f.v, op: 'mul' } : { s: 'armc', vs: f.vs, v: f.v });
-    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<Effect['s'], 'rof' | 'bonus' | 'armc'>, op: f.op ?? 'add', v: f.v } as Effect);
+    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<Effect['s'], 'rof' | 'bonus' | 'armc' | 'ca'>, op: f.op ?? 'add', v: f.v } as Effect);
   });
   return out;
+}
+
+/** 按原 .dat 顺序提取属性 63（combatAbility）命令；严格白名单校验 op 与有限数值，未知 op 不静默回退为 add。 */
+export function extractCombatAbilityEffects(eco: readonly DatEco[] | undefined, unitId: number): Effect[] {
+  if (!eco?.length) return [];
+  const out: Effect[] = [];
+  for (const item of eco) {
+    if (
+      item.a === 63 &&
+      item.t?.includes(unitId) &&
+      (item.op === 'add' || item.op === 'mul' || item.op === 'set') &&
+      typeof item.v === 'number' &&
+      Number.isFinite(item.v)
+    ) {
+      out.push({ s: 'ca', op: item.op, v: item.v });
+    }
+  }
+  return out;
+}
+
+/** 共享属性 63（combatAbility）折叠纯函数：按 Genie 整数算术 set/add/mul 顺序叠加（绝不用按位 OR 替代 add），供 effects.ts 与 issue 1367 共用。 */
+export function applyCombatAbilityEco(baseCa: number, eco: readonly DatEco[] | undefined, unitId: number): number {
+  let ca = baseCa;
+  for (const effect of extractCombatAbilityEffects(eco, unitId)) {
+    if (effect.s === 'ca') ca = applyEffectValue(ca, effect.op, effect.v);
+  }
+  return ca;
 }
 export const idPred = (ids: readonly number[]) => {
   const s = new Set(ids);
