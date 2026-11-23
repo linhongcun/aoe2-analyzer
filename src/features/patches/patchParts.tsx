@@ -16,7 +16,6 @@ import { Icon, type IconName } from '../../shared/ui/Icon';
 import { NumericText } from '../../shared/ui/PatchHistory';
 import { ResourceValue } from '../../shared/ui/ResourceValue';
 
-export const OBJECT_LABEL = { unit: '单位', building: '建筑', tech: '科技', civ: '文明' } as const;
 const KIND_ICON: Record<ArchiveKind, IconName> = { new: 'plus', buff: 'arrow-up', nerf: 'arrow-down', adjust: 'info' };
 
 export function civZh(en: string) {
