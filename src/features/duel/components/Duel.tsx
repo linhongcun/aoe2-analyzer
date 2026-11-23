@@ -417,8 +417,8 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
             {damageFormula}
           </span>
-          （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。常规远程按命中率取期望伤害。目录准确度为 <span className="num nw">0%</span>{' '}
-          的特殊远程攻击按每击命中主目标估算。
+          （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。攻击方带「无视护甲」且目标不抵抗时，近战、穿刺护甲按 <span className="num nw">0</span>{' '}
+          计。常规远程按命中率取期望伤害。目录准确度为 <span className="num nw">0%</span> 的特殊远程攻击按每击命中主目标估算。
           {kiteOpt ? (
             <KiteContactBoundary />
           ) : mode === '1' ? (

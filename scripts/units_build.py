@@ -190,6 +190,10 @@ def main():
         if u['from_'] not in units:
             u['from_'] = None
         source_unit = _DU[u['id']] if u['id'] < len(_DU) else None
+        combat_ability = source_unit.get('CombatAbility') if source_unit else None
+        if type(combat_ability) is not int or combat_ability < 0:
+            raise ValueError(f"Missing or invalid CombatAbility for unit {u['id']}: {combat_ability!r}")
+        u['combatAbility'] = combat_ability
         if source_unit:
             for field in ('BlastDamage', 'BlastAttackLevel', 'FriendlyFireDamage'):
                 if field in source_unit:
@@ -239,6 +243,10 @@ def main():
             )
         if not valid:
             raise ValueError(f'Form relation changed: {owner} to {target}')
+        form_dat = _DU[target] if target < len(_DU) else None
+        form_ca = form_dat.get('CombatAbility') if form_dat else None
+        if type(form_ca) is not int or form_ca < 0:
+            raise ValueError(f'Missing or invalid CombatAbility for form {target}: {form_ca!r}')
         entry = units[owner]
         entry['form'] = dict(
             id=target,
@@ -246,6 +254,7 @@ def main():
             en=f"{entry['en']} ({en_suffix})",
             zh=f"{entry['zh']}（{zh_suffix}）",
             **combat_stats(alternate),
+            combatAbility=form_ca,
         )
 
     # Only the Bengali elephant bonus (technology 846, effect 865) is in scope.

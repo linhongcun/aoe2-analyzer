@@ -1,5 +1,5 @@
 import type { Cost, StatSet, Unit } from './types';
-import { damageRows, totalDamage } from './damageCore';
+import { damageRows, evaluateIgnoreArmor, totalDamage } from './damageCore';
 
 export type AccuracyMode = 'catalog' | 'assume-hit';
 
@@ -18,6 +18,8 @@ export interface Fighter {
   canAttack?: boolean;
   /** 远程命中口径：'assume-hit' 表示目录准确度 0% 的特殊远程攻击按每次主弹命中主目标估算。 */
   accuracyMode?: AccuracyMode;
+  /** 生效 combatAbility（属性 63）位掩码；缺省按 0 计以兼容手构测试对象。 */
+  combatAbility?: number;
   ranged: boolean;
   rng: number;
   cost: Cost;
@@ -89,6 +91,7 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
     acc: clampedAcc / 100,
     canAttack,
     accuracyMode,
+    combatAbility: S.ca,
     ranged: u.rng > 1,
     rng: S.rng,
     cost: u.cost,
@@ -104,13 +107,17 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
 }
 
 /** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
-export function damageByClass(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact'>, d: Pick<Fighter, 'armor'>) {
+export function damageByClass(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>, d: Pick<Fighter, 'armor' | 'combatAbility'>) {
   if (!fighterCanAttack(a)) return [];
+  const ignoreArmor = evaluateIgnoreArmor(a, d);
   // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
-  return damageRows(a.attack, d.armor, { allowInvalid: true }).rows;
+  return damageRows(a.attack, d.armor, {
+    allowInvalid: true,
+    ...(ignoreArmor.applied ? { ignoredCategories: new Set(ignoreArmor.categories) } : {}),
+  }).rows;
 }
 /** 单次命中伤害（不含命中率）；无普通攻击返回 0。 */
-export function damagePerHit(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact'>, d: Pick<Fighter, 'armor'>): number {
+export function damagePerHit(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>, d: Pick<Fighter, 'armor' | 'combatAbility'>): number {
   if (!fighterCanAttack(a)) return 0;
   return totalDamage(damageByClass(a, d));
 }

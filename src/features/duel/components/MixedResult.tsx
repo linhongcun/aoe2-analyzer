@@ -1,5 +1,6 @@
 import { useMemo, type RefObject } from 'react';
 import { civByEn } from '../../../data';
+import { evaluateIgnoreArmor } from '../../../domain/damageCore';
 import { fighterUsesAssumeHit } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
@@ -59,7 +60,7 @@ export function MixedRules() {
           <li>同刻攻击按本方行顺序逐击结算。清空前排后，仅对还在射程内的下一行继续结算，按新目标计算每击伤害。单击超出的伤害丢弃。</li>
           <li>
             沿用本站伤害类别、护甲和常规远程命中率期望（目录准确度为 <span className="num nw">0%</span>{' '}
-            的特殊远程攻击按每击命中主目标估算）；占比只是单位数量占比，不是人口、资源或攻击权重。
+            的特殊远程攻击按每击命中主目标估算），攻击方「无视护甲」时目标的近战、穿刺护甲不扣，目标「抵抗无视护甲」时照扣；占比只是单位数量占比，不是人口、资源或攻击权重。
           </li>
           <li>
             达到 <span className="num nw">{FIGHT_TIME} 游戏秒</span>时限或事件、攻击计算上限时停止。双方仍存活时显示存活数量，暂无胜者。
@@ -69,6 +70,42 @@ export function MixedRules() {
       </details>
     </aside>
   );
+}
+
+function buildMixedIgnoreArmorNote(a: MixedSideView, b: MixedSideView): string | null {
+  const clauses: string[] = [];
+  const pairs: readonly [string, MixedSideView, string, MixedSideView][] = [
+    ['A', a, 'B', b],
+    ['B', b, 'A', a],
+  ];
+  for (const [atkPrefix, atkView, defPrefix, defView] of pairs) {
+    const defRows = defView.rows.flatMap((row, i) => (row.resolved ? [{ label: `${defPrefix}${i + 1} ${row.resolved.u.zh}`, fighter: row.resolved.F }] : []));
+    if (!defRows.length) continue;
+    for (let i = 0; i < atkView.rows.length; i++) {
+      const atkResolved = atkView.rows[i]?.resolved;
+      if (!atkResolved) continue;
+      const atkLabel = `${atkPrefix}${i + 1} ${atkResolved.u.zh}`;
+      const appliedTargets: string[] = [];
+      const resistedTargets: string[] = [];
+      const categorySet = new Set<'近战' | '穿刺'>();
+      for (const target of defRows) {
+        const evalRes = evaluateIgnoreArmor(atkResolved.F, target.fighter);
+        if (!evalRes.active) continue;
+        for (const cat of evalRes.categories) categorySet.add(cat);
+        if (evalRes.applied) appliedTargets.push(target.label);
+        else if (evalRes.resisted) resistedTargets.push(target.label);
+      }
+      if (!appliedTargets.length && !resistedTargets.length) continue;
+      const categories = (['近战', '穿刺'] as const).filter((cat) => categorySet.has(cat)).join('、');
+      if (appliedTargets.length) {
+        const base = `${atkLabel} 打 ${appliedTargets.join('、')} 时不扣${categories}护甲`;
+        clauses.push(resistedTargets.length ? `${base}；${resistedTargets.join('、')} 抵抗无视护甲，照常扣甲` : base);
+      } else {
+        clauses.push(`${atkLabel} 的无视护甲对本场目标无效（${resistedTargets.join('、')} 抵抗无视护甲），照常扣甲`);
+      }
+    }
+  }
+  return clauses.length ? `无视护甲：${clauses.join('；')}。` : null;
 }
 
 export function MixedResult({
@@ -157,6 +194,7 @@ export function MixedResult({
   };
   const aInfo = rangedInfo(a.army!, 'a');
   const bInfo = rangedInfo(b.army!, 'b');
+  const ignoreArmorNote = buildMixedIgnoreArmorNote(a, b);
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
@@ -196,6 +234,11 @@ export function MixedResult({
             : result.status === 'draw'
               ? '本次事件内双方攻击均完成，结果为同时全灭。'
               : '结果对应本次配置。'}
+        </p>
+      )}
+      {ignoreArmorNote && (
+        <p className="note" data-t="mixed-ignore-armor-note">
+          {ignoreArmorNote}
         </p>
       )}
       <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />

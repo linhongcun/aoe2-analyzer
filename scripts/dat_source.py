@@ -94,6 +94,7 @@ def unit(u):
             'Transform': u.building.transform_unit if u.building else -1,
             **({'BlastDamage': t.blast_damage, 'BlastAttackLevel': t.blast_attack_level,
                 'FriendlyFireDamage': t.friendly_fire_damage} if t else {}),
+            'CombatAbility': t.break_off_combat if t else 0,
             'BloodUnitID': u.blood_unit_id,
             'AccuracyDispersion': t.accuracy_dispersion if t else None,
             'DisplayedReloadTime': t.displayed_reload_time if t else None,
@@ -154,7 +155,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v21.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v22.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

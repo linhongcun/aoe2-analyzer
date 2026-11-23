@@ -39,6 +39,13 @@ export function effectParts(ef: readonly Effect[]): EffectPart[] {
     if (e.s === 'bonus')
       return { icon: '', text: e.op === 'mul' ? `对 ${e.vs} 加成伤害 ${e.v >= 1 ? '+' : ''}${pct(e.v - 1)}` : `对 ${e.vs} 加成 ${e.v > 0 ? '+' : ''}${e.v}` };
     if (e.s === 'armc') return { icon: '', text: `护甲类别「${e.vs}」${e.v > 0 ? '+' : ''}${e.v}` };
+    if (e.s === 'ca') {
+      const op = e.op ?? 'add';
+      if (op === 'add' && e.v === 1) return { icon: '', text: '攻击无视护甲' };
+      if (op === 'set') return { icon: '', text: `特殊能力标记 → ${e.v}` };
+      if (op === 'mul') return { icon: '', text: `特殊能力标记 ×${e.v}` };
+      return { icon: '', text: `特殊能力标记 ${e.v > 0 ? '+' : ''}${e.v}` };
+    }
     const [n, icon] = STAT_ZH[e.s] ?? [e.s, ''];
     if (e.s === 'rof') return { icon, text: `${n} +${pct(e.v)}` };
     if (e.s === 'bt' && 'op' in e && e.op === 'mul') return { icon, text: `建造速度 +${pct(1 / e.v - 1)}` };

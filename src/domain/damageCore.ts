@@ -6,11 +6,67 @@
  * - `negativeAttack`：单位 PK 保留负攻击扣减，建筑伤害按 0 起算；
  * - `roundHp`：攻城工具先取整建筑生命值，单位 PK 使用原始生命值。
  */
+const COMBAT_ABILITY_IGNORE_ARMOR = 1;
+const COMBAT_ABILITY_RESIST_IGNORE_ARMOR = 2;
+const ARMOR_IGNORE_CLASSES = ['近战', '穿刺'] as const;
+
+/** 生效 combatAbility 是否带 bit 1（无视护甲）。 */
+export function hasIgnoreArmor(ca?: number): boolean {
+  return typeof ca === 'number' && Number.isFinite(ca) && (Math.trunc(ca) & COMBAT_ABILITY_IGNORE_ARMOR) !== 0;
+}
+
+/** 生效 combatAbility 是否带 bit 2（抵抗无视护甲）。 */
+export function hasResistIgnoreArmor(ca?: number): boolean {
+  return typeof ca === 'number' && Number.isFinite(ca) && (Math.trunc(ca) & COMBAT_ABILITY_RESIST_IGNORE_ARMOR) !== 0;
+}
+
+export interface IgnoreArmorEvaluation {
+  active: boolean;
+  resisted: boolean;
+  applied: boolean;
+  categories: ('近战' | '穿刺')[];
+  armors: number[];
+}
+
+const INACTIVE_IGNORE_ARMOR: IgnoreArmorEvaluation = {
+  active: false,
+  resisted: false,
+  applied: false,
+  categories: [],
+  armors: [],
+};
+
+/**
+ * 唯一「无视护甲（bit 1 / bit 2）」判定函数：供 1v1、群战、混编、伤害拆解与结果说明行共用。
+ * 在 categories 非空（攻方存在有限正近战/穿刺攻击）前提下，fighterCanAttack(attacker) 严格等价于 attacker.canAttack !== false。
+ */
+export function evaluateIgnoreArmor(
+  attacker: { attack: Readonly<Record<string, number>>; combatAbility?: number; canAttack?: boolean },
+  defender: { armor: Readonly<Record<string, number>>; combatAbility?: number },
+): IgnoreArmorEvaluation {
+  if (attacker.canAttack === false || !hasIgnoreArmor(attacker.combatAbility)) return INACTIVE_IGNORE_ARMOR;
+  const categories: ('近战' | '穿刺')[] = [];
+  const armors: number[] = [];
+  for (const cat of ARMOR_IGNORE_CLASSES) {
+    const atk = attacker.attack[cat];
+    const arm = defender.armor[cat];
+    if (typeof atk === 'number' && Number.isFinite(atk) && atk > 0 && typeof arm === 'number' && Number.isFinite(arm)) {
+      categories.push(cat);
+      armors.push(arm);
+    }
+  }
+  if (!categories.length) return INACTIVE_IGNORE_ARMOR;
+  const resisted = hasResistIgnoreArmor(defender.combatAbility);
+  return { active: true, resisted, applied: !resisted, categories, armors };
+}
+
 export interface DamageRow {
   category: string;
   attack: number;
   armor: number;
   damage: number;
+  /** 仅当本类别因「无视护甲」按 0 计护甲时设为 true；未无视行必须省略此键。 */
+  ignored?: boolean;
 }
 
 export interface DamageRowsOptions {
@@ -20,6 +76,8 @@ export interface DamageRowsOptions {
   missingArmor?: 'skip' | 'error';
   /** PK 保留非有限值参与计算；默认把非有限值列入 problems。 */
   allowInvalid?: boolean;
+  /** 本击被「无视护甲」按 0 计的护甲类别（仅近战/穿刺）。 */
+  ignoredCategories?: ReadonlySet<string>;
 }
 
 export interface DamageRowsResult {
@@ -31,7 +89,7 @@ export interface DamageRowsResult {
 export function damageRows(
   attacks: Readonly<Record<string, number>>,
   armors: Readonly<Record<string, number>>,
-  { negativeAttack = true, missingArmor = 'skip', allowInvalid = false }: DamageRowsOptions = {},
+  { negativeAttack = true, missingArmor = 'skip', allowInvalid = false, ignoredCategories }: DamageRowsOptions = {},
 ): DamageRowsResult {
   const rows: DamageRow[] = [];
   const problems: string[] = [];
@@ -49,11 +107,14 @@ export function damageRows(
       if (missingArmor === 'error') problems.push(category);
       continue;
     }
+    const ignored = Boolean(ignoredCategories?.has(category));
+    const effectiveArmor = ignored ? 0 : armor;
     rows.push({
       category,
       attack,
       armor,
-      damage: negativeAttack ? Math.max(Math.min(0, attack), attack - armor) : Math.max(0, attack - armor),
+      damage: negativeAttack ? Math.max(Math.min(0, attack), attack - effectiveArmor) : Math.max(0, attack - effectiveArmor),
+      ...(ignored ? { ignored: true } : {}),
     });
   }
   return { rows, problems };

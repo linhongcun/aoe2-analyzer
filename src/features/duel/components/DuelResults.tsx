@@ -22,6 +22,7 @@ import type { Tech } from '../../../domain/types';
 import { CounterSummary } from './CounterSummary';
 import { BattleReplay } from './BattleReplay';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
+import { IgnoreArmorNotes } from './IgnoreArmorNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
 import { GroupContact } from './ContactSummary';
 import { DisengagedNotice, KiteContactBoundary, KiteSummaryCard } from './KiteSummaryCard';
@@ -183,6 +184,7 @@ export function OneVOne({
           )
         )}
       </h2>
+      <IgnoreArmorNotes a={A} b={B} />
       {isDisengaged && oneKite && (
         <DisengagedNotice aName={A.u.zh} aRng={A.F.rng} bName={B.u.zh} bRng={B.F.rng} disengagedAt={oneKite.disengagedAt ?? r.duration} />
       )}
@@ -385,6 +387,7 @@ export function Group({
           )}
         </small>
       </h2>
+      <IgnoreArmorNotes a={A} b={B} />
       {isDisengaged && g.contact.kite && (
         <DisengagedNotice aName={A.u.zh} aRng={A.F.rng} bName={B.u.zh} bRng={B.F.rng} disengagedAt={g.contact.kite.disengagedAt ?? g.duration} />
       )}

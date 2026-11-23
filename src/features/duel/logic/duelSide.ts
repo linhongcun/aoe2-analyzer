@@ -1,6 +1,7 @@
 import { civByEn } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import type { CostDiscount } from '../../../domain/costDiscount';
+import { hasIgnoreArmor } from '../../../domain/damageCore';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
 import { simTechs, simulate, type SimContext } from '../../../domain/simulator';
@@ -22,6 +23,8 @@ export interface Resolved {
   disc: CostDiscount;
   /** 已选且本站已支持的费用科技之后的训练价，与 Fighter.cost 同一笔 unitCost */
   training: TrainingQuote;
+  /** 单位本身不带 bit 1、由已选科技开启无视护甲时的科技中文名（如「乌兹钢」）。 */
+  ignoreArmorTech?: string;
   earlyAgeMarker?: TrainingAgeMarker;
 }
 /** issue 124 选的文明造不了这个单位：保留玩家选的文明，不出属性与战斗结果，等玩家点按钮 */
@@ -145,7 +148,19 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
   const sel = selectTrainingIds(spec.techs, avail, age, costs, civ);
-  const S = simulate(ctx, u, civ, age, sel, new Set(spec.team));
+  const intrinsicIgnoreArmor = hasIgnoreArmor(u.combatAbility);
+  let ignoreArmorTech: string | undefined;
+  const S = simulate(ctx, u, civ, age, sel, new Set(spec.team), (step) => {
+    if (intrinsicIgnoreArmor) return;
+    const beforeOn = hasIgnoreArmor(step.before.ca);
+    const afterOn = hasIgnoreArmor(step.after.ca);
+    if (!beforeOn && afterOn && step.techId !== undefined) {
+      ignoreArmorTech = avail.find((item) => item.t.id === step.techId)?.t.zh;
+    } else if (beforeOn && !afterOn) {
+      ignoreArmorTech = undefined;
+    }
+  });
+  if (intrinsicIgnoreArmor || !hasIgnoreArmor(S.ca)) ignoreArmorTech = undefined;
   const training = quoteTraining(u, civ, age, sel, costs, ok, earlyAgeMarker);
   return {
     spec,
@@ -158,6 +173,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     avail,
     disc: training.price.discount,
     training,
+    ...(ignoreArmorTech ? { ignoreArmorTech } : {}),
     ...(earlyAgeMarker ? { earlyAgeMarker } : {}),
   };
 }

@@ -227,9 +227,20 @@
       },
       "required": ["units", "chargeOnly"],
       "additionalProperties": false
+    },
+    "combatAbilityBase": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[0-9]+$"
+      }
     }
   },
-  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics"],
+  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics", "combatAbilityBase"],
   "additionalProperties": false,
   "$defs": {
     "fx": {

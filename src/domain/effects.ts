@@ -7,7 +7,8 @@
  */
 import { civs } from '../data';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, type BPred } from './buildingEffects.manual';
-import { DAT, idPred, toEffects, type DatEco, type DatEntry } from './datEffects';
+import { hasIgnoreArmor, hasResistIgnoreArmor } from './damageCore';
+import { applyCombatAbilityEco, DAT, extractCombatAbilityEffects, idPred, toEffects, type DatEco, type DatEntry } from './datEffects';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES, type CivBonus, type EffectRule } from './effects.manual';
 import type { Effect, UnitPred } from './types';
 
@@ -24,6 +25,7 @@ export type BonusSrc = Src | 'eco' | 'text';
 export const TECH_SRC: Record<string, Src> = {};
 export const TECH_EFFECTS: Record<string, EffectRule[]> = {};
 export const BUILDING_EFFECTS: Record<string, [BPred, Effect[]][]> = {};
+const combatAbilityBase = DAT.combatAbilityBase ?? {};
 for (const [en, t] of Object.entries(DAT.techs)) {
   if (!t.combat) continue;
   const u: EffectRule[] = [],
@@ -32,6 +34,30 @@ for (const [en, t] of Object.entries(DAT.techs)) {
     const fx = toEffects(r.fx);
     if (fx.length) (r.b ? b : u).push([idPred(r.t), fx]);
   });
+  const caTargets = new Set<number>();
+  for (const item of t.eco) {
+    if (item.a !== 63 || !item.t?.length) continue;
+    for (const uid of item.t) {
+      if (Object.hasOwn(combatAbilityBase, String(uid))) caTargets.add(uid);
+    }
+  }
+  if (caTargets.size) {
+    const groups = new Map<string, { uids: number[]; fx: Effect[] }>();
+    for (const uid of caTargets) {
+      const baseCa = combatAbilityBase[String(uid)]!;
+      const afterCa = applyCombatAbilityEco(baseCa, t.eco, uid);
+      if (hasIgnoreArmor(baseCa) === hasIgnoreArmor(afterCa) && hasResistIgnoreArmor(baseCa) === hasResistIgnoreArmor(afterCa)) continue;
+      const fx = extractCombatAbilityEffects(t.eco, uid);
+      if (!fx.length) continue;
+      const key = JSON.stringify(fx);
+      const bucket = groups.get(key);
+      if (bucket) bucket.uids.push(uid);
+      else groups.set(key, { uids: [uid], fx });
+    }
+    for (const { uids, fx } of groups.values()) {
+      u.push([idPred(uids), fx]);
+    }
+  }
   if (u.length) TECH_EFFECTS[en] = u;
   if (b.length) BUILDING_EFFECTS[en] = b;
   if (u.length || b.length) TECH_SRC[en] = 'dat';
