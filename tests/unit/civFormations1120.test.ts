@@ -103,7 +103,7 @@ describe('#1120 与 #1139 发布契约', () => {
     expect(georgians!.routes[0]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805', 'building:235', 'tech:923']);
     expect(georgians!.routes[0]!.prerequisites.map(({ kind, id, historicalName }) => [kind, id, historicalName])).toEqual([['tech', 63, '大型箭塔']]);
     expect(spanish!.source).toEqual({
-      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#西班牙',
+      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1304-L1350',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
       boundary: '未验证混编胜负，不把单兵克制当作阵容效果。',
     });

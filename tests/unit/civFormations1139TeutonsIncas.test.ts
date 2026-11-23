@@ -17,12 +17,12 @@ const TEUTON_SOURCE_LINES = {
   'teutons-elite-knight-skirmisher': [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573],
 } as const;
 const INCAS_SOURCE_URLS = {
-  'incas-kamayuk-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L877',
-  'incas-champi-candidate': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L879',
+  'incas-kamayuk-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1114-L1149',
+  'incas-champi-candidate': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1118',
 } as const;
 const INCAS_SOURCE_LINES = {
-  'incas-kamayuk-skirmisher': [877, 885, 887, 888, 891, 893, 899, 900, 901, 902, 908, 910],
-  'incas-champi-candidate': [879, 889, 891, 893, 901, 902, 910],
+  'incas-kamayuk-skirmisher': [1114, 1116, 1126, 1127, 1130, 1132, 1138, 1139, 1140, 1141, 1147, 1149],
+  'incas-champi-candidate': [1118, 1128, 1130, 1132, 1140, 1141, 1149],
 } as const;
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
@@ -60,7 +60,7 @@ describe('#1139 条顿与印加路线边界', () => {
     expect(eliteKnight.adjustments[1]!.text).not.toContain('已有长戟');
     expect(eliteKnight.adjustments[1]!.text).toContain('按实际反骑压力补长戟兵');
     const candidate = route('Incas', 'incas-champi-candidate');
-    expect(candidate.evidence.scope).toContain('固定来源 L879');
+    expect(candidate.evidence.scope).toContain('固定来源 L1118');
     expect(candidate.evidence.scope).toContain('2026-11-18 08:51 UTC');
     expect(candidate.evidence.scope).toContain('候选实战未核实');
   });

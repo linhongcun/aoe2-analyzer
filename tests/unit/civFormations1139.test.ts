@@ -87,8 +87,10 @@ describe('#1139 文明路线契约与投影', () => {
     expect(wagons.supplements[0]!.mode).toBe('as-needed');
     expect(wagons.supplements[0]!.condition).toBe('按需少量手推炮');
     expect(wagons.supplements[0]!.entities.map(({ id }) => id)).toEqual([36]);
-    expect(wagons.evidence.recordedVersion).toBe('章节资料核对：v0.77.102 · DE 188329 · 84988dd；旧战车路线的单独对局版本未记录');
-    expect(wagons.evidence.sourceLines).toEqual([171, 415, 419]);
+    expect(wagons.evidence.recordedVersion).toBe(
+      '章节资料核对：v0.77.102 · DE 188329 · 84988dd；旧战车路线的单独对局版本未记录；拉扯复核：v0.99.34 · DE 188329 · 55613e4a',
+    );
+    expect(wagons.evidence.sourceLines).toEqual([172, 579, 583]);
     expect(wagons.evidence.scope).not.toContain('来源行');
 
     expect([garrison.status, garrison.playtest, garrison.composition, garrison.age, garrison.required.map(({ id }) => id)]).toEqual([
@@ -106,7 +108,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(garrison.evidence.recordedVersion).toBe(
       '章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）；驻军预览复核：v0.99.0 · DE 188329 · 531df91',
     );
-    expect(garrison.evidence.sourceLines).toEqual([527, 531, 535, 536, 537, 538, 540, 542, 544, 550, 551, 552, 553, 559, 560, 561, 562, 564, 566]);
+    expect(garrison.evidence.sourceLines).toEqual([546, 550, 554, 555, 556, 557, 559, 561, 563, 569, 570, 571, 572, 578, 579, 580, 581, 583, 585]);
     expect(garrison.evidence.scope).not.toContain('来源行');
     expect(garrison.required[0]!.role).toBe('主要固定远程火力与掩体');
     expect(garrison.required[1]!.role).toBe('驻塔增箭、出塔清冲车并保护塔和炮');
@@ -234,8 +236,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(turks.limitation).toContain('从零转重装骑射手仍需补升级与科技投入');
     expect(turks.limitation).toContain('贴身 PK 不能否定骑射手的射程和机动');
     expect(turks.limitation).toContain('苏丹亲兵依赖城堡产能和精锐升级');
-    expect(turks.evidence.recordedVersion).toBe('v0.77.102 · DE 188329 · 84988dd');
-    expect(turks.evidence.sourceLines).toEqual([273, 274, 277]);
+    expect(turks.evidence.recordedVersion).toBe('v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a');
+    expect(turks.evidence.sourceLines).toEqual([348, 349, 353]);
     expect(turks.alternatives).toBeUndefined();
     expect(turks.choices?.map(({ title, entities }) => [title, entities.map(({ id }) => id)])).toEqual([
       ['重装骑射手', [474]],

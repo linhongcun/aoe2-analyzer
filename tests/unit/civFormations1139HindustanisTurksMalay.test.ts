@@ -10,16 +10,16 @@ import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const urls = {
-  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L238',
-  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L248',
-  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L273',
+  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L243-L279',
+  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L318-L355',
+  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L348-L353',
   'malay-battle-elephant-progression': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355',
   'malay-two-handed-swordsman-sustain': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356',
 } as const;
 const lines = {
-  'hindustani-handcannon-hussar': [238, 240, 242],
-  'turks-hussar-handcannon': [248, 250, 252, 253, 254, 256, 258, 264, 265, 266, 267, 275, 277],
-  'turks-existing-line-choice': [273, 274, 277],
+  'hindustani-handcannon-hussar': [243, 247, 251, 259, 265, 266, 267, 274, 275, 277, 279],
+  'turks-hussar-handcannon': [318, 322, 326, 327, 328, 330, 332, 338, 339, 340, 341, 342, 350, 351, 353, 355],
+  'turks-existing-line-choice': [348, 349, 353],
   'malay-battle-elephant-progression': [355, 356, 357],
   'malay-two-handed-swordsman-sustain': [355, 356, 357],
 } as const;

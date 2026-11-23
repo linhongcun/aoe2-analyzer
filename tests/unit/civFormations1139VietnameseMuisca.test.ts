@@ -8,10 +8,10 @@ import { DAT } from '../../src/domain/datEffects';
 import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
-const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L774-L822';
-const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L984';
-const VIETNAMESE_SOURCE_LINES = [774, 784, 788, 796, 800, 804, 805, 808, 810, 816, 817, 818, 820, 822];
-const MUISCA_SOURCE_LINES = [984, 988, 990, 992, 993, 995, 997, 1003, 1004, 1005, 1011, 1012, 1014];
+const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L795-L843';
+const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1223-L1256';
+const VIETNAMESE_SOURCE_LINES = [795, 805, 809, 817, 821, 825, 826, 829, 831, 837, 838, 839, 841, 843];
+const MUISCA_SOURCE_LINES = [1223, 1225, 1229, 1233, 1234, 1235, 1237, 1239, 1245, 1246, 1247, 1253, 1254, 1256];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => {

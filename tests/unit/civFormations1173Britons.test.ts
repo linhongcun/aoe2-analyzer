@@ -12,7 +12,7 @@ describe('#1173 不列颠步弓进阶', () => {
     const catalog = { core: await loadCore(), trees: await loadTrees() };
     expect(britons.routes).toHaveLength(1);
     expect(route).toMatchObject({ age: 2, status: 'approved', playtest: 'unreported', composition: 'progression', presentation: 'age-progression' });
-    expect(britons.source.content).toContain('9dd3d907001c32417967a83154fb2de3d7523be0/role/game-strategy.md#L1313-L1352');
+    expect(britons.source.content).toContain('415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1569-L1611');
     expect(route.evidence).toMatchObject({ scope: '混编胜率未测。', playtest: '未说明实战使用。' });
     const view = projectFormation(route, britons.civ, DATA_PATCH, catalog, britons.routes, britons.source);
     expect(view.status).toBe('current');

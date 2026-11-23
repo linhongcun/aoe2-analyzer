@@ -17,9 +17,9 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       {
         civ: 'Bohemians',
         id: 'bohemians-handcannon-halberdier',
-        lines: [13, 826, 830, 835, 838, 840],
-        version: `${reviewedGarrisonVersion}；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71`,
-        links: 4,
+        lines: [13, 1035, 1039, 1047, 1051, 1057, 1068, 1070],
+        version: `${reviewedGarrisonVersion}；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；拉扯复核：v0.99.34 · DE 188329 · 55613e4a`,
+        links: 5,
       },
     ];
 
@@ -137,7 +137,7 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       ['upgrade', [1709]],
       ['position-variant', [235, 1704]],
     ]);
-    expect(bohemianContract.sourceLines).toEqual([13, 826, 830, 835, 838, 840]);
+    expect(bohemianContract.sourceLines).toEqual([13, 1035, 1039, 1047, 1051, 1057, 1068, 1070]);
 
     expect(
       byCiv('Spanish').routes.map(({ id, status, playtest, composition, age, required }) => [
