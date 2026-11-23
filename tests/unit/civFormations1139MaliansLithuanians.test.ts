@@ -7,9 +7,9 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { techAvailable } from '../../src/domain/unitAvailability';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
-const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318';
+const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452';
 const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640';
-const MALIAN_SOURCE_LINES = [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 349, 351];
+const MALIAN_SOURCE_LINES = [408, 412, 416, 417, 418, 419, 421, 423, 436, 437, 438, 439, 445, 446, 447, 448, 450, 452];
 const LITHUANIAN_SOURCE_LINES = [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;

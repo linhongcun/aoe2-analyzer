@@ -138,8 +138,8 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     ]);
     for (const entry of [obuch, arbalest, knights]) {
       expect(entry.evidence.scope).not.toContain('来源行');
-      expect(entry.evidence.sourceLines).toContain(682);
-      expect(entry.evidence.sourceLines).toContain(712);
+      expect(entry.evidence.sourceLines).toContain(954);
+      expect(entry.evidence.sourceLines).toContain(984);
       expect(contractRoute('Poles', entry.id).sourceLines).toEqual(entry.evidence.sourceLines);
     }
     expect(obuch.adjustments[1]!.fallback).toContain('规避受保护的远程火力');
@@ -148,24 +148,24 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
 
   it('六条路线的sourceLines与固定版本URL锚点逐条对应', () => {
     const franksSha = '415863b2a3e94078129554c09378c9a9fba04b57';
-    const polesSha = '8d1adeacc7c97374ee6d95d9cabfceb793d080d3';
+    const polesSha = '6c3cdc6ded5200eac43e95efb28878066b96c3d9';
     const expected = [
-      ['Franks', 'franks-paladin-skirmisher', franksSha, 762, [750, 754, 758, 762, 766, 768, 770, 776, 778, 784, 785, 786, 789, 793]],
-      ['Franks', 'franks-heavy-mounted-crossbow-light-cav', franksSha, 763, [750, 754, 758, 763, 766, 768, 770, 778, 789, 791, 793]],
-      ['Franks', 'franks-throwing-axeman-light-cav', franksSha, 764, [750, 754, 758, 764, 766, 768, 770, 777, 778, 787, 789, 793]],
-      ['Poles', 'poles-obuch-winged-hussar', polesSha, 686, [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712]],
-      ['Poles', 'poles-arbalest-winged-hussar', polesSha, 687, [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712]],
-      ['Poles', 'poles-discount-knights', polesSha, 688, [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]],
+      ['Franks', 'franks-paladin-skirmisher', franksSha, 'L762', [750, 754, 758, 762, 766, 768, 770, 776, 778, 784, 785, 786, 789, 793]],
+      ['Franks', 'franks-heavy-mounted-crossbow-light-cav', franksSha, 'L763', [750, 754, 758, 763, 766, 768, 770, 778, 789, 791, 793]],
+      ['Franks', 'franks-throwing-axeman-light-cav', franksSha, 'L764', [750, 754, 758, 764, 766, 768, 770, 777, 778, 787, 789, 793]],
+      ['Poles', 'poles-obuch-winged-hussar', polesSha, 'L948-L984', [948, 954, 958, 962, 964, 966, 972, 973, 974, 980, 981, 982, 984]],
+      ['Poles', 'poles-arbalest-winged-hussar', polesSha, 'L948-L984', [948, 954, 959, 962, 964, 966, 972, 973, 974, 981, 984]],
+      ['Poles', 'poles-discount-knights', polesSha, 'L948-L984', [948, 954, 960, 962, 964, 966, 972, 973, 974, 980, 981, 984]],
     ] as const;
-    const url = (sha: string, line: number) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#L${line}`;
+    const url = (sha: string, anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#${anchor}`;
 
-    for (const [civ, id, sha, line, lines] of expected) {
+    for (const [civ, id, sha, anchor, lines] of expected) {
       const entry = route(civ, id);
       const contract = contractRoute(civ, id);
       expect(entry.evidence.sourceLines).toEqual(lines);
       expect(contract.sourceLines).toEqual(lines);
-      expect(entry.source?.content).toBe(url(sha, line));
-      expect(contract.source.content).toBe(url(sha, line));
+      expect(entry.source?.content).toBe(url(sha, anchor));
+      expect(contract.source.content).toBe(url(sha, anchor));
     }
   });
 

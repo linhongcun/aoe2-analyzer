@@ -10,16 +10,16 @@ import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const urls = {
-  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L243-L279',
-  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L318-L355',
-  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L348-L353',
+  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L243-L289',
+  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L329-L368',
+  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L361-L366',
   'malay-battle-elephant-progression': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355',
   'malay-two-handed-swordsman-sustain': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356',
 } as const;
 const lines = {
-  'hindustani-handcannon-hussar': [243, 247, 251, 259, 265, 266, 267, 274, 275, 277, 279],
-  'turks-hussar-handcannon': [318, 322, 326, 327, 328, 330, 332, 338, 339, 340, 341, 342, 350, 351, 353, 355],
-  'turks-existing-line-choice': [348, 349, 353],
+  'hindustani-handcannon-hussar': [243, 247, 251, 252, 253, 259, 275, 276, 277, 284, 285, 287, 289],
+  'turks-hussar-handcannon': [329, 333, 337, 338, 339, 341, 343, 351, 352, 353, 354, 355, 363, 364, 366, 368],
+  'turks-existing-line-choice': [361, 362, 366],
   'malay-battle-elephant-progression': [355, 356, 357],
   'malay-two-handed-swordsman-sustain': [355, 356, 357],
 } as const;
@@ -51,7 +51,7 @@ describe('#1174 印度火铳', () => {
     expect(view.status).toBe('current');
     if (view.status !== 'current') return;
 
-    expect(civ(name).routes.map((row) => row.id)).toEqual([id]);
+    expect(civ(name).routes.map((row) => row.id)).toEqual([id, 'hindustani-camel-ghulam-field']);
     expect(view.required.map(({ entity }) => entity.id)).toEqual([5, 441, 36]);
     expect(view.prerequisites).toEqual([]);
     expect(view.supplements[0]?.entities.map(({ entity }) => entity.id)).toEqual([207]);

@@ -104,7 +104,7 @@ test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({
   await expect(entity).not.toBeFocused();
   await page.goto('./#/civ/Georgians#formation-monaspa-towers');
   const section = page.locator(formations);
-  await expect(section.locator('article')).toHaveCount(1);
+  await expect(section.locator('article')).toHaveCount(2);
   await onScreenBelowNav(page.locator('#formation-monaspa-towers'));
   await expect(section.getByRole('link', { name: /^大型箭塔 建筑支点/ })).toHaveAttribute('href', '#/building/235?civ=Georgians');
   await expect(section.getByRole('link', { name: /^斯万箭塔/ })).toHaveAttribute('href', '#/tech/923?civ=Georgians');
@@ -321,16 +321,16 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
   test.setTimeout(90000);
   const routes: Record<string, number> = {
     Chinese: 2,
-    Hindustanis: 1,
-    Turks: 2,
+    Hindustanis: 2,
+    Turks: 3,
     Byzantines: 1,
-    Malians: 1,
+    Malians: 2,
     Malay: 2,
     Sicilians: 1,
     Goths: 1,
     Koreans: 2,
-    Jurchens: 1,
-    Saxons: 1,
+    Jurchens: 2,
+    Saxons: 2,
     Teutons: 3,
     Franks: 3,
     Vietnamese: 3,
@@ -341,7 +341,7 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
     Bohemians: 1,
     Aztecs: 2,
     Incas: 2,
-    Mayans: 1,
+    Mayans: 2,
     Mapuche: 2,
     Muisca: 1,
     Tupi: 2,

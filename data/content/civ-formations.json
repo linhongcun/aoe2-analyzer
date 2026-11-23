@@ -3,7 +3,7 @@
     "civ": "Spanish",
     "lead": "陆地帝王中后期，按局面选择一条路线。条件替代，不必同时训练。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1304-L1350",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "未验证混编胜负，不把单兵克制当作阵容效果。"
     },
@@ -83,7 +83,7 @@
           "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
           "scope": "原有路线条件与组成保持；补充 DE 188329 预算 3000 单兵种站桩与边走边射拉扯核对（后撤上限 40 格、不含二维包抄与护卫），混编胜负未验证。",
           "recordedVersion": "DE Update 188329（2026-10-28）；拉扯复核：v0.99.34 · DE 188329 · 55613e4a",
-          "sourceLines": [1304, 1306, 1312, 1316, 1318, 1320, 1326, 1327, 1328, 1330, 1339, 1346, 1350],
+          "sourceLines": [1373, 1375, 1381, 1385, 1387, 1389, 1395, 1396, 1397, 1399, 1408, 1415, 1419],
           "links": [
             {
               "label": "预算 3000 · 精锐西班牙征服者 22 名站桩对 50 个法兰克长戟兵（长戟剩 12/50）",
@@ -206,7 +206,7 @@
           "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
           "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
           "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
-          "sourceLines": [1304, 1306, 1313, 1318, 1320, 1326, 1327, 1328, 1338, 1339, 1346, 1350]
+          "sourceLines": [1373, 1375, 1382, 1387, 1389, 1395, 1396, 1397, 1407, 1408, 1415, 1419]
         }
       },
       {
@@ -305,7 +305,7 @@
           "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
           "scope": "原有路线条件与组成保持；适用结论仅限固定来源所述范围。",
           "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留。",
-          "sourceLines": [1304, 1306, 1314, 1316, 1318, 1320, 1326, 1328, 1329, 1330, 1332, 1344, 1346, 1350]
+          "sourceLines": [1373, 1375, 1383, 1385, 1387, 1389, 1395, 1397, 1398, 1399, 1401, 1413, 1415, 1419]
         }
       }
     ]
@@ -314,7 +314,7 @@
     "civ": "Georgians",
     "lead": "陆地帝王中后期的条件方案。主力、科技前提与按需补充分别列出。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1421-L1463",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "穿透目标数与逐个伤害未核实，驻军箭数为站内理论预览、未与客户端逐项对账，不扩写为范围溅射或混编输出。"
     },
@@ -446,7 +446,7 @@
           "playtest": "固定记录未报告该路线的实战使用；不推断为已验证或未验证。",
           "scope": "原有路线条件与组成保持；斯万箭塔含射箭槽满科技驻军理论预览已补齐（未与客户端逐项对账）；适用结论仅限固定来源所述范围。",
           "recordedVersion": "DE Update 188329（2026-10-28）；路线内容按原记录保留；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9",
-          "sourceLines": [],
+          "sourceLines": [1421, 1423, 1429, 1430, 1431, 1435, 1437, 1443, 1444, 1445, 1446, 1448, 1449, 1455, 1456, 1457, 1458, 1459, 1461, 1463],
           "links": [
             {
               "label": "DE 188329 固定科技树",
@@ -481,6 +481,198 @@
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Georgians&age=4&gtechs=199,200,201,47,608,923&army=6:5:e"
             }
           ]
+        }
+      },
+      {
+        "id": "georgians-monaspa-field",
+        "title": "精锐莫纳斯帕＋长戟／翼骑／重型投石车／火枪手",
+        "status": "approved",
+        "playtest": "pending",
+        "age": 4,
+        "composition": "combined",
+        "revised": "2026-11-24",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "condition": "开阔地野战推进或不便前置箭塔时，以精锐莫纳斯帕为核心机动主力，按对手配入长戟兵、翼骑兵、重型投石车或火枪手。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1805,
+            "age": 4,
+            "historicalName": "精锐莫纳斯帕",
+            "role": "满科技 100 血、18 攻、8/6 甲，编队光环与生命回复未建模；与巨型投石机共用城堡生产队列"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "对手重骑或骆驼施压时保护后排与主力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4,
+                "historicalName": "长戟兵",
+                "role": "反骑护卫"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "需要免金侧袭、拉扯或切攻城器时补充",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "age": 4,
+                "historicalName": "翼骑兵",
+                "role": "机动侧翼与反攻城"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "面对密集弓手或固定攻城阵地时补入远程范围压制",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4,
+                "historicalName": "重型投石车",
+                "role": "满科技 9 射程，固有溅射伤害未建模，须配护卫"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "面对成群重甲步兵或长戟海压线时补入反步火力",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4,
+                "historicalName": "火枪手",
+                "role": "反步兵远程输出"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "需要拆城堡等关键防御时配入，注意与精锐莫纳斯帕共用城堡生产队列",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "age": 4,
+                "historicalName": "巨型投石机",
+                "role": "拆防，与莫纳斯帕竞争城堡队列"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "帝王时代于城堡研究（550 食物、250 黄金），骑兵所占人口 −20%，人口吃紧时补研",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 924,
+                "age": 4,
+                "historicalName": "阿兹瑙里骑兵",
+                "role": "降低骑兵人口占用，满人口实战收益未模拟"
+              }
+            ]
+          }
+        ],
+        "reason": "高海拔战斗受伤 −15% 配合精锐莫纳斯帕机动突击，再用重型投石车、火枪手、长戟兵与翼骑兵按对手补齐短板，覆盖不适合前置斯万箭塔的开阔地野战推进。",
+        "limitation": "单位 PK（#1367）已对骑兵回血与莫纳斯帕编队光环弹出未建模提示，在不计光环与回血的基线下，预算 3000 精锐莫纳斯帕 28 名正面对法兰克游侠 22 名（敌剩 2/22）、42 个日本冠军剑士（敌剩 3/42）与 42 个不列颠劲弩手（敌剩 10/42）均微负，切忌孤军硬冲；强化教堂 9 格 +10% 经济光环仍无数值模拟，格鲁吉亚无手推炮且莫纳斯帕与巨型投石机共用城堡生产队列。",
+        "attack": "以精锐莫纳斯帕抢占高地并牵制敌军，按敌方组成配重型投石车清弓群或火枪手清步兵，推进堡垒时统筹城堡队列补巨型投石机。",
+        "defense": "长戟兵保护重投与火枪，翼骑兵绕侧骚扰与切炮，受伤莫纳斯帕脱战休整并依托高地减伤与对手换战损。",
+        "alternatives": "具备石料与安全施工点需要阵地推进时，切换精锐莫纳斯帕＋斯万箭塔路线。",
+        "adjustments": [
+          {
+            "id": "georgians-field-anti-archer",
+            "when": "密集弓手或远程攻城阵地压线",
+            "text": "补 9 射程重型投石车压制密集弓群（固有溅射伤害未建模），配翼骑兵绕侧切入，避免莫纳斯帕顶箭硬冲。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4
+              }
+            ],
+            "fallback": "重型投石车不可用时改靠翼骑与地形侧袭限制弓群。"
+          },
+          {
+            "id": "georgians-field-anti-infantry",
+            "when": "成群重甲步兵或长戟海压线",
+            "text": "补火枪手远程清线，莫纳斯帕避开长戟正面改打侧翼。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4
+              }
+            ],
+            "fallback": "火枪手不可用时避免让莫纳斯帕正面硬拼长戟海。"
+          },
+          {
+            "id": "georgians-field-anti-cavalry",
+            "when": "重骑或强反骑骆驼施压",
+            "text": "补长戟兵护住后排重型投石车与火枪手，莫纳斯帕借编队与高地寻机接战。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少长戟保护时收拢阵型避免后排暴露给重骑。"
+          },
+          {
+            "id": "georgians-field-anti-siege",
+            "when": "敌方手推炮或巨投远程压制",
+            "text": "格鲁吉亚无手推炮，借翼骑兵机动绕侧偷袭攻城器，有安全路径时再由莫纳斯帕协同切入。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "age": 4
+              }
+            ],
+            "fallback": "没有安全侧翼路径时先退守高地拉扯阵线。"
+          }
+        ],
+        "evidence": {
+          "playtest": "待实战验证；DE 188329 预算 3000 莫纳斯帕基线已复核（未计光环与回血），不代表完整混编实战胜率。",
+          "scope": "覆盖开阔地精锐莫纳斯帕＋长戟／翼骑／重型投石车／火枪手野战推进与城堡队列边界。",
+          "recordedVersion": "批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [1421, 1433, 1435, 1437, 1443, 1444, 1446, 1447, 1449, 1456, 1461, 1463],
+          "links": [
+            {
+              "label": "重型投石车（588）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/588?civ=Georgians"
+            },
+            {
+              "label": "火枪手（5）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/5?civ=Georgians"
+            },
+            {
+              "label": "预算 3000 · 精锐莫纳斯帕 28 名对法兰克游侠 22 名（游侠剩 2/22，未计光环与回血）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1805.Georgians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐莫纳斯帕 28 名对 42 个日本冠军剑士（冠军剩 3/42，未计光环与回血）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1805.Georgians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐莫纳斯帕 28 名对 42 个不列颠劲弩手（劲弩剩 10/42，未计光环与回血）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1805.Georgians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            }
+          ],
+          "recognition": "批 2 实战核实补充认可（#1386），与既有认可主路并列，待实战验证。"
         }
       }
     ]
@@ -760,7 +952,7 @@
     "civ": "Hindustanis",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L243-L279",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L243-L289",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -844,7 +1036,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "节省黄金的帝王中后期；火枪和炮保存，翼骑承担消耗。 碰撞接敌等资源预算 3000 核对：31 个火枪手（9 射程）由 1v1 贴脸输冠军剑士反转为站桩大胜 42 个日本冠军剑士（剩 19/31，734 血，3 次先手齐射），开启边走边射拉扯后更提至 31/31 满血零损（1240 血，用时 21.55 秒，后撤 17.9 格）；站桩对射 42 个不列颠劲弩手 全灭（对方剩 32/42）；一维接敌后撤上限 40 格、不含二维包抄与护卫。",
           "recordedVersion": "原记录未记录站点版本/构建；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；拉扯复核：v0.99.34 · DE 188329 · 55613e4a",
-          "sourceLines": [243, 247, 251, 259, 265, 266, 267, 274, 275, 277, 279],
+          "sourceLines": [243, 247, 251, 252, 253, 259, 275, 276, 277, 284, 285, 287, 289],
           "links": [
             {
               "label": "印度火铳的策略补充",
@@ -894,9 +1086,193 @@
           }
         ],
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L243-L279",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L243-L289",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "hindustani-camel-ghulam-field",
+        "title": "帝王骆驼兵／精锐古拉姆＋攻城战象／重装骑射手",
+        "status": "approved",
+        "playtest": "pending",
+        "age": 4,
+        "composition": "choice",
+        "revised": "2026-11-24",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "condition": "黄金供给可承受且对局以重骑或强弓为主轴时，按对手在帝王骆驼兵与精锐古拉姆中择一作主力核心，再配区域攻城战象或全科技重装骑射手。",
+        "choiceLabel": "按对手择一主力（重骑选帝王骆驼，强弓选精锐古拉姆）",
+        "required": [],
+        "choices": [
+          {
+            "id": "hindustani-choice-imperial-camel",
+            "title": "帝王骆驼兵（正面压制重骑）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 207,
+                "age": 4,
+                "historicalName": "帝王骆驼兵",
+                "role": "满科技 160 血、12 攻、3/4 甲、1.67 秒攻速（+20% 攻速），马厩出兵不占城堡队列"
+              }
+            ],
+            "preconditions": [
+              "对手以重骑或游侠为主轴，黄金与马厩升级投入可承受",
+              "预算 3000 下 26 名帝王骆驼兵 正面对法兰克游侠 22 名（剩 7/26）与条顿游侠 22 名（剩 7/26）均胜出"
+            ]
+          },
+          {
+            "id": "hindustani-choice-elite-ghulam",
+            "title": "精锐古拉姆（高速反弓冲散后排）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1749,
+                "age": 4,
+                "historicalName": "精锐古拉姆",
+                "role": "满科技 70 血、15 攻、2/8 甲，固有穿透溅射伤害未建模，依赖城堡产能"
+              }
+            ],
+            "preconditions": ["对手成群弓手施压且已有城堡产能与精锐升级投入", "预算 3000 下精锐古拉姆 40 名正面对 42 个不列颠劲弩手（剩 20/40，未计溅射）"]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "需要抗箭硬拆防线或缺少手推炮推进窗口时作区域攻城替代",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1746,
+                "age": 4,
+                "historicalName": "攻城战象",
+                "role": "满科技 240 血、8 攻、1/154 甲，固有溅射伤害未建模，怕长戟与僧侣"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "开阔地需机动远程拉扯清理步兵海时补充",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 4,
+                "historicalName": "重装骑射手",
+                "role": "满科技 80 血、11 攻、4/4 甲、射程 7、1.80 秒攻速，预算 3000 下 30 个重装骑射手 拉扯对 42 个日本冠军剑士（剩 23/30，后撤 27.8 格）"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "城堡时代于城堡研究（250 食物、200 木材），全渠道黄金收入 +10% 并将市场交易税降至 10%，不是产兵前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 506,
+                "age": 3,
+                "historicalName": "大干道",
+                "role": "强化后期金流与市场换金效率，支撑骆驼、古拉姆或骑射金线"
+              }
+            ]
+          }
+        ],
+        "reason": "帝王骆驼兵与精锐古拉姆分别覆盖印度斯坦最突出的反重骑与反强弓优势，搭配攻城战象拆防、全科技重装骑射手开阔地拉扯及城堡经济独科大干道，形成不依赖火枪手的独立野战主路。",
+        "limitation": "精锐古拉姆依赖城堡产能且缺步兵钢甲，忌与冠军剑士等强近战步兵硬拼；攻城战象与古拉姆的固有溅射伤害均未在单位 PK 数值建模；不要同时铺满多条耗金主力线，大干道仍需先建城堡完成研究。",
+        "attack": "按对手选定帝王骆驼或精锐古拉姆压制野战主力，开阔地可用重装骑射手拉扯清步兵，清护卫后由攻城战象推进拆防。",
+        "defense": "骆驼或古拉姆保持机动拦截敌方主力，重装骑射手依托地形拉扯消耗慢速步兵，后期借大干道维持市场换金与持续补兵。",
+        "alternatives": "黄金吃紧时回退火枪手＋翼骑兵主路；缺少城堡产能时优先马厩帝王骆驼兵，不强押精锐古拉姆。",
+        "adjustments": [
+          {
+            "id": "hindustani-camel-ghulam-anti-cavalry",
+            "when": "重骑或游侠成群压阵",
+            "text": "走帝王骆驼兵分支正面压制，预算 3000 下 26 名帝王骆驼兵 对法兰克游侠 22 名（剩 7/26）与条顿游侠 22 名（剩 7/26）均占优。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 207,
+                "age": 4
+              }
+            ],
+            "fallback": "先核对帝王骆驼兵可用性后再决定马厩反骑投入。"
+          },
+          {
+            "id": "hindustani-camel-ghulam-anti-archer",
+            "when": "长射程弓手成群且已有城堡产能",
+            "text": "走精锐古拉姆分支高速切入弓群，预算 3000 下精锐古拉姆 40 名正面对 42 个不列颠劲弩手（剩 20/40，未计溅射）。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1749,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少城堡产能或古拉姆不可用时改靠翼骑与地形拉扯接近弓群。"
+          },
+          {
+            "id": "hindustani-camel-ghulam-anti-infantry-siege",
+            "when": "开阔地步兵海或需抗箭强拆防御建筑",
+            "text": "开阔地补全科技重装骑射手拉扯清理步兵（30 个重装骑射手 拉扯对 42 个日本冠军剑士 剩 23/30，后撤 27.8 格），清护卫后由攻城战象推进拆防。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 4
+              },
+              {
+                "kind": "unit",
+                "id": 1746,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少骑射或攻城战象支持时按现有兵种回退火枪与手推炮配置。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L243-L289",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1386",
+          "boundary": "DE 188329 预算 3000 一维群战与拉扯复核；攻城战象与古拉姆固有溅射伤害未建模，待实战验证。"
+        },
+        "evidence": {
+          "playtest": "待实战验证；DE 188329 预算 3000 群战与拉扯已复核，不代表完整混编实战胜率。",
+          "scope": "覆盖帝王骆驼、精锐古拉姆、攻城战象、全科技重装骑射手与大干道；攻城战象与古拉姆固有溅射未建模。",
+          "recordedVersion": "批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [243, 261, 265, 266, 267, 268, 269, 275, 276, 277, 278, 284, 285, 287, 289],
+          "links": [
+            {
+              "label": "大干道（506）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/506?civ=Hindustanis"
+            },
+            {
+              "label": "攻城战象（1746）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1746?civ=Hindustanis"
+            },
+            {
+              "label": "重装骑射手（474）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/474?civ=Hindustanis"
+            },
+            {
+              "label": "预算 3000 · 26 名帝王骆驼兵 对法兰克游侠 22 名（剩 7/26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=207.Hindustanis.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 26 名帝王骆驼兵 对条顿游侠 22 名（剩 7/26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=207.Hindustanis.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐古拉姆 40 名对 42 个不列颠劲弩手（剩 20/40，未计溅射）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1749.Hindustanis.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 个重装骑射手 拉扯对 42 个日本冠军剑士（剩 23/30，后撤 27.8 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Hindustanis.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            }
+          ],
+          "recognition": "批 2 实战核实补充认可（#1386），与既有认可主路并列，待实战验证。"
         }
       }
     ]
@@ -905,7 +1281,7 @@
     "civ": "Turks",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L318-L355",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L329-L368",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -963,7 +1339,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "覆盖获认可的翼骑、火枪与手推炮主结构及分工，反骑压力下的调整、重装骑士的非默认投入，以及炮属性与石质建筑处理时间的核实边界。 碰撞接敌等资源预算 3000 核对：31 个火枪手 由 1v1 贴脸输冠军剑士反转为站桩大胜 42 个日本冠军剑士（剩 16/31，800 血，2 次先手齐射），开启边走边射拉扯后更提至 31/31 满血零损（1550 血，用时 21.55 秒，后撤 17.9 格）；但站桩对射 42 个不列颠劲弩手 全灭（对方剩 34/42）；一维接敌后撤上限 40 格、不含二维包抄与护卫。",
           "recordedVersion": "v0.77.102 · DE 188329 · 84988dd；攻城工具复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；拉扯复核：v0.99.34 · DE 188329 · 55613e4a",
-          "sourceLines": [318, 322, 326, 327, 328, 330, 332, 338, 339, 340, 341, 342, 350, 351, 353, 355],
+          "sourceLines": [329, 333, 337, 338, 339, 341, 343, 351, 352, 353, 354, 355, 363, 364, 366, 368],
           "links": [
             {
               "label": "DE 188329 固定科技树",
@@ -1032,9 +1408,146 @@
         ],
         "alternatives": "重装骑士不作默认替代：与翼骑职责重叠并增加黄金消耗。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L318-L355",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L329-L368",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "turks-sipahi-cav-archer-field",
+        "title": "西帕希重装骑射手＋翼骑兵",
+        "status": "approved",
+        "playtest": "pending",
+        "age": 4,
+        "composition": "combined",
+        "revised": "2026-11-24",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "condition": "开阔地形从城堡时代主动围绕骑射布局，且能先建城堡研究西帕希骑兵时，与火枪手主路并列的一线野战主路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 474,
+            "age": 4,
+            "historicalName": "重装骑射手",
+            "role": "西帕希后满科技 100 血、11 攻、5/6 甲、射程 7、1.80 秒攻速，机动消耗与硬换对射核心"
+          },
+          {
+            "kind": "unit",
+            "id": 441,
+            "age": 4,
+            "historicalName": "翼骑兵",
+            "role": "轻骑升级免费且高远甲，承担前排视野、反掷矛与切攻城器"
+          }
+        ],
+        "prerequisites": [
+          {
+            "kind": "tech",
+            "id": 491,
+            "age": 3,
+            "historicalName": "西帕希骑兵",
+            "role": "城堡时代城堡独特科技（350 食物、150 黄金），令骑射手 +20 血升至 100 血",
+            "condition": "重装骑射手可先从靶场训练成型，但补齐 100 血肉度须先建城堡完成西帕希骑兵研究。"
+          }
+        ],
+        "supplements": [
+          {
+            "mode": "conditional",
+            "condition": "对手重骑或游侠成群且缺长戟兵时补入正面反骑",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "age": 4,
+                "historicalName": "重装骆驼兵",
+                "role": "反重骑补队"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "需要拆防御建筑或反远程攻城器时按需配入",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "age": 4,
+                "historicalName": "手推炮",
+                "role": "火炮术后 14 射程拆防与反攻城"
+              }
+            ]
+          }
+        ],
+        "reason": "西帕希骑兵使土耳其重装骑射手达到 100 血，预算 3000 下 30 个西帕希重装骑射手 正面对 42 个不列颠劲弩手（剩 21/30）、拉扯对 42 个日本冠军剑士（剩 25/30，后撤 27.8 格），配合免费升级的翼骑兵在开阔地兼顾机动与强力远程输出。",
+        "limitation": "骑射成型依赖前期靶场、马厩科技与城堡研究西帕希骑兵，土耳其仍缺长枪系与精锐掷矛手，遇重骑海须补重装骆驼兵，狭口与密集投石车阵地不宜硬冲。",
+        "attack": "以西帕希重装骑射手主导开阔地拉扯与压制长射程弓手，翼骑兵控侧翼并切孤立攻城器，拔除堡垒时配 14 射程手推炮。",
+        "defense": "骑射借机动空间持续消耗来犯步兵与弓手，翼骑兵拦截侧翼，重骑压阵时补重装骆驼兵兜底。",
+        "alternatives": "狭口推进或已从城堡末走免费化学火药体系时，改走翼骑兵＋火枪手主路，不在同一局同时铺满两套昂贵远程科技。",
+        "adjustments": [
+          {
+            "id": "turks-sipahi-anti-archer",
+            "when": "长射程弓手成群施压",
+            "text": "完成西帕希骑兵后可直接正面接战压制弓群，预算 3000 下 30 个西帕希重装骑射手 正面对 42 个不列颠劲弩手（剩 21/30），翼骑兵同步封锁对方撤退与攻城器。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 491,
+                "age": 3
+              }
+            ],
+            "fallback": "尚未完成西帕希骑兵研究前避免与满科技强弓硬换射。"
+          },
+          {
+            "id": "turks-sipahi-anti-infantry",
+            "when": "重装步兵海推进",
+            "text": "利用机动空间边退边射清理步兵，预算 3000 下 30 个西帕希重装骑射手 拉扯对 42 个日本冠军剑士（剩 25/30，后撤 27.8 格）。",
+            "requires": []
+          },
+          {
+            "id": "turks-sipahi-anti-cavalry",
+            "when": "敌方重骑或游侠成群冲阵",
+            "text": "补重装骆驼兵正面护卫骑射并吸收重骑冲击，翼骑兵保持侧翼任务。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "age": 4
+              }
+            ],
+            "fallback": "缺反骑护卫时先拉开距离避免骑射被重骑贴脸包围。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L329-L368",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1386",
+          "boundary": "DE 188329 预算 3000 一维群战与拉扯复核；西帕希骑兵须建城堡研究，待实战验证。"
+        },
+        "evidence": {
+          "playtest": "待实战验证；DE 188329 预算 3000 群战与拉扯已复核，不代表完整混编实战胜率。",
+          "scope": "覆盖开阔地西帕希重装骑射手＋翼骑兵平行主路与重装骆驼、手推炮按需补充。",
+          "recordedVersion": "批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [329, 345, 351, 353, 354, 361, 366, 368],
+          "links": [
+            {
+              "label": "西帕希骑兵（491）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/491?civ=Turks"
+            },
+            {
+              "label": "重装骑射手（474）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/474?civ=Turks"
+            },
+            {
+              "label": "预算 3000 · 30 个西帕希重装骑射手 正面对 42 个不列颠劲弩手（剩 21/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Turks.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 个西帕希重装骑射手 拉扯对 42 个日本冠军剑士（剩 25/30，后撤 27.8 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Turks.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            }
+          ],
+          "recognition": "批 2 实战核实补充认可（#1386），与既有认可主路并列，待实战验证。"
         }
       },
       {
@@ -1048,8 +1561,8 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-23",
-        "condition": "已有骑射手或苏丹亲兵基础时，按条件择一延续为重装骑射手或精锐苏丹亲兵；不为采用该延续路线从零另起兵线，两者并非同时必需。",
+        "revised": "2026-11-24",
+        "condition": "已选定翼骑兵＋火枪手主路且手中留有城堡骑射残编或苏丹亲兵基础时，按条件择一顺手延续；不与开阔地主动西帕希骑射主路混淆，也不为此另起第二套满科技双金线。",
         "required": [],
         "prerequisites": [],
         "supplements": [],
@@ -1057,8 +1570,8 @@
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "说明已有骑射手或苏丹亲兵基础时择一延续的条件，以及从零转线所需科技、城堡产能和精锐升级投入；不并入火枪主路。预算 3000 核对：26 个精锐苏丹亲兵 站桩负 42 个日本冠军剑士（对方剩 8/42）、拉扯反转 26/26 满血零损（后撤 36.4 格，未触顶）；一维接敌后撤上限 40 格、不含二维包抄与护卫。",
-          "recordedVersion": "v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a",
-          "sourceLines": [348, 349, 353],
+          "recordedVersion": "v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [361, 362, 366],
           "links": [
             {
               "label": "预算 3000 · 26 个精锐苏丹亲兵 站桩对 42 个日本冠军剑士（冠军剩 8/42）",
@@ -1099,12 +1612,12 @@
           }
         ],
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L348-L353",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L361-L366",
           "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
         "reason": "沿已有骑射手或苏丹亲兵基础按条件延续，不必强转火枪。预算 3000 对 42 个日本冠军剑士 中，26 个精锐苏丹亲兵 站桩落败（对方剩 8/42），开启拉扯（前摇 0 秒）反转为 26/26 满血零损（1300 血，后撤 36.4 格）。",
-        "limitation": "从零转重装骑射手仍需补升级与科技投入；贴身 PK 不能否定骑射手的射程和机动。苏丹亲兵依赖城堡产能和精锐升级。",
+        "limitation": "已在火枪线投入大量资源时，顺手沿用既有残编即可，避免从零同时铺满两套昂贵远程科技；精锐苏丹亲兵另需城堡产能与精锐升级。",
         "adjustments": []
       }
     ]
@@ -1304,7 +1817,7 @@
     "civ": "Malians",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -1405,7 +1918,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "轻骑与精锐飞刀主结构获认可；前线TC阵地仅标注为hongcun常用经验，不据此将整套混编标成已实战。 碰撞接敌等资源预算 3000 核对：37 个轻型骑兵（含死士）正面硬冲 42 个不列颠劲弩手 全灭（对方凭 4 次先手齐射剩 21/42，807 血，前排仅 5 个轻型骑兵 可同时出手）；计入手推炮最小射程 5 后对 6 个条顿手推炮 胜剩 35/37（接敌 1v1 剩 43/80，未计溅射与护卫）。",
           "recordedVersion": "v0.77.102 · DE 188329 · 84988dd；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
-          "sourceLines": [318, 320, 322, 323, 324, 325, 327, 329, 335, 336, 337, 338, 344, 345, 346, 347, 349, 351],
+          "sourceLines": [408, 412, 416, 417, 418, 419, 421, 423, 436, 437, 438, 439, 445, 446, 447, 448, 450, 452],
           "links": [
             {
               "label": "预算 3000 · 37 个轻型骑兵 对 42 个不列颠劲弩手（劲弩剩 21/42）",
@@ -1514,9 +2027,180 @@
         ],
         "alternatives": "冠军剑士常驻：额外远程护甲不解决追弓手的机动问题，不作默认投入；重装骑士或骆驼代替飞刀：叠骑兵留下共同怕长戟的缺口，骆驼补队只在对应依赖调整中显示；投石车常驻：不默认作为固定配套；长枪、掷矛再作常驻不耗金兵：已有轻骑主体，另开路线增加升级、产能与编队负担。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L318",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "malians-farimba-cav-champ-field",
+        "title": "死士重装骑士／重装骆驼兵或高远甲冠军剑士",
+        "status": "approved",
+        "playtest": "pending",
+        "age": 4,
+        "composition": "choice",
+        "revised": "2026-11-24",
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "condition": "缺石料铺多座城堡养飞刀、或需要常规建筑高爆发野战主力直面重骑与弓群时，按对手在死士马厩骑兵与高远甲兵营冠军剑士中择一。",
+        "choiceLabel": "按对手择一常规建筑主线（产兵均不占城堡队列）",
+        "required": [],
+        "choices": [
+          {
+            "id": "malians-choice-farimba-cavalry",
+            "title": "死士重装骑士／死士重装骆驼兵（马厩出兵、需城堡研死士）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 283,
+                "age": 4,
+                "historicalName": "重装骑士",
+                "role": "死士后 140 血、19 攻、5/6 甲，预算 3000 下 22 名重装骑士 对法兰克游侠 22 名（敌剩 2/22）"
+              },
+              {
+                "kind": "unit",
+                "id": 330,
+                "age": 4,
+                "historicalName": "重装骆驼兵",
+                "role": "死士后 140 血、14 攻、3/4 甲，预算 3000 下 26 名重装骆驼兵 正面对法兰克游侠 22 名（剩 3/26）"
+              }
+            ],
+            "preconditions": [
+              "马厩量产不占城堡产兵队列，但需先建城堡完成帝王独特科技死士（577）补足 +5 攻",
+              "常规野战爆发选重装骑士，对手大量游侠时改以重装骆驼兵反制"
+            ]
+          },
+          {
+            "id": "malians-choice-high-pa-champion",
+            "title": "高远甲兵营冠军剑士（完全无城堡门槛）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 567,
+                "age": 4,
+                "historicalName": "冠军剑士",
+                "role": "满科技 70 血、16 攻、4/8 甲，预算 3000 下 42 名冠军剑士 正面对 42 个不列颠劲弩手（剩 16/42）"
+              }
+            ],
+            "preconditions": [
+              "对手以成群弓手或长戟＋弓手施压，且希望彻底绕开城堡建造与城堡科技门槛",
+              "兵营直出 8 远甲正面抗箭推进，遇强近战重骑或重步兵时配合兵种切换"
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "mechanism-support",
+            "condition": "仅服务选项 A（马厩重装骑士与重装骆驼兵）；需先建城堡完成研究（650 食物、400 黄金，+5 攻），选项 B 兵营冠军剑士无需城堡科技。",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 577,
+                "age": 4,
+                "historicalName": "死士",
+                "role": "帝王城堡独特科技（+5 攻），只服务选项 A 骑兵线"
+              }
+            ]
+          },
+          {
+            "mode": "choice",
+            "condition": "推进拆防或反远程攻城器时按需选择。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "age": 4,
+                "historicalName": "巨型投石机",
+                "role": "拆建筑"
+              },
+              {
+                "kind": "unit",
+                "id": 36,
+                "age": 4,
+                "historicalName": "手推炮",
+                "role": "反远程攻城与拆防"
+              }
+            ]
+          }
+        ],
+        "reason": "常规马厩与兵营出兵避开城堡产兵队列瓶颈：缺鼓风炉仍可凭死士 +5 攻让重装骑士与重装骆驼正面抗衡游侠，而兵营 4/8 甲冠军剑士在零城堡门槛下即可正面突破满编弓群。",
+        "limitation": "选项 A 的死士（577）仍需先建城堡完成研究且重装骑士与重装骆驼均持续耗金；选项 B 冠军剑士移速较慢、追击机动不如轻骑，遇强近战重骑或重装步兵仍须及时切换。",
+        "attack": "按对手选定马厩死士骑兵或兵营高远甲冠军压线，配巨投或手推炮拔除关键城堡与防线。",
+        "defense": "死士重装骆驼拦截重骑冲阵，高远甲冠军剑士顶住弓群推进，保持常规建筑多线补员优势。",
+        "alternatives": "有足够石料与城堡产能打机动游击或蛮王前线城镇中心阵地时，沿用轻骑兵＋精锐飞刀女兵主路。",
+        "adjustments": [
+          {
+            "id": "malians-farimba-anti-cavalry",
+            "when": "敌方游侠或重骑持续冲阵",
+            "text": "完成死士后以重装骆驼兵正面反制，预算 3000 下 26 名重装骆驼兵 正面对法兰克游侠 22 名（剩 3/26）。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "age": 4
+              },
+              {
+                "kind": "tech",
+                "id": 577,
+                "age": 4
+              }
+            ],
+            "fallback": "尚未建城堡完成死士研究时注意控制重骑正面换血。"
+          },
+          {
+            "id": "malians-farimba-anti-archer",
+            "when": "对手纯弓海且缺少城堡产能养飞刀",
+            "text": "直接切入兵营高远甲冠军剑士线正面抗箭推进，预算 3000 下 42 名冠军剑士 正面对 42 个不列颠劲弩手（剩 16/42），无需城堡或城堡科技。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 567,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少步兵升级支持时先用地形与侧袭限制弓群输出。"
+          }
+        ],
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1386",
+          "boundary": "DE 188329 预算 3000 一维站桩复核；死士（577）需城堡研究且仅服务选项 A，待实战验证。"
+        },
+        "evidence": {
+          "playtest": "待实战验证；DE 188329 预算 3000 群战已复核，不代表完整混编实战胜率。",
+          "scope": "覆盖马厩死士重装骑士／重装骆驼与兵营高远甲冠军剑士双分支，与轻骑＋飞刀主路并列。",
+          "recordedVersion": "批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [408, 425, 429, 430, 436, 437, 445, 446, 452],
+          "links": [
+            {
+              "label": "重装骑士（283）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/283?civ=Malians"
+            },
+            {
+              "label": "重装骆驼兵（330）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/330?civ=Malians"
+            },
+            {
+              "label": "冠军剑士（567）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/567?civ=Malians"
+            },
+            {
+              "label": "预算 3000 · 22 名死士重装骑士 对法兰克游侠 22 名（游侠剩 2/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=283.Malians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 26 名死士重装骆驼兵 对法兰克游侠 22 名（剩 3/26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=330.Malians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 42 名冠军剑士 对 42 个不列颠劲弩手（剩 16/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=567.Malians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            }
+          ],
+          "recognition": "批 2 实战核实补充认可（#1386），与既有认可主路并列，待实战验证。"
         }
       }
     ]
@@ -1790,7 +2474,7 @@
     "civ": "Sicilians",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L496-L532",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -1806,14 +2490,14 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
-        "condition": "已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。",
+        "revised": "2026-11-24",
+        "condition": "已认可的萨金特卫兵＋轻骑基础配置；黄金与科技充裕打通用野战时可升格锁子甲重装骑士主力前排，并按局势扩展城楼、第一次十字军东征、重型投石车或重装骑马弩兵。",
         "required": [
           {
             "kind": "unit",
             "id": 1659,
             "historicalName": "精锐萨金特卫兵",
-            "role": "城堡来源精锐萨金特卫兵"
+            "role": "正面接战与输出；城堡训练时与巨型投石机共用城堡生产队列（城楼可分担部分卫兵产能）"
           },
           {
             "kind": "unit",
@@ -1825,20 +2509,20 @@
             "kind": "unit",
             "id": 331,
             "historicalName": "巨型投石机",
-            "role": "拆关键防御"
+            "role": "拆城堡等关键防御，由接战部队掩护；与精锐萨金特卫兵共用城堡生产队列"
           }
         ],
         "prerequisites": [],
         "supplements": [
           {
             "mode": "continuation-adjustment",
-            "condition": "已有骑士线投入、黄金和骑士科技允许时，延续重装骑士补充；不把骑士作为从零新开的完整阵容。",
+            "condition": "黄金和骑士科技允许、需要通用野战硬前排时，可将轻骑升格为锁子甲重装骑士主力（需城堡研究锁子甲 757，并配反步或远程护航）",
             "entities": [
               {
                 "kind": "unit",
                 "id": 283,
                 "historicalName": "重装骑士",
-                "role": "锁子甲重装骑士，替换轻骑"
+                "role": "锁子甲后 140 血、16 攻、6/8 甲通用野战主力；但预算 3000 下 22 名锁子甲重装骑士 仍负 50 个法兰克长戟兵（敌剩 16/50）与法兰克游侠 22 名（敌剩 4/22）"
               }
             ]
           },
@@ -1881,6 +2565,39 @@
                 "id": 280,
                 "historicalName": "轻型投石车",
                 "role": "投石车系基础目录引用；新增投入仅作条件评估，非反攻城标配"
+              },
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4,
+                "historicalName": "重型投石车",
+                "role": "帝王 9 射程范围压制，固有溅射伤害未建模；用于密集弓群、成群弩炮与反攻城"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "城堡时代于城堡研究（400 食物、300 黄金），用于转攻一波或急需爆兵稳线，不是主路前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 756,
+                "age": 3,
+                "historicalName": "第一次十字军东征",
+                "role": "城镇中心最多 5 座，每座产 5 名萨金特卫兵，并提升己方单位抗招降能力"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "面对慢速步兵海且有开阔拉扯空间时条件评估，忌与满科技强弓硬对射",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2701,
+                "age": 4,
+                "historicalName": "重装骑马弩兵",
+                "role": "满科技 75 血、12 攻、4/2 甲、射程 8（含便携弯弩装置）、2.50 秒攻速，缺射手锁甲与扳指；预算 3000 下 28 名重装骑马弩兵 拉扯对 42 个日本冠军剑士（剩 25/28，后撤 33.1 格）"
               }
             ]
           }
@@ -1889,8 +2606,8 @@
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录萨金特卫兵与轻骑基础配置，以及按路线基础、资源、阵线和对手压力评估的骑士、城楼与条件支援；城楼帝王满科技驻军理论预览（未与客户端逐箭核对）：无射箭槽 9 个村民达到 12/12 箭，含射箭槽 10 个村民 10/12 箭、10 个劲弩手 11/12 箭，10 个精锐萨金特卫兵：火力系数 0、不增箭，仍 3/12 箭。",
-          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9",
-          "sourceLines": [13, 361, 363, 365, 366, 367, 368, 372],
+          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [496, 500, 504, 505, 506, 508, 510, 512, 518, 519, 520, 521, 527, 528, 529, 530, 532],
           "links": [
             {
               "label": "无射箭槽 · 9 个村民 12/12 箭",
@@ -1907,14 +2624,56 @@
             {
               "label": "10 个精锐萨金特卫兵 3/12 箭（不增箭）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/1665?tab=garrison&gv=2&civ=Sicilians&age=4&gtechs=199,200,201,47&army=1659:10:e"
+            },
+            {
+              "label": "第一次十字军东征（756）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/756?civ=Sicilians"
+            },
+            {
+              "label": "重型投石车（588）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/588?civ=Sicilians"
+            },
+            {
+              "label": "重装骑马弩兵（2701）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/2701?civ=Sicilians"
+            },
+            {
+              "label": "预算 3000 · 22 名锁子甲重装骑士 对 50 个法兰克长戟兵（长戟剩 16/50）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=283.Sicilians.4.f.&b=359.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 22 名锁子甲重装骑士 对法兰克游侠 22 名（游侠剩 4/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=283.Sicilians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 拉扯对 42 个日本冠军剑士（剩 25/28，后撤 33.1 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Sicilians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 对 42 个不列颠劲弩手（劲弩剩 33/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Sicilians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
             }
           ]
         },
-        "reason": "精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机。卫兵凭高护甲承担正面接战与输出；轻骑提供机动，清理可接近的射手和攻城器；巨投拆城堡等关键防御。",
-        "limitation": "卫兵＋长戟可能一起受成群弩炮压制；减少所受额外伤害不等于减少所有基础伤害。轻骑已能完成清理任务时，优先用好已有兵种。卫兵与骑兵都争食物，步骑共享近战攻击但护甲和兵种升级分开；锁子甲、骑士线、城楼箭系各有新增投入。高护甲不代表卫兵必胜所有骑兵，城楼也受远程攻城和固定位置限制。",
-        "adjustments": [],
+        "reason": "精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机。卫兵凭高护甲承担正面接战与输出；轻骑提供机动，清理可接近的射手和攻城器；巨投拆城堡等关键防御。黄金充足并完成锁子甲（757）后，锁子甲重装骑士（140 血、16 攻、6/8 甲）可升格为通用野战主力。",
+        "limitation": "精锐萨金特卫兵与巨型投石机共用城堡生产队列，推进前须统筹城堡产能。锁子甲重装骑士需城堡研究锁子甲（700 食物、600 黄金）并持续耗金，且即便享 -40% 额外克制伤害，预算 3000 下 22 名锁子甲重装骑士 正面对 50 个法兰克长戟兵（敌剩 16/50）与法兰克游侠 22 名（敌剩 4/22）仍落败，须配反步或远程护航。卫兵＋长戟可能一起受成群弩炮压制；减少所受额外伤害不等于减少所有基础伤害。卫兵与骑兵都争食物，步骑共享近战攻击但护甲和兵种升级分开；重装骑马弩兵缺射手锁甲与扳指，正面对 42 个不列颠劲弩手（敌剩 33/42）完败。高护甲不代表卫兵必胜所有骑兵，城楼也受远程攻城和固定位置限制。",
+        "adjustments": [
+          {
+            "id": "sicilians-mounted-crossbow-kite",
+            "when": "慢速步兵海且有开阔拉扯空间",
+            "text": "可条件评估重装骑马弩兵拉扯清理慢速步兵，预算 3000 下 28 名重装骑马弩兵 拉扯对 42 个日本冠军剑士（剩 25/28，后撤 33.1 格）；因缺射手锁甲与扳指，忌与满科技劲弩正面对射（敌剩 33/42）。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 2701,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重装骑马弩兵支持时继续以萨金特、锁子甲重装骑士与重型投石车应对步兵压线。"
+          }
+        ],
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L361",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L496-L532",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -1925,7 +2684,7 @@
     "civ": "Goths",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L534-L566",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -2019,13 +2778,13 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录近卫军与长戟的步兵核心、按需攻城器择用、哥特补兵机制及对应投入边界。",
           "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录",
-          "sourceLines": [13, 376, 378, 380]
+          "sourceLines": [534, 538, 542, 543, 544, 546, 548, 554, 555, 556, 557, 563, 564, 566]
         },
         "reason": "精锐近卫军凭高穿刺护甲接近弓箭兵并冲击经济区；长戟兵按骑兵压力调比例。步兵折扣、无政府解锁兵营近卫军、井喷与团队兵营加成共同支持补兵。",
         "limitation": "共享步兵攻防不免除精锐、长戟、冠军和特色科技的独立投入。农田、黄金和前线兵营产能须持续支持；便宜且产得快不等于资源可无限消耗。近卫军的高穿刺护甲不能代替近战能力，也不能抵消投石车打击。",
         "adjustments": [],
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L376",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L534-L566",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -4658,7 +5417,7 @@
     "civ": "Poles",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L678",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -4674,7 +5433,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-24",
         "condition": "用户认可三条条件路线、彼此替代，不同时铺开。",
         "required": [
           {
@@ -4716,7 +5475,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录奥布奇正面接战破甲与翼骑机动的认可条件、食物和城堡产能成本、共用攻城支援及反制边界。 碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 对 6 个条顿手推炮 胜剩 35/37（接敌 1v1 剩 63/100，未计溅射与护卫），但缺骑兵钢甲导致正面硬冲 42 个不列颠劲弩手 全灭（劲弩剩 25/42，980 血，未计践踏伤害与侧翼包抄）。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
-          "sourceLines": [678, 682, 686, 690, 692, 694, 700, 701, 702, 708, 709, 710, 712],
+          "sourceLines": [948, 954, 958, 962, 964, 966, 972, 973, 974, 980, 981, 982, 984],
           "links": [
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 42 个不列颠劲弩手（劲弩剩 25/42）",
@@ -4729,12 +5488,12 @@
           ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L686",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
         "reason": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹。战锤兵每个 55 食、20 金，翼骑兵每个 80 食；食物消耗较大，战锤兵还依赖城堡产能。两者共享近战攻击科技，但步兵与骑兵护甲分别升级。",
-        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。战锤兵与翼骑兵都消耗食物；战锤兵依赖城堡产能，步兵与骑兵护甲需分别升级。翼骑兵缺骑兵钢甲；列克提克遗产的践踏在站内科技模拟器中为“仅文本”，不代表群战或混编胜率。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。战锤兵与翼骑兵都消耗食物；战锤兵依赖城堡产能，步兵与骑兵护甲需分别升级。翼骑兵缺骑兵钢甲；列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率。",
         "attack": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹并在有安全通路时寻找侧翼机会；不假定能绕到后排。",
         "defense": "奥布奇依托阵地接战，翼骑兵保留机动拦截；不让翼骑兵对受保护的反骑阵硬冲。",
         "adjustments": [
@@ -4774,7 +5533,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-24",
         "condition": "训练资源较互补；不固定再加入战锤兵。",
         "required": [
           {
@@ -4816,7 +5575,7 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录劲弩远射清理长戟与翼骑掩护的分工、训练资源互补、翼骑机制证据边界及共用攻城支援。 碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 正面硬冲 42 个不列颠劲弩手 全灭（对方剩 25/42，980 血，未计践踏伤害）；计入手推炮最小射程 5 后切 6 个条顿手推炮 胜剩 35/37（未计溅射与护卫）。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
-          "sourceLines": [678, 682, 687, 690, 692, 694, 700, 701, 702, 709, 712],
+          "sourceLines": [948, 954, 959, 962, 964, 966, 972, 973, 974, 981, 984],
           "links": [
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 42 个不列颠劲弩手（劲弩剩 25/42）",
@@ -4829,12 +5588,12 @@
           ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L687",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
         "reason": "劲弩手远程清理长戟，翼骑兵掩护并寻找侧翼机会；劲弩耗木材与黄金、翼骑耗食物，训练资源较互补。劲弩没有波兰专属加成，不因能训练就默认优于其他路线。",
-        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。劲弩没有波兰专属加成；翼骑兵缺骑兵钢甲。列克提克遗产的践踏在站内科技模拟器中为“仅文本”，不代表群战或混编胜率；资源互补也不证明该路线必然优于其他选择。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。劲弩没有波兰专属加成；翼骑兵缺骑兵钢甲。列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率；资源互补也不证明该路线必然优于其他选择。",
         "attack": "劲弩先远射清理反骑护卫，翼骑兵掩护并在有安全侧翼通路时突入；不假定能绕到后排。",
         "defense": "劲弩依托可互相支援的位置接战，翼骑兵保留机动拦截；不让翼骑对受保护的反骑阵硬冲。",
         "adjustments": [
@@ -4920,10 +5679,10 @@
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "记录贵族特权骑士的已有科技延续条件、折扣适用范围、共用经济与攻城支援边界。",
           "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
-          "sourceLines": [678, 682, 688, 690, 692, 694, 700, 701, 702, 708, 709, 712]
+          "sourceLines": [948, 954, 960, 962, 964, 966, 972, 973, 974, 980, 981, 984]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L688",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
@@ -7147,7 +7906,7 @@
     "civ": "Japanese",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L1153",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1465-L1509",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -7163,14 +7922,14 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-24",
         "condition": "箭塔是按需支点；按射手压力补远程支援，不把辅助合并为必出。",
         "required": [
           {
             "kind": "unit",
             "id": 560,
             "historicalName": "精锐日本武士",
-            "role": "近战主力"
+            "role": "近战主力，与巨型投石机共用城堡生产队列"
           },
           {
             "kind": "unit",
@@ -7182,7 +7941,7 @@
             "kind": "unit",
             "id": 331,
             "historicalName": "巨型投石机",
-            "role": "拆防"
+            "role": "拆防，与精锐日本武士共用城堡生产队列"
           }
         ],
         "prerequisites": [],
@@ -7252,9 +8011,9 @@
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
           "scope": "精锐日本武士攻击间隔约 1.43 秒、对独特单位额外伤害 +12、45F/30G，轻骑 80F 零黄金。双方帝王满科技的接触 1v1 中，西班牙游侠胜，剩 92/180 生命。当前等资源群战计入一维接敌、射程先手和近战占位，未模拟二维包抄、走位、弹道穿透与溅射，预算也不约束实战人口或反映混编护卫。v0.97.30 · 9938101 的无碰撞全员集火比值仅留在原始历史记录。换兵是条件性策略，暂无实测胜率。弹射器强化巨投、射箭孔研究后依托大型箭塔发射额外箭矢，均为固定记录列出的条件机制；基础箭数 1→3，含射箭槽时驻 5 个村民与驻 5 个劲弩手，同为 6/7 箭（无射箭槽时 5 个劲弩手 7/7 箭、5 个村民仍 6/7 箭），均为指定理论预览，不是招募配方或每箭伤害。这些研究条件、机制与预览不表示玩家当前已完成研究，也不证明相关可选项当前可用。箭塔按需作阵地支点，射手压力下各支援择需，不默认同时铺开。 碰撞接敌等资源预算 3000 核对：40 个精锐日本武士 对西班牙游侠 22 名，由 1v1 落败转为险胜剩 1/40（52 血，用时 188.5 秒；对法兰克游侠 22 名，仍微负，对方剩 1/22，且未计武士充能特殊机制）；37 个轻型骑兵 对 6 个条顿手推炮 胜剩 35/37（接敌 1v1 剩 42/80，未计手推炮固有溅射伤害），但缺骑兵钢甲导致正面硬冲 42 个不列颠劲弩手 全灭（劲弩剩 34/42，1328 血）。",
-          "recordedVersion": "原配置记录未注明站点版本和构建；接触 1v1 复核：v0.99.29 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
+          "recordedVersion": "原配置记录未注明站点版本和构建；接触 1v1 复核：v0.99.29 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
           "sourceLines": [
-            1359, 1361, 1367, 1368, 1369, 1370, 1372, 1374, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1392, 1393, 1394, 1395, 1396, 1397, 1399, 1401, 1403
+            1465, 1467, 1473, 1474, 1475, 1476, 1478, 1480, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1498, 1499, 1500, 1501, 1502, 1503, 1505, 1507, 1509
           ],
           "links": [
             {
@@ -7288,12 +8047,12 @@
           ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L1359-L1403",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1465-L1509",
           "discussion": "https://app.devin.ai/sessions/ddea80a7615d41fbab87cf5879539194",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
         "reason": "用户认可的配置：精锐日本武士＋轻型骑兵＋少量巨型投石机。",
-        "limitation": "磨坊、伐木场、采矿场费用 -50% 利于扩张；缺轮作使后期食物线偏弱，轻骑（80F）与长戟（35F）虽省金但耗食，规模受农田经济制约。缺翼骑兵，轻骑封顶即最终形态；缺建筑学与加热射击，塔防硬度不及高丽。精锐日本武士目录基础近战/穿刺护甲为 1/1，不代表满科技数值。攻城线无手推炮，最高只到中型投石车。",
+        "limitation": "磨坊、伐木场、采矿场费用 -50% 利于扩张；缺轮作使后期食物线偏弱，轻骑（80F）与长戟（35F）虽省金但耗食，规模受农田经济制约。缺翼骑兵，轻骑封顶即最终形态；缺建筑学与加热射击，塔防硬度不及高丽。精锐日本武士目录基础近战/穿刺护甲为 1/1，不代表满科技数值。攻城线无手推炮，最高只到中型投石车。精锐日本武士与巨型投石机共用城堡生产队列，推进前须统筹城堡产能。",
         "attack": "武士贴身输出，轻骑寻找安全接敌路径切攻城器与后排，巨投拆防御。",
         "defense": "武士目录基础近战/穿刺护甲为 1/1，面对射手时注意其防护缺口；轻骑拦截可接近的突入攻城器。射手压力下的远程掩护见独立调整。",
         "adjustments": [
@@ -7489,7 +8248,7 @@
     "civ": "Wei",
     "lead": "帝王成军后由翼骑兵保护鲜卑掠骑兵；先确认能完成前置科技。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1198-L1234",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1511-L1553",
       "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
       "boundary": "仅核对固定帝王科技配置与目录；曹操光环的幅度、范围、覆盖及混编胜负未验证。"
     },
@@ -7501,7 +8260,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-20",
+        "revised": "2026-11-24",
         "id": "wei-hussar-xianbei",
         "title": "明光铠翼骑兵＋鲜卑掠骑兵",
         "composition": "combined",
@@ -7559,16 +8318,42 @@
                 "age": 4
               }
             ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "金流充裕或正面对拼需要硬前排时，与明光铠翼骑兵并列的金线前排主选",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1946,
+                "age": 4,
+                "historicalName": "重装黑光铠骑兵",
+                "role": "享魏 +30% 生命与明光铠 +4 近甲（137 血、16 攻、10/5 甲），预算 3000 下 23 名重装黑光铠骑兵 正面对法兰克游侠 22 名（剩 1/23）与 42 个日本冠军剑士（剩 2/23）均胜出"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "城堡时代于城堡研究（250 食物、300 木材），士兵持续被动产生食物，缓解长期骑兵食物消耗，不是成型前置",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 1061,
+                "age": 3,
+                "historicalName": "屯田",
+                "role": "士兵自动产生食物，长期对局中支撑翼骑兵与黑光铠持续补员"
+              }
+            ]
           }
         ],
         "reason": "翼骑兵每名 80 食，鲜卑掠骑兵每名 65 木/35 金，训练资源分开，前排吸收火力，后排保持输出。",
-        "limitation": "翼骑兵升级、明光铠研究、城堡及英雄另有投入；不要把训练资源互补当作成军没有成本。",
+        "limitation": "翼骑兵升级、明光铠研究、城堡及英雄另有投入；不要把训练资源互补当作成军没有成本。重装黑光铠骑兵（65 食、65 金）与鲜卑掠骑兵共用黄金，断金或金流吃紧时仍应回退明光铠翼骑兵控金；屯田（1061）须先建城堡研究。",
         "attack": "翼骑兵护住接敌窗口；鲜卑留在后方保持射程，不让翼骑正面撞进枪兵阵。",
         "defense": "翼骑兵留出护两翼的空间，不让鲜卑被迫单独接战。",
         "conditionBranches": [
           {
             "id": "wei-retain-black-light-cavalry",
-            "title": "已有黑光铠骑兵",
+            "title": "已有黑光铠骑兵或金流充裕转重装黑光铠",
             "requires": [
               {
                 "kind": "unit",
@@ -7577,12 +8362,12 @@
               }
             ],
             "context": {
-              "label": "保留已有",
-              "text": "城堡时代留下的黑光可以继续当作前排，不必立即换掉。"
+              "label": "保留与升格",
+              "text": "城堡时代留下的黑光铠骑兵可直接续作前排；进入帝王补齐明光铠与重装升级后，魏重装黑光铠骑兵达 137 血、10/5 甲，预算 3000 正面对法兰克游侠 22 名（剩 1/23）与 42 个日本冠军剑士（剩 2/23）均胜出。"
             },
             "decision": {
-              "label": "是否继续训练",
-              "text": "新补黑光会和鲜卑争用黄金。只有前排缺兵且不耽误鲜卑补员，才考虑继续训练。其他情况下先用已有部队。"
+              "label": "黄金配额取舍",
+              "text": "金流紧张时仍以翼骑兵配鲜卑掠骑兵控金；金流充裕或正面对拼重骑与步兵需要硬前排时，可将重装黑光铠骑兵升格为并列金线前排主选，与鲜卑按黄金配额协调补员。"
             },
             "evidence": "未做混编或实战验证。"
           },
@@ -7655,8 +8440,8 @@
           "recognition": "用户认可的是这一配置及其适用条件，不是每局固定出兵。",
           "playtest": "讨论未说明实战使用；单兵机制或模拟不代表混编结果。",
           "scope": "只比较同一帝王配置下有无明光铠，并核对独立的训练资源。",
-          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。",
-          "sourceLines": [1198, 1200, 1206, 1207, 1208, 1210, 1212, 1214, 1220, 1221, 1222, 1223, 1229, 1230, 1231, 1232, 1234],
+          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [1511, 1513, 1519, 1520, 1521, 1522, 1524, 1526, 1528, 1534, 1535, 1536, 1537, 1543, 1544, 1545, 1546, 1550, 1551, 1553],
           "links": [
             {
               "label": "翼骑兵模拟（不含明光铠）",
@@ -7685,6 +8470,22 @@
             {
               "label": "魏科技树固定资料",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/c4ab71cf6148e0908f2c483ebc4f0292965f57f5/data/game/trees.json"
+            },
+            {
+              "label": "重装黑光铠骑兵（1946）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1946?civ=Wei"
+            },
+            {
+              "label": "屯田（1061）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/1061?civ=Wei"
+            },
+            {
+              "label": "预算 3000 · 23 名重装黑光铠骑兵 对法兰克游侠 22 名（剩 1/23）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1946.Wei.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 23 名重装黑光铠骑兵 对 42 个日本冠军剑士（剩 2/23）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1946.Wei.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
             }
           ]
         }
@@ -7695,7 +8496,7 @@
     "civ": "Shu",
     "lead": "先看是否已有成队步弓，再决定是否延续到帝王。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1236-L1270",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1555-L1598",
       "discussion": "https://app.devin.ai/sessions/e99892ed7e4247f08ff77d4ab7f21af2",
       "boundary": "弩箭匣的追加箭和盘蛇阵在混编中的收益未量化，未验证混编及客户端实战。"
     },
@@ -7707,7 +8508,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-24",
         "id": "shu-crossbow-arbalester",
         "title": "已有步弓：弩手 → 劲弩手",
         "composition": "progression",
@@ -7756,10 +8557,49 @@
                 "age": 4
               }
             ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "已有城堡产能且面临重骑冲阵时，作为强反骑前排补充",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1961,
+                "age": 4,
+                "historicalName": "精锐白毦兵",
+                "role": "满科技 100 血、9 攻、3/7 甲，命中减速未建模；即便未计减速，预算 3000 下 40 名精锐白毦兵 对法兰克游侠 22 名（敌仅剩 1/22）几乎拼平"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "开阔地需机动拉扯慢速步兵时条件补充，忌与满血强弓硬对射",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 4,
+                "historicalName": "重装骑射手",
+                "role": "缺血统仅 60 血，预算 3000 下 30 个重装骑射手 拉扯对 42 个日本冠军剑士（剩 21/30，后撤 29.2 格），正面对 42 个不列颠劲弩手（敌剩 21/42）"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "军队成形且资源允许时，与魏节曹操同边界按余量补充",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1966,
+                "age": 4,
+                "historicalName": "刘备",
+                "role": "帝王城堡英雄（500 食、500 金、限一），425 血、16 攻、6/7 甲，光环与编队增益未建模"
+              }
+            ]
           }
         ],
         "reason": "利用存活弓群和已有升级延续输出。适用的科技折扣不是造兵折扣，视野也不是射程。",
-        "limitation": "没有成队步弓时不强转；保护、当下升级或补兵不足时，先解决眼前缺口。铁匠铺缺铸铁与鼓风炉，长戟兵、白毦兵、轻型骑兵与黑光铠骑兵的近战攻击科技只加 1 攻。长戟兵仍承担反骑。马厩缺血统，另限制轻型骑兵与黑光铠骑兵的生命上限。",
+        "limitation": "没有成队步弓时不强转；保护、当下升级或补兵不足时，先解决眼前缺口。铁匠铺缺铸铁与鼓风炉，长戟兵、白毦兵、轻型骑兵与黑光铠骑兵的近战攻击科技只加 1 攻。长戟兵仍承担反骑。马厩缺血统，另限制轻型骑兵与黑光铠骑兵的生命上限，同时令蜀重装骑射手仅 60 血（正面对 42 个不列颠劲弩手 敌剩 21/42），忌与满血强弓硬对射。",
         "attack": "保住已有弓群，按战况决定何时升级；不为凑成枪弓攻城三线而延误当前进攻。",
         "defense": "弓群避免被迫贴身作战；接战前保留后撤路线，不让护卫追出阵线。",
         "adjustments": [
@@ -7808,13 +8648,15 @@
             "fallback": "先满足护卫、常用升级与补兵需要。"
           }
         ],
-        "alternatives": "不默认加战车：与弓群争金，弓群失去后才重新评估转型。精锐白毦兵需要城堡。普通白毦兵基础 7 攻，精锐基础 8 攻，蜀帝王满科技为 9 攻（锻造 +1）。按减速、反骑和盘蛇阵就近扛线的职责评估；盘蛇阵联动不惠及弓手。弩箭匣不是固定优先项。",
+        "alternatives": "战车每名 75 食/90 金且最小射程 1，更适合弓群失去后转型，不与劲弩同时铺双金线；精锐白毦兵是强反骑前排（未计命中减速预算 3000 对法兰克游侠 22 名 敌仅剩 1/22），普通白毦兵基础 7 攻，精锐基础 8 攻，蜀帝王满科技为 9 攻（锻造 +1），需城堡产能，按减速、反骑和盘蛇阵就近扛线的职责评估；刘备（500 食、500 金、限一）光环未量化，先成军再考虑；弩箭匣 650 食/750 金不享弓兵科技 -25% 折扣。",
         "evidence": {
           "recognition": "用户认可的是这一配置及其适用条件，不是每局固定出兵。",
           "playtest": "讨论未说明实战使用；单兵机制或模拟不代表混编结果。",
           "scope": "固定劲弩科技模拟只说明单兵配置；折扣、额外箭与视野按固定科技资料解释。",
-          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。",
-          "sourceLines": [1236, 1238, 1244, 1245, 1246, 1248, 1250, 1252, 1257, 1258, 1259, 1261, 1265, 1266, 1267, 1268, 1270],
+          "recordedVersion": "原模拟记录：站点 v0.89.2 · DE 188329 · 构建 5870754。；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [
+            1555, 1557, 1563, 1564, 1565, 1566, 1567, 1569, 1571, 1577, 1578, 1579, 1580, 1581, 1587, 1588, 1589, 1590, 1591, 1592, 1594, 1596, 1598
+          ],
           "links": [
             {
               "label": "劲弩手固定科技配置",
@@ -7847,6 +8689,26 @@
             {
               "label": "DE 188329 固定科技效果",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/effects.json"
+            },
+            {
+              "label": "重装骑射手（474）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/474?civ=Shu"
+            },
+            {
+              "label": "刘备（1966）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/unit/1966?civ=Shu"
+            },
+            {
+              "label": "预算 3000 · 40 名精锐白毦兵 对法兰克游侠 22 名（游侠剩 1/22，未计减速）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1961.Shu.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 个重装骑射手 拉扯对 42 个日本冠军剑士（剩 21/30，后撤 29.2 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Shu.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 30 个重装骑射手 对 42 个不列颠劲弩手（劲弩剩 21/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Shu.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
             }
           ]
         }
@@ -8468,7 +9330,7 @@
     "civ": "Persians",
     "lead": "进入帝王时代后，以萨瓦尔掩护弩手和手推炮。根据主力补员与城堡产能决定是否投入战象。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/4202736a10ea200426b053adc026b4990459e6de/role/game-strategy.md#L251-L257",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L291-L327",
       "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1176",
       "boundary": "原讨论记录认可范围。固定目录和费用模型用于核对研究与训练。"
     },
@@ -8485,7 +9347,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-24",
         "condition": "进入帝王时代推进时，须能持续补员并承担研究与攻城投入。",
         "required": [
           {
@@ -8551,6 +9413,19 @@
                 "role": "普通战象每头 170 食物、85 黄金，从城堡训练并占用城堡队列。攒兵时先维持已有部队的补员和阵线。"
               }
             ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "守关键坡口、矿区或前线堡阵且有城堡资源时再补研，不是主力推进前置。",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 7,
+                "age": 4,
+                "historicalName": "堡垒",
+                "role": "帝王城堡独特科技（600 木材、300 黄金），城堡攻击 +4、对冲车 +3、对步兵 +3、受额外伤害 -25%。"
+              }
+            ]
           }
         ],
         "adjustments": [
@@ -8611,8 +9486,8 @@
           "recognition": "维护者在原讨论认可萨瓦尔、免金弩与手推炮主路，并保留战象为条件选项。",
           "playtest": "原讨论未报告实战使用。",
           "scope": "按固定目录核对实体，用同文明同时代的模型比较单名弩手训练费用。",
-          "recordedVersion": "DE 188329，原讨论未记录站点构建。",
-          "sourceLines": [251, 253, 255, 257],
+          "recordedVersion": "DE 188329，原讨论未记录站点构建。；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671",
+          "sourceLines": [291, 295, 299, 300, 301, 303, 305, 307, 315, 316, 317, 318, 324, 325, 327],
           "links": [
             {
               "label": "固定单位目录",
@@ -8645,11 +9520,28 @@
             {
               "label": "波斯城堡时代帕提亚加成",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/civ/Persians#bonuses"
+            },
+            {
+              "label": "堡垒（7）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/tech/7?civ=Persians"
+            },
+            {
+              "label": "预算 3000 · 60 个弩手 拉扯对 50 个法兰克长戟兵（60/60 满血零损，后撤 9.1 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=24.Persians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 60 个弩手 拉扯对 42 个日本冠军剑士（剩 31/60，后撤 18.1 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=24.Persians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 60 个弩手 对 42 个不列颠劲弩手（剩 8/60）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=24.Persians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
             }
           ]
         },
-        "limitation": "弩手无劲弩手升级和护腕，帝王满科技模拟为 35 血、8 攻、射程 7。遇到高远甲前排时，重新分配后排输出，别让免金弩手独自撑帝王输出。",
-        "defense": "萨瓦尔护住后排，弩手在其掩护下优先清长戟，手推炮留给攻城任务。"
+        "limitation": "弩手无劲弩手升级和护腕，帝王满科技模拟为 35 血、8 攻、射程 7。预算 3000 下 60 个弩手 拉扯对 50 个法兰克长戟兵（60/60 满血零损，后撤 9.1 格）、拉扯对 42 个日本冠军剑士（剩 31/60，后撤 18.1 格），正面对 42 个不列颠劲弩手（剩 8/60）；遇到高远甲前排时，重新分配后排输出，别让免金弩手独自撑帝王输出。波斯缺攻城技师（377），手推炮固定 12 射程且固有溅射伤害未建模，炮战易受 13 射程攻城技师手推炮压制，须靠萨瓦尔绕侧而非硬对轰。",
+        "defense": "萨瓦尔护住后排，弩手在其掩护下优先清长戟，手推炮留给攻城任务。",
+        "alternatives": "无防守关键堡阵压力时不提前点帝王独科堡垒（7）。"
       }
     ]
   }

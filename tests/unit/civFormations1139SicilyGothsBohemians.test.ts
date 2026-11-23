@@ -12,8 +12,20 @@ const reviewedGarrisonVersion = `${reviewedVersion}；驻军满科技复核：v0
 describe('#1139 西西里、哥特与波西米亚内容回归', () => {
   it('将资料核对版本与原用户对局版本分别记录，并同步来源范围', () => {
     const expectedSourceLines = [
-      { civ: 'Sicilians', id: 'sicilians-serjeant-light-cavalry', lines: [13, 361, 363, 365, 366, 367, 368, 372], version: reviewedGarrisonVersion, links: 4 },
-      { civ: 'Goths', id: 'goths-huskarl-halberdier', lines: [13, 376, 378, 380], version: reviewedVersion, links: 0 },
+      {
+        civ: 'Sicilians',
+        id: 'sicilians-serjeant-light-cavalry',
+        lines: [496, 500, 504, 505, 506, 508, 510, 512, 518, 519, 520, 521, 527, 528, 529, 530, 532],
+        version: `${reviewedGarrisonVersion}；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671`,
+        links: 11,
+      },
+      {
+        civ: 'Goths',
+        id: 'goths-huskarl-halberdier',
+        lines: [534, 538, 542, 543, 544, 546, 548, 554, 555, 556, 557, 563, 564, 566],
+        version: reviewedVersion,
+        links: 0,
+      },
       {
         civ: 'Bohemians',
         id: 'bohemians-handcannon-halberdier',
@@ -45,7 +57,8 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     const mangonelEvaluation = sicilian.supplements.find(({ mode }) => mode === 'conditional-evaluation')!;
 
     expect([sicilian.status, sicilian.playtest, sicilian.composition, sicilian.age]).toEqual(['approved', 'unreported', 'combined', 4]);
-    expect(sicilian.condition).toBe('已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。');
+    expect(sicilian.condition).toContain('已认可的萨金特卫兵＋轻骑基础配置');
+    expect(sicilian.condition).toContain('锁子甲重装骑士');
     expect(sicilian.required.map(({ id }) => id)).toEqual([1659, 546, 331]);
     expect(position.condition).toContain('石头充足');
     expect(position.condition).toContain('已有稳定战线');
@@ -54,7 +67,10 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
     expect(mangonelEvaluation.condition).toContain('敌方攻城器保护严密、轻骑难以接近');
     expect(mangonelEvaluation.condition).toContain('先看路线与交战位置，再评估新增投石车投入');
     expect(mangonelEvaluation.condition).toContain('不把第二条反攻城路线列为标配');
-    expect(mangonelEvaluation.entities.map(({ id, historicalName }) => [id, historicalName])).toEqual([[280, '轻型投石车']]);
+    expect(mangonelEvaluation.entities.map(({ id, historicalName }) => [id, historicalName])).toEqual([
+      [280, '轻型投石车'],
+      [588, '重型投石车'],
+    ]);
     expect(mangonelEvaluation.entities.map(({ id }) => id)).not.toContain(331);
     expect(mangonelEvaluation.entities[0]!.role).toBe('投石车系基础目录引用；新增投入仅作条件评估，非反攻城标配');
     expect([mangonel.id, mangonel.en, mangonel.zh, mangonel.type, mangonel.age]).toEqual([280, 'Mangonel', '轻型投石车', 'Unit', 3]);
@@ -63,7 +79,9 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       ['continuation-adjustment', [283]],
       ['position-variant', [1665, 1661]],
       ['as-needed', [359]],
-      ['conditional-evaluation', [280]],
+      ['conditional-evaluation', [280, 588]],
+      ['mechanism-support', [756]],
+      ['conditional', [2701]],
     ]);
   });
 
@@ -162,6 +180,9 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
         age,
         required.map(({ id: unitId }) => unitId),
       ]),
-    ).toEqual([['monaspa-towers', 'approved', 'unreported', 'combined', 4, [1805, 235, 923]]]);
+    ).toEqual([
+      ['monaspa-towers', 'approved', 'unreported', 'combined', 4, [1805, 235, 923]],
+      ['georgians-monaspa-field', 'approved', 'pending', 'combined', 4, [1805]],
+    ]);
   });
 });

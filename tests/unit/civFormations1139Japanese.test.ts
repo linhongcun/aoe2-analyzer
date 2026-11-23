@@ -6,9 +6,9 @@ import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
-const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L1359-L1403';
+const SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1465-L1509';
 const SOURCE_LINES = [
-  1359, 1361, 1367, 1368, 1369, 1370, 1372, 1374, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1392, 1393, 1394, 1395, 1396, 1397, 1399, 1401, 1403,
+  1465, 1467, 1473, 1474, 1475, 1476, 1478, 1480, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1498, 1499, 1500, 1501, 1502, 1503, 1505, 1507, 1509,
 ];
 const rightArrow = String.fromCodePoint(0x2192);
 const japaneseCiv = () => civFormationContent.find(({ civ }) => civ === 'Japanese')!;

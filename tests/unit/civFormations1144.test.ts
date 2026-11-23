@@ -18,8 +18,21 @@ const project = (civ: string, resources: Catalog, patch = DATA_PATCH) => {
 
 describe('#1144 三国阵容', () => {
   it.each([
-    ['Wei', 1, 4, 'combined', 'unreported', [441, 1952], [4, 4], [1062], [], [1954, 359], 'a348c548624a41da50735eebf166d23456ff56fa', '1198-L1234'],
-    ['Shu', 1, 4, 'progression', 'unreported', [24, 492], [3, 4], [], [], [359, 1942], 'a348c548624a41da50735eebf166d23456ff56fa', '1236-L1270'],
+    ['Wei', 1, 4, 'combined', 'unreported', [441, 1952], [4, 4], [1062], [], [1954, 359, 1946, 1061], '6c3cdc6ded5200eac43e95efb28878066b96c3d9', '1511-L1553'],
+    [
+      'Shu',
+      1,
+      4,
+      'progression',
+      'unreported',
+      [24, 492],
+      [3, 4],
+      [],
+      [],
+      [359, 1942, 1961, 474, 1966],
+      '6c3cdc6ded5200eac43e95efb28878066b96c3d9',
+      '1555-L1598',
+    ],
     ['Wu', 2, 4, 'choice', 'pending', [], [], [], [492, 6], [1970, 359, 1942], 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8', '1569-L1618'],
   ] as const)(
     '%s 发布主路线，并按时代解析实体及固定来源',
@@ -48,7 +61,7 @@ describe('#1144 三国阵容', () => {
     const wei = project('Wei', partial);
     expect(wei.status).toBe('current');
     if (wei.status !== 'current') throw new Error(wei.status);
-    expect(wei.supplements).toEqual([]);
+    expect(wei.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([1946, 1061]);
     expect(wei.adjustments.filter(({ unavailable }) => unavailable).map(({ id }) => id)).toEqual(['wei-hussar-xianbei-cavalry', 'wei-hussar-xianbei-cao-cao']);
     const techById = { ...core.techById };
     delete techById[1062];

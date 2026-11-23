@@ -50,7 +50,14 @@ describe('#1176 波斯已讨论路线', () => {
     delete unitById[239];
     const withoutElephant = project({ core: { ...core, unitById }, trees });
     expect(withoutElephant.status).toBe('current');
-    if (withoutElephant.status === 'current') expect(withoutElephant.supplements).toEqual([]);
+    if (withoutElephant.status === 'current') {
+      expect(withoutElephant.supplements.flatMap(({ entities }) => entities.map(({ entity }) => entity.id))).toEqual([7]);
+    }
+    const techWithoutCitadels = { ...core.techById };
+    delete techWithoutCitadels[7];
+    const withoutBoth = project({ core: { ...core, unitById, techById: techWithoutCitadels }, trees });
+    expect(withoutBoth.status).toBe('current');
+    if (withoutBoth.status === 'current') expect(withoutBoth.supplements).toEqual([]);
   });
 
   it('价格快照限于核对版本，并校验发布配置', async () => {
