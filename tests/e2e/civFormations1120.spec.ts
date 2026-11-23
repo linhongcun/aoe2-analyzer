@@ -526,7 +526,7 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   await expect(card.locator('time.num.nw')).toContainText('2026-11-22');
   await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
     'href',
-    'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L546-L585',
+    'https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L546-L598',
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

@@ -7,16 +7,15 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const SOURCE_URLS = {
-  'saxons-retainer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L638-L688',
-  'mayans-plumed-archer-halberdier': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L914',
-  'aztecs-eagle-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L844',
+  'saxons-retainer-tower': 'https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L683-L746',
+  'mayans-plumed-archer-halberdier':
+    'https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1192-L1230',
+  'aztecs-eagle-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L1111-L1153',
 } as const;
 const SOURCE_LINES = {
-  'saxons-retainer-tower': [
-    638, 642, 646, 647, 648, 650, 652, 654, 656, 658, 662, 666, 667, 668, 669, 670, 676, 677, 678, 679, 680, 681, 682, 683, 685, 687, 688,
-  ],
-  'mayans-plumed-archer-halberdier': [914, 918, 920, 922, 923, 924, 926, 928, 934, 935, 936, 942, 944],
-  'aztecs-eagle-skirmisher': [844, 846, 848, 852, 853, 855, 857, 863, 864, 865, 871, 873],
+  'saxons-retainer-tower': [683, 700, 704, 705, 706, 708, 710, 712, 714, 716, 724, 725, 726, 727, 728, 734, 735, 736, 737, 738, 739, 740, 741, 743, 745, 746],
+  'mayans-plumed-archer-halberdier': [1192, 1204, 1208, 1209, 1210, 1212, 1214, 1220, 1221, 1222, 1228, 1230],
+  'aztecs-eagle-skirmisher': [1111, 1115, 1132, 1134, 1140, 1143, 1144, 1150, 1153],
 } as const;
 
 const byCiv = (name: string) => civFormationContent.find(({ civ }) => civ === name)!;
@@ -199,6 +198,6 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     expect(formation.attack).not.toContain('鹰勇士');
     expect(formation.alternatives).toContain('原记录只将其列为特定反弓需求候选');
     expect(formation.alternatives).toContain('不表示已认可为完整阵容或已实战核实');
-    expect(formation.evidence.sourceLines).toContain(918);
+    expect(formation.evidence.sourceLines).toContain(1204);
   });
 });

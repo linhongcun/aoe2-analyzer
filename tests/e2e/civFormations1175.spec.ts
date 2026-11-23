@@ -9,7 +9,8 @@ for (const width of [1280, 360]) {
     await page.goto('./' + routeHash);
 
     const formation = page.locator('#formations');
-    const card = formation.locator('.formation-list > article');
+    await expect(formation.locator('.formation-list > article')).toHaveCount(2);
+    const card = formation.locator('.formation-list > article').filter({ has: page.locator('#formation-wu-ranged-by-opponent') });
     await expect(card).toHaveCount(1);
     await expect(card.locator('.formation-choice')).toHaveCount(2);
     const siege = card.locator('.formation-supplement-group').filter({ hasText: '有明确推进目标且能安排护卫时' });

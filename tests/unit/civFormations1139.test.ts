@@ -14,7 +14,7 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons', 'Persians'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(46);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(49);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 1],
@@ -29,8 +29,8 @@ describe('#1139 文明路线契约与投影', () => {
       Sicilians: 1,
       Goths: 1,
       Koreans: 2,
-      Jurchens: 1,
-      Saxons: 1,
+      Jurchens: 2,
+      Saxons: 2,
       Teutons: 3,
       Franks: 3,
       Vietnamese: 3,
@@ -41,7 +41,7 @@ describe('#1139 文明路线契约与投影', () => {
       Bohemians: 1,
       Aztecs: 2,
       Incas: 2,
-      Mayans: 1,
+      Mayans: 2,
       Mapuche: 2,
       Muisca: 1,
       Tupi: 2,
@@ -78,19 +78,20 @@ describe('#1139 文明路线契约与投影', () => {
 
     expect([wagons.status, wagons.playtest, wagons.composition, wagons.age, wagons.required.map(({ id }) => id)]).toEqual([
       'approved',
-      'unreported',
-      'combined',
+      'pending',
+      'choice',
       4,
-      [829, 359],
+      [359],
     ]);
+    expect(wagons.choices?.flatMap(({ entities }) => entities.map(({ id }) => id))).toEqual([829, 492]);
     expect(wagons.supplements).toHaveLength(1);
     expect(wagons.supplements[0]!.mode).toBe('as-needed');
-    expect(wagons.supplements[0]!.condition).toBe('按需少量手推炮');
-    expect(wagons.supplements[0]!.entities.map(({ id }) => id)).toEqual([36]);
+    expect(wagons.supplements[0]!.condition).toContain('按需少量手推炮');
+    expect(wagons.supplements[0]!.entities.map(({ id }) => id)).toEqual([36, 1907]);
     expect(wagons.evidence.recordedVersion).toBe(
-      '章节资料核对：v0.77.102 · DE 188329 · 84988dd；旧战车路线的单独对局版本未记录；拉扯复核：v0.99.34 · DE 188329 · 55613e4a',
+      '章节资料核对：v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；野战主路重构复核：v0.99.38 · DE 188329 · 8cd21b75',
     );
-    expect(wagons.evidence.sourceLines).toEqual([172, 579, 583]);
+    expect(wagons.evidence.sourceLines).toEqual([172, 546, 550, 554, 555, 556, 558, 560, 582, 583, 584, 585, 592, 593, 594, 596]);
     expect(wagons.evidence.scope).not.toContain('来源行');
 
     expect([garrison.status, garrison.playtest, garrison.composition, garrison.age, garrison.required.map(({ id }) => id)]).toEqual([
@@ -108,7 +109,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(garrison.evidence.recordedVersion).toBe(
       '章节综合资料核对：v0.77.102 · DE 188329 · 84988dd；鼓风炉机制补记：v0.77.105 · DE 188329（未记构建）；驻军预览复核：v0.99.0 · DE 188329 · 531df91',
     );
-    expect(garrison.evidence.sourceLines).toEqual([546, 550, 554, 555, 556, 557, 559, 561, 563, 569, 570, 571, 572, 578, 579, 580, 581, 583, 585]);
+    expect(garrison.evidence.sourceLines).toEqual([546, 562, 566, 567, 568, 569, 571, 573, 575, 581, 582, 583, 585, 591, 592, 593, 594, 596, 598]);
     expect(garrison.evidence.scope).not.toContain('来源行');
     expect(garrison.required[0]!.role).toBe('主要固定远程火力与掩体');
     expect(garrison.required[1]!.role).toBe('驻塔增箭、出塔清冲车并保护塔和炮');
@@ -137,7 +138,7 @@ describe('#1139 文明路线契约与投影', () => {
     expect(jurchens.evidence.recordedVersion).toBe(
       'v0.77.105 · DE 188329 · cd9382c；驻军预览复核：v0.99.0 · DE 188329 · 531df91；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71',
     );
-    expect(jurchens.evidence.scope).toContain('描述前线箭塔、驻塔火矛和翼骑主路');
+    expect(jurchens.evidence.scope).toContain('描述前线箭塔、驻塔火矛和翼骑阵地变体');
     expect(jurchens.evidence.scope).not.toContain('来源行');
   });
 

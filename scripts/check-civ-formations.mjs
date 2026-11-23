@@ -3,8 +3,10 @@ import { resolveFormationSource } from '../src/domain/civFormationsSource.mjs';
 export const FORMATIONS_FILE = 'data/content/civ-formations.json';
 export const FORMATION_CONTRACT_FILE = 'data/reference/civ-formations-contract.json';
 const FIXED_SOURCE_COMMIT = '8d1adeacc7c97374ee6d95d9cabfceb793d080d3';
-const THREE_KINGDOMS_SOURCE_COMMIT = 'a348c548624a41da50735eebf166d23456ff56fa';
 const threeKingdoms = new Set(['Wei', 'Shu', 'Wu']);
+const PINNED_STRATEGY_URL_RE = /^https:\/\/github\.com\/linhongcun\/aoe2-analyzer\/blob\/([0-9a-f]{40})\/role\/game-strategy\.md#L([1-9]\d*)-L([1-9]\d*)$/;
+const isStrictlyAscendingLines = (lines) =>
+  Array.isArray(lines) && lines.length > 0 && lines.every((n, idx) => Number.isInteger(n) && n > 0 && (idx === 0 || n > lines[idx - 1]));
 
 const sameArray = (actual = [], expected = []) =>
   actual.length === expected.length && actual.every((value, index) => JSON.stringify(value) === JSON.stringify(expected[index]));
@@ -89,8 +91,14 @@ export function formationProblems(content, contract) {
         add(`${routePath}/evidence/links`, '核对链接与独立发布契约不一致');
       if (threeKingdoms.has(civ.civ)) {
         const lines = contractRoute.sourceLines;
-        const pinned = `https://github.com/linhongcun/aoe2-analyzer/blob/${THREE_KINGDOMS_SOURCE_COMMIT}/role/game-strategy.md#L${lines[0]}-L${lines.at(-1)}`;
-        if (!lines.length || source?.content !== pinned) add(`${routePath}/source/content`, '魏蜀吴来源行必须对应本单固定策略版本');
+        const match = typeof source?.content === 'string' ? PINNED_STRATEGY_URL_RE.exec(source.content) : null;
+        if (!isStrictlyAscendingLines(lines) || !match || Number(match[2]) !== lines[0] || Number(match[3]) !== lines.at(-1))
+          add(`${routePath}/source/content`, '魏蜀吴来源行必须对应固定策略提交及严格递增起止行范围');
+      } else if (typeof source?.content === 'string' && /\/role\/game-strategy\.md#L\d+-L\d+$/.test(source.content)) {
+        const lines = contractRoute.sourceLines;
+        const match = PINNED_STRATEGY_URL_RE.exec(source.content);
+        if (!isStrictlyAscendingLines(lines) || !match || Number(match[2]) > Number(match[3]))
+          add(`${routePath}/source/content`, '带起止行号的策略来源必须固定 40 位提交哈希且行号严格递增');
       }
       if (route.composition === 'choice' && (route.choices ?? []).length < 2) add(`${routePath}/choices`, '择一路线至少需要两个可审查选项');
       for (const adjustment of route.adjustments ?? []) {
