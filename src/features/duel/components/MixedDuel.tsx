@@ -21,7 +21,7 @@ import { DuelModeBar, type TopMode } from './DuelModeBar';
 import { MixedSideEditor } from './MixedSideEditor';
 import { MixedResult, MixedRules } from './MixedResult';
 import { CONTACT_BOUNDARY } from './ContactSummary';
-import { KITE_CONTACT_BOUNDARY } from './KiteSummaryCard';
+import { KiteContactBoundary } from './KiteSummaryCard';
 import { hasAnyKiteEnabled, mixedSideCanKite } from '../logic/duelKiteView';
 import '../mixed-duel.css';
 
@@ -435,7 +435,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
         固定数据 <span className="num nw">DE {DATA_SOURCES.patch?.build ?? '未知'}</span> · {MIXED_RULE_LABEL}
       </p>
       <p className="note mix-footer">
-        {result && result.status !== 'error' && hasAnyKiteEnabled(result.contact.kite) ? KITE_CONTACT_BOUNDARY : CONTACT_BOUNDARY}
+        {result && result.status !== 'error' && hasAnyKiteEnabled(result.contact.kite) ? <KiteContactBoundary /> : CONTACT_BOUNDARY}
       </p>
       {core && view?.a && view.b && <CivArtCredit civs={[input.a.civ, input.b.civ]} />}
       {exitMode && (

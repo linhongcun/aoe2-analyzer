@@ -57,6 +57,10 @@ test('图 1 & 图 2：单远程未触底（1280 浅色）与 40 格触底告警�
   await expect(res.locator('[data-t="duel-kite-card"]')).toContainText('A · 边走边射（未触底）');
   await expect(res.locator('[data-t="kite-opening-delta"]')).toContainText(/较站桩 \+\d+ 轮/);
   await expect(res.locator('[data-t="duel-contact-boundary"]')).toContainText('单方累计后撤上限 40 格');
+  await expect(res.locator('[data-t="duel-contact-boundary"] .note .num.nw', { hasText: '40 格' })).toHaveCount(1);
+  await expect(res.locator('[data-t="duel-contact-boundary"] .note .num.nw', { hasText: '0 秒' })).toHaveCount(1);
+  await expect(page.locator('#duel-model .num.nw', { hasText: '40 格' })).toHaveCount(1);
+  await expect(page.locator('#duel-model .num.nw', { hasText: '0 秒' })).toHaveCount(1);
   await assertKiteLayoutClean(page, '#duel');
 
   const axeLight = await new AxeBuilder({ page }).include('#duel').withTags(['wcag2a', 'wcag2aa']).analyze();
@@ -72,6 +76,8 @@ test('图 1 & 图 2：单远程未触底（1280 浅色）与 40 格触底告警�
   await expect(res.locator('[data-t="duel-kite-card"]')).toContainText('40.0 格（已触底）');
   await expect(res.locator('[data-t="duel-contact-boundary"]')).toContainText('（触底后）');
   await expect(res.locator('[data-t="replay-retreat-cap"][data-side="a"][data-hit="true"]')).toHaveCount(1);
+  await expect(res.locator('[data-t="replay-legend-retreat-cap"]')).toContainText('40 格退距线');
+  await expect(res.locator('[data-t="replay-legend-retreat-cap"] .num.nw')).toHaveText('40 格');
 
   const axeDark = await new AxeBuilder({ page }).include('#duel').withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(axeDark.violations).toEqual([]);
@@ -258,8 +264,78 @@ test('图 6：781px 双栏双远程、360px 混编与 390px 单兵（浅/深双�
   await page.goto('./#/duel?a=474.Magyars.4.f.&b=359.Franks.4.f.&m=n&na=15&nb=50&ka=1');
   await page.getByRole('radio', { name: '混编', exact: true }).click();
   await expect(page.locator('[data-t="duel-kite-block-a"]')).toBeVisible();
+  await page.getByRole('button', { name: '计算混编结果' }).click();
+  await expect(page.getByTestId('mixed-result')).toBeVisible();
+  await expect(page.locator('.mix-footer .num.nw', { hasText: '40 格' })).toHaveCount(1);
+  await expect(page.locator('.mix-footer .num.nw', { hasText: '0 秒' })).toHaveCount(1);
   await assertKiteLayoutClean(page, '#duel');
   const axe360 = await new AxeBuilder({ page }).include('#duel').withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(axe360.violations).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('审计回归：纯近战 URL 带 kite:true 不误显拉扯、混编首行阵亡后脱离接战按存活行展示', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+
+  // P1-3：纯近战方手改 URL 传入 "kite":true，输入快照不得误显「边走边射（拉扯）」
+  await page.goto('./#/duel?a=359.Franks.4.f.&b=567.Japanese.4.f.&m=n&na=10&nb=10');
+  await page.getByRole('radio', { name: '混编', exact: true }).click();
+  await expect(page.getByTestId('mixed-duel')).toBeVisible();
+  const meleeSp = new URLSearchParams(page.url().split('?')[1]);
+  const maMelee = JSON.parse(meleeSp.get('ma')!);
+  maMelee.kite = true;
+  meleeSp.set('ma', JSON.stringify(maMelee));
+  await page.goto('./#/duel?' + meleeSp.toString());
+  await page.getByRole('button', { name: '计算混编结果' }).click();
+  const mixedResult = page.getByTestId('mixed-result');
+  await expect(mixedResult).toBeVisible();
+  await mixedResult.locator('.mix-input-snapshot summary').click();
+  await expect(mixedResult.locator('.mix-input-snapshot')).not.toContainText('边走边射（拉扯）');
+  await expect(mixedResult.locator('.mix-input-snapshot')).not.toContainText('作战模式');
+
+  // P1-2：不列颠 [1 精锐长弓兵(12格) + 10 劲弩手(11格)] vs [10 劲弩手(11格)] 双拉扯，首行长弓阵亡后脱离接战须展示存活行「劲弩手，射程 11 格」
+  await page.goto('./#/duel?a=530.Britons.4.f.&b=492.Britons.4.f.&m=n&na=1&nb=10&ka=1&kb=1');
+  await page.getByRole('radio', { name: '混编', exact: true }).click();
+  await expect(page.getByTestId('mixed-duel')).toBeVisible();
+  const mixSp = new URLSearchParams(page.url().split('?')[1]);
+  const maMix = JSON.parse(mixSp.get('ma')!);
+  maMix.rows.push({ uid: '492', qty: '10' });
+  mixSp.set('ma', JSON.stringify(maMix));
+  await page.goto('./#/duel?' + mixSp.toString());
+  await page.getByRole('button', { name: '计算混编结果' }).click();
+  await expect(mixedResult).toBeVisible();
+  const notice = mixedResult.locator('[data-t="duel-disengaged-notice"]');
+  await expect(notice).toBeVisible();
+  await expect(notice).toContainText('A（劲弩手，射程 11 格）');
+  await expect(notice).not.toContainText('精锐长弓兵');
+
+  // Devin PR #1365 PRRT_kwDOVDI1mM66pllB：帝王无科技不列颠镜像 [5 轻型投石车(7格) + 1 精锐长弓兵(8格)] vs [5 重型弩炮(7格)] 双拉扯，前排仍存活时须展示前排「轻型投石车，射程 7 格」而非未开火后排长弓
+  const rearSp = new URLSearchParams(mixSp);
+  rearSp.set(
+    'ma',
+    JSON.stringify({
+      civ: 'Britons',
+      age: '4',
+      techs: [],
+      team: [],
+      rows: [
+        { uid: '280', qty: '5' },
+        { uid: '530', qty: '1' },
+      ],
+      kite: true,
+    }),
+  );
+  rearSp.set('mb', JSON.stringify({ civ: 'Britons', age: '4', techs: [], team: [], rows: [{ uid: '542', qty: '5' }], kite: true }));
+  await page.goto('./#/duel?' + rearSp.toString());
+  await page.getByRole('button', { name: '计算混编结果' }).click();
+  await expect(mixedResult).toBeVisible();
+  await expect(notice).toBeVisible();
+  await expect(notice).toContainText('A（轻型投石车，射程 7 格）');
+  await expect(notice).not.toContainText('精锐长弓兵');
   expect(errors).toEqual([]);
 });

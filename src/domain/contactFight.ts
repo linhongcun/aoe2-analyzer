@@ -223,14 +223,14 @@ export function contactFight(
       }
     }
 
-    const eligibility = (side: Formation, target: Formation, frontMoving: boolean) =>
+    const eligibility = (side: Formation, target: Formation, frontMoving: boolean, sideRetreating: boolean) =>
       side.rows.map((row) => {
         const eligible: RankInRange[] = [];
         const { ranged, rng } = row.fighter;
         const diameter = 2 * row.radiusX;
         const setback = side.setback[row.index]!;
         const firstSurvivor = row.canFightAtMultipleDepths ? row.count - row.alive : 0;
-        if (frontMoving && row === side.front) {
+        if ((frontMoving && row === side.front) || (sideRetreating && ranged)) {
           for (let i = firstSurvivor; i < row.clocks.length; i++) {
             const clock = row.clocks[i];
             if (clock) clock.aimAt = null;
@@ -306,8 +306,8 @@ export function contactFight(
         }
         return eligible;
       });
-    const inA = eligibility(left, right, aFrontMoving),
-      inB = eligibility(right, left, bFrontMoving);
+    const inA = eligibility(left, right, aFrontMoving, kiteMode && retA && vxA < -EPS),
+      inB = eligibility(right, left, bFrontMoving, kiteMode && retB && vxB > EPS);
     const hasMeleeHit = (front: RowState, eligible: RankInRange[][]) => !front.fighter.ranged && eligible[front.index]!.some((r) => !r.leaving);
     if (contact.meleeAt === null && (hasMeleeHit(left.front, inA) || hasMeleeHit(right.front, inB))) {
       contact.meleeAt = time;
@@ -393,7 +393,7 @@ export function contactFight(
           }
           const key = row.fighter.ranged ? 'maxRanged' : 'maxMelee';
           rows[i]![key] = Math.max(rows[i]![key], fired);
-          if (kiteMode) recordKiteVolley(row, front, ks, time);
+          if (kiteMode) recordKiteVolley(row, front, ks, time, bothEngaged, gap);
         });
       }
       const prevAPos = recorder?.getAPos() ?? 0,

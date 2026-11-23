@@ -18,6 +18,7 @@ export interface SideKiteSummary {
   retreatCap: number;
   capHit: boolean;
   capHitAt: number | null;
+  /** 首次触底时的世界坐标；仅在 recordReplay: true 时填充，否则为 null。 */
   capHitX: number | null;
   activatedAt: number | null;
   clearedFrontNames: string[];
@@ -173,18 +174,19 @@ export function syncKiteFront(form: KiteFormation, ks: KiteRuntime, time: number
       ks.primaryMoveWindow = moveWindow(front);
     }
     if (!ks.kitedRangedNames.includes(front.fighter.name)) ks.kitedRangedNames.push(front.fighter.name);
-    if (frontChanged && ks.lastFrontIdx !== -1 && !ks.capHit && front.speed > EPS) {
+    if (frontChanged && ks.lastFrontIdx !== -1) {
       const minCdEnd = earliestAliveCooldownEnd(front);
-      const remMove = minCdEnd !== null ? minCdEnd - front.delay - time : 0;
-      if (remMove > EPS && moveWindow(front) > EPS) {
-        ks.retreatUntil = time + remMove;
-        ks.engaged = true;
+      ks.engaged = minCdEnd !== null;
+      ks.escapingMinRange = false;
+      if (!ks.capHit && front.speed > EPS) {
+        const remMove = minCdEnd !== null ? minCdEnd - front.delay - time : 0;
+        ks.retreatUntil = remMove > EPS && moveWindow(front) > EPS ? time + remMove : null;
       } else {
         ks.retreatUntil = null;
       }
-      ks.escapingMinRange = false;
     }
   } else {
+    ks.engaged = false;
     ks.retreatUntil = null;
     ks.escapingMinRange = false;
   }
@@ -195,9 +197,11 @@ export function syncKiteFront(form: KiteFormation, ks: KiteRuntime, time: number
 export function computeKiteStep(left: KiteFormation, right: KiteFormation, kA: KiteRuntime, kB: KiteRuntime, gap: number, time: number): KiteStep {
   const isActive = (front: KiteRowState, ks: KiteRuntime) =>
     ks.enabled && front.fighter.ranged && !ks.capHit && front.speed > EPS && (moveWindow(front) > EPS || front.minRange > 0);
+  const canVolleyKite = (front: KiteRowState, ks: KiteRuntime) =>
+    ks.enabled && front.fighter.ranged && !ks.capHit && front.speed > EPS && moveWindow(front) > EPS;
   const activeA = isActive(left.front, kA);
   const activeB = isActive(right.front, kB);
-  const bothEngaged = activeA && activeB && kA.engaged && kB.engaged;
+  const bothEngaged = canVolleyKite(left.front, kA) && canVolleyKite(right.front, kB) && kA.engaged && kB.engaged;
 
   const updateMinEsc = (front: KiteRowState, other: KiteRowState, ks: KiteRuntime, active: boolean, otherNotChasing: boolean) => {
     // Round 4 P2-2: 合成防御，用 Math.max(other.rof, other.delay) 计算对手追击内收有效射程
@@ -235,6 +239,15 @@ export function computeKiteStep(left: KiteFormation, right: KiteFormation, kA: K
     kB.retreatUntil = null;
   }
 
+  if (!bothEngaged && !escA && retA && gap > left.front.fighter.rng + EPS) {
+    kA.retreatUntil = null;
+    retA = false;
+  }
+  if (!bothEngaged && !escB && retB && gap > right.front.fighter.rng + EPS) {
+    kB.retreatUntil = null;
+    retB = false;
+  }
+
   const remRetA = retA ? (kA.retreatUntil !== null ? Math.max(0, kA.retreatUntil - time) : Infinity) : 0;
   const remRetB = retB ? (kB.retreatUntil !== null ? Math.max(0, kB.retreatUntil - time) : Infinity) : 0;
 
@@ -265,6 +278,7 @@ export function computeKiteStep(left: KiteFormation, right: KiteFormation, kA: K
     if (Math.abs(vxA) <= EPS) {
       vxA = 0;
       retA = false;
+      kA.retreatUntil = null;
     }
   }
   if (retB && !bothEngaged && gap >= right.front.fighter.rng - EPS) {
@@ -272,6 +286,7 @@ export function computeKiteStep(left: KiteFormation, right: KiteFormation, kA: K
     if (Math.abs(vxB) <= EPS) {
       vxB = 0;
       retB = false;
+      kB.retreatUntil = null;
     }
   }
 
@@ -317,15 +332,15 @@ export function scheduleKiteEvents(
   schedule: (delay: number) => void,
 ): void {
   const { vxA, vxB, closingSpeed, openingSpeed, retA, retB, escA, escB, escTargetA, escTargetB, advStopA, advStopB, bothEngaged } = step;
+  if (kA.retreatUntil !== null && kA.retreatUntil - time > EPS) schedule(kA.retreatUntil - time);
+  if (kB.retreatUntil !== null && kB.retreatUntil - time > EPS) schedule(kB.retreatUntil - time);
   if (retA && vxA < -EPS) {
     if (RETREAT_CAP - kA.retreated > EPS) schedule((RETREAT_CAP - kA.retreated) / -vxA);
-    if (kA.retreatUntil !== null && kA.retreatUntil - time > EPS) schedule(kA.retreatUntil - time);
     if (!bothEngaged && openingSpeed > EPS && left.front.fighter.rng - gap > EPS) schedule((left.front.fighter.rng - gap) / openingSpeed);
     if (escA && openingSpeed > EPS && escTargetA - gap > EPS) schedule((escTargetA - gap) / openingSpeed);
   }
   if (retB && vxB > EPS) {
     if (RETREAT_CAP - kB.retreated > EPS) schedule((RETREAT_CAP - kB.retreated) / vxB);
-    if (kB.retreatUntil !== null && kB.retreatUntil - time > EPS) schedule(kB.retreatUntil - time);
     if (!bothEngaged && openingSpeed > EPS && right.front.fighter.rng - gap > EPS) schedule((right.front.fighter.rng - gap) / openingSpeed);
     if (escB && openingSpeed > EPS && escTargetB - gap > EPS) schedule((escTargetB - gap) / openingSpeed);
   }
@@ -336,11 +351,18 @@ export function scheduleKiteEvents(
   }
 }
 
-export function recordKiteVolley(row: KiteRowState, front: KiteRowState, ks: KiteRuntime, time: number): void {
-  if (row !== front || !ks.enabled || !row.fighter.ranged) return;
-  ks.engaged = true;
-  if (!ks.capHit && row.speed > EPS) {
-    const mw = moveWindow(row);
+export function recordKiteVolley(row: KiteRowState, front: KiteRowState, ks: KiteRuntime, time: number, bothEngaged = false, gap = Infinity): void {
+  if (!ks.enabled || !row.fighter.ranged) return;
+  if (row === front) {
+    ks.engaged = true;
+    if (!ks.capHit && row.speed > EPS) {
+      const mw = moveWindow(row);
+      if (mw > EPS) ks.retreatUntil = time + mw;
+    }
+    return;
+  }
+  if (bothEngaged && gap > front.fighter.rng + EPS && !ks.capHit && front.fighter.ranged && front.speed > EPS) {
+    const mw = moveWindow(front);
     if (mw > EPS) ks.retreatUntil = time + mw;
   }
 }

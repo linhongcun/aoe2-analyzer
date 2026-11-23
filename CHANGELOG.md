@@ -18,6 +18,16 @@
 
 ## [Unreleased]
 
+## [0.99.33] - 2026-11-23
+
+### 更新说明
+
+修复单位 PK 与混编远程「边走边射（拉扯）」模式的多项边界问题：混编前排阵亡切换后排时，未开火的远程后排现在会立即推进接敌而不再误判提前脱离接战；对手在自身最大射程外且未追击时不再滞留后撤状态导致卡死或僵死；双方同时拉扯且后排射程更长或前排无移动窗口时不再把对手冻在射程外白打；全队高速后撤期间后排远程同步停火、不再边跑边射；同步修正混编脱离接战公告的存活单位与射程对应、纯近战链接误显作战模式、「40 格 / 0 秒」数字防折行、双拉扯达时限/上限状态文案及回放舞台 40 格退距线图例。
+
+### 修复
+
+- #1295：修复 `src/domain/contactKite.ts` 中 `computeKiteStep` / `scheduleKiteEvents` 在 `!bothEngaged && gap >= rng` 钳零未清 `retreatUntil` 导致的射程外僵死与 600s 死锁、修复 `syncKiteFront` 在前排切换（含近战中转、`capHit` 与 `speed <= EPS`）时未按新前排开火史重置 `engaged` 导致的过早脱离接战（含 Devin Review `PRRT_kwDOVDI1mM66oawD`）、修复双拉扯 `bothEngaged` 下 `moveWindow === 0 && minRange > 0` 前排或更长射程后排持续开火冻结对手的问题，并补充 `SideKiteSummary.capHitX` JSDoc；修复 `src/domain/contactFight.ts` 中整队后撤期间后排远程仍可开火问题（默认站桩模式保持逐比特一致）；修复 `MixedResult.tsx` 脱离接战提示按存活行取同行单位与射程及输入快照不向纯近战方误显拉扯模式；将 `KITE_CONTACT_BOUNDARY` 升级为带 `.num.nw` 防折行的 `KiteContactBoundary` 组件并更新全站 5 处引用；为 `KiteSummaryCard` 补充 `status` 区分双拉扯达时限/上限文案，并在 `BattleStageSvg.tsx` / `battle-replay.css` 补充 40 格退距线图例；同步在 `tests/unit/rangedKite1295.test.ts` 与 `tests/e2e/rangedKite1295.spec.ts` 补齐回归用例。
+
 ## [0.99.32] - 2026-11-23
 
 ### 更新说明

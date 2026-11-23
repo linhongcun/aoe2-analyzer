@@ -23,7 +23,7 @@ import { BattleReplay } from './BattleReplay';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
 import { GroupContact } from './ContactSummary';
-import { DisengagedNotice, KITE_CONTACT_BOUNDARY, KiteSummaryCard } from './KiteSummaryCard';
+import { DisengagedNotice, KiteContactBoundary, KiteSummaryCard } from './KiteSummaryCard';
 import { hasAnyKiteEnabled, standingOpeningDelta } from '../logic/duelKiteView';
 import { r1, type Resolved } from '../logic/duelSide';
 import { summarizeGroup, summarizeOneVOne } from '../logic/duelSummary';
@@ -210,8 +210,10 @@ export function OneVOne({
       />
       {hasKite && oneKite && (
         <section className="contact-summary kite-one-summary" data-t="duel-kite-summary" aria-label="拉扯与后撤摘要">
-          <KiteSummaryCard kite={oneKite} headingLevel={3} />
-          <p className="note">{KITE_CONTACT_BOUNDARY}</p>
+          <KiteSummaryCard kite={oneKite} status={r.mode === 'contact' ? r.status : undefined} headingLevel={3} />
+          <p className="note">
+            <KiteContactBoundary />
+          </p>
         </section>
       )}
       {oneModel ? <BattleReplay model={oneModel} unitById={unitById} /> : !isContact ? <BattleReplay fallback={{ reason: r.fallbackReason }} /> : null}
@@ -384,6 +386,7 @@ export function Group({
       />
       <GroupContact
         value={g.contact}
+        status={g.status}
         a={{ fighter: A.F, count: na, ...g.contact.a[0]! }}
         b={{ fighter: B.F, count: nb, ...g.contact.b[0]! }}
         standingDeltaVolleys={standingDeltaVolleys}

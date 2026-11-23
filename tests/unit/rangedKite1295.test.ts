@@ -24,13 +24,14 @@ beforeAll(async () => {
   ctx = makeSimContext(core.techs, trees);
 });
 
-function getResolved(uid: number, civ: string): Resolved {
-  const r = resolve(ctx, core.unitById, { uid, civ, age: 4, ageSet: true, techs: 'f', team: [] }, uid);
+function getResolved(uid: number, civ: string, techs: 'f' | number[] = 'f'): Resolved {
+  const r = resolve(ctx, core.unitById, { uid, civ, age: 4, ageSet: true, techs, team: [] }, uid);
   if (isUnavail(r)) throw new Error(`Unit ${uid} unavailable for ${civ}`);
   return r;
 }
 
-const getF = (uid: number, civ: string): Fighter => getResolved(uid, civ).F;
+const getF = (uid: number, civ: string, techs: 'f' | number[] = 'f'): Fighter => getResolved(uid, civ, techs).F;
+const row = (uid: number, count: number, fighter: Fighter): ArmyRow => ({ uid, count, fighter });
 
 describe('issue 1295 ranged kiting engine (TRD v4)', () => {
   it('keeps default standing mode 100% bit-for-bit identical across undefined / false / omitted kite', () => {
@@ -232,52 +233,25 @@ describe('issue 1295 ranged kiting engine (TRD v4)', () => {
     const britArb = getF(492, 'Britons');
 
     // [1 骠骑 + 1 精锐掷矛(拉扯)] vs [1 不列颠劲弩(站桩)]
-    const rHuszar = contactFight(
-      [
-        { uid: 871, count: 1, fighter: huszar },
-        { uid: 6, count: 1, fighter: skirm },
-      ],
-      [{ uid: 492, count: 1, fighter: britArb }],
-      { kite: { a: true } },
-    );
+    const rHuszar = contactFight([row(871, 1, huszar), row(6, 1, skirm)], [row(492, 1, britArb)], { kite: { a: true } });
     expect(rHuszar.status).toBe('win');
 
     // [1 民兵 + 1 拜占庭精锐掷矛(拉扯)] vs [1 不列颠劲弩(站桩)]：站桩死锁盲区 B 胜 → 拉扯脱离反胜
-    const rStand = contactFight(
-      [
-        { uid: 74, count: 1, fighter: militiaMag },
-        { uid: 6, count: 1, fighter: skirm },
-      ],
-      [{ uid: 492, count: 1, fighter: britArb }],
-    );
-    const rKite = contactFight(
-      [
-        { uid: 74, count: 1, fighter: militiaMag },
-        { uid: 6, count: 1, fighter: skirm },
-      ],
-      [{ uid: 492, count: 1, fighter: britArb }],
-      { kite: { a: true } },
-    );
+    const milSkm = [row(74, 1, militiaMag), row(6, 1, skirm)];
+    const rStand = contactFight(milSkm, [row(492, 1, britArb)]);
+    const rKite = contactFight(milSkm, [row(492, 1, britArb)], { kite: { a: true } });
     if (rStand.status !== 'win' || rKite.status !== 'win') throw new Error('expected win');
     expect(rStand.winner).toBe('b');
     expect(rKite.winner).toBe('a');
     expect(rKite.contact.kite!.a.retreated).toBeGreaterThan(0);
 
     // Round 3 P1-1: BBC(36, minr=5) vs Ballista Elephant(1120) & Elite Mameluke(556) — zero oscillation, zero 40-tile waste
-    const militiaTurks = getF(74, 'Turks');
-    const bbc = getF(36, 'Turks');
+    const milBbc = [row(74, 1, getF(74, 'Turks')), row(36, 1, getF(36, 'Turks'))];
     for (const [oppUid, oppCiv] of [
       [1120, 'Khmer'],
       [556, 'Saracens'],
     ] as const) {
-      const res = contactFight(
-        [
-          { uid: 74, count: 1, fighter: militiaTurks },
-          { uid: 36, count: 1, fighter: bbc },
-        ],
-        [{ uid: oppUid, count: 1, fighter: getF(oppUid, oppCiv) }],
-        { kite: { a: true }, recordReplay: true },
-      );
+      const res = contactFight(milBbc, [row(oppUid, 1, getF(oppUid, oppCiv))], { kite: { a: true }, recordReplay: true });
       if (res.status === 'error') throw new Error('unexpected error');
       expect(res.status).toBe('win');
       expect(res.contact.kite?.a.capHit).toBe(false);
@@ -291,15 +265,7 @@ describe('issue 1295 ranged kiting engine (TRD v4)', () => {
     const champ = getF(567, 'Japanese');
     const hca = getF(474, 'Magyars');
     const arb = getF(492, 'Britons');
-    const res = contactFight(
-      [
-        { uid: 871, count: 2, fighter: huszar },
-        { uid: 359, count: 2, fighter: halb },
-        { uid: 474, count: 15, fighter: hca },
-      ],
-      [{ uid: 567, count: 40, fighter: champ }],
-      { kite: { a: true }, recordReplay: true },
-    );
+    const res = contactFight([row(871, 2, huszar), row(359, 2, halb), row(474, 15, hca)], [row(567, 40, champ)], { kite: { a: true }, recordReplay: true });
     if (res.status === 'error') throw new Error('unexpected error');
     expect(res.contact.kite?.a.hadMeleeFront).toBe(true);
     expect(res.contact.kite?.a.triggered).toBe(true);
@@ -309,14 +275,7 @@ describe('issue 1295 ranged kiting engine (TRD v4)', () => {
     expect(res.contact.kite!.a.retreated).toBeGreaterThan(0);
 
     // Multi-ranged transition shares a single 40-tile retreat budget and joins rangedName by '、'
-    const multiRanged = contactFight(
-      [
-        { uid: 492, count: 3, fighter: arb },
-        { uid: 474, count: 15, fighter: hca },
-      ],
-      [{ uid: 567, count: 50, fighter: champ }],
-      { kite: { a: true }, recordReplay: true },
-    );
+    const multiRanged = contactFight([row(492, 3, arb), row(474, 15, hca)], [row(567, 50, champ)], { kite: { a: true }, recordReplay: true });
     if (multiRanged.status === 'error') throw new Error('unexpected error');
     expect(multiRanged.contact.kite?.a.rangedName).toBe(`${arb.name}、${hca.name}`);
     expect(multiRanged.contact.kite!.a.retreated).toBeLessThanOrEqual(RETREAT_CAP);
@@ -326,6 +285,95 @@ describe('issue 1295 ranged kiting engine (TRD v4)', () => {
     expect(isKiteEligible(halb)).toBe(false);
     expect(isKiteEligible(getF(125, 'Franks'))).toBe(false);
     expect(isKiteEligible(getF(775, 'Spanish'))).toBe(false);
+  });
+
+  it('fixes P0-1 out-of-range clamp deadlock, P0-2 front transition engaged reset, P0-3 dual-kite freeze, and P1-1 backline retreat fire', () => {
+    const milT = getF(74, 'Turks'),
+      bbcT = getF(36, 'Turks'),
+      mamS = getF(556, 'Saracens');
+    const arbB = getF(492, 'Britons'),
+      trebB = getF(331, 'Britons'),
+      lbowB = getF(530, 'Britons');
+    const skmB = getF(6, 'Britons'),
+      hcaM = getF(474, 'Magyars'),
+      halbF = getF(359, 'Franks');
+
+    // P0-1: BBC+Mil vs Mameluke never deadlocks at 600s; longer backline doesn't freeze B; speed=0 backline doesn't false-error
+    for (const kite of [{ b: true }, { a: true, b: true }]) {
+      const r = contactFight([row(74, 1, milT), row(36, 1, bbcT)], [row(556, 1, mamS)], { kite });
+      expect(r.status).not.toBe('timeout');
+      expect(r.status).not.toBe('error');
+    }
+    for (const [a, b] of [
+      [[row(492, 1, arbB), row(331, 1, trebB)], [row(492, 10, arbB)]],
+      [[row(492, 1, arbB), row(36, 5, bbcT)], [row(492, 10, arbB)]],
+      [[row(6, 1, skmB), row(530, 5, lbowB)], [row(6, 10, skmB)]],
+    ] as [ArmyRow[], ArmyRow[]][]) {
+      const r = contactFight(a, b, { kite: { b: true }, recordReplay: true });
+      if (r.status === 'error') throw new Error(r.reason);
+      expect(r.status).toBe('win');
+      const frozen = r.replay!.frames.filter(
+        (f) => f.t < r.duration - 1e-9 && f.gap > b[0]!.fighter.rng + 1e-6 && Math.abs(f.vxB) <= 1e-9 && f.bRows[0]!.alive > 0,
+      );
+      expect(frozen).toEqual([]);
+    }
+    const staticArb: Fighter = { ...arbB, name: '定桩弩', contact: { ...arbB.contact!, speed: 0 } };
+    for (const kite of [{ b: true }, { a: true, b: true }]) {
+      const r = contactFight([row(492, 1, arbB), row(9991, 3, staticArb)], [row(492, 10, arbB)], { kite });
+      expect(r.status).toBe('win');
+    }
+
+    // P0-2: Devin Imp Britons no-tech [1 Arb + 3 Skm] vs [10 Arb] never prematurely disengages at 2.52s; unfired backline advances & engages; 3-row ranged->melee->ranged
+    const arb0 = getF(492, 'Britons', []),
+      skm0 = getF(6, 'Britons', []);
+    const devin = contactFight([row(492, 1, arb0), row(6, 3, skm0)], [row(492, 10, arb0)], { kite: { a: true, b: true }, recordReplay: true });
+    if (devin.status === 'error') throw new Error(devin.reason);
+    expect(devin.status).toBe('win');
+    expect(devin.duration).toBeGreaterThan(10);
+    expect(devin.replay!.frames.some((f) => f.aFrontRow === 1 && f.vxA > 1e-9)).toBe(true);
+    const devinMore = contactFight([row(492, 1, arb0), row(6, 20, skm0)], [row(492, 10, arb0)], { kite: { a: true, b: true } });
+    if (devinMore.status === 'error') throw new Error(devinMore.reason);
+    expect(devinMore.contact.a[1]!.maxRanged).toBeGreaterThan(0);
+    const threeRow = contactFight([row(492, 2, arbB), row(359, 3, halbF), row(474, 10, hcaM)], [row(492, 20, arbB)], { kite: { a: true, b: true } });
+    if (threeRow.status === 'error') throw new Error(threeRow.reason);
+    expect(threeRow.contact.a[2]!.maxRanged).toBeGreaterThan(0);
+
+    // P0-3: Dual-kite backline longer range triggers retreat to disengage; moveWindow===0 && minRange>0 never freezes opponent
+    const backLong1 = contactFight([row(474, 2, hcaM), row(530, 10, lbowB)], [row(474, 15, hcaM)], { kite: { a: true, b: true } });
+    const backLong2 = contactFight([row(6, 10, skmB), row(530, 10, lbowB)], [row(474, 15, hcaM)], { kite: { a: true, b: true } });
+    if (backLong1.status === 'error' || backLong2.status === 'error') throw new Error('unexpected error');
+    expect(backLong1.status).toBe('disengaged');
+    expect(backLong1.duration).toBeLessThan(15);
+    expect(backLong2.status).toBe('disengaged');
+    expect(backLong2.duration).toBeLessThan(20);
+    const slowLong: Fighter = { ...arbB, rng: 11, contact: { ...arbB.contact!, minRange: 1, firstHitDelay: arbB.rof + 0.5 } };
+    const slowRes = contactFight([row(492, 10, slowLong)], [row(474, 15, hcaM)], { kite: { a: true, b: true } });
+    if (slowRes.status !== 'win') throw new Error(`expected win, got ${slowRes.status}`);
+    expect(slowRes.winner).toBe('b');
+    expect(slowRes.duration).toBeLessThan(20);
+    // Devin PR #1365 regression: rear volley while front is still in range must not cancel front's lethal volley into disengagement
+    const tupiRes = contactFight([row(6, 15, getF(6, 'Tupi')), row(492, 1, getF(492, 'Tupi'))], [row(474, 2, getF(474, 'Khmer'))], {
+      kite: { a: true, b: true },
+    });
+    if (tupiRes.status !== 'win') throw new Error(`expected Tupi win, got ${tupiRes.status}`);
+    expect(tupiRes.winner).toBe('a');
+    expect(tupiRes.duration).toBeLessThan(5);
+    expect(tupiRes.a.total.alive).toBe(16);
+    expect(tupiRes.b.total.alive).toBe(0);
+
+    // P1-1: Backline ranged never fires during retreat frames while standing mode remains bit-for-bit identical
+    const mixA = [row(474, 5, hcaM), row(492, 10, arbB)],
+      mixB = [row(359, 50, halbF)];
+    const retRes = contactFight(mixA, mixB, { kite: { a: true }, recordReplay: true });
+    if (retRes.status === 'error') throw new Error(retRes.reason);
+    const frames = retRes.replay!.frames;
+    expect(frames.some((f) => f.vxA < -1e-9)).toBe(true);
+    for (let i = 0; i < frames.length; i++) {
+      const f = frames[i]!;
+      if (f.vxA < -1e-9) expect(f.aRows.every((r) => r.active === 0)).toBe(true);
+      if (i > 0 && frames[i - 1]!.vxA < -1e-9) expect(f.aFired).toBe(0);
+    }
+    expect(contactFight(mixA, mixB, { kite: { a: false, b: false }, recordReplay: true })).toEqual(contactFight(mixA, mixB, { recordReplay: true }));
   });
 
   it('handles attackDelaySeconds=0, synthetic delay>=rof, speed=0, full valid ranged sweep, and perf budget', () => {

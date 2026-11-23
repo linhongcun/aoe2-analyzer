@@ -37,7 +37,7 @@ import { UpgradeComparison } from './UpgradeComparison';
 import { Side } from './DuelSelection';
 import { OneVOne, Group } from './DuelResults';
 import { CONTACT_BOUNDARY } from './ContactSummary';
-import { KITE_CONTACT_BOUNDARY } from './KiteSummaryCard';
+import { KiteContactBoundary } from './KiteSummaryCard';
 import { resolve, isUnavail, type SideState } from '../logic/duelSide';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
@@ -465,7 +465,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）。常规远程按命中率取期望伤害。目录准确度为 <span className="num nw">0%</span>{' '}
           的特殊远程攻击按每击命中主目标估算。
           {kiteOpt ? (
-            KITE_CONTACT_BOUNDARY
+            <KiteContactBoundary />
           ) : mode === '1' ? (
             <>
               1v1 有有效碰撞数据时按一维接敌与射程先手模拟（自爆或无普攻单位降级为 <span className="num nw">t=0</span>{' '}

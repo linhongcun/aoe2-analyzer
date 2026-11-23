@@ -150,13 +150,13 @@ export function MixedResult({
     `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}][k=${s.kite ? 1 : 0}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
   const replayKey = `${sideKey(input.a)}|${sideKey(input.b)}|${result.duration}`;
   const isDisengaged = result.status === 'disengaged';
-  const rangedInfo = (army: NonNullable<MixedSideView['army']>) => {
-    const r = army.find((row) => row.fighter.ranged) ?? army[0]!;
-    const maxRng = army.reduce((m, row) => (row.fighter.ranged ? Math.max(m, row.fighter.rng) : m), r.fighter.rng);
-    return { name: r.fighter.name, rng: maxRng };
+  const rangedInfo = (army: NonNullable<MixedSideView['army']>, side: 'a' | 'b') => {
+    const aliveRows = army.filter((_, i) => (result[side].rows[i]?.alive ?? 0) > 0);
+    const r = aliveRows.find((row) => row.fighter.ranged) ?? aliveRows[0] ?? army.find((row) => row.fighter.ranged) ?? army[0]!;
+    return { name: r.fighter.name, rng: r.fighter.rng };
   };
-  const aInfo = rangedInfo(a.army!);
-  const bInfo = rangedInfo(b.army!);
+  const aInfo = rangedInfo(a.army!, 'a');
+  const bInfo = rangedInfo(b.army!, 'b');
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
@@ -199,7 +199,7 @@ export function MixedResult({
         </p>
       )}
       <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />
-      <MixedContact value={result.contact} a={lines(a, 'a')} b={lines(b, 'b')} standingDeltaVolleys={standingDeltaVolleys} />
+      <MixedContact value={result.contact} status={result.status} a={lines(a, 'a')} b={lines(b, 'b')} standingDeltaVolleys={standingDeltaVolleys} />
       <BattleReplay key={replayKey} model={replayModel} unitById={unitById} />
       <ArmyResult side="a" value={result.a} view={a} input={input} />
       <ArmyResult side="b" value={result.b} view={b} input={input} />
@@ -218,7 +218,7 @@ export function MixedResult({
         {(['a', 'b'] as const).map((key) => {
           const s = input[key],
             view = key === 'a' ? a : b;
-          const showMode = mixedSideCanKite(view) || s.kite === true;
+          const showMode = mixedSideCanKite(view);
           return (
             <p key={key}>
               {key.toUpperCase()}：{civByEn(s.civ)?.zh ?? s.civ} / {AGE_ZH[+s.age]} / 科技：
