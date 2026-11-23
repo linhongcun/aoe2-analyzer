@@ -110,12 +110,6 @@ export function recoverTechQuery(data: CivUpdatesData, query: URLSearchParams, d
   for (const key of techQueryErrors(data, query, true, detailId)) next.delete(key);
   return next;
 }
-export function clearTechFilters(query: URLSearchParams) {
-  const next = new URLSearchParams(query);
-  for (const key of TECH_FILTER_KEYS) next.delete(key);
-  next.delete('histEvent');
-  return next;
-}
 export function techHistoryPath(data: CivUpdatesData, entityId: string, query: URLSearchParams, view: 'overview' | 'detail', returnTo?: string) {
   const entity = tech(data, entityId);
   if (!entity) return '/patches?histView=techs';
