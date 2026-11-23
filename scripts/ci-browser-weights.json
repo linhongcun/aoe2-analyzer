@@ -369,7 +369,8 @@
     "tests/e2e/villagerGather730.spec.ts": 13500,
     "tests/e2e/wei197.spec.ts": 42269,
     "tests/e2e/wingedHussar460.spec.ts": 19736,
-    "tests/e2e/techHistory.spec.ts": 12000
+    "tests/e2e/techHistory.spec.ts": 12000,
+    "tests/e2e/civFormations1386.spec.ts": 9000
   },
   "cases": {}
 }

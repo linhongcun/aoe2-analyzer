@@ -14,17 +14,17 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons', 'Persians'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(49);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(53);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
-      ['Georgians', 1],
+      ['Georgians', 2],
     ]);
     expect(Object.fromEntries(originalContent.slice(2).map(({ civ, routes }) => [civ, routes.length]))).toEqual({
       Chinese: 2,
-      Hindustanis: 1,
-      Turks: 2,
+      Hindustanis: 2,
+      Turks: 3,
       Byzantines: 1,
-      Malians: 1,
+      Malians: 2,
       Malay: 2,
       Sicilians: 1,
       Goths: 1,
@@ -228,17 +228,17 @@ describe('#1139 文明路线契约与投影', () => {
     expect(turks.status).toBe('approved');
     expect(turks.playtest).toBe('unreported');
     expect(turks.required).toEqual([]);
-    expect(turks.condition).toContain('已有骑射手或苏丹亲兵基础');
-    expect(turks.condition).toContain('按条件择一延续为重装骑射手或精锐苏丹亲兵');
-    expect(turks.condition).toContain('不为采用该延续路线从零另起兵线');
-    expect(turks.condition).toContain('两者并非同时必需');
+    expect(turks.condition).toContain('已选定翼骑兵＋火枪手主路且手中留有城堡骑射残编或苏丹亲兵基础');
+    expect(turks.condition).toContain('按条件择一顺手延续');
+    expect(turks.condition).toContain('不与开阔地主动西帕希骑射主路混淆');
     expect(turks.reason).toContain('沿已有骑射手或苏丹亲兵基础按条件延续');
     expect(turks.reason).toContain('不必强转火枪');
-    expect(turks.limitation).toContain('从零转重装骑射手仍需补升级与科技投入');
-    expect(turks.limitation).toContain('贴身 PK 不能否定骑射手的射程和机动');
-    expect(turks.limitation).toContain('苏丹亲兵依赖城堡产能和精锐升级');
-    expect(turks.evidence.recordedVersion).toBe('v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a');
-    expect(turks.evidence.sourceLines).toEqual([348, 349, 353]);
+    expect(turks.limitation).toContain('避免从零同时铺满两套昂贵远程科技');
+    expect(turks.limitation).toContain('精锐苏丹亲兵另需城堡产能与精锐升级');
+    expect(turks.evidence.recordedVersion).toBe(
+      'v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671',
+    );
+    expect(turks.evidence.sourceLines).toEqual([361, 362, 366]);
     expect(turks.alternatives).toBeUndefined();
     expect(turks.choices?.map(({ title, entities }) => [title, entities.map(({ id }) => id)])).toEqual([
       ['重装骑射手', [474]],
@@ -367,13 +367,14 @@ describe('#1139 文明路线契约与投影', () => {
     const sicilian = route('Sicilians', 'sicilians-serjeant-light-cavalry');
     const knightContinuation = sicilian.supplements.find(({ mode }) => mode === 'continuation-adjustment');
 
-    expect(sicilian.condition).toBe('已认可的萨金特卫兵＋轻骑基础配置；按位置与资源扩展，已有骑士线的延续只是条件调整。');
-    expect(sicilian.reason).toBe(
-      '精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机。卫兵凭高护甲承担正面接战与输出；轻骑提供机动，清理可接近的射手和攻城器；巨投拆城堡等关键防御。',
-    );
-    expect(sicilian.limitation).toBe(
-      '卫兵＋长戟可能一起受成群弩炮压制；减少所受额外伤害不等于减少所有基础伤害。轻骑已能完成清理任务时，优先用好已有兵种。卫兵与骑兵都争食物，步骑共享近战攻击但护甲和兵种升级分开；锁子甲、骑士线、城楼箭系各有新增投入。高护甲不代表卫兵必胜所有骑兵，城楼也受远程攻城和固定位置限制。',
-    );
+    expect(sicilian.condition).toContain('已认可的萨金特卫兵＋轻骑基础配置');
+    expect(sicilian.condition).toContain('锁子甲重装骑士');
+    expect(sicilian.reason).toContain('精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机');
+    expect(sicilian.reason).toContain('锁子甲重装骑士');
+    expect(sicilian.limitation).toContain('共用城堡生产队列');
+    expect(sicilian.limitation).toContain('22 名锁子甲重装骑士');
+    expect(sicilian.limitation).toContain('敌剩 16/50');
+    expect(sicilian.limitation).toContain('减少所受额外伤害不等于减少所有基础伤害');
     expect(sicilian.evidence.scope).not.toContain('来源行');
     expect(knightContinuation?.condition).toContain('黄金和骑士科技允许');
   });

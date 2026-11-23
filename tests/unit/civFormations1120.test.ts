@@ -88,11 +88,20 @@ describe('#1120 与 #1139 发布契约', () => {
     ]);
     expect(georgians!.routes.map((route) => [route.id, route.title, route.condition])).toEqual([
       ['monaspa-towers', '精锐莫纳斯帕＋箭塔', '能控制并保护施工位置，有石料与村民投入。不在暴露地点强行前置。'],
+      [
+        'georgians-monaspa-field',
+        '精锐莫纳斯帕＋长戟／翼骑／重型投石车／火枪手',
+        '开阔地野战推进或不便前置箭塔时，以精锐莫纳斯帕为核心机动主力，按对手配入长戟兵、翼骑兵、重型投石车或火枪手。',
+      ],
+    ]);
+    expect(
+      spanish!.routes.every((route) => route.status === 'approved' && route.playtest === 'unreported' && route.age === 4 && route.composition === 'combined'),
+    ).toBe(true);
+    expect(georgians!.routes.map(({ status, playtest, age, composition }) => [status, playtest, age, composition])).toEqual([
+      ['approved', 'unreported', 4, 'combined'],
+      ['approved', 'pending', 4, 'combined'],
     ]);
     for (const civ of [spanish!, georgians!]) {
-      expect(
-        civ.routes.every((route) => route.status === 'approved' && route.playtest === 'unreported' && route.age === 4 && route.composition === 'combined'),
-      ).toBe(true);
       expect(civ.routes.every((route) => route.source === undefined)).toBe(true);
     }
     expect(spanish!.routes.map((route) => route.required.map(({ kind, id }) => `${kind}:${id}`))).toEqual([
@@ -101,20 +110,21 @@ describe('#1120 与 #1139 发布契约', () => {
       ['unit:5', 'unit:359'],
     ]);
     expect(georgians!.routes[0]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805', 'building:235', 'tech:923']);
+    expect(georgians!.routes[1]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805']);
     expect(georgians!.routes[0]!.prerequisites.map(({ kind, id, historicalName }) => [kind, id, historicalName])).toEqual([['tech', 63, '大型箭塔']]);
     expect(spanish!.source).toEqual({
-      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1304-L1350',
+      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
       boundary: '未验证混编胜负，不把单兵克制当作阵容效果。',
     });
     expect(georgians!.source).toEqual({
-      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/9eded5cf510deda603558b37920431f9491b75b3/role/game-strategy.md#格鲁吉亚',
+      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1421-L1463',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
       boundary: '穿透目标数与逐个伤害未核实，驻军箭数为站内理论预览、未与客户端逐项对账，不扩写为范围溅射或混编输出。',
     });
   });
 
-  it('目录解析精确保留旧四路，Celts 仍为空态，旧补丁保留历史状态', async () => {
+  it('目录解析精确保留旧四路与格鲁吉亚野战路线，Celts 仍为空态，旧补丁保留历史状态', async () => {
     const resources = await catalog();
     expect(approvedFormations(civFormationContent.find(({ civ }) => civ === 'Celts'))).toEqual([]);
     expect(approvedFormations({ ...spanish!, routes: [{ ...conquistador!, status: 'draft' }] })).toEqual([]);
@@ -149,6 +159,7 @@ describe('#1120 与 #1139 发布契约', () => {
         ['building', 235, '大型箭塔', 4],
         ['tech', 923, '斯万箭塔', 3],
       ],
+      [['unit', 1805, '精锐莫纳斯帕', 4]],
     ]);
   });
 

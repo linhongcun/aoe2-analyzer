@@ -21,10 +21,10 @@ for (const width of [1280, 360]) {
     const branches = route.getByRole('region', { name: '条件分支' });
     const items = branches.locator('.formation-condition-branch');
     await expect(items).toHaveCount(2);
-    await expect(items.nth(0).getByRole('heading')).toHaveText('已有黑光铠骑兵');
-    await expect(items.nth(0)).toContainText('城堡时代留下的黑光可以继续当作前排');
-    await expect(items.nth(0)).toContainText('新补黑光会和鲜卑争用黄金');
-    await expect(items.nth(0)).toContainText('只有前排缺兵且不耽误鲜卑补员，才考虑继续训练');
+    await expect(items.nth(0).getByRole('heading')).toHaveText('已有黑光铠骑兵或金流充裕转重装黑光铠');
+    await expect(items.nth(0)).toContainText('城堡时代留下的黑光铠骑兵可直接续作前排');
+    await expect(items.nth(0)).toContainText('137 血');
+    await expect(items.nth(0)).toContainText('可将重装黑光铠骑兵升格为并列金线前排主选');
     await expect(items.nth(1).getByRole('heading')).toHaveText('已有推进拆城目标');
     await expect(items.nth(1)).toContainText('目录事实');
     const discount = items.nth(1).locator('.num.nw').filter({ hasText: '−25%' });
@@ -50,7 +50,7 @@ for (const width of [1280, 360]) {
     expect(await branches.evaluate((node) => node.nextElementSibling?.id)).toBe('formation-wei-hussar-xianbei-sources');
     await expect(route.getByText('查看攻守与调整', { exact: true })).toBeVisible();
     await sourceFold.locator('summary').click();
-    await expect(sourceFold.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute('href', /a348c548.*#L1198-L1234$/);
+    await expect(sourceFold.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute('href', /6c3cdc6d.*#L1511-L1553$/);
     await expect(sourceFold.getByRole('link', { name: '魏文明加成固定资料' })).toHaveAttribute('href', /c4ab71cf.*\/civs\.json$/);
     await expect(sourceFold.getByRole('link', { name: '魏科技树固定资料' })).toHaveAttribute('href', /c4ab71cf.*\/trees\.json$/);
 

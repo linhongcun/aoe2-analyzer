@@ -10,8 +10,8 @@ const cases = [
     badge: /讨论认可.*实战未说明/,
     summary: '帝王时代',
     adjustment: '骆驼或重骑突破屏障',
-    sha: 'a348c548624a41da50735eebf166d23456ff56fa',
-    source: '1198-L1234',
+    sha: '6c3cdc6ded5200eac43e95efb28878066b96c3d9',
+    source: '1511-L1553',
   },
   {
     civ: 'Shu',
@@ -22,8 +22,8 @@ const cases = [
     badge: /讨论认可.*实战未说明/,
     summary: '已有成队步弓',
     adjustment: '经济、护卫与推进节奏',
-    sha: 'a348c548624a41da50735eebf166d23456ff56fa',
-    source: '1236-L1270',
+    sha: '6c3cdc6ded5200eac43e95efb28878066b96c3d9',
+    source: '1555-L1598',
   },
   {
     civ: 'Wu',

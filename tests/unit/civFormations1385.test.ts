@@ -310,9 +310,9 @@ describe('#1385 批 1 · 6 国策略与阵容重构回归', () => {
       }
     }
 
-    // 魏/蜀仍保留旧提交，吴独立重签 DOC_SHA；校验脚本负例拦截非 40 位哈希、起止不匹配、乱序/重复/倒置/空数组与前导零
-    expect(byCiv('Wei').source.content).toContain('/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1198-L1234');
-    expect(byCiv('Shu').source.content).toContain('/blob/a348c548624a41da50735eebf166d23456ff56fa/role/game-strategy.md#L1236-L1270');
+    // 魏/蜀由 #1386 独立重签，吴保留 #1385 DOC_SHA；校验脚本负例拦截非 40 位哈希、起止不匹配、乱序/重复/倒置/空数组与前导零
+    expect(byCiv('Wei').source.content).toContain('/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1511-L1553');
+    expect(byCiv('Shu').source.content).toContain('/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1555-L1598');
 
     // 验证阿兹特克城堡-帝王前期过渡含弩手（24, age 3）与劲弩手（492, age 4），女真霹雳炸弹（997）区分阵亡与炮弹爆炸
     const azTransition = route('Aztecs', 'aztecs-garland-infantry').supplements.find(({ entities }) => entities.some(({ id }) => id === 492));

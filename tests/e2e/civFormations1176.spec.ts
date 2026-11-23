@@ -24,10 +24,14 @@ for (const width of [1280, 360]) {
     await expect(card.getByText(/研究费和每名弩手的训练费分别计算/)).toBeVisible();
     await expect(tech).toHaveCount(1);
     await expect(main.getByRole('link', { name: /^战象/ })).toHaveCount(0);
-    await expect(support.getByRole('heading', { name: '条件补充 · 非默认主力' })).toBeVisible();
-    await expect(support).toContainText('城堡有余力、主力能持续补员');
-    await expect(support.locator('.num.nw')).toHaveText(['170 食物', '85 黄金']);
-    await expect(support).toContainText('占用城堡队列');
+    const elephantSupport = support.locator('.formation-supplement-group').first();
+    const citadelsSupport = support.locator('.formation-supplement-group').nth(1);
+    await expect(elephantSupport.getByRole('heading', { name: '条件补充 · 非默认主力' })).toBeVisible();
+    await expect(elephantSupport).toContainText('城堡有余力、主力能持续补员');
+    await expect(elephantSupport.locator('.num.nw')).toHaveText(['170 食物', '85 黄金']);
+    await expect(elephantSupport).toContainText('占用城堡队列');
+    await expect(citadelsSupport).toContainText('堡垒');
+    await expect(citadelsSupport).toContainText('600 木材');
     await expect(card.locator('details')).toHaveCount(2);
     await expect(card.locator('details[open]')).toHaveCount(0);
     const mainBox = await main.boundingBox();

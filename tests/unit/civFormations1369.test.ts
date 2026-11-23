@@ -22,7 +22,14 @@ import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 
 const DOC_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
-const SUPERSEDED_BY_1385 = new Map<string, string>([['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8']]);
+const SUPERSEDED_BY_LATER = new Map<string, string>([
+  ['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8'],
+  ['Spanish', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+  ['Hindustanis', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+  ['Turks', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+]);
+const ADDED_BY_1386 = new Set<string>(['Hindustanis/hindustani-camel-ghulam-field', 'Turks/turks-sipahi-cav-archer-field']);
+const REVISED_BY_1386 = new Map<string, string>([['Turks/turks-existing-line-choice', '2026-11-24']]);
 const TARGET_CIVS = [
   'Spanish',
   'Hindustanis',
@@ -392,7 +399,7 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
 
     for (const civ of civFormationContent) {
       if (targetSet.has(civ.civ)) {
-        const expectedSha = SUPERSEDED_BY_1385.get(civ.civ) ?? DOC_SHA;
+        const expectedSha = SUPERSEDED_BY_LATER.get(civ.civ) ?? DOC_SHA;
         expect(civ.source.content, civ.civ).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
         for (const r of civ.routes) {
           const key = `${civ.civ}/${r.id}`;
@@ -401,13 +408,14 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
           } else {
             expect(r.source?.content, key).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
           }
+          if (ADDED_BY_1386.has(key)) continue;
           if (UNCHANGED_SUBROUTES.has(key)) {
             unchangedCount += 1;
             expect(r.revised, key).toBe(UNCHANGED_SUBROUTES.get(key));
             expect(r.evidence.recordedVersion, key).not.toContain('v0.99.34');
           } else {
             updatedCount += 1;
-            expect(r.revised, key).toBe('2026-11-23');
+            expect(r.revised, key).toBe(REVISED_BY_1386.get(key) ?? '2026-11-23');
             expect(r.evidence.recordedVersion, key).toContain('v0.99.34 · DE 188329 · 55613e4a');
           }
         }
