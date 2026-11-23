@@ -1,6 +1,5 @@
 /** 资源费用，键为 aoe2techtree 资源名 */
 export type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>> & Record<string, number>;
-export type Age = 1 | 2 | 3 | 4;
 export type CivType = 'cav' | 'arch' | 'inf' | 'naval' | 'monk' | 'siege' | 'def' | 'eco';
 
 export interface Civ {
