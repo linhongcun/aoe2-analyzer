@@ -251,8 +251,8 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
       const initial = fight.winner === 'a' ? budgetA.count! : budgetB.count!;
       expect([alive, initial], label).toEqual([aliveExpected, initialExpected]);
       if (label.includes('满血零损')) {
-        expect(Math.round(fight.hpLeft), `${label} full HP`).toBe(budgetA.count! * sideA.F.hp);
-        expect(Math.round(fight.hpLeft), `${label} total 1750 HP`).toBe(1750);
+        expect(fight.hpLeft, `${label} full HP`).toBe(budgetA.count! * sideA.F.hp);
+        expect(fight.hpLeft, `${label} total 1750 HP`).toBe(1750);
       }
       if (retreated1dp !== null) {
         const kaSum = fight.contact.kite?.a;
