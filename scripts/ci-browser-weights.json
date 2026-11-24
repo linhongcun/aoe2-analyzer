@@ -373,6 +373,7 @@
     "tests/e2e/wingedHussar460.spec.ts": 19736,
     "tests/e2e/techHistory.spec.ts": 12000,
     "tests/e2e/civFormations1386.spec.ts": 9000,
+    "tests/e2e/civFormations1398.spec.ts": 6000,
     "tests/e2e/lithuaniansRelic1383.spec.ts": 15000,
     "tests/e2e/tupiBlackwoodPair1384.spec.ts": 15000
   },
