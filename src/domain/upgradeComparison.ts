@@ -143,7 +143,7 @@ export function upgradeComparison(
   if (!b0.ok) return { ok: false, reason: `保存的 B 方案无效：${b0.reason}` };
   const b1 = upgradePlan(ctx, byId, opponent);
   if (!b1.ok) return { ok: false, reason: `当前 B 方案无效：${b1.reason}` };
-  if (!sameContext(a0.spec, a1.spec)) return { ok: false, reason: 'A 的单位、文明、时代或团队加成已变化，请重新保存升级前方案。' };
+  if (!sameContext(a0.spec, a1.spec)) return { ok: false, reason: 'A 的单位、文明、时代、团队加成或圣物数已变化，请重新保存升级前方案。' };
   if (!sameContext(b0.spec, b1.spec) || !sameIds(b0.spec.techs, b1.spec.techs)) return { ok: false, reason: 'B 的配置已变化，请重新保存升级前方案。' };
 
   const added = a1.techs.filter((t) => !a0.sel.has(t.id));

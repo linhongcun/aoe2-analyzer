@@ -104,8 +104,10 @@ export function useSimState(u: Unit, rt: SimRoute, navigationAdapter?: SimNaviga
     const clamped = Math.max(0, Math.min(state.relicBonus.maxRelics, Math.floor(relics)));
     const rawSearch = currentHashLocation()?.search ?? location.search;
     const nextSearch = withQueryRelics(rawSearch, clamped);
-    if (nextSearch === rawSearch) return;
-    navigateSim(location.pathname, nextSearch, state.civ, state.relicBonus.maxRelics);
+    // 共享单位若仅靠会话记忆继承立陶宛，切正数圣物时一并写明文明路径，避免复制链接在新会话回退为其他文明而丢失圣物数。
+    const targetPath = clamped > 0 && !rt.civ && u.civs.length > 1 ? unitPath(u.id, state.civ, state.age, state.sel, state.team) : location.pathname;
+    if (targetPath === location.pathname && nextSearch === rawSearch) return;
+    navigateSim(targetPath, nextSearch, state.civ, state.relicBonus.maxRelics);
   };
   const encodedSim = rt.age !== undefined || rt.ids.length > 0 || rt.team.length > 0;
   useEffect(() => {

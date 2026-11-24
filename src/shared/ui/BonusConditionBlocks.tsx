@@ -36,7 +36,7 @@ export function RelicConditionCallout({ relicFx }: { relicFx: CivRelicBonus }) {
         和
         <Link className="ulink" to="/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=1">
           单位 PK
-        </Link>
+        </Link>{' '}
         里可选 <span className="num nw">0–{relicFx.maxRelics} 件</span>，城堡时代起生效。
       </p>
     </div>

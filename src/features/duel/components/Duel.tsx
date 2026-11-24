@@ -78,7 +78,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const [sp, setSp] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const hasUpgrade = ['base', 'fixed', 'basev'].some((key) => sp.has(key));
+  const hasUpgrade = ['base', 'fixed', 'basev', 'baser', 'fixedr'].some((key) => sp.has(key));
   // issue 772 / issue 1368：坏单位 id / 乱码科技回退，或 1260 精锐钦察（库曼雇佣兵）替换为 1233 时给出明确提示，
   // 并把标记放进 history state，让地址栏 replace 后提示保留一次；之后用户改动任意参数自然清除。
   const linkState = location.state as { duelLinkInvalid?: boolean; duelUnitReplaced?: boolean } | null;
@@ -128,7 +128,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const canonKiteEligible = hasUpgrade ? undefined : uiKiteEligible;
   const relicBonusA = A && !isUnavail(A) ? unitRelicBonus(A.civ, A.u) : null;
   const relicBonusB = B && !isUnavail(B) ? unitRelicBonus(B.civ, B.u) : null;
-  const canonRelicMax = !core || hasUpgrade ? undefined : { a: relicBonusA?.maxRelics ?? 0, b: relicBonusB?.maxRelics ?? 0 };
+  const canonRelicMax = !A || !B || hasUpgrade ? undefined : { a: relicBonusA?.maxRelics ?? 0, b: relicBonusB?.maxRelics ?? 0 };
   // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
   const civFix = (s: SideSpec, fallback: number): SideSpec => {
     if (!core || civByEn(s.civ)) return s;
@@ -405,8 +405,23 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           byId={core.unitById}
           params={sp}
           available={!isUnavail(A) && !isUnavail(B)}
-          onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES?.patch?.build ?? '') })}
-          onClear={() => set({}, ['base', 'fixed', 'basev'])}
+          onSave={(a, b) => {
+            const next: Record<string, string> = {
+              a: fmtSide(a),
+              b: fmtSide(b),
+              m: '1',
+              base: fmtSide(a),
+              fixed: fmtSide(b),
+              basev: String(DATA_SOURCES?.patch?.build ?? ''),
+            };
+            const drop: string[] = [];
+            if (a.relics && a.relics > 0) next.baser = String(a.relics);
+            else drop.push('baser');
+            if (b.relics && b.relics > 0) next.fixedr = String(b.relics);
+            else drop.push('fixedr');
+            set(next, drop);
+          }}
+          onClear={() => set({}, ['base', 'fixed', 'basev', 'baser', 'fixedr'])}
           onNormalize={(values) => set(values)}
         />
         {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}

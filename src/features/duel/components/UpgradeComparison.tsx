@@ -103,11 +103,24 @@ export function UpgradeComparison({
     if (!rb) return side;
     return { ...side, relics: Math.min(rb.maxRelics, count) };
   };
+  const attachSavedRelics = (side: UpgradeSide | null, key: 'baser' | 'fixedr'): UpgradeSide | null => {
+    if (!side) return null;
+    const rawAll = params.getAll(key);
+    if (!rawAll.length) return side;
+    if (rawAll.length > 1) return null;
+    const raw = rawAll[0]!;
+    if (!/^[1-9]\d*$/.test(raw)) return null;
+    const count = Number(raw);
+    const u = byId[side.uid];
+    const rb = u ? unitRelicBonus(side.civ, u) : null;
+    if (!rb || count > rb.maxRelics) return null;
+    return { ...side, relics: count };
+  };
   const a = attachRelics(parseUpgradeSide(params.get('a')), rawRelics.a);
   const b = attachRelics(parseUpgradeSide(params.get('b')), rawRelics.b);
-  const base = attachRelics(parseUpgradeSide(params.get('base'), false), rawRelics.a);
-  const fixed = attachRelics(parseUpgradeSide(params.get('fixed'), false), rawRelics.b);
-  const hasBase = ['base', 'fixed', 'basev'].some((key) => params.has(key));
+  const base = attachSavedRelics(parseUpgradeSide(params.get('base'), false), 'baser');
+  const fixed = attachSavedRelics(parseUpgradeSide(params.get('fixed'), false), 'fixedr');
+  const hasBase = ['base', 'fixed', 'basev', 'baser', 'fixedr'].some((key) => params.has(key));
   const one = params.get('m') === '1';
   const currentA = a ? upgradePlan(ctx, byId, a) : null;
   const currentB = b ? upgradePlan(ctx, byId, b) : null;
@@ -224,7 +237,7 @@ export function UpgradeComparison({
       <summary className="upgrade-summary">
         <h2 className="upgrade-title">升级前后对比</h2>
       </summary>
-      <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代和团队加成，仅比较 1v1。</p>
+      <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代、团队加成与圣物数，仅比较 1v1。</p>
       <div className="upgrade-actions">
         <button type="button" disabled={!canSave} onClick={save}>
           {hasBase ? '重新保存基准' : '保存为升级前'}

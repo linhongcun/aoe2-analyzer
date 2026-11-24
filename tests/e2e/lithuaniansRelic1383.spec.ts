@@ -24,7 +24,7 @@ async function openDetails(page: Page, selector: string) {
   return el;
 }
 
-test('#1383 单位详情模拟器：0 圣物基线、0–4 档位解耦、对比列说明、返回来源与 URL 清理', async ({ page }) => {
+test('#1383 单位详情模拟器：0 圣物基线、0–4 档位解耦、对比列说明、返回来源与 URL 清理', async ({ page, browser }) => {
   const errors = await attachErrorGuard(page);
   await page.setViewportSize({ width: 1280, height: 900 });
 
@@ -77,10 +77,32 @@ test('#1383 单位详情模拟器：0 圣物基线、0–4 档位解耦、对比
   await expect(page).toHaveURL(/#\/unit\/1236\?tab=sim$/);
   await expect(page.locator('[data-t="relic-sim-tag"]')).toHaveText('默认 0 件');
 
+  // 7. 共享单位（游侠 569）经会话记忆继承立陶宛时，选正数圣物写明文明路径且返回概览仍回到原无文明地址，新会话打开复制链接可完整复现
+  await page.goto('./#/civ/Lithuanians');
+  await expect(page.getByRole('heading', { level: 1, name: /立陶宛/ })).toBeVisible();
+  await page.goto('./#/unit/569');
+  await page.getByRole('button', { name: /打开科技模拟器/ }).click();
+  await expect(page).toHaveURL(/#\/unit\/569\?tab=sim$/);
+  await page.locator('[data-t="relic-sim-group"] button', { hasText: '3 件' }).click();
+  await expect(page).toHaveURL(/#\/unit\/569\/Lithuanians\/4\/\?tab=sim&relics=3$/);
+  const sharedRelicUrl = page.url();
+  await page.getByRole('button', { name: '返回概览', exact: true }).click();
+  await expect(page).toHaveURL(/#\/unit\/569$/);
+
+  const freshContext = await browser.newContext();
+  try {
+    const freshPage = await freshContext.newPage();
+    await freshPage.goto(sharedRelicUrl);
+    await expect(freshPage.locator('[data-t="relic-sim-tag"]')).toHaveText('攻击 +3');
+    await expect(freshPage.locator('#sim table.simtab tr', { hasText: '攻击' }).first().locator('td').nth(2)).toHaveText('17');
+  } finally {
+    await freshContext.close();
+  }
+
   expect(errors).toEqual([]);
 });
 
-test('#1383 单位 PK 单兵与混编：胜负翻转、双边独立、互换、逐击来源、时代/升级对比与混编联动', async ({ page }) => {
+test('#1383 单位 PK 单兵与混编：胜负翻转、双边独立、互换、逐击来源、时代/升级对比与混编联动', async ({ page, browser }) => {
   const errors = await attachErrorGuard(page);
   await page.setViewportSize({ width: 1280, height: 900 });
 
@@ -113,14 +135,65 @@ test('#1383 单位 PK 单兵与混编：胜负翻转、双边独立、互换、�
   await expect(page).not.toHaveURL(/rb=/);
   await expect(page.locator('#duel-res h2')).toContainText('A · 游侠 获胜');
 
-  // 4. 升级前后对比与各时代对比透传圣物
+  // 4. 升级前后对比与各时代对比透传圣物，且改动实时圣物档位使旧基准失效而不静默篡改
   await page.goto('./#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=1&ra=2');
   const ageBox = await openDetails(page, '[data-t="age-comparison"]');
   await expect(ageBox.locator('section[aria-label="帝王时代对比"] a')).toHaveAttribute('href', /ra=2/);
   const upgBox = await openDetails(page, '[data-t="upgrade-comparison"]');
   await upgBox.getByRole('button', { name: '保存为升级前' }).click();
+  await expect(page).toHaveURL(/baser=2/);
   await expect(upgBox.locator('[data-t="upgrade-before"]')).toContainText('驻守 2 件圣物');
   await expect(upgBox.locator('[data-t="upgrade-before"]').getByRole('link', { name: '打开升级前独立 PK' })).toHaveAttribute('href', /ra=2/);
+  await page.locator('[data-t="relic-a-group"] button', { hasText: '4 件' }).click();
+  await expect(page).toHaveURL(/ra=4/);
+  await expect(page).toHaveURL(/baser=2/);
+  await expect(upgBox.locator('[data-t="upgrade-status"]')).toContainText('已变化');
+  await expect(upgBox.locator('[data-metric]')).toHaveCount(0);
+  await upgBox.getByRole('button', { name: '重新保存基准' }).click();
+  await expect(page).toHaveURL(/baser=4/);
+  await expect(upgBox.locator('[data-t="upgrade-before"]')).toContainText('驻守 4 件圣物');
+  await upgBox.getByRole('button', { name: '清除比较' }).click();
+  await expect(page).not.toHaveURL(/baser=|fixedr=/);
+
+  // 4b. 冷加载竞态：全新会话下 core 先于 trees 返回时不得删除合法的 ra=2
+  const coldCtx = await browser.newContext();
+  const coldPage = await coldCtx.newPage();
+  const coldErrors = await attachErrorGuard(coldPage);
+  try {
+    let releaseTrees!: () => void;
+    const treesGate = new Promise<void>((resolve) => {
+      releaseTrees = resolve;
+    });
+    let coreDone!: () => void;
+    const coreFinished = new Promise<void>((resolve) => {
+      coreDone = resolve;
+    });
+    let sawTrees = false;
+    await coldPage.route('**/assets/**', async (route) => {
+      const url = route.request().url();
+      if (route.request().resourceType() === 'script' && /trees-[^/]+\.js/iu.test(url)) {
+        sawTrees = true;
+        await coreFinished;
+        await treesGate;
+      }
+      await route.continue();
+    });
+    coldPage.on('response', (res) => {
+      if (/core-[^/]+\.js/iu.test(res.url()) && res.status() === 200) coreDone();
+    });
+    const coldUrl = new URL('./#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&ra=2', page.url()).href;
+    await coldPage.goto(coldUrl, { waitUntil: 'domcontentloaded' });
+    await coreFinished;
+    await coldPage.waitForTimeout(150);
+    releaseTrees();
+    await expect(coldPage.locator('[data-t="relic-a-tag"]')).toHaveText('攻击 +2');
+    await expect(coldPage).toHaveURL(/ra=2/);
+    await expect(coldPage.locator('#duel-a .duel-stats')).toContainText('20（近战）');
+    expect(sawTrees).toBe(true);
+    expect(coldErrors).toEqual([]);
+  } finally {
+    await coldCtx.close();
+  }
 
   // 5. 混编：命中单位列精锐烈堤司、游侠，切 2 件后输入快照显示驻守圣物，非法 relics 无协议错
   const qMix = new URLSearchParams({

@@ -149,6 +149,16 @@ describe('#1383 立陶宛圣物加攻：数据隔离、模拟器、单位 PK、�
     // 切回 0 件（省略 relics）仍保持返回来源
     const st2 = advanceUnitSimReturnState(st1, dstRelic2, dst, 1236, leitisCivs, 'Lithuanians', 4);
     expect(readUnitSimReturnSource(st2, dst, 1236, leitisCivs)).toEqual(src);
+
+    // 共享单位（游侠 569）经会话记忆继承立陶宛时，选正数圣物把路径写成显式文明，同时仍保留返回原无文明概览的来源
+    const paladinCivs = byId[569]!.civs;
+    const pSrc = { pathname: '/unit/569', search: '', hash: '' };
+    const pDst = { pathname: '/unit/569', search: '?tab=sim', hash: '' };
+    const pSt0 = createUnitSimReturnState(pSrc, pDst, 569, paladinCivs);
+    const pDstExplicit = { pathname: '/unit/569/Lithuanians/4/', search: '?tab=sim&relics=3', hash: '' };
+    const pSt1 = advanceUnitSimReturnState(pSt0, pDst, pDstExplicit, 569, paladinCivs, 'Lithuanians', 4);
+    expect(pSt1).toBeDefined();
+    expect(readUnitSimReturnSource(pSt1, pDstExplicit, 569, paladinCivs, 'Lithuanians')).toEqual(pSrc);
   });
 
   it('单兵 PK URL / swap / AgeComparison / UpgradeComparison 联动', () => {
@@ -210,6 +220,16 @@ describe('#1383 立陶宛圣物加攻：数据隔离、模拟器、单位 PK、�
       { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] },
     );
     expect(cmpMismatch.ok).toBe(false);
+    if (!cmpMismatch.ok) expect(cmpMismatch.reason).toContain('圣物数');
+    const cmpBMismatch = upgradeComparison(
+      ctx,
+      byId,
+      { uid: 569, civ: 'Franks', age: 4, techs: [], team: [] },
+      { uid: 569, civ: 'Franks', age: 4, techs: [67], team: [] },
+      { uid: 569, civ: 'Lithuanians', age: 4, techs: 'f', team: [], relics: 1 },
+      { uid: 569, civ: 'Lithuanians', age: 4, techs: 'f', team: [], relics: 3 },
+    );
+    expect(cmpBMismatch.ok).toBe(false);
   });
 
   it('混编对战协议容错、仅命中行生效、去重与单兵互转', () => {
