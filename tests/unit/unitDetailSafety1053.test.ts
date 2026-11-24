@@ -86,10 +86,10 @@ describe('#1051 C3 驻军章节入口与目标', () => {
     const navigation = html.match(/<nav[^>]*aria-label="本页章节"[^>]*>[\s\S]*?<\/nav>/u)![0];
     expect(navigation.includes('>驻军</button>')).toBe(expected);
     expect(html.includes('id="unit-garrison"')).toBe(expected);
-    for (const label of ['属性', '如何获得', '说明', '相关', '模拟器', '更新历史', '反向查询']) {
+    for (const label of ['属性', '如何获得', '说明', '相关', '各文明对照', '模拟器', '更新历史', '反向查询']) {
       expect(navigation).toContain(`>${label}</button>`);
     }
-    expect(navigation.match(/<button\b/gu)).toHaveLength(expected ? 8 : 7);
+    expect(navigation.match(/<button\b/gu)).toHaveLength(expected ? 9 : 8);
   });
 });
 

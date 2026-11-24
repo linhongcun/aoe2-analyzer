@@ -115,23 +115,36 @@ test('#1283 页内跳转条顺序与正文可见章节自上而下完全一致',
     说明: 'unit-notes',
     反向查询: 'unit-reverse-counters',
     相关: 'unit-related',
+    各文明对照: 'unit-civ-rank',
     模拟器: 'unit-sim',
     更新历史: 'unit-history',
   };
 
-  for (const hash of ['/unit/569', '/unit/24', '/unit/1738']) {
+  for (const [hash, unitId] of [
+    ['/unit/569', '569'],
+    ['/unit/24', '24'],
+    ['/unit/1738', '1738'],
+  ] as const) {
     await page.goto(`./#${hash}`);
-    await expect(page.locator('#unit h1')).toBeVisible();
-    const labels = await page.locator('.ud-jump button').allInnerTexts();
-    expect(labels.length).toBeGreaterThanOrEqual(4);
-    const ids = labels.map((label) => {
-      const id = labelToId[label.trim()];
-      expect(id, `未知跳转项: ${label}`).toBeTruthy();
-      return id!;
-    });
-    const tops = await page.evaluate((targetIds) => targetIds.map((id) => document.getElementById(id)!.getBoundingClientRect().top + window.scrollY), ids);
-    for (let i = 1; i < tops.length; i++) {
-      expect(tops[i]!, `${hash}: ${ids[i - 1]} (${tops[i - 1]}) 应在 ${ids[i]} (${tops[i]}) 之前`).toBeGreaterThan(tops[i - 1]!);
+    await expect(page.locator('#unit .ud-en')).toContainText(`id ${unitId}`);
+    const snapshot = await page.evaluate((map) => {
+      const labels = Array.from(document.querySelectorAll('.ud-jump button')).map((el) => el.textContent?.trim() ?? '');
+      const ids = labels.map((label) => map[label] ?? '');
+      const tops = ids.map((id) => {
+        const el = id ? document.getElementById(id) : null;
+        return el ? el.getBoundingClientRect().top + window.scrollY : null;
+      });
+      return { labels, ids, tops };
+    }, labelToId);
+    expect(snapshot.labels.length).toBeGreaterThanOrEqual(4);
+    for (let i = 0; i < snapshot.labels.length; i++) {
+      expect(snapshot.ids[i], `未知跳转项: ${snapshot.labels[i]}`).toBeTruthy();
+      expect(snapshot.tops[i], `${hash}: 缺少目标节点 ${snapshot.ids[i]}`).not.toBeNull();
+    }
+    for (let i = 1; i < snapshot.tops.length; i++) {
+      expect(snapshot.tops[i]!, `${hash}: ${snapshot.ids[i - 1]} (${snapshot.tops[i - 1]}) 应在 ${snapshot.ids[i]} (${snapshot.tops[i]}) 之前`).toBeGreaterThan(
+        snapshot.tops[i - 1]!,
+      );
     }
   }
 });

@@ -14,7 +14,8 @@ import { unitRelatedTechs } from '../../../domain/relatedTechs';
 import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../../../domain/simulator';
 import type { Trees, Unit } from '../../../domain/types';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
-import { discountView, replaceUnitCiv, unitTypeLabel, unitWorkspaceOpen, upgradeNotes, withUnitTab } from '../../../domain/unitDetailView';
+import { unitTypeLabel, unitWorkspaceOpen, upgradeNotes, withUnitTab, discountView, replaceUnitCiv } from '../../../domain/unitDetailView';
+import { supportsUnitCivRank } from '../../../domain/unitCivRank';
 import { trainingSites } from '../../../domain/unitTrainingSites';
 import { AgeImg, CivChip, CostView, DlcBadge, UnitIcon } from '../../../shared/ui/art';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
@@ -54,6 +55,7 @@ import type { SimNavigationAdapter } from '../../../shared/hooks/useSimState';
 import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
 import { FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
+import { AvailableCivsHeader, UnitCivRank } from './UnitCivRank';
 import './unit-detail.css';
 import './unit-detail-1283.css';
 
@@ -64,6 +66,7 @@ const JUMPS = [
   ['unit-notes', '说明'],
   ['unit-reverse-counters', '反向查询'],
   ['unit-related', '相关'],
+  ['unit-civ-rank', '各文明对照'],
   ['unit-sim', '模拟器'],
   ['unit-history', '更新历史'],
 ] as const;
@@ -170,6 +173,7 @@ export default function UnitDetail() {
   const trainingBuildingLabel = extraBuildings.length ? [baseBuildingLabel, ...extraBuildings].join('、') : baseBuildingLabel;
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
+  const showCivRank = supportsUnitCivRank(u, !!alternate, invalidCombatProjection);
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
   const simulatorRoute = routeWithQueryCiv(rt, context && canTrain ? context.en : undefined, u.civs);
   const simNavigationAdapter: SimNavigationAdapter = ({ current, next, civ, maxRelics }) => {
@@ -304,6 +308,7 @@ export default function UnitDetail() {
           ([id]) =>
             (!alternate || (id !== 'unit-obtain' && id !== 'unit-garrison' && id !== 'unit-sim')) &&
             (id !== 'unit-garrison' || !workspace) &&
+            (id !== 'unit-civ-rank' || showCivRank) &&
             (id !== 'unit-history' || !entityHistory.empty),
         ).map(([id, label]) => (
           <button
@@ -494,9 +499,7 @@ export default function UnitDetail() {
         )}
         <h3>相关科技</h3>
         {alternate ? <FormRelatedTechLink ownerHref={formHref(owner.id)} /> : rel ? <RelatedTechs items={rel} civ={context?.en} /> : treeWaiting}
-        <h3>
-          可用文明（<span className="num nw">{u.civs.length}</span>/<span className="num nw">{civs.length}</span>）
-        </h3>
+        <AvailableCivsHeader count={u.civs.length} total={civs.length} showRankLink={showCivRank} />
         <div className="ud-civs">
           {u.civs.map((name) => {
             const c = civByEn(name);
@@ -504,6 +507,8 @@ export default function UnitDetail() {
           })}
         </div>
       </section>
+
+      {showCivRank && <UnitCivRank key={u.id} unit={u} core={core} trees={trees} treeWaiting={treeWaiting} />}
 
       {alternate ? (
         workspace && (
