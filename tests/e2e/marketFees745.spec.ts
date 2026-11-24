@@ -1,11 +1,7 @@
-import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import effects from '../../data/game/effects.json' with { type: 'json' };
 import eco from '../../data/game/eco.json' with { type: 'json' };
-import { tableStyles } from './staticSweep338';
-
-const tableGolden = JSON.parse(readFileSync('data/fixtures/e2e/fixtures/v0300-338-tables.json', 'utf8')) as Record<string, unknown[]>;
 
 const region = (page: Page) => page.getByRole('region', { name: '交易费与进贡税', exact: true });
 
@@ -79,8 +75,7 @@ test('issue 745 市场页展示交易费与进贡税并链到三科技', async (
   await expect(note).not.toContainText('Grand Trunk');
   await expect(note).not.toContainText('10%');
   await expect(note).not.toContainText('套利');
-  expect(tableGolden['1280 /building/84']).toEqual([]);
-  expect(await tableStyles(page)).toEqual([]);
+  await expect(note.locator('table')).toHaveCount(0);
 
   const guilds = note.getByRole('link', { name: '行会', exact: true });
   await expect(guilds).toHaveAttribute('href', /#\/tech\/15$/);
@@ -135,8 +130,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(target.locator('[data-step="banking"] [data-field="rate"]')).toHaveText('0%');
       await expect(target).toContainText('这不是 DE 导出');
       await expect(target).not.toContainText('10%');
-      expect(await tableStyles(page)).toEqual([]);
-      if (width === 360 || width === 1280) expect(tableGolden[`${width} /building/84`]).toEqual([]);
+      await expect(target.locator('table')).toHaveCount(0);
       await numbersStay(target);
       for (const link of await target.getByRole('link').all()) {
         const box = await link.boundingBox();

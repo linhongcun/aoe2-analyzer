@@ -2,8 +2,9 @@
  * issue 1387：单位详情「各文明满科技对照」纯领域计算引擎（无 React / UI / features 依赖）。
  * 100% 复用与单位 PK（duelSide.resolve）同源的底层领域函数，不静态导入 src/data/core.ts。
  */
-import { civByEn, civs } from '../data';
+import { civByEn } from '../data';
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
+import { cmpNum, filterCivRankRows, finiteOr, fmtTrim, RANK_EPS, type SortDir } from './civRankShared';
 import { civStatus } from './civStatus';
 import { hasIgnoreArmor } from './damageCore';
 import { costSum, DPS_UNAVAILABLE_REASON, NO_NORMAL_ATTACK_REASON, unitHasNormalAttack } from './duel';
@@ -12,16 +13,14 @@ import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type Trainin
 import { applicableUnmodeledTechIds, detectUnitUnmodeled } from './duelUnmodeled';
 import { TECH_EFFECTS } from './effects';
 import { formatHp } from './hpFormat';
-import { AGE_ZH } from './ratings';
-import { norm, pyMatch } from './search';
 import { applicableSimCostTechs } from './simEffectiveCost';
 import { simTechs, simulate, unitPath, type SimContext } from './simulator';
-import type { Civ, Tech, Unit } from './types';
+import type { Tech, Unit } from './types';
 
+export type { SortDir };
 export type RankCombatKind = 'normal' | 'suicide' | 'non-attacking';
 export type RankMetricCol = 'hp' | 'atk' | 'rof' | 'dps' | 'ma' | 'pa' | 'rng' | 'spd' | 'totalCost' | 'gold' | 'bt';
 export type RankSortCol = RankMetricCol | 'civ';
-export type SortDir = 'asc' | 'desc';
 
 export interface RankColMeta {
   col: RankMetricCol;
@@ -116,22 +115,13 @@ export interface UnitCivRankFilterResult {
   emptyMessage: string | null;
 }
 
-const EPS = 1e-6;
+const EPS = RANK_EPS;
 export const DUEL_BUDGET_DEFAULT = 3000;
 export { DPS_UNAVAILABLE_REASON, NO_NORMAL_ATTACK_REASON };
 
 /** 适用范围判定：非切换副形态、无异常攻防投影且可用文明数 >= 2。 */
 export function supportsUnitCivRank(u: Pick<Unit, 'civs'> | null | undefined, alternate: boolean, invalidCombatProjection: boolean): boolean {
   return !!u && !alternate && !invalidCombatProjection && Array.isArray(u.civs) && u.civs.length >= 2;
-}
-
-const finiteOr = (v: number, fallback = 0): number => (Number.isFinite(v) ? v : fallback);
-
-function fmtTrim(value: number, maxDecimals: number): string {
-  if (!Number.isFinite(value)) return '—';
-  const factor = 10 ** maxDecimals;
-  const rounded = Math.round(value * factor) / factor;
-  return Object.is(rounded, -0) ? '0' : rounded.toFixed(maxDecimals).replace(/\.?0+$/, '');
 }
 
 /** 各指标精确格式化（hp 复用 domain/hpFormat，总价与黄金保留至多一位小数，攻/射程至多两位小数）。 */
@@ -166,8 +156,6 @@ export function quantizeRankMetric(col: RankMetricCol, value: number): number {
   const parsed = Number(formatRankMetric(col, value));
   return Number.isFinite(parsed) && !Object.is(parsed, -0) ? parsed : 0;
 }
-
-const cmpNum = (a: number, b: number, dir: SortDir): number => (Math.abs(a - b) <= EPS ? 0 : dir === 'desc' ? b - a : a - b);
 
 /** 稳定排序：不适用（null）沉底；主维度按展示精度比较，同值按 生命降序 -> 总价升序 -> 文明英文名升序。 */
 export function sortUnitCivRankRows(rows: readonly UnitCivRankRow[], col: RankSortCol, dir: SortDir): UnitCivRankRow[] {
@@ -417,15 +405,6 @@ export function isRankBestCell(result: Pick<UnitCivRankResult, 'bestValues'>, co
   return best !== undefined && Math.abs(quantizeRankMetric(col, value) - best) <= EPS;
 }
 
-function matchesCivQuery(c: Pick<Civ, 'zh' | 'en' | 'py' | 'pyi'>, normalizedQuery: string): boolean {
-  return c.zh.toLowerCase().includes(normalizedQuery) || c.en.toLowerCase().includes(normalizedQuery) || pyMatch(c, normalizedQuery);
-}
-
-function formatCivList(list: readonly Civ[]): string {
-  if (list.length <= 2) return list.map((c) => c.zh).join('、');
-  return `${list[0]!.zh}、${list[1]!.zh} 等 ${list.length} 个文明`;
-}
-
 /** 文明搜索与空结果三态分类：中/英文子串匹配 + 拼音前缀（pyMatch，先经 norm 归一化）。 */
 export function filterUnitCivRankRows(
   rows: readonly UnitCivRankRow[],
@@ -433,31 +412,7 @@ export function filterUnitCivRankRows(
   unit: Pick<Unit, 'zh' | 'civs'>,
   age: number,
 ): UnitCivRankFilterResult {
-  const trimmed = rawQuery.trim();
-  if (!trimmed) return { rows: [...rows], emptyMessage: null };
-  const q = norm(trimmed);
-  if (!q) return { rows: [...rows], emptyMessage: null };
-
-  const matched = rows.filter((r) => {
-    const c = civByEn(r.civ);
-    if (c) return matchesCivQuery(c, q);
-    return r.civZh.toLowerCase().includes(q) || r.civ.toLowerCase().includes(q);
-  });
-  if (matched.length > 0) return { rows: matched, emptyMessage: null };
-
-  const unitCivSet = new Set(unit.civs);
-  const allMatched = civs.filter((c) => matchesCivQuery(c, q));
-  if (allMatched.length === 0) {
-    return { rows: [], emptyMessage: `没有匹配「${trimmed}」的文明。` };
-  }
-
-  const laterAgeCivs = allMatched.filter((c) => unitCivSet.has(c.en));
-  const neverCivs = allMatched.filter((c) => !unitCivSet.has(c.en));
-  const ageLabel = AGE_ZH[age] ?? `${age}时代`;
-  const parts: string[] = [];
-  if (laterAgeCivs.length > 0) parts.push(`${formatCivList(laterAgeCivs)}在${ageLabel}不能训练${unit.zh}`);
-  if (neverCivs.length > 0) parts.push(`${formatCivList(neverCivs)}不能训练${unit.zh}`);
-  return { rows: [], emptyMessage: `${parts.join('；')}。` };
+  return filterCivRankRows(rows, rawQuery, unit, age, '训练');
 }
 
 /** 构造单文明模拟器链接：省略冗余 ?civ= 与旧 relics，保留对局助手来源参数 me/opp。 */

@@ -67,8 +67,7 @@ test('issue 744 建筑页说明修复费用，村民和格鲁吉亚页链过来'
   await expect(note).toContainText('不估算要花多少资源');
   await expect(note).not.toContainText('一半');
   await expect(note).not.toContainText('50%');
-  expect(tableGolden['1280 /building/109']).toEqual([]);
-  expect(await tableStyles(page)).toEqual([]);
+  await expect(note.locator('table')).toHaveCount(0);
 
   await expect(note.getByRole('link', { name: '格鲁吉亚', exact: true })).toHaveAttribute('href', /#\/civ\/Georgians$/);
   await expect(note.getByRole('link', { name: 'UGC 资源表', exact: true })).toHaveAttribute('href', 'https://ugc.aoe2.rocks/general/resources/resources/');
@@ -125,8 +124,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(target.locator('[data-step="rate"] [data-field="limit"]')).toHaveText('待确认');
       await expect(target).toContainText('这不是 DE 导出的基准比例');
       await expect(target).not.toContainText('50%');
-      expect(await tableStyles(page)).toEqual([]);
-      if (width === 360 || width === 1280) expect(tableGolden[`${width} /building/109`]).toEqual([]);
+      await expect(target.locator('table')).toHaveCount(0);
       await numbersStay(target);
       for (const link of await target.getByRole('link').all()) {
         const box = await link.boundingBox();

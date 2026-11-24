@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const TECH_LABELS = ['研究', '作用对象', '说明', '文明', '更新历史'];
 const TECH_WITHOUT_AFFECTS = ['研究', '说明', '文明', '目录关联', '更新历史'];
-const BUILDING_LABELS = ['属性', '生产', '研究', '说明', '相关', '更新历史'];
+const BUILDING_LABELS = ['属性', '生产', '研究', '说明', '相关', '各文明对照', '更新历史'];
 const UNIT_LABELS = ['属性', '如何获得', '说明', '相关', '模拟器', '更新历史'];
 const CIV_LABELS = ['身份', '加成', '兵种', '科技树', '其他'];
 
