@@ -11,7 +11,7 @@ import { costSum, DPS_UNAVAILABLE_REASON, NO_NORMAL_ATTACK_REASON, unitHasNormal
 import { fmtSide, type SideSpec } from './duelState';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker } from './duelTrainingCost';
 import { applicableUnmodeledTechIds, detectUnitUnmodeled } from './duelUnmodeled';
-import { TECH_EFFECTS } from './effects';
+import { TECH_EFFECTS, unitRelicBonus } from './effects';
 import { formatHp } from './hpFormat';
 import { applicableSimCostTechs } from './simEffectiveCost';
 import { simTechs, simulate, unitPath, type SimContext } from './simulator';
@@ -55,6 +55,14 @@ export interface UnitCivRankMissingTech {
   age: number;
 }
 
+/** issue 1399：由 effects.unitRelicBonus 数据驱动派生的条件圣物加攻元数据（不进 unmodeledPills） */
+export interface UnitCivRankRelicBonus {
+  minAge: number;
+  perRelicAtk: number;
+  maxAtk: number;
+  maxRelics: number;
+}
+
 export interface UnitCivRankRow {
   civ: string;
   civZh: string;
@@ -72,6 +80,7 @@ export interface UnitCivRankRow {
   bt: number;
   estimatedCost: boolean;
   missingTechs: UnitCivRankMissingTech[];
+  relicBonus?: UnitCivRankRelicBonus;
   ignoreArmorTech?: string;
   unmodeledPills: string[];
   /** 与 duelSide.resolve(..., 'f') 一致的满科技所选 ID（有序） */
@@ -108,6 +117,7 @@ export interface UnitCivRankResult {
   champions: UnitCivRankChampion[];
   commonMechanisms: string[];
   hasEstimatedCost: boolean;
+  hasRelicBonus: boolean;
 }
 
 export interface UnitCivRankFilterResult {
@@ -294,6 +304,16 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     const atk = combatKind === 'non-attacking' ? null : finiteOr(S.atk);
     const rof = combatKind === 'normal' && Number.isFinite(S.rof) && S.rof > 0 ? S.rof : null;
     const dps = combatKind === 'normal' && atk !== null && rof !== null ? atk / rof : null;
+    const rawRelicBonus = unitRelicBonus(civ, u);
+    const relicBonus: UnitCivRankRelicBonus | undefined =
+      rawRelicBonus && age >= rawRelicBonus.minAge
+        ? {
+            minAge: rawRelicBonus.minAge,
+            perRelicAtk: rawRelicBonus.perRelicAtk,
+            maxAtk: rawRelicBonus.maxAtk,
+            maxRelics: rawRelicBonus.maxRelics,
+          }
+        : undefined;
 
     pending.push({
       row: {
@@ -313,6 +333,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
         bt: finiteOr(S.bt),
         estimatedCost,
         missingTechs: [],
+        ...(relicBonus ? { relicBonus } : {}),
         ...(ignoreArmorTech ? { ignoreArmorTech } : {}),
         unmodeledPills: rawPills,
         selTechIds,
@@ -396,6 +417,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     champions,
     commonMechanisms,
     hasEstimatedCost: rows.some((r) => r.estimatedCost),
+    hasRelicBonus: rows.some((r) => Boolean(r.relicBonus)),
   };
 }
 

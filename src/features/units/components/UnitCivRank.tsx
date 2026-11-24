@@ -25,7 +25,7 @@ import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { radioKeyboard } from '../../../shared/ui/radioKeyboard';
 import { SearchInput } from '../../../shared/ui/widgets';
-import { UnitCivRankTable } from './UnitCivRankTable';
+import { UnitCivRankRelicNotes, UnitCivRankTable } from './UnitCivRankTable';
 import '../../../shared/styles/civ-rank.css';
 import './unit-civ-rank.css';
 
@@ -419,6 +419,7 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
             {data.hasEstimatedCost && <li>「估算」：含尚未完全解码的造价科技，总价按已解码部分计算。</li>}
             <li>训练时间沿用科技模拟器单兵口径（未计征招及建筑工作效率加成，完整产兵周期见「持续生产」）。</li>
             <li>「缺」：本时代其他文明能研究、这个文明研究不了的通用科技。</li>
+            {data.hasRelicBonus && <UnitCivRankRelicNotes rows={data.rows} />}
           </ul>
         </>
       )}

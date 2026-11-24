@@ -436,6 +436,15 @@
   color: var(--color-link);
   font-weight: 600;
 }
+/* issue 1399：条件圣物加攻虚线标签，沿用 .ucr-tag 的 --radius-sm 并与 .ucr-best 胶囊区分 */
+.ucr-tag.is-relic {
+  gap: 0;
+  padding: 1px 5px;
+  border: 1px dashed var(--color-good);
+  background: var(--color-surface);
+  color: var(--color-good);
+  font-weight: 600;
+}
 .ucr-tag.is-mech {
   background: var(--color-tag);
   color: var(--color-text-2);
