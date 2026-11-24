@@ -12,7 +12,8 @@ import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
 import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
-import { canonDuelKite, canonDuelParams, decodeDuelKite, decodeDuelParams } from '../../../domain/duelParams';
+import { canonDuelKite, canonDuelParams, canonDuelRelics, decodeDuelKite, decodeDuelParams, decodeDuelRelics } from '../../../domain/duelParams';
+import { unitRelicBonus } from '../../../domain/effects';
 import type { KiteOptions } from '../../../domain/contactKite';
 import { buildsPath } from '../../../domain/matchupRoute';
 import '../../../shared/ui/contextLinks.css';
@@ -103,16 +104,17 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const productionContext = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
   const { mode, na, nb, bud, vils, mins } = decodeDuelParams(sp);
   const kite = decodeDuelKite(sp);
+  const relics = decodeDuelRelics(sp);
   const eq = mode === 'r' || mode === 't';
   const aParam = sp.get('a');
   const bParam = sp.get('b');
   const A = useMemo<SideState | null>(
-    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(aParam, DEF_A, hasUpgrade), DEF_A.uid) : null),
-    [core, ctx, aParam, hasUpgrade],
+    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(aParam, DEF_A, hasUpgrade), DEF_A.uid, relics.a) : null),
+    [core, ctx, aParam, hasUpgrade, relics.a],
   );
   const B = useMemo<SideState | null>(
-    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(bParam, DEF_B, hasUpgrade), DEF_B.uid) : null),
-    [core, ctx, bParam, hasUpgrade],
+    () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(bParam, DEF_B, hasUpgrade), DEF_B.uid, relics.b) : null),
+    [core, ctx, bParam, hasUpgrade, relics.b],
   );
   const set = (k: Record<string, string>, drop: string[] = []) => {
     const n = new URLSearchParams(sp);
@@ -124,6 +126,9 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const canon = new URLSearchParams(sp);
   const uiKiteEligible = resolveDuelKiteEligibility(mode, A, B);
   const canonKiteEligible = hasUpgrade ? undefined : uiKiteEligible;
+  const relicBonusA = A && !isUnavail(A) ? unitRelicBonus(A.civ, A.u) : null;
+  const relicBonusB = B && !isUnavail(B) ? unitRelicBonus(B.civ, B.u) : null;
+  const canonRelicMax = !core || hasUpgrade ? undefined : { a: relicBonusA?.maxRelics ?? 0, b: relicBonusB?.maxRelics ?? 0 };
   // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
   const civFix = (s: SideSpec, fallback: number): SideSpec => {
     if (!core || civByEn(s.civ)) return s;
@@ -139,7 +144,11 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
     canon.set('m', mode);
   }
   const incoming = sp.toString();
-  const canonStr = canonDuelKite(canonDuelParams(canon, { mode, na, nb, bud, vils, mins }), kite, canonKiteEligible).toString();
+  const canonStr = canonDuelRelics(
+    canonDuelKite(canonDuelParams(canon, { mode, na, nb, bud, vils, mins }), kite, canonKiteEligible),
+    relics,
+    canonRelicMax,
+  ).toString();
   const matchupContext = readDuelMatchupContext(sp);
 
   useEffect(() => {
@@ -355,6 +364,9 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               canKite={uiKiteEligible?.a ?? false}
               kite={effKiteA}
               onKiteChange={(v) => set(v ? { ka: '1' } : {}, v ? [] : ['ka'])}
+              relicBonus={relicBonusA}
+              relics={!isUnavail(A) ? A.relics : 0}
+              onRelicsChange={(n) => set(n > 0 ? { ra: String(n) } : {}, n > 0 ? [] : ['ra'])}
             />
             <button
               type="button"
@@ -382,6 +394,9 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               canKite={uiKiteEligible?.b ?? false}
               kite={effKiteB}
               onKiteChange={(v) => set(v ? { kb: '1' } : {}, v ? [] : ['kb'])}
+              relicBonus={relicBonusB}
+              relics={!isUnavail(B) ? B.relics : 0}
+              onRelicsChange={(n) => set(n > 0 ? { rb: String(n) } : {}, n > 0 ? [] : ['rb'])}
             />
           </div>
         </DuelStage>
@@ -395,7 +410,9 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           onNormalize={(values) => set(values)}
         />
         {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
-        {!isUnavail(A) && !isUnavail(B) && <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ }} b={{ ...B.spec, civ: B.civ }} />}
+        {!isUnavail(A) && !isUnavail(B) && (
+          <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ, relics: A.relics }} b={{ ...B.spec, civ: B.civ, relics: B.relics }} />
+        )}
         {!eq && !isUnavail(A) && !isUnavail(B) && (
           // issue 25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
           <BreakEven
@@ -404,7 +421,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             b={B.F}
             nb={cntB ?? 1}
             summary={`${formatBreakEvenSide(A, effKiteA)} vs ${formatBreakEvenSide(B, effKiteB)}`}
-            sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB ?? 1, Number(effKiteA), Number(effKiteB)].join('|')}
+            sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB ?? 1, Number(effKiteA), Number(effKiteB), A.relics, B.relics].join('|')}
             auto={sp.get('be') === '1'}
             kite={kiteOpt}
             onComputed={() => set({ be: '1' })}

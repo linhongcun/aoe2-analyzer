@@ -1,5 +1,5 @@
 import { fmtSide } from '../../../domain/duelState';
-import type { DuelParams } from '../../../domain/duelParams';
+import { decodeDuelRelics, type DuelParams } from '../../../domain/duelParams';
 import type { MixedDuelInput } from '../../../domain/mixedDuelParams';
 import type { SideState } from './duelSide';
 
@@ -28,6 +28,11 @@ export function swapSingleDuelParams(sp: URLSearchParams, a: SideState, b: SideS
   else next.delete('ka');
   if (rawKa === '1') next.set('kb', '1');
   else next.delete('kb');
+  const relics = decodeDuelRelics(sp);
+  if (relics.b > 0) next.set('ra', String(relics.b));
+  else next.delete('ra');
+  if (relics.a > 0) next.set('rb', String(relics.a));
+  else next.delete('rb');
   return next;
 }
 

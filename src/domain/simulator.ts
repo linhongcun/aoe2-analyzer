@@ -2,7 +2,7 @@
 import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { militaryTechAge } from './availabilityAge';
 import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
-import { CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
+import { activeRelicBonus, CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
 import { applyEffectValue } from './numericEffects';
 
 export interface SimContext {
@@ -128,6 +128,7 @@ export function simulate(
   sel: ReadonlySet<number>,
   team: ReadonlySet<number>,
   trace?: (step: SimStep) => void,
+  relics = 0,
 ): SimStats {
   const S: SimStats = baseStats(u);
   const apply = (list: readonly Effect[], source: string, techId?: number) => {
@@ -138,6 +139,10 @@ export function simulate(
   (CIV_BONUSES[civ] ?? []).forEach(([f, g, note]) => {
     if (f(u)) apply(g(age), `文明加成：${note}`);
   });
+  const relicFx = activeRelicBonus(civ, u, age, relics);
+  if (relicFx) {
+    apply(relicFx.fx, `文明加成：驻守圣物 ${relicFx.appliedRelics} 件（每件 +${relicFx.bonus.perRelicAtk}，最多 +${relicFx.bonus.maxAtk}）`);
+  }
   simTechs(ctx, u, civ).forEach(({ t, ef }) => {
     if (!ef || !sel.has(t.id)) return;
     if (extraOk(civ, t, u, age)) apply(ef, `科技：${t.zh}`, t.id);

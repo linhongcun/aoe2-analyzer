@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ageComparison, type AgeSide } from '../../../domain/ageComparison';
+import { unitRelicBonus } from '../../../domain/effects';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
@@ -59,7 +60,11 @@ export function AgeComparison({ ctx, byId, a, b }: { ctx: SimContext; byId: Reco
               </b>{' '}
               <Link
                 className="ulink"
-                to={`/duel?a=${fmtSide({ ...a, uid: row.a.u.id, age: row.age, techs: 'f' })}&b=${fmtSide({ ...b, uid: row.b.u.id, age: row.age, techs: 'f' })}&m=1`}
+                to={
+                  `/duel?a=${fmtSide({ ...a, uid: row.a.u.id, age: row.age, techs: 'f' })}&b=${fmtSide({ ...b, uid: row.b.u.id, age: row.age, techs: 'f' })}&m=1` +
+                  ((a.relics ?? 0) > 0 && unitRelicBonus(a.civ, row.a.u) ? `&ra=${a.relics}` : '') +
+                  ((b.relics ?? 0) > 0 && unitRelicBonus(b.civ, row.b.u) ? `&rb=${b.relics}` : '')
+                }
               >
                 打开{AGE_ZH[row.age]}对阵
               </Link>

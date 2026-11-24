@@ -8,9 +8,9 @@
 import { civs } from '../data';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, type BPred } from './buildingEffects.manual';
 import { hasIgnoreArmor, hasResistIgnoreArmor } from './damageCore';
-import { applyCombatAbilityEco, DAT, extractCombatAbilityEffects, idPred, toEffects, type DatEco, type DatEntry } from './datEffects';
+import { applyCombatAbilityEco, DAT, extractCombatAbilityEffects, idPred, toEffects, type DatConditionalEntry, type DatEco, type DatEntry } from './datEffects';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES, type CivBonus, type EffectRule } from './effects.manual';
-import type { Effect, UnitPred } from './types';
+import type { Effect, Unit, UnitPred } from './types';
 
 export type { CivBonus, EffectRule } from './effects.manual';
 export { BUILDING_TEXT_ONLY } from './buildingEffects.manual';
@@ -88,22 +88,94 @@ export interface TechExtra {
   idx: number | null;
 }
 export const CIV_TECH_EXTRAS: Record<string, Record<string, TechExtra[]>> = {};
+/** 条件触发的圣物驻守文明加成档位（.dat conditional，绝不混入常驻 CIV_BONUSES） */
+export interface CivRelicTier {
+  tech: number;
+  minRelics: number;
+  age: number;
+  rules: { pred: (x: { id: number }) => boolean; unitIds: readonly number[]; fx: Effect[] }[];
+}
+export interface CivRelicBonus {
+  civ: string;
+  idx: number;
+  label: string;
+  minAge: number;
+  maxRelics: number;
+  perRelicAtk: number;
+  maxAtk: number;
+  unitIds: ReadonlySet<number>;
+  tiers: readonly CivRelicTier[];
+}
+export const CIV_RELIC_BONUSES: Record<string, CivRelicBonus> = {};
 /** civ → 序号或 'team' → 来源 */
 export const BONUS_SRC: Record<string, Record<string, BonusSrc>> = {};
-/** civ → 序号 → 关联的 .dat 条目（含经济项、新鲜度未通过的条目也保留，供页面/审计展示） */
-export const BONUS_DAT: Record<string, Record<string, DatEntry[]>> = {};
+/** civ → 序号 → 关联的 .dat 条目（含常驻与条件条目、经济项，供页面/审计展示） */
+export const BONUS_DAT: Record<string, Record<string, (DatEntry | DatConditionalEntry)[]>> = {};
 
 const gate = (age: number, fx: Effect[]) => (a: number) => (a >= age ? fx : []);
 civs.forEach((c) => {
   const d = DAT.civs[c.en];
   const src: Record<string, BonusSrc> = (BONUS_SRC[c.en] = {});
-  const byIdx: Record<string, DatEntry[]> = (BONUS_DAT[c.en] = {});
-  d?.bonus.forEach((e) => (byIdx[e.idx === null ? 'hidden' : String(e.idx)] ??= []).push(e));
+  const byIdx: Record<string, (DatEntry | DatConditionalEntry)[]> = (BONUS_DAT[c.en] = {});
+  const byIdxPermanent: Record<string, DatEntry[]> = {};
+  d?.bonus.forEach((e) => {
+    const key = e.idx === null ? 'hidden' : String(e.idx);
+    (byIdx[key] ??= []).push(e);
+    (byIdxPermanent[key] ??= []).push(e);
+  });
+  const condEntries = (d?.conditional ?? []).filter((e) => e.condition.kind === 'relics');
+  const condIdxSet = new Set<string>();
+  condEntries.forEach((e) => {
+    const key = e.idx === null ? 'hidden' : String(e.idx);
+    (byIdx[key] ??= []).push(e);
+  });
+  const relicTiers: CivRelicTier[] = condEntries
+    .filter((e) => e.combat)
+    .sort((a, b) => a.condition.min - b.condition.min || a.tech - b.tech)
+    .map((e) => ({
+      tech: e.tech,
+      minRelics: e.condition.min,
+      age: e.age,
+      rules: e.rules
+        .filter((r) => !r.b)
+        .map((r) => ({ pred: idPred(r.t), unitIds: r.t, fx: toEffects(r.fx) }))
+        .filter((r) => r.fx.length),
+    }))
+    .filter((t) => t.rules.length);
+  if (relicTiers.length) {
+    const firstWithIdx = condEntries.find((e) => e.idx !== null);
+    const idx = firstWithIdx?.idx ?? -1;
+    const label = idx >= 0 ? c.bon[idx]! : '驻守圣物条件加成';
+    const unitIds = new Set<number>(relicTiers.flatMap((t) => t.rules.flatMap((r) => r.unitIds)));
+    const sampleId = [...unitIds][0];
+    const atkDeltaOf = (tier: CivRelicTier) =>
+      sampleId === undefined
+        ? 0
+        : tier.rules
+            .filter((r) => r.unitIds.includes(sampleId))
+            .flatMap((r) => r.fx)
+            .filter((f) => f.s === 'atk' && (!('op' in f) || f.op === 'add'))
+            .reduce((sum, f) => sum + f.v, 0);
+    const perRelicAtk = atkDeltaOf(relicTiers[0]!);
+    const maxAtk = relicTiers.reduce((sum, t) => sum + atkDeltaOf(t), 0);
+    CIV_RELIC_BONUSES[c.en] = {
+      civ: c.en,
+      idx,
+      label,
+      minAge: Math.min(...relicTiers.map((t) => t.age)),
+      maxRelics: Math.max(...relicTiers.map((t) => t.minRelics)),
+      perRelicAtk,
+      maxAtk,
+      unitIds,
+      tiers: relicTiers,
+    };
+    if (idx >= 0) condIdxSet.add(String(idx));
+  }
   const U: CivBonus[] = [],
     B: BCivBonus[] = [];
   const keys = [...c.bon.map((_, i) => String(i)), 'hidden'];
   keys.forEach((k) => {
-    const es = byIdx[k] ?? [];
+    const es = byIdxPermanent[k] ?? [];
     const idx = k === 'hidden' ? -1 : +k;
     const label = idx >= 0 ? c.bon[idx]! : '隐藏加成（.dat 中存在、加成文本未列出）';
     // .dat 为当前固定补丁：不再按文本一致性回退；fresh 仅供审计/页面提示
@@ -123,6 +195,10 @@ civs.forEach((c) => {
       if (idx >= 0) src[k] = 'dat';
       return;
     }
+    if (idx >= 0 && condIdxSet.has(k)) {
+      src[k] = 'dat';
+      return;
+    }
     if (idx < 0) return;
     const mu = (MANUAL_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx),
       mb = (MANUAL_BUILDING_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx);
@@ -130,11 +206,39 @@ civs.forEach((c) => {
       U.push(...mu);
       B.push(...mb);
       src[k] = 'manual';
-    } else src[k] = es.some((e) => e.eco.length) ? 'eco' : 'text';
+    } else src[k] = (byIdx[k] ?? []).some((e) => e.eco.length) ? 'eco' : 'text';
   });
   CIV_BONUSES[c.en] = U;
   BUILDING_CIV_BONUSES[c.en] = B;
 });
+
+/** 查询某文明是否具有 .dat 驻守圣物条件加成 */
+export function civRelicBonus(civ: string): CivRelicBonus | null {
+  return Object.hasOwn(CIV_RELIC_BONUSES, civ) ? (CIV_RELIC_BONUSES[civ] ?? null) : null;
+}
+
+/** 按数据判定某文明下的单位是否受驻守圣物加攻影响（且该文明可造该单位） */
+export function unitRelicBonus(civ: string, u: Pick<Unit, 'id' | 'civs'>): CivRelicBonus | null {
+  const bonus = civRelicBonus(civ);
+  if (!bonus || !bonus.unitIds.has(u.id) || !u.civs.includes(civ)) return null;
+  return bonus;
+}
+
+/** 计算给定时代与驻守圣物件数下实际生效的圣物加成效果；未到生效时代或 0 件时返回 null */
+export function activeRelicBonus(
+  civ: string,
+  u: Pick<Unit, 'id' | 'civs'>,
+  age: number,
+  relics: number,
+): { bonus: CivRelicBonus; appliedRelics: number; fx: Effect[] } | null {
+  const bonus = unitRelicBonus(civ, u);
+  if (!bonus || age < bonus.minAge) return null;
+  const applied = Math.min(bonus.maxRelics, Math.max(0, Math.floor(Number.isFinite(relics) ? relics : 0)));
+  if (applied < 1) return null;
+  const fx = bonus.tiers.filter((t) => t.minRelics <= applied && age >= t.age).flatMap((t) => t.rules.filter((r) => r.pred(u)).flatMap((r) => r.fx));
+  if (!fx.length) return null;
+  return { bonus, appliedRelics: applied, fx };
+}
 
 // ---------------- 团队加成 ----------------
 /** [文明, 说明, 适用判定, 该单位获得的效果] */

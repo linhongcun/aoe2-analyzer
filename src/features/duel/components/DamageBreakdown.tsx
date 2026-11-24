@@ -18,8 +18,22 @@ interface Side {
   F: Fighter;
   disc: CostDiscount;
   training: { price: { cost: CostDiscount['cost'] } };
+  relics?: number;
 }
 const n = (v: number) => Number(v.toFixed(3));
+function formatSourceLabel(text: string) {
+  const parts = text.split(/(\d+\s*件|\+\d+)/g);
+  if (parts.length === 1) return text;
+  return parts.map((part, idx) =>
+    idx % 2 ? (
+      <span className="num nw" key={idx}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 
 export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Side }) {
   return (
@@ -37,7 +51,7 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
         ] as const
       ).map(([side, attacker, defender]) => {
         const d = damageBreakdown(attacker.F, defender.F);
-        const trace = damageSources(ctx, attacker.u, attacker.civ, attacker.age, attacker.sel, new Set(attacker.spec.team));
+        const trace = damageSources(ctx, attacker.u, attacker.civ, attacker.age, attacker.sel, new Set(attacker.spec.team), attacker.relics ?? 0);
         return (
           <section key={side} aria-label={`${side} 伤害拆解`}>
             <h3 className="damage-heading">
@@ -109,7 +123,7 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                       {source.source}
                     </Link>
                   ) : (
-                    source.source
+                    formatSourceLabel(source.source)
                   )}
                   {source.changes.map((change) => (
                     <span className="damage-change" key={change.stat}>

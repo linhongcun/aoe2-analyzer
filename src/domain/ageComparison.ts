@@ -23,13 +23,14 @@ export interface AgeSide {
   uid: number;
   civ: string;
   team: number[];
+  relics?: number;
 }
 export function ageComparison(ctx: SimContext, byId: Record<number, Unit>, a: AgeSide, b: AgeSide) {
   const resolve = (side: AgeSide, age: number) => {
     const u = unitAtAge(byId, side.uid, side.civ, age, ctx.trees);
     if (!u) return null;
     const sel = presetUpTo(simTechs(ctx, u, side.civ), age, side.civ);
-    const stats = simulate(ctx, u, side.civ, age, sel, new Set(side.team));
+    const stats = simulate(ctx, u, side.civ, age, sel, new Set(side.team), undefined, side.relics ?? 0);
     return { u, stats, fighter: fighterFrom(u, stats) };
   };
   return [1, 2, 3, 4].map((age) => {

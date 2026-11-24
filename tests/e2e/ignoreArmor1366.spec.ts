@@ -28,28 +28,30 @@ test('#1366 验收 1–5：烈堤司、复合弓、乌兹钢与目标抵抗的 1
   const errors = await attachErrorGuard(page);
   await page.setViewportSize({ width: 1280, height: 900 });
 
-  // 验收 1：精锐烈堤司（22 攻）vs 精锐条顿骑士（13 近甲）1v1
+  // 验收 1：精锐烈堤司（默认 0 圣物 18 攻）vs 精锐条顿骑士（13 近甲）1v1
   await page.goto('./#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=1');
   await expect(page.locator('#duel-res')).toBeVisible();
   await expect(page.locator('[data-t="ignore-armor-note-a"]')).toHaveText('A · 精锐烈堤司无视护甲：每击不扣精锐条顿骑士的近战护甲（13）。');
   await expect(page.locator('[data-t="ignore-armor-note-b"]')).toHaveCount(0);
   await expect(page.locator('[data-t="duel-unmodeled-notes"]')).toHaveCount(0);
-  await expect(page.locator('#duel-res table.duel-tab tbody tr').first().locator('td').nth(1)).toHaveText('22');
+  await expect(page.locator('#duel-res table.duel-tab tbody tr').first().locator('td').nth(1)).toHaveText('18');
 
   const bd1 = await openDetails(page, '[data-t="damage-breakdown"]');
   await expect(bd1).toContainText('攻击方「无视护甲」时，目标的近战、穿刺护甲不扣；目标「抵抗无视护甲」时照扣。');
   const secA1 = bd1.locator('section[aria-label="A 伤害拆解"]');
-  await expect(secA1.locator('.damage-classes')).toContainText('近战：攻击 22，目标护甲 13（已无视），伤害 22');
+  await expect(secA1.locator('.damage-classes')).toContainText('近战：攻击 18，目标护甲 13（已无视），伤害 18');
   await expect(secA1.locator('[data-t="damage-ignore-armor-A"]')).toHaveText('本击无视目标的近战护甲；其他类别护甲照扣。');
-  await expect(secA1.locator('[data-t="damage-total-A"]')).toHaveText('22');
+  await expect(secA1.locator('[data-t="damage-total-A"]')).toHaveText('18');
   await expect(secA1).toContainText('；攻击无视护甲');
 
   await expect(page.locator('#duel-model')).toContainText('攻击方带「无视护甲」且目标不抵抗时，近战、穿刺护甲按 0 计。');
 
-  // 验收 5：3000 预算群战（烈堤司反胜）
+  // 验收 5：3000 预算群战（0 圣物基线 B 小胜，&ra=2 烈堤司反胜）
   await page.goto('./#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000');
-  await expect(page.locator('#duel-res h2')).toContainText('A · 精锐烈堤司 获胜');
+  await expect(page.locator('#duel-res h2')).toContainText('B · 精锐条顿骑士 获胜');
   await expect(page.locator('[data-t="ignore-armor-note-a"]')).toHaveText('A · 精锐烈堤司无视护甲：每击不扣精锐条顿骑士的近战护甲（13）。');
+  await page.goto('./#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000&ra=2');
+  await expect(page.locator('#duel-res h2')).toContainText('A · 精锐烈堤司 获胜');
 
   // 验收 2：精锐复合弓箭手 vs 精锐近卫军
   await page.goto('./#/duel?a=1802.Armenians.4.f.&b=761.Goths.4.f.&m=1');
@@ -74,10 +76,10 @@ test('#1366 验收 1–5：烈堤司、复合弓、乌兹钢与目标抵抗的 1
   await expect(page.locator('#duel-res table.duel-tab tbody tr').first().locator('td').nth(1)).toHaveText('5');
   await expect(page.locator('[data-t="ignore-armor-note-a"]')).toHaveCount(0);
 
-  // 验收 4 反例：精锐烈堤司打条顿中型冲车（抵抗）及科技来源冠军剑士打条顿中型冲车（沿用单一抵抗模板）
+  // 验收 4 反例：精锐烈堤司（默认 0 圣物 18 攻）打条顿中型冲车（抵抗）及科技来源冠军剑士打条顿中型冲车（沿用单一抵抗模板）
   await page.goto('./#/duel?a=1236.Lithuanians.4.f.&b=422.Teutons.4.f.&m=1');
   await expect(page.locator('[data-t="ignore-armor-note-a"]')).toHaveText('A · 精锐烈堤司无视护甲，但中型冲车抵抗无视护甲：每击照常扣近战护甲（2）。');
-  await expect(page.locator('#duel-res table.duel-tab tbody tr').first().locator('td').nth(1)).toHaveText('20');
+  await expect(page.locator('#duel-res table.duel-tab tbody tr').first().locator('td').nth(1)).toHaveText('16');
   const bd4 = await openDetails(page, '[data-t="damage-breakdown"]');
   const secA4 = bd4.locator('section[aria-label="A 伤害拆解"]');
   await expect(secA4.locator('[data-t="damage-ignore-armor-A"]')).toHaveText('目标抵抗无视护甲，本击照常扣近战护甲。');

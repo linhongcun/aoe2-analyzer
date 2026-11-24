@@ -107,6 +107,13 @@
               "$ref": "#/$defs/entry"
             }
           },
+          "conditional": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/conditionalEntry"
+            },
+            "minItems": 1
+          },
           "team": {
             "type": "object",
             "properties": {
@@ -470,6 +477,76 @@
         }
       },
       "required": ["tech", "name", "age", "req", "combat", "rules", "eco", "idx", "linked"],
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "relics"
+        },
+        "min": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["kind", "min"],
+      "additionalProperties": false
+    },
+    "conditionalEntry": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "req": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "combat": {
+          "type": "boolean"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "eco": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/eco"
+          }
+        },
+        "idx": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "linked": {
+          "type": "string",
+          "enum": ["auto", "manual"]
+        },
+        "condition": {
+          "$ref": "#/$defs/condition"
+        }
+      },
+      "required": ["tech", "name", "age", "req", "combat", "rules", "eco", "idx", "linked", "condition"],
       "additionalProperties": false
     },
     "fresh": {

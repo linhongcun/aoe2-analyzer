@@ -115,6 +115,12 @@
   align-items: center;
 }
 
+.civ-bonus-dialog-scroll .bonus-cond-note a.ulink {
+  margin-block: -10px;
+  padding-inline: 2px;
+  vertical-align: baseline;
+}
+
 .bonus-evidence-section {
   margin: 24px 0;
 }

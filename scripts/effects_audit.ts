@@ -136,10 +136,12 @@ export function buildAudit() {
     civs.forEach((c) => {
       const d = DAT.civs[c.en]!,
         o = prev.civs[c.en];
-      const idxs = new Set([...d.bonus.map((e) => e.idx), ...(o?.bonus ?? []).map((e) => e.idx)].filter((x): x is number => x !== null));
+      const curAll = [...d.bonus, ...(d.conditional ?? [])];
+      const prevAll = [...(o?.bonus ?? []), ...(o?.conditional ?? [])];
+      const idxs = new Set([...curAll.map((e) => e.idx), ...prevAll.map((e) => e.idx)].filter((x): x is number => x !== null));
       [...idxs].sort().forEach((i) => {
         const pick = (es: DatEntry[] | undefined) => (es ?? []).filter((e) => e.idx === i && !e.req.length && e.combat).flatMap((e) => e.rules);
-        nb += cmp(`${c.zh}（${c.en}）#${i}：${c.bon[i]}${!o ? '（更新前无该文明）' : ''}`, pick(o?.bonus), pick(d.bonus), c.en);
+        nb += cmp(`${c.zh}（${c.en}）#${i}：${c.bon[i]}${!o ? '（更新前无该文明）' : ''}`, pick(prevAll), pick(curAll), c.en);
       });
       nb += cmp(`${c.zh}（${c.en}）团队：${c.tb}`, o?.team.rules, d.team.rules);
     });
@@ -235,7 +237,7 @@ export function buildAudit() {
     const idxs = new Set([...(MANUAL_CIV_BONUSES[c.en] ?? []).map((x) => x[3]), ...(MANUAL_BUILDING_CIV_BONUSES[c.en] ?? []).map((x) => x[3])]);
     const d = DAT.civs[c.en];
     [...idxs].sort().forEach((i) => {
-      const es = (d?.bonus ?? []).filter((e) => e.idx === i && !e.req.length && e.combat);
+      const es = [...(d?.bonus ?? []), ...(d?.conditional ?? [])].filter((e) => e.idx === i && !e.req.length && e.combat);
       const fresh = d?.fresh[String(i)];
       const used = BONUS_SRC[c.en]?.[String(i)];
       const groups = new Map<string, string[]>();

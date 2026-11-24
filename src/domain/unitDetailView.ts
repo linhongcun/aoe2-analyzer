@@ -49,11 +49,14 @@ export function replaceUnitCiv(pathname: string, search: string, civ: string): {
   const route = parseUnitPath(pathname);
   if (!route) return { pathname, search };
   const params = paramsOf(search);
+  const prevCiv = route.civ || params.get('civ') || '';
   if (!civ) {
     params.delete('civ');
+    params.delete('relics');
     const q = params.toString();
     return { pathname: `/unit/${route.id}`, search: q ? `?${q}` : '' };
   }
+  if (prevCiv !== civ) params.delete('relics');
   if (route.civ) {
     params.delete('civ');
     const rest = pathname.replace(/^\/?unit\/\d+\/[^/]*/, '');

@@ -3,10 +3,11 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedUnitReplacedNote, sanitizeMixedDuelUnits } from '../../../domain/duelBudget';
 import { fmtSide, type Mode } from '../../../domain/duelState';
-import { TEAM_BONUSES } from '../../../domain/effects';
-import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, type MixedDuelInput } from '../../../domain/mixedDuelParams';
+import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
+import { decodeMixedDuel, emptyMixedDuel, encodeMixedDuel, mixedDataVersion, mixedRawRelicsDirty, type MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { mixedFight, MIXED_RULE, MIXED_RULE_LABEL, type MixedFightResult } from '../../../domain/mixedFight';
 import { isKiteEligible, type KiteOptions } from '../../../domain/contactKite';
+import { parseRelicCount } from '../../../domain/relicParams';
 import { makeSimContext } from '../../../domain/simulator';
 import { Icon } from '../../../shared/ui/Icon';
 import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
@@ -15,7 +16,7 @@ import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import type { CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import { readDuelSourceState } from '../logic/duelContext';
-import { canRecoverSingleDuelSide, positiveId, resolveMixedSide } from '../logic/mixedDuel';
+import { canRecoverSingleDuelSide, positiveId, resolveMixedSide, stripIneligibleMixedRelics } from '../logic/mixedDuel';
 import { mixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { swapMixedDuelInput } from '../logic/duelSwap';
 import { DuelModeBar, type TopMode } from './DuelModeBar';
@@ -37,22 +38,38 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
   const preservedSource = readDuelSourceState(location.state);
   const raw = params.toString();
   const { input: decodedInput, errors: protocolErrors, sharedErrors, sideErrors, legacy } = useMemo(() => decodeMixedDuel(params), [params]);
+  const rawRelicsDirty = useMemo(() => mixedRawRelicsDirty(params), [params]);
   const sanitized = useMemo(
     () => (protocolErrors.length ? { input: decodedInput, positions: [] as string[] } : sanitizeMixedDuelUnits(decodedInput)),
     [decodedInput, protocolErrors.length],
   );
   const input = sanitized.input;
   const linkStateReplaced = (location.state as { duelMixedUnitReplaced?: string[] } | null)?.duelMixedUnitReplaced;
-  const replacedPositions = sanitized.positions.length ? sanitized.positions : (linkStateReplaced ?? []);
-  useEffect(() => {
-    if (!sanitized.positions.length) return;
-    setParams(encodeMixedDuel(sanitized.input), {
-      replace: true,
-      state: { ...(preservedSource ? { duelSource: preservedSource } : {}), duelMixedUnitReplaced: sanitized.positions },
-    });
-  }, [sanitized, setParams, preservedSource]);
+  const replacedPositions = useMemo(
+    () => (sanitized.positions.length ? sanitized.positions : (linkStateReplaced ?? [])),
+    [sanitized.positions, linkStateReplaced],
+  );
   const core = resources.core.data,
     trees = resources.trees.data;
+  const dataMismatch = input.data !== DATA_VERSION;
+  const loadError = resources.core.error || resources.trees.error;
+  useEffect(() => {
+    if (protocolErrors.length || legacy || dataMismatch) return;
+    const hasRelicsToValidate = rawRelicsDirty || Boolean(input.a.relics) || Boolean(input.b.relics);
+    if (hasRelicsToValidate && !core && !loadError) return;
+    const nextA = core ? stripIneligibleMixedRelics(core, input.a) : input.a;
+    const nextB = core ? stripIneligibleMixedRelics(core, input.b) : input.b;
+    const relicsChanged = rawRelicsDirty || nextA.relics !== input.a.relics || nextB.relics !== input.b.relics;
+    if (!sanitized.positions.length && !relicsChanged) return;
+    const nextState: Record<string, unknown> = {
+      ...(preservedSource ? { duelSource: preservedSource } : {}),
+      ...(replacedPositions.length ? { duelMixedUnitReplaced: replacedPositions } : {}),
+    };
+    setParams(encodeMixedDuel({ ...input, a: nextA, b: nextB }), {
+      replace: true,
+      ...(Object.keys(nextState).length ? { state: nextState } : {}),
+    });
+  }, [sanitized, input, rawRelicsDirty, core, loadError, protocolErrors.length, legacy, dataMismatch, setParams, preservedSource, replacedPositions]);
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
   const view = useMemo(() => {
     if (!core || !ctx) return null;
@@ -63,8 +80,6 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     }
   }, [core, ctx, input]);
   const fields = [...(view?.a?.errors ?? []), ...(view?.b?.errors ?? [])];
-  const dataMismatch = input.data !== DATA_VERSION;
-  const loadError = resources.core.error || resources.trees.error;
   const ready = !!core && !!ctx && !loadError;
   const canCompute = ready && !legacy && !protocolErrors.length && !dataMismatch && !view?.error && !!view?.a?.army && !!view.b?.army;
   const training = useMemo(() => {
@@ -217,6 +232,12 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
     const firstB = view?.b?.rows[0]?.resolved?.F;
     if (input.a.kite === true && firstA && isKiteEligible(firstA)) next.set('ka', '1');
     if (input.b.kite === true && firstB && isKiteEligible(firstB)) next.set('kb', '1');
+    const firstUnitA = view?.a?.rows[0]?.unit;
+    const firstUnitB = view?.b?.rows[0]?.unit;
+    const ra = parseRelicCount(input.a.relics);
+    const rb = parseRelicCount(input.b.relics);
+    if (ra > 0 && firstUnitA && unitRelicBonus(input.a.civ, firstUnitA)) next.set('ra', String(ra));
+    if (rb > 0 && firstUnitB && unitRelicBonus(input.b.civ, firstUnitB)) next.set('rb', String(rb));
     if (preservedSource?.me) next.set('me', preservedSource.me);
     if (preservedSource?.opp) next.set('opp', preservedSource.opp);
     if (preservedSource?.practice) next.set('practice', preservedSource.practice);
