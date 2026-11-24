@@ -9,20 +9,10 @@ import { civStatus } from './simulator';
 import { productionTechAge } from './production';
 import { buildingAge as getGarrisonBuildingAge, trainingUnitAge } from './availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
+import { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow } from './garrisonUrl';
 import { toggleSelected } from './prereq';
 
-export type GarrisonEntry = 'enter' | 'created' | 'deposit';
-export interface GeneralGarrisonRow {
-  unitId: number;
-  count: string;
-  entry: GarrisonEntry;
-}
-export interface GeneralGarrisonConfig {
-  civ: string;
-  age: number;
-  techs: number[];
-  rows: GeneralGarrisonRow[];
-}
+export { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow };
 export interface GeneralGarrisonContext {
   core: Core;
   trees: Trees;
@@ -687,15 +677,4 @@ export function readGeneralGarrison(params: URLSearchParams, b: Building): { con
   } else if ([TC_BY_AGE[0]!, 79, 234, 235].includes(b.id)) rows.push({ unitId: VILLAGER_UNIT_ID, count: '0', entry: 'enter' });
   if (rows.length > GENERAL_GARRISON_LIMIT) errors.push(`驻军列表最多 ${GENERAL_GARRISON_LIMIT} 项。`);
   return { config: { civ: params.get('civ') ?? b.civs[0]!, age: age === null ? Math.max(3, b.age) : Number(age), techs: unique(techs), rows }, errors };
-}
-
-export function writeGeneralGarrison(config: GeneralGarrisonConfig): URLSearchParams {
-  return new URLSearchParams({
-    tab: 'garrison',
-    gv: '2',
-    civ: config.civ,
-    age: String(config.age),
-    gtechs: unique(config.techs).join(','),
-    army: config.rows.map((r) => `${r.unitId}:${r.count}:${r.entry === 'enter' ? 'e' : r.entry === 'deposit' ? 'd' : 'c'}`).join(','),
-  });
 }

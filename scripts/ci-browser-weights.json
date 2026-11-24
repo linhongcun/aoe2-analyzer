@@ -25,6 +25,7 @@
     "tests/e2e/unitTransportCapacity1220.spec.ts": 4500,
     "tests/e2e/unitForms1221.spec.ts": 6000,
     "tests/e2e/unitCivRank1387.spec.ts": 15000,
+    "tests/e2e/buildingCivRank1393.spec.ts": 15000,
     "tests/e2e/civFormations1144.spec.ts": 12000,
     "tests/e2e/civFormationsHistoricalDisclosure1139.spec.ts": 1600,
     "tests/e2e/treeUnavailable1119.spec.ts": 36500,

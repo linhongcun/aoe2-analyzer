@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { trainingUnitAge } from '../../../domain/availabilityAge';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -20,33 +20,16 @@ import {
   type SortDir,
   type UnitCivRankRow,
 } from '../../../domain/unitCivRank';
+import { useNarrowTable } from '../../../shared/hooks/useNarrowTable';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { radioKeyboard } from '../../../shared/ui/radioKeyboard';
 import { SearchInput } from '../../../shared/ui/widgets';
 import { UnitCivRankTable } from './UnitCivRankTable';
+import '../../../shared/styles/civ-rank.css';
 import './unit-civ-rank.css';
 
 const COLLAPSE_LIMIT = 12;
-
-function useNarrowTable(): boolean {
-  const [narrow, setNarrow] = useState(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
-    return window.matchMedia('(max-width: 720px)').matches;
-  });
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
-    const mql = window.matchMedia('(max-width: 720px)');
-    const sync = () => setNarrow(mql.matches);
-    sync();
-    if (typeof mql.addEventListener === 'function') {
-      mql.addEventListener('change', sync);
-      return () => mql.removeEventListener('change', sync);
-    }
-    return undefined;
-  }, []);
-  return narrow;
-}
 
 export function AvailableCivsHeader({ count, total, showRankLink }: { count: number; total: number; showRankLink: boolean }) {
   const loc = useLocation();

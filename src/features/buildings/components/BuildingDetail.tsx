@@ -15,6 +15,7 @@ import {
   type BuildingAnchor,
 } from '../../../domain/buildingDetailView';
 import { BUILDING_TYPE_ZH } from '../../../domain/buildings';
+import { supportsBuildingCivRank } from '../../../domain/buildingCivRank';
 import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
@@ -34,7 +35,7 @@ import { useEntityHistory } from '../../../shared/ui/useEntityHistory';
 import { Linked, Loading } from '../../../shared/ui/widgets';
 import { BuildingAttackDetails } from './BuildingAttackDetails';
 import { BuildingCatalog } from './BuildingCatalog';
-import BuildingSimulator from './BuildingSimulator';
+import { BuildingCivRank, BuildingCivsHeader } from './BuildingCivRank';
 import { FoodAmount } from './FoodAmount';
 import { HousingGuideLink, POP_ANCHOR } from './HousingGuideLink';
 import { MarketFees } from './MarketFees';
@@ -42,6 +43,7 @@ import { RepairCosts } from './RepairCosts';
 import { WallAgeChanges } from './WallAgeChanges';
 import './building-detail.css';
 
+const BuildingSimulator = lazy(() => import('./BuildingSimulator'));
 const GarrisonPreview = lazy(() => import('./GeneralGarrisonPreview'));
 
 const ANCHOR: Record<BuildingAnchor, string> = {
@@ -65,6 +67,9 @@ export default function BuildingDetail() {
   const civ = b ? buildingCiv(params.get('civ'), b.civs) : null;
   const requestedCiv = civByEn(params.get('civ') ?? '');
   const pendingScroll = useRef<string | null>(null);
+  const scrolledSurfaceRef = useRef<string | null>(null);
+  const routeState = loc.state as { scrollTo?: string } | null;
+  const routeScrollTarget = typeof routeState?.scrollTo === 'string' ? routeState.scrollTo : null;
   const [garrisonDiscountAge, setGarrisonDiscountAge] = useState<{ key: string; age: number } | null>(null);
 
   useEffect(() => {
@@ -87,20 +92,21 @@ export default function BuildingDetail() {
       return;
     }
     const next = buildingSurface(tab, host);
-    if (next.surface === 'sim') {
-      document.getElementById('building-sim')?.scrollIntoView({ block: 'start' });
+    if (next.surface === 'sim' || next.surface === 'garrison') {
+      const surfaceKey = `${b.id}:${next.surface}`;
+      if (scrolledSurfaceRef.current === surfaceKey) return;
+      scrolledSurfaceRef.current = surfaceKey;
+      const defaultTarget = next.surface === 'sim' ? 'building-sim' : 'building-garrison';
+      document.getElementById(routeScrollTarget ?? defaultTarget)?.scrollIntoView({ block: 'start' });
       return;
     }
-    if (next.surface === 'garrison') {
-      document.getElementById('building-garrison')?.scrollIntoView({ block: 'start' });
-      return;
-    }
+    scrolledSurfaceRef.current = null;
     if (next.anchor) {
       document.getElementById(ANCHOR[next.anchor])?.scrollIntoView({ block: 'start' });
       return;
     }
     if (loc.hash === `#${POP_ANCHOR}`) document.getElementById(POP_ANCHOR)?.scrollIntoView({ block: 'start' });
-  }, [b, tab, host, loc.hash, entityHistory.empty]);
+  }, [b, tab, host, loc.hash, entityHistory.empty, routeScrollTarget]);
 
   if (!core)
     return (
@@ -122,6 +128,7 @@ export default function BuildingDetail() {
   const discount = buildingDiscountView(b, civ, rawDiscountAge);
   const construction = buildingConstructionEntry(b.id, b.age, civ);
   const showSiege = siegeBuildingEntryVerified(b, core.unitById[SIEGE_DEFAULT_UNIT_ID]);
+  const showCivRank = supportsBuildingCivRank(b);
   const attack = buildingHasAttack(b);
   const workspaceStatus = host
     ? civ
@@ -212,6 +219,7 @@ export default function BuildingDetail() {
             ['building-tech', '研究', 'ov'],
             ['building-notes', '说明', 'ov'],
             ['building-civs', '相关', 'ov'],
+            ...(showCivRank ? ([['building-civ-rank', '各文明对照', 'ov']] as const) : []),
           ] as const
         ).map(([target, label, next]) => (
           <button
@@ -410,7 +418,9 @@ export default function BuildingDetail() {
 
       {view.surface === 'sim' && (
         <div className="bd-workspace" id="building-sim">
-          <BuildingSimulator b={b} />
+          <Suspense fallback={<Loading />}>
+            <BuildingSimulator b={b} />
+          </Suspense>
         </div>
       )}
       {view.surface === 'garrison' && (
@@ -453,9 +463,7 @@ export default function BuildingDetail() {
           </section>
           <section className="bd-section" id="building-civs" aria-label="相关">
             <h2>相关</h2>
-            <p className="bd-kicker">
-              拥有这座建筑的文明 <span className="num nw">{b.civs.length}</span>
-            </p>
+            <BuildingCivsHeader count={b.civs.length} showRankLink={showCivRank} />
             <div className="bd-civs">
               {b.civs.map((name) => {
                 const owner = civByEn(name);
@@ -463,6 +471,7 @@ export default function BuildingDetail() {
               })}
             </div>
           </section>
+          {showCivRank && <BuildingCivRank key={b.id} building={b} core={core} />}
           {!entityHistory.empty && (
             <details
               className="bd-history"
