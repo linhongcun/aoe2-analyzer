@@ -525,10 +525,13 @@
   gap: 2px;
 }
 .ucr-est {
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
   color: var(--color-warn);
   font-size: var(--fs-xs);
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 .ucr-sel-btn,
 .ucr-sim-btn,

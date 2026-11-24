@@ -17,6 +17,8 @@ import {
   filterUnitCivRankRows,
   formatRankMetric,
   isRankBestCell,
+  quantizeRankMetric,
+  RANK_METRIC_COLS,
   sortUnitCivRankRows,
   supportsUnitCivRank,
   type UnitCivRankRow,
@@ -52,6 +54,19 @@ describe('#1387 单位详情「各文明满科技对照」纯领域计算引擎'
           expect(Number.isFinite(r.totalCost)).toBe(true);
           expect(Number.isFinite(r.gold)).toBe(true);
           expect(Number.isFinite(r.bt)).toBe(true);
+          for (const { col } of RANK_METRIC_COLS) {
+            const v = r[col];
+            if (v !== null) {
+              expect(formatRankMetric(col, quantizeRankMetric(col, v))).toBe(formatRankMetric(col, v));
+            }
+          }
+        }
+        // 冠军胶囊文本与对应最优单元格展示值严格一致
+        for (const champ of res.champions) {
+          for (const leader of champ.civs) {
+            const row = res.rows.find((x) => x.civ === leader.civ)!;
+            expect(formatRankMetric(champ.col, row[champ.col])).toBe(champ.formattedValue);
+          }
         }
       }
     }
@@ -273,6 +288,20 @@ describe('#1387 单位详情「各文明满科技对照」纯领域计算引擎'
     if (dpsChamp) {
       expect(dpsChamp.civs.map((c) => c.civ)).toEqual(expect.arrayContaining(['Portuguese', 'Bohemians']));
     }
+
+    // 329 骆驼兵 & 1370 草原枪兵城堡时代移速：库曼 1.60 严格领先 1.59 且夺得移速最快；545 运输船冠军胶囊与单元格完全一致
+    for (const uid of [329, 1370]) {
+      const res = buildUnitCivRank(ctx, uById(uid), 3);
+      const sortedSpd = sortUnitCivRankRows(res.rows, 'spd', 'desc');
+      expect(sortedSpd[0]!.civ).toBe('Cumans');
+      expect(formatRankMetric('spd', sortedSpd[0]!.spd)).toBe('1.60');
+      const spdChamp = res.champions.find((c) => c.col === 'spd')!;
+      expect(spdChamp.formattedValue).toBe('1.60');
+      expect(spdChamp.civs.map((c) => c.civ)).toEqual(['Cumans']);
+    }
+    const shipDark = buildUnitCivRank(ctx, uById(545), 1);
+    const shipSpd = shipDark.champions.find((c) => c.col === 'spd')!;
+    expect(shipSpd.formattedValue).toBe(formatRankMetric('spd', shipDark.rows.find((r) => r.civ === 'Berbers')!.spd));
 
     // 模拟器跳转保留对局助手 me/opp，不带入旧 civ 或 relics
     const simKeep = buildCivRankSimHref(2701, buildUnitCivRank(ctx, uById(2701), 4).rows[0]!, 4, '?civ=Franks&relics=3&me=Saxons&opp=Poles');

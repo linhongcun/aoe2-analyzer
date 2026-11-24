@@ -160,13 +160,11 @@ export function unitRankAgeBounds(u: Pick<Unit, 'id' | 'age' | 'civs'>): { minAg
   return { minAge: clampedMin, standardAge: Math.max(clampedMin, Math.min(4, standardAge)), availableAges };
 }
 
-/** 按表格展示精度量化指标，确保排序、并列判定、绿标高亮与展示数字严格一致。 */
+/** 按表格展示精度量化指标（直接与 formatRankMetric 同源），确保排序、并列判定、绿标高亮与展示数字 100% 一致。 */
 export function quantizeRankMetric(col: RankMetricCol, value: number): number {
   if (!Number.isFinite(value)) return 0;
-  const decimals = col === 'ma' || col === 'pa' ? 0 : col === 'totalCost' || col === 'gold' || col === 'bt' ? 1 : 2;
-  const factor = 10 ** decimals;
-  const rounded = Math.round(value * factor) / factor;
-  return Object.is(rounded, -0) ? 0 : rounded;
+  const parsed = Number(formatRankMetric(col, value));
+  return Number.isFinite(parsed) && !Object.is(parsed, -0) ? parsed : 0;
 }
 
 const cmpNum = (a: number, b: number, dir: SortDir): number => (Math.abs(a - b) <= EPS ? 0 : dir === 'desc' ? b - a : a - b);
