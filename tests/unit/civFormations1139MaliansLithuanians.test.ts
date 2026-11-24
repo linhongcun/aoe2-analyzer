@@ -8,9 +8,9 @@ import { techAvailable } from '../../src/domain/unitAvailability';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452';
-const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640';
+const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953';
 const MALIAN_SOURCE_LINES = [408, 412, 416, 417, 418, 419, 421, 423, 436, 437, 438, 439, 445, 446, 447, 448, 450, 452];
-const LITHUANIAN_SOURCE_LINES = [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674];
+const LITHUANIAN_SOURCE_LINES = [908, 912, 916, 917, 918, 919, 921, 923, 925, 931, 932, 933, 934, 940, 941, 942, 944, 946, 947, 948, 949, 951, 953];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => {
@@ -102,7 +102,7 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect([lithuanian.status, lithuanian.playtest, lithuanian.age, lithuanian.composition]).toEqual(['approved', 'unreported', 4, 'combined']);
     expect(lithuanian.required.map(({ id }) => id)).toEqual([1236, 6]);
     expect(lithuanian.prerequisites).toEqual([]);
-    expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建');
+    expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建；圣物数 0/2/4 预算 3000 群战复核：v0.99.44 · DE 188329 · f1d5aab');
     expect(lithuanian.evidence.scope).toContain('驻军预览不代表混编实战或胜率证明');
     expect(lithuanian.reason).toContain('烈堤司以近战处理重甲');
     expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('烈堤司近战保护攻城器');
@@ -111,7 +111,7 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     );
     expect(lithuanian.reason).toContain('掷矛反弓并远射长戟');
     expect([lithuanian.reason, lithuanian.attack, lithuanian.defense].join(' ')).not.toMatch(/前线城镇中心作支点|村民落中心|依托中心|中心与驻扎的掷矛控制/);
-    expect(lithuanian.limitation).toContain('不默认开局有4件');
+    expect(lithuanian.limitation).toContain('不默认开局已有四件圣物');
     expect(lithuanian.limitation).toContain('未证明混编实战胜率');
     expect(lithuanian.limitation).toContain('城镇中心不是主路线前置');
     expect(lithuanian.alternatives).not.toMatch(/继续游侠合理|缺金、骚扰时可替换部分贵骑兵|已有掷矛和施工村民可以驻防/);

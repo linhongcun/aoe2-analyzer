@@ -3387,14 +3387,22 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L640",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [640, 642, 644, 645, 646, 647, 649, 651, 653, 659, 660, 661, 662, 668, 669, 670, 672, 674],
+          "sourceLines": [908, 912, 916, 917, 918, 919, 921, 923, 925, 931, 932, 933, 934, 940, 941, 942, 944, 946, 947, 948, 949, 951, 953],
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/trees.json",
             "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/civs.json",
-            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"
+            "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&ra=2",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=359.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ra=2",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000&ra=2",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ra=4"
           ]
         }
       ]
@@ -4815,10 +4823,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1266",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L1342",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1258, 1266, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296],
+          "sourceLines": [1334, 1342, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372],
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
@@ -4940,11 +4948,16 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1267",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L1343",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1258, 1267, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296],
-          "evidenceLinks": ["https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json"]
+          "sourceLines": [1334, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1"
+          ]
         }
       ]
     },

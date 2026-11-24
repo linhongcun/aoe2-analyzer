@@ -27,9 +27,19 @@ const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Spanish', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
   ['Hindustanis', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
   ['Turks', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+  ['Tupi', 'b63cccc015b677017efb4a64de8ebc01cd727ffd'],
 ]);
 const ADDED_BY_1386 = new Set<string>(['Hindustanis/hindustani-camel-ghulam-field', 'Turks/turks-sipahi-cav-archer-field']);
-const REVISED_BY_1386 = new Map<string, string>([['Turks/turks-existing-line-choice', '2026-11-24']]);
+const REVISED_BY_LATER = new Map<string, string>([
+  ['Turks/turks-existing-line-choice', '2026-11-24'],
+  ['Tupi/tupi-champi-slinger', '2026-11-24'],
+  ['Tupi/tupi-blackwood-halberdier', '2026-11-24'],
+]);
+// 按路线忠实保留历史版本链：黑檀木路线历史止于 v0.99.12，本次 #1398 直接追加 v0.99.44（不伪造 v0.99.34）
+const EXPECTED_RECORDED_VERSIONS = new Map<string, readonly string[]>([
+  ['Tupi/tupi-champi-slinger', ['v0.99.34 · DE 188329 · 55613e4a', 'v0.99.44 · DE 188329 · f1d5aab']],
+  ['Tupi/tupi-blackwood-halberdier', ['v0.99.12 · DE 188329 · 66620c9', 'v0.99.44 · DE 188329 · f1d5aab']],
+]);
 const TARGET_CIVS = [
   'Spanish',
   'Hindustanis',
@@ -54,7 +64,6 @@ const UNCHANGED_SUBROUTES = new Map<string, string>([
   ['Vietnamese/vietnamese-elephant-skirmisher', '2026-11-20'],
   ['Vietnamese/vietnamese-defensive-tower', '2026-11-22'],
   ['Incas/incas-champi-candidate', '2026-11-18'],
-  ['Tupi/tupi-blackwood-halberdier', '2026-11-22'],
 ]);
 
 const SPLIT_COUNTED_NOUN =
@@ -415,8 +424,10 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
             expect(r.evidence.recordedVersion, key).not.toContain('v0.99.34');
           } else {
             updatedCount += 1;
-            expect(r.revised, key).toBe(REVISED_BY_1386.get(key) ?? '2026-11-23');
-            expect(r.evidence.recordedVersion, key).toContain('v0.99.34 · DE 188329 · 55613e4a');
+            expect(r.revised, key).toBe(REVISED_BY_LATER.get(key) ?? '2026-11-23');
+            const requiredTokens = EXPECTED_RECORDED_VERSIONS.get(key) ?? ['v0.99.34 · DE 188329 · 55613e4a'];
+            for (const token of requiredTokens) expect(r.evidence.recordedVersion, key).toContain(token);
+            if (key === 'Tupi/tupi-blackwood-halberdier') expect(r.evidence.recordedVersion, key).not.toContain('v0.99.34');
           }
         }
       } else {
@@ -426,7 +437,7 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
         }
       }
     }
-    expect([updatedCount, unchangedCount]).toEqual([16, 8]);
+    expect([updatedCount, unchangedCount]).toEqual([17, 7]);
 
     // 渲染不变量：FormationText 零拆分 + #1285 去重计数 + 公开链接唯一性
     const core = await loadCore();

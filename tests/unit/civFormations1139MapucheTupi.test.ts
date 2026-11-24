@@ -27,7 +27,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
         4,
         'combined',
         [2554, 185],
-        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；拉扯复核：v0.99.34 · DE 188329 · 55613e4a',
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；转线口径同步：v0.99.44 · DE 188329 · f1d5aab',
       ],
       [
         'Tupi',
@@ -35,7 +35,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
         4,
         'combined',
         [2581, 359],
-        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9',
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；成对训练与群战复核：v0.99.44 · DE 188329 · f1d5aab',
       ],
     ] as const;
 
@@ -126,8 +126,9 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(narrative(blackwood)).not.toMatch(/蔷琵|投石手/);
     expect(blackwood.reason).toContain('两者共享木材');
     expect(blackwood.reason).toContain('成对训练');
-    expect(blackwood.reason).toContain('计价单位未明');
-    expect(blackwood.reason).toContain('不折半推算');
+    expect(blackwood.reason).toContain('40 木材＋45 黄金产 2 名');
+    expect(blackwood.reason).toContain('70 只精锐黑檀木步弓手');
+    expect(blackwood.reason).not.toMatch(/计价单位未明|不折半推算/);
     expect(blackwood.limitation).toContain('长戟按骑兵压力反骑');
     expect(blackwood.limitation).toContain('不因此视为反攻城');
     expect(blackwood.attack).toContain('按需调整长戟比例');
@@ -199,7 +200,8 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     expect(champi.adjustments.find(({ id }) => id.endsWith('-fourth'))!.requires).toEqual([{ kind: 'unit', id: 2584 }]);
     expect(champiCrossRoute.requires).toEqual([{ kind: 'route', id: 'tupi-blackwood-halberdier' }]);
     expect(champiCrossRoute.text).toContain('共享木材');
-    expect(champiCrossRoute.text).toContain('计价单位未核');
+    expect(champiCrossRoute.text).toContain('40 木材＋45 黄金产 2 名');
+    expect(champiCrossRoute.text).not.toContain('计价单位未核');
     expect(champiCrossRoute.fallback).toContain('不展示转线建议');
 
     expect(blackwood.supplements.filter(({ mode }) => mode === 'conditional').flatMap(({ entities }) => entities.map(({ id }) => id))).toEqual([2554, 6, 2584]);
@@ -214,22 +216,24 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
   });
 
   it('来源行和固定版本URL锚点按四路线独立字面期望核对', () => {
+    const MAPUCHE_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
+    const TUPI_SHA = 'b63cccc015b677017efb4a64de8ebc01cd727ffd';
     const expected = [
-      ['Mapuche', 'mapuche-kona-bolas', 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
-      ['Mapuche', 'mapuche-kona-slinger', 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],
-      ['Tupi', 'tupi-champi-slinger', 'L1266', [1258, 1266, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296]],
-      ['Tupi', 'tupi-blackwood-halberdier', 'L1267', [1258, 1267, 1269, 1271, 1273, 1275, 1281, 1282, 1283, 1284, 1290, 1291, 1292, 1294, 1296]],
+      ['Mapuche', 'mapuche-kona-bolas', MAPUCHE_SHA, 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
+      ['Mapuche', 'mapuche-kona-slinger', MAPUCHE_SHA, 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],
+      ['Tupi', 'tupi-champi-slinger', TUPI_SHA, 'L1342', [1334, 1342, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
+      ['Tupi', 'tupi-blackwood-halberdier', TUPI_SHA, 'L1343', [1334, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
     ] as const;
-    const url = (anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#${anchor}`;
+    const url = (sha: string, anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#${anchor}`;
 
-    for (const [civ, id, anchor, lines] of expected) {
+    for (const [civ, id, sha, anchor, lines] of expected) {
       const entry = route(civ, id);
       const contract = contractRoute(civ, id);
       expect(entry.evidence.scope).not.toContain('来源行');
       expect(entry.evidence.sourceLines).toEqual(lines);
       expect(contract.sourceLines).toEqual(lines);
-      expect(entry.source?.content).toBe(url(anchor));
-      expect(contract.source.content).toBe(url(anchor));
+      expect(entry.source?.content).toBe(url(sha, anchor));
+      expect(contract.source.content).toBe(url(sha, anchor));
     }
   });
 
