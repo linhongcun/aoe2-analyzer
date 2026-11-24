@@ -3,9 +3,26 @@ import { costSum } from '../../../domain/duel';
 import type { TrainingQuote } from '../../../domain/duelTrainingCost';
 import { trainingLines } from '../logic/trainingCostView';
 
-export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote; sel: ReadonlySet<number>; bud: number; count: number | null }) {
+export function TrainingPrice({
+  quote,
+  sel,
+  bud,
+  count,
+  batches,
+  trainCount = 1,
+}: {
+  quote: TrainingQuote;
+  sel: ReadonlySet<number>;
+  bud: number;
+  count: number | null;
+  batches?: number | null;
+  trainCount?: number;
+}) {
   const { lines, notes } = trainingLines(quote, sel);
-  const spent = (count ?? 0) * costSum(quote.price.cost);
+  const tc = Number.isInteger(trainCount) && trainCount > 1 ? trainCount : 1;
+  const isPair = tc > 1;
+  const effectiveBatches = batches !== undefined ? batches : count;
+  const spent = (effectiveBatches ?? 0) * costSum(quote.price.cost);
   if (!lines.length && !notes.length && bud <= 0) return null;
   return (
     <div>
@@ -42,9 +59,14 @@ export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote
             <span>派出数量</span>
             <span className="pk-count-val" data-t="pk-count">
               <b className="num nw">{count ?? '—'}</b>
+              {isPair && effectiveBatches !== null && effectiveBatches > 0 && (
+                <span className="pk-count-batches num nw" data-t="pk-batches">
+                  {effectiveBatches} 对
+                </span>
+              )}
               {count === 0 && (
                 <span className="pk-under-one num nw" data-t="pk-under-one">
-                  不足 1 个
+                  {isPair ? `不足 1 对（${tc} 只）` : '不足 1 个'}
                 </span>
               )}
             </span>
@@ -55,7 +77,14 @@ export function TrainingPrice({ quote, sel, bud, count }: { quote: TrainingQuote
               {spent} / {bud}
             </span>
           </div>
-          <p className="note">按已选科技后的每名训练价计算，不含一次研究费用。派出数量与卡头每名训练价是同一笔数。</p>
+          {isPair ? (
+            <p className="note">
+              按已选科技后的每对（<span className="num nw">{tc} 只</span>）训练价整对购买，不含一次研究费用。游戏里不能单买 <span className="num nw">1 只</span>
+              ，派出数量总是偶数。
+            </p>
+          ) : (
+            <p className="note">按已选科技后的每名训练价计算，不含一次研究费用。派出数量与卡头每名训练价是同一笔数。</p>
+          )}
         </div>
       )}
     </div>

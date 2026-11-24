@@ -184,7 +184,7 @@ def main():
         units[125]['b'] = min(counts, key=lambda building: (-counts[building], building))
     UU = d['data']['unit_upgrades']
     # #38 双射程：aoe2techtree 只给对单位射程；对建筑射程差值取自固定 .dat（蓄力远程 ChargeType，Range − DisplayedRange）
-    from dat_source import load as _dat_load
+    from dat_source import derive_train_count as _derive_train_count, load as _dat_load
 
     _DAT = _dat_load()
     _DU = _DAT['Civs'][1]['Units']
@@ -263,6 +263,9 @@ def main():
             ):
                 u['chargeMultiProjectiles'] = True
             u.update(derive_unmodeled_dat_fields(source_unit, _DU))
+            train_count = _derive_train_count(source_unit, u['id'])
+            if train_count > 1:
+                u['trainCount'] = train_count
         dd = rngBd(u['id'])
         if dd:  # 插在 rng 之后，保持字段顺序
             it = list(u.items())

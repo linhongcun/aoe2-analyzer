@@ -24,7 +24,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
   const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team, undefined, S.relics);
   const C = S.cmp ? simulate(S.ctx, u, S.cmp, 4, allNumeric(simTechs(S.ctx, u, S.cmp)), new Set()) : null;
   const cmpRelic = S.cmp && S.cmp !== S.civ ? unitRelicBonus(S.cmp, u) : null;
-  const effectiveCost = buildSimEffectiveCost(u, 'unit', S.civ, S.age, S.sel, S.costTechs);
+  const effectiveCost = buildSimEffectiveCost(u, 'unit', S.civ, S.age, S.sel, S.costTechs, cur.bt);
   return (
     <SimPanel
       civs={u.civs}

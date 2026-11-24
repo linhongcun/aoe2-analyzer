@@ -3,6 +3,7 @@ import { TRAINING_RESOURCES } from '../../../domain/duelTrainingCost';
 import { RES_ZH } from '../../../domain/ratings';
 import type { Cost } from '../../../domain/types';
 import { StatIcon } from '../../../shared/ui/art';
+import { PairBadge } from '../../../shared/ui/PairTrainingHint';
 
 const ICON: Record<string, string> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
 
@@ -17,10 +18,11 @@ function Amounts({ cost, strike }: { cost: Cost; strike?: boolean }) {
   return strike ? <s>{body}</s> : <>{body}</>;
 }
 
-export function PkCost({ cost, base }: { cost: Cost; base?: Cost }) {
+export function PkCost({ cost, base, showPairTag }: { cost: Cost; base?: Cost; showPairTag?: boolean }) {
   const changed = !!base && TRAINING_RESOURCES.some((res) => (base[res] ?? null) !== (cost[res] ?? null));
   return (
     <span className="pk-price" data-t="pk-price">
+      {showPairTag && <PairBadge dataT="pk-pair-badge">每对</PairBadge>}
       <Amounts cost={cost} />
       {changed && base && (
         <span className="pk-base" data-t="pk-base">

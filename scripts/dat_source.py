@@ -11,7 +11,7 @@
   python3 scripts/dat_source.py --check     # 下载 + 校验 sha256 + 补丁标记（CI/构建前检查）
   from dat_source import load               # 返回与旧 aoe2dat full.json 同形的 dict（Techs/Effects/Civs）
 """
-import hashlib, json, os, subprocess, sys, urllib.request
+import hashlib, json, math, os, subprocess, sys, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -98,6 +98,8 @@ def unit(u):
             'ProjectileHitMode': u.projectile.hit_mode if u.projectile else 0,
             'CombatTasks': [{'action': x.action_type, 'attr': x.search_wait_time, 'v1': x.work_value_1, 'v2': x.work_value_2, 'flag': x.combat_level_flag, 'dip': x.target_diplomacy}
                             for x in (u.bird.tasks if u.bird else []) if x.action_type in (157, 158, 160)],
+            'SpawnTasks': [{'cls': x.class_id, 'unit': x.unit_id, 'v1': x.work_value_1, 'v2': x.work_value_2}
+                           for x in (u.bird.tasks if u.bird else []) if x.action_type == 156],
             'BloodUnitID': u.blood_unit_id,
             'AccuracyDispersion': t.accuracy_dispersion if t else None,
             'DisplayedReloadTime': t.displayed_reload_time if t else None,
@@ -139,12 +141,17 @@ def combat_tasks_sig(u):
     if u is None: return None
     return tuple((x.action_type, x.search_wait_time, x.work_value_1, x.work_value_2, x.combat_level_flag, x.target_diplomacy)
                  for x in (u.bird.tasks if u.bird else []) if x.action_type in (157, 158, 160))
+def spawn_tasks_sig(u):
+    if u is None: return None
+    return tuple((x.class_id, x.unit_id, x.work_value_1, x.work_value_2)
+                 for x in (u.bird.tasks if u.bird else []) if x.action_type == 156)
 def proj_hit_mode_sig(u):
     if u is None: return None
     return u.projectile.hit_mode if u.projectile else 0
 base_ct = [combat_tasks_sig(u) for u in d.civs[1].units]
+base_st = [spawn_tasks_sig(u) for u in d.civs[1].units]
 base_hm = [proj_hit_mode_sig(u) for u in d.civs[1].units]
-bad_ct, bad_hm = [], []
+bad_ct, bad_st, bad_hm = [], [], []
 for c in d.civs:
     if c.name == 'Gaia' or c.name in ROR: continue
     n = max(len(base_ct), len(c.units))
@@ -152,11 +159,15 @@ for c in d.civs:
         cu = c.units[i] if i < len(c.units) else None
         if (base_ct[i] if i < len(base_ct) else None) != combat_tasks_sig(cu) and len(bad_ct) < 12:
             bad_ct.append('%s #%s' % (c.name, i))
+        if (base_st[i] if i < len(base_st) else None) != spawn_tasks_sig(cu) and len(bad_st) < 12:
+            bad_st.append('%s #%s' % (c.name, i))
         if (base_hm[i] if i < len(base_hm) else None) != proj_hit_mode_sig(cu) and len(bad_hm) < 12:
             bad_hm.append('%s #%s' % (c.name, i))
-    if len(bad_ct) >= 12 and len(bad_hm) >= 12: break
+    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12: break
 if bad_ct:
     raise SystemExit('文明单位特殊战斗任务（157/158/160）不一致（RoR 以外）：' + '；'.join(bad_ct))
+if bad_st:
+    raise SystemExit('文明单位成对生成任务（156）不一致（RoR 以外）：' + '；'.join(bad_st))
 if bad_hm:
     raise SystemExit('文明投射物穿透标记不一致（RoR 以外）：' + '；'.join(bad_hm))
 out = {
@@ -180,9 +191,36 @@ json.dump(out, open(sys.argv[2], 'w'))
 '''
 
 
+def derive_train_count(source_unit, unit_id=None):
+    """#1384：从固定 .dat 的 Task 156（SpawnTasks）推导每批训练产出数（fail-closed，无条目返回 1）。"""
+    if not isinstance(source_unit, dict) or 'SpawnTasks' not in source_unit:
+        raise ValueError(f'Missing SpawnTasks for unit {unit_id}: {source_unit!r}')
+    tasks = source_unit['SpawnTasks']
+    if not isinstance(tasks, list):
+        raise ValueError(f'Invalid SpawnTasks for unit {unit_id}: {tasks!r}')
+    if not tasks:
+        return 1
+    extra = 0
+    for task in tasks:
+        if not isinstance(task, dict):
+            raise ValueError(f'Invalid SpawnTask entry for unit {unit_id}: {task!r}')
+        for key in ('cls', 'unit', 'v1', 'v2'):
+            if key not in task:
+                raise ValueError(f'Missing {key!r} in SpawnTask for unit {unit_id}: {task!r}')
+        cls_id, tgt_unit, v1, v2 = task['cls'], task['unit'], task['v1'], task['v2']
+        if isinstance(cls_id, bool) or cls_id != -1 or isinstance(tgt_unit, bool) or tgt_unit != -1:
+            raise ValueError(f'Unsupported SpawnTask target for unit {unit_id}: {task!r}')
+        if isinstance(v1, bool) or not isinstance(v1, (int, float)) or not math.isfinite(v1) or v1 < 0 or abs(v1 - round(v1)) >= 1e-6:
+            raise ValueError(f'Invalid SpawnTask v1 for unit {unit_id}: {task!r}')
+        if isinstance(v2, bool) or not isinstance(v2, (int, float)) or not math.isfinite(v2) or v2 <= 0 or abs(v2 - round(v2)) >= 1e-6:
+            raise ValueError(f'Invalid SpawnTask v2 for unit {unit_id}: {task!r}')
+        extra += int(round(v2))
+    return 1 + extra
+
+
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v23.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v24.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

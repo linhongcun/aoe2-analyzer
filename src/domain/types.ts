@@ -127,6 +127,8 @@ export interface Unit {
   damagedTargetBonus?: boolean;
   /** issue 1367：固定 DAT 低血量破盾变形态标记（action_type 158，v2 < 0）。 */
   lowHpTransform?: boolean;
+  /** issue 1384：固定 DAT Task 156 每批训练产出数（仅 > 1 时导出，如黑檀木步弓手为 2）。 */
+  trainCount?: number;
   atks: [string, number][];
   arms: [string, number][];
   desc: string;

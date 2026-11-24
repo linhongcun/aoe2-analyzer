@@ -11,12 +11,14 @@ import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { parseRelicCount } from '../../../domain/relicParams';
 import { civBonusNotes, type SimContext } from '../../../domain/simulator';
+import { batchesForQty, unitTrainCount } from '../../../domain/trainBatch';
 import type { Unit } from '../../../domain/types';
 import { unitOptionLabel } from '../../../domain/unitOptionLabel';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CivIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
+import { PairHintLine } from '../../../shared/ui/PairTrainingHint';
 import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
 import { mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
@@ -349,7 +351,10 @@ export function MixedSideEditor({
                     formatLabel={formatUnitLabel}
                     invalid={!!errors(`unit-${i}`).length}
                     describedBy={errors(`unit-${i}`).length ? `${prefix}-unit-${i}-error` : `${prefix}-identity-${i}`}
-                    onChange={(unit) => changeRow(i, { uid: String(unit.id) })}
+                    onChange={(unit) => {
+                      const tc = unitTrainCount(unit);
+                      changeRow(i, tc > 1 && (row.qty === '' || row.qty === '1') ? { uid: String(unit.id), qty: String(tc) } : { uid: String(unit.id) });
+                    }}
                   />
                 </div>
                 <label className="mix-qty" htmlFor={`${prefix}-qty-${i}`}>
@@ -372,6 +377,18 @@ export function MixedSideEditor({
                   <strong className="num nw">{percentage(row.qty)}</strong>
                 </div>
               </div>
+              {u && unitTrainCount(u) > 1 && (
+                <PairHintLine dataT={`${prefix}-pair-hint-${i}`}>
+                  数量每次 <span className="num nw">± {unitTrainCount(u)} 只</span>；
+                  {/^[1-9]\d*$/.test(row.qty) && Number(row.qty) <= 200 ? (
+                    <>
+                      按 <span className="num nw">{batchesForQty(Number(row.qty), unitTrainCount(u))} 对</span>带入训练费用。
+                    </>
+                  ) : (
+                    '带入训练费用时按整对计费。'
+                  )}
+                </PairHintLine>
+              )}
               <p id={`${prefix}-identity-${i}`} className="note mix-identity">
                 {u ? `${u.en} · 具体 ID ${u.id} · ${AGE_ZH[age] ?? '时代待修正'}` : `单位 ID：${row.uid || '未选择'}`} · {civByEn(input.civ)?.zh ?? input.civ}
               </p>

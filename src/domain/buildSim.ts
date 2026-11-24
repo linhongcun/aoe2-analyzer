@@ -98,7 +98,7 @@ export interface EcoData {
   khmerPrerequisites?: KhmerPrerequisites;
   fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number; fishTrapMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
-  units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
+  units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number; trainCount?: number }>;
   buildings: Record<string, { buildTime: number; cost: Cost; class?: number }>;
   techs: Record<string, { researchTime: number; at: number; cost: Cost }>;
   ecoTechs: Record<string, { effects: EffectRow['effects']; at?: string }>;

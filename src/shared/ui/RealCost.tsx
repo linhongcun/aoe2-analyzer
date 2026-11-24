@@ -50,6 +50,7 @@ export function RealCostBlock({
   vils,
   min,
   headingLevel,
+  trainCount = 1,
 }: {
   k: 'a' | 'b';
   civ: string;
@@ -60,9 +61,13 @@ export function RealCostBlock({
   min: number;
   /** 默认保持共享说明的 h4；单位 PK 显式使用 h3。 */
   headingLevel?: 3 | 4;
+  trainCount?: number;
 }) {
   const { g, rc } = realCostOf(d, age, civ);
-  const count = countForTime(rc.total, vils, min);
+  const tc = Number.isInteger(trainCount) && trainCount > 1 ? trainCount : 1;
+  const isPair = tc > 1;
+  const batches = countForTime(rc.total, vils, min);
+  const count = batches * tc;
   const res = ORDER.filter((r) => d.base[r]);
   return (
     <div className="pk-cost rc" data-t={`rc-${k}`}>
@@ -94,7 +99,8 @@ export function RealCostBlock({
           ))}
           <tr data-t="rc-sum">
             <td>
-              单个用时<small className="rc-res">1 个村民</small>
+              {isPair ? '每对用时' : '单个用时'}
+              <small className="rc-res num nw">1 个村民</small>
             </td>
             <td>
               <b className="rc-t tl-num" data-t="rc-total">
@@ -108,9 +114,14 @@ export function RealCostBlock({
             <td>
               <span className="rc-count-val">
                 <b className="rc-big tl-num">{rc.total > 0 ? count : '—'}</b>
+                {rc.total > 0 && isPair && batches > 0 && (
+                  <span className="pk-count-batches num nw" data-t="rc-batches">
+                    {batches} 对
+                  </span>
+                )}
                 {rc.total > 0 && count === 0 && (
                   <span className="rc-under-one num nw" data-t="pk-under-one">
-                    不足 1 个
+                    {isPair ? `不足 1 对（${tc} 只）` : '不足 1 个'}
                   </span>
                 )}
               </span>

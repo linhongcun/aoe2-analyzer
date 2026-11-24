@@ -5,7 +5,6 @@ import type { KiteOptions } from '../../../domain/contactKite';
 import {
   groupFight,
   oneVOneFight,
-  costSum,
   fighterUsesAssumeHit,
   NO_NORMAL_ATTACK_REASON,
   unitIsNonAttackingCaster,
@@ -15,12 +14,11 @@ import {
 import type { DuelBudgetPart } from '../../../domain/duelBudget';
 import { formatHp } from '../../../domain/hpFormat';
 import { buildGroupReplay, buildOneVOneReplay } from '../../../domain/battleReplay';
-import { formatTrade, tradeLosses } from '../../../domain/trade';
-import { CostView } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import type { Tech } from '../../../domain/types';
 import { CounterSummary } from './CounterSummary';
 import { BattleReplay } from './BattleReplay';
+import { BudgetSummary, TradeRow } from './DuelTradeAndBudget';
 import { DuelUnmodeledNotes } from './DuelUnmodeledNotes';
 import { IgnoreArmorNotes } from './IgnoreArmorNotes';
 import { OneTimeline, GroupTimeline } from './DuelTimeline';
@@ -419,23 +417,7 @@ export function Group({
         ]}
         note={groupShareNote}
       />
-      {bud > 0 && (
-        <p className="note">
-          预算 <span className="num nw">{bud}</span>：
-          {(
-            [
-              ['A', A, na],
-              ['B', B, nb],
-            ] as const
-          ).map(([key, side, count]) => (
-            <span key={key}>
-              {' '}
-              {key} {side.u.zh} <span className="num nw">× {count}</span>（单价 <span className="num nw">{costSum(side.training.price.cost)}</span>，投入{' '}
-              <span className="num nw">{count * costSum(side.training.price.cost)}</span>）
-            </span>
-          ))}
-        </p>
-      )}
+      <BudgetSummary A={A} B={B} na={na} nb={nb} bud={bud} />
       <CounterSummary a={A.F} b={B.F} />
       <table className="stat duel-tab">
         <tbody>
@@ -452,38 +434,6 @@ export function Group({
       </table>
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
       <GroupTimeline result={g} na={na} nb={nb} />
-    </div>
-  );
-}
-
-/** issue 107 交换比：只计阵亡单位，按折后取整单价；金按 1:1 计入 */
-function TradeRow({ A, B, na, nb, aAlive, bAlive }: { A: Resolved; B: Resolved; na: number; nb: number; aAlive: number; bAlive: number }) {
-  const t = tradeLosses({ na, nb, aAlive, bAlive, costA: A.training.price.cost, costB: B.training.price.cost });
-  const f = formatTrade(t);
-  return (
-    <div className="pk-trade" data-t="pk-trade">
-      <p className="pk-trade-main">
-        {f.label}{' '}
-        <b className="pk-trade-value" data-t="pk-trade-value">
-          {f.value}
-        </b>
-      </p>
-      {f.note && <p className="note">{f.note}</p>}
-      {(['a', 'b'] as const).map((k) => (
-        <p key={k} className="note pk-trade-loss" data-t={`pk-trade-loss-${k}`}>
-          <span className="nw">
-            {k.toUpperCase()} 损失 {t[k].total}
-          </span>
-          （阵亡 {t[k].dead}
-          {t[k].dead > 0 && (
-            <>
-              ：<CostView c={t[k].res} />
-            </>
-          )}
-          ）
-        </p>
-      ))}
-      <p className="note">只计阵亡单位，存活单位掉的血不算；金按 1:1 计入。</p>
     </div>
   );
 }

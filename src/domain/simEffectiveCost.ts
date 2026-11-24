@@ -7,6 +7,7 @@ import { civStatus } from './civStatus';
 import { DAT } from './datEffects';
 import { RES_ZH } from './ratings';
 import type { SimContext, SimTech } from './simulator';
+import { unitTrainCount } from './trainBatch';
 import type { Cost, Tech } from './types';
 import { isUnitCostAttribute, UNIT_COST_RESOURCES, unitCost, type UnitCostResource, type UnitCostTech } from './unitCost';
 
@@ -43,6 +44,8 @@ export interface SimEffectiveCostView {
   availableHint: string | null;
   undecodedTechNames: string[];
   unsupportedDiscountLabels: string[];
+  trainCount?: number;
+  trainSeconds?: number;
 }
 
 export type SimCostBadgeKind = 'cost' | 'partial' | 'undecoded';
@@ -51,6 +54,7 @@ export interface CostEntity {
   id: number;
   age: number;
   cost: Cost;
+  trainCount?: number;
 }
 
 function asCostInput(tech: Tech): UnitCostTech {
@@ -133,6 +137,7 @@ export function buildSimEffectiveCost(
   age: number,
   sel: ReadonlySet<number>,
   costTechs: readonly SimCostTech[],
+  trainSeconds?: number,
 ): SimEffectiveCostView {
   const tier = Math.max(entity.age, age);
   const isActiveSelected = (item: SimCostTech) => sel.has(item.tech.id) && item.tech.age <= age;
@@ -166,6 +171,9 @@ export function buildSimEffectiveCost(
       ? `另有可选降价科技：${availableTechNames.join('、')}（勾选后叠加生效）`
       : null;
 
+  const tc = unitTrainCount(entity);
+  const validTrainSeconds = trainSeconds !== undefined && Number.isFinite(trainSeconds) && trainSeconds > 0 ? trainSeconds : undefined;
+
   return {
     entityKind,
     kind,
@@ -179,5 +187,7 @@ export function buildSimEffectiveCost(
     availableHint,
     undecodedTechNames,
     unsupportedDiscountLabels,
+    ...(tc > 1 ? { trainCount: tc } : {}),
+    ...(validTrainSeconds !== undefined ? { trainSeconds: validTrainSeconds } : {}),
   };
 }

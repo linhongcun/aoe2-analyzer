@@ -9,6 +9,7 @@ import './shared/styles/editorial.css';
 import './shared/styles/issue62-layout.css';
 import './shared/styles/issue62-cards.css';
 import './shared/styles/bonus-condition.css';
+import './shared/styles/pair-training.css';
 
 installPreloadErrorRecovery();
 

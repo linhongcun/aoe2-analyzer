@@ -37,6 +37,10 @@
           "trainTime": {
             "type": "number"
           },
+          "trainCount": {
+            "type": "integer",
+            "minimum": 2
+          },
           "at": {
             "type": "array",
             "items": {

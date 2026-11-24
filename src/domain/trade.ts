@@ -1,6 +1,7 @@
+import { perUnitCost } from './trainBatch';
 import type { Cost } from './types';
 
-/** issue 107 一方损失：阵亡数 × 折后取整单价（逐资源）；存活单位掉的血不计 */
+/** issue 107 / issue 1384 一方损失：阵亡数 × 单只折算价（成对训练按每批价除以产出数）；存活单位掉的血不计 */
 export interface SideLoss {
   dead: number;
   res: Cost;
@@ -13,22 +14,33 @@ export interface Trade {
   ratio: number | null;
 }
 
-function loss(n: number, alive: number, cost: Cost): SideLoss {
+function loss(n: number, alive: number, cost: Cost, trainCount = 1): SideLoss {
   const dead = Math.max(0, n - alive);
+  const unitCost = perUnitCost(cost, trainCount);
   const res: Cost = {};
   let total = 0;
   if (dead > 0)
-    for (const [k, v] of Object.entries(cost)) {
+    for (const [k, v] of Object.entries(unitCost)) {
       if (!v) continue;
-      (res as Record<string, number>)[k] = v * dead;
-      total += v * dead;
+      const part = Math.round(v * dead * 1000) / 1000;
+      (res as Record<string, number>)[k] = part;
+      total += part;
     }
-  return { dead, res, total };
+  return { dead, res, total: Math.round(total * 1000) / 1000 };
 }
 
-export function tradeLosses(p: { na: number; nb: number; aAlive: number; bAlive: number; costA: Cost; costB: Cost }): Trade {
-  const a = loss(p.na, p.aAlive, p.costA),
-    b = loss(p.nb, p.bAlive, p.costB);
+export function tradeLosses(p: {
+  na: number;
+  nb: number;
+  aAlive: number;
+  bAlive: number;
+  costA: Cost;
+  costB: Cost;
+  trainCountA?: number;
+  trainCountB?: number;
+}): Trade {
+  const a = loss(p.na, p.aAlive, p.costA, p.trainCountA ?? 1),
+    b = loss(p.nb, p.bAlive, p.costB, p.trainCountB ?? 1);
   return { a, b, ratio: a.total > 0 && b.total > 0 ? b.total / a.total : null };
 }
 

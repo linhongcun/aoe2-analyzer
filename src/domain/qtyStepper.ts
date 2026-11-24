@@ -3,6 +3,7 @@
 export interface QtyStepBounds {
   min: number;
   max: number;
+  step?: number;
 }
 
 const STRICT_DECIMAL_RE = /^-?\d+(?:\.\d+)?$/;
@@ -24,8 +25,13 @@ function clampInt(n: number, { min, max }: QtyStepBounds): number {
   return normalizeZero(Math.min(max, Math.max(min, Math.trunc(n))));
 }
 
-function defaultActiveValue({ min, max }: QtyStepBounds): number {
-  return normalizeZero(Math.min(max, Math.max(min, 1)));
+function normalizeStep({ step }: QtyStepBounds): number {
+  return step !== undefined && Number.isInteger(step) && step > 1 ? step : 1;
+}
+
+function defaultActiveValue(bounds: QtyStepBounds): number {
+  const step = normalizeStep(bounds);
+  return normalizeZero(Math.min(bounds.max, Math.max(bounds.min, step)));
 }
 
 /** 判断指定步进方向是否允许点击（用于按钮 disabled 状态）。 */
@@ -54,9 +60,11 @@ export function stepQuantity(raw: string, delta: -1 | 1, bounds: QtyStepBounds):
   if (parsed > bounds.max) {
     return String(normalizeZero(bounds.max));
   }
+  const step = normalizeStep(bounds);
   if (Number.isInteger(parsed)) {
-    return String(clampInt(parsed + delta, bounds));
+    const stepped = delta > 0 ? (Math.floor(parsed / step) + 1) * step : (Math.ceil(parsed / step) - 1) * step;
+    return String(clampInt(stepped, bounds));
   }
-  const stepped = delta < 0 ? Math.floor(parsed) : Math.ceil(parsed);
+  const stepped = delta < 0 ? Math.floor(parsed / step) * step : Math.ceil(parsed / step) * step;
   return String(clampInt(stepped, bounds));
 }

@@ -16,11 +16,13 @@ interface CatalogUnit {
   civs: string[];
   cost?: Cost;
   tt?: number;
+  trainCount?: number;
 }
 interface EcoUnit {
   class?: number;
   cost?: Cost;
   trainTime?: number;
+  trainCount?: number;
 }
 interface EcoEffect {
   kind?: string;
@@ -76,6 +78,8 @@ export function baseDrifts(
     if (!sameCost(unit.cost, eco.cost)) out.push(`单位 ${unit.id} ${unit.zh ?? ''} 造价 目录 ${JSON.stringify(unit.cost)} eco ${JSON.stringify(eco.cost)}`);
     if (unit.tt !== undefined && eco.trainTime !== undefined && unit.tt !== eco.trainTime)
       out.push(`单位 ${unit.id} ${unit.zh ?? ''} 训练时间 目录 ${unit.tt} eco ${eco.trainTime}`);
+    if ((unit.trainCount ?? 1) !== (eco.trainCount ?? 1))
+      out.push(`单位 ${unit.id} ${unit.zh ?? ''} 每批产出数 目录 ${unit.trainCount ?? 1} eco ${eco.trainCount ?? 1}`);
   }
   for (const id of Object.keys(ecoUnits)) if (!seen.has(id)) out.push(`eco.units ${id} 不在单位目录`);
   const seenB = new Set<string>();

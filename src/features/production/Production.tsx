@@ -342,12 +342,14 @@ function ProductionBody({
                   {line && (
                     <div className="production-line-result">
                       <div>
-                        <span>单个造价</span>
+                        <span>{line.trainCount > 1 ? '每对造价' : '单个造价'}</span>
                         <CostView c={line.cost} />
                       </div>
                       <div>
                         <span>实际训练</span>
-                        <b className="production-number">{num(line.seconds)} 秒 / 个</b>
+                        <b className="production-number">
+                          {num(line.seconds)} 秒 / {line.trainCount > 1 ? '对' : '个'}
+                        </b>
                       </div>
                       <div>
                         <span>产量</span>
@@ -366,6 +368,12 @@ function ProductionBody({
                         </small>
                       ))}
                       <small>
+                        {line.trainCount > 1 && (
+                          <>
+                            每次训练 <span className="num nw">{line.trainCount} 只</span>，合{' '}
+                            <span className="num nw">{num(line.batchesPerMinute)} 对 / 分钟</span>；
+                          </>
+                        )}
                         {result.resources
                           .filter((r) => line.spend[r.key] > 0)
                           .map((r) => `${RES_ZH[r.key]} ${num(line.spend[r.key])}/分钟`)
