@@ -160,9 +160,18 @@ export function unitRankAgeBounds(u: Pick<Unit, 'id' | 'age' | 'civs'>): { minAg
   return { minAge: clampedMin, standardAge: Math.max(clampedMin, Math.min(4, standardAge)), availableAges };
 }
 
+/** 按表格展示精度量化指标，确保排序、并列判定、绿标高亮与展示数字严格一致。 */
+export function quantizeRankMetric(col: RankMetricCol, value: number): number {
+  if (!Number.isFinite(value)) return 0;
+  const decimals = col === 'ma' || col === 'pa' ? 0 : col === 'totalCost' || col === 'gold' || col === 'bt' ? 1 : 2;
+  const factor = 10 ** decimals;
+  const rounded = Math.round(value * factor) / factor;
+  return Object.is(rounded, -0) ? 0 : rounded;
+}
+
 const cmpNum = (a: number, b: number, dir: SortDir): number => (Math.abs(a - b) <= EPS ? 0 : dir === 'desc' ? b - a : a - b);
 
-/** 稳定排序：不适用（null）沉底；主维度同值按 生命降序 -> 总价升序 -> 文明英文名升序。 */
+/** 稳定排序：不适用（null）沉底；主维度按展示精度比较，同值按 生命降序 -> 总价升序 -> 文明英文名升序。 */
 export function sortUnitCivRankRows(rows: readonly UnitCivRankRow[], col: RankSortCol, dir: SortDir): UnitCivRankRow[] {
   return [...rows].sort((a, b) => {
     let primary: number;
@@ -174,12 +183,12 @@ export function sortUnitCivRankRows(rows: readonly UnitCivRankRow[], col: RankSo
       if (va === null && vb === null) primary = 0;
       else if (va === null) return 1;
       else if (vb === null) return -1;
-      else primary = cmpNum(va, vb, dir);
+      else primary = cmpNum(quantizeRankMetric(col, va), quantizeRankMetric(col, vb), dir);
     }
     if (primary !== 0) return primary;
-    const hpDiff = cmpNum(a.hp, b.hp, 'desc');
+    const hpDiff = cmpNum(quantizeRankMetric('hp', a.hp), quantizeRankMetric('hp', b.hp), 'desc');
     if (hpDiff !== 0) return hpDiff;
-    const costDiff = cmpNum(a.totalCost, b.totalCost, 'asc');
+    const costDiff = cmpNum(quantizeRankMetric('totalCost', a.totalCost), quantizeRankMetric('totalCost', b.totalCost), 'asc');
     return costDiff !== 0 ? costDiff : a.civ.localeCompare(b.civ);
   });
 }
@@ -364,12 +373,12 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
       if (!applicableCols.includes(meta.col)) continue;
       const valid = rows.filter((r) => r[meta.col] !== null);
       if (valid.length < 2) continue;
-      let best = valid[0]![meta.col]!;
+      let best = quantizeRankMetric(meta.col, valid[0]![meta.col]!);
       for (let i = 1; i < valid.length; i++) {
-        const v = valid[i]![meta.col]!;
+        const v = quantizeRankMetric(meta.col, valid[i]![meta.col]!);
         if (meta.bestDir === 'desc' ? v > best : v < best) best = v;
       }
-      const leaders = valid.filter((r) => Math.abs(r[meta.col]! - best) <= EPS);
+      const leaders = valid.filter((r) => Math.abs(quantizeRankMetric(meta.col, r[meta.col]!) - best) <= EPS);
       const qualifies = leaders.length < valid.length / 2 || (valid.length === 2 && leaders.length === 1);
       if (!qualifies) continue;
       bestValues[meta.col] = best;
@@ -407,7 +416,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
 export function isRankBestCell(result: Pick<UnitCivRankResult, 'bestValues'>, col: RankMetricCol, value: number | null): boolean {
   if (value === null) return false;
   const best = result.bestValues[col];
-  return best !== undefined && Math.abs(value - best) <= EPS;
+  return best !== undefined && Math.abs(quantizeRankMetric(col, value) - best) <= EPS;
 }
 
 function matchesCivQuery(c: Pick<Civ, 'zh' | 'en' | 'py' | 'pyi'>, normalizedQuery: string): boolean {
@@ -453,9 +462,16 @@ export function filterUnitCivRankRows(
   return { rows: [], emptyMessage: `${parts.join('；')}。` };
 }
 
-/** 构造单文明模拟器链接（省略冗余 ?civ=，与 unitDetailView 一致）。 */
-export function buildCivRankSimHref(unitId: number, row: Pick<UnitCivRankRow, 'civ' | 'simTechIds'>, age: number): string {
-  return `${unitPath(unitId, row.civ, age, row.simTechIds, [])}?tab=sim`;
+/** 构造单文明模拟器链接：省略冗余 ?civ= 与旧 relics，保留对局助手来源参数 me/opp。 */
+export function buildCivRankSimHref(unitId: number, row: Pick<UnitCivRankRow, 'civ' | 'simTechIds'>, age: number, preserveSearch = ''): string {
+  const src = new URLSearchParams(preserveSearch.startsWith('?') ? preserveSearch.slice(1) : preserveSearch);
+  const next = new URLSearchParams();
+  for (const key of ['me', 'opp'] as const) {
+    const val = src.get(key);
+    if (val) next.set(key, val);
+  }
+  next.set('tab', 'sim');
+  return `${unitPath(unitId, row.civ, age, row.simTechIds, [])}?${next.toString()}`;
 }
 
 function buildDuelSideSpec(unitId: number, row: Pick<UnitCivRankRow, 'civ' | 'selTechIds' | 'activeUnmodeledTechIds'>, age: number): SideSpec {
@@ -473,14 +489,10 @@ export function buildCivRankDuelHref(
   age: number,
   combatKind: RankCombatKind,
 ): string {
-  const params = new URLSearchParams();
-  params.set('a', fmtSide(buildDuelSideSpec(unitId, rowA, age)));
-  params.set('b', fmtSide(buildDuelSideSpec(unitId, rowB, age)));
-  if (combatKind === 'suicide') {
-    params.set('m', '1');
-  } else {
-    params.set('m', 'r');
-    params.set('bud', String(DUEL_BUDGET_DEFAULT));
-  }
+  const params = new URLSearchParams({
+    a: fmtSide(buildDuelSideSpec(unitId, rowA, age)),
+    b: fmtSide(buildDuelSideSpec(unitId, rowB, age)),
+    ...(combatKind === 'suicide' ? { m: '1' } : { m: 'r', bud: String(DUEL_BUDGET_DEFAULT) }),
+  });
   return `/duel?${params.toString()}`;
 }

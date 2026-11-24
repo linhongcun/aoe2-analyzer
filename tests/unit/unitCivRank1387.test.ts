@@ -247,7 +247,7 @@ describe('#1387 单位详情「各文明满科技对照」纯领域计算引擎'
     }
   });
 
-  it('精确小数格式（691 土耳其 187.50 生命、588 萨拉森 87.25 攻击、维京船 .5 黄金）、稳定次级排序与合成估算标记', () => {
+  it('精确小数格式（691 土耳其 187.50 生命、588 萨拉森 87.25 攻击、维京箭船 25.5 / 魏 157.5 黄金）、展示精度并列（2700 城堡 4.00）、稳定次级排序、合成估算标记与对局返回参数', () => {
     const cg = buildUnitCivRank(ctx, uById(691), 4);
     const turks = cg.rows.find((r) => r.civ === 'Turks')!;
     expect(formatRankMetric('hp', turks.hp)).toBe('187.50');
@@ -256,8 +256,39 @@ describe('#1387 单位详情「各文明满科技对照」纯领域计算引擎'
     const saracen = buildUnitCivRank(ctx, uById(588), 4).rows.find((r) => r.civ === 'Saracens')!;
     expect(formatRankMetric('atk', saracen.atk)).toBe('87.25');
 
+    const vikingGalley = buildUnitCivRank(ctx, uById(539), 3).rows.find((r) => r.civ === 'Vikings')!;
+    expect(formatRankMetric('gold', vikingGalley.gold)).toBe('25.5');
+
     const weiGold = buildUnitCivRank(ctx, uById(1942), 4).rows.find((r) => r.civ === 'Wei')!;
     expect(formatRankMetric('gold', weiGold.gold)).toBe('157.5');
+
+    // 2700 城堡时代骑马弩兵：葡萄牙（4.0000176）与波希米亚（4.0）均展示为 4.00，并列判定与冠军高亮完全一致
+    const mcCastle = buildUnitCivRank(ctx, uById(2700), 3);
+    const port = mcCastle.rows.find((r) => r.civ === 'Portuguese')!;
+    const boh = mcCastle.rows.find((r) => r.civ === 'Bohemians')!;
+    expect(formatRankMetric('dps', port.dps)).toBe('4.00');
+    expect(formatRankMetric('dps', boh.dps)).toBe('4.00');
+    expect(isRankBestCell(mcCastle, 'dps', port.dps)).toBe(isRankBestCell(mcCastle, 'dps', boh.dps));
+    const dpsChamp = mcCastle.champions.find((c) => c.col === 'dps');
+    if (dpsChamp) {
+      expect(dpsChamp.civs.map((c) => c.civ)).toEqual(expect.arrayContaining(['Portuguese', 'Bohemians']));
+    }
+
+    // 模拟器跳转保留对局助手 me/opp，不带入旧 civ 或 relics
+    const simKeep = buildCivRankSimHref(2701, buildUnitCivRank(ctx, uById(2701), 4).rows[0]!, 4, '?civ=Franks&relics=3&me=Saxons&opp=Poles');
+    const simParams = new URLSearchParams(simKeep.split('?')[1]);
+    expect(simParams.get('me')).toBe('Saxons');
+    expect(simParams.get('opp')).toBe('Poles');
+    expect(simParams.get('tab')).toBe('sim');
+    expect(simParams.get('civ')).toBeNull();
+    expect(simParams.get('relics')).toBeNull();
+
+    // 真实合成 partial 费用科技（马普切 1380 布图马普命中 2569）：触发 estimatedCost 与 hasEstimatedCost
+    const syntheticPartialUnit: Unit = { ...uById(2569), civs: ['Mapuche', 'Franks'] };
+    const partialRes = buildUnitCivRank(ctx, syntheticPartialUnit, 4);
+    expect(partialRes.hasEstimatedCost).toBe(true);
+    expect(partialRes.rows.find((r) => r.civ === 'Mapuche')!.estimatedCost).toBe(true);
+    expect(partialRes.rows.find((r) => r.civ === 'Franks')!.estimatedCost).toBe(false);
 
     // 稳定次级排序（同值按生命降序 -> 总价升序 -> 文明英文名升序，null 沉底）
     const fakeRows: UnitCivRankRow[] = [

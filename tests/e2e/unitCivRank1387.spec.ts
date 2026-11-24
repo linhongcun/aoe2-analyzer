@@ -63,13 +63,15 @@ test('#1387 重装骑马弩兵 2701：桌面 1280 入口、各项第一、排序
   await expect(page.locator('#duel')).toBeVisible();
   await expect(page.locator('[role="alert"]')).toHaveCount(0);
 
-  // 回到 2701，点击丹麦人进模拟器，再点击瓦兰吉人确认已展开态仍更新文明
-  await open(page, '/unit/2701', 'light');
+  // 回到 2701（带对局助手来源 me/opp），点击丹麦人进模拟器仍保留「回对局助手」，再点击瓦兰吉人确认已展开态更新文明
+  await open(page, '/unit/2701?me=Saxons&opp=Franks', 'light');
   await page.locator('#unit-civ-rank tr[data-civ="Danes"] .ucr-sim-btn').click();
   await expect(page.locator('[data-t="workspace-open"]')).toBeVisible();
-  await expect(page).toHaveURL(/\/unit\/2701\/Danes\/4\/.*\?tab=sim$/);
+  await expect(page).toHaveURL(/\/unit\/2701\/Danes\/4\/.*\?me=Saxons&opp=Franks&tab=sim$/);
+  await expect(page.getByRole('link', { name: '回对局助手' })).toBeVisible();
   await page.locator('#unit-civ-rank tr[data-civ="Varangians"] .ucr-sim-btn').click();
-  await expect(page).toHaveURL(/\/unit\/2701\/Varangians\/4\/.*\?tab=sim$/);
+  await expect(page).toHaveURL(/\/unit\/2701\/Varangians\/4\/.*\?me=Saxons&opp=Franks&tab=sim$/);
+  await expect(page.getByRole('link', { name: '回对局助手' })).toBeVisible();
 });
 
 test('#1387 桌面中等宽 768/900 局部横滚零页溢出、691 小数生命 187.50 不截断、窄屏 360/390 四列与手风琴', async ({ page }) => {

@@ -436,6 +436,10 @@
 .ucr-row.is-selected td.is-sorted {
   background: var(--color-route-current);
 }
+.ucr-row.is-selected .ucr-all-tech,
+.ucr-row.is-selected .ucr-na {
+  color: var(--color-text-2);
+}
 .ucr-row td.is-sorted {
   background: var(--color-surface-2);
 }

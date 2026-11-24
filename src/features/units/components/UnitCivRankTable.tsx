@@ -24,6 +24,7 @@ interface UnitCivRankTableProps {
   sortDir: SortDir;
   selected: readonly string[];
   expandedCiv: string | null;
+  preserveSearch: string;
   onSort: (col: RankSortCol) => void;
   onToggleSelect: (civ: string) => void;
   onToggleExpand: (civ: string) => void;
@@ -122,6 +123,7 @@ export function UnitCivRankTable({
   sortDir,
   selected,
   expandedCiv,
+  preserveSearch,
   onSort,
   onToggleSelect,
   onToggleExpand,
@@ -164,7 +166,7 @@ export function UnitCivRankTable({
             {rows.map((row) => {
               const slot = slotOf(row.civ);
               const expanded = expandedCiv === row.civ;
-              const simHref = buildCivRankSimHref(data.unitId, row, data.age);
+              const simHref = buildCivRankSimHref(data.unitId, row, data.age, preserveSearch);
               return (
                 <Fragment key={row.civ}>
                   <tr className={slot ? 'ucr-row is-selected' : 'ucr-row'} data-civ={row.civ}>
@@ -173,14 +175,14 @@ export function UnitCivRankTable({
                         <SelectButton row={row} slot={slot} full={full} onToggle={onToggleSelect} />
                       </td>
                     )}
-                    <td className="ucr-civ-cell">
+                    <td className={sortCol === 'civ' ? 'ucr-civ-cell is-sorted' : 'ucr-civ-cell'}>
                       <div className="ucr-civ-head">
                         <CivIcon c={{ en: row.civ }} alt="" />
                         <span className="ucr-civ-name">{row.civZh}</span>
                       </div>
                       <CivTags row={row} />
                     </td>
-                    <td className="ucr-num-cell is-sorted">
+                    <td className={sortCol === 'civ' ? 'ucr-num-cell' : 'ucr-num-cell is-sorted'}>
                       <MetricCellContent data={data} row={row} col={activeMetricCol} />
                     </td>
                     <td className="ucr-action-cell">
@@ -283,7 +285,7 @@ export function UnitCivRankTable({
         <tbody>
           {rows.map((row) => {
             const slot = slotOf(row.civ);
-            const simHref = buildCivRankSimHref(data.unitId, row, data.age);
+            const simHref = buildCivRankSimHref(data.unitId, row, data.age, preserveSearch);
             return (
               <tr key={row.civ} className={slot ? 'ucr-row is-selected' : 'ucr-row'} data-civ={row.civ}>
                 {showSelectCol && (

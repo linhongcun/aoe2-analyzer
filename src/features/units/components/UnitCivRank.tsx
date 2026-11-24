@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { trainingUnitAge } from '../../../domain/availabilityAge';
 import { AGE_ZH } from '../../../domain/ratings';
 import { makeSimContext } from '../../../domain/simulator';
 import type { Tech, Trees, Unit } from '../../../domain/types';
@@ -82,6 +83,7 @@ interface UnitCivRankProps {
 }
 
 export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps) {
+  const loc = useLocation();
   const narrow = useNarrowTable();
   const initialCombat = unitRankCombatKind(unit);
   const initialSortCol: RankMetricCol = initialCombat === 'normal' ? 'dps' : initialCombat === 'suicide' ? 'atk' : 'hp';
@@ -114,30 +116,32 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
     return filterUnitCivRankRows(sortedRows, query, unit, data.age);
   }, [data, sortedRows, query, unit]);
 
-  const { visibleRows, hiddenCount } = useMemo(() => {
+  const { visibleRows, hiddenCount, collapsibleCount } = useMemo(() => {
     const list = filtered.rows;
-    if (query.trim() || showAll || list.length <= COLLAPSE_LIMIT) {
-      return { visibleRows: list, hiddenCount: 0 };
+    if (query.trim() || list.length <= COLLAPSE_LIMIT) {
+      return { visibleRows: list, hiddenCount: 0, collapsibleCount: 0 };
     }
     const selSet = new Set(selected);
-    const out = list.filter((r, idx) => idx < COLLAPSE_LIMIT || selSet.has(r.civ));
-    return { visibleRows: out, hiddenCount: list.length - out.length };
+    const collapsed = list.filter((r, idx) => idx < COLLAPSE_LIMIT || selSet.has(r.civ));
+    const collapsible = list.length - collapsed.length;
+    if (showAll || collapsible === 0) {
+      return { visibleRows: list, hiddenCount: 0, collapsibleCount: collapsible };
+    }
+    return { visibleRows: collapsed, hiddenCount: collapsible, collapsibleCount: collapsible };
   }, [filtered.rows, query, showAll, selected]);
 
   const handleAgeChange = (nextAge: number) => {
     if (nextAge === age) return;
     setAge(nextAge);
     setExpandedCiv(null);
-    if (!ctx || selected.length === 0) {
+    if (selected.length === 0) {
       setRemovedNotice(null);
       return;
     }
-    const nextData = buildUnitCivRank(ctx, unit, nextAge);
-    const availSet = new Set(nextData.rows.map((r) => r.civ));
     const kept: string[] = [];
     const removedNames: string[] = [];
     for (const civ of selected) {
-      if (availSet.has(civ)) kept.push(civ);
+      if (trainingUnitAge(civ, unit.id, unit.age) <= nextAge) kept.push(civ);
       else removedNames.push(rowByCiv.get(civ)?.civZh ?? civ);
     }
     setSelected(kept);
@@ -391,11 +395,12 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
                 sortDir={sortDir}
                 selected={selected}
                 expandedCiv={expandedCiv}
+                preserveSearch={loc.search}
                 onSort={handleSort}
                 onToggleSelect={handleToggleSelect}
                 onToggleExpand={handleToggleExpand}
               />
-              {!query.trim() && filtered.rows.length > COLLAPSE_LIMIT && (
+              {!query.trim() && collapsibleCount > 0 && (
                 <div className="ucr-more-wrap">
                   {hiddenCount > 0 ? (
                     <button type="button" className="ud-btn ucr-more-btn" onClick={() => setShowAll(true)}>
@@ -429,6 +434,7 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
               </li>
             )}
             {data.hasEstimatedCost && <li>「估算」：含尚未完全解码的造价科技，总价按已解码部分计算。</li>}
+            <li>训练时间沿用科技模拟器单兵口径（未计征招及建筑工作效率加成，完整产兵周期见「持续生产」）。</li>
             <li>「缺」：本时代其他文明能研究、这个文明研究不了的通用科技。</li>
           </ul>
         </>
