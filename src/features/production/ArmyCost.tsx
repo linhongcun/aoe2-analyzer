@@ -7,9 +7,11 @@ import { ARMY_RESEARCH_STATES as STATES } from '../../domain/armyResearchEvidenc
 import { ARMY_COST_DATA, emptyArmyCost, type ArmyCostConfig } from '../../domain/armyCostConfig';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../domain/production';
 import { AGE_ZH } from '../../domain/ratings';
+import { unitTrainCount } from '../../domain/trainBatch';
 import { CostView, UnitIcon } from '../../shared/ui/art';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
+import { PairOddBillingHint } from '../../shared/ui/PairTrainingHint';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { SHARE_STATUS_PROPS, useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
@@ -306,6 +308,8 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   {config.rows.map((row, index) => {
                     const unit = context?.core.unitById[row.unit];
                     const line = result?.training.lines[index];
+                    const tc = unitTrainCount(unit);
+                    const isPair = tc > 1;
                     return (
                       <article className="army-unit-row" key={index}>
                         <div className="army-section-heading">
@@ -354,7 +358,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                             />
                           </label>
                           <div>
-                            <span className="note">目标状态单价</span>
+                            <span className="note">{isPair ? '目标状态每对单价' : '目标状态单价'}</span>
                             {line?.cost ? <CostView c={line.cost} /> : <span>待核算</span>}
                           </div>
                         </div>
@@ -366,10 +370,26 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                         )}
                         {line?.subtotal && (
                           <div className="army-line-total">
-                            <span>本行训练费</span>
+                            <span>
+                              {isPair && line.billedBatches !== null ? (
+                                <>
+                                  本行训练费（<span className="num nw">{line.billedBatches} 对</span>）
+                                </>
+                              ) : (
+                                '本行训练费'
+                              )}
+                            </span>
                             <CostView c={line.subtotal} />
                           </div>
                         )}
+                        {isPair &&
+                          line?.status === 'ok' &&
+                          line.qtyValue !== null &&
+                          line.billedBatches !== null &&
+                          line.deliveredQty !== null &&
+                          line.qtyValue % tc !== 0 && (
+                            <PairOddBillingHint qty={line.qtyValue} batches={line.billedBatches} delivered={line.deliveredQty} dataT="army-cost-pair-hint" />
+                          )}
                       </article>
                     );
                   })}
@@ -380,12 +400,16 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                       onClose={closePicker}
                       onSelect={(u) => {
                         const index = picker;
+                        const tc = unitTrainCount(u);
+                        const defaultQty = String(tc);
                         update({
                           ...config,
                           rows:
                             index === config.rows.length
-                              ? [...config.rows, { unit: u.id, qty: '1' }]
-                              : config.rows.map((r, i) => (i === index ? { ...r, unit: u.id } : r)),
+                              ? [...config.rows, { unit: u.id, qty: defaultQty }]
+                              : config.rows.map((r, i) =>
+                                  i === index ? { ...r, unit: u.id, ...(tc > 1 && (r.qty === '' || r.qty === '1') ? { qty: defaultQty } : {}) } : r,
+                                ),
                         });
                         setPicker(null);
                         requestAnimationFrame(() => document.getElementById(`army-qty-${index}`)?.focus());

@@ -60,26 +60,39 @@ export interface DuelBudgetPart {
 
 type DuelBudgetErrorKind = 'zero-cost' | 'under-budget' | 'under-time';
 
-interface DuelSideBudgetCount {
-  /** 实际派出数量（预算/时间不足时为 0；零造价无法换算时为 null） */
+export interface DuelSideBudgetCount {
+  /** 实际派出只数（预算/时间不足时为 0；零造价无法换算时为 null） */
   count: number | null;
+  /** 实际购买批数（对数）；常规单位等于 count，零造价时为 null */
+  batches: number | null;
+  /** 每批产出数（默认 1，成对训练单位为 2） */
+  trainCount: number;
   error: DuelBudgetErrorKind | null;
   unitCost: number;
   unitSec: number;
 }
 
-export function resolveSideBudgetCount(mode: 'r' | 't', cost: Cost, unitSec: number, budget: { bud: number; vils: number; mins: number }): DuelSideBudgetCount {
+export function resolveSideBudgetCount(
+  mode: 'r' | 't',
+  cost: Cost,
+  unitSec: number,
+  budget: { bud: number; vils: number; mins: number },
+  trainCount = 1,
+): DuelSideBudgetCount {
+  const tc = Number.isInteger(trainCount) && trainCount > 1 ? trainCount : 1;
   const unitCost = costSum(cost);
   if (mode === 'r') {
-    const count = countForBudget(cost, budget.bud);
-    if (count === null) return { count: null, error: 'zero-cost', unitCost, unitSec };
-    return { count, error: count < 1 ? 'under-budget' : null, unitCost, unitSec };
+    const batches = countForBudget(cost, budget.bud);
+    if (batches === null) return { count: null, batches: null, trainCount: tc, error: 'zero-cost', unitCost, unitSec };
+    const count = batches * tc;
+    return { count, batches, trainCount: tc, error: count < 1 ? 'under-budget' : null, unitCost, unitSec };
   }
   if (!Number.isFinite(unitCost) || unitCost <= 0 || !Number.isFinite(unitSec) || unitSec <= 0) {
-    return { count: null, error: 'zero-cost', unitCost, unitSec };
+    return { count: null, batches: null, trainCount: tc, error: 'zero-cost', unitCost, unitSec };
   }
-  const count = countForTime(unitSec, budget.vils, budget.mins);
-  return { count, error: count < 1 ? 'under-time' : null, unitCost, unitSec };
+  const batches = countForTime(unitSec, budget.vils, budget.mins);
+  const count = batches * tc;
+  return { count, batches, trainCount: tc, error: count < 1 ? 'under-time' : null, unitCost, unitSec };
 }
 
 interface DuelBudgetErrorSide {
@@ -98,36 +111,69 @@ export function buildDuelBudgetErrorParts(
   let hasUnderBudget = false;
   let hasUnderTime = false;
   for (const item of [a, b]) {
-    const { error, unitCost, unitSec } = item.resolved;
+    const { error, unitCost, unitSec, trainCount } = item.resolved;
+    const isPair = trainCount > 1;
     if (!error) continue;
     if (error === 'zero-cost') {
       clauses.push([{ text: `${item.side} 方的${item.unitName}没有训练造价，不能按资源预算换算` }]);
     } else if (error === 'under-budget') {
       hasUnderBudget = true;
-      clauses.push([
-        { text: `${item.side} 方预算 ` },
-        { text: String(budget.bud), num: true },
-        { text: ' 不够训练 ' },
-        { text: '1 个', num: true },
-        { text: `${item.unitName}（每名 ` },
-        { text: String(unitCost), num: true },
-        { text: '）' },
-      ]);
+      clauses.push(
+        isPair
+          ? [
+              { text: `${item.side} 方预算 ` },
+              { text: String(budget.bud), num: true },
+              { text: ' 不够训练 ' },
+              { text: '1 对', num: true },
+              { text: '（' },
+              { text: `${trainCount} 只`, num: true },
+              { text: `）${item.unitName}（每对 ` },
+              { text: String(unitCost), num: true },
+              { text: '）' },
+            ]
+          : [
+              { text: `${item.side} 方预算 ` },
+              { text: String(budget.bud), num: true },
+              { text: ' 不够训练 ' },
+              { text: '1 个', num: true },
+              { text: `${item.unitName}（每名 ` },
+              { text: String(unitCost), num: true },
+              { text: '）' },
+            ],
+      );
     } else {
       hasUnderTime = true;
-      clauses.push([
-        { text: `${item.side} 方 ` },
-        { text: `${budget.vils} 个村民`, num: true },
-        { text: ' × ' },
-        { text: fmtClock(budget.mins * 60), num: true },
-        { text: ' 采不够 ' },
-        { text: '1 个', num: true },
-        { text: `${item.unitName}（` },
-        { text: '1 个村民', num: true },
-        { text: '需 ' },
-        { text: fmtClock(unitSec), num: true },
-        { text: '）' },
-      ]);
+      clauses.push(
+        isPair
+          ? [
+              { text: `${item.side} 方 ` },
+              { text: `${budget.vils} 个村民`, num: true },
+              { text: ' × ' },
+              { text: fmtClock(budget.mins * 60), num: true },
+              { text: ' 采不够 ' },
+              { text: '1 对', num: true },
+              { text: '（' },
+              { text: `${trainCount} 只`, num: true },
+              { text: `）${item.unitName}（每对 ` },
+              { text: '1 个村民', num: true },
+              { text: '需 ' },
+              { text: fmtClock(unitSec), num: true },
+              { text: '）' },
+            ]
+          : [
+              { text: `${item.side} 方 ` },
+              { text: `${budget.vils} 个村民`, num: true },
+              { text: ' × ' },
+              { text: fmtClock(budget.mins * 60), num: true },
+              { text: ' 采不够 ' },
+              { text: '1 个', num: true },
+              { text: `${item.unitName}（` },
+              { text: '1 个村民', num: true },
+              { text: '需 ' },
+              { text: fmtClock(unitSec), num: true },
+              { text: '）' },
+            ],
+      );
     }
   }
   if (!clauses.length) return null;

@@ -10,6 +10,7 @@ import { unitCost } from './unitCost';
 import { priceAge } from './costDiscount';
 import { DAT } from './datEffects';
 import { resistDelta, DEVOTION_ID, FAITH_ID } from './conversion';
+import { batchesForQty, deliveredQty, unitTrainCount } from './trainBatch';
 
 import type { ArmyCostConfig } from './armyCostConfig';
 export { emptyArmyCost } from './armyCostConfig';
@@ -228,7 +229,10 @@ export interface ArmyCostResult {
 }
 export interface ArmyTrainingLine {
   unit: Unit | null;
+  trainCount: number;
   qtyValue: number | null;
+  billedBatches: number | null;
+  deliveredQty: number | null;
   status: 'ok' | 'pending' | 'badqty' | 'unavail';
   cost: Cost | null;
   subtotal: Cost | null;
@@ -472,7 +476,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     lines: config.rows.map((row) => {
       const unit = ctx.core.unitById[row.unit] ?? null;
       const qtyValue = /^\d+$/.test(row.qty) && +row.qty >= 1 && +row.qty <= 1000 ? +row.qty : null;
-      const base = { unit, qtyValue, cost: null, subtotal: null };
+      const base = { unit, trainCount: unitTrainCount(unit), qtyValue, billedBatches: null, deliveredQty: null, cost: null, subtotal: null };
       if (blocked.length) return { ...base, status: 'unavail', reason: '文明或时代无效，原行已保留' };
       if (!unit) return { ...base, status: 'pending', reason: row.unit ? '无法识别单位形态，原行已保留' : '请选择兵种形态' };
       if (!productionBuildings(ctx, productionShell(config.civ, age, activeTechs), unit).length)
@@ -506,14 +510,19 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
       const quote = unitCost(unit, config.civ, priceAge(unit.age, age), techs);
       if (quote.undecoded.length || quote.discount.unsupported.length) badRows.set(index, '目标状态训练费用修正未核实');
       else {
+        const batches = batchesForQty(line.qtyValue!, line.trainCount);
+        line.billedBatches = batches;
+        line.deliveredQty = deliveredQty(line.qtyValue!, line.trainCount);
         line.cost = quote.cost;
         line.subtotal = {};
-        for (const r of ARMY_RES) line.subtotal[r] = (quote.cost[r] ?? 0) * line.qtyValue!;
+        for (const r of ARMY_RES) line.subtotal[r] = (quote.cost[r] ?? 0) * batches;
       }
     }
     if (badRows.has(index)) {
       line.status = 'unavail';
       line.reason = badRows.get(index)!;
+      line.billedBatches = null;
+      line.deliveredQty = null;
       line.cost = null;
       line.subtotal = null;
     }

@@ -12,6 +12,7 @@ import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES, type CivRelicBonus } from '../../../domain/effects';
 import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
+import { unitTrainCount } from '../../../domain/trainBatch';
 import { unitAvailable } from '../../../domain/unitAvailability';
 import { unitOptionLabel } from '../../../domain/unitOptionLabel';
 import type { Unit } from '../../../domain/types';
@@ -47,6 +48,7 @@ export function Side({
   fams,
   onChange,
   count,
+  batches,
   bud,
   time,
   context,
@@ -62,6 +64,7 @@ export function Side({
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   count: number | null;
+  batches?: number | null;
   /** 等资源预算；0 = 不显示派出数量和训练投入 */
   bud: number;
   /** issue 88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
@@ -109,6 +112,7 @@ export function Side({
   if (isUnavail(side))
     return <UnavailSide k={k} side={side} fams={fams} formatUnitLabel={formatUnitLabel} onChange={onChange} transferLink={transferLink} context={context} />;
   const { u, spec } = side;
+  const tc = unitTrainCount(u);
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
   const eliteSelected = isElite(u, core.fam);
@@ -143,12 +147,12 @@ export function Side({
                 {civObj?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
               </span>
             </span>
-            <PkCost cost={side.training.price.cost} base={side.training.before} />
+            <PkCost cost={side.training.price.cost} base={side.training.before} showPairTag={(bud > 0 || time !== null) && tc > 1} />
           </small>
         </div>
       </div>
       <div data-t={`pk-cost-${k}`}>
-        <TrainingPrice quote={side.training} sel={side.sel} bud={bud} count={count} />
+        <TrainingPrice quote={side.training} sel={side.sel} bud={bud} count={count} batches={batches} trainCount={tc} />
         <CostDiscountBlock unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} />
       </div>
       {time && (
@@ -161,6 +165,7 @@ export function Side({
           d={{ ...side.disc, cost: side.training.price.cost, exact: side.training.price.exact }}
           vils={time[0]}
           min={time[1]}
+          trainCount={tc}
         />
       )}
       <div className="duel-pickers">

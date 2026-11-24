@@ -108,16 +108,24 @@ export function TrainTotalResult({
         <ul className="train-total-lines">
           {result.lines.flatMap((line, index) => {
             if (line.status !== 'ok' || !line.unit || !line.cost || !line.subtotal) return [];
+            const isPair = line.trainCount > 1 && line.billedBatches !== null && line.deliveredQty !== null;
             return [
               <li key={index}>
                 <UnitIcon u={line.unit} />
                 <div>
                   <div>
-                    {line.unit.zh} <span className="nw">× {line.qtyValue}</span>
+                    {line.unit.zh}{' '}
+                    {isPair ? (
+                      <span className="nw num">
+                        × {line.deliveredQty}（{line.billedBatches} 对）
+                      </span>
+                    ) : (
+                      <span className="nw">× {line.qtyValue}</span>
+                    )}
                   </div>
                   <div className="train-total-mini">
                     <span>
-                      单价 <CostView c={line.cost} />
+                      {isPair ? '每对' : '单价'} <CostView c={line.cost} />
                     </span>
                     <span>
                       小计 <CostView c={line.subtotal} />

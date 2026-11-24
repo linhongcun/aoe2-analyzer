@@ -2,11 +2,13 @@ import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
-import { defaultTrainUnit, evaluateTrainTotal, TRAIN_TOTAL_QTY_MAX, type TrainTotalConfig } from '../../domain/trainTotal';
+import { defaultTrainQty, defaultTrainUnit, evaluateTrainTotal, TRAIN_TOTAL_QTY_MAX, type TrainTotalConfig } from '../../domain/trainTotal';
+import { unitTrainCount } from '../../domain/trainBatch';
 import { AGE_ZH } from '../../domain/ratings';
 import { CostView } from '../../shared/ui/art';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
+import { PairHintLine, PairOddBillingHint } from '../../shared/ui/PairTrainingHint';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { UnitPicker } from '../../shared/ui/UnitPicker';
@@ -198,7 +200,10 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
               type="button"
               className="btn train-total-add"
               disabled={config.rows.length >= PRODUCTION_LIMIT || blocked}
-              onClick={() => write({ ...config, rows: [...config.rows, { unit: defaultTrainUnit(context, config), qty: '1' }] })}
+              onClick={() => {
+                const unitId = defaultTrainUnit(context, config);
+                write({ ...config, rows: [...config.rows, { unit: unitId, qty: defaultTrainQty(unitId ? context.core.unitById[unitId] : null) }] });
+              }}
             >
               <Icon name="plus" />
               添加兵种
@@ -212,6 +217,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 const row = config.rows[index];
                 if (!row) return null;
                 const waiting = pendingTrainQuantity(line);
+                const tc = line.trainCount;
+                const isPair = tc > 1;
                 const rowAvailable = row.unit > 0 && options.some((unit) => unit.id === row.unit);
                 const unavailableText = row.unit > 0 && !rowAvailable ? `当前不可用：${line.unit?.zh ?? row.unit}` : undefined;
                 return (
@@ -237,7 +244,15 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                         list={unitEntries}
                         invalid={line.status === 'unavail' || line.status === 'pending'}
                         unavailableText={unavailableText}
-                        onChange={(unit) => editRow(config, index, { unit: unit.id }, write)}
+                        onChange={(unit) => {
+                          const nextTc = unitTrainCount(unit);
+                          editRow(
+                            config,
+                            index,
+                            nextTc > 1 && (row.qty === '' || row.qty === '1') ? { unit: unit.id, qty: String(nextTc) } : { unit: unit.id },
+                            write,
+                          );
+                        }}
                       />
                     </div>
                     <div className="train-total-field">
@@ -245,15 +260,27 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                       <QtyStepper
                         id={`train-total-qty-${index}`}
                         value={row.qty}
-                        bounds={{ min: 1, max: TRAIN_TOTAL_QTY_MAX }}
+                        bounds={isPair ? { min: tc, max: TRAIN_TOTAL_QTY_MAX, step: tc } : { min: 1, max: TRAIN_TOTAL_QTY_MAX }}
                         inputLabel={`兵种 ${index + 1} 训练数量`}
-                        decrementLabel={`兵种 ${index + 1} 数量减 1`}
-                        incrementLabel={`兵种 ${index + 1} 数量加 1`}
-                        placeholder="填写 1–1000"
+                        decrementLabel={`兵种 ${index + 1} 数量减 ${tc}`}
+                        incrementLabel={`兵种 ${index + 1} 数量加 ${tc}`}
+                        placeholder={isPair ? `填写 ${tc}–${TRAIN_TOTAL_QTY_MAX}` : '填写 1–1000'}
                         invalid={waiting ? undefined : line.status === 'badqty'}
                         onChange={(qty) => editRow(config, index, { qty }, write)}
                       />
                     </div>
+                    {isPair &&
+                      (line.status === 'ok' &&
+                      line.qtyValue !== null &&
+                      line.billedBatches !== null &&
+                      line.deliveredQty !== null &&
+                      line.qtyValue % tc !== 0 ? (
+                        <PairOddBillingHint qty={line.qtyValue} batches={line.billedBatches} delivered={line.deliveredQty} dataT="train-total-pair-hint" />
+                      ) : (
+                        <PairHintLine dataT="train-total-pair-hint">
+                          每点一次 <span className="num nw">± {tc} 只</span>，最少 <span className="num nw">{tc} 只</span>。
+                        </PairHintLine>
+                      ))}
                     {line.unlockSelectable && line.needUnlockId != null && (
                       <button
                         type="button"
@@ -292,10 +319,17 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                     {line.status === 'ok' && line.cost && line.subtotal && (
                       <div className="train-total-mini">
                         <span>
-                          有效单价 <CostView c={line.cost} />
+                          {isPair ? '每对单价' : '有效单价'} <CostView c={line.cost} />
                         </span>
                         <span>
-                          小计 <CostView c={line.subtotal} />
+                          {isPair && line.billedBatches !== null ? (
+                            <>
+                              小计（<span className="num nw">{line.billedBatches} 对</span>）
+                            </>
+                          ) : (
+                            '小计'
+                          )}{' '}
+                          <CostView c={line.subtotal} />
                         </span>
                         {line.notes.map((note) => (
                           <span key={note}>{note}</span>

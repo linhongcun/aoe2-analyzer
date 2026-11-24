@@ -8,6 +8,7 @@ import { CivArtCredit } from '../../../shared/ui/CivArtCredit';
 import { isChampiUnit } from '../../../domain/champiCounters';
 import { damageByClass } from '../../../domain/duel';
 import { buildDuelBudgetErrorParts, DUEL_UNIT_REPLACED_NOTE, isDuelExcludedUnit, replaceDuelUnitId, resolveSideBudgetCount } from '../../../domain/duelBudget';
+import { unitTrainCount } from '../../../domain/trainBatch';
 import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
@@ -23,6 +24,7 @@ import { buildEnterMixedParams, formatBreakEvenSide, rawUid, resolveDuelKiteElig
 import { swapSingleDuelParams } from '../logic/duelSwap';
 import { DUEL_COST_MODEL } from '../logic/trainingCostView';
 import { Icon } from '../../../shared/ui/Icon';
+import { DuelNPairHints, pairBatchQtyPatch } from './DuelTradeAndBudget';
 import { radioKeyboard } from './radioKeyboard';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
@@ -191,7 +193,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const sideBudget = (s: SideState | null) => {
     if (!s || isUnavail(s) || (mode !== 'r' && mode !== 't')) return null;
     const unitSec = mode === 't' ? realCostOf({ ...s.disc, cost: s.training.price.cost, exact: s.training.price.exact }, s.age, s.civ).rc.total : 0;
-    return resolveSideBudgetCount(mode, s.training.price.cost, unitSec, { bud, vils, mins });
+    return resolveSideBudgetCount(mode, s.training.price.cost, unitSec, { bud, vils, mins }, unitTrainCount(s.u));
   };
   const budgetA = sideBudget(A);
   const budgetB = sideBudget(B);
@@ -253,7 +255,10 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
         ? '本场存在负伤害贡献；只对目标已入库且具有的护甲类别求和。'
         : '本场双方已匹配类别均无负伤害贡献，使用等价简式；一般规则保留负攻击扣减。';
   const damageFormula = hasNegative ? FULL_DAMAGE : SIMPLE_DAMAGE;
-  const upd = (k: 'a' | 'b', s: SideSpec) => set({ [k]: fmtSide(s) });
+  const upd = (k: 'a' | 'b', s: SideSpec) =>
+    set({ [k]: fmtSide(s), ...pairBatchQtyPatch(mode, k, (k === 'a' ? A : B).u, core.unitById[s.uid], k === 'a' ? na : nb) });
+  const tcA = !isUnavail(A) ? unitTrainCount(A.u) : 1;
+  const tcB = !isUnavail(B) ? unitTrainCount(B.u) : 1;
   const enterMixed = (viaKeyboard: boolean) => {
     if (isUnavail(A) || isUnavail(B)) {
       pendingModeFocusRef.current = null;
@@ -294,10 +299,30 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           {mode === 'n' && (
             <div className="duel-mode-extra">
               <label>
-                A 数量 <input id="duel-na" type="number" min={1} max={200} value={na} onChange={(e) => set({ na: e.target.value })} style={{ width: 64 }} />
+                A 数量{' '}
+                <input
+                  id="duel-na"
+                  type="number"
+                  min={tcA}
+                  step={tcA}
+                  max={200}
+                  value={na}
+                  onChange={(e) => set({ na: e.target.value })}
+                  style={{ width: 64 }}
+                />
               </label>
               <label>
-                B 数量 <input id="duel-nb" type="number" min={1} max={200} value={nb} onChange={(e) => set({ nb: e.target.value })} style={{ width: 64 }} />
+                B 数量{' '}
+                <input
+                  id="duel-nb"
+                  type="number"
+                  min={tcB}
+                  step={tcB}
+                  max={200}
+                  value={nb}
+                  onChange={(e) => set({ nb: e.target.value })}
+                  style={{ width: 64 }}
+                />
               </label>
             </div>
           )}
@@ -310,6 +335,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             </div>
           )}
         </DuelModeBar>
+        {mode === 'n' && <DuelNPairHints A={A} B={B} na={na} nb={nb} />}
         {eq && (
           <div className="rc-seg">
             <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>
@@ -358,6 +384,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               fams={fams}
               onChange={(s) => upd('a', s)}
               count={cntA}
+              batches={budgetA?.batches ?? null}
               bud={mode === 'r' ? bud : 0}
               time={mode === 't' ? [vils, mins] : null}
               context={productionContext!}
@@ -388,6 +415,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               fams={fams}
               onChange={(s) => upd('b', s)}
               count={cntB}
+              batches={budgetB?.batches ?? null}
               bud={mode === 'r' ? bud : 0}
               time={mode === 't' ? [vils, mins] : null}
               context={productionContext!}

@@ -11,7 +11,7 @@ import json, math, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from dat_source import DAT, load  # noqa: E402
+from dat_source import DAT, derive_train_count, load  # noqa: E402
 from effects_build import CIV_DAT  # noqa: E402
 from res_names import RES_ZH as RES_LABEL  # noqa: E402
 
@@ -206,6 +206,9 @@ def main():
         if not u: diffs.append((kind, i, en, '.dat 中不存在', '', '')); return
         rec = {'en': en, time_key: u['TrainTime'], 'at': [x[0] for x in u['TrainAt']], 'cost': cost(u['Cost'])}
         if kind in ('units', 'buildings'): rec['class'] = u['Class']  # #42/#197：按类别的单位/建筑费用
+        if kind == 'units':
+            train_count = derive_train_count(u, i)
+            if train_count > 1: rec['trainCount'] = train_count
         if len({x[1] for x in u['TrainAt']}) > 1: rec['timeAt'] = {str(x[0]): x[1] for x in u['TrainAt']}
         out[kind][str(i)] = rec
         if ref_time is not None and ref_time != rec[time_key] and ref_time not in rec.get('timeAt', {}).values(): diffs.append((kind, i, en, time_key, ref_time, rec[time_key]))

@@ -8,10 +8,12 @@ import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import type { UnitRelatedTech } from '../../../domain/relatedTechs';
+import { perUnitCost, perUnitTime, unitTrainCount } from '../../../domain/trainBatch';
 import type { Cost, Unit } from '../../../domain/types';
 import type { discountView } from '../../../domain/unitDetailView';
 import { BuildingIcon, CostView, TechLink } from '../../../shared/ui/art';
 import { Icon, type IconName } from '../../../shared/ui/Icon';
+import { PairBadge } from '../../../shared/ui/PairTrainingHint';
 import { RangeB, rangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Basis } from '../../../shared/ui/RealCost';
@@ -188,6 +190,8 @@ export function CatalogCostColumn({
   displayAge: number;
   buildingLabel: string;
 }) {
+  const tc = unitTrainCount(u);
+  const isPair = tc > 1;
   return (
     <div className="ud-cost-col">
       <h2>目录造价与训练</h2>
@@ -195,6 +199,16 @@ export function CatalogCostColumn({
       <div className="ud-cost" data-t="catalog-cost">
         <CostView c={u.cost} />
       </div>
+      {isPair && (
+        <p className="ud-pair-note" data-t="ud-pair-note">
+          <PairBadge dataT="ud-pair-badge">
+            每次训练 <span className="num nw">{tc} 只</span>
+          </PairBadge>
+          <span>
+            上面是一对的价格。游戏里只能成对训练，不能单买 <span className="num nw">1 只</span>；每只占 <span className="num nw">0.5 人口</span>。
+          </span>
+        </p>
+      )}
       {(u.id === 1759 || u.id === 1761) && (u.cost.Food ?? 0) === 0 && <p className="ud-kicker">训练不消耗食物。</p>}
       {discount.kind === 'price' && (
         <div className="ud-discount" data-t="discount-price">
@@ -215,12 +229,21 @@ export function CatalogCostColumn({
       )}
       <dl className="ud-train-summary" data-t="catalog-training">
         <div>
-          <dt>训练时间</dt>
+          <dt>{isPair ? '训练时间（每对）' : '训练时间'}</dt>
           <dd className="num nw">
             <Icon name="clock" />
             {u.tt} 秒
           </dd>
         </div>
+        {isPair && (
+          <div data-t="ud-per-unit">
+            <dt>折合每只（参考）</dt>
+            <dd className="ud-per-unit-val num">
+              <CostView c={perUnitCost(u.cost, tc)} />
+              <span className="num nw"> · {perUnitTime(u.tt, tc)} 秒</span>
+            </dd>
+          </div>
+        )}
         <div>
           <dt>训练建筑</dt>
           <dd>{buildingLabel}</dd>
@@ -248,12 +271,29 @@ export function GatherLine({ u, cost, age, civ }: { u: Unit; cost: Cost; age?: n
   const a = Math.max(u.age, age ?? DEFAULT_AGE);
   const rc = realCost(cost, gatherModel(a, civ));
   if (!(rc.total > 0)) return null;
+  const tc = unitTrainCount(u);
+  const isPair = tc > 1;
   return (
     <section className="ud-section" id="unit-gather" aria-label="采集时间估算">
       <h2>采集时间估算</h2>
-      <p className="ud-kicker">采集时间估算，不是训练价。训练资源按本页已出示的造价；没有折后训练价时用目录造价。未选时代按城堡时代。食物按农田，不含播种。</p>
+      <p className="ud-kicker">
+        采集时间估算，不是训练价。
+        {isPair ? (
+          <>
+            训练资源按本页已出示的每对造价（一次训练 <span className="num nw">{tc} 只</span>）；
+          </>
+        ) : (
+          '训练资源按本页已出示的造价；'
+        )}
+        没有折后训练价时用目录造价。未选时代按城堡时代。食物按农田，不含播种。
+      </p>
       <p className="ud-gather" data-t="rc-uline">
         <Icon name="clock" />
+        {isPair && (
+          <PairBadge dataT="rc-uline-pair-badge">
+            每对（<span className="num nw">{tc} 只</span>）
+          </PairBadge>
+        )}
         <span className="num nw" data-t="rc-uline-time">
           ≈ 1个村民 {fmtClock(rc.total)}
         </span>

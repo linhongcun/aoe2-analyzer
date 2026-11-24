@@ -20,6 +20,7 @@ import {
 } from './production';
 import { AGE_ZH, RES_ZH } from './ratings';
 import { makeSimContext } from './simulator';
+import { batchesForQty, deliveredQty, unitTrainCount } from './trainBatch';
 import type { Cost, Tech, Unit } from './types';
 import { unitCost, type UnitCostTech } from './unitCost';
 
@@ -42,8 +43,11 @@ export interface TrainTotalConfig {
 }
 export interface TrainTotalLine {
   unit: Unit | null;
+  trainCount: number;
   qty: string;
   qtyValue: number | null;
+  billedBatches: number | null;
+  deliveredQty: number | null;
   status: 'ok' | 'pending' | 'badqty' | 'unavail';
   reason: string;
   /** 右栏原因，已带「第 n 行」。 */
@@ -101,6 +105,11 @@ export function pickNewUnit(availableIds: readonly number[]): number {
 export function defaultTrainUnit(ctx: ProductionContext, config: TrainTotalConfig): number {
   if (!civLegal(config.civ) || config.age == null) return 0;
   return pickNewUnit(productionUnits(ctx, shell(config.civ, config.age, config.techs)).map((unit) => unit.id));
+}
+
+/** 新增或切换至某单位时的默认数量（成对训练单位默认 2，常规单位默认 1）。 */
+export function defaultTrainQty(unit: Pick<Unit, 'trainCount'> | null | undefined): string {
+  return String(unitTrainCount(unit));
 }
 
 function shell(civ: string, age: number, techs: number[]): ProductionConfig {
@@ -365,9 +374,13 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
   const appliedSomewhere = new Set<number>();
   config.rows.forEach((row, index) => {
     const unit = row.unit ? (ctx.core.unitById[row.unit] ?? null) : null;
+    const trainCount = unitTrainCount(unit);
     const base = {
+      trainCount,
       qty: row.qty,
       qtyValue: qtyOf(row.qty),
+      billedBatches: null as number | null,
+      deliveredQty: null as number | null,
       needUnlockId: null as number | null,
       unlockName: '',
       unlockSelectable: false,
@@ -421,12 +434,15 @@ export function evaluateTrainTotal(ctx: ProductionContext, config: TrainTotalCon
     const quote = quoteRow(config, unit, active, costs);
     if (quote.pricingProblems.length) incomplete = true;
     for (const id of quote.applied) appliedSomewhere.add(id);
-    const subtotal = scale(quote.cost, count);
+    const billedBatches = batchesForQty(count, trainCount);
+    const subtotal = scale(quote.cost, billedBatches);
     addCost(total, subtotal);
     lines.push({
       ...base,
       unit,
       qtyValue: count,
+      billedBatches,
+      deliveredQty: deliveredQty(count, trainCount),
       status: 'ok',
       reason: '',
       summary: '',

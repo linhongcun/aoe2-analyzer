@@ -12,6 +12,7 @@ import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameId
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { formatProductionNumber, ratePerMinute } from './formatTime';
 import { toggleSelected } from './prereq';
+import { unitTrainCount } from './trainBatch';
 import { MAPUCHE_CIV, MAPUCHE_SETTLEMENT_UNITS, SETTLEMENT, trainingAtBuilding } from './unitTrainingSites';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
@@ -249,8 +250,13 @@ export interface ProductionLine {
   unit: Unit;
   building: number;
   count: number;
+  /** 每批训练产出数（默认 1，成对训练单位为 2） */
+  trainCount: number;
   cost: Cost;
   seconds: number;
+  /** 每分钟训练批数（对数）；常规单位等于 perMinute */
+  batchesPerMinute: number;
+  /** 每分钟实际产出只数（batchesPerMinute × trainCount） */
   perMinute: number;
   spend: Record<GatherRes, number>;
   applied: string[];
@@ -378,9 +384,23 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       return;
     }
     const count = +row.count,
-      perMinute = ratePerMinute(count, seconds);
-    const spend = Object.fromEntries(PRODUCTION_RES.map((r) => [r, (cost[r] ?? 0) * perMinute])) as Record<GatherRes, number>;
-    lines.push({ unit: u, building: row.building, count, cost, seconds, perMinute, spend, applied: unique(notes), rowWarnings: unique(rowWarnings) });
+      trainCount = unitTrainCount(u),
+      batchesPerMinute = ratePerMinute(count, seconds),
+      perMinute = batchesPerMinute * trainCount;
+    const spend = Object.fromEntries(PRODUCTION_RES.map((r) => [r, (cost[r] ?? 0) * batchesPerMinute])) as Record<GatherRes, number>;
+    lines.push({
+      unit: u,
+      building: row.building,
+      count,
+      trainCount,
+      cost,
+      seconds,
+      batchesPerMinute,
+      perMinute,
+      spend,
+      applied: unique(notes),
+      rowWarnings: unique(rowWarnings),
+    });
   });
   const resources = PRODUCTION_RES.map((key) => {
     const spend = errors.length ? 0 : lines.reduce((total, l) => total + l.spend[key], 0);

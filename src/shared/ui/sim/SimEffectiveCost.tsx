@@ -1,11 +1,36 @@
 /** 单位与建筑模拟器有效训练/建造价卡片，以及固定顺位有序金额渲染（issue 1297）。 */
+import { Fragment } from 'react';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import type { CostDelta, SimEffectiveCostView } from '../../../domain/simEffectiveCost';
+import { perUnitCost, perUnitTime } from '../../../domain/trainBatch';
 import type { Cost } from '../../../domain/types';
 import { UNIT_COST_RESOURCES } from '../../../domain/unitCost';
 import { RK, StatIcon } from '../art';
 import { Icon } from '../Icon';
+import { PairBadge } from '../PairTrainingHint';
 import './sim-effective-cost.css';
+
+const RES_SHORT: Record<string, string> = { Food: '食', Wood: '木', Gold: '金', Stone: '石' };
+
+function SimPairPerUnit({ cost, trainCount, trainSeconds }: { cost: Cost; trainCount: number; trainSeconds?: number }) {
+  const unitCost = perUnitCost(cost, trainCount);
+  const items = [
+    ...UNIT_COST_RESOURCES.filter((res) => (unitCost[res] ?? 0) > 0).map((res) => `${unitCost[res]} ${RES_SHORT[res] ?? res}`),
+    ...(trainSeconds !== undefined && Number.isFinite(trainSeconds) && trainSeconds > 0 ? [`${perUnitTime(trainSeconds, trainCount)} 秒`] : []),
+  ];
+  if (!items.length) return null;
+  return (
+    <span className="sim-pair-sub" data-t="sim-pair-per-unit">
+      折合每只{' '}
+      {items.map((item, idx) => (
+        <Fragment key={item}>
+          {idx > 0 && ' · '}
+          <span className="num nw">{item}</span>
+        </Fragment>
+      ))}
+    </span>
+  );
+}
 
 /**
  * 固定顺位（食物→木材→黄金→石料）的资源金额展示。
@@ -50,9 +75,16 @@ export function CostDeltaPills({ deltas }: { deltas: readonly CostDelta[] }) {
 
 export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCostView; headingLevel?: 2 | 3 }) {
   const isBuilding = view.entityKind === 'building';
+  const tc = view.trainCount !== undefined && Number.isInteger(view.trainCount) && view.trainCount > 1 ? view.trainCount : 1;
+  const isPair = !isBuilding && tc > 1;
   const shortLabel = isBuilding ? '有效建造价' : '有效训练价';
   const title = isBuilding ? '当前模拟有效建造价' : '当前模拟有效训练价';
-  const scopeTag = isBuilding ? '单座建造价 · 不含研究费' : '单兵训练价 · 不含研究费';
+  const scopeTag = isBuilding ? '单座建造价 · 不含研究费' : isPair ? '每对训练价 · 不含研究费' : '单兵训练价 · 不含研究费';
+  const pairBadge = isPair ? (
+    <PairBadge dataT="sim-pair-badge">
+      每对（<span className="num nw">{tc} 只</span>）
+    </PairBadge>
+  ) : null;
 
   const unsupportedDiscountNotice =
     view.unsupportedDiscountLabels.length > 0 ? (
@@ -65,8 +97,12 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
   if (view.kind === 'plain' && !unsupportedDiscountNotice) {
     return (
       <p className="sim-eff-plain" data-t="sim-effective-cost" data-state="plain">
-        {shortLabel}与目录一致（
-        <OrderedCost cost={view.base} />）
+        {pairBadge}
+        <span>
+          {shortLabel}与目录一致（
+          <OrderedCost cost={view.base} />）
+        </span>
+        {isPair && <SimPairPerUnit cost={view.cost} trainCount={tc} trainSeconds={view.trainSeconds} />}
       </p>
     );
   }
@@ -82,9 +118,11 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
     return (
       <section className="sim-eff-cost is-available" data-t="sim-effective-cost" data-state="available" aria-label={title}>
         <p className="sim-eff-avail-line">
+          {pairBadge}
           <strong className="sim-eff-avail-label">{title}：</strong>
           <OrderedCost cost={view.base} />
           <span className="sim-eff-avail-hint">{actionHint ? `（与目录一致；${actionHint}）` : '（与目录一致）'}</span>
+          {isPair && <SimPairPerUnit cost={view.cost} trainCount={tc} trainSeconds={view.trainSeconds} />}
         </p>
         {unsupportedDiscountNotice}
       </section>
@@ -101,6 +139,7 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
         <span className="sim-eff-scope nw">{scopeTag}</span>
       </div>
       <div className="sim-eff-price-row" data-t="sim-effective-price">
+        {pairBadge}
         <span className="sim-eff-main">
           <OrderedCost cost={view.cost} base={view.base} />
         </span>
@@ -115,6 +154,11 @@ export function SimEffectiveCost({ view, headingLevel }: { view: SimEffectiveCos
           </span>
         )}
       </div>
+      {isPair && (
+        <p className="sim-pair-sub" data-t="sim-pair-per-unit-row">
+          <SimPairPerUnit cost={view.cost} trainCount={tc} trainSeconds={view.trainSeconds} />
+        </p>
+      )}
       {view.deltas.length > 0 && (
         <div data-t="sim-effective-deltas">
           <CostDeltaPills deltas={view.deltas} />
