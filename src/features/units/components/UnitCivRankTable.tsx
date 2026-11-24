@@ -37,9 +37,28 @@ function handleSimLinkClick(event: MouseEvent<HTMLAnchorElement>) {
 }
 
 function CivTags({ row }: { row: UnitCivRankRow }) {
+  const relic = row.relicBonus;
   return (
     <div className="ucr-civ-tags">
       {row.earlyUnlock && <span className="ucr-tag is-early">提前解锁</span>}
+      {relic && (
+        <span
+          className="ucr-tag is-relic"
+          data-t="ucr-relic-tag"
+          title={`驻守圣物：${AGE_ZH[relic.minAge] ?? `${relic.minAge}时代`}起每件攻击 +${relic.perRelicAtk}，最多 +${relic.maxAtk}；排行按 0 件计算`}
+        >
+          <span className="nw">圣物加攻：</span>
+          <span className="nw">
+            按 <span className="num">0</span> 件；
+          </span>
+          <span className="nw">
+            每件 <span className="num">+{relic.perRelicAtk}</span>，
+          </span>
+          <span className="nw">
+            最多 <span className="num">+{relic.maxAtk}</span>
+          </span>
+        </span>
+      )}
       {row.ignoreArmorTech && <span className="ucr-tag is-mech">无视护甲 · {row.ignoreArmorTech}（已计入）</span>}
       {row.unmodeledPills.map((pill) => (
         <span key={pill} className="ucr-tag is-mech">
@@ -60,6 +79,26 @@ function CivTags({ row }: { row: UnitCivRankRow }) {
         <span className="ucr-all-tech">科技齐全</span>
       )}
     </div>
+  );
+}
+
+/** issue 1399：表底条件圣物加攻口径注脚（遍历全量稳定行，不受搜索、列排序与折叠影响）。 */
+export function UnitCivRankRelicNotes({ rows }: { rows: readonly UnitCivRankRow[] }) {
+  return (
+    <>
+      {rows.map((row) => {
+        const relic = row.relicBonus;
+        if (!relic) return null;
+        const minAgeLabel = AGE_ZH[relic.minAge] ?? `${relic.minAge}时代`;
+        return (
+          <li key={`relic-${row.civ}`} data-t="ucr-relic-note" data-civ={row.civ}>
+            「圣物加攻」：排行按驻守 <span className="num nw">0 件</span>圣物计算；{row.civZh}从{minAgeLabel}起每驻守 <span className="num nw">1 件</span>
+            圣物攻击 <span className="num nw">+{relic.perRelicAtk}</span>，最多 <span className="num nw">+{relic.maxAtk}</span>，可在模拟器或单位 PK 里选{' '}
+            <span className="num nw">0–{relic.maxRelics} 件</span>。
+          </li>
+        );
+      })}
+    </>
   );
 }
 
