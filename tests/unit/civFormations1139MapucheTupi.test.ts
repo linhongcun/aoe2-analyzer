@@ -221,7 +221,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
     const expected = [
       ['Mapuche', 'mapuche-kona-bolas', MAPUCHE_SHA, 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
       ['Mapuche', 'mapuche-kona-slinger', MAPUCHE_SHA, 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],
-      ['Tupi', 'tupi-champi-slinger', TUPI_SHA, 'L1342', [1334, 1342, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
+      ['Tupi', 'tupi-champi-slinger', TUPI_SHA, 'L1342', [1334, 1342, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
       ['Tupi', 'tupi-blackwood-halberdier', TUPI_SHA, 'L1343', [1334, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
     ] as const;
     const url = (sha: string, anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#${anchor}`;

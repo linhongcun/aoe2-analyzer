@@ -250,6 +250,10 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
       const alive = fight.winner === 'a' ? fight.aAlive : fight.bAlive;
       const initial = fight.winner === 'a' ? budgetA.count! : budgetB.count!;
       expect([alive, initial], label).toEqual([aliveExpected, initialExpected]);
+      if (label.includes('满血零损')) {
+        expect(Math.round(fight.hpLeft), `${label} full HP`).toBe(budgetA.count! * sideA.F.hp);
+        expect(Math.round(fight.hpLeft), `${label} total 1750 HP`).toBe(1750);
+      }
       if (retreated1dp !== null) {
         const kaSum = fight.contact.kite?.a;
         expect(kaSum, label).toBeDefined();
@@ -281,6 +285,18 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
       nb: 42,
       res: { status: 'win', winner: 'a', aAlive: 1 },
     });
+    expect(runMatch('1236.Lithuanians.4.f.', '492.Britons.4.f.', 1)).toMatchObject({
+      aAtk: 19,
+      na: 25,
+      nb: 42,
+      res: { status: 'win', winner: 'b', bAlive: 8 },
+    });
+    expect(runMatch('1236.Lithuanians.4.f.', '359.Franks.4.f.', 1)).toMatchObject({
+      aAtk: 19,
+      na: 25,
+      nb: 50,
+      res: { status: 'win', winner: 'b', bAlive: 4 },
+    });
     expect(runMatch('1236.Lithuanians.4.f.', '554.Teutons.4.f.', 1)).toMatchObject({
       aAtk: 19,
       na: 25,
@@ -300,7 +316,7 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     expect(runMatch('569.Lithuanians.4.f.', '569.Teutons.4.f.', 4).res.status).toBe('draw');
   });
 
-  it('全库过期计价表述清零、仅两国重签 DOC_SHA_1398、31 国零漂移与契约/去重不变量全部通过', async () => {
+  it('全库过期计价表述清零、仅两国重签 DOC_SHA_1398、其余 31 国不引用本次提交与契约/去重不变量全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
     expect(civFormationContent).toHaveLength(33);
