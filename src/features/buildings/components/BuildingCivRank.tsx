@@ -187,8 +187,7 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
     if (garrisonState === 'ready' && resolvedGarrisonMod && ctx) {
       return { status: 'ready', byCiv: computeGarrisonArrowsByCiv(resolvedGarrisonMod, ctx, building, clampedAge) };
     }
-    if (garrisonState === 'error') return { status: 'error' };
-    return { status: 'loading' };
+    return { status: garrisonState };
   }, [needsGarrison, garrisonState, resolvedGarrisonMod, ctx, building, clampedAge]);
 
   const data = useMemo(() => (ctx ? buildBuildingCivRank(ctx, building, clampedAge, garrisonArrows) : null), [ctx, building, clampedAge, garrisonArrows]);
@@ -220,11 +219,23 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
     if (nextAge === clampedAge) return;
     setAge(nextAge);
     setExpandedCiv(null);
+    if (ctx && sortCol !== 'civ') {
+      const nextArrows: BuildingGarrisonArrowsState =
+        needsGarrison && garrisonState === 'ready' && resolvedGarrisonMod
+          ? { status: 'ready', byCiv: computeGarrisonArrowsByCiv(resolvedGarrisonMod, ctx, building, nextAge) }
+          : { status: garrisonState };
+      const nextData = buildBuildingCivRank(ctx, building, nextAge, nextArrows);
+      if (!nextData.sortableCols.includes(sortCol)) {
+        setSortCol(nextData.defaultSortCol);
+        setSortDir(BUILDING_RANK_COL_META_BY_KEY[nextData.defaultSortCol].bestDir);
+      }
+    }
   };
 
   const handleSort = (col: BuildingRankSortCol) => {
     if (effectiveSortCol === col) {
-      setSortDir((prev) => (prev === 'desc' ? 'asc' : 'desc'));
+      setSortCol(col);
+      setSortDir(effectiveSortDir === 'desc' ? 'asc' : 'desc');
     } else {
       setSortCol(col);
       setSortDir(col === 'civ' ? 'asc' : BUILDING_RANK_COL_META_BY_KEY[col].bestDir);
@@ -380,7 +391,14 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
                 })}
                 <option value="civ">文明</option>
               </select>
-              <button type="button" className="ucr-ms-dir" onClick={() => setSortDir((prev) => (prev === 'desc' ? 'asc' : 'desc'))}>
+              <button
+                type="button"
+                className="ucr-ms-dir"
+                onClick={() => {
+                  setSortCol(effectiveSortCol);
+                  setSortDir(effectiveSortDir === 'desc' ? 'asc' : 'desc');
+                }}
+              >
                 <Icon name={effectiveSortDir === 'desc' ? 'arrow-down' : 'arrow-up'} />
                 <span>{effectiveSortDir === 'desc' ? '从高到低' : '从低到高'}</span>
               </button>
@@ -428,7 +446,11 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
           )}
 
           <ul className="ucr-notes">
-            {data.category === 'A' && <li>空驻箭：没有驻军时每次射出的箭数；满驻箭：驻满能贡献箭矢的单位后的上限，与「驻军预览」同一口径。</li>}
+            {data.category === 'A' && (
+              <li>
+                空驻箭：没有驻军时每次射出的箭数；满驻箭：建筑数据规定的驻军箭矢上限（与「驻军预览」的「箭矢上限」同源；单文明具体驻军能否打满上限可在「驻军预览」核对）。
+              </li>
+            )}
             {building.id === FORTIFIED_CHURCH_ID && churchSample && churchSample.baseProj !== null && churchSample.maxProj !== null && (
               <li>
                 强化教堂须驻守圣物才会射箭：空驻军时 <span className="num nw">{churchSample.baseProj} 支</span>，每件圣物 <span className="num nw">+1 支</span>

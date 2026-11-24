@@ -114,10 +114,17 @@ test('桌面 1280 浅/深色：大型箭塔、城堡与城镇中心核心排序�
   await expect(section.locator('tr[data-civ="Cumans"]')).toContainText('270.0');
   await expect(section.locator('tr[data-civ="Cumans"] [data-bcr-open="construction"]')).toHaveCount(1);
   await expect(section.locator('tr[data-civ="Persians"] .bcr-open-empty')).toHaveCount(1);
-  // 切黑暗时代：工期全「—」不可排序，自动回退按生命降序
+  // 切黑暗时代：工期全「—」不可排序，自动回退按生命降序；再次点击生命表头可正常切换升序且切回帝王不跳回工期降序
   await section.getByRole('radio', { name: '黑暗时代' }).click();
   await expect(section.locator('thead th').filter({ hasText: '工期' }).locator('button')).toHaveCount(0);
   await expect(section.locator('tbody tr[data-civ]').first()).toHaveAttribute('data-civ', 'Persians');
+  const hpHeader = section.locator('thead th').filter({ hasText: '生命' });
+  await expect(hpHeader).toHaveAttribute('aria-sort', 'descending');
+  await hpHeader.getByRole('button').click();
+  await expect(hpHeader).toHaveAttribute('aria-sort', 'ascending');
+  await expect(section.locator('tbody tr[data-civ]').first()).not.toHaveAttribute('data-civ', 'Persians');
+  await section.getByRole('radio', { name: '帝王时代' }).click();
+  await expect(hpHeader).toHaveAttribute('aria-sort', 'ascending');
 });
 
 test('四类边界与非 A 类零拉取 garrisonGeneral：炮塔、船坞、养鱼场、攻城武器厂、强化教堂、单文明营垒', async ({ page }) => {
@@ -181,17 +188,38 @@ test('四类边界与非 A 类零拉取 garrisonGeneral：炮塔、船坞、养�
   await expect(section.locator('.ucr-notes')).toContainText('5 支');
 });
 
-test('A 类懒加载失败重试与「打开」列三入口联动无红框', async ({ page }) => {
+test('A 类懒加载占位、失败重试与「打开」列三入口联动无红框', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  let blockGarrison = true;
-  await page.route(/garrisonGeneral.*\.js/, (route) => {
-    if (blockGarrison) return route.abort('failed');
+  let mode: 'hold' | 'fail' | 'pass' = 'hold';
+  let garrisonRequested = false;
+  let releasePending: (() => void) | null = null;
+  await page.route(/garrisonGeneral.*\.js/, async (route) => {
+    garrisonRequested = true;
+    if (mode === 'hold') {
+      await new Promise<void>((resolve) => {
+        releasePending = resolve;
+      });
+    }
+    if (mode === 'fail') return route.abort('failed');
     return route.continue();
   });
 
   await page.goto('./#/building/235');
+  await expect(page.locator('#building h1')).toContainText('大型箭塔');
   const section = page.locator('#building-civ-rank');
+  // 未滚入视口前不触发驻军 chunk 拉取，也不提前挂 loading 状态行
+  expect(garrisonRequested).toBe(false);
+  await expect(section.locator('[data-t="bcr-garrison-loading"]')).toHaveCount(0);
+
+  // 滚入视口后进入加载中态：显示状态行与 28×12 占位块，两列暂不可排序
   await section.scrollIntoViewIfNeeded();
+  await expect(section.locator('[data-t="bcr-garrison-loading"]')).toBeVisible();
+  await expect(section.locator('.bcr-skel').first()).toBeVisible();
+  await expect(section.locator('thead th').filter({ hasText: '空驻箭' }).locator('button')).toHaveCount(0);
+
+  // 放行并模拟网络失败 → 进入失败重试态
+  mode = 'fail';
+  releasePending?.();
   await expect(section.locator('[data-t="bcr-garrison-error"]')).toBeVisible();
   await expect(section.locator('[data-t="bcr-garrison-error"]')).toContainText('驻军资料没有读取成功');
   await expect(section.locator('thead th').filter({ hasText: '空驻箭' }).locator('button')).toHaveCount(0);
@@ -200,7 +228,7 @@ test('A 类懒加载失败重试与「打开」列三入口联动无红框', asy
   await expect(section.locator('tbody tr[data-civ]').first()).toHaveAttribute('data-civ', 'Britons');
 
   // 恢复网络并点重试
-  blockGarrison = false;
+  mode = 'pass';
   await section.locator('[data-t="bcr-garrison-error"]').getByRole('button', { name: '重试' }).click();
   await expect(section.locator('[data-t="bcr-garrison-error"]')).toHaveCount(0);
   await expect(section.locator('.ucr-champs')).toContainText('空驻箭最多');
@@ -257,6 +285,14 @@ test('窄屏 360 浅色 / 390 深色手风琴与平板 768/900 零页面溢出',
   await expect(detail).toBeVisible();
   await expect(detail.locator('.bcr-dl-actions a')).toHaveText(['在模拟器打开帝王时代满科技', '打开驻军预览', '比较多人施工']);
   await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank');
+  // 窄屏工期排序切黑暗回退后，方向按钮仍能正常切换
+  await section.locator('#bcr-search').fill('');
+  await section.locator('#bcr-sort-select').selectOption('bt');
+  await section.getByRole('radio', { name: '黑暗时代' }).click();
+  await expect(section.locator('#bcr-sort-select')).toHaveValue('hp');
+  await expect(section.locator('.ucr-ms-dir')).toContainText('从高到低');
+  await section.locator('.ucr-ms-dir').click();
+  await expect(section.locator('.ucr-ms-dir')).toContainText('从低到高');
 
   // 768 / 900 平板：零页面横向溢出
   await setTheme(page, 'light');
