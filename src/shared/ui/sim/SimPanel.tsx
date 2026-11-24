@@ -6,6 +6,7 @@ import { civByEn } from '../../../data';
 import { ARMC_CLASS_NOTE } from '../../../domain/affects';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
+import type { CivRelicBonus } from '../../../domain/effects';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
@@ -13,6 +14,7 @@ import type { SimCostBadgeKind, SimEffectiveCostView } from '../../../domain/sim
 import type { NumStat, StatSet, Tech } from '../../../domain/types';
 import { CostView, StatIcon, TechIcon } from '../art';
 import { Icon } from '../Icon';
+import { RelicCountSelector } from '../RelicCountSelector';
 import { fmtStat } from '../../utils/simFormat';
 import { DATA_SOURCES } from '../../utils/dataInfo';
 import { SimEffectiveCost } from './SimEffectiveCost';
@@ -55,6 +57,10 @@ export interface SimPanelProps {
   costTechBadges?: ReadonlyMap<number, SimCostBadgeKind>;
   /** 累计研究费用卡片副说明（如「一次性研究投入，不计入单兵训练价」）。 */
   researchCostNote?: string;
+  /** 单位详情模拟器左栏「对局条件」圣物选择器（仅单位详情模拟器传入，PK 嵌入不传）。 */
+  relicControl?: { value: number; bonus: CivRelicBonus; onChange: (relics: number) => void };
+  /** 对比列文明受圣物加攻影响时的 0 圣物基线说明。 */
+  cmpRelicNote?: { civZh: string; perRelicAtk: number; maxAtk: number };
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -318,8 +324,28 @@ export default function SimPanel(p: SimPanelProps) {
         )}
       </div>
       {p.civNotes.length > 0 && <p className="note">已计入文明加成：{p.civNotes.join('；')}</p>}
+      {p.cmpRelicNote && (
+        <p className="note" data-t="sim-cmp-relic-note">
+          对比列「{p.cmpRelicNote.civZh} 满科技」按 <span className="num nw">0 件</span>圣物计算，不含圣物加攻（每件{' '}
+          <span className="num nw">+{p.cmpRelicNote.perRelicAtk}</span>，最多 <span className="num nw">+{p.cmpRelicNote.maxAtk}</span>）。
+        </p>
+      )}
       <div className="two">
         <div>
+          {p.relicControl && (
+            <div className="simg" data-t="sim-match-conditions">
+              <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>对局条件</Subheading>
+              <RelicCountSelector
+                variant="sim"
+                value={p.relicControl.value}
+                maxRelics={p.relicControl.bonus.maxRelics}
+                perRelicAtk={p.relicControl.bonus.perRelicAtk}
+                maxAtk={p.relicControl.bonus.maxAtk}
+                ageLocked={p.age < p.relicControl.bonus.minAge}
+                onChange={p.relicControl.onChange}
+              />
+            </div>
+          )}
           {Object.entries(groups).map(([g, l]) => (
             <div className="simg" key={g}>
               <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>{g}</Subheading>

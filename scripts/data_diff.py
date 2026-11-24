@@ -42,8 +42,14 @@ def _bonus_diff(old_civs, new_civs, old_fx, new_fx):
             if ot != t: row('bonusText', index=i + 1, old=ot, new=t)
         if p.get('tbEn') != c.get('tbEn'): row('teamBonusText', old=p.get('tbEn'), new=c.get('tbEn'))
         oc = (old_fx or {}).get('civs', {}).get(c['en'], {}); nc = (new_fx or {}).get('civs', {}).get(c['en'], {})
-        key = lambda e: (e['tech'], json.dumps(e.get('rules'), sort_keys=True), json.dumps(e.get('eco'), sort_keys=True))
-        ob = {e['tech']: e for e in oc.get('bonus', [])}; nb = {e['tech']: e for e in nc.get('bonus', [])}
+        key = lambda e: (
+            e['tech'],
+            json.dumps(e.get('rules'), sort_keys=True),
+            json.dumps(e.get('eco'), sort_keys=True),
+            json.dumps(e.get('condition'), sort_keys=True),
+        )
+        ob = {e['tech']: e for e in oc.get('bonus', []) + oc.get('conditional', [])}
+        nb = {e['tech']: e for e in nc.get('bonus', []) + nc.get('conditional', [])}
         for t, e in nb.items():
             if t not in ob: row('datBonusAdded', tech=t, name=e['name'])
             elif key(ob[t]) != key(e): row('datBonusChanged', tech=t, name=e['name'])

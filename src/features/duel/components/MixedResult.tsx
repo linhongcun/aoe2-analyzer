@@ -9,12 +9,13 @@ import { FIGHT_CAP, FIGHT_TIME } from '../../../domain/contactFight';
 import type { MixedDuelInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE_LABEL, type MixedFightResult, type MixedArmyResult } from '../../../domain/mixedFight';
 import { AGE_ZH } from '../../../domain/ratings';
+import { parseRelicCount } from '../../../domain/relicParams';
 import type { Tech, Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
 import { mixedSideCanKite, standingOpeningDelta } from '../logic/duelKiteView';
 import type { Resolved } from '../logic/duelSide';
-import type { MixedSideView } from '../logic/mixedDuel';
+import { mixedSideRelicMatchedUnits, type MixedSideView } from '../logic/mixedDuel';
 import { BattleReplay } from './BattleReplay';
 import { CONTACT_BOUNDARY, MixedContact, STOP_LABELS } from './ContactSummary';
 import { DisengagedNotice } from './KiteSummaryCard';
@@ -184,7 +185,7 @@ export function MixedResult({
   );
   const standingDeltaVolleys = useMemo(() => standingOpeningDelta(a.army!, b.army!, result.contact), [a.army, b.army, result.contact]);
   const sideKey = (s: MixedDuelInput['a']) =>
-    `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}][k=${s.kite ? 1 : 0}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
+    `${s.civ}@${s.age}[${s.techs.join(',')}][${s.team.join(',')}][k=${s.kite ? 1 : 0}][r=${parseRelicCount(s.relics)}]:${s.rows.map((r) => `${r.uid}x${r.qty}`).join(',')}`;
   const replayKey = `${sideKey(input.a)}|${sideKey(input.b)}|${result.duration}`;
   const isDisengaged = result.status === 'disengaged';
   const rangedInfo = (army: NonNullable<MixedSideView['army']>, side: 'a' | 'b') => {
@@ -262,12 +263,19 @@ export function MixedResult({
           const s = input[key],
             view = key === 'a' ? a : b;
           const showMode = mixedSideCanKite(view);
+          const showRelics = mixedSideRelicMatchedUnits(s.civ, view.rows).length > 0;
           return (
             <p key={key}>
               {key.toUpperCase()}：{civByEn(s.civ)?.zh ?? s.civ} / {AGE_ZH[+s.age]} / 科技：
               {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'} / 团队效果：
               {s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'}
               {showMode && <> / 作战模式：{s.kite === true ? '边走边射（拉扯）' : '站桩输出'}</>}
+              {showRelics && (
+                <>
+                  {' '}
+                  / 驻守圣物：<span className="num nw">{parseRelicCount(s.relics)} 件</span>
+                </>
+              )}
               <br />
               单位与数量：
               {s.rows.map((r, i) => (

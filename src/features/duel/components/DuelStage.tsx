@@ -59,7 +59,7 @@ export function DuelStage({
         </div>
       ) : mode === '1' ? (
         <OneVOne
-          key={[fmtSide(A.spec), fmtSide(B.spec), kA, kB].join('|')}
+          key={[fmtSide(A.spec), fmtSide(B.spec), kA, kB, A.relics, B.relics].join('|')}
           A={A}
           B={B}
           kite={kite}
@@ -69,7 +69,7 @@ export function DuelStage({
         />
       ) : (
         <Group
-          key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA ?? 'null', cntB ?? 'null', kA, kB].join('|')}
+          key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA ?? 'null', cntB ?? 'null', kA, kB, A.relics, B.relics].join('|')}
           A={A}
           B={B}
           na={cntA ?? 0}

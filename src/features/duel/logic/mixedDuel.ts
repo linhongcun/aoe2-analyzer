@@ -1,11 +1,12 @@
 import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { isDuelExcludedUnit } from '../../../domain/duelBudget';
-import { TEAM_BONUSES } from '../../../domain/effects';
+import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import { applicableTrainingTechs } from '../../../domain/duelTrainingCost';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { mixedFighterError, type MixedFighter } from '../../../domain/mixedFight';
 import { prereqChain } from '../../../domain/prereq';
+import { parseRelicCount } from '../../../domain/relicParams';
 import { civStatus, simTechs, type SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
 import { unitAvailable } from '../../../domain/unitAvailability';
@@ -35,6 +36,35 @@ export interface MixedSideView {
   total: number | null;
 }
 export const positiveId = (raw: string): number | null => (/^[1-9]\d*$/.test(raw) && Number.isSafeInteger(+raw) ? +raw : null);
+
+/** 混编单侧命中圣物加攻的单位中文名（按行序去重，不依赖 row.resolved 以确保低时代仍显示禁用态）。 */
+export function mixedSideRelicMatchedUnits(civ: string, rows: readonly MixedRowView[]): string[] {
+  const names: string[] = [];
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const u = row.unit;
+    if (!u || isDuelExcludedUnit(u.id) || !unitRelicBonus(civ, u)) continue;
+    if (!seen.has(u.zh)) {
+      seen.add(u.zh);
+      names.push(u.zh);
+    }
+  }
+  return names;
+}
+
+/** 混编单侧若不再含圣物命中单位行，移除其 relics 字段。 */
+export function stripIneligibleMixedRelics(core: Core, sideInput: MixedSideInput): MixedSideInput {
+  if (!sideInput.relics) return sideInput;
+  const eligible = sideInput.rows.some((row) => {
+    const uid = positiveId(row.uid);
+    const u = uid !== null ? core.unitById[uid] : undefined;
+    return Boolean(u && !isDuelExcludedUnit(u.id) && unitRelicBonus(sideInput.civ, u));
+  });
+  if (eligible) return sideInput;
+  const { relics: _dropped, ...rest } = sideInput;
+  void _dropped;
+  return rest;
+}
 
 /**
  * issue 1279：判断混编单侧是否具备切回单兵种模式的最小有效上下文（允许自爆单位与科技树时代滞后单位安全退出，不锁死退路）。
@@ -158,11 +188,12 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     else if (team.has(id)) fail('team', `团队效果重复：${raw}`);
     else team.add(id);
   }
+  const sideRelics = parseRelicCount(input.relics);
   rows.forEach((row, i) => {
     const u = row.unit;
     if (!u || isDuelExcludedUnit(u.id) || !civ || !age || !unitAvailable({ core, trees: ctx.trees }, input.civ, u.id, age)) return;
     const applicable = [...selected].filter((id) => candidates.get(id)?.rows.includes(i));
-    const result = resolve(ctx, core.unitById, { uid: u.id, civ: input.civ, age, ageSet: true, techs: applicable, team: [...team] }, u.id);
+    const result = resolve(ctx, core.unitById, { uid: u.id, civ: input.civ, age, ageSet: true, techs: applicable, team: [...team] }, u.id, sideRelics);
     if (isUnavail(result) || result.civ !== input.civ || result.age !== age || result.u.id !== u.id) {
       fail(`unit-${i}`, `第 ${i + 1} 行上下文解析不一致，未计算`);
       return;

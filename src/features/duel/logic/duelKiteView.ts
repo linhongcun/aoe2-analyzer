@@ -2,6 +2,7 @@ import { civByEn } from '../../../data';
 import { contactFight, contactFighterError, type ArmyRow, type ContactSummary } from '../../../domain/contactFight';
 import { isKiteEligible, type KiteSummary } from '../../../domain/contactKite';
 import type { DuelKite } from '../../../domain/duelParams';
+import { unitRelicBonus } from '../../../domain/effects';
 import type { Mode } from '../../../domain/duelState';
 import { encodeMixedDuel, mixedDataVersion, type MixedSideInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE } from '../../../domain/mixedFight';
@@ -42,6 +43,7 @@ export function buildEnterMixedParams(
     team: s.spec.team.map(String),
     rows: [{ uid: String(s.u.id), qty }],
     ...(kOn ? { kite: true } : {}),
+    ...(s.relics > 0 ? { relics: String(s.relics) } : {}),
   });
   const eq = mode === 'r' || mode === 't';
   return encodeMixedDuel({
@@ -52,10 +54,16 @@ export function buildEnterMixedParams(
   });
 }
 
-export const formatBreakEvenSide = (s: Resolved, kite = false) =>
-  `${civByEn(s.civ)?.zh ?? s.civ} ${s.u.zh}` +
-  (Array.isArray(s.spec.techs) ? (s.spec.techs.length ? ` · 自选科技 ${s.sel.size} 项` : ' · 无科技') : ` · ${PRESET_ZH[s.spec.techs]}`) +
-  (kite ? ' · 边走边射' : '');
+export const formatBreakEvenSide = (s: Resolved, kite = false) => {
+  const rb = s.relics > 0 ? unitRelicBonus(s.civ, s.u) : null;
+  const relicNote = rb && s.age >= rb.minAge ? ` · 驻守 ${s.relics} 件圣物` : '';
+  return (
+    `${civByEn(s.civ)?.zh ?? s.civ} ${s.u.zh}` +
+    (Array.isArray(s.spec.techs) ? (s.spec.techs.length ? ` · 自选科技 ${s.sel.size} 项` : ' · 无科技') : ` · ${PRESET_ZH[s.spec.techs]}`) +
+    relicNote +
+    (kite ? ' · 边走边射' : '')
+  );
+};
 
 /** Round 4 P2-1 空安全：仅在 A/B 均非空时计算单兵与 1v1 远程开关资格（不附带 !hasUpgrade）。 */
 export function resolveDuelKiteEligibility(mode: Mode, a: SideState | null, b: SideState | null): DuelKite | undefined {

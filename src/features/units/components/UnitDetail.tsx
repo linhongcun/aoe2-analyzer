@@ -9,6 +9,7 @@ import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { confusablesOf } from '../../../data/confusables';
 import { unitInsights } from '../../../domain/insights';
 import { AGE_ZH } from '../../../domain/ratings';
+import { stripQueryRelics } from '../../../domain/relicParams';
 import { unitRelatedTechs } from '../../../domain/relatedTechs';
 import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../../../domain/simulator';
 import type { Trees, Unit } from '../../../domain/types';
@@ -92,8 +93,10 @@ export default function UnitDetail() {
   const workspace = rt ? unitWorkspaceOpen(rt, loc.search) : false;
   const setHistory = (open: boolean) => {
     const next = new URLSearchParams(loc.search);
-    if (open) next.set('tab', 'history');
-    else if (next.get('tab') === 'history') next.delete('tab');
+    if (open) {
+      next.set('tab', 'history');
+      next.delete('relics');
+    } else if (next.get('tab') === 'history') next.delete('tab');
     const query = next.toString();
     nav({ pathname: loc.pathname, search: query ? `?${query}` : '' }, { state: loc.state });
   };
@@ -169,12 +172,12 @@ export default function UnitDetail() {
   const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
   const simulatorRoute = routeWithQueryCiv(rt, context && canTrain ? context.en : undefined, u.civs);
-  const simNavigationAdapter: SimNavigationAdapter = ({ current, next, civ }) => {
+  const simNavigationAdapter: SimNavigationAdapter = ({ current, next, civ, maxRelics }) => {
     const historyKey = (window.history.state as { key?: unknown } | null)?.key;
     if (typeof historyKey === 'string' && historyKey !== loc.key) return { kind: 'ignore' };
     const rendered = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
     if (!sameUnitSimLocation(current, rendered)) return { kind: 'ignore' };
-    return { kind: 'navigate', state: advanceUnitSimReturnState(loc.state, current, next, u.id, u.civs, civ) };
+    return { kind: 'navigate', state: advanceUnitSimReturnState(loc.state, current, next, u.id, u.civs, civ, maxRelics ?? 0) };
   };
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   const setCiv = (en: string) => {
@@ -192,7 +195,7 @@ export default function UnitDetail() {
     const current = { pathname: loc.pathname, search: loc.search, hash: loc.hash };
     const source = readUnitSimReturnSource(loc.state, current, u.id, u.civs, context?.en);
     if (source) navigator.push(source, null);
-    else nav({ pathname: loc.pathname, search: withUnitTab(loc.search, 'ov') });
+    else nav({ pathname: loc.pathname, search: stripQueryRelics(withUnitTab(loc.search, 'ov')) });
   };
   const forkCivs = (id: number) => {
     if (!trees) return '';

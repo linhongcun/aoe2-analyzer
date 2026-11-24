@@ -1,0 +1,21 @@
+/* issue 1383：加成详情页与文明页「作用与依据」弹窗共用的条件计入说明块（非警示色，语义令牌）。 */
+.bonus-cond-note {
+  margin: var(--space-3) 0;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.bonus-cond-note p {
+  margin: 0;
+}
+
+.bonus-cond-note .num.nw {
+  display: inline-block;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}

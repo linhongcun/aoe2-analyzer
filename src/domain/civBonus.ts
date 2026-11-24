@@ -5,12 +5,14 @@
 import { effectKey, effectParts, unitGroup, type AffectGroup, type AffectRow } from './affects';
 import { buildingBase, type BCivBonus, type BPred } from './buildingSim';
 import { BUILDING_TYPE_ZH } from './buildings';
-import type { DatEco, DatEntry } from './datEffects';
+import type { DatConditionalEntry, DatEco, DatEntry } from './datEffects';
 import {
+  activeRelicBonus,
   BONUS_DAT,
   BONUS_SRC,
   BUILDING_CIV_BONUSES,
   CIV_BONUSES,
+  CIV_RELIC_BONUSES,
   CIV_TECH_EXTRAS,
   DAT_FRESH,
   TEAM_BLD,
@@ -18,6 +20,7 @@ import {
   TEAM_ECO,
   type BonusSrc,
   type CivBonus,
+  type CivRelicBonus,
   type TeamBonus,
   type TechExtra,
 } from './effects';
@@ -45,10 +48,12 @@ export interface CivBonusEnt {
   teamBld: [BPred, Effect[]][];
   /** 由科技触发的部分：科技英文名 → 规则 */
   techFx: [string, TechExtra][];
+  /** 条件触发的圣物驻守文明加成 */
+  relicFx?: CivRelicBonus;
   /** 数值来源 */
   src: BonusSrc;
-  /** 关联的 .dat 条目（含经济/费用项） */
-  dat: DatEntry[];
+  /** 关联的 .dat 条目（含常驻与条件条目、经济/费用项） */
+  dat: (DatEntry | DatConditionalEntry)[];
   /** 团队加成的 .dat 经济项 */
   eco: DatEco[];
   /** .dat 数值与当前文本的一致性：true 吻合 / false 不一致（已回退） / null 无可比数值或无 .dat */
@@ -105,6 +110,8 @@ export function civBonuses(c: Civ): CivBonusEnt[] {
         ? Object.entries(CIV_TECH_EXTRAS[c.en] ?? {}).flatMap(([t, l]) => l.filter((x) => x.idx === i).map((x) => [t, x] as [string, TechExtra]))
         : [];
     const dat = BONUS_DAT[c.en]?.[String(i)] ?? [];
+    const civRelic = CIV_RELIC_BONUSES[c.en];
+    const relicFx = civRelic && civRelic.idx === i ? civRelic : undefined;
     return {
       id: `${c.en}-${i}`,
       civ: c.en,
@@ -119,11 +126,12 @@ export function civBonuses(c: Civ): CivBonusEnt[] {
       teamFx: [],
       teamBld: [],
       techFx,
+      ...(relicFx ? { relicFx } : {}),
       src,
       dat,
       eco: [],
       fresh: DAT_FRESH(c.en, String(i)),
-      encoded: unitFx.length + bldFx.length + techFx.length > 0,
+      encoded: unitFx.length + bldFx.length + techFx.length > 0 || Boolean(relicFx),
     };
   });
   const teamFx = TEAM_BONUSES.filter((t) => t[0] === c.en);
@@ -178,6 +186,15 @@ export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: 
     if (!own(u.civs)) return;
     const ef = unitEffects(b, u, 4);
     if (ef.length) add(unitGroup(u), ef, u);
+    if (b.relicFx && b.relicFx.unitIds.has(u.id)) {
+      const g = unitGroup(u);
+      const label = `每件圣物 攻击 +${b.relicFx.perRelicAtk}（最多 +${b.relicFx.maxAtk}）`;
+      const m = G.get(g) ?? new Map<string, AffectRow>();
+      G.set(g, m);
+      const r = m.get(label) ?? { effect: label, parts: [{ icon: 'atk', text: label }], units: [], buildings: [] };
+      m.set(label, r);
+      r.units.push(u);
+    }
   });
   buildings.forEach((x) => {
     if (!own(x.civs)) return;
@@ -187,12 +204,20 @@ export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: 
   return [...G.entries()].map(([group, m]) => ({ group, rows: [...m.values()] }));
 }
 
+export interface RelicExampleRow {
+  relics: number;
+  stat: NumStat;
+  before: number;
+  after: number;
+}
 export interface Example {
   name: string;
   kind: 'unit' | 'building';
   id: number;
   /** [适用时代（相同数值的时代合并）, 属性, 之前, 之后]；团队加成时代为空数组 */
   rows: [number[], NumStat, number, number][];
+  /** 条件触发圣物加成的 0..maxRelics 件逐档示例行 */
+  relicRows?: RelicExampleRow[];
 }
 const STATS: NumStat[] = ['hp', 'atk', 'ma', 'pa', 'rng', 'spd', 'los', 'rof', 'gar', 'bt', 'minr'];
 function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): Example['rows'] {
@@ -219,6 +244,21 @@ function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): 
 }
 /** 代表性数值示例：优先选该文明拥有的、受影响的最高时代单位/建筑 */
 export function bonusExample(b: CivBonusEnt, units: readonly Unit[], buildings: readonly Building[], prefer?: string): Example | null {
+  if (b.relicFx) {
+    const us = units.filter((u) => u.civs.length && b.relicFx!.unitIds.has(u.id) && u.civs.includes(b.civ));
+    const pick = us.find((u) => u.en === prefer) ?? [...us].sort((x, y) => y.age - x.age || y.hp - x.hp)[0];
+    if (pick) {
+      const base = baseStats(pick);
+      const relicRows: RelicExampleRow[] = [];
+      for (let count = 0; count <= b.relicFx.maxRelics; count++) {
+        const S: StatSet = { ...base, bonus: { ...base.bonus }, armc: { ...base.armc } };
+        const active = activeRelicBonus(b.civ, pick, Math.max(4, b.relicFx.minAge), count);
+        if (active) applyEffects(S, active.fx);
+        relicRows.push({ relics: count, stat: 'atk', before: base.atk, after: Math.round(S.atk * 100) / 100 });
+      }
+      return { name: pick.zh, kind: 'unit', id: pick.id, rows: [], relicRows };
+    }
+  }
   const ages = b.team ? [4] : [1, 2, 3, 4];
   const us = units.filter((u) => u.civs.length && unitEffects(b, u, 4).length && (b.team || u.civs.includes(b.civ)));
   const pick = us.find((u) => u.en === prefer) ?? [...us].sort((x, y) => y.age - x.age || y.hp - x.hp)[0];

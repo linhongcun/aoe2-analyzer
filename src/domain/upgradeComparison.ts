@@ -1,7 +1,7 @@
 /** issue 205：对同一对手比较科技方案；所有属性和战斗结果复用现有模拟器。 */
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { duel, fighterCanAttack, fighterFrom, type DuelOutcome, type Fighter } from './duel';
-import { TEAM_BONUSES } from './effects';
+import { TEAM_BONUSES, unitRelicBonus } from './effects';
 import { civStatus, presetUpTo, simTechs, simulate, type SimContext } from './simulator';
 import type { Cost, StatSet, Tech, Unit } from './types';
 
@@ -11,6 +11,7 @@ export interface UpgradeSide {
   age: number;
   techs: 'f' | 'c' | number[];
   team: number[];
+  relics?: number;
 }
 
 export interface UpgradePlan {
@@ -33,7 +34,8 @@ export interface InvalidUpgrade {
 
 const sortedUnique = (ids: readonly number[]) => [...new Set(ids)].sort((a, b) => a - b);
 const sameIds = (a: readonly number[], b: readonly number[]) => a.length === b.length && a.every((id, i) => id === b[i]);
-const sameContext = (a: UpgradePlan['spec'], b: UpgradePlan['spec']) => a.uid === b.uid && a.civ === b.civ && a.age === b.age && sameIds(a.team, b.team);
+const sameContext = (a: UpgradePlan['spec'], b: UpgradePlan['spec']) =>
+  a.uid === b.uid && a.civ === b.civ && a.age === b.age && sameIds(a.team, b.team) && (a.relics ?? 0) === (b.relics ?? 0);
 
 /** 严格解析比较方案；不沿用普通 PK 对非法配置的回落或丢弃行为。 */
 export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: UpgradeSide): UpgradePlan | InvalidUpgrade {
@@ -92,10 +94,15 @@ export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: U
 
   const ids = sortedUnique([...closure]);
   const sel = new Set(ids);
-  const S = simulate(ctx, u, spec.civ, spec.age, sel, new Set(team));
+  const relicBonus = unitRelicBonus(spec.civ, u);
+  const relics =
+    relicBonus && typeof spec.relics === 'number' && Number.isInteger(spec.relics) && spec.relics >= 1 && spec.relics <= relicBonus.maxRelics ? spec.relics : 0;
+  const S = simulate(ctx, u, spec.civ, spec.age, sel, new Set(team), undefined, relics);
+  const { relics: _ignoredRelics, ...restSpec } = spec;
+  void _ignoredRelics;
   return {
     ok: true,
-    spec: { ...spec, techs: ids, team },
+    spec: { ...restSpec, techs: ids, team, ...(relics > 0 ? { relics } : {}) },
     u,
     sel,
     S,
@@ -136,7 +143,7 @@ export function upgradeComparison(
   if (!b0.ok) return { ok: false, reason: `保存的 B 方案无效：${b0.reason}` };
   const b1 = upgradePlan(ctx, byId, opponent);
   if (!b1.ok) return { ok: false, reason: `当前 B 方案无效：${b1.reason}` };
-  if (!sameContext(a0.spec, a1.spec)) return { ok: false, reason: 'A 的单位、文明、时代或团队加成已变化，请重新保存升级前方案。' };
+  if (!sameContext(a0.spec, a1.spec)) return { ok: false, reason: 'A 的单位、文明、时代、团队加成或圣物数已变化，请重新保存升级前方案。' };
   if (!sameContext(b0.spec, b1.spec) || !sameIds(b0.spec.techs, b1.spec.techs)) return { ok: false, reason: 'B 的配置已变化，请重新保存升级前方案。' };
 
   const added = a1.techs.filter((t) => !a0.sel.has(t.id));

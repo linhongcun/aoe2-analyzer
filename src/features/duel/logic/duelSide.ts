@@ -3,6 +3,7 @@ import { militaryTechAge } from '../../../domain/availabilityAge';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
+import { unitRelicBonus } from '../../../domain/effects';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
 import { simTechs, simulate, type SimContext } from '../../../domain/simulator';
 import type { StatSet, Tech, Trees, Unit } from '../../../domain/types';
@@ -26,6 +27,8 @@ export interface Resolved {
   /** 单位本身不带 bit 1、由已选科技开启无视护甲时的科技中文名（如「乌兹钢」）。 */
   ignoreArmorTech?: string;
   earlyAgeMarker?: TrainingAgeMarker;
+  /** 本侧驻守圣物件数（仅对命中圣物加攻的文明与单位保留 0..maxRelics，其余为 0）。 */
+  relics: number;
 }
 /** issue 124 选的文明造不了这个单位：保留玩家选的文明，不出属性与战斗结果，等玩家点按钮 */
 export interface Unavail {
@@ -128,7 +131,7 @@ export function switchSideCiv(
   return { ...spec, civ: nextCiv, techs: filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge) };
 }
 
-export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number): SideState {
+export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number, relics = 0): SideState {
   const requestedUnit = byId[spec.uid];
   let u = requestedUnit;
   if (!u || !u.civs.length) u = byId[fallback]!;
@@ -148,18 +151,29 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
   const sel = selectTrainingIds(spec.techs, avail, age, costs, civ);
+  const relicBonus = unitRelicBonus(civ, u);
+  const effectiveRelics = relicBonus ? Math.min(relicBonus.maxRelics, Math.max(0, Math.floor(Number.isFinite(relics) ? relics : 0))) : 0;
   const intrinsicIgnoreArmor = hasIgnoreArmor(u.combatAbility);
   let ignoreArmorTech: string | undefined;
-  const S = simulate(ctx, u, civ, age, sel, new Set(spec.team), (step) => {
-    if (intrinsicIgnoreArmor) return;
-    const beforeOn = hasIgnoreArmor(step.before.ca);
-    const afterOn = hasIgnoreArmor(step.after.ca);
-    if (!beforeOn && afterOn && step.techId !== undefined) {
-      ignoreArmorTech = avail.find((item) => item.t.id === step.techId)?.t.zh;
-    } else if (beforeOn && !afterOn) {
-      ignoreArmorTech = undefined;
-    }
-  });
+  const S = simulate(
+    ctx,
+    u,
+    civ,
+    age,
+    sel,
+    new Set(spec.team),
+    (step) => {
+      if (intrinsicIgnoreArmor) return;
+      const beforeOn = hasIgnoreArmor(step.before.ca);
+      const afterOn = hasIgnoreArmor(step.after.ca);
+      if (!beforeOn && afterOn && step.techId !== undefined) {
+        ignoreArmorTech = avail.find((item) => item.t.id === step.techId)?.t.zh;
+      } else if (beforeOn && !afterOn) {
+        ignoreArmorTech = undefined;
+      }
+    },
+    effectiveRelics,
+  );
   if (intrinsicIgnoreArmor || !hasIgnoreArmor(S.ca)) ignoreArmorTech = undefined;
   const training = quoteTraining(u, civ, age, sel, costs, ok, earlyAgeMarker);
   return {
@@ -175,6 +189,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     training,
     ...(ignoreArmorTech ? { ignoreArmorTech } : {}),
     ...(earlyAgeMarker ? { earlyAgeMarker } : {}),
+    relics: effectiveRelics,
   };
 }
 

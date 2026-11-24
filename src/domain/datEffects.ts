@@ -38,6 +38,10 @@ export interface DatEco {
   /** 同一建筑各时代形态的倍率（黑暗到帝王）。v 仍是目录里那个形态的值。 */
   byAge?: number[];
 }
+export interface DatCondition {
+  kind: 'relics';
+  min: number;
+}
 export interface DatEntry {
   tech: number;
   name: string;
@@ -49,6 +53,9 @@ export interface DatEntry {
   idx: number | null;
   linked: 'auto' | 'manual';
 }
+export interface DatConditionalEntry extends DatEntry {
+  condition: DatCondition;
+}
 export interface DatFresh {
   ok: boolean | null;
   dat: unknown[];
@@ -57,6 +64,7 @@ export interface DatFresh {
 export interface DatCiv {
   dat: boolean;
   bonus: DatEntry[];
+  conditional?: DatConditionalEntry[];
   team: { combat: boolean; rules: DatRule[]; eco: DatEco[] };
   fresh: Record<string, DatFresh>;
 }

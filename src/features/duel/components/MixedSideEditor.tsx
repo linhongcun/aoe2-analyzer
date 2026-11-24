@@ -4,11 +4,12 @@ import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedBallisticsScope } from '../../../domain/ballistics';
 import { isDuelExcludedUnit } from '../../../domain/duelBudget';
 import { fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
-import { TEAM_BONUSES } from '../../../domain/effects';
+import { civRelicBonus, TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
+import { parseRelicCount } from '../../../domain/relicParams';
 import { civBonusNotes, type SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
 import { unitOptionLabel } from '../../../domain/unitOptionLabel';
@@ -16,8 +17,9 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CivIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
+import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
-import { resolveMixedSide, type MixedSideView } from '../logic/mixedDuel';
+import { mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
 import { mixedSideCanKite, mixedSideHasMeleeFront } from '../logic/duelKiteView';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
@@ -49,17 +51,20 @@ export function MixedSideEditor({
   const fullUnits = useMemo(() => core.units.filter((u) => u.civs.length && !isDuelExcludedUnit(u.id)), [core]);
   const units = useMemo(() => fullUnits.map((u) => ({ u })), [fullUnits]);
   const formatUnitLabel = useMemo(() => (unit: Unit) => unitOptionLabel({ core }, unit, fullUnits), [core, fullUnits]);
-  const age = +input.age;
+  const validAge = /^[1-4]$/.test(input.age) ? +input.age : null;
+  const age = validAge ?? +input.age;
   const focus = (id: string) => requestAnimationFrame(() => document.getElementById(id)?.focus());
   const emitChange = (next: MixedSideInput, announcement?: string) => {
-    if (next.kite === true && !mixedSideCanKite(resolveMixedSide(ctx, core, next, side))) {
-      const { kite: _dropped, ...rest } = next;
-      void _dropped;
-      onChange(rest, announcement);
-      return;
+    let out = stripIneligibleMixedRelics(core, next);
+    if (out.kite === true && !mixedSideCanKite(resolveMixedSide(ctx, core, out, side))) {
+      const { kite: _droppedKite, ...rest } = out;
+      void _droppedKite;
+      out = rest;
     }
-    onChange(next, announcement);
+    onChange(out, announcement);
   };
+  const relicBonus = civRelicBonus(input.civ);
+  const relicMatchedUnits = relicBonus ? mixedSideRelicMatchedUnits(input.civ, view.rows) : [];
   const changeRow = (index: number, value: Partial<MixedSideInput['rows'][number]>) =>
     emitChange({ ...input, rows: input.rows.map((r, i) => (i === index ? { ...r, ...value } : r)) });
   const errors = (field: string) => view.errors.filter((e) => e.field === `${prefix}-${field}`);
@@ -126,7 +131,7 @@ export function MixedSideEditor({
             value={input.civ}
             emptyText="选择文明"
             compactTrigger
-            onChange={(civ) => onChange({ ...input, civ })}
+            onChange={(civ) => emitChange({ ...input, civ })}
           />
           {fieldErrors('civ')}
         </div>
@@ -162,6 +167,26 @@ export function MixedSideEditor({
           满科技
         </button>
       </div>
+      {relicBonus && relicMatchedUnits.length > 0 && (
+        <RelicCountSelector
+          variant="mixed"
+          side={side}
+          value={parseRelicCount(input.relics, relicBonus.maxRelics)}
+          maxRelics={relicBonus.maxRelics}
+          perRelicAtk={relicBonus.perRelicAtk}
+          maxAtk={relicBonus.maxAtk}
+          ageLocked={validAge === null || validAge < relicBonus.minAge}
+          matchedUnits={relicMatchedUnits}
+          onChange={(n) => {
+            if (n > 0) onChange({ ...input, relics: String(n) });
+            else {
+              const { relics: _dropped, ...rest } = input;
+              void _dropped;
+              onChange(rest);
+            }
+          }}
+        />
+      )}
       {mixedSideCanKite(view) && (
         <RangedModeToggle
           side={side}

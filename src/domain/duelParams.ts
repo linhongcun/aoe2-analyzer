@@ -6,6 +6,7 @@
  */
 import type { Mode } from './duelState';
 import { DEFAULT_MIN, DEFAULT_VILS } from './realCost';
+import { DEFAULT_MAX_RELICS, parseRelicCount } from './relicParams';
 
 export interface DuelParams {
   /** '1' 1v1；'n' N vs M；'r' 等资源（预算）；'t' 等资源（等采集时间） */
@@ -23,6 +24,7 @@ export interface DuelParams {
 /** 只读查询参数（URLSearchParams 即满足） */
 export interface ParamReader {
   get(key: string): string | null;
+  getAll?(key: string): string[];
 }
 
 const MODES: readonly string[] = ['1', 'n', 'r', 't'];
@@ -76,5 +78,32 @@ export function canonDuelKite(base: URLSearchParams, kite: DuelKite, eligible?: 
   else canon.delete('ka');
   if (kite.b && (!eligible || eligible.b)) canon.set('kb', '1');
   else canon.delete('kb');
+  return canon;
+}
+
+export interface DuelRelics {
+  a: number;
+  b: number;
+}
+
+/** issue 1383：解码单兵 PK 的 A/B 圣物件数（ra / rb）；缺失、重复键、0 或非法值均按 0 处理。 */
+export function decodeDuelRelics(q: ParamReader): DuelRelics {
+  const readOne = (key: 'ra' | 'rb') => {
+    if (q.getAll && q.getAll(key).length > 1) return 0;
+    return parseRelicCount(q.get(key));
+  };
+  return { a: readOne('ra'), b: readOne('rb') };
+}
+
+/** issue 1383：规范化写回 ra/rb；0 省略，1..max 保留，冷加载或升级比较链路传 maxBySide=undefined 保留合法 ra/rb 不删。 */
+export function canonDuelRelics(base: URLSearchParams, relics: DuelRelics, maxBySide?: { a: number; b: number }): URLSearchParams {
+  const canon = new URLSearchParams(base);
+  const write = (key: 'ra' | 'rb', value: number, max?: number) => {
+    const limit = max === undefined ? DEFAULT_MAX_RELICS : max;
+    if (Number.isInteger(value) && value >= 1 && value <= limit) canon.set(key, String(value));
+    else canon.delete(key);
+  };
+  write('ra', relics.a, maxBySide?.a);
+  write('rb', relics.b, maxBySide?.b);
   return canon;
 }

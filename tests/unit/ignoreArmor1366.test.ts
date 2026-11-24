@@ -193,27 +193,36 @@ describe('#1366 无视护甲（combatAbility bit 1 / bit 2）领域结算与边�
   });
 
   it('验收 1–5：三组对照、3000 预算群战与反例、以及 831/832/1904/1907 自动规则', () => {
-    // 验收 1：精锐烈堤司（22 攻）vs 精锐条顿骑士（13 近甲）→ 每击 22（改前 9）
+    // 验收 1：精锐烈堤司（默认 0 圣物 18 攻；#1383 改为默认不叠圣物）vs 精锐条顿骑士（13 近甲）→ 每击 18（改前 5）
     const leitis = resolveSide(1236, 'Lithuanians', 4, 'f');
     const tk = resolveSide(554, 'Teutons', 4, 'f');
-    expect(leitis.S.atk).toBe(22);
+    expect(leitis.S.atk).toBe(18);
     expect(tk.S.ma).toBe(13);
     expect(leitis.ignoreArmorTech).toBeUndefined();
-    expect(damagePerHit(leitis.F, tk.F)).toBe(22);
+    expect(damagePerHit(leitis.F, tk.F)).toBe(18);
     const bd1 = damageBreakdown(leitis.F, tk.F);
     expect(bd1.canAttack).toBe(true);
     if (bd1.canAttack) {
-      expect(bd1.total).toBe(22);
+      expect(bd1.total).toBe(18);
       expect(bd1.ignoreArmor).toEqual({ active: true, resisted: false, applied: true, categories: ['近战'], armors: [13] });
-      expect(bd1.rows.find((r) => r.category === '近战')).toEqual({ category: '近战', attack: 22, armor: 13, damage: 22, ignored: true });
+      expect(bd1.rows.find((r) => r.category === '近战')).toEqual({ category: '近战', attack: 18, armor: 13, damage: 18, ignored: true });
     }
-    // 验收 5：3000 预算群战（25 精锐烈堤司 vs 26 精锐条顿骑士）→ 烈堤司反胜
+    // 验收 5：3000 预算群战（25 精锐烈堤司 vs 26 精锐条顿骑士）→ 0 圣物基线（18 攻）条顿小胜，带 2 件圣物（20 攻）烈堤司反胜
     const g3000 = groupFight(leitis.F, 25, tk.F, 26);
     expect(g3000.status).toBe('win');
     if (g3000.status === 'win') {
-      expect(g3000.winner).toBe('a');
-      expect(g3000.aAlive).toBeGreaterThan(0);
-      expect(g3000.bAlive).toBe(0);
+      expect(g3000.winner).toBe('b');
+      expect(g3000.bAlive).toBeGreaterThan(0);
+    }
+    const leitis2Relics = resolve(ctx, byId, { uid: 1236, civ: 'Lithuanians', age: 4, ageSet: true, techs: 'f', team: [] }, 1236, 2);
+    if ('unavail' in leitis2Relics) throw new Error('unexpected unavail');
+    expect(leitis2Relics.S.atk).toBe(20);
+    const g3000Relics = groupFight(leitis2Relics.F, 25, tk.F, 26);
+    expect(g3000Relics.status).toBe('win');
+    if (g3000Relics.status === 'win') {
+      expect(g3000Relics.winner).toBe('a');
+      expect(g3000Relics.aAlive).toBeGreaterThan(0);
+      expect(g3000Relics.bAlive).toBe(0);
     }
 
     // 验收 2：精锐复合弓箭手（8 攻）vs 精锐近卫军（10 远甲）与游侠（7 远甲）→ 每击 8（改前 1）
@@ -238,7 +247,7 @@ describe('#1366 无视护甲（combatAbility bit 1 / bit 2）领域结算与边�
     expect(champNoWootz.ignoreArmorTech).toBeUndefined();
     expect(damagePerHit(champNoWootz.F, tk.F)).toBe(5);
 
-    // 验收 4 反例：精锐烈堤司打条顿中型冲车（铁甲 ma=2，bit 2 抵抗）→ 20；复合弓打箭船（bit 2 抵抗）→ 照扣远甲
+    // 验收 4 反例：精锐烈堤司（0 圣物 18 攻）打条顿中型冲车（铁甲 ma=2，bit 2 抵抗）→ 16；复合弓打箭船（bit 2 抵抗）→ 照扣远甲
     const teutonRam = resolveSide(422, 'Teutons', 4, 'f');
     expect(teutonRam.S.ma).toBe(2);
     expect(evaluateIgnoreArmor(leitis.F, teutonRam.F)).toEqual({
@@ -248,7 +257,7 @@ describe('#1366 无视护甲（combatAbility bit 1 / bit 2）领域结算与边�
       categories: ['近战'],
       armors: [2],
     });
-    expect(damagePerHit(leitis.F, teutonRam.F)).toBe(20);
+    expect(damagePerHit(leitis.F, teutonRam.F)).toBe(16);
     const galleon = resolveSide(539, 'Britons', 4, 'f');
     expect(evaluateIgnoreArmor(cb.F, galleon.F).resisted).toBe(true);
     expect(damagePerHit(cb.F, galleon.F)).toBe(Math.max(1, cb.S.atk - galleon.S.pa));
@@ -290,10 +299,11 @@ describe('#1366 无视护甲（combatAbility bit 1 / bit 2）领域结算与边�
       changes: [{ stat: '攻击无视护甲', before: 0, after: 1, kind: 'boolean' }],
     });
 
-    // 烈堤司打攻城战象：攻城战象叠加乌兹钢后仍保留 bit 2，抵抗无视护甲，照常扣近战护甲（-2 → 22 - (-2) = 24）
+    // 烈堤司打攻城战象：攻城战象叠加乌兹钢后仍保留 bit 2，抵抗无视护甲，照常扣满科技近战护甲（0 → 18 - 0 = 18）
     const evLeitisToEle = evaluateIgnoreArmor(leitis.F, siegeEle.F);
     expect(evLeitisToEle).toEqual({ active: true, resisted: true, applied: false, categories: ['近战'], armors: [siegeEle.S.ma] });
     expect(damagePerHit(leitis.F, siegeEle.F)).toBe(leitis.S.atk - siegeEle.S.ma);
+    expect(damagePerHit(leitis.F, siegeEle.F)).toBe(18);
 
     // SimPanel 属性行：基础 否 → 当前 <b>是</b>
     const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? 'atk' : ic]);
@@ -334,8 +344,8 @@ describe('#1366 无视护甲（combatAbility bit 1 / bit 2）领域结算与边�
     const one = oneVOneFight(leitis.F, tk.F);
     const grp = groupFight(leitis.F, 1, tk.F, 1);
     const mix = mixedFight([{ uid: 1236, count: 1, fighter: leitis.F }], [{ uid: 554, count: 1, fighter: tk.F }]);
-    expect(one.ab.dmg).toBe(22);
-    expect(duel(leitis.F, tk.F).ab.dmg).toBe(22);
+    expect(one.ab.dmg).toBe(18);
+    expect(duel(leitis.F, tk.F).ab.dmg).toBe(18);
     expect(grp.status).toBe('win');
     expect(mix.status).toBe('win');
     if (one.mode === 'contact' && grp.status === 'win' && mix.status === 'win') {

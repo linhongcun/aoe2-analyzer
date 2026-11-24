@@ -7,9 +7,9 @@ import { groupLines } from '../../domain/family';
 import { linkify } from '../../domain/linker';
 import { AGE_ZH } from '../../domain/ratings';
 import { BuildingLink, StatIcon, UnitLinks } from './art';
+import { BonusExampleTable, RelicConditionCallout } from './BonusConditionBlocks';
 import { Icon } from './Icon';
 import { Linked, Loading } from './widgets';
-import { fmtStat } from '../utils/simFormat';
 import { LineChip } from './LineChip';
 import type { Unit } from '../../domain/types';
 import { collapse } from '../../domain/family';
@@ -153,6 +153,7 @@ export function BonusBodyContent({
         </>
       )}
       {b.team && <p className="note">团队加成对你和所有盟友生效（包括你自己）。</p>}
+      {b.relicFx && <RelicConditionCallout relicFx={b.relicFx} />}
       {ex && (
         <div className="bex">
           <h4>
@@ -160,24 +161,9 @@ export function BonusBodyContent({
             <Link className="ulink" to={ex.kind === 'unit' ? `/unit/${ex.id}` : `/building/${ex.id}`}>
               {ex.name}
             </Link>
-            <small className="note">（基础值，仅计这一条加成）</small>
+            <small className="note">{ex.relicRows?.length ? '（基础值，仅计这一条加成；按驻守圣物件数，城堡时代起）' : '（基础值，仅计这一条加成）'}</small>
           </h4>
-          <table className="stat bextab">
-            <tbody>
-              {ex.rows.map(([ages, k, a, v], i) => (
-                <tr key={i}>
-                  {!b.team && <td>{ageTxt(ages)}</td>}
-                  <td>
-                    <StatIcon k={STAT_ZH[k]?.[1] ?? ''} t={STAT_ZH[k]?.[0]} />
-                    {STAT_ZH[k]?.[0] ?? k}
-                  </td>
-                  <td>
-                    {fmtStat(k, a)} <Icon name="arrow-right" /> <b className="up">{fmtStat(k, v)}</b>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <BonusExampleTable b={b} ex={ex} />
         </div>
       )}
       {usage.length > 0 && (
@@ -262,6 +248,12 @@ export function BonusBodyContent({
                 </code>
                 {e.age > 1 && <small className="note"> · {AGE_ZH[e.age]}</small>}
                 {e.req.length > 0 && <small className="note"> · 需 {e.req.join(' + ')}</small>}
+                {'condition' in e && e.condition.kind === 'relics' && (
+                  <small className="note">
+                    {' '}
+                    · 条件：驻守圣物 ≥ <span className="num nw">{e.condition.min} 件</span>
+                  </small>
+                )}
                 {e.rules.length > 0 && <small className="note"> · 属性命令 {e.rules.reduce((n, r) => n + r.fx.length, 0)} 条（见上方作用对象）</small>}
                 {e.eco.length > 0 && (
                   <ul>
@@ -335,6 +327,14 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
               {entry.req.length ? entry.req.join(' + ') : '无'} <code>req={JSON.stringify(entry.req)}</code>
             </dd>
           </div>
+          {'condition' in entry && entry.condition.kind === 'relics' && (
+            <div>
+              <dt>条件</dt>
+              <dd>
+                驻守圣物 ≥ <span className="num nw">{entry.condition.min} 件</span>
+              </dd>
+            </div>
+          )}
         </dl>
         {entry.rules.length > 0 && (
           <ul className="bonus-raw-rules">
@@ -435,6 +435,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
           </div>
         )}
       </section>
+      {b.relicFx && <RelicConditionCallout relicFx={b.relicFx} />}
       {ex && (
         <section className="bonus-evidence-section">
           <h4>数值示例</h4>
@@ -443,24 +444,9 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
               <Link className="ulink" to={ex.kind === 'unit' ? `/unit/${ex.id}` : `/building/${ex.id}`}>
                 {ex.name}
               </Link>
-              <small className="note">（基础值，仅计这一条加成）</small>
+              <small className="note">{ex.relicRows?.length ? '（基础值，仅计这一条加成；按驻守圣物件数，城堡时代起）' : '（基础值，仅计这一条加成）'}</small>
             </h5>
-            <table className="stat bextab">
-              <tbody>
-                {ex.rows.map(([ages, key, before, after], index) => (
-                  <tr key={index}>
-                    {!b.team && <td>{ageTxt(ages)}</td>}
-                    <td>
-                      <StatIcon k={STAT_ZH[key]?.[1] ?? ''} t={STAT_ZH[key]?.[0]} />
-                      {STAT_ZH[key]?.[0] ?? key}
-                    </td>
-                    <td>
-                      {fmtStat(key, before)} <Icon name="arrow-right" /> <b className="up">{fmtStat(key, after)}</b>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <BonusExampleTable b={b} ex={ex} />
           </div>
         </section>
       )}

@@ -52,6 +52,54 @@ AGE_TECH = {101: 2, 102: 3, 103: 4}
 CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 'Mayan': 'Mayans', 'Indians': 'Hindustanis'}
 # 未导出多形态单位 ID → 目录规范单位 ID（#1293：展开态巨型投石机 42 ↔ 打包态目录记录 331）
 UNIT_FORM_ALIASES = {42: 331}
+# .dat 科技 resource_costs 中代表「修道院驻守圣物数」的资源 ID（立陶宛 699–702：Cost=[[7, 1..4, 1]]）
+RELIC_RESOURCE_ID = 7
+
+
+def tech_resource_costs(tech):
+    """返回科技的非空资源消耗/触发条件列表 [[type, amount, flag], ...]（仅计有效消耗/条件：type>=0、amount>0、flag!=0）。"""
+    return [c for c in (tech.get('Cost') or []) if len(c) >= 3 and c[0] >= 0 and c[1] > 0 and c[2] != 0]
+
+
+def relic_condition(rcosts):
+    """识别单一圣物驻守条件（resource_type=7 且数量 >= 1），否则返回 None。"""
+    if len(rcosts) == 1 and rcosts[0][0] == RELIC_RESOURCE_ID and rcosts[0][1] >= 1:
+        return {'kind': 'relics', 'min': int(round(rcosts[0][1]))}
+    return None
+
+
+def conditional_age_req(AT, tech_to_blds, blds_by_id, tech_by_id, tid, civ_en, seen=None):
+    """推导带条件隐藏科技的生效时代与前置科技（环路保护；经 BuildTech 查该文明可用目录建筑，推导不出 >= 城堡时代则 fail-closed）。"""
+    is_root = seen is None
+    seen = set() if is_root else seen
+    seen.add(tid)
+    req = [x for x in AT[tid]['RequiredTechs'] if x >= 0] if 0 <= tid < len(AT) else []
+    age, pre = 1, []
+    for r in req:
+        if r in AGE_TECH:
+            age = max(age, AGE_TECH[r])
+            continue
+        if r in tech_by_id:
+            pre.append(tech_by_id[r]['en'])
+            age = max(age, tech_by_id[r].get('age', 1))
+            continue
+        if r in tech_to_blds:
+            matched_ages = [blds_by_id[bid]['age'] for bid in tech_to_blds[r] if bid in blds_by_id and civ_en in blds_by_id[bid].get('civs', [])]
+            if matched_ages:
+                age = max(age, min(matched_ages))
+                continue
+        nm = AT[r]['Name'] if 0 <= r < len(AT) else ''
+        m = re.search(r'(Feudal|Castle|Imperial)', nm or '')
+        if m and 'Age' in nm:
+            age = max(age, {'Feudal': 2, 'Castle': 3, 'Imperial': 4}[m.group(1)])
+            continue
+        if r not in seen:
+            a2, p2 = conditional_age_req(AT, tech_to_blds, blds_by_id, tech_by_id, r, civ_en, seen)
+            age = max(age, a2)
+            pre += p2
+    if is_root and age < 3:
+        raise ValueError(f'Conditional tech {tid} ({civ_en}) failed to derive >= Castle Age from .dat (got age={age})')
+    return age, sorted(set(pre))
 
 
 def main_atk(o):
@@ -315,6 +363,11 @@ def main():
     ours = {u['id']: u for u in units}
     ours.update({b['id']: dict(b, _b=1) for b in blds})
     forms = building_age_forms(A, [b['id'] for b in blds])
+    blds_by_id = {b['id']: b for b in blds}
+    tech_to_blds = defaultdict(list)
+    for bid_str, btid in (A.get('BuildTech') or {}).items():
+        if isinstance(btid, int) and btid >= 0:
+            tech_to_blds[btid].append(int(bid_str))
     tech_by_id = {t['id']: t for t in techs}
     AT, AE, AC = A['Techs'], A['Effects'], A['Civs']
 
@@ -487,6 +540,7 @@ def main():
         en = c['en']
         ai = adat.get(en)
         entries = []
+        conditional_entries = []
         # tech tree 效果（开局即有）
         # 科技树效果里的「禁用单位/科技」(2/102/103) 与本站无关，compile_cmds 自然忽略
         tree_cmds = a_cmds(AC[ai]['TechTreeID']) if ai is not None else []
@@ -503,16 +557,27 @@ def main():
             cmds, ok = merged_cmds(tid)
             rules, eco = compile_cmds(cmds)
             if not rules and not eco and ok: continue
-            age, pre = age_req(tid)
             nm = AT[tid]['Name']
             if '+ BL' in nm: continue  # 「已研究血统」时的引擎替换副本（与无 BL 版本数值相同），不重复计入
+            rcosts = tech_resource_costs(AT[tid])
+            if rcosts:
+                # 凡带非空 resource_costs 的文明隐藏科技（如立陶宛圣物 699–702、后帝王 790/791）绝不进常驻 bonus
+                cond = relic_condition(rcosts)
+                if cond and (rules or eco):
+                    c_age, c_pre = conditional_age_req(AT, tech_to_blds, blds_by_id, tech_by_id, tid, en)
+                    conditional_entries.append({'tech': tid, 'name': nm, 'age': c_age, 'req': c_pre, 'combat': ok, 'rules': rules, 'eco': eco, 'condition': cond})
+                continue
+            age, pre = age_req(tid)
             entries.append({'tech': tid, 'name': nm, 'age': age, 'req': pre, 'combat': ok, 'rules': rules, 'eco': eco})
         team_cmds = a_cmds(AC[ai]['TeamBonusID']) if ai is not None else []
         trules, teco = compile_cmds(team_cmds)
         for tt in TEAM_TECHS.get(en, []):
             cm, _ = merged_cmds(tt); r2, e2 = compile_cmds(cm)
             trules += [r for r in r2 if r not in trules]; teco += [x for x in e2 if x not in teco]
-        out['civs'][en] = {'dat': ai is not None, 'bonus': entries, 'team': {'combat': ai is not None, 'rules': trules, 'eco': teco}}
+        civ_rec = {'dat': ai is not None, 'bonus': entries, 'team': {'combat': ai is not None, 'rules': trules, 'eco': teco}}
+        if conditional_entries:
+            civ_rec['conditional'] = conditional_entries
+        out['civs'][en] = civ_rec
 
     # ---- 关联 ----
     links = json.load(open(ROOT / 'data/sources/effects_links.json')) if (ROOT / 'data/sources/effects_links.json').exists() else {}
@@ -520,7 +585,8 @@ def main():
     for c in civs:
         ent = out['civs'][c['en']]
         L = links.get(c["en"], {})
-        for e in ent['bonus']:
+        all_entries = ent['bonus'] + ent.get('conditional', [])
+        for e in all_entries:
             names = {re.sub(r'^Elite ', '', ours[i]['en']) for r in e['rules'] for i in r['t']} | {re.sub(r'^Elite ', '', ours[i]['en']) for x in e['eco'] for i in x.get('t', []) if i in ours}
             names |= {w for w in CLASSW if any(w.lower() in n.lower() for n in names)}
             sc = [link_score(e, b, names) for b in c['bonEn']]
@@ -529,13 +595,13 @@ def main():
             k = str(e['tech'])
             e['idx'] = L[k] if k in L else e['auto']
             e['linked'] = 'manual' if k in L else 'auto'
-        for e in ent['bonus']: e.pop('auto', None)
+        for e in all_entries: e.pop('auto', None)
 
     # ---- 新鲜度：dat 数值 vs 当前补丁的游戏内加成文本（civs.json，来自当前 aoe2techtree 字符串） ----
     for c in civs:
         ent = out['civs'][c['en']]
         groups = defaultdict(list)
-        for e in ent['bonus']:
+        for e in ent['bonus'] + ent.get('conditional', []):
             if e['idx'] is not None: groups[e['idx']].append(e)
         fr = {}
         for idx, es in groups.items():

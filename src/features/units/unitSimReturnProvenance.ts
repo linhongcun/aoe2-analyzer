@@ -1,3 +1,4 @@
+import { readQueryRelics, sameSearchIgnoringRelics } from '../../domain/relicParams';
 import { unitWorkspaceOpen, withUnitTab } from '../../domain/unitDetailView';
 import type { SimRoute } from '../../domain/simulator';
 
@@ -152,26 +153,30 @@ export function advanceUnitSimReturnState(
   targetId: number,
   availableCivs: readonly string[],
   currentCiv: string,
+  maxRelics = 0,
 ): unknown {
   const provenance = readProvenance(state);
   if (!provenance || provenance.targetId !== targetId || !sameUnitSimLocation(provenance.expected, current)) return undefined;
   const sourceCiv = overviewCiv(provenance.source, targetId, availableCivs, provenance.sourceCiv ?? undefined);
+  const samePath = next.pathname === current.pathname;
+  const searchAllowed =
+    next.search === current.search || (sameSearchIgnoringRelics(current.search, next.search) && !readQueryRelics(next.search, maxRelics).dirty);
   if (
     sourceCiv === false ||
     sourceCiv !== provenance.sourceCiv ||
-    next.search !== current.search ||
+    !searchAllowed ||
     next.hash !== current.hash ||
     !isSimulatorLocation(current, targetId, availableCivs, currentCiv, false) ||
     (provenance.expectedCiv !== null && provenance.expectedCiv !== currentCiv) ||
     (provenance.sourceCiv !== null && provenance.sourceCiv !== currentCiv) ||
-    !isSimulatorLocation(next, targetId, availableCivs, currentCiv, true)
+    !isSimulatorLocation(next, targetId, availableCivs, currentCiv, !samePath)
   )
     return undefined;
   return {
     [stateKey]: {
       ...provenance,
       expected: { ...next },
-      expectedCiv: provenance.expectedCiv ?? currentCiv,
+      expectedCiv: samePath ? provenance.expectedCiv : (provenance.expectedCiv ?? currentCiv),
     },
   };
 }

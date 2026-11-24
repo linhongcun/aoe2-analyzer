@@ -1,6 +1,7 @@
+import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { EARLY_UNIT_AGES } from '../../../domain/availabilityAge';
-import { TEAM_BONUSES } from '../../../domain/effects';
+import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
 import { buildSimEffectiveCost, costTechBadgeMap, presetCostTechIds } from '../../../domain/simEffectiveCost';
 import type { Unit } from '../../../domain/types';
@@ -12,7 +13,7 @@ import SimPanel, { type StatRow } from './SimPanel';
 /** 单位科技模拟器（状态在路径中：#/unit/<id>/<civ>/<age>/<ids>/<team>） */
 export default function Simulator({ u, route, navigationAdapter }: { u: Unit; route: SimRoute; navigationAdapter?: SimNavigationAdapter }) {
   const core = useCore();
-  const { state: S, go, setCmp } = useSimState(u, route, navigationAdapter);
+  const { state: S, go, setCmp, setRelics } = useSimState(u, route, navigationAdapter);
   if (!S || !core)
     return (
       <div id="sim" className="posbox">
@@ -20,8 +21,9 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
       </div>
     );
   const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
-  const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team);
+  const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team, undefined, S.relics);
   const C = S.cmp ? simulate(S.ctx, u, S.cmp, 4, allNumeric(simTechs(S.ctx, u, S.cmp)), new Set()) : null;
+  const cmpRelic = S.cmp && S.cmp !== S.civ ? unitRelicBonus(S.cmp, u) : null;
   const effectiveCost = buildSimEffectiveCost(u, 'unit', S.civ, S.age, S.sel, S.costTechs);
   return (
     <SimPanel
@@ -38,6 +40,8 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
       costTechBadges={costTechBadgeMap(S.costTechs)}
       effectiveCost={effectiveCost}
       researchCostNote="一次性研究投入，不计入单兵训练价"
+      relicControl={S.relicBonus ? { value: S.relics, bonus: S.relicBonus, onChange: setRelics } : undefined}
+      cmpRelicNote={cmpRelic ? { civZh: civByEn(S.cmp)?.zh ?? S.cmp, perRelicAtk: cmpRelic.perRelicAtk, maxAtk: cmpRelic.maxAtk } : undefined}
       techById={core.techById}
       rows={rows}
       base={baseStats(u)}

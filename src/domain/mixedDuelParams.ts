@@ -11,6 +11,7 @@ export interface MixedSideInput {
   team: string[];
   rows: MixedRowInput[];
   kite?: boolean;
+  relics?: string;
 }
 export interface MixedDuelInput {
   rule: string;
@@ -62,7 +63,7 @@ export function decodeMixedDuel(params: URLSearchParams): {
       fail('配置须为对象');
       return emptyMixedSide();
     }
-    if (Object.keys(obj).some((k) => !['civ', 'age', 'techs', 'team', 'rows', 'kite'].includes(k))) fail('配置含未知字段');
+    if (Object.keys(obj).some((k) => !['civ', 'age', 'techs', 'team', 'rows', 'kite', 'relics'].includes(k))) fail('配置含未知字段');
     for (const k of ['civ', 'age']) if (typeof obj[k] !== 'string') fail(`${k} 字段格式无效`);
     if ('kite' in obj && typeof obj.kite !== 'boolean') fail('kite 字段须为布尔值');
     const list = (key: 'techs' | 'team') => {
@@ -86,6 +87,7 @@ export function decodeMixedDuel(params: URLSearchParams): {
     });
     const out: MixedSideInput = { civ: scalar(obj.civ), age: scalar(obj.age), techs: list('techs'), team: list('team'), rows };
     if (obj.kite === true) out.kite = true;
+    if (typeof obj.relics === 'string' && /^[1-4]$/.test(obj.relics)) out.relics = obj.relics;
     return out;
   };
   const input = { rule, data, a: side('a'), b: side('b') };
@@ -93,9 +95,28 @@ export function decodeMixedDuel(params: URLSearchParams): {
   return { input, errors, sharedErrors, sideErrors, legacy: rule === LEGACY_MIXED_RULE && !errors.length };
 }
 
+/** issue 1383：检测原始 ma/mb JSON 是否携带了非法或按 0 省略的 relics 键，供页面规范化单次清理。 */
+export function mixedRawRelicsDirty(params: URLSearchParams): boolean {
+  for (const key of ['ma', 'mb'] as const) {
+    const raw = params.get(key);
+    if (!raw) continue;
+    try {
+      const obj: unknown = JSON.parse(raw);
+      if (record(obj) && 'relics' in obj && !(typeof obj.relics === 'string' && /^[1-4]$/.test(obj.relics))) return true;
+    } catch {
+      continue;
+    }
+  }
+  return false;
+}
+
 function serializeMixedSide(side: MixedSideInput): MixedSideInput {
-  const { kite, ...rest } = side;
-  return kite === true ? { ...rest, kite: true } : rest;
+  const { kite, relics, ...rest } = side;
+  return {
+    ...rest,
+    ...(kite === true ? { kite: true } : {}),
+    ...(typeof relics === 'string' && /^[1-4]$/.test(relics) ? { relics } : {}),
+  };
 }
 
 export function encodeMixedDuel(input: MixedDuelInput): URLSearchParams {

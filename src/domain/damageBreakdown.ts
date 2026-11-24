@@ -10,7 +10,7 @@ export interface DamageSource {
 }
 
 /** 按引擎实际施加顺序记录，乘法和覆盖效果也以施加前后的数值呈现。 */
-export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>) {
+export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>, relics = 0) {
   const sources: DamageSource[] = [];
   const record = ({ source, techId, before, after }: SimStep) => {
     const changes: DamageSource['changes'] = [];
@@ -38,7 +38,7 @@ export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number
     }
     if (changes.length) sources.push({ source, techId, changes });
   };
-  const stats = simulate(ctx, u, civ, age, sel, team, record);
+  const stats = simulate(ctx, u, civ, age, sel, team, record, relics);
   return { sources, base: fighterFrom(u, baseStats(u)), fighter: fighterFrom(u, stats) };
 }
 

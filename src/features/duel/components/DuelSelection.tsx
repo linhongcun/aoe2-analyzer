@@ -9,7 +9,7 @@ import { formatHp } from '../../../domain/hpFormat';
 import { baseUnit, isElite } from '../../../domain/family';
 import type { collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
-import { TEAM_BONUSES } from '../../../domain/effects';
+import { TEAM_BONUSES, type CivRelicBonus } from '../../../domain/effects';
 import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
 import { unitAvailable } from '../../../domain/unitAvailability';
@@ -20,6 +20,7 @@ import { CivIcon, StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
 import { RangeB } from '../../../shared/ui/RangeB';
+import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
 import { SIM_ROWS } from '../../../shared/utils/simFormat';
 import { RealCostBlock } from '../../../shared/ui/RealCost';
@@ -52,6 +53,9 @@ export function Side({
   canKite = false,
   kite = false,
   onKiteChange,
+  relicBonus = null,
+  relics = 0,
+  onRelicsChange,
 }: {
   k: 'a' | 'b';
   side: SideState;
@@ -66,6 +70,9 @@ export function Side({
   canKite?: boolean;
   kite?: boolean;
   onKiteChange?: (kite: boolean) => void;
+  relicBonus?: CivRelicBonus | null;
+  relics?: number;
+  onRelicsChange?: (relics: number) => void;
 }) {
   const core = useCore()!;
   const fullUnits = useMemo(() => fams.map((entry) => entry.u), [fams]);
@@ -233,6 +240,18 @@ export function Side({
         </div>
       </div>
       {canKite && onKiteChange && <RangedModeToggle side={k} active={kite} onChange={onKiteChange} />}
+      {relicBonus && onRelicsChange && (
+        <RelicCountSelector
+          variant="duel"
+          side={k}
+          value={relics}
+          maxRelics={relicBonus.maxRelics}
+          perRelicAtk={relicBonus.perRelicAtk}
+          maxAtk={relicBonus.maxAtk}
+          ageLocked={side.age < relicBonus.minAge}
+          onChange={onRelicsChange}
+        />
+      )}
       <dl className="duel-stats">
         {(
           [

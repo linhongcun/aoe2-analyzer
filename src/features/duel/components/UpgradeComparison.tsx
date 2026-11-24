@@ -4,6 +4,8 @@ import { useShareLink } from '../../../shared/ui/useShareLink';
 import { civByEn } from '../../../data';
 import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { fighterCanAttack } from '../../../domain/duel';
+import { decodeDuelRelics } from '../../../domain/duelParams';
+import { unitRelicBonus } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import { upgradeCombatAvailable, upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
 import type { SimContext } from '../../../domain/simulator';
@@ -18,7 +20,16 @@ const MODEL =
   '1v1 近似模型：首击同时发生，常规远程按命中率取期望（目录准确度 0% 的特殊远程按每击命中主目标估算）；未模拟移速、射程、弹道、走位、地形和特殊能力的实战价值。结果不变不代表科技无用。';
 const COST_NOTE = '基础研究费用：文明科研折扣、免费科技、返金与研究速度加成未计入；研究时长为逐项合计，不模拟并行研究。';
 type Plan = Extract<ReturnType<typeof upgradePlan>, { ok: true }>;
-const sideText = (p: Plan) => `${civByEn(p.spec.civ)?.zh ?? p.spec.civ} · ${p.u.zh} · ${['', '黑暗时代', '封建时代', '城堡时代', '帝王时代'][p.spec.age]}`;
+function SideSummary({ plan }: { plan: Plan }) {
+  const base = `${civByEn(plan.spec.civ)?.zh ?? plan.spec.civ} · ${plan.u.zh} · ${['', '黑暗时代', '封建时代', '城堡时代', '帝王时代'][plan.spec.age]}`;
+  return plan.spec.relics && plan.spec.relics > 0 ? (
+    <>
+      {base} · 驻守 <span className="num nw">{plan.spec.relics} 件</span>圣物
+    </>
+  ) : (
+    <>{base}</>
+  );
+}
 const techList = (items: Tech[], empty = '无') =>
   items.length ? (
     <ul className="upgrade-tech-list">
@@ -33,10 +44,14 @@ const techList = (items: Tech[], empty = '无') =>
   );
 
 function PlanCard({ label, plan, opponent, testId }: { label: string; plan: Plan; opponent: Plan; testId: string }) {
+  const ra = plan.spec.relics && plan.spec.relics > 0 ? `&ra=${plan.spec.relics}` : '';
+  const rb = opponent.spec.relics && opponent.spec.relics > 0 ? `&rb=${opponent.spec.relics}` : '';
   return (
     <section className="upgrade-plan" data-t={testId} aria-label={label}>
       <h3 className="upgrade-subtitle">{label}</h3>
-      <p>{sideText(plan)}</p>
+      <p>
+        <SideSummary plan={plan} />
+      </p>
       <p className="note">完整科技（{plan.techs.length} 项）</p>
       {techList(plan.techs, '无科技')}
       <p>
@@ -45,7 +60,7 @@ function PlanCard({ label, plan, opponent, testId }: { label: string; plan: Plan
       </p>
       <p className="note">数据版本：{versionLabel(DATA_SOURCES)}</p>
       <p className="note">{MODEL}</p>
-      <Link className="ulink" to={`/duel?a=${fmtSide(plan.spec)}&b=${fmtSide(opponent.spec)}&m=1`}>
+      <Link className="ulink" to={`/duel?a=${fmtSide(plan.spec)}&b=${fmtSide(opponent.spec)}&m=1${ra}${rb}`}>
         打开{label}独立 PK
       </Link>
     </section>
@@ -80,11 +95,32 @@ export function UpgradeComparison({
     failureMessage: '自动复制不可用，请选中下面的完整链接手动复制。',
   });
   const copy = () => copyLink(window.location.href);
-  const a = parseUpgradeSide(params.get('a'));
-  const b = parseUpgradeSide(params.get('b'));
-  const base = parseUpgradeSide(params.get('base'), false);
-  const fixed = parseUpgradeSide(params.get('fixed'), false);
-  const hasBase = ['base', 'fixed', 'basev'].some((key) => params.has(key));
+  const rawRelics = decodeDuelRelics(params);
+  const attachRelics = (side: UpgradeSide | null, count: number): UpgradeSide | null => {
+    if (!side || count <= 0) return side;
+    const u = byId[side.uid];
+    const rb = u ? unitRelicBonus(side.civ, u) : null;
+    if (!rb) return side;
+    return { ...side, relics: Math.min(rb.maxRelics, count) };
+  };
+  const attachSavedRelics = (side: UpgradeSide | null, key: 'baser' | 'fixedr'): UpgradeSide | null => {
+    if (!side) return null;
+    const rawAll = params.getAll(key);
+    if (!rawAll.length) return side;
+    if (rawAll.length > 1) return null;
+    const raw = rawAll[0]!;
+    if (!/^[1-9]\d*$/.test(raw)) return null;
+    const count = Number(raw);
+    const u = byId[side.uid];
+    const rb = u ? unitRelicBonus(side.civ, u) : null;
+    if (!rb || count > rb.maxRelics) return null;
+    return { ...side, relics: count };
+  };
+  const a = attachRelics(parseUpgradeSide(params.get('a')), rawRelics.a);
+  const b = attachRelics(parseUpgradeSide(params.get('b')), rawRelics.b);
+  const base = attachSavedRelics(parseUpgradeSide(params.get('base'), false), 'baser');
+  const fixed = attachSavedRelics(parseUpgradeSide(params.get('fixed'), false), 'fixedr');
+  const hasBase = ['base', 'fixed', 'basev', 'baser', 'fixedr'].some((key) => params.has(key));
   const one = params.get('m') === '1';
   const currentA = a ? upgradePlan(ctx, byId, a) : null;
   const currentB = b ? upgradePlan(ctx, byId, b) : null;
@@ -201,7 +237,7 @@ export function UpgradeComparison({
       <summary className="upgrade-summary">
         <h2 className="upgrade-title">升级前后对比</h2>
       </summary>
-      <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代和团队加成，仅比较 1v1。</p>
+      <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代、团队加成与圣物数，仅比较 1v1。</p>
       <div className="upgrade-actions">
         <button type="button" disabled={!canSave} onClick={save}>
           {hasBase ? '重新保存基准' : '保存为升级前'}
@@ -230,7 +266,9 @@ export function UpgradeComparison({
       ) : (
         <>
           <p className="note">
-            固定 B：{sideText(comparison.opponent)}；科技：{comparison.opponent.techs.map((t) => t.zh).join('、') || '无'}；双方数量：1 / 1。
+            固定 B：
+            <SideSummary plan={comparison.opponent} />
+            ；科技：{comparison.opponent.techs.map((t) => t.zh).join('、') || '无'}；双方数量：1 / 1。
           </p>
           <div className="upgrade-plans">
             <PlanCard label="升级前" plan={comparison.before} opponent={comparison.opponent} testId="upgrade-before" />
