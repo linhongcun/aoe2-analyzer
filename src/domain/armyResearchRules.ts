@@ -38,12 +38,12 @@ export function civConditionalDisablers(data: ArmyResearchData, context: ArmyRes
   if (!context) return disablers;
   for (const [key, n] of Object.entries(data.nodes)) {
     const tid = Number(key);
-    if (n.location > 0 || (n.civ >= 0 && n.civ !== context.id) || context.disabled.includes(tid)) continue;
-    const globalStart = isGlobalStartDisableNode(n);
+    // Global start-disable nodes are either regional disables handled via globalRegionalDisabled (t:79/121/717)
+    // or non-RM mode toggles such as Regicide-only t:117 (Disable Spies); never apply them as RM conditional disables.
+    if (n.location > 0 || isGlobalStartDisableNode(n) || (n.civ >= 0 && n.civ !== context.id) || context.disabled.includes(tid)) continue;
     for (const c of n.mods) {
       if (c.Type !== 102 || !Number.isFinite(c.D)) continue;
       const target = Math.round(c.D);
-      if (globalStart && context.enabled?.includes(target)) continue;
       disablers.set(target, [...(disablers.get(target) ?? []), tid]);
     }
   }

@@ -312,20 +312,30 @@ describe('army research pinned data', () => {
         const units = productionUnits(ctx, { civ: c.en, age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
         for (const u of units) {
           const r = evaluateArmyCost(ctx, { ...makeArmyCost(c.en), rows: [{ unit: u.id, qty: '1' }] });
-          const is1409Deferred = c.en === 'Chinese' || u.id === 529 || u.id === 532;
-          if (!is1409Deferred && (r.partial || r.training.lines[0]?.status !== 'ok')) {
-            unexpectedFailures.push(`${c.en}:${u.id}:partial=${r.partial}:line=${r.training.lines[0]?.status}(${r.training.lines[0]?.reason})`);
+          const isFireShip1409 = u.id === 529 || u.id === 532 || u.id === 1302;
+          // Independent tech-tree unit availability: every civ (including Chinese) must train cleanly except #1409 t:243 Fire Ship line (529/532/1302).
+          if (!isFireShip1409 && r.training.lines[0]?.status !== 'ok') {
+            unexpectedFailures.push(`${c.en}:${u.id}:line=${r.training.lines[0]?.status}(${r.training.lines[0]?.reason})`);
           }
-          // Every owning civ's regional upgrade target must both train cleanly and keep its upgrade entry in the ledger
+          // Non-Chinese, non-Fire-Ship pairs must have full quotes (Chinese res:85 research pricing is deferred to #1409).
+          if (c.en !== 'Chinese' && !isFireShip1409 && r.partial) {
+            unexpectedFailures.push(`${c.en}:${u.id}:partial=true`);
+          }
+          // Determine expected regional upgrades from independent productionUnits (never gate on ARMY_RESEARCH.civs[c].enabled).
           const expectedRegional = Object.entries(ARMY_RESEARCH.nodes)
             .filter(([tid, n]) => regionalUpgrades.has(Number(tid)) && n.upgrades.some(([, b]) => b === u.id))
             .map(([tid]) => Number(tid));
           for (const tid of expectedRegional) {
-            if (!ARMY_RESEARCH.civs[c.en]?.enabled?.includes(tid)) continue;
             checkedRegionalPairs.push(`${c.en}:${u.id}:t:${tid}`);
             const entry = r.ledger.find((e) => e.id === tid);
-            if (r.training.lines[0]?.status !== 'ok' || !entry || (c.en !== 'Chinese' && entry.status !== 'planned')) {
-              unexpectedFailures.push(`regional-missing:${c.en}:${u.id}:t:${tid}:line=${r.training.lines[0]?.status}:entry=${entry?.status}`);
+            if (!entry) {
+              unexpectedFailures.push(`regional-missing:${c.en}:${u.id}:t:${tid}:line=${r.training.lines[0]?.status}`);
+            } else if (c.en === 'Chinese') {
+              if (entry.problem !== 'price' || !entry.reason.includes('全局研究费用倍率')) {
+                unexpectedFailures.push(`regional-chinese-unexpected:${c.en}:${u.id}:t:${tid}:${entry.status}:${entry.problem}:${entry.reason}`);
+              }
+            } else if (entry.status !== 'planned') {
+              unexpectedFailures.push(`regional-unplanned:${c.en}:${u.id}:t:${tid}:entry=${entry.status}(${entry.reason})`);
             }
           }
           for (const e of r.ledger) {
@@ -339,6 +349,7 @@ describe('army research pinned data', () => {
       }
       expect(unexpectedFailures).toEqual([]);
       expect(checkedRegionalPairs.length).toBeGreaterThanOrEqual(70);
+      expect(checkedRegionalPairs).toEqual(expect.arrayContaining(['Chinese:1907:t:980', 'Chinese:1903:t:982', 'Tatars:1372:t:715', 'Spanish:2701:t:1451']));
 
       // Named regional upgrades across civs
       const spanish = evaluateArmyCost(ctx, { ...makeArmyCost('Spanish'), rows: [{ unit: 2701, qty: '1' }] });
@@ -401,6 +412,15 @@ describe('army research pinned data', () => {
       expect(polesDone428.ledger.find((e) => e.id === 428)?.status).toBe('invalid');
       expect(polesDone428.ledger.find((e) => e.id === 254)?.status).toBe('planned');
       expect(polesDone428.researchTotal).toMatchObject({ Food: 75, Gold: 50 });
+
+      // Regicide-only t:117 (Disable Spies) must NOT reject completed Spies t:408 in standard RM across all 56 civs
+      const britDone408 = evaluateArmyCost(ctx, { ...makeArmyCost('Britons'), rows: [{ unit: 6, qty: '1' }], done: ['t:408'] });
+      expect(britDone408.partial).toBe(false);
+      expect(britDone408.ledger.find((e) => e.id === 408)?.status).toBe('done');
+      expect(britDone408.ledger.find((e) => e.id === 98)?.status).toBe('planned');
+      for (const c of civs) {
+        expect(researchResolver(ARMY_RESEARCH, c.en, 4).resolve(408).state, c.en).toBe('ready');
+      }
     });
 
     it('AC2: ignores post-imperial t:790/791 and unreachable shadow t:1142 across affected civs', () => {
