@@ -10,7 +10,6 @@ import { productionTechAge } from './production';
 import { buildingAge as getGarrisonBuildingAge, trainingUnitAge } from './availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
 import { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow } from './garrisonUrl';
-import { toggleSelected } from './prereq';
 
 export { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow };
 export interface GeneralGarrisonContext {
@@ -561,12 +560,7 @@ const POWER_STATS = new Set<GarrisonStat>(['attack', 'reload', 'firepower', 'tot
 const isShootingBuilding = (B: GeneralGarrisonUnit | undefined): boolean =>
   !!B && B.attack > 0 && B.reload > 0 && (B.projectile >= 0 || B.secondaryProjectile >= 0);
 
-const numbersDiffer = (a: number, b: number): boolean => {
-  if (Object.is(a, b) || a === b) return false;
-  if (!Number.isFinite(a) || !Number.isFinite(b)) return true;
-  const scale = Math.max(Math.abs(a), Math.abs(b));
-  return Math.abs(a - b) > scale * 1e-12;
-};
+const numbersDiffer = (a: number, b: number): boolean => !Object.is(a, b) && a !== b;
 
 const buildingShootingDiff = (
   bA: GeneralGarrisonUnit,
@@ -640,6 +634,11 @@ function computeGarrisonTechs(
     availUnitCache.set(uid, ok);
     return ok;
   };
+  // Fortified Church relic deposits compute power from state.units[VILLAGER_UNIT_ID] directly even if villagers are absent from rosterIds.
+  const isRelicPowerHost =
+    FORTIFIED_CHURCH_IDS.has(b.id) && !!data.units[VILLAGER_UNIT_ID] && relicIds.some((rid) => unitAvailable(ctx, rid, baseConfig, data, status));
+  const isPowerUnit = (uid: number): boolean => isAvailEligible(uid) || (uid === VILLAGER_UNIT_ID && isRelicPowerHost);
+  const powerUnitIds = isRelicPowerHost && !eligiblePool.has(VILLAGER_UNIT_ID) ? unique([...eligibleIds, VILLAGER_UNIT_ID]) : eligibleIds;
 
   // Forward-reachable dynamic rules whose readiness can change (never satisfied before their stage ran in baseState,
   // including rules that fired on Pass >= 2 in baseState and may reorder onto an earlier pass when extra techs/shapes are known).
@@ -788,8 +787,8 @@ function computeGarrisonTechs(
   if (baseB.secondaryProjectile >= 0) prelimSecProjs.add(baseB.secondaryProjectile);
   const initBuildingSecProj = initUnitField(rawBuildingKey, 'secondaryProjectile') ?? -1;
   if (initBuildingSecProj >= 0) prelimSecProjs.add(initBuildingSecProj);
-  for (const id of eligibleIds) {
-    if (!isAvailEligible(id)) continue;
+  for (const id of powerUnitIds) {
+    if (!isPowerUnit(id)) continue;
     const sec = baseState.units[id]?.secondaryProjectile ?? -1;
     if (sec >= 0) prelimSecProjs.add(sec);
     const initSec = initUnitField(id, 'secondaryProjectile') ?? -1;
@@ -798,7 +797,7 @@ function computeGarrisonTechs(
   const collectPrelimSecProj = (rule: GeneralGarrisonRule) => {
     for (const e of rule.effects) {
       if (e.stat !== 'secondaryProjectile') continue;
-      if (e.unit !== b.id && !isAvailEligible(e.unit)) continue;
+      if (e.unit !== b.id && !isPowerUnit(e.unit)) continue;
       if (e.op === 'set' && e.value >= 0) prelimSecProjs.add(e.value);
       else if (e.op !== 'set') prelimDynamicSecProj = true;
     }
@@ -823,7 +822,7 @@ function computeGarrisonTechs(
     r.effects.some(
       (e) =>
         e.unit === b.id ||
-        isAvailEligible(e.unit) ||
+        isPowerUnit(e.unit) ||
         baseState.units[e.unit]?.type === 60 ||
         (e.stat === 'attack' && (prelimDynamicSecProj || prelimSecProjs.has(e.unit))),
     ) ||
@@ -875,16 +874,16 @@ function computeGarrisonTechs(
   const reloadInvalidFlipUnits = new Set<number>();
   const fpSignFlipUnits = new Set<number>();
   const multiProjCandidates = new Set<number>();
-  for (const id of eligibleIds) {
+  for (const id of powerUnitIds) {
     const u = baseState.units[id];
-    if (!u || !isAvailEligible(id)) continue;
+    if (!u || !isPowerUnit(id)) continue;
     if (u.firepower < 0 || (initUnitField(id, 'firepower') ?? 0) < 0) negFpCapableUnits.add(id);
     if (u.total > 1 || (initUnitField(id, 'total') ?? 0) > 1) multiProjCandidates.add(id);
   }
   const inspectRuleStats = (rule: GeneralGarrisonRule) => {
     for (const e of rule.effects) {
       if (e.unit === b.id) allBuildingEffects.push(e);
-      if (!isAvailEligible(e.unit)) continue;
+      if (!isPowerUnit(e.unit)) continue;
       if (e.stat === 'reload' && !((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1))) {
         reloadTouchedUnits.add(e.unit);
         const baseReload = baseState.units[e.unit]?.reload ?? 0;
@@ -925,7 +924,7 @@ function computeGarrisonTechs(
       if (e.unit === b.id && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'projectile' || e.stat === 'secondaryProjectile')) {
         shadowedBuildingFlip = true;
       }
-      if (!isAvailEligible(e.unit)) continue;
+      if (!isPowerUnit(e.unit)) continue;
       if (e.stat === 'reload') {
         reloadTouchedUnits.add(e.unit);
         reloadInvalidFlipUnits.add(e.unit);
@@ -937,6 +936,36 @@ function computeGarrisonTechs(
       }
     }
   }
+
+  // Detect (unit, stat) pairs whose initial & base values match and every reachable rule only writes that same constant (or add 0 / mul 1).
+  const statValuesVary = new Set<string>();
+  const statBaseCache = new Map<string, number | undefined>();
+  const getConstantStatBase = (unit: number, stat: GarrisonStat): number | undefined => {
+    const key = `${unit}:${stat}`;
+    if (statBaseCache.has(key)) return statBaseCache.get(key);
+    const baseVal = baseState.units[unit]?.[stat];
+    const initVal = initUnitField(unit === b.id ? rawBuildingKey : unit, stat);
+    const val = typeof baseVal === 'number' && baseVal === initVal ? baseVal : undefined;
+    statBaseCache.set(key, val);
+    return val;
+  };
+  for (const ruleList of [activeAgeRules, pool.map((t) => data.techs[t.id]!), allEnabledDynRules, availFreeShapeRules, availImpliedType60Rules]) {
+    for (const r of ruleList) {
+      for (const e of r.effects) {
+        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        const key = `${e.unit}:${e.stat}`;
+        if (statValuesVary.has(key)) continue;
+        const constBase = getConstantStatBase(e.unit, e.stat);
+        if (constBase === undefined || e.op !== 'set' || e.value !== constBase) statValuesVary.add(key);
+      }
+    }
+  }
+  const isNoopEffect = (e: GeneralGarrisonEffect): boolean => {
+    if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return true;
+    if (e.op !== 'set') return false;
+    const key = `${e.unit}:${e.stat}`;
+    return !statValuesVary.has(key) && getConstantStatBase(e.unit, e.stat) === e.value;
+  };
 
   const initBAttack = initUnitField(rawBuildingKey, 'attack') ?? baseB.attack;
   const initBReload = initUnitField(rawBuildingKey, 'reload') ?? baseB.reload;
@@ -1049,8 +1078,8 @@ function computeGarrisonTechs(
     if (!rule) continue;
     const touchesRelevantType60 = rule.effects.some((e) => {
       if (baseState.units[e.unit]?.type !== 60) return false;
-      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
-      return e.unit === b.id || isAvailEligible(e.unit) || ((baseShooting || shootingCanFlip) && (hasDynamicSecProjOp || relevantSecProjs.has(e.unit)));
+      if (isNoopEffect(e)) return false;
+      return e.unit === b.id || isPowerUnit(e.unit) || ((baseShooting || shootingCanFlip) && (hasDynamicSecProjOp || relevantSecProjs.has(e.unit)));
     });
     if (touchesRelevantType60) shapeHooks.add(tid);
   }
@@ -1059,7 +1088,7 @@ function computeGarrisonTechs(
     const rule = data.techs[t.id]!;
     let isControl = false;
     for (const e of rule.effects) {
-      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+      if (isNoopEffect(e)) continue;
       if (e.unit === b.id) {
         if (
           e.stat === 'capacity' ||
@@ -1070,9 +1099,9 @@ function computeGarrisonTechs(
           isControl = true;
           break;
         }
-      } else if (isAvailEligible(e.unit)) {
+      } else if (isPowerUnit(e.unit)) {
         if (
-          e.stat === 'sizeClass' ||
+          (e.stat === 'sizeClass' && isAvailEligible(e.unit)) ||
           e.stat === 'secondaryProjectile' ||
           (e.stat === 'firepower' && fpSignFlipUnits.has(e.unit)) ||
           (e.stat === 'reload' && reloadInvalidFlipUnits.has(e.unit)) ||
@@ -1254,7 +1283,7 @@ function computeGarrisonTechs(
     return es.relicDeposit;
   };
   const isPowerContributorIn = (es: EvalState, uid: number): boolean => {
-    const c = candOf(es, uid);
+    const c = isAvailEligible(uid) ? candOf(es, uid) : null;
     return (!!c && (c.canEnter || c.canCreate)) || (uid === VILLAGER_UNIT_ID && hasRelicDepositIn(es));
   };
 
@@ -1292,7 +1321,7 @@ function computeGarrisonTechs(
     for (const tid of shapeGroupHooks[gi]!) {
       if (baseFree.has(tid)) continue;
       for (const e of data.techs[tid]?.effects ?? []) {
-        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        if (isNoopEffect(e)) continue;
         if (baseState.units[e.unit]?.type !== 60) continue;
         const key = `${e.unit}:${e.stat}`;
         let rec = type60OpsByStat.get(key);
@@ -1401,9 +1430,9 @@ function computeGarrisonTechs(
   for (const es of allReachableStates) {
     const secB = es.snapshot.building?.secondaryProjectile ?? -1;
     if (secB >= 0) relevantSecProjs.add(secB);
-    for (const uid of eligibleIds) {
+    for (const uid of powerUnitIds) {
       const u = es.snapshot.units[uid];
-      if (!u || !isAvailEligible(uid)) continue;
+      if (!u || !isPowerUnit(uid)) continue;
       if (u.total > 1) {
         multiProjCandidates.add(uid);
         if (u.secondaryProjectile >= 0) relevantSecProjs.add(u.secondaryProjectile);
@@ -1576,7 +1605,7 @@ function computeGarrisonTechs(
                 }
               }
             }
-            if (isAvailEligible(e.unit) && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'firepower')) {
+            if (isPowerUnit(e.unit) && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'firepower')) {
               extraTouchedUnits!.add(e.unit);
             }
           }
@@ -1626,7 +1655,7 @@ function computeGarrisonTechs(
 
     const checkedUnits = new Set<number>();
     const checkUnitPowerDiff = (uid: number): boolean => {
-      if (checkedUnits.has(uid) || !isAvailEligible(uid)) return false;
+      if (checkedUnits.has(uid) || !isPowerUnit(uid)) return false;
       checkedUnits.add(uid);
       if (!isPowerContributorIn(esA, uid) && !isPowerContributorIn(esB, uid)) return false;
       const uA = sA.units[uid];
@@ -1676,7 +1705,7 @@ function computeGarrisonTechs(
       return false;
     };
 
-    for (const uid of eligibleIds) {
+    for (const uid of powerUnitIds) {
       if (sA.units[uid] !== sB.units[uid] && checkUnitPowerDiff(uid)) return true;
     }
     for (const uid of multiProjCandidates) {
@@ -1749,15 +1778,15 @@ function computeGarrisonTechs(
     if (baseShooting || shootingCanFlip) {
       for (const t of nonControlTechs) {
         const relevant = data.techs[t.id]!.effects.some((e) => {
-          if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+          if (isNoopEffect(e)) return false;
           if (e.unit === b.id && BUILDING_SHOOTING_STATS.has(e.stat)) return true;
           if (e.stat === 'attack' && (relevantSecProjs.has(e.unit) || hasDynamicSecProjOp)) return true;
-          if (!isAvailEligible(e.unit)) return false;
+          if (!isPowerUnit(e.unit)) return false;
           if (e.stat !== 'attack' && e.stat !== 'reload' && e.stat !== 'firepower') return false;
           const u = baseState.units[e.unit];
           if (!u) return false;
           if (u.firepower === 0 && !fpSignFlipUnits.has(e.unit)) return false;
-          return canBuildingProduceUnit(e.unit) || (e.unit === VILLAGER_UNIT_ID && FORTIFIED_CHURCH_IDS.has(b.id)) || acceptsTask(u, baseB, scope.aliases);
+          return canBuildingProduceUnit(e.unit) || (e.unit === VILLAGER_UNIT_ID && isRelicPowerHost) || acceptsTask(u, baseB, scope.aliases);
         });
         if (relevant) kept.add(t.id);
       }
@@ -1826,7 +1855,7 @@ function computeGarrisonTechs(
     }
 
     const effectCouldTouchState = (e: GeneralGarrisonEffect, es: EvalState): boolean => {
-      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+      if (isNoopEffect(e)) return false;
       const st = es.snapshot;
       const B = st.building;
       if (!isShootingBuilding(B)) return false;
@@ -1838,7 +1867,7 @@ function computeGarrisonTechs(
           if (u && u.firepower > 0 && u.total > 1 && u.reload > 0 && u.secondaryProjectile === e.unit && isPowerContributorIn(es, uid)) return true;
         }
       }
-      if (!isAvailEligible(e.unit) || !isPowerContributorIn(es, e.unit)) return false;
+      if (!isPowerUnit(e.unit) || !isPowerContributorIn(es, e.unit)) return false;
       const u = st.units[e.unit];
       if (!u || u.firepower === 0) return false;
       if (u.firepower > 0 && !(u.reload > 0)) return false;
@@ -1883,7 +1912,7 @@ function computeGarrisonTechs(
                 }
               }
             }
-            if (isAvailEligible(e.unit)) {
+            if (isPowerUnit(e.unit)) {
               const u = st.units[e.unit];
               if (u && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'firepower')) {
                 addKey(`${e.unit}:attack`);
@@ -2056,8 +2085,40 @@ export function toggleGeneralGarrisonTech(
   const index = getStaticIndex(data);
   const available = new Set(computeGarrisonTechs(ctx, b, config, data, status).map((t) => t.id));
   const free = new Set(freeGarrisonTechs(ctx, b, config, technologyData(data), status, index.shapeUpgrades));
-  const selected = new Set([...config.techs, ...free]);
-  return unique([...toggleSelected(id, selected, ctx.core.techById, { available, free, ignoreUnavailable: true, stopAtSelected: true })]);
+  const next = new Set([...config.techs, ...free]);
+  if (!ctx.core.techById[id] || free.has(id) || !available.has(id)) return unique([...next]);
+  const snapFor = (techSet: Set<number>) => snapshot(ctx, b, { ...config, techs: unique([...techSet].filter((tid) => !free.has(tid))) }, data, status, index);
+  if (next.has(id)) {
+    next.delete(id);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const nextSnap = snapFor(next);
+      for (const xid of [...next]) {
+        const pre = ctx.core.techById[xid]?.pre;
+        if (pre != null && available.has(pre) && !nextSnap.known.has(pre)) {
+          next.delete(xid);
+          changed = true;
+        }
+      }
+    }
+  } else {
+    next.add(id);
+    let cur = id;
+    const seen = new Set<number>([id]);
+    while (true) {
+      const pre = ctx.core.techById[cur]?.pre;
+      if (pre == null || seen.has(pre)) break;
+      seen.add(pre);
+      if (next.has(pre)) break;
+      const nextSnap = snapFor(next);
+      if (nextSnap.known.has(pre)) break;
+      if (!available.has(pre)) break;
+      next.add(pre);
+      cur = pre;
+    }
+  }
+  return unique([...next]);
 }
 
 /** Unit contribution is not target damage. It uses the current pinned pierce/reload/firepower fields. */
