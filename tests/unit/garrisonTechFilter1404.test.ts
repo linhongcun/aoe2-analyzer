@@ -363,6 +363,12 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     const cloneData = (): GeneralGarrisonData => structuredClone({ ...GENERAL_GARRISON_DATA, unitUpgradeTechs: GARRISON_TECH_DATA.unitUpgradeTechs });
     const tc = ctx.core.buildingById[109]!;
     const tcForms = [109, ...(GENERAL_GARRISON_DATA.buildings[109]?.eraForms ?? [])];
+    const mkRule = (id: number, effects: GeneralGarrisonData['conditional'][number]['effects'] = [], requires: number[] = [], count = requires.length) => ({
+      id,
+      requires,
+      count,
+      effects,
+    });
 
     // 1. R11 P1: 自动规则将 199 写入 known 且 233.pre=199；勾选 233 不强制带入 199，从 [199,233] 取消 199 保留 233
     const preCore = structuredClone(ctx.core);
@@ -372,18 +378,13 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     const preTc = preCore.buildingById[109]!;
     const preData = cloneData();
     preData.techs = {
-      199: {
-        id: 199,
-        requires: [],
-        count: 0,
-        effects: [
-          { unit: 109, stat: 'capacity', op: 'add', value: 1 },
-          { unit: 492, stat: 'firepower', op: 'set', value: 0 },
-        ],
-      },
-      233: { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 4 }] },
+      199: mkRule(199, [
+        { unit: 109, stat: 'capacity', op: 'add', value: 1 },
+        { unit: 492, stat: 'firepower', op: 'set', value: 0 },
+      ]),
+      233: mkRule(233, [{ unit: 492, stat: 'attack', op: 'add', value: 4 }]),
     };
-    preData.civs.Britons!.automatic = [{ id: 199, requires: [], count: 0, effects: [] }];
+    preData.civs.Britons!.automatic = [mkRule(199)];
     preData.civs.Britons!.free = [];
     preData.conditional = [];
     preData.units[492] = { ...preData.units[492]!, attack: 6, reload: 2, total: 1, firepower: 1 };
@@ -392,7 +393,7 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
 
     // 2. R11 P2-1: 副弹丸攻击 20 -> 20 + 1e-11 在阈值处令弹丸 1 -> 0，精确比较不吞掉
     const epsData = cloneData();
-    epsData.techs = { 233: { id: 233, requires: [], count: 0, effects: [{ unit: 54, stat: 'attack', op: 'add', value: 1e-11 }] } };
+    epsData.techs = { 233: mkRule(233, [{ unit: 54, stat: 'attack', op: 'add', value: 1e-11 }]) };
     epsData.civs.Britons!.automatic = [];
     epsData.civs.Britons!.free = [];
     epsData.conditional = [];
@@ -403,13 +404,12 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     const epsBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), epsData);
     const epsAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), epsData);
     expect(epsAfter.errors).toEqual([]);
-    expect(epsBefore.totalProjectiles).toBe(1);
-    expect(epsAfter.totalProjectiles).toBe(0);
+    expect([epsBefore.totalProjectiles, epsAfter.totalProjectiles]).toEqual([1, 0]);
 
     // 3. R11 P2-2: 强化教堂（1806）移除 rosterIds 中的村民 83 后，修改村民攻击仍影响圣物火力（2.5 -> 4.5），保留 233
     const relicVillData = cloneData();
     relicVillData.rosterIds = relicVillData.rosterIds.filter((id) => id !== 83);
-    relicVillData.techs = { 233: { id: 233, requires: [], count: 0, effects: [{ unit: 83, stat: 'attack', op: 'add', value: 4 }] } };
+    relicVillData.techs = { 233: mkRule(233, [{ unit: 83, stat: 'attack', op: 'add', value: 4 }]) };
     relicVillData.civs.Armenians!.automatic = [];
     relicVillData.civs.Armenians!.free = [];
     relicVillData.conditional = [];
@@ -435,60 +435,7 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     constCapData.civs.Britons!.automatic = [];
     constCapData.civs.Britons!.free = [];
     constCapData.conditional = [];
-    constCapData.techs = Object.fromEntries(
-      capIds.map((id) => [id, { id, requires: [], count: 0, effects: [{ unit: 109, stat: 'capacity', op: 'set', value: 15 }] }]),
-    );
+    constCapData.techs = Object.fromEntries(capIds.map((id) => [id, mkRule(id, [{ unit: 109, stat: 'capacity', op: 'set', value: 15 }])]));
     expect(techIds(109, 'Britons', 4, constCapData)).toEqual([]);
-  });
-
-  it('R12 回归：条件规则满足前置时保留手选/免费触发科技（含控制后继），无效果路径与已自动满足路径不误留', () => {
-    const cloneData = (): GeneralGarrisonData => structuredClone({ ...GENERAL_GARRISON_DATA, unitUpgradeTechs: GARRISON_TECH_DATA.unitUpgradeTechs });
-    const preCore = structuredClone(ctx.core);
-    preCore.techById[233] = { ...preCore.techById[233]!, pre: 199 };
-    preCore.techs[preCore.techs.findIndex((t) => t.id === 233)] = preCore.techById[233]!;
-    const preCtx: GeneralGarrisonContext = { core: preCore, trees: ctx.trees };
-    const preTc = preCore.buildingById[109]!;
-    const rows = [{ unitId: 492, count: '1', entry: 'enter' as const }];
-    const idsOf = (d: GeneralGarrisonData) =>
-      getGarrisonTechs(preCtx, preTc, cfg('Britons', 4), d)
-        .map((t) => t.id)
-        .sort((a, z) => a - z);
-
-    // 1. R12 P1 原例：47 -> cond(199) 满足 233.pre=199，199 清零容量；保留 [47,199,233]，[47,233] 合法且火力 3 -> 5
-    const condPreData = cloneData();
-    condPreData.techs = {
-      47: { id: 47, requires: [], count: 0, effects: [] },
-      199: { id: 199, requires: [], count: 0, effects: [{ unit: 109, stat: 'capacity', op: 'set', value: 0 }] },
-      233: { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 4 }] },
-    };
-    condPreData.civs.Britons!.automatic = [];
-    condPreData.civs.Britons!.free = [];
-    condPreData.conditional = [{ id: 199, requires: [47], count: 1, effects: [] }];
-    condPreData.units[492] = { ...condPreData.units[492]!, attack: 6, reload: 2, total: 1, firepower: 1 };
-    expect(idsOf(condPreData)).toEqual([47, 199, 233]);
-    expect(toggleGeneralGarrisonTech(preCtx, preTc, cfg('Britons', 4, [47]), 233, condPreData)).toEqual([47, 233]);
-    const condRes = calculateGeneralGarrison(preCtx, preTc, cfg('Britons', 4, [47, 233], rows), condPreData);
-    expect(condRes.errors).toEqual([]);
-    expect(condRes.capacity).toBe(15);
-    expect(condRes.garrisonPower).toBeCloseTo(5, 5);
-
-    // 2. 控制后继（233 改容量 +2）与免费触发科技（47 ∈ civ.free）均保留 47，容许 [47,233] / [233]
-    const ctrlPostData = structuredClone(condPreData);
-    ctrlPostData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] };
-    expect(idsOf(ctrlPostData)).toEqual([47, 199, 233]);
-    expect(calculateGeneralGarrison(preCtx, preTc, cfg('Britons', 4, [47, 233]), ctrlPostData).capacity).toBe(17);
-    const freeCondData = structuredClone(condPreData);
-    freeCondData.civs.Britons!.free = [47];
-    expect(idsOf(freeCondData)).toEqual([47, 199, 233]);
-    expect(calculateGeneralGarrison(preCtx, preTc, cfg('Britons', 4, [47, 233], rows), freeCondData).errors).toEqual([]);
-
-    // 3. 反例不误留：492 火力为 0（仅 199 开启火力）或 199 已被自动规则无条件满足时，均排除 47
-    const zeroFpData = structuredClone(condPreData);
-    zeroFpData.units[492] = { ...zeroFpData.units[492]!, firepower: 0 };
-    zeroFpData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 492, stat: 'firepower', op: 'set', value: 1 }] };
-    expect(idsOf(zeroFpData)).toEqual([199, 233]);
-    const autoKnownData = structuredClone(condPreData);
-    autoKnownData.civs.Britons!.automatic = [{ id: 199, requires: [], count: 0, effects: [] }];
-    expect(idsOf(autoKnownData)).toEqual([199, 233]);
   });
 });

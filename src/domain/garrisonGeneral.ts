@@ -1810,7 +1810,8 @@ function computeGarrisonTechs(
     return { peers: [...reqMap.keys()].sort((a, z) => a - z), reqMap };
   };
 
-  // Prune invalid rows and techs whose pool prerequisite is missing in snapshot.known to get a legal baseline state.
+  // Prune techs whose pool prerequisite is missing in snapshot.known first, then rebuild before pruning invalid rows,
+  // repeating until both selected techs and rows form a legal baseline state.
   const pruneToValidState = (
     startTechs: number[],
     startRowIds: number[],
@@ -1821,16 +1822,19 @@ function computeGarrisonTechs(
     let curRows = startRowIds;
     while (true) {
       const es = makeEvalState(curTechs, curRows, undefined, stateData, stateIndex);
-      const nextRows = curRows.length ? curRows.filter((uid) => isOccupantIn(es, uid)) : curRows;
       const nextTechs = isSelectedPrereqValid(es.snapshot)
         ? curTechs
         : curTechs.filter((id) => {
             const pre = ctx.core.techById[id]?.pre;
             return !(pre && poolIds.has(pre) && !es.snapshot.known.has(pre));
           });
-      if (nextRows.length === curRows.length && nextTechs.length === curTechs.length) return es;
+      if (nextTechs.length !== curTechs.length) {
+        curTechs = nextTechs;
+        continue;
+      }
+      const nextRows = curRows.length ? curRows.filter((uid) => isOccupantIn(es, uid)) : curRows;
+      if (nextRows.length === curRows.length) return es;
       curRows = nextRows;
-      curTechs = nextTechs;
     }
   };
 
