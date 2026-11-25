@@ -88,11 +88,16 @@ describe('驻军覆盖契约（issue 905）', () => {
         legacyIds.every((id) => generalIds.includes(id)),
         `tech subset ${id}`,
       ).toBe(true);
-      // 通用模型额外提供启发 233；建筑页箭数模型不列该科技，属已声明覆盖差异。
+      // 过滤无关科技（Issue 1404）后，不列颠四座重叠建筑的通用模型不再泄漏启发 233，集合与建筑页村民模型一致。
       expect(
         generalIds.filter((id) => !legacyIds.includes(id)),
         `general-only tech ${id}`,
-      ).toEqual([233]);
+      ).toEqual([]);
     }
+    // 含有效可驻兵种火力科技的文明仍保留通用模型专属科技（如日本大型箭塔的扳指 437、中国城镇中心的炮塔 64 与扳指 437）。
+    const jpnKeep = ctx.core.buildingById[235]!;
+    const jpnLegacy = garrisonTechs(ctx, jpnKeep, 'Japanese', 4).map((t) => t.id);
+    const jpnGeneral = getGarrisonTechs(ctx, jpnKeep, { civ: 'Japanese', age: 4, techs: [], rows: [] }).map((t) => t.id);
+    expect(jpnGeneral.filter((id) => !jpnLegacy.includes(id))).toEqual([437]);
   });
 });

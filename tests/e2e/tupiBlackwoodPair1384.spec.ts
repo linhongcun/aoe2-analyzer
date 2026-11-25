@@ -128,11 +128,12 @@ test('#1384 单位 PK 等资源 3000/3020/100、等采集时间、N vs M 与混�
   await page.locator('#duel-a .eseg button', { hasText: '普通' }).click();
   await expect(page.locator('#duel-na')).toHaveValue('11');
 
-  // 混编模式：成对提示与清空数量时不出现 NaN 对 / 0 对
+  // 混编模式：成对提示与清空数量时不出现 ± 2 只 / NaN 对 / 0 对
   await page.locator('#duel [role="radiogroup"][aria-label="模式"] button[data-mode="mix"]').click();
-  await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).toContainText('数量每次 ± 2 只；按 6 对带入训练费用。');
+  await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).toContainText('每次训练 2 只；计算训练费用时 11 只按 6 对计费。');
+  await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).not.toContainText('±');
   await page.locator('#mix-a-qty-0').fill('');
-  await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).toContainText('带入训练费用时按整对计费。');
+  await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).toContainText('每次训练 2 只；计算训练费用时按整对向上计费。');
   await expect(page.locator('[data-t="mix-a-pair-hint-0"]')).not.toContainText('NaN');
 });
 
