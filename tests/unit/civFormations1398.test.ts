@@ -19,6 +19,7 @@ import { FormationText } from '../../src/features/civs/components/CivFormations'
 import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 
 const DOC_SHA_1398 = 'b63cccc015b677017efb4a64de8ebc01cd727ffd';
+const SUPERSEDED_BY_LATER = new Map<string, string>([['Lithuanians', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e']]);
 const TARGET_CIVS = ['Tupi', 'Lithuanians'] as const;
 
 const SPLIT_COUNTED_NOUN =
@@ -320,7 +321,7 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(62);
 
     const serialized = JSON.stringify(civFormationContent);
     expect(serialized).not.toMatch(/一只还是一对|计价单位未明|计价单位未核|不折半|每对价格单位/);
@@ -328,9 +329,10 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     const targetSet = new Set<string>(TARGET_CIVS);
     for (const civ of civFormationContent) {
       if (targetSet.has(civ.civ)) {
-        expect(civ.source.content, civ.civ).toContain(`/blob/${DOC_SHA_1398}/role/game-strategy.md#L`);
+        const expectedSha = SUPERSEDED_BY_LATER.get(civ.civ) ?? DOC_SHA_1398;
+        expect(civ.source.content, civ.civ).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
         for (const r of civ.routes) {
-          expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${DOC_SHA_1398}/role/game-strategy.md#L`);
+          expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
           const hrefs = (r.evidence.links ?? []).map(({ href }) => href);
           expect(new Set(hrefs).size, `${civ.civ}/${r.id} duplicate href`).toBe(hrefs.length);
           for (const href of hrefs) expect(isPublicSourceUrl(href), `${civ.civ}/${r.id} ${href}`).toBe(true);

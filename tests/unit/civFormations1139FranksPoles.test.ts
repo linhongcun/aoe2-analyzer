@@ -138,8 +138,8 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
     ]);
     for (const entry of [obuch, arbalest, knights]) {
       expect(entry.evidence.scope).not.toContain('来源行');
-      expect(entry.evidence.sourceLines).toContain(954);
-      expect(entry.evidence.sourceLines).toContain(984);
+      expect(entry.evidence.sourceLines).toContain(1015);
+      expect(entry.evidence.sourceLines).toContain(1051);
       expect(contractRoute('Poles', entry.id).sourceLines).toEqual(entry.evidence.sourceLines);
     }
     expect(obuch.adjustments[1]!.fallback).toContain('规避受保护的远程火力');
@@ -148,14 +148,14 @@ describe('#1139 法兰克与波兰路线职责及条件支援', () => {
 
   it('六条路线的sourceLines与固定版本URL锚点逐条对应', () => {
     const franksSha = '415863b2a3e94078129554c09378c9a9fba04b57';
-    const polesSha = '6c3cdc6ded5200eac43e95efb28878066b96c3d9';
+    const polesSha = '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e';
     const expected = [
       ['Franks', 'franks-paladin-skirmisher', franksSha, 'L762', [750, 754, 758, 762, 766, 768, 770, 776, 778, 784, 785, 786, 789, 793]],
       ['Franks', 'franks-heavy-mounted-crossbow-light-cav', franksSha, 'L763', [750, 754, 758, 763, 766, 768, 770, 778, 789, 791, 793]],
       ['Franks', 'franks-throwing-axeman-light-cav', franksSha, 'L764', [750, 754, 758, 764, 766, 768, 770, 777, 778, 787, 789, 793]],
-      ['Poles', 'poles-obuch-winged-hussar', polesSha, 'L948-L984', [948, 954, 958, 962, 964, 966, 972, 973, 974, 980, 981, 982, 984]],
-      ['Poles', 'poles-arbalest-winged-hussar', polesSha, 'L948-L984', [948, 954, 959, 962, 964, 966, 972, 973, 974, 981, 984]],
-      ['Poles', 'poles-discount-knights', polesSha, 'L948-L984', [948, 954, 960, 962, 964, 966, 972, 973, 974, 980, 981, 984]],
+      ['Poles', 'poles-obuch-winged-hussar', polesSha, 'L1013-L1051', [1013, 1015, 1019, 1023, 1027, 1029, 1031, 1037, 1038, 1039, 1046, 1047, 1049, 1051]],
+      ['Poles', 'poles-arbalest-winged-hussar', polesSha, 'L1013-L1051', [1013, 1015, 1019, 1024, 1027, 1029, 1031, 1037, 1038, 1039, 1040, 1047, 1048, 1051]],
+      ['Poles', 'poles-discount-knights', polesSha, 'L1013-L1051', [1013, 1015, 1019, 1025, 1027, 1029, 1031, 1037, 1038, 1039, 1046, 1051]],
     ] as const;
     const url = (sha: string, anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#${anchor}`;
 

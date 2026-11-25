@@ -241,7 +241,7 @@ describe('#1139 optional siege and source-backed availability regressions', () =
     if (missing.status === 'current') expect(missing.supplements.some(({ entities }) => entities.some(({ entity }) => entity.id === 331))).toBe(false);
 
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(62);
     const saxons = route('Saxons', 'saxons-retainer-tower');
     expect(saxons.required.map(({ id }) => id)).toEqual([235, 2706, 331]);
     expect(saxons.prerequisites).toEqual([]);
