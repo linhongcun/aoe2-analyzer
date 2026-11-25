@@ -319,6 +319,7 @@ const IMPLIED: Record<string, string[]> = {
   'Guard Tower': ['Guard Tower'],
   'Fortified Wall': ['Fortified Wall'],
   'Bombard Tower': ['Bombard Tower'],
+  Harbor: ['Thalassocracy', 'Harbor'],
 };
 /** 在给定时代、已选科技与文明下，对某单位/建筑生效的通用/限定文明隐藏效果条目；有 civs 限制且未传入文明时 fail-closed 不匹配 */
 export function matchingGenericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean, civ?: string): GenericFx[] {

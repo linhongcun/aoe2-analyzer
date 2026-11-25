@@ -117,6 +117,26 @@ describe('建筑详情各文明满科技对照（#1393）', () => {
     expect(mule.moveSpeedTechNames).toEqual(expect.arrayContaining(['独轮推车', '手推车']));
     expect(mule.rows.find((r) => r.civ === 'Armenians')?.missingTechs.map((t) => t.id)).toEqual([51]);
     expect(mule.rows.find((r) => r.civ === 'Georgians')?.missingTechs).toEqual([]);
+
+    // #1407：商队旅馆（1754）及全站无攻多文明建筑的 simTechIds / missingTechs 不含 322/380
+    const caravanserai = buildBuildingCivRank(ctx, building(1754), 4);
+    expect(caravanserai.rows.find((r) => r.civ === 'Persians')?.simTechIds).toEqual([8, 50, 51, 280]);
+    expect(caravanserai.rows.find((r) => r.civ === 'Hindustanis')?.simTechIds).toEqual([8, 50, 280]);
+    for (const b of CORE.buildings.filter((x) => supportsBuildingCivRank(x) && x.atk === 0 && (x.atks?.length ?? 0) === 0)) {
+      const rank = buildBuildingCivRank(ctx, b, 4);
+      for (const r of rank.rows) {
+        expect(r.simTechIds, `${b.id}/${r.civ} simTechIds`).not.toContain(322);
+        expect(r.simTechIds, `${b.id}/${r.civ} simTechIds`).not.toContain(380);
+        expect(
+          r.missingTechs.map((t) => t.id),
+          `${b.id}/${r.civ} missingTechs`,
+        ).not.toContain(322);
+        expect(
+          r.missingTechs.map((t) => t.id),
+          `${b.id}/${r.civ} missingTechs`,
+        ).not.toContain(380);
+      }
+    }
   });
 
   it('大型箭塔（235）与城堡（82）：数值、斯拉夫 455、凯尔特 482 与机制标签核对', () => {

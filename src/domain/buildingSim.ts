@@ -2,11 +2,22 @@
  * 建筑科技模拟器：复用 simulator.ts 的效果引擎（applyEffects / civStatus / totalCost / prereq）。
  * 效果数值来自 .dat 生成的 data/game/effects.json（经 effects.ts 合成，手工表仅作回退）。
  */
-import type { Building, StatSet } from './types';
+import type { Building, Effect, StatSet } from './types';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
 import { BUILDING_CIV_BONUSES, BUILDING_EFFECTS, BUILDING_TEXT_ONLY, genericFx } from './effects';
 export type { BPred, BCivBonus } from './buildingEffects.manual';
 export { BUILDING_CIV_BONUSES, BUILDING_EFFECTS };
+
+/** 仅对具备攻击能力的建筑生效的进攻类效果属性 */
+const OFFENSIVE_BUILDING_STATS: ReadonlySet<Effect['s']> = new Set(['atk', 'rng', 'minr', 'rof', 'bonus', 'acc', 'ca']);
+
+/**
+ * 判断建筑是否具备攻击能力。
+ * 不能仅看基础 b.atk === 0：西西里城楼（1665）基础 atk=0，但含 5 项攻击类别及 minr=1、rof=2，随时代加成获得攻击力。
+ */
+function buildingCanAttack(b: Pick<Building, 'atk' | 'rng' | 'minr' | 'rof' | 'atks'>): boolean {
+  return b.atk > 0 || b.rng > 0 || b.minr > 0 || b.rof > 0 || (b.atks?.length ?? 0) > 0;
+}
 
 export function buildingBase(b: Building): StatSet {
   return {
@@ -30,25 +41,43 @@ export function buildingBase(b: Building): StatSet {
   };
 }
 
+/** 仅文本层中的进攻类建筑科技（无攻建筑同样过滤） */
+const OFFENSIVE_TEXT_ONLY = new Set(['Heated Shot', 'Ballistics']);
+
 export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): SimTech[] {
   const st = civStatus(ctx.trees, civ);
   const r: SimTech[] = [];
+  const seen = new Set<number>();
+  const canAttack = buildingCanAttack(b);
   const has = (n: string) => {
     const t = ctx.techByEn[n];
     return t && st['t' + t.id] ? t : null;
   };
   Object.keys(BUILDING_EFFECTS).forEach((n) => {
     const t = has(n);
-    if (!t) return;
-    const ef = BUILDING_EFFECTS[n]!.filter(([f]) => f(b)).flatMap((x) => x[1]);
-    if (ef.length) r.push({ t, ef });
+    if (!t || seen.has(t.id)) return;
+    const rawEf = BUILDING_EFFECTS[n]!.filter(([f]) => f(b)).flatMap((x) => x[1]);
+    const ef = canAttack ? rawEf : rawEf.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s));
+    if (ef.length) {
+      seen.add(t.id);
+      r.push({ t, ef });
+    }
   });
   Object.entries(BUILDING_TEXT_ONLY).forEach(([n, f]) => {
+    if (!canAttack && OFFENSIVE_TEXT_ONLY.has(n)) return;
     const t = has(n);
-    if (t && f(b) && !r.some((x) => x.t.id === t.id)) r.push({ t, ef: null });
+    if (t && f(b) && !seen.has(t.id)) {
+      seen.add(t.id);
+      r.push({ t, ef: null });
+    }
   });
-  // 在该建筑研究的独特科技：仅文本
-  ctx.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && b.techs.includes(t.id)).forEach((t) => r.push({ t, ef: null }));
+  // 在该建筑研究的独特科技：仅文本（已由上方效果/文本表纳入的按 t.id 去重）
+  ctx.techs.forEach((t) => {
+    if (t.type === 'UniqueTech' && t.civs.includes(civ) && b.techs.includes(t.id) && !seen.has(t.id)) {
+      seen.add(t.id);
+      r.push({ t, ef: null });
+    }
+  });
   return r;
 }
 
