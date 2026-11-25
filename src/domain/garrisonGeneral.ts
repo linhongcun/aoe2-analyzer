@@ -191,17 +191,27 @@ function existingUnitAge(ctx: GeneralGarrisonContext, id: number, civ: string, d
   // Keep the normal training age separate (see issue224-engine.md).
   return data.civs[civ]?.startingScoutId === id ? 1 : unitAge(ctx, id, civ, data);
 }
-function unitAvailable(ctx: GeneralGarrisonContext, id: number, config: GeneralGarrisonConfig, data: GeneralGarrisonData): boolean {
+function unitAvailable(
+  ctx: GeneralGarrisonContext,
+  id: number,
+  config: GeneralGarrisonConfig,
+  data: GeneralGarrisonData,
+  status: Record<string, number> = civStatus(ctx.trees, config.civ),
+): boolean {
   const u = ctx.core.unitById[id] ?? (id === FEMALE_VILLAGER_ID ? ctx.core.unitById[VILLAGER_UNIT_ID] : undefined) ?? ctx.core.buildingById[id];
   if (u && !u.civs.includes(config.civ)) return false;
   if (!u && !data.herdableIds.includes(id) && !(data.specialOccupantIds ?? []).includes(id) && !(data.relicIds ?? []).includes(id)) return false;
   if (!u && data.units[id]?.catalog?.civs.length && !data.units[id]!.catalog!.civs.includes(config.civ)) return false;
   if (existingUnitAge(ctx, id, config.civ, data) > config.age) return false;
-  return civStatus(ctx.trees, config.civ)['u' + (id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id)] !== 0;
+  return status['u' + (id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id)] !== 0;
 }
 
-function availableTechs(ctx: GeneralGarrisonContext, config: GeneralGarrisonConfig, data: GeneralGarrisonData): Tech[] {
-  const status = civStatus(ctx.trees, config.civ);
+function availableTechs(
+  ctx: GeneralGarrisonContext,
+  config: GeneralGarrisonConfig,
+  data: GeneralGarrisonData,
+  status: Record<string, number> = civStatus(ctx.trees, config.civ),
+): Tech[] {
   const disabled = new Set(data.civs[config.civ]?.disabled ?? []);
   return ctx.core.techs.filter(
     (t) =>
@@ -216,9 +226,19 @@ interface Snapshot {
   selected: number[];
   productionLocations: Record<number, number[]>;
   appliedRules: GeneralGarrisonRule[];
+  stage0AppliedCount: number;
+  stage0GarrisonType: number;
+  stage0SizeClass: Map<number, number>;
 }
 
-function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data: GeneralGarrisonData): Snapshot {
+function snapshot(
+  ctx: GeneralGarrisonContext,
+  b: Building,
+  config: GeneralGarrisonConfig,
+  data: GeneralGarrisonData,
+  status: Record<string, number> = civStatus(ctx.trees, config.civ),
+  index: StaticGarrisonIndex = getStaticIndex(data),
+): Snapshot {
   const civ = data.civs[config.civ];
   const units: Record<string, GeneralGarrisonUnit> = { ...data.units };
   const cloned = new Set<string>();
@@ -257,19 +277,25 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
     }
     return unit;
   };
-  const selected = unique([...config.techs, ...getFreeGarrisonTechs(ctx, b, config, data)]);
+  const techData = technologyData(data);
+  const selected = unique([...config.techs, ...freeGarrisonTechs(ctx, b, config, techData, status, index.shapeUpgrades)]);
   const productionLocations: Record<number, number[]> = {};
   const known = new Set([104]);
   const disabled = new Set(civ?.disabled ?? []);
-  const implied = implicitShapeTechs(ctx, b, config, technologyData(data));
+  const implied = implicitShapeTechs(ctx, b, config, techData, index.shapeUpgrades);
   for (const tid of implied) known.add(tid);
   // Exact tower shape means the line upgrade has already been researched.
   if (b.id === 234 || b.id === 235) known.add(140);
   if (b.id === 235) known.add(63);
+  const stage0SizeClass = new Map<number, number>();
+  let recordStage0SizeClass = false;
   const apply = (rule: GeneralGarrisonRule) => {
     for (const e of rule.effects) {
       const u = writableUnit(e.unit);
-      if (u) u[e.stat] = e.op === 'set' ? e.value : e.op === 'mul' ? u[e.stat] * e.value : u[e.stat] + e.value;
+      if (u) {
+        if (recordStage0SizeClass && e.stat === 'sizeClass' && !stage0SizeClass.has(e.unit)) stage0SizeClass.set(e.unit, u.sizeClass);
+        u[e.stat] = e.op === 'set' ? e.value : e.op === 'mul' ? u[e.stat] * e.value : u[e.stat] + e.value;
+      }
     }
     for (const e of rule.trainingLocations ?? []) {
       const unit = writableTrain(e.unit);
@@ -280,8 +306,8 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
       (productionLocations[e.unit] ??= []).push(e.location);
     }
   };
-  for (const [index, id] of AGE_TECH_IDS.entries())
-    if (config.age >= index + 2) {
+  for (const [indexAge, id] of AGE_TECH_IDS.entries())
+    if (config.age >= indexAge + 2) {
       if (data.ageRules[id]) apply(data.ageRules[id]!);
       known.add(id);
     }
@@ -309,6 +335,9 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
     }
   };
   advance();
+  const stage0AppliedCount = appliedRules.length;
+  const stage0GarrisonType = units[b.id]?.garrisonType ?? 0;
+  recordStage0SizeClass = true;
   for (const id of implied)
     if (!selected.includes(id) && data.techs[id]) {
       const rule = data.techs[id]!;
@@ -320,7 +349,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
   }
   automatic.push(...data.conditional);
   advance();
-  return { units, building: units[b.id], known, selected, productionLocations, appliedRules };
+  return { units, building: units[b.id], known, selected, productionLocations, appliedRules, stage0AppliedCount, stage0GarrisonType, stage0SizeClass };
 }
 
 export function getGarrisonBuildings(ctx: GeneralGarrisonContext): Building[] {
@@ -370,7 +399,6 @@ function buildStaticIndex(data: GeneralGarrisonData): StaticGarrisonIndex {
 let defaultStaticIndex: StaticGarrisonIndex | null = null;
 const getStaticIndex = (data: GeneralGarrisonData): StaticGarrisonIndex =>
   data === GENERAL_GARRISON_DATA ? (defaultStaticIndex ??= buildStaticIndex(data)) : buildStaticIndex(data);
-const defaultGarrisonTechCache = new WeakMap<Core, WeakMap<Trees, Map<string, readonly Tech[]>>>();
 
 /**
  * Buildings with their own catalog `produces` list (e.g. Archery Range 87, Fortified Church 1806)
@@ -407,11 +435,12 @@ function candidate(
   state: Snapshot,
   data: GeneralGarrisonData,
   scope = buildingProductionScope(b, data),
+  status: Record<string, number> = civStatus(ctx.trees, config.civ),
 ): GarrisonCandidate | null {
   if (id === 286) return null; // Carrier representation is used to validate relic deposits, never as a second occupant.
   const u = state.units[id],
     B = state.building;
-  if (!u || !B || !unitAvailable(ctx, id, config, data)) return null;
+  if (!u || !B || !unitAvailable(ctx, id, config, data, status)) return null;
   const mask = garrisonUnitMask(u);
   const { aliases, predecessors, catalogSources, trainSources } = scope;
   const canEnter = B.capacity > 0 && mask !== null && (B.garrisonType & mask) !== 0 && acceptsTask(u, B, aliases);
@@ -467,11 +496,12 @@ export function getGarrisonCandidates(
   config: GeneralGarrisonConfig,
   data = GENERAL_GARRISON_DATA,
 ): GarrisonCandidate[] {
-  const state = snapshot(ctx, b, config, data);
+  const status = civStatus(ctx.trees, config.civ);
   const index = getStaticIndex(data);
+  const state = snapshot(ctx, b, config, data, status, index);
   const scope = buildingProductionScope(b, data, index);
   return index.eligibleIds
-    .map((id) => candidate(ctx, b, config, id, state, data, scope))
+    .map((id) => candidate(ctx, b, config, id, state, data, scope, status))
     .filter((u): u is GarrisonCandidate => u !== null && (u.canEnter || u.canCreate || u.canDeposit));
 }
 
@@ -483,6 +513,15 @@ const EXPLICIT_CREATE_UNLOCKS: readonly { techId: number; unitIds: readonly numb
   { techId: 483, unitIds: [886, 887], buildingId: 101 },
   { techId: 755, unitIds: [1699] },
 ];
+const MAX_STAT_STATES = 256;
+
+const applyEffectOp = (cur: number, op: GeneralGarrisonEffect['op'], val: number): number => (op === 'set' ? val : op === 'mul' ? cur * val : cur + val);
+
+const applyStatList = (cur: number, list: readonly GeneralGarrisonEffect[]): number => {
+  let v = cur;
+  for (const e of list) v = applyEffectOp(v, e.op, e.value);
+  return v;
+};
 
 const isShootingBuilding = (B: GeneralGarrisonUnit | undefined): boolean =>
   !!B && B.attack > 0 && B.reload > 0 && (B.projectile >= 0 || B.secondaryProjectile >= 0);
@@ -511,29 +550,16 @@ function effectAffectsOccupant(effect: GeneralGarrisonEffect, caps: OccupantCaps
 
 /** Covers the whole eligible roster so removing a row never invalidates its selected technologies. */
 export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data = GENERAL_GARRISON_DATA): Tech[] {
-  let cacheBucket: Map<string, readonly Tech[]> | null = null;
-  let cacheKey = '';
-  if (data === GENERAL_GARRISON_DATA && ctx.core.buildingById[b.id] === b) {
-    let byTree = defaultGarrisonTechCache.get(ctx.core);
-    if (!byTree) {
-      byTree = new WeakMap();
-      defaultGarrisonTechCache.set(ctx.core, byTree);
-    }
-    cacheBucket = byTree.get(ctx.trees) ?? null;
-    if (!cacheBucket) {
-      cacheBucket = new Map();
-      byTree.set(ctx.trees, cacheBucket);
-    }
-    cacheKey = `${b.id}:${config.civ}:${config.age}`;
-    const hit = cacheBucket.get(cacheKey);
-    if (hit) return [...hit];
-  }
-  const result = computeGarrisonTechs(ctx, b, config, data);
-  if (cacheBucket) cacheBucket.set(cacheKey, result);
-  return [...result];
+  return computeGarrisonTechs(ctx, b, config, data, civStatus(ctx.trees, config.civ));
 }
 
-function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data: GeneralGarrisonData): Tech[] {
+function computeGarrisonTechs(
+  ctx: GeneralGarrisonContext,
+  b: Building,
+  config: GeneralGarrisonConfig,
+  data: GeneralGarrisonData,
+  status: Record<string, number>,
+): Tech[] {
   const buildingInfo = data.buildings[b.id];
   const civData = data.civs[config.civ];
   if (!buildingInfo || !civData || !b.civs.includes(config.civ)) return [];
@@ -541,24 +567,328 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
   const upgradeData = technologyData(data);
   const staticIndex = getStaticIndex(data);
   const { eligibleIds, eligiblePool, shapeUpgrades } = staticIndex;
-  const pool = availableTechs(ctx, config, data).filter((t) => !shapeUpgrades.has(t.id));
+  const pool = availableTechs(ctx, config, data, status).filter((t) => !shapeUpgrades.has(t.id));
   if (!pool.length) return [];
 
   const poolIds = new Set(pool.map((t) => t.id));
+  const civFreeSet = new Set(civData.free);
+  const disabled = new Set(civData.disabled);
   const baseConfig: GeneralGarrisonConfig = { civ: config.civ, age: config.age, techs: [], rows: [] };
   let fullConfig: GeneralGarrisonConfig = { civ: config.civ, age: config.age, techs: pool.map((t) => t.id), rows: [] };
-  const baseState = snapshot(ctx, b, baseConfig, data);
-  let fullState = snapshot(ctx, b, fullConfig, data);
+  const baseState = snapshot(ctx, b, baseConfig, data, status, staticIndex);
+  let fullState = snapshot(ctx, b, fullConfig, data, status, staticIndex);
   const baseB = baseState.building;
   if (!baseB || !fullState.building) return [];
 
   const scope = buildingProductionScope(b, data, staticIndex);
-  const { aliases, trainSources } = scope;
+  const { aliases, predecessors, catalogSources, trainSources } = scope;
   const relicIds = data.relicIds ?? [];
+  const baseFree = new Set(baseState.selected);
+  const baseStage0Ids = new Set(baseState.appliedRules.slice(0, baseState.stage0AppliedCount).map((r) => r.id));
+  const baseStage2Ids = new Set(baseState.appliedRules.slice(baseState.stage0AppliedCount).map((r) => r.id));
 
-  // Include implicit shape technologies that any eligible occupant row could inject into snapshot(),
+  const prereqSetInPool = (tid: number): Set<number> => {
+    const out = new Set<number>();
+    let pre = ctx.core.techById[tid]?.pre;
+    while (pre && poolIds.has(pre) && !out.has(pre)) {
+      out.add(pre);
+      pre = ctx.core.techById[pre]?.pre;
+    }
+    return out;
+  };
+
+  interface Reachability {
+    effectsByUnit: Map<number, GeneralGarrisonEffect[]>;
+    relocUnits: Set<number>;
+    bEffects: GeneralGarrisonEffect[];
+    stage1Ids: number[];
+    stage2Rules: GeneralGarrisonRule[];
+    canHaveCapacity: boolean;
+    gTypeValues: number[];
+    gTypeMask: number;
+    gTypeOverflow: boolean;
+    isOccupant: (id: number) => boolean;
+    stage0ClassesOf: (uid: number, fullS: Snapshot) => number[];
+  }
+
+  const propagateSingleStat = (
+    initialValues: number[],
+    stage1Ids: number[],
+    stage2Rules: GeneralGarrisonRule[],
+    targetUnit: number,
+    stat: GarrisonStat,
+  ): { values: number[]; overflow: boolean } => {
+    let values = new Set<number>(initialValues);
+    let overflow = false;
+    const s1Items = stage1Ids
+      .map((id) => ({ id, fx: (data.techs[id]?.effects ?? []).filter((e) => e.unit === targetUnit && e.stat === stat) }))
+      .filter((item) => item.fx.length > 0);
+    if (s1Items.length > 0) {
+      const s1Index = new Map(s1Items.map((item, idx) => [item.id, idx]));
+      const reqMasks = s1Items.map((item) => {
+        let mask = 0;
+        for (const p of prereqSetInPool(item.id)) {
+          const idx = s1Index.get(p);
+          if (idx !== undefined) mask |= 1 << idx;
+        }
+        return mask;
+      });
+      const hasInternalPrereq = reqMasks.some((m) => m !== 0);
+      if (hasInternalPrereq && s1Items.length <= 14) {
+        let states = new Map<string, [number, number, number]>();
+        for (const v of values) states.set(`${v}:0:0`, [v, 0, 0]);
+        for (let i = 0; i < s1Items.length; i++) {
+          const item = s1Items[i]!;
+          const bit = 1 << i;
+          const forced = baseFree.has(item.id);
+          const next = new Map<string, [number, number, number]>();
+          const push = (v: number, chosen: number, req: number) => {
+            const key = `${v}:${chosen}:${req}`;
+            if (!next.has(key)) next.set(key, [v, chosen, req]);
+          };
+          for (const [v, chosen, req] of states.values()) {
+            if (!forced) push(v, chosen, req);
+            push(applyStatList(v, item.fx), chosen | bit, req | reqMasks[i]!);
+            if (next.size > MAX_STAT_STATES * 2) {
+              overflow = true;
+              break;
+            }
+          }
+          if (overflow) break;
+          states = next;
+        }
+        if (!overflow) {
+          values = new Set<number>();
+          for (const [v, chosen, req] of states.values()) {
+            if ((req & ~chosen) === 0) values.add(v);
+          }
+        }
+      } else {
+        for (const item of s1Items) {
+          if (baseFree.has(item.id)) {
+            const next = new Set<number>();
+            for (const v of values) next.add(applyStatList(v, item.fx));
+            values = next;
+          } else {
+            const added: number[] = [];
+            for (const v of values) added.push(applyStatList(v, item.fx));
+            for (const v of added) {
+              values.add(v);
+              if (values.size > MAX_STAT_STATES) {
+                overflow = true;
+                break;
+              }
+            }
+            if (overflow) break;
+          }
+        }
+      }
+    }
+    if (!overflow) {
+      const s2Items = stage2Rules
+        .map((r) => ({ forced: baseStage2Ids.has(r.id), fx: r.effects.filter((e) => e.unit === targetUnit && e.stat === stat) }))
+        .filter((item) => item.fx.length > 0);
+      if (s2Items.length > 0) {
+        if (s2Items.every((item) => item.forced)) {
+          for (const item of s2Items) {
+            const next = new Set<number>();
+            for (const v of values) next.add(applyStatList(v, item.fx));
+            values = next;
+          }
+        } else if (s2Items.length > 20) {
+          overflow = true;
+        } else {
+          let forcedMask = 0;
+          for (let i = 0; i < s2Items.length; i++) if (s2Items[i]!.forced) forcedMask |= 1 << i;
+          const seen = new Set<string>();
+          const queue: [number, number][] = [];
+          for (const v of values) {
+            const key = `${v}:0`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              queue.push([v, 0]);
+            }
+          }
+          for (let q = 0; q < queue.length && !overflow; q++) {
+            const [v, bits] = queue[q]!;
+            for (let i = 0; i < s2Items.length; i++) {
+              if (((bits >> i) & 1) !== 0) continue;
+              const nv = applyStatList(v, s2Items[i]!.fx);
+              const nbits = bits | (1 << i);
+              const key = `${nv}:${nbits}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                queue.push([nv, nbits]);
+                if (seen.size > MAX_STAT_STATES * 2) {
+                  overflow = true;
+                  break;
+                }
+              }
+            }
+          }
+          if (!overflow) {
+            values = new Set<number>();
+            for (const [v, bits] of queue) {
+              if ((bits & forcedMask) === forcedMask) values.add(v);
+            }
+          }
+        }
+      }
+    }
+    return { values: [...values], overflow };
+  };
+
+  const analyzeReachability = (cfgFull: GeneralGarrisonConfig, stateFull: Snapshot): Reachability => {
+    const fullB = stateFull.building!;
+    const effectsByUnit = new Map<number, GeneralGarrisonEffect[]>();
+    const relocUnits = new Set<number>();
+    const indexRule = (rule: GeneralGarrisonRule) => {
+      for (const e of rule.effects) {
+        let list = effectsByUnit.get(e.unit);
+        if (!list) {
+          list = [];
+          effectsByUnit.set(e.unit, list);
+        }
+        list.push(e);
+      }
+      for (const loc of rule.trainingLocations ?? []) {
+        if (trainSources.includes(loc.location)) relocUnits.add(loc.unit);
+      }
+    };
+    for (const t of pool) indexRule(data.techs[t.id]!);
+    for (const r of stateFull.appliedRules) indexRule(r);
+
+    const bEffects = effectsByUnit.get(b.id) ?? [];
+    const stage1Ids = unique([...poolIds, ...baseState.selected, ...stateFull.selected]);
+    const stage2Rules = stateFull.appliedRules.slice(stateFull.stage0AppliedCount);
+    const shapeStage0Rules = stateFull.appliedRules.slice(0, stateFull.stage0AppliedCount).filter((r) => !baseStage0Ids.has(r.id));
+
+    const stage0ValuesOf = (baseVal: number, fullVal: number, targetUnit: number, stat: GarrisonStat): number[] => {
+      const vals = new Set<number>([baseVal, fullVal]);
+      const fxRules = shapeStage0Rules.map((r) => r.effects.filter((e) => e.unit === targetUnit && e.stat === stat)).filter((fx) => fx.length > 0);
+      for (const fx of fxRules) {
+        const next: number[] = [];
+        for (const v of vals) next.push(applyStatList(v, fx));
+        for (const v of next) vals.add(v);
+      }
+      return [...vals];
+    };
+
+    const stage0ClassesOf = (uid: number, fullS: Snapshot): number[] => {
+      const bClass = baseState.stage0SizeClass.get(uid) ?? baseState.units[uid]?.sizeClass;
+      const fClass = fullS.stage0SizeClass.get(uid) ?? fullS.units[uid]?.sizeClass;
+      if (bClass === undefined && fClass === undefined) return [];
+      return stage0ValuesOf(bClass ?? fClass!, fClass ?? bClass!, uid, 'sizeClass');
+    };
+
+    const canHaveCapacity =
+      baseB.capacity > 0 || fullB.capacity > 0 || bEffects.some((e) => e.stat === 'capacity' && (e.op === 'set' || e.op === 'add') && e.value > 0);
+
+    const hasGTypeEffects = bEffects.some((e) => e.stat === 'garrisonType');
+    const gTypeProp = hasGTypeEffects
+      ? propagateSingleStat(
+          stage0ValuesOf(baseState.stage0GarrisonType, stateFull.stage0GarrisonType, b.id, 'garrisonType'),
+          stage1Ids,
+          stage2Rules,
+          b.id,
+          'garrisonType',
+        )
+      : { values: [baseB.garrisonType, fullB.garrisonType], overflow: false };
+    const gTypeValues = unique([...gTypeProp.values, baseB.garrisonType, fullB.garrisonType]);
+    let gTypeMask = gTypeProp.overflow ? 0x7f : 0;
+    if (!gTypeProp.overflow) {
+      for (const v of gTypeValues) gTypeMask |= v & 0x7f;
+    }
+
+    const createGateMet = (uid: number): boolean => {
+      for (const gate of EXPLICIT_CREATE_UNLOCKS) {
+        if (gate.buildingId !== undefined && gate.buildingId !== b.id) continue;
+        if (gate.unitIds.includes(uid) && !stateFull.known.has(gate.techId)) return false;
+      }
+      return true;
+    };
+
+    const occupantCache = new Map<number, boolean>();
+    const isOccupant = (id: number): boolean => {
+      const cached = occupantCache.get(id);
+      if (cached !== undefined) return cached;
+      if (!eligiblePool.has(id) || id === 286) {
+        occupantCache.set(id, false);
+        return false;
+      }
+      const baseC = candidate(ctx, b, baseConfig, id, baseState, data, scope, status);
+      if (baseC && (baseC.canEnter || baseC.canCreate || baseC.canDeposit)) {
+        occupantCache.set(id, true);
+        return true;
+      }
+      const fullC = candidate(ctx, b, cfgFull, id, stateFull, data, scope, status);
+      if (fullC && (fullC.canEnter || fullC.canCreate || fullC.canDeposit)) {
+        occupantCache.set(id, true);
+        return true;
+      }
+      let ok = false;
+      if (canHaveCapacity && unitAvailable(ctx, id, baseConfig, data, status)) {
+        const bu = baseState.units[id];
+        const fu = stateFull.units[id];
+        const unitBase = bu ?? fu;
+        const taskOk = (!!bu && acceptsTask(bu, baseB, aliases)) || (!!fu && acceptsTask(fu, fullB, aliases));
+        if (taskOk && unitBase && (gTypeProp.overflow || gTypeMask !== 0)) {
+          const hasSizeEffects = (effectsByUnit.get(id) ?? []).some((e) => e.stat === 'sizeClass');
+          if (!hasSizeEffects) {
+            const m = garrisonUnitMask(unitBase);
+            if (m !== null && (gTypeProp.overflow || (gTypeMask & m) !== 0)) ok = true;
+          } else {
+            const scProp = propagateSingleStat(stage0ClassesOf(id, stateFull), stage1Ids, stage2Rules, id, 'sizeClass');
+            if (scProp.overflow) {
+              ok = true;
+            } else {
+              for (const sc of scProp.values) {
+                const m = garrisonUnitMask({ ...unitBase, sizeClass: sc });
+                if (m !== null && (gTypeProp.overflow || (gTypeMask & m) !== 0)) {
+                  ok = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+        const productionId = id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id;
+        const isRelic = relicIds.includes(id);
+        if (!ok && !isRelic && unitAge(ctx, id, config.civ, data) <= config.age && createGateMet(id)) {
+          const catalogProduction = catalogSources.some((sourceId) => data.buildings[sourceId]?.produces.includes(productionId));
+          const producer = baseState.units[productionId] ?? stateFull.units[productionId];
+          const hasNativeTrainLoc = !!producer?.trainLocations.some((t) => trainSources.includes(t.unitId));
+          if (relocUnits.has(productionId) || (catalogProduction && hasNativeTrainLoc)) ok = true;
+        }
+        if (!ok && isRelic) {
+          const carrier = baseState.units[286] ?? stateFull.units[286];
+          if (carrier?.specialTasks?.some((t) => t.action === 136 && (predecessors.includes(t.unitId) || (t.unitId < 0 && t.classId === baseB.class))))
+            ok = true;
+        }
+      }
+      occupantCache.set(id, ok);
+      return ok;
+    };
+
+    return {
+      effectsByUnit,
+      relocUnits,
+      bEffects,
+      stage1Ids,
+      stage2Rules,
+      canHaveCapacity,
+      gTypeValues,
+      gTypeMask,
+      gTypeOverflow: gTypeProp.overflow,
+      isOccupant,
+      stage0ClassesOf,
+    };
+  };
+
+  let reach = analyzeReachability(fullConfig, fullState);
+
+  // Include implicit shape technologies that any reachable occupant row could inject into snapshot(),
   // without depending on config.rows so adding/removing rows never changes the tech list.
-  const disabled = new Set(civData.disabled);
   const shapeHooks = new Set<number>();
   for (const r of civData.automatic) {
     if (disabled.has(r.id)) continue;
@@ -589,60 +919,56 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
       }
       return [...found];
     };
-    const shapeRows: GeneralGarrisonRow[] = [];
-    const zeroCap = baseB.capacity <= 0 && fullState.building.capacity <= 0;
+    const shapeCandidates: number[] = [];
     for (const [key, seeds] of Object.entries(upgradeData.unitUpgradeTechs)) {
       if (!seeds.length) continue;
       const uid = Number(key);
-      if (!eligiblePool.has(uid) || uid === 286) continue;
+      if (!eligiblePool.has(uid) || uid === 286 || !unitAvailable(ctx, uid, baseConfig, data, status)) continue;
       if (!unitShapeClosure(seeds).some((tid) => shapeHooks.has(tid))) continue;
-      const eligible = zeroCap
-        ? unitAvailable(ctx, uid, baseConfig, data)
-        : (() => {
-            const bc = candidate(ctx, b, baseConfig, uid, baseState, data, scope);
-            if (bc && (bc.canEnter || bc.canCreate || bc.canDeposit)) return true;
-            const fc = candidate(ctx, b, fullConfig, uid, fullState, data, scope);
-            return !!fc && (fc.canEnter || fc.canCreate || fc.canDeposit);
-          })();
-      if (eligible) shapeRows.push({ unitId: uid, count: '0', entry: 'enter' });
+      shapeCandidates.push(uid);
     }
-    if (shapeRows.length > 0) {
-      fullConfig = { ...fullConfig, rows: shapeRows };
-      fullState = snapshot(ctx, b, fullConfig, data);
+    const allConditionalRules = [...civData.automatic, ...data.conditional].filter((r) => !disabled.has(r.id));
+    const hasUnappliedEntryMutator = (uid: number, appliedIds: Set<number>): boolean => {
+      const prodId = uid === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : uid;
+      return allConditionalRules.some(
+        (r) =>
+          !appliedIds.has(r.id) &&
+          (r.effects.some((e) => (e.unit === b.id && (e.stat === 'capacity' || e.stat === 'garrisonType')) || (e.unit === uid && e.stat === 'sizeClass')) ||
+            (r.trainingLocations ?? []).some((loc) => loc.unit === prodId && trainSources.includes(loc.location))),
+      );
+    };
+    const acceptedShapeIds = new Set<number>();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const appliedIds = new Set(fullState.appliedRules.map((r) => r.id));
+      for (const uid of shapeCandidates) {
+        if (acceptedShapeIds.has(uid)) continue;
+        let eligible = reach.isOccupant(uid);
+        if (!eligible && hasUnappliedEntryMutator(uid, appliedIds)) {
+          const probeRows: GeneralGarrisonRow[] = [...acceptedShapeIds, uid].map((id) => ({ unitId: id, count: '0', entry: 'enter' }));
+          const probeConfig: GeneralGarrisonConfig = { ...fullConfig, rows: probeRows };
+          const probeState = snapshot(ctx, b, probeConfig, data, status, staticIndex);
+          if (probeState.building) eligible = analyzeReachability(probeConfig, probeState).isOccupant(uid);
+        }
+        if (eligible) {
+          acceptedShapeIds.add(uid);
+          changed = true;
+        }
+      }
+      if (changed) {
+        fullConfig = { ...fullConfig, rows: [...acceptedShapeIds].map((id) => ({ unitId: id, count: '0', entry: 'enter' })) };
+        fullState = snapshot(ctx, b, fullConfig, data, status, staticIndex);
+        if (!fullState.building) return [];
+        reach = analyzeReachability(fullConfig, fullState);
+      }
     }
   }
+
   const fullB = fullState.building;
   if (!fullB) return [];
+  const { effectsByUnit, relocUnits, bEffects, stage1Ids, stage2Rules, canHaveCapacity, gTypeValues, gTypeOverflow, isOccupant, stage0ClassesOf } = reach;
 
-  // Aggregate reachable effects/locations across pool techs + fullState.appliedRules so partial-selection
-  // states (where another tech later cancels or overwrites firepower/attack/capacity/garrisonType) are not missed.
-  const effectsByUnit = new Map<number, GeneralGarrisonEffect[]>();
-  const relocUnits = new Set<number>();
-  const indexRule = (rule: GeneralGarrisonRule) => {
-    for (const e of rule.effects) {
-      let list = effectsByUnit.get(e.unit);
-      if (!list) {
-        list = [];
-        effectsByUnit.set(e.unit, list);
-      }
-      list.push(e);
-    }
-    for (const loc of rule.trainingLocations ?? []) {
-      if (trainSources.includes(loc.location)) relocUnits.add(loc.unit);
-    }
-  };
-  for (const t of pool) indexRule(data.techs[t.id]!);
-  for (const r of fullState.appliedRules) indexRule(r);
-
-  const bEffects = effectsByUnit.get(b.id) ?? [];
-  const canHaveCapacity =
-    baseB.capacity > 0 || fullB.capacity > 0 || bEffects.some((e) => e.stat === 'capacity' && (e.op === 'set' || e.op === 'add') && e.value > 0);
-  let reachableGarrisonType = baseB.garrisonType | fullB.garrisonType;
-  for (const e of bEffects) {
-    if (e.stat !== 'garrisonType' || !Number.isSafeInteger(e.value)) continue;
-    if (e.op === 'set' && e.value > 0) reachableGarrisonType |= e.value;
-    else if (e.op === 'add') reachableGarrisonType |= Math.max(0, baseB.garrisonType + e.value) | Math.max(0, fullB.garrisonType + e.value);
-  }
   const shooting =
     isShootingBuilding(baseB) ||
     isShootingBuilding(fullB) ||
@@ -652,7 +978,9 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
         fullB.projectile >= 0 ||
         baseB.secondaryProjectile >= 0 ||
         fullB.secondaryProjectile >= 0 ||
-        bEffects.some((e) => (e.stat === 'projectile' || e.stat === 'secondaryProjectile') && e.op === 'set' && e.value >= 0)));
+        bEffects.some(
+          (e) => (e.stat === 'projectile' || e.stat === 'secondaryProjectile') && ((e.op === 'set' && e.value >= 0) || (e.op === 'add' && e.value > 0)),
+        )));
 
   const capsCache = new Map<number, OccupantCaps>();
   const unitCaps = (uid: number): OccupantCaps => {
@@ -664,8 +992,10 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
     let hasPosFp = (bu?.firepower ?? 0) > 0 || (fu?.firepower ?? 0) > 0;
     let hasNegFp = (bu?.firepower ?? 0) < 0 || (fu?.firepower ?? 0) < 0;
     let hasNonZeroAttack = (bu?.attack ?? 0) !== 0 || (fu?.attack ?? 0) !== 0;
+    let hasPosTotal = (bu?.total ?? 0) > 0 || (fu?.total ?? 0) > 0;
     let hasMultiProj = (bu?.total ?? 0) > 1 || (fu?.total ?? 0) > 1;
     let hasNegMulFp = false;
+    let hasMulTotalGt1 = false;
     for (const e of ue) {
       if (e.stat === 'firepower') {
         if ((e.op === 'set' || e.op === 'add') && e.value > 0) hasPosFp = true;
@@ -674,14 +1004,12 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
       } else if (e.stat === 'attack') {
         if ((e.op === 'set' || e.op === 'add') && e.value !== 0) hasNonZeroAttack = true;
       } else if (e.stat === 'total') {
-        if (
-          (e.op === 'set' && e.value > 1) ||
-          (e.op === 'add' && e.value > 0) ||
-          (e.op === 'mul' && e.value > 1 && ((bu?.total ?? 0) > 0 || (fu?.total ?? 0) > 0))
-        )
-          hasMultiProj = true;
+        if ((e.op === 'set' || e.op === 'add') && e.value > 0) hasPosTotal = true;
+        if ((e.op === 'set' && e.value > 1) || (e.op === 'add' && e.value > 0)) hasMultiProj = true;
+        else if (e.op === 'mul' && e.value > 1) hasMulTotalGt1 = true;
       }
     }
+    if (hasMulTotalGt1 && hasPosTotal) hasMultiProj = true;
     if (hasNegMulFp) {
       if (hasPosFp) hasNegFp = true;
       if (hasNegFp) hasPosFp = true;
@@ -691,49 +1019,7 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
     return caps;
   };
 
-  const occupantCache = new Map<number, boolean>();
-  const isOccupant = (id: number): boolean => {
-    const cached = occupantCache.get(id);
-    if (cached !== undefined) return cached;
-    if (!eligiblePool.has(id) || id === 286) {
-      occupantCache.set(id, false);
-      return false;
-    }
-    const baseC = candidate(ctx, b, baseConfig, id, baseState, data, scope);
-    if (baseC && (baseC.canEnter || baseC.canCreate || baseC.canDeposit)) {
-      occupantCache.set(id, true);
-      return true;
-    }
-    const fullC = candidate(ctx, b, fullConfig, id, fullState, data, scope);
-    if (fullC && (fullC.canEnter || fullC.canCreate || fullC.canDeposit)) {
-      occupantCache.set(id, true);
-      return true;
-    }
-    let ok = false;
-    if (canHaveCapacity && unitAvailable(ctx, id, baseConfig, data)) {
-      const bu = baseState.units[id];
-      const fu = fullState.units[id];
-      const taskOk = (!!bu && acceptsTask(bu, baseB, aliases)) || (!!fu && acceptsTask(fu, fullB, aliases));
-      if (taskOk && reachableGarrisonType !== 0) {
-        const masks: (number | null)[] = [bu ? garrisonUnitMask(bu) : null, fu ? garrisonUnitMask(fu) : null];
-        for (const e of effectsByUnit.get(id) ?? []) {
-          if (e.stat === 'sizeClass' && e.op === 'set' && bu) masks.push(garrisonUnitMask({ ...bu, sizeClass: e.value }));
-        }
-        if (masks.some((m) => m !== null && (reachableGarrisonType & m) !== 0)) ok = true;
-      }
-      const productionId = id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id;
-      if (!ok && !relicIds.includes(id) && unitAge(ctx, id, config.civ, data) <= config.age && relocUnits.has(productionId)) ok = true;
-    }
-    occupantCache.set(id, ok);
-    return ok;
-  };
-
-  const hasRelicDeposit =
-    FORTIFIED_CHURCH_IDS.has(b.id) &&
-    relicIds.some(
-      (rid) =>
-        !!candidate(ctx, b, baseConfig, rid, baseState, data, scope)?.canDeposit || !!candidate(ctx, b, fullConfig, rid, fullState, data, scope)?.canDeposit,
-    );
+  const hasRelicDeposit = FORTIFIED_CHURCH_IDS.has(b.id) && relicIds.some((rid) => isOccupant(rid));
 
   const isEffectivePowerUnit = (uid: number): boolean => isOccupant(uid) || (uid === VILLAGER_UNIT_ID && hasRelicDeposit);
 
@@ -757,28 +1043,141 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
     }
   }
 
-  const gTypeMasks = unique([baseB.garrisonType, fullB.garrisonType, reachableGarrisonType].filter((m) => m !== 0));
-  const sizeClassChangesEntry = (e: GeneralGarrisonEffect): boolean => {
-    if (!canHaveCapacity || !gTypeMasks.length || !eligiblePool.has(e.unit) || !unitAvailable(ctx, e.unit, baseConfig, data)) return false;
-    const bu = baseState.units[e.unit];
-    const fu = fullState.units[e.unit];
+  const activeGTypes = gTypeValues.filter((m) => (m & 0x7f) !== 0);
+  const techDependsOn = (k: number, target: number): boolean => {
+    let pre = ctx.core.techById[k]?.pre;
+    const seen = new Set<number>();
+    while (pre && poolIds.has(pre) && !seen.has(pre)) {
+      if (pre === target) return true;
+      seen.add(pre);
+      pre = ctx.core.techById[pre]?.pre;
+    }
+    return false;
+  };
+
+  const sizeClassChangesEntryForTech = (uid: number, tid: number, triggered: GeneralGarrisonRule[]): boolean => {
+    if (!canHaveCapacity || (!gTypeOverflow && !activeGTypes.length) || !eligiblePool.has(uid) || !unitAvailable(ctx, uid, baseConfig, data, status))
+      return false;
+    const bu = baseState.units[uid];
+    const fu = fullState.units[uid];
     const unitBase = bu ?? fu;
     if (!unitBase) return false;
     if (!((bu && acceptsTask(bu, baseB, aliases)) || (fu && acceptsTask(fu, fullB, aliases)))) return false;
-    const preClasses = new Set<number>();
-    if (bu) preClasses.add(bu.sizeClass);
-    if (fu) preClasses.add(fu.sizeClass);
-    for (const other of effectsByUnit.get(e.unit) ?? []) {
-      if (other.stat === 'sizeClass' && other.op === 'set') preClasses.add(other.value);
+
+    const tidPrereqs = prereqSetInPool(tid);
+    const s1Items = stage1Ids
+      .map((id) => ({ id, fx: (data.techs[id]?.effects ?? []).filter((e) => e.unit === uid && e.stat === 'sizeClass') }))
+      .filter((item) => item.fx.length > 0);
+    let pairs = new Map<string, [number, number]>();
+    for (const c of stage0ClassesOf(uid, fullState)) pairs.set(`${c}:${c}`, [c, c]);
+
+    for (const item of s1Items) {
+      const k = item.id;
+      const next = new Map<string, [number, number]>();
+      const push = (a: number, bVal: number) => {
+        const key = `${a}:${bVal}`;
+        if (!next.has(key)) next.set(key, [a, bVal]);
+      };
+      const isTid = k === tid;
+      const forcedBoth = baseFree.has(k) || tidPrereqs.has(k);
+      const depOnTid = !isTid && techDependsOn(k, tid);
+      for (const [a, bVal] of pairs.values()) {
+        if (isTid) {
+          push(a, applyStatList(bVal, item.fx));
+        } else if (forcedBoth) {
+          push(applyStatList(a, item.fx), applyStatList(bVal, item.fx));
+        } else if (depOnTid) {
+          if (civFreeSet.has(k)) {
+            const allPrereqsMet = [...prereqSetInPool(k)].every((p) => p === tid || tidPrereqs.has(p) || baseFree.has(p));
+            if (!allPrereqsMet) push(a, bVal);
+            push(a, applyStatList(bVal, item.fx));
+          } else {
+            push(a, bVal);
+          }
+        } else {
+          push(a, bVal);
+          push(applyStatList(a, item.fx), applyStatList(bVal, item.fx));
+        }
+        if (next.size > MAX_STAT_STATES * 2) return true;
+      }
+      pairs = next;
     }
-    for (const preClass of preClasses) {
-      const beforeMask = garrisonUnitMask({ ...unitBase, sizeClass: preClass });
-      const afterClass = e.op === 'set' ? e.value : e.op === 'mul' ? preClass * e.value : preClass + e.value;
-      const afterMask = garrisonUnitMask({ ...unitBase, sizeClass: afterClass });
-      for (const gType of gTypeMasks) {
-        const beforeAllowed = beforeMask !== null && (gType & beforeMask) !== 0;
-        const afterAllowed = afterMask !== null && (gType & afterMask) !== 0;
-        if (beforeAllowed !== afterAllowed) return true;
+
+    const s2Items = stage2Rules
+      .map((r) => ({ rule: r, forced: baseStage2Ids.has(r.id), fx: r.effects.filter((e) => e.unit === uid && e.stat === 'sizeClass') }))
+      .filter((item) => item.fx.length > 0);
+    let finalPairs: [number, number][] = [...pairs.values()];
+    if (s2Items.length > 0) {
+      const triggeredSet = new Set(triggered.map((r) => r.id));
+      if (s2Items.every((item) => item.forced)) {
+        for (const item of s2Items) {
+          finalPairs = finalPairs.map(([a, bVal]) => [applyStatList(a, item.fx), applyStatList(bVal, item.fx)]);
+        }
+      } else if (s2Items.length > 16) {
+        return true;
+      } else {
+        let forcedMask = 0;
+        for (let i = 0; i < s2Items.length; i++) if (s2Items[i]!.forced) forcedMask |= 1 << i;
+        const seen = new Set<string>();
+        const queue: [number, number, number, number][] = [];
+        for (const [a, bVal] of finalPairs) {
+          const key = `${a}:${bVal}:0:0`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            queue.push([a, bVal, 0, 0]);
+          }
+        }
+        const enqueue = (a: number, bVal: number, ba: number, bb: number): boolean => {
+          const key = `${a}:${bVal}:${ba}:${bb}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            queue.push([a, bVal, ba, bb]);
+            if (seen.size > MAX_STAT_STATES * 2) return false;
+          }
+          return true;
+        };
+        for (let q = 0; q < queue.length; q++) {
+          const [a, bVal, ba, bb] = queue[q]!;
+          for (let i = 0; i < s2Items.length; i++) {
+            const item = s2Items[i]!;
+            const bit = 1 << i;
+            const inA = ((ba >> i) & 1) !== 0;
+            const inB = ((bb >> i) & 1) !== 0;
+            const isTriggered = triggeredSet.has(item.rule.id);
+            const blockedWithoutTid = isTriggered && item.rule.requires.includes(tid) && item.rule.requires.length - 1 < item.rule.count;
+            if (!inA && !inB && !blockedWithoutTid) {
+              if (!enqueue(applyStatList(a, item.fx), applyStatList(bVal, item.fx), ba | bit, bb | bit)) return true;
+            }
+            if (isTriggered && !inA && !inB) {
+              if (!enqueue(a, applyStatList(bVal, item.fx), ba, bb | bit)) return true;
+            }
+            if (item.forced && !inA && inB) {
+              if (!enqueue(applyStatList(a, item.fx), bVal, ba | bit, bb)) return true;
+            }
+            if (item.forced && inA && !inB) {
+              if (!enqueue(a, applyStatList(bVal, item.fx), ba, bb | bit)) return true;
+            }
+          }
+        }
+        finalPairs = [];
+        for (const [a, bVal, ba, bb] of queue) {
+          if ((ba & forcedMask) === forcedMask && (bb & forcedMask) === forcedMask) finalPairs.push([a, bVal]);
+        }
+      }
+    }
+
+    for (const [a, bVal] of finalPairs) {
+      if (a === bVal) continue;
+      const maskA = garrisonUnitMask({ ...unitBase, sizeClass: a });
+      const maskB = garrisonUnitMask({ ...unitBase, sizeClass: bVal });
+      if (gTypeOverflow) {
+        if (maskA !== maskB) return true;
+        continue;
+      }
+      for (const gType of activeGTypes) {
+        const allowedA = maskA !== null && (gType & maskA) !== 0;
+        const allowedB = maskB !== null && (gType & maskB) !== 0;
+        if (allowedA !== allowedB) return true;
       }
     }
     return false;
@@ -787,7 +1186,6 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
   const effectRelevant = (e: GeneralGarrisonEffect): boolean => {
     if (e.unit === b.id) return BUILDING_ALWAYS_STATS.has(e.stat) || (shooting && BUILDING_SHOOTING_STATS.has(e.stat));
     if (e.stat === 'attack' && buildingSecondaries.has(e.unit)) return true;
-    if (e.stat === 'sizeClass') return sizeClassChangesEntry(e);
     if (!shooting) return false;
     if (e.stat === 'attack' && occupantSecondaries.has(e.unit)) return true;
     if (!eligiblePool.has(e.unit)) return false;
@@ -804,7 +1202,7 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
         loc.unit !== 286 &&
         !relicIds.includes(loc.unit) &&
         !!data.units[loc.unit] &&
-        unitAvailable(ctx, loc.unit, baseConfig, data) &&
+        unitAvailable(ctx, loc.unit, baseConfig, data, status) &&
         unitAge(ctx, loc.unit, config.civ, data) <= config.age
       )
         return true;
@@ -812,7 +1210,13 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
     for (const gate of EXPLICIT_CREATE_UNLOCKS) {
       if (gate.techId !== tid || (gate.buildingId !== undefined && gate.buildingId !== b.id)) continue;
       for (const uid of gate.unitIds) {
-        if (candidate(ctx, b, fullConfig, uid, fullState, data, scope)?.canCreate) return true;
+        if (candidate(ctx, b, fullConfig, uid, fullState, data, scope, status)?.canCreate) return true;
+        if (!unitAvailable(ctx, uid, baseConfig, data, status) || unitAge(ctx, uid, config.civ, data) > config.age) continue;
+        const prodId = uid === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : uid;
+        const catalogProduction = catalogSources.some((sourceId) => data.buildings[sourceId]?.produces.includes(prodId));
+        const producer = baseState.units[prodId] ?? fullState.units[prodId];
+        const hasNativeTrainLoc = !!producer?.trainLocations.some((t) => trainSources.includes(t.unitId));
+        if (relocUnits.has(prodId) || (catalogProduction && hasNativeTrainLoc)) return true;
       }
     }
     return false;
@@ -856,7 +1260,27 @@ function computeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: 
     const locations = triggered.length
       ? [...(rule.trainingLocations ?? []), ...triggered.flatMap((r) => r.trainingLocations ?? [])]
       : (rule.trainingLocations ?? []);
-    if (effects.some(effectRelevant) || unlocksProductionHere(t.id, locations)) kept.add(t.id);
+    let relevant = false;
+    let sizeUnits: Set<number> | null = null;
+    for (const e of effects) {
+      if (e.stat === 'sizeClass') {
+        (sizeUnits ??= new Set()).add(e.unit);
+        continue;
+      }
+      if (effectRelevant(e)) {
+        relevant = true;
+        break;
+      }
+    }
+    if (!relevant && sizeUnits) {
+      for (const uid of sizeUnits) {
+        if (sizeClassChangesEntryForTech(uid, t.id, triggered)) {
+          relevant = true;
+          break;
+        }
+      }
+    }
+    if (relevant || unlocksProductionHere(t.id, locations)) kept.add(t.id);
   }
   for (const id of [...kept]) {
     let pre = ctx.core.techById[id]?.pre;
@@ -879,8 +1303,10 @@ export function toggleGeneralGarrisonTech(
   id: number,
   data = GENERAL_GARRISON_DATA,
 ): number[] {
-  const available = new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id));
-  const free = new Set(getFreeGarrisonTechs(ctx, b, config, data));
+  const status = civStatus(ctx.trees, config.civ);
+  const index = getStaticIndex(data);
+  const available = new Set(computeGarrisonTechs(ctx, b, config, data, status).map((t) => t.id));
+  const free = new Set(freeGarrisonTechs(ctx, b, config, technologyData(data), status, index.shapeUpgrades));
   const selected = new Set([...config.techs, ...free]);
   return unique([...toggleSelected(id, selected, ctx.core.techById, { available, free, ignoreUnavailable: true, stopAtSelected: true })]);
 }
@@ -976,15 +1402,17 @@ function calculateGarrison(
   if (!Number.isSafeInteger(config.age) || config.age < getGarrisonBuildingAge(b, config.civ, ctx.trees) || config.age > 4)
     out.errors.push('时代无效或早于此建筑。');
   if (config.rows.length > GENERAL_GARRISON_LIMIT) out.errors.push(`方案最多包含 ${GENERAL_GARRISON_LIMIT} 种驻军记录。`);
+  const status = civStatus(ctx.trees, config.civ);
+  const index = getStaticIndex(data);
   let availableSet: Set<number> | null = null;
-  const getAvailable = () => (availableSet ??= new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id)));
+  const getAvailable = () => (availableSet ??= new Set(computeGarrisonTechs(ctx, b, config, data, status).map((t) => t.id)));
   if (config.techs.length > 0) {
     const available = getAvailable();
     for (const id of config.techs)
       if (!Number.isSafeInteger(id) || !available.has(id)) out.errors.push(`${ctx.core.techById[id]?.zh ?? `科技 ${id}`}不可用或不影响驻军预览。`);
   }
   if (out.errors.length) return out;
-  const state = snapshot(ctx, b, config, data),
+  const state = snapshot(ctx, b, config, data, status, index),
     B = state.building;
   out.selected = state.selected;
   for (const id of state.selected) {
@@ -994,7 +1422,7 @@ function calculateGarrison(
   if (!B || !Number.isSafeInteger(B.capacity) || B.capacity < 0 || B.capacity > 255) out.errors.push('固定版本建筑容量数据无效。');
   if (!B || out.errors.length) return out;
   out.capacity = B.capacity;
-  const scope = buildingProductionScope(b, data, getStaticIndex(data));
+  const scope = buildingProductionScope(b, data, index);
   const seen = new Set<string>();
   let power: number | null = 0;
   for (const row of config.rows) {
@@ -1003,7 +1431,7 @@ function calculateGarrison(
     seen.add(key);
     if (!Number.isSafeInteger(row.unitId) || !['enter', 'created', 'deposit'].includes(row.entry)) out.errors.push('驻军单位或入驻方式无效。');
     const unit = state.units[row.unitId],
-      item = candidate(ctx, b, config, row.unitId, state, data, scope);
+      item = candidate(ctx, b, config, row.unitId, state, data, scope, status);
     if (!unit || !item || !(row.entry === 'enter' ? item.canEnter : row.entry === 'deposit' ? item.canDeposit : item.canCreate))
       out.errors.push(`${unit?.zh ?? `单位 ${row.unitId}`}不能以所选方式驻军。`);
     const validCount = /^\d+$/.test(row.count) && Number.isSafeInteger(Number(row.count)) && Number(row.count) <= B.capacity;

@@ -21,22 +21,36 @@ interface Config {
   rows: { unitId: number }[];
 }
 export const GARRISON_TECH_DATA: GarrisonTechData = raw;
+const DEFAULT_SHAPE_UPGRADES: ReadonlySet<number> = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
+const shapeUpgradeSet = (data: GarrisonTechData): ReadonlySet<number> =>
+  data === GARRISON_TECH_DATA ? DEFAULT_SHAPE_UPGRADES : new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
 
-export function implicitShapeTechs(ctx: Context, b: Building, config: Config, data: GarrisonTechData): number[] {
-  const all = new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
+export function implicitShapeTechs(
+  ctx: Context,
+  b: Building,
+  config: Config,
+  data: GarrisonTechData,
+  shapeUpgrades: ReadonlySet<number> = shapeUpgradeSet(data),
+): number[] {
   const found = new Set<number>();
   const add = (id: number) => {
     if (found.has(id)) return;
     found.add(id);
     const pre = ctx.core.techById[id]?.pre;
-    if (pre && all.has(pre)) add(pre);
+    if (pre && shapeUpgrades.has(pre)) add(pre);
   };
   for (const id of [b.id, ...config.rows.map((r) => r.unitId)]) for (const tid of data.unitUpgradeTechs?.[id] ?? []) add(tid);
   return [...found];
 }
 
-export function freeGarrisonTechs(ctx: Context, b: Building, config: Config, data = GARRISON_TECH_DATA): number[] {
-  const status = civStatus(ctx.trees, config.civ);
+export function freeGarrisonTechs(
+  ctx: Context,
+  b: Building,
+  config: Config,
+  data = GARRISON_TECH_DATA,
+  status: Record<string, number> = civStatus(ctx.trees, config.civ),
+  shapeUpgrades: ReadonlySet<number> = shapeUpgradeSet(data),
+): number[] {
   const disabled = new Set(data.civs[config.civ]?.disabled ?? []);
   const available = new Set(
     ctx.core.techs
@@ -51,8 +65,7 @@ export function freeGarrisonTechs(ctx: Context, b: Building, config: Config, dat
       .map((t) => t.id),
   );
   const known = new Set(config.techs);
-  for (const tid of implicitShapeTechs(ctx, b, config, data)) known.add(tid);
-  const shapeUpgrades = new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
+  for (const tid of implicitShapeTechs(ctx, b, config, data, shapeUpgrades)) known.add(tid);
   for (const tid of [...known]) {
     let pre = ctx.core.techById[tid]?.pre;
     while (pre && shapeUpgrades.has(pre) && !known.has(pre)) {
