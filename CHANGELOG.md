@@ -18,6 +18,10 @@
 
 ## [Unreleased]
 
+## [0.99.52] - 2026-11-25
+
+- 修复数据管线死科技泄漏与中国文明加成错字（#1408）：在 `scripts/effects_build.py` 新增 `is_unreachable_tech()` 与 `fx_triggered_techs()`，排除建筑建成触发（`BuildTech`，如亚美尼亚二段圣物触发链 `t:949 → 建筑 1118 → t:957`）与效果命令激活（`Type 8/18, B=12, D∈{1,3}`）后，过滤所有有效前置数（排除 `-1` 占位）不足 `RequiredTechCount` 的不可达死科技，彻底剔除中国已删幽灵加成 `t:396`（爆破船系 `+50% HP`）并清理 `data/sources/effects_links.json` 废弃条目 `"396": null`；中国爆破筏（`1104`）、爆破船（`527`）与重型爆破船（`528`）满科技生命恢复 DE Update 188329 真实值 `40 / 50 / 70`，消除 `#1387` 跨文明排行中国虚假生命第一（各表 `50 / 50 / 25` 家全员并列、无生命冠军）；同时经 `data/sources/civ_text_corrections.json` 将中国第 3 条文明加成错字「人口控件」修正为「人口空间」，同步重生成 `effects.json`、`docs/reports/EFFECTS-AUDIT.md`、`civs.json`、`search-py.json` 与 `page-metadata.json`（`src/`、`scripts/eco_build.py` 与 `data/game/eco.json` 零改动）。
+
 ## [0.99.51] - 2026-11-25
 
 - 修复建筑科技模拟器（`buildingSim` / `effects.ts`）三项引擎缺陷（#1407）：为 `buildingSimTechs()` 跨阶段按科技 ID 去重，消除波斯城堡「堡垒（7）」、凯尔特城堡「堡垒（482）」、格鲁吉亚城堡「斯万箭塔（923）」与条顿城堡「开垛口（11）」同时渲染「可勾选 + 仅文本」两行及重复 React `key`；在 `effects.ts` 的 `IMPLIED` 补齐 `Harbor: ['Thalassocracy', 'Harbor']`（不涉及普通船坞 `45`），激活 `.dat` 组合科技 `669/670/671`，使马来巨港（`1189`）满科技准确恢复 `攻击 8 / 射程 10 / 视野 21`；按真实攻击能力过滤全站 19 座无攻经济/生产建筑（含商队旅馆 `1754` 等）上的纯进攻科技（如近射孔 `322`、加热射击 `380`），同时保留基础攻击为 0 但具备攻击类别与射程间隔的西西里城楼（`1665`）全部进攻科技，并同步净化建筑各文明满科技对照中的模拟器科技链接。

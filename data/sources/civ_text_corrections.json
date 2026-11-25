@@ -33,5 +33,15 @@
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
       "note": "#1264：文明介绍120188颠倒了食物和黄金；采用同版本科技785的名称与研究说明。"
     }
+  },
+  "Chinese": {
+    "bon": {
+      "2": {
+        "original": "城镇中心的视野 +7，提供的人口控件 +15",
+        "corrected": "城镇中心的视野 +7，提供的人口空间 +15",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1408：文明介绍120155的英文为 provide +15 population space；中文译文将「人口空间」误写为「人口控件」，全站56文明仅此处出现。"
+      }
+    }
   }
 }

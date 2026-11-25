@@ -68,6 +68,29 @@ def relic_condition(rcosts):
     return None
 
 
+def fx_triggered_techs(AE):
+    """收集由效果命令 Type 8/18（B=12，D=1 启用或 D=3 强制研究）激活的科技 ID。"""
+    triggered = set()
+    for e in AE:
+        for c in e.get('EffectCommands') or []:
+            if c.get('Type') in (8, 18) and c.get('B') == 12:
+                d = float(c.get('D', 0))
+                if abs(d - 1.0) < 1e-9 or abs(d - 3.0) < 1e-9:
+                    tid = c.get('A', -1)
+                    if isinstance(tid, int) and tid >= 0:
+                        triggered.add(tid)
+    return triggered
+
+
+def is_unreachable_tech(tid, tech, build_tech_ids=(), fx_triggered_ids=()):
+    """判断 .dat 科技是否永不可达：排除 BuildTech 建筑触发与 Type 8/18 B=12 激活后，RequiredTechCount 大于有效前置（>= 0）数。"""
+    if tid in build_tech_ids or tid in fx_triggered_ids:
+        return False
+    reqs = [r for r in (tech.get('RequiredTechs') or []) if r >= 0]
+    need = tech.get('RequiredTechCount') or 0
+    return need > len(reqs)
+
+
 def conditional_age_req(AT, tech_to_blds, blds_by_id, tech_by_id, tid, civ_en, seen=None):
     """推导带条件隐藏科技的生效时代与前置科技（环路保护；经 BuildTech 查该文明可用目录建筑，推导不出 >= 城堡时代则 fail-closed）。"""
     is_root = seen is None
@@ -290,8 +313,10 @@ def regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens):
     return unlocks
 
 
-def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds):
+def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds, build_tech_ids=(), fx_triggered_ids=None):
     """导出通用与限定文明隐藏科技：时代科技自身单位属性（101/102/103）+ 常规/区域解锁隐藏科技。"""
+    if fx_triggered_ids is None:
+        fx_triggered_ids = fx_triggered_techs(AE)
     unlocks = regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens)
     generic = []
     for i, t in enumerate(AT):
@@ -307,6 +332,8 @@ def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a
             generic.append({'tech': i, 'name': name, 'age': AGE_TECH[i], 'req': [], 'any': False, 'rules': unit_rules})
             continue
         if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or i in tech_by_id:
+            continue
+        if is_unreachable_tech(i, t, build_tech_ids, fx_triggered_ids):
             continue
         rq = [r for r in t['RequiredTechs'] if r >= 0]
         if not rq:
@@ -370,6 +397,8 @@ def main():
             tech_to_blds[btid].append(int(bid_str))
     tech_by_id = {t['id']: t for t in techs}
     AT, AE, AC = A['Techs'], A['Effects'], A['Civs']
+    build_tech_ids = set(tech_to_blds.keys())
+    fx_triggered_ids = fx_triggered_techs(AE)
 
     dcls = {i: u['Class'] for i, u in enumerate(AC[0]['Units']) if u}
 
@@ -533,7 +562,10 @@ def main():
     adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
 
     # ---- 通用/限定文明隐藏科技（Civ=-1、不可研究）与时代科技自身单位属性（101/102/103） ----
-    out['generic'] = build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, [c['en'] for c in civs], a_cmds, compile_cmds)
+    out['generic'] = build_generic_entries(
+        AT, AE, AC, ours, tech_by_id, adat, [c['en'] for c in civs], a_cmds, compile_cmds,
+        build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids,
+    )
 
     # ---- 文明：bonus techs + tech tree + team ----
     for c in civs:
@@ -554,6 +586,7 @@ def main():
         ids = {i for i, t in enumerate(AT) if ai is not None and t['Civ'] == ai and t['ResearchLocation'] <= 0 and t['EffectID'] >= 0} - set(TEAM_TECHS.get(en, []))
         for tid in sorted(ids):
             if tid in tech_by_id: continue
+            if is_unreachable_tech(tid, AT[tid], build_tech_ids, fx_triggered_ids): continue
             cmds, ok = merged_cmds(tid)
             rules, eco = compile_cmds(cmds)
             if not rules and not eco and ok: continue
