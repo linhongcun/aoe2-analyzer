@@ -102,6 +102,15 @@
   background: var(--color-surface);
   line-height: 1.6;
 }
+.army-decimal-note {
+  margin: var(--space-3) 0;
+  border-color: var(--color-warn);
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+}
+.army-decimal-note svg {
+  color: var(--color-warn);
+}
 .army-boundary svg,
 .army-warning svg {
   flex-shrink: 0;
@@ -150,6 +159,9 @@
   gap: var(--space-3);
   flex-wrap: wrap;
 }
+.army-results > .army-card {
+  container-type: inline-size;
+}
 .army-resources {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -169,10 +181,26 @@
   padding: var(--space-4);
   background: var(--color-surface-2);
   border-radius: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .army-primary strong {
   color: var(--color-accent);
   font-size: 28px;
+}
+@container (min-width: 640px) {
+  .army-primary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@container (max-width: 480px) {
+  .army-resources:not(.army-primary) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container (max-width: 340px) {
+  .army-primary strong {
+    font-size: 22px;
+  }
 }
 .army-tags {
   display: flex;
@@ -296,9 +324,6 @@
   }
   .army-editor-columns {
     grid-template-columns: 1fr;
-  }
-  .army-resources {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .army-cost-page .team-sections {
     display: grid;

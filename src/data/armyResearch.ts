@@ -24,7 +24,7 @@ export interface ResearchNode {
 export interface ArmyResearchData {
   meta: { generatedBy: string; patch: string; commit: string; sha256: string };
   nodes: Record<string, ResearchNode>;
-  civs: Record<string, { id: number; disabled: number[]; mods: ResearchCommand[] }>;
+  civs: Record<string, { id: number; disabled: number[]; enabled?: number[]; mods: ResearchCommand[] }>;
   buildingTechs: number[];
   buildingTriggers: Record<string, number>;
 }
