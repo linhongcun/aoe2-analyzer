@@ -882,10 +882,7 @@ function computeGarrisonTechs(
     if (u.firepower < 0 || (initUnitField(id, 'firepower') ?? 0) < 0) negFpCapableUnits.add(id);
     if (u.total > 1 || (initUnitField(id, 'total') ?? 0) > 1) multiProjCandidates.add(id);
   }
-  const inspectedRules = new Set<GeneralGarrisonRule>();
   const inspectRuleStats = (rule: GeneralGarrisonRule) => {
-    if (inspectedRules.has(rule)) return;
-    inspectedRules.add(rule);
     for (const e of rule.effects) {
       if (e.unit === b.id) allBuildingEffects.push(e);
       if (!isPowerUnit(e.unit)) continue;
@@ -929,11 +926,11 @@ function computeGarrisonTechs(
       }
     }
   };
+  // Inspect each snapshot() execution stage independently (same rule object in multiple stages applies once per stage),
+  // deduplicating only across the single advance() pool (baseState.appliedRules ∪ activeDynRules ∪ activeShadowedDynRules).
   for (const r of activeAgeRules) inspectRuleStats(r);
-  for (const r of baseState.appliedRules) inspectRuleStats(r);
+  for (const r of new Set([...baseState.appliedRules, ...activeDynRules, ...activeShadowedDynRules])) inspectRuleStats(r);
   for (const t of pool) inspectRuleStats(data.techs[t.id]!);
-  for (const r of activeDynRules) inspectRuleStats(r);
-  for (const r of activeShadowedDynRules) inspectRuleStats(r);
   for (const r of availFreeShapeRules) inspectRuleStats(r);
   for (const r of availImpliedType60Rules) inspectRuleStats(r);
   // Detect IEEE-754 non-finite, underflow-to-zero, or overflow-to-Infinity/NaN risk across set/add/mul sequences.

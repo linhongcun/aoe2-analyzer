@@ -291,7 +291,7 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     expect([buBefore.errors, buBefore.mode, buBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
     expect([buAfter.errors, buAfter.mode, buAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
 
-    // 2. 同源单位火力下溢恢复（R17 P2 强化）：初始火力 Number.MIN_VALUE、attack=0.625、reload=1（无形态时 +MIN_VALUE 舍入仍为 5e-324），
+    // 2. 同源单位火力下溢恢复（可区分 R16 de6cc607 与 R17+）：初始火力 Number.MIN_VALUE、attack=0.625、reload=1（无形态时 +MIN_VALUE 舍入仍为 5e-324），
     //    仅形态 237 乘 0.5 下溢为 0 后手选 233 加回 Number.MIN_VALUE 才令驻军火力从 0 恢复为 5e-324
     const fpUnderflowData = cloneBaseData();
     fpUnderflowData.unitUpgradeTechs = { 492: [237] };
@@ -361,8 +361,8 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     evictNoFree.civs.Franks!.free = [];
     expect(calculateGeneralGarrison(ctx, tc, cfg('Franks', 4, [], evictRows), evictNoFree).errors).toEqual([]);
 
-    // 3. R17 P1-2（时代规则与常驻自动规则中间下溢）：TC 原攻 6，时代规则 102（或 Stage 0 常驻自动规则）置 1e-320，
-    //    形态 237 乘 1e-5 下溢为 0，常驻条件规则乘 1e308 掩盖空阵容终态，手选 233 加回 1e-320 恢复 arrows / 2 发
+    // 3. R17 P1-2 & R18 P1/P2（时代规则、常驻自动规则及跨阶段共用同一规则对象产生的中间下溢）：
+    //    使用 add 1e-100 + conditional mul 1e290（两者均远离 1e±300），分别严格锁定 activeAgeRules、baseState.appliedRules 与跨阶段重复应用
     const ageUnderflowData = cloneBaseData();
     ageUnderflowData.unitUpgradeTechs = { 492: [237] };
     ageUnderflowData.civs.Britons!.baseOverrides = {
@@ -372,9 +372,9 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     ageUnderflowData.ageRules = { ...ageUnderflowData.ageRules, 102: mkRule(102, [ef(109, 'attack', 'set', 1e-320)]) };
     ageUnderflowData.techs = {
       237: mkRule(237, [ef(109, 'attack', 'mul', 1e-5)]),
-      233: mkRule(233, [ef(109, 'attack', 'add', 1e-320)]),
+      233: mkRule(233, [ef(109, 'attack', 'add', 1e-100)]),
     };
-    ageUnderflowData.conditional = [mkRule(99032, [ef(109, 'attack', 'mul', 1e308)])];
+    ageUnderflowData.conditional = [mkRule(99032, [ef(109, 'attack', 'mul', 1e290)])];
     expect(idsOf('Britons', ageUnderflowData)).toEqual([233]);
     expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, ageUnderflowData)).toEqual([233]);
     const auBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), ageUnderflowData);
@@ -385,6 +385,27 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     autoUnderflowData.ageRules = structuredClone(GENERAL_GARRISON_DATA.ageRules);
     autoUnderflowData.civs.Britons!.automatic = [mkRule(99033, [ef(109, 'attack', 'set', 1e-320)])];
     expect(idsOf('Britons', autoUnderflowData)).toEqual([233]);
+    // R18 P1：同一规则对象（attack × 1e-160）同时挂在 ageRules[102] 与 Stage 0 Britons.automatic，两次实际应用合计下溢
+    const sharedUnderflowData = cloneBaseData();
+    const sharedShrink = mkRule(99034, [ef(109, 'attack', 'mul', 1e-160)]);
+    sharedUnderflowData.unitUpgradeTechs = { 492: [237] };
+    sharedUnderflowData.civs.Britons!.baseOverrides = {
+      ...sharedUnderflowData.civs.Britons!.baseOverrides,
+      142: { type: 60, attack: 1, reload: 2, projectile: 54, secondaryProjectile: 54 },
+    };
+    sharedUnderflowData.ageRules = { ...sharedUnderflowData.ageRules, 102: sharedShrink };
+    sharedUnderflowData.civs.Britons!.automatic = [sharedShrink];
+    sharedUnderflowData.techs = {
+      237: mkRule(237, [ef(109, 'attack', 'mul', 1e-5)]),
+      233: mkRule(233, [ef(109, 'attack', 'add', 1e-100)]),
+    };
+    sharedUnderflowData.conditional = [mkRule(99035, [ef(109, 'attack', 'mul', 1e290)])];
+    expect(idsOf('Britons', sharedUnderflowData)).toEqual([233]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, sharedUnderflowData)).toEqual([233]);
+    const suBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), sharedUnderflowData);
+    const suAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), sharedUnderflowData);
+    expect([suBefore.errors, suBefore.mode, suBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
+    expect([suAfter.errors, suAfter.mode, suAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
 
     // 4. R17 P1-3（有限乘数致主弹丸 NaN 恢复）：TC 主弹丸 54、无副弹丸，形态 237 依次乘 Number.MAX_VALUE 与 0 得到 NaN 进入 shelter，
     //    手选 233 将主弹丸设回 54 恢复 arrows / 2 发
