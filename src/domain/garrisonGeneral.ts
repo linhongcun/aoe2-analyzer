@@ -1301,7 +1301,8 @@ function computeGarrisonTechs(
     }
   };
 
-  // Deduplicate shapeCandidates into groups by ordered hook signature; detect non-commuting type-60 groups whose row order affects snapshot().
+  // Deduplicate shapeCandidates into groups by ordered hook signature; detect type-60 groups sharing any (unit, stat)
+  // whose row order can affect snapshot() (including IEEE-754 floating-point add/mul non-associativity).
   const shapeGroupUnits: number[][] = [];
   const shapeGroupHooks: number[][] = [];
   if (shapeCandidates.length > 0) {
@@ -1319,7 +1320,7 @@ function computeGarrisonTechs(
       shapeGroupHooks.push(entry.hooks);
     }
   }
-  const type60OpsByStat = new Map<string, { groups: Set<number>; ops: Set<GeneralGarrisonEffect['op']> }>();
+  const type60GroupsByStat = new Map<string, Set<number>>();
   for (let gi = 0; gi < shapeGroupHooks.length; gi++) {
     for (const tid of shapeGroupHooks[gi]!) {
       if (baseFree.has(tid)) continue;
@@ -1327,20 +1328,18 @@ function computeGarrisonTechs(
         if (isNoopEffect(e)) continue;
         if (baseState.units[e.unit]?.type !== 60) continue;
         const key = `${e.unit}:${e.stat}`;
-        let rec = type60OpsByStat.get(key);
-        if (!rec) {
-          rec = { groups: new Set(), ops: new Set() };
-          type60OpsByStat.set(key, rec);
+        let groups = type60GroupsByStat.get(key);
+        if (!groups) {
+          groups = new Set();
+          type60GroupsByStat.set(key, groups);
         }
-        rec.groups.add(gi);
-        rec.ops.add(e.op);
+        groups.add(gi);
       }
     }
   }
   const sensitiveGroupSet = new Set<number>();
-  for (const { groups, ops } of type60OpsByStat.values()) {
+  for (const groups of type60GroupsByStat.values()) {
     if (groups.size < 2) continue;
-    if (ops.size === 1 && (ops.has('add') || ops.has('mul'))) continue;
     for (const gi of groups) sensitiveGroupSet.add(gi);
   }
   const sensitiveGroupIndices: number[] = [];
@@ -1811,7 +1810,7 @@ function computeGarrisonTechs(
   };
 
   // Prune techs whose pool prerequisite is missing in snapshot.known first, then rebuild before pruning invalid rows,
-  // repeating until both selected techs and rows form a legal baseline state.
+  // restoring startRowIds whenever curTechs shrinks (lexicographically decreasing on (curTechs.length, curRows.length)).
   const pruneToValidState = (
     startTechs: number[],
     startRowIds: number[],
@@ -1830,6 +1829,7 @@ function computeGarrisonTechs(
           });
       if (nextTechs.length !== curTechs.length) {
         curTechs = nextTechs;
+        curRows = startRowIds;
         continue;
       }
       const nextRows = curRows.length ? curRows.filter((uid) => isOccupantIn(es, uid)) : curRows;
@@ -1936,7 +1936,8 @@ function computeGarrisonTechs(
         const esA = hasA ? mapA.get(rk)! : makeEvalState(T, mapB.get(rk)!.rowIds);
         const esB = hasB ? mapB.get(rk)! : makeEvalState(TWith, mapA.get(rk)!.rowIds);
         if (!isSelectedPrereqValid(esB.snapshot)) continue;
-        if (isSelectedPrereqValid(esA.snapshot)) {
+        if (!hasB && pruneToValidState(TWith, esA.rowIds).techs.length !== TWith.length) continue;
+        if (hasA && isSelectedPrereqValid(esA.snapshot)) {
           if (statesObservableDiff(esA, esB, true) || (hasB && unlocksRelevantNonControl(esA, esB))) {
             relevant = true;
             break;
@@ -2161,7 +2162,8 @@ function computeGarrisonTechs(
         if (!baseFree.has(fid) && !es.techs.every((tid) => kept.has(tid))) continue;
         const snapWithout = snapshot(ctx, b, es.config, withoutData, status, withoutIndex);
         const esWithout = makeEvalState(es.techs, es.rowIds, snapWithout, withoutData, withoutIndex);
-        if (isSelectedPrereqValid(esWithout.snapshot)) {
+        const withoutRowsValid = esWithout.rowIds.every((uid) => isOccupantIn(esWithout, uid));
+        if (withoutRowsValid && isSelectedPrereqValid(esWithout.snapshot)) {
           if (statesObservableDiff(esWithout, es, true) || unlocksRelevantNonControl(esWithout, es)) {
             relevant = true;
             break;

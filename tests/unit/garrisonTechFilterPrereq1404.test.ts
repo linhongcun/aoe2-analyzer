@@ -145,23 +145,86 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     falsePosData.conditional.pop();
     expect(idsOf(preCtx, falsePosData)).toEqual([]);
 
-    // 4. 级联裁剪（删科技 -> 行失效 -> 依赖该行隐式形态的科技失效）：基线容量 0，233 开启容量 15 且 492 隐式形态 237 满足 608.pre=34
-    const cascadeCtx = patchPrereqs({ 233: 199, 608: 34 });
+    // 4. 级联裁剪（删科技 -> 行失效 -> 依赖该行隐式形态的科技失效 -> 恢复原合法行）：锁定删行后重检科技前置、删科技后恢复 startRowIds 及非法行前置防护
+    //    34.pre=608 且 34 < 608；492 隐式形态 237 满足 608 并加 4 攻；所有合法态容量恒 15、492 火力恒 5，无论手选或免费 233 均须返回 []
+    const cascadeCtx = patchPrereqs({ 233: 199, 34: 608 });
     const cascadeData = cloneBaseData();
-    const tcForms = [109, ...(cascadeData.buildings[109]?.eraForms ?? [])];
-    for (const form of tcForms) cascadeData.units[form] = { ...cascadeData.units[form]!, capacity: 0 };
     cascadeData.unitUpgradeTechs = { 492: [237] };
+    cascadeData.civs.Britons!.automatic = [mkRule(99003, [ef(492, 'attack', 'add', 4)], [237])];
     cascadeData.techs = {
-      34: mkRule(34),
+      34: mkRule(34, [ef(109, 'capacity', 'set', 0)]),
       47: mkRule(47),
       199: mkRule(199),
-      233: mkRule(233, [ef(109, 'capacity', 'set', 15)]),
-      608: mkRule(608, [ef(492, 'attack', 'add', 4)]),
+      233: mkRule(233),
+      608: mkRule(608, [ef(109, 'capacity', 'set', 15)]),
     };
-    cascadeData.conditional = [mkRule(199, [], [47]), mkRule(34, [], [237])];
-    expect(idsOf(cascadeCtx, cascadeData)).toEqual([34, 47, 199, 233, 608]);
-    const casRes = calculateGeneralGarrison(cascadeCtx, cascadeCtx.core.buildingById[109]!, cfg('Britons', 4, [47, 233, 608], rows), cascadeData);
+    cascadeData.conditional = [mkRule(199, [], [47]), mkRule(608, [], [237]), mkRule(99004, [ef(109, 'capacity', 'set', 15)], [233, 199])];
+    expect(idsOf(cascadeCtx, cascadeData)).toEqual([]);
+    const freeCascadeData = structuredClone(cascadeData);
+    freeCascadeData.civs.Britons!.free = [233];
+    expect(idsOf(cascadeCtx, freeCascadeData)).toEqual([]);
+    // 同结构若条件规则 99005 在 [34,233,199,237] 下改动 492 攻击（火力 5 -> 7），则合法态存在真实火力变化，全部参与科技均须保留
+    const cascadePosData = structuredClone(cascadeData);
+    cascadePosData.conditional.push(mkRule(99005, [ef(492, 'attack', 'add', 4)], [34, 233, 199, 237]));
+    expect(idsOf(cascadeCtx, cascadePosData)).toEqual([34, 47, 199, 233, 608]);
+    const casRes = calculateGeneralGarrison(cascadeCtx, cascadeCtx.core.buildingById[109]!, cfg('Britons', 4, [34, 47, 233], rows), cascadePosData);
     expect(casRes.errors).toEqual([]);
-    expect([casRes.capacity, casRes.garrisonPower]).toEqual([15, 5]);
+    expect([casRes.capacity, casRes.garrisonPower]).toEqual([15, 7]);
+  });
+
+  it('R14 回归：同属性 type=60 隐式形态全加法/全乘法仍按行序排列（覆盖手选与免费触发）', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const idsOf = (d: GeneralGarrisonData) =>
+      getGarrisonTechs(ctx, tc, cfg('Britons', 4), d)
+        .map((t) => t.id)
+        .sort((a, z) => a - z);
+    const makeFloatOrderData = (baseAttack: number, op: 'add' | 'mul', v1: number, v2: number) => {
+      const data = cloneBaseData();
+      data.unitUpgradeTechs = { 83: [199], 492: [233] };
+      data.civs.Britons!.baseOverrides = {
+        ...data.civs.Britons!.baseOverrides,
+        142: { type: 60, attack: baseAttack, reload: 2, projectile: 54, secondaryProjectile: -1 },
+      };
+      data.techs = {
+        47: mkRule(47),
+        199: mkRule(199, [ef(109, 'attack', op, v1)]),
+        233: mkRule(233, [ef(109, 'attack', op, v2)]),
+      };
+      data.conditional = [mkRule(99010, [ef(109, 'attack', 'set', 0)], [47, 199, 233])];
+      return data;
+    };
+
+    // 1. R14 P1（全 add 浮点非结合）：(1 + 0.2) - 1.2 = 0 vs (1 - 1.2) + 0.2 = 5.55e-17 > 0，反序 [492,83] 下 47 使模式 arrows -> shelter
+    const addData = makeFloatOrderData(1, 'add', 0.2, -1.2);
+    expect(idsOf(addData)).toEqual([47]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 47, addData)).toEqual([47]);
+    const rowsFwd: GeneralGarrisonConfig['rows'] = [
+      { unitId: 83, count: '0', entry: 'enter' },
+      { unitId: 492, count: '0', entry: 'enter' },
+    ];
+    const rowsRev: GeneralGarrisonConfig['rows'] = [
+      { unitId: 492, count: '0', entry: 'enter' },
+      { unitId: 83, count: '0', entry: 'enter' },
+    ];
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsFwd), addData).mode).toBe('shelter');
+    const revBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsRev), addData);
+    const revAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [47], rowsRev), addData);
+    expect([revBefore.errors, revBefore.mode, revBefore.totalProjectiles]).toEqual([[], 'arrows', 1]);
+    expect([revAfter.errors, revAfter.mode, revAfter.totalProjectiles]).toEqual([[], 'shelter', 0]);
+
+    // 2. R14 P1（Part 3C 免费触发）：47 ∈ civ.free 同样因反序 [492,83] 实际生效而被保留
+    const freeAddData = structuredClone(addData);
+    freeAddData.civs.Britons!.free = [47];
+    expect(idsOf(freeAddData)).toEqual([47]);
+    const freeAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsRev), freeAddData);
+    expect([freeAfter.errors, freeAfter.selected, freeAfter.mode]).toEqual([[], [47], 'shelter']);
+
+    // 3. 同源全 mul 浮点非结合：(1e308 * 10) * 0.1 = Infinity vs (1e308 * 0.1) * 10 = 1e308，反序 [492,83] 下 47 使可计算射击变为 shelter
+    const mulData = makeFloatOrderData(1e308, 'mul', 10, 0.1);
+    expect(idsOf(mulData)).toEqual([47]);
+    const mulRevBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsRev), mulData);
+    const mulRevAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [47], rowsRev), mulData);
+    expect([mulRevBefore.errors, mulRevBefore.mode, mulRevBefore.totalProjectiles]).toEqual([[], 'arrows', 1]);
+    expect([mulRevAfter.errors, mulRevAfter.mode, mulRevAfter.totalProjectiles]).toEqual([[], 'shelter', 0]);
   });
 });
