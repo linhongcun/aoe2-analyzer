@@ -333,4 +333,117 @@ describe('Issue 1404: R6 与 Devin Review 改序/形态预算/同伴协同/精�
     expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), perfData)).toEqual([]);
     expect(performance.now() - t0).toBeLessThan(1500);
   });
+
+  it('R8 与 Devin Review 回归：文明覆盖 type=60 形态、手选触发免费形态及同 ID 互斥规则实例识别', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const tcForms = new Set([109, ...(GENERAL_GARRISON_DATA.buildings[109]?.eraForms ?? [])]);
+
+    // 1. R8 P1-1: 副弹丸 54 原始 type=10、由 baseOverrides 覆写为 type=60 时，形态扫描与反序排列 [492,24] 均生效（2.6 -> 4.2）
+    const ovTypeData = cloneIsolated([47, 608, 233]);
+    ovTypeData.unitUpgradeTechs = { 24: [47], 492: [608] };
+    ovTypeData.units[54] = { ...ovTypeData.units[54]!, type: 10 };
+    ovTypeData.civs.Britons!.baseOverrides = { ...ovTypeData.civs.Britons!.baseOverrides, 54: { type: 60 } };
+    for (const uid of [24, 492]) {
+      ovTypeData.units[uid] = { ...ovTypeData.units[uid]!, attack: 1, total: 1, reload: 2, firepower: 1, secondaryProjectile: 54 };
+    }
+    for (const form of tcForms) ovTypeData.units[form] = { ...ovTypeData.units[form]!, secondaryProjectile: 0 };
+    ovTypeData.techs[47] = rule(47, [ef(54, 'attack', 'set', 4)]);
+    ovTypeData.techs[608] = rule(608, [ef(54, 'attack', 'set', 0)]);
+    ovTypeData.techs[233] = rule(233, [ef(54, 'attack', 'mul', 2)]);
+    ovTypeData.conditional.push(rule(99602, [ef(492, 'total', 'set', 2)], [47, 608], 2));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), ovTypeData).map((t) => t.id)).toContain(233);
+    const ovRows: GeneralGarrisonConfig['rows'] = [
+      { unitId: 492, count: '1', entry: 'enter' },
+      { unitId: 24, count: '1', entry: 'enter' },
+    ];
+    const ovBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], ovRows), ovTypeData);
+    const ovAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], ovRows), ovTypeData);
+    expect(ovAfter.errors).toEqual([]);
+    expect(ovBefore.garrisonPower).toBeCloseTo(2.6, 5);
+    expect(ovAfter.garrisonPower).toBeCloseTo(4.2, 5);
+
+    // 2. Devin #2 (43492275): 3 行形态含覆写 type=60 副弹丸 1930，仅行序 [4,24,6] 留存 1930 攻击 4 使 233 翻倍生效
+    const threeRowData = cloneIsolated([47, 608, 199, 233]);
+    threeRowData.unitUpgradeTechs = { 4: [47], 24: [608], 6: [199] };
+    threeRowData.units[1930] = { ...threeRowData.units[1930]!, type: 10, attack: 0 };
+    threeRowData.civs.Britons!.baseOverrides = { ...threeRowData.civs.Britons!.baseOverrides, 1930: { type: 60 } };
+    for (const uid of [4, 24, 6]) {
+      threeRowData.units[uid] = { ...threeRowData.units[uid]!, attack: 1, total: 1, reload: 2, firepower: 1, secondaryProjectile: 1930 };
+    }
+    for (const form of tcForms) threeRowData.units[form] = { ...threeRowData.units[form]!, secondaryProjectile: 0 };
+    threeRowData.techs[47] = rule(47, [ef(54, 'attack', 'set', 2), ef(1930, 'attack', 'set', 0)]);
+    threeRowData.techs[608] = rule(608, [ef(1930, 'attack', 'set', 4)]);
+    threeRowData.techs[199] = rule(199, [ef(54, 'attack', 'set', 3)]);
+    threeRowData.techs[233] = rule(233, [ef(1930, 'attack', 'mul', 2)]);
+    threeRowData.conditional.push(rule(99603, [ef(24, 'total', 'set', 2)], [47, 608, 199], 3));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), threeRowData).map((t) => t.id)).toContain(233);
+    const triRows: GeneralGarrisonConfig['rows'] = [
+      { unitId: 4, count: '1', entry: 'enter' },
+      { unitId: 24, count: '1', entry: 'enter' },
+      { unitId: 6, count: '1', entry: 'enter' },
+    ];
+    const triBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], triRows), threeRowData);
+    const triAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], triRows), threeRowData);
+    expect(triAfter.errors).toEqual([]);
+    expect(triAfter.garrisonPower!).toBeGreaterThan(triBefore.garrisonPower! + 1);
+
+    // 3. R8 P1-2: 手选后继科技 233（233.pre = 47，自身无效果）触发免费形态 47（给 492 加 4 攻），单驻 492 火力 0.5 -> 2.5
+    const freeShapeCtx = patchPrereq(233, 47);
+    const freeShapeTrigData = cloneIsolated([47, 233]);
+    freeShapeTrigData.unitUpgradeTechs = { 24: [47] };
+    freeShapeTrigData.civs.Britons!.free = [47];
+    freeShapeTrigData.units[492] = { ...freeShapeTrigData.units[492]!, attack: 1, total: 1, reload: 2, firepower: 1 };
+    freeShapeTrigData.techs[47] = rule(47, [ef(492, 'attack', 'add', 4)]);
+    const tcPatched = freeShapeCtx.core.buildingById[109]!;
+    expect(getGarrisonTechs(freeShapeCtx, tcPatched, cfg('Britons', 4), freeShapeTrigData).map((t) => t.id)).toContain(233);
+    const fstBefore = calculateGeneralGarrison(
+      freeShapeCtx,
+      tcPatched,
+      cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]),
+      freeShapeTrigData,
+    );
+    const fstAfter = calculateGeneralGarrison(
+      freeShapeCtx,
+      tcPatched,
+      cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]),
+      freeShapeTrigData,
+    );
+    expect(fstAfter.errors).toEqual([]);
+    expect(fstAfter.selected).toEqual([47, 233]);
+    expect(fstBefore.garrisonPower).toBeCloseTo(0.5, 5);
+    expect(fstAfter.garrisonPower).toBeCloseTo(2.5, 5);
+
+    // 4. R8 P1-3a & Devin #1 (43492275): 同 ID 互斥规则不折叠 Part 3B 状态（含空效果抢占默认清零规则），保留 [199,233]
+    const mutexPart3BData = cloneIsolated([199, 233]);
+    mutexPart3BData.units[492] = { ...mutexPart3BData.units[492]!, attack: 0, total: 1, reload: 2, firepower: 1 };
+    mutexPart3BData.techs[199] = rule(199, [ef(492, 'reload', 'mul', 0.5)]);
+    mutexPart3BData.conditional.push(rule(99610, [ef(492, 'attack', 'add', 4)], [233], 1), rule(99610, [ef(492, 'attack', 'add', 0)], [], 0));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), mutexPart3BData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const m3Before = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), mutexPart3BData);
+    const m3After = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), mutexPart3BData);
+    expect(m3After.errors).toEqual([]);
+    expect(m3Before.garrisonPower).toBeCloseTo(2, 5);
+    expect(m3After.garrisonPower).toBeCloseTo(4, 5);
+
+    const preemptEmptyData = cloneIsolated([199, 233]);
+    preemptEmptyData.units[492] = { ...preemptEmptyData.units[492]!, attack: 0, total: 1, reload: 2, firepower: 1 };
+    preemptEmptyData.techs[199] = rule(199, [ef(492, 'attack', 'add', 4)]);
+    preemptEmptyData.conditional.push(rule(99612, [], [233], 1), rule(99612, [ef(492, 'attack', 'set', 0)], [], 0));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), preemptEmptyData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const peAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), preemptEmptyData);
+    expect(peAfter.errors).toEqual([]);
+    expect(peAfter.garrisonPower).toBeCloseTo(2, 5);
+
+    // 5. R8 P1-3b: 同 ID 互斥规则 ×2 / ×1 切换不被 rulesSameOrder 跳过，与 199 (+4 攻) 协同时保留 [199,233]（2 -> 4）
+    const mutexDiffData = cloneIsolated([199, 233]);
+    mutexDiffData.units[492] = { ...mutexDiffData.units[492]!, attack: 0, total: 1, reload: 2, firepower: 1 };
+    mutexDiffData.techs[199] = rule(199, [ef(492, 'attack', 'add', 4)]);
+    mutexDiffData.conditional.push(rule(99611, [ef(492, 'attack', 'mul', 2)], [233], 1), rule(99611, [ef(492, 'attack', 'mul', 1)], [], 0));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), mutexDiffData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const mdBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199], [{ unitId: 492, count: '1', entry: 'enter' }]), mutexDiffData);
+    const mdAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), mutexDiffData);
+    expect(mdAfter.errors).toEqual([]);
+    expect(mdBefore.garrisonPower).toBeCloseTo(2, 5);
+    expect(mdAfter.garrisonPower).toBeCloseTo(4, 5);
+  });
 });

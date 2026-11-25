@@ -388,7 +388,6 @@ interface StaticGarrisonIndex {
   eligiblePool: Set<number>;
   shapeUpgrades: Set<number>;
   usefulConditional: GeneralGarrisonRule[];
-  type60ShapeTechs: number[];
   scopeByBuilding: Map<number, BuildingProductionScope>;
 }
 
@@ -430,11 +429,7 @@ function buildStaticIndex(data: GeneralGarrisonData): StaticGarrisonIndex {
     }
   }
   const usefulConditional = data.conditional.filter((r) => usefulIds.has(r.id));
-  const type60ShapeTechs: number[] = [];
-  for (const tid of shapeUpgrades) {
-    if (data.techs[tid]?.effects.some((e) => data.units[e.unit]?.type === 60)) type60ShapeTechs.push(tid);
-  }
-  return { eligibleIds, eligiblePool, shapeUpgrades, usefulConditional, type60ShapeTechs, scopeByBuilding: new Map() };
+  return { eligibleIds, eligiblePool, shapeUpgrades, usefulConditional, scopeByBuilding: new Map() };
 }
 
 let defaultStaticIndex: StaticGarrisonIndex | null = null;
@@ -636,13 +631,40 @@ function computeGarrisonTechs(
       }
     }
   }
-  // Free shape upgrades are excluded from `pool` yet apply their full rule effects when implied by a row or building.
+  // Free shape upgrades are excluded from `pool` yet apply their full rule effects when implied by a row/building
+  // or when a manual pool tech's leading shape-prereq chain puts them in freeGarrisonTechs()'s known set.
+  const leadingShapePrereqs = (tid: number): number[] => {
+    const out: number[] = [];
+    const seen = new Set<number>();
+    let pre = ctx.core.techById[tid]?.pre;
+    while (pre && shapeUpgrades.has(pre) && !seen.has(pre)) {
+      seen.add(pre);
+      out.push(pre);
+      pre = ctx.core.techById[pre]?.pre;
+    }
+    return out;
+  };
+  const poolTriggeredShapes = new Set<number>();
+  const shapeTriggerPoolTechs = new Map<number, number[]>();
+  for (const t of pool) {
+    for (const sid of leadingShapePrereqs(t.id)) {
+      poolTriggeredShapes.add(sid);
+      let list = shapeTriggerPoolTechs.get(sid);
+      if (!list) {
+        list = [];
+        shapeTriggerPoolTechs.set(sid, list);
+      }
+      list.push(t.id);
+    }
+  }
   const availFreeShapeRules: GeneralGarrisonRule[] = [];
+  const availFreeShapeIds = new Set<number>();
   for (const fid of civData.free) {
     if (!shapeUpgrades.has(fid) || disabled.has(fid) || !data.techs[fid]) continue;
-    if (!baseImplicitShapes.has(fid) && !availShapeTechs.has(fid)) continue;
+    if (!baseImplicitShapes.has(fid) && !availShapeTechs.has(fid) && !poolTriggeredShapes.has(fid)) continue;
     const t = ctx.core.techById[fid];
     if (!t || !t.civs.includes(config.civ) || status['t' + t.id] !== 1 || productionTechAge(t, config.civ) > config.age) continue;
+    availFreeShapeIds.add(fid);
     availFreeShapeRules.push(data.techs[fid]!);
   }
   const hasMinHits = (requires: number[], count: number, set: Set<number>): boolean => {
@@ -654,17 +676,17 @@ function computeGarrisonTechs(
     ...civData.automatic.filter((r) => !disabled.has(r.id) && r.count > 0 && !hasMinHits(r.requires, r.count, baseState.knownBeforeStage0)),
     ...staticIndex.usefulConditional.filter((r) => !disabled.has(r.id) && r.count > 0 && !hasMinHits(r.requires, r.count, baseState.knownAfterStage0)),
   ];
-  const knownUpper = new Set<number>([...baseState.known, ...poolIds, ...availShapeTechs]);
+  const knownUpper = new Set<number>([...baseState.known, ...poolIds, ...availShapeTechs, ...availFreeShapeIds]);
   const reachableDynRules: GeneralGarrisonRule[] = [];
+  const reachableDynSet = new Set<GeneralGarrisonRule>();
   {
-    const fired = new Set<number>();
     let changed = true;
     while (changed) {
       changed = false;
       for (const r of candidateDynRules) {
-        if (fired.has(r.id)) continue;
+        if (reachableDynSet.has(r)) continue;
         if (hasMinHits(r.requires, r.count, knownUpper)) {
-          fired.add(r.id);
+          reachableDynSet.add(r);
           knownUpper.add(r.id);
           reachableDynRules.push(r);
           changed = true;
@@ -672,6 +694,11 @@ function computeGarrisonTechs(
       }
     }
   }
+  const reachableDynIds = new Set(reachableDynRules.map((r) => r.id));
+  const shadowedBaseDynRules: GeneralGarrisonRule[] = [
+    ...civData.automatic.filter((r) => !disabled.has(r.id) && reachableDynIds.has(r.id) && !reachableDynSet.has(r)),
+    ...staticIndex.usefulConditional.filter((r) => !disabled.has(r.id) && reachableDynIds.has(r.id) && !reachableDynSet.has(r)),
+  ];
 
   const everRelocatedIntoB = new Set<number>();
   const collectRelocInto = (rule: GeneralGarrisonRule) => {
@@ -681,6 +708,7 @@ function computeGarrisonTechs(
   };
   for (const t of pool) collectRelocInto(data.techs[t.id]!);
   for (const r of reachableDynRules) collectRelocInto(r);
+  for (const r of shadowedBaseDynRules) collectRelocInto(r);
   for (const r of availFreeShapeRules) collectRelocInto(r);
 
   const canBuildingProduceUnit = (uid: number): boolean => {
@@ -703,8 +731,34 @@ function computeGarrisonTechs(
     return !!baseState.units[loc.unit]?.trainLocations.some((t) => trainSources.includes(t.unitId));
   };
 
+  const prelimSecProjs = new Set<number>();
+  let prelimDynamicSecProj = false;
+  if (baseB.secondaryProjectile >= 0) prelimSecProjs.add(baseB.secondaryProjectile);
+  for (const id of eligibleIds) {
+    const sec = baseState.units[id]?.secondaryProjectile ?? -1;
+    if (sec >= 0) prelimSecProjs.add(sec);
+  }
+  const collectPrelimSecProj = (rule: GeneralGarrisonRule) => {
+    for (const e of rule.effects) {
+      if (e.stat !== 'secondaryProjectile') continue;
+      if (e.unit !== b.id && !isAvailEligible(e.unit)) continue;
+      if (e.op === 'set' && e.value >= 0) prelimSecProjs.add(e.value);
+      else if (e.op !== 'set') prelimDynamicSecProj = true;
+    }
+  };
+  for (const t of pool) collectPrelimSecProj(data.techs[t.id]!);
+  for (const r of reachableDynRules) collectPrelimSecProj(r);
+  for (const r of shadowedBaseDynRules) collectPrelimSecProj(r);
+  for (const r of availFreeShapeRules) collectPrelimSecProj(r);
+
   const ruleDirectlyRelevant = (r: GeneralGarrisonRule): boolean =>
-    r.effects.some((e) => e.unit === b.id || isAvailEligible(e.unit) || data.units[e.unit]?.type === 60) ||
+    r.effects.some(
+      (e) =>
+        e.unit === b.id ||
+        isAvailEligible(e.unit) ||
+        baseState.units[e.unit]?.type === 60 ||
+        (e.stat === 'attack' && (prelimDynamicSecProj || prelimSecProjs.has(e.unit))),
+    ) ||
     (r.trainingLocations ?? []).some(relocTouchesBuilding) ||
     EXPLICIT_CREATE_UNLOCKS.some(
       (gate) => gate.techId === r.id && (gate.buildingId === undefined || gate.buildingId === b.id) && gate.unitIds.some(canBuildingProduceUnit),
@@ -725,6 +779,12 @@ function computeGarrisonTechs(
         queue.push(r.id);
       }
     }
+    for (const r of shadowedBaseDynRules) {
+      if (ruleDirectlyRelevant(r) && !activeDynIds.has(r.id)) {
+        activeDynIds.add(r.id);
+        queue.push(r.id);
+      }
+    }
     for (let i = 0; i < queue.length; i++) {
       const rid = queue[i]!;
       for (const r of byId.get(rid) ?? []) {
@@ -738,6 +798,7 @@ function computeGarrisonTechs(
     }
   }
   const activeDynRules = reachableDynRules.filter((r) => activeDynIds.has(r.id));
+  const activeShadowedDynRules = shadowedBaseDynRules.filter((r) => activeDynIds.has(r.id));
 
   // Detect whether shooting-ness of building b, unit firepower sign, unit reload validity, or negative-fp attack-zeroing can flip.
   const allBuildingEffects: GeneralGarrisonEffect[] = [];
@@ -783,18 +844,40 @@ function computeGarrisonTechs(
   };
   for (const t of pool) inspectRuleStats(data.techs[t.id]!);
   for (const r of activeDynRules) inspectRuleStats(r);
+  for (const r of activeShadowedDynRules) inspectRuleStats(r);
   for (const r of availFreeShapeRules) inspectRuleStats(r);
+  let shadowedBuildingFlip = false;
+  for (const r of activeShadowedDynRules) {
+    for (const e of r.effects) {
+      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+      if (e.unit === b.id && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'projectile' || e.stat === 'secondaryProjectile')) {
+        shadowedBuildingFlip = true;
+      }
+      if (!isAvailEligible(e.unit)) continue;
+      if (e.stat === 'reload') {
+        reloadTouchedUnits.add(e.unit);
+        reloadInvalidFlipUnits.add(e.unit);
+      } else if (e.stat === 'firepower') {
+        fpSignFlipUnits.add(e.unit);
+        negFpCapableUnits.add(e.unit);
+      } else if (e.stat === 'total') {
+        multiProjCandidates.add(e.unit);
+      }
+    }
+  }
 
   const baseShooting = isShootingBuilding(baseB);
-  const shootingCanFlip = !baseShooting
-    ? allBuildingEffects.some((e) => e.stat === 'attack' || e.stat === 'reload' || e.stat === 'projectile' || e.stat === 'secondaryProjectile')
-    : allBuildingEffects.some(
-        (e) =>
-          ((e.stat === 'attack' || e.stat === 'reload') &&
-            ((e.op === 'set' && e.value <= 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value <= 0))) ||
-          ((e.stat === 'projectile' || e.stat === 'secondaryProjectile') &&
-            ((e.op === 'set' && e.value < 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value < 0))),
-      );
+  const shootingCanFlip =
+    shadowedBuildingFlip ||
+    (!baseShooting
+      ? allBuildingEffects.some((e) => e.stat === 'attack' || e.stat === 'reload' || e.stat === 'projectile' || e.stat === 'secondaryProjectile')
+      : allBuildingEffects.some(
+          (e) =>
+            ((e.stat === 'attack' || e.stat === 'reload') &&
+              ((e.op === 'set' && e.value <= 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value <= 0))) ||
+            ((e.stat === 'projectile' || e.stat === 'secondaryProjectile') &&
+              ((e.op === 'set' && e.value < 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value < 0))),
+        ));
 
   // Partition pool into control techs (affecting entry, capacity, shooting-ness, firepower sign, reload validity, total,
   // secondaryProjectile, relocation/eviction, explicit unlocks, conditional/free rules) vs pure-stat techs.
@@ -830,7 +913,11 @@ function computeGarrisonTechs(
   }
   for (const fid of civData.free) {
     if (shapeUpgrades.has(fid)) {
-      if (!baseImplicitShapes.has(fid) && data.techs[fid]) shapeHooks.add(fid);
+      if (!availFreeShapeIds.has(fid)) continue;
+      if (!baseImplicitShapes.has(fid)) {
+        shapeHooks.add(fid);
+        for (const tid of shapeTriggerPoolTechs.get(fid) ?? []) controlSet.add(tid);
+      }
       for (const p of prereqChainInPool(fid)) controlSet.add(p);
       continue;
     }
@@ -838,8 +925,13 @@ function computeGarrisonTechs(
     controlSet.add(fid);
     for (const p of prereqChainInPool(fid)) controlSet.add(p);
     let pre = ctx.core.techById[fid]?.pre;
-    while (pre && shapeUpgrades.has(pre)) {
-      if (!baseImplicitShapes.has(pre)) shapeHooks.add(pre);
+    const seenPre = new Set<number>();
+    while (pre && shapeUpgrades.has(pre) && !seenPre.has(pre)) {
+      seenPre.add(pre);
+      if (!baseImplicitShapes.has(pre)) {
+        shapeHooks.add(pre);
+        for (const tid of shapeTriggerPoolTechs.get(pre) ?? []) controlSet.add(tid);
+      }
       pre = ctx.core.techById[pre]?.pre;
     }
   }
@@ -866,11 +958,19 @@ function computeGarrisonTechs(
     };
     for (const t of pool) collectUnitSecProj(data.techs[t.id]!);
     for (const r of activeDynRules) collectUnitSecProj(r);
+    for (const r of activeShadowedDynRules) collectUnitSecProj(r);
     for (const r of availFreeShapeRules) collectUnitSecProj(r);
-    for (const tid of staticIndex.type60ShapeTechs) {
-      if (baseImplicitShapes.has(tid)) continue;
-      if (hasDynamicSecProjOp || data.techs[tid]?.effects.some((e) => relevantSecProjs.has(e.unit))) shapeHooks.add(tid);
-    }
+  }
+  for (const tid of availShapeTechs) {
+    if (baseImplicitShapes.has(tid)) continue;
+    const rule = data.techs[tid];
+    if (!rule) continue;
+    const touchesRelevantType60 = rule.effects.some((e) => {
+      if (baseState.units[e.unit]?.type !== 60) return false;
+      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+      return e.unit === b.id || isAvailEligible(e.unit) || ((baseShooting || shootingCanFlip) && (hasDynamicSecProjOp || relevantSecProjs.has(e.unit)));
+    });
+    if (touchesRelevantType60) shapeHooks.add(tid);
   }
 
   for (const t of pool) {
@@ -1099,7 +1199,7 @@ function computeGarrisonTechs(
       if (baseFree.has(tid)) continue;
       for (const e of data.techs[tid]?.effects ?? []) {
         if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
-        if (data.units[e.unit]?.type !== 60) continue;
+        if (baseState.units[e.unit]?.type !== 60) continue;
         const key = `${e.unit}:${e.stat}`;
         let rec = type60OpsByStat.get(key);
         if (!rec) {
@@ -1370,7 +1470,7 @@ function computeGarrisonTechs(
       const rulesSameOrder =
         sA.stage0RuleCount === sB.stage0RuleCount &&
         sA.appliedRules.length === sB.appliedRules.length &&
-        sA.appliedRules.every((r, i) => r.id === sB.appliedRules[i]!.id);
+        sA.appliedRules.every((r, i) => r === sB.appliedRules[i]);
       if (!rulesSameOrder) {
         for (const r of sA.appliedRules) markDiffRule(r);
         for (const r of sB.appliedRules) markDiffRule(r);
@@ -1562,6 +1662,15 @@ function computeGarrisonTechs(
     const part3BStates: EvalState[] = [];
     {
       const seenPart3B = new Set<string>();
+      const ruleInstanceIds = new Map<GeneralGarrisonRule, number>();
+      const ruleInstanceId = (r: GeneralGarrisonRule): number => {
+        let id = ruleInstanceIds.get(r);
+        if (id === undefined) {
+          id = ruleInstanceIds.size;
+          ruleInstanceIds.set(r, id);
+        }
+        return id;
+      };
       for (const es of allReachableStates) {
         const st = es.snapshot;
         const B = st.building;
@@ -1573,7 +1682,7 @@ function computeGarrisonTechs(
         }
         const reqSig = es.techs.filter((id) => nonCtrlReqBranchIds.has(id)).join(',');
         const selPower = st.selected.filter((id) => powerSelectedIds.has(id)).join(',');
-        const rulesSig = `${st.stage0RuleCount}:${st.appliedRules.map((r) => r.id).join(',')}`;
+        const rulesSig = `${st.stage0RuleCount}:${st.appliedRules.map(ruleInstanceId).join(',')}`;
         const unitDiffs: string[] = [];
         for (const uid of eligibleIds) {
           const u = st.units[uid];
@@ -1761,30 +1870,39 @@ function computeGarrisonTechs(
   closePrereqs();
 
   // Part 3C: Evaluate free control techs (baseFree, autoFreeControl, or shape-gated free control techs).
-  const freeControlCandidates = [...controlSet].filter(
-    (id) => baseFree.has(id) || (civFreeSet.has(id) && prereqChainInPool(id).every((p) => kept.has(p) || baseFree.has(p) || autoFreeControl.has(p))),
-  );
-  for (const fid of freeControlCandidates) {
-    if (kept.has(fid)) continue;
-    if (stateSpaceOverflow) {
-      kept.add(fid);
-      continue;
-    }
-    const { withoutData, withoutIndex } = makeWithoutFree(fid);
-    let relevant = false;
-    for (const es of allReachableStates) {
-      if (!es.snapshot.selected.includes(fid)) continue;
-      if (!baseFree.has(fid) && !es.techs.every((tid) => kept.has(tid))) continue;
-      const snapWithout = snapshot(ctx, b, es.config, withoutData, status, withoutIndex);
-      const esWithout = makeEvalState(es.techs, es.rowIds, snapWithout, withoutData, withoutIndex);
-      if (statesObservableDiff(esWithout, es, true)) {
-        relevant = true;
-        break;
+  let part3CChanged = true;
+  while (part3CChanged) {
+    part3CChanged = false;
+    const freeControlCandidates = [...controlSet].filter(
+      (id) =>
+        !kept.has(id) &&
+        (baseFree.has(id) || (civFreeSet.has(id) && prereqChainInPool(id).every((p) => kept.has(p) || baseFree.has(p) || autoFreeControl.has(p)))),
+    );
+    for (const fid of freeControlCandidates) {
+      if (stateSpaceOverflow) {
+        kept.add(fid);
+        part3CChanged = true;
+        continue;
+      }
+      const { withoutData, withoutIndex } = makeWithoutFree(fid);
+      let relevant = false;
+      for (const es of allReachableStates) {
+        if (!es.snapshot.selected.includes(fid)) continue;
+        if (!baseFree.has(fid) && !es.techs.every((tid) => kept.has(tid))) continue;
+        const snapWithout = snapshot(ctx, b, es.config, withoutData, status, withoutIndex);
+        const esWithout = makeEvalState(es.techs, es.rowIds, snapWithout, withoutData, withoutIndex);
+        if (statesObservableDiff(esWithout, es, true)) {
+          relevant = true;
+          break;
+        }
+      }
+      if (relevant) {
+        kept.add(fid);
+        part3CChanged = true;
       }
     }
-    if (relevant) kept.add(fid);
+    if (part3CChanged) closePrereqs();
   }
-  closePrereqs();
 
   return pool.filter((t) => kept.has(t.id));
 }
