@@ -376,7 +376,6 @@ Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsv
 
 ## 六、.dat 中存在、加成文本未列出的效果（已计入模拟器，标注为「隐藏加成」）
 
-- 中国：396 `C-Bonus, +50% Demo HP` → 3 个目标 [{"op":"mul","s":"hp","v":1.5}]
 - 西班牙：-3 `Tech tree #3` → 1 个目标 [{"op":"mul","s":"bt","v":0.833331}]
 
 ## 七、通用/限定文明隐藏科技（时代自动或组合触发）
