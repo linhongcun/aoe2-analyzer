@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 from dat_source import DAT, load
-from effects_build import CIV_DAT, is_identity_mul, r6
+from effects_build import CIV_DAT, fx_triggered_techs, is_identity_mul, is_unreachable_tech, r6
 from projectile_scope import guided_projectile_ids, split_projectile_units, transform_closure
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,8 +70,11 @@ def build(d):
 
     nodes = {}
     combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 63, 102, 107, 108, 109}
+    build_tech_ids = set(d['BuildTech'].values())
+    fx_triggered_ids = fx_triggered_techs(d['Effects'])
     for i, t in enumerate(d['Techs']):
-        commands = cmds(t['EffectID'])
+        unreachable = is_unreachable_tech(i, t, build_tech_ids, fx_triggered_ids)
+        commands = [] if unreachable else cmds(t['EffectID'])
         # Projectile guidance and poison combat fields (Curare): follow actual projectile & charge-projectile users.
         guided = guided_projectile_ids(commands, attrs=(19, 145, 146, 147))
         proj_all, proj_charge_only = split_projectile_units(dat_units, combat_forms, units, guided) if guided else ([], [])

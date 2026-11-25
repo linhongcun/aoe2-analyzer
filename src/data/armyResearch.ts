@@ -28,4 +28,12 @@ export interface ArmyResearchData {
   buildingTechs: number[];
   buildingTriggers: Record<string, number>;
 }
-export const ARMY_RESEARCH = raw as ArmyResearchData;
+function deepFreeze<T>(value: T): T {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const entry of Object.values(value as Record<string, unknown>)) deepFreeze(entry);
+  }
+  return value;
+}
+
+export const ARMY_RESEARCH = deepFreeze(raw as ArmyResearchData);

@@ -1,15 +1,18 @@
 import { civByEn } from '../data';
-import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand } from '../data/armyResearch';
+import { ARMY_RESEARCH, type ArmyResearchData } from '../data/armyResearch';
 import {
   ARMY_RES,
   addArmyCost,
+  armyResearchIndex,
   civConditionalDisablers,
   evalConditionNode,
   globalRegionalDisabled,
   hasDecimalCost,
-  isGlobalStartDisableNode,
+  isUnreachableCountNode,
   isUnreachableHiddenNode,
-  roundArmyCost,
+  researchKey,
+  researchPrice,
+  type ArmyResearchPrice,
 } from './armyResearchRules';
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { AGE_BY_TECH } from './gameIds';
@@ -26,10 +29,10 @@ import { batchesForQty, deliveredQty, unitTrainCount } from './trainBatch';
 import type { ArmyCostConfig } from './armyCostConfig';
 export { emptyArmyCost } from './armyCostConfig';
 export type { ArmyCostConfig } from './armyCostConfig';
-export { ARMY_RES, addArmyCost, hasDecimalCost };
+export { ARMY_RES, addArmyCost, hasDecimalCost, researchKey, researchPrice };
+export type { ArmyResearchPrice };
 export const researchId = (key: string): number | null =>
   /^t:(0|[1-9]\d*)$/.test(key) && Number.isSafeInteger(Number(key.slice(2))) ? Number(key.slice(2)) : null;
-export const researchKey = (id: number) => `t:${id}`;
 interface Closure {
   ids: Set<number>;
   error: string;
@@ -83,13 +86,12 @@ export function researchResolver(data: ArmyResearchData, civ: string, age: numbe
     const next = new Set(stack).add(id);
     const branches = node.requires.map((pre) => resolve(pre, next));
     const satisfied = branches.filter((b) => b.state === 'ready' && [...b.ids].every((tid) => completed.has(tid))).length;
-    // Hidden non-free start-age/scenario placeholders never trigger in standard RM; other non-standard hidden triggers stay unknown.
-    let result = isUnreachableHiddenNode(node)
-      ? fail(`研究 t:${id} 在标准对局中不可触发`, 'unavailable')
-      : node.location <= 0 && (node.time > 0 || node.cost.some(([, v, enabled]) => enabled && v! > 0))
-        ? fail(`研究 t:${id} 的外部触发条件尚未核实`)
-        : node.count > node.requires.length
-          ? fail(`研究 t:${id} 的隐藏条件尚未核实`)
+    // Hidden non-free start-age/scenario placeholders and dead count>requires nodes never trigger in standard RM.
+    let result =
+      isUnreachableHiddenNode(node) || isUnreachableCountNode(data, id, node)
+        ? fail(`研究 t:${id} 在标准对局中不可触发`, 'unavailable')
+        : node.location <= 0 && (node.time > 0 || node.cost.some(([, v, enabled]) => enabled && v! > 0))
+          ? fail(`研究 t:${id} 的外部触发条件尚未核实`)
           : requiredPaidSet(
               branches
                 .filter((b) => b.state !== 'ready' || [...b.ids].some((tid) => !completed.has(tid)))
@@ -105,111 +107,6 @@ export function researchResolver(data: ArmyResearchData, civ: string, age: numbe
     return result;
   };
   return { available, resolve };
-}
-
-export interface ArmyResearchPrice {
-  cost: Cost | null;
-  free: boolean;
-  zero: boolean;
-  reason: string;
-  sources: string[];
-  baseCost: Cost | null;
-  modifiers: { source: string; condition: string; command: ResearchCommand; applied: boolean }[];
-}
-/** Research price uses raw research commands; unit-cost discounts never enter this function. */
-export function researchPrice(
-  data: ArmyResearchData,
-  civ: string,
-  age: number,
-  id: number,
-  active: ReadonlySet<number>,
-  before: ReadonlySet<number> = active,
-): ArmyResearchPrice {
-  const node = data.nodes[id];
-  const context = data.civs[civ];
-  let baseCost: Cost | null = null;
-  const modifiers: ArmyResearchPrice['modifiers'] = [];
-  const bad = (reason: string): ArmyResearchPrice => ({
-    cost: null,
-    free: false,
-    zero: false,
-    reason,
-    sources: [...new Set(modifiers.map((m) => m.source))],
-    baseCost,
-    modifiers,
-  });
-  if (!node || !context) return bad('研究身份或文明未核实');
-  const cost: Cost = {};
-  const res: Record<number, string> = { 0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold' };
-  for (const [r, amount, enabled] of node.cost) {
-    if (!enabled) continue;
-    if (r === undefined || amount === undefined || !res[r] || !Number.isFinite(amount) || amount < 0) return bad('研究费用资源未核实');
-    cost[res[r]!] = (cost[res[r]!] ?? 0) + amount;
-  }
-  baseCost = { ...cost };
-  const groups: { source: string; condition: string; mods: ResearchCommand[] }[] = [
-    { source: '本文明科技树与团队加成', condition: `文明 ${civ} 的常驻效果`, mods: context.mods },
-  ];
-  const reenabled = !!context.enabled?.includes(id);
-  for (const [key, n] of Object.entries(data.nodes)) {
-    const tid = Number(key);
-    const skipGlobalDisable = reenabled && isGlobalStartDisableNode(n);
-    const relevant = n.mods.filter(
-      (c) =>
-        ((c.Type === 101 || c.Type === 103) && c.A === id) ||
-        (c.Type === 102 && c.D === id && !skipGlobalDisable) ||
-        ((c.Type === 1 || c.Type === 6) && c.A === 85),
-    );
-    if (!relevant.length || (n.civ >= 0 && n.civ !== context.id)) continue;
-    const applies =
-      n.location > 0 ? (before.has(tid) ? true : active.has(tid) && tid !== id ? null : false) : evalConditionNode(data, context, age, id, active, before, tid);
-    const group = {
-      source: `${n.name ?? '文明条件'} t:${tid}`,
-      condition: before.has(tid) ? '已完成或本动作的确定必要前置' : `自动条件：前置 ${n.requires.map(researchKey).join('、') || '无'}，需满足 ${n.count} 项`,
-      mods: relevant,
-    };
-    if (applies === null) {
-      modifiers.push(...relevant.map((command) => ({ source: group.source, condition: '触发或相对研究顺序尚未核实', command, applied: false })));
-      return bad('影响本项研究费用的文明条件尚未核实');
-    }
-    if (applies) groups.push(group);
-  }
-  let time = node.time;
-  const sources: string[] = [];
-  const operations = new Map<string, { source: string; op: number; value: number }>();
-  for (const group of groups)
-    for (const c of group.mods) {
-      if (!(((c.Type === 101 || c.Type === 103) && c.A === id) || (c.Type === 102 && c.D === id) || ((c.Type === 1 || c.Type === 6) && c.A === 85))) continue;
-      const modifier = { source: group.source, condition: group.condition, command: c, applied: false };
-      modifiers.push(modifier);
-      if (c.Type === 102 && c.D === id) return bad('本项研究被条件效果禁用');
-      if ((c.Type === 1 || c.Type === 6) && c.A === 85) return bad('本文明全局研究费用倍率尚未核实');
-      if (c.A !== id) continue;
-      if (c.Type !== 101 && c.Type !== 103) return bad('研究修正类型尚未核实');
-      if (![0, 1, 2, -1].includes(c.C) || !Number.isFinite(c.D)) return bad('研究修正操作尚未核实');
-      for (const key of c.Type === 103 ? ['time'] : c.B === -1 ? [...ARMY_RES] : [res[c.B] ?? 'unknown']) {
-        const prev = operations.get(key);
-        const op = c.C === -1 ? 1 : c.C;
-        if (
-          prev &&
-          prev.source !== group.source &&
-          !((op === prev.op && (op !== 0 || c.D === prev.value)) || (op === 2 && prev.op === 0 && prev.value === 0) || (op === 0 && c.D === 0 && prev.op === 2))
-        )
-          return bad('多项研究修正的生效顺序尚未核实');
-        operations.set(key, { source: group.source, op, value: c.D });
-      }
-      const apply = (v: number) => Math.max(0, c.C === 0 ? c.D : c.C === 2 ? v * c.D : v + c.D);
-      if (c.Type === 103) time = apply(time);
-      else if (c.B === -1) for (const r of ARMY_RES) cost[r] = apply(cost[r] ?? 0);
-      else if (!res[c.B]) return bad('研究修正资源尚未核实');
-      else cost[res[c.B]!] = apply(cost[res[c.B]!] ?? 0);
-      sources.push(group.source);
-      modifier.applied = true;
-    }
-  // Non-integer discounted research costs keep at most two decimals (in-game rounding unverified).
-  for (const r of ARMY_RES) if (cost[r] !== undefined) cost[r] = roundArmyCost(cost[r]!);
-  const zero = ARMY_RES.every((r) => !cost[r]);
-  return { cost, zero, free: zero && time === 0, reason: '', sources: [...new Set(sources)], baseCost, modifiers };
 }
 
 export interface ResearchEntry {
@@ -260,7 +157,7 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
   const numeric = new Map(simTechs(sim, u, civ).map((entry) => [entry.t.id, entry.ef]));
   const tree = civStatus(sim.trees, civ);
   return sim.techs
-    .filter((t) => militaryTechAge(civ, t.id, t.age) <= age && t.civs.includes(civ) && tree['t' + t.id])
+    .filter((t) => !AGE_BY_TECH[t.id] && militaryTechAge(civ, t.id, t.age) <= age && t.civs.includes(civ) && tree['t' + t.id])
     .filter(
       (t) =>
         numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
@@ -281,6 +178,7 @@ export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConf
   const sim = makeSimContext(ctx.core.techs, ctx.trees);
   const age = Number(config.age);
   const resolver = researchResolver(data, config.civ, age);
+  const { upgradesByUnit } = armyResearchIndex(data);
   const ids = new Set<number>();
   for (const row of config.rows) {
     const u = ctx.core.unitById[row.unit];
@@ -289,9 +187,8 @@ export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConf
     for (const { tech } of applicableTrainingTechs(sim, u, config.civ, age)) ids.add(tech.id);
     for (const id of unitUnlocks(ctx, config.civ, age, u)) ids.add(id);
     // A form upgrade may also be an explicit target, in addition to automatic inference.
-    for (const [id, node] of Object.entries(data.nodes)) {
-      const tid = Number(id);
-      if (node.upgrades.some(([, target]) => target === u.id) && resolver.available(tid) && resolver.resolve(tid).state !== 'unavailable') ids.add(tid);
+    for (const tid of upgradesByUnit.get(u.id) ?? []) {
+      if (resolver.available(tid) && resolver.resolve(tid).state !== 'unavailable') ids.add(tid);
     }
   }
   // Unresolved unique abilities stay visible as unverified instead of silently disappearing.
@@ -411,6 +308,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
   if (!blocked.length) {
     for (const key of config.done) request(key, true);
     for (const key of config.targets) request(key, false);
+    const { enablesByUnit, upgradesByUnit } = armyResearchIndex(data);
     config.rows.forEach((row, index) => {
       const unit = ctx.core.unitById[row.unit];
       if (!unit) return;
@@ -422,9 +320,9 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
           return;
         }
         visited.add(u.id);
-        const enabling = Object.entries(data.nodes).filter(([id, n]) => resolver.available(Number(id)) && n.enables.includes(u.id));
+        const enabling = (enablesByUnit.get(u.id) ?? []).filter((tid) => resolver.available(tid) && !isUnreachableCountNode(data, tid, data.nodes[tid]!));
         if (enabling.length) {
-          const paths = enabling.map(([id]) => resolver.resolve(Number(id)));
+          const paths = enabling.map((tid) => resolver.resolve(tid));
           const possible = paths.filter((p) => !p.error);
           // An already satisfied enabling path makes extra paid alternatives unnecessary.
           const necessary = possible.find((p) => possible.every((other) => [...p.ids].every((id) => other.ids.has(id))));
@@ -433,14 +331,12 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
           else for (const id of necessary.ids) request(researchKey(id), false, index);
         }
         if (u.from_) {
-          const candidates = Object.entries(data.nodes).filter(
-            ([id, n]) => resolver.available(Number(id)) && n.upgrades.some(([, b]) => b === u.id) && resolver.resolve(Number(id)).state !== 'unavailable',
-          );
+          const candidates = (upgradesByUnit.get(u.id) ?? []).filter((tid) => resolver.available(tid) && resolver.resolve(tid).state !== 'unavailable');
           if (candidates.length !== 1) {
             badRows.set(index, '单位升级研究身份未能唯一核实');
             return;
           }
-          request(researchKey(Number(candidates[0]![0])), false, index);
+          request(researchKey(candidates[0]!), false, index);
           const parent = ctx.core.unitById[u.from_];
           if (parent) shape(parent);
           else badRows.set(index, '前置单位形态未知');
