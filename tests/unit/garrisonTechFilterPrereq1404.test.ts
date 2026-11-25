@@ -291,19 +291,118 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     expect([buBefore.errors, buBefore.mode, buBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
     expect([buAfter.errors, buAfter.mode, buAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
 
-    // 2. 同源单位火力下溢恢复：492 火力系数 1e-320 被形态 237 乘 1e-5 下溢为 0，手选 233 加回 1 恢复正火力
+    // 2. 同源单位火力下溢恢复（R17 P2 强化）：初始火力 Number.MIN_VALUE、attack=0.625、reload=1（无形态时 +MIN_VALUE 舍入仍为 5e-324），
+    //    仅形态 237 乘 0.5 下溢为 0 后手选 233 加回 Number.MIN_VALUE 才令驻军火力从 0 恢复为 5e-324
     const fpUnderflowData = cloneBaseData();
     fpUnderflowData.unitUpgradeTechs = { 492: [237] };
-    fpUnderflowData.units[492] = { ...fpUnderflowData.units[492]!, type: 60, firepower: 1e-320 };
+    fpUnderflowData.units[492] = { ...fpUnderflowData.units[492]!, type: 60, attack: 0.625, reload: 1, firepower: Number.MIN_VALUE };
     fpUnderflowData.techs = {
-      237: mkRule(237, [ef(492, 'firepower', 'mul', 1e-5)]),
-      233: mkRule(233, [ef(492, 'firepower', 'add', 1)]),
+      237: mkRule(237, [ef(492, 'firepower', 'mul', 0.5)]),
+      233: mkRule(233, [ef(492, 'firepower', 'add', Number.MIN_VALUE)]),
     };
     expect(idsOf(fpUnderflowData)).toEqual([233]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, fpUnderflowData)).toEqual([233]);
     const fpuBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), fpUnderflowData);
     const fpuAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), fpUnderflowData);
     expect([fpuBefore.errors, fpuBefore.garrisonPower]).toEqual([[], 0]);
-    expect(fpuAfter.errors).toEqual([]);
-    expect(fpuAfter.garrisonPower).toBeCloseTo(3, 5);
+    expect([fpuAfter.errors, fpuAfter.garrisonPower]).toEqual([[], Number.MIN_VALUE]);
+  });
+
+  it('R17 & Devin Review 回归：Part 3C 同状态数裁剪不跳过、时代/常驻规则中间下溢与主弹丸 NaN 恢复均准确保留', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const row492: GeneralGarrisonConfig['rows'] = [{ unitId: 492, count: '1', entry: 'enter' }];
+    const idsOf = (civ: string, d: GeneralGarrisonData) =>
+      getGarrisonTechs(ctx, tc, cfg(civ, 4), d)
+        .map((t) => t.id)
+        .sort((a, z) => a - z);
+
+    // 1. R17 P1-1（Part 3C 同状态数裁剪）：24/83 共用形态 98000、492 用 98001，免费 233 在两形态同时已知时将 garrisonType 置 1，
+    //    带 233 时四个行键 [] / [24,83] / [492] / [83] 数量仍等于 shapeStateCount=4，但去 233 后 [24,83,492] 合法
+    const mirrorGroupData = cloneBaseData();
+    mirrorGroupData.unitUpgradeTechs = { 24: [98000], 83: [98000], 492: [98001] };
+    mirrorGroupData.techs = { 233: mkRule(233) };
+    mirrorGroupData.civs.Britons!.free = [233];
+    mirrorGroupData.conditional = [mkRule(99030, [ef(109, 'garrisonType', 'set', 1)], [233, 98000, 98001])];
+    expect(idsOf('Britons', mirrorGroupData)).toEqual([233]);
+    const mgBlocked = calculateGeneralGarrison(
+      ctx,
+      tc,
+      cfg(
+        'Britons',
+        4,
+        [],
+        [
+          { unitId: 24, count: '1', entry: 'enter' },
+          { unitId: 83, count: '1', entry: 'enter' },
+          { unitId: 492, count: '1', entry: 'enter' },
+        ],
+      ),
+      mirrorGroupData,
+    );
+    expect(mgBlocked.errors.length).toBeGreaterThan(0);
+
+    // 2. Devin Review PRRT_kwDOVDI1mM670uNr：法兰克 TC 村民 83 与仅支持生产的火枪手 5 共用形态 98000（5 另隐含化学 47 解锁生产），
+    //    免费箭羽 199 与 98000 将火枪手生产迁出 TC，带 199 时行键仅 [] 与 [83]（状态数仍等于 shapeStateCount=2），须保留 199
+    const evictProdData = cloneBaseData();
+    evictProdData.civs.Franks!.automatic = [];
+    evictProdData.civs.Franks!.free = [199];
+    evictProdData.unitUpgradeTechs = { 83: [98000], 5: [98000, 47] };
+    evictProdData.buildings[109] = { ...evictProdData.buildings[109]!, produces: [...evictProdData.buildings[109]!.produces, 5] };
+    evictProdData.units[5] = { ...evictProdData.units[5]!, garrisonTasks: [], trainLocations: [{ unitId: 109, time: 34 }] };
+    evictProdData.techs = { 199: mkRule(199), 47: mkRule(47) };
+    evictProdData.conditional = [{ id: 99031, requires: [199, 98000], count: 2, effects: [], trainingLocations: [{ unit: 5, slot: 0, location: 87 }] }];
+    expect(idsOf('Franks', evictProdData)).toEqual([199]);
+    const evictRows: GeneralGarrisonConfig['rows'] = [
+      { unitId: 83, count: '1', entry: 'enter' },
+      { unitId: 5, count: '1', entry: 'created' },
+    ];
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Franks', 4, [], evictRows), evictProdData).errors.length).toBeGreaterThan(0);
+    const evictNoFree = structuredClone(evictProdData);
+    evictNoFree.civs.Franks!.free = [];
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Franks', 4, [], evictRows), evictNoFree).errors).toEqual([]);
+
+    // 3. R17 P1-2（时代规则与常驻自动规则中间下溢）：TC 原攻 6，时代规则 102（或 Stage 0 常驻自动规则）置 1e-320，
+    //    形态 237 乘 1e-5 下溢为 0，常驻条件规则乘 1e308 掩盖空阵容终态，手选 233 加回 1e-320 恢复 arrows / 2 发
+    const ageUnderflowData = cloneBaseData();
+    ageUnderflowData.unitUpgradeTechs = { 492: [237] };
+    ageUnderflowData.civs.Britons!.baseOverrides = {
+      ...ageUnderflowData.civs.Britons!.baseOverrides,
+      142: { type: 60, attack: 6, reload: 2, projectile: 54, secondaryProjectile: 54 },
+    };
+    ageUnderflowData.ageRules = { ...ageUnderflowData.ageRules, 102: mkRule(102, [ef(109, 'attack', 'set', 1e-320)]) };
+    ageUnderflowData.techs = {
+      237: mkRule(237, [ef(109, 'attack', 'mul', 1e-5)]),
+      233: mkRule(233, [ef(109, 'attack', 'add', 1e-320)]),
+    };
+    ageUnderflowData.conditional = [mkRule(99032, [ef(109, 'attack', 'mul', 1e308)])];
+    expect(idsOf('Britons', ageUnderflowData)).toEqual([233]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, ageUnderflowData)).toEqual([233]);
+    const auBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), ageUnderflowData);
+    const auAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), ageUnderflowData);
+    expect([auBefore.errors, auBefore.mode, auBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
+    expect([auAfter.errors, auAfter.mode, auAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
+    const autoUnderflowData = structuredClone(ageUnderflowData);
+    autoUnderflowData.ageRules = structuredClone(GENERAL_GARRISON_DATA.ageRules);
+    autoUnderflowData.civs.Britons!.automatic = [mkRule(99033, [ef(109, 'attack', 'set', 1e-320)])];
+    expect(idsOf('Britons', autoUnderflowData)).toEqual([233]);
+
+    // 4. R17 P1-3（有限乘数致主弹丸 NaN 恢复）：TC 主弹丸 54、无副弹丸，形态 237 依次乘 Number.MAX_VALUE 与 0 得到 NaN 进入 shelter，
+    //    手选 233 将主弹丸设回 54 恢复 arrows / 2 发
+    const nanProjData = cloneBaseData();
+    nanProjData.unitUpgradeTechs = { 492: [237] };
+    nanProjData.civs.Britons!.baseOverrides = {
+      ...nanProjData.civs.Britons!.baseOverrides,
+      142: { type: 60, attack: 6, reload: 2, projectile: 54, secondaryProjectile: -1 },
+    };
+    nanProjData.techs = {
+      237: mkRule(237, [ef(109, 'projectile', 'mul', Number.MAX_VALUE), ef(109, 'projectile', 'mul', 0)]),
+      233: mkRule(233, [ef(109, 'projectile', 'set', 54)]),
+    };
+    expect(idsOf('Britons', nanProjData)).toEqual([233]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, nanProjData)).toEqual([233]);
+    const npBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), nanProjData);
+    const npAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), nanProjData);
+    expect([npBefore.errors, npBefore.mode, npBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
+    expect([npAfter.errors, npAfter.mode, npAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
   });
 });

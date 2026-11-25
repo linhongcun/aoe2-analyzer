@@ -882,7 +882,10 @@ function computeGarrisonTechs(
     if (u.firepower < 0 || (initUnitField(id, 'firepower') ?? 0) < 0) negFpCapableUnits.add(id);
     if (u.total > 1 || (initUnitField(id, 'total') ?? 0) > 1) multiProjCandidates.add(id);
   }
+  const inspectedRules = new Set<GeneralGarrisonRule>();
   const inspectRuleStats = (rule: GeneralGarrisonRule) => {
+    if (inspectedRules.has(rule)) return;
+    inspectedRules.add(rule);
     for (const e of rule.effects) {
       if (e.unit === b.id) allBuildingEffects.push(e);
       if (!isPowerUnit(e.unit)) continue;
@@ -926,16 +929,18 @@ function computeGarrisonTechs(
       }
     }
   };
+  for (const r of activeAgeRules) inspectRuleStats(r);
+  for (const r of baseState.appliedRules) inspectRuleStats(r);
   for (const t of pool) inspectRuleStats(data.techs[t.id]!);
   for (const r of activeDynRules) inspectRuleStats(r);
   for (const r of activeShadowedDynRules) inspectRuleStats(r);
   for (const r of availFreeShapeRules) inspectRuleStats(r);
   for (const r of availImpliedType60Rules) inspectRuleStats(r);
-  // Detect IEEE-754 underflow-to-zero or overflow-to-Infinity across positive mul/add/set sequences.
-  const canExtremeFlip = (vals: (number | undefined)[], effects: readonly GeneralGarrisonEffect[], absMode = false): boolean => {
+  // Detect IEEE-754 non-finite, underflow-to-zero, or overflow-to-Infinity/NaN risk across set/add/mul sequences.
+  const canExtremeFlip = (vals: (number | undefined)[], effects: readonly GeneralGarrisonEffect[]): boolean => {
     let minPos = Infinity;
     let maxPos = 0;
-    let posAddSum = 0;
+    let addAbsSum = 0;
     let shrinkProd = 1;
     let growProd = 1;
     let hasShrink = false;
@@ -943,7 +948,7 @@ function computeGarrisonTechs(
     for (const raw of vals) {
       if (raw === undefined) continue;
       if (!Number.isFinite(raw)) return true;
-      const v = absMode ? Math.abs(raw) : raw;
+      const v = Math.abs(raw);
       if (v > 0) {
         if (v < minPos) minPos = v;
         if (v > maxPos) maxPos = v;
@@ -951,14 +956,17 @@ function computeGarrisonTechs(
     }
     for (const e of effects) {
       if (!Number.isFinite(e.value)) return true;
-      const v = absMode ? Math.abs(e.value) : e.value;
+      const v = Math.abs(e.value);
       if (e.op === 'set') {
         if (v > 0) {
           if (v < minPos) minPos = v;
           if (v > maxPos) maxPos = v;
         }
       } else if (e.op === 'add') {
-        if (v > 0) posAddSum += v;
+        if (v > 0) {
+          addAbsSum += v;
+          if (v < minPos) minPos = v;
+        }
       } else if (e.op === 'mul') {
         if (v > 0 && v < 1) {
           hasShrink = true;
@@ -969,9 +977,10 @@ function computeGarrisonTechs(
         }
       }
     }
+    if ((minPos < Infinity && minPos <= 1e-300) || maxPos >= 1e300) return true;
     if (hasShrink && minPos < Infinity && minPos * shrinkProd <= 1e-300) return true;
-    const upper = (maxPos + posAddSum) * growProd;
-    if ((hasGrow || posAddSum > 0) && maxPos + posAddSum > 0 && (!Number.isFinite(upper) || upper >= 1e300)) return true;
+    const upper = (maxPos + addAbsSum) * growProd;
+    if ((hasGrow || addAbsSum > 0) && maxPos + addAbsSum > 0 && (!Number.isFinite(upper) || upper >= 1e300)) return true;
     return false;
   };
   for (const [uid, relList] of unitReloadEffects) {
@@ -980,7 +989,7 @@ function computeGarrisonTechs(
     }
   }
   for (const [uid, fpList] of unitFpEffects) {
-    if (!fpSignFlipUnits.has(uid) && canExtremeFlip([baseState.units[uid]?.firepower, initUnitField(uid, 'firepower')], fpList, true)) {
+    if (!fpSignFlipUnits.has(uid) && canExtremeFlip([baseState.units[uid]?.firepower, initUnitField(uid, 'firepower')], fpList)) {
       fpSignFlipUnits.add(uid);
     }
   }
@@ -1058,6 +1067,14 @@ function computeGarrisonTechs(
         canExtremeFlip(
           [baseB.reload, initBReload],
           allBuildingEffects.filter((e) => e.stat === 'reload'),
+        ) ||
+        canExtremeFlip(
+          [baseB.projectile, initBProj],
+          allBuildingEffects.filter((e) => e.stat === 'projectile'),
+        ) ||
+        canExtremeFlip(
+          [baseB.secondaryProjectile, initBuildingSecProj],
+          allBuildingEffects.filter((e) => e.stat === 'secondaryProjectile'),
         ));
 
   // Partition pool into control techs (affecting entry, capacity, shooting-ness, firepower sign, reload validity, total,
@@ -1462,12 +1479,22 @@ function computeGarrisonTechs(
     genPerms();
   }
 
-  const validStatesForTechs = (techs: number[], stateData: GeneralGarrisonData = data, stateIndex: StaticGarrisonIndex = staticIndex): EvalState[] => {
+  const validStatesForTechs = (
+    techs: number[],
+    stateData: GeneralGarrisonData = data,
+    stateIndex: StaticGarrisonIndex = staticIndex,
+    outUnpruned?: { value: boolean },
+  ): EvalState[] => {
     const emptyState = makeEvalState(techs, [], techs.length === 0 && stateData === data ? baseState : undefined, stateData, stateIndex);
-    if (!allShapeUids.length) return [emptyState];
+    if (!allShapeUids.length) {
+      if (outUnpruned) outUnpruned.value = true;
+      return [emptyState];
+    }
     const byKey = new Map<string, EvalState>([['', emptyState]]);
+    let allUnpruned = true;
     if (sensitiveGroupIndices.length === 0) {
       const maxState = pruneToValidRows(techs, allShapeUids, stateData, stateIndex);
+      if (maxState.rowIds.length < allShapeUids.length) allUnpruned = false;
       if (!byKey.has(maxState.rowKey)) byKey.set(maxState.rowKey, maxState);
       if (shapeGroupUnits.length > 1) {
         const totalMasks = 1 << shapeGroupUnits.length;
@@ -1477,6 +1504,7 @@ function computeGarrisonTechs(
             if (((mask >> i) & 1) !== 0) subsetIds.push(...shapeGroupUnits[i]!);
           }
           const pruned = pruneToValidRows(techs, subsetIds, stateData, stateIndex);
+          if (pruned.rowIds.length < subsetIds.length) allUnpruned = false;
           if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
         }
       }
@@ -1492,20 +1520,26 @@ function computeGarrisonTechs(
           const subsetIds = [...commIds];
           for (const gi of perm) subsetIds.push(...shapeGroupUnits[gi]!);
           const pruned = pruneToValidRows(techs, subsetIds, stateData, stateIndex);
+          if (pruned.rowIds.length < subsetIds.length) allUnpruned = false;
           if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
         }
       }
     }
+    if (outUnpruned) outUnpruned.value = allUnpruned;
     return [...byKey.values()];
   };
 
   // Materialize all exact reachable (T, R) states (skipped if overflowed, where conservative fallback applies).
   const statesByTechKey = new Map<string, EvalState[]>();
+  const unprunedTechKeys = new Set<string>();
   const allReachableStates: EvalState[] = [];
   if (!stateSpaceOverflow) {
     for (const techs of legalSubsets) {
-      const list = validStatesForTechs(techs);
-      statesByTechKey.set(techs.join(','), list);
+      const unpruned = { value: false };
+      const list = validStatesForTechs(techs, data, staticIndex, unpruned);
+      const techKey = techs.join(',');
+      statesByTechKey.set(techKey, list);
+      if (unpruned.value) unprunedTechKeys.add(techKey);
       for (const es of list) allReachableStates.push(es);
     }
   }
@@ -1857,10 +1891,18 @@ function computeGarrisonTechs(
             addKey(`${b.id}:reload`);
             if (B.secondaryProjectile >= 0) addKey(`${B.secondaryProjectile}:attack`);
           }
+          if (!(Number.isSafeInteger(B.total) && B.total >= 0 && Number.isSafeInteger(B.max) && B.max >= 0)) {
+            addKey(`${b.id}:total`);
+            addKey(`${b.id}:max`);
+          }
         } else {
           if (e.stat === 'attack' && B && B.secondaryProjectile === e.unit) {
             addKey(`${b.id}:attack`);
             addKey(`${b.id}:reload`);
+            if (!(Number.isSafeInteger(B.total) && B.total >= 0 && Number.isSafeInteger(B.max) && B.max >= 0)) {
+              addKey(`${b.id}:total`);
+              addKey(`${b.id}:max`);
+            }
           }
           if (e.stat === 'attack') {
             for (const uid of multiProjCandidates) {
@@ -2260,8 +2302,9 @@ function computeGarrisonTechs(
       if (!relevant && allShapeUids.length > 0) {
         for (const T of legalSubsets) {
           if (!baseFree.has(fid) && !T.every((tid) => kept.has(tid))) continue;
-          const listWith = statesByTechKey.get(T.join(',')) ?? [];
-          if (listWith.length >= shapeStateCount) continue;
+          const techKey = T.join(',');
+          if (unprunedTechKeys.has(techKey)) continue;
+          const listWith = statesByTechKey.get(techKey) ?? [];
           if ((part3CMirrorProbes += shapeStateCount) > MAX_EXACT_STATES) {
             relevant = true;
             break;
