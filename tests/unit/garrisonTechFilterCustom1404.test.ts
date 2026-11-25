@@ -414,4 +414,71 @@ describe('Issue 1404: getGarrisonTechs 自定义数据与精确状态边界回�
     expect(negMulIds).toContain(233);
     expect(negMulIds).not.toContain(608);
   });
+
+  it('R10 回归：自动规则已满足前置、极小量级火力相对容差、零火力免费科技与纯存放圣物过滤', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const tcForms = [109, ...(GENERAL_GARRISON_DATA.buildings[109]?.eraForms ?? [])];
+
+    // 1. R10 P1-1: 自动规则将 199 写入 known 且 233.pre = 199；手选 199 会把 492.firepower 置 0，单选 233 合法且火力 3 -> 5
+    const autoPreCore = structuredClone(ctx.core);
+    autoPreCore.techById[233] = { ...autoPreCore.techById[233]!, pre: 199 };
+    autoPreCore.techs[autoPreCore.techs.findIndex((t) => t.id === 233)] = autoPreCore.techById[233]!;
+    const autoPreCtx: GeneralGarrisonContext = { core: autoPreCore, trees: ctx.trees };
+    const autoPreTc = autoPreCore.buildingById[109]!;
+    const autoPreData = cloneCustomData();
+    autoPreData.techs = {
+      199: {
+        id: 199,
+        requires: [],
+        count: 0,
+        effects: [
+          { unit: 109, stat: 'capacity', op: 'add', value: 1 },
+          { unit: 492, stat: 'firepower', op: 'set', value: 0 },
+        ],
+      },
+      233: { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 4 }] },
+    };
+    autoPreData.civs.Britons!.automatic = [{ id: 199, requires: [], count: 0, effects: [] }];
+    autoPreData.civs.Britons!.free = [];
+    autoPreData.conditional = [];
+    autoPreData.units[492] = { ...autoPreData.units[492]!, attack: 6, reload: 2, total: 1, firepower: 1 };
+    expect(getGarrisonTechs(autoPreCtx, autoPreTc, cfg('Britons', 4), autoPreData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const apBefore = calculateGeneralGarrison(autoPreCtx, autoPreTc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), autoPreData);
+    const apAfter = calculateGeneralGarrison(autoPreCtx, autoPreTc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), autoPreData);
+    expect(apAfter.errors).toEqual([]);
+    expect(apBefore.garrisonPower).toBeCloseTo(3, 5);
+    expect(apAfter.garrisonPower).toBeCloseTo(5, 5);
+
+    // 2. R10 P1-2: 极小量级建筑副弹丸攻击（2e-13 -> 4e-13）不被绝对舍入吞掉，弹丸 4 -> 2，保留 233
+    const tinyScaleData = cloneCustomData();
+    tinyScaleData.techs = { 233: { id: 233, requires: [], count: 0, effects: [{ unit: 54, stat: 'attack', op: 'add', value: 2e-13 }] } };
+    tinyScaleData.civs.Britons!.automatic = [];
+    tinyScaleData.civs.Britons!.free = [];
+    tinyScaleData.conditional = [];
+    tinyScaleData.units[54] = { ...tinyScaleData.units[54]!, attack: 2e-13 };
+    for (const form of tcForms) tinyScaleData.units[form] = { ...tinyScaleData.units[form]!, reload: 2, secondaryProjectile: 54 };
+    tinyScaleData.units[492] = { ...tinyScaleData.units[492]!, attack: 8e-13, reload: 2, total: 1, firepower: 1 };
+    expect(techIds(109, 'Britons', 4, tinyScaleData)).toContain(233);
+    const tsBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), tinyScaleData);
+    const tsAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), tinyScaleData);
+    expect(tsAfter.errors).toEqual([]);
+    expect(tsBefore.totalProjectiles).toBe(4);
+    expect(tsAfter.totalProjectiles).toBe(2);
+
+    // 3. R10 P2-1: 免费科技 233 将 492.firepower 设为 0（火力 3 -> 0），不被后态零火力跳过
+    const freeZeroData = cloneCustomData();
+    freeZeroData.techs = { 233: { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'firepower', op: 'set', value: 0 }] } };
+    freeZeroData.civs.Britons!.automatic = [];
+    freeZeroData.civs.Britons!.free = [233];
+    freeZeroData.conditional = [];
+    expect(techIds(109, 'Britons', 4, freeZeroData)).toContain(233);
+
+    // 4. R10 P2-2: 亚美尼亚强化教堂（1806）中圣物 285 仅支持 deposit（用村民火力），修改 285 本体攻击的科技应排除
+    const relicAtkData = cloneCustomData();
+    relicAtkData.techs = { 233: { id: 233, requires: [], count: 0, effects: [{ unit: 285, stat: 'attack', op: 'add', value: 4 }] } };
+    relicAtkData.civs.Armenians!.automatic = [];
+    relicAtkData.civs.Armenians!.free = [];
+    relicAtkData.conditional = [];
+    expect(techIds(1806, 'Armenians', 4, relicAtkData)).not.toContain(233);
+  });
 });
