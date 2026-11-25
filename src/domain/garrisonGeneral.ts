@@ -667,6 +667,26 @@ function computeGarrisonTechs(
     availFreeShapeIds.add(fid);
     availFreeShapeRules.push(data.techs[fid]!);
   }
+  // Implied non-free shape upgrades still apply effects targeting units with resolved type === 60 (snapshot() L344-348).
+  const availImpliedType60Rules: GeneralGarrisonRule[] = [];
+  for (const tid of new Set([...baseImplicitShapes, ...availShapeTechs])) {
+    const rule = data.techs[tid];
+    if (!rule) continue;
+    const effects = rule.effects.filter((e) => baseState.units[e.unit]?.type === 60);
+    if (effects.length > 0) availImpliedType60Rules.push({ ...rule, trainingLocations: [], effects });
+  }
+  const actualBuildingId = buildingInfo.eraForms[config.age - 1] ?? b.id;
+  const rawBuildingKey = data.units[actualBuildingId] ? actualBuildingId : b.id;
+  const initUnitField = <K extends keyof GeneralGarrisonUnit>(uid: number, field: K): GeneralGarrisonUnit[K] | undefined =>
+    civData.baseOverrides[uid]?.[field] ?? data.units[uid]?.[field];
+  const activeAgeRules: GeneralGarrisonRule[] = [];
+  for (const [indexAge, id] of AGE_TECH_IDS.entries()) {
+    if (config.age >= indexAge + 2 && data.ageRules[id]) activeAgeRules.push(data.ageRules[id]!);
+  }
+  const allEnabledDynRules: GeneralGarrisonRule[] = [
+    ...civData.automatic.filter((r) => !disabled.has(r.id)),
+    ...staticIndex.usefulConditional.filter((r) => !disabled.has(r.id)),
+  ];
   const hasMinHits = (requires: number[], count: number, set: Set<number>): boolean => {
     let hits = 0;
     for (const req of requires) if (set.has(req) && ++hits >= count) return true;
@@ -716,7 +736,11 @@ function computeGarrisonTechs(
     const prodId = uid === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : uid;
     if (everRelocatedIntoB.has(prodId) || baseState.productionLocations[prodId]?.some((loc) => trainSources.includes(loc))) return true;
     const catalogProduction = catalogSources.some((sourceId) => data.buildings[sourceId]?.produces.includes(prodId));
-    return catalogProduction && !!baseState.units[prodId]?.trainLocations.some((t) => trainSources.includes(t.unitId));
+    return (
+      catalogProduction &&
+      (!!baseState.units[prodId]?.trainLocations.some((t) => trainSources.includes(t.unitId)) ||
+        !!initUnitField(prodId, 'trainLocations')?.some((t) => trainSources.includes(t.unitId)))
+    );
   };
 
   // Both relocations INTO b and evictions OUT OF b can change canCreate.
@@ -728,15 +752,23 @@ function computeGarrisonTechs(
     if (trainSources.includes(loc.location)) return true;
     if (everRelocatedIntoB.has(loc.unit)) return true;
     if (baseState.productionLocations[loc.unit]?.some((l) => trainSources.includes(l))) return true;
-    return !!baseState.units[loc.unit]?.trainLocations.some((t) => trainSources.includes(t.unitId));
+    return (
+      !!baseState.units[loc.unit]?.trainLocations.some((t) => trainSources.includes(t.unitId)) ||
+      !!initUnitField(loc.unit, 'trainLocations')?.some((t) => trainSources.includes(t.unitId))
+    );
   };
 
   const prelimSecProjs = new Set<number>();
   let prelimDynamicSecProj = false;
   if (baseB.secondaryProjectile >= 0) prelimSecProjs.add(baseB.secondaryProjectile);
+  const initBuildingSecProj = initUnitField(rawBuildingKey, 'secondaryProjectile') ?? -1;
+  if (initBuildingSecProj >= 0) prelimSecProjs.add(initBuildingSecProj);
   for (const id of eligibleIds) {
+    if (!isAvailEligible(id)) continue;
     const sec = baseState.units[id]?.secondaryProjectile ?? -1;
     if (sec >= 0) prelimSecProjs.add(sec);
+    const initSec = initUnitField(id, 'secondaryProjectile') ?? -1;
+    if (initSec >= 0) prelimSecProjs.add(initSec);
   }
   const collectPrelimSecProj = (rule: GeneralGarrisonRule) => {
     for (const e of rule.effects) {
@@ -746,10 +778,11 @@ function computeGarrisonTechs(
       else if (e.op !== 'set') prelimDynamicSecProj = true;
     }
   };
+  for (const r of activeAgeRules) collectPrelimSecProj(r);
   for (const t of pool) collectPrelimSecProj(data.techs[t.id]!);
-  for (const r of reachableDynRules) collectPrelimSecProj(r);
-  for (const r of shadowedBaseDynRules) collectPrelimSecProj(r);
+  for (const r of allEnabledDynRules) collectPrelimSecProj(r);
   for (const r of availFreeShapeRules) collectPrelimSecProj(r);
+  for (const r of availImpliedType60Rules) collectPrelimSecProj(r);
 
   const ruleDirectlyRelevant = (r: GeneralGarrisonRule): boolean =>
     r.effects.some(
@@ -810,8 +843,8 @@ function computeGarrisonTechs(
   for (const id of eligibleIds) {
     const u = baseState.units[id];
     if (!u || !isAvailEligible(id)) continue;
-    if (u.firepower < 0) negFpCapableUnits.add(id);
-    if (u.total > 1) multiProjCandidates.add(id);
+    if (u.firepower < 0 || (initUnitField(id, 'firepower') ?? 0) < 0) negFpCapableUnits.add(id);
+    if (u.total > 1 || (initUnitField(id, 'total') ?? 0) > 1) multiProjCandidates.add(id);
   }
   const inspectRuleStats = (rule: GeneralGarrisonRule) => {
     for (const e of rule.effects) {
@@ -846,6 +879,7 @@ function computeGarrisonTechs(
   for (const r of activeDynRules) inspectRuleStats(r);
   for (const r of activeShadowedDynRules) inspectRuleStats(r);
   for (const r of availFreeShapeRules) inspectRuleStats(r);
+  for (const r of availImpliedType60Rules) inspectRuleStats(r);
   let shadowedBuildingFlip = false;
   for (const r of activeShadowedDynRules) {
     for (const e of r.effects) {
@@ -940,6 +974,7 @@ function computeGarrisonTechs(
   let hasDynamicSecProjOp = false;
   if (baseShooting || shootingCanFlip) {
     if (baseB.secondaryProjectile >= 0) relevantSecProjs.add(baseB.secondaryProjectile);
+    if (initBuildingSecProj >= 0) relevantSecProjs.add(initBuildingSecProj);
     for (const e of allBuildingEffects) {
       if (e.stat !== 'secondaryProjectile') continue;
       if (e.op === 'set' && e.value >= 0) relevantSecProjs.add(e.value);
@@ -948,18 +983,22 @@ function computeGarrisonTechs(
     for (const uid of multiProjCandidates) {
       const sec = baseState.units[uid]?.secondaryProjectile ?? -1;
       if (sec >= 0) relevantSecProjs.add(sec);
+      const initSec = initUnitField(uid, 'secondaryProjectile') ?? -1;
+      if (initSec >= 0) relevantSecProjs.add(initSec);
     }
-    const collectUnitSecProj = (rule: GeneralGarrisonRule) => {
+    const collectRelevantSecProj = (rule: GeneralGarrisonRule) => {
       for (const e of rule.effects) {
-        if (e.stat !== 'secondaryProjectile' || !multiProjCandidates.has(e.unit)) continue;
+        if (e.stat !== 'secondaryProjectile') continue;
+        if (e.unit !== b.id && !multiProjCandidates.has(e.unit)) continue;
         if (e.op === 'set' && e.value >= 0) relevantSecProjs.add(e.value);
         else if (e.op !== 'set') hasDynamicSecProjOp = true;
       }
     };
-    for (const t of pool) collectUnitSecProj(data.techs[t.id]!);
-    for (const r of activeDynRules) collectUnitSecProj(r);
-    for (const r of activeShadowedDynRules) collectUnitSecProj(r);
-    for (const r of availFreeShapeRules) collectUnitSecProj(r);
+    for (const r of activeAgeRules) collectRelevantSecProj(r);
+    for (const t of pool) collectRelevantSecProj(data.techs[t.id]!);
+    for (const r of allEnabledDynRules) collectRelevantSecProj(r);
+    for (const r of availFreeShapeRules) collectRelevantSecProj(r);
+    for (const r of availImpliedType60Rules) collectRelevantSecProj(r);
   }
   for (const tid of availShapeTechs) {
     if (baseImplicitShapes.has(tid)) continue;
@@ -1307,9 +1346,13 @@ function computeGarrisonTechs(
   for (const es of allReachableStates) {
     const secB = es.snapshot.building?.secondaryProjectile ?? -1;
     if (secB >= 0) relevantSecProjs.add(secB);
-    for (const uid of multiProjCandidates) {
-      const secU = es.snapshot.units[uid]?.secondaryProjectile ?? -1;
-      if (secU >= 0) relevantSecProjs.add(secU);
+    for (const uid of eligibleIds) {
+      const u = es.snapshot.units[uid];
+      if (!u || !isAvailEligible(uid)) continue;
+      if (u.total > 1) {
+        multiProjCandidates.add(uid);
+        if (u.secondaryProjectile >= 0) relevantSecProjs.add(u.secondaryProjectile);
+      }
     }
   }
 

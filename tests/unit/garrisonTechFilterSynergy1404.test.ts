@@ -446,4 +446,44 @@ describe('Issue 1404: R6 与 Devin Review 改序/形态预算/同伴协同/精�
     expect(mdBefore.garrisonPower).toBeCloseTo(2, 5);
     expect(mdAfter.garrisonPower).toBeCloseTo(4, 5);
   });
+
+  it('R9 回归：同 ID 抢占恢复初始副弹丸与隐式 type=60 形态开启多弹丸均保留有效攻击科技', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const tcForms = new Set([109, ...(GENERAL_GARRISON_DATA.buildings[109]?.eraForms ?? [])]);
+
+    // 1. R9 P1-1: 初始副弹丸 99090 被同 ID 默认规则 99091 覆写为 54，勾选 233 抢占恢复 99090，199 给 99090 加 4 攻 -> 保留 [199, 233]
+    const restoreProjData = cloneIsolated([199, 233]);
+    restoreProjData.units[99090] = { ...restoreProjData.units[54]!, id: 99090, type: 10, attack: 4 };
+    for (const form of tcForms) restoreProjData.units[form] = { ...restoreProjData.units[form]!, reload: 2, secondaryProjectile: 99090 };
+    restoreProjData.conditional.push(
+      rule(99091, [], [233], 1),
+      rule(99091, [ef(109, 'secondaryProjectile', 'set', 54)], [], 0),
+      rule(99092, [ef(99090, 'attack', 'add', 4)], [199], 1),
+    );
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), restoreProjData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const rpBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), restoreProjData);
+    const rpAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), restoreProjData);
+    expect(rpAfter.errors).toEqual([]);
+    expect(rpBefore.buildingPower).toBeCloseTo(2, 5);
+    expect(rpAfter.buildingPower).toBeCloseTo(4, 5);
+
+    // 2. R9 P1-2: 文明覆写 492.type=60，24 的隐式形态 47 将 492.total 设为 2 启用副弹丸 1930，233 给 1930 加 4 攻 -> 保留 233
+    const impMultiData = cloneIsolated([47, 233]);
+    impMultiData.unitUpgradeTechs = { 24: [47] };
+    impMultiData.civs.Britons!.baseOverrides = { ...impMultiData.civs.Britons!.baseOverrides, 492: { type: 60 } };
+    impMultiData.units[492] = { ...impMultiData.units[492]!, attack: 1, total: 1, reload: 2, firepower: 1, secondaryProjectile: 1930 };
+    impMultiData.units[1930] = { ...impMultiData.units[1930]!, attack: 5 };
+    for (const form of tcForms) impMultiData.units[form] = { ...impMultiData.units[form]!, secondaryProjectile: 0 };
+    impMultiData.techs[47] = rule(47, [ef(492, 'total', 'set', 2)]);
+    impMultiData.techs[233] = rule(233, [ef(1930, 'attack', 'add', 4)]);
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), impMultiData).map((t) => t.id)).toContain(233);
+    const imRows: GeneralGarrisonConfig['rows'] = [
+      { unitId: 24, count: '1', entry: 'enter' },
+      { unitId: 492, count: '1', entry: 'enter' },
+    ];
+    const imBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], imRows), impMultiData);
+    const imAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], imRows), impMultiData);
+    expect(imAfter.errors).toEqual([]);
+    expect(imAfter.garrisonPower! - imBefore.garrisonPower!).toBeCloseTo(1.6, 5);
+  });
 });
