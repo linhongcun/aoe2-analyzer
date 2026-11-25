@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 from dat_source import DAT, load
-from effects_build import CIV_DAT, MUL_IDENTITY_EPS
+from effects_build import CIV_DAT, is_identity_mul, r6
 from projectile_scope import guided_projectile_ids, split_projectile_units, transform_closure
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -48,8 +48,8 @@ def direct_combat_units(commands, units, combat_forms, dat_units, combat_attrs):
                 factor = float(c['D'])
             for f in hit_forms:
                 key = (f, attr, cls_key)
-                mul_acc[key] = mul_acc.get(key, 1.0) * factor
-        if matched or any(abs(prod - 1.0) >= MUL_IDENTITY_EPS for prod in mul_acc.values()):
+                mul_acc[key] = r6(mul_acc.get(key, 1.0) * r6(factor))
+        if matched or any(not is_identity_mul(prod) for prod in mul_acc.values()):
             out.add(uid)
     return out
 

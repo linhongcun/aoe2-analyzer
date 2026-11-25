@@ -2,6 +2,7 @@ import { civByEn } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
+import { DAT } from '../../../domain/datEffects';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
 import { unitRelicBonus } from '../../../domain/effects';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
@@ -120,6 +121,39 @@ export function filterExplicitTechsForAge(techs: SideSpec['techs'], techById: Re
     : techs;
 }
 
+function keepsProjectilePoisonForUnit(tech: Tech | undefined, unitId: number): boolean {
+  const poison = tech ? DAT.projectilePoison?.[tech.en] : undefined;
+  if (!poison || poison.units.includes(unitId)) return true;
+  return Boolean(DAT.techs[tech!.en]?.rules.some((r) => !r.b && r.t.includes(unitId)));
+}
+
+/** 裁剪仅通过投射物剧毒（如箭毒 1393）生效、但对目标单位不适用的显式科技 ID，避免残留到 URL、切回时恢复勾选或阻断升级对比。 */
+export function filterExplicitTechsForUnit(techs: SideSpec['techs'], techById: Record<number, Tech>, unitId: number): SideSpec['techs'] {
+  if (!Array.isArray(techs) || !techs.length) return techs;
+  const next = techs.filter((id) => keepsProjectilePoisonForUnit(techById[id], unitId));
+  return next.length === techs.length ? techs : next;
+}
+
+/** 切单位时剔除对新单位不适用的投射物剧毒显式科技 ID，其余显式科技与预设保持原样。 */
+export function switchSideUnit(techById: Record<number, Tech>, spec: SideSpec, nextUid: number): SideSpec {
+  return { ...spec, uid: nextUid, techs: filterExplicitTechsForUnit(spec.techs, techById, nextUid) };
+}
+
+/** 普通 PK 链接规范化：未知单位回退默认、空/未知文明回落首个可用文明，并剔除对当前单位不适用的投射物剧毒科技。 */
+export function canonicalizeDuelSide(
+  core: { unitById: Record<number, Unit>; techById: Record<number, Tech> } | null | undefined,
+  spec: SideSpec,
+  fallback: SideSpec,
+): SideSpec {
+  if (!core) return spec;
+  let next = !core.unitById[spec.uid] ? fallback : spec;
+  if (!civByEn(next.civ)) {
+    const u = core.unitById[next.uid]?.civs.length ? core.unitById[next.uid]! : core.unitById[fallback.uid];
+    if (u?.civs.length) next = { ...next, civ: u.civs[0]! };
+  }
+  return switchSideUnit(core.techById, next, next.uid);
+}
+
 /** 切文明时按目标文明实际解析出的时代裁剪显式科技，避免沿用旧文明被抬高后的 side.age 残留超时代科技。 */
 export function switchSideCiv(
   data: { byId: Record<number, Unit>; techById: Record<number, Tech>; trees: unknown },
@@ -149,8 +183,21 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   const ok = new Set(avail.map((x) => x.t.id));
   // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）。
   // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
+  const resolvedTechs =
+    Array.isArray(spec.techs) && spec.techs.length
+      ? (() => {
+          const next = spec.techs.filter((id) =>
+            keepsProjectilePoisonForUnit(
+              ctx.techs.find((t) => t.id === id),
+              u.id,
+            ),
+          );
+          return next.length === spec.techs.length ? spec.techs : next;
+        })()
+      : spec.techs;
+  const resolvedSpec = resolvedTechs === spec.techs ? spec : { ...spec, techs: resolvedTechs };
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
-  const sel = selectTrainingIds(spec.techs, avail, age, costs, civ, u.id);
+  const sel = selectTrainingIds(resolvedSpec.techs, avail, age, costs, civ, u.id);
   const relicBonus = unitRelicBonus(civ, u);
   const effectiveRelics = relicBonus ? Math.min(relicBonus.maxRelics, Math.max(0, Math.floor(Number.isFinite(relics) ? relics : 0))) : 0;
   const intrinsicIgnoreArmor = hasIgnoreArmor(u.combatAbility);
@@ -161,7 +208,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     civ,
     age,
     sel,
-    new Set(spec.team),
+    new Set(resolvedSpec.team),
     (step) => {
       if (intrinsicIgnoreArmor) return;
       const beforeOn = hasIgnoreArmor(step.before.ca);
@@ -177,7 +224,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   if (intrinsicIgnoreArmor || !hasIgnoreArmor(S.ca)) ignoreArmorTech = undefined;
   const training = quoteTraining(u, civ, age, sel, costs, ok, earlyAgeMarker);
   return {
-    spec,
+    spec: resolvedSpec,
     u,
     civ,
     age,

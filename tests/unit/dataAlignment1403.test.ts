@@ -18,9 +18,10 @@ import { applicableUnmodeledTechIds, collectDuelUnmodeled, detectUnitUnmodeled }
 import { unitRelatedTechs } from '../../src/domain/relatedTechs';
 import { presetUpTo, simTechs, simulate } from '../../src/domain/simulator';
 import { buildUnitCivRank } from '../../src/domain/unitCivRank';
+import { upgradePlan } from '../../src/domain/upgradeComparison';
 import { DuelUnmodeledNotes } from '../../src/features/duel/components/DuelUnmodeledNotes';
 import { prepareVgDisplay, VgNotes } from '../../src/features/duel/components/VgNotes';
-import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
+import { canonicalizeDuelSide, filterExplicitTechsForUnit, isUnavail, resolve, switchSideUnit } from '../../src/features/duel/logic/duelSide';
 import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 import { varangianPkNotes } from '../../src/features/duel/logic/varangianNotes';
 import { resolveUnitForm } from '../../src/features/units/unitFormDetail';
@@ -184,15 +185,43 @@ describe('Issue 1403 数据管线与未建模提示卡全站对齐', () => {
       ).toBe(true);
       expect(applicableUnmodeledTechIds(avail, uid, u.combatAbility ?? 0).has(1393), `uncheckable ${uid}`).toBe(false);
       expect(detectUnitUnmodeled({ unit: u, civ: 'Tupi', age: 4, selectedTechs: [curare] })).toEqual([]);
-      // 直达 #/duel?a=<uid>.Tupi.4.1393. 或从已选箭毒步弓切换：sel 自动剔除 1393
+      // 直达 #/duel?a=<uid>.Tupi.4.1393. 或从已选箭毒步弓切换：sel 与 spec.techs 均自动剔除 1393
       const costs = applicableTrainingTechs(ctx, u, 'Tupi', 4);
       expect(selectTrainingIds([1393], avail, 4, costs, 'Tupi', uid).has(1393)).toBe(false);
+      expect(filterExplicitTechsForUnit([47, 1393], techById, uid)).toEqual([47]);
       const resolved = resolve(ctx, byId, { uid, civ: 'Tupi', age: 4, ageSet: true, techs: [1393], team: [] }, uid);
       expect(isUnavail(resolved)).toBe(false);
       if (!isUnavail(resolved)) {
         expect(resolved.sel.has(1393)).toBe(false);
+        expect(resolved.spec.techs).toEqual([]);
       }
     }
+
+    // 2581（选 1393）→ 185 投石手 → 切回 2581：切换提交即移除 1393，不残留在链接、不复活且不阻断升级对比；直达比较链接仍严格拒收 1393
+    const archerWithCurare = { uid: 2581, civ: 'Tupi', age: 4, ageSet: true, techs: [1393] as number[], team: [] };
+    const rStart = resolve(ctx, byId, archerWithCurare, 2581);
+    expect(isUnavail(rStart)).toBe(false);
+    if (!isUnavail(rStart)) expect([...rStart.sel]).toEqual([1393]);
+    const slingerSpec = switchSideUnit(techById, archerWithCurare, 185);
+    expect(slingerSpec.techs).toEqual([]);
+    const rSlinger = resolve(ctx, byId, slingerSpec, 185);
+    expect(isUnavail(rSlinger)).toBe(false);
+    if (!isUnavail(rSlinger)) {
+      expect([...rSlinger.sel]).toEqual([]);
+      expect(rSlinger.spec.techs).toEqual([]);
+    }
+    expect(upgradePlan(ctx, byId, slingerSpec).ok).toBe(true);
+    expect(upgradePlan(ctx, byId, { ...slingerSpec, techs: [1393] }).ok).toBe(false);
+    const backToArcher = switchSideUnit(techById, slingerSpec, 2581);
+    expect(backToArcher.techs).toEqual([]);
+    const rBack = resolve(ctx, byId, backToArcher, 2581);
+    expect(isUnavail(rBack)).toBe(false);
+    if (!isUnavail(rBack)) expect([...rBack.sel]).toEqual([]);
+    // 普通 PK 链接规范化同步剔除反例单位上的 1393，保留受益单位上的 1393
+    expect(canonicalizeDuelSide(CORE, { uid: 6, civ: 'Tupi', age: 4, ageSet: true, techs: [1393], team: [] }, archerWithCurare).techs).toEqual([]);
+    expect(canonicalizeDuelSide(CORE, archerWithCurare, archerWithCurare).techs).toEqual([1393]);
+    // 不影响医疗部队（831）等非投射物剧毒科技的既有切单位行为
+    expect(switchSideUnit(techById, { uid: 1744, civ: 'Dravidians', age: 4, ageSet: true, techs: [831], team: [] }, 567).techs).toEqual([831]);
 
     // 混编模式：纯反例不可勾选且显式 1393 拦截；步弓+投石同队仅步弓行适用与出胶囊
     const mixPureNeg = resolveMixedSide(
@@ -284,6 +313,14 @@ describe('Issue 1403 数据管线与未建模提示卡全站对齐', () => {
     const auraUnits = CORE.units.filter((u) => u.deathHealAura === true).map((u) => u.id);
     expect(auraUnits).toEqual([2562, 2564]);
     expect(resolveUnitForm(CORE, 1980).rawTarget?.deathHealAura).toBeUndefined();
+    // 突变敏感校验：主形态 1962 人工注入 deathHealAura: true 时，副形态 1980 仍须显式清除而不透传
+    const syntheticOwner = { ...CORE.unitById[1962]!, deathHealAura: true };
+    const syntheticCore = {
+      ...CORE,
+      units: CORE.units.map((u) => (u.id === 1962 ? syntheticOwner : u)),
+      unitById: { ...CORE.unitById, 1962: syntheticOwner },
+    };
+    expect(resolveUnitForm(syntheticCore, 1980).rawTarget?.deathHealAura).toBeUndefined();
 
     for (const uid of [2562, 2564]) {
       const u = byId[uid]!;

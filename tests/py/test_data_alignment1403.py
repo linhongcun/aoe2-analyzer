@@ -1,4 +1,5 @@
 """Issue 1403：10 国被动链接与错链修复、草药学 1.0005 残差与 excluded、箭毒 projectilePoison、格查阵亡回血与 4 单位训练时间对齐单测。"""
+import hashlib
 import json
 import sys
 import unittest
@@ -93,7 +94,28 @@ class DataAlignment1403Tests(unittest.TestCase):
         self.assertIsNone(self.links['Muisca']['1363'])
         self.assertNotIn(1363, by_tech('Muisca'))
 
-        # Non-target civ auto tie-breaks remain intact (e.g., Japanese 341, Romans 889-891)
+        # All 46 non-target civs must remain byte-for-byte drift-free across all bonus links
+        target_civs = {
+            'Bulgarians',
+            'Burgundians',
+            'Byzantines',
+            'Dravidians',
+            'Italians',
+            'Mapuche',
+            'Poles',
+            'Spanish',
+            'Turks',
+            'Vietnamese',
+        }
+        self.assertEqual(len(civs), 56)
+        non_targets = sorted(c for c in civs if c not in target_civs)
+        self.assertEqual(len(non_targets), 46)
+        non_target_table = {c: [[e['tech'], e['idx'], e['linked']] for e in civs[c]['bonus']] for c in non_targets}
+        non_target_digest = hashlib.sha256(
+            json.dumps(non_target_table, sort_keys=True, separators=(',', ':')).encode('utf-8')
+        ).hexdigest()
+        self.assertEqual(non_target_digest, '20681f18e4e4b974466e6e4e18d0f1a1a0b8eafe6762382d220a302f12a07d86')
+        # Spot-check non-target auto tie-breaks (Japanese 341, Romans 889-891)
         self.assertEqual(by_tech('Japanese')[341]['idx'], 1)
         self.assertEqual(by_tech('Japanese')[341]['linked'], 'auto')
         for tid in (889, 890, 891):
@@ -101,15 +123,36 @@ class DataAlignment1403Tests(unittest.TestCase):
             self.assertEqual(by_tech('Romans')[tid]['linked'], 'auto')
 
     def test_identity_fx_threshold_and_herbalism_excluded(self):
-        # 1.0005 residual filtered, genuine multipliers preserved
+        # 1.0005 residual & values strictly within |r6(v) - 1| < 1e-3 filtered; exact 1e-3 boundary and Float32 1.001f preserved
         self.assertTrue(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.0005}))
         self.assertTrue(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 0.9995}))
+        self.assertTrue(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.000999}))
+        self.assertTrue(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 0.999001}))
         self.assertTrue(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.0}))
         self.assertTrue(effects_build.is_identity_fx({'s': 'atk', 'op': 'add', 'v': 0}))
         self.assertTrue(effects_build.is_identity_fx({'s': 'rof', 'v': 0.0}))
+        self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.001}))
+        self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 0.999}))
+        self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.0010000467300415}))
+        self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 0.9990000128746033}))
         self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.05}))
         self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 0.95}))
         self.assertFalse(effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': 1.15}))
+
+        # Both effects_build and army_research_build must agree at the 1e-3 / Float32 1.001f boundary
+        boundary_vals = [1.000999, 0.999001, 1.001, 0.999, 1.0010000467300415, 0.9990000128746033]
+        for val in boundary_vals:
+            fx_kept = not effects_build.is_identity_fx({'s': 'spd', 'op': 'mul', 'v': effects_build.r6(val)})
+            ar_kept = bool(
+                army_research_build.direct_combat_units(
+                    [{'Type': 5, 'A': 0, 'B': -1, 'C': 5, 'D': val}],
+                    [{'id': 0}],
+                    {0: {0}},
+                    [{'Class': 0}],
+                    {5},
+                )
+            )
+            self.assertEqual(fx_kept, ar_kept, f'boundary divergence at {val}')
 
         # Only Herbalism emits excluded across all catalog techs; Thumb Ring keeps acc=100 so never excluded
         excluded_techs = {en: t['excluded'] for en, t in self.effects['techs'].items() if 'excluded' in t}

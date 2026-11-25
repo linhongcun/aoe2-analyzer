@@ -40,7 +40,7 @@ import { UpgradeComparison } from './UpgradeComparison';
 import { Side } from './DuelSelection';
 import { CONTACT_BOUNDARY } from './ContactSummary';
 import { KiteContactBoundary } from './KiteSummaryCard';
-import { resolve, isUnavail, type SideState } from '../logic/duelSide';
+import { canonicalizeDuelSide, resolve, isUnavail, type SideState } from '../logic/duelSide';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -131,18 +131,10 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const relicBonusA = A && !isUnavail(A) ? unitRelicBonus(A.civ, A.u) : null;
   const relicBonusB = B && !isUnavail(B) ? unitRelicBonus(B.civ, B.u) : null;
   const canonRelicMax = !A || !B || hasUpgrade ? undefined : { a: relicBonusA?.maxRelics ?? 0, b: relicBonusB?.maxRelics ?? 0 };
-  // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
-  const civFix = (s: SideSpec, fallback: number): SideSpec => {
-    if (!core || civByEn(s.civ)) return s;
-    const u = core.unitById[s.uid]?.civs.length ? core.unitById[s.uid]! : core.unitById[fallback];
-    return u?.civs.length ? { ...s, civ: u.civs[0]! } : s;
-  };
-  // issue 772：未知单位 id 回退到默认一侧，避免坏链接永远留在地址栏。
-  const fixSide = (spec: SideSpec, fallback: SideSpec) => (core && !core.unitById[spec.uid] ? fallback : civFix(spec, fallback.uid));
-  // 比较链接的错误参数须保留并明确失效，不能经旧 PK 容错回退后变成有效比较。
+  // issue 141 / 772 / 1403：普通 PK 链接规范化（比较链接的错误参数须保留并明确失效，不经容错回退）。
   if (!hasUpgrade) {
-    canon.set('a', fmtSide(fixSide(parseDuelSpec(aParam, DEF_A, false), DEF_A)));
-    canon.set('b', fmtSide(fixSide(parseDuelSpec(bParam, DEF_B, false), DEF_B)));
+    canon.set('a', fmtSide(canonicalizeDuelSide(core, parseDuelSpec(aParam, DEF_A, false), DEF_A)));
+    canon.set('b', fmtSide(canonicalizeDuelSide(core, parseDuelSpec(bParam, DEF_B, false), DEF_B)));
     canon.set('m', mode);
   }
   const incoming = sp.toString();

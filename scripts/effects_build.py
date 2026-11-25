@@ -58,14 +58,25 @@ RELIC_RESOURCE_ID = 7
 MUL_IDENTITY_EPS = 1e-3
 
 
+def r6(x):
+    """规范到 6 位小数（接近整数时取 int），供 effects 与 army_research 双管线共用。"""
+    x = float(x)
+    return int(x) if abs(x - round(x)) < 1e-9 else round(x, 6)
+
+
+def is_identity_mul(v):
+    """按 6 位小数规范后的偏差判定乘法恒等残差：|round(v, 6) - 1| < 1e-3（避免 1.001 - 1 浮点减法误判）。"""
+    return round(abs(r6(v) - 1.0), 6) < MUL_IDENTITY_EPS
+
+
 def is_identity_fx(f):
-    """判断单条合并后效果是否为零增益/恒等残差（add/rof 0，或 |mul - 1| < 1e-3）。"""
+    """判断单条合并后效果是否为零增益/恒等残差（add/rof 0，或 |round(mul, 6) - 1| < 1e-3）。"""
     op = f.get('op', 'add')
     v = f['v']
     if op == 'add':
         return v == 0
     if op == 'mul':
-        return abs(v - 1) < MUL_IDENTITY_EPS
+        return is_identity_mul(v)
     return False
 
 
@@ -490,10 +501,6 @@ def main():
                 out.append((i, {'s': s, 'op': op, 'v': r6(d)}))
         return out, None
 
-    def r6(x):
-        x = float(x)
-        return int(x) if abs(x - round(x)) < 1e-9 else round(x, 6)
-
     def tech_name(i):
         if i in tech_by_id: return tech_by_id[i]['en']
         return AT[i]['Name'] if 0 <= i < len(AT) else str(i)
@@ -536,7 +543,7 @@ def main():
                 elif g['op'] == 'mul': g['v'] = r6(g['v'] * f['v'])
                 else: g['v'] = f['v']
             dropped_mul = any(
-                k[1] == 'mul' and mul_counts[k] >= 2 and abs(f['v'] - 1) < MUL_IDENTITY_EPS
+                k[1] == 'mul' and mul_counts[k] >= 2 and is_identity_mul(f['v'])
                 for k, f in m.items()
             )
             fx = [f for f in m.values() if not is_identity_fx(f)]
