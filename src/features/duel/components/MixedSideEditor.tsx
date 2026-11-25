@@ -379,13 +379,14 @@ export function MixedSideEditor({
               </div>
               {u && unitTrainCount(u) > 1 && (
                 <PairHintLine dataT={`${prefix}-pair-hint-${i}`}>
-                  数量每次 <span className="num nw">± {unitTrainCount(u)} 只</span>；
+                  每次训练 <span className="num nw">{unitTrainCount(u)} 只</span>；
                   {/^[1-9]\d*$/.test(row.qty) && Number(row.qty) <= 200 ? (
                     <>
-                      按 <span className="num nw">{batchesForQty(Number(row.qty), unitTrainCount(u))} 对</span>带入训练费用。
+                      计算训练费用时 <span className="num nw">{Number(row.qty)} 只</span>按{' '}
+                      <span className="num nw">{batchesForQty(Number(row.qty), unitTrainCount(u))} 对</span>计费。
                     </>
                   ) : (
-                    '带入训练费用时按整对计费。'
+                    '计算训练费用时按整对向上计费。'
                   )}
                 </PairHintLine>
               )}

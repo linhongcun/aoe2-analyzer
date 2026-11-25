@@ -2,11 +2,12 @@ import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { armySupplyResearch, projectArmySupply, type ArmySupplyRow, type ArmySupplySettings } from '../../domain/armySupply';
-import { BUILDING_LIMIT, calculateProduction, type ProductionContext } from '../../domain/production';
+import { BUILDING_LIMIT, calculateProduction, type ProductionContext, type ProductionLine } from '../../domain/production';
 import { AGE_ZH } from '../../domain/ratings';
 import { PRODUCTION_MODE_LABELS } from '../../domain/productionMode';
 import { UnitIcon } from '../../shared/ui/art';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { PairHintLine } from '../../shared/ui/PairTrainingHint';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
@@ -120,7 +121,7 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
               row={row}
               index={index}
               update={(patch) => editRow(index, patch)}
-              perMinute={complete ? result.lines[index]?.perMinute : undefined}
+              line={complete ? result.lines[index] : undefined}
             />
           ))}
         </section>
@@ -288,13 +289,13 @@ function SupplyRow({
   row,
   index,
   update,
-  perMinute,
+  line,
 }: {
   context: ProductionContext;
   row: SupplyProjection['rows'][number];
   index: number;
   update: (patch: Partial<ArmySupplyRow>) => void;
-  perMinute?: number;
+  line?: ProductionLine;
 }) {
   const { original, setup, unit, buildings, issue, availableBuilding, validCount } = row;
   const label = `第 ${index + 1} 行`;
@@ -373,13 +374,20 @@ function SupplyRow({
       ) : (
         <p className="note">本行生产条件已确认。</p>
       )}
-      {perMinute !== undefined && (
-        <p>
-          产量{' '}
-          <strong className="num nw" data-testid="army-supply-rate">
-            {num(perMinute)} 名 / 分钟
-          </strong>
-        </p>
+      {line && (
+        <>
+          <p>
+            产量{' '}
+            <strong className="num nw" data-testid="army-supply-rate">
+              {num(line.perMinute)} 名 / 分钟
+            </strong>
+          </p>
+          {line.trainCount > 1 && (
+            <PairHintLine dataT="army-supply-pair-hint">
+              每次训练 <span className="num nw">{line.trainCount} 只</span>，合 <span className="num nw">{num(line.batchesPerMinute)} 对 / 分钟</span>。
+            </PairHintLine>
+          )}
+        </>
       )}
     </article>
   );

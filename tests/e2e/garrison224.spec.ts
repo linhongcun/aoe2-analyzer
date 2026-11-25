@@ -410,8 +410,8 @@ test('#1262 女真科技快捷全选、前置联动与分享还原', async ({ pa
   await selectAllTechs(page).focus();
   await page.keyboard.press('Enter');
   await expect(selectAllTechs(page)).toBeDisabled();
-  await expect(panel(page)).toContainText('已自选 7 / 7 项');
-  expect(selectedTechIds(page)?.sort()).toEqual(['199', '200', '201', '233', '47', '608', '997']);
+  await expect(panel(page)).toContainText('已自选 5 / 5 项');
+  expect(selectedTechIds(page)?.sort()).toEqual(['199', '200', '201', '47', '608']);
   await expect(total(page)).toHaveText('4');
   await expect(firepower(page)).toContainText('副弹丸攻击 15 ÷ 攻击间隔 2 秒 = 7.5');
   await expect(firepower(page)).toContainText('基础 1 + 驻军 3 = 4 箭');
@@ -444,7 +444,7 @@ test('#1262 中国单兵阈值与混编合计在窄屏保留计算与读数', as
 
   await page.setViewportSize({ width: 360, height: 900 });
   await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
-  await page.goto(url(235, 'Chinese', 4, '559:2:e,492:2:e,567:1:e', '52,437,199,200,201,233,47,608'));
+  await page.goto(url(235, 'Chinese', 4, '559:2:e,492:2:e,567:1:e', '437,199,200,201,47,608'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   const card = firepower(page);

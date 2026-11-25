@@ -7,7 +7,7 @@
  *
  * 两套模型的免费科技来源不同：建筑页读 `garrison.json` 的 `civs[civ].free`，
  * 通用预览读 `garrison_techs.json` 的 `civs[civ].free`；多个文明的集合并不相同。
- * 通用模型还会列出建筑页不提供的科技（例如 Britons 的启发 233）。这些是有意
+ * 通用模型还会列出建筑页村民模型不提供的可驻兵种火力科技（例如扳指 437 或炮塔 64）。这些是有意
  * 保留的数据边界，测试只声明“允许不同”，不强行合并，也不把某个文明当成全部。
  */
 import { GARRISON_BUILDINGS } from './garrison';
