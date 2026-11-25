@@ -20,15 +20,23 @@ async function assertNoOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 
-async function assertAllNwSingleLine(container: Locator) {
+async function assertAllNwSingleLine(container: Locator, expectedCount: number) {
   const nw = container.locator('.nw');
-  const count = await nw.count();
-  expect(count).toBeGreaterThan(0);
-  for (let i = 0; i < count; i++) {
+  await expect(nw).toHaveCount(expectedCount);
+  for (let i = 0; i < expectedCount; i++) {
     const tops = await nw.nth(i).evaluate((el) => [...el.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top)));
     expect(tops.length).toBeGreaterThan(0);
     expect(new Set(tops).size).toBe(1);
   }
+}
+
+async function setTheme(page: Page, theme: 'light' | 'dark') {
+  await page.evaluate((value) => {
+    localStorage.setItem('aoe2-theme', value);
+    document.documentElement.dataset.theme = value;
+    document.documentElement.dataset.themePreference = value;
+  }, theme);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
 }
 
 test('Issue 1404 驻军科技列表过滤、正例保留与旧链接移除恢复', async ({ page }) => {
@@ -83,20 +91,22 @@ test('Issue 1404 混编编辑器成对提示（偶数/奇数/空/普通单位，
   await expect(page.locator('[data-t="mix-a-pair-hint-1"]')).toHaveCount(0);
   await assertNoOverflow(page);
 
-  // 360px 浅色：奇数 21 -> 11 对，所有 .nw 单行不折行
+  // 360px 浅色：奇数 21 -> 11 对，徽章 + 正文 3 处 .num.nw 均单行不折行
+  await setTheme(page, 'light');
   await page.setViewportSize({ width: 360, height: 800 });
   await page.locator('#mix-a-qty-0').fill('21');
   await expect(hint0).toHaveText('成对训练每次训练 2 只；计算训练费用时 21 只按 11 对计费。');
-  await assertAllNwSingleLine(hint0);
+  await assertAllNwSingleLine(hint0, 4);
   await assertNoOverflow(page);
 
-  // 360px 深色：空数量与超上限回退文案
-  await page.emulateMedia({ colorScheme: 'dark' });
+  // 360px 深色：空数量与超上限回退文案（徽章 + 1 处 .num.nw）
+  await setTheme(page, 'dark');
   await page.locator('#mix-a-qty-0').fill('');
   await expect(hint0).toHaveText('成对训练每次训练 2 只；计算训练费用时按整对向上计费。');
-  await assertAllNwSingleLine(hint0);
+  await assertAllNwSingleLine(hint0, 2);
   await page.locator('#mix-a-qty-0').fill('201');
   await expect(hint0).toHaveText('成对训练每次训练 2 只；计算训练费用时按整对向上计费。');
+  await assertAllNwSingleLine(hint0, 2);
   await assertNoOverflow(page);
 });
 
@@ -143,12 +153,13 @@ test('Issue 1404 军队补给页成对产出说明（未确认/正常/暂停 0 �
   await expect(rows.nth(0).getByTestId('army-supply-rate')).toHaveText('0 名 / 分钟');
   await expect(pairHint).toHaveText('成对训练每次训练 2 只，合 0 对 / 分钟。');
 
-  // 360px 浅色与深色：单行不折行且零横向溢出
+  // 360px 浅色与深色：徽章 + 正文 2 处 .num.nw 均单行不折行且零横向溢出
   await page.getByRole('textbox', { name: '第 1 行 建筑座数' }).fill('2');
   await page.setViewportSize({ width: 360, height: 800 });
-  await assertAllNwSingleLine(pairHint);
+  await setTheme(page, 'light');
+  await assertAllNwSingleLine(pairHint, 3);
   await assertNoOverflow(page);
-  await page.emulateMedia({ colorScheme: 'dark' });
-  await assertAllNwSingleLine(pairHint);
+  await setTheme(page, 'dark');
+  await assertAllNwSingleLine(pairHint, 3);
   await assertNoOverflow(page);
 });
