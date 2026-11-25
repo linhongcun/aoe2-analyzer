@@ -59,19 +59,24 @@ export function freeGarrisonTechs(
   status: Record<string, number> = civStatus(ctx.trees, config.civ),
   shapeUpgrades: ReadonlySet<number> = shapeUpgradeSet(data),
 ): number[] {
+  const freeList = data.civs[config.civ]?.free ?? [];
+  if (!freeList.length) return [];
   const disabled = new Set(data.civs[config.civ]?.disabled ?? []);
-  const available = new Set(
-    ctx.core.techs
-      .filter(
-        (t) =>
-          t.civs.includes(config.civ) &&
-          status['t' + t.id] === 1 &&
-          !disabled.has(t.id) &&
-          productionTechAge(t, config.civ) <= config.age &&
-          !!data.techs[t.id],
-      )
-      .map((t) => t.id),
-  );
+  const availCache = new Map<number, boolean>();
+  const isAvailable = (tid: number): boolean => {
+    const cached = availCache.get(tid);
+    if (cached !== undefined) return cached;
+    const t = ctx.core.techById[tid];
+    const ok =
+      !!t &&
+      t.civs.includes(config.civ) &&
+      status['t' + t.id] === 1 &&
+      !disabled.has(t.id) &&
+      productionTechAge(t, config.civ) <= config.age &&
+      !!data.techs[t.id];
+    availCache.set(tid, ok);
+    return ok;
+  };
   const known = new Set(config.techs);
   for (const tid of implicitShapeTechs(ctx, b, config, data, shapeUpgrades)) known.add(tid);
   for (const tid of [...known]) {
@@ -85,9 +90,9 @@ export function freeGarrisonTechs(
   let changed = true;
   while (changed) {
     changed = false;
-    for (const id of data.civs[config.civ]?.free ?? []) {
+    for (const id of freeList) {
       const pre = ctx.core.techById[id]?.pre;
-      if (accepted.includes(id) || !available.has(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && available.has(pre) && !known.has(pre))) continue;
+      if (accepted.includes(id) || !isAvailable(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && isAvailable(pre) && !known.has(pre))) continue;
       accepted.push(id);
       known.add(id);
       changed = true;

@@ -293,4 +293,125 @@ describe('Issue 1404: getGarrisonTechs 自定义数据与精确状态边界回�
     expect(Object.isFrozen(GENERAL_GARRISON_DATA.rosterIds)).toBe(true);
     expect(Object.isFrozen(GARRISON_TECH_DATA)).toBe(true);
   });
+
+  it('R5 边界回归：大 ID 前置、必触发规则改序、迁出生产槽互斥、超限溢出与副弹丸/覆写/免费纯数值/负乘数弹丸', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const tcImpForm = GENERAL_GARRISON_DATA.buildings[109]!.eraForms[3]!;
+
+    // 16. R5 P1-1: 前置科技 ID 大于后继（233.pre = 608）时按拓扑序枚举，[608, 233] 增容 15->17 均保留
+    const revPreCore = structuredClone(ctx.core);
+    revPreCore.techById[233] = { ...revPreCore.techById[233]!, pre: 608 };
+    const revPreIdx = revPreCore.techs.findIndex((t) => t.id === 233);
+    revPreCore.techs[revPreIdx] = revPreCore.techById[233]!;
+    const revPreCtx: GeneralGarrisonContext = { core: revPreCore, trees: ctx.trees };
+    const revPreTc = revPreCore.buildingById[109]!;
+    const revPreData = cloneCustomData();
+    revPreData.techs[608] = { id: 608, requires: [], count: 0, effects: [] };
+    revPreData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] };
+    const revPreIds = getGarrisonTechs(revPreCtx, revPreTc, cfg('Britons', 4), revPreData).map((t) => t.id);
+    expect(revPreIds).toEqual(expect.arrayContaining([608, 233]));
+    const revPreRes = calculateGeneralGarrison(revPreCtx, revPreTc, cfg('Britons', 4, [608, 233]), revPreData);
+    expect(revPreRes.errors).toEqual([]);
+    expect(revPreRes.capacity).toBe(17);
+
+    // 17. R5 P1-2: 必触发规则因 233 提前到第一轮而与后续覆写换序（无 233 民兵可进，有 233 民兵不可进）-> 保留 233
+    const reorderData = cloneCustomData();
+    reorderData.units[74] = { ...reorderData.units[74]!, sizeClass: 3 };
+    reorderData.techs[233] = { id: 233, requires: [], count: 0, effects: [] };
+    reorderData.conditional.push(
+      { id: 99301, requires: [99303, 233], count: 1, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 2 }] },
+      { id: 99302, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 3 }] },
+      { id: 99303, requires: [], count: 0, effects: [] },
+    );
+    expect(techIds(109, 'Britons', 4, reorderData)).toContain(233);
+    expect(getGarrisonCandidates(ctx, tc, cfg('Britons', 4, []), reorderData).find((c) => c.id === 74)?.canEnter).toBe(true);
+    expect(getGarrisonCandidates(ctx, tc, cfg('Britons', 4, [233]), reorderData).find((c) => c.id === 74)).toBeUndefined();
+
+    // 18. R5 P1-3: 迁出生产槽造成的形态互斥保留单行触发科技 233，且单独迁出村民生产槽也保留对应科技
+    const evictMutexData = cloneCustomData();
+    evictMutexData.units[tcImpForm] = { ...evictMutexData.units[tcImpForm]!, garrisonType: 1 };
+    evictMutexData.units[492] = { ...evictMutexData.units[492]!, garrisonTasks: [], trainLocations: [{ unitId: 109, time: 20 }] };
+    evictMutexData.units[6] = { ...evictMutexData.units[6]!, garrisonTasks: [], trainLocations: [{ unitId: 109, time: 20 }] };
+    evictMutexData.buildings[109]!.produces.push(492, 6);
+    evictMutexData.conditional.push(
+      {
+        id: 99304,
+        requires: [237, 98],
+        count: 2,
+        effects: [],
+        trainingLocations: [
+          { unit: 492, slot: 0, location: 87 },
+          { unit: 6, slot: 0, location: 87 },
+        ],
+      },
+      { id: 99305, requires: [237, 233], count: 2, effects: [{ unit: 109, stat: 'total', op: 'add', value: 2 }] },
+    );
+    expect(techIds(109, 'Britons', 4, evictMutexData)).toContain(233);
+    const evictRes = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'created' }]), evictMutexData);
+    expect(evictRes.errors).toEqual([]);
+
+    const evictVilData = cloneCustomData();
+    evictVilData.techs[233] = { id: 233, requires: [], count: 0, effects: [], trainingLocations: [{ unit: 83, slot: 0, location: 87 }] };
+    expect(techIds(109, 'Britons', 4, evictVilData)).toContain(233);
+    expect(getGarrisonCandidates(ctx, tc, cfg('Britons', 4, [233]), evictVilData).find((c) => c.id === 83)?.canCreate).toBe(false);
+
+    // 19. R5 P1-4: 11 项独立控制科技超上限（2048 > 1024）时，不依赖截断状态误删依赖低 ID 控制项解锁的纯数值科技 233
+    const overflowData = cloneCustomData();
+    const elevenIds = ctx.core.techs
+      .filter((t) => t.civs.includes('Britons') && !t.pre && t.id !== 233 && !overflowData.civs.Britons!.disabled.includes(t.id))
+      .map((t) => t.id)
+      .sort((a, z) => a - z)
+      .slice(0, 11);
+    expect(elevenIds).toHaveLength(11);
+    overflowData.units[tcImpForm] = { ...overflowData.units[tcImpForm]!, garrisonType: 1 };
+    overflowData.techs[elevenIds[0]!] = { id: elevenIds[0]!, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'set', value: 11 }] };
+    for (const id of elevenIds.slice(1)) {
+      overflowData.techs[id] = { id, requires: [], count: 0, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 1 }] };
+    }
+    overflowData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 3 }] };
+    expect(techIds(109, 'Britons', 4, overflowData)).toContain(233);
+    const ovBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [elevenIds[0]!], [{ unitId: 492, count: '1', entry: 'enter' }]), overflowData);
+    const ovAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [elevenIds[0]!, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), overflowData);
+    expect(ovAfter.errors).toEqual([]);
+    expect(ovAfter.rows[0]!.powerEach!).toBeGreaterThan(ovBefore.rows[0]!.powerEach!);
+
+    // 20. R5 P1-5: 副弹丸攻击科技 199 建立火力后解锁攻击间隔科技 233（1.6 -> 2.0）
+    const secReloadData = cloneCustomData();
+    secReloadData.civs.Britons!.disabled.push(200, 201);
+    secReloadData.units[492] = { ...secReloadData.units[492]!, attack: 0, total: 2, secondaryProjectile: 54, firepower: 1, reload: 2 };
+    secReloadData.units[54] = { ...secReloadData.units[54]!, attack: 0 };
+    secReloadData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 54, stat: 'attack', op: 'add', value: 4 }] };
+    secReloadData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'reload', op: 'mul', value: 0.8 }] };
+    expect(techIds(109, 'Britons', 4, secReloadData)).toEqual(expect.arrayContaining([199, 233]));
+    const srBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199], [{ unitId: 492, count: '1', entry: 'enter' }]), secReloadData);
+    const srAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), secReloadData);
+    expect(srAfter.errors).toEqual([]);
+    expect(srBefore.rows[0]!.powerEach).toBeCloseTo(1.6, 5);
+    expect(srAfter.rows[0]!.powerEach).toBeCloseTo(2.0, 5);
+
+    // 21. R5 P2-1/P2-2/P2-3: 末尾覆写纯数值不误留、免费纯数值不丢失、弹丸负乘数翻转为庇护后依赖科技排除
+    const tailOverrideData = cloneCustomData();
+    tailOverrideData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 3 }] };
+    tailOverrideData.conditional.push({ id: 99306, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'set', value: 7 }] });
+    expect(techIds(109, 'Britons', 4, tailOverrideData)).not.toContain(233);
+
+    const freePureData = cloneCustomData();
+    freePureData.civs.Britons!.free.push(233);
+    freePureData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'set', value: 12 }] };
+    expect(techIds(109, 'Britons', 4, freePureData)).toContain(233);
+
+    const negMulCore = structuredClone(ctx.core);
+    negMulCore.techById[608] = { ...negMulCore.techById[608]!, pre: 233 };
+    const negMulIdx = negMulCore.techs.findIndex((t) => t.id === 608);
+    negMulCore.techs[negMulIdx] = negMulCore.techById[608]!;
+    const negMulCtx: GeneralGarrisonContext = { core: negMulCore, trees: ctx.trees };
+    const negMulTc = negMulCore.buildingById[109]!;
+    const negMulData = cloneCustomData();
+    negMulData.units[tcImpForm] = { ...negMulData.units[tcImpForm]!, projectile: 54, secondaryProjectile: -1 };
+    negMulData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 109, stat: 'projectile', op: 'mul', value: -1 }] };
+    negMulData.techs[608] = { id: 608, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 3 }] };
+    const negMulIds = getGarrisonTechs(negMulCtx, negMulTc, cfg('Britons', 4), negMulData).map((t) => t.id);
+    expect(negMulIds).toContain(233);
+    expect(negMulIds).not.toContain(608);
+  });
 });

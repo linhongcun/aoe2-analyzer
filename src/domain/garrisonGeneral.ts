@@ -231,9 +231,12 @@ interface Snapshot {
   units: Record<string, GeneralGarrisonUnit>;
   building: GeneralGarrisonUnit | undefined;
   known: Set<number>;
+  knownBeforeStage0: Set<number>;
+  knownBeforeStage2: Set<number>;
   selected: number[];
   productionLocations: Record<number, number[]>;
   appliedRules: GeneralGarrisonRule[];
+  stage2AppliedRules: GeneralGarrisonRule[];
 }
 
 function snapshot(
@@ -334,7 +337,9 @@ function snapshot(
         }
     }
   };
+  const knownBeforeStage0 = new Set(known);
   advance();
+  const stage0Count = appliedRules.length;
   for (const id of implied)
     if (!selected.includes(id) && data.techs[id]) {
       const rule = data.techs[id]!;
@@ -344,9 +349,21 @@ function snapshot(
     known.add(id);
     if (data.techs[id]) apply(data.techs[id]!);
   }
+  const knownBeforeStage2 = new Set(known);
   automatic.push(...data.conditional);
   advance();
-  return { units, building: units[b.id], known, selected, productionLocations, appliedRules };
+  const stage2AppliedRules = appliedRules.slice(stage0Count);
+  return {
+    units,
+    building: units[b.id],
+    known,
+    knownBeforeStage0,
+    knownBeforeStage2,
+    selected,
+    productionLocations,
+    appliedRules,
+    stage2AppliedRules,
+  };
 }
 
 export function getGarrisonBuildings(ctx: GeneralGarrisonContext): Building[] {
@@ -389,7 +406,7 @@ function buildStaticIndex(data: GeneralGarrisonData): StaticGarrisonIndex {
   const queue: number[] = [];
   const byId = new Map<number, GeneralGarrisonRule[]>();
   for (const r of allRules) {
-    if (r.effects.length > 0 || (r.trainingLocations?.length ?? 0) > 0) {
+    if (r.effects.length > 0 || (r.trainingLocations?.length ?? 0) > 0 || EXPLICIT_CREATE_UNLOCK_IDS.has(r.id)) {
       if (!usefulIds.has(r.id)) {
         usefulIds.add(r.id);
         queue.push(r.id);
@@ -537,8 +554,10 @@ const EXPLICIT_CREATE_UNLOCKS: readonly { techId: number; unitIds: readonly numb
   { techId: 483, unitIds: [886, 887], buildingId: 101 },
   { techId: 755, unitIds: [1699] },
 ];
+const EXPLICIT_CREATE_UNLOCK_IDS = new Set<number>(EXPLICIT_CREATE_UNLOCKS.map((g) => g.techId));
 const MAX_EXACT_CONTROL_SUBSETS = 1024;
 const MAX_SHAPE_GROUPS_EXACT = 6;
+const MAX_EXACT_PEER_SUBSETS = 4;
 
 const applyEffectOp = (cur: number, op: GeneralGarrisonEffect['op'], val: number): number => (op === 'set' ? val : op === 'mul' ? cur * val : cur + val);
 
@@ -551,7 +570,8 @@ const buildingShootingSignature = (B: GeneralGarrisonUnit, units: Record<string,
   const secAtk = hasSecondary ? units[B.secondaryProjectile]?.attack : undefined;
   const atk = secAtk ?? B.attack;
   const bPower = atk / B.reload;
-  return `${hasPrimary ? 1 : 0}:${hasSecondary ? 1 : 0}:${B.total}:${B.max}:${Number.isFinite(bPower) ? bPower.toFixed(12) : 'nan'}`;
+  const secMismatch = hasSecondary && secAtk !== B.attack ? 1 : 0;
+  return `${hasPrimary ? 1 : 0}:${hasSecondary ? 1 : 0}:${B.total}:${B.max}:${secMismatch}:${Number.isFinite(bPower) ? bPower.toFixed(12) : 'nan'}`;
 };
 
 /** Covers the whole eligible roster so removing a row never invalidates its selected technologies. */
@@ -598,7 +618,8 @@ function computeGarrisonTechs(
     return ok;
   };
 
-  // Forward-reachable dynamic rules (not yet satisfied in baseState.known, and satisfiable under baseState.known ∪ pool ∪ available shapes).
+  // Forward-reachable dynamic rules whose readiness can change (never satisfied before their stage ran in baseState,
+  // including rules that fired on Pass >= 2 in baseState and may reorder onto an earlier pass when extra techs/shapes are known).
   const availShapeTechs = new Set<number>();
   if (upgradeData.unitUpgradeTechs) {
     for (const [key, seeds] of Object.entries(upgradeData.unitUpgradeTechs)) {
@@ -612,12 +633,15 @@ function computeGarrisonTechs(
       }
     }
   }
-  const candidateDynRules = [...civData.automatic, ...staticIndex.usefulConditional].filter((r) => {
-    if (disabled.has(r.id) || r.count <= 0) return false;
-    let baseHits = 0;
-    for (const req of r.requires) if (baseState.known.has(req)) baseHits++;
-    return baseHits < r.count;
-  });
+  const hasMinHits = (requires: number[], count: number, set: Set<number>): boolean => {
+    let hits = 0;
+    for (const req of requires) if (set.has(req) && ++hits >= count) return true;
+    return false;
+  };
+  const candidateDynRules: GeneralGarrisonRule[] = [
+    ...civData.automatic.filter((r) => !disabled.has(r.id) && r.count > 0 && !hasMinHits(r.requires, r.count, baseState.knownBeforeStage0)),
+    ...staticIndex.usefulConditional.filter((r) => !disabled.has(r.id) && r.count > 0 && !hasMinHits(r.requires, r.count, baseState.knownBeforeStage2)),
+  ];
   const knownUpper = new Set<number>([...baseState.known, ...poolIds, ...availShapeTechs]);
   const reachableDynRules: GeneralGarrisonRule[] = [];
   {
@@ -627,9 +651,7 @@ function computeGarrisonTechs(
       changed = false;
       for (const r of candidateDynRules) {
         if (fired.has(r.id)) continue;
-        let hits = 0;
-        for (const req of r.requires) if (knownUpper.has(req) && ++hits >= r.count) break;
-        if (hits >= r.count) {
+        if (hasMinHits(r.requires, r.count, knownUpper)) {
           fired.add(r.id);
           knownUpper.add(r.id);
           reachableDynRules.push(r);
@@ -638,9 +660,42 @@ function computeGarrisonTechs(
       }
     }
   }
+
+  const everRelocatedIntoB = new Set<number>();
+  const collectRelocInto = (rule: GeneralGarrisonRule) => {
+    for (const loc of rule.trainingLocations ?? []) {
+      if (trainSources.includes(loc.location)) everRelocatedIntoB.add(loc.unit);
+    }
+  };
+  for (const t of pool) collectRelocInto(data.techs[t.id]!);
+  for (const r of reachableDynRules) collectRelocInto(r);
+
+  const canBuildingProduceUnit = (uid: number): boolean => {
+    if (!isAvailEligible(uid) || relicIds.includes(uid) || unitAge(ctx, uid, config.civ, data) > config.age) return false;
+    const prodId = uid === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : uid;
+    if (everRelocatedIntoB.has(prodId) || baseState.productionLocations[prodId]?.some((loc) => trainSources.includes(loc))) return true;
+    const catalogProduction = catalogSources.some((sourceId) => data.buildings[sourceId]?.produces.includes(prodId));
+    return catalogProduction && !!baseState.units[prodId]?.trainLocations.some((t) => trainSources.includes(t.unitId));
+  };
+
+  // Both relocations INTO b and evictions OUT OF b can change canCreate.
+  const relocTouchesBuilding = (loc: { unit: number; slot: number; location: number }): boolean => {
+    const unitOk =
+      (isAvailEligible(loc.unit) && !relicIds.includes(loc.unit) && unitAge(ctx, loc.unit, config.civ, data) <= config.age) ||
+      (loc.unit === VILLAGER_UNIT_ID && isAvailEligible(FEMALE_VILLAGER_ID));
+    if (!unitOk) return false;
+    if (trainSources.includes(loc.location)) return true;
+    if (everRelocatedIntoB.has(loc.unit)) return true;
+    if (baseState.productionLocations[loc.unit]?.some((l) => trainSources.includes(l))) return true;
+    return !!baseState.units[loc.unit]?.trainLocations.some((t) => trainSources.includes(t.unitId));
+  };
+
   const ruleDirectlyRelevant = (r: GeneralGarrisonRule): boolean =>
     r.effects.some((e) => e.unit === b.id || isAvailEligible(e.unit) || data.units[e.unit]?.type === 60) ||
-    (r.trainingLocations ?? []).some((loc) => trainSources.includes(loc.location) && isAvailEligible(loc.unit));
+    (r.trainingLocations ?? []).some(relocTouchesBuilding) ||
+    EXPLICIT_CREATE_UNLOCKS.some(
+      (gate) => gate.techId === r.id && (gate.buildingId === undefined || gate.buildingId === b.id) && gate.unitIds.some(canBuildingProduceUnit),
+    );
   const activeDynIds = new Set<number>();
   {
     const byId = new Map<number, GeneralGarrisonRule[]>();
@@ -671,10 +726,11 @@ function computeGarrisonTechs(
   }
   const activeDynRules = reachableDynRules.filter((r) => activeDynIds.has(r.id));
 
-  // Detect whether shooting-ness of building b, unit firepower sign, or negative-fp unit attack-zeroing can flip.
+  // Detect whether shooting-ness of building b, unit firepower sign, unit reload validity, or negative-fp attack-zeroing can flip.
   const allBuildingEffects: GeneralGarrisonEffect[] = [];
   const negFpCapableUnits = new Set<number>();
   const reloadTouchedUnits = new Set<number>();
+  const reloadInvalidFlipUnits = new Set<number>();
   const fpSignFlipUnits = new Set<number>();
   const multiProjCandidates = new Set<number>();
   for (const id of eligibleIds) {
@@ -687,7 +743,13 @@ function computeGarrisonTechs(
     for (const e of rule.effects) {
       if (e.unit === b.id) allBuildingEffects.push(e);
       if (!isAvailEligible(e.unit)) continue;
-      if (e.stat === 'reload' && !((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1))) reloadTouchedUnits.add(e.unit);
+      if (e.stat === 'reload' && !((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1))) {
+        reloadTouchedUnits.add(e.unit);
+        const baseReload = baseState.units[e.unit]?.reload ?? 0;
+        if (baseReload <= 0 || (e.op === 'set' && e.value <= 0) || (e.op === 'mul' && e.value <= 0) || (e.op === 'add' && baseReload + e.value <= 0)) {
+          reloadInvalidFlipUnits.add(e.unit);
+        }
+      }
       if (e.stat === 'firepower') {
         const baseFp = baseState.units[e.unit]?.firepower ?? 0;
         if (
@@ -701,7 +763,12 @@ function computeGarrisonTechs(
           negFpCapableUnits.add(e.unit);
         }
       }
-      if (e.stat === 'total' && ((e.op === 'set' && e.value > 1) || (e.op === 'add' && e.value > 0) || (e.op === 'mul' && e.value > 1))) {
+      if (
+        e.stat === 'total' &&
+        ((e.op === 'set' && e.value > 1) ||
+          (e.op === 'add' && e.value > 0) ||
+          (e.op === 'mul' && (e.value > 1 || (e.value < 0 && (baseState.units[e.unit]?.total ?? 0) < 0))))
+      ) {
         multiProjCandidates.add(e.unit);
       }
     }
@@ -716,27 +783,12 @@ function computeGarrisonTechs(
         (e) =>
           ((e.stat === 'attack' || e.stat === 'reload') &&
             ((e.op === 'set' && e.value <= 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value <= 0))) ||
-          ((e.stat === 'projectile' || e.stat === 'secondaryProjectile') && ((e.op === 'set' && e.value < 0) || (e.op === 'add' && e.value < 0))),
+          ((e.stat === 'projectile' || e.stat === 'secondaryProjectile') &&
+            ((e.op === 'set' && e.value < 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value < 0))),
       );
 
-  const relocTargets = new Set<number>();
-  const collectRelocs = (rule: GeneralGarrisonRule) => {
-    for (const loc of rule.trainingLocations ?? []) {
-      if (trainSources.includes(loc.location)) relocTargets.add(loc.unit);
-    }
-  };
-  for (const t of pool) collectRelocs(data.techs[t.id]!);
-  for (const r of activeDynRules) collectRelocs(r);
-  const canBuildingProduceUnit = (uid: number): boolean => {
-    if (!isAvailEligible(uid) || relicIds.includes(uid) || unitAge(ctx, uid, config.civ, data) > config.age) return false;
-    const prodId = uid === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : uid;
-    if (relocTargets.has(prodId) || baseState.productionLocations[prodId]?.some((loc) => trainSources.includes(loc))) return true;
-    const catalogProduction = catalogSources.some((sourceId) => data.buildings[sourceId]?.produces.includes(prodId));
-    return catalogProduction && !!baseState.units[prodId]?.trainLocations.some((t) => trainSources.includes(t.unitId));
-  };
-
-  // Partition pool into control techs (affecting entry, capacity, shooting-ness, firepower sign, total, secondaryProjectile,
-  // relocation, explicit unlocks, conditional/free rules) vs pure-stat techs.
+  // Partition pool into control techs (affecting entry, capacity, shooting-ness, firepower sign, reload validity, total,
+  // secondaryProjectile, relocation/eviction, explicit unlocks, conditional/free rules) vs pure-stat techs.
   const controlSet = new Set<number>();
   const shapeHooks = new Set<number>();
   const prereqChainInPool = (tid: number): number[] => {
@@ -781,27 +833,32 @@ function computeGarrisonTechs(
       pre = ctx.core.techById[pre]?.pre;
     }
   }
+
+  const relevantSecProjs = new Set<number>();
+  let hasDynamicSecProjOp = false;
   if (baseShooting || shootingCanFlip) {
-    const relevantSecProjs = new Set<number>();
     if (baseB.secondaryProjectile >= 0) relevantSecProjs.add(baseB.secondaryProjectile);
-    for (const e of allBuildingEffects) if (e.stat === 'secondaryProjectile' && e.op === 'set' && e.value >= 0) relevantSecProjs.add(e.value);
+    for (const e of allBuildingEffects) {
+      if (e.stat !== 'secondaryProjectile') continue;
+      if (e.op === 'set' && e.value >= 0) relevantSecProjs.add(e.value);
+      else if (e.op !== 'set') hasDynamicSecProjOp = true;
+    }
     for (const uid of multiProjCandidates) {
       const sec = baseState.units[uid]?.secondaryProjectile ?? -1;
       if (sec >= 0) relevantSecProjs.add(sec);
     }
-    for (const t of pool) {
-      for (const e of data.techs[t.id]!.effects) {
-        if (e.stat === 'secondaryProjectile' && e.op === 'set' && e.value >= 0 && multiProjCandidates.has(e.unit)) relevantSecProjs.add(e.value);
+    const collectUnitSecProj = (rule: GeneralGarrisonRule) => {
+      for (const e of rule.effects) {
+        if (e.stat !== 'secondaryProjectile' || !multiProjCandidates.has(e.unit)) continue;
+        if (e.op === 'set' && e.value >= 0) relevantSecProjs.add(e.value);
+        else if (e.op !== 'set') hasDynamicSecProjOp = true;
       }
-    }
-    for (const r of activeDynRules) {
-      for (const e of r.effects) {
-        if (e.stat === 'secondaryProjectile' && e.op === 'set' && e.value >= 0 && multiProjCandidates.has(e.unit)) relevantSecProjs.add(e.value);
-      }
-    }
+    };
+    for (const t of pool) collectUnitSecProj(data.techs[t.id]!);
+    for (const r of activeDynRules) collectUnitSecProj(r);
     for (const tid of staticIndex.type60ShapeTechs) {
       if (baseState.known.has(tid)) continue;
-      if (data.techs[tid]?.effects.some((e) => relevantSecProjs.has(e.unit))) shapeHooks.add(tid);
+      if (hasDynamicSecProjOp || data.techs[tid]?.effects.some((e) => relevantSecProjs.has(e.unit))) shapeHooks.add(tid);
     }
   }
 
@@ -824,7 +881,8 @@ function computeGarrisonTechs(
           e.stat === 'sizeClass' ||
           e.stat === 'secondaryProjectile' ||
           (e.stat === 'firepower' && fpSignFlipUnits.has(e.unit)) ||
-          (e.stat === 'total' && (e.op === 'set' || e.op === 'add' || (e.op === 'mul' && e.value !== 1))) ||
+          (e.stat === 'reload' && reloadInvalidFlipUnits.has(e.unit)) ||
+          (e.stat === 'total' && !((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1))) ||
           (e.stat === 'attack' && negFpCapableUnits.has(e.unit) && reloadTouchedUnits.has(e.unit))
         ) {
           isControl = true;
@@ -832,18 +890,7 @@ function computeGarrisonTechs(
         }
       }
     }
-    if (
-      !isControl &&
-      (rule.trainingLocations ?? []).some(
-        (loc) =>
-          trainSources.includes(loc.location) &&
-          isAvailEligible(loc.unit) &&
-          !relicIds.includes(loc.unit) &&
-          unitAge(ctx, loc.unit, config.civ, data) <= config.age,
-      )
-    ) {
-      isControl = true;
-    }
+    if (!isControl && (rule.trainingLocations ?? []).some(relocTouchesBuilding)) isControl = true;
     if (
       !isControl &&
       EXPLICIT_CREATE_UNLOCKS.some(
@@ -858,30 +905,42 @@ function computeGarrisonTechs(
     for (const p of prereqChainInPool(cid)) controlSet.add(p);
   }
 
-  // Track which (unit, stat) pairs are touched by non-control techs (for latent synergy & no-op detection).
-  const nonControlStatKeys = new Set<string>();
-  const nonControlNonZeroAttackUnits = new Set<number>();
-  const nonControlTechs = pool.filter((t) => !controlSet.has(t.id));
-  for (const t of nonControlTechs) {
-    for (const e of data.techs[t.id]!.effects) {
-      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
-      nonControlStatKeys.add(`${e.unit}:${e.stat}`);
-      if (e.stat === 'attack' && (e.op === 'set' || e.op === 'add') && e.value !== 0) nonControlNonZeroAttackUnits.add(e.unit);
-    }
-  }
-  const nonControlTouches = (uid: number, stat: GarrisonStat): boolean => nonControlStatKeys.has(`${uid}:${stat}`);
-  const nonControlCanGiveAttack = (uid: number): boolean => nonControlNonZeroAttackUnits.has(uid);
-
   // Techs in civ.free (without unmet shape prereq) automatically enter selected whenever their pool prereqs are present,
   // so they are determined by their prerequisites rather than independent branch choices.
   const autoFreeControl = new Set<number>([...controlSet].filter((id) => !baseFree.has(id) && civFreeSet.has(id) && !hasUnmetShapePrereq(id)));
-  const branchTechs = [...controlSet].filter((id) => !baseFree.has(id) && !autoFreeControl.has(id)).sort((a, z) => a - z);
+  const rawBranchTechs = [...controlSet].filter((id) => !baseFree.has(id) && !autoFreeControl.has(id)).sort((a, z) => a - z);
+  const branchSet = new Set(rawBranchTechs);
   const branchPrereqs = new Map<number, number[]>();
-  for (const bid of branchTechs) {
-    branchPrereqs.set(
-      bid,
-      prereqChainInPool(bid).filter((p) => !baseFree.has(p) && !autoFreeControl.has(p)),
-    );
+  const inDegree = new Map<number, number>();
+  const dependents = new Map<number, number[]>();
+  for (const bid of rawBranchTechs) {
+    const reqs = prereqChainInPool(bid).filter((p) => branchSet.has(p));
+    branchPrereqs.set(bid, reqs);
+    inDegree.set(bid, reqs.length);
+    for (const p of reqs) {
+      let list = dependents.get(p);
+      if (!list) {
+        list = [];
+        dependents.set(p, list);
+      }
+      list.push(bid);
+    }
+  }
+  // Topological sort (prerequisites before dependents, ascending ID tie-break) so prereq ID > dependent ID still enumerates cleanly.
+  const branchTechs: number[] = [];
+  const readyQueue = rawBranchTechs.filter((id) => (inDegree.get(id) ?? 0) === 0);
+  while (readyQueue.length > 0) {
+    readyQueue.sort((a, z) => a - z);
+    const id = readyQueue.shift()!;
+    branchTechs.push(id);
+    for (const dep of dependents.get(id) ?? []) {
+      const deg = (inDegree.get(dep) ?? 1) - 1;
+      inDegree.set(dep, deg);
+      if (deg === 0) readyQueue.push(dep);
+    }
+  }
+  for (const id of rawBranchTechs) {
+    if (!branchTechs.includes(id)) branchTechs.push(id);
   }
 
   // Enumerate all prerequisite-closed subsets of branchTechs (bounded by MAX_EXACT_CONTROL_SUBSETS).
@@ -893,7 +952,7 @@ function computeGarrisonTechs(
     const dfs = (idx: number) => {
       if (subsetOverflow) return;
       if (idx === branchTechs.length) {
-        legalSubsets.push([...chosen]);
+        legalSubsets.push([...chosen].sort((a, z) => a - z));
         if (legalSubsets.length > MAX_EXACT_CONTROL_SUBSETS) subsetOverflow = true;
         return;
       }
@@ -942,17 +1001,6 @@ function computeGarrisonTechs(
     }
   }
 
-  // Check if any shape-hooked rule can restrict entry or reduce firepower (requiring subset probing across shape groups).
-  const shapeCanRestrict =
-    shapeCandidates.length > 0 &&
-    activeDynRules.some((r) =>
-      r.effects.some(
-        (e) =>
-          (e.unit === b.id && (e.stat === 'capacity' || e.stat === 'garrisonType' || e.stat === 'attack' || e.stat === 'reload')) ||
-          (isAvailEligible(e.unit) && (e.stat === 'sizeClass' || e.stat === 'firepower')),
-      ),
-    );
-
   interface EvalState {
     techs: number[];
     rowIds: number[];
@@ -998,7 +1046,7 @@ function computeGarrisonTechs(
     }
   };
 
-  // Deduplicate shapeCandidates into groups by hook signature for exact subset fallback when shape rules can restrict.
+  // Deduplicate shapeCandidates into groups by hook signature; probe all subsets across groups when > 1 group exists.
   const shapeGroupUnits: number[][] = [];
   if (shapeCandidates.length > 0) {
     const byHook = new Map<string, number[]>();
@@ -1020,31 +1068,123 @@ function computeGarrisonTechs(
     const byKey = new Map<string, EvalState>([['', emptyState]]);
     const maxState = pruneToValidRows(techs, allShapeUids);
     if (!byKey.has(maxState.rowKey)) byKey.set(maxState.rowKey, maxState);
-    if (shapeCanRestrict && shapeGroupUnits.length > 1 && shapeGroupUnits.length <= MAX_SHAPE_GROUPS_EXACT) {
-      const totalMasks = 1 << shapeGroupUnits.length;
-      for (let mask = 1; mask < totalMasks - 1; mask++) {
-        const subsetIds: number[] = [];
-        for (let i = 0; i < shapeGroupUnits.length; i++) {
-          if (((mask >> i) & 1) !== 0) subsetIds.push(...shapeGroupUnits[i]!);
+    if (shapeGroupUnits.length > 1) {
+      if (shapeGroupUnits.length <= MAX_SHAPE_GROUPS_EXACT) {
+        const totalMasks = 1 << shapeGroupUnits.length;
+        for (let mask = 1; mask < totalMasks - 1; mask++) {
+          const subsetIds: number[] = [];
+          for (let i = 0; i < shapeGroupUnits.length; i++) {
+            if (((mask >> i) & 1) !== 0) subsetIds.push(...shapeGroupUnits[i]!);
+          }
+          const pruned = pruneToValidRows(techs, subsetIds);
+          if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
         }
-        const pruned = pruneToValidRows(techs, subsetIds);
-        if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
+      } else {
+        for (const group of shapeGroupUnits) {
+          const pruned = pruneToValidRows(techs, group);
+          if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
+        }
       }
     }
     return [...byKey.values()];
   };
 
-  // Materialize all exact reachable (T, R) states.
+  // Materialize all exact reachable (T, R) states (skipped if overflowed, where conservative fallback applies).
   const statesByTechKey = new Map<string, EvalState[]>();
   const allReachableStates: EvalState[] = [];
-  for (const techs of legalSubsets) {
-    const list = validStatesForTechs(techs);
-    statesByTechKey.set(techs.join(','), list);
-    for (const es of list) allReachableStates.push(es);
+  if (!subsetOverflow) {
+    for (const techs of legalSubsets) {
+      const list = validStatesForTechs(techs);
+      statesByTechKey.set(techs.join(','), list);
+      for (const es of list) allReachableStates.push(es);
+    }
+  }
+  for (const es of allReachableStates) {
+    const secB = es.snapshot.building?.secondaryProjectile ?? -1;
+    if (secB >= 0) relevantSecProjs.add(secB);
+    for (const uid of multiProjCandidates) {
+      const secU = es.snapshot.units[uid]?.secondaryProjectile ?? -1;
+      if (secU >= 0) relevantSecProjs.add(secU);
+    }
   }
 
+  // Non-control tech metadata for latent synergy and peer interaction.
+  const nonControlTechs = pool.filter((t) => !controlSet.has(t.id));
+  const nonControlPrereqs = new Map<number, { reqBranch: number[]; reqNonCtrl: number[] }>();
+  const nonControlAttackTechsByUnit = new Map<number, number[]>();
+  const nonControlTouchTechsByKey = new Map<string, number[]>();
+  for (const t of nonControlTechs) {
+    const chain = prereqChainInPool(t.id);
+    const reqBranch = chain.filter((p) => branchSet.has(p));
+    const reqNonCtrl = chain.filter((p) => !branchSet.has(p) && !baseFree.has(p) && !autoFreeControl.has(p));
+    nonControlPrereqs.set(t.id, { reqBranch, reqNonCtrl });
+    const seenKeys = new Set<string>();
+    for (const e of data.techs[t.id]!.effects) {
+      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+      const key = `${e.unit}:${e.stat}`;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        let list = nonControlTouchTechsByKey.get(key);
+        if (!list) {
+          list = [];
+          nonControlTouchTechsByKey.set(key, list);
+        }
+        list.push(t.id);
+      }
+      if (e.stat === 'attack' && (e.op === 'set' || e.op === 'add') && e.value !== 0) {
+        let atkList = nonControlAttackTechsByUnit.get(e.unit);
+        if (!atkList) {
+          atkList = [];
+          nonControlAttackTechsByUnit.set(e.unit, atkList);
+        }
+        if (!atkList.includes(t.id)) atkList.push(t.id);
+      }
+    }
+  }
+
+  // Exact check: can any compatible non-control tech actually produce non-zero attack for uid in state es (post-Stage-2)?
+  const latentAttackCache = new Map<string, boolean>();
+  const effectiveNonControlAttack = (es: EvalState, uid: number): boolean => {
+    const sources = nonControlAttackTechsByUnit.get(uid);
+    if (!sources || !sources.length) return false;
+    const cacheKey = `${es.techs.join(',')}|${es.rowKey}|${uid}`;
+    const cached = latentAttackCache.get(cacheKey);
+    if (cached !== undefined) return cached;
+    const compatible = sources.filter((tid) => nonControlPrereqs.get(tid)!.reqBranch.every((p) => es.techs.includes(p)));
+    let ok = false;
+    for (const tid of compatible) {
+      const { reqNonCtrl } = nonControlPrereqs.get(tid)!;
+      const snap = snapshot(ctx, b, { ...es.config, techs: unique([...es.techs, ...reqNonCtrl, tid]) }, data, status, staticIndex);
+      if ((snap.units[uid]?.attack ?? 0) !== 0) {
+        ok = true;
+        break;
+      }
+    }
+    if (!ok && compatible.length > 1) {
+      const unionTechs = unique([...es.techs, ...compatible.flatMap((tid) => [...nonControlPrereqs.get(tid)!.reqNonCtrl, tid])]);
+      const snap = snapshot(ctx, b, { ...es.config, techs: unionTechs }, data, status, staticIndex);
+      if ((snap.units[uid]?.attack ?? 0) !== 0) ok = true;
+    }
+    latentAttackCache.set(cacheKey, ok);
+    return ok;
+  };
+  const effectiveNonControlTouchesAttack = (es: EvalState, uid: number): boolean => {
+    const sources = nonControlTouchTechsByKey.get(`${uid}:attack`);
+    if (!sources || !sources.length) return false;
+    const baseAtk = es.snapshot.units[uid]?.attack;
+    if (baseAtk === undefined) return false;
+    for (const tid of sources) {
+      const { reqBranch, reqNonCtrl } = nonControlPrereqs.get(tid)!;
+      if (!reqBranch.every((p) => es.techs.includes(p))) continue;
+      const snap = snapshot(ctx, b, { ...es.config, techs: unique([...es.techs, ...reqNonCtrl, tid]) }, data, status, staticIndex);
+      if (snap.units[uid]?.attack !== baseAtk) return true;
+    }
+    return false;
+  };
+
   // Exact observable difference between two real snapshots (stateA vs stateB).
-  const statesObservableDiff = (esA: EvalState, esB: EvalState): boolean => {
+  // When includeNonControlSynergy is true (Part 3A / Part 3C), also checks latent synergy with non-control stat techs.
+  const statesObservableDiff = (esA: EvalState, esB: EvalState, includeNonControlSynergy = true): boolean => {
     const sA = esA.snapshot;
     const sB = esB.snapshot;
     const bA = sA.building;
@@ -1052,7 +1192,6 @@ function computeGarrisonTechs(
     if (!bA || !bB) return bA !== bB;
     if (bA.capacity !== bB.capacity) return true;
 
-    // Candidate set check: only scan all eligibleIds if any entry/creation/deposit prerequisite changed.
     let needCandScan = bA.garrisonType !== bB.garrisonType;
     if (!needCandScan) {
       for (const gate of EXPLICIT_CREATE_UNLOCKS) {
@@ -1083,16 +1222,18 @@ function computeGarrisonTechs(
         if (cA && cB && (cA.canEnter !== cB.canEnter || cA.canCreate !== cB.canCreate || cA.canDeposit !== cB.canDeposit)) return true;
       }
     } else {
-      // Check individual units whose sizeClass or trainLocations changed via copy-on-write reference diff.
       for (const uid of eligibleIds) {
         const uA = sA.units[uid];
         const uB = sB.units[uid];
         if (uA === uB || !isAvailEligible(uid)) continue;
         if (uA?.sizeClass !== uB?.sizeClass || uA?.trainLocations !== uB?.trainLocations) {
-          const cA = candOf(esA, uid);
-          const cB = candOf(esB, uid);
-          if (!!cA !== !!cB) return true;
-          if (cA && cB && (cA.canEnter !== cB.canEnter || cA.canCreate !== cB.canCreate || cA.canDeposit !== cB.canDeposit)) return true;
+          const checkIds = uid === VILLAGER_UNIT_ID && isAvailEligible(FEMALE_VILLAGER_ID) ? [uid, FEMALE_VILLAGER_ID] : [uid];
+          for (const cid of checkIds) {
+            const cA = candOf(esA, cid);
+            const cB = candOf(esB, cid);
+            if (!!cA !== !!cB) return true;
+            if (cA && cB && (cA.canEnter !== cB.canEnter || cA.canCreate !== cB.canCreate || cA.canDeposit !== cB.canDeposit)) return true;
+          }
         }
       }
     }
@@ -1103,14 +1244,17 @@ function computeGarrisonTechs(
     if (!shootA) return false;
     if (buildingShootingSignature(bA, sA.units) !== buildingShootingSignature(bB, sB.units)) return true;
     if (
+      includeNonControlSynergy &&
       bA.secondaryProjectile !== bB.secondaryProjectile &&
-      (nonControlTouches(bA.secondaryProjectile, 'attack') || nonControlTouches(bB.secondaryProjectile, 'attack'))
+      ((bA.secondaryProjectile >= 0 && effectiveNonControlTouchesAttack(esA, bA.secondaryProjectile)) ||
+        (bB.secondaryProjectile >= 0 && effectiveNonControlTouchesAttack(esB, bB.secondaryProjectile)))
     ) {
       return true;
     }
 
-    // Check effective occupant garrison power diffs + latent synergy with non-control stat techs.
     const checkedUnits = new Set<number>();
+    const hasLatentAttack = (u: GeneralGarrisonUnit, es: EvalState, uid: number): boolean =>
+      effectiveNonControlAttack(es, uid) || (u.total > 1 && u.secondaryProjectile >= 0 && effectiveNonControlAttack(es, u.secondaryProjectile));
     const checkUnitPowerDiff = (uid: number): boolean => {
       if (checkedUnits.has(uid) || !isAvailEligible(uid)) return false;
       checkedUnits.add(uid);
@@ -1122,23 +1266,22 @@ function computeGarrisonTechs(
       const pB = describeUnitGarrisonPower(uB, sB.units).power;
       if ((pA === null) !== (pB === null)) return true;
       if (pA !== null && pB !== null && Math.abs(pA - pB) > 1e-12) return true;
-      if (uA.firepower !== uB.firepower && (uA.attack !== 0 || uB.attack !== 0 || nonControlCanGiveAttack(uid) || uA.total > 1 || uB.total > 1)) {
+      if (!includeNonControlSynergy) return false;
+      if (uA.firepower !== uB.firepower && (hasLatentAttack(uA, esA, uid) || hasLatentAttack(uB, esB, uid))) return true;
+      if (uA.reload !== uB.reload && ((uA.firepower !== 0 && hasLatentAttack(uA, esA, uid)) || (uB.firepower !== 0 && hasLatentAttack(uB, esB, uid)))) {
         return true;
       }
       if (
-        uA.reload !== uB.reload &&
-        (uA.firepower > 0 ||
-          uB.firepower > 0 ||
-          ((uA.firepower < 0 || uB.firepower < 0) && (uA.attack !== 0 || uB.attack !== 0 || nonControlCanGiveAttack(uid))))
+        uA.total !== uB.total &&
+        ((uA.firepower > 0 && uA.total > 1 && uA.secondaryProjectile >= 0 && effectiveNonControlAttack(esA, uA.secondaryProjectile)) ||
+          (uB.firepower > 0 && uB.total > 1 && uB.secondaryProjectile >= 0 && effectiveNonControlAttack(esB, uB.secondaryProjectile)))
       ) {
         return true;
       }
-      if (uA.total !== uB.total && (uA.firepower > 0 || uB.firepower > 0) && (uA.total > 1 || uB.total > 1)) return true;
       if (
         uA.secondaryProjectile !== uB.secondaryProjectile &&
-        (uA.firepower > 0 || uB.firepower > 0) &&
-        (uA.total > 1 || uB.total > 1) &&
-        (nonControlTouches(uA.secondaryProjectile, 'attack') || nonControlTouches(uB.secondaryProjectile, 'attack'))
+        ((uA.firepower > 0 && uA.total > 1 && uA.secondaryProjectile >= 0 && effectiveNonControlTouchesAttack(esA, uA.secondaryProjectile)) ||
+          (uB.firepower > 0 && uB.total > 1 && uB.secondaryProjectile >= 0 && effectiveNonControlTouchesAttack(esB, uB.secondaryProjectile)))
       ) {
         return true;
       }
@@ -1159,6 +1302,22 @@ function computeGarrisonTechs(
   };
 
   const kept = new Set<number>();
+
+  // Helper to build data with a single free tech removed from civData.free (for testing whether an auto-applied free tech matters).
+  const makeWithoutFree = (fid: number): { withoutData: GeneralGarrisonData; withoutIndex: StaticGarrisonIndex } => {
+    const withoutData: GeneralGarrisonData = {
+      ...data,
+      unitUpgradeTechs: upgradeData.unitUpgradeTechs,
+      civs: {
+        ...data.civs,
+        [config.civ]: {
+          ...civData,
+          free: civData.free.filter((id) => id !== fid),
+        },
+      },
+    };
+    return { withoutData, withoutIndex: getStaticIndex(withoutData) };
+  };
 
   // Part 3A: Evaluate each branch control tech across exact (T, T ∪ {t}) transitions.
   for (const tid of branchTechs) {
@@ -1181,7 +1340,7 @@ function computeGarrisonTechs(
       for (const rk of rowKeys) {
         const esA = mapA.get(rk) ?? makeEvalState(T, mapB.get(rk)!.rowIds);
         const esB = mapB.get(rk) ?? makeEvalState(TWith, mapA.get(rk)!.rowIds);
-        if (statesObservableDiff(esA, esB)) {
+        if (statesObservableDiff(esA, esB, true)) {
           relevant = true;
           break;
         }
@@ -1191,69 +1350,254 @@ function computeGarrisonTechs(
     if (relevant) kept.add(tid);
   }
 
-  // Helper to evaluate pure-stat effects against a specific list of exact reachable states (jointly per state).
-  const pureEffectRelevantInState = (e: GeneralGarrisonEffect, es: EvalState, otherTechTouches: boolean): boolean => {
-    if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
-    const st = es.snapshot;
-    const B = st.building;
-    if (!isShootingBuilding(B)) return false;
-    if (e.unit === b.id) {
-      if (!BUILDING_SHOOTING_STATS.has(e.stat)) return false;
-      return otherTechTouches || applyEffectOp(B![e.stat], e.op, e.value) !== B![e.stat];
+  // Part 3B: Evaluate pure non-control techs.
+  if (subsetOverflow) {
+    // Sound conservative fallback when control combinations exceed MAX_EXACT_CONTROL_SUBSETS: never drop a potentially effective tech.
+    if (baseShooting || shootingCanFlip) {
+      for (const t of nonControlTechs) {
+        const relevant = data.techs[t.id]!.effects.some((e) => {
+          if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+          if (e.unit === b.id && BUILDING_SHOOTING_STATS.has(e.stat)) return true;
+          if (e.stat === 'attack' && (relevantSecProjs.has(e.unit) || hasDynamicSecProjOp)) return true;
+          if (!isAvailEligible(e.unit)) return false;
+          if (e.stat !== 'attack' && e.stat !== 'reload' && e.stat !== 'firepower') return false;
+          const u = baseState.units[e.unit];
+          if (!u) return false;
+          if (u.firepower === 0 && !fpSignFlipUnits.has(e.unit)) return false;
+          return canBuildingProduceUnit(e.unit) || (e.unit === VILLAGER_UNIT_ID && FORTIFIED_CHURCH_IDS.has(b.id)) || acceptsTask(u, baseB, scope.aliases);
+        });
+        if (relevant) kept.add(t.id);
+      }
     }
-    if (e.stat === 'attack' && B!.secondaryProjectile === e.unit) {
-      const p = st.units[e.unit];
-      return !!p && (otherTechTouches || applyEffectOp(p.attack, e.op, e.value) !== p.attack);
+  } else {
+    // Stats written in Stage 2 (already applied in baseState or dynamic) or by later free techs require real snapshot() verification.
+    const stage2WrittenStats = new Set<string>();
+    for (const r of [...baseState.stage2AppliedRules, ...activeDynRules]) {
+      for (const e of r.effects) {
+        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        stage2WrittenStats.add(`${e.unit}:${e.stat}`);
+      }
     }
-    if (e.stat === 'attack') {
-      for (const uid of multiProjCandidates) {
-        const u = st.units[uid];
-        if (!u || u.firepower <= 0 || u.total <= 1 || u.secondaryProjectile !== e.unit || !isEffectiveOccupantIn(es, uid)) continue;
+    const freeWriterMaxId = new Map<string, number>();
+    for (const fid of civData.free) {
+      if (disabled.has(fid) || !data.techs[fid]) continue;
+      for (const e of data.techs[fid]!.effects) {
+        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        const key = `${e.unit}:${e.stat}`;
+        const cur = freeWriterMaxId.get(key) ?? -1;
+        if (fid > cur) freeWriterMaxId.set(key, fid);
+      }
+    }
+
+    // Direct O(1) check valid only when t is not free and no Stage 2 rule / later free tech / duplicate effect can overwrite t's writes.
+    const pureDirectEffectChanged = (e: GeneralGarrisonEffect, es: EvalState): boolean => {
+      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+      const st = es.snapshot;
+      const B = st.building;
+      if (!isShootingBuilding(B)) return false;
+      if (e.unit === b.id) {
+        if (!BUILDING_SHOOTING_STATS.has(e.stat)) return false;
+        if (e.stat === 'attack' && B!.secondaryProjectile >= 0 && st.units[B!.secondaryProjectile] !== undefined) {
+          const secAtk = st.units[B!.secondaryProjectile]!.attack;
+          const nextAtk = applyEffectOp(B!.attack, e.op, e.value);
+          return (secAtk !== nextAtk) !== (secAtk !== B!.attack);
+        }
+        return applyEffectOp(B![e.stat], e.op, e.value) !== B![e.stat];
+      }
+      if (e.stat === 'attack' && B!.secondaryProjectile === e.unit) {
         const p = st.units[e.unit];
-        if (p && (otherTechTouches || applyEffectOp(p.attack, e.op, e.value) !== p.attack)) return true;
+        return !!p && applyEffectOp(p.attack, e.op, e.value) !== p.attack;
       }
-    }
-    if (!isAvailEligible(e.unit) || !isEffectiveOccupantIn(es, e.unit)) return false;
-    const u = st.units[e.unit];
-    if (!u || u.firepower === 0) return false;
-    if (e.stat === 'firepower') return otherTechTouches || applyEffectOp(u.firepower, e.op, e.value) !== u.firepower;
-    if (e.stat === 'attack') return otherTechTouches || applyEffectOp(u.attack, e.op, e.value) !== u.attack;
-    if (e.stat === 'reload') {
-      const hasAttack =
-        u.attack !== 0 || nonControlCanGiveAttack(e.unit) || (u.total > 1 && u.secondaryProjectile >= 0 && (st.units[u.secondaryProjectile]?.attack ?? 0) > 0);
-      if (u.firepower > 0 && !hasAttack) return false;
-      if (u.firepower < 0 && u.attack === 0 && !nonControlCanGiveAttack(e.unit)) return false;
-      return otherTechTouches || applyEffectOp(u.reload, e.op, e.value) !== u.reload;
-    }
-    return false;
-  };
-
-  // Count how many pool techs touch each (unit, stat) so `set` no-ops are detected when no other tech alters the stat.
-  const statTouchCount = new Map<string, number>();
-  for (const t of pool) {
-    const seen = new Set<string>();
-    for (const e of data.techs[t.id]!.effects) {
-      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
-      seen.add(`${e.unit}:${e.stat}`);
-    }
-    for (const k of seen) statTouchCount.set(k, (statTouchCount.get(k) ?? 0) + 1);
-  }
-
-  // Part 3B: Evaluate pure non-control techs jointly within each exact reachable state satisfying their control prereqs.
-  const branchSet = new Set(branchTechs);
-  for (const t of nonControlTechs) {
-    const effects = data.techs[t.id]!.effects;
-    if (!effects.length) continue;
-    const reqBranch = prereqChainInPool(t.id).filter((p) => branchSet.has(p));
-    let relevant = false;
-    for (const es of allReachableStates) {
-      if (reqBranch.length > 0 && !reqBranch.every((p) => es.techs.includes(p))) continue;
-      if (effects.some((e) => pureEffectRelevantInState(e, es, (statTouchCount.get(`${e.unit}:${e.stat}`) ?? 0) > 1))) {
-        relevant = true;
-        break;
+      if (e.stat === 'attack') {
+        for (const uid of multiProjCandidates) {
+          const u = st.units[uid];
+          if (!u || u.firepower <= 0 || u.total <= 1 || u.secondaryProjectile !== e.unit || !isEffectiveOccupantIn(es, uid)) continue;
+          const p = st.units[e.unit];
+          if (p && applyEffectOp(p.attack, e.op, e.value) !== p.attack) return true;
+        }
       }
+      if (!isAvailEligible(e.unit) || !isEffectiveOccupantIn(es, e.unit)) return false;
+      const u = st.units[e.unit];
+      if (!u || u.firepower === 0) return false;
+      if (e.stat === 'firepower') {
+        const hasAtk = u.firepower < 0 || u.attack !== 0 || (u.total > 1 && u.secondaryProjectile >= 0 && (st.units[u.secondaryProjectile]?.attack ?? 0) !== 0);
+        return hasAtk && applyEffectOp(u.firepower, e.op, e.value) !== u.firepower;
+      }
+      if (e.stat === 'attack') return applyEffectOp(u.attack, e.op, e.value) !== u.attack;
+      if (e.stat === 'reload') {
+        const hasAttack = u.attack !== 0 || (u.total > 1 && u.secondaryProjectile >= 0 && (st.units[u.secondaryProjectile]?.attack ?? 0) !== 0);
+        if (u.firepower > 0 && !hasAttack) return false;
+        if (u.firepower < 0 && u.attack === 0) return false;
+        return applyEffectOp(u.reload, e.op, e.value) !== u.reload;
+      }
+      return false;
+    };
+
+    const effectCouldTouchState = (e: GeneralGarrisonEffect, es: EvalState): boolean => {
+      if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) return false;
+      const st = es.snapshot;
+      const B = st.building;
+      if (!isShootingBuilding(B)) return false;
+      if (e.unit === b.id) return BUILDING_SHOOTING_STATS.has(e.stat);
+      if (e.stat === 'attack' && B!.secondaryProjectile === e.unit) return !!st.units[e.unit];
+      if (e.stat === 'attack') {
+        for (const uid of multiProjCandidates) {
+          const u = st.units[uid];
+          if (u && u.firepower > 0 && u.total > 1 && u.secondaryProjectile === e.unit && isEffectiveOccupantIn(es, uid)) return true;
+        }
+      }
+      if (!isAvailEligible(e.unit) || !isEffectiveOccupantIn(es, e.unit)) return false;
+      const u = st.units[e.unit];
+      return !!u && u.firepower !== 0 && (e.stat === 'attack' || e.stat === 'reload' || e.stat === 'firepower');
+    };
+
+    // Collect interacting non-control peers for a tech t in state es (same stat, or cross-stat attack/reload/firepower synergy).
+    const interactingPeersIn = (t: Tech, es: EvalState): number[] => {
+      const peers = new Set<number>();
+      const addKey = (key: string) => {
+        for (const pid of nonControlTouchTechsByKey.get(key) ?? []) {
+          if (pid === t.id || es.snapshot.selected.includes(pid)) continue;
+          if (!nonControlPrereqs.get(pid)!.reqBranch.every((p) => es.techs.includes(p))) continue;
+          peers.add(pid);
+        }
+      };
+      const st = es.snapshot;
+      const B = st.building;
+      for (const e of data.techs[t.id]!.effects) {
+        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        addKey(`${e.unit}:${e.stat}`);
+        if (e.unit === b.id && B) {
+          if (e.stat === 'attack' || e.stat === 'reload') {
+            addKey(`${b.id}:attack`);
+            addKey(`${b.id}:reload`);
+            if (B.secondaryProjectile >= 0) addKey(`${B.secondaryProjectile}:attack`);
+          }
+        } else if (isAvailEligible(e.unit)) {
+          const u = st.units[e.unit];
+          if (u && (e.stat === 'reload' || e.stat === 'firepower')) {
+            addKey(`${e.unit}:attack`);
+            if (u.total > 1 && u.secondaryProjectile >= 0) addKey(`${u.secondaryProjectile}:attack`);
+          }
+        }
+      }
+      return [...peers].sort((a, z) => a - z);
+    };
+
+    const peerSubsetsOf = (peers: number[]): number[][] => {
+      const out: number[][] = [];
+      if (!peers.length) return out;
+      if (peers.length <= MAX_EXACT_PEER_SUBSETS) {
+        const total = 1 << peers.length;
+        for (let mask = 1; mask < total; mask++) {
+          const sub: number[] = [];
+          for (let i = 0; i < peers.length; i++) if (((mask >> i) & 1) !== 0) sub.push(peers[i]!);
+          out.push(sub);
+        }
+        return out;
+      }
+      for (const p of peers) out.push([p]);
+      out.push(peers);
+      return out;
+    };
+
+    for (const t of nonControlTechs) {
+      const effects = data.techs[t.id]!.effects;
+      if (!effects.length) continue;
+      const { reqBranch, reqNonCtrl } = nonControlPrereqs.get(t.id)!;
+      const isFreeBase = baseFree.has(t.id);
+      const effectKeys = new Set<string>();
+      let hasDupKey = false;
+      let needsExactSnapshot = isFreeBase;
+      for (const e of effects) {
+        if ((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1)) continue;
+        const key = `${e.unit}:${e.stat}`;
+        if (effectKeys.has(key)) hasDupKey = true;
+        effectKeys.add(key);
+        if (stage2WrittenStats.has(key) || (freeWriterMaxId.get(key) ?? -1) > t.id) needsExactSnapshot = true;
+        if (reqNonCtrl.length > 0 && (e.op !== 'add' || e.stat === 'reload' || (e.unit === b.id && e.stat === 'attack'))) {
+          needsExactSnapshot = true;
+        }
+      }
+      if (!effectKeys.size) continue;
+      if (hasDupKey) needsExactSnapshot = true;
+      if (!needsExactSnapshot && reqNonCtrl.length > 0) {
+        // An additive effect on attack/firepower/total/max is only invalidated by a prerequisite if that prerequisite
+        // writes a later-ordered set/mul/negative override or changes attack zero-ness.
+        for (const pid of reqNonCtrl) {
+          if (pid > t.id) {
+            needsExactSnapshot = true;
+            break;
+          }
+          for (const pe of data.techs[pid]?.effects ?? []) {
+            if (pe.op === 'set' || (pe.op === 'mul' && pe.value <= 0) || (pe.op === 'add' && pe.value < 0 && pe.stat === 'attack')) {
+              needsExactSnapshot = true;
+              break;
+            }
+          }
+          if (needsExactSnapshot) break;
+        }
+      }
+
+      let relevant = false;
+      const candidateStates: EvalState[] = [];
+      for (const es of allReachableStates) {
+        if (reqBranch.length > 0 && !reqBranch.every((p) => es.techs.includes(p))) continue;
+        if (!effects.some((e) => effectCouldTouchState(e, es))) continue;
+        if (!needsExactSnapshot && effects.some((e) => pureDirectEffectChanged(e, es))) {
+          relevant = true;
+          break;
+        }
+        candidateStates.push(es);
+      }
+
+      if (!relevant && candidateStates.length > 0) {
+        const freeCtx = isFreeBase ? makeWithoutFree(t.id) : null;
+        for (const es of candidateStates) {
+          if (freeCtx && es.snapshot.selected.includes(t.id)) {
+            const snapWithout = snapshot(ctx, b, es.config, freeCtx.withoutData, status, freeCtx.withoutIndex);
+            const esWithout: EvalState = { ...es, snapshot: snapWithout, candCache: new Map(), relicDeposit: null };
+            if (statesObservableDiff(esWithout, es, false)) {
+              relevant = true;
+              break;
+            }
+            const peers = interactingPeersIn(t, es);
+            for (const sub of peerSubsetsOf(peers)) {
+              const techsWithPeers = unique([...es.techs, ...sub.flatMap((pid) => [...nonControlPrereqs.get(pid)!.reqNonCtrl, pid])]);
+              const cfgPeers: GeneralGarrisonConfig = { ...es.config, techs: techsWithPeers };
+              const esPWith = makeEvalState(techsWithPeers, es.rowIds);
+              const snapPWithout = snapshot(ctx, b, cfgPeers, freeCtx.withoutData, status, freeCtx.withoutIndex);
+              const esPWithout: EvalState = { ...esPWith, snapshot: snapPWithout, candCache: new Map(), relicDeposit: null };
+              if (statesObservableDiff(esPWithout, esPWith, false)) {
+                relevant = true;
+                break;
+              }
+            }
+            if (relevant) break;
+          } else {
+            const baseTechs = reqNonCtrl.length > 0 ? unique([...es.techs, ...reqNonCtrl]) : es.techs;
+            const esBase = reqNonCtrl.length > 0 ? makeEvalState(baseTechs, es.rowIds) : es;
+            const esWith = makeEvalState(unique([...baseTechs, t.id]), es.rowIds);
+            if (statesObservableDiff(esBase, esWith, false)) {
+              relevant = true;
+              break;
+            }
+            const peers = interactingPeersIn(t, es).filter((pid) => !baseTechs.includes(pid));
+            for (const sub of peerSubsetsOf(peers)) {
+              const pBaseTechs = unique([...baseTechs, ...sub.flatMap((pid) => [...nonControlPrereqs.get(pid)!.reqNonCtrl, pid])]);
+              if (pBaseTechs.includes(t.id)) continue;
+              const esPBase = makeEvalState(pBaseTechs, es.rowIds);
+              const esPWith = makeEvalState(unique([...pBaseTechs, t.id]), es.rowIds);
+              if (statesObservableDiff(esPBase, esPWith, false)) {
+                relevant = true;
+                break;
+              }
+            }
+            if (relevant) break;
+          }
+        }
+      }
+      if (relevant) kept.add(t.id);
     }
-    if (relevant) kept.add(t.id);
   }
 
   // Close prerequisites for manual kept techs before checking conditionally-free control techs.
@@ -1264,31 +1608,24 @@ function computeGarrisonTechs(
   };
   closePrereqs();
 
-  // Part 3C: Evaluate baseFree control techs and autoFreeControl techs (only when their prereqs are kept).
+  // Part 3C: Evaluate free control techs (baseFree, autoFreeControl, or shape-gated free control techs).
   const freeControlCandidates = [...controlSet].filter(
-    (id) => baseFree.has(id) || (autoFreeControl.has(id) && prereqChainInPool(id).every((p) => kept.has(p) || baseFree.has(p) || autoFreeControl.has(p))),
+    (id) => baseFree.has(id) || (civFreeSet.has(id) && prereqChainInPool(id).every((p) => kept.has(p) || baseFree.has(p) || autoFreeControl.has(p))),
   );
   for (const fid of freeControlCandidates) {
     if (kept.has(fid)) continue;
-    const withoutFreeData: GeneralGarrisonData = {
-      ...data,
-      unitUpgradeTechs: upgradeData.unitUpgradeTechs,
-      civs: {
-        ...data.civs,
-        [config.civ]: {
-          ...civData,
-          free: civData.free.filter((id) => id !== fid),
-        },
-      },
-    };
-    const withoutIndex = getStaticIndex(withoutFreeData);
+    if (subsetOverflow) {
+      kept.add(fid);
+      continue;
+    }
+    const { withoutData, withoutIndex } = makeWithoutFree(fid);
     let relevant = false;
     for (const es of allReachableStates) {
       if (!es.snapshot.selected.includes(fid)) continue;
       if (!baseFree.has(fid) && !es.techs.every((tid) => kept.has(tid))) continue;
-      const snapWithout = snapshot(ctx, b, es.config, withoutFreeData, status, withoutIndex);
+      const snapWithout = snapshot(ctx, b, es.config, withoutData, status, withoutIndex);
       const esWithout: EvalState = { ...es, snapshot: snapWithout, candCache: new Map(), relicDeposit: null };
-      if (statesObservableDiff(esWithout, es)) {
+      if (statesObservableDiff(esWithout, es, true)) {
         relevant = true;
         break;
       }
