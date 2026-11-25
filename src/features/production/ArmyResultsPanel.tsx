@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import type { evaluateArmyCost } from '../../domain/armyCost';
+import { hasDecimalCost, type evaluateArmyCost } from '../../domain/armyCost';
 import type { ArmyCostConfig } from '../../domain/armyCostConfig';
 import { RES_ZH } from '../../domain/ratings';
 import type { Cost } from '../../domain/types';
@@ -32,6 +32,7 @@ export function ArmyResultsPanel({
   resultRef: RefObject<HTMLHeadingElement>;
   onRemoveResearch: (key: string) => void;
 }) {
+  const decimalCount = result?.ledger.filter((e) => e.status === 'planned' && hasDecimalCost(e.cost)).length ?? 0;
   return (
     <div className="army-results">
       <section className="army-card">
@@ -59,6 +60,18 @@ export function ArmyResultsPanel({
             <h3>一次性研究 / 升级费</h3>
             <ResourceGrid cost={result.researchTotal} />
             <p className="note">按实际研究动作去重，不乘训练数量。</p>
+            {decimalCount > 0 && (
+              <p className="army-boundary army-decimal-note" data-t="army-decimal-note" role="note">
+                <Icon name="info" />
+                <span>
+                  有{' '}
+                  <span className="nw">
+                    <span className="num">{decimalCount}</span> 项
+                  </span>
+                  研究的折后价含小数：按固定数据的折扣比例保留至多两位小数并计入；游戏内实际是否取整未核实。
+                </span>
+              </p>
+            )}
             {!result.partial && result.ledger.length > 0 && result.ledger.every((e) => ['done', 'inferred-done', 'free'].includes(e.status)) && (
               <p className="note">
                 所有必要和目标研究均已完成；新增研究费为 <span className="num">0</span>。

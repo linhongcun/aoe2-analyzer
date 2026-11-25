@@ -3,7 +3,17 @@ import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';
 import { civs } from '../../src/data';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
-import { emptyArmyCost as makeArmyCost, evaluateArmyCost, researchPrice, researchResolver, armyResearchChoices, researchKey } from '../../src/domain/armyCost';
+import {
+  emptyArmyCost as makeArmyCost,
+  evaluateArmyCost,
+  researchPrice,
+  researchResolver,
+  armyResearchChoices,
+  researchKey,
+  addArmyCost,
+  hasDecimalCost,
+} from '../../src/domain/armyCost';
+import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS } from '../../src/domain/production';
 import { evaluateTrainTotal } from '../../src/domain/trainTotal';
 import { armyResearchConditions } from '../../src/domain/armyResearchEvidence';
 
@@ -117,15 +127,16 @@ describe('army research pinned data', () => {
     expect(unknown.hasValue).toBe(false);
     expect(evaluateArmyCost(ctx, { ...emptyArmyCost(), done: ['t:67'], targets: ['t:68'] }, data).partial).toBe(false);
   });
-  it('does not treat the nonfree Paphos shadow event as an automatic condition', () => {
-    expect(researchResolver(ARMY_RESEARCH, 'Georgians', 4).resolve(1138).state).toBe('unknown');
+  it('treats the nonfree Paphos shadow event as unavailable in standard RM rather than automatic or unknown', () => {
+    expect(researchResolver(ARMY_RESEARCH, 'Georgians', 4).resolve(1138).state).toBe('unavailable');
     const r = evaluateArmyCost(ctx, { ...makeArmyCost('Georgians'), rows: [{ unit: 567, qty: '1' }] });
-    expect(r.partial).toBe(true);
+    expect(r.partial).toBe(false);
+    expect(r.ledger.map((e) => e.id)).toContain(264);
+    expect(r.ledger.map((e) => e.id)).not.toContain(1174);
     for (const civ of ['Georgians', 'Khitans', 'Shu', 'Wu']) {
-      const faith = evaluateArmyCost(ctx, { ...makeArmyCost(civ), targets: ['t:45'] });
-      expect(faith.partial).toBe(true);
-      expect(faith.ledger.find((e) => e.id === 45)?.reason).toContain('未核实');
-      expect(faith.hasValue).toBe(false);
+      const faith = evaluateArmyCost(ctx, { ...makeArmyCost(civ), rows: [{ unit: 125, qty: '1' }], targets: ['t:45'] });
+      expect(faith.partial).toBe(false);
+      expect(faith.ledger.map((e) => e.id)).toEqual(expect.arrayContaining([45, 46]));
     }
   });
   it('maps every published civilization to its fixed-data identity, including the default empty plan', () => {
@@ -290,5 +301,248 @@ describe('army research pinned data', () => {
     data.civs.Sicilians!.mods = [{ Type: 101, A: 67, B: 0, C: 1, D: 10 }];
     data.nodes[68]!.mods = [{ Type: 101, A: 67, B: 0, C: 2, D: 0.5 }];
     expect(researchPrice(data, 'Sicilians', 4, 67, new Set([68])).cost).toBe(null);
+  });
+
+  describe('#1402 regional re-enable, post-imperial/shadow filters, decimal rounding and duplicate champion upgrades', () => {
+    it('AC1: clears t:79/t:656/t:1350 across all 56 civs and keeps non-owning regional upgrades unavailable', () => {
+      const unexpectedFailures: string[] = [];
+      const regionalUpgrades = new Set(ARMY_RESEARCH.nodes[79]!.mods.filter((m) => m.Type === 102).map((m) => Math.round(m.D)));
+      const checkedRegionalPairs: string[] = [];
+      for (const c of civs) {
+        const units = productionUnits(ctx, { civ: c.en, age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
+        for (const u of units) {
+          const r = evaluateArmyCost(ctx, { ...makeArmyCost(c.en), rows: [{ unit: u.id, qty: '1' }] });
+          const isFireShip1409 = u.id === 529 || u.id === 532 || u.id === 1302;
+          // Independent tech-tree unit availability: every civ (including Chinese) must train cleanly except #1409 t:243 Fire Ship line (529/532/1302).
+          if (!isFireShip1409 && r.training.lines[0]?.status !== 'ok') {
+            unexpectedFailures.push(`${c.en}:${u.id}:line=${r.training.lines[0]?.status}(${r.training.lines[0]?.reason})`);
+          }
+          // Non-Chinese, non-Fire-Ship pairs must have full quotes (Chinese res:85 research pricing is deferred to #1409).
+          if (c.en !== 'Chinese' && !isFireShip1409 && r.partial) {
+            unexpectedFailures.push(`${c.en}:${u.id}:partial=true`);
+          }
+          // Determine expected regional upgrades from independent productionUnits (never gate on ARMY_RESEARCH.civs[c].enabled).
+          const expectedRegional = Object.entries(ARMY_RESEARCH.nodes)
+            .filter(([tid, n]) => regionalUpgrades.has(Number(tid)) && n.upgrades.some(([, b]) => b === u.id))
+            .map(([tid]) => Number(tid));
+          for (const tid of expectedRegional) {
+            checkedRegionalPairs.push(`${c.en}:${u.id}:t:${tid}`);
+            const entry = r.ledger.find((e) => e.id === tid);
+            if (!entry) {
+              unexpectedFailures.push(`regional-missing:${c.en}:${u.id}:t:${tid}:line=${r.training.lines[0]?.status}`);
+            } else if (c.en === 'Chinese') {
+              if (entry.problem !== 'price' || !entry.reason.includes('全局研究费用倍率')) {
+                unexpectedFailures.push(`regional-chinese-unexpected:${c.en}:${u.id}:t:${tid}:${entry.status}:${entry.problem}:${entry.reason}`);
+              }
+            } else if (entry.status !== 'planned') {
+              unexpectedFailures.push(`regional-unplanned:${c.en}:${u.id}:t:${tid}:entry=${entry.status}(${entry.reason})`);
+            }
+          }
+          for (const e of r.ledger) {
+            if (e.status !== 'invalid') continue;
+            const srcs = e.quote?.modifiers.map((m) => m.source).join(',') ?? '';
+            if (srcs.includes('t:79') || srcs.includes('t:656') || e.id === 1350) {
+              unexpectedFailures.push(`${c.en}:${u.id}:${e.key}:${e.reason}`);
+            }
+          }
+        }
+      }
+      expect(unexpectedFailures).toEqual([]);
+      expect(checkedRegionalPairs.length).toBeGreaterThanOrEqual(70);
+      expect(checkedRegionalPairs).toEqual(expect.arrayContaining(['Chinese:1907:t:980', 'Chinese:1903:t:982', 'Tatars:1372:t:715', 'Spanish:2701:t:1451']));
+
+      // Named regional upgrades across civs
+      const spanish = evaluateArmyCost(ctx, { ...makeArmyCost('Spanish'), rows: [{ unit: 2701, qty: '1' }] });
+      expect(spanish.partial).toBe(false);
+      expect(spanish.researchTotal).toMatchObject({ Food: 1000, Gold: 650 });
+
+      const byzVarangian = evaluateArmyCost(ctx, { ...makeArmyCost('Byzantines'), rows: [{ unit: 2704, qty: '1' }] });
+      expect(byzVarangian.partial).toBe(false);
+      expect(byzVarangian.researchTotal).toMatchObject({ Food: 750, Gold: 475 });
+
+      const byzCamel = evaluateArmyCost(ctx, { ...makeArmyCost('Byzantines'), rows: [{ unit: 330, qty: '1' }] });
+      expect(byzCamel.partial).toBe(false);
+      expect(byzCamel.researchTotal).toMatchObject({ Food: 325, Gold: 360 });
+
+      const berberGenitour = evaluateArmyCost(ctx, { ...makeArmyCost('Berbers'), rows: [{ unit: 1012, qty: '1' }] });
+      expect(berberGenitour.partial).toBe(false);
+      expect(berberGenitour.researchTotal).toMatchObject({ Food: 500, Wood: 450 });
+
+      const vietSkirm = evaluateArmyCost(ctx, { ...makeArmyCost('Vietnamese'), rows: [{ unit: 1155, qty: '1' }] });
+      expect(vietSkirm.partial).toBe(false);
+      expect(vietSkirm.ledger.find((e) => e.id === 655)?.cost).toMatchObject({ Wood: 300, Gold: 300 });
+
+      // All 4 South American civs x 4 Champi units = 16 combinations
+      for (const civ of ['Incas', 'Mapuche', 'Muisca', 'Tupi']) {
+        for (const uid of [2550, 2588, 2552, 2554]) {
+          const r = evaluateArmyCost(ctx, { ...makeArmyCost(civ), rows: [{ unit: uid, qty: '1' }] });
+          expect(r.partial, `${civ}:${uid}`).toBe(false);
+          expect(r.training.lines[0]?.status, `${civ}:${uid}`).toBe('ok');
+          expect((r.trainingTotal.Food ?? 0) + (r.trainingTotal.Gold ?? 0), `${civ}:${uid}`).toBeGreaterThan(0);
+          expect(r.ledger.find((e) => e.id === 1350)).toMatchObject({ name: '启用：蔷琵斥候', status: 'free' });
+        }
+      }
+
+      // Negative cases: non-owning civs must still reject regional upgrades and conditionally disabled techs (including done history)
+      for (const tid of [236, 1454, 1350, 599]) {
+        expect(researchResolver(ARMY_RESEARCH, 'Franks', 4).available(tid), `Franks t:${tid}`).toBe(false);
+        expect(researchPrice(ARMY_RESEARCH, 'Franks', 4, tid, new Set()).cost, `Franks price t:${tid}`).toBe(null);
+      }
+      expect(researchPrice(ARMY_RESEARCH, 'Britons', 4, 655, new Set([98])).cost).toBe(null);
+      expect(researchResolver(ARMY_RESEARCH, 'Britons', 4).resolve(655).state).toBe('unavailable');
+      expect(researchResolver(ARMY_RESEARCH, 'Turks', 4).available(655)).toBe(false);
+
+      // Britons marking Imperial Skirmisher t:655 as done must NOT infer Elite Skirmisher t:98 done or zero out its cost
+      const britDone655 = evaluateArmyCost(ctx, { ...makeArmyCost('Britons'), rows: [{ unit: 6, qty: '1' }], done: ['t:655'] });
+      expect(britDone655.partial).toBe(true);
+      expect(britDone655.ledger.find((e) => e.id === 655)?.status).toBe('invalid');
+      expect(britDone655.ledger.find((e) => e.id === 98)?.status).toBe('planned');
+      expect(britDone655.researchTotal).toMatchObject({ Wood: 230, Gold: 130 });
+
+      // Positive control: Vietnamese legitimately owns t:655 and CAN mark it done (inferring t:98 done)
+      const vietDone655 = evaluateArmyCost(ctx, { ...makeArmyCost('Vietnamese'), rows: [{ unit: 6, qty: '1' }], done: ['t:655'] });
+      expect(vietDone655.partial).toBe(false);
+      expect(vietDone655.ledger.find((e) => e.id === 655)?.status).toBe('done');
+      expect(vietDone655.ledger.find((e) => e.id === 98)?.status).toBe('inferred-done');
+      expect(vietDone655.researchTotal.Wood ?? 0).toBe(0);
+
+      // Poles marking disabled Hussar t:428 as done must NOT infer Light Cavalry t:254 done
+      const polesDone428 = evaluateArmyCost(ctx, { ...makeArmyCost('Poles'), rows: [{ unit: 546, qty: '1' }], done: ['t:428'] });
+      expect(polesDone428.partial).toBe(true);
+      expect(polesDone428.ledger.find((e) => e.id === 428)?.status).toBe('invalid');
+      expect(polesDone428.ledger.find((e) => e.id === 254)?.status).toBe('planned');
+      expect(polesDone428.researchTotal).toMatchObject({ Food: 75, Gold: 50 });
+
+      // Regicide-only t:117 (Disable Spies) must NOT reject completed Spies t:408 in standard RM across all 56 civs
+      const britDone408 = evaluateArmyCost(ctx, { ...makeArmyCost('Britons'), rows: [{ unit: 6, qty: '1' }], done: ['t:408'] });
+      expect(britDone408.partial).toBe(false);
+      expect(britDone408.ledger.find((e) => e.id === 408)?.status).toBe('done');
+      expect(britDone408.ledger.find((e) => e.id === 98)?.status).toBe('planned');
+      for (const c of civs) {
+        expect(researchResolver(ARMY_RESEARCH, c.en, 4).resolve(408).state, c.en).toBe('ready');
+      }
+    });
+
+    it('AC2: ignores post-imperial t:790/791 and unreachable shadow t:1142 across affected civs', () => {
+      const lith = evaluateArmyCost(ctx, { ...makeArmyCost('Lithuanians'), rows: [{ unit: 1707, qty: '1' }] });
+      expect(lith.partial).toBe(false);
+      expect(lith.ledger.find((e) => e.id === 786)?.cost).toMatchObject({ Food: 600, Gold: 800 });
+
+      const poles = evaluateArmyCost(ctx, { ...makeArmyCost('Poles'), rows: [{ unit: 1707, qty: '1' }] });
+      expect(poles.partial).toBe(false);
+      expect(poles.ledger.find((e) => e.id === 786)?.cost).toMatchObject({ Food: 300, Gold: 800 });
+
+      const paphosNavalBlocked: string[] = [];
+      for (const civ of ['Armenians', 'Georgians', 'Jurchens', 'Khitans', 'Shu', 'Wei', 'Wu']) {
+        for (const tid of [34, 35, 244, 905]) {
+          if (!researchResolver(ARMY_RESEARCH, civ, 4).available(tid)) continue;
+          const p = researchPrice(ARMY_RESEARCH, civ, 4, tid, new Set());
+          if (p.modifiers.some((m) => m.source.includes('t:1142')) || p.cost === null) {
+            paphosNavalBlocked.push(`${civ}:t:${tid}:${p.reason}`);
+          }
+        }
+      }
+      expect(paphosNavalBlocked).toEqual([]);
+
+      const armGalleon = evaluateArmyCost(ctx, { ...makeArmyCost('Armenians'), rows: [{ unit: 442, qty: '1' }] });
+      expect(armGalleon.partial).toBe(false);
+      expect(armGalleon.researchTotal).toMatchObject({ Wood: 550, Gold: 415 });
+    });
+
+    it('AC3: prices non-integer discounted research to at most 2 decimals and eliminates float32 residue', () => {
+      // Zero rounding rejections across all 56 civs' choices
+      const roundingErrors: string[] = [];
+      for (const c of civs) {
+        const units = productionUnits(ctx, { civ: c.en, age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
+        const choices = armyResearchChoices(ctx, { ...makeArmyCost(c.en), rows: units.map((u) => ({ unit: u.id, qty: '1' })) }, false);
+        for (const tid of choices) {
+          const p = researchPrice(ARMY_RESEARCH, c.en, 4, tid, new Set());
+          if (p.reason.includes('取整')) roundingErrors.push(`${c.en}:t:${tid}`);
+        }
+      }
+      expect(roundingErrors).toEqual([]);
+
+      // Bulgarians Blast Furnace (t:75 = 137.5F + 225G)
+      const bulg = evaluateArmyCost(ctx, { ...makeArmyCost('Bulgarians'), rows: [{ unit: 1227, qty: '10' }], targets: ['t:75'] });
+      expect(bulg.partial).toBe(false);
+      expect(bulg.ledger.find((e) => e.id === 75)?.cost).toEqual({ Food: 137.5, Gold: 225 });
+      expect(bulg.researchTotal).toMatchObject({ Food: 1322.5, Gold: 1095 });
+      expect(bulg.ledger.filter((e) => e.status === 'planned' && hasDecimalCost(e.cost)).map((e) => e.id)).toEqual([75]);
+
+      // Tupi Arson (37.5F) + Crossbowman (87.5F) + Arbalest prereq passes
+      const tupi = evaluateArmyCost(ctx, {
+        ...makeArmyCost('Tupi'),
+        rows: [
+          { unit: 492, qty: '1' },
+          { unit: 2554, qty: '1' },
+        ],
+        targets: ['t:602'],
+      });
+      expect(tupi.partial).toBe(false);
+      expect(tupi.ledger.find((e) => e.id === 602)?.cost).toEqual({ Food: 37.5, Gold: 25 });
+      expect(tupi.ledger.find((e) => e.id === 100)?.cost).toEqual({ Food: 87.5, Gold: 100 });
+      expect(tupi.ledger.find((e) => e.id === 237)?.status).toBe('planned');
+
+      // Italians 2-decimal items + integer item (UX Fig 3)
+      const ita = evaluateArmyCost(ctx, {
+        ...makeArmyCost('Italians'),
+        rows: [
+          { unit: 868, qty: '10' },
+          { unit: 691, qty: '3' },
+        ],
+        targets: ['t:93'],
+      });
+      expect(ita.partial).toBe(false);
+      expect(ita.total).toEqual({ Food: 1125, Wood: 1548.75, Gold: 2166.25, Stone: 0 });
+      expect(
+        ita.ledger
+          .filter((e) => e.status === 'planned' && hasDecimalCost(e.cost))
+          .map((e) => e.id)
+          .sort((a, b) => a! - b!),
+      ).toEqual([93, 376]);
+      expect(hasDecimalCost(ita.ledger.find((e) => e.id === 47)?.cost)).toBe(false);
+
+      // Danes float32 residue rounds to exact integers (UX Fig 5) while done Long Swordsman keeps 22.1G reference quote
+      const danes = evaluateArmyCost(ctx, { ...makeArmyCost('Danes'), rows: [{ unit: 567, qty: '10' }], done: ['t:222', 't:207'] });
+      expect(danes.partial).toBe(false);
+      expect(danes.ledger.find((e) => e.id === 264)?.cost).toEqual({ Food: 650, Gold: 119 });
+      expect(danes.ledger.find((e) => e.id === 217)?.cost).toEqual({ Food: 200, Gold: 34 });
+      expect(danes.ledger.filter((e) => e.status === 'planned' && hasDecimalCost(e.cost))).toEqual([]);
+      expect(danes.ledger.find((e) => e.id === 207)?.quote?.cost).toEqual({ Food: 150, Gold: 22.1 });
+      expect(hasDecimalCost(danes.ledger.find((e) => e.id === 207)?.quote?.cost)).toBe(true);
+
+      // Summation drift guard (30.6 + 22.1 === 52.7, not 52.699999999999996)
+      const acc: Record<string, number> = {};
+      addArmyCost(acc, { Gold: 30.6 });
+      addArmyCost(acc, { Gold: 22.1 });
+      expect(acc.Gold).toBe(52.7);
+    });
+
+    it('AC4: excludes unreachable duplicate Champion upgrade t:1174 across all 39 Champion civs and fixes 5 shape() civs', () => {
+      const champCivs = civs.filter((c) => ctx.core.unitById[567]!.civs.includes(c.en));
+      expect(champCivs).toHaveLength(39);
+      for (const c of champCivs) {
+        const choices = armyResearchChoices(ctx, { ...makeArmyCost(c.en), rows: [{ unit: 567, qty: '1' }] });
+        expect(choices, c.en).toContain(264);
+        expect(choices, c.en).not.toContain(1174);
+      }
+      for (const civ of ['Armenians', 'Georgians', 'Khitans', 'Shu', 'Wu']) {
+        const r = evaluateArmyCost(ctx, { ...makeArmyCost(civ), rows: [{ unit: 567, qty: '1' }] });
+        expect(r.partial, civ).toBe(false);
+        expect(r.training.lines[0]?.status, civ).toBe('ok');
+        expect(
+          r.ledger.map((e) => e.id),
+          civ,
+        ).toContain(264);
+        expect(
+          r.ledger.map((e) => e.id),
+          civ,
+        ).not.toContain(1174);
+      }
+      // Explicit URL targeting unreachable t:1174 remains invalid
+      const badTarget = evaluateArmyCost(ctx, { ...makeArmyCost('Goths'), rows: [{ unit: 567, qty: '1' }], targets: ['t:1174'] });
+      expect(badTarget.partial).toBe(true);
+      expect(badTarget.ledger.find((e) => e.id === 1174)?.status).toBe('invalid');
+    });
   });
 });

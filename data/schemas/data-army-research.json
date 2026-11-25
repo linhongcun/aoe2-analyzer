@@ -24,11 +24,12 @@
       "minProperties": 1,
       "additionalProperties": {
         "type": "object",
-        "required": ["id", "disabled", "mods"],
+        "required": ["id", "disabled", "enabled", "mods"],
         "additionalProperties": false,
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "disabled": { "type": "array", "items": { "type": "integer" } },
+          "enabled": { "type": "array", "items": { "type": "integer" } },
           "mods": { "$ref": "#/$defs/commands" }
         }
       }

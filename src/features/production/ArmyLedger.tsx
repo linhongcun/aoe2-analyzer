@@ -1,5 +1,5 @@
 import { ARMY_RESEARCH } from '../../data/armyResearch';
-import type { ResearchEntry } from '../../domain/armyCost';
+import { hasDecimalCost, type ResearchEntry } from '../../domain/armyCost';
 import type { ArmyCostConfig } from '../../domain/armyCostConfig';
 import { armyResearchConditions, ARMY_RESEARCH_STATES as STATES } from '../../domain/armyResearchEvidence';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
@@ -40,6 +40,13 @@ export function ArmyLedger({
         ))}
         {entry.reason && ' · ' + entry.reason}
         {['done', 'inferred-done'].includes(entry.status) && ' · 历史研究费用不重复计入。'}
+        {entry.status === 'planned' && hasDecimalCost(entry.cost) && (
+          <>
+            {' · '}
+            <span className="nw">折后价含小数，</span>
+            <span className="nw">保留至多两位</span>
+          </>
+        )}
       </p>
       {entry.cost && <CostView c={entry.cost} />}
       <details>
@@ -100,6 +107,7 @@ export function ArmyLedger({
           <>
             <p>当前条件参考价（历史研究不据此补收）：</p>
             <CostView c={entry.quote.cost} />
+            {hasDecimalCost(entry.quote.cost) && <p>按折扣比例计算，保留至多两位小数；游戏内实际是否取整未核实。</p>}
           </>
         ) : (
           <p>{entry.quote?.reason || entry.reason || '有效价尚未核实。'}</p>
@@ -109,7 +117,8 @@ export function ArmyLedger({
             {entry.quote.modifiers.map((m, i) => (
               <li key={i}>
                 {m.source}：{m.command.Type === 103 ? '研究时间' : m.command.B === -1 ? '四种资源' : (RES_ZH[RES_ID[m.command.B]!] ?? '全局／未识别资源')}
-                {m.command.C === 0 ? '设为' : m.command.C === 2 ? '乘以' : '加上'} <span className="num">{m.command.D}</span>。{m.applied ? '已计入' : '未计入'}
+                {m.command.C === 0 ? '设为' : m.command.C === 2 ? '乘以' : '加上'} <span className="num">{Math.round(m.command.D * 1e4) / 1e4 || 0}</span>。
+                {m.applied ? '已计入' : '未计入'}
                 ；生效依据：{m.condition}。
                 <span className="nw">
                   类型 <span className="num">{m.command.Type}</span>

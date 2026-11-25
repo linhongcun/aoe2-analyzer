@@ -45,7 +45,12 @@ def build(d):
         combat_units = sorted(set(proj_all) | direct_combat)
         charge_only = sorted(set(proj_charge_only) - direct_combat)
         upgrades = [[c['A'], c['B']] for c in commands if c['Type'] == 3]
-        label = names.get(i) or next(('升级：' + unit_names[b] for _, b in upgrades if b in unit_names), None)
+        enables = [c['A'] for c in commands if c['Type'] == 2 and c['B'] == 1]
+        label = (
+            names.get(i)
+            or next(('升级：' + unit_names[b] for _, b in upgrades if b in unit_names), None)
+            or (next(('启用：' + unit_names[u] for u in enables if u in unit_names), None) if t['ResearchLocation'] > 0 else None)
+        )
         node = dict(
             name=label,
             civ=t['Civ'],
@@ -55,7 +60,7 @@ def build(d):
             time=t['ResearchTime'],
             cost=t['Cost'],
             upgrades=upgrades,
-            enables=[c['A'] for c in commands if c['Type'] == 2 and c['B'] == 1],
+            enables=enables,
             mods=[c for c in commands if relevant(c)],
             combatUnits=combat_units,
         )
@@ -66,9 +71,13 @@ def build(d):
     for i, c in enumerate(d['Civs']):
         if not i:
             continue
-        tree = cmds(c['TechTreeID'])
-        civs[CIV_DAT.get(c['Name'], c['Name'])] = dict(id=i, disabled=[int(x['D']) for x in tree if x['Type'] == 102],
-                               mods=[x for x in tree + cmds(c['TeamBonusID']) if relevant(x) and x['Type'] != 102])
+        civ_cmds = cmds(c['TechTreeID']) + cmds(c['TeamBonusID'])
+        civs[CIV_DAT.get(c['Name'], c['Name'])] = dict(
+            id=i,
+            disabled=sorted({int(round(x['D'])) for x in civ_cmds if x['Type'] == 102}),
+            enabled=sorted({int(x['A']) for x in civ_cmds if x['Type'] in (8, 18) and x['B'] == 12 and abs(float(x['D']) - 1.0) < 1e-9}),
+            mods=[x for x in civ_cmds if relevant(x) and x['Type'] != 102],
+        )
     return dict(meta=dict(generatedBy='scripts/army_research_build.py', patch=DAT['patch'],
                           commit=DAT['commit'], sha256=DAT['sha256']),
                 nodes=nodes, civs=civs, buildingTechs=sorted(set(d['BuildTech'].values())), buildingTriggers=d['BuildTech'])
