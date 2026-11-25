@@ -26,6 +26,7 @@ export interface ArmyResearchData {
   nodes: Record<string, ResearchNode>;
   civs: Record<string, { id: number; disabled: number[]; enabled?: number[]; mods: ResearchCommand[] }>;
   buildingTechs: number[];
+  fxTriggeredTechs?: number[];
   buildingTriggers: Record<string, number>;
 }
 function deepFreeze<T>(value: T): T {

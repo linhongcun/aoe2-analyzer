@@ -70,9 +70,9 @@ export function isUnreachableHiddenNode(node: ResearchNode): boolean {
   return node.location <= 0 && (node.time > 0 || node.cost.some(([r, v, enabled]) => enabled && v! > 0 && r !== undefined && r >= 0 && r <= 3));
 }
 
-/** Structurally unreachable .dat tech: not triggered by building construction and requires more prerequisites than exist. */
+/** Structurally unreachable .dat tech: not triggered by building construction or effect commands, and requires more prerequisites than exist. */
 export function isUnreachableCountNode(data: ArmyResearchData, id: number, node: ResearchNode): boolean {
-  return node.count > node.requires.length && !data.buildingTechs.includes(id);
+  return node.count > node.requires.length && !data.buildingTechs.includes(id) && !data.fxTriggeredTechs?.includes(id);
 }
 
 export function isGlobalResearchCostMod(c: ResearchCommand): boolean {
@@ -117,7 +117,7 @@ export interface GlobalResearchModCandidate {
 export function applyGlobalResearchMods(
   entries: GlobalResearchModCandidate[],
   cost: Cost,
-  operations: Map<string, { source: string; op: number; value: number }>,
+  operations: Map<string, { source: string; op: number; value: number }[]>,
   sources: string[],
   modifiers: ArmyPriceModifier[],
 ): string | null {
@@ -131,23 +131,23 @@ export function applyGlobalResearchMods(
   });
   const valid =
     entries.length > 0 &&
-    entries.every((e) => e.command.Type === 1 && e.command.B === 0 && Number.isFinite(e.command.D) && e.command.D >= 0) &&
-    (entries.length === 1 || (entries.every((e) => e.ageRank !== null) && new Set(entries.map((e) => e.ageRank!)).size === entries.length));
+    entries.every((e) => e.command.Type === 1 && e.command.B === 0 && Number.isFinite(e.command.D) && e.command.D >= 0 && e.ageRank !== null) &&
+    new Set(entries.map((e) => e.ageRank!)).size === entries.length;
   if (!valid) {
     modifiers.push(...entries.map((e) => toMod(e, false)));
     return '本文明全局研究费用倍率尚未核实';
   }
-  const sorted = entries.length === 1 ? entries : [...entries].sort((a, b) => a.ageRank! - b.ageRank!);
+  const sorted = [...entries].sort((a, b) => a.ageRank! - b.ageRank!);
   const effective = sorted[sorted.length - 1]!;
   const superseded = sorted.slice(0, -1);
   for (const r of ARMY_RES) {
     if (cost[r] === undefined) continue;
-    const prev = operations.get(r);
-    if (prev && prev.source !== effective.source && !(prev.op === 2 || (prev.op === 0 && prev.value === 0))) {
+    const history = operations.get(r) ?? [];
+    if (history.some((prev) => !(prev.op === 2 || (prev.op === 0 && prev.value === 0)))) {
       modifiers.push(...[effective, ...superseded].map((e) => toMod(e, false)));
       return '多项研究修正的生效顺序尚未核实';
     }
-    operations.set(r, { source: effective.source, op: 2, value: effective.command.D });
+    operations.set(r, [...history, { source: effective.source, op: 2, value: effective.command.D }]);
   }
   for (const r of ARMY_RES) if (cost[r] !== undefined) cost[r] = Math.max(0, cost[r]! * effective.command.D);
   sources.push(effective.source);
@@ -193,10 +193,11 @@ export function evalConditionNode(
   const n = data.nodes[tid];
   if (!n || seen.has(tid)) return null;
   if (context.disabled.includes(tid) || (n.civ >= 0 && n.civ !== context.id)) return false;
+  if (isUnreachableCountNode(data, tid, n)) return false;
   if (before.has(tid) || data.buildingTechs.includes(tid)) return true;
   if (n.location > 0) return active.has(tid) && tid !== targetId ? null : false;
-  if (isUnreachableHiddenNode(n) || isUnreachableCountNode(data, tid, n)) return false;
-  if (n.time > 0 || n.cost.some(([, v, enabled]) => enabled && v! > 0)) return null;
+  if (isUnreachableHiddenNode(n)) return false;
+  if (n.time > 0 || n.cost.some(([, v, enabled]) => enabled && v! > 0) || n.count > n.requires.length) return null;
   const results = n.requires.map((p) => evalConditionNode(data, context, age, targetId, active, before, p, new Set(seen).add(tid)));
   const yes = results.filter((r) => r === true).length;
   return yes >= n.count ? true : yes + results.filter((r) => r === null).length < n.count ? false : null;
@@ -235,6 +236,7 @@ export function researchPrice(
     modifiers,
   });
   if (!node || !context) return bad('研究身份或文明未核实');
+  if (isUnreachableCountNode(data, id, node)) return bad(`研究 t:${id} 在标准对局中不可触发`);
   const cost: Cost = {};
   const res: Record<number, string> = { 0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold' };
   for (const [r, amount, enabled] of node.cost) {
@@ -284,7 +286,7 @@ export function researchPrice(
   }
   let time = node.time;
   const sources: string[] = [];
-  const operations = new Map<string, { source: string; op: number; value: number }>();
+  const operations = new Map<string, { source: string; op: number; value: number }[]>();
   const res85Candidates: GlobalResearchModCandidate[] = [];
   for (const group of groups)
     for (const c of group.mods) {
@@ -306,15 +308,21 @@ export function researchPrice(
       if (c.Type !== 101 && c.Type !== 103) return bad('研究修正类型尚未核实');
       if (![0, 1, 2, -1].includes(c.C) || !Number.isFinite(c.D)) return bad('研究修正操作尚未核实');
       for (const key of c.Type === 103 ? ['time'] : c.B === -1 ? [...ARMY_RES] : [res[c.B] ?? 'unknown']) {
-        const prev = operations.get(key);
+        const history = operations.get(key) ?? [];
         const op = c.C === -1 ? 1 : c.C;
         if (
-          prev &&
-          prev.source !== group.source &&
-          !((op === prev.op && (op !== 0 || c.D === prev.value)) || (op === 2 && prev.op === 0 && prev.value === 0) || (op === 0 && c.D === 0 && prev.op === 2))
+          history.some(
+            (prev) =>
+              prev.source !== group.source &&
+              !(
+                (op === prev.op && (op !== 0 || c.D === prev.value)) ||
+                (op === 2 && prev.op === 0 && prev.value === 0) ||
+                (op === 0 && c.D === 0 && prev.op === 2)
+              ),
+          )
         )
           return bad('多项研究修正的生效顺序尚未核实');
-        operations.set(key, { source: group.source, op, value: c.D });
+        operations.set(key, [...history, { source: group.source, op, value: c.D }]);
       }
       const apply = (v: number) => Math.max(0, c.C === 0 ? c.D : c.C === 2 ? v * c.D : v + c.D);
       if (c.Type === 103) time = apply(time);

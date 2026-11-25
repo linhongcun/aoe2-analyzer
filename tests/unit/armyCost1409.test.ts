@@ -14,6 +14,7 @@ import {
   type ResearchEntry,
 } from '../../src/domain/armyCost';
 import { AGE_TECH_IDS } from '../../src/domain/gameIds';
+import { evalConditionNode } from '../../src/domain/armyResearchRules';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS } from '../../src/domain/production';
 import { ArmyLedger } from '../../src/features/production/ArmyLedger';
 
@@ -134,9 +135,28 @@ describe('#1409 Chinese res:85 global research discount, unreachable count>requi
     dupAge.nodes[351]!.requires = [103];
     expect(researchPrice(dupAge, 'Chinese', 4, 199, new Set()).cost).toBe(null);
 
+    // Single res:85 node with unknown (non-age) trigger must fail closed
+    const unknownAgeSingle = structuredClone(ARMY_RESEARCH);
+    unknownAgeSingle.nodes[304]!.requires = [67];
+    unknownAgeSingle.nodes[304]!.count = 1;
+    expect(researchPrice(unknownAgeSingle, 'Chinese', 1, 199, new Set([67]))).toMatchObject({
+      cost: null,
+      reason: '本文明全局研究费用倍率尚未核实',
+    });
+
     const nonCommutative = structuredClone(ARMY_RESEARCH);
     nonCommutative.civs.Chinese!.mods.push({ Type: 101, A: 199, B: 0, C: 1, D: 20 });
     expect(researchPrice(nonCommutative, 'Chinese', 4, 199, new Set())).toMatchObject({ cost: null, reason: '多项研究修正的生效顺序尚未核实' });
+
+    // Same node emitting both res:85 and non-commutative Type=101 (+20) must still fail closed
+    const sameNodeConflict = structuredClone(ARMY_RESEARCH);
+    sameNodeConflict.nodes[352]!.mods.push({ Type: 101, A: 199, B: 0, C: 1, D: 20 });
+    expect(researchPrice(sameNodeConflict, 'Chinese', 4, 199, new Set())).toMatchObject({ cost: null, reason: '多项研究修正的生效顺序尚未核实' });
+
+    // Same group emitting +20 then x0.5 must NOT erase the earlier +20 from commutativity history before res:85
+    const addThenMulConflict = structuredClone(ARMY_RESEARCH);
+    addThenMulConflict.civs.Chinese!.mods.push({ Type: 101, A: 199, B: 0, C: 1, D: 20 }, { Type: 101, A: 199, B: 0, C: 2, D: 0.5 });
+    expect(researchPrice(addThenMulConflict, 'Chinese', 4, 199, new Set())).toMatchObject({ cost: null, reason: '多项研究修正的生效顺序尚未核实' });
 
     const commutativeMul = structuredClone(ARMY_RESEARCH);
     commutativeMul.civs.Chinese!.mods.push({ Type: 101, A: 199, B: 0, C: 2, D: 0.5 });
@@ -279,7 +299,16 @@ describe('#1409 Chinese res:85 global research discount, unreachable count>requi
       expect(node.upgrades, `t:${tid}`).toEqual([]);
       expect(node.mods, `t:${tid}`).toEqual([]);
       expect(researchResolver(ARMY_RESEARCH, 'Byzantines', 4).resolve(tid).state, `t:${tid}`).toBe('unavailable');
+      const civName = tid === 490 ? 'Saracens' : tid === 598 ? 'Berbers' : 'Byzantines';
+      const ctxCiv = ARMY_RESEARCH.civs[civName]!;
+      expect(researchPrice(ARMY_RESEARCH, civName, 4, tid, new Set()), `direct price t:${tid}`).toMatchObject({ cost: null, free: false });
+      expect(evalConditionNode(ARMY_RESEARCH, ctxCiv, 4, 199, new Set([tid]), new Set([tid]), tid), `evalConditionNode before t:${tid}`).toBe(false);
+      expect(evalConditionNode(ARMY_RESEARCH, ctxCiv, 4, 199, new Set([tid]), new Set(), tid), `evalConditionNode active t:${tid}`).toBe(false);
     }
+    // Effect-triggered tech t:707 is preserved as non-dead (ready when completed, unknown otherwise)
+    expect(ARMY_RESEARCH.fxTriggeredTechs).toContain(707);
+    expect(researchResolver(ARMY_RESEARCH, 'Cumans', 4, new Set([707])).resolve(707).state).toBe('ready');
+    expect(researchResolver(ARMY_RESEARCH, 'Cumans', 4).resolve(707).state).toBe('unknown');
     for (const tid of [128, 242, 1210, 1211, 1212, 1213, 1220, 1497, 1498]) {
       expect(ARMY_RESEARCH.buildingTechs, `t:${tid}`).toContain(tid);
       expect(ARMY_RESEARCH.nodes[tid]!.enables, `t:${tid}`).toEqual([]);

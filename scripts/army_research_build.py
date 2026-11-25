@@ -117,7 +117,8 @@ def build(d):
         )
     return dict(meta=dict(generatedBy='scripts/army_research_build.py', patch=DAT['patch'],
                           commit=DAT['commit'], sha256=DAT['sha256']),
-                nodes=nodes, civs=civs, buildingTechs=sorted(set(d['BuildTech'].values())), buildingTriggers=d['BuildTech'])
+                nodes=nodes, civs=civs, buildingTechs=sorted(build_tech_ids),
+                fxTriggeredTechs=sorted(fx_triggered_ids), buildingTriggers=d['BuildTech'])
 
 
 def main():

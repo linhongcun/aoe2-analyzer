@@ -92,12 +92,16 @@ export function researchResolver(data: ArmyResearchData, civ: string, age: numbe
         ? fail(`研究 t:${id} 在标准对局中不可触发`, 'unavailable')
         : node.location <= 0 && (node.time > 0 || node.cost.some(([, v, enabled]) => enabled && v! > 0))
           ? fail(`研究 t:${id} 的外部触发条件尚未核实`)
-          : requiredPaidSet(
-              branches
-                .filter((b) => b.state !== 'ready' || [...b.ids].some((tid) => !completed.has(tid)))
-                .map((b) => ({ ...b, ids: new Set([...b.ids].filter((tid) => !completed.has(tid))) })),
-              Math.max(0, node.count - satisfied),
-            );
+          : node.count > node.requires.length
+            ? completed.has(id)
+              ? ok()
+              : fail(`研究 t:${id} 的外部触发条件尚未核实`)
+            : requiredPaidSet(
+                branches
+                  .filter((b) => b.state !== 'ready' || [...b.ids].some((tid) => !completed.has(tid)))
+                  .map((b) => ({ ...b, ids: new Set([...b.ids].filter((tid) => !completed.has(tid))) })),
+                Math.max(0, node.count - satisfied),
+              );
     if (!result.error && node.location > 0) {
       const before = new Set([...completed, ...result.ids]);
       const disabledByCond = (disablers.get(id) ?? []).some((dtid) => evalConditionNode(data, context, age, id, before, before, dtid) === true);

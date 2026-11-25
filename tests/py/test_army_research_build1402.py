@@ -178,9 +178,11 @@ class ArmyResearchBuild1402Tests(unittest.TestCase):
         self.assertEqual(built['nodes']['0']['count'], 2)
         self.assertEqual(len(built['nodes']['1']['mods']), 1)
         self.assertEqual(len(built['nodes']['2']['mods']), 1)
+        self.assertEqual(built['fxTriggeredTechs'], [2])
 
     def test_committed_army_research_json_1409_unreachable_nodes(self):
         ar = json.loads((ROOT / 'data/game/army_research.json').read_text(encoding='utf-8'))
+        self.assertIn(707, ar['fxTriggeredTechs'])
         # Truly unreachable dead techs stripped of enables/upgrades/mods/combatUnits
         for tid in ('243', '490', '598'):
             node = ar['nodes'][tid]
