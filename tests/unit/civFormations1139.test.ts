@@ -14,9 +14,9 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons', 'Persians'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(56);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(62);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
-      ['Spanish', 3],
+      ['Spanish', 4],
       ['Georgians', 2],
     ]);
     expect(Object.fromEntries(originalContent.slice(2).map(({ civ, routes }) => [civ, routes.length]))).toEqual({
@@ -36,16 +36,16 @@ describe('#1139 文明路线契约与投影', () => {
       Vietnamese: 3,
       Lithuanians: 2,
       Poles: 3,
-      Bulgarians: 1,
+      Bulgarians: 3,
       Magyars: 1,
       Bohemians: 1,
       Aztecs: 2,
       Incas: 2,
       Mayans: 2,
       Mapuche: 2,
-      Muisca: 1,
+      Muisca: 3,
       Tupi: 2,
-      Japanese: 1,
+      Japanese: 2,
     });
   });
 

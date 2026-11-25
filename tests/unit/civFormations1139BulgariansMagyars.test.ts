@@ -63,9 +63,9 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
     expect(main.evidence.scope).toContain('ID1225');
     expect(main.evidence.scope).toContain('20 个村民驻营垒理论预览 17/21 箭，19 个村民即达 17/21 箭');
     expect(main.evidence.recordedVersion).toBe(
-      'v0.77.105 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71',
+      'v0.77.105 · DE 188329；驻军满科技复核：v0.99.12 · DE 188329 · 66620c9；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；第一档批 2 全工具复核：v0.99.56 · DE 188329',
     );
-    expect(main.evidence.links).toHaveLength(7);
+    expect(main.evidence.links).toHaveLength(12);
     expect(main.evidence.links?.[0]).toEqual({
       label: '帝王满科技 · 20 个村民驻营垒 17/21 箭',
       href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e',
@@ -218,8 +218,8 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
       [
         'Bulgarians',
         'bulgarians-krepost-konnik',
-        'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718',
-        [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764],
+        'https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1053-L1108',
+        [1053, 1057, 1061, 1062, 1063, 1067, 1069, 1073, 1076, 1079, 1089, 1090, 1091, 1092, 1093, 1095, 1101, 1102, 1103, 1104, 1106, 1108],
       ],
       [
         'Magyars',

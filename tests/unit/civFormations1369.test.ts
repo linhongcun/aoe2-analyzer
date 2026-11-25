@@ -24,23 +24,36 @@ import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 const DOC_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
 const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8'],
-  ['Spanish', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+  ['Spanish', 'c86b7cc5f934f72aaec66374c072a0b897de2ac7'],
   ['Hindustanis', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Turks', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
-  ['Tupi', 'b63cccc015b677017efb4a64de8ebc01cd727ffd'],
+  ['Muisca', 'c86b7cc5f934f72aaec66374c072a0b897de2ac7'],
+  ['Tupi', 'c86b7cc5f934f72aaec66374c072a0b897de2ac7'],
 ]);
-const ADDED_BY_1386 = new Set<string>(['Hindustanis/hindustani-camel-ghulam-field', 'Turks/turks-sipahi-cav-archer-field']);
+const ADDED_BY_1386 = new Set<string>([
+  'Hindustanis/hindustani-camel-ghulam-field',
+  'Turks/turks-sipahi-cav-archer-field',
+  'Spanish/spanish-hmc-hussar',
+  'Muisca/muisca-arbalester-temple-champi',
+  'Muisca/muisca-arbalester-skirmisher',
+]);
 const REVISED_BY_LATER = new Map<string, string>([
   ['Hindustanis/hindustani-handcannon-hussar', '2026-11-25'],
   ['Turks/turks-hussar-handcannon', '2026-11-25'],
   ['Turks/turks-existing-line-choice', '2026-11-25'],
-  ['Tupi/tupi-champi-slinger', '2026-11-24'],
-  ['Tupi/tupi-blackwood-halberdier', '2026-11-24'],
+  ['Spanish/conquistador-hussar', '2026-11-26'],
+  ['Spanish/paladin-skirmisher', '2026-11-26'],
+  ['Spanish/handcannon-halberdier', '2026-11-26'],
+  ['Muisca/muisca-temple-guard-slinger', '2026-11-26'],
+  ['Tupi/tupi-champi-slinger', '2026-11-26'],
+  ['Tupi/tupi-blackwood-halberdier', '2026-11-26'],
 ]);
-// 按路线忠实保留历史版本链：黑檀木路线历史止于 v0.99.12，本次 #1398 直接追加 v0.99.44（不伪造 v0.99.34）
+// 按路线忠实保留历史版本链：黑檀木路线历史止于 v0.99.12，后续直接追加 v0.99.44 与 v0.99.56（不伪造 v0.99.34）
 const EXPECTED_RECORDED_VERSIONS = new Map<string, readonly string[]>([
-  ['Tupi/tupi-champi-slinger', ['v0.99.34 · DE 188329 · 55613e4a', 'v0.99.44 · DE 188329 · f1d5aab']],
-  ['Tupi/tupi-blackwood-halberdier', ['v0.99.12 · DE 188329 · 66620c9', 'v0.99.44 · DE 188329 · f1d5aab']],
+  ['Spanish/paladin-skirmisher', ['v0.99.56 · DE 188329']],
+  ['Spanish/handcannon-halberdier', ['v0.99.56 · DE 188329']],
+  ['Tupi/tupi-champi-slinger', ['v0.99.34 · DE 188329 · 55613e4a', 'v0.99.44 · DE 188329 · f1d5aab', 'v0.99.56 · DE 188329']],
+  ['Tupi/tupi-blackwood-halberdier', ['v0.99.12 · DE 188329 · 66620c9', 'v0.99.44 · DE 188329 · f1d5aab', 'v0.99.56 · DE 188329']],
 ]);
 const TARGET_CIVS = [
   'Spanish',
@@ -59,8 +72,6 @@ const TARGET_CIVS = [
 ] as const;
 
 const UNCHANGED_SUBROUTES = new Map<string, string>([
-  ['Spanish/paladin-skirmisher', '2026-11-18'],
-  ['Spanish/handcannon-halberdier', '2026-11-18'],
   ['Koreans/koreans-fire-lancer-garrison', '2026-11-22'],
   ['Franks/franks-throwing-axeman-light-cav', '2026-11-22'],
   ['Vietnamese/vietnamese-elephant-skirmisher', '2026-11-20'],
@@ -439,7 +450,7 @@ describe('#1369 13 文明拉扯重估、JSON B 项清零与指针回归', () => 
         }
       }
     }
-    expect([updatedCount, unchangedCount]).toEqual([17, 7]);
+    expect([updatedCount, unchangedCount]).toEqual([19, 5]);
 
     // 渲染不变量：FormationText 零拆分 + #1285 去重计数 + 公开链接唯一性
     const core = await loadCore();

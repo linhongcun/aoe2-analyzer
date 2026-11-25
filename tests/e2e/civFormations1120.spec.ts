@@ -41,7 +41,7 @@ for (const width of [1280, 390]) {
     const section = page.locator(formations);
     await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '推荐阵容' }).press('Enter');
     await expect(section.getByRole('heading', { level: 2 })).toBeFocused();
-    await expect(section.locator('article')).toHaveCount(3);
+    await expect(section.locator('article')).toHaveCount(4);
     const jump = section.getByRole('navigation').getByRole('link', { name: '游侠＋精锐掷矛手' });
     await jump.press('Enter');
     const title = page.locator(`#${paladin}`);
@@ -286,7 +286,7 @@ for (const asset of ['core', 'trees']) {
     await expect(page.getByTestId('civ-techtree')).toContainText('失败');
     fail = false;
     await section.getByRole('button', { name: '重试', exact: true }).press('Enter');
-    await expect(section.locator('article')).toHaveCount(3);
+    await expect(section.locator('article')).toHaveCount(4);
     await expect(section.getByRole('heading', { level: 2 })).toBeFocused();
     await expect(section.getByText('推荐阵容已读取')).toBeVisible();
     await expect(page.getByTestId('civ-unique-units')).toBeVisible();
@@ -336,16 +336,16 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
     Vietnamese: 3,
     Lithuanians: 2,
     Poles: 3,
-    Bulgarians: 1,
+    Bulgarians: 3,
     Magyars: 1,
     Bohemians: 1,
     Aztecs: 2,
     Incas: 2,
     Mayans: 2,
     Mapuche: 2,
-    Muisca: 1,
+    Muisca: 3,
     Tupi: 2,
-    Japanese: 1,
+    Japanese: 2,
   };
   for (const [civ, count] of Object.entries(routes)) {
     await page.goto(`./#/civ/${civ}#formations`);
@@ -424,7 +424,7 @@ for (const width of [1280, 360]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.goto('./#/civ/Spanish#formations');
     await expect(section.getByRole('heading', { name: /机动主路|正面主路|火矛驻塔/ })).toHaveCount(0);
-    await expect(section.getByRole('article')).toHaveCount(3);
+    await expect(section.getByRole('article')).toHaveCount(4);
   });
 }
 

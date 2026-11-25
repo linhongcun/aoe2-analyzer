@@ -54,10 +54,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1467-L1524",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1373, 1375, 1381, 1385, 1387, 1389, 1395, 1396, 1397, 1399, 1408, 1415, 1419],
+          "sourceLines": [1467, 1469, 1475, 1480, 1483, 1484, 1485, 1486, 1488, 1492, 1494, 1500, 1501, 1502, 1504, 1513, 1517, 1520, 1524],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=359.Franks.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
@@ -66,7 +66,15 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Spanish.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Spanish.4.f.&m=r&bud=3000&ka=1",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Teutons.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Teutons.4.f.&m=r&bud=3000&ka=1"
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Teutons.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/construction?cv=1&building=82&civ=Spanish&age=4&techs=&builders=8&baseline=1&tc=1&task=&walk=3&farm=0",
+            "https://linhongcun.github.io/aoe2-analyzer/#/construction?cv=1&building=235&civ=Spanish&age=4&techs=63&builders=4&baseline=1&tc=1&task=&walk=3&farm=0",
+            "https://linhongcun.github.io/aoe2-analyzer/#/construction?cv=1&building=236&civ=Spanish&age=4&techs=64&builders=4&baseline=1&tc=1&task=&walk=3&farm=0",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=773.Spanish.4.f.&b=207.Hindustanis.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2228%22%7D%2C%7B%22uid%22%3A%22773%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Spanish&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=441%3A101%3A4%2C773%3A82%3A2",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Spanish&age=4&acunits=%5B%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A773%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A39%22%2C%22t%3A428%22%2C%22t%3A435%22%2C%22t%3A60%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
           ]
         },
         {
@@ -127,10 +135,14 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1467-L1524",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1373, 1375, 1382, 1387, 1389, 1395, 1396, 1397, 1407, 1408, 1415, 1419]
+          "sourceLines": [1467, 1469, 1476, 1486, 1489, 1492, 1494, 1500, 1501, 1502, 1512, 1513, 1520, 1524],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Spanish&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=569%3A101%3A3%2C6%3A87%3A3",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Spanish&age=4&acunits=%5B%7B%22unit%22%3A569%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A265%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
+          ]
         },
         {
           "id": "handcannon-halberdier",
@@ -199,10 +211,113 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1467-L1524",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1373, 1375, 1383, 1385, 1387, 1389, 1395, 1397, 1398, 1399, 1401, 1413, 1415, 1419]
+          "sourceLines": [1467, 1469, 1477, 1483, 1484, 1485, 1486, 1490, 1492, 1494, 1501, 1503, 1506, 1518, 1520, 1524],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Spanish.4.f.&b=207.Hindustanis.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Spanish.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22215%22%2C%22602%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2229%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Spanish&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=359%3A12%3A4%2C5%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Spanish&age=4&acunits=%5B%7B%22unit%22%3A5%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A429%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%5D"
+          ]
+        },
+        {
+          "id": "spanish-hmc-hussar",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2701
+            },
+            {
+              "kind": "unit",
+              "id": 441
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 36
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 5
+                },
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "spanish-hmc-vs-archers",
+              "requires": []
+            },
+            {
+              "id": "spanish-hmc-vs-paladins",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "conquistador-hussar"
+                }
+              ]
+            },
+            {
+              "id": "spanish-hmc-vs-camels",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "handcannon-halberdier"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1467-L1524",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [1467, 1469, 1478, 1480, 1483, 1484, 1485, 1486, 1487, 1492, 1494, 1500, 1501, 1502, 1514, 1520, 1524],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=773.Spanish.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=773.Spanish.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Spanish.4.f.&b=207.Hindustanis.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2228%22%7D%2C%7B%22uid%22%3A%222701%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2228%22%7D%2C%7B%22uid%22%3A%222701%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Spanish%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2228%22%7D%2C%7B%22uid%22%3A%222701%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22215%22%2C%22602%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2229%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Spanish&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=441%3A101%3A4%2C2701%3A87%3A5",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Spanish&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C373&rows=441%3A101%3A4%2C2701%3A87%3A5",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Spanish&age=4&acunits=%5B%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A2701%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1451%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A39%22%2C%22t%3A428%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%5D"
+          ]
         }
       ]
     },
@@ -4342,10 +4457,10 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L718",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1053-L1108",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [718, 722, 723, 724, 726, 728, 730, 734, 737, 745, 746, 747, 748, 749, 751, 757, 758, 759, 760, 764],
+          "sourceLines": [1053, 1057, 1061, 1062, 1063, 1067, 1069, 1073, 1076, 1079, 1089, 1090, 1091, 1092, 1093, 1095, 1101, 1102, 1103, 1104, 1106, 1108],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=199,200,201,47&army=83:20:e",
             "https://linhongcun.github.io/aoe2-analyzer/#/unit/1255?civ=Bulgarians",
@@ -4353,7 +4468,224 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=359.Franks.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=36.Teutons.4.f.&m=r&bud=3000"
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=36.Teutons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=47%2C199%2C200%2C201%2C437&army=1255%3A20%3Ae",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=569.Teutons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1255.Bulgarians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Bulgarians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315&rows=1255%3A1251%3A3",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Bulgarians&age=4&acunits=%5B%7B%22unit%22%3A1255%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A67%22%2C%22t%3A678%22%2C%22t%3A68%22%2C%22t%3A685%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ]
+        },
+        {
+          "id": "bulgarians-stirrups-cav-hca-siege",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [
+            {
+              "id": "bulgarians-stirrups-hussar",
+              "preconditions": ["黄金吃紧、需要低采金负担与免金高攻速前排配合骑射控场时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            },
+            {
+              "id": "bulgarians-stirrups-cavalier",
+              "preconditions": ["黄金充裕、需要正面与重骑或游侠硬拼突破时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 283
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 588
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 685
+                }
+              ]
+            },
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 109
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "bulgarians-hca-vs-paladins",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 283,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "bulgarians-hca-vs-archers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 441,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "bulgarians-hca-krepost-garrison",
+              "requires": [
+                {
+                  "kind": "building",
+                  "id": 1251,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1053-L1108",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1401"
+          },
+          "sourceLines": [1053, 1057, 1061, 1064, 1067, 1069, 1080, 1089, 1090, 1092, 1095, 1103, 1106, 1108],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/building/1251?tab=garrison&gv=2&civ=Bulgarians&age=4&gtechs=47%2C199%2C200%2C201%2C437&army=474%3A19%3Ae",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=283.Bulgarians.4.f.&b=1255.Bulgarians.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=283.Bulgarians.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Bulgarians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Bulgarians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Bulgarians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Bulgarians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22685%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22283%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2214%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Bulgarians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22685%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2214%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Bulgarians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315&rows=441%3A101%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Bulgarians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315&rows=283%3A101%3A3%2C474%3A87%3A3",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Bulgarians&age=4&acunits=%5B%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A218%22%2C%22t%3A39%22%2C%22t%3A428%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A685%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Bulgarians&age=4&acunits=%5B%7B%22unit%22%3A283%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A209%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A218%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A685%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%5D"
+          ]
+        },
+        {
+          "id": "bulgarians-bagains-ths-siege",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 473
+            }
+          ],
+          "choices": [],
+          "prerequisites": [
+            {
+              "kind": "tech",
+              "id": 686
+            }
+          ],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 588
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "bulgarians-bagains-vs-infantry",
+              "requires": []
+            },
+            {
+              "id": "bulgarians-bagains-vs-kiting-archers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 588,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "bulgarians-bagains-vs-ignore-armor",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "bulgarians-krepost-konnik"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1053-L1108",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1401"
+          },
+          "sourceLines": [1053, 1057, 1065, 1067, 1069, 1081, 1090, 1091, 1095, 1101, 1106, 1108],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=567.Spanish.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=560.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=555.Goths.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=359.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=473.Bulgarians.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Bulgarians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315&rows=473%3A12%3A4%2C548%3A49%3A1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Bulgarians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279&rows=473%3A12%3A4%2C548%3A49%3A1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Bulgarians&age=4&acunits=%5B%7B%22unit%22%3A473%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A217%22%2C%22t%3A255%22%2C%22t%3A377%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A686%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A875%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Bulgarians&age=4&acunits=%5B%7B%22unit%22%3A473%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A588%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A217%22%2C%22t%3A320%22%2C%22t%3A377%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A686%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A875%22%5D"
           ]
         }
       ]
@@ -5302,13 +5634,230 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1223-L1256",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1364-L1411",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1223, 1225, 1229, 1233, 1234, 1235, 1237, 1239, 1245, 1246, 1247, 1253, 1254, 1256],
+          "sourceLines": [1364, 1366, 1370, 1374, 1375, 1384, 1385, 1390, 1392, 1394, 1400, 1401, 1402, 1408, 1409, 1411],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Muisca.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Muisca.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Muisca.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2587.Muisca.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=358.Muisca.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2564.Muisca.4.f.&b=6.Muisca.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%221366%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222587%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22185%22%2C%22qty%22%3A%2230%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C1366&rows=2587%3A12%3A3%2C185%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A2587%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A185%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1366%22%2C%22t%3A1401%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D"
+          ]
+        },
+        {
+          "id": "muisca-arbalester-temple-champi",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 492
+            }
+          ],
+          "choices": [
+            {
+              "id": "muisca-frontline-temple-guard",
+              "preconditions": ["面对游侠、重装骑士等骑兵冲阵，需要兵营或修道院直出反骑前排时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2587
+                }
+              ]
+            },
+            {
+              "id": "muisca-frontline-champi",
+              "preconditions": ["面对不列颠长射程弓群拉扯或重型攻城器压线，需要高速高远甲突进前排时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2554
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 588
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 1365
+                },
+                {
+                  "kind": "tech",
+                  "id": 377
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "muisca-arbalester-vs-cavalry",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 2587,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "muisca-arbalester-vs-long-range-archers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 2554,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "muisca-arbalester-herbalism-upgrade",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1365,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1364-L1411",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1401"
+          },
+          "sourceLines": [1364, 1366, 1370, 1376, 1380, 1382, 1383, 1384, 1385, 1387, 1388, 1392, 1394, 1400, 1401, 1402, 1411],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2554.Muisca.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222587%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222587%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222554%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222554%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22215%22%2C%22602%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2229%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=2587%3A12%3A3%2C492%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=2587%3A12%3A3%2C492%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=2554%3A12%3A3%2C492%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=2554%3A12%3A3%2C492%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A2587%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1401%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A2587%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1365%22%2C%22t%3A1401%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A2554%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1352%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A2554%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1352%22%2C%22t%3A1365%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D"
+          ]
+        },
+        {
+          "id": "muisca-arbalester-skirmisher",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 492
+            },
+            {
+              "kind": "unit",
+              "id": 6
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 588
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 1365
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "muisca-skirm-vs-long-range",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "muisca-arbalester-temple-champi"
+                }
+              ]
+            },
+            {
+              "id": "muisca-skirm-castle-upgrade",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1365,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1364-L1411",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1401"
+          },
+          "sourceLines": [1364, 1366, 1370, 1377, 1380, 1382, 1383, 1384, 1385, 1389, 1392, 1394, 1400, 1402, 1411],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.47-199-200-201-211-212-437.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.47-199-200-201-211-212-437.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Muisca.4.47-199-200-201-211-212-437.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Muisca.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2235%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Muisca%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22437%22%2C%221365%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2235%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=492%3A87%3A4%2C6%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Muisca&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=492%3A87%3A4%2C6%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A93%22%2C%22t%3A98%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Muisca&age=4&acunits=%5B%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1365%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A237%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
           ]
         }
       ]
@@ -5316,6 +5865,149 @@
     {
       "civ": "Tupi",
       "routes": [
+        {
+          "id": "tupi-blackwood-halberdier",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 2581
+            },
+            {
+              "kind": "unit",
+              "id": 359
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "choice",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 1105
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2554,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 2584,
+                  "age": 4
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-first",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 2554
+                }
+              ]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-second",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-third",
+              "requires": []
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-fourth",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 2584
+                }
+              ]
+            },
+            {
+              "id": "tupi-blackwood-halberdier-adjustment-fifth",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "tupi-champi-slinger"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1413-L1459",
+            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
+          },
+          "sourceLines": [1413, 1415, 1421, 1424, 1427, 1428, 1429, 1430, 1432, 1434, 1436, 1438, 1444, 1445, 1446, 1447, 1453, 1454, 1455, 1457, 1459],
+          "evidenceLinks": [
+            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=492.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=492.Tupi.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=1707.Poles.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=441.Spanish.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=441.Magyars.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=441.Bulgarians.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=441.Turks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222581%22%2C%22qty%22%3A%2256%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2230%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222581%22%2C%22qty%22%3A%2256%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2230%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222581%22%2C%22qty%22%3A%2256%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2226%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222584%22%2C%22qty%22%3A%2216%22%7D%2C%7B%22uid%22%3A%222581%22%2C%22qty%22%3A%2250%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2230%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222581%22%2C%22qty%22%3A%2256%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2216%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tupi&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=2581%3A82%3A2%2C359%3A12%3A3",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tupi&age=4&acunits=%5B%7B%22unit%22%3A2581%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1389%22%2C%22t%3A1393%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A429%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tupi&age=4&acunits=%5B%7B%22unit%22%3A2584%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1391%22%2C%22t%3A215%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tupi&age=4&acunits=%5B%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1393%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A237%22%2C%22t%3A47%22%2C%22t%3A93%22%5D"
+          ]
+        },
         {
           "id": "tupi-champi-slinger",
           "status": "approved",
@@ -5431,140 +6123,17 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L1342",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1413-L1459",
             "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
           },
-          "sourceLines": [1334, 1342, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372],
+          "sourceLines": [1413, 1415, 1422, 1424, 1428, 1429, 1431, 1434, 1436, 1438, 1444, 1445, 1446, 1447, 1453, 1454, 1455, 1457, 1459],
           "evidenceLinks": [
             "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
-          ]
-        },
-        {
-          "id": "tupi-blackwood-halberdier",
-          "status": "approved",
-          "playtest": "unreported",
-          "composition": "combined",
-          "age": 4,
-          "required": [
-            {
-              "kind": "unit",
-              "id": 2581
-            },
-            {
-              "kind": "unit",
-              "id": 359
-            }
-          ],
-          "choices": [],
-          "prerequisites": [],
-          "supplements": [
-            {
-              "mode": "choice",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 548
-                },
-                {
-                  "kind": "unit",
-                  "id": 1105
-                }
-              ]
-            },
-            {
-              "mode": "as-needed",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 331
-                }
-              ]
-            },
-            {
-              "mode": "conditional",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 2554,
-                  "age": 4
-                }
-              ]
-            },
-            {
-              "mode": "conditional",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 6,
-                  "age": 4
-                }
-              ]
-            },
-            {
-              "mode": "conditional",
-              "entities": [
-                {
-                  "kind": "unit",
-                  "id": 2584,
-                  "age": 4
-                }
-              ]
-            }
-          ],
-          "adjustments": [
-            {
-              "id": "tupi-blackwood-halberdier-adjustment-first",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 2554
-                }
-              ]
-            },
-            {
-              "id": "tupi-blackwood-halberdier-adjustment-second",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 6
-                }
-              ]
-            },
-            {
-              "id": "tupi-blackwood-halberdier-adjustment-third",
-              "requires": []
-            },
-            {
-              "id": "tupi-blackwood-halberdier-adjustment-fourth",
-              "requires": [
-                {
-                  "kind": "unit",
-                  "id": 2584
-                }
-              ]
-            },
-            {
-              "id": "tupi-blackwood-halberdier-adjustment-fifth",
-              "requires": [
-                {
-                  "kind": "route",
-                  "id": "tupi-champi-slinger"
-                }
-              ]
-            }
-          ],
-          "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L1343",
-            "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4"
-          },
-          "sourceLines": [1334, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372],
-          "evidenceLinks": [
-            "https://github.com/linhongcun/aoe2-analyzer/blob/66620c905f887543d321637a1b24790b7af0a8ce/data/game/units.json",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
-            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2581.Tupi.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1"
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=185.Tupi.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tupi%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%2C%221392%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%222554%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22185%22%2C%22qty%22%3A%2230%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2226%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tupi&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=2554%3A12%3A3%2C185%3A87%3A3",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tupi&age=4&acunits=%5B%7B%22unit%22%3A2554%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A185%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1352%22%2C%22t%3A1392%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D"
           ]
         }
       ]
@@ -5791,11 +6360,12 @@
             }
           ],
           "source": {
-            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1465-L1509",
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1570-L1624",
             "discussion": "https://app.devin.ai/sessions/ddea80a7615d41fbab87cf5879539194"
           },
           "sourceLines": [
-            1465, 1467, 1473, 1474, 1475, 1476, 1478, 1480, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1498, 1499, 1500, 1501, 1502, 1503, 1505, 1507, 1509
+            1570, 1572, 1578, 1579, 1580, 1581, 1585, 1589, 1590, 1592, 1594, 1600, 1601, 1602, 1603, 1604, 1605, 1607, 1613, 1614, 1615, 1616, 1617, 1618,
+            1620, 1622, 1624
           ],
           "evidenceLinks": [
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=1",
@@ -5803,8 +6373,129 @@
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=560.Japanese.4.f.&b=569.Spanish.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=36.Teutons.4.f.&m=r&bud=3000",
             "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=546.Japanese.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Japanese&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315%2C373&rows=560%3A82%3A2%2C546%3A101%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Japanese&age=4&acunits=%5B%7B%22unit%22%3A560%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A546%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A254%22%2C%22t%3A366%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Japanese&age=4&acunits=%5B%7B%22unit%22%3A560%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A546%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A254%22%2C%22t%3A366%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A47%22%2C%22t%3A59%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e",
             "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e"
+          ]
+        },
+        {
+          "id": "japanese-halberdier-hca-trebuchet",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 359
+            },
+            {
+              "kind": "unit",
+              "id": 474
+            },
+            {
+              "kind": "unit",
+              "id": 331
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 59
+                },
+                {
+                  "kind": "tech",
+                  "id": 484
+                }
+              ]
+            },
+            {
+              "mode": "position-variant",
+              "entities": [
+                {
+                  "kind": "building",
+                  "id": 235
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 546
+                },
+                {
+                  "kind": "unit",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 567
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "japanese-hca-vs-skirmishers",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 546,
+                  "age": 4
+                }
+              ]
+            },
+            {
+              "id": "japanese-hca-vs-double-gold",
+              "requires": []
+            },
+            {
+              "id": "japanese-hca-early-timing",
+              "requires": [
+                {
+                  "kind": "route",
+                  "id": "japanese-samurai-light-cavalry"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1570-L1624",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1401"
+          },
+          "sourceLines": [
+            1570, 1572, 1580, 1581, 1582, 1585, 1586, 1587, 1588, 1589, 1590, 1592, 1594, 1600, 1601, 1604, 1605, 1606, 1615, 1617, 1620, 1622, 1624
+          ],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=474.Huns.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=474.Tatars.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=474.Magyars.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=474.Turks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=5.Spanish.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Japanese.4.f.&b=6.Spanish.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22215%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22211%22%2C%22212%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2218%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2222%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Japanese&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315%2C373&rows=359%3A12%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Japanese&age=4&acunits=%5B%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A218%22%2C%22t%3A219%22%2C%22t%3A39%22%2C%22t%3A429%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Japanese&age=4&acunits=%5B%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A218%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A429%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A59%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D"
           ]
         }
       ]
