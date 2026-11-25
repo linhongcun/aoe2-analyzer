@@ -257,4 +257,80 @@ describe('Issue 1404: R6 与 Devin Review 改序/形态预算/同伴协同/精�
     netZeroCtrlData.conditional.push(rule(99520, [ef(109, 'garrisonType', 'set', 11)], [233], 1));
     expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), netZeroCtrlData).map((t) => t.id)).not.toContain(233);
   });
+
+  it('R7 与 Devin #1 回归：零值条件倍率、自动免费形态多弹丸、非交换形态行序、激活既有副弹丸与组合性能守卫', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const tcForms = new Set([109, ...(GENERAL_GARRISON_DATA.buildings[109]?.eraForms ?? [])]);
+
+    // 1. R7 P1-1: 492 基础攻 0，47 加 4 攻，233 触发 Stage 2 攻击翻倍 -> [47, 233] 火力 2 -> 4，保留 233
+    const mulCondData = cloneIsolated([47, 233]);
+    mulCondData.units[492] = { ...mulCondData.units[492]!, attack: 0, total: 1, reload: 2, firepower: 1 };
+    mulCondData.techs[47] = rule(47, [ef(492, 'attack', 'add', 4)]);
+    mulCondData.conditional.push(rule(99600, [ef(492, 'attack', 'mul', 2)], [233], 1));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), mulCondData).map((t) => t.id)).toEqual(expect.arrayContaining([47, 233]));
+    const mulCondRes = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [47, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), mulCondData);
+    expect(mulCondRes.errors).toEqual([]);
+    expect(mulCondRes.garrisonPower).toBeCloseTo(4, 5);
+
+    // 2. R7 P1-2: 自动免费形态 47 将 492 total 设为 2，233 给副弹丸 54 加 4 攻 -> 火力 2.5 -> 4.1，保留 233
+    const freeShapeData = cloneIsolated([47, 233]);
+    freeShapeData.units[492] = { ...freeShapeData.units[492]!, attack: 1, total: 1, reload: 2, firepower: 1, secondaryProjectile: 54 };
+    for (const form of tcForms) freeShapeData.units[form] = { ...freeShapeData.units[form]!, secondaryProjectile: 0 };
+    freeShapeData.unitUpgradeTechs![492] = [47];
+    freeShapeData.civs.Britons!.free = [47];
+    freeShapeData.techs[47] = rule(47, [ef(492, 'total', 'set', 2)]);
+    freeShapeData.techs[233] = rule(233, [ef(54, 'attack', 'add', 4)]);
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), freeShapeData).map((t) => t.id)).toContain(233);
+    const fsBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), freeShapeData);
+    const fsAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), freeShapeData);
+    expect(fsAfter.errors).toEqual([]);
+    expect(fsBefore.garrisonPower).toBeCloseTo(2.5, 5);
+    expect(fsAfter.garrisonPower).toBeCloseTo(4.1, 5);
+
+    // 3. R7 P1-3: 非交换 type=60 形态 [24,492] vs [492,24]，反序下 233 使副弹丸 54 攻击 4 -> 8（总火力 2.6 -> 4.2），保留 233
+    const orderData = cloneIsolated([47, 608, 233]);
+    orderData.unitUpgradeTechs = { 24: [47], 492: [608] };
+    for (const uid of [24, 492]) {
+      orderData.units[uid] = { ...orderData.units[uid]!, attack: 1, total: 1, reload: 2, firepower: 1, secondaryProjectile: 54 };
+    }
+    for (const form of tcForms) orderData.units[form] = { ...orderData.units[form]!, secondaryProjectile: 0 };
+    orderData.techs[47] = rule(47, [ef(54, 'attack', 'set', 4)]);
+    orderData.techs[608] = rule(608, [ef(54, 'attack', 'set', 0)]);
+    orderData.techs[233] = rule(233, [ef(54, 'attack', 'mul', 2)]);
+    orderData.conditional.push(rule(99601, [ef(492, 'total', 'set', 2)], [47, 608], 2));
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), orderData).map((t) => t.id)).toContain(233);
+    const descRows: GeneralGarrisonConfig['rows'] = [
+      { unitId: 492, count: '1', entry: 'enter' },
+      { unitId: 24, count: '1', entry: 'enter' },
+    ];
+    const ordBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], descRows), orderData);
+    const ordAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], descRows), orderData);
+    expect(ordAfter.errors).toEqual([]);
+    expect(ordBefore.garrisonPower).toBeCloseTo(2.6, 5);
+    expect(ordAfter.garrisonPower).toBeCloseTo(4.2, 5);
+
+    // 4. Devin #1 (70284405): total 1 -> 2 激活既有 secondaryProjectile（ID 未变）且副攻仅由同伴 199 提供 -> 保留 233
+    const activateProjData = cloneIsolated([199, 233]);
+    activateProjData.units[492] = { ...activateProjData.units[492]!, attack: 0, total: 1, reload: 2, firepower: 1, secondaryProjectile: 1930 };
+    activateProjData.units[1930] = { ...activateProjData.units[1930]!, attack: 0 };
+    activateProjData.techs[199] = rule(199, [ef(1930, 'attack', 'add', 5)]);
+    activateProjData.techs[233] = rule(233, [ef(492, 'total', 'add', 1)]);
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), activateProjData).map((t) => t.id)).toEqual(expect.arrayContaining([199, 233]));
+    const apBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199], [{ unitId: 492, count: '1', entry: 'enter' }]), activateProjData);
+    const apAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), activateProjData);
+    expect(apAfter.errors).toEqual([]);
+    expect(apBefore.garrisonPower).toBe(0);
+    expect(apAfter.garrisonPower).toBeCloseTo(2, 5);
+
+    // 5. R7 P2-1: 10 项容量空置控制科技 × 7 项净零数值科技去重求解准确返回 [] 且耗时远低于 1 秒
+    const perfIds = independentBritonsIds(17, [16, 47, 483, 755]);
+    expect(perfIds).toHaveLength(17);
+    const perfData = cloneIsolated(perfIds);
+    perfData.unitUpgradeTechs = {};
+    for (const id of perfIds.slice(0, 10)) perfData.techs[id] = rule(id, [ef(109, 'capacity', 'set', 15)]);
+    for (const id of perfIds.slice(10)) perfData.techs[id] = rule(id, [ef(492, 'attack', 'add', 1), ef(492, 'attack', 'add', -1)]);
+    const t0 = performance.now();
+    expect(getGarrisonTechs(ctx, tc, cfg('Britons', 4), perfData)).toEqual([]);
+    expect(performance.now() - t0).toBeLessThan(1500);
+  });
 });
