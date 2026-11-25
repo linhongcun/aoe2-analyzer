@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 
 import army_research_build  # noqa: E402
 import effects_build  # noqa: E402
+import stats_crosscheck  # noqa: E402
 import units_build  # noqa: E402
 
 
@@ -228,10 +229,23 @@ class DataAlignment1403Tests(unittest.TestCase):
         self.assertEqual(self.unit_by_id[755]['tt'], 14)
         self.assertEqual(self.unit_by_id[757]['tt'], 14)
 
-        # Fallback contract (e.g. unit 1811 whose catalog building 1806 only has TrainAt slot 104)
-        self.assertEqual(units_build.resolve_building_train_time({'TrainAt': [[82, 13], [12, 16]]}, 12, 13), 16)
-        self.assertEqual(units_build.resolve_building_train_time({'TrainAt': [[104, 30]]}, 1806, 30), 30)
+        # Fallback contract (e.g. unit 1811 whose catalog building 1806 only has TrainAt slot 104):
+        # must prefer .dat TrainAt slot, then .dat TrainTime (aligned with stats_crosscheck), even if aoe2techtree fallback_tt differs
+        slot_unit = {'TrainAt': [[82, 13], [12, 16]], 'TrainTime': 13}
+        self.assertEqual(units_build.resolve_building_train_time(slot_unit, 12, 99), 16)
+        self.assertEqual(stats_crosscheck.dat_train_time(slot_unit, 12), 16)
+
+        unit_1811_like = {'TrainAt': [[104, 30]], 'TrainTime': 30}
+        self.assertEqual(units_build.resolve_building_train_time(unit_1811_like, 1806, 99), 30)
+        self.assertEqual(stats_crosscheck.dat_train_time(unit_1811_like, 1806), 30)
+
+        empty_train_at_unit = {'TrainAt': [], 'TrainTime': 21}
+        self.assertEqual(units_build.resolve_building_train_time(empty_train_at_unit, 12, 99), 21)
+        self.assertEqual(stats_crosscheck.dat_train_time(empty_train_at_unit, 12), 21)
+
+        # Only falls back to catalog fallback_tt when .dat lacks a valid positive TrainTime
         self.assertEqual(units_build.resolve_building_train_time({'TrainAt': []}, 12, 21), 21)
+        self.assertEqual(units_build.resolve_building_train_time({'TrainAt': [], 'TrainTime': 0}, 12, 21), 21)
 
         # Full 248-unit anti-drift invariant against eco.json
         self.assertEqual(len(self.units), 248)

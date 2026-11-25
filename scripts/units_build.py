@@ -133,14 +133,17 @@ def derive_death_heal_aura(source_unit, dat_units):
     return bool(target_ca & 32)
 
 
-def resolve_building_train_time(source_unit, building_id, fallback_tt):
-    """#1403：按目录主训练建筑匹配 .dat TrainAt 槽位时间；未命中槽位时回退 fallback_tt。"""
+def resolve_building_train_time(source_unit, building_id, fallback_tt=None):
+    """#1403：按目录主训练建筑匹配 .dat TrainAt 槽位时间；未命中槽位时回退 .dat TrainTime，仅当 .dat 缺有效值时回退 fallback_tt。"""
     train_at = source_unit.get('TrainAt') or []
     for slot in train_at:
         if isinstance(slot, list) and len(slot) >= 2 and slot[0] == building_id:
             t = slot[1]
             if type(t) in (int, float) and math.isfinite(t) and t > 0:
                 return t
+    dat_tt = source_unit.get('TrainTime')
+    if type(dat_tt) in (int, float) and math.isfinite(dat_tt) and dat_tt > 0:
+        return dat_tt
     return fallback_tt
 
 
