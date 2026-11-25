@@ -119,12 +119,14 @@ CI 由 `.github/workflows/` 下的两个验证工作流组成（Release 另见 [
 
 | 工作流                  | 触发                                    | 内容                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ----------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ci.yml`（CI / Deploy） | 每个 PR、main push                      | `check`：安装依赖一次 → PR 标题检查 → `node scripts/ci-commands.mjs static`（lint、tsc、`content:check --strict`、`check-source-presentation`、`content:validators --check`、`lint:layers --strict`）→ `npm run build` → 安装 Chromium → `node scripts/ci-commands.mjs smoke`。main push 成功后 `deploy` 用 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物供 Release 打包。PR 不部署。 |
+| `ci.yml`（CI / Deploy） | PR、main push、手动触发                 | `check` 在 PR 检查标题。纯 Markdown 文档 PR 只再跑文档边界检查。其他改动和事件安装依赖，运行 `node scripts/ci-commands.mjs static`（lint、tsc、严格内容结构、来源、校验器、分层），安装 Chromium、构建并跑窄冒烟。main push 通过后用同一份 `dist` 发布 Pages，并上传 `site` 供 Release 打包。 |
 | `full.yml`（CI full）   | 每日北京时间 02:30，或 Actions 手动触发 | 同样的 static，再加 `unused:check`、对比度、`introductions:check`、全部 Vitest、`node scripts/ci-commands.mjs data`（Python 测试、`.dat` 复现、生成数据与报告一致性、开局库校验）、构建和整站 Playwright。不部署，不触发 Release。                                                                                                                                                                   |
 
 窄冒烟固定 7 条，由 `scripts/ci-scope.mjs` 的 `GATE_NARROW_SMOKE` 和 `BUILD_IDENTITY_TITLE` 定义、`ci-commands.mjs` 以 `--grep` 选出：`tests/e2e/smoke.spec.ts` 的首页、`#civs`、`#/civ/Franks`、`#unit/569` 无控制台错误，Ctrl+K 搜索，法兰克圣骑士满科技 192 HP；加 `tests/e2e/ciBuild659.spec.ts` 的构建身份（页脚版本与提交等于本次检出）。改这组用例的标题要同步改 `GATE_NARROW_SMOKE`。
 
-默认门禁不随 diff 扩成 full，也不复用其他 run 的结果：每次 PR/main 都实跑 static、构建和窄冒烟。`scripts/ci-scope.mjs` 的 `planChanges` 仍保留 `maintenance` / `civ-ui` / `targeted` / `full` 分类，只供本地判断该补哪些直接相关测试和数据管线，不改变 CI 范围。
+纯 Markdown 文档 PR 按本次合并检出的实际文件变更分类。普通 Markdown 可以位于 `docs/`、`role/`、`.github/` 或仓库约定的根目录文档位置。`CHANGELOG.md`、`docs/reports/` 和 `docs/patch-notes/` 仍走默认检查，以覆盖发版读取与生成产物。混合改动、文件类型异常或基准无法确认时也走默认检查。
+
+每次默认检查实跑 static、构建和窄冒烟。`scripts/ci-scope.mjs` 的 `planChanges` 用于本地选择直接相关的测试与数据管线。
 
 CI full 失败不阻塞 PR 合并，但须有人认领：定位真实失败，建 Issue 或修复，不提高超时、增加重试或放宽断言。#338 的 hash 与表格检查、24 条冷路由、四宽与明暗矩阵都只在 CI full 或本地排查时跑。
 
@@ -134,7 +136,7 @@ CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`。e2e 权重文件 `s
 
 本地按文首 2026-11-10：必要冒烟和与本次改动直接相关的测试。没有新修改时不扩大范围。全局 Icon、共享样式不因此要求每 PR 跑 full。
 
-报告写清三件事：本地实际命令和结果；这次 CI 的范围（默认：static、构建身份、7 条窄冒烟；CI full 另计）；没跑的宽度、主题、计算或数据。跳过、中止不要写成通过。
+报告写清三件事：本地实际命令和结果；这次 CI 的实际范围（纯文档、默认检查或 CI full）；没跑的宽度、主题、计算或数据。跳过、中止不要写成通过。
 
 部署是否成功看 main 的真实 check、deploy 和线上结果。空 statuses、只有 PR 绿灯或仅提交祖先关系不算已部署。不得伪造结论、提高超时、增加重试，或放宽断言掩盖算错和数据错误。
 

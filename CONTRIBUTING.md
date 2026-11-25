@@ -111,7 +111,7 @@ hongcun 明确要求：“以后已经部署的 issue，就可以关闭了”。
 
 hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-10：每 PR 只做必要冒烟和与本次改动直接相关的测试；纯布局不重跑无关计算或数据；全站全尺寸主题矩阵不是门禁；计算或数据只做针对性正确性检查。报告区分实际执行、CI 范围和未验证项。有意替换的旧布局、入口、链接和重复功能，不再用历史验收期望卡住。独立复核与数据来源职责不变。当前 CI 范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)。
 
-- 默认 CI（每个 PR 与 main push）只跑 static、真实构建和 7 条窄冒烟，每次实跑、不复用其他 run 的结果；范围与命令以 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及 `.github/workflows/ci.yml` 为准。
+- 纯 Markdown 文档 PR 跑标题和文档边界检查。其他 PR、main push 与手动默认 CI 实跑 static、真实构建和 7 条窄冒烟。范围与命令见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及 `.github/workflows/ci.yml`。
 - `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，只供本地判断该补哪些直接相关测试和数据管线，不改变 CI 范围。
 - main push 成功后用同一份 `dist` 部署 Pages 并上传 `site` 产物；Release 直接打包该产物并核对版本/tag，不二次构建。
 - 全量单测、数据检查、`unused`/对比度/简介检查和整站浏览器回归在 `.github/workflows/full.yml`（每日及手动）运行，不部署、不触发 Release，也不是普通 PR 的合并条件。真实失败仍须认领定位，不提高超时、增加重试或放宽断言掩盖问题。

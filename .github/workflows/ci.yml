@@ -13,24 +13,41 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: "${{ github.event_name == 'pull_request' && 2 || 1 }}" }
+      - name: Detect documentation-only PR
+        id: scope
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BASE_SHA: '${{ github.event.pull_request.base.sha }}'
+        run: node scripts/check-pr-docs-only.mjs
       - uses: actions/setup-node@v4
-        with: { node-version: '20.19.5', cache: npm }
-      - run: npm ci --legacy-peer-deps
+        with: { node-version: '20.19.5', cache: "${{ steps.scope.outputs.docs_only != 'true' && 'npm' || '' }}" }
       - name: PR title (Conventional Commits)
         if: github.event_name == 'pull_request'
         env: { PR_TITLE: '${{ github.event.pull_request.title }}' }
         run: node scripts/check-pr-title.mjs
+      - name: Documentation boundary
+        if: steps.scope.outputs.docs_only == 'true'
+        run: node scripts/check-docs-boundary.mjs
+      - name: Install dependencies
+        if: steps.scope.outputs.docs_only != 'true'
+        run: npm ci --legacy-peer-deps
       - name: Static checks
+        if: steps.scope.outputs.docs_only != 'true'
         run: node scripts/ci-commands.mjs static
       - uses: actions/cache@v4
+        if: steps.scope.outputs.docs_only != 'true'
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright chromium
+        if: steps.scope.outputs.docs_only != 'true'
         run: npx playwright install --with-deps chromium || (sleep 30 && npx playwright install --with-deps chromium)
       - name: Build the checked-out commit
+        if: steps.scope.outputs.docs_only != 'true'
         run: npm run build
       - name: Narrow browser smoke against this build
+        if: steps.scope.outputs.docs_only != 'true'
         run: node scripts/ci-commands.mjs smoke
       - uses: actions/upload-artifact@v4
         if: failure()
