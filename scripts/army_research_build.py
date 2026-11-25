@@ -4,11 +4,54 @@ import argparse
 import json
 from pathlib import Path
 from dat_source import DAT, load
-from effects_build import CIV_DAT
+from effects_build import CIV_DAT, MUL_IDENTITY_EPS
 from projectile_scope import guided_projectile_ids, split_projectile_units, transform_closure
 
 ROOT = Path(__file__).resolve().parent.parent
 DEST = ROOT / 'data/game/army_research.json'
+
+
+def direct_combat_units(commands, units, combat_forms, dat_units, combat_attrs):
+    """返回因属性命令实际获得净战斗改动的目录单位 ID 集合。
+
+    Type 0/4 立即计入；Type 5 按 (unit_form, attr, cls_or_none) 连乘聚合
+    （属性 8/9 按 divmod(round(D), 256) 解码攻防类别与倍率），
+    过滤 |prod - 1| < MUL_IDENTITY_EPS 的抵消残差（如草药学 1365 的 1.0005）。
+    """
+    out = set()
+    for u in units:
+        uid = u['id']
+        forms = combat_forms[uid]
+        form_classes = {f: dat_units[f]['Class'] for f in forms}
+        mul_acc = {}
+        matched = False
+        for c in commands:
+            ctype = c['Type']
+            attr = c['C']
+            if ctype not in (0, 4, 5) or attr not in combat_attrs:
+                continue
+            a, b = c['A'], c['B']
+            if a >= 0:
+                hit_forms = [a] if a in forms else []
+            else:
+                hit_forms = [f for f, cls in form_classes.items() if cls == b]
+            if not hit_forms:
+                continue
+            if ctype in (0, 4):
+                matched = True
+                break
+            if attr in (8, 9):
+                cls_key, pct = divmod(int(round(c['D'])), 256)
+                factor = pct / 100.0
+            else:
+                cls_key = None
+                factor = float(c['D'])
+            for f in hit_forms:
+                key = (f, attr, cls_key)
+                mul_acc[key] = mul_acc.get(key, 1.0) * factor
+        if matched or any(abs(prod - 1.0) >= MUL_IDENTITY_EPS for prod in mul_acc.values()):
+            out.add(uid)
+    return out
 
 
 def build(d):
@@ -32,16 +75,7 @@ def build(d):
         # Projectile guidance and poison combat fields (Curare): follow actual projectile & charge-projectile users.
         guided = guided_projectile_ids(commands, attrs=(19, 145, 146, 147))
         proj_all, proj_charge_only = split_projectile_units(dat_units, combat_forms, units, guided) if guided else ([], [])
-        direct_combat = {
-            u['id']
-            for u in units
-            if any(
-                c['Type'] in (0, 4, 5)
-                and c['C'] in combat_attrs
-                and (c['A'] in combat_forms[u['id']] or (c['A'] < 0 and any(dat_units[f]['Class'] == c['B'] for f in combat_forms[u['id']])))
-                for c in commands
-            )
-        }
+        direct_combat = direct_combat_units(commands, units, combat_forms, dat_units, combat_attrs)
         combat_units = sorted(set(proj_all) | direct_combat)
         charge_only = sorted(set(proj_charge_only) - direct_combat)
         upgrades = [[c['A'], c['B']] for c in commands if c['Type'] == 3]

@@ -18,7 +18,8 @@ export type UnmodeledKind =
   | 'pass-through'
   | 'damaged-bonus'
   | 'low-hp-transform'
-  | 'regen';
+  | 'regen'
+  | 'death-heal';
 
 export interface UnmodeledMechanism {
   kind: UnmodeledKind;
@@ -26,7 +27,7 @@ export interface UnmodeledMechanism {
   pill: string;
   /** 面向玩家的中文偏差说明 */
   detail: string;
-  /** 若由已选科技触发，记录科技英文名与 ID，供 VgNotes 按同侧去重 */
+  /** 若由已选科技触发，记录科技英文名与 ID */
   techId?: number;
   techEn?: string;
 }
@@ -47,8 +48,6 @@ export interface DuelUnmodeledEntry {
   unit: Unit;
   civ: string;
   mechanisms: UnmodeledMechanism[];
-  /** 本条触发的科技英文名集合，供同侧 VgNotes 去重 */
-  techEns: Set<string>;
 }
 
 const EPS = 1e-9;
@@ -113,6 +112,7 @@ const hasPositiveSplash = (eco: readonly DatEco[] | undefined, unitId: number) =
 const hasPositiveExtraProjectiles = (eco: readonly DatEco[] | undefined, unitId: number) =>
   hasPositiveEcoAttr(eco, unitId, 102, 1) || hasPositiveEcoAttr(eco, unitId, 107, 1);
 const hasPositiveRegen = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 109, EPS);
+const hasProjectilePoison = (techEn: string, unitId: number): boolean => DAT.projectilePoison?.[techEn]?.units.includes(unitId) ?? false;
 
 function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitId: number, baseCombatAbility: number): boolean {
   if (!eco?.length) return false;
@@ -122,8 +122,8 @@ function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitI
 }
 
 /**
- * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）、额外弹矢（a:102/107）、生命回复（a:109）
- * 或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
+ * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）、额外弹矢（a:102/107）、生命回复（a:109）、
+ * 投射物剧毒（DAT.projectilePoison）或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
  * 供单兵种 SimPanel 开放勾选（与混编模式及 issue 943 费用科技一致；不进入 f/c 自动预设）。
  */
 export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number, baseCombatAbility = 0): Set<number> {
@@ -134,6 +134,7 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
       hasPositiveSplash(eco, unitId) ||
       hasPositiveExtraProjectiles(eco, unitId) ||
       hasPositiveRegen(eco, unitId) ||
+      hasProjectilePoison(t.en, unitId) ||
       changesUnmodeledCombatAbility(eco, unitId, baseCombatAbility)
     ) {
       ids.add(t.id);
@@ -331,6 +332,16 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
   if ((effectiveCa & COMBAT_ABILITY_ON_HIT) !== 0) {
     out.push(detectOnHitMechanism(unit.onHitEffect));
   }
+  for (const tech of selectedTechs) {
+    if (!hasProjectilePoison(tech.en, unit.id)) continue;
+    out.push({
+      kind: 'on-hit',
+      pill: `命中后持续伤害 · ${tech.zh}`,
+      detail: `当前未计入命中后的中毒持续伤害（已选科技「${tech.zh}」；未勾选该科技时本项不会触发）；实际输出通常高于此处估算。`,
+      techId: tech.id,
+      techEn: tech.en,
+    });
+  }
 
   // 9. 直线穿透（主投射物 hit_mode === 1）
   if (unit.projectilePassThrough === true) {
@@ -379,6 +390,15 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     });
   }
 
+  // 13. 阵亡回血光环（BloodUnitID 指向 CombatAbility & 32 实体，如格查战士 2562/2564）
+  if (unit.deathHealAura === true) {
+    out.push({
+      kind: 'death-heal',
+      pill: '同伴阵亡回血',
+      detail: '当前未计入附近格查战士被击败时的生命回复；成群作战、持续减员时实际生存能力通常高于此处估算。',
+    });
+  }
+
   return out;
 }
 
@@ -394,15 +414,12 @@ export function collectDuelUnmodeled(entries: readonly DuelUnmodeledInput[]): Du
     seen.add(key);
     const mechanisms = detectUnitUnmodeled(entry);
     if (!mechanisms.length) continue;
-    const techEns = new Set<string>();
-    for (const item of mechanisms) if (item.techEn) techEns.add(item.techEn);
     out.push({
       side: entry.side,
       badge: entry.badge,
       unit: entry.unit,
       civ: entry.civ,
       mechanisms,
-      techEns,
     });
   }
   return out;

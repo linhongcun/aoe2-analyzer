@@ -203,7 +203,8 @@ function deriveUniqueTechTags(
     if (!dt) continue;
     const matchingRules = dt.rules.filter((r) => r.b && r.t.includes(b.id));
     const ecoHits = dt.eco.filter((e) => e.t?.includes(b.id));
-    if (!matchingRules.length && !ecoHits.length) continue;
+    const hasPoison = DAT.projectilePoison?.[t.en]?.buildings.includes(b.id) ?? false;
+    if (!matchingRules.length && !ecoHits.length && !hasPoison) continue;
 
     if (matchingRules.length && sel.has(t.id)) {
       const without = new Set(sel);
@@ -236,6 +237,8 @@ function deriveUniqueTechTags(
 
     const workRate = ecoHits.find((e) => e.a === 13 && e.op === 'mul' && e.v > 0);
     if (workRate) tags.push(`未计入：训练速度 ×${fmtTrim(workRate.v, 2)} · ${t.zh}`);
+
+    if (hasPoison) tags.push(`未计入：命中后持续伤害 · ${t.zh}`);
   }
   return [...new Set(tags)];
 }

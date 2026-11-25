@@ -20,20 +20,28 @@ import { simSupport } from '../../src/domain/simSupport';
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const ALL = civs.flatMap((c) => civBonuses(c));
-type Fx = { kind: string; techName?: string; tech?: number; target?: string; attr?: string; v?: number };
+type Fx = { kind: string; techName?: string; tech?: number; target?: string; attr?: string; v?: number; res?: string };
 const free =
   (...names: string[]) =>
   (e: Fx) =>
     e.kind === 'freeTech' && names.includes(e.techName ?? '');
 
-/** 加成 → tree 行里属于它的效果（依据 b.en 游戏原文）；同时记下原文，文案变了就要重新认定 */
+/** 加成 → tree 行里属于它的效果（依据 b.en 游戏原文）；同时记下原文，文案变了就要重新认定（#1403 移除归正为 text 的 Burgundians-2 并纳入 7 条新关联 treeOnly 加成） */
 const EFFECTS: Record<string, { en: string; pick: (e: Fx) => boolean }> = {
   'Aztecs-1': { en: 'Villagers carry +3', pick: (e) => e.kind === 'attr' && e.attr === 'carry' && e.target === 'class:4' },
   'Bohemians-0': { en: 'Mining Camp technologies free', pick: free('Gold Mining', 'Gold Shaft Mining', 'Stone Mining', 'Stone Shaft Mining') },
-  // 城堡时代可升级骑士是科技可用性，不在 eco.json 的 tree 行里（tree 行里 Cavalier 的 techCost ×0.5 属于 Burgundians-1「马厩科技 -50%」）：
-  // 开局模拟没有可去掉的对应效果，去掉后结果必然不变，结论应为「未计入」（或写明核对不了的原因）
-  'Burgundians-2': { en: 'Cavalier upgrade available in Castle Age', pick: () => false },
+  'Bulgarians-1': {
+    en: 'Blacksmith and Siege Workshop technologies cost -50% food',
+    pick: (e) => e.kind === 'techCost' && e.res === 'Food' && e.v === 0.5,
+  },
+  'Burgundians-0': {
+    en: 'Economic upgrades available one age earlier and cost -40% food',
+    pick: (e) => e.kind === 'techCost' && e.res === 'Food' && Math.abs((e.v ?? 0) - 0.6) < 0.01,
+  },
+  'Burgundians-1': { en: 'Stable technologies cost -50%', pick: (e) => e.kind === 'techCost' && e.v === 0.5 },
   'Byzantines-2': { en: 'Town Watch, Town Patrol free', pick: free('Town Watch', 'Town Patrol') },
+  'Byzantines-3': { en: 'Advancing to Imperial Age costs -33%', pick: (e) => e.kind === 'techCost' && e.tech === 103 },
+  'Dravidians-3': { en: 'Barracks technologies cost -50%', pick: (e) => e.kind === 'techCost' && e.v === 0.5 },
   'Franks-1': { en: 'Mill technologies free', pick: free('Crop rotation', 'Heavy plow', 'Horse collar') },
   'Italians-0': { en: 'Advancing to the next Age costs -15%', pick: (e) => e.kind === 'techCost' && [101, 102, 103].includes(e.tech ?? -1) },
   'Italians-2': { en: 'Dock and University technologies cost -25%', pick: (e) => e.kind === 'techCost' && e.v === 0.75 },
@@ -41,10 +49,15 @@ const EFFECTS: Record<string, { en: string; pick: (e: Fx) => boolean }> = {
   'Koreans-0': { en: 'Stone miners work +20% faster', pick: (e) => e.kind === 'attr' && e.attr === 'workRate' && e.target === 'task:stone' },
   'Magyars-2': { en: 'Melee attack upgrades free', pick: free('Forging', 'Iron casting', 'Blast Furnace') },
   'Malay-1': { en: 'Infantry armor upgrades free', pick: free('Scale Mail Armor', 'Chain Mail Armor', 'Plate Mail Armor') },
+  'Spanish-2': { en: 'Blacksmith upgrades cost no gold', pick: (e) => e.kind === 'techCost' && e.res === 'Gold' && e.v === 0 },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', pick: free('Murder Holes', 'Herbal Medicine') },
   'Turks-2': {
     en: 'Chemistry free; Gunpowder technologies costs -50%',
     pick: (e) => free('Chemistry')(e) || (e.kind === 'techCost' && [64, 376].includes(e.tech ?? -1)),
+  },
+  'Vietnamese-1': {
+    en: 'Economic upgrades cost no wood and research +100% faster',
+    pick: (e) => (e.kind === 'techCost' && e.res === 'Wood' && e.v === 0) || (e.kind === 'techTime' && e.v === 0.5),
   },
   'Vietnamese-3': { en: 'Conscription free', pick: free('Conscription') },
   'Vikings-0': { en: 'Wheelbarrow, Hand Cart free', pick: free('Wheel Barrow', 'Hand Cart') },
@@ -71,17 +84,17 @@ const simChanges = (b: CivBonusEnt) => run(b.civ, E) !== run(b.civ, withoutBonus
 const simLine = (b: CivBonusEnt) => bonusUsage(b).find((l) => l.tool === 'sim');
 const GENERIC = '本条属于科技树汇总效果，未逐条核对是否计入';
 
-describe('#332 清单：f856c9e 上开局模拟「未逐条核对」的加成', () => {
-  it('共 15 条，就是 EFFECTS 列出的这些（之后不应再有新的「未逐条核对」）', () => {
-    // f856c9e 上这条会通过；修好后 on = null 的集合应为空或只剩写明原因的条目——见下一组
+describe('#332 清单：科技树汇总加成（#1403 扩充为 21 条，Burgundians-2 归回 src = text）', () => {
+  it('共 21 条，就是 EFFECTS 列出的这些；Burgundians-2 归回纯文本（无开局模拟行）', () => {
     const listed = Object.keys(EFFECTS).sort();
-    expect(listed.length).toBe(15);
+    expect(listed.length).toBe(21);
     for (const id of listed) expect(ALL.find((b) => b.id === id)?.en, `${id} 原文未变`).toBe(EFFECTS[id]!.en);
+    const bur2 = ALL.find((b) => b.id === 'Burgundians-2')!;
+    expect(bur2.src).toBe('text');
+    expect(bonusUsage(bur2)).toEqual([]);
   });
   it('每条在 tree 行里都能找到对应效果（防空转）', () => {
-    for (const id of Object.keys(EFFECTS).filter((x) => x !== 'Burgundians-2'))
-      expect(withoutBonus(ALL.find((b) => b.id === id)!).removed, id).toBeGreaterThan(0);
-    expect(withoutBonus(ALL.find((b) => b.id === 'Burgundians-2')!).removed).toBe(0);
+    for (const id of Object.keys(EFFECTS)) expect(withoutBonus(ALL.find((b) => b.id === id)!).removed, id).toBeGreaterThan(0);
   });
   it('全站开局模拟里不再出现通用的「未逐条核对」说明（核对不了的条目写「无法核实」再写具体原因）', () => {
     const left = ALL.filter((b) => bonusUsage(b).some((l) => l.on === null && l.note.includes(GENERIC))).map((b) => b.id);
@@ -89,9 +102,6 @@ describe('#332 清单：f856c9e 上开局模拟「未逐条核对」的加成', 
   });
 });
 
-const RULED: Record<string, string> = {
-  'Burgundians-2': '未计入：现有开局方案不升级骑士',
-};
 describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重跑」一致），或「无法核实」在前、具体原因在后', () => {
   for (const id of Object.keys(EFFECTS))
     it(`${id}（${EFFECTS[id]!.en}）`, () => {
@@ -99,12 +109,6 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
       expect(simSupport(b.civ), '支持的文明').toBe(true);
       const l = simLine(b);
       expect(l, '开局模拟一行还在').toBeDefined();
-      if (id in RULED) {
-        // Steve 2026-10-22 定稿：勃艮第-2 按定稿结论断言。法兰克-1 的例外已由 #358 修掉，走下面的「去掉后重跑」对照。
-        expect(l!.on, `${id} 定稿结论`).toBe(false);
-        expect(l!.note).toContain(RULED[id]!);
-        return;
-      }
       if (l!.on === null) {
         // Steve 2026-10-22：具体原因不能代替结论——先写结论「无法核实」，再写具体原因；不能是原来的通用句
         expect(l!.note).not.toContain(GENERIC);
@@ -118,16 +122,16 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
       }
       expect(l!.on, '已计入 当且仅当 去掉这条效果后开局模拟结果变化').toBe(simChanges(b));
     }, 60_000);
-  it('合计 6 条已计入、9 条未计入（#358 起法兰克磨坊科技免费改回已计入）', () => {
+  it('合计 8 条已计入、13 条未计入（#1403 新增 Burgundians-0 与 Vietnamese-1 已计入）', () => {
     const ons = Object.keys(EFFECTS).map((id) => simLine(ALL.find((x) => x.id === id)!)!.on);
-    expect(ons.filter((x) => x === true).length).toBe(6);
-    expect(ons.filter((x) => x === false).length).toBe(9);
+    expect(ons.filter((x) => x === true).length).toBe(8);
+    expect(ons.filter((x) => x === false).length).toBe(13);
   });
 });
 
-describe('#332 所有数值不变：这些文明的开局模拟结果与 f856c9e 相同', () => {
-  // #358 更新 Franks（马轭免费）；#393 更新 Vietnamese（免木材不再误当自动获得，避免重复套用）。其余文明仍是 f856c9e。
-  it('13 个文明 × 全部开局方案', () => {
+describe('#332 所有数值不变：这些文明的开局模拟结果与当前固定数据快照一致', () => {
+  // #358 更新 Franks；#393 更新 Vietnamese；#1384（v0.99.42）变更 eco/units 后基线快照漂移；#1403 扩充 Bulgarians / Dravidians / Spanish。
+  it('16 个文明 × 全部开局方案', () => {
     const civsUsed = [...new Set(Object.keys(EFFECTS).map((id) => id.split('-')[0]!))].sort();
     expect(Object.fromEntries(civsUsed.map((c) => [c, runFull(c)]))).toMatchSnapshot();
   }, 120_000);

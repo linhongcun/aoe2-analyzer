@@ -143,6 +143,26 @@ class StatsCheck(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn('unlisted 1 objects 6', buf.getvalue())
 
+    def test_unit_train_time_matches_primary_building_slot_with_fallback(self):
+        d = fake_d()
+        # Unit 74 trained at building 12 takes 16s via TrainAt, while TrainTime default is 13s
+        d['Civs'][1]['Units'][74]['TrainTime'] = 13
+        d['Civs'][1]['Units'][74]['TrainAt'] = [[82, 13], [12, 16]]
+        units, blds = self.good_mixed()
+        units[0]['b'] = 12
+        units[0]['tt'] = 16
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sc.main(units, blds, d), 0)
+        # Mismatching primary building slot fails
+        units[0]['tt'] = 13
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sc.main(units, blds, d), 1)
+        # Missing building slot falls back to TrainTime
+        units[0]['b'] = 1806
+        units[0]['tt'] = 13
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sc.main(units, blds, d), 0)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -304,13 +304,13 @@ describe('#1296 未建模机制精准判定（全量 24 充能单位 + 5 类机�
       ['B1', 558],
     ]);
 
-    // 同侧编入 2703 普通 + 2704 精锐瓦兰吉卫队，选哥瑟砍时抑去 vg-gothikon，产金按行分列且加成去重
+    // 同侧编入 2703 普通 + 2704 精锐瓦兰吉卫队，产金按行分列且常驻加成去重（哥瑟砍改由勾选触发）
     const vg = prepareVgDisplay(
       [
         { rowKey: 'a-0-2703', k: 'a', rowLabel: 'A1 · 瓦兰吉卫队', unitId: 2703, civ: 'Varangians', age: 4, rof: 1.6, seconds: 12 },
         { rowKey: 'a-1-2704', k: 'a', rowLabel: 'A2 · 精锐瓦兰吉卫队', unitId: 2704, civ: 'Varangians', age: 4, rof: 1.6, seconds: 24 },
       ],
-      { group: true, suppressedTechs: { a: new Set(['Gothikon']), b: new Set() } },
+      { group: true },
     );
     expect(vg.gold.map((g) => g.rowKey)).toEqual(['a-0-2703', 'a-1-2704']);
     expect(vg.lines.map((l) => l.note.id)).toEqual(['vg-rof', 'vg-gold']);

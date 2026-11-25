@@ -232,7 +232,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     const avail = simTechs(ctx, u, civ);
     const ok = new Set(avail.map((x) => x.t.id));
     const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
-    const sel = selectTrainingIds('f', avail, age, costs, civ);
+    const sel = selectTrainingIds('f', avail, age, costs, civ, u.id);
 
     let ignoreArmorTech: string | undefined;
     const S = simulate(

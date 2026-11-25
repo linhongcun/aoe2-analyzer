@@ -201,7 +201,7 @@ def main():
            'units': {}, 'buildings': {}, 'techs': {}}
     diffs = []
 
-    def put(kind, i, en, time_key, ref_time, ref_cost):
+    def put(kind, i, en, time_key, ref_time, ref_cost, ref_building=None):
         u = U[i] if i < len(U) else None
         if not u: diffs.append((kind, i, en, '.dat 中不存在', '', '')); return
         rec = {'en': en, time_key: u['TrainTime'], 'at': [x[0] for x in u['TrainAt']], 'cost': cost(u['Cost'])}
@@ -211,10 +211,11 @@ def main():
             if train_count > 1: rec['trainCount'] = train_count
         if len({x[1] for x in u['TrainAt']}) > 1: rec['timeAt'] = {str(x[0]): x[1] for x in u['TrainAt']}
         out[kind][str(i)] = rec
-        if ref_time is not None and ref_time != rec[time_key] and ref_time not in rec.get('timeAt', {}).values(): diffs.append((kind, i, en, time_key, ref_time, rec[time_key]))
+        expected_time = rec.get('timeAt', {}).get(str(ref_building), rec[time_key]) if ref_building is not None else rec[time_key]
+        if ref_time is not None and ref_time != expected_time: diffs.append((kind, i, en, time_key, ref_time, expected_time))
         if ref_cost is not None and norm(ref_cost) != rec['cost']: diffs.append((kind, i, en, 'cost', ref_cost, rec['cost']))
 
-    for x in units: put('units', x['id'], x['en'], 'trainTime', x.get('tt'), x.get('cost'))
+    for x in units: put('units', x['id'], x['en'], 'trainTime', x.get('tt'), x.get('cost'), x.get('b'))
     if '83' not in out['units']: put('units', 83, 'Villager', 'trainTime', None, None)
     for x in blds: put('buildings', x['id'], x['en'], 'buildTime', x.get('bt'), x.get('cost'))
     for b in (50, 70, 68, 562, 584, 45, 109, 12, 87, 101, 49, 103, 84):

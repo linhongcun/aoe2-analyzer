@@ -69,3 +69,31 @@ export function filterCivRankRows<Row extends { civ: string; civZh: string }>(
   if (neverCivs.length > 0) parts.push(`${formatCivList(neverCivs)}不能${verb}${entity.zh}`);
   return { rows: [], emptyMessage: `${parts.join('；')}。` };
 }
+
+export interface MechTagSegment {
+  text: string;
+  /** 紧跟在当前段之后的原始空格（保留 textContent 一致性，例如 ` · ` 的后置空格）。 */
+  spaceAfter: boolean;
+}
+
+/**
+ * 单位/建筑对照表 `.ucr-tag.is-mech` 标签语义分段（UX D.3）：
+ * 将「未计入：」前缀及 ` · ` 中点连接短语拆成独立的 `.nw` 段落，冒号与 ` ·` 紧贴前段，
+ * 保证 360px 窄屏下只发生段间折行而绝不在短语内拆字，且完整保留原始 `textContent`。
+ */
+export function splitMechTagSegments(tag: string): MechTagSegment[] {
+  const out: MechTagSegment[] = [];
+  let rest = tag;
+  const prefix = '未计入：';
+  if (rest.startsWith(prefix)) {
+    out.push({ text: prefix, spaceAfter: false });
+    rest = rest.slice(prefix.length);
+  }
+  if (!rest) return out;
+  const chunks = rest.split(' · ');
+  chunks.forEach((chunk, idx) => {
+    const isLast = idx === chunks.length - 1;
+    out.push({ text: isLast ? chunk : `${chunk} ·`, spaceAfter: !isLast });
+  });
+  return out;
+}

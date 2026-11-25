@@ -54,6 +54,30 @@ CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 
 UNIT_FORM_ALIASES = {42: 331}
 # .dat 科技 resource_costs 中代表「修道院驻守圣物数」的资源 ID（立陶宛 699–702：Cost=[[7, 1..4, 1]]）
 RELIC_RESOURCE_ID = 7
+# .dat 乘法抵消浮点残差容差（如穆伊斯卡草药学 1365 对弓兵类 ×1.15 后对掷矛/投石/格查 ×0.87 = 1.0005）
+MUL_IDENTITY_EPS = 1e-3
+
+
+def is_identity_fx(f):
+    """判断单条合并后效果是否为零增益/恒等残差（add/rof 0，或 |mul - 1| < 1e-3）。"""
+    op = f.get('op', 'add')
+    v = f['v']
+    if op == 'add':
+        return v == 0
+    if op == 'mul':
+        return abs(v - 1) < MUL_IDENTITY_EPS
+    return False
+
+
+def building_can_attack(b):
+    """判断目录建筑是否具备攻击能力（与 src/domain/buildingSim.ts buildingCanAttack 同口径）。"""
+    return (
+        (b.get('atk') or 0) > 0
+        or (b.get('rng') or 0) > 0
+        or (b.get('minr') or 0) > 0
+        or (b.get('rof') or 0) > 0
+        or bool(b.get('atks'))
+    )
 
 
 def tech_resource_costs(tech):
@@ -486,7 +510,7 @@ def main():
         if t == 6: return {'res': a, 'name': RES.get(a, '资源%d' % a), 'op': 'mul', 'v': r6(d)}
         return None
 
-    def compile_cmds(cmds):
+    def compile_cmds(cmds, return_excluded=False):
         """命令列表 → 规则 [{t:[ids], fx:[...]}] + 经济项；同一单位多条命令合并（加法求和、乘法连乘）。"""
         cmds = filter_aliased_cmds(cmds, ours, dcls)
         per = defaultdict(list); eco = []
@@ -497,21 +521,32 @@ def main():
             r = res_txt(c)
             if r: eco.append(r)
         groups = defaultdict(list)
+        canceled_units = set()
         for i, l in per.items():
             m = {}
+            mul_counts = defaultdict(int)
             for f in l:
                 k = (f['s'], f.get('op', 'add'), f.get('vs'))
+                if f.get('op') == 'mul':
+                    mul_counts[k] += 1
                 if k not in m: m[k] = dict(f); continue
                 g = m[k]
                 if f['s'] == 'rof': g['v'] = r6((1 + g['v']) * (1 + f['v']) - 1)
                 elif g.get('op', 'add') == 'add': g['v'] = r6(g['v'] + f['v'])
                 elif g['op'] == 'mul': g['v'] = r6(g['v'] * f['v'])
                 else: g['v'] = f['v']
-            fx = [f for f in m.values() if not (f.get('op', 'add') == 'add' and f['v'] == 0) and not (f.get('op') == 'mul' and f['v'] == 1)]
+            dropped_mul = any(
+                k[1] == 'mul' and mul_counts[k] >= 2 and abs(f['v'] - 1) < MUL_IDENTITY_EPS
+                for k, f in m.items()
+            )
+            fx = [f for f in m.values() if not is_identity_fx(f)]
             for f in fx:
                 if f.get('op') == 'add' or f['s'] == 'rof': f.pop('op', None)
             fx.sort(key=lambda f: (f['s'], f.get('vs') or '', f.get('op') or ''))
-            if fx: groups[json.dumps(fx, ensure_ascii=False, sort_keys=True)].append(i)
+            if fx:
+                groups[json.dumps(fx, ensure_ascii=False, sort_keys=True)].append(i)
+            elif dropped_mul and not ours[i].get('_b'):
+                canceled_units.add(i)
         rules = []
         for k, ids in groups.items():
             u = sorted(i for i in ids if not ours[i].get('_b')); b = sorted(i for i in ids if ours[i].get('_b'))
@@ -519,6 +554,10 @@ def main():
             if b: rules.append({'t': b, 'fx': json.loads(k), 'b': 1})
         rules.sort(key=lambda r: (-len(r['t']), r['t'][0]))
         annotate_building_ages(eco, cmds, forms)
+        if return_excluded:
+            eco_units = {uid for x in eco for uid in (x.get('t') or ())}
+            excluded = sorted(i for i in canceled_units if i not in eco_units)
+            return rules, eco, excluded
         return rules, eco
 
     def a_cmds(eid):
@@ -555,9 +594,12 @@ def main():
     for t in techs:
         if t['id'] in AGE_TECH: continue
         cmds, ok = merged_cmds(t['id'])
-        rules, eco = compile_cmds(cmds)
+        rules, eco, excluded = compile_cmds(cmds, return_excluded=True)
         age, pre = age_req(t['id'])
-        out['techs'][t['en']] = {'id': t['id'], 'combat': ok, 'rules': rules, 'eco': eco}
+        rec = {'id': t['id'], 'combat': ok, 'rules': rules, 'eco': eco}
+        if excluded:
+            rec['excluded'] = excluded
+        out['techs'][t['en']] = rec
 
     adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
 
@@ -615,6 +657,22 @@ def main():
     # ---- 关联 ----
     links = json.load(open(ROOT / 'data/sources/effects_links.json')) if (ROOT / 'data/sources/effects_links.json').exists() else {}
     CLASSW = ['Infantry', 'Cavalry', 'Mounted', 'Archer', 'Ship', 'Monk', 'Villager', 'Siege', 'Gunpowder', 'Camel', 'Elephant', 'Town Center', 'Castle', 'Scout', 'Galley', 'Knight', 'Spearman', 'Skirmisher', 'Tower', 'Dock', 'Farm', 'Building']
+    bld_names = {b['id']: b['en'] for b in blds}
+    tech_blds = {}
+    upgrade_techs = set()
+    for tid, tdat in enumerate(AT):
+        locs = [loc[0] for loc in (tdat.get('ResearchAt') or []) if isinstance(loc, list) and loc]
+        if not locs and (tdat.get('ResearchLocation') or -1) > 0:
+            locs = [tdat['ResearchLocation']]
+        bnames = sorted({bld_names[bid] for bid in locs if bid in bld_names})
+        if bnames:
+            tech_blds[tid] = bnames
+        eid = tdat.get('EffectID', -1)
+        if 0 <= eid < len(AE) and any(
+            cmd.get('Type') == 3 and cmd.get('A') in ours and cmd.get('B') in ours and not ours[cmd['A']].get('_b')
+            for cmd in (AE[eid].get('EffectCommands') or [])
+        ):
+            upgrade_techs.add(tid)
     for c in civs:
         ent = out['civs'][c['en']]
         L = links.get(c["en"], {})
@@ -622,9 +680,16 @@ def main():
         for e in all_entries:
             names = {re.sub(r'^Elite ', '', ours[i]['en']) for r in e['rules'] for i in r['t']} | {re.sub(r'^Elite ', '', ours[i]['en']) for x in e['eco'] for i in x.get('t', []) if i in ours}
             names |= {w for w in CLASSW if any(w.lower() in n.lower() for n in names)}
-            sc = [link_score(e, b, names) for b in c['bonEn']]
-            best = max(range(len(sc)), key=lambda i: sc[i]) if sc else None
-            e['auto'] = best if sc and sc[best] > 0 else None
+            sc = [link_score(e, b, names, tech_blds=tech_blds, bld_names=bld_names, upgrade_techs=upgrade_techs) for b in c['bonEn']]
+            if sc:
+                mx = max(sc)
+                if mx > 0 and (e['tech'] >= 0 or sc.count(mx) == 1):
+                    best = sc.index(mx)
+                else:
+                    best = None
+            else:
+                best = None
+            e['auto'] = best
             k = str(e['tech'])
             e['idx'] = L[k] if k in L else e['auto']
             e['linked'] = 'manual' if k in L else 'auto'
@@ -657,6 +722,26 @@ def main():
         guided_projectile_ids(ballistics_cmds, attrs=(19,)),
     )
     out['ballistics'] = {'units': ballistics_units, 'chargeOnly': ballistics_charge_only}
+
+    # ---- #1403 投射物剧毒科技（属性 145/146/147，如箭毒 1393）适用单位与有攻建筑（零硬编码 ID，按科技文明取交集） ----
+    bld_forms = transform_closure(dat_units, [b['id'] for b in blds])
+    attacking_blds = [b for b in blds if building_can_attack(b)]
+    projectile_poison = {}
+    for t in techs:
+        tid = t['id']
+        eid = AT[tid]['EffectID'] if 0 <= tid < len(AT) else -1
+        raw_cmds = AE[eid]['EffectCommands'] if 0 <= eid < len(AE) else []
+        poison_pids = guided_projectile_ids(raw_cmds, attrs=(145, 146, 147))
+        if not poison_pids:
+            continue
+        tech_civs = set(t.get('civs') or ())
+        scoped_units = [u for u in units if not tech_civs or (set(u.get('civs') or ()) & tech_civs)]
+        scoped_blds = [b for b in attacking_blds if not tech_civs or (set(b.get('civs') or ()) & tech_civs)]
+        p_units, _ = split_projectile_units(dat_units, unit_forms, scoped_units, poison_pids)
+        p_blds, _ = split_projectile_units(dat_units, bld_forms, scoped_blds, poison_pids)
+        if p_units or p_blds:
+            projectile_poison[t['en']] = {'units': p_units, 'buildings': p_blds}
+    out['projectilePoison'] = projectile_poison
 
     # ---- #1366 目录单位基础 combatAbility（属性 63 位掩码；全量 248 目录单位，供 effects.ts 零耦合折叠 a:63） ----
     combat_ability_base = {}
@@ -693,9 +778,17 @@ def tokens(s):
     return {w.rstrip('s') for w in re.findall(r'[a-z]{4,}', s)} - STOP, set(re.findall(r'\d+', s))
 
 
-def link_score(e, text, unames):
+WHAT_RES_EN = {'食物': 'food', '木材': 'wood', '石料': 'stone', '黄金': 'gold'}
+ECO_BLD_NAMES = {'Mill', 'Lumber Camp', 'Mining Camp', 'Market'}
+
+
+def link_score(e, text, unames, tech_blds=None, bld_names=None, upgrade_techs=None):
     t = text.lower()
-    nt, nn = tokens(re.sub(r'^c-bonus,?\s*', '', e['name'], flags=re.I))
+    is_tree = e.get('tech', 0) < 0
+    if is_tree:
+        nt, nn = set(), set()
+    else:
+        nt, nn = tokens(re.sub(r'^c-bonus,?\s*', '', e['name'], flags=re.I))
     tt, tn = tokens(text)
     sc = 3 * len(nt & tt) + 2 * len(nn & tn)
     for r in e['rules']:
@@ -703,7 +796,44 @@ def link_score(e, text, unames):
             sc += any(w in t for w in STAT_WORDS.get(f['s'], []))
     for x in e['eco']:
         if 'a' in x: sc += any(w in t for w in ECO_WORDS.get(x['a'], []))
-        if 'tech' in x: sc += 2 * (x['tech'].lower() in t) + ('free' in t and x['v'] == 0)
+        if 'tech' in x:
+            sc += 2 * (x['tech'].lower() in t) + ('free' in t and x['v'] == 0)
+            if is_tree:
+                tid = x.get('tid')
+                op = x.get('op')
+                v = x.get('v')
+                what = x.get('what') or ''
+                res_en = WHAT_RES_EN.get(what)
+                has_tech_kw = 'technolog' in t or 'upgrade' in t
+                if tid in AGE_TECH and 'advanc' in t:
+                    sc += 4
+                if tech_blds and tid in tech_blds and has_tech_kw:
+                    bnames = tech_blds[tid]
+                    if any(bn.lower() in t for bn in bnames):
+                        sc += 3
+                    if 'economic' in t and any(bn in ECO_BLD_NAMES for bn in bnames):
+                        sc += 2
+                if op == 'set' and v == 0:
+                    if res_en and f'no {res_en}' in t:
+                        sc += 3
+                    if upgrade_techs and tid in upgrade_techs and 'upgrade' in t and 'free' in t:
+                        sc += 2
+                elif op == 'mul' and isinstance(v, (int, float)) and v > 0 and v != 1:
+                    if what == '研究时间':
+                        pct_spd = str(round((1 / v - 1) * 100))
+                        if ('research' in t or 'faster' in t) and pct_spd in tn:
+                            sc += 3
+                    else:
+                        pct_cost = str(round((1 - v) * 100))
+                        if (has_tech_kw or 'advanc' in t) and pct_cost in tn:
+                            sc += 2
+                            if res_en and res_en in t:
+                                sc += 1
+        if x.get('res') == 204 and bld_names and 'reveal' in t:
+            bid = int(round(x['v']))
+            bn = bld_names.get(bid)
+            if bn and bn.lower() in t:
+                sc += 3
     sc += 2 * len({n for n in unames if n.lower() in t})
     return sc
 

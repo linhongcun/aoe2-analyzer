@@ -46,6 +46,7 @@ function expectedKindsForBase(u: Unit, civ: string, age: number): UnmodeledKind[
   if (u.damagedTargetBonus === true) out.push('damaged-bonus');
   if (u.lowHpTransform === true) out.push('low-hp-transform');
   if (hasPositiveEcoAttr(civEco, u.id, 109, 1e-9)) out.push('regen');
+  if (u.deathHealAura === true) out.push('death-heal');
   return out;
 }
 

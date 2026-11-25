@@ -150,9 +150,9 @@ describe('issue 317 罗马', () => {
 });
 
 describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一致', () => {
-  it('覆盖面：112 条 src = eco、37 条 src = text（非团队）', () => {
-    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(112);
-    expect(ECO.filter((b) => b.src === 'text')).toHaveLength(37);
+  it('覆盖面：119 条 src = eco、30 条 src = text（非团队；#1403 补齐 8 条被动链接并修正勃艮第-2 归回 text）', () => {
+    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(119);
+    expect(ECO.filter((b) => b.src === 'text')).toHaveLength(30);
   });
   it('src = text 中实际被工具计入的六条：亚美尼亚经济研究、凯尔特伐木、高棉免建筑前置、朝鲜采石、高丽战船木材、突厥采金', () => {
     const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
@@ -246,12 +246,12 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       if (counted) hidden++;
     }
     expect(hidden).toBeGreaterThan(0);
-    expect(hidden).toBeLessThan(112);
-    // src = text 同样规则：六条被工具计入，不显示；其余 31 条没有工具计入，仍显示
+    expect(hidden).toBeLessThan(119);
+    // src = text 同样规则：六条被工具计入，不显示；其余 24 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
     for (const b of text)
       expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Koreans-3', 'Turks-0'].includes(b.id)]);
-    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(31);
+    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(24);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

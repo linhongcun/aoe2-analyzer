@@ -64,12 +64,8 @@ export function DuelUnmodeledNotes({
     standaloneAssumeHit.push(entry);
   }
 
-  const suppressedTechs = { a: new Set<string>(), b: new Set<string>() };
-  for (const item of items) {
-    for (const techEn of item.techEns) suppressedTechs[item.side].add(techEn);
-  }
   const effectiveContact = usesContact ?? group;
-  const vg = prepareVgDisplay(vgSides, { group, usesContact: effectiveContact, suppressedTechs });
+  const vg = prepareVgDisplay(vgSides, { group, usesContact: effectiveContact });
 
   if (!items.length && !standaloneAssumeHit.length && !vg.hasContent) return null;
 
@@ -92,7 +88,7 @@ export function DuelUnmodeledNotes({
         {assumeHitCallout}
         {vg.hasContent && (
           <aside className="pk-unmodeled" role="region" aria-label="本场未计入机制与专项说明">
-            <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} suppressedTechs={suppressedTechs} />
+            <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} />
           </aside>
         )}
       </>
@@ -160,7 +156,7 @@ export function DuelUnmodeledNotes({
             );
           })}
         </div>
-        {vg.hasContent && <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} embedded suppressedTechs={suppressedTechs} />}
+        {vg.hasContent && <VgNotes sides={vgSides} group={group} usesContact={effectiveContact} embedded />}
       </aside>
     </>
   );
