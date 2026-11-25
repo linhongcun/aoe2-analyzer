@@ -272,6 +272,42 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     shelterShootData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 12, stat: 'reload', op: 'mul', value: 0.8 }] };
     expect(techIds(12, 'Franks', 4, shelterShootData)).toEqual(expect.arrayContaining([199, 233]));
     expect(calculateGeneralGarrison(ctx, barracks, cfg('Franks', 4, [199, 233]), shelterShootData).mode).toBe('arrows');
+
+    // 7. 隐式单位形态科技触发的条件链：英国城镇中心放入劲弩手 492（隐式 237）后 237 + 233 增容 -> 列表保留 233 且行增删列表稳定
+    const shapeChainData = cloneCustomData();
+    shapeChainData.conditional.push({ id: 99101, requires: [237, 233], count: 2, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] });
+    expect(techIds(109, 'Britons', 4, shapeChainData)).toContain(233);
+    expect(
+      getGarrisonTechs(ctx, tc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), shapeChainData)
+        .map((t) => t.id)
+        .sort((a, z) => a - z),
+    ).toEqual(techIds(109, 'Britons', 4, shapeChainData));
+    const shapeRes = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), shapeChainData);
+    expect(shapeRes.errors).toEqual([]);
+    expect(shapeRes.capacity).toBe(17);
+
+    // 8. 部分选择下的非单调火力抵消：199 赋予民兵火力，200 将其归零，233 加攻击 -> 空/全选均为 0，仅选 199 时 233 有效，必须保留
+    const partialFpData = cloneCustomData();
+    partialFpData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 74, stat: 'firepower', op: 'set', value: 1 }] };
+    partialFpData.techs[200] = { id: 200, requires: [], count: 0, effects: [{ unit: 74, stat: 'firepower', op: 'set', value: 0 }] };
+    partialFpData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'attack', op: 'add', value: 3 }] };
+    expect(techIds(109, 'Britons', 4, partialFpData)).toContain(233);
+    const partialBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199], [{ unitId: 74, count: '1', entry: 'enter' }]), partialFpData);
+    const partialAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 74, count: '1', entry: 'enter' }]), partialFpData);
+    expect(partialAfter.errors).toEqual([]);
+    expect(partialBefore.rows[0]!.powerEach).toBe(0);
+    expect(partialAfter.rows[0]!.powerEach).toBeCloseTo(1.5, 5);
+
+    // 9. sizeClass 精细判定：从不被 TC 接受的 3 改为同样不被接受的 6 应排除；改为可进入的 2 应保留
+    const sizeNoopData = cloneCustomData();
+    sizeNoopData.units[74] = { ...sizeNoopData.units[74]!, sizeClass: 3 };
+    sizeNoopData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 6 }] };
+    expect(techIds(109, 'Britons', 4, sizeNoopData)).not.toContain(233);
+    const sizeAllowData = cloneCustomData();
+    sizeAllowData.units[74] = { ...sizeAllowData.units[74]!, sizeClass: 3 };
+    sizeAllowData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 2 }] };
+    expect(techIds(109, 'Britons', 4, sizeAllowData)).toContain(233);
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 74, count: '1', entry: 'enter' }]), sizeAllowData).errors).toEqual([]);
   });
 
   it('全站 56 文明 × 20 宿主 × 全有效时代真实行为完整性守卫：被排除科技零行为变化且行增删列表稳定', () => {
@@ -317,20 +353,25 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
           const excluded = civTechs.filter((t) => productionTechAge(t, civ) <= age && !kept.has(t.id)).map((t) => t.id);
           if (!excluded.length) continue;
 
-          // 真实引擎对照：将所有被排除的可用科技注入 civ.automatic（以原 tech.id 进入 known 并触发全部条件链），
-          // 验证在空态与保留全选态下，候选列表、建筑模式/容量/箭数/火力阈值及全部可驻单位单人火力均零变化
-          const baseCiv = GENERAL_GARRISON_DATA.civs[civ]!;
+          // 真实引擎对照：将所有被排除的可用科技注入 data.conditional（在自动规则与已选科技之后按真实顺序生效，
+          // 以原 tech.id 进入 known 并触发条件链），验证空态与保留全选态下候选、容量、模式、弹丸、阈值与单人火力零变化
           const withExcludedData: GeneralGarrisonData = {
             ...GENERAL_GARRISON_DATA,
             unitUpgradeTechs: GARRISON_TECH_DATA.unitUpgradeTechs,
-            civs: {
-              ...GENERAL_GARRISON_DATA.civs,
-              [civ]: {
-                ...baseCiv,
-                automatic: [...baseCiv.automatic, ...excluded.map((id) => ({ ...GENERAL_GARRISON_DATA.techs[id]!, requires: [], count: 0 }))],
-              },
-            },
+            conditional: [...GENERAL_GARRISON_DATA.conditional, ...excluded.map((id) => ({ ...GENERAL_GARRISON_DATA.techs[id]!, requires: [], count: 0 }))],
           };
+
+          const keyOf = (list: ReturnType<typeof getGarrisonCandidates>) => list.map((c) => `${c.id}:${+c.canEnter}${+c.canCreate}${+c.canDeposit}`);
+          const isShooting = (r: ReturnType<typeof calculateGeneralGarrison>) => r.mode === 'arrows' || r.mode === 'cannon';
+          const summarize = (r: ReturnType<typeof calculateGeneralGarrison>) => ({
+            mode: r.mode,
+            capacity: r.capacity,
+            baseProjectiles: r.baseProjectiles,
+            maxProjectiles: r.maxProjectiles,
+            totalProjectiles: r.totalProjectiles,
+            buildingPower: r.buildingPower,
+            ...(isShooting(r) ? { powers: r.rows.map((row) => row.powerEach) } : {}),
+          });
 
           for (const [tag, selectedTechs] of [
             ['base', []],
@@ -338,19 +379,8 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
           ] as const) {
             const candsA = getGarrisonCandidates(ctx, b, cfg(civ, age, [...selectedTechs]));
             const candsB = getGarrisonCandidates(ctx, b, cfg(civ, age, [...selectedTechs]), withExcludedData);
-            const keyOf = (list: typeof candsA) => list.map((c) => `${c.id}:${+c.canEnter}${+c.canCreate}${+c.canDeposit}`);
             expect(keyOf(candsB), `${label} ${tag} cands changed by [${excluded.join(',')}]`).toEqual(keyOf(candsA));
 
-            const isShooting = (r: ReturnType<typeof calculateGeneralGarrison>) => r.mode === 'arrows' || r.mode === 'cannon';
-            const summarize = (r: ReturnType<typeof calculateGeneralGarrison>) => ({
-              mode: r.mode,
-              capacity: r.capacity,
-              baseProjectiles: r.baseProjectiles,
-              maxProjectiles: r.maxProjectiles,
-              totalProjectiles: r.totalProjectiles,
-              buildingPower: r.buildingPower,
-              ...(isShooting(r) ? { powers: r.rows.map((row) => row.powerEach) } : {}),
-            });
             const headA = calculateGeneralGarrison(ctx, b, cfg(civ, age, [...selectedTechs]));
             const headB = calculateGeneralGarrison(ctx, b, cfg(civ, age, [...selectedTechs]), withExcludedData);
             expect(headA.errors, `${label} ${tag} A`).toEqual([]);
@@ -371,6 +401,46 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
               expect(resA.errors, `${label} ${tag} A`).toEqual([]);
               expect(resB.errors, `${label} ${tag} B`).toEqual([]);
               expect(summarize(resB), `${label} ${tag} output changed by [${excluded.join(',')}]`).toEqual(summarize(resA));
+            }
+          }
+
+          // 反向必要性守卫（帝王时代）：每项非前置垫脚、非免费保留科技均须实际改写至少一项候选、建筑参数或可驻单位单人火力
+          if (age === 4) {
+            const preUsed = new Set<number>();
+            for (const kid of kept) {
+              const pre = ctx.core.techById[kid]?.pre;
+              if (pre && kept.has(pre)) preUsed.add(pre);
+            }
+            const stateSignature = (techs: number[]) => {
+              const cands = getGarrisonCandidates(ctx, b, cfg(civ, age, techs));
+              const head = calculateGeneralGarrison(ctx, b, cfg(civ, age, techs));
+              expect(head.errors, `${label} kept sig [${techs.join(',')}]`).toEqual([]);
+              const powers: (number | null)[] = [];
+              if (isShooting(head)) {
+                const rowsAll = cands.map((c) => ({
+                  unitId: c.id,
+                  count: '0',
+                  entry: (c.canDeposit ? 'deposit' : c.canEnter ? 'enter' : 'created') as 'enter' | 'created' | 'deposit',
+                }));
+                for (let i = 0; i < rowsAll.length; i += 32) {
+                  const res = calculateGeneralGarrison(ctx, b, cfg(civ, age, techs, rowsAll.slice(i, i + 32)));
+                  powers.push(...res.rows.map((r) => r.powerEach));
+                }
+              }
+              return JSON.stringify({ cands: keyOf(cands), head: summarize(head), powers });
+            };
+            for (const tid of manualKept) {
+              if (preUsed.has(tid)) continue;
+              const chain: number[] = [];
+              let pre = ctx.core.techById[tid]?.pre;
+              while (pre && kept.has(pre)) {
+                if (!freeBase.has(pre)) chain.push(pre);
+                pre = ctx.core.techById[pre]?.pre;
+              }
+              const freeAfterChain = new Set(getFreeGarrisonTechs(ctx, b, cfg(civ, age, chain)));
+              const preClean = chain.filter((id) => !freeAfterChain.has(id));
+              if (freeAfterChain.has(tid)) continue;
+              expect(stateSignature([...preClean, tid]), `${label} kept tech ${tid} had no observable effect`).not.toBe(stateSignature(preClean));
             }
           }
         }
