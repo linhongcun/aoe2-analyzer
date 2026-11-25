@@ -23,7 +23,8 @@ function formatSeconds(rof: number): string {
 
 /**
  * 一方是瓦兰吉卫队系时，列出本场对该文明生效的相关加成。
- * 其他文明不列出瓦兰吉人专属的攻速、产金和哥瑟砍。
+ * 其他文明不列出瓦兰吉人专属的攻速与产金。
+ * 注：需勾选生效的独特科技（瓦兰吉哥瑟砍 1474、拜占庭后勤学 61）统一由 duelUnmodeled 按勾选态触发，不在此无条件覆盖。
  */
 export function varangianPkNotes(unitId: number, civ: string, age: number, rof?: number, group = false, usesContact = group): VgNote[] {
   if (!VG_IDS.has(unitId)) return [];
@@ -44,23 +45,6 @@ export function varangianPkNotes(unitId: number, civ: string, age: number, rof?:
       status: 'counted',
       // 说明文案是 +50%，.dat / UGC 的内部乘法约为 ×1.33。黄金数字见结果卡上的估算。
       reason: `游戏说明写 +50%，数据里约为 ×${formatRatio(varangianListedRatio())}。本场黄金已按这个倍率估算。`,
-    });
-    if (age >= 4) {
-      notes.push({
-        id: 'vg-gothikon',
-        civ,
-        label: '哥瑟砍（定期投掷斧头）',
-        status: 'uncounted',
-        reason: '定期投斧不计入单位 PK',
-      });
-    }
-  } else if (civ === 'Byzantines' && age >= 4) {
-    notes.push({
-      id: 'byz-logistica',
-      civ,
-      label: '后勤学（践踏伤害）',
-      status: 'uncounted',
-      reason: '践踏伤害不计入单位 PK',
     });
   } else if (civ === 'Danes') {
     notes.push({

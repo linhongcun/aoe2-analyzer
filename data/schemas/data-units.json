@@ -228,6 +228,7 @@
       "onHitEffect": { "type": "string", "enum": ["dot", "slow", "attack-speed"] },
       "damagedTargetBonus": { "type": "boolean" },
       "lowHpTransform": { "type": "boolean" },
+      "deathHealAura": { "type": "boolean" },
       "atks": {
         "type": "array",
         "items": {

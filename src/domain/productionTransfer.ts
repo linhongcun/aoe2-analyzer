@@ -50,7 +50,8 @@ export function duelToTrainTotal(
 ): ProductionTransfer<TrainTotalConfig> {
   const { unit, civ, age } = source;
   const sim = makeSimContext(ctx.core.techs, ctx.trees);
-  const selected = source.selected ?? selectTrainingIds(source.techs, simTechs(sim, unit, civ), age, applicableTrainingTechs(sim, unit, civ, age), civ);
+  const selected =
+    source.selected ?? selectTrainingIds(source.techs, simTechs(sim, unit, civ), age, applicableTrainingTechs(sim, unit, civ, age), civ, unit.id);
   const explicit = Array.isArray(source.techs) ? source.techs : [];
   const config = { ...emptyTrainTotal(civ, age), rows: [{ unit: unit.id, qty: String(source.count) }], techs: [...new Set([...selected, ...explicit])] };
   config.techs = evaluateTrainTotal(ctx, config)

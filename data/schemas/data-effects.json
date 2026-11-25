@@ -83,6 +83,15 @@
             "items": {
               "$ref": "#/$defs/eco"
             }
+          },
+          "excluded": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uniqueItems": true,
+            "minItems": 1
           }
         },
         "required": ["id", "combat", "rules", "eco"],
@@ -235,6 +244,36 @@
       "required": ["units", "chargeOnly"],
       "additionalProperties": false
     },
+    "projectilePoison": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "units": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uniqueItems": true
+          },
+          "buildings": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": ["units", "buildings"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "combatAbilityBase": {
       "type": "object",
       "additionalProperties": {
@@ -247,7 +286,7 @@
       }
     }
   },
-  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics", "combatAbilityBase"],
+  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics", "projectilePoison", "combatAbilityBase"],
   "additionalProperties": false,
   "$defs": {
     "fx": {

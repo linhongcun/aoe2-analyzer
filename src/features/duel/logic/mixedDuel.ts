@@ -7,6 +7,7 @@ import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { mixedFighterError, type MixedFighter } from '../../../domain/mixedFight';
 import { prereqChain } from '../../../domain/prereq';
 import { parseRelicCount } from '../../../domain/relicParams';
+import { DAT } from '../../../domain/datEffects';
 import { civStatus, simTechs, type SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
 import { unitAvailable } from '../../../domain/unitAvailability';
@@ -138,7 +139,13 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
     const avail = simTechs(ctx, u, input.civ);
     const costs = applicableTrainingTechs(ctx, u, input.civ, age ?? 4);
     for (const item of [
-      ...avail.map(({ t, ef, chargeOnly }) => ({ t, numeric: !!ef, cost: false, partial: false, chargeOnly: !!chargeOnly })),
+      ...avail
+        .filter(({ t, ef }) => {
+          if (ef !== null) return true;
+          const poison = DAT.projectilePoison?.[t.en];
+          return !poison || poison.units.includes(u.id);
+        })
+        .map(({ t, ef, chargeOnly }) => ({ t, numeric: !!ef, cost: false, partial: false, chargeOnly: !!chargeOnly })),
       ...costs.map(({ tech, supported, partial }) => ({
         t: tech,
         numeric: false,

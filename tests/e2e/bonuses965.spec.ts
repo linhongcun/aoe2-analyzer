@@ -8,15 +8,15 @@ async function settle(page: Page) {
 }
 
 test.describe('#965 文明加成按文明分组', () => {
-  test('默认 56 张卡、281 行，计入筛选是有计入 174 / 仅文本 107', async ({ page }) => {
+  test('默认 56 张卡、281 行，计入筛选是有计入 176 / 仅文本 105', async ({ page }) => {
     await page.goto('./#/bonuses');
     await expect(page.locator('#bonuses h1')).toHaveText('文明加成');
     await expect(page.locator('#blist > section')).toHaveCount(56);
     await expect(page.locator('#blist li')).toHaveCount(281);
     await expect(page.locator('#blist > section').first().locator('h2')).toHaveCount(1);
     await expect(page.locator('#blist > section').first().locator('.ico')).toHaveCount(1);
-    await expect(page.getByRole('radio', { name: '有计入 174' })).toBeVisible();
-    await expect(page.getByRole('radio', { name: '仅文本 107' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: '有计入 176' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: '仅文本 105' })).toBeVisible();
     await expect(page.locator('#bcnt')).toHaveText('281 条 · 56 个文明');
     await expect(page.locator('#bonuses')).not.toContainText('.dat');
     await expect(page.getByRole('link', { name: '按玩家阵容汇总团队加成' })).toHaveAttribute('href', /#\/team-bonuses$/);

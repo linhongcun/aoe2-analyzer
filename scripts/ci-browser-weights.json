@@ -6,6 +6,7 @@
   "defaultCaseMs": 1500,
   "staticSweepMs": 85000,
   "files": {
+    "tests/e2e/dataAlignment1403.spec.ts": 18000,
     "tests/e2e/armyCost1402.spec.ts": 12000,
     "tests/e2e/civAboutFeedback1153.spec.ts": 12000,
     "tests/e2e/upgradeLine1150.spec.ts": 6000,

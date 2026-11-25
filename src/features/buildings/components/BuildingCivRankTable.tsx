@@ -17,6 +17,7 @@ import {
 } from '../../../domain/buildingCivRank';
 import { AGE_ZH } from '../../../domain/ratings';
 import { CivIcon } from '../../../shared/ui/art';
+import { CivRankMechTag } from '../../../shared/ui/CivRankMechTag';
 import { Icon } from '../../../shared/ui/Icon';
 
 interface BuildingCivRankTableProps {
@@ -48,9 +49,7 @@ function BuildingCivTags({ row }: { row: BuildingCivRankRow }) {
     <div className="ucr-civ-tags">
       {row.earlyUnlock && <span className="ucr-tag is-early">提前解锁</span>}
       {row.tags.map((tag) => (
-        <span key={tag} className="ucr-tag is-mech">
-          {tag}
-        </span>
+        <CivRankMechTag key={tag} text={tag} />
       ))}
       {row.missingTechs.length > 0 ? (
         <span className="ucr-tag is-miss">

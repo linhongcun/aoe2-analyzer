@@ -11,23 +11,22 @@ const side = (id: number, civ: string, age = 4) => {
 };
 
 describe('#350 瓦兰吉卫队 PK 计入标注', () => {
-  it('精锐瓦兰吉人列出攻速与产金已计入，哥瑟砍仍未计入', () => {
+  it('精锐瓦兰吉人列出攻速与产金已计入，哥瑟砍改为勾选后由未建模卡统一提示', () => {
     const a = side(2704, 'Varangians');
     const notes = varangianPkNotes(2704, 'Varangians', 4, a.S.rof);
     expect(notes.map((n) => [n.id, n.status, n.label, n.reason])).toEqual([
       ['vg-rof', 'counted', '攻击速度 +25%', '已反映在攻击间隔 1.6s'],
       ['vg-gold', 'counted', '产生的黄金 +50%', '游戏说明写 +50%，数据里约为 ×1.33。本场黄金已按这个倍率估算。'],
-      ['vg-gothikon', 'uncounted', '哥瑟砍（定期投掷斧头）', '定期投斧不计入单位 PK'],
     ]);
     expect(notes.map((n) => `${n.label} ${n.reason}`).join('\n')).not.toMatch(/每秒|每次|work_value/);
   });
 
-  it('城堡时代的普通瓦兰吉卫队还没有哥瑟砍', () => {
+  it('城堡时代的普通瓦兰吉卫队同样列出攻速与产金', () => {
     expect(varangianPkNotes(2703, 'Varangians', 3, 1.6).map((n) => n.id)).toEqual(['vg-rof', 'vg-gold']);
   });
 
-  it('拜占庭、丹麦、撒克逊、维京只列各自生效的加成', () => {
-    expect(varangianPkNotes(2704, 'Byzantines', 4).map((n) => n.id)).toEqual(['byz-logistica']);
+  it('拜占庭、丹麦、撒克逊、维京只列各自常驻/非勾选加成（拜占庭后勤学改由勾选触发）', () => {
+    expect(varangianPkNotes(2704, 'Byzantines', 4)).toEqual([]);
     expect(varangianPkNotes(2703, 'Byzantines', 3)).toEqual([]);
     expect(varangianPkNotes(2704, 'Danes', 4).map((n) => [n.id, n.status])).toEqual([
       ['danes-spd', 'uncounted'],
@@ -41,6 +40,7 @@ describe('#350 瓦兰吉卫队 PK 计入标注', () => {
       expect(ids).not.toContain('vg-rof');
       expect(ids).not.toContain('vg-gold');
       expect(ids).not.toContain('vg-gothikon');
+      expect(ids).not.toContain('byz-logistica');
     }
   });
 

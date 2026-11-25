@@ -73,6 +73,8 @@ export interface DatTech {
   combat: boolean;
   rules: DatRule[];
   eco: DatEco[];
+  /** .dat 乘法抵消残差清除后无剩余规则/经济命中的显式排除单位 ID（仅非空时存在） */
+  excluded?: number[];
 }
 export interface DatGeneric {
   tech: number;
@@ -102,6 +104,10 @@ export interface DatBallistics {
   units: number[];
   chargeOnly: number[];
 }
+export interface DatProjectilePoison {
+  units: number[];
+  buildings: number[];
+}
 export interface DatFile {
   costDiscounts: Record<string, DatCostDiscount[]>;
   meta: { newIds: number[]; sources: { id: string; repo: string; commit: string; file: string; patch: string; use: string }[] };
@@ -109,6 +115,7 @@ export interface DatFile {
   civs: Record<string, DatCiv>;
   generic: DatGeneric[];
   ballistics?: DatBallistics;
+  projectilePoison?: Record<string, DatProjectilePoison>;
   combatAbilityBase?: Record<string, number>;
 }
 export const DAT = raw as unknown as DatFile;

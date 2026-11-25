@@ -3,6 +3,7 @@
  * 效果数值来自 .dat 生成的 data/game/effects.json（经 effects.ts 合成，手工表仅作回退）。
  */
 import type { Building, Effect, StatSet } from './types';
+import { DAT } from './datEffects';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
 import { BUILDING_CIV_BONUSES, BUILDING_EFFECTS, BUILDING_TEXT_ONLY, genericFx } from './effects';
 export type { BPred, BCivBonus } from './buildingEffects.manual';
@@ -71,6 +72,17 @@ export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): Sim
       r.push({ t, ef: null });
     }
   });
+  // 投射物剧毒科技（如箭毒 1393，按 DAT.projectilePoison 仅命中具备攻击能力的适用建筑；先于 b.techs 去重）
+  if (canAttack) {
+    Object.entries(DAT.projectilePoison ?? {}).forEach(([en, scope]) => {
+      if (!scope.buildings.includes(b.id)) return;
+      const t = has(en);
+      if (!t || seen.has(t.id)) return;
+      if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
+      seen.add(t.id);
+      r.push({ t, ef: null, scopeNote: '研究后本建筑的攻击附带中毒持续伤害；面板数值未计入。' });
+    });
+  }
   // 在该建筑研究的独特科技：仅文本（已由上方效果/文本表纳入的按 t.id 去重）
   ctx.techs.forEach((t) => {
     if (t.type === 'UniqueTech' && t.civs.includes(civ) && b.techs.includes(t.id) && !seen.has(t.id)) {

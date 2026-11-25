@@ -3,6 +3,7 @@ import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types
 import { militaryTechAge } from './availabilityAge';
 import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
 import { activeRelicBonus, CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
+import { DAT } from './datEffects';
 import { applyEffectValue } from './numericEffects';
 
 export interface SimContext {
@@ -92,7 +93,9 @@ export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
     const ef = l.filter((x) => !x.b && x.pred(u)).flatMap((x) => x.fx);
     if (ef.length) r.push({ t, ef });
   });
-  ctx.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && !r.some((x) => x.t.id === t.id)).forEach((t) => r.push({ t, ef: null }));
+  ctx.techs
+    .filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && !r.some((x) => x.t.id === t.id) && !DAT.techs[t.en]?.excluded?.includes(u.id))
+    .forEach((t) => r.push({ t, ef: null }));
   TEXT_ONLY_TECHS.forEach((n) => {
     const t = ctx.techByEn[n];
     if (!t || !st['t' + t.id]) return;

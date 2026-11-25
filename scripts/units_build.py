@@ -118,6 +118,35 @@ def derive_unmodeled_dat_fields(source_unit, dat_units):
     return out
 
 
+def derive_death_heal_aura(source_unit, dat_units):
+    """#1403：从固定 DAT 派生阵亡回血光环标记（BloodUnitID 指向 CombatAbility & 32 实体，fail-closed）。"""
+    blood_id = source_unit['BloodUnitID']
+    if type(blood_id) is not int:
+        raise ValueError(f'Invalid BloodUnitID: {blood_id!r}')
+    if blood_id < 0:
+        return False
+    if blood_id >= len(dat_units) or dat_units[blood_id] is None:
+        raise ValueError(f'Missing BloodUnitID target {blood_id} in dat_units')
+    target_ca = dat_units[blood_id]['CombatAbility']
+    if type(target_ca) is not int or target_ca < 0:
+        raise ValueError(f'Invalid CombatAbility for BloodUnitID target {blood_id}: {target_ca!r}')
+    return bool(target_ca & 32)
+
+
+def resolve_building_train_time(source_unit, building_id, fallback_tt=None):
+    """#1403：按目录主训练建筑匹配 .dat TrainAt 槽位时间；未命中槽位时回退 .dat TrainTime，仅当 .dat 缺有效值时回退 fallback_tt。"""
+    train_at = source_unit.get('TrainAt') or []
+    for slot in train_at:
+        if isinstance(slot, list) and len(slot) >= 2 and slot[0] == building_id:
+            t = slot[1]
+            if type(t) in (int, float) and math.isfinite(t) and t > 0:
+                return t
+    dat_tt = source_unit.get('TrainTime')
+    if type(dat_tt) in (int, float) and math.isfinite(dat_tt) and dat_tt > 0:
+        return dat_tt
+    return fallback_tt
+
+
 def main():
     cache_dir = os.environ['AOE_CACHE'] + '/'
     with open(cache_dir + 'data.json', encoding='utf-8') as f:
@@ -263,6 +292,9 @@ def main():
             ):
                 u['chargeMultiProjectiles'] = True
             u.update(derive_unmodeled_dat_fields(source_unit, _DU))
+            if derive_death_heal_aura(source_unit, _DU):
+                u['deathHealAura'] = True
+            u['tt'] = resolve_building_train_time(source_unit, u['b'], u['tt'])
             train_count = _derive_train_count(source_unit, u['id'])
             if train_count > 1:
                 u['trainCount'] = train_count

@@ -82,15 +82,31 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
   return found;
 }
 
-/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 仍只保留当前时代可用的战斗科技或本题适用的费用科技。 */
-export function selectTrainingIds(techs: TechSpec, avail: readonly SimTech[], age: number, costs: readonly TrainingCostTech[], civ: string): Set<number> {
+/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 只保留当前时代可用的战斗/费用科技，并对无数值投射物剧毒科技按作用单位裁剪。 */
+export function selectTrainingIds(
+  techs: TechSpec,
+  avail: readonly SimTech[],
+  age: number,
+  costs: readonly TrainingCostTech[],
+  civ: string,
+  unitId?: number,
+): Set<number> {
   if (techs === 'f' || techs === 'c') {
     const sel = presetUpTo(avail, age, civ);
     for (const item of costs) if (item.supported && !item.partial) sel.add(item.tech.id);
     return sel;
   }
   const allowed = new Set([
-    ...avail.filter((item) => militaryTechAge(civ, item.t.id, item.t.age) <= age).map((item) => item.t.id),
+    ...avail
+      .filter((item) => {
+        if (militaryTechAge(civ, item.t.id, item.t.age) > age) return false;
+        if (unitId !== undefined && item.ef === null) {
+          const poison = DAT.projectilePoison?.[item.t.en];
+          if (poison && !poison.units.includes(unitId)) return false;
+        }
+        return true;
+      })
+      .map((item) => item.t.id),
     ...costs.filter((item) => militaryTechAge(civ, item.tech.id, item.tech.age) <= age).map((item) => item.tech.id),
   ]);
   return new Set(techs.filter((id) => allowed.has(id)));

@@ -32,12 +32,22 @@ def load_allowlist(path=ROOT / 'data/sources/stats_allowlist.json'):
     return {(it['en'], it['key']): it for it in items}
 
 
-def dat_stats(u, main):
+def dat_train_time(u, building_id=None):
+    """按目录主建筑匹配 .dat TrainAt 槽位；未命中槽位或无 TrainAt 时回退 TrainTime。"""
+    if building_id is not None:
+        for slot in u.get('TrainAt') or ():
+            if isinstance(slot, list) and len(slot) >= 2 and slot[0] == building_id:
+                return slot[1]
+    return u.get('TrainTime')
+
+
+def dat_stats(u, main, building_id=None):
     at, ar = dict(map(tuple, u['Attacks'])), dict(map(tuple, u['Armours']))
     s = {'hp': u['HP'], 'los': round(u['LOS'], 2), 'spd': round(u['Speed'], 3), 'ma': ar.get(4, 0), 'pa': ar.get(3, 0),
          'rng': round(unit_range(u), 2), 'rof': round(u['Reload'], 3), 'acc': u['Accuracy'], 'minr': round(u['MinRange'], 2)}
     if main: s['atk'] = at.get(main, 0)
-    if u.get('TrainTime') is not None: s['tt'] = u['TrainTime']
+    tt = dat_train_time(u, building_id)
+    if tt is not None: s['tt'] = tt
     return s
 
 
@@ -82,7 +92,7 @@ def main(units=None, blds=None, d=None):
     for o, isb in [(x, False) for x in units] + [(x, True) for x in blds]:
         u = U[o['id']] if o['id'] < len(U) else None
         if not u: diffs.append((o['en'], 'missing', None, None)); continue
-        ds = dat_stats(u, main_attack_class(o, isb))
+        ds = dat_stats(u, main_attack_class(o, isb), None if isb else o.get('b'))
         if o.get('rngBd'):
             o = {**o, 'rngB': round(o['rng'] + o['rngBd'], 2)}
             ds['rngB'] = round(building_range(u), 2)

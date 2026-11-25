@@ -14,6 +14,7 @@ import {
   type UnitCivRankRow,
 } from '../../../domain/unitCivRank';
 import { CivIcon } from '../../../shared/ui/art';
+import { CivRankMechTag } from '../../../shared/ui/CivRankMechTag';
 import { Icon } from '../../../shared/ui/Icon';
 
 interface UnitCivRankTableProps {
@@ -59,11 +60,9 @@ function CivTags({ row }: { row: UnitCivRankRow }) {
           </span>
         </span>
       )}
-      {row.ignoreArmorTech && <span className="ucr-tag is-mech">无视护甲 · {row.ignoreArmorTech}（已计入）</span>}
+      {row.ignoreArmorTech && <CivRankMechTag text={`无视护甲 · ${row.ignoreArmorTech}（已计入）`} />}
       {row.unmodeledPills.map((pill) => (
-        <span key={pill} className="ucr-tag is-mech">
-          未计入：{pill}
-        </span>
+        <CivRankMechTag key={pill} text={`未计入：${pill}`} />
       ))}
       {row.missingTechs.length > 0 ? (
         <span className="ucr-tag is-miss">

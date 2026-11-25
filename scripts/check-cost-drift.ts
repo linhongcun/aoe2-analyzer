@@ -13,6 +13,7 @@ interface CatalogUnit {
   id: number;
   zh?: string;
   age: number;
+  b?: number;
   civs: string[];
   cost?: Cost;
   tt?: number;
@@ -22,6 +23,7 @@ interface EcoUnit {
   class?: number;
   cost?: Cost;
   trainTime?: number;
+  timeAt?: Record<string, number>;
   trainCount?: number;
 }
 interface EcoEffect {
@@ -76,8 +78,9 @@ export function baseDrifts(
       continue;
     }
     if (!sameCost(unit.cost, eco.cost)) out.push(`单位 ${unit.id} ${unit.zh ?? ''} 造价 目录 ${JSON.stringify(unit.cost)} eco ${JSON.stringify(eco.cost)}`);
-    if (unit.tt !== undefined && eco.trainTime !== undefined && unit.tt !== eco.trainTime)
-      out.push(`单位 ${unit.id} ${unit.zh ?? ''} 训练时间 目录 ${unit.tt} eco ${eco.trainTime}`);
+    const expectedTt = (unit.b !== undefined ? eco.timeAt?.[String(unit.b)] : undefined) ?? eco.trainTime;
+    if (unit.tt !== undefined && expectedTt !== undefined && unit.tt !== expectedTt)
+      out.push(`单位 ${unit.id} ${unit.zh ?? ''} 训练时间 目录 ${unit.tt} eco ${expectedTt}`);
     if ((unit.trainCount ?? 1) !== (eco.trainCount ?? 1))
       out.push(`单位 ${unit.id} ${unit.zh ?? ''} 每批产出数 目录 ${unit.trainCount ?? 1} eco ${eco.trainCount ?? 1}`);
   }

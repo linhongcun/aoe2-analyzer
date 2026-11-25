@@ -30,7 +30,7 @@ import { CostDiscountBlock } from './CostDiscount';
 import { PkCost } from './PkCost';
 import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
-import { filterExplicitTechsForAge, isUnavail, r1, switchSideCiv, type SideState, type Unavail } from '../logic/duelSide';
+import { filterExplicitTechsForAge, isUnavail, r1, switchSideCiv, switchSideUnit, type SideState, type Unavail } from '../logic/duelSide';
 import { radioKeyboard } from './radioKeyboard';
 import { RangedModeToggle } from './RangedModeToggle';
 import { duelToTrainTotal } from '../../../domain/productionTransfer';
@@ -177,7 +177,7 @@ export function Side({
             civ={side.civ}
             list={fams}
             formatLabel={formatUnitLabel}
-            onChange={(x) => onChange({ ...spec, uid: x.id })}
+            onChange={(x) => onChange(switchSideUnit(core.techById, spec, x.id))}
           />
           {elite && (
             <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
@@ -187,7 +187,7 @@ export function Side({
                 aria-checked={u.id === base.id}
                 tabIndex={u.id === base.id ? 0 : -1}
                 className={u.id === base.id ? 'on' : undefined}
-                onClick={() => onChange({ ...spec, uid: base.id })}
+                onClick={() => onChange(switchSideUnit(core.techById, spec, base.id))}
               >
                 普通
               </button>
@@ -197,7 +197,7 @@ export function Side({
                 aria-checked={eliteSelected}
                 tabIndex={eliteSelected ? 0 : -1}
                 className={eliteSelected ? 'on' : undefined}
-                onClick={() => onChange({ ...spec, uid: elite.id })}
+                onClick={() => onChange(switchSideUnit(core.techById, spec, elite.id))}
               >
                 精锐
               </button>
@@ -422,7 +422,11 @@ function UnavailSide({
         </p>
         <div className="pk-unavail-acts">
           {sub && (
-            <button type="button" className="pk-act pri" onClick={() => onChange({ ...spec, uid: sub.id, age: Math.max(spec.age, sub.age) })}>
+            <button
+              type="button"
+              className="pk-act pri"
+              onClick={() => onChange({ ...switchSideUnit(context.core.techById, spec, sub.id), age: Math.max(spec.age, sub.age) })}
+            >
               换成{sub.zh}
             </button>
           )}
@@ -440,7 +444,7 @@ function UnavailSide({
             civ={side.civ}
             list={fams}
             formatLabel={formatUnitLabel}
-            onChange={(x) => onChange({ ...spec, uid: x.id })}
+            onChange={(x) => onChange(switchSideUnit(context.core.techById, spec, x.id))}
           />
         </div>
         <div className="duel-civ-slot">
