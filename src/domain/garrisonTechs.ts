@@ -86,17 +86,17 @@ export function freeGarrisonTechs(
       pre = ctx.core.techById[pre]?.pre;
     }
   }
-  const accepted: number[] = [];
+  const accepted = new Set<number>();
   let changed = true;
   while (changed) {
     changed = false;
     for (const id of freeList) {
       const pre = ctx.core.techById[id]?.pre;
-      if (accepted.includes(id) || !isAvailable(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && isAvailable(pre) && !known.has(pre))) continue;
-      accepted.push(id);
+      if (accepted.has(id) || !isAvailable(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && isAvailable(pre) && !known.has(pre))) continue;
+      accepted.add(id);
       known.add(id);
       changed = true;
     }
   }
-  return [...new Set(accepted)].sort((a, b) => a - b);
+  return [...accepted].sort((a, b) => a - b);
 }
