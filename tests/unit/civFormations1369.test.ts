@@ -25,13 +25,15 @@ const DOC_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
 const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8'],
   ['Spanish', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
-  ['Hindustanis', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
-  ['Turks', '6c3cdc6ded5200eac43e95efb28878066b96c3d9'],
+  ['Hindustanis', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+  ['Turks', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Tupi', 'b63cccc015b677017efb4a64de8ebc01cd727ffd'],
 ]);
 const ADDED_BY_1386 = new Set<string>(['Hindustanis/hindustani-camel-ghulam-field', 'Turks/turks-sipahi-cav-archer-field']);
 const REVISED_BY_LATER = new Map<string, string>([
-  ['Turks/turks-existing-line-choice', '2026-11-24'],
+  ['Hindustanis/hindustani-handcannon-hussar', '2026-11-25'],
+  ['Turks/turks-hussar-handcannon', '2026-11-25'],
+  ['Turks/turks-existing-line-choice', '2026-11-25'],
   ['Tupi/tupi-champi-slinger', '2026-11-24'],
   ['Tupi/tupi-blackwood-halberdier', '2026-11-24'],
 ]);

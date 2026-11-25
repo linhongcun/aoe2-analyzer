@@ -10,18 +10,20 @@ import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const urls = {
-  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L243-L289',
-  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L329-L368',
-  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L361-L366',
-  'malay-battle-elephant-progression': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L355',
-  'malay-two-handed-swordsman-sustain': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L356',
+  'hindustani-handcannon-hussar': 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L253-L306',
+  'turks-hussar-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L351-L398',
+  'turks-existing-line-choice': 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L374-L396',
+  'malay-battle-elephant-progression':
+    'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L488-L536',
+  'malay-two-handed-swordsman-sustain':
+    'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L488-L536',
 } as const;
 const lines = {
-  'hindustani-handcannon-hussar': [243, 247, 251, 252, 253, 259, 275, 276, 277, 284, 285, 287, 289],
-  'turks-hussar-handcannon': [329, 333, 337, 338, 339, 341, 343, 351, 352, 353, 354, 355, 363, 364, 366, 368],
-  'turks-existing-line-choice': [361, 362, 366],
-  'malay-battle-elephant-progression': [355, 356, 357],
-  'malay-two-handed-swordsman-sustain': [355, 356, 357],
+  'hindustani-handcannon-hussar': [253, 257, 261, 262, 263, 269, 285, 286, 287, 290, 292, 295, 301, 302, 304, 306],
+  'turks-hussar-handcannon': [351, 355, 359, 360, 361, 363, 365, 369, 371, 373, 375, 381, 382, 383, 384, 385, 391, 392, 393, 394, 396, 398],
+  'turks-existing-line-choice': [374, 375, 391, 392, 396],
+  'malay-battle-elephant-progression': [488, 492, 496, 499, 501, 503, 506, 508, 510, 511, 517, 518, 519, 520, 527, 529, 530, 532, 534, 536],
+  'malay-two-handed-swordsman-sustain': [488, 492, 497, 503, 506, 509, 511, 519, 520, 521, 528, 529, 532, 534, 536],
 } as const;
 const civ = (name: string) => civFormationContent.find((entry) => entry.civ === name)!;
 const route = (name: string, id: string) => {

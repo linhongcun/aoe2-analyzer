@@ -320,7 +320,7 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(59);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
 
     const serialized = JSON.stringify(civFormationContent);
     expect(serialized).not.toMatch(/一只还是一对|计价单位未明|计价单位未核|不折半|每对价格单位/);
@@ -347,7 +347,8 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     expect(byCiv('Aztecs').source.content).toContain('/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L');
     expect(byCiv('Mayans').source.content).toContain('/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L');
     expect(byCiv('Mapuche').source.content).toContain('/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L');
-    expect(byCiv('Malians').source.content).toContain('/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L');
+    expect(byCiv('Spanish').source.content).toContain('/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L');
+    expect(byCiv('Malians').source.content).toContain('/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L');
 
     // 去重计数不变量
     const core = await loadCore();

@@ -320,7 +320,7 @@ test('#1120 切换文明后迟到读取不带回旧路线', async ({ page }) => 
 test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
   test.setTimeout(90000);
   const routes: Record<string, number> = {
-    Chinese: 2,
+    Chinese: 3,
     Hindustanis: 2,
     Turks: 3,
     Byzantines: 1,

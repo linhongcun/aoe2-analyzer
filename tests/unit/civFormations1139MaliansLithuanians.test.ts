@@ -7,9 +7,9 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { techAvailable } from '../../src/domain/unitAvailability';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
-const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L408-L452';
+const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L438-L486';
 const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953';
-const MALIAN_SOURCE_LINES = [408, 412, 416, 417, 418, 419, 421, 423, 436, 437, 438, 439, 445, 446, 447, 448, 450, 452];
+const MALIAN_SOURCE_LINES = [438, 442, 446, 447, 448, 449, 451, 453, 463, 464, 470, 471, 472, 473, 479, 480, 481, 482, 484, 486];
 const LITHUANIAN_SOURCE_LINES = [908, 912, 916, 917, 918, 919, 921, 923, 925, 931, 932, 933, 934, 940, 941, 942, 944, 946, 947, 948, 949, 951, 953];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
