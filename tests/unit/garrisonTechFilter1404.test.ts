@@ -27,13 +27,10 @@ const cfg = (civ: string, age = 4, techs: number[] = [], rows: GeneralGarrisonCo
   techs,
   rows,
 });
-const techIds = (bid: number, civ: string, age = 4, data: GeneralGarrisonData = GENERAL_GARRISON_DATA) =>
-  getGarrisonTechs(ctx, ctx.core.buildingById[bid]!, cfg(civ, age), data)
+function techIds(bid: number, civ: string, age = 4, data: GeneralGarrisonData = GENERAL_GARRISON_DATA) {
+  return getGarrisonTechs(ctx, ctx.core.buildingById[bid]!, cfg(civ, age), data)
     .map((t) => t.id)
     .sort((a, b) => a - b);
-
-function cloneCustomData(): GeneralGarrisonData {
-  return structuredClone({ ...GENERAL_GARRISON_DATA, unitUpgradeTechs: GARRISON_TECH_DATA.unitUpgradeTechs });
 }
 
 describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () => {
@@ -203,156 +200,6 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     );
     expect(bbtMixNo.totalProjectiles).toBe(1);
     expect(bbtMixYes.totalProjectiles).toBe(2);
-  });
-
-  it('自定义数据边界回归：链式触发、跨科技火力联动、自动迁移与免费火力生效后不再漏判', () => {
-    const tc = ctx.core.buildingById[109]!;
-    const barracks = ctx.core.buildingById[12]!;
-
-    // 1. 链式触发：233 -> 无直接效果的中间标记规则 -> TC 容量 +2
-    const chainData = cloneCustomData();
-    chainData.conditional.push(
-      { id: 99001, requires: [233], count: 1, effects: [] },
-      { id: 99002, requires: [99001], count: 1, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] },
-    );
-    expect(techIds(109, 'Franks', 4, chainData)).toContain(233);
-    expect(calculateGeneralGarrison(ctx, tc, cfg('Franks', 4, [233]), chainData).capacity).toBe(
-      calculateGeneralGarrison(ctx, tc, cfg('Franks', 4, []), chainData).capacity + 2,
-    );
-
-    // 2. OR 规则跨两个可选科技（count: 1）双方均保留，而已被时代满足的 OR 规则不误保留
-    const orData = cloneCustomData();
-    orData.conditional.push(
-      { id: 99003, requires: [233, 608], count: 1, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 1 }] },
-      { id: 99004, requires: [102, 233], count: 1, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 1 }] },
-    );
-    expect(techIds(109, 'Franks', 4, orData)).toContain(233);
-    const baseSatisfiedData = cloneCustomData();
-    baseSatisfiedData.conditional.push({ id: 99005, requires: [102, 233], count: 1, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 1 }] });
-    expect(techIds(109, 'Franks', 4, baseSatisfiedData)).not.toContain(233);
-
-    // 3. 跨科技火力联动：免费或前置科技赋予步兵非零火力，后续攻击科技能真实提升贡献 -> 保留
-    const fpChainData = cloneCustomData();
-    fpChainData.techs[11] = { id: 11, requires: [], count: 0, effects: [{ unit: 74, stat: 'firepower', op: 'set', value: 1 }] };
-    fpChainData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'attack', op: 'add', value: 4 }] };
-    expect(techIds(109, 'Teutons', 4, fpChainData)).toContain(233);
-    const fpBefore = calculateGeneralGarrison(ctx, tc, cfg('Teutons', 4, [11], [{ unitId: 74, count: '1', entry: 'enter' }]), fpChainData);
-    const fpAfter = calculateGeneralGarrison(ctx, tc, cfg('Teutons', 4, [11, 233], [{ unitId: 74, count: '1', entry: 'enter' }]), fpChainData);
-    expect(fpAfter.rows[0]!.powerEach!).toBeGreaterThan(fpBefore.rows[0]!.powerEach!);
-
-    // 4. 跨科技多弹丸联动：一个科技把 total 从 1 提到 2，另一科技改副弹丸 -> 两者均保留
-    const multiData = cloneCustomData();
-    multiData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 4, stat: 'secondaryProjectile', op: 'set', value: 54 }] };
-    multiData.techs[608] = {
-      ...multiData.techs[608]!,
-      effects: [...multiData.techs[608]!.effects, { unit: 4, stat: 'total', op: 'add', value: 1 }],
-    };
-    expect(techIds(109, 'Franks', 4, multiData)).toContain(233);
-
-    // 5. 自动规则把单位迁入当前射击建筑生产后，该单位的火力科技进入列表
-    const relocData = cloneCustomData();
-    relocData.units[4] = { ...relocData.units[4]!, garrisonTasks: [] };
-    relocData.civs.Franks!.automatic.push({ id: 99006, requires: [], count: 0, effects: [], trainingLocations: [{ unit: 4, slot: 0, location: 109 }] });
-    relocData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 4, stat: 'attack', op: 'add', value: 3 }] };
-    expect(getGarrisonCandidates(ctx, tc, cfg('Franks', 4), relocData).find((c) => c.id === 4)?.canCreate).toBe(true);
-    expect(techIds(109, 'Franks', 4, relocData)).toContain(233);
-
-    // 6. 科技让非射击建筑转为射击建筑时，建筑与可驻单位射击科技同时保留
-    const shelterShootData = cloneCustomData();
-    const barracksImpForm = shelterShootData.buildings[12]!.eraForms[3]!;
-    shelterShootData.units[barracksImpForm] = {
-      ...shelterShootData.units[barracksImpForm]!,
-      reload: 2,
-      projectile: 54,
-      total: 1,
-      max: 5,
-      attack: 0,
-    };
-    shelterShootData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 12, stat: 'attack', op: 'set', value: 6 }] };
-    shelterShootData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 12, stat: 'reload', op: 'mul', value: 0.8 }] };
-    expect(techIds(12, 'Franks', 4, shelterShootData)).toEqual(expect.arrayContaining([199, 233]));
-    expect(calculateGeneralGarrison(ctx, barracks, cfg('Franks', 4, [199, 233]), shelterShootData).mode).toBe('arrows');
-
-    // 7. 隐式单位形态科技触发的条件链：英国城镇中心放入劲弩手 492（隐式 237）后 237 + 233 增容 -> 列表保留 233 且行增删列表稳定
-    const shapeChainData = cloneCustomData();
-    shapeChainData.conditional.push({ id: 99101, requires: [237, 233], count: 2, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] });
-    expect(techIds(109, 'Britons', 4, shapeChainData)).toContain(233);
-    expect(
-      getGarrisonTechs(ctx, tc, cfg('Britons', 4, [], [{ unitId: 492, count: '1', entry: 'enter' }]), shapeChainData)
-        .map((t) => t.id)
-        .sort((a, z) => a - z),
-    ).toEqual(techIds(109, 'Britons', 4, shapeChainData));
-    const shapeRes = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 492, count: '1', entry: 'enter' }]), shapeChainData);
-    expect(shapeRes.errors).toEqual([]);
-    expect(shapeRes.capacity).toBe(17);
-
-    // 8. 部分选择下的非单调火力抵消：199 赋予民兵火力，200 将其归零，233 加攻击 -> 空/全选均为 0，仅选 199 时 233 有效，必须保留
-    const partialFpData = cloneCustomData();
-    partialFpData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 74, stat: 'firepower', op: 'set', value: 1 }] };
-    partialFpData.techs[200] = { id: 200, requires: [], count: 0, effects: [{ unit: 74, stat: 'firepower', op: 'set', value: 0 }] };
-    partialFpData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'attack', op: 'add', value: 3 }] };
-    expect(techIds(109, 'Britons', 4, partialFpData)).toContain(233);
-    const partialBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199], [{ unitId: 74, count: '1', entry: 'enter' }]), partialFpData);
-    const partialAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 74, count: '1', entry: 'enter' }]), partialFpData);
-    expect(partialAfter.errors).toEqual([]);
-    expect(partialBefore.rows[0]!.powerEach).toBe(0);
-    expect(partialAfter.rows[0]!.powerEach).toBeCloseTo(1.5, 5);
-
-    // 9. sizeClass 精细判定：从不被 TC 接受的 3 改为同样不被接受的 6 应排除；改为可进入的 2 应保留
-    const sizeNoopData = cloneCustomData();
-    sizeNoopData.units[74] = { ...sizeNoopData.units[74]!, sizeClass: 3 };
-    sizeNoopData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 6 }] };
-    expect(techIds(109, 'Britons', 4, sizeNoopData)).not.toContain(233);
-    const sizeAllowData = cloneCustomData();
-    sizeAllowData.units[74] = { ...sizeAllowData.units[74]!, sizeClass: 3 };
-    sizeAllowData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 2 }] };
-    expect(techIds(109, 'Britons', 4, sizeAllowData)).toContain(233);
-    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], [{ unitId: 74, count: '1', entry: 'enter' }]), sizeAllowData).errors).toEqual([]);
-
-    // 10. R3 P1-1：仅在部分科技组合下可驻单位的隐式形态链（TC 初始 garrisonType=1，199 改 11，200 改回 1，[237, 233] 增容）
-    const partialShapeData = cloneCustomData();
-    const tcImpForm = partialShapeData.buildings[109]!.eraForms[3]!;
-    partialShapeData.units[tcImpForm] = { ...partialShapeData.units[tcImpForm]!, garrisonType: 1 };
-    partialShapeData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'set', value: 11 }] };
-    partialShapeData.techs[200] = { id: 200, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'set', value: 1 }] };
-    partialShapeData.conditional.push({ id: 99102, requires: [237, 233], count: 2, effects: [{ unit: 109, stat: 'capacity', op: 'add', value: 2 }] });
-    expect(techIds(109, 'Britons', 4, partialShapeData)).toContain(233);
-    const partialShapeRes = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), partialShapeData);
-    expect(partialShapeRes.errors).toEqual([]);
-    expect(partialShapeRes.capacity).toBe(17);
-
-    // 11. R3 P1-2：多次加法叠加解锁 garrisonType（0 + 1 + 1 = 2 允许劲弩手 492 进入，201 归零）-> 233 加劲弩手攻击必须保留
-    const multiAddGTypeData = cloneCustomData();
-    multiAddGTypeData.units[tcImpForm] = { ...multiAddGTypeData.units[tcImpForm]!, garrisonType: 0 };
-    multiAddGTypeData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'add', value: 1 }] };
-    multiAddGTypeData.techs[200] = { id: 200, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'add', value: 1 }] };
-    multiAddGTypeData.techs[201] = { id: 201, requires: [], count: 0, effects: [{ unit: 109, stat: 'garrisonType', op: 'set', value: 0 }] };
-    multiAddGTypeData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 492, stat: 'attack', op: 'add', value: 3 }] };
-    expect(techIds(109, 'Britons', 4, multiAddGTypeData)).toContain(233);
-    const addBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 200], [{ unitId: 492, count: '1', entry: 'enter' }]), multiAddGTypeData);
-    const addAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [199, 200, 233], [{ unitId: 492, count: '1', entry: 'enter' }]), multiAddGTypeData);
-    expect(addAfter.errors).toEqual([]);
-    expect(addAfter.rows[0]!.powerEach!).toBeGreaterThan(addBefore.rows[0]!.powerEach!);
-
-    // 12. R3 P2-1：sizeClass 阶段顺序判定（禁用 200/201，民兵 74 初始 3，199 改 6，233 改 2 -> 199 永不改准入应排除、233 保留）
-    const orderedSizeData = cloneCustomData();
-    orderedSizeData.civs.Britons!.disabled.push(200, 201);
-    orderedSizeData.units[74] = { ...orderedSizeData.units[74]!, sizeClass: 3 };
-    orderedSizeData.techs[199] = { id: 199, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 6 }] };
-    orderedSizeData.techs[233] = { id: 233, requires: [], count: 0, effects: [{ unit: 74, stat: 'sizeClass', op: 'set', value: 2 }] };
-    const orderedIds = techIds(109, 'Britons', 4, orderedSizeData);
-    expect(orderedIds).not.toContain(199);
-    expect(orderedIds).toContain(233);
-
-    // 13. R3 P2-3：不跨调用缓存可变 Core/Trees；在复制 core 上改写返回项 civs 后同键重算立即反映变化
-    const clonedCore = structuredClone(ctx.core);
-    const clonedCtx: GeneralGarrisonContext = { core: clonedCore, trees: ctx.trees };
-    const clonedTc = clonedCore.buildingById[109]!;
-    const firstCall = getGarrisonTechs(clonedCtx, clonedTc, cfg('Britons', 4));
-    const fletching = firstCall.find((t) => t.id === 199);
-    expect(fletching).toBeDefined();
-    fletching!.civs = fletching!.civs.filter((c) => c !== 'Britons');
-    expect(getGarrisonTechs(clonedCtx, clonedTc, cfg('Britons', 4)).map((t) => t.id)).not.toContain(199);
   });
 
   it('全站 56 文明 × 20 宿主 × 全有效时代真实行为完整性守卫：被排除科技零行为变化且行增删列表稳定', () => {

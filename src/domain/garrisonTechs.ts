@@ -20,7 +20,15 @@ interface Config {
   techs: number[];
   rows: { unitId: number }[];
 }
-export const GARRISON_TECH_DATA: GarrisonTechData = raw;
+function deepFreeze<T>(value: T): T {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
+  }
+  return value;
+}
+
+export const GARRISON_TECH_DATA: GarrisonTechData = deepFreeze(raw as GarrisonTechData);
 const DEFAULT_SHAPE_UPGRADES: ReadonlySet<number> = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
 const shapeUpgradeSet = (data: GarrisonTechData): ReadonlySet<number> =>
   data === GARRISON_TECH_DATA ? DEFAULT_SHAPE_UPGRADES : new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
