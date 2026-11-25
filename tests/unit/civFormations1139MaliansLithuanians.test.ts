@@ -8,9 +8,9 @@ import { techAvailable } from '../../src/domain/unitAvailability';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const MALIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L438-L486';
-const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953';
+const LITHUANIAN_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L964-L1011';
 const MALIAN_SOURCE_LINES = [438, 442, 446, 447, 448, 449, 451, 453, 463, 464, 470, 471, 472, 473, 479, 480, 481, 482, 484, 486];
-const LITHUANIAN_SOURCE_LINES = [908, 912, 916, 917, 918, 919, 921, 923, 925, 931, 932, 933, 934, 940, 941, 942, 944, 946, 947, 948, 949, 951, 953];
+const LITHUANIAN_SOURCE_LINES = [964, 968, 972, 973, 974, 975, 977, 979, 983, 989, 990, 991, 992, 998, 999, 1000, 1002, 1004, 1005, 1006, 1007, 1009, 1011];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => {
@@ -102,7 +102,9 @@ describe('#1139 马里与立陶宛前线中心条件边界', () => {
     expect([lithuanian.status, lithuanian.playtest, lithuanian.age, lithuanian.composition]).toEqual(['approved', 'unreported', 4, 'combined']);
     expect(lithuanian.required.map(({ id }) => id)).toEqual([1236, 6]);
     expect(lithuanian.prerequisites).toEqual([]);
-    expect(lithuanian.evidence.recordedVersion).toBe('原记录未记录站点版本/构建；圣物数 0/2/4 预算 3000 群战复核：v0.99.44 · DE 188329 · f1d5aab');
+    expect(lithuanian.evidence.recordedVersion).toBe(
+      '原记录未记录站点版本/构建；圣物数 0/2/4 预算 3000 群战复核：v0.99.44 · DE 188329 · f1d5aab；全工具混编/驻军/账本复核：v0.99.54 · DE 188329 · 026085d',
+    );
     expect(lithuanian.evidence.scope).toContain('驻军预览不代表混编实战或胜率证明');
     expect(lithuanian.reason).toContain('烈堤司以近战处理重甲');
     expect(lithuanian.supplements.find(({ mode }) => mode === 'choice')?.condition).toContain('烈堤司近战保护攻城器');

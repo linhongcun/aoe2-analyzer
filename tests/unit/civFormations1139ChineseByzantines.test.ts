@@ -7,9 +7,9 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L215-L251';
-const BYZANTINE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283';
+const BYZANTINE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L400-L440';
 const CHINESE_SOURCE_LINES = [215, 219, 223, 224, 225, 226, 228, 230, 236, 237, 238, 239, 245, 246, 247, 249, 251];
-const BYZANTINE_SOURCE_LINES = [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312];
+const BYZANTINE_SOURCE_LINES = [400, 404, 408, 409, 410, 411, 413, 415, 425, 426, 427, 433, 434, 435, 436, 438, 440];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => {

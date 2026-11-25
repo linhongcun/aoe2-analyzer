@@ -191,7 +191,7 @@ describe('#1298 碰撞接敌 14 文明同步与链接领域回归', () => {
     const ctx = makeSimContext(core.techs, trees);
 
     for (const routeId of ['poles-obuch-winged-hussar', 'poles-arbalest-winged-hussar'] as const) {
-      const duelLinks = (route('Poles', routeId).evidence.links ?? []).filter(({ href }) => href.includes('#/duel?'));
+      const duelLinks = (route('Poles', routeId).evidence.links ?? []).filter(({ href }) => href.includes('a=1707.Poles.4.39-67-68-75-81-82-435-783.'));
       expect(duelLinks).toHaveLength(2);
       for (const link of duelLinks) {
         const params = new URLSearchParams(new URL(link.href).hash.split('?')[1] ?? '');

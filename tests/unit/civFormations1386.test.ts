@@ -23,6 +23,8 @@ const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Persians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Turks', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Malians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+  ['Goths', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
+  ['Poles', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
 ]);
 const BATCH_1_SHA = 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8';
 
@@ -217,7 +219,7 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
   it('12 国独立重签 DOC_SHA_1386、21 国零漂移、33 文明 59 路线契约与残留收口守卫全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(62);
 
     // 全库 JSON 与契约零 aoe2insights 外链残留
     expect(JSON.stringify(civFormationContent)).not.toContain('aoe2insights');

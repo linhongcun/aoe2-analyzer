@@ -7,14 +7,19 @@ import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties } from './civFormationsTestUtils';
 
 const TEUTON_SOURCE_URLS = {
-  'teutons-paladin-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542',
-  'teutons-halberdier-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L543',
-  'teutons-elite-knight-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L544',
+  'teutons-paladin-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867',
+  'teutons-halberdier-handcannon': 'https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867',
+  'teutons-elite-knight-skirmisher':
+    'https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867',
 } as const;
 const TEUTON_SOURCE_LINES = {
-  'teutons-paladin-skirmisher': [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573],
-  'teutons-halberdier-handcannon': [538, 540, 543, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573],
-  'teutons-elite-knight-skirmisher': [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573],
+  'teutons-paladin-skirmisher': [819, 823, 827, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 865, 867],
+  'teutons-halberdier-handcannon': [
+    819, 823, 828, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 863, 865, 867,
+  ],
+  'teutons-elite-knight-skirmisher': [
+    819, 823, 827, 829, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 863, 865, 867,
+  ],
 } as const;
 const INCAS_SOURCE_URLS = {
   'incas-kamayuk-skirmisher': 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L1114-L1149',
@@ -67,7 +72,7 @@ describe('#1139 条顿与印加路线边界', () => {
 
   it('保留路线统计与原四条回归路线', () => {
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(62);
     expect(civFormationContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 2],
@@ -105,6 +110,8 @@ describe('#1139 条顿与印加路线边界', () => {
       'teutons-paladin-skirmisher-adjustment-second',
       'teutons-paladin-skirmisher-adjustment-third',
       'teutons-paladin-skirmisher-adjustment-fourth',
+      'teutons-paladin-skirmisher-adjustment-ignore-armor',
+      'teutons-paladin-skirmisher-adjustment-remote-kite',
     ]);
     expect(paladin.adjustments[2]!.requires).toEqual([{ kind: 'unit', id: 359, age: 4 }]);
     expect(paladin.adjustments[2]!.text).toContain('替换部分游侠');

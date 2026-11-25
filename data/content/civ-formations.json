@@ -1916,7 +1916,7 @@
     "civ": "Byzantines",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L400-L440",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -1932,7 +1932,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-22",
+        "revised": "2026-11-26",
         "condition": "精锐甲胄骑兵、长戟兵与精锐掷矛手组成主结构。",
         "required": [
           {
@@ -2035,9 +2035,9 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "基础方案及对手调整获明确认可；固定记录未说明实战状态。当前目录复核与早先接触PK讨论分别保留各自版本边界。",
-          "recordedVersion": "目录复核 v0.77.102 · DE 188329 · 84988dd；早先认可讨论及接触PK v0.77.100 · DE 188329 · 66c4763",
-          "sourceLines": [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312],
+          "scope": "基础方案及对手调整获明确认可；固定记录未说明实战状态。保留原目录与早先讨论版本边界，并以 DE 188329 全工具补齐预算 3000 单兵群战、一维拉扯、真混编、持续生产（三元主路 75 名村民、纯垃圾双线村民 44 名）及不含抗招降研究账本（主路合计 11075、骆驼＋掷矛合计 6160）。",
+          "recordedVersion": "目录复核 v0.77.102 · DE 188329 · 84988dd；早先认可讨论及接触PK v0.77.100 · DE 188329 · 66c4763；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [400, 404, 408, 409, 410, 411, 413, 415, 425, 426, 427, 433, 434, 435, 436, 438, 440],
           "links": [
             {
               "label": "DE 188329 固定科技树",
@@ -2046,18 +2046,86 @@
             {
               "label": "DE 188329 固定科技目录",
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/techs.json"
+            },
+            {
+              "label": "预算 3000 · 34 名重装骆驼兵 对法兰克游侠 22 名（胜，剩 1/34）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=330.Byzantines.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 20 名精锐甲胄骑兵 对 50 个法兰克长戟兵（胜，剩 6/20，未计践踏）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=553.Byzantines.4.f.&b=359.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 20 名精锐甲胄骑兵 对 42 个日本冠军剑士（胜，剩 4/20，未计践踏）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=553.Byzantines.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 20 名精锐甲胄骑兵 对哥特精锐近卫军 38 名（胜，剩 9/20，未计践踏）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=553.Byzantines.4.f.&b=761.Goths.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 20 名精锐甲胄骑兵 对法兰克游侠 22 名（负，游侠剩 6/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=553.Byzantines.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 20 名精锐甲胄骑兵 对条顿游侠 22 名（负，游侠剩 8/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=553.Byzantines.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 66 名精锐掷矛手 对 50 名越南帝王掷矛手（胜，剩 18/66）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Byzantines.4.f.&b=1155.Vietnamese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 66 名精锐掷矛手 对 50 名立陶宛精锐掷矛手（胜，剩 41/66）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Byzantines.4.f.&b=6.Lithuanians.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 66 名精锐掷矛手 对拉扯不列颠劲弩手 42 名（负，劲弩剩 37/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Byzantines.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "混编 · 33 名长戟兵 与 33 名精锐掷矛手 对法兰克游侠 14 名与 20 名长戟兵（胜，剩长戟 7、掷矛 33）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2233%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2233%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 33 名长戟兵 与 33 名精锐掷矛手 对不列颠 20 名长戟兵 与 26 名劲弩手（胜，剩长戟 0、掷矛 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2233%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2233%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 22 名重装骆驼兵 与 33 名精锐掷矛手 对法兰克游侠 18 名与 25 名长戟兵（胜，剩骆驼 1、掷矛 33）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22330%22%2C%22qty%22%3A%2222%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2233%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 精锐甲胄骑兵（城堡 2 座）＋长戟兵（兵营 3 座）＋精锐掷矛手（靶场 3 座）· 75 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Byzantines&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=553%3A82%3A2%2C359%3A12%3A3%2C6%3A87%3A3"
+            },
+            {
+              "label": "持续生产 · 纯垃圾双线 长戟兵（兵营 4 座）＋精锐掷矛手（靶场 4 座）· 44 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Byzantines&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=359%3A12%3A4%2C6%3A87%3A4"
+            },
+            {
+              "label": "持续生产 · 重装骆驼兵（马厩 3 座）＋精锐掷矛手（靶场 3 座）· 51 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Byzantines&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373&rows=330%3A101%3A3%2C6%3A87%3A3"
+            },
+            {
+              "label": "研究账本 · 精锐甲胄骑兵＋长戟兵＋精锐掷矛手（不含抗招降，合计 11075）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Byzantines&age=4&acunits=%5B%7B%22unit%22%3A553%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A361%22%2C%22t%3A39%22%2C%22t%3A429%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A61%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
+            },
+            {
+              "label": "研究账本 · 重装骆驼兵＋精锐掷矛手（不含抗招降，合计 6160）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Byzantines&age=4&acunits=%5B%7B%22unit%22%3A330%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A236%22%2C%22t%3A39%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
             }
           ]
         },
-        "reason": "精锐甲胄骑兵＋长戟兵＋精锐掷矛手为主结构；基础方案和对手调整获 hongcun 明确认可，折扣兵撑线并保存昂贵甲胄。",
-        "limitation": "甲胄与后勤学都要求城堡产能和帝王多线科技投入；甲胄不是通用反游侠单位。缺血统与鼓风炉，不按通用满科技骑兵估计；既有接触模型不含射程、走位或践踏，不能证明混编实战胜负。升帝王费用优惠不保证精锐、后勤学及多线及时完成。步兵、骑兵和射手的铁匠铺攻防科技各有投入，按当前任务安排先后。",
+        "reason": "精锐甲胄骑兵＋长戟兵＋精锐掷矛手为主结构；基础方案和对手调整获 hongcun 明确认可，折扣兵撑线并保存昂贵甲胄。DE 188329 核实拜占庭拥有 22 类多文明建筑生命全游第一与折扣重装骆驼兵总价 86、黄金 45 双项第一；混编 33 名长戟兵 与 33 名精锐掷矛手 正面胜法兰克游侠 14 名与 20 名长戟兵（剩长戟 7、掷矛 33）及不列颠 20 名长戟兵 与 26 名劲弩手（剩长戟 0、掷矛 28）。",
+        "limitation": "甲胄与后勤学都要求城堡产能和帝王多线科技投入；甲胄不是通用反游侠单位，预算 3000 下对法兰克游侠 22 名（剩 6/22）与条顿游侠 22 名（剩 8/22）均落败。缺血统与鼓风炉，不按通用满科技骑兵估计；早期贴脸复核不含射程、走位或践踏，现行一维接敌模型计入射程、开启拉扯时模拟一维后撤（本批混编复核未开启拉扯），仍不含二维包抄、地形、护卫与践踏，后勤学仅赋予甲胄与瓦兰吉 5 点固定践踏（未建模），不能证明混编实战胜负。升帝王费用优惠不保证精锐、后勤学及多线及时完成：三元主路战斗研究费不含抗招降高达 11075（含抗招降三件套为 13675），持续生产需 75 名村民。步兵、骑兵和射手的铁匠铺攻防科技各有投入，按当前任务安排先后；66 名精锐掷矛手 正面压制越南与立陶宛掷矛手，但遇 11 射程不列颠劲弩手拉扯反败（劲弩剩 37/42）。",
         "attack": "甲胄处理步兵，长戟与掷矛分别承担反骑和反弓任务，按目标互相保护。",
         "defense": "依托高生命建筑保存主力，长戟反骑、掷矛反弓；操作允许时利用团队治疗加成恢复伤兵。",
         "adjustments": [
           {
             "id": "byzantines-cataphract-adjustment-first",
             "when": "骑士、游侠为主",
-            "text": "增加长戟；重骑压力仍大时才评估折扣重装骆驼，甲胄处理护航步兵而不硬拼重骑",
+            "text": "增加长戟；重骑压力仍大时才评估折扣重装骆驼（总价 86、黄金 45 双项第一，预算 3000 下 34 名重装骆驼兵 险胜法兰克游侠 22 名剩 1/34，混编 22 名重装骆驼兵 与 33 名精锐掷矛手 胜法兰克游侠 18 名与 25 名长戟兵 剩骆驼 1、掷矛 33，马厩 3 座＋靶场 3 座持续生产需 51 名村民、研费 6160），甲胄处理护航步兵而不硬拼重骑",
             "requires": [
               {
                 "kind": "unit",
@@ -2070,7 +2138,7 @@
           {
             "id": "byzantines-cataphract-adjustment-second",
             "when": "弓手为主、无法安全接近且需范围威胁",
-            "text": "增加掷矛，避免甲胄硬冲密集弓手；仅在确需范围伤害且接敌地形允许时，按已有兵量与射击机会评估投石车系基础目录参考，具体等级另行评估，不作固定配套",
+            "text": "增加掷矛，避免甲胄硬冲密集弓手；遇 11 射程不列颠劲弩手拉扯（66 名精锐掷矛手 反败，劲弩剩 37/42）或确需范围伤害且接敌地形允许时，按已有兵量与射击机会评估投石车系基础目录参考，具体等级另行评估，不作固定配套",
             "requires": [
               {
                 "kind": "unit",
@@ -2083,7 +2151,7 @@
           {
             "id": "byzantines-cataphract-adjustment-third",
             "when": "步兵为主",
-            "text": "提高甲胄的任务比重，按资源与兵量评估后勤学。游戏说明写明，研究后甲胄骑兵和瓦兰吉卫队均可造成践踏伤害；实际伤害未测。接战时仍需防范弓手与重骑。",
+            "text": "提高甲胄的任务比重，按资源与兵量评估后勤学（预算 3000 下 20 名精锐甲胄骑兵 不计践踏仍胜 50 个法兰克长戟兵 剩 6/20、胜 42 个日本冠军剑士 剩 4/20、胜哥特精锐近卫军 38 名剩 9/20）。游戏说明写明，研究后甲胄骑兵和瓦兰吉卫队均可造成践踏伤害；实际伤害未测。无城堡产能或黄金吃紧时可改走零城堡低金平行路线，接战时仍需防范弓手与重骑。",
             "requires": [
               {
                 "kind": "tech",
@@ -2096,9 +2164,169 @@
         ],
         "alternatives": "大量重装骆驼常驻：针对骑兵压力，不代替甲胄清长戟；没有相应敌军时不必继续堆量。投石车固定配套：不默认配置，条件评估仅由对应依赖调整显示。所有升级同时开齐：升帝王费用优惠不保证精锐、后勤学及多线及时完成；无血统、鼓风炉，不按通用满科技骑兵估计。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L400-L440",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "byzantines-halberdier-handcannon-arbalest",
+        "title": "折扣长戟兵＋火枪手／满配劲弩手（零城堡低金）",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-26",
+        "condition": "无城堡产能或黄金与研究费吃紧时，以折扣长戟兵为前排，在火枪手与满配劲弩手中择一作远程核心；不取代既有认可甲胄主路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 359,
+            "historicalName": "长戟兵",
+            "role": "享 -25% 折扣的反骑前排（结算 26 食 19 木 = 45），兵营直出免城堡队列"
+          }
+        ],
+        "choices": [
+          {
+            "id": "byzantines-zero-castle-handcannon",
+            "title": "火枪手（更省研费）",
+            "preconditions": ["在本平行路线两分支中追求更低研究费快速成型，或需要高爆发清理近战步兵与前排时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "historicalName": "火枪手",
+                "role": "战斗研究费仅 4090（不含抗招降），无征招合计 41 名村民 可满产"
+              }
+            ]
+          },
+          {
+            "id": "byzantines-zero-castle-arbalest",
+            "title": "满配劲弩手（均衡控线）",
+            "preconditions": ["已有弓手升级基础、需要更远射程与低食物消耗均衡控线时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 492,
+                "historicalName": "劲弩手",
+                "role": "步弓科技全满，无征招合计 40 名村民 可满产（不含抗招降研费 7140）"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "零城堡阶段需要拆防御建筑或反制敌方攻城器时，由攻城武器厂按需配手推炮",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "零城堡阶段按需拆防与反攻城"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "后期建有城堡且需远程安全拆防时，按需补巨型投石机",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "建城后按需远程拆防"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "按 #1400 第一档策略重审新增的零城堡低金平行路线，列于既有认可甲胄主路之后。",
+          "playtest": "待实战验证；DE 188329 一维拉扯、真混编、无征招持续生产与研究账本已复核，不代表实战胜率。",
+          "scope": "覆盖拜占庭不依赖城堡队列的折扣长戟兵配火枪手或满配劲弩手双选项、拉扯零损对位、真混编胜负、无征招持续生产（41 名与 40 名村民，不含城堡科技征招）与研究账本（不含抗招降 4090 与 7140，含虔诚＋异教＋信念另加 2600）。",
+          "recordedVersion": "第一档批 1 全工具复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [417, 418, 419, 425, 426, 427, 435, 438],
+          "links": [
+            {
+              "label": "预算 3000 · 31 名火枪手 拉扯对 42 个日本冠军剑士（31/31 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=5.Byzantines.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 42 名劲弩手 拉扯对 50 个法兰克长戟兵（42/42 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Byzantines.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "混编 · 33 名长戟兵 与 22 名火枪手 对日本 32 名冠军剑士 与 29 名长戟兵（胜，剩长戟 16、火枪 22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2233%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2229%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 33 名长戟兵 与 22 名火枪手 对法兰克游侠 18 名与 25 名长戟兵（胜，剩长戟 14、火枪 22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2233%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 33 名长戟兵 与 30 名劲弩手 对不列颠 30 名长戟兵 与 28 名劲弩手（胜，剩长戟 0、劲弩 29）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Byzantines%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2233%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2230%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 零城堡 长戟兵（兵营 4 座）＋火枪手（靶场 4 座）· 41 名村民（无征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Byzantines&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C373&rows=359%3A12%3A4%2C5%3A87%3A4"
+            },
+            {
+              "label": "持续生产 · 零城堡 长戟兵（兵营 4 座）＋劲弩手（靶场 4 座）· 40 名村民（无征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Byzantines&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C373&rows=359%3A12%3A4%2C492%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 长戟兵＋火枪手（不含抗招降，合计 4090）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Byzantines&age=4&acunits=%5B%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A5%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A429%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D"
+            },
+            {
+              "label": "研究账本 · 长戟兵＋劲弩手（不含抗招降，合计 7140）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Byzantines&age=4&acunits=%5B%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A237%22%2C%22t%3A429%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%5D"
+            }
+          ]
+        },
+        "reason": "免去城堡建造门槛与高额甲胄精锐投入，凭便宜长戟盾墙配合靶场直出火枪手或全满科技劲弩手快速建立帝王火力线；火枪选项不含抗招降战斗研究费仅 4090，劲弩选项为 7140，且两项在零城堡无征招下分别仅需 41 名与 40 名村民 可满产。",
+        "limitation": "火枪与劲弩均畏惧敌方重型投石车、远程攻城器与高远甲重骑切后排；本路未配甲胄时面对成片强近战步兵依赖长戟肉盾和远程拉扯距离，且两个远程分支择一升级，不默认同时拉满两套靶场科技。",
+        "attack": "以折扣长戟持续铺垫正面并挡住骑兵冲阵，火枪或劲弩保持射程集中集火敌方步兵与长戟，随后掩护按需手推炮稳步拆防。",
+        "defense": "依托拜占庭高生命防御建筑卡住地形，长戟拦骑、火枪或劲弩收割压线步兵；远程压力过大时及时补入折扣掷矛缓解后排损耗。",
+        "adjustments": [
+          {
+            "id": "byzantines-zero-castle-vs-infantry",
+            "when": "对方以冠军剑士等强步兵压境",
+            "text": "优先选火枪手分支：31 名火枪手 拉扯可 31/31 满血零损清 42 个日本冠军剑士，混编 33 名长戟兵 与 22 名火枪手 胜日本 32 名冠军剑士 与 29 名长戟兵 剩长戟 16、火枪 22。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少火枪手目录资料时隐藏此分支建议；改用劲弩手分支控距或转回常规方案。"
+          },
+          {
+            "id": "byzantines-zero-castle-vs-archers",
+            "when": "对方以长戟护弓手对射拉扯",
+            "text": "优先选满配劲弩手分支并视弓兵火力补折扣掷矛：混编 33 名长戟兵 与 30 名劲弩手 胜不列颠 30 名长戟兵 与 28 名劲弩手 剩长戟 0、劲弩 29，避免火枪在短射程对射中吃亏。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 492,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少劲弩手目录资料时隐藏此分支建议；依赖地形与手推炮化解敌方远程压制。"
+          }
+        ],
+        "alternatives": "有稳固城堡队列、黄金充裕且需要强力反步骑兵冲击阵线时，仍优先采用第一张认可甲胄主路，而非机械放弃城堡体系。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L417-L438",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1400",
+          "boundary": "按 #1400 第一档策略重审新增的零城堡低金平行路线，列于既有认可甲胄主路之后；待实战验证。"
         }
       }
     ]
@@ -3157,7 +3385,7 @@
     "civ": "Goths",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L534-L566",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L580-L615",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -3173,7 +3401,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-26",
         "condition": "长戟按骑兵压力。",
         "required": [
           {
@@ -3249,18 +3477,148 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录近卫军与长戟的步兵核心、按需攻城器择用、哥特补兵机制及对应投入边界。",
-          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录",
-          "sourceLines": [534, 538, 542, 543, 544, 546, 548, 554, 555, 556, 557, 563, 564, 566]
+          "scope": "记录近卫军与长戟的步兵核心、按需攻城器择用、哥特补兵机制及对应投入边界。本次以 DE 188329 全工具补齐预算 3000 单兵与拉扯对位、三组真混编、兵营满速 5.01 秒产能账本（兵营 3 座近卫＋兵营 3 座长戟＋攻城武器厂 1 座炮需 156 名村民，纯 6 兵营需村民 138 名）与不含抗招降研究账本（近卫＋长戟合计 5090、加手推炮合计 5590；哥特无异教，加虔诚与信念另增 1600）。",
+          "recordedVersion": "资料及驻军机制核对：v0.77.100 · DE 188329（2026-10-28） · ea09def；原用户对局版本未单独记录；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [580, 584, 588, 589, 590, 592, 594, 600, 601, 602, 603, 604, 610, 611, 613, 615],
+          "links": [
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对 42 个不列颠劲弩手（站桩胜，剩 31/38）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对拉扯不列颠劲弩手 42 名（胜，剩 26/38）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对拉扯马扎尔重装骑射手 30 名（胜，剩 15/38）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=474.Magyars.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对法兰克游侠 22 名（负，游侠剩 6/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对条顿游侠 22 名（负，游侠剩 7/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对 42 个日本冠军剑士（负，冠军剩 10/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对拉扯西班牙火枪手 31 名（负，火枪 31/31 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=5.Spanish.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 精锐近卫军 38 名对拉扯波希米亚火枪手 31 名（负，火枪 31/31 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=761.Goths.4.f.&b=5.Bohemians.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 61 名冠军剑士 对精锐近卫军 38 名（胜，剩 12/61）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=567.Goths.4.f.&b=761.Goths.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 61 名冠军剑士 对 42 名条顿冠军剑士（胜，剩 1/61）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=567.Goths.4.f.&b=567.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 61 名冠军剑士 对 42 个日本冠军剑士（负，敌剩 2/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=567.Goths.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 71 名长戟兵 对法兰克游侠 22 名（胜，剩 6/71）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Goths.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 71 名长戟兵 对条顿游侠 22 名（胜，剩 6/71）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Goths.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 71 名长戟兵 对圣物数 4 精锐烈堤司 25 名（胜，剩 2/71）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Goths.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000&rb=4"
+            },
+            {
+              "label": "混编 · 精锐近卫军 30 名与 40 名长戟兵 对马扎尔游侠 15 名与 28 名劲弩手（负，敌剩游侠 6、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Goths%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22761%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2240%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 精锐近卫军 25 名与 22 名火枪手 对日本 35 名冠军剑士 与 26 名长戟兵（胜，剩近卫 13、火枪 22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Goths%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22761%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2235%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 40 名冠军剑士 与 22 名火枪手 对条顿 22 名精锐条顿骑士 与 25 名长戟兵（胜，剩冠军 26、火枪 22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Goths%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2240%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2222%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22554%22%2C%22qty%22%3A%2222%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 精锐近卫军（兵营 3 座）＋长戟兵（兵营 3 座）＋手推炮（攻城武器厂 1 座）· 156 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Goths&age=4&walk=3&farm=1&techs=13%2C14%2C16%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373%2C457&rows=761%3A12%3A3%2C359%3A12%3A3%2C36%3A49%3A1"
+            },
+            {
+              "label": "持续生产 · 精锐近卫军（兵营 3 座）＋长戟兵（兵营 3 座）· 138 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Goths&age=4&walk=3&farm=1&techs=13%2C14%2C16%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315%2C373%2C457&rows=761%3A12%3A3%2C359%3A12%3A3"
+            },
+            {
+              "label": "研究账本 · 精锐近卫军＋长戟兵（不含抗招降，合计 5090）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Goths&age=4&acunits=%5B%7B%22unit%22%3A761%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A16%22%2C%22t%3A215%22%2C%22t%3A365%22%2C%22t%3A429%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%5D"
+            },
+            {
+              "label": "研究账本 · 精锐近卫军＋长戟兵＋手推炮（不含抗招降，合计 5590）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Goths&age=4&acunits=%5B%7B%22unit%22%3A761%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A36%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A16%22%2C%22t%3A215%22%2C%22t%3A365%22%2C%22t%3A429%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%5D"
+            }
+          ]
         },
-        "reason": "精锐近卫军凭高穿刺护甲接近弓箭兵并冲击经济区；长戟兵按骑兵压力调比例。步兵折扣、无政府解锁兵营近卫军、井喷与团队兵营加成共同支持补兵。",
-        "limitation": "共享步兵攻防不免除精锐、长戟、冠军和特色科技的独立投入。农田、黄金和前线兵营产能须持续支持；便宜且产得快不等于资源可无限消耗。近卫军的高穿刺护甲不能代替近战能力，也不能抵消投石车打击。",
-        "adjustments": [],
+        "reason": "精锐近卫军凭远甲为 10 接近弓箭兵并冲击经济区（预算 3000 下精锐近卫军 38 名对不列颠劲弩手 42 名站桩剩 31/38、敌拉扯仍剩 26/38，对马扎尔重装骑射手 30 名拉扯仍剩 15/38）；长戟兵总价 42 全游第一，按骑兵压力调比例。步兵折扣、无政府解锁兵营近卫军（满速 5.01 秒）、井喷与团队兵营加成共同支持补兵。",
+        "limitation": "硬基线缺步兵钢甲、软甲、纵火、攻城技师、石墙与高级箭塔及钻井采金法；共享步兵攻防不免除精锐、长戟、冠军和特色科技的独立投入（近卫＋长戟战斗研究费不含抗招降为 5090、加手推炮为 5590；无异教，计入虔诚与信念另增 1600）。农田、黄金和前线兵营产能须持续支持（兵营 3 座近卫＋兵营 3 座长戟＋攻城武器厂 1 座炮需 156 名村民，其中农夫 84 名、伐木 23 名、采金 49 名；纯 6 兵营亦需村民 138 名）；便宜且产得快不等于资源可无限消耗。近卫军的高穿刺护甲不能代替近战能力（正面负法兰克游侠、条顿游侠与日本冠军剑士），也不能抵消投石车打击或拉扯火枪风筝（对拉扯西班牙火枪手 31 名被 31/31 零损团灭）。",
+        "adjustments": [
+          {
+            "id": "goths-huskarl-halberdier-adjustment-cavalry",
+            "when": "骑兵压力大",
+            "text": "随骑兵压力提高折扣长戟兵比例：预算 3000 达 71 名长戟兵，正面胜法兰克游侠 22 名与条顿游侠 22 名均剩 6/71，胜圣物数 4 精锐烈堤司 25 名剩 2/71，避免纯近卫军正面硬吃重骑。"
+          },
+          {
+            "id": "goths-huskarl-halberdier-adjustment-melee-infantry",
+            "when": "强力近战步兵",
+            "text": "用折扣冠军剑士替换部分近卫军（总价 49、黄金 14 双项全游第一）：预算 3000 达 61 名冠军剑士，正面胜精锐近卫军 38 名剩 12/61、反胜 42 名条顿冠军剑士 剩 1/61，对 42 名日本冠军剑士 敌仅剩 2/42。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 567,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少冠军剑士目录资料时隐藏此替换建议；仍以近卫＋长戟主路避战敌方强近战步兵。"
+          },
+          {
+            "id": "goths-huskarl-halberdier-adjustment-anti-infantry",
+            "when": "条顿武士等强反步兵单位",
+            "text": "评估火枪手支援：混编精锐近卫军 25 名与 22 名火枪手 大胜日本 35 名冠军剑士 与 26 名长戟兵 剩近卫 13、火枪 22；40 名冠军剑士 与 22 名火枪手 胜条顿 22 名精锐条顿骑士 与 25 名长戟兵 剩冠军 26、火枪 22。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少火枪手目录资料时隐藏此支援建议；避免步兵正面硬撞强反步兵单位。"
+          },
+          {
+            "id": "goths-huskarl-halberdier-adjustment-narrow-mix",
+            "when": "重骑＋弓手混编窄口对撞",
+            "text": "一维窄口实测精锐近卫军 30 名与 40 名长戟兵 正面硬撞马扎尔游侠 15 名与 28 名劲弩手 全灭（敌剩游侠 6、劲弩 28）；避免单通道硬冲，多向侧翼包抄、攻城器破阵与连续波次消耗仅作待实战验证的应对选项。"
+          },
+          {
+            "id": "goths-huskarl-halberdier-adjustment-siege-kite",
+            "when": "步兵难以接近的攻城器或拉扯火枪",
+            "text": "近卫军远甲为 10 但不抗投石车范围打击，遇拉扯西班牙火枪手 31 名被 31/31 零损团灭；由按需远程攻城支援施加威胁并配合兵种切换化解。"
+          }
+        ],
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L534-L566",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L580-L615",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
-        }
+        },
+        "attack": "近卫军接近射手或冲击经济区，长戟兵按骑兵压力配入，按需攻城支援拆关键防御；避免在单通道窄口用近卫＋长戟正面硬撞重骑＋弓手混编，多向包抄与连续波次消耗仅作待实战验证的应对选项。",
+        "defense": "按骑兵压力分配长戟兵，近卫军处理射手和可接近的攻城器，缺石墙与高级箭塔须靠主动清线和前线兵营补兵维持阵地。"
       }
     ]
   },
@@ -4421,7 +4779,7 @@
     "civ": "Teutons",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L538",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -4437,7 +4795,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-26",
         "condition": "主动接战时；不是万金油。",
         "required": [
           {
@@ -4477,12 +4835,66 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；游侠与精锐掷矛手分担主力和反弓职责，限主动接战并保护昂贵游侠。",
-          "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；游侠与精锐掷矛手分担主力和反弓职责，限主动接战并保护昂贵游侠。本次补齐 DE 188329 群战/拉扯/混编、城镇中心 25 驻军满箭校准（无炮塔 15 名村民 可满 15/15 箭、含炮塔 15 名村民 射 14/15 箭、需 16 名村民 可满 15/15 箭）、持续生产（村民 65 名）及不含抗招降研究账本（合计 7675，含抗招降三件套为 10275）。",
+          "recordedVersion": "原讨论站点版本与构建未单独记录；全工具群战/混编/驻军/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [819, 823, 827, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 865, 867],
+          "links": [
+            {
+              "label": "预算 3000 · 条顿游侠 22 名对圣物数 0 精锐烈堤司 25 名（负，烈堤司剩 3/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Teutons.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 50 名精锐掷矛手 对 30 名马扎尔重装骑射手（负，骑射剩 6/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Teutons.4.f.&b=474.Magyars.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 50 名精锐掷矛手 对拉扯不列颠劲弩手 42 名（负，劲弩 42/42 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Teutons.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 对马扎尔翼骑 44 名（胜，剩 15/28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Teutons.4.f.&b=441.Magyars.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 拉扯对 42 个日本冠军剑士（负，冠军剩 4/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Teutons.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 对 42 个不列颠劲弩手（负，劲弩剩 34/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Teutons.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "混编 · 条顿游侠 18 名与 26 名精锐掷矛手 对不列颠 25 名长戟兵 与 35 名劲弩手（胜，剩游侠 2、掷矛 26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 条顿游侠 18 名与 26 名精锐掷矛手 对马扎尔游侠 15 名与 20 名重装骑射手（负，敌剩游侠 9、骑射 20）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%2247%22%2C%22515%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D"
+            },
+            {
+              "label": "满科技驻军 · 城镇中心不含炮塔 15 名村民 15/15 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200&army=83%3A15%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 城镇中心含炮塔 15 名村民 14/15 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C64%2C199%2C200&army=83%3A15%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 城镇中心含炮塔 16 名村民 15/15 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C64%2C199%2C200&army=83%3A16%3Ae"
+            },
+            {
+              "label": "持续生产 · 游侠（马厩 3 座）＋精锐掷矛手（靶场 3 座）· 65 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Teutons&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=569%3A101%3A3%2C6%3A87%3A3"
+            },
+            {
+              "label": "研究账本 · 游侠＋精锐掷矛手（不含抗招降，合计 7675）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Teutons&age=4&acunits=%5B%7B%22unit%22%3A569%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A265%22%2C%22t%3A435%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
+            }
+          ]
         },
-        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。游侠＋精锐掷矛手（主动接战时）；游侠作主力，掷矛处理弓手与长戟。",
-        "limitation": "游侠在帝王时代有 +2 近战护甲，但缺畜牧；精锐掷矛手缺护腕和扳指，满科技射程 7。掷矛不能替昂贵游侠吸收前线损耗，需保护游侠。",
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。游侠＋精锐掷矛手（主动接战时）；游侠享帝王 7/7 护甲（近甲全游第一）作主力，掷矛处理弓手与长戟；混编条顿游侠 18 名与 26 名精锐掷矛手 正面胜不列颠 25 名长戟兵 与 35 名劲弩手（剩游侠 2、掷矛 26），持续生产需 65 名村民，不含抗招降战斗研究费为 7675。",
+        "limitation": "游侠在帝王时代有 +2 近战护甲，但缺畜牧；精锐掷矛手缺护腕和扳指，满科技射程 7。掷矛不能替昂贵游侠吸收前线损耗，需保护游侠。面对无视护甲骑兵与高机动远程拉扯均落于下风：预算 3000 下游侠对圣物数 0 精锐烈堤司落败（敌剩 3/25），50 名精锐掷矛手 站桩负 30 名马扎尔重装骑射手（敌剩 6/30）且被拉扯不列颠劲弩手 42 名满血零损风筝，混编亦负马扎尔游侠 15 名与 20 名重装骑射手（敌剩游侠 9、骑射 20）。",
         "attack": "主动接战时以游侠＋精锐掷矛手为主路线；不把前推城堡当成每次进攻都需要的锚点。",
         "defense": "利用已有阵地和狭口保护昂贵游侠；精锐掷矛手处理弓手与长戟，不以掷矛替游侠承担前线损耗。",
         "adjustments": [
@@ -4520,11 +4932,37 @@
               }
             ],
             "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留游侠＋精锐掷矛手路线。"
+          },
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-ignore-armor",
+            "when": "无视护甲骑兵（如立陶宛精锐烈堤司）",
+            "text": "条顿游侠在预算 3000 下正面负于圣物数 0 精锐烈堤司 25 名（敌剩 3/25）；避免纯重甲正面硬换，改配火枪手远程集火或依托满科技修道院用僧侣招降化解。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少火枪手目录资料时隐藏此火力建议；依托满科技修道院僧侣与地形规避无视护甲骑兵正面消耗。"
+          },
+          {
+            "id": "teutons-paladin-skirmisher-adjustment-remote-kite",
+            "when": "高机动远程拉扯与防线三绝驻军",
+            "text": "面对骑射与长射程劲弩拉扯，补全科技重装甲重型投石车（4/8 护甲）压制，或依托开垛口 13 射程城堡、大型箭塔与 25 驻军城镇中心（无炮塔 15 名村民 可满 15/15 箭、含炮塔 15 名村民 射 14/15 箭、需 16 名村民 可满 15/15 箭）逼迫对方接团。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重型投石车目录资料时隐藏该攻城建议；依托开垛口城堡与高驻军防线逼团，不盲追远程拉扯。"
           }
         ],
-        "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
+        "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。；重装骑马弩兵不列为主路：虽有近甲为 7 全游第一（28 名重装骑马弩兵 胜马扎尔翼骑 44 名剩 15/28），但同时缺护腕、扳指、畜牧与便携弯弩四项核心科技，拉扯仍负 42 个日本冠军剑士（敌剩 4/42）。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L542",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -4540,7 +4978,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-26",
         "condition": "持续低价前排；怕弓手、骑射和投石车。",
         "required": [
           {
@@ -4580,11 +5018,49 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；长戟与火枪组成低价前排，并保留该慢速路线怕远程单位和投石车的限制。",
-          "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [538, 540, 543, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；长戟与火枪组成低价前排，并保留该慢速路线怕远程单位和投石车的限制。本次补齐 DE 188329 混编胜日本步兵、满科技开垛口城堡与 10 驻军大型箭塔实测（射箭槽内外对照）、持续生产（村民 64 名）及不含抗招降研究账本（合计 4590，含抗招降三件套为 7190）。",
+          "recordedVersion": "原讨论站点版本与构建未单独记录；全工具群战/混编/驻军/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [819, 823, 828, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 863, 865, 867],
+          "links": [
+            {
+              "label": "预算 3000 · 50 名长戟兵 对圣物数 4 精锐烈堤司 25 名（负，烈堤司剩 1/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Teutons.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000&rb=4"
+            },
+            {
+              "label": "混编 · 34 名长戟兵 与 21 名火枪手 对日本 32 名冠军剑士 与 29 名长戟兵（胜，剩长戟 20、火枪 21）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2221%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2232%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2229%22%7D%5D%7D"
+            },
+            {
+              "label": "满科技驻军 · 开垛口城堡 20 名火枪手 19/21 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/82?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200&army=5%3A20%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 大型箭塔无射箭槽 10 名火枪手 9/9 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200&army=5%3A10%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 大型箭塔含射箭槽 10 名火枪手 8/9 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200%2C608&army=5%3A10%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 大型箭塔无射箭槽 10 名村民 8/9 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200&army=83%3A10%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 大型箭塔含射箭槽 10 名村民 6/9 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200%2C608&army=83%3A10%3Ae"
+            },
+            {
+              "label": "持续生产 · 长戟兵（兵营 4 座）＋火枪手（靶场 4 座）· 64 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Teutons&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=359%3A12%3A4%2C5%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 长戟兵＋火枪手（不含抗招降，合计 4590）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Teutons&age=4&acunits=%5B%7B%22unit%22%3A359%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A5%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A429%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%5D"
+            }
+          ]
         },
-        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。长戟兵＋火枪手（持续用低价前排时）；长戟反骑并保护火枪，火枪处理步兵；火枪手对步兵有 +10 额外伤害，没有条顿专属攻击加成。",
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。长戟兵＋火枪手（持续用低价前排时）；长戟反骑并保护火枪（近甲为 5 全游第一），火枪处理步兵；火枪手对步兵有 +10 额外伤害，没有条顿专属攻击加成。混编 34 名长戟兵 与 21 名火枪手 大胜日本 32 名冠军剑士 与 29 名长戟兵（剩长戟 20、火枪 21），兵营 4 座＋靶场 4 座持续生产需 64 名村民，不含抗招降战斗研究费仅 4590。",
         "limitation": "这条慢速路线怕弓手、骑射手和投石车。",
         "attack": "持续需要低价前排时以长戟兵＋火枪手推进；不把前推城堡当成每次进攻都需要的锚点。",
         "defense": "利用已有阵地和狭口保护长戟兵与火枪手；长戟按实际反骑压力补充。",
@@ -4622,11 +5098,29 @@
               }
             ],
             "fallback": "条顿骑士路线缺失或不可用于当前推荐时隐藏此改选建议；保留本路线长戟＋火枪。"
+          },
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-ignore-armor",
+            "when": "无视护甲骑兵（如立陶宛精锐烈堤司）",
+            "text": "预算 3000 下 50 名条顿长戟兵 单挑负于圣物数 4 精锐烈堤司 25 名（敌剩 1/25）；依靠本路火枪手远程集火压低烈堤司血线并配合满科技修道院僧侣招降，避免纯长戟单独硬接满圣物烈堤司。"
+          },
+          {
+            "id": "teutons-halberdier-handcannon-adjustment-remote-kite",
+            "when": "高机动远程拉扯与防线三绝驻军",
+            "text": "补全科技重装甲重型投石车（4/8 护甲）压制敌方远程群，并借开垛口 13 射程城堡（20 名火枪手 射 19/21 箭）与大型箭塔（无射箭槽 10 名火枪手 满 9/9 箭、含射箭槽 8/9 箭，10 名村民 8/9 与 6/9 箭）构建防线逼团。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重型投石车目录资料时隐藏该攻城建议；依托开垛口城堡与大型箭塔掩护推进。"
           }
         ],
         "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L543",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -4642,7 +5136,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-26",
         "condition": "近战重、狭口或已有阵地。",
         "required": [
           {
@@ -4682,12 +5176,42 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；条顿骑士与精锐掷矛手按近战重、狭口或已有阵地选择，并保留城堡产能边界。",
-          "recordedVersion": "站点版本和构建本次未记录",
-          "sourceLines": [538, 540, 542, 544, 545, 547, 549, 551, 557, 558, 559, 560, 566, 567, 568, 569, 571, 573]
+          "scope": "记录农田费用对建造与重播成本、长期补兵能力及不影响农作速度和产量的边界；条顿骑士与精锐掷矛手按近战重、狭口或已有阵地选择，并保留城堡产能边界。本次补齐 DE 188329 下对烈堤司圣物反转线、防风筝对位、开垛口城堡 20 名精锐条顿骑士 驻军（12/21 箭）、持续生产（村民 78 名）及不含抗招降研究账本（合计 6175，含抗招降三件套为 8775）。",
+          "recordedVersion": "原讨论站点版本与构建未单独记录；全工具群战/混编/驻军/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [819, 823, 827, 829, 830, 832, 834, 836, 838, 839, 840, 841, 847, 848, 849, 850, 851, 852, 858, 859, 860, 861, 862, 863, 865, 867],
+          "links": [
+            {
+              "label": "预算 3000 · 26 名精锐条顿骑士 对圣物数 1 精锐烈堤司 25 名（负，烈堤司剩 1/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=554.Teutons.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000&rb=1"
+            },
+            {
+              "label": "预算 3000 · 26 名精锐条顿骑士 对圣物数 2 精锐烈堤司 25 名（负，烈堤司剩 1/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=554.Teutons.4.f.&b=1236.Lithuanians.4.f.&m=r&bud=3000&rb=2"
+            },
+            {
+              "label": "预算 3000 · 26 名精锐条顿骑士 对拉扯不列颠劲弩手 42 名（负，劲弩 42/42 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=554.Teutons.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "混编 · 18 名精锐条顿骑士 与 20 名火枪手 对立陶宛圣物数 4 精锐烈堤司 19 名与 28 名精锐掷矛手（胜，剩条顿骑士 7、火枪 20）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22554%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2219%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2228%22%7D%5D%2C%22relics%22%3A%224%22%7D"
+            },
+            {
+              "label": "满科技驻军 · 开垛口城堡 20 名精锐条顿骑士 12/21 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/82?tab=garrison&gv=2&civ=Teutons&age=4&gtechs=11%2C47%2C199%2C200&army=554%3A20%3Ae"
+            },
+            {
+              "label": "持续生产 · 精锐条顿骑士（城堡 2 座）＋精锐掷矛手（靶场 3 座）· 78 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Teutons&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=554%3A82%3A2%2C6%3A87%3A3"
+            },
+            {
+              "label": "研究账本 · 精锐条顿骑士＋精锐掷矛手（不含抗招降，合计 6175）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Teutons&age=4&acunits=%5B%7B%22unit%22%3A554%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A215%22%2C%22t%3A219%22%2C%22t%3A364%22%2C%22t%3A47%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
+            }
+          ]
         },
-        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。条顿骑士（后期精锐）＋精锐掷矛手；骑士承担近战，掷矛应对射手。",
-        "limitation": "精锐条顿骑士护甲高但移动慢；掷矛的射程差，不宜对射远程攻城器或追击。条顿骑士需要城堡产能；已有城堡可用于生产和研究，不等于必须反复前推城堡。",
+        "reason": "农田费用 -40% 降低建造和重播农田的木材成本，可支撑长期补兵，但不提升农作速度或产量。条顿骑士（后期精锐）＋精锐掷矛手；骑士承担近战，掷矛应对射手。精锐条顿骑士（城堡 2 座）＋精锐掷矛手（靶场 3 座）持续生产需 78 名村民（其中农夫 47 名、采金 18 名，高粮低金契合农田减免），不含抗招降战斗研究费为 6175。",
+        "limitation": "精锐条顿骑士护甲高但移动慢，遇拉扯不列颠劲弩手 42 名被 42/42 满血零损风筝，且面对无视近甲的立陶宛精锐烈堤司在圣物数 1 即遭反转（敌剩 1/25）；掷矛的射程差，不宜对射远程攻城器或追击。条顿骑士需要城堡产能；已有城堡可用于生产和研究，不等于必须反复前推城堡。",
         "attack": "近战压力重、狭口或已有阵地时以条顿骑士＋精锐掷矛手推进；不把前推城堡当成每次进攻都需要的锚点。",
         "defense": "利用已有阵地和狭口保护条顿骑士与精锐掷矛手；不让慢速条顿骑士裸追远程攻城器。",
         "adjustments": [
@@ -4720,11 +5244,37 @@
             "id": "teutons-elite-knight-skirmisher-adjustment-fourth",
             "when": "近战兵多、狭口或已有阵地",
             "text": "仅在近战压力、狭口或已有阵地时使用本路线；避免在开阔地被远程单位风筝或追击攻城器。"
+          },
+          {
+            "id": "teutons-elite-knight-skirmisher-adjustment-ignore-armor",
+            "when": "无视护甲骑兵（如立陶宛精锐烈堤司）",
+            "text": "预算 3000 下 26 名精锐条顿骑士 面对圣物数 1 与圣物数 2 精锐烈堤司均落败（敌剩 1/25）；对策为改配火枪手远程集火（混编 18 名精锐条顿骑士 与 20 名火枪手 胜立陶宛圣物数 4 精锐烈堤司 19 名与 28 名精锐掷矛手 剩条顿骑士 7、火枪 20）或依托满科技修道院用僧侣招降。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 5,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少火枪手目录资料时隐藏此远程集火建议；依托满科技修道院僧侣与阵地规避烈堤司正面换血。"
+          },
+          {
+            "id": "teutons-elite-knight-skirmisher-adjustment-remote-kite",
+            "when": "高机动远程拉扯与城堡驻军",
+            "text": "慢速条顿骑士在开阔地易被高速长射程拉扯风筝（预算 3000 下 26 名精锐条顿骑士 对拉扯不列颠劲弩手 42 名遭 42/42 满血零损风筝）；对策为补全科技重装甲重型投石车（4/8 护甲）压制，或依托开垛口 13 射程城堡（20 名精锐条顿骑士 驻城射 12/21 箭）与狭口阵地逼迫接团。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 588,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重型投石车目录资料时隐藏该攻城建议；严守狭口与开垛口城堡防线，不裸追远程拉扯。"
           }
         ],
         "alternatives": "前推城堡作为固定推进锚点：造价 650 石料、施工久且村民暴露；敌方巨型投石机或手推炮可能凭射程压制阵地，慢速条顿骑士不保证能及时截击。已有城堡仍可用于生产与研究。；游侠＋手推炮作为唯一后期方案：两条都重黄金，难作为不看经济的持续补兵模板；不等于禁止双金兵线，具体炮类仅由可选补充表达。；游侠常驻搭配长戟：对普通骑兵的职责容易重叠；不默认让游侠与长戟常驻成对，长戟条件补队仅由依赖调整表达。；骑兵线默认升级到轻骑兵：科技树显示斥候骑兵是可用的最高斥候线；轻型骑兵和翼骑兵均标为条顿不可用。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L544",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L819-L867",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
         }
@@ -5640,7 +6190,7 @@
     "civ": "Lithuanians",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L964-L1011",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -5656,7 +6206,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-24",
+        "revised": "2026-11-26",
         "condition": "主结构不固定数量；城镇中心阵地仅按条件支援呈现。",
         "required": [
           {
@@ -5738,9 +6288,9 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "讨论认可烈堤司与掷矛主结构及驻军分工修正；驻军预览不代表混编实战或胜率证明，圣物数量不作开局假定。预算 3000 核对（一维接敌模型，不含二维包抄、溅射与护卫）：精锐烈堤司 25 名在圣物数 0 胜法兰克游侠、条顿游侠与日本冠军，负于不列颠劲弩、法兰克长戟与精锐条顿骑士，从圣物数 0 升至 2 三组均由负转胜；游侠 22 名在圣物数 0 胜不列颠劲弩、负法兰克与条顿游侠，圣物数 4 反胜法兰克游侠剩 1/22。",
-          "recordedVersion": "原记录未记录站点版本/构建；圣物数 0/2/4 预算 3000 群战复核：v0.99.44 · DE 188329 · f1d5aab",
-          "sourceLines": [908, 912, 916, 917, 918, 919, 921, 923, 925, 931, 932, 933, 934, 940, 941, 942, 944, 946, 947, 948, 949, 951, 953],
+          "scope": "讨论认可烈堤司与掷矛主结构及驻军分工修正；驻军预览不代表混编实战或胜率证明，圣物数量不作开局假定。预算 3000 核对（一维接敌模型，不含二维包抄、溅射与护卫）：精锐烈堤司 25 名在圣物数 0 胜法兰克游侠、条顿游侠与日本冠军，负于不列颠劲弩、法兰克长戟与精锐条顿骑士，从圣物数 0 升至 2 三组均由负转胜；游侠 22 名在圣物数 0 胜不列颠劲弩、负法兰克与条顿游侠，圣物数 4 反胜法兰克游侠剩 1/22。本次补齐塔盾掷矛反拉扯、真混编、山城堡城镇中心满科技驻军校准（彻底剔除无关科技，含炮塔 10 名村民 射 9/10 箭、11 名村民 可满 10/10 箭）、持续生产（村民 63 名）及不含抗招降研究账本（烈堤司＋掷矛合计 7925，较游侠＋掷矛 9075 省 1150）。",
+          "recordedVersion": "原记录未记录站点版本/构建；圣物数 0/2/4 预算 3000 群战复核：v0.99.44 · DE 188329 · f1d5aab；全工具混编/驻军/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [964, 968, 972, 973, 974, 975, 977, 979, 983, 989, 990, 991, 992, 998, 999, 1000, 1002, 1004, 1005, 1006, 1007, 1009, 1011],
           "links": [
             {
               "label": "DE 188329 固定科技树",
@@ -5755,12 +6305,28 @@
               "href": "https://github.com/linhongcun/aoe2-analyzer/blob/531df914b66bdc2e28cd7e189e1426ce92d1d7ae/data/game/units.json"
             },
             {
+              "label": "圣物数 0 · 精锐烈堤司 25 名对法兰克游侠 22 名（胜，剩 2/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "圣物数 0 · 精锐烈堤司 25 名对条顿游侠 22 名（胜，剩 3/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "圣物数 0 · 精锐烈堤司 25 名对 42 个日本冠军剑士（胜，剩 1/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
               "label": "圣物数 0 · 精锐烈堤司 25 名对 42 个不列颠劲弩手（劲弩剩 8/42，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
             },
             {
               "label": "圣物数 2 · 精锐烈堤司 25 名对 42 个不列颠劲弩手（剩 7/25，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&ra=2"
+            },
+            {
+              "label": "圣物数 4 · 精锐烈堤司 25 名对 42 个不列颠劲弩手（胜，剩 7/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&ra=4"
             },
             {
               "label": "圣物数 0 · 精锐烈堤司 25 名对 50 个法兰克长戟兵（长戟剩 4/50，一维接敌模型）",
@@ -5771,25 +6337,125 @@
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ra=2"
             },
             {
+              "label": "圣物数 4 · 精锐烈堤司 25 名对 50 个法兰克长戟兵（胜，剩 1/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ra=4"
+            },
+            {
               "label": "圣物数 0 · 精锐烈堤司 25 名对 26 名精锐条顿骑士（条顿骑士剩 2/26，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "圣物数 1 · 精锐烈堤司 25 名对 26 名精锐条顿骑士（胜，剩 1/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000&ra=1"
             },
             {
               "label": "圣物数 2 · 精锐烈堤司 25 名对 26 名精锐条顿骑士（剩 1/25，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000&ra=2"
             },
             {
+              "label": "圣物数 4 · 精锐烈堤司 25 名对 26 名精锐条顿骑士（胜，剩 3/25，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1236.Lithuanians.4.f.&b=554.Teutons.4.f.&m=r&bud=3000&ra=4"
+            },
+            {
+              "label": "圣物数 0 · 游侠 22 名对 42 个不列颠劲弩手（胜，剩 5/22，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
               "label": "圣物数 0 · 游侠 22 名对法兰克游侠 22 名（法兰克游侠剩 3/22，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
             },
             {
+              "label": "圣物数 2 · 游侠 22 名对法兰克游侠 22 名（负，法兰克游侠剩 1/22，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ra=2"
+            },
+            {
+              "label": "圣物数 3 · 游侠 22 名对法兰克游侠 22 名（双方同归于尽，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ra=3"
+            },
+            {
               "label": "圣物数 4 · 游侠 22 名对法兰克游侠 22 名（剩 1/22，一维接敌模型）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ra=4"
+            },
+            {
+              "label": "圣物数 0 · 游侠 22 名对条顿游侠 22 名（负，条顿游侠剩 4/22，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "圣物数 4 · 游侠 22 名对条顿游侠 22 名（双方战平，一维接敌模型）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=569.Lithuanians.4.f.&b=569.Teutons.4.f.&m=r&bud=3000&ra=4"
+            },
+            {
+              "label": "预算 3000 · 50 名精锐掷矛手 对拉扯不列颠劲弩手 42 名（胜，剩 36/50）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=6.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&kb=1"
+            },
+            {
+              "label": "预算 3000 · 30 名重装骑射手 拉扯对 50 个法兰克长戟兵（30/30 满血零损）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Lithuanians.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 30 名重装骑射手 拉扯对 42 个日本冠军剑士（胜，剩 23/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Lithuanians.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "混编 · 圣物数 0 精锐烈堤司 12 名与 26 名精锐掷矛手 对法兰克游侠 14 名与 20 名长戟兵（胜，剩烈堤司 1、掷矛 26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 圣物数 2 精锐烈堤司 12 名与 26 名精锐掷矛手 对法兰克游侠 14 名与 20 名长戟兵（胜，剩烈堤司 1、掷矛 26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%2C%22relics%22%3A%222%22%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 圣物数 4 精锐烈堤司 12 名与 26 名精锐掷矛手 对法兰克游侠 14 名与 20 名长戟兵（胜，剩烈堤司 2、掷矛 26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%2C%22relics%22%3A%224%22%7D&mb=%7B%22civ%22%3A%22Franks%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%2239%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2214%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 圣物数 0 精锐烈堤司 12 名与 26 名精锐掷矛手 对不列颠 20 名长戟兵 与 26 名劲弩手（胜，剩烈堤司 0、掷矛 23）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 圣物数 2 精锐烈堤司 12 名与 26 名精锐掷矛手 对不列颠 20 名长戟兵 与 26 名劲弩手（胜，剩烈堤司 0、掷矛 24）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%2C%22relics%22%3A%222%22%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 圣物数 4 精锐烈堤司 12 名与 26 名精锐掷矛手 对不列颠 20 名长戟兵 与 26 名劲弩手（胜，剩烈堤司 0、掷矛 24）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%22692%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221236%22%2C%22qty%22%3A%2212%22%7D%2C%7B%22uid%22%3A%226%22%2C%22qty%22%3A%2226%22%7D%5D%2C%22relics%22%3A%224%22%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "满科技驻军 · 山城堡城镇中心不含炮塔 10 名村民 10/10 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Lithuanians&age=4&gtechs=47%2C199%2C200%2C201%2C437&army=83%3A10%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 山城堡城镇中心含炮塔 10 名村民 9/10 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Lithuanians&age=4&gtechs=47%2C64%2C199%2C200%2C201%2C437&army=83%3A10%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 山城堡城镇中心含炮塔 11 名村民 10/10 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Lithuanians&age=4&gtechs=47%2C64%2C199%2C200%2C201%2C437&army=83%3A11%3Ae"
+            },
+            {
+              "label": "满科技驻军 · 山城堡城镇中心含炮塔 15 名精锐掷矛手 7/10 箭",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/building/109?tab=garrison&gv=2&civ=Lithuanians&age=4&gtechs=47%2C64%2C199%2C200%2C201%2C437&army=6%3A15%3Ae"
+            },
+            {
+              "label": "持续生产 · 精锐烈堤司（城堡 2 座）＋精锐掷矛手（靶场 3 座）· 63 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Lithuanians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1236%3A82%3A2%2C6%3A87%3A3"
+            },
+            {
+              "label": "持续生产 · 立陶宛游侠（马厩 3 座）· 43 名村民，其中采金村民 27 名",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Lithuanians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=569%3A101%3A3"
+            },
+            {
+              "label": "研究账本 · 精锐烈堤司＋精锐掷矛手（不含抗招降，合计 7925）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Lithuanians&age=4&acunits=%5B%7B%22unit%22%3A1236%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A684%22%2C%22t%3A692%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
+            },
+            {
+              "label": "研究账本 · 立陶宛游侠＋精锐掷矛手（不含抗招降，合计 9075）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Lithuanians&age=4&acunits=%5B%7B%22unit%22%3A569%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A6%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A265%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A692%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%2C%22t%3A98%22%5D"
             }
           ]
         },
-        "reason": "烈堤司以近战处理重甲（无视近战甲）；掷矛反弓并远射长戟；主结构获讨论认可，记录未说明实战状态。预算 3000 群战复核（圣物数 0/2/4，一维接敌模型）：精锐烈堤司 25 名在圣物数 0（18 攻）胜法兰克游侠 22 名（剩 2/25）、条顿游侠 22 名（剩 3/25）与 42 个日本冠军剑士（剩 1/25），负于 42 个不列颠劲弩手（劲弩剩 8/42）、50 个法兰克长戟兵（长戟剩 4/50）与 26 名精锐条顿骑士（条顿骑士剩 2/26）；从圣物数 0 升至 2（20 攻）三组均由负转胜（对精锐条顿骑士圣物数 1 即反胜剩 1/25，对不列颠劲弩剩 7/25 与法兰克长戟剩 1/25 均在圣物数 2 跨过斩杀线），圣物数 4（22 攻）对精锐条顿骑士余量扩至剩 3/25。",
-        "limitation": "烈堤司与掷矛的升级、食物/黄金投入和接敌方式限制成型；圣物是需争取的条件，不默认开局已有四件圣物（站内 PK 与科技模拟器均默认按圣物数 0 计算；游侠 22 名在圣物数 0、16 攻胜 42 个不列颠劲弩手 剩 5/22，对法兰克游侠 22 名在圣物数 0/2/4 依次为敌剩 3/22、敌剩 1/22、反胜剩 1/22，对条顿游侠 22 名在圣物数 0 敌剩 4/22、圣物数 4 战平；以上均为一维接敌模型，不含二维包抄、溅射与护卫）。中心射程与驻军箭数为站内理论，未证明混编实战胜率；城镇中心不是主路线前置。铁匠铺缺鼓风炉和步兵钢甲，分别少了末级近战攻击和步兵护甲。每驻守一件圣物，骑士系和烈堤司攻击 +1，最高 +4。烈堤司的实际攻击取决于圣物数量，波兰翼骑兵和长戟兵没有这项加攻。",
+        "reason": "烈堤司以近战处理重甲（无视近战甲）；掷矛反弓并远射长戟；主结构获讨论认可，记录未说明实战状态。预算 3000 群战复核（圣物数 0/2/4，一维接敌模型）：精锐烈堤司 25 名在圣物数 0（18 攻）胜法兰克游侠 22 名（剩 2/25）、条顿游侠 22 名（剩 3/25）与 42 个日本冠军剑士（剩 1/25），负于 42 个不列颠劲弩手（劲弩剩 8/42）、50 个法兰克长戟兵（长戟剩 4/50）与 26 名精锐条顿骑士（条顿骑士剩 2/26）；从圣物数 0 升至 2（20 攻）三组均由负转胜（对精锐条顿骑士圣物数 1 即反胜剩 1/25，对不列颠劲弩剩 7/25 与法兰克长戟剩 1/25 均在圣物数 2 跨过斩杀线），圣物数 4（22 攻）对精锐条顿骑士余量扩至剩 3/25。 塔盾精锐掷矛手远甲为 10 且移速为 1.06 双全游第一，预算 3000 下 50 名精锐掷矛手 击穿拉扯不列颠劲弩手 42 名（剩 36/50）；混编精锐烈堤司 12 名与 26 名精锐掷矛手 在圣物数 0/2/4 全胜法兰克游侠 14 名与 20 名长戟兵（剩烈堤司 1/1/2、掷矛 26）及不列颠 20 名长戟兵 与 26 名劲弩手（剩掷矛 23/24/24），精锐烈堤司（城堡 2 座）＋精锐掷矛手（靶场 3 座）持续生产需 63 名村民，不含抗招降战斗研究费为 7925（较游侠线省 1150）。",
+        "limitation": "烈堤司与掷矛的升级、食物/黄金投入和接敌方式限制成型；圣物是需争取的条件，不默认开局已有四件圣物（站内 PK 与科技模拟器均默认按圣物数 0 计算；游侠 22 名在圣物数 0、16 攻胜 42 个不列颠劲弩手 剩 5/22，对法兰克游侠 22 名在圣物数 0/2/4 依次为敌剩 3/22、敌剩 1/22、反胜剩 1/22，对条顿游侠 22 名在圣物数 0 敌剩 4/22、圣物数 4 战平；以上均为一维接敌模型，不含二维包抄、溅射与护卫）。中心射程与驻军箭数为站内理论，未证明混编实战胜率；城镇中心不是主路线前置。铁匠铺缺鼓风炉和步兵钢甲，分别少了末级近战攻击和步兵护甲。每驻守一件圣物，骑士系和烈堤司攻击 +1，最高 +4。烈堤司的实际攻击取决于圣物数量，波兰翼骑兵和长戟兵没有这项加攻。 另须留意立陶宛缺射箭槽与钻井采金法，且无劲弩手、重型冲车与重型投石车；山城堡城镇中心一键满科技含炮塔时 10 名村民仅 9/10 箭、需 11 名村民 可满 10/10 箭。",
         "attack": "烈堤司与掷矛先争取安全接敌空间并相互支援；不连续抢建前线建筑。",
         "defense": "烈堤司保持机动，掷矛反弓并远射长戟；保存撤退与安全接敌空间，不把城镇中心当主路前提。",
         "adjustments": [
@@ -5907,13 +6573,142 @@
               }
             ],
             "fallback": "缺少波兰翼骑兵目录资料时隐藏该替换选择；不把波兰翼骑兵列为固定反长戟主力。"
+          },
+          {
+            "id": "lithuanians-leitis-skirmisher-adjustment-hca",
+            "when": "开阔地需高机动远程拉扯步兵与长戟海",
+            "text": "立陶宛重装骑射手仅缺帕提亚战术，预算 3000 下 30 名重装骑射手 拉扯可 30/30 满血零损清 50 个法兰克长戟兵、对 42 个日本冠军剑士 剩 23/30，开阔地可作条件拉扯补充。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重装骑射手目录资料时隐藏此拉扯建议；仍以塔盾掷矛、火枪或低金平行路线处理长戟海。"
           }
         ],
         "alternatives": "游侠与烈堤司同时大量生产：分散黄金和产能；烈堤司每名比游侠少 25 金。常驻一大队波兰翼骑兵：没补上反长戟缺口，还扩大食物压力；圣物加攻不作用于波兰翼骑兵。专门另练弩手驻中心：增加升级线，不作默认投入。游侠线、波兰翼骑兵替换与中心驻军条件仅通过有目录依赖的调整显示，不因此列为固定主力。",
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/b63cccc015b677017efb4a64de8ebc01cd727ffd/role/game-strategy.md#L908-L953",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L964-L1011",
           "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
           "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
+        }
+      },
+      {
+        "id": "lithuanians-winged-hussar-handcannon",
+        "title": "波兰翼骑兵＋火枪手（平行低金路线）",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-26",
+        "condition": "缺金、无城堡队列或需要低研究费快速成型的帝王局，由马厩与靶场直出高护甲波兰翼骑兵配火枪手；不取代既有认可烈堤司主路。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1707,
+            "historicalName": "波兰翼骑兵",
+            "role": "4/6 护甲全游第一的免金机动前排，负责承伤与骚扰"
+          },
+          {
+            "kind": "unit",
+            "id": 5,
+            "historicalName": "火枪手",
+            "role": "低研究费补足反步兵与反长戟火力，解决翼骑单线清长戟缺口"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "需要拆防御建筑或反制敌方远程攻城器时，按当前建筑队列配手推炮或巨型投石机",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 36,
+                "historicalName": "手推炮",
+                "role": "零城堡阶段攻城武器厂直出拆防与反攻城"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "已有城堡时按需远程拆防"
+              }
+            ]
+          }
+        ],
+        "evidence": {
+          "recognition": "按 #1400 第一档策略重审新增的低金平行路线，列于既有认可烈堤司主路之后。",
+          "playtest": "待实战验证；DE 188329 真混编、持续生产与研究账本已复核，不代表实战胜率。",
+          "scope": "覆盖立陶宛 4/6 护甲波兰翼骑兵配火枪手的低研费与低金产线：不含抗招降战斗研究费仅 4990（含抗招降三件套为 7590），马厩 3 座＋靶场 3 座含征招需 48 名村民（采金村民 16 名），零城堡无征招仅需 36 名村民（采金村民 12 名）。",
+          "recordedVersion": "第一档批 1 全工具复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [981, 990, 999, 1002, 1009, 1011],
+          "links": [
+            {
+              "label": "混编 · 19 名波兰翼骑兵 与 15 名火枪手 对日本 21 名冠军剑士 与 25 名长戟兵（胜，剩翼骑 3、火枪 15）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%2267%22%2C%2268%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2219%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22875%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22567%22%2C%22qty%22%3A%2221%22%7D%2C%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 19 名波兰翼骑兵 与 15 名火枪手 对不列颠 20 名长戟兵 与 26 名劲弩手（胜，剩翼骑 1、火枪 15）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Lithuanians%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22211%22%2C%22212%22%2C%22219%22%2C%2239%22%2C%22435%22%2C%2267%22%2C%2268%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2219%22%7D%2C%7B%22uid%22%3A%225%22%2C%22qty%22%3A%2215%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 零城堡 波兰翼骑兵（马厩 3 座）＋火枪手（靶场 3 座）· 36 名村民（无征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Lithuanians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=1707%3A101%3A3%2C5%3A87%3A3"
+            },
+            {
+              "label": "持续生产 · 波兰翼骑兵（马厩 3 座）＋火枪手（靶场 3 座）· 48 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Lithuanians&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1707%3A101%3A3%2C5%3A87%3A3"
+            },
+            {
+              "label": "研究账本 · 波兰翼骑兵＋火枪手（不含抗招降，合计 4990）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Lithuanians&age=4&acunits=%5B%7B%22unit%22%3A1707%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A5%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A786%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            }
+          ]
+        },
+        "reason": "绕开城堡产能与烈堤司双线高额升级，凭全游第一 4/6 护甲的波兰翼骑兵抗箭开路、火枪手集中清除长戟与步兵；不含抗招降战斗研究费仅 4990，含征招满产仅需 16 名采金村民，混编 19 名波兰翼骑兵 与 15 名火枪手 双胜日本步兵与不列颠枪弓。",
+        "limitation": "波兰翼骑兵无法享受圣物加攻且立陶宛缺鼓风炉，单兵近战爆发逊于满圣物重骑；本路耗粮高且火枪射程较短，面对成群重型投石车或超远射程弓群须靠翼骑拉扯分兵与手推炮反制。",
+        "attack": "翼骑兵凭高远甲抢占视野并多线袭扰农田，正面交战时翼骑拦住突进目标、火枪手贴近集火长戟与步兵，掩护攻城器推进。",
+        "defense": "依托机动翼骑及时清扫敌方孤立炮兵与散兵，火枪守住关键隘口输出，避免翼骑孤立硬冲成片长戟阵。",
+        "adjustments": [
+          {
+            "id": "lithuanians-wh-hc-vs-cavalry",
+            "when": "对方重骑或骆驼数量压制",
+            "text": "按骑兵压力在翼骑与火枪之间混入移速为 1.21 全游第一的长戟兵守住火枪后排，避免翼骑正面硬换重骑。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 359,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少长戟兵目录资料时隐藏此反骑补队；保持翼骑分兵拉扯并集中火枪集火。"
+          },
+          {
+            "id": "lithuanians-wh-hc-vs-archers",
+            "when": "对方超远射程弓群或火枪对射压力过大",
+            "text": "按需补入远甲为 10 的塔盾精锐掷矛手分担弓兵火力，保护昂贵火枪手并维持低金消耗。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少精锐掷矛手目录资料时隐藏此补队建议；依托地形和手推炮避开远程对耗。"
+          }
+        ],
+        "alternatives": "黄金宽裕、手握城堡队列或已夺得关键圣物时，仍以第一张认可精锐烈堤司＋精锐掷矛手为主路，利用无视护甲与圣物加攻建立正面优势。",
+        "source": {
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L981-L1011",
+          "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1400",
+          "boundary": "按 #1400 第一档策略重审新增的低金平行路线，列于既有认可烈堤司主路之后；待实战验证。"
         }
       }
     ]
@@ -5922,7 +6717,7 @@
     "civ": "Poles",
     "lead": "按当前条件选择路线；各路线的认可与实战状态分别标示。",
     "source": {
-      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L1013-L1051",
       "discussion": "https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4",
       "boundary": "固定策略文档是路线来源；认可与实战状态均按各路线证据呈现，不相互推导。"
     },
@@ -5938,7 +6733,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-24",
+        "revised": "2026-11-26",
         "condition": "用户认可三条条件路线、彼此替代，不同时铺开。",
         "required": [
           {
@@ -5978,9 +6773,9 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录奥布奇正面接战破甲与翼骑机动的认可条件、食物和城堡产能成本、共用攻城支援及反制边界。 碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 对 6 个条顿手推炮 胜剩 35/37（接敌 1v1 剩 63/100，未计溅射与护卫），但缺骑兵钢甲导致正面硬冲 42 个不列颠劲弩手 全灭（劲弩剩 25/42，980 血，未计践踏伤害与侧翼包抄）。",
-          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
-          "sourceLines": [948, 954, 958, 962, 964, 966, 972, 973, 974, 980, 981, 982, 984],
+          "scope": "记录奥布奇正面接战破甲与翼骑机动的认可条件、食物和城堡产能成本、共用攻城支援及反制边界。碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 对 6 个条顿手推炮 胜剩 35/37（接敌 1v1 剩 63/100，未计溅射与护卫），但缺骑兵钢甲导致正面硬冲 42 个不列颠劲弩手 全灭（劲弩剩 25/42，980 血，未计践踏伤害与侧翼包抄）。本次补齐无长戟硬基线（50 名长枪兵 正面负法兰克游侠 22 名，敌剩 2/22）、持续生产（村民 65 名）及不含抗招降研究账本（合计 6840；波兰无异教，含虔诚与信念为 8440）。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [1013, 1015, 1019, 1023, 1027, 1029, 1031, 1037, 1038, 1039, 1046, 1047, 1049, 1051],
           "links": [
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 42 个不列颠劲弩手（劲弩剩 25/42）",
@@ -5989,16 +6784,28 @@
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 6 个条顿手推炮（剩 35/37）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1707.Poles.4.39-67-68-75-81-82-435-783.&b=36.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 50 名长枪兵 对法兰克游侠 22 名（负，游侠剩 2/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=358.Poles.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "持续生产 · 精锐奥布奇战锤兵（城堡 2 座）＋波兰翼骑兵（马厩 4 座）· 65 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Poles&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C782&rows=1703%3A82%3A2%2C1707%3A101%3A4"
+            },
+            {
+              "label": "研究账本 · 精锐奥布奇战锤兵＋波兰翼骑兵（不含抗招降，合计 6840）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Poles&age=4&acunits=%5B%7B%22unit%22%3A1703%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1707%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A75%22%2C%22t%3A76%22%2C%22t%3A77%22%2C%22t%3A779%22%2C%22t%3A783%22%2C%22t%3A786%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
             }
           ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L1013-L1051",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
-        "reason": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹。战锤兵每个 55 食、20 金，翼骑兵每个 80 食；食物消耗较大，战锤兵还依赖城堡产能。两者共享近战攻击科技，但步兵与骑兵护甲分别升级。",
-        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。战锤兵与翼骑兵都消耗食物；战锤兵依赖城堡产能，步兵与骑兵护甲需分别升级。翼骑兵缺骑兵钢甲；列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率。",
+        "reason": "奥布奇战锤兵正面接战破甲，波兰翼骑兵（13 攻、裸 DPS 6.84 全游第一）机动包夹。战锤兵每个 55 食、20 金，翼骑兵每个 80 食；食物消耗较大，城堡 2 座战锤＋马厩 4 座翼骑持续生产需 65 名村民（其中农夫 53 名、采金 12 名），不含抗招降战斗研究费为 6840，战锤兵还依赖城堡产能。两者共享近战攻击科技，但步兵与骑兵护甲分别升级。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。战锤兵与翼骑兵都消耗食物，且波兰无长戟兵（最高仅长枪兵，50 名长枪兵 负法兰克游侠 22 名，敌剩 2/22）并缺双人锯与钻井采金法；战锤兵依赖城堡产能，步兵与骑兵护甲需分别升级。翼骑兵缺骑兵钢甲；列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率。",
         "attack": "奥布奇战锤兵正面接战破甲，翼骑兵机动包夹并在有安全通路时寻找侧翼机会；不假定能绕到后排。",
         "defense": "奥布奇依托阵地接战，翼骑兵保留机动拦截；不让翼骑兵对受保护的反骑阵硬冲。",
         "adjustments": [
@@ -6038,7 +6845,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-24",
+        "revised": "2026-11-26",
         "condition": "训练资源较互补；不固定再加入战锤兵。",
         "required": [
           {
@@ -6073,14 +6880,27 @@
                 "role": "巨投"
               }
             ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "仅在已有血统食物费用减半与畜牧、需随骑兵机动拉扯慢速步兵或抗轻骑切后排时条件换用；常规阵地对射、反帝王骆驼与省农省研费仍选劲弩手。",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 2701,
+                "age": 4,
+                "historicalName": "重装骑马弩兵",
+                "role": "已有马厩科技时机动拉扯步兵的条件替代（严禁站桩与硬碰骆驼）"
+              }
+            ]
           }
         ],
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录劲弩远射清理长戟与翼骑掩护的分工、训练资源互补、翼骑机制证据边界及共用攻城支援。 碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 正面硬冲 42 个不列颠劲弩手 全灭（对方剩 25/42，980 血，未计践踏伤害）；计入手推炮最小射程 5 后切 6 个条顿手推炮 胜剩 35/37（未计溅射与护卫）。",
-          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71",
-          "sourceLines": [948, 954, 959, 962, 964, 966, 972, 973, 974, 981, 984],
+          "scope": "记录劲弩远射清理长戟与翼骑掩护的分工、训练资源互补、翼骑机制证据边界及共用攻城支援。碰撞接敌等资源预算 3000 核对：37 个波兰翼骑兵 正面硬冲 42 个不列颠劲弩手 全灭（对方剩 25/42，980 血，未计践踏伤害）；计入手推炮最小射程 5 后切 6 个条顿手推炮 胜剩 35/37（未计溅射与护卫）。本次补齐劲弩手与重装骑马弩兵精确选用分界、真混编对照、持续生产（劲弩线 64 名村民 vs 骑马弩线村民 75 名）及不含抗招降研究账本（8340 vs 8915；波兰无异教，加虔诚与信念另增 1600）。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；碰撞接敌复核：v0.99.15 · DE 188329 · d070ec71；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [1013, 1015, 1019, 1024, 1027, 1029, 1031, 1037, 1038, 1039, 1040, 1047, 1048, 1051],
           "links": [
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 42 个不列颠劲弩手（劲弩剩 25/42）",
@@ -6089,16 +6909,68 @@
             {
               "label": "预算 3000 · 37 个波兰翼骑兵 对 6 个条顿手推炮（剩 35/37）",
               "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1707.Poles.4.39-67-68-75-81-82-435-783.&b=36.Teutons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 对 42 名劲弩手（负，劲弩剩 23/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Poles.4.f.&b=492.Poles.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 42 名劲弩手 对 26 名印度斯坦帝王骆驼兵（胜，剩 25/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=492.Poles.4.f.&b=207.Hindustanis.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 拉扯对 26 名印度斯坦帝王骆驼兵（负，帝王骆驼剩 10/26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Poles.4.f.&b=207.Hindustanis.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 拉扯对 50 个法兰克长戟兵（胜，剩 20/28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Poles.4.f.&b=359.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 28 名重装骑马弩兵 拉扯对 42 个日本冠军剑士（胜，剩 20/28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=2701.Poles.4.f.&b=567.Japanese.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "混编 · 20 名波兰翼骑兵 与 28 名劲弩手 对不列颠 30 名长戟兵 与 25 名劲弩手（胜，剩翼骑 4、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Poles%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 20 名波兰翼骑兵 与 28 名劲弩手 对日本 30 名长戟兵 与 25 名劲弩手（胜，剩翼骑 0、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Poles%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 20 名波兰翼骑兵 与 18 名重装骑马弩兵 对不列颠 30 名长戟兵 与 25 名劲弩手（负，敌剩长戟 0、劲弩 23）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Poles%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222701%22%2C%22qty%22%3A%2218%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%223%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 20 名波兰翼骑兵 与 18 名重装骑马弩兵 对日本 30 名长戟兵 与 25 名劲弩手（负，敌剩长戟 6、劲弩 25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Poles%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221707%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%222701%22%2C%22qty%22%3A%2218%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Japanese%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22437%22%2C%2247%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2230%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2225%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 波兰翼骑兵（马厩 4 座）＋劲弩手（靶场 4 座）· 64 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Poles&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C782&rows=1707%3A101%3A4%2C492%3A87%3A4"
+            },
+            {
+              "label": "持续生产 · 波兰翼骑兵（马厩 4 座）＋重装骑马弩兵（靶场 4 座）· 75 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Poles&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C782&rows=1707%3A101%3A4%2C2701%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 劲弩手＋波兰翼骑兵（不含抗招降，合计 8340）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Poles&age=4&acunits=%5B%7B%22unit%22%3A492%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1707%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A237%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A783%22%2C%22t%3A786%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%5D"
+            },
+            {
+              "label": "研究账本 · 重装骑马弩兵＋波兰翼骑兵（不含抗招降，合计 8915）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Poles&age=4&acunits=%5B%7B%22unit%22%3A2701%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1707%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1451%22%2C%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A783%22%2C%22t%3A786%22%2C%22t%3A81%22%2C%22t%3A82%22%2C%22t%3A93%22%5D"
             }
           ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L1013-L1051",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
-        "reason": "劲弩手远程清理长戟，翼骑兵掩护并寻找侧翼机会；劲弩耗木材与黄金、翼骑耗食物，训练资源较互补。劲弩没有波兰专属加成，不因能训练就默认优于其他路线。",
-        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。劲弩没有波兰专属加成；翼骑兵缺骑兵钢甲。列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率；资源互补也不证明该路线必然优于其他选择。",
+        "reason": "劲弩手远程清理长戟，翼骑兵掩护并寻找侧翼机会；劲弩耗木材与黄金、翼骑耗食物，训练资源较互补。混编 20 名波兰翼骑兵 与 28 名劲弩手 正面双胜不列颠与日本 30 名长戟兵 与 25 名劲弩手（分别剩翼骑 4、劲弩 28 与翼骑 0、劲弩 28），马厩 4 座＋靶场 4 座持续生产需 64 名村民、不含抗招降研究费为 8340。劲弩没有波兰专属加成且缺射手锁甲（2/2 护甲），不因能训练就默认优于其他路线。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。劲弩没有波兰专属加成且缺射手锁甲与双人锯、钻井采金法；翼骑兵缺骑兵钢甲。列克提克遗产的践踏伤害在科技模拟器中仍标为“仅文本”、不改单兵基础值，在单位 PK 勾选后会弹出践踏未建模提示卡（#1296），不代表群战或混编胜率；资源互补也不证明该路线必然优于其他选择。",
         "attack": "劲弩先远射清理反骑护卫，翼骑兵掩护并在有安全侧翼通路时突入；不假定能绕到后排。",
         "defense": "劲弩依托可互相支援的位置接战，翼骑兵保留机动拦截；不让翼骑对受保护的反骑阵硬冲。",
         "adjustments": [
@@ -6116,6 +6988,19 @@
             "id": "poles-arbalest-winged-hussar-adjustment-third",
             "when": "受保护的攻城器",
             "text": "计入手推炮最小射程 5 后，波兰翼骑兵预算 3000 对 6 个条顿手推炮 胜剩 35/37（未计溅射与护卫）；实战翼骑只在护卫与路径允许时侧切，劲弩压制可接近的护卫并避免整队挤入火力。"
+          },
+          {
+            "id": "poles-arbalest-winged-hussar-adjustment-hmc-boundary",
+            "when": "重装骑马弩兵与劲弩手选用分界",
+            "text": "常规清长戟、反帝王骆驼（42 名劲弩手 胜 26 名帝王骆驼兵 剩 25/42，28 名重装骑马弩兵 拉扯仍负敌剩 10/26）、阵地对射（42 名劲弩手 胜 28 名重装骑马弩兵 剩 23/42）、真混编对抗（换 18 名重装骑马弩兵 对不列颠与日本皆败，敌分别剩 0＋23 与 6＋25）及省农省研费（64 vs 75 名村民，8340 vs 8915）均优先选劲弩手；仅在已有血统食物费用减半与畜牧、需高移速随骑拉扯慢速步兵（28 名重装骑马弩兵 拉扯对 50 个法兰克长戟兵 与 42 个日本冠军剑士 均剩 20/28）时条件换用，严禁站桩与硬碰骆驼。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 2701,
+                "age": 4
+              }
+            ],
+            "fallback": "缺少重装骑马弩兵目录资料时隐藏此条件换用分界；保持劲弩手＋波兰翼骑兵主路。"
           }
         ],
         "alternatives": "本路不固定加入战锤兵；训练资源较互补不表示必然优于另一条件路线，转型仍需承担射手科技和产能投入。"
@@ -6131,7 +7016,7 @@
           "build": 188329,
           "date": "2026-10-28"
         },
-        "revised": "2026-11-18",
+        "revised": "2026-11-26",
         "condition": "适合已有骑士/马厩科技且想延续兵量优势；折扣不作用于波兰翼骑。",
         "required": [
           {
@@ -6182,24 +7067,42 @@
         "evidence": {
           "recognition": "固定策略记录将此路线列为认可方案；不将可选补充视为固定同出。",
           "playtest": "固定记录未说明是否实战使用；不推断已验证或未验证。",
-          "scope": "记录贵族特权骑士的已有科技延续条件、折扣适用范围、共用经济与攻城支援边界。",
-          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1",
-          "sourceLines": [948, 954, 960, 962, 964, 966, 972, 973, 974, 980, 981, 984]
+          "scope": "记录贵族特权骑士的已有科技延续条件、折扣适用范围、共用经济与攻城支援边界。本次补齐城堡时代 33 名贵族特权骑士 压制 22 名法兰克骑士（剩 3/33）、帝王期混编 20 名重装骑士 与 26 名劲弩手 大胜条顿 24 名长戟兵 与条顿游侠 16 名（剩重骑 10、劲弩 26）、马厩 5 座重装骑士仅需 45 名村民及单线不含抗招降研究账本（合计 3265）。",
+          "recordedVersion": "v0.80.0 · DE 188329（2026-10-28） · 构建 21eb1a1；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d",
+          "sourceLines": [1013, 1015, 1019, 1025, 1027, 1029, 1031, 1037, 1038, 1039, 1046, 1051],
+          "links": [
+            {
+              "label": "城堡时代预算 3000 · 33 名骑士 对 22 名法兰克骑士（胜，剩 3/33）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=38.Poles.3.f.&b=38.Franks.3.f.&m=r&bud=3000"
+            },
+            {
+              "label": "混编 · 20 名重装骑士 与 26 名劲弩手 对条顿 24 名长戟兵 与条顿游侠 16 名（胜，剩重骑 10、劲弩 26）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Poles%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%2239%22%2C%22435%22%2C%22437%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%22782%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22283%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2226%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Teutons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%22215%22%2C%22435%22%2C%22602%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%2280%22%2C%2281%22%2C%2282%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2224%22%7D%2C%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2216%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 贵族特权重装骑士（马厩 5 座）· 45 名村民",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Poles&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C782&rows=283%3A101%3A5"
+            },
+            {
+              "label": "研究账本 · 贵族特权重装骑士单线（不含抗招降，合计 3265）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Poles&age=4&acunits=%5B%7B%22unit%22%3A283%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A209%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A782%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            }
+          ]
         },
         "source": {
-          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L948-L984",
+          "content": "https://github.com/linhongcun/aoe2-analyzer/blob/372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e/role/game-strategy.md#L1013-L1051",
           "discussion": "https://app.devin.ai/sessions/c4c0ec49b9764759b9a437530d863aab",
           "boundary": "此路线采用对应讨论记录；条件与认可/实战状态仍以本路线证据为准。"
         },
-        "reason": "贵族特权路线从已有骑士与马厩科技基础延续到重装骑士，利用骑士系黄金折扣支持持续推进；这是条件延续，不代表从零转型无需升级或补兵投入。",
-        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。波兰没有游侠且缺骑兵钢甲；贵族特权折扣只作用于骑士系黄金，不作用于翼骑兵。长戟等共同反制仍需考虑，低金耗不能抵消持续的食物、科技、马厩产能与延续投入。",
+        "reason": "贵族特权路线从已有骑士与马厩科技基础延续到重装骑士（总价 90、黄金 30 双项全游第一），利用骑士系黄金折扣支持持续推进：城堡时代预算 3000 下 33 名骑士 正面压制 22 名法兰克骑士（剩 3/33），帝王期重装骑士（马厩 5 座）持续生产仅需 45 名村民（其中农夫 27 名、采金 18 名），单线不含抗招降研究费仅 3265；这是条件延续，不代表从零转型无需升级或补兵投入。",
+        "limitation": "大庄园可提前兑现附近新建农田的一部分食物，但不能替代足够的农田和补兵经济。波兰没有游侠、无长戟兵且缺骑兵钢甲、双人锯与钻井采金法；贵族特权折扣只作用于骑士系黄金，不作用于翼骑兵。长戟等共同反制仍需考虑，低金耗不能抵消持续的食物、科技、马厩产能与延续投入。",
         "attack": "从已有骑士基础延续兵量推进；不假定骑士能绕到后排。",
         "defense": "面对明确反骑阵容时不靠黄金折扣反复硬撞；按接敌条件控制骑士投入。",
         "adjustments": [
           {
             "id": "poles-discount-knights-adjustment-first",
             "when": "长戟等反骑部队护住后排",
-            "text": "不因贵族特权折扣继续硬撞；按长戟反制压力和已有骑士基础重新评估延续投入。"
+            "text": "不因贵族特权折扣继续硬撞；按长戟反制压力和已有骑士基础重新评估延续投入，可补劲弩手远程清理长戟（混编 20 名重装骑士 与 26 名劲弩手 大胜条顿 24 名长戟兵 与条顿游侠 16 名，剩重骑 10、劲弩 26）。"
           },
           {
             "id": "poles-discount-knights-adjustment-second",

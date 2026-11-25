@@ -17,7 +17,7 @@ const CASES = [
   },
   {
     civ: 'Lithuanians',
-    cardCount: 1,
+    cardCount: 2,
     anchorId: 'lithuanians-leitis-skirmisher',
     mustContain: ['圣物数 0/2/4', '不默认开局已有四件圣物', '精锐烈堤司 25 名', '7/25', '1/25', '1/22'],
     mustNotContain: ['不默认开局有4件'],
@@ -104,8 +104,8 @@ test('#1398 提取证据链接 hash 在本地 BASE_URL 实测图皮 70 只成对
   const lithCard = page.locator('#formations .formation-list > article').filter({ has: page.locator('#formation-lithuanians-leitis-skirmisher') });
   await lithCard.locator('summary').filter({ hasText: '来源与核对' }).click();
 
-  const ra2Href = await lithCard.locator('a[href*="1236.Lithuanians.4.f."][href*="ra=2"]').first().getAttribute('href');
-  const ra4Href = await lithCard.locator('a[href*="569.Lithuanians.4.f."][href*="ra=4"]').first().getAttribute('href');
+  const ra2Href = await lithCard.locator('a[href*="1236.Lithuanians.4.f."][href*="492.Britons.4.f."][href*="ra=2"]').first().getAttribute('href');
+  const ra4Href = await lithCard.locator('a[href*="569.Lithuanians.4.f."][href*="569.Franks.4.f."][href*="ra=4"]').first().getAttribute('href');
   expect(ra2Href).toBe(`${PROD_ORIGIN}#/duel?a=1236.Lithuanians.4.f.&b=492.Britons.4.f.&m=r&bud=3000&ra=2`);
   expect(ra4Href).toBe(`${PROD_ORIGIN}#/duel?a=569.Lithuanians.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ra=4`);
 

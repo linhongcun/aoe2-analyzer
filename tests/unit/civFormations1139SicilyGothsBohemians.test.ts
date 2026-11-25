@@ -22,9 +22,9 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       {
         civ: 'Goths',
         id: 'goths-huskarl-halberdier',
-        lines: [534, 538, 542, 543, 544, 546, 548, 554, 555, 556, 557, 563, 564, 566],
-        version: reviewedVersion,
-        links: 0,
+        lines: [580, 584, 588, 589, 590, 592, 594, 600, 601, 602, 603, 604, 610, 611, 613, 615],
+        version: `${reviewedVersion}；全工具群战/混编/账本复核：v0.99.54 · DE 188329 · 026085d`,
+        links: 21,
       },
       {
         civ: 'Bohemians',

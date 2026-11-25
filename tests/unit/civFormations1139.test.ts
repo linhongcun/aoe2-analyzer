@@ -14,7 +14,7 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons', 'Persians'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(54);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(56);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 2],
@@ -23,7 +23,7 @@ describe('#1139 文明路线契约与投影', () => {
       Chinese: 3,
       Hindustanis: 2,
       Turks: 3,
-      Byzantines: 1,
+      Byzantines: 2,
       Malians: 2,
       Malay: 2,
       Sicilians: 1,
@@ -34,7 +34,7 @@ describe('#1139 文明路线契约与投影', () => {
       Teutons: 3,
       Franks: 3,
       Vietnamese: 3,
-      Lithuanians: 1,
+      Lithuanians: 2,
       Poles: 3,
       Bulgarians: 1,
       Magyars: 1,
@@ -390,7 +390,7 @@ describe('#1139 文明路线契约与投影', () => {
 
     for (const item of [paladin, halberdier, knight]) {
       expect(item.reason).toContain(economicBoundary);
-      expect(item.evidence.sourceLines).toContain(547);
+      expect(item.evidence.sourceLines).toContain(823);
       expect(item.evidence.scope).not.toContain('来源行');
     }
 
