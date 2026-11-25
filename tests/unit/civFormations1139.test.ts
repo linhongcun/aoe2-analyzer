@@ -14,13 +14,13 @@ describe('#1139 文明路线契约与投影', () => {
   it('保留 #1139 的 26 个新增文明与四条回归路线', () => {
     const originalContent = civFormationContent.filter(({ civ }) => !['Wei', 'Shu', 'Wu', 'Britons', 'Persians'].includes(civ));
     expect(originalContent).toHaveLength(28);
-    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(53);
+    expect(originalContent.flatMap(({ routes }) => routes)).toHaveLength(54);
     expect(originalContent.slice(0, 2).map(({ civ, routes }) => [civ, routes.length])).toEqual([
       ['Spanish', 3],
       ['Georgians', 2],
     ]);
     expect(Object.fromEntries(originalContent.slice(2).map(({ civ, routes }) => [civ, routes.length]))).toEqual({
-      Chinese: 2,
+      Chinese: 3,
       Hindustanis: 2,
       Turks: 3,
       Byzantines: 1,
@@ -167,8 +167,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(swords.status).toBe('approved');
     expect(swords.playtest).toBe('unreported');
     expect(swords.evidence.playtest).toContain('未确认用户亲自实战这套具体混编');
-    expect(swords.evidence.playtest).toContain('本轮未做新模拟或实战验证');
-    expect(swords.evidence.sourceLines).toEqual([355, 356, 357]);
+    expect(swords.evidence.playtest).toContain('已补充 DE 188329 真混编与持续生产领域模型对照，仍无实战验证');
+    expect(swords.evidence.sourceLines).toEqual([488, 492, 497, 503, 506, 509, 511, 519, 520, 521, 528, 529, 532, 534, 536]);
     expect(swords.evidence.scope).not.toContain('来源行');
     const crossbowSupport = progression.adjustments.find(({ id }) => id === 'malay-battle-elephant-progression-adjustment-first')!;
     expect(crossbowSupport.requires).toEqual([{ kind: 'unit', id: 24, age: 3 }]);
@@ -184,8 +184,8 @@ describe('#1139 文明路线契约与投影', () => {
     expect(progression.status).toBe('approved');
     expect(progression.playtest).toBe('unreported');
     expect(progression.evidence.playtest).toContain('未确认用户亲自实战这套具体混编');
-    expect(progression.evidence.playtest).toContain('已补充碰撞接敌等资源预算 3000 站桩模型对照，仍无实战验证');
-    expect(progression.evidence.sourceLines).toEqual([355, 356, 357]);
+    expect(progression.evidence.playtest).toContain('已补充碰撞接敌等资源预算 3000 站桩模型对照及拉扯、真混编、巨港驻军与持续生产复核，仍无实战验证');
+    expect(progression.evidence.sourceLines).toEqual([488, 492, 496, 499, 501, 503, 506, 508, 510, 511, 517, 518, 519, 520, 527, 529, 530, 532, 534, 536]);
     expect(progression.evidence.scope).not.toContain('来源行');
     const cavalrySupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 359))!;
     const siegeSupport = progression.supplements.find(({ entities }) => entities.some(({ id }) => id === 36))!;
@@ -236,9 +236,9 @@ describe('#1139 文明路线契约与投影', () => {
     expect(turks.limitation).toContain('避免从零同时铺满两套昂贵远程科技');
     expect(turks.limitation).toContain('精锐苏丹亲兵另需城堡产能与精锐升级');
     expect(turks.evidence.recordedVersion).toBe(
-      'v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671',
+      'v0.77.102 · DE 188329 · 84988dd；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；批 2 实战修订复核：v0.99.40 · DE 188329 · 68b6c671；二档六国升级复核：v0.99.46 · DE 188329 · c8c4c79',
     );
-    expect(turks.evidence.sourceLines).toEqual([361, 362, 366]);
+    expect(turks.evidence.sourceLines).toEqual([374, 375, 391, 392, 396]);
     expect(turks.alternatives).toBeUndefined();
     expect(turks.choices?.map(({ title, entities }) => [title, entities.map(({ id }) => id)])).toEqual([
       ['重装骑射手', [474]],
@@ -350,8 +350,8 @@ describe('#1139 文明路线契约与投影', () => {
     const fireLancer = route('Chinese', 'china-fire-lancer-tower');
     const fireLancerAdjustments = fireLancer.adjustments ?? [];
     const mainText = `${main.reason} ${main.limitation}`;
-    expect(main.evidence.sourceLines).toEqual([194, 196, 198]);
-    expect(main.evidence.recordedVersion).toBe('原讨论的完整站点版本与构建未记录，不将后续版本补作原观察');
+    expect(main.evidence.sourceLines).toEqual([199, 201, 203, 205, 206, 207, 208, 209, 213]);
+    expect(main.evidence.recordedVersion).toBe('原讨论的完整站点版本与构建未记录，不将后续版本补作原观察；二档六国升级复核：v0.99.46 · DE 188329 · c8c4c79');
     expect(main.evidence.scope).toContain('原讨论的完整站点版本和构建未记录');
     expect(main.evidence.scope).not.toContain('来源行');
     expect(main.reason).toContain('经常使用精锐诸葛弩＋轻骑兵＋少量巨型投石机');
@@ -491,7 +491,7 @@ describe('#1139 文明路线契约与投影', () => {
       expect(view).not.toHaveProperty('route');
       expect(view).not.toHaveProperty('required');
       expect(view.pendingText).toContain('待核实');
-      expect(view.source?.content).toContain('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
+      expect(view.source?.content).toContain('54f7f61d762a5ec6bf665431c28f549df43681f9');
     }
   });
 

@@ -6,9 +6,9 @@ import { loadCore, loadTrees } from '../../src/data';
 import { projectFormation } from '../../src/domain/civFormations';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
-const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/2273171e5424e99ba556f5b77819acef56aa06f5/role/game-strategy.md#L205-L241';
+const CHINESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L215-L251';
 const BYZANTINE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/8d1adeacc7c97374ee6d95d9cabfceb793d080d3/role/game-strategy.md#L283';
-const CHINESE_SOURCE_LINES = [205, 209, 213, 214, 215, 216, 218, 220, 226, 227, 228, 229, 235, 236, 237, 239, 241];
+const CHINESE_SOURCE_LINES = [215, 219, 223, 224, 225, 226, 228, 230, 236, 237, 238, 239, 245, 246, 247, 249, 251];
 const BYZANTINE_SOURCE_LINES = [283, 285, 287, 288, 289, 290, 292, 294, 300, 301, 302, 308, 309, 310, 312];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;

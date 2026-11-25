@@ -18,6 +18,12 @@ import { FormationText } from '../../src/features/civs/components/CivFormations'
 import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 
 const DOC_SHA_1386 = '6c3cdc6ded5200eac43e95efb28878066b96c3d9';
+const SUPERSEDED_BY_LATER = new Map<string, string>([
+  ['Hindustanis', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+  ['Persians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+  ['Turks', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+  ['Malians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
+]);
 const BATCH_1_SHA = 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8';
 
 const TARGET_CIVS = ['Hindustanis', 'Persians', 'Turks', 'Malians', 'Sicilians', 'Goths', 'Poles', 'Spanish', 'Georgians', 'Japanese', 'Wei', 'Shu'] as const;
@@ -211,7 +217,7 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
   it('12 国独立重签 DOC_SHA_1386、21 国零漂移、33 文明 59 路线契约与残留收口守卫全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(59);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(60);
 
     // 全库 JSON 与契约零 aoe2insights 外链残留
     expect(JSON.stringify(civFormationContent)).not.toContain('aoe2insights');
@@ -220,12 +226,13 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
     const targetSet = new Set<string>(TARGET_CIVS);
     for (const civ of civFormationContent) {
       if (targetSet.has(civ.civ)) {
-        expect(civ.source.content, civ.civ).toContain(`/blob/${DOC_SHA_1386}/role/game-strategy.md#L`);
+        const expectedSha = SUPERSEDED_BY_LATER.get(civ.civ) ?? DOC_SHA_1386;
+        expect(civ.source.content, civ.civ).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
         for (const r of civ.routes) {
           if (INHERITED_SOURCE_CIVS.has(civ.civ)) {
             expect(r.source, `${civ.civ}/${r.id}`).toBeUndefined();
           } else {
-            expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${DOC_SHA_1386}/role/game-strategy.md#L`);
+            expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
           }
           expect(r.playtest, `${civ.civ}/${r.id}`).not.toBe('reported');
         }
