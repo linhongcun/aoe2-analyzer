@@ -1290,10 +1290,15 @@ function computeGarrisonTechs(
     return (!!c && (c.canEnter || c.canCreate)) || (uid === VILLAGER_UNIT_ID && hasRelicDepositIn(es));
   };
 
-  const pruneToValidRows = (techs: number[], startIds: number[]): EvalState => {
+  const pruneToValidRows = (
+    techs: number[],
+    startIds: number[],
+    stateData: GeneralGarrisonData = data,
+    stateIndex: StaticGarrisonIndex = staticIndex,
+  ): EvalState => {
     let cur = startIds;
     while (true) {
-      const es = makeEvalState(techs, cur);
+      const es = makeEvalState(techs, cur, undefined, stateData, stateIndex);
       if (!cur.length) return es;
       const next = cur.filter((uid) => isOccupantIn(es, uid));
       if (next.length === cur.length) return es;
@@ -1382,12 +1387,12 @@ function computeGarrisonTechs(
     genPerms();
   }
 
-  const validStatesForTechs = (techs: number[]): EvalState[] => {
-    const emptyState = makeEvalState(techs, [], techs.length === 0 ? baseState : undefined);
+  const validStatesForTechs = (techs: number[], stateData: GeneralGarrisonData = data, stateIndex: StaticGarrisonIndex = staticIndex): EvalState[] => {
+    const emptyState = makeEvalState(techs, [], techs.length === 0 && stateData === data ? baseState : undefined, stateData, stateIndex);
     if (!allShapeUids.length) return [emptyState];
     const byKey = new Map<string, EvalState>([['', emptyState]]);
     if (sensitiveGroupIndices.length === 0) {
-      const maxState = pruneToValidRows(techs, allShapeUids);
+      const maxState = pruneToValidRows(techs, allShapeUids, stateData, stateIndex);
       if (!byKey.has(maxState.rowKey)) byKey.set(maxState.rowKey, maxState);
       if (shapeGroupUnits.length > 1) {
         const totalMasks = 1 << shapeGroupUnits.length;
@@ -1396,7 +1401,7 @@ function computeGarrisonTechs(
           for (let i = 0; i < shapeGroupUnits.length; i++) {
             if (((mask >> i) & 1) !== 0) subsetIds.push(...shapeGroupUnits[i]!);
           }
-          const pruned = pruneToValidRows(techs, subsetIds);
+          const pruned = pruneToValidRows(techs, subsetIds, stateData, stateIndex);
           if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
         }
       }
@@ -1411,7 +1416,7 @@ function computeGarrisonTechs(
           if (mask === 0 && perm.length === 0) continue;
           const subsetIds = [...commIds];
           for (const gi of perm) subsetIds.push(...shapeGroupUnits[gi]!);
-          const pruned = pruneToValidRows(techs, subsetIds);
+          const pruned = pruneToValidRows(techs, subsetIds, stateData, stateIndex);
           if (!byKey.has(pruned.rowKey)) byKey.set(pruned.rowKey, pruned);
         }
       }
@@ -1944,7 +1949,7 @@ function computeGarrisonTechs(
           }
         } else if (hasB) {
           const esBase = pruneToValidState(T, esB.rowIds);
-          if (statesObservableDiff(esBase, esB, true) || unlocksRelevantNonControl(esBase, esB)) {
+          if (esBase.rowIds.length < esB.rowIds.length || statesObservableDiff(esBase, esB, true) || unlocksRelevantNonControl(esBase, esB)) {
             relevant = true;
             break;
           }
@@ -2170,10 +2175,26 @@ function computeGarrisonTechs(
           }
         } else {
           const esBase = pruneToValidState(es.techs, es.rowIds, withoutData, withoutIndex);
-          if (statesObservableDiff(esBase, es, true) || unlocksRelevantNonControl(esBase, es)) {
+          if (esBase.rowIds.length < es.rowIds.length || statesObservableDiff(esBase, es, true) || unlocksRelevantNonControl(esBase, es)) {
             relevant = true;
             break;
           }
+        }
+      }
+      if (!relevant && allShapeUids.length > 0) {
+        for (const T of legalSubsets) {
+          if (!baseFree.has(fid) && !T.every((tid) => kept.has(tid))) continue;
+          for (const esW of validStatesForTechs(T, withoutData, withoutIndex)) {
+            if (!esW.rowIds.length || !isSelectedPrereqValid(esW.snapshot)) continue;
+            const esWith = makeEvalState(T, esW.rowIds);
+            if (!esWith.snapshot.selected.includes(fid) || !isSelectedPrereqValid(esWith.snapshot)) continue;
+            if (pruneToValidState(T, esW.rowIds).techs.length !== T.length) continue;
+            if (statesObservableDiff(esW, esWith, true)) {
+              relevant = true;
+              break;
+            }
+          }
+          if (relevant) break;
         }
       }
       if (relevant) {

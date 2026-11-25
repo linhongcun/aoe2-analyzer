@@ -219,12 +219,49 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     const freeAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsRev), freeAddData);
     expect([freeAfter.errors, freeAfter.selected, freeAfter.mode]).toEqual([[], [47], 'shelter']);
 
-    // 3. 同源全 mul 浮点非结合：(1e308 * 10) * 0.1 = Infinity vs (1e308 * 0.1) * 10 = 1e308，反序 [492,83] 下 47 使可计算射击变为 shelter
-    const mulData = makeFloatOrderData(1e308, 'mul', 10, 0.1);
+    // 3. 同源全 mul 浮点下溢非结合：(1e-320 * 1e-5) * 1e5 = 0（正序为 shelter）vs (1e-320 * 1e5) * 1e-5 = 1e-320 > 0（仅反序为 arrows）
+    const mulData = makeFloatOrderData(1e-320, 'mul', 1e-5, 1e5);
     expect(idsOf(mulData)).toEqual([47]);
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsFwd), mulData).mode).toBe('shelter');
     const mulRevBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], rowsRev), mulData);
     const mulRevAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [47], rowsRev), mulData);
     expect([mulRevBefore.errors, mulRevBefore.mode, mulRevBefore.totalProjectiles]).toEqual([[], 'arrows', 1]);
     expect([mulRevAfter.errors, mulRevAfter.mode, mulRevAfter.totalProjectiles]).toEqual([[], 'shelter', 0]);
+  });
+
+  it('R15 & Devin Review 回归：科技解除或触发隐式形态自阻塞驻军行时，手选与免费路径均准确保留', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const row492: GeneralGarrisonConfig['rows'] = [{ unitId: 492, count: '1', entry: 'enter' }];
+    const idsOf = (d: GeneralGarrisonData) =>
+      getGarrisonTechs(ctx, tc, cfg('Britons', 4), d)
+        .map((t) => t.id)
+        .sort((a, z) => a - z);
+
+    // 1. Devin PRRT_kwDOVDI1mM67z4Rs & R15 P1（手选解除自阻塞）：492 隐式形态 237 清零容量，[237,47] 恢复容量 15
+    const unblockData = cloneBaseData();
+    unblockData.unitUpgradeTechs = { 492: [237] };
+    unblockData.techs = { 47: mkRule(47) };
+    unblockData.conditional = [mkRule(99020, [ef(109, 'capacity', 'set', 0)], [237]), mkRule(99021, [ef(109, 'capacity', 'set', 15)], [237, 47])];
+    expect(idsOf(unblockData)).toEqual([47]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 47, unblockData)).toEqual([47]);
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), unblockData).errors.length).toBeGreaterThan(0);
+    const ubOk = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [47], row492), unblockData);
+    expect([ubOk.errors, ubOk.capacity]).toEqual([[], 15]);
+
+    // 2. R15 P1（Part 3C 免费解除自阻塞）：47 ∈ civ.free 同理保留 [47] 且无报错
+    const freeUnblockData = structuredClone(unblockData);
+    freeUnblockData.civs.Britons!.free = [47];
+    expect(idsOf(freeUnblockData)).toEqual([47]);
+    const fubOk = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), freeUnblockData);
+    expect([fubOk.errors, fubOk.selected, fubOk.capacity]).toEqual([[], [47], 15]);
+
+    // 3. 镜像（Part 3C 免费自阻塞）：47 ∈ civ.free 仅在 492 形态 237 出现时把容量清零，使 492 无法入驻，仍保留 [47]
+    const freeBlockData = cloneBaseData();
+    freeBlockData.unitUpgradeTechs = { 492: [237] };
+    freeBlockData.techs = { 47: mkRule(47) };
+    freeBlockData.civs.Britons!.free = [47];
+    freeBlockData.conditional = [mkRule(99022, [ef(109, 'capacity', 'set', 0)], [237, 47])];
+    expect(idsOf(freeBlockData)).toEqual([47]);
+    expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), freeBlockData).errors.length).toBeGreaterThan(0);
   });
 });
