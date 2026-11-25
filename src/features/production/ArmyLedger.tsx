@@ -1,13 +1,48 @@
-import { ARMY_RESEARCH } from '../../data/armyResearch';
+import { Fragment } from 'react';
+import { ARMY_RESEARCH, type ResearchCommand } from '../../data/armyResearch';
 import { hasDecimalCost, type ResearchEntry } from '../../domain/armyCost';
 import type { ArmyCostConfig } from '../../domain/armyCostConfig';
 import { armyResearchConditions, ARMY_RESEARCH_STATES as STATES } from '../../domain/armyResearchEvidence';
+import { isGlobalResearchCostMod } from '../../domain/armyResearchRules';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { CostView } from '../../shared/ui/art';
 
 const dataLink = (path: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${__BUILD__}/${path}`;
 const ORIGINS = { done: '你标记已完成', target: '你选择的本次目标', shape: '目标形态或宿主必需', prerequisite: '确定必要前置／完成历史推导' };
 const RES_ID: Record<number, string> = { 0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold' };
+const formatModValue = (d: number) => (Number.isFinite(d) ? Math.round(d * 1e4) / 1e4 || 0 : d);
+const globalResearchOpLabel = (c: ResearchCommand) => (c.Type === 6 ? '乘以' : c.B === 0 ? '设为' : c.B === 1 ? '加上' : '调整');
+
+function renderModifierSource(source: string, nodeId?: number) {
+  const token = nodeId !== undefined ? `t:${nodeId}` : '';
+  if (!token || !source.endsWith(token)) return source;
+  return (
+    <>
+      {source.slice(0, -token.length)}
+      <span className="nw num">{token}</span>
+    </>
+  );
+}
+
+function renderConditionText(text: string) {
+  return text.split(/(t:\d+|\d+\s*项)/g).map((part, i) => {
+    if (/^t:\d+$/.test(part))
+      return (
+        <span key={i} className="nw num">
+          {part}
+        </span>
+      );
+    const countMatch = /^(\d+)(\s*项)$/.exec(part);
+    if (countMatch)
+      return (
+        <span key={i} className="nw">
+          <span className="num">{countMatch[1]}</span>
+          {countMatch[2]}
+        </span>
+      );
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}
 
 export function ArmyLedger({
   entry,
@@ -22,6 +57,9 @@ export function ArmyLedger({
 }) {
   const node = entry.id === null ? undefined : ARMY_RESEARCH.nodes[entry.id];
   const conditions = armyResearchConditions(ARMY_RESEARCH, config, entries, entry.id);
+  const modifiers = entry.quote?.modifiers ?? [];
+  const supersededRes85 = modifiers.filter((m) => m.superseded && isGlobalResearchCostMod(m.command));
+  const visibleModifiers = modifiers.filter((m) => !m.superseded);
   return (
     <article className="army-ledger-entry">
       <div className="army-section-heading">
@@ -112,24 +150,57 @@ export function ArmyLedger({
         ) : (
           <p>{entry.quote?.reason || entry.reason || '有效价尚未核实。'}</p>
         )}
-        {entry.quote?.modifiers.length ? (
+        {visibleModifiers.length ? (
           <ul>
-            {entry.quote.modifiers.map((m, i) => (
-              <li key={i}>
-                {m.source}：{m.command.Type === 103 ? '研究时间' : m.command.B === -1 ? '四种资源' : (RES_ZH[RES_ID[m.command.B]!] ?? '全局／未识别资源')}
-                {m.command.C === 0 ? '设为' : m.command.C === 2 ? '乘以' : '加上'} <span className="num">{Math.round(m.command.D * 1e4) / 1e4 || 0}</span>。
-                {m.applied ? '已计入' : '未计入'}
-                ；生效依据：{m.condition}。
-                <span className="nw">
-                  类型 <span className="num">{m.command.Type}</span>
-                </span>
-                ，
-                <span className="nw">
-                  操作 <span className="num">{m.command.C}</span>
-                </span>
-                。
-              </li>
-            ))}
+            {visibleModifiers.map((m, i) =>
+              isGlobalResearchCostMod(m.command) ? (
+                <Fragment key={i}>
+                  <li>
+                    {renderModifierSource(m.source, m.nodeId)}：研究费用倍率{globalResearchOpLabel(m.command)}{' '}
+                    <span className="nw num">{formatModValue(m.command.D)}</span>（升时代除外）。{m.applied ? '已计入' : '未计入'}；生效依据：
+                    {renderConditionText(m.condition)}。
+                    <span className="nw">
+                      类型 <span className="num">{m.command.Type}</span>
+                    </span>
+                    ，
+                    <span className="nw">
+                      资源 <span className="num">{m.command.A}</span>
+                    </span>
+                    。
+                  </li>
+                  {m.applied && supersededRes85.length > 0 && (
+                    <li>
+                      较早时代的同类倍率{' '}
+                      {supersededRes85.map((s, idx) => (
+                        <Fragment key={s.nodeId ?? idx}>
+                          {idx > 0 && '、'}
+                          <span className="nw">
+                            <span className="num">{s.nodeId !== undefined ? `t:${s.nodeId}` : s.source}</span>（
+                            <span className="num">{formatModValue(s.command.D)}</span>）
+                          </span>
+                        </Fragment>
+                      ))}
+                      已被本时代倍率覆盖，不叠乘。
+                    </li>
+                  )}
+                </Fragment>
+              ) : (
+                <li key={i}>
+                  {renderModifierSource(m.source, m.nodeId)}：
+                  {m.command.Type === 103 ? '研究时间' : m.command.B === -1 ? '四种资源' : (RES_ZH[RES_ID[m.command.B]!] ?? '全局／未识别资源')}
+                  {m.command.C === 0 ? '设为' : m.command.C === 2 ? '乘以' : '加上'} <span className="nw num">{formatModValue(m.command.D)}</span>。
+                  {m.applied ? '已计入' : '未计入'}；生效依据：{renderConditionText(m.condition)}。
+                  <span className="nw">
+                    类型 <span className="num">{m.command.Type}</span>
+                  </span>
+                  ，
+                  <span className="nw">
+                    操作 <span className="num">{m.command.C}</span>
+                  </span>
+                  。
+                </li>
+              ),
+            )}
           </ul>
         ) : (
           <p>没有已计入的额外研究价修正；未核实原因另行列明，不回落为基础价。</p>

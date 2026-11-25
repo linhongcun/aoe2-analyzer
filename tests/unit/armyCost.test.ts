@@ -38,7 +38,10 @@ describe('army research pinned data', () => {
     const price = researchPrice(ARMY_RESEARCH, 'Burgundians', 4, 254, new Set());
     expect(price.baseCost).toEqual({ Food: 150, Gold: 50 });
     expect(price.modifiers.filter((m) => m.applied).map((m) => m.command.D)).toEqual([0.5, 0.5]);
-    expect(researchPrice(ARMY_RESEARCH, 'Chinese', 4, 67, new Set()).modifiers.some((m) => !m.applied && m.command.A === 85)).toBe(true);
+    const chinesePrice = researchPrice(ARMY_RESEARCH, 'Chinese', 4, 67, new Set());
+    expect(chinesePrice.cost).toEqual({ Food: 127.5 });
+    expect(chinesePrice.modifiers.filter((m) => m.applied && m.command.A === 85).map((m) => m.nodeId)).toEqual([352]);
+    expect(chinesePrice.modifiers.filter((m) => m.superseded && m.command.A === 85).map((m) => m.nodeId)).toEqual([304, 350, 351]);
   });
   it('quotes Flemish militia training independently of its unlock resource marker', () => {
     const r = evaluateArmyCost(ctx, { ...makeArmyCost('Burgundians'), rows: [{ unit: 1699, qty: '2' }] });
@@ -180,9 +183,11 @@ describe('army research pinned data', () => {
     data.civs.Magyars!.mods = [];
     expect(researchPrice(data, 'Magyars', 4, 67, new Set())).toMatchObject({ free: false, zero: true });
   });
-  it('does not turn an unresolved prerequisite or global research multiplier into a base-price quote', () => {
+  it('does not turn an unresolved prerequisite or unverified global research multiplier into a base-price quote', () => {
     expect(researchResolver(ARMY_RESEARCH, 'Goths', 2).resolve(365).error).not.toBe('');
-    expect(researchPrice(ARMY_RESEARCH, 'Chinese', 4, 67, new Set()).cost).toBe(null);
+    const data = structuredClone(ARMY_RESEARCH);
+    data.nodes[352]!.mods = [{ Type: 6, A: 85, B: 0, C: -1, D: 0.85 }];
+    expect(researchPrice(data, 'Chinese', 4, 67, new Set()).cost).toBe(null);
   });
   it.each([
     ['Sicilians', [1659, 546, 331], { Food: 1730, Wood: 200, Gold: 1295, Stone: 0 }],
@@ -256,7 +261,9 @@ describe('army research pinned data', () => {
     expect(r.training.lines[0]?.subtotal).toBe(null);
   });
   it('preserves independently known training when only research price is unverified', () => {
-    const r = evaluateArmyCost(ctx, { ...emptyArmyCost('Chinese'), rows: [{ unit: 4, qty: '2' }], targets: ['t:199'] });
+    const data = structuredClone(ARMY_RESEARCH);
+    data.nodes[352]!.mods = [{ Type: 6, A: 85, B: 0, C: -1, D: 0.85 }];
+    const r = evaluateArmyCost(ctx, { ...emptyArmyCost('Chinese'), rows: [{ unit: 4, qty: '2' }], targets: ['t:199'] }, data);
     expect(r.partial).toBe(true);
     expect(r.ledger.find((e) => e.id === 199)?.cost).toBe(null);
     expect(r.training.lines[0]?.status).toBe('ok');
@@ -307,33 +314,37 @@ describe('army research pinned data', () => {
     it('AC1: clears t:79/t:656/t:1350 across all 56 civs and keeps non-owning regional upgrades unavailable', () => {
       const unexpectedFailures: string[] = [];
       const regionalUpgrades = new Set(ARMY_RESEARCH.nodes[79]!.mods.filter((m) => m.Type === 102).map((m) => Math.round(m.D)));
+      const regionalUpgradesByUnit = new Map<number, number[]>();
+      for (const [tidStr, n] of Object.entries(ARMY_RESEARCH.nodes)) {
+        const tid = Number(tidStr);
+        if (!regionalUpgrades.has(tid)) continue;
+        for (const [, target] of n.upgrades) {
+          if (target === undefined) continue;
+          const list = regionalUpgradesByUnit.get(target);
+          if (list) {
+            if (!list.includes(tid)) list.push(tid);
+          } else regionalUpgradesByUnit.set(target, [tid]);
+        }
+      }
       const checkedRegionalPairs: string[] = [];
       for (const c of civs) {
         const units = productionUnits(ctx, { civ: c.en, age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
         for (const u of units) {
           const r = evaluateArmyCost(ctx, { ...makeArmyCost(c.en), rows: [{ unit: u.id, qty: '1' }] });
-          const isFireShip1409 = u.id === 529 || u.id === 532 || u.id === 1302;
-          // Independent tech-tree unit availability: every civ (including Chinese) must train cleanly except #1409 t:243 Fire Ship line (529/532/1302).
-          if (!isFireShip1409 && r.training.lines[0]?.status !== 'ok') {
+          // Independent tech-tree unit availability: every civ (including Chinese and Fire Ship lines) must train and quote cleanly.
+          if (r.training.lines[0]?.status !== 'ok') {
             unexpectedFailures.push(`${c.en}:${u.id}:line=${r.training.lines[0]?.status}(${r.training.lines[0]?.reason})`);
           }
-          // Non-Chinese, non-Fire-Ship pairs must have full quotes (Chinese res:85 research pricing is deferred to #1409).
-          if (c.en !== 'Chinese' && !isFireShip1409 && r.partial) {
+          if (r.partial) {
             unexpectedFailures.push(`${c.en}:${u.id}:partial=true`);
           }
           // Determine expected regional upgrades from independent productionUnits (never gate on ARMY_RESEARCH.civs[c].enabled).
-          const expectedRegional = Object.entries(ARMY_RESEARCH.nodes)
-            .filter(([tid, n]) => regionalUpgrades.has(Number(tid)) && n.upgrades.some(([, b]) => b === u.id))
-            .map(([tid]) => Number(tid));
+          const expectedRegional = regionalUpgradesByUnit.get(u.id) ?? [];
           for (const tid of expectedRegional) {
             checkedRegionalPairs.push(`${c.en}:${u.id}:t:${tid}`);
             const entry = r.ledger.find((e) => e.id === tid);
             if (!entry) {
               unexpectedFailures.push(`regional-missing:${c.en}:${u.id}:t:${tid}:line=${r.training.lines[0]?.status}`);
-            } else if (c.en === 'Chinese') {
-              if (entry.problem !== 'price' || !entry.reason.includes('全局研究费用倍率')) {
-                unexpectedFailures.push(`regional-chinese-unexpected:${c.en}:${u.id}:t:${tid}:${entry.status}:${entry.problem}:${entry.reason}`);
-              }
             } else if (entry.status !== 'planned') {
               unexpectedFailures.push(`regional-unplanned:${c.en}:${u.id}:t:${tid}:entry=${entry.status}(${entry.reason})`);
             }
