@@ -869,6 +869,8 @@ function computeGarrisonTechs(
 
   // Detect whether shooting-ness of building b, unit firepower sign, unit reload validity, or negative-fp attack-zeroing can flip.
   const allBuildingEffects: GeneralGarrisonEffect[] = [];
+  const unitReloadEffects = new Map<number, GeneralGarrisonEffect[]>();
+  const unitFpEffects = new Map<number, GeneralGarrisonEffect[]>();
   const negFpCapableUnits = new Set<number>();
   const reloadTouchedUnits = new Set<number>();
   const reloadInvalidFlipUnits = new Set<number>();
@@ -886,6 +888,12 @@ function computeGarrisonTechs(
       if (!isPowerUnit(e.unit)) continue;
       if (e.stat === 'reload' && !((e.op === 'add' && e.value === 0) || (e.op === 'mul' && e.value === 1))) {
         reloadTouchedUnits.add(e.unit);
+        let relList = unitReloadEffects.get(e.unit);
+        if (!relList) {
+          relList = [];
+          unitReloadEffects.set(e.unit, relList);
+        }
+        relList.push(e);
         const baseReload = baseState.units[e.unit]?.reload ?? 0;
         const initReload = initUnitField(e.unit, 'reload') ?? baseReload;
         if (baseReload <= 0 || initReload <= 0 || (e.op === 'set' && e.value <= 0) || (e.op === 'mul' && e.value <= 0) || (e.op === 'add' && e.value < 0)) {
@@ -893,6 +901,12 @@ function computeGarrisonTechs(
         }
       }
       if (e.stat === 'firepower') {
+        let fpList = unitFpEffects.get(e.unit);
+        if (!fpList) {
+          fpList = [];
+          unitFpEffects.set(e.unit, fpList);
+        }
+        fpList.push(e);
         const baseFp = baseState.units[e.unit]?.firepower ?? 0;
         const initFp = initUnitField(e.unit, 'firepower') ?? baseFp;
         if (
@@ -917,6 +931,59 @@ function computeGarrisonTechs(
   for (const r of activeShadowedDynRules) inspectRuleStats(r);
   for (const r of availFreeShapeRules) inspectRuleStats(r);
   for (const r of availImpliedType60Rules) inspectRuleStats(r);
+  // Detect IEEE-754 underflow-to-zero or overflow-to-Infinity across positive mul/add/set sequences.
+  const canExtremeFlip = (vals: (number | undefined)[], effects: readonly GeneralGarrisonEffect[], absMode = false): boolean => {
+    let minPos = Infinity;
+    let maxPos = 0;
+    let posAddSum = 0;
+    let shrinkProd = 1;
+    let growProd = 1;
+    let hasShrink = false;
+    let hasGrow = false;
+    for (const raw of vals) {
+      if (raw === undefined) continue;
+      if (!Number.isFinite(raw)) return true;
+      const v = absMode ? Math.abs(raw) : raw;
+      if (v > 0) {
+        if (v < minPos) minPos = v;
+        if (v > maxPos) maxPos = v;
+      }
+    }
+    for (const e of effects) {
+      if (!Number.isFinite(e.value)) return true;
+      const v = absMode ? Math.abs(e.value) : e.value;
+      if (e.op === 'set') {
+        if (v > 0) {
+          if (v < minPos) minPos = v;
+          if (v > maxPos) maxPos = v;
+        }
+      } else if (e.op === 'add') {
+        if (v > 0) posAddSum += v;
+      } else if (e.op === 'mul') {
+        if (v > 0 && v < 1) {
+          hasShrink = true;
+          shrinkProd *= v;
+        } else if (v > 1) {
+          hasGrow = true;
+          growProd *= v;
+        }
+      }
+    }
+    if (hasShrink && minPos < Infinity && minPos * shrinkProd <= 1e-300) return true;
+    const upper = (maxPos + posAddSum) * growProd;
+    if ((hasGrow || posAddSum > 0) && maxPos + posAddSum > 0 && (!Number.isFinite(upper) || upper >= 1e300)) return true;
+    return false;
+  };
+  for (const [uid, relList] of unitReloadEffects) {
+    if (!reloadInvalidFlipUnits.has(uid) && canExtremeFlip([baseState.units[uid]?.reload, initUnitField(uid, 'reload')], relList)) {
+      reloadInvalidFlipUnits.add(uid);
+    }
+  }
+  for (const [uid, fpList] of unitFpEffects) {
+    if (!fpSignFlipUnits.has(uid) && canExtremeFlip([baseState.units[uid]?.firepower, initUnitField(uid, 'firepower')], fpList, true)) {
+      fpSignFlipUnits.add(uid);
+    }
+  }
   let shadowedBuildingFlip = false;
   for (const r of activeShadowedDynRules) {
     for (const e of r.effects) {
@@ -983,6 +1050,14 @@ function computeGarrisonTechs(
               ((e.op === 'set' && e.value <= 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value <= 0))) ||
             ((e.stat === 'projectile' || e.stat === 'secondaryProjectile') &&
               ((e.op === 'set' && e.value < 0) || (e.op === 'add' && e.value < 0) || (e.op === 'mul' && e.value < 0))),
+        ) ||
+        canExtremeFlip(
+          [baseB.attack, initBAttack],
+          allBuildingEffects.filter((e) => e.stat === 'attack'),
+        ) ||
+        canExtremeFlip(
+          [baseB.reload, initBReload],
+          allBuildingEffects.filter((e) => e.stat === 'reload'),
         ));
 
   // Partition pool into control techs (affecting entry, capacity, shooting-ness, firepower sign, reload validity, total,
@@ -2146,6 +2221,7 @@ function computeGarrisonTechs(
 
   // Part 3C: Evaluate free control techs (baseFree, autoFreeControl, or shape-gated free control techs).
   let part3CChanged = true;
+  let part3CMirrorProbes = 0;
   while (part3CChanged) {
     part3CChanged = false;
     const freeControlCandidates = [...controlSet].filter(
@@ -2184,8 +2260,15 @@ function computeGarrisonTechs(
       if (!relevant && allShapeUids.length > 0) {
         for (const T of legalSubsets) {
           if (!baseFree.has(fid) && !T.every((tid) => kept.has(tid))) continue;
+          const listWith = statesByTechKey.get(T.join(',')) ?? [];
+          if (listWith.length >= shapeStateCount) continue;
+          if ((part3CMirrorProbes += shapeStateCount) > MAX_EXACT_STATES) {
+            relevant = true;
+            break;
+          }
+          const knownRowKeys = new Set(listWith.map((es) => es.rowKey));
           for (const esW of validStatesForTechs(T, withoutData, withoutIndex)) {
-            if (!esW.rowIds.length || !isSelectedPrereqValid(esW.snapshot)) continue;
+            if (!esW.rowIds.length || knownRowKeys.has(esW.rowKey) || !isSelectedPrereqValid(esW.snapshot)) continue;
             const esWith = makeEvalState(T, esW.rowIds);
             if (!esWith.snapshot.selected.includes(fid) || !isSelectedPrereqValid(esWith.snapshot)) continue;
             if (pruneToValidState(T, esW.rowIds).techs.length !== T.length) continue;

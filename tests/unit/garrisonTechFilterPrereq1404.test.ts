@@ -264,4 +264,46 @@ describe('Issue 1404: 条件规则满足前置与合法基线裁剪（R12/R13/De
     expect(idsOf(freeBlockData)).toEqual([47]);
     expect(calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), freeBlockData).errors.length).toBeGreaterThan(0);
   });
+
+  it('R16 回归：正倍率下溢清零建筑攻击或单位火力后，手选恢复科技仍准确纳入筛选且计算通过', () => {
+    const tc = ctx.core.buildingById[109]!;
+    const row492: GeneralGarrisonConfig['rows'] = [{ unitId: 492, count: '1', entry: 'enter' }];
+    const idsOf = (d: GeneralGarrisonData) =>
+      getGarrisonTechs(ctx, tc, cfg('Britons', 4), d)
+        .map((t) => t.id)
+        .sort((a, z) => a - z);
+
+    // 1. R16 P1（建筑攻击下溢恢复）：TC 攻击 1e-320，492 隐式形态 237 乘 1e-5 下溢为 0，手选 233 加回 1e-320 恢复 arrows / 2 发
+    const bUnderflowData = cloneBaseData();
+    bUnderflowData.unitUpgradeTechs = { 492: [237] };
+    bUnderflowData.civs.Britons!.baseOverrides = {
+      ...bUnderflowData.civs.Britons!.baseOverrides,
+      142: { type: 60, attack: 1e-320, reload: 2, projectile: 54, secondaryProjectile: 54 },
+    };
+    bUnderflowData.techs = {
+      237: mkRule(237, [ef(109, 'attack', 'mul', 1e-5)]),
+      233: mkRule(233, [ef(109, 'attack', 'add', 1e-320)]),
+    };
+    expect(idsOf(bUnderflowData)).toEqual([233]);
+    expect(toggleGeneralGarrisonTech(ctx, tc, cfg('Britons', 4, []), 233, bUnderflowData)).toEqual([233]);
+    const buBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), bUnderflowData);
+    const buAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), bUnderflowData);
+    expect([buBefore.errors, buBefore.mode, buBefore.totalProjectiles]).toEqual([[], 'shelter', 0]);
+    expect([buAfter.errors, buAfter.mode, buAfter.totalProjectiles]).toEqual([[], 'arrows', 2]);
+
+    // 2. 同源单位火力下溢恢复：492 火力系数 1e-320 被形态 237 乘 1e-5 下溢为 0，手选 233 加回 1 恢复正火力
+    const fpUnderflowData = cloneBaseData();
+    fpUnderflowData.unitUpgradeTechs = { 492: [237] };
+    fpUnderflowData.units[492] = { ...fpUnderflowData.units[492]!, type: 60, firepower: 1e-320 };
+    fpUnderflowData.techs = {
+      237: mkRule(237, [ef(492, 'firepower', 'mul', 1e-5)]),
+      233: mkRule(233, [ef(492, 'firepower', 'add', 1)]),
+    };
+    expect(idsOf(fpUnderflowData)).toEqual([233]);
+    const fpuBefore = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [], row492), fpUnderflowData);
+    const fpuAfter = calculateGeneralGarrison(ctx, tc, cfg('Britons', 4, [233], row492), fpUnderflowData);
+    expect([fpuBefore.errors, fpuBefore.garrisonPower]).toEqual([[], 0]);
+    expect(fpuAfter.errors).toEqual([]);
+    expect(fpuAfter.garrisonPower).toBeCloseTo(3, 5);
+  });
 });
