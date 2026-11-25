@@ -306,10 +306,28 @@ describe('army research pinned data', () => {
   describe('#1402 regional re-enable, post-imperial/shadow filters, decimal rounding and duplicate champion upgrades', () => {
     it('AC1: clears t:79/t:656/t:1350 across all 56 civs and keeps non-owning regional upgrades unavailable', () => {
       const unexpectedFailures: string[] = [];
+      const regionalUpgrades = new Set(ARMY_RESEARCH.nodes[79]!.mods.filter((m) => m.Type === 102).map((m) => Math.round(m.D)));
+      const checkedRegionalPairs: string[] = [];
       for (const c of civs) {
         const units = productionUnits(ctx, { civ: c.en, age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
         for (const u of units) {
           const r = evaluateArmyCost(ctx, { ...makeArmyCost(c.en), rows: [{ unit: u.id, qty: '1' }] });
+          const is1409Deferred = c.en === 'Chinese' || u.id === 529 || u.id === 532;
+          if (!is1409Deferred && (r.partial || r.training.lines[0]?.status !== 'ok')) {
+            unexpectedFailures.push(`${c.en}:${u.id}:partial=${r.partial}:line=${r.training.lines[0]?.status}(${r.training.lines[0]?.reason})`);
+          }
+          // Every owning civ's regional upgrade target must both train cleanly and keep its upgrade entry in the ledger
+          const expectedRegional = Object.entries(ARMY_RESEARCH.nodes)
+            .filter(([tid, n]) => regionalUpgrades.has(Number(tid)) && n.upgrades.some(([, b]) => b === u.id))
+            .map(([tid]) => Number(tid));
+          for (const tid of expectedRegional) {
+            if (!ARMY_RESEARCH.civs[c.en]?.enabled?.includes(tid)) continue;
+            checkedRegionalPairs.push(`${c.en}:${u.id}:t:${tid}`);
+            const entry = r.ledger.find((e) => e.id === tid);
+            if (r.training.lines[0]?.status !== 'ok' || !entry || (c.en !== 'Chinese' && entry.status !== 'planned')) {
+              unexpectedFailures.push(`regional-missing:${c.en}:${u.id}:t:${tid}:line=${r.training.lines[0]?.status}:entry=${entry?.status}`);
+            }
+          }
           for (const e of r.ledger) {
             if (e.status !== 'invalid') continue;
             const srcs = e.quote?.modifiers.map((m) => m.source).join(',') ?? '';
@@ -320,6 +338,7 @@ describe('army research pinned data', () => {
         }
       }
       expect(unexpectedFailures).toEqual([]);
+      expect(checkedRegionalPairs.length).toBeGreaterThanOrEqual(70);
 
       // Named regional upgrades across civs
       const spanish = evaluateArmyCost(ctx, { ...makeArmyCost('Spanish'), rows: [{ unit: 2701, qty: '1' }] });
@@ -353,13 +372,35 @@ describe('army research pinned data', () => {
         }
       }
 
-      // Negative cases: non-owning civs must still reject regional upgrades and Imperial Skirmisher
+      // Negative cases: non-owning civs must still reject regional upgrades and conditionally disabled techs (including done history)
       for (const tid of [236, 1454, 1350, 599]) {
         expect(researchResolver(ARMY_RESEARCH, 'Franks', 4).available(tid), `Franks t:${tid}`).toBe(false);
         expect(researchPrice(ARMY_RESEARCH, 'Franks', 4, tid, new Set()).cost, `Franks price t:${tid}`).toBe(null);
       }
       expect(researchPrice(ARMY_RESEARCH, 'Britons', 4, 655, new Set([98])).cost).toBe(null);
+      expect(researchResolver(ARMY_RESEARCH, 'Britons', 4).resolve(655).state).toBe('unavailable');
       expect(researchResolver(ARMY_RESEARCH, 'Turks', 4).available(655)).toBe(false);
+
+      // Britons marking Imperial Skirmisher t:655 as done must NOT infer Elite Skirmisher t:98 done or zero out its cost
+      const britDone655 = evaluateArmyCost(ctx, { ...makeArmyCost('Britons'), rows: [{ unit: 6, qty: '1' }], done: ['t:655'] });
+      expect(britDone655.partial).toBe(true);
+      expect(britDone655.ledger.find((e) => e.id === 655)?.status).toBe('invalid');
+      expect(britDone655.ledger.find((e) => e.id === 98)?.status).toBe('planned');
+      expect(britDone655.researchTotal).toMatchObject({ Wood: 230, Gold: 130 });
+
+      // Positive control: Vietnamese legitimately owns t:655 and CAN mark it done (inferring t:98 done)
+      const vietDone655 = evaluateArmyCost(ctx, { ...makeArmyCost('Vietnamese'), rows: [{ unit: 6, qty: '1' }], done: ['t:655'] });
+      expect(vietDone655.partial).toBe(false);
+      expect(vietDone655.ledger.find((e) => e.id === 655)?.status).toBe('done');
+      expect(vietDone655.ledger.find((e) => e.id === 98)?.status).toBe('inferred-done');
+      expect(vietDone655.researchTotal.Wood ?? 0).toBe(0);
+
+      // Poles marking disabled Hussar t:428 as done must NOT infer Light Cavalry t:254 done
+      const polesDone428 = evaluateArmyCost(ctx, { ...makeArmyCost('Poles'), rows: [{ unit: 546, qty: '1' }], done: ['t:428'] });
+      expect(polesDone428.partial).toBe(true);
+      expect(polesDone428.ledger.find((e) => e.id === 428)?.status).toBe('invalid');
+      expect(polesDone428.ledger.find((e) => e.id === 254)?.status).toBe('planned');
+      expect(polesDone428.researchTotal).toMatchObject({ Food: 75, Gold: 50 });
     });
 
     it('AC2: ignores post-imperial t:790/791 and unreachable shadow t:1142 across affected civs', () => {

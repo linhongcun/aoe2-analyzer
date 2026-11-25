@@ -1,5 +1,16 @@
 import { civByEn } from '../data';
-import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand, type ResearchNode } from '../data/armyResearch';
+import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand } from '../data/armyResearch';
+import {
+  ARMY_RES,
+  addArmyCost,
+  civConditionalDisablers,
+  evalConditionNode,
+  globalRegionalDisabled,
+  hasDecimalCost,
+  isGlobalStartDisableNode,
+  isUnreachableHiddenNode,
+  roundArmyCost,
+} from './armyResearchRules';
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { AGE_BY_TECH } from './gameIds';
 import { productionBuildings, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from './production';
@@ -15,34 +26,10 @@ import { batchesForQty, deliveredQty, unitTrainCount } from './trainBatch';
 import type { ArmyCostConfig } from './armyCostConfig';
 export { emptyArmyCost } from './armyCostConfig';
 export type { ArmyCostConfig } from './armyCostConfig';
-export const ARMY_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
+export { ARMY_RES, addArmyCost, hasDecimalCost };
 export const researchId = (key: string): number | null =>
   /^t:(0|[1-9]\d*)$/.test(key) && Number.isSafeInteger(Number(key.slice(2))) ? Number(key.slice(2)) : null;
 export const researchKey = (id: number) => `t:${id}`;
-const round2 = (v: number) => Math.round(v * 100) / 100 || 0;
-export function hasDecimalCost(cost: Cost | null | undefined): boolean {
-  return !!cost && ARMY_RES.some((r) => cost[r] !== undefined && !Number.isInteger(cost[r]));
-}
-export function addArmyCost(to: Cost, from: Cost) {
-  for (const r of ARMY_RES) to[r] = round2((to[r] ?? 0) + (from[r] ?? 0));
-}
-/** Hidden non-free start-age / scenario placeholders (e.g. Post-Imperial 790/791, Paphos 1138) never auto-trigger in RM. */
-function isUnreachableHiddenNode(node: ResearchNode): boolean {
-  return node.location <= 0 && (node.time > 0 || node.cost.some(([r, v, enabled]) => enabled && v! > 0 && r !== undefined && r >= 0 && r <= 3));
-}
-function isGlobalStartDisableNode(node: ResearchNode): boolean {
-  return node.civ < 0 && node.location <= 0 && !node.requires.length && node.count === 0 && !isUnreachableHiddenNode(node);
-}
-function globalRegionalDisabled(data: ArmyResearchData): Set<number> {
-  const reenabledAny = new Set<number>();
-  for (const c of Object.values(data.civs)) for (const id of c.enabled ?? []) reenabledAny.add(id);
-  const ids = new Set<number>();
-  for (const node of Object.values(data.nodes)) {
-    if (!isGlobalStartDisableNode(node)) continue;
-    for (const c of node.mods) if (c.Type === 102 && Number.isFinite(c.D) && reenabledAny.has(Math.round(c.D))) ids.add(Math.round(c.D));
-  }
-  return ids;
-}
 interface Closure {
   ids: Set<number>;
   error: string;
@@ -72,6 +59,7 @@ function requiredPaidSet(branches: Closure[], needed: number): Closure {
 export function researchResolver(data: ArmyResearchData, civ: string, age: number, completed: ReadonlySet<number> = new Set()) {
   const context = data.civs[civ];
   const globalDisabled = globalRegionalDisabled(data);
+  const disablers = civConditionalDisablers(data, context);
   const memo = new Map<number, Closure>();
   let revision = completed.size;
   const available = (id: number) => {
@@ -108,7 +96,11 @@ export function researchResolver(data: ArmyResearchData, civ: string, age: numbe
                 .map((b) => ({ ...b, ids: new Set([...b.ids].filter((tid) => !completed.has(tid))) })),
               Math.max(0, node.count - satisfied),
             );
-    if (!result.error && node.location > 0) result = ok(new Set([...result.ids, id]));
+    if (!result.error && node.location > 0) {
+      const before = new Set([...completed, ...result.ids]);
+      const disabledByCond = (disablers.get(id) ?? []).some((dtid) => evalConditionNode(data, context, age, id, before, before, dtid) === true);
+      result = disabledByCond ? fail(`研究 t:${id} 在本文明被条件效果禁用`, 'unavailable') : ok(new Set([...result.ids, id]));
+    }
     memo.set(id, result);
     return result;
   };
@@ -155,20 +147,6 @@ export function researchPrice(
     cost[res[r]!] = (cost[res[r]!] ?? 0) + amount;
   }
   baseCost = { ...cost };
-  const predicate = (tid: number, seen = new Set<number>()): boolean | null => {
-    if (AGE_BY_TECH[tid]) return AGE_BY_TECH[tid]! <= age;
-    const n = data.nodes[tid];
-    if (!n || seen.has(tid)) return null;
-    if (context.disabled.includes(tid) || (n.civ >= 0 && n.civ !== context.id)) return false;
-    if (before.has(tid) || data.buildingTechs.includes(tid)) return true;
-    if (n.location > 0) return active.has(tid) && tid !== id ? null : false;
-    if (isUnreachableHiddenNode(n)) return false;
-    if (n.time > 0 || n.cost.some(([, v, enabled]) => enabled && v! > 0)) return null;
-    if (!n.requires.length && n.count > 0) return null;
-    const results = n.requires.map((p) => predicate(p, new Set(seen).add(tid)));
-    const yes = results.filter((r) => r === true).length;
-    return yes >= n.count ? true : yes + results.filter((r) => r === null).length < n.count ? false : null;
-  };
   const groups: { source: string; condition: string; mods: ResearchCommand[] }[] = [
     { source: '本文明科技树与团队加成', condition: `文明 ${civ} 的常驻效果`, mods: context.mods },
   ];
@@ -183,7 +161,8 @@ export function researchPrice(
         ((c.Type === 1 || c.Type === 6) && c.A === 85),
     );
     if (!relevant.length || (n.civ >= 0 && n.civ !== context.id)) continue;
-    const applies = n.location > 0 ? (before.has(tid) ? true : active.has(tid) && tid !== id ? null : false) : predicate(tid);
+    const applies =
+      n.location > 0 ? (before.has(tid) ? true : active.has(tid) && tid !== id ? null : false) : evalConditionNode(data, context, age, id, active, before, tid);
     const group = {
       source: `${n.name ?? '文明条件'} t:${tid}`,
       condition: before.has(tid) ? '已完成或本动作的确定必要前置' : `自动条件：前置 ${n.requires.map(researchKey).join('、') || '无'}，需满足 ${n.count} 项`,
@@ -228,7 +207,7 @@ export function researchPrice(
       modifier.applied = true;
     }
   // Non-integer discounted research costs keep at most two decimals (in-game rounding unverified).
-  for (const r of ARMY_RES) if (cost[r] !== undefined) cost[r] = round2(cost[r]!);
+  for (const r of ARMY_RES) if (cost[r] !== undefined) cost[r] = roundArmyCost(cost[r]!);
   const zero = ARMY_RES.every((r) => !cost[r]);
   return { cost, zero, free: zero && time === 0, reason: '', sources: [...new Set(sources)], baseCost, modifiers };
 }
