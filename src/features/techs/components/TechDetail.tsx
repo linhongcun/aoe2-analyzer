@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
-import { useCore } from '../../../data/hooks';
+import { useCore, useTrees } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
+import { buildTechCostChangeView, classifyTechDataConsumption } from '../../../domain/techDetailCost';
 import { techEffectEntries, techTypeMark } from '../../../domain/techDetailView';
 import { TECH_AKA } from '../../../data/aliases';
 import { AgeImg, BuildingIcon, CivChip, CivIcon, CostView, TechIcon, TechLink, TechReleaseBadge } from '../../../shared/ui/art';
@@ -20,6 +21,7 @@ import ChargeAttack710 from './ChargeAttack710';
 import { ConversionTechLink } from './ConversionTechLink';
 import { MarketFeeTechLinks } from './MarketFeeTechLinks';
 import TechAffects from './TechAffects';
+import { TechCostChanges } from './TechCostChanges';
 import { TechRepeatableRule } from './TechRepeatableRule';
 import '../../../shared/ui/contextLinks.css';
 import './tech-detail.css';
@@ -36,6 +38,7 @@ export default function TechDetail() {
   const me = civByEn(params.get('me') ?? '');
   const opp = civByEn(params.get('opp') ?? '');
   const core = useCore();
+  const trees = useTrees();
   const tech = core?.techById[+id];
   const entityHistory = useEntityHistory(tech ? 'tech/' + tech.id : undefined, tab === 'history');
   const setHistory = (open: boolean) => {
@@ -73,6 +76,8 @@ export default function TechDetail() {
   const ageName = AGE_ZH[tech.age] ?? String(tech.age);
   const aliases = TECH_AKA[tech.id]?.filter((name) => name.toLowerCase() !== tech.en.toLowerCase() && name !== tech.zh);
   const entries = techEffectEntries(tech, core.units, core.buildings);
+  const costChanges = buildTechCostChangeView(tech, entries.length > 0, core, trees);
+  const consumption = classifyTechDataConsumption(tech, entries.length > 0, { unitById: core.unitById, buildingById: core.buildingById });
   const previous = tech.pre != null ? core.techById[tech.pre] : undefined;
   const next = core.techs.filter((item) => item.pre === tech.id);
   const unavailable = civs.filter((civ) => !tech.civs.includes(civ.en));
@@ -137,6 +142,11 @@ export default function TechDetail() {
         <button type="button" onClick={() => jump('tech-research')}>
           研究
         </button>
+        {costChanges && (
+          <button type="button" onClick={() => jump('tech-cost-changes')}>
+            费用变化
+          </button>
+        )}
         {entries.length > 0 && (
           <button type="button" onClick={() => jump('affects')}>
             作用对象
@@ -209,6 +219,8 @@ export default function TechDetail() {
           researchScope={tech.id === 408 ? '本条的研究规则只指随机地图的「间谍」。弑君模式的「叛徒」是可以反复付费使用的指令。' : undefined}
         />
       </section>
+
+      {costChanges && <TechCostChanges key={tech.id} view={costChanges} unitById={core.unitById} buildingById={core.buildingById} techById={core.techById} />}
 
       {entries.length > 0 && <TechAffects tech={tech} entries={entries} units={core.units} unitById={core.unitById} fam={core.fam} techs={core.techs} />}
 
@@ -283,7 +295,7 @@ export default function TechDetail() {
         </section>
       )}
 
-      <DetailSource note={entries.length ? '结构化效果与科技模拟器同源；未编码效果以游戏说明为准' : '这条科技没有编码数值，以游戏说明为准'} />
+      <DetailSource note={consumption.sourceNote} />
 
       {!entityHistory.empty && (
         <details

@@ -147,6 +147,14 @@ class GarrisonGeneral224Test(unittest.TestCase):
         self.assertEqual(self.techs['unitUpgradeTechs']['24'], [100])
         self.assertEqual(self.techs['unitUpgradeTechs']['234'], [140])
 
+    def test_numeric_effect_techs_index_matches_garrison_numeric_rules_only(self):
+        indexed = set(self.techs['numericEffectTechs'])
+        self.assertEqual(self.techs['numericEffectTechs'], sorted(indexed))
+        # 时代规则 101-103、副弹丸 64、建筑多箭 484/576、驻军火力多箭 485/1069 均改变驻军数值
+        self.assertTrue({64, 101, 102, 103, 484, 485, 576, 1069}.issubset(indexed))
+        # 纯训练地点解锁（16/483/755）、零火力单位（623 重弩战象）与仅改主弹丸 ID（1080）不计入
+        self.assertEqual({16, 483, 623, 755, 1080}.intersection(indexed), set())
+
     def test_relic_deposit_and_transformed_monastery_stay_separate(self):
         tasks = self.data['units']['286']['specialTasks']
         self.assertTrue(any(t['action'] == 136 and t['unitId'] == 104 for t in tasks))

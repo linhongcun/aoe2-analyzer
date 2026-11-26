@@ -7,6 +7,7 @@ import { productionTechAge } from './production';
 
 export interface GarrisonTechData {
   techs: Record<string, unknown>;
+  numericEffectTechs?: readonly number[];
   unitUpgradeTechs?: Record<string, number[]>;
   civs: Record<string, { free: number[]; disabled: number[] }>;
 }
@@ -29,6 +30,7 @@ function deepFreeze<T>(value: T): T {
 }
 
 export const GARRISON_TECH_DATA: GarrisonTechData = deepFreeze(raw as GarrisonTechData);
+export const GARRISON_NUMERIC_EFFECT_TECH_IDS: ReadonlySet<number> = new Set(GARRISON_TECH_DATA.numericEffectTechs ?? []);
 const DEFAULT_SHAPE_UPGRADES: ReadonlySet<number> = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
 const shapeUpgradeSet = (data: GarrisonTechData): ReadonlySet<number> =>
   data === GARRISON_TECH_DATA ? DEFAULT_SHAPE_UPGRADES : new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
