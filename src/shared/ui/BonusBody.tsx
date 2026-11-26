@@ -9,7 +9,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { BuildingLink, StatIcon, UnitLinks } from './art';
 import { BonusExampleTable, RelicConditionCallout } from './BonusConditionBlocks';
 import { Icon } from './Icon';
-import { Linked, Loading } from './widgets';
+import { Linked, Loading, NumWrappedText } from './widgets';
 import { LineChip } from './LineChip';
 import type { Unit } from '../../domain/types';
 import { collapse } from '../../domain/family';
@@ -85,7 +85,7 @@ const formatUsageNote = (text: string) =>
   );
 export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boolean }) {
   if (b.id === 'Bengalis-0') return bengaliQuantity(b.zh, linked);
-  if (b.civ !== 'Sicilians' && (b.civ !== 'Tatars' || b.idx !== 2)) return linked ? <Linked text={b.zh} /> : b.zh;
+  if (b.civ !== 'Sicilians' && (b.civ !== 'Tatars' || b.idx !== 2)) return linked ? <Linked text={b.zh} wrapNums /> : <NumWrappedText text={b.zh} />;
   const parts = b.zh.split(b.civ === 'Sicilians' ? /([+−-]?\d+(?:\.\d+)?\s*%?)/g : /(\d+(?:\.\d+)?\s*头绵羊)/g);
   return parts.map((part, index) =>
     index % 2 ? (
@@ -146,7 +146,7 @@ export function BonusBodyContent({
           <p className="bz">
             <BonusText b={b} />
           </p>
-          <p className="note">{b.en}</p>
+          <p className="note">{b.en ? <NumWrappedText text={b.en} /> : ''}</p>
           <p>
             <BonusTags b={b} />
           </p>
@@ -497,7 +497,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
       </section>
       <section className="bonus-evidence-section">
         <h4>来源与原文</h4>
-        <p className="note">{b.en || '暂无英文说明。'}</p>
+        <p className="note">{b.en ? <NumWrappedText text={b.en} /> : '暂无英文说明。'}</p>
         <p>
           <BonusTags b={b} includeTeam={false} includeFresh={false} />
         </p>

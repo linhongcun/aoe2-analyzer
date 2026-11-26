@@ -755,9 +755,9 @@
     "py": "bubingtoushishouhezhimaoshouzaifengjianchengbaodiwangshidaideshengmingzhi",
     "pyi": "bbtsshzmszfjcbdwsddsmz"
   },
-  "步兵和骑兵单位在城堡/帝王时代的近战护甲 +1/+2": {
-    "py": "bubingheqibingdanweizaichengbaodiwangshidaidejinzhanhujia",
-    "pyi": "bbhqbdwzcbdwsddjzhj"
+  "步兵和骑乘单位在城堡/帝王时代的近战护甲 +1/+2": {
+    "py": "bubingheqichengdanweizaichengbaodiwangshidaidejinzhanhujia",
+    "pyi": "bbhqcdwzcbdwsddjzhj"
   },
   "步兵在封建/城堡/帝王时代对建筑的攻击力 +1/+2/+3": {
     "py": "bubingzaifengjianchengbaodiwangshidaiduijianzhudegongjili",
@@ -799,7 +799,7 @@
     "py": "bugongshouheyidaliyongbingdejinzhanhujiayuanchenghujia",
     "pyi": "bgshydlybdjzhjychj"
   },
-  "步弓手和掷矛手对建筑的攻击力 +2": {
+  "步弓手和掷矛手对建筑的攻击力 +3": {
     "py": "bugongshouhezhimaoshouduijianzhudegongjili",
     "pyi": "bgshzmsdjzdgjl"
   },
@@ -1259,25 +1259,25 @@
     "py": "luotuoqibinggongjisudu",
     "pyi": "ltqbgjsd"
   },
-  "骑兵单位从封建时代开始生命值 +20%": {
-    "py": "qibingdanweicongfengjianshidaikaishishengmingzhi",
-    "pyi": "qbdwcfjsdkssmz"
+  "骑乘单位从封建时代开始生命值 +20%": {
+    "py": "qichengdanweicongfengjianshidaikaishishengmingzhi",
+    "pyi": "qcdwcfjsdkssmz"
   },
-  "骑兵单位击败敌军时生成的黄金 +3": {
-    "py": "qibingdanweijibaidijunshishengchengdehuangjin",
-    "pyi": "qbdwjbdjsscdhj"
+  "骑乘单位击败敌军时生成的黄金 +3": {
+    "py": "qichengdanweijibaidijunshishengchengdehuangjin",
+    "pyi": "qcdwjbdjsscdhj"
   },
-  "骑兵单位在封建/城堡/帝王时代每分钟恢复 2/8/14 生命值": {
-    "py": "qibingdanweizaifengjianchengbaodiwangshidaimeifenzhonghuifushengmingzhi",
-    "pyi": "qbdwzfjcbdwsdmfzhfsmz"
+  "骑乘单位在封建/城堡/帝王时代每分钟恢复 2/8/14 生命值": {
+    "py": "qichengdanweizaifengjianchengbaodiwangshidaimeifenzhonghuifushengmingzhi",
+    "pyi": "qcdwzfjcbdwsdmfzhfsmz"
   },
-  "骑兵单位在封建/城堡/帝王时代的移动速度 +5/10/15%": {
-    "py": "qibingdanweizaifengjianchengbaodiwangshidaideyidongsudu",
-    "pyi": "qbdwzfjcbdwsddydsd"
+  "骑乘单位在封建/城堡/帝王时代的移动速度 +5/10/15%": {
+    "py": "qichengdanweizaifengjianchengbaodiwangshidaideyidongsudu",
+    "pyi": "qcdwzfjcbdwsddydsd"
   },
-  "骑兵单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%": {
-    "py": "qibingdanweizaifengjianchengbaodiwangshidaizaochengdeewaishanghai",
-    "pyi": "qbdwzfjcbdwsdzcdewsh"
+  "骑乘单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%": {
+    "py": "qichengdanweizaifengjianchengbaodiwangshidaizaochengdeewaishanghai",
+    "pyi": "qcdwzfjcbdwsdzcdewsh"
   },
   "骑兵对掷矛手的攻击力 +2": {
     "py": "qibingduizhimaoshoudegongjili",

@@ -1,14 +1,20 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
-const bonusBox = (page: Page) => page.locator('.bonusbox').filter({ has: page.getByRole('heading', { name: '克制加成 / Bonus damage', exact: true }) });
-const negativeNote = (page: Page) => bonusBox(page).locator('[data-t="negative-bonus-note"]');
+const bonusBox = (page: Page, context: 'unit' | 'sim' = 'unit') =>
+  page.locator(context === 'sim' ? '#sim .bonusbox' : '.bonusbox').filter({
+    has: page.getByRole('heading', {
+      name: context === 'sim' ? '克制加成 / Bonus damage' : '本单位对其他单位的攻击加成',
+      exact: true,
+    }),
+  });
+const negativeNote = (page: Page, context: 'unit' | 'sim' = 'unit') => bonusBox(page, context).locator('[data-t="negative-bonus-note"]');
 const formula = (page: Page) => page.locator('.duel-note [role="math"]');
 const simple = '伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))';
 const full = '伤害 = max(1, Σ max(min(0, 攻击类别), 攻击类别 − 对应护甲类别))';
 
-async function note(page: Page) {
-  const n = negativeNote(page);
+async function note(page: Page, context: 'unit' | 'sim' = 'unit') {
+  const n = negativeNote(page, context);
   await expect(n).toBeVisible();
   await expect(n).toContainText('max(min(0, 攻击), 攻击 − 护甲)');
   await expect(n).toContainText('与基础攻击的对应类别贡献合计');
@@ -19,7 +25,7 @@ async function note(page: Page) {
 
 test('#707 PC1280 骑士与轻型投石车的负攻击加成都有同屏解释', async ({ page }) => {
   for (const [id, category, value] of [
-    [38, '村民', -3],
+    [38, '骑乘减伤', -3],
     [280, '僧侣', -1],
   ] as const) {
     await page.goto(`./#/unit/${id}`);
@@ -72,8 +78,8 @@ for (const width of [360, 375, 390, 1280]) {
         await page.goto(`./#/${route}`);
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
         if (context === 'pk') await expect(formula(page)).toHaveText(full);
-        else await note(page);
-        const target = context === 'pk' ? page.locator('.duel-note') : bonusBox(page);
+        else await note(page, context);
+        const target = context === 'pk' ? page.locator('.duel-note') : bonusBox(page, context);
         await expect(target).toHaveCount(1);
         await target.evaluate((element) => element.setAttribute('data-negative-audit', '707'));
         expect((await new AxeBuilder({ page }).include('[data-negative-audit="707"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);

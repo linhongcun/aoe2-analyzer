@@ -13,6 +13,7 @@ import { parseRelicCount } from '../../../domain/relicParams';
 import type { Tech, Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import { UnitIcon } from '../../../shared/ui/art';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import { mixedSideCanKite, standingOpeningDelta } from '../logic/duelKiteView';
 import type { Resolved } from '../logic/duelSide';
 import { mixedSideRelicMatchedUnits, type MixedSideView } from '../logic/mixedDuel';
@@ -268,7 +269,7 @@ export function MixedResult({
             <p key={key}>
               {key.toUpperCase()}：{civByEn(s.civ)?.zh ?? s.civ} / {AGE_ZH[+s.age]} / 科技：
               {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'} / 团队效果：
-              {s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'}
+              <NumWrappedText text={s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'} />
               {showMode && <> / 作战模式：{s.kite === true ? '边走边射（拉扯）' : '站桩输出'}</>}
               {showRelics && (
                 <>

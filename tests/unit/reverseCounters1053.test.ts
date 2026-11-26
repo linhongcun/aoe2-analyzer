@@ -43,7 +43,7 @@ describe('单位详情反向类别加成（#1053）', () => {
     const multiClass = query(core.unitById[359]!, [core.unitById[763]!]);
     expect(multiClass.groups.find((item) => item.category === '长矛兵')?.rows[0]?.damage).toBe(2);
     expect(multiClass.groups.find((item) => item.category === '步兵')?.rows[0]?.damage).toBe(1);
-    expect(query(core.unitById[1263]!, [core.unitById[38]!]).groups.find((item) => item.category === '村民')?.rows).toEqual([]);
+    expect(query(core.unitById[1263]!, [core.unitById[38]!]).groups.find((item) => item.category === '骑乘减伤')?.rows).toEqual([]);
   });
 
   it('包含真实正向镜像贡献和同单位 PK；无正贡献的镜像仍不出现', () => {

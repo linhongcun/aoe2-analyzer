@@ -383,13 +383,13 @@ describe('#652 城堡快照严格字段来源门禁', () => {
   });
 
   it('骑士真实负附加伤害合法，数值更新仍传播到受审profile', () => {
-    expect(ctx.core.unitById[38]!.atks).toContainEqual(['村民', -3]);
+    expect(ctx.core.unitById[38]!.atks).toContainEqual(['骑乘减伤', -3]);
     expect(scene(ctx, 'pocket').status).toBe('ok');
     const c = copy();
-    c.core.unitById[38]!.atks.find(([name]) => name === '村民')![1] = -7;
+    c.core.unitById[38]!.atks.find(([name]) => name === '骑乘减伤')![1] = -7;
     const result = profile(c, 'pocket');
     expect(result.ok).toBe(true);
-    if (result.ok) expect(result.value.stats.bonus['村民']).toBe(-7);
+    if (result.ok) expect(result.value.stats.bonus['骑乘减伤']).toBe(-7);
   });
   it.each([
     ['缺主攻击', [['长矛兵', 3]]],

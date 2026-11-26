@@ -96,6 +96,7 @@ class DataAlignment1403Tests(unittest.TestCase):
         self.assertNotIn(1363, by_tech('Muisca'))
 
         # All 46 non-target civs must remain byte-for-byte drift-free across all bonus links
+        # (Issue 1445 intentionally moved Varangians 1488 from [1488, 0, 'auto'] to [1488, 2, 'manual'])
         target_civs = {
             'Bulgarians',
             'Burgundians',
@@ -115,7 +116,7 @@ class DataAlignment1403Tests(unittest.TestCase):
         non_target_digest = hashlib.sha256(
             json.dumps(non_target_table, sort_keys=True, separators=(',', ':')).encode('utf-8')
         ).hexdigest()
-        self.assertEqual(non_target_digest, '20681f18e4e4b974466e6e4e18d0f1a1a0b8eafe6762382d220a302f12a07d86')
+        self.assertEqual(non_target_digest, '4c6b30d6846956e9235a4cff7b5ce3e808fad80f035732eb4c599fc6961df474')
         # Spot-check non-target auto tie-breaks (Japanese 341, Romans 889-891)
         self.assertEqual(by_tech('Japanese')[341]['idx'], 1)
         self.assertEqual(by_tech('Japanese')[341]['linked'], 'auto')

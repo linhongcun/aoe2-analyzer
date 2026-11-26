@@ -55,10 +55,10 @@ export function DetailPage({
   id: string;
   crumb: string;
   icon: ReactNode;
-  title: string;
+  title: ReactNode;
   /** 主名后的文明小字（#44：重名 / 易混单位的详情页页头始终显示） */
   titleNote?: string;
-  en: string;
+  en: ReactNode;
   badges?: ReactNode;
   tags?: ReactNode;
   tabs: DetailTab[];

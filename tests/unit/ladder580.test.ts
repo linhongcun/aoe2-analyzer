@@ -37,10 +37,15 @@ describe('天梯新手友好度补齐 #580', () => {
     expect(notes.note).toBe(KEPT_NOTE);
   });
 
-  it('女真理由完整引用目录里的火矛兵攻速加成', () => {
-    const bonus = civs.find((civ) => civ.en === 'Jurchens')!.bon[1]!;
-    expect(bonus).toContain('火矛兵');
-    expect(friendliness('Jurchens', notes.entries).reason).toContain(bonus);
+  it('女真、法兰克与条顿理由完整引用目录里的已校加成文案', () => {
+    const jurchen = civs.find((civ) => civ.en === 'Jurchens')!.bon[1]!;
+    expect(jurchen).toContain('火矛兵');
+    expect(friendliness('Jurchens', notes.entries).reason).toContain(jurchen);
+    for (const civEn of ['Franks', 'Teutons'] as const) {
+      const bonus = civs.find((civ) => civ.en === civEn)!.bon[2]!;
+      expect(bonus, civEn).toContain('骑乘单位');
+      expect(friendliness(civEn, notes.entries).reason, civEn).toContain(bonus);
+    }
   });
 
   it('全部段每一家都有档名、一两句理由，且理由引用站内加成原文', () => {

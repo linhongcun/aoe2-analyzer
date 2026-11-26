@@ -20,6 +20,7 @@ import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
 import { PairHintLine } from '../../../shared/ui/PairTrainingHint';
 import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
 import { mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
 import { mixedSideCanKite, mixedSideHasMeleeFront } from '../logic/duelKiteView';
@@ -287,7 +288,7 @@ export function MixedSideEditor({
                 onChange={(e) => onChange({ ...input, team: e.target.checked ? [...input.team, String(i)] : input.team.filter((id) => id !== String(i)) })}
               />
               <span>
-                {name}
+                <NumWrappedText text={name} />
                 <small>
                   适用行：
                   {view.rows
@@ -479,13 +480,20 @@ export function MixedSideEditor({
                     </p>
                     <p className="note">
                       本行团队数值效果：
-                      {input.team
-                        .map(Number)
-                        .filter((id) => TEAM_BONUSES[id]?.[2](r.u))
-                        .map((id) => TEAM_BONUSES[id]![1])
-                        .join('、') || '无'}
+                      <NumWrappedText
+                        text={
+                          input.team
+                            .map(Number)
+                            .filter((id) => TEAM_BONUSES[id]?.[2](r.u))
+                            .map((id) => TEAM_BONUSES[id]![1])
+                            .join('、') || '无'
+                        }
+                      />
                     </p>
-                    <p className="note">常驻文明加成：{civBonusNotes(r.u, r.civ).join('；') || '无适用条目'}</p>
+                    <p className="note">
+                      常驻文明加成：
+                      <NumWrappedText text={civBonusNotes(r.u, r.civ).join('；') || '无适用条目'} />
+                    </p>
                   </>
                 ) : (
                   <p className="note">请先修正本行单位与共享上下文，暂不展示有效属性。</p>

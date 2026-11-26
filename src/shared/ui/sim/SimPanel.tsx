@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
-import { ARMC_CLASS_NOTE } from '../../../domain/affects';
+import { ARMC_CLASS_NOTE, MOUNTED_REDUCTION_CLASS } from '../../../domain/affects';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
 import type { CivRelicBonus } from '../../../domain/effects';
@@ -15,6 +15,7 @@ import type { NumStat, StatSet, Tech } from '../../../domain/types';
 import { CostView, StatIcon, TechIcon } from '../art';
 import { Icon } from '../Icon';
 import { RelicCountSelector } from '../RelicCountSelector';
+import { NumWrappedText } from '../widgets';
 import { fmtStat } from '../../utils/simFormat';
 import { DATA_SOURCES } from '../../utils/dataInfo';
 import { SimEffectiveCost } from './SimEffectiveCost';
@@ -168,7 +169,7 @@ export function BonusTable({
                       {b}
                     </span>{' '}
                     {S && s !== b && (
-                      <span className={s > b ? 'up' : 'dn'}>
+                      <span className={`${s > b ? 'up' : 'dn'} num nw`}>
                         {s > b ? '+' : ''}
                         {s - b}
                       </span>
@@ -176,10 +177,10 @@ export function BonusTable({
                   </td>
                   {S && (
                     <td>
-                      <b>{s}</b>
+                      <b className="num nw">{s}</b>
                     </td>
                   )}
-                  {C && <td>{C[k] ?? 0}</td>}
+                  {C && <td className="num nw">{C[k] ?? 0}</td>}
                 </tr>
               );
             })}
@@ -205,15 +206,15 @@ export function ArmorClasses({ list, headingLevel }: { list: [string, number][];
         <Icon name="shield" /> 护甲类别（防御）
       </Heading>
       <p className="note">敌方对这些类别有克制加成时会对其造成额外伤害；数值为该类别护甲</p>
-      {l.some(([n]) => n === '村民') && (
+      {l.some(([n]) => n === MOUNTED_REDUCTION_CLASS) && (
         <p className="note" data-t="royal-heirs-armc">
-          {ARMC_CLASS_NOTE}
+          <NumWrappedText text={ARMC_CLASS_NOTE} />
         </p>
       )}
       <div>
         {l.length
           ? l.map(([n, v]) => (
-              <span key={n} className="tag" title={CLASS_AKA[n]} aria-label={CLASS_AKA[n] ? `${n} ${v}（${CLASS_AKA[n]}）` : undefined}>
+              <span key={n} className="tag nw" title={CLASS_AKA[n]} aria-label={CLASS_AKA[n] ? `${n} ${v}（${CLASS_AKA[n]}）` : undefined}>
                 {n} <span className="num nw">{v}</span>
               </span>
             ))
@@ -323,7 +324,12 @@ export default function SimPanel(p: SimPanelProps) {
           </>
         )}
       </div>
-      {p.civNotes.length > 0 && <p className="note">已计入文明加成：{p.civNotes.join('；')}</p>}
+      {p.civNotes.length > 0 && (
+        <p className="note">
+          已计入文明加成：
+          <NumWrappedText text={p.civNotes.join('；')} />
+        </p>
+      )}
       {p.cmpRelicNote && (
         <p className="note" data-t="sim-cmp-relic-note">
           对比列「{p.cmpRelicNote.civZh} 满科技」按 <span className="num nw">0 件</span>圣物计算，不含圣物加攻（每件{' '}
@@ -402,7 +408,9 @@ export default function SimPanel(p: SimPanelProps) {
                   x.ok && (
                     <label key={i} className="simt">
                       <input type="checkbox" checked={p.team.has(i)} onChange={() => teamToggle(i)} />
-                      {x.label}
+                      <span>
+                        <NumWrappedText text={x.label} />
+                      </span>
                     </label>
                   ),
               )

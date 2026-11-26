@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page, type Request } from '@playwright/test';
 
-const PINS = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../data/sources/data_sources.json');
+const PINS = JSON.parse(
+  readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8'),
+) as typeof import('../../data/sources/data_sources.json');
 
 const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 const PKG_VERSION = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
@@ -453,8 +455,11 @@ test('bonus detail shows game-data source, text-vs-data note and structured eco 
     .first()
     .click();
   await expect(page.getByText('#870').first()).toBeVisible();
-  await page.goto('./#/civ/Saracens/bonus/team');
+  await page.goto('./#/civ/Gurjaras/bonus/2');
   await expect(page.getByText('游戏说明文字与游戏数据数值不一致（以游戏数据为准）').first()).toBeVisible();
+  await page.goto('./#/civ/Saracens/bonus/team');
+  await expect(page.locator('#bonus h1')).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
+  await expect(page.getByText('游戏说明文字与游戏数据数值不一致（以游戏数据为准）')).toHaveCount(0);
 });
 
 test('feedback link: footer + detail page button prefill GitHub issue', async ({ page }) => {

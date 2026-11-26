@@ -10,8 +10,12 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 
 
+BONUS3_ORIGINAL = '骑兵单位击败敌军时生成的黄金 +3'
+BONUS3_CORRECTED = '骑乘单位击败敌军时生成的黄金 +3'
+
+
 class CivTextCorrections(unittest.TestCase):
-    def generate(self, stale=False, name='来源名称', description='来源说明。'):
+    def generate(self, stale=False, name='来源名称', description='来源说明。', bonus3=BONUS3_ORIGINAL):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / 'data/sources').mkdir(parents=True)
@@ -21,10 +25,10 @@ class CivTextCorrections(unittest.TestCase):
             corrections = json.loads((ROOT / 'data/sources/civ_text_corrections.json').read_text())
             rule = corrections['Mapuche']['ct']
             original = rule['original'] + ('上游已修订' if stale else '')
-            zh = {'1': f'文明说明<br>\n<b>独特单位：</b>单位<br>\n<b>独特科技：</b><br>\n• {original}<br>\n• 另一科技<br>\n<b>团队加成：</b>团队说明',
+            zh = {'1': f'文明说明<br>\n• 保留加成零<br>\n• 保留加成一<br>\n• 保留加成二<br>\n• {bonus3}<br>\n<b>独特单位：</b>单位<br>\n<b>独特科技：</b><br>\n• {original}<br>\n• 另一科技<br>\n<b>团队加成：</b>团队说明',
                   '2': '测试文明', str(rule['name_string_id']): name,
                   str(rule['help_string_id']): f'研究<b>{name}</b> (成本)<br>\n{description}'}
-            en = {'1': 'Civilization<br>\n<b>Unique Unit:</b>Unit<br>\n<b>Unique Tech:</b><br>\n• Malon (description)<br>\n• Other Tech<br>\n<b>Team Bonus:</b>Team', '2': 'Test'}
+            en = {'1': 'Civilization<br>\n• Bonus 0<br>\n• Bonus 1<br>\n• Bonus 2<br>\n• Mounted Units generate +3 gold when defeating military units<br>\n<b>Unique Unit:</b>Unit<br>\n<b>Unique Tech:</b><br>\n• Malon (description)<br>\n• Other Tech<br>\n<b>Team Bonus:</b>Team', '2': 'Test'}
             data = {'civs': {'Mapuche': {'help_string_id': 1, 'name_string_id': 2}}}
             for filename, value in [('data.json', data), ('zh.json', zh), ('en.json', en)]:
                 (cache / filename).write_text(json.dumps(value, ensure_ascii=False))
@@ -41,11 +45,18 @@ class CivTextCorrections(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(output[0]['ct'], '来源名称 (来源说明)｜Malon')
         self.assertEqual(output[0]['it'], '另一科技｜Other Tech')
+        self.assertEqual(output[0]['bon'][3], BONUS3_CORRECTED)
 
     def test_changed_source_is_not_silently_overridden(self):
         result, output = self.generate(stale=True)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('unique-tech source changed', result.stderr)
+        self.assertIsNone(output)
+
+    def test_changed_bonus3_source_is_not_silently_overridden(self):
+        result, output = self.generate(bonus3=BONUS3_ORIGINAL + '上游已修订')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Mapuche bonus 3 source changed; review civ_text_corrections.json', result.stderr)
         self.assertIsNone(output)
 
     def test_uses_new_reference_content_instead_of_hardcoded_replacement(self):

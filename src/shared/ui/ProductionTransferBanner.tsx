@@ -4,6 +4,7 @@ import { DEFAULT_PRODUCTION_COUNT } from '../../domain/production';
 import { AGE_ZH } from '../../domain/ratings';
 import { readProductionTransfer, withoutProductionTransfer } from '../utils/productionTransferState';
 import { Icon } from './Icon';
+import { NumWrappedText } from './widgets';
 import './productionTransfer.css';
 
 export function ProductionTransferBanner() {
@@ -40,7 +41,11 @@ export function ProductionTransferBanner() {
             </p>
             <p>计入单价：{value.pricing.join('、') || '目录训练价与适用的文明折扣'}</p>
             {value.unlocks.length > 0 && <p>训练解锁条件：{value.unlocks.join('、')}</p>}
-            <p>未带入：{[...value.omitted, '另一方', '战斗结果'].join('、')}。合计只含训练费。</p>
+            <p>
+              未带入：
+              <NumWrappedText text={[...value.omitted, '另一方', '战斗结果'].join('、')} />
+              。合计只含训练费。
+            </p>
           </>
         ) : (
           <>

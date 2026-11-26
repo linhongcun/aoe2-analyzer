@@ -27,6 +27,7 @@ import {
   type SortKey,
 } from '../../domain/ladder';
 import type { SliceFacts } from '../../domain/ladderQuery';
+import { NumWrappedText } from '../../shared/ui/widgets';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderFreshness } from './LadderFreshness';
 import { LadderSourceFacts } from './LadderSourceFacts';
@@ -354,12 +355,20 @@ export function LadderArabia({
                                     <p>
                                       <strong>{TIER_LABEL[row.tier]}</strong>
                                     </p>
-                                    {row.tier === 'pending' ? <p>这个文明的新手友好度理由还没写，不影响上面的胜率数据。</p> : <p>{row.reason}</p>}
+                                    {row.tier === 'pending' ? (
+                                      <p>这个文明的新手友好度理由还没写，不影响上面的胜率数据。</p>
+                                    ) : (
+                                      <p>
+                                        <NumWrappedText text={row.reason} />
+                                      </p>
+                                    )}
                                     <p className="ladder-reason-links">
                                       {row.bonuses.map((bonus) => (
                                         <Link key={bonus.idx} to={`/civ/${row.en}/bonus/${bonus.idx}`}>
                                           <Icon name="scroll" />
-                                          {bonus.text ?? `加成 ${bonus.idx + 1}`}
+                                          <span>
+                                            <NumWrappedText text={bonus.text ?? `加成 ${bonus.idx + 1}`} />
+                                          </span>
                                         </Link>
                                       ))}
                                       <Link to="/bonuses">全部文明加成</Link>

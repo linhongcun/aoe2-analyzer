@@ -6,6 +6,14 @@
       "help_string_id": 28495,
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/locales/zh/strings.json",
       "note": "文明介绍120207含重复字和尾随圆点；采用同版本科技名称17495与研究说明28495，不改数值。"
+    },
+    "bon": {
+      "3": {
+        "original": "骑兵单位击败敌军时生成的黄金 +3",
+        "corrected": "骑乘单位击败敌军时生成的黄金 +3",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Mounted Units generate +3 gold when defeating military units，全站 56 国 Mounted Units 统一译作「骑乘单位」。"
+      }
     }
   },
   "Jurchens": {
@@ -51,6 +59,70 @@
       "help_string_id": 28309,
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
       "note": "#1440：文明介绍120182的中文漏译「骑射手」（英文含 Cavalry Archers）；采用同版本科技687的名称17309与研究说明28309。"
+    }
+  },
+  "Saracens": {
+    "tb": {
+      "original": "步弓手和掷矛手对建筑的攻击力 +2",
+      "corrected": "步弓手和掷矛手对建筑的攻击力 +3",
+      "source": "https://github.com/SiegeEngineers/auto-mods/blob/e293dc106b0f3b0ceac2db98409fbcc5c921190b/dat/empires2_x2_p1.dat",
+      "note": "#1445：DE 188329 固定 .dat（auto-mods@e293dc1，TeamBonusID=409，Type=4, C=9, D=5379=21×256+3）实为对标准建筑 +3；aoe2techtree@e56728e7 文本仍停留在旧值 +2。"
+    },
+    "tbEn": {
+      "original": "Foot Archers and Skirmishers +2 attack vs. buildings",
+      "corrected": "Foot Archers and Skirmishers +3 attack vs. buildings",
+      "source": "https://github.com/SiegeEngineers/auto-mods/blob/e293dc106b0f3b0ceac2db98409fbcc5c921190b/dat/empires2_x2_p1.dat",
+      "note": "#1445：同步对齐英文团队加成原文为 +3，与 DE 188329 固定 .dat（auto-mods@e293dc1，TeamBonusID=409）实值及 effects_build.py 新鲜度校验一致。"
+    }
+  },
+  "Cumans": {
+    "bon": {
+      "1": {
+        "original": "骑兵单位在封建/城堡/帝王时代的移动速度 +5/10/15%",
+        "corrected": "骑乘单位在封建/城堡/帝王时代的移动速度 +5/10/15%",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age（.dat 覆盖骑射手与钦察），统一译作「骑乘单位」。"
+      }
+    }
+  },
+  "Franks": {
+    "bon": {
+      "2": {
+        "original": "骑兵单位从封建时代开始生命值 +20%",
+        "corrected": "骑乘单位从封建时代开始生命值 +20%",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Mounted Units +20% HP starting in Feudal Age，全站 56 国 Mounted Units 统一译作「骑乘单位」。"
+      }
+    }
+  },
+  "Georgians": {
+    "bon": {
+      "2": {
+        "original": "骑兵单位在封建/城堡/帝王时代每分钟恢复 2/8/14 生命值",
+        "corrected": "骑乘单位在封建/城堡/帝王时代每分钟恢复 2/8/14 生命值",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age，统一译作「骑乘单位」。"
+      }
+    }
+  },
+  "Gurjaras": {
+    "bon": {
+      "2": {
+        "original": "骑兵单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%",
+        "corrected": "骑乘单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age（.dat 含骑象射手与攻城战象），统一译作「骑乘单位」并保留官方数值文案。"
+      }
+    }
+  },
+  "Teutons": {
+    "bon": {
+      "2": {
+        "original": "步兵和骑兵单位在城堡/帝王时代的近战护甲 +1/+2",
+        "corrected": "步兵和骑乘单位在城堡/帝王时代的近战护甲 +1/+2",
+        "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+        "note": "#1445：英文原文为 Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age，全站 56 国 Mounted Units 统一译作「骑乘单位」。"
+      }
     }
   }
 }

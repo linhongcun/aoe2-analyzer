@@ -5,6 +5,7 @@ import { civEnCasePath } from '../../../domain/civRoute';
 import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import BonusList from './BonusList';
 import RomanArmor710 from './RomanArmor710';
 
@@ -26,8 +27,8 @@ export default function BonusDetail() {
       id="bonus"
       crumb={kind}
       icon={<CivIcon c={c} />}
-      title={b.zh}
-      en={b.en}
+      title={<BonusText b={b} linked={false} />}
+      en={b.en ? <NumWrappedText text={b.en} /> : ''}
       badges={<span className="tag bon-kind">{kind}</span>}
       tags={<BonusTags b={b} />}
       showTabs={false}
@@ -48,7 +49,16 @@ export default function BonusDetail() {
           <ul className="bside">
             {list.map((x) => (
               <li key={x.id} className={x.id === b.id ? 'cur' : undefined}>
-                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>{x.team ? '团队：' + x.zh : <BonusText b={x} linked={false} />}</Link>
+                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>
+                  {x.team ? (
+                    <>
+                      团队：
+                      <BonusText b={x} linked={false} />
+                    </>
+                  ) : (
+                    <BonusText b={x} linked={false} />
+                  )}
+                </Link>
               </li>
             ))}
           </ul>

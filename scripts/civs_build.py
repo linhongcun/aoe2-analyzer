@@ -19,12 +19,39 @@ out=[]
 for k,v in d['civs'].items():
     ez=parse(e[str(v['help_string_id'])]);zz=parse(z[str(v['help_string_id'])]);r=R[k]
     corrections=CORRECTIONS.get(k,{})
+    if not isinstance(corrections,dict):
+        raise ValueError(f'{k} corrections entry is invalid; review civ_text_corrections.json')
     bonuses=zz[3]
-    for index,correction in corrections.get('bon',{}).items():
-        i=int(index)
-        if not 0<=i<len(bonuses) or bonuses[i]!=correction['original']:
-            raise ValueError(f'{k} bonus {index} source changed; review civ_text_corrections.json')
-        bonuses[i]=correction['corrected']
+    if 'bon' in corrections:
+        bon_map=corrections['bon']
+        if not isinstance(bon_map,dict):
+            raise ValueError(f'{k} bonus corrections are invalid; review civ_text_corrections.json')
+        for index,correction in bon_map.items():
+            if not isinstance(correction,dict) or not isinstance(correction.get('original'),str):
+                raise ValueError(f'{k} bonus {index} correction is invalid; review civ_text_corrections.json')
+            i=int(index)
+            if not 0<=i<len(bonuses) or bonuses[i]!=correction['original']:
+                raise ValueError(f'{k} bonus {index} source changed; review civ_text_corrections.json')
+            corrected=correction.get('corrected')
+            if not isinstance(corrected,str) or not corrected.strip():
+                raise ValueError(f'{k} bonus {index} corrected text is empty; review civ_text_corrections.json')
+            bonuses[i]=corrected
+
+    def apply_team_correction(text,key,label):
+        if key not in corrections:
+            return text
+        correction=corrections[key]
+        if not isinstance(correction,dict) or not isinstance(correction.get('original'),str):
+            raise ValueError(f'{k} {label} correction is invalid; review civ_text_corrections.json')
+        if text!=correction['original']:
+            raise ValueError(f'{k} {label} source changed; review civ_text_corrections.json')
+        corrected=correction.get('corrected')
+        if not isinstance(corrected,str) or not corrected.strip():
+            raise ValueError(f'{k} {label} corrected text is empty; review civ_text_corrections.json')
+        return corrected
+
+    tb=apply_team_correction(zz[4],'tb','team-bonus')
+    tb_en=apply_team_correction(ez[4],'tbEn','team-bonus-en')
 
     def nm(i):
         text=zz[2][i]
@@ -45,5 +72,5 @@ for k,v in d['civs'].items():
                 help_text=z[str(correction['help_string_id'])].split('<br>',1)[1]
                 text=name+' ('+strip(help_text).removesuffix('。')+')'
         return text+'｜'+ez[2][i].split(' (')[0]
-    out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=bonuses,bonEn=ez[3],tb=zz[4],tbEn=ez[4],s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
+    out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=bonuses,bonEn=ez[3],tb=tb,tbEn=tb_en,s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
 json.dump(out,open('data/game/civs.json','w'),ensure_ascii=False);print('civs',len(out))
