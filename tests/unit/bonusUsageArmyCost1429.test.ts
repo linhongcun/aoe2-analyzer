@@ -1,8 +1,5 @@
-import { execFile } from 'node:child_process';
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
-import { promisify } from 'node:util';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
@@ -11,10 +8,9 @@ import { ARMY_COST_USAGE } from '../../src/data/armyCostUsage';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
 import { CORE } from '../../src/data/core';
 import { civs, loadCore, loadTrees } from '../../src/data/index';
-import { armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } from '../../src/domain/armyCost';
+import { ARMY_RES, armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } from '../../src/domain/armyCost';
 import { bonusLevel, bonusUsage, showEcoSourceTag, USAGE_TOOL_ZH } from '../../src/domain/bonusUsage';
-import { allCivBonuses, civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
-import { DAT } from '../../src/domain/datEffects';
+import { allCivBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
 import { PRODUCTION_MODE_LABELS } from '../../src/domain/productionMode';
 import BonusBody, { BonusBodyContent } from '../../src/shared/ui/BonusBody';
@@ -107,21 +103,61 @@ function transitiveClosure(rootFiles: readonly string[]): Set<string> {
 }
 
 describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」', () => {
-  it('构建期派生索引与真实 evaluateArmyCost() 56 文明 × 4 时代全量 100% 一致（精确 24 国 27 条）', () => {
+  it('构建期派生索引与直接实跑 56 文明 × 4 时代原始 evaluateArmyCost() 100% 独立对账（24 国 27 条）', () => {
     const built = buildArmyCostUsage(ctx, ARMY_RESEARCH);
     expect(built).toEqual(ARMY_COST_USAGE);
     expect(formatArmyCostUsageJson(built)).toBe(readFileSync('data/game/army_cost_usage.json', 'utf8'));
 
-    const hitIds = Object.keys(built.bonuses).sort();
+    const hitIds = Object.keys(ARMY_COST_USAGE.bonuses).sort();
+    const expectedIds = [...Object.keys(EXPECTED_HALF_NOTES), ...Object.keys(EXPECTED_GENERIC_NOTES)].sort();
+    expect(hitIds).toEqual(expectedIds);
     const hitCivs = [...new Set(hitIds.map((id) => id.split('-')[0]!))].sort();
     expect(hitCivs).toHaveLength(24);
     expect(hitIds).toHaveLength(27);
 
-    // 断言 bonusUsage(b) 含 armyCost: true 当且仅当 真实引擎命中的 27 条
+    // 独立于生成器直接实跑全站 56 文明 × 4 时代 evaluateArmyCost()，核对每国被动折价研究并集与索引逐项一致
+    const rawDiscountedByCiv: Record<string, number[]> = {};
+    for (const c of civs) {
+      const civTids = new Set<number>();
+      for (const age of [1, 2, 3, 4]) {
+        const rows = productionUnits(ctx, { civ: c.en, age, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 }).map((u) => ({
+          unit: u.id,
+          qty: '1',
+        }));
+        const shapeCfg = { ...emptyArmyCost(c.en, String(age)), rows };
+        const choices = armyResearchChoices(ctx, shapeCfg, false, ARMY_RESEARCH);
+        const fullCfg = { ...shapeCfg, targets: choices.map(researchKey) };
+        const results = [evaluateArmyCost(ctx, shapeCfg, ARMY_RESEARCH), evaluateArmyCost(ctx, fullCfg, ARMY_RESEARCH)];
+        for (const tid of choices) {
+          const entry = results[1]!.ledger.find((e) => e.id === tid);
+          if (entry?.status === 'invalid' && entry.problem === 'price') {
+            results.push(evaluateArmyCost(ctx, { ...shapeCfg, targets: [researchKey(tid)] }, ARMY_RESEARCH));
+          }
+        }
+        for (const res of results) {
+          for (const e of res.ledger) {
+            if (e.id === null || e.status === 'invalid' || !e.quote?.cost || !e.quote.baseCost) continue;
+            const cheaper =
+              ARMY_RES.every((r) => (e.quote!.cost![r] ?? 0) <= (e.quote!.baseCost![r] ?? 0) + 1e-9) &&
+              ARMY_RES.some((r) => (e.quote!.cost![r] ?? 0) < (e.quote!.baseCost![r] ?? 0) - 1e-9);
+            if (cheaper) civTids.add(e.id);
+          }
+        }
+      }
+      if (civTids.size) rawDiscountedByCiv[c.en] = [...civTids].sort((a, b) => a - b);
+    }
+
+    const indexTidsByCiv: Record<string, number[]> = {};
+    for (const [id, entry] of Object.entries(ARMY_COST_USAGE.bonuses)) {
+      const civEn = id.split('-')[0]!;
+      const merged = new Set([...(indexTidsByCiv[civEn] ?? []), ...entry.tids]);
+      indexTidsByCiv[civEn] = [...merged].sort((a, b) => a - b);
+    }
+    expect(rawDiscountedByCiv).toEqual(indexTidsByCiv);
+
     for (const b of ALL) {
       const lines = bonusUsage(b).filter((l) => l.tool === 'armyCost');
-      const expected = Object.hasOwn(built.bonuses, b.id);
-      if (expected) {
+      if (Object.hasOwn(ARMY_COST_USAGE.bonuses, b.id)) {
         expect(lines, b.id).toHaveLength(1);
         expect(lines[0]).toMatchObject({
           tool: 'armyCost',
@@ -145,7 +181,6 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       const rows = units.map((u) => ({ unit: u.id, qty: '1' }));
       const shapeCfg = { ...emptyArmyCost(civEn, '4'), rows };
       const choices = armyResearchChoices(ctx, shapeCfg, false, ARMY_RESEARCH);
-      // t:35 重型战船不在可选研究列表中，必须从报价账本自动前置提取
       expect(choices).not.toContain(35);
 
       const shapeEntry = evaluateArmyCost(ctx, shapeCfg, ARMY_RESEARCH).ledger.find((e) => e.id === 35);
@@ -163,10 +198,8 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       expect(ARMY_COST_USAGE.bonuses[bonusId]?.tids).toContain(35);
     }
 
-    // 波希米亚帝王：t:785 同批遮蔽 t:231 触发 price invalid，单项配置恢复原价 175 金
     const bohUnits = productionUnits(ctx, { civ: 'Bohemians', age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 });
-    const bohRows = bohUnits.map((u) => ({ unit: u.id, qty: '1' }));
-    const bohBase = { ...emptyArmyCost('Bohemians', '4'), rows: bohRows };
+    const bohBase = { ...emptyArmyCost('Bohemians', '4'), rows: bohUnits.map((u) => ({ unit: u.id, qty: '1' })) };
     const bohChoices = armyResearchChoices(ctx, bohBase, false, ARMY_RESEARCH);
     expect(bohChoices).toContain(231);
     const full231 = evaluateArmyCost(ctx, { ...bohBase, targets: bohChoices.map(researchKey) }, ARMY_RESEARCH).ledger.find((e) => e.id === 231);
@@ -176,7 +209,6 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
   });
 
   it('4 条经济研究项精确作用域、交叉拒收与空阵容保留研究目标，以及通用模板受益单位一致性', () => {
-    // 1) Burgundians-0 交叉拒收：村民(83) -> 213/249 折价、48 拒收；贸易车(128)/贸易船(17) -> 48 折价、213/249 拒收；空阵容保留三项 -> 全折价；纯军事(38) -> 全拒收
     const burgMil = evaluateArmyCost(ctx, { ...emptyArmyCost('Burgundians', '4'), rows: [{ unit: 38, qty: '1' }], targets: ['t:48', 't:213', 't:249'] });
     for (const id of [48, 213, 249]) expect(burgMil.ledger.find((e) => e.id === id)?.status).toBe('invalid');
 
@@ -201,7 +233,6 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     expect(burgEmpty.ledger.find((e) => e.id === 249)).toMatchObject({ status: 'planned', cost: { Food: 180, Wood: 200 } });
     expect(burgEmpty.ledger.find((e) => e.id === 48)).toMatchObject({ status: 'planned', cost: { Food: 120, Gold: 200 } });
 
-    // 2) Vikings-0 / Vietnamese-1 / Muisca-4 三态：纯军事拒收、含对应单位生效、空阵容保留目标生效
     const cases = [
       { civ: 'Vikings', milUnit: 4, okUnits: [83], targets: ['t:213', 't:249'], free: true },
       { civ: 'Vietnamese', milUnit: 4, okUnits: [83], targets: ['t:213', 't:249'], free: false },
@@ -215,88 +246,29 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       for (const uid of tc.okUnits) {
         const okRes = evaluateArmyCost(ctx, { ...emptyArmyCost(tc.civ, '4'), rows: [{ unit: uid, qty: '1' }], targets: [...tc.targets] });
         for (const key of tc.targets) {
-          const entry = okRes.ledger.find((e) => e.key === key);
-          expect(entry?.status, `${tc.civ} unit:${uid} ${key}`).toBe(tc.free ? 'free' : 'planned');
+          expect(okRes.ledger.find((e) => e.key === key)?.status, `${tc.civ} unit:${uid} ${key}`).toBe(tc.free ? 'free' : 'planned');
         }
       }
 
       const emptyRes = evaluateArmyCost(ctx, { ...emptyArmyCost(tc.civ, '4'), rows: [], targets: [...tc.targets] });
       for (const key of tc.targets) {
-        const entry = emptyRes.ledger.find((e) => e.key === key);
-        expect(entry?.status, `${tc.civ} empty ${key}`).toBe(tc.free ? 'free' : 'planned');
+        expect(emptyRes.ledger.find((e) => e.key === key)?.status, `${tc.civ} empty ${key}`).toBe(tc.free ? 'free' : 'planned');
       }
     }
 
-    // 3) 通用模板中 ecoOnlyUnits 非空条目（Vikings-0）：其全部命中研究的受益单位集合必须一致（防未来拆组文案歧义）
     for (const [id, entry] of Object.entries(ARMY_COST_USAGE.bonuses)) {
       if (Object.hasOwn(EXPECTED_HALF_NOTES, id) || !entry.ecoOnlyUnits.length) continue;
       const civEn = id.split('-')[0]!;
       const rows = [83, 128, 17].map((unit) => ({ unit, qty: '1' }));
       const res = evaluateArmyCost(ctx, { ...emptyArmyCost(civEn, '4'), rows, targets: entry.tids.map(researchKey) });
-      const perTidUnits = entry.tids.map((tid) => {
-        const e = res.ledger.find((x) => x.id === tid)!;
-        return e.beneficiaries.map((bi) => rows[bi]!.unit).sort((a, b) => a - b);
-      });
-      for (const set of perTidUnits) expect(set, `${id} per-tid beneficiaries`).toEqual([...entry.ecoOnlyUnits].sort((a, b) => a - b));
+      for (const tid of entry.tids) {
+        const units = res.ledger
+          .find((x) => x.id === tid)!
+          .beneficiaries.map((bi) => rows[bi]!.unit)
+          .sort((a, b) => a - b);
+        expect(units, `${id} t:${tid} beneficiaries`).toEqual([...entry.ecoOnlyUnits].sort((a, b) => a - b));
+      }
     }
-  });
-
-  it('命令级 1 对 1 归属反例：西班牙 t:68 同键团队归零不误归因非团队减半，歧义/缺项/多余命令 fail-closed', () => {
-    const spanish = civs.find((c) => c.en === 'Spanish')!;
-    const spanishBonuses = civBonuses(spanish);
-
-    // 1) 西班牙 t:68（铸铁）：非团队 Spanish-2 改为 mul 0.5 黄金，团队同时追加 set 0 黄金
-    const syntheticData = structuredClone(ARMY_RESEARCH);
-    const mods = syntheticData.civs.Spanish!.mods;
-    const idx68 = mods.findIndex((m) => m.Type === 101 && m.A === 68 && m.B === 3 && m.C === 0 && m.D === 0);
-    expect(idx68).toBeGreaterThanOrEqual(0);
-    mods[idx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
-    mods.push({ Type: 101, A: 68, B: 3, C: 0, D: 0 });
-
-    const syntheticBonuses = spanishBonuses.map((bon) => {
-      if (bon.id !== 'Spanish-2') return bon;
-      return {
-        ...bon,
-        dat: bon.dat.map((d) =>
-          d.tech >= 0
-            ? d
-            : {
-                ...d,
-                eco: d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, op: 'mul', v: 0.5 } : e)),
-              },
-        ),
-      };
-    });
-    const syntheticTeamEco = [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'set', v: 0 }];
-
-    // 仅摘除 Spanish-2 的 mul 0.5 命令后，t:68 因团队 set 0 仍是 0 金 -> Spanish-2 不被错误归因，未归属检查必须拦截 t:68
-    expect(() =>
-      buildArmyCostUsage(ctx, syntheticData, {
-        civList: ['Spanish'],
-        bonusesByCiv: { Spanish: syntheticBonuses },
-        teamEcoByCiv: { Spanish: syntheticTeamEco },
-      }),
-    ).toThrow(/Spanish.*未归属.*68/u);
-
-    // 2) 同精确签名同时属于非团队与团队 -> 歧义 fail-closed
-    const ambData = structuredClone(ARMY_RESEARCH);
-    ambData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 0, D: 0 });
-    expect(() =>
-      buildArmyCostUsage(ctx, ambData, {
-        civList: ['Spanish'],
-        teamEcoByCiv: { Spanish: syntheticTeamEco },
-      }),
-    ).toThrow(/同时属于多个来源|无法唯一确定/u);
-
-    // 3) 缺少匹配的 Type=101 命令 -> fail-closed
-    const missingData = structuredClone(ARMY_RESEARCH);
-    missingData.civs.Spanish!.mods = missingData.civs.Spanish!.mods.filter((_, i) => i !== idx68);
-    expect(() => buildArmyCostUsage(ctx, missingData, { civList: ['Spanish'] })).toThrow(/缺少匹配/u);
-
-    // 4) 多余未归属 Type=101 命令 -> fail-closed
-    const extraData = structuredClone(ARMY_RESEARCH);
-    extraData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 0, C: 2, D: 0.5 });
-    expect(() => buildArmyCostUsage(ctx, extraData, { civList: ['Spanish'] })).toThrow(/未归属/u);
   });
 
   it('锁定 9 条半覆盖精确 tids/文案、18 条通用模板、工具顺序与 20 条原 none 来源标签消失', () => {
@@ -304,24 +276,21 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
 
     for (const [id, expectedTids] of Object.entries(EXPECTED_HALF_TIDS)) {
       expect(ARMY_COST_USAGE.bonuses[id]?.tids, `${id} tids`).toEqual(expectedTids);
-      const line = bonusUsage(byId(id)).find((l) => l.tool === 'armyCost');
-      expect(line?.note, `${id} note`).toBe(EXPECTED_HALF_NOTES[id]);
+      expect(bonusUsage(byId(id)).find((l) => l.tool === 'armyCost')?.note, `${id} note`).toBe(EXPECTED_HALF_NOTES[id]);
     }
-
     for (const [id, expectedNote] of Object.entries(EXPECTED_GENERIC_NOTES)) {
-      const line = bonusUsage(byId(id)).find((l) => l.tool === 'armyCost');
-      expect(line?.note, `${id} note`).toBe(expectedNote);
+      expect(bonusUsage(byId(id)).find((l) => l.tool === 'armyCost')?.note, `${id} note`).toBe(expectedNote);
     }
 
-    // 顺序：sim -> gather -> cost -> armyCost -> construction -> repair
     const order = ['sim', 'gather', 'cost', 'armyCost', 'construction', 'repair'];
     for (const b of ALL) {
-      const tools = bonusUsage(b).map((l) => l.tool);
-      const indices = tools.filter((t) => order.includes(t)).map((t) => order.indexOf(t));
+      const indices = bonusUsage(b)
+        .map((l) => l.tool)
+        .filter((t) => order.includes(t))
+        .map((t) => order.indexOf(t));
       expect(indices, `${b.id} order`).toEqual([...indices].sort((a, b) => a - b));
     }
 
-    // 原 none 新计入的 20 条全部隐藏来源标签
     expect(NEWLY_COUNTED_20).toHaveLength(20);
     for (const id of NEWLY_COUNTED_20) {
       const b = byId(id);
@@ -343,26 +312,23 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       ).toBe(false);
     }
 
-    // 全部 56 条团队加成不输出 armyCost 行
     const teamBonuses = ALL.filter((b) => b.team);
     expect(teamBonuses).toHaveLength(56);
-    for (const tb of teamBonuses)
+    for (const tb of teamBonuses) {
       expect(
         bonusUsage(tb).some((l) => l.tool === 'armyCost'),
         tb.id,
       ).toBe(false);
+    }
 
-    // 7 条纯开局经济/升时代加成保持 all 不被误降级
     for (const id of ['Bohemians-0', 'Burmese-0', 'Franks-1', 'Italians-0', 'Malay-0', 'Muisca-0', 'Goths-0']) {
       expect(bonusLevel(byId(id)), id).toBe('all');
     }
 
-    // 全局节点 t:104 仅对勃艮第 755 加价，不触发任何勃艮第加成
     for (const id of Object.keys(ARMY_COST_USAGE.bonuses).filter((k) => k.startsWith('Burgundians-'))) {
       expect(ARMY_COST_USAGE.bonuses[id]!.tids).not.toContain(755);
     }
 
-    // 全部 76 条非团队 src=dat：仅 6 条既有混合 + Turks-1 输出工具行，其余 69 条仍返回 []
     const datNonTeam = ALL.filter((b) => !b.team && b.src === 'dat');
     expect(datNonTeam).toHaveLength(76);
     const datWithUsage = datNonTeam
@@ -372,7 +338,7 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     expect(datWithUsage).toEqual(['Chinese-2', 'Gurjaras-1', 'Mapuche-1', 'Mayans-1', 'Poles-0', 'Sicilians-4', 'Turks-1']);
   });
 
-  it('BonusBody SSR：Turks-1 默认与弹层双端展示 armyCost 行、Franks-2 保持无 busage、通用 .num.nw 包裹生效', () => {
+  it('BonusBody SSR：Turks-1 双端展示、Franks-2 保持无 busage、全站 281 条工具说明零裸数字遗漏', () => {
     const turks1 = byId('Turks-1');
     expect(turks1.encoded).toBe(true);
     expect(turks1.src).toBe('dat');
@@ -394,13 +360,13 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     );
     expect(franks2Html).not.toContain('busage');
 
-    // 通用 .num.nw 包裹代表样本
     const samples: [string, string[]][] = [
       ['Danes-2', ['<span class="num nw">11 项</span>']],
       ['Koreans-2', ['<span class="num nw">3 项</span>']],
-      ['Jurchens-3', ['<span class="num nw">-75%</span>', '<span class="num nw">+100%</span>']],
+      ['Jurchens-3', ['<span class="num nw">8套开局</span>', '<span class="num nw">-75%</span>', '<span class="num nw">+100%</span>']],
       ['Chinese-1', ['<span class="num nw">-5/10/15%</span>']],
-      ['Chinese-2', ['<span class="num nw">15人口</span>']],
+      ['Chinese-2', ['<span class="num nw">6村民</span>', '<span class="num nw">15人口</span>']],
+      ['Gurjaras-1', ['<span class="num nw">8套模板</span>']],
       ['Burgundians-0', ['<span class="num nw">-40%</span>']],
     ];
     for (const [id, expectedSpans] of samples) {
@@ -409,9 +375,19 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       );
       for (const span of expectedSpans) expect(html, `${id} -> ${span}`).toContain(span);
     }
+
+    // 全站 281 条加成：凡 .busage li 渲染含数字的工具行，去掉 <span class="num nw">...</span> 与标签后不得残留裸数字
+    for (const b of ALL) {
+      if (!bonusUsage(b).some((l) => /\d/.test(l.note))) continue;
+      const html = renderToStaticMarkup(createElement(StaticRouter, { location: `/civ/${b.civ}` }, createElement(BonusBody, { b })));
+      const ulMatch = /<div class="note busage">[\s\S]*?<ul>([\s\S]*?)<\/ul>/u.exec(html);
+      expect(ulMatch, b.id).toBeTruthy();
+      const withoutWrapped = ulMatch![1]!.replace(/<span class="num nw">[^<]*<\/span>/gu, '').replace(/<[^>]+>/gu, '');
+      expect(withoutWrapped, `${b.id} unwrapped digits: ${withoutWrapped}`).not.toMatch(/\d/u);
+    }
   });
 
-  it('Schema 严格校验拒绝非法键、空 tids、非法 ecoOnlyUnits 与多余字段', () => {
+  it('Schema 严格校验与 311 KB 包体导入闭包隔离', () => {
     const file = 'data/game/army_cost_usage.json';
     const valid = JSON.parse(readFileSync(file, 'utf8'));
     expect(validateDocument(file, valid).valid).toBe(true);
@@ -431,9 +407,7 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     const extraField = structuredClone(valid);
     extraField.bonuses['Danes-2'].extra = 1;
     expect(validateDocument(file, extraField).valid).toBe(false);
-  });
 
-  it('311 KB 包体隔离：目标页面与生成器导入闭包严格解耦', () => {
     const consumerClosure = transitiveClosure([
       'src/domain/bonusUsage.ts',
       'src/shared/ui/BonusBody.tsx',
@@ -452,33 +426,4 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     expect(generatorClosure.has('src/data/armyCostUsage.ts')).toBe(false);
     expect(generatorClosure.has('src/domain/bonusUsage.ts')).toBe(false);
   });
-
-  it('无默认索引的隔离临时仓库副本冷生成与 --check 一致通过', async () => {
-    const execFileAsync = promisify(execFile);
-    const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
-    try {
-      mkdirSync(join(tempDir, 'data'), { recursive: true });
-      cpSync(resolve('src'), join(tempDir, 'src'), { recursive: true });
-      cpSync(resolve('scripts'), join(tempDir, 'scripts'), { recursive: true });
-      cpSync(resolve('data/game'), join(tempDir, 'data/game'), { recursive: true });
-      cpSync(resolve('data/sources'), join(tempDir, 'data/sources'), { recursive: true });
-      cpSync(resolve('data/patch-notes'), join(tempDir, 'data/patch-notes'), { recursive: true });
-      cpSync(resolve('package.json'), join(tempDir, 'package.json'));
-      cpSync(resolve('tsconfig.json'), join(tempDir, 'tsconfig.json'));
-      cpSync(resolve('vite.config.ts'), join(tempDir, 'vite.config.ts'));
-      symlinkSync(resolve('node_modules'), join(tempDir, 'node_modules'));
-
-      const target = join(tempDir, 'data/game/army_cost_usage.json');
-      unlinkSync(target);
-
-      const viteNodeBin = resolve('node_modules/.bin/vite-node');
-      await expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir })).rejects.toThrow();
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts'], { cwd: tempDir });
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
-
-      expect(readFileSync(target, 'utf8')).toBe(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8'));
-    } finally {
-      rmSync(tempDir, { recursive: true, force: true });
-    }
-  }, 60_000);
 });

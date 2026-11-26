@@ -72,7 +72,7 @@ const bengaliQuantity = (text: string, linked: boolean) =>
       part
     ),
   );
-const USAGE_NUM_RE = /([+-]?\d+(?:\/\d+)*(?:\.\d+)?\s*(?:%|项|个村民|人口|个模板))/g;
+const USAGE_NUM_RE = /([+-]?\d+(?:\/\d+)*(?:\.\d+)?\s*(?:%|项|个?村民|人口|[个套]模板|套开局))/g;
 const formatUsageNote = (text: string) =>
   text.split(USAGE_NUM_RE).map((part, index) =>
     index % 2 ? (

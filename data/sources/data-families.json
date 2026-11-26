@@ -14,7 +14,7 @@
       "generator": "scripts/army_cost_usage_build.ts",
       "pin": "dat",
       "check": ["npx vite-node scripts/army_cost_usage_build.ts --check"],
-      "tests": ["tests/unit/bonusUsageArmyCost1429.test.ts"],
+      "tests": ["tests/unit/bonusUsageArmyCost1429.test.ts", "tests/unit/armyCostUsageBuild1429.test.ts"],
       "auditStatus": "reproduced-by-check"
     },
     {

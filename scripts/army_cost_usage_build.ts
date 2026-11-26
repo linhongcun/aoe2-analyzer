@@ -11,7 +11,7 @@
  */
 import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand } from '../src/data/armyResearch';
 import { CORE } from '../src/data/core';
 import { civs, loadTrees } from '../src/data/index';
@@ -23,23 +23,15 @@ import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } f
 import type { Cost } from '../src/domain/types';
 
 export type EcoOnlyUnitId = 83 | 128 | 17;
-
 export interface ArmyCostUsageEntry {
   tids: number[];
   allFree: boolean;
   ecoOnlyUnits: EcoOnlyUnitId[];
 }
-
 export interface ArmyCostUsageFile {
-  meta: {
-    generatedBy: 'scripts/army_cost_usage_build.ts';
-    patch: string;
-    commit: string;
-    sha256: string;
-  };
+  meta: { generatedBy: 'scripts/army_cost_usage_build.ts'; patch: string; commit: string; sha256: string };
   bonuses: Record<string, ArmyCostUsageEntry>;
 }
-
 export interface BuildArmyCostUsageOverrides {
   bonusesByCiv?: Readonly<Record<string, readonly CivBonusEnt[]>>;
   teamEcoByCiv?: Readonly<Record<string, readonly DatEco[]>>;
@@ -48,18 +40,9 @@ export interface BuildArmyCostUsageOverrides {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DEFAULT_ARMY_COST_USAGE_DEST = resolve(ROOT, 'data/game/army_cost_usage.json');
-
 const ECO_ONLY_UNIT_ORDER: readonly EcoOnlyUnitId[] = [83, 128, 17];
 const ECO_ONLY_UNIT_SET = new Set<number>(ECO_ONLY_UNIT_ORDER);
-
-const WHAT_TO_B: Readonly<Record<string, number>> = {
-  食物: 0,
-  木材: 1,
-  石料: 2,
-  黄金: 3,
-  全部资源: -1,
-};
-
+const WHAT_TO_B: Readonly<Record<string, number>> = { 食物: 0, 木材: 1, 石料: 2, 黄金: 3, 全部资源: -1 };
 const EPS = 1e-9;
 const CMD_V_EPS = 1e-5;
 
@@ -116,7 +99,6 @@ function mapCivCostCommands(civEn: string, bonuses: readonly CivBonusEnt[], data
     v: number;
   }
   const expected: ExpectedCivCmd[] = [];
-  const sigOwners = new Map<string, Set<string>>();
 
   const recordExpected = (owner: string, isTeam: boolean, e: DatEco) => {
     if (e.tid === undefined || e.what === '研究时间') return;
@@ -125,10 +107,6 @@ function mapCivCostCommands(civEn: string, bonuses: readonly CivBonusEnt[], data
       throw new Error(`${civEn} ${owner}: 无法识别的研究费用资源字段 what=${String(e.what)} (tid=${e.tid})`);
     }
     expected.push({ owner, isTeam, tid: e.tid, b, op: e.op, v: e.v });
-    const sig = `${e.tid}:${b}:${e.op}:${Math.round(e.v * 1e5)}`;
-    const owners = sigOwners.get(sig) ?? new Set<string>();
-    owners.add(owner);
-    sigOwners.set(sig, owners);
   };
 
   for (const bon of bonuses) {
@@ -140,19 +118,39 @@ function mapCivCostCommands(civEn: string, bonuses: readonly CivBonusEnt[], data
   }
   for (const e of teamEco) recordExpected(`${civEn}-team`, true, e);
 
-  for (const [sig, owners] of sigOwners) {
-    if (owners.size > 1) {
-      throw new Error(`${civEn}: 负科技号研究费用命令签名 ${sig} 同时属于多个来源（${[...owners].sort().join(', ')}），来源无法唯一确定`);
+  const matchesCivCmd = (exp: ExpectedCivCmd, cmd: ResearchCommand): boolean =>
+    cmd.A === exp.tid && cmd.B === exp.b && opMatchesTechCost(exp.op, cmd.C) && Math.abs(cmd.D - exp.v) <= CMD_V_EPS;
+
+  // Cross-owner ambiguity check using the exact same tolerance predicate as matching.
+  for (let i = 0; i < expected.length; i++) {
+    for (let j = i + 1; j < expected.length; j++) {
+      const a = expected[i]!;
+      const b = expected[j]!;
+      if (a.owner !== b.owner && a.tid === b.tid && a.b === b.b && a.op === b.op && Math.abs(a.v - b.v) <= CMD_V_EPS) {
+        throw new Error(
+          `${civEn}: 负科技号研究费用预期命令（tid=${a.tid}, B=${a.b}, op=${a.op}）在容差内同时属于多个来源（${[a.owner, b.owner].sort().join(', ')}），来源无法唯一确定`,
+        );
+      }
     }
   }
 
+  for (const { cmd, idx } of type101Entries) {
+    const owners = new Set(expected.filter((exp) => matchesCivCmd(exp, cmd)).map((exp) => exp.owner));
+    if (owners.size > 1) {
+      throw new Error(
+        `${civEn}: 常驻 Type=101 命令 #${idx}（tid=${cmd.A}, B=${cmd.B}, C=${cmd.C}, D=${cmd.D}）在容差内同时匹配多个来源（${[...owners].sort().join(', ')}），来源无法唯一确定`,
+      );
+    }
+  }
+
+  // Sort expected and actual candidates by numeric value ascending for deterministic 1D interval matching.
+  const sortedExpected = [...expected].sort((a, b) => a.tid - b.tid || a.b - b.b || a.op.localeCompare(b.op) || a.v - b.v);
+  const sortedActual = [...type101Entries].sort((a, b) => a.cmd.A - b.cmd.A || a.cmd.B - b.cmd.B || a.cmd.C - b.cmd.C || a.cmd.D - b.cmd.D || a.idx - b.idx);
+
   const usedCivIdx = new Set<number>();
   const civIndicesByBonus = new Map<string, Set<number>>();
-  for (const exp of expected) {
-    const match = type101Entries.find(
-      ({ cmd, idx }) =>
-        !usedCivIdx.has(idx) && cmd.A === exp.tid && cmd.B === exp.b && opMatchesTechCost(exp.op, cmd.C) && Math.abs(cmd.D - exp.v) <= CMD_V_EPS,
-    );
+  for (const exp of sortedExpected) {
+    const match = sortedActual.find(({ cmd, idx }) => !usedCivIdx.has(idx) && matchesCivCmd(exp, cmd));
     if (!match) {
       throw new Error(`${civEn} ${exp.owner}: 缺少匹配的 Type=101 常驻命令（tid=${exp.tid}, B=${exp.b}, op=${exp.op}, v=${exp.v}）`);
     }
@@ -195,9 +193,11 @@ function mapCivCostCommands(civEn: string, bonuses: readonly CivBonusEnt[], data
         );
       }
 
+      const sortedPosExpected = [...expectedCostEco].sort((a, b) => a.v - b.v);
+      const sortedPosActual = [...actualCostMods].sort((a, b) => a.cmd.D - b.cmd.D || a.idx - b.idx);
       const usedPosIdx = new Set<number>();
-      for (const e of expectedCostEco) {
-        const hit = actualCostMods.find(({ cmd, idx }) => {
+      for (const e of sortedPosExpected) {
+        const hit = sortedPosActual.find(({ cmd, idx }) => {
           if (usedPosIdx.has(idx)) return false;
           if (e.res === 85) {
             return isGlobalResearchCostMod(cmd) && opMatchesRes85(e.op, cmd) && Math.abs(cmd.D - e.v) <= CMD_V_EPS;
@@ -316,23 +316,18 @@ export function buildArmyCostUsage(
     const { civIndicesByBonus, posIndicesByBonus } = mapCivCostCommands(civEn, bonuses, data, teamEco);
     const ageEvals = [1, 2, 3, 4].map((age) => evaluateAgePassiveConfigs(ctx, civEn, age, data));
 
-    // Collect all passive discounted research IDs across ages 1-4 directly from valid ledger entries.
-    const civPassiveDiscountedTids = new Set<number>();
-    for (const { configs } of ageEvals) {
-      for (const { res } of configs) {
-        for (const entry of res.ledger) {
-          if (entry.id === null || entry.status === 'invalid' || !entry.quote?.cost || !entry.quote.baseCost) continue;
-          if (strictlyCheaper(entry.quote.cost, entry.quote.baseCost)) {
-            civPassiveDiscountedTids.add(entry.id);
-          }
-        }
+    const slotKey = (age: number, label: string, tid: number) => `${age}|${label}|${tid}`;
+    const discountedOf = (res: ArmyCostResult) =>
+      res.ledger.filter((e) => e.id !== null && e.status !== 'invalid' && e.quote?.cost && e.quote.baseCost && strictlyCheaper(e.quote.cost, e.quote.baseCost));
+    const civPassiveDiscountedKeys = new Set<string>();
+    for (const { age, configs } of ageEvals) {
+      for (const { label, res } of configs) {
+        for (const entry of discountedOf(res)) civPassiveDiscountedKeys.add(slotKey(age, label, entry.id!));
       }
     }
 
-    const attributedTids = new Set<number>();
-    const nonTeamBonuses = bonuses.filter((b) => !b.team);
-
-    for (const bon of nonTeamBonuses) {
+    const attributedKeys = new Set<string>();
+    for (const bon of bonuses.filter((b) => !b.team)) {
       const civDrop = civIndicesByBonus.get(bon.id);
       const posDrop = posIndicesByBonus.get(bon.id);
       if (!civDrop?.size && !posDrop?.size) continue;
@@ -342,25 +337,23 @@ export function buildArmyCostUsage(
       let allFree = true;
       const beneficiaries = new Set<number>();
 
-      for (const { rows, configs } of ageEvals) {
-        for (const { cfg, res: baseRes } of configs) {
-          const discountedEntries = baseRes.ledger.filter(
-            (e) => e.id !== null && e.status !== 'invalid' && e.quote?.cost && e.quote.baseCost && strictlyCheaper(e.quote.cost, e.quote.baseCost),
-          );
+      for (const { age, rows, configs } of ageEvals) {
+        for (const { label, cfg, res: baseRes } of configs) {
+          const discountedEntries = discountedOf(baseRes);
           if (!discountedEntries.length) continue;
-
-          const abRes = evaluateArmyCost(ctx, cfg, ablatedData);
-          const abById = new Map(abRes.ledger.filter((e) => e.id !== null).map((e) => [e.id!, e]));
-
+          const abById = new Map(
+            evaluateArmyCost(ctx, cfg, ablatedData)
+              .ledger.filter((e) => e.id !== null)
+              .map((e) => [e.id!, e]),
+          );
           for (const baseEntry of discountedEntries) {
             const abEntry = abById.get(baseEntry.id!);
             if (!abEntry || abEntry.status === 'invalid' || !abEntry.quote?.cost) {
               throw new Error(`${bon.id}: 反事实摘除后研究 t:${baseEntry.id} 变为无效（${abEntry?.reason ?? '缺失'}）`);
             }
             if (!strictlyCheaper(baseEntry.quote!.cost!, abEntry.quote.cost)) continue;
-
             hitTids.add(baseEntry.id!);
-            attributedTids.add(baseEntry.id!);
+            attributedKeys.add(slotKey(age, label, baseEntry.id!));
             if (!baseEntry.quote!.zero) allFree = false;
             for (const bi of baseEntry.beneficiaries) {
               const uid = rows[bi]?.unit;
@@ -372,18 +365,55 @@ export function buildArmyCostUsage(
 
       if (hitTids.size > 0) {
         const ecoOnly = beneficiaries.size > 0 && [...beneficiaries].every((id) => ECO_ONLY_UNIT_SET.has(id));
-        const ecoOnlyUnits: EcoOnlyUnitId[] = ecoOnly ? ECO_ONLY_UNIT_ORDER.filter((id) => beneficiaries.has(id)) : [];
         resultBonuses[bon.id] = {
           tids: [...hitTids].sort((a, b) => a - b),
           allFree,
-          ecoOnlyUnits,
+          ecoOnlyUnits: ecoOnly ? ECO_ONLY_UNIT_ORDER.filter((id) => beneficiaries.has(id)) : [],
         };
       }
     }
 
-    const unattributed = [...civPassiveDiscountedTids].filter((tid) => !attributedTids.has(tid)).sort((a, b) => a - b);
+    const unattributed = [...civPassiveDiscountedKeys].filter((key) => !attributedKeys.has(key)).sort();
     if (unattributed.length) {
       throw new Error(`${civEn}: 被动报价场景（done: []）存在未归属的折价研究条目：[${unattributed.join(', ')}]`);
+    }
+
+    if (civPassiveDiscountedKeys.size > 0) {
+      const allCivDrop = new Set<number>();
+      for (const s of civIndicesByBonus.values()) for (const idx of s) allCivDrop.add(idx);
+      const allPosDrop = new Map<number, Set<number>>();
+      for (const byNode of posIndicesByBonus.values()) {
+        for (const [nodeId, idxs] of byNode) {
+          const target = allPosDrop.get(nodeId) ?? new Set<number>();
+          for (const idx of idxs) target.add(idx);
+          allPosDrop.set(nodeId, target);
+        }
+      }
+      const jointAblated = ablateBonusCommands(civEn, data, allCivDrop, allPosDrop);
+      const residual: string[] = [];
+      for (const { age, configs } of ageEvals) {
+        for (const { label, cfg, res: baseRes } of configs) {
+          const discountedEntries = discountedOf(baseRes);
+          if (!discountedEntries.length) continue;
+          const abById = new Map(
+            evaluateArmyCost(ctx, cfg, jointAblated)
+              .ledger.filter((e) => e.id !== null)
+              .map((e) => [e.id!, e]),
+          );
+          for (const baseEntry of discountedEntries) {
+            const abEntry = abById.get(baseEntry.id!);
+            if (!abEntry || abEntry.status === 'invalid' || !abEntry.quote?.cost) {
+              throw new Error(`${civEn}: 联合摘除全部非团队加成后研究 t:${baseEntry.id} 变为无效（${abEntry?.reason ?? '缺失'}）`);
+            }
+            if (strictlyCheaper(abEntry.quote.cost, baseEntry.quote!.baseCost!)) {
+              residual.push(slotKey(age, label, baseEntry.id!));
+            }
+          }
+        }
+      }
+      if (residual.length) {
+        throw new Error(`${civEn}: 联合摘除全部非团队加成后仍存在未归属的残余折价：[${residual.sort().join(', ')}]`);
+      }
     }
   }
 
@@ -439,14 +469,17 @@ async function main() {
   console.log(`wrote ${out} (${Object.keys(payload.bonuses).length} bonuses)`);
 }
 
-function isDirectCliInvocation(): boolean {
+function isDirectCliInvocation(topLevelStack: string): boolean {
   const entry = process.argv[1];
   if (!entry) return false;
-  if (/(?:^|[\\/])vite-node(?:\.(?:m|c)?js)?$/u.test(entry)) return true;
+  const selfReal = realpathSync(fileURLToPath(import.meta.url));
   const resolved = resolve(entry);
-  if (!existsSync(resolved)) return false;
-  return pathToFileURL(realpathSync(resolved)).href === pathToFileURL(realpathSync(fileURLToPath(import.meta.url))).href;
+  if (existsSync(resolved) && realpathSync(resolved) === selfReal) return true;
+  if (/(?:^|[\\/])vite-node(?:\.(?:m|c)?js)?$/u.test(entry)) {
+    return topLevelStack.includes('ViteNodeRunner.executeFile') && !topLevelStack.includes('ViteNodeRunner.dependencyRequest');
+  }
+  return false;
 }
-if (isDirectCliInvocation()) {
+if (isDirectCliInvocation(new Error().stack ?? '')) {
   await main();
 }
