@@ -59,6 +59,7 @@ def pass_through_projectile_ids(commands):
     """从原始 EffectCommands 字典列表提取同时满足 C=67 (HitMode=1) 且 C=119 > 0 (PassThroughDamage) 的具体弹丸 ID 集合（#1446）。
 
     显式契约：commands 必须是原始 .dat EffectCommands 字典列表（遇非字典立即抛 TypeError）；
+    先校验所有命令的 Type 与 C 均为严格整数（否则 fail-closed 抛 ValueError）；
     对 C in (67, 119) 且 Type in (0, 4, 5, 10, 14, 15) 仅接受具体弹丸（A >= 0）的 Type=0（set）与有限数值 D，
     遇按类（A < 0）、非 Type=0、bool 或非有限 D 立即 fail-closed 抛 ValueError；
     同弹丸按命令顺序覆盖（后续 set 0 可清除前序正值）。
@@ -68,12 +69,14 @@ def pass_through_projectile_ids(commands):
     for c in commands:
         if not isinstance(c, dict):
             raise TypeError(f'pass_through_projectile_ids expects raw EffectCommands dict items, got {type(c).__name__}')
-        attr = c['C']
-        if isinstance(attr, bool) or attr not in (67, 119):
-            continue
         t = c['Type']
-        if isinstance(t, bool):
-            raise ValueError(f'pass_through_projectile_ids encountered bool command type: {c!r}')
+        if type(t) is not int:
+            raise ValueError(f'pass_through_projectile_ids encountered non-int command type {t!r}: {c!r}')
+        attr = c['C']
+        if type(attr) is not int:
+            raise ValueError(f'pass_through_projectile_ids encountered non-int command attribute {attr!r}: {c!r}')
+        if attr not in (67, 119):
+            continue
         if t not in (0, 4, 5, 10, 14, 15):
             continue
         if t != 0:

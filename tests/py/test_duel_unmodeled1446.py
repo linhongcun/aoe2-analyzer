@@ -117,11 +117,20 @@ class DuelUnmodeled1446Tests(unittest.TestCase):
         with self.assertRaises(TypeError):
             pass_through_projectile_ids([(0, 380, -1, 67, 1.0)])
 
-        # 合法具体弹丸 A=380 上独立拒绝 Type=4/5/10/14/15 与 bool（分别测 C=67 与 C=119）
+        # 合法具体弹丸 A=380 上独立拒绝 Type=4/5/10/14/15 与非严格 int（float/str/NaN/±Inf/None/bool）
         for attr in (67, 119):
-            for bad_type in (4, 5, 10, 14, 15, False, True):
+            for bad_type in (4, 5, 10, 14, 15, False, True, 0.0, 4.0, '0', '4', math.nan, math.inf, -math.inf, None):
                 with self.assertRaises(ValueError, msg=f'attr={attr} type={bad_type!r}'):
                     pass_through_projectile_ids([{'Type': bad_type, 'A': 380, 'B': -1, 'C': attr, 'D': 1.0}])
+
+            # 畸形 Type 紧随合法穿透命令后也不得静默跳过并保留前序穿透结果
+            for bad_type in (0.0, '4', math.nan, math.inf, -math.inf, None):
+                with self.assertRaises(ValueError, msg=f'trailing attr={attr} type={bad_type!r}'):
+                    pass_through_projectile_ids([
+                        {'Type': 0, 'A': 380, 'B': -1, 'C': 67, 'D': 1.0},
+                        {'Type': 0, 'A': 380, 'B': -1, 'C': 119, 'D': 0.15},
+                        {'Type': bad_type, 'A': 380, 'B': -1, 'C': attr, 'D': 0.0},
+                    ])
 
             # 合法具体弹丸 A=380 上独立拒绝 NaN / ±Inf / bool / str 的 D
             for bad_d in (math.nan, math.inf, -math.inf, True, False, '0.15', None):
@@ -132,6 +141,11 @@ class DuelUnmodeled1446Tests(unittest.TestCase):
             for bad_a in (-1, -5, True, False, '380', 380.0):
                 with self.assertRaises(ValueError, msg=f'attr={attr} A={bad_a!r}'):
                     pass_through_projectile_ids([{'Type': 0, 'A': bad_a, 'B': 15, 'C': attr, 'D': 1.0}])
+
+        # 非严格 int 的 C 也必须 fail-closed
+        for bad_c in (67.0, 119.0, '67', False, True, math.nan, None):
+            with self.assertRaises(ValueError, msg=f'C={bad_c!r}'):
+                pass_through_projectile_ids([{'Type': 0, 'A': 380, 'B': -1, 'C': bad_c, 'D': 1.0}])
 
     def test_committed_units_and_effects_exact_invariants(self):
         self.assertEqual(len(self.units), 248)

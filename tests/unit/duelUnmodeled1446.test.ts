@@ -95,10 +95,35 @@ describe('Issue 1446 单位 PK 未建模提示补齐（a:24 / 单位固有回血
     // 孟加拉战车（1759/1761）不在 846 作用名单内
     expect(hitsByCiv.Bengalis).not.toContain(1759);
     expect(hitsByCiv.Bengalis).not.toContain(1761);
-    // 西西里覆盖 8 类陆军（重骑 283、精锐萨金特 1659、长戟 359 等），排除海军、攻城、村民、僧侣
-    expect(hitsByCiv.Sicilians).toContain(283);
-    expect(hitsByCiv.Sicilians).toContain(1659);
-    expect(hitsByCiv.Sicilians).toContain(359);
+    // 西西里 771 底层 8 类陆军 a:24 命令与精确 27 个可用单位 ID 全集（排除海军、攻城、村民、僧侣）
+    const sicilian771A24 = DAT.civs.Sicilians!.bonus.filter((b) => b.tech === 771).flatMap((b) => b.eco.filter((e) => e.a === 24));
+    expect(sicilian771A24).toHaveLength(8);
+    expect(sicilian771A24.map((e) => e.cls).sort((a, b) => (a ?? -1) - (b ?? -1))).toEqual([0, 6, 12, 23, 35, 36, 44, 47]);
+    for (const e of sicilian771A24) {
+      expect(e.op).toBe('set');
+      expect(e.v).toBe(0.4);
+    }
+    const sicilianA24AllTargets = [
+      ...new Set(
+        DAT.civs
+          .Sicilians!.bonus.flatMap((b) => b.eco)
+          .filter((e) => e.a === 24)
+          .flatMap((e) => e.t ?? []),
+      ),
+    ].sort((a, b) => a - b);
+    const sicilian771Targets = [...new Set(sicilian771A24.flatMap((e) => e.t ?? []))].sort((a, b) => a - b);
+    expect(sicilianA24AllTargets).toEqual(sicilian771Targets);
+    expect(sicilian771Targets).toHaveLength(197);
+    const expectedSicilianAvail = [
+      4, 6, 7, 24, 38, 74, 75, 77, 93, 283, 358, 359, 440, 448, 473, 492, 546, 567, 1658, 1659, 1660, 1661, 1786, 1787, 1788, 2700, 2701,
+    ];
+    expect(
+      units
+        .filter((u) => u.civs.includes('Sicilians') && sicilian771Targets.includes(u.id))
+        .map((u) => u.id)
+        .sort((a, b) => a - b),
+    ).toEqual(expectedSicilianAvail);
+    expect(hitsByCiv.Sicilians).toEqual(expectedSicilianAvail);
     for (const excluded of [83, 125, 280, 331, 442, 539, 548]) {
       expect(hitsByCiv.Sicilians).not.toContain(excluded);
     }
@@ -115,75 +140,24 @@ describe('Issue 1446 单位 PK 未建模提示补齐（a:24 / 单位固有回血
   });
 
   it('P2 边界：hasPositiveBonusDamageReduction 有限数值与顺序 set/add/mul 覆盖消歧', () => {
+    const e24 = (op: string, v: number, t = [875]): DatEco => ({ a: 24, op, v, t });
     expect(hasPositiveBonusDamageReduction(undefined, 875)).toBe(false);
     expect(hasPositiveBonusDamageReduction([], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: 0.25, t: [875] }], 875)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: 0.4, t: [283] }], 283)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: 0, t: [875] }], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: -0.25, t: [875] }], 875)).toBe(false);
-
-    // 顺序 set 覆盖：后 set 0 清除前正值；反序先 0 后正值开启
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'set', v: 0.25, t: [875] },
-          { a: 24, op: 'set', v: 0, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(false);
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'set', v: 0, t: [875] },
-          { a: 24, op: 'set', v: 0.25, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(true);
-
-    // 顺序 mul 覆盖：set 0.25 → mul 0 归零返回 false；反序 mul 0 → set 0.25 返回 true
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'set', v: 0.25, t: [875] },
-          { a: 24, op: 'mul', v: 0, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(false);
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'mul', v: 0, t: [875] },
-          { a: 24, op: 'set', v: 0.25, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(true);
-
-    // add 抵消与非有限数防护
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'add', v: 0.25, t: [875] },
-          { a: 24, op: 'add', v: -0.25, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(false);
-    expect(
-      hasPositiveBonusDamageReduction(
-        [
-          { a: 24, op: 'set', v: 0.25, t: [875] },
-          { a: 24, op: 'add', v: -0.25, t: [875] },
-        ],
-        875,
-      ),
-    ).toBe(false);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: Number.NaN, t: [875] }], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: Number.POSITIVE_INFINITY, t: [875] }], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([{ a: 24, op: 'set', v: Number.NEGATIVE_INFINITY, t: [875] }], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0.25)], 875)).toBe(true);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0.4, [283])], 283)).toBe(true);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', -0.25)], 875)).toBe(false);
+    // 顺序 set / mul / add 覆盖消歧
+    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('set', 0)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0), e24('set', 0.25)], 875)).toBe(true);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('mul', 0)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('mul', 0), e24('set', 0.25)], 875)).toBe(true);
+    expect(hasPositiveBonusDamageReduction([e24('add', 0.25), e24('add', -0.25)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('add', -0.25)], 875)).toBe(false);
+    // 非有限数防护
+    expect(hasPositiveBonusDamageReduction([e24('set', Number.NaN)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', Number.POSITIVE_INFINITY)], 875)).toBe(false);
+    expect(hasPositiveBonusDamageReduction([e24('set', Number.NEGATIVE_INFINITY)], 875)).toBe(false);
   });
 
   it('文案逐字对齐 UX 规格、来源分离、副形态 regenRate 零透传与零内部字段泄漏', () => {
