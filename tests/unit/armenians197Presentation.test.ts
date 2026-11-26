@@ -30,12 +30,12 @@ describe('#197 亚美尼亚公开口径与原工具边界', () => {
     expect(practiceAction({ type: 'build', building: 562 }, () => '伐木场')).toBe('建造 1 座伐木场');
   });
 
-  it('骡车新数值完整nowrap，原默认数字处理DOM保持', () => {
+  it('骡车与通用数值走统一 NumUnitText 完整 nowrap', () => {
     const text = '建造1辆骡车，费用60木、15食物';
-    expect(renderToStaticMarkup(createElement(NumUnitText, { text, cartUnits: true }))).toContain('<span class="nw">1辆</span>');
-    expect(renderToStaticMarkup(createElement(NumUnitText, { text, cartUnits: true }))).toContain('<span class="nw">15食物</span>');
+    expect(renderToStaticMarkup(createElement(NumUnitText, { text }))).toContain('<span class="nw">1辆</span>');
+    expect(renderToStaticMarkup(createElement(NumUnitText, { text }))).toContain('<span class="nw">15食物</span>');
     expect(renderToStaticMarkup(createElement(NumUnitText, { text: '3个村民、60木' }))).toBe('<span class="nw">3个村民</span>、<span class="nw">60木</span>');
-    expect(renderToStaticMarkup(createElement(NumUnitText, { text: '1辆骡车' }))).toBe('1辆骡车');
+    expect(renderToStaticMarkup(createElement(NumUnitText, { text: '1辆骡车' }))).toBe('<span class="nw">1辆</span>骡车');
   });
 
   it('费用附注随真实移除958变为全价，不再声称原60木15食物', () => {
