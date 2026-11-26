@@ -195,6 +195,18 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
         await page.goBack();
         await expect(countInput).toHaveValue('');
         await expect(countError).toBeVisible();
+
+        // 同 URL 历史条目后退不保留上一条含逗号草稿（R4 P2）
+        await page.goto('./#/production?rows=83:109:7');
+        await countInput.fill('');
+        await expect(countInput).toHaveValue('');
+        await page.goto('./#/production?rows=83:109:5');
+        await expect(countInput).toHaveValue('5');
+        await countInput.fill('1,000');
+        await expect(countInput).toHaveValue('1,000');
+        await page.goBack();
+        await expect(countInput).toHaveValue('');
+        await expect(countError).toBeVisible();
       }
 
       expect(errors).toEqual([]);
@@ -375,6 +387,17 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
     // 离开同模式另一查询再浏览器后退，不复活旧含逗号草稿（R3 P2）
     await page.goto('./#/production?mode=train-total&civ=Franks&age=4&units=38:5');
     await expect(ttQty).toHaveValue('5');
+    await page.goBack();
+    await expect(ttQty).toHaveValue('');
+    await expect(ttQty).not.toHaveAttribute('aria-invalid');
+    await expect(ttQty).toHaveAttribute('aria-describedby', 'train-total-row-error-0');
+
+    // 同 URL 历史条目后退不保留上一条含逗号草稿与 aria-invalid（R4 P2）
+    await page.goto('./#/production?mode=train-total&civ=Franks&age=4&units=38:5');
+    await expect(ttQty).toHaveValue('5');
+    await ttQty.fill('1,000');
+    await expect(ttQty).toHaveValue('1,000');
+    await expect(ttQty).toHaveAttribute('aria-invalid', 'true');
     await page.goBack();
     await expect(ttQty).toHaveValue('');
     await expect(ttQty).not.toHaveAttribute('aria-invalid');

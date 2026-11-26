@@ -1,5 +1,5 @@
 import { Fragment, lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
@@ -98,15 +98,19 @@ export default function Production() {
 
 function LegacyProduction({ context }: { context: ProductionContext }) {
   const location = useLocation(),
-    navigate = useNavigate();
+    navigate = useNavigate(),
+    navigationType = useNavigationType();
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
-  const [observedSearch, setObservedSearch] = useState(location.search);
+  const [observed, setObserved] = useState({ key: location.key, search: location.search });
   const [rawCounts, setRawCounts] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
-  if (observedSearch !== location.search) {
-    setObservedSearch(location.search);
-    if (rawCounts.search !== location.search) setRawCounts({ search: location.search, drafts: {} });
+  if (observed.key !== location.key || observed.search !== location.search) {
+    setObserved({ key: location.key, search: location.search });
+    if (navigationType !== 'REPLACE' || rawCounts.search !== location.search) setRawCounts({ search: location.search, drafts: {} });
   }
-  const activeDrafts = useMemo(() => (rawCounts.search === location.search ? rawCounts.drafts : {}), [rawCounts, location.search]);
+  const activeDrafts = useMemo(
+    () => (observed.key === location.key && rawCounts.search === location.search ? rawCounts.drafts : {}),
+    [observed.key, location.key, rawCounts, location.search],
+  );
   const config = useMemo(
     () =>
       Object.keys(activeDrafts).length === 0

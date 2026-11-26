@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
 import { defaultTrainQty, defaultTrainUnit, evaluateTrainTotal, TRAIN_TOTAL_QTY_MAX, type TrainTotalConfig } from '../../domain/trainTotal';
@@ -65,14 +65,18 @@ export function TrainTotalLinkError({ errors }: { errors: string[] }) {
 export function TrainTotal({ context }: { context: ProductionContext }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const decoded = useMemo(() => decodeTrainTotal(location.search), [location.search]);
-  const [observedSearch, setObservedSearch] = useState(location.search);
+  const [observed, setObserved] = useState({ key: location.key, search: location.search });
   const [rawQtys, setRawQtys] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
-  if (observedSearch !== location.search) {
-    setObservedSearch(location.search);
-    if (rawQtys.search !== location.search) setRawQtys({ search: location.search, drafts: {} });
+  if (observed.key !== location.key || observed.search !== location.search) {
+    setObserved({ key: location.key, search: location.search });
+    if (navigationType !== 'REPLACE' || rawQtys.search !== location.search) setRawQtys({ search: location.search, drafts: {} });
   }
-  const activeDrafts = useMemo(() => (rawQtys.search === location.search ? rawQtys.drafts : {}), [rawQtys, location.search]);
+  const activeDrafts = useMemo(
+    () => (observed.key === location.key && rawQtys.search === location.search ? rawQtys.drafts : {}),
+    [observed.key, location.key, rawQtys, location.search],
+  );
   const config = useMemo(
     () =>
       Object.keys(activeDrafts).length === 0
