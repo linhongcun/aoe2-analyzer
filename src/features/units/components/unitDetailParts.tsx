@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { formatAttackDelaySeconds } from '../../../domain/attackDelayFormat';
 import { entityCivLink } from '../../../domain/civRoute';
-import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
+import { DPS_UNAVAILABLE_REASON, mainAttackType } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
@@ -130,7 +130,7 @@ export function CatalogStats({ u, base, elite, meleeForm }: { u: Unit; base: Uni
         sub={<EliteDelta n={elite ? u.hp - base.hp : undefined} hp />}
       />
       <StatTile
-        icon={u.rng > 1 ? 'bow-arrow' : 'sword'}
+        icon={mainAttackType(u) === '穿刺' ? 'bow-arrow' : 'sword'}
         stat="atk"
         label={u.id === 331 ? '攻击力（展开态）' : '攻击力'}
         value={<span className="num nw">{u.atk}</span>}

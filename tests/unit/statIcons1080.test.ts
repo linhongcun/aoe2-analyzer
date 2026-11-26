@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { loadCore, type Core } from '../../src/data';
+import { mainAttackType } from '../../src/domain/duel';
 import type { Unit } from '../../src/domain/types';
 import BuildingDetail from '../../src/features/buildings/components/BuildingDetail';
 import UnitList from '../../src/features/units/components/UnitList';
@@ -60,8 +61,25 @@ describe('Issue 1080 局部属性图形与术语', () => {
     expect(new Set(icons).size).toBe(4);
     expect(icon(tile(html, 'ma'))).toContain('lucide-shield ');
     expect(icon(tile(html, 'pa'))).toContain('lucide-shield-half');
-    expect(icon(tile(html, 'atk'))).toContain(unit.rng > 1 ? 'lucide-bow-arrow' : 'lucide-sword');
+    expect(icon(tile(html, 'atk'))).toContain(mainAttackType(unit) === '穿刺' ? 'lucide-bow-arrow' : 'lucide-sword');
     expect(icon(tile(html, 'rng'))).toContain('lucide-crosshair');
+  });
+
+  it.each([531, 1015, 1907])('远程近战单位 %i 目录攻击图标采用近战剑而非弓箭，射程图标不变', (id) => {
+    const unit = state.core!.unitById[id]!;
+    expect(unit.rng).toBeGreaterThan(1);
+    expect(mainAttackType(unit)).toBe('近战');
+    const html = stats(unit);
+    expect(icon(tile(html, 'atk'))).toContain('lucide-sword');
+    expect(icon(tile(html, 'atk'))).not.toContain('lucide-bow-arrow');
+    expect(icon(tile(html, 'rng'))).toContain('lucide-crosshair');
+  });
+
+  it.each([492, 559, 542])('远程穿刺与双类别穿刺单位 %i 目录攻击图标维持弓箭', (id) => {
+    const unit = state.core!.unitById[id]!;
+    expect(mainAttackType(unit)).toBe('穿刺');
+    const html = stats(unit);
+    expect(icon(tile(html, 'atk'))).toContain('lucide-bow-arrow');
   });
 
   it('营垒的两类护甲图形与单位一致，数值仍来自对应字段', () => {
@@ -78,7 +96,10 @@ describe('Issue 1080 局部属性图形与术语', () => {
       expect(icon(part)).toBe(icon(tile(unit, stat)));
     }
     expect(tile(html, 'pa')).not.toContain('远程护甲');
-    expect(icon(tile(html, 'atk'))).toContain('lucide-sword');
+    // #1219 起建筑攻击由 BuildingAttackDetails（data-stat="atk"）分列基础攻击类别，不再在 bd-stat-grid 渲染 sword 图标卡片
+    const atkBlock = html.match(/<dl[^>]*data-stat="atk"[^>]*>.*?<\/dl>/s)?.[0] ?? '';
+    expect(atkBlock).toContain('基础穿刺攻击');
+    expect(atkBlock).toContain(`>${building.atk}</dd>`);
   });
 
   it('巨投后缀、精锐差值与负值不因换图改变', () => {

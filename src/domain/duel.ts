@@ -20,6 +20,7 @@ export {
   fighterCanAttack,
   fighterFrom,
   fighterUsesAssumeHit,
+  mainAttackType,
   unitHasNormalAttack,
   unitIsNonAttackingCaster,
   type Fighter,
