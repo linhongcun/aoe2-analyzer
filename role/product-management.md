@@ -408,6 +408,12 @@
 
 原因是计算引擎复用同一份 `effects.json` 或 `unitCost` 时，下游页面既容易把「排除行」与「含未解码边界的估算」混成同一个布尔开关，也容易默认参数顺序无关。以后评审把既有科技/费用能力接入第二个工具页时，必须额外核实两件事：先查目标结果面板是否已区分「部分排除（`partial`）」与「全行计入但含估算边界（`estimated`）」，缺估算 UI 态即交体验设计；涉及加/乘混合科技叠加的计算页，在 PRD 验收中明确锁定与 `simulator.ts`（`TECH_EFFECTS` 键序）同源的叠加顺序并写明非交换算例（如萨拉森 `331 + 47 + 454`），同时按 `ceil` 逐例验算击数/向上取整阈值，避免草稿把单次增伤误写成多单位总击数下降。
 
+### 改共享经济采集引擎前，核清主包依赖链、三类 `requires` 与 `bonusUsage` 反事实联动
+
+2026-11-26 评审[亚美尼亚骡车科技与 `collectCivGather` 前置过滤修复](https://github.com/linhongcun/aoe2-analyzer/issues/1473)时，沿 [realCost.ts](../src/domain/realCost.ts) 全仓反查暴露出四类容易返工的隐性约束：一是 [realCost.ts](../src/domain/realCost.ts) 表面只服务懒加载计算页，实际经 `Home → RouteContinuity → routeProfiles → scenarioBudget` 处于主包依赖链，若直接静态 import `CORE`（`techs.json`）或直读 `trees.json`，会触发主包目录膨胀或违反 [check-layers.mjs](../scripts/check-layers.mjs) / [dataBudget282.test.ts](../tests/unit/dataBudget282.test.ts)；二是全站 56 国 `civEco` 触及采集且带 `requires` 的 10 条记录混含三类不同语义——非目录/时代触发（柏柏尔 `104`/`101` 不得被过滤）、`ecoTechs` 采集前置（亚美尼亚可用 5 项与禁用 `221`/`279`）以及非 `ecoTechs` 科技前置（波希米亚修道院科技 `252` 狂热），在「显式 `techIds`」与「默认省略 `techIds`」两种口径下表现并不相同；三是 [production.ts](../src/domain/production.ts) 的 `gatherUnsupportedSources` 与 `gatherModel` 分开调用，未同步透传 `techIds` 会持续残余伪告警；四是 [bonusUsage317.test.ts](../tests/unit/bonusUsage317.test.ts) 强制约束 [bonusUsage.ts](../src/domain/bonusUsage.ts) 的 `gather` 行与 `gatherModel(4, civ).applied` 严格等价，且 `bonusTechs` 会把采集条目带入开局模拟反事实快照（对要求整族 7/7 完整的 [armenianEconomy.ts](../src/domain/armenianEconomy.ts) 只删 5 条可用项会误触发 fail-closed）。
+
+原因是共享经济领域模块同时被主包路由、多套显式/默认口径工具与 `bonusUsage` 对账单测交叉绑定，只盯单一页面容易漏核隐性边界。以后评审涉及 `realCost.ts`、`civEco` 或经济加成建模的 Issue（如 [#1486](https://github.com/linhongcun/aoe2-analyzer/issues/1486)、[#1477](https://github.com/linhongcun/aoe2-analyzer/issues/1477) 等）时，固定完成四项核查：先追踪传递 import 确认模块是否落入主包，在 PRD 明确分层与零主包膨胀约束；按全站 56 国数据扫描区分时代/内部触发、`ecoTechs` 前置与非 `ecoTechs` 前置，分别写清显式 `techIds` 与默认省略 `techIds` 两种口径的验收正反例；核查全部并行读取入口（如 `gatherUnsupportedSources`、`ecoPayoff` 的 `before/after`）是否同步透传过滤参数；凡新增或变更 `SOURCED` 文明，一并核对 `bonusUsage.ts` 早退特例、`v0290-317-tool-used.json`、`v0290-322-golden.json` 及 `bonusUsage317` 反事实语义。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
