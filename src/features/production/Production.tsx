@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense, useMemo, type ReactNode } from 'react';
+import { Fragment, lazy, Suspense, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
@@ -182,6 +182,28 @@ function ProductionBody({
   manualLink: string;
 }) {
   const location = useLocation();
+  const pendingRevealRef = useRef<{ errorId: string; fieldId: string } | null>(null);
+  useLayoutEffect(() => {
+    const pending = pendingRevealRef.current;
+    if (!pending) return;
+    pendingRevealRef.current = null;
+    const errorEl = document.getElementById(pending.errorId);
+    const fieldEl = document.getElementById(pending.fieldId);
+    if (!errorEl || !fieldEl) return;
+    const errRect = errorEl.getBoundingClientRect();
+    const fieldRect = fieldEl.getBoundingClientRect();
+    const topbar = document.querySelector<HTMLElement>('header.topbar');
+    const topLimit = (topbar?.getBoundingClientRect().bottom ?? 0) + 4;
+    if (fieldRect.bottom <= topLimit || fieldRect.top >= window.innerHeight) return;
+    const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions');
+    const dockFixed = dock && getComputedStyle(dock).position === 'fixed';
+    const bottomLimit = (dockFixed ? Math.min(window.innerHeight, dock.getBoundingClientRect().top) : window.innerHeight) - 8;
+    if (errRect.bottom > bottomLimit) {
+      const maxScroll = Math.max(0, Math.floor(fieldRect.top - topLimit));
+      const delta = Math.min(Math.ceil(errRect.bottom - bottomLimit), maxScroll);
+      if (delta > 0) window.scrollBy(0, delta);
+    }
+  }, [config.rows]);
   const transfer = useMemo(() => {
     const mapped = productionToTrainTotal(ctx, config);
     return {
@@ -357,7 +379,15 @@ function ProductionBody({
                         incrementLabel={`需求 ${index + 1} 建筑数加 1`}
                         invalid={countInvalid}
                         describedBy={countInvalid ? `production-count-error-${index}` : undefined}
-                        onChange={(count) => editRow(index, { count })}
+                        onChange={(count) => {
+                          if (!/^\d+$/.test(count) || +count > BUILDING_LIMIT) {
+                            pendingRevealRef.current = {
+                              errorId: `production-count-error-${index}`,
+                              fieldId: `production-count-${index}`,
+                            };
+                          }
+                          editRow(index, { count });
+                        }}
                       />
                       {countInvalid && (
                         <FieldError id={`production-count-error-${index}`}>

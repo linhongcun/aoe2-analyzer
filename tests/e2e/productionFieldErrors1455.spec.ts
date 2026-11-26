@@ -117,6 +117,43 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
         await expect(dockNote).toHaveCount(0);
       }
 
+      if (width === 390) {
+        // 临界位置回归（R1 P1）：输入框底边紧贴底栏上方 24px 时输入 -5 并按 Tab，不手动预滚动也须自动露出错因且不被底栏遮挡
+        await page.evaluate(() => {
+          const input = document.getElementById('production-count-0')!;
+          const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions')!;
+          const inputRect = input.getBoundingClientRect();
+          const dockTop = dock.getBoundingClientRect().top;
+          window.scrollBy(0, Math.round(inputRect.bottom - (dockTop - 24)));
+        });
+        await countInput.fill('-5');
+        await countInput.press('Tab');
+
+        await expect(countError).toBeVisible();
+        await expect(dockNote).toHaveText('请先修正生产需求中的错误，再复制方案。');
+        const hitCheck = await page.evaluate(() => {
+          const err = document.getElementById('production-count-error-0')!;
+          const input = document.getElementById('production-count-0')!;
+          const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions')!;
+          const topbar = document.querySelector<HTMLElement>('header.topbar')!;
+          const errRect = err.getBoundingClientRect();
+          const inputRect = input.getBoundingClientRect();
+          const dockTop = dock.getBoundingClientRect().top;
+          const topbarBottom = topbar.getBoundingClientRect().bottom;
+          const hit = document.elementFromPoint(errRect.left + errRect.width / 2, errRect.top + errRect.height / 2);
+          return {
+            errBottom: errRect.bottom,
+            dockTop,
+            inputTop: inputRect.top,
+            topbarBottom,
+            hitInsideError: !!hit && (hit === err || err.contains(hit)),
+          };
+        });
+        expect(hitCheck.errBottom).toBeLessThanOrEqual(hitCheck.dockTop);
+        expect(hitCheck.inputTop).toBeGreaterThanOrEqual(hitCheck.topbarBottom);
+        expect(hitCheck.hitInsideError).toBe(true);
+      }
+
       expect(errors).toEqual([]);
     });
 
