@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
@@ -66,7 +66,18 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
   const location = useLocation();
   const navigate = useNavigate();
   const decoded = useMemo(() => decodeTrainTotal(location.search), [location.search]);
-  const config = decoded.config;
+  const [rawQtys, setRawQtys] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  const activeDrafts = useMemo(() => (rawQtys.search === location.search ? rawQtys.drafts : {}), [rawQtys, location.search]);
+  const config = useMemo(
+    () =>
+      Object.keys(activeDrafts).length === 0
+        ? decoded.config
+        : {
+            ...decoded.config,
+            rows: decoded.config.rows.map((r, i) => (Object.hasOwn(activeDrafts, i) ? { ...r, qty: activeDrafts[i]! } : r)),
+          },
+    [decoded.config, activeDrafts],
+  );
   const transfer = useMemo(() => {
     const mapped = trainTotalToProduction(context, config);
     return { to: '/production?' + encodeProduction(mapped.config), state: productionTransferState(mapped.notice) };
@@ -79,14 +90,28 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
     incomplete: result.incomplete,
   });
   const share = useShareLink({
-    stateKey: location.search,
+    stateKey: JSON.stringify([location.search, activeDrafts]),
     successMessage: '链接已复制，包含当前全部设置。',
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const write = (next: TrainTotalConfig) => {
-    const search = '?' + encodeTrainTotal(next);
+    const nextDrafts: Record<number, string> = {};
+    const urlConfig: TrainTotalConfig = {
+      ...next,
+      rows: next.rows.map((r, i) => {
+        if (r.qty.includes(',')) {
+          nextDrafts[i] = r.qty;
+          return { ...r, qty: '' };
+        }
+        return r;
+      }),
+    };
+    const search = '?' + encodeTrainTotal(urlConfig);
     const clearNotice = search !== location.search && readProductionTransfer(location.state)?.source === 'mixed-duel';
-    navigate({ pathname: '/production', search }, { replace: true, state: clearNotice ? withoutProductionTransfer(location.state) : location.state });
+    setRawQtys({ search, drafts: nextDrafts });
+    if (search !== location.search) {
+      navigate({ pathname: '/production', search }, { replace: true, state: clearNotice ? withoutProductionTransfer(location.state) : location.state });
+    }
     share.reset();
   };
   const blocked = result.blocked.length > 0;
@@ -122,7 +147,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 onClick={() =>
                   void share.copy(() => {
                     const url = new URL(window.location.href);
-                    url.hash = '/production?' + encodeTrainTotal(config);
+                    const safeConfig = { ...config, rows: config.rows.map((r) => (r.qty.includes(',') ? { ...r, qty: '' } : r)) };
+                    url.hash = '/production?' + encodeTrainTotal(safeConfig);
                     return url.href;
                   })
                 }

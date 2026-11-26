@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react';
+import { Fragment, lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
@@ -100,7 +100,18 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
   const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
-  const config = decoded.config;
+  const [rawCounts, setRawCounts] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  const activeDrafts = useMemo(() => (rawCounts.search === location.search ? rawCounts.drafts : {}), [rawCounts, location.search]);
+  const config = useMemo(
+    () =>
+      Object.keys(activeDrafts).length === 0
+        ? decoded.config
+        : {
+            ...decoded.config,
+            rows: decoded.config.rows.map((r, i) => (Object.hasOwn(activeDrafts, i) ? { ...r, count: activeDrafts[i]! } : r)),
+          },
+    [decoded.config, activeDrafts],
+  );
   const {
     copy,
     status: shareStatus,
@@ -112,7 +123,28 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const update = (next: ProductionConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true, state: location.state });
+    const nextDrafts: Record<number, string> = {};
+    const urlConfig: ProductionConfig = {
+      ...next,
+      rows: next.rows.map((r, i) => {
+        if (/[,:]/.test(r.count)) {
+          nextDrafts[i] = r.count;
+          const safe = decoded.config.rows[i]?.count;
+          return { ...r, count: safe !== undefined && !/[,:]/.test(safe) ? safe : DEFAULT_PRODUCTION_COUNT };
+        }
+        return r;
+      }),
+    };
+    const nextSearch = '?' + encodeProduction(urlConfig);
+    if (
+      nextSearch === location.search ||
+      (Object.keys(nextDrafts).length > 0 && decoded.errors.length === 0 && encodeProduction(urlConfig) === encodeProduction(decoded.config))
+    ) {
+      setRawCounts({ search: location.search, drafts: nextDrafts });
+    } else {
+      setRawCounts({ search: nextSearch, drafts: nextDrafts });
+      navigate({ pathname: '/production', search: nextSearch }, { replace: true, state: location.state });
+    }
     resetShare();
   };
   return (

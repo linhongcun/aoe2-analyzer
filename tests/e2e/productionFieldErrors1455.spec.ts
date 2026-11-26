@@ -152,6 +152,28 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
         expect(hitCheck.errBottom).toBeLessThanOrEqual(hitCheck.dockTop);
         expect(hitCheck.inputTop).toBeGreaterThanOrEqual(hitCheck.topbarBottom);
         expect(hitCheck.hitInsideError).toBe(true);
+
+        // 含半角分隔符（逗号/冒号）非法粘贴回归（R2 P1）：双行需求下粘贴 1,000 / 1:2 须原样保留输入、不丢行、不退化为链接错误
+        await page.goto('./#/production?rows=83:109:1,38:101:2');
+        await expect(page.getByTestId('production-row')).toHaveCount(2);
+        for (const sepBad of ['1,000', '1:2']) {
+          await countInput.fill(sepBad);
+          await expect(page.getByTestId('production-row')).toHaveCount(2);
+          await expect(countInput).toHaveValue(sepBad);
+          await expect(page.locator('#production-count-1')).toHaveValue('2');
+          await expect(countInput).toHaveAttribute('aria-invalid', 'true');
+          await expect(countInput).toHaveAttribute('aria-describedby', 'production-count-error-0');
+          await expect(countError).toHaveText('建筑数量须为 0–100 的整数。');
+          await expect(page.locator('.production-errors')).not.toContainText('链接中的生产需求格式无效');
+          await expect(copyBtn).toBeDisabled();
+          await expect(dockNote).toHaveText('请先修正生产需求中的错误，再复制方案。');
+        }
+        await countInput.fill('1');
+        await expect(page.getByTestId('production-row')).toHaveCount(2);
+        await expect(countError).toHaveCount(0);
+        await expect(countInput).not.toHaveAttribute('aria-invalid');
+        await expect(countInput).not.toHaveAttribute('aria-describedby');
+        await expect(copyBtn).toBeEnabled();
       }
 
       expect(errors).toEqual([]);
@@ -321,6 +343,13 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
     await expect(ttQty).toHaveAttribute('aria-invalid', 'true');
     await expect(ttQty).toHaveAttribute('aria-describedby', 'train-total-row-error-0');
     await expect(ttUnit).not.toHaveAttribute('aria-describedby');
+
+    await ttQty.fill('1,000');
+    await expect(ttQty).toHaveValue('1,000');
+    await expect(ttFlag).toBeVisible();
+    await expect(ttQty).toHaveAttribute('aria-invalid', 'true');
+    await expect(ttQty).toHaveAttribute('aria-describedby', 'train-total-row-error-0');
+    await expect(page.getByTestId('train-total-result')).not.toContainText('无法识别');
 
     await ttQty.fill('');
     await expect(ttFlag).toBeVisible();
