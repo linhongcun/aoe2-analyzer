@@ -355,6 +355,52 @@
         "pattern": "^(0|[1-9][0-9]*)$"
       }
     },
+    "civEcoTechs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "civ": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "en": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "minLength": 1
+          },
+          "researchTime": {
+            "type": "number"
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/effect"
+            }
+          }
+        },
+        "required": ["civ", "name", "en", "at", "researchTime", "cost", "age", "effects"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
     "civEco": {
       "type": "object",
       "additionalProperties": {
@@ -605,7 +651,7 @@
       "$ref": "#/$defs/slavicFarm"
     }
   },
-  "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
+  "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEcoTechs", "civEco", "ageReq"],
   "additionalProperties": false,
   "$defs": {
     "effect": {

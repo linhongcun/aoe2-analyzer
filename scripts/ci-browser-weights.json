@@ -385,7 +385,8 @@
     "tests/e2e/civFormations1400.spec.ts": 9000,
     "tests/e2e/civFormations1401.spec.ts": 9000,
     "tests/e2e/bonusUsageArmyCost1429.spec.ts": 15000,
-    "tests/e2e/civText1440.spec.ts": 6000
+    "tests/e2e/civText1440.spec.ts": 6000,
+    "tests/e2e/productionSiege1410.spec.ts": 18000
   },
   "cases": {}
 }

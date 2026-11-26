@@ -43,6 +43,7 @@ import { isDefaultProduction, productionToTrainTotal } from '../../domain/produc
 import { encodeTrainTotal, trainTotalHrefFrom } from './trainTotalCodec';
 import { productionTransferState } from '../../shared/utils/productionTransferState';
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
+import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
 import './production.css';
 import './trainCompare.css';
@@ -437,7 +438,9 @@ function ProductionBody({
           {result.warnings.length > 0 && (
             <ul className="production-warnings">
               {result.warnings.map((w) => (
-                <li key={w}>{w}</li>
+                <li key={w}>
+                  <ProductionWarningText text={w} />
+                </li>
               ))}
             </ul>
           )}

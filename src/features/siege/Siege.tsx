@@ -8,6 +8,7 @@ import {
   decodeSiege,
   encodeSiege,
   siegeArmorTechs,
+  siegeUnitCounter,
   SIEGE_COMPARE_IDS,
   SIEGE_MANGONEL_REASON,
   SIEGE_MAX_COUNT,
@@ -57,9 +58,12 @@ function SiegeTool({ core }: { core: Core }) {
   const b = core.buildingById[config.bldg]!;
   const result = calculateSiege(u, b, config.n, config.civ, config.armor);
   const armorTechs = siegeArmorTechs(b);
+  const counter = siegeUnitCounter(u.id);
   const title = (
     <>
-      <span className="num">{config.n} 台</span>
+      <span className="num nw">
+        {config.n} {counter}
+      </span>
       {u.zh} 拆 {b.zh}
     </>
   );
@@ -124,7 +128,7 @@ function SiegeTool({ core }: { core: Core }) {
               <label htmlFor="siege-count">数量</label>
               <div className="siege-quantity">
                 <div className="siege-stepper">
-                  <button type="button" aria-label="减少一台" disabled={config.n === 1} onClick={() => changeCount(config.n - 1)}>
+                  <button type="button" aria-label={`减少一${counter}`} disabled={config.n === 1} onClick={() => changeCount(config.n - 1)}>
                     <Icon name="minus" />
                   </button>
                   <input
@@ -142,7 +146,7 @@ function SiegeTool({ core }: { core: Core }) {
                     }}
                     onBlur={() => setEmptyCount(null)}
                   />
-                  <button type="button" aria-label="增加一台" disabled={config.n === SIEGE_MAX_COUNT} onClick={() => changeCount(config.n + 1)}>
+                  <button type="button" aria-label={`增加一${counter}`} disabled={config.n === SIEGE_MAX_COUNT} onClick={() => changeCount(config.n + 1)}>
                     <Icon name="plus" />
                   </button>
                 </div>
@@ -270,9 +274,12 @@ function SiegeTool({ core }: { core: Core }) {
           {shareControls}
           {result.verified && (
             <section className="siege-panel siege-compare" data-testid="siege-compare">
-              <table aria-label={`同组合对照：${config.n} 台${u.zh}`}>
+              <table aria-label={`同组合对照：${config.n} ${counter}${u.zh}`}>
                 <caption>
-                  同组合对照 · <span className="num">{config.n} 台</span>
+                  同组合对照 ·{' '}
+                  <span className="num nw">
+                    {config.n} {counter}
+                  </span>
                   {u.zh}
                 </caption>
                 <thead>

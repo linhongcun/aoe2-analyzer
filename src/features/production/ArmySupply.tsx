@@ -11,6 +11,7 @@ import { PairHintLine } from '../../shared/ui/PairTrainingHint';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
+import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { decodeArmyCost } from './armyCostCodec';
 import { decodeArmySupply, encodeArmySupply, SUPPLY_COUNT_INPUT_LIMIT, SUPPLY_FARM_DISTANCES, SUPPLY_WALK_DISTANCES } from './armySupplyCodec';
@@ -167,7 +168,9 @@ function SupplyPlanner({ context, sourceQuery, settings }: { context: Production
                 {result.warnings.length > 0 && (
                   <ul className="production-warnings">
                     {result.warnings.map((warning) => (
-                      <li key={warning}>{warning}</li>
+                      <li key={warning}>
+                        <ProductionWarningText text={warning} />
+                      </li>
                     ))}
                   </ul>
                 )}

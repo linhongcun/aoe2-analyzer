@@ -23,6 +23,8 @@ RES = {0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold'}
 TASKS = {'build': (118, 212), 'sheep': (592, 590), 'hunt': (122, 216), 'berries': (120, 354), 'farm': (259, 214),
          'fish': (56, 57), 'wood': (123, 218), 'gold': (579, 581), 'stone': (124, 220)}
 TASK_OF = {u: k for k, v in TASKS.items() for u in v}
+GATHER_TARGETS = {'villager', 'class:4'} | {'task:' + k for k in TASKS}
+GATHER_ATTRS = {'workRate', 'carry', 'speed'}
 VIL = (83, 293)
 ATTR = {5: 'speed', 13: 'workRate', 14: 'carry', 100: 'cost', 101: 'trainTime', 103: 'foodCost', 104: 'woodCost', 105: 'goldCost', 106: 'stoneCost'}
 OP = {0: 'set', 4: 'add', 5: 'mul'}
@@ -256,15 +258,35 @@ def main():
         if i in AGE_TECHS: a = max(a, {101: 2, 102: 3, 103: 4}[i])
         memo[i] = a; return a
     # 通用经济科技
+    dat_civ = {c['Name']: k for k, c in enumerate(d['Civs'])}
+    civ_en = {k: c['en'] for c in civs for k in [dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))] if k is not None}
+    bldg_en = {b['id']: b['en'] for b in blds}
     out['ecoTechs'] = {}
+    out['civEcoTechs'] = {}
     for i, t in enumerate(T):
         at = [ECO_BLDG[l] for l, _ in t['ResearchAt'] if l in ECO_BLDG]
         if t['Civ'] == -1 and at and (i in tech_ids or i in AGE_TECHS):
             out['ecoTechs'][str(i)] = {'name': t['Name'], 'en': tech_ids[i]['en'] if i in tech_ids else AGE_TECHS[i], 'at': at[0],
                                        'researchTime': next(x for l, x in t['ResearchAt'] if l in ECO_BLDG), 'cost': cost(t['Cost']), 'age': age_of(i),
                                        'effects': decode(eff(d, t['EffectID']), T)}
+        elif t['Civ'] >= 0 and t['Civ'] in civ_en and i in tech_ids and t['ResearchAt']:
+            ef = decode(eff(d, t['EffectID']), T)
+            if any(e['kind'] == 'attr' and e['attr'] in GATHER_ATTRS and e['target'] in GATHER_TARGETS for e in ef):
+                loc, rt = t['ResearchAt'][0]
+                at_name = bldg_en.get(loc) or ECO_BLDG.get(loc)
+                if not at_name:
+                    raise ValueError('文明专属采集科技 %d 研究建筑 %d 未找到英文名' % (i, loc))
+                out['civEcoTechs'][str(i)] = {
+                    'civ': civ_en[t['Civ']],
+                    'name': t['Name'],
+                    'en': tech_ids[i]['en'],
+                    'at': at_name,
+                    'researchTime': rt,
+                    'cost': cost(t['Cost']),
+                    'age': age_of(i),
+                    'effects': ef,
+                }
     # 文明经济效果
-    dat_civ = {c['Name']: k for k, c in enumerate(d['Civs'])}
     out['civEco'] = {}
     for c in civs:
         e = fx['civs'].get(c['en'], {}); k = dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))
@@ -363,7 +385,6 @@ def main():
     BT = {}
     for u, tid in d.get('BuildTech', {}).items(): BT.setdefault(tid, []).append(int(u))
     BZH = {b['id']: b['zh'] for b in json.load(open(ROOT / 'data/game/buildings.json'))}
-    civ_en = {k: c['en'] for c in civs for k in [dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))] if k is not None}
     def req(i, depth=0):
         t = T[i]; kids = [r for r in t['RequiredTechs'] if r >= 0]
         if i in BT:

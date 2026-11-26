@@ -1,7 +1,7 @@
 import type { Tech } from '../../domain/types';
 
 // 仅用于预设分组；实际效果仍全部读取固定数据，并由领域层校验文明和时代。
-const ECO_GATHER_IDS = new Set([12, 13, 14, 55, 182, 202, 203, 213, 221, 249, 278, 279]);
+const ECO_GATHER_IDS = new Set([12, 13, 14, 55, 182, 202, 203, 213, 221, 249, 278, 279, 506]);
 
 export function ProductionTechs({
   available,

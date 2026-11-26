@@ -6,7 +6,7 @@ import { civByEn } from '../data';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';
 import { civStatus } from './simulator';
-import { productionBuildings, productionTechs, type ProductionContext } from './production';
+import { isCivEcoTech, productionBuildings, productionTechs, type ProductionContext } from './production';
 import { buildingAge } from './availabilityAge';
 
 export const PLAN_AGES = [2, 3, 4] as const;
@@ -402,7 +402,7 @@ export function teamPlanErrors(plan: TeamPlan, ctx: ProductionContext): string[]
       for (const id of row.completedUnlockTechIds) {
         const tech = ctx.core.techById[id];
         if (!tech) errors.push(`${prefix}：解锁科技 ID ${id} 不存在。`);
-        else if (!productionTechs(ctx, { civ: player.civ, age: phase.age }).some((t) => t.id === id))
+        else if (isCivEcoTech(id) || !productionTechs(ctx, { civ: player.civ, age: phase.age }).some((t) => t.id === id))
           errors.push(`${prefix}：${tech.zh}研究确认与文明、时代或本工具范围不符。`);
       }
       for (const id of row.completedBuildings) {

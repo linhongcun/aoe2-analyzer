@@ -18,6 +18,7 @@ import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './trade-income.css';
 
@@ -418,7 +419,9 @@ function TradeIncomeBody({
                   <h2>具体未计入项</h2>
                   <ul>
                     {r.warnings.map((w) => (
-                      <li key={w}>{w}</li>
+                      <li key={w}>
+                        <ProductionWarningText text={w} />
+                      </li>
                     ))}
                   </ul>
                 </section>

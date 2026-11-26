@@ -1,6 +1,14 @@
 import { evaluateArmyCost, type ResearchEntry } from './armyCost';
 import type { ArmyCostConfig } from './armyCostConfig';
-import { BUILDING_LIMIT, PRODUCTION_UNLOCK_TECH_IDS, productionBuildings, productionTechs, type ProductionConfig, type ProductionContext } from './production';
+import {
+  BUILDING_LIMIT,
+  isCivEcoTech,
+  PRODUCTION_UNLOCK_TECH_IDS,
+  productionBuildings,
+  productionTechs,
+  type ProductionConfig,
+  type ProductionContext,
+} from './production';
 
 export interface ArmySupplyRow {
   building: number;
@@ -17,7 +25,11 @@ export interface ArmySupplySettings {
 
 export function armySupplyResearch(ctx: ProductionContext, source: ArmyCostConfig) {
   const production = { civ: source.civ, age: Number(source.age) };
-  const available = new Set(productionTechs(ctx, production).map((tech) => tech.id));
+  const available = new Set(
+    productionTechs(ctx, production)
+      .filter((tech) => !isCivEcoTech(tech.id))
+      .map((tech) => tech.id),
+  );
   const ledger = evaluateArmyCost(ctx, source).ledger;
   const withSupport = (entry: ResearchEntry) => ({ entry, supported: entry.id !== null && available.has(entry.id) && entry.status !== 'invalid' });
   return {

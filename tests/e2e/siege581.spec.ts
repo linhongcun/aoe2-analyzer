@@ -27,7 +27,7 @@ const ISSUES_NEW = 'https://github.com/linhongcun/aoe2-analyzer/issues/new';
 const CAPPED_RAM_ID = 422;
 const CONTEXT = 'siege-feedback-context';
 /** 与 src/domain/siege.ts 的 SIEGE_UNIT_IDS 一致，只用来识别反馈旁伪造的单位。 */
-const SIEGE_UNIT_IDS = [1258, 422, 548, 331, 280, 550, 588, 36];
+const SIEGE_UNIT_IDS = [1258, 422, 548, 1744, 1746, 331, 280, 550, 588, 36];
 
 const cappedRam = units.find((unit) => unit.id === CAPPED_RAM_ID);
 const siegeUnits = SIEGE_UNIT_IDS.map((id) => units.find((unit) => unit.id === id));

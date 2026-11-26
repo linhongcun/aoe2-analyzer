@@ -2,6 +2,7 @@ import { civs } from '../../data';
 import {
   calculateProduction,
   effectiveProductionTechs,
+  isCivEcoTech,
   productionBuildings,
   productionTechs,
   type ProductionConfig,
@@ -29,7 +30,9 @@ function fullConfig(ctx: ProductionContext, civ: string, unit: number): Producti
     age: 3,
     walk: 3,
     farm: 1,
-    techs: productionTechs(ctx, { civ, age: 3 }).map((tech) => tech.id),
+    techs: productionTechs(ctx, { civ, age: 3 })
+      .filter((tech) => !isCivEcoTech(tech.id))
+      .map((tech) => tech.id),
     rows: [{ unit, building: 101, count: '1' }],
   };
   return { ...config, techs: [...effectiveProductionTechs(ctx, config)] };
