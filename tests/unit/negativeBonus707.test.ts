@@ -19,8 +19,8 @@ const text = (html: string) =>
     .trim();
 
 const negativeCases: Parameters<typeof BonusTable>[0][] = [
-  { B: { 村民: -3 } },
-  { B: { 村民: -3 }, S: { 村民: 1 } },
+  { B: { 骑乘减伤: -3 } },
+  { B: { 骑乘减伤: -3 }, S: { 骑乘减伤: 1 } },
   { B: { 僧侣: 0 }, S: { 僧侣: -1 } },
   { B: { 僧侣: 0 }, C: { 僧侣: -1 }, cmpLabel: '对比' },
 ];
@@ -45,12 +45,12 @@ describe('#707 负攻击加成的同屏说明', () => {
 });
 
 describe('#707 固定数据与现有引擎口径', () => {
-  it('骑士的对村民 -3 因目标当前缺该类别而未计入，不编造 7 点', () => {
+  it('骑士的对骑乘减伤 -3 因村民目标缺该类别而未计入，不编造 7 点', () => {
     const a = fighter(38),
       d = fighter(83);
-    expect(a.attack['村民']).toBe(-3);
-    expect(d.armor).not.toHaveProperty('村民');
-    expect(damageByClass(a, d).some((row) => row.category === '村民')).toBe(false);
+    expect(a.attack['骑乘减伤']).toBe(-3);
+    expect(d.armor).not.toHaveProperty('骑乘减伤');
+    expect(damageByClass(a, d).some((row) => row.category === '骑乘减伤')).toBe(false);
     expect(damagePerHit(a, d)).toBe(10);
   });
 
@@ -66,7 +66,7 @@ describe('#707 固定数据与现有引擎口径', () => {
   });
 
   it('保留最低 1 与负护甲边界；无负贡献时简式与完整式等价', () => {
-    expect(damagePerHit({ attack: { 近战: 2, 村民: -3 } }, { armor: { 近战: 0, 村民: 0 } })).toBe(1);
+    expect(damagePerHit({ attack: { 近战: 2, 骑乘减伤: -3 } }, { armor: { 近战: 0, 骑乘减伤: 0 } })).toBe(1);
     for (const [attack, armor] of [
       [-3, -4],
       [0, -1],

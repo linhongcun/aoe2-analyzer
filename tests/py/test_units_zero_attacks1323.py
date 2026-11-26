@@ -35,7 +35,7 @@ class UnitsZeroAttacks1323(unittest.TestCase):
                 {'Class': 28, 'Amount': 0},
                 {'Class': 39, 'Amount': -3},
             ]),
-            [['标准建筑', 0], ['穿刺', 2], ['骑射手', 0], ['村民', -3]],
+            [['标准建筑', 0], ['穿刺', 2], ['骑射手', 0], ['骑乘减伤', -3]],
         )
         # 类别 14 译为掠食动物；未知类别回退「类别N」
         self.assertEqual(

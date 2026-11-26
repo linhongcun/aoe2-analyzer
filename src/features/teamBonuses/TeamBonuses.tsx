@@ -370,7 +370,7 @@ function PermanentCard({ row, core }: { row: TeamPermanentRow; core: Core }) {
         <span className="team-state">常驻来源</span>
       </header>
       <p>
-        <Linked text={civ?.tb ?? '文明说明缺失，待核实'} />
+        <Linked text={civ?.tb ?? '文明说明缺失，待核实'} wrapNums />
       </p>
       <div className="team-effect-types" aria-label="效果类别">
         {row.source.effectTypes?.map((type) => (

@@ -16,6 +16,7 @@ import {
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import {
   browseCivs,
   browseDetailPath,
@@ -363,11 +364,15 @@ export default function CivList() {
               <h4>文明加成</h4>
               <ul>
                 {detail.bon.map((line) => (
-                  <li key={line}>{line}</li>
+                  <li key={line}>
+                    <NumWrappedText text={line} />
+                  </li>
                 ))}
               </ul>
               <h4>团队加成</h4>
-              <p>{detail.tb}</p>
+              <p>
+                <NumWrappedText text={detail.tb} />
+              </p>
               <h4>独特单位</h4>
               <p className="civ-uu">{uniqueUnitLabel(detail.uu)}</p>
               <Link className="civ-open-detail" to={browseDetailPath(detail.en, filters, conditions)}>

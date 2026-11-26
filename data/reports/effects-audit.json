@@ -21,9 +21,9 @@
   "manualMismatches": {
     "techGroups": 55,
     "civBonuses": 15,
-    "teamBonuses": 11
+    "teamBonuses": 10
   },
-  "textMismatches": 6,
+  "textMismatches": 5,
   "previousSnapshot": null,
   "lhcSnapshot": null
 }

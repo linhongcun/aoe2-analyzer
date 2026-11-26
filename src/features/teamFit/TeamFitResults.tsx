@@ -47,7 +47,7 @@ function SourceCard({ row, core, reverse }: { row: FitSource; core: Core; revers
         </div>
       </header>
       <p>
-        <Linked text={tech?.desc ?? civByEn(civ)?.tb ?? '原说明待核实'} />
+        <Linked text={tech?.desc ?? civByEn(civ)?.tb ?? '原说明待核实'} wrapNums />
       </p>
       <p className="tf-providers">
         提供者：

@@ -28,12 +28,11 @@ export interface EffectPart {
   text: string;
 }
 const pct = (x: number) => `${Math.round(x * 100)}%`;
-/**
- * 生成表把护甲类别 39 写成「村民」。已提交单位里，村民没有这个类别；
- * 弯刀勇士和骆驼目标的该护甲是 -3，龙脉把它 +3。这里只说明名称，不把类别改写成另一种游戏属性。
- */
+/** Genie 护甲类别 39 正式中文名（Issue 1445：由误标「村民」正名为「骑乘减伤」）。 */
+export const MOUNTED_REDUCTION_CLASS = '骑乘减伤';
+/** 护甲类别 39（骑乘减伤）与埃塞俄比亚「龙脉（574）」减伤机制精简说明（Issue 1445）。 */
 export const ARMC_CLASS_NOTE =
-  '「村民」是生成数据里的护甲类别名，不是村民单位；村民没有这个类别。龙脉把弯刀勇士和骆驼目标的这项护甲加上效果里的数值。攻击方若带有同一类别的负攻击，按现有伤害公式计入，总伤害仍沿用现有下限。没有这条攻击的单位不受影响。本站未做游戏内对照。';
+  '「骑乘减伤」基础护甲为 -3，与骑乘单位自带的 -3 同类攻击相互抵消；研究龙脉使该护甲 +3 至 0 后，受带此攻击的骑乘单位命中时伤害 -3（总伤害最低仍为 1）。';
 export function effectParts(ef: readonly Effect[]): EffectPart[] {
   return ef.map((e) => {
     if (e.s === 'bonus')

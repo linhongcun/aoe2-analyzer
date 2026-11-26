@@ -207,7 +207,7 @@ describe('#657 蔷琵有限同代接触对照', () => {
     zeroAcc.core.unitById[4]!.acc = 0;
     expect(ready(zeroAcc).cards[0]!.candidates[2]!.state).toBe('ok');
 
-    expect(data.core.unitById[448]!.atks).toContainEqual(['村民', -3]);
+    expect(data.core.unitById[448]!.atks).toContainEqual(['骑乘减伤', -3]);
     expect(ready().cards[0]!.candidates[1]!.state).toBe('ok');
   });
   it.each([

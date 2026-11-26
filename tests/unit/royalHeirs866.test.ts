@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { ARMC_CLASS_NOTE, effectParts, techAffects } from '../../src/domain/affects';
+import { ARMC_CLASS_NOTE, MOUNTED_REDUCTION_CLASS, effectParts, techAffects } from '../../src/domain/affects';
 import { DAT, toEffects } from '../../src/domain/datEffects';
 import { damageByClass, damagePerHit, fighterFrom } from '../../src/domain/duel';
 import { TECH_EFFECTS } from '../../src/domain/effects';
@@ -11,12 +11,16 @@ import { isMounted } from '../../src/domain/unitClass';
 import { ArmorClasses } from '../../src/shared/ui/sim/SimPanel';
 import { ctx, unit, units } from './helpers';
 
-const LABEL = '村民';
+const LABEL = MOUNTED_REDUCTION_CLASS;
 const text = (html: string) =>
   html
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+const noteText = (html: string) => {
+  const match = html.match(/<p[^>]*data-t="royal-heirs-armc"[^>]*>([\s\S]*?)<\/p>/);
+  return match ? match[1]!.replace(/<[^>]*>/g, '') : '';
+};
 
 describe('#866 龙脉 armc', () => {
   it('只保留这一条护甲类别命令，并按类别名加入模拟', () => {
@@ -31,7 +35,7 @@ describe('#866 龙脉 armc', () => {
     ]);
     const decoded = toEffects(entry!.rules[0]!.fx);
     expect(decoded).toEqual([{ s: 'armc', vs: LABEL, v: 3 }]);
-    expect(effectParts(decoded)[0]?.text).toBe('护甲类别「村民」+3');
+    expect(effectParts(decoded)[0]?.text).toBe(`护甲类别「${LABEL}」+3`);
     expect(TECH_EFFECTS['Royal Heirs']?.[0]?.[1]).toEqual(decoded);
     let armc = 0;
     const walk = (node: unknown) => {
@@ -104,21 +108,30 @@ describe('#866 龙脉 armc', () => {
     ).toEqual([207, 282, 329, 330, 556, 1007, 1009, 1016, 1018, 1263, 1755, 1923]);
   });
 
-  it('科技页和护甲类别说明写出名称边界，骑士护甲列表不出现这条说明', () => {
+  it('科技页和护甲类别说明写出骑乘减伤机制，骑士与村民护甲列表不出现这条说明', () => {
     const shotel = unit('Shotel Warrior');
     const affects = techAffects(ctx.techByEn['Royal Heirs']!, units, []);
-    expect(affects.flatMap((group) => group.rows.map((row) => row.effect))).toContain('护甲类别「村民」+3');
+    expect(affects.flatMap((group) => group.rows.map((row) => row.effect))).toContain(`护甲类别「${LABEL}」+3`);
     expect(affects.flatMap((group) => group.rows.flatMap((row) => row.units.map((u) => u.id)))).toContain(shotel.id);
-    const shown = text(
-      renderToStaticMarkup(createElement(ArmorClasses, { list: Object.entries(simulate(ctx, shotel, 'Ethiopians', 3, new Set([574]), new Set()).armc) })),
+    const shotelHtml = renderToStaticMarkup(
+      createElement(ArmorClasses, { list: Object.entries(simulate(ctx, shotel, 'Ethiopians', 3, new Set([574]), new Set()).armc) }),
     );
-    expect(shown).toContain('村民 0');
-    expect(shown).toContain(ARMC_CLASS_NOTE);
-    expect(text(renderToStaticMarkup(createElement(ArmorClasses, { list: unit('Knight').armc })))).not.toContain('不是村民单位');
+    const shown = text(shotelHtml);
+    expect(shown).toContain(`${LABEL} 0`);
+    expect(shotelHtml).toContain('class="tag nw"');
+    expect(noteText(shotelHtml)).toBe(ARMC_CLASS_NOTE);
+    for (const token of ['-3', '+3', '0', '1']) {
+      expect(shotelHtml).toContain(`<span class="num nw">${token}</span>`);
+    }
+    const knightHtml = renderToStaticMarkup(createElement(ArmorClasses, { list: unit('Knight').armc }));
+    const villagerHtml = renderToStaticMarkup(createElement(ArmorClasses, { list: unit('Villager').armc }));
+    expect(knightHtml).not.toContain('data-t="royal-heirs-armc"');
+    expect(villagerHtml).not.toContain('data-t="royal-heirs-armc"');
     const sources = damageSources(ctx, shotel, 'Ethiopians', 3, new Set([574]), new Set());
     expect(
       sources.sources.some(
-        (source) => source.techId === 574 && source.changes.some((change) => change.stat === '护甲类别「村民」' && change.before === -3 && change.after === 0),
+        (source) =>
+          source.techId === 574 && source.changes.some((change) => change.stat === `护甲类别「${LABEL}」` && change.before === -3 && change.after === 0),
       ),
     ).toBe(true);
   });

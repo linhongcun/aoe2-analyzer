@@ -6,19 +6,41 @@ import { linkify } from '../../domain/linker';
 import { useCore } from '../../data/hooks';
 import { Icon } from './Icon';
 
-/** 自动链接单位/科技名称；nl=true 时把换行渲染为 <br> */
-export function Linked({ text, nl }: { text: string; nl?: boolean }) {
+const NUM_PART = String.raw`(?:[+＋−-]\s*)?\d+(?:\.\d+)?(?:\s*\/\s*(?:[+＋−-]\s*)?\d+(?:\.\d+)?)*`;
+const UNIT_PART = String.raw`%|个村民|人口空间|生命值|每分钟|秒|分钟|木材|食物|黄金|石料|资源|头绵羊|个模板|格范围内|格范围|射程|攻击力|护甲|格|片果树丛|片|个单位|个`;
+const NUM_UNIT_RE = new RegExp(`(${NUM_PART}(?:\\s*(?:${UNIT_PART}))?)`, 'g');
+
+/** 将文本中的符号/斜杠数值与「数字+单位」包裹 .num.nw，避免窄屏折行。 */
+export function NumWrappedText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(NUM_UNIT_RE).map((part, index) =>
+        index % 2 ? (
+          <span className="num nw" key={index}>
+            {part}
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
+/** 自动链接单位/科技名称；nl=true 时把换行渲染为 <br>；wrapNums=true 时对非链接文本包裹 .num.nw */
+export function Linked({ text, nl, wrapNums = false }: { text: string; nl?: boolean; wrapNums?: boolean }) {
   const core = useCore();
   const segs = core ? linkify(text, core.linker) : [{ text }];
+  const renderLine = (line: string) => (wrapNums ? <NumWrappedText text={line} /> : line);
   const br = (s: string) =>
     nl
       ? s.split('\n').map((p, i) => (
           <Fragment key={i}>
             {i > 0 && <br />}
-            {p}
+            {renderLine(p)}
           </Fragment>
         ))
-      : s;
+      : renderLine(s);
   return (
     <>
       {segs.map((s, i) =>

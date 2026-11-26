@@ -1,5 +1,6 @@
 /** issue 308：固定生成数据驱动的理想齐射模型，不估计未收录的护甲类别。 */
 import { DAT, toEffects } from './datEffects';
+import { MOUNTED_REDUCTION_CLASS } from './affects';
 import { applyEffects, baseStats } from './simulator';
 import { damageRows, hitCount, totalDamage } from './damageCore';
 import { mainAttackType } from './duelFighter';
@@ -151,7 +152,7 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
     if (category === '近战' || category === '穿刺') attacks[category] = category === main ? attacker.atk : amount;
   }
   // 旧 ram/331/南亚攻城象简表路径保持既有模型；手推炮使用上方独立的完整类别证据。
-  const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣', '村民', '掷矛手']);
+  const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣', MOUNTED_REDUCTION_CLASS, '掷矛手']);
   const armors: Record<string, number> = { 近战: defender.ma, 穿刺: defender.pa, 所有建筑: defender.barm };
   const filtered = Object.fromEntries(
     Object.entries(attacks).filter(([category, amount]) => !irrelevant.has(category) && (category in armors || amount !== 0)),

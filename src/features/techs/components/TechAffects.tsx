@@ -19,7 +19,7 @@ import { BuildingLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
 import { LineChip } from '../../../shared/ui/LineChip';
-import { Loading } from '../../../shared/ui/widgets';
+import { Loading, NumWrappedText } from '../../../shared/ui/widgets';
 import { techEffectText } from '../techEffectText';
 import { ThumbRingEffectText } from './ThumbRingEffectText';
 
@@ -143,7 +143,7 @@ export default function TechAffects({
       )}
       {tech.id === 574 && (
         <p className="note" data-t="royal-heirs-armc">
-          {ARMC_CLASS_NOTE}
+          <NumWrappedText text={ARMC_CLASS_NOTE} />
         </p>
       )}
       <div className="td-filter">
