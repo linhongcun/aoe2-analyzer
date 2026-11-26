@@ -160,8 +160,20 @@ describe('建筑详情各文明满科技对照（#1393）', () => {
     expect(formatBuildingRankMetric('totalCost', keep.rows.find((r) => r.civ === 'Incas')!.totalCost)).toBe('141');
     expect(formatBuildingRankMetric('stone', keep.rows.find((r) => r.civ === 'Incas')!.stone)).toBe('106');
     expect(formatBuildingRankMetric('bt', keep.rows.find((r) => r.civ === 'Spanish')!.bt)).toBe('61.5');
-    // 加热射击 380 在大型箭塔上为无操作（0 * 2.25 === 0），不进缺项
-    for (const r of keep.rows) expect(r.missingTechs.map((t) => t.id)).not.toContain(380);
+    // #1453：修复 buildingBase 基础目标类别加成后，加热射击 380 在四级防御塔/炮塔生效，缺少 380 的文明自动进入 missingTechs
+    const keepMissing380 = keep.rows.filter((r) => r.missingTechs.some((t) => t.id === 380)).map((r) => r.civ);
+    expect(keepMissing380).toHaveLength(11);
+    expect(keepMissing380).toEqual(expect.arrayContaining(['Byzantines', 'Japanese', 'Spanish']));
+    for (const civ of ['Chinese', 'Britons', 'Turks']) {
+      expect(keep.rows.find((r) => r.civ === civ)!.missingTechs.map((t) => t.id)).not.toContain(380);
+    }
+    // 79 瞭望箭塔（17 国缺 380；封建时代 380 未解锁不进缺项）与 234 警戒箭塔（15 国缺 380）
+    const wtImp = buildBuildingCivRank(ctx, building(79), 4, readyArrows(building(79), 4));
+    expect(wtImp.rows.filter((r) => r.missingTechs.some((t) => t.id === 380))).toHaveLength(17);
+    const wtFeudal = buildBuildingCivRank(ctx, building(79), 2, readyArrows(building(79), 2));
+    for (const r of wtFeudal.rows) expect(r.missingTechs.map((t) => t.id)).not.toContain(380);
+    const gtImp = buildBuildingCivRank(ctx, building(234), 4, readyArrows(building(234), 4));
+    expect(gtImp.rows.filter((r) => r.missingTechs.some((t) => t.id === 380))).toHaveLength(15);
     // 凯尔特 482 堡垒在 A 类不显示间隔列，不得误标「已计入」
     const celtsKeep = keep.rows.find((r) => r.civ === 'Celts')!;
     expect(celtsKeep.tags).toContain('未计入：攻速加快 · 堡垒');
@@ -260,11 +272,17 @@ describe('建筑详情各文明满科技对照（#1393）', () => {
     expect(church.rows.find((r) => r.civ === 'Armenians')!.missingTechs.map((t) => t.id)).toEqual([51]);
     expect(church.rows.find((r) => r.civ === 'Georgians')!.missingTechs.map((t) => t.id)).toEqual([380]);
 
-    // 炮塔 236：拜占庭希腊之火、土耳其火炮术
+    // 炮塔 236：拜占庭希腊之火、土耳其火炮术，及 6 国缺加热射击（#1453）
     const bbt = buildBuildingCivRank(ctx, building(236), 4);
     expect(bbt.rows.find((r) => r.civ === 'Byzantines')!.tags).toContain('未计入：爆炸半径 +0.5 · 希腊之火');
     expect(bbt.rows.find((r) => r.civ === 'Turks')!.tags).toContain('火炮术（已计入）');
     expect(bbt.rows.find((r) => r.civ === 'Turks')!.rng).toBe(13);
+    const bbtMissing380 = bbt.rows.filter((r) => r.missingTechs.some((t) => t.id === 380)).map((r) => r.civ);
+    expect(bbtMissing380).toHaveLength(6);
+    expect(bbtMissing380).toEqual(expect.arrayContaining(['Byzantines', 'Spanish']));
+    for (const civ of ['Chinese', 'Turks']) {
+      expect(bbt.rows.find((r) => r.civ === civ)!.missingTechs.map((t) => t.id)).not.toContain(380);
+    }
   });
 
   it('最优值少于半数阈值、量化一致性与文明搜索三态', () => {
