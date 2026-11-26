@@ -13,14 +13,18 @@ import { isUnitCostAttribute } from './unitCost';
 
 export const TECH_COST_OPS = new Set(['set', 'mul', 'add']);
 const CONVERSION_RES = new Set([27, 28, 29, 192, 193]);
-const UNMODELED_COMBAT_ATTRS = new Set([22, 63, 102, 107, 109]);
-const GATHER_ATTRS = new Set(['workRate', 'carry', 'speed']);
+const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 63, 102, 107, 109]);
+const BUILDING_GARRISON_ATTRS = new Set([102, 107]);
+const BUILDING_COMBAT_NOTICE_ATTRS = new Set([22, 24, 109]);
+const PAYOFF_GATHER_TARGETS = new Set(['task:wood', 'task:gold', 'task:stone']);
 const FARM_FOOD_RES = 36;
 const FISHING_SHIP_CLASS = 21;
 
 export type TechDataConsumptionKind = 'simulated' | 'cost' | 'consumed' | 'unencoded';
-export type TechConsumedDomain =
-  'cost-unit' | 'cost-building' | 'market' | 'eco-gather' | 'eco-other' | 'work-rate' | 'garrison-healing' | 'conversion' | 'combat-unmodeled';
+export type TechAdoptedDomain =
+  'market' | 'eco-payoff' | 'production' | 'eco-farm' | 'eco-fishing' | 'eco-build' | 'garrison-healing' | 'building-garrison' | 'conversion' | 'army-cost';
+export type TechNoticeDomain = 'unit-combat-notice' | 'building-combat-notice';
+export type TechConsumedDomain = 'cost-unit' | 'cost-building' | TechAdoptedDomain | TechNoticeDomain;
 
 export interface TechDataConsumption {
   kind: TechDataConsumptionKind;
@@ -40,29 +44,36 @@ export function validCostEffectsOf(datEco: readonly DatEco[]): DatEco[] {
   return datEco.filter((e) => isUnitCostAttribute(e.a) && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0);
 }
 
-function hasEcoGatherSignal(ecoData: EcoDataView, techId: number, datEco: readonly DatEco[]): boolean {
-  const effects = ecoData.ecoTechs[techId]?.effects ?? [];
-  if (effects.some((e) => (e.kind === 'attr' && GATHER_ATTRS.has(e.attr ?? '')) || (e.kind === 'res' && e.res === FARM_FOOD_RES))) {
-    return true;
-  }
-  return datEco.some((e) => (e.a === 13 || e.a === 14) && e.cls === FISHING_SHIP_CLASS);
-}
-
-const DOMAIN_TOOL_LABEL: Record<Exclude<TechConsumedDomain, 'cost-unit' | 'cost-building'>, string> = {
-  market: '市场',
-  'eco-gather': '经济收益',
-  'eco-other': '经济与开局',
-  'work-rate': '持续生产',
-  'garrison-healing': '驻军回血',
-  conversion: '招降与阵容账本',
-  'combat-unmodeled': '单位 PK 与模拟器',
+const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string; isToolName: boolean }> = {
+  market: { label: '市场', isToolName: true },
+  'eco-payoff': { label: '经济收益', isToolName: true },
+  production: { label: '持续生产', isToolName: true },
+  'eco-farm': { label: '农田食物量', isToolName: false },
+  'eco-fishing': { label: '渔船采集', isToolName: false },
+  'eco-build': { label: '开局模拟', isToolName: true },
+  'garrison-healing': { label: '驻军回血', isToolName: true },
+  'building-garrison': { label: '建筑驻军与满科技对照', isToolName: false },
+  conversion: { label: '招降说明与阵容账本', isToolName: false },
+  'army-cost': { label: '阵容账本', isToolName: true },
+  'unit-combat-notice': { label: '单位 PK 与模拟器', isToolName: false },
+  'building-combat-notice': { label: '建筑满科技对照', isToolName: false },
 };
 
-function formatToolList(labels: readonly string[]): string {
-  const unique = [...new Set(labels)];
-  if (unique.length <= 1) return unique[0] ?? '站内';
-  if (unique.length === 2) return `${unique[0]}与${unique[1]}`;
-  return unique.join('、');
+function formatConsumers(domains: readonly (TechAdoptedDomain | TechNoticeDomain)[]): string {
+  const unique = [...new Set(domains)];
+  const labels = unique.map((d) => DOMAIN_LABEL[d].label);
+  const appendTool = unique.length > 0 && unique.every((d) => DOMAIN_LABEL[d].isToolName);
+  let text: string;
+  if (labels.length <= 1) {
+    text = labels[0] ?? '站内';
+  } else if (labels.some((l) => l.includes('与'))) {
+    text = labels.join('、');
+  } else if (labels.length === 2) {
+    text = `${labels[0]}与${labels[1]}`;
+  } else {
+    text = `${labels.slice(0, -1).join('、')}与${labels[labels.length - 1]}`;
+  }
+  return appendTool ? `${text}工具` : text;
 }
 
 /** 按站内工具/数据层实际解码消费的规则分类单条科技，生成底部 DetailSource 三态说明。 */
@@ -82,11 +93,16 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
   const datEco = datTech?.eco ?? [];
   const hasResMarker = datEco.some((e) => e.res !== undefined);
 
+  const hasUnitTarget = (ids: readonly number[] | undefined): boolean =>
+    Boolean(ids?.length && (deps.unitById ? ids.some((id) => !!deps.unitById![id]) : !deps.buildingById));
+  const hasBuildingTarget = (ids: readonly number[] | undefined): boolean =>
+    Boolean(ids?.length && (deps.buildingById ? ids.some((id) => !!deps.buildingById![id]) : false));
+
   const costEffects = validCostEffectsOf(datEco);
   if (costEffects.length > 0) {
     const targetIds = [...new Set(costEffects.flatMap((e) => e.t ?? []))];
-    const hasUnit = deps.unitById ? targetIds.some((id) => !!deps.unitById![id]) : true;
-    const hasBuilding = deps.buildingById ? targetIds.some((id) => !!deps.buildingById![id]) : false;
+    const hasUnit = hasUnitTarget(targetIds);
+    const hasBuilding = hasBuildingTarget(targetIds);
     const domains: TechConsumedDomain[] = [];
     if (hasUnit) domains.push('cost-unit');
     if (hasBuilding) domains.push('cost-building');
@@ -102,46 +118,99 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     return { kind: 'cost', domains, hasUndecoded, sourceNote };
   }
 
-  const domains: Exclude<TechConsumedDomain, 'cost-unit' | 'cost-building'>[] = [];
+  const adopted: TechAdoptedDomain[] = [];
+  const notices: TechNoticeDomain[] = [];
   const inEcoTechs = Object.hasOwn(ecoData.ecoTechs, String(tech.id));
   const inCivEcoTechs = Boolean(ecoData.civEcoTechs && Object.hasOwn(ecoData.civEcoTechs, String(tech.id)));
+  const ecoEffects = ecoData.ecoTechs[tech.id]?.effects ?? [];
 
-  const isMarket = inEcoTechs && datEco.some((e) => (e.res === TRADE_FEE_RES || e.res === TRIBUTE_TAX_RES) && e.op === 'set' && Number.isFinite(e.v));
-  if (isMarket) domains.push('market');
+  const isMarket =
+    (inEcoTechs || inCivEcoTechs) && datEco.some((e) => (e.res === TRADE_FEE_RES || e.res === TRIBUTE_TAX_RES) && e.op === 'set' && Number.isFinite(e.v));
 
   if (inCivEcoTechs) {
-    domains.push('eco-gather');
-  } else if (inEcoTechs && !isMarket) {
-    domains.push(hasEcoGatherSignal(ecoData, tech.id, datEco) ? 'eco-gather' : 'eco-other');
+    // 文明专属采集科技由持续生产按需采用，不进入经济收益工具（ecoPayoff）
+    adopted.push('production');
   }
 
-  if (!inEcoTechs && datEco.some((e) => e.a === 13 && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0)) {
-    domains.push('work-rate');
-  }
-  if (datEco.some((e) => e.a === 108 && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0)) {
-    domains.push('garrison-healing');
+  if (isMarket) adopted.push('market');
+
+  if (inEcoTechs && !isMarket) {
+    const isEcoPayoff = ecoEffects.some((e) => e.kind === 'attr' && e.attr === 'workRate' && PAYOFF_GATHER_TARGETS.has(e.target ?? ''));
+    const isFarmFood = ecoEffects.some((e) => e.kind === 'res' && e.res === FARM_FOOD_RES);
+    const hasFarmCarry = ecoEffects.some((e) => e.kind === 'attr' && e.target === 'task:farm' && e.attr === 'carry' && (e.v ?? 0) > 0);
+    const isFishing =
+      ecoEffects.some((e) => e.target === `class:${FISHING_SHIP_CLASS}`) || datEco.some((e) => (e.a === 13 || e.a === 14) && e.cls === FISHING_SHIP_CLASS);
+
+    if (isEcoPayoff) {
+      adopted.push('eco-payoff');
+    } else if (isFarmFood) {
+      adopted.push('eco-farm');
+      if (hasFarmCarry) adopted.push('production');
+      adopted.push('eco-build');
+    } else if (isFishing) {
+      adopted.push('eco-fishing', 'eco-build');
+    } else {
+      adopted.push('eco-build');
+    }
   }
 
-  const hasConversion =
-    resistDelta(datTech) !== null ||
+  // 与 production.ts 保持一致：含资源标记（如 res:33）的工作速率科技在持续生产中整项跳过，仅由建筑满科技对照读取作提示
+  const hasBuildingWorkRate = !inEcoTechs && datEco.some((e) => e.a === 13 && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t));
+  if (hasBuildingWorkRate) {
+    if (hasResMarker) {
+      if (datEco.some((e) => e.a === 13 && e.op === 'mul' && e.v > 0 && hasBuildingTarget(e.t))) {
+        notices.push('building-combat-notice');
+      }
+    } else {
+      adopted.push('production');
+    }
+  }
+
+  if (datEco.some((e) => e.a === 108 && TECH_COST_OPS.has(e.op) && (deps.buildingById ? hasBuildingTarget(e.t) : (e.t?.length ?? 0) > 0))) {
+    adopted.push('garrison-healing');
+  }
+
+  if (datEco.some((e) => e.a !== undefined && BUILDING_GARRISON_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t))) {
+    adopted.push('building-garrison');
+  }
+
+  if (resistDelta(datTech) !== null) {
+    adopted.push('conversion');
+  } else if (
     datEco.some((e) => e.res !== undefined && CONVERSION_RES.has(e.res)) ||
-    datEco.some((e) => e.a === 10 && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0);
-  if (hasConversion) domains.push('conversion');
+    datEco.some((e) => e.a === 10 && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t))
+  ) {
+    adopted.push('army-cost');
+  }
 
-  const hasCombatUnmodeled =
-    datEco.some((e) => e.a !== undefined && UNMODELED_COMBAT_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0) ||
-    Boolean(dat.projectilePoison?.[tech.en]) ||
-    Boolean(dat.projectilePassThrough?.[tech.en]) ||
+  const poisonScope = dat.projectilePoison?.[tech.en];
+  const passThroughScope = dat.projectilePassThrough?.[tech.en];
+
+  const hasUnitCombatNotice =
+    datEco.some((e) => e.a !== undefined && UNIT_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t)) ||
+    (poisonScope?.units.length ?? 0) > 0 ||
+    (passThroughScope?.units.length ?? 0) > 0 ||
     (tech.id === BALLISTICS_TECH_ID && Boolean(dat.ballistics));
-  if (hasCombatUnmodeled) domains.push('combat-unmodeled');
+  if (hasUnitCombatNotice) notices.push('unit-combat-notice');
 
+  const hasBuildingCombatNotice =
+    datEco.some((e) => e.a !== undefined && BUILDING_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t)) ||
+    (poisonScope?.buildings.length ?? 0) > 0 ||
+    (passThroughScope?.buildings.length ?? 0) > 0;
+  if (hasBuildingCombatNotice && !notices.includes('building-combat-notice')) {
+    notices.push('building-combat-notice');
+  }
+
+  const domains: TechConsumedDomain[] = [...adopted, ...notices];
   if (domains.length > 0) {
-    const tools = formatToolList(domains.map((d) => DOMAIN_TOOL_LABEL[d]));
+    const clauses: string[] = [];
+    if (adopted.length > 0) clauses.push(`${formatConsumers(adopted)}已采用固定数据编码`);
+    if (notices.length > 0) clauses.push(`${formatConsumers(notices)}已读取固定数据编码作机制提示`);
     return {
       kind: 'consumed',
       domains,
       hasUndecoded: hasResMarker,
-      sourceNote: `本页不逐条模拟属性；${tools}工具已采用固定数据编码，其余效果以游戏说明为准`,
+      sourceNote: `本页不逐条模拟属性；${clauses.join('，')}，其余效果以游戏说明为准`,
     };
   }
 

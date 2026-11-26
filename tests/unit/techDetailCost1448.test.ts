@@ -6,6 +6,9 @@ import { StaticRouter } from 'react-router-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees, type Core } from '../../src/data';
 import { evaluateArmyCost } from '../../src/domain/armyCost';
+import { buildBuildingCivRank } from '../../src/domain/buildingCivRank';
+import { payoffAvailable } from '../../src/domain/ecoPayoff';
+import { marketFee } from '../../src/domain/market';
 import { calculateProduction, decodeProduction } from '../../src/domain/production';
 import { buildTechCostChangeView, classifyTechDataConsumption, TECH_COST_PREVIEW_COUNT } from '../../src/domain/techDetailCost';
 import { techEffectEntries } from '../../src/domain/techDetailView';
@@ -35,7 +38,7 @@ beforeAll(async () => {
 describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
   it('全站 199 项科技精确按数据消费规则分类，零硬编码科技 ID', () => {
     const src = readFileSync('src/domain/techDataConsumption.ts', 'utf8') + '\n' + readFileSync('src/domain/techDetailCost.ts', 'utf8');
-    for (const id of ['455', '488', '499', '514', '625', '782', '785', '835', '1380', '1496', '1484', '1379']) {
+    for (const id of ['455', '484', '488', '499', '506', '514', '576', '578', '625', '782', '785', '835', '996', '1379', '1380', '1393', '1484', '1496']) {
       expect(src).not.toMatch(new RegExp(`\\b${id}\\b`));
     }
 
@@ -226,7 +229,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text514).toContain('训练费用已按固定数据编码；未在站内消费的效果以游戏说明为准');
     expect(text514).not.toContain('这条科技没有编码数值');
 
-    // 其他已消费编码：202 双刃斧 / 315 征招 / 1379 突袭
+    // 其他已消费编码：202 双刃斧 / 315 征招 / 506 大干道 / 578 土堡 / 484 射箭孔 / 576 蛮王 / 996 强化堡垒 / 1379 突袭 / 1393 箭毒
     const text202 = visible(markup('/tech/202'));
     expect(text202).toContain('本页不逐条模拟属性；经济收益工具已采用固定数据编码，其余效果以游戏说明为准');
     expect(text202).not.toContain('这条科技没有编码数值');
@@ -234,8 +237,43 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     const text315 = visible(markup('/tech/315'));
     expect(text315).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，其余效果以游戏说明为准');
 
+    const text506 = visible(markup('/tech/506'));
+    expect(text506).toContain('本页不逐条模拟属性；持续生产与市场工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text506).not.toContain('经济收益');
+
+    const text578 = visible(markup('/tech/578'));
+    expect(text578).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text578).not.toContain('持续生产');
+
+    const text484 = visible(markup('/tech/484'));
+    expect(text484).toContain('本页不逐条模拟属性；建筑驻军与满科技对照已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text484).not.toContain('单位 PK');
+
+    const text576 = visible(markup('/tech/576'));
+    expect(text576).toContain('本页不逐条模拟属性；建筑驻军与满科技对照已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text576).not.toContain('单位 PK');
+
+    const text996 = visible(markup('/tech/996'));
+    expect(text996).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text996).not.toContain('单位 PK');
+
     const text1379 = visible(markup('/tech/1379'));
-    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 与模拟器工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 与模拟器已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+
+    const text1393 = visible(markup('/tech/1393'));
+    expect(text1393).toContain('本页不逐条模拟属性；单位 PK 与模拟器、建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+
+    const text102 = visible(markup('/tech/102'));
+    expect(text102).toContain('本页不逐条模拟属性；开局模拟工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text102).not.toContain('经济收益');
+
+    const text13 = visible(markup('/tech/13'));
+    expect(text13).toContain('本页不逐条模拟属性；农田食物量、持续生产与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text13).not.toContain('经济收益');
+
+    const text65 = visible(markup('/tech/65'));
+    expect(text65).toContain('本页不逐条模拟属性；渔船采集与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text65).not.toContain('经济收益');
 
     // 排除项（仅 res:33 与真无编码）：1484 / 21 / 573
     for (const id of [1484, 21, 573]) {
@@ -258,5 +296,67 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       const sectionText = visible(costSection);
       expect(sectionText).not.toMatch(/a:\d+|res:\d+|属性\s*\d+|资源\s*33|资源槽/);
     }
+  });
+
+  it('来源说明与站内工具真实消费行为一致（578 土堡、484/576/996 建筑科技、506 大干道）', () => {
+    const ctx = { core, trees };
+
+    // 578 土堡：持续生产跳过并提示整项未计入，建筑满科技对照在城堡行读取作未计入提示
+    const prodBefore578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
+    const prodAfter578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
+    expect(prodAfter578.lines[0]!.seconds).toBe(prodBefore578.lines[0]!.seconds);
+    expect(prodAfter578.warnings.some((w) => w.includes('土堡') && w.includes('整项未计入'))).toBe(true);
+    const castleRank = buildBuildingCivRank(ctx, core.buildingById[82]!, 3);
+    const berberRow = castleRank.rows.find((r) => r.civ === 'Berbers');
+    expect(berberRow?.tags.some((t) => t.includes('土堡'))).toBe(true);
+    const c578 = classifyTechDataConsumption(core.techById[578]!, false, { unitById: core.unitById, buildingById: core.buildingById });
+    expect(c578.domains).toEqual(['building-combat-notice']);
+
+    // 484 射箭孔 / 576 蛮王 / 996 强化堡垒：目标均为建筑，归入建筑驻军或建筑满科技对照，绝不归入单位 PK
+    const civ484 = core.techById[484]!.civs[0]!;
+    const civ576 = core.techById[576]!.civs[0]!;
+    const civ996 = core.techById[996]!.civs[0]!;
+    const towerRank = buildBuildingCivRank(ctx, core.buildingById[79]!, 4);
+    const tcRank = buildBuildingCivRank(ctx, core.buildingById[109]!, 4);
+    expect(towerRank.rows.find((r) => r.civ === civ484)?.tags.some((t) => t.includes('射箭孔'))).toBe(true);
+    expect(tcRank.rows.find((r) => r.civ === civ576)?.tags.some((t) => t.includes('蛮王'))).toBe(true);
+    expect(towerRank.rows.find((r) => r.civ === civ996)?.tags.some((t) => t.includes('强化堡垒'))).toBe(true);
+    expect(classifyTechDataConsumption(core.techById[484]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-garrison',
+    ]);
+    expect(classifyTechDataConsumption(core.techById[576]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-garrison',
+    ]);
+    expect(classifyTechDataConsumption(core.techById[996]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-combat-notice',
+    ]);
+
+    // 506 大干道：持续生产改变采金速率、市场采用 10% 手续费，但不在经济收益工具可选清单中
+    const payoffIds = payoffAvailable(ctx, { civ: 'Hindustanis', age: 4 }).map((t) => t.id);
+    expect(payoffIds).not.toContain(506);
+    expect(marketFee({ civ: 'Hindustanis', guilds: false, unique: true })).toBe(0.1);
+    const prodBefore506 = calculateProduction(ctx, {
+      civ: 'Hindustanis',
+      age: 3,
+      techs: [],
+      rows: [{ unit: 38, building: 101, count: '1' }],
+      walk: 0,
+      farm: 0,
+    });
+    const prodAfter506 = calculateProduction(ctx, {
+      civ: 'Hindustanis',
+      age: 3,
+      techs: [506],
+      rows: [{ unit: 38, building: 101, count: '1' }],
+      walk: 0,
+      farm: 0,
+    });
+    const goldBefore = prodBefore506.resources.find((r) => r.key === 'Gold')!.income;
+    const goldAfter = prodAfter506.resources.find((r) => r.key === 'Gold')!.income;
+    expect(goldAfter).toBeGreaterThan(goldBefore);
+    expect(classifyTechDataConsumption(core.techById[506]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'production',
+      'market',
+    ]);
   });
 });
