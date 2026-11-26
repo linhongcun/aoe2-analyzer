@@ -426,6 +426,12 @@
 
 原因是加成归类、工具对账与证据弹层共享同一套 `effects.json` 与 `BONUS_SRC` 骨架，静态推理既看不出懒加载分包和跨模块签名，也分不清 `sim:null` 背后究竟是漏入 `TREE_SIM`、漏接 `cc.tree` 还是纯战斗误入 `treeOnly`。以后评审涉及 `effects.ts`、`BONUS_SRC` 或 `bonusUsage.ts` 的 Issue 时，固定补做三项核查：追踪运行时非 typeOnly 静态导入闭包，确认不把 `core.ts` 拖入 `CivDetail` 等懒加载页并保留原始 `.dat` 目标；凡改动 `BONUS_SRC` 触及 `SCENARIO_CIVS` 七国，同步把情景数值零漂移与 `positionScenarioReview.json` 刷新写入范围和验收；排查 `bonusUsage` 候选与 `sim:null` 时必须直接实跑 `simulateBuild` / `calculateConstruction` 反事实而非仅看静态返回，把发现的独立引擎缺陷划出非目标另单跟进，不让标签与工具当前计算脱节。
 
+### 战斗机制从未建模升级为正式结算时，连核运行期成对抵消、满科技对照续显与阵容实算单测
+
+2026-11-27 评审[额外伤害减免（`a:24`）接入伤害核心](https://github.com/linhongcun/aoe2-analyzer/issues/1500)时，独立核查暴露出三处单看基础目录或单兵公式极易漏掉的连锁问题：一是运营仅扫描 `units.json` 基础 `atks` 得出「负攻击行与 33 个 `a:24` 单位无交集」，而全量扫描 `effects.json` 规则才检出真实在役反例——日本 `tech 190` 对骑射手（`39/474`）编码了成对规则 `对弓手 +2` 与 `对掷矛手 -2`，打西西里掷矛手（`6/7`）时若只折减正值额外伤害行，会把净加成错扣成 `-0.8`（总伤反降至 `4.2`，低于无加成的 `5`），须按引擎 Step 3 对全部非基础类同乘 `(1 - r)` 才能保持 `+1.2 - 1.2 = 0`；二是从 [duelUnmodeled.ts](../src/domain/duelUnmodeled.ts) 移除「未计入：额外伤害减免」后，若不在 [unitCivRank.ts](../src/domain/unitCivRank.ts) 参照 `ignoreArmorTech` 补入独立结构化的已计入标签，11 列基础面板表会直接丢失孟加拉与西西里的核心文明特质；三是 [civFormations1386.test.ts](../tests/unit/civFormations1386.test.ts) 对已发布的西西里推荐阵容链接现场重跑 `groupFight`（西西里锁子甲重骑对法兰克长戟由剩 `16/50` 变为 `2/50`），且把 `a:24` 折叠进 `CIV_BONUSES` 会将 `Bengalis-2`/`Sicilians-2` 的 `BONUS_SRC` 从 `eco` 转为 `dat` 并改变 [bonusUsage317.test.ts](../tests/unit/bonusUsage317.test.ts) 计数与快照。
+
+原因是把战斗机制从「仅提示」升级为「进公式」会同时改写伤害拆解口径、移除既有对照表线索，并牵动依赖实时战斗引擎的下游回归。以后评审同类战斗机制正式建模需求（如溅射、充能、近战反伤等）时，固定完成三项核查：排查公式边界反例必须同时扫描 `units.json` 基础值与 `effects.json` 运行期规则（尤其正负成对抵消项）；移除 `detectUnitUnmodeled` 旧提示的同时，核查 [UnitCivRankTable.tsx](../src/features/units/components/UnitCivRankTable.tsx) 是否需要平滑切换为已计入行内标签，并在 [DamageBreakdown.tsx](../src/features/duel/components/DamageBreakdown.tsx) 标清折算依据；全仓检索 `tests/unit/civFormations*.test.ts` 与 `bonusUsage317` 对受影响文明的实算断言，明确「本单同步更新实时引擎测试断言，但不越权改写 `role/game-strategy.md` 与 `civ-formations.json` 固定来源文案」。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
