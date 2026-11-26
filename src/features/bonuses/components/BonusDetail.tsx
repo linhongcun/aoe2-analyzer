@@ -5,6 +5,7 @@ import { civEnCasePath } from '../../../domain/civRoute';
 import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import BonusList from './BonusList';
 import RomanArmor710 from './RomanArmor710';
 
@@ -27,7 +28,7 @@ export default function BonusDetail() {
       crumb={kind}
       icon={<CivIcon c={c} />}
       title={<BonusText b={b} linked={false} />}
-      en={b.en}
+      en={b.en ? <NumWrappedText text={b.en} /> : ''}
       badges={<span className="tag bon-kind">{kind}</span>}
       tags={<BonusTags b={b} />}
       showTabs={false}

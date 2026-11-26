@@ -135,16 +135,44 @@ test('#1445 瓦兰吉 1488 归属、萨拉森 +3 全消费点与 6 国骑乘单�
   await expect(dialog.locator('details.datfx')).toContainText('1.3333');
   await page.keyboard.press('Escape');
 
-  // 萨拉森文明页 + 团队加成详情页：+3 且消除不一致提示
+  // 萨拉森文明页（含作用与依据英文原文）+ 团队加成详情页：+3 且消除不一致提示
   await page.goto('./#/civ/Saracens');
   const saracenTeamRow = page.locator('[data-bonus-id="Saracens-team"]');
   await expect(saracenTeamRow).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
   await expect(saracenTeamRow.locator('.civ-bonus-warning')).toHaveCount(0);
-  await expectSingleLine(saracenTeamRow.locator('.num.nw'));
+  await expectSingleLine(saracenTeamRow.locator('.num.nw', { hasText: /^\+3$/ }));
+  await saracenTeamRow.getByRole('button', { name: /作用与依据/u }).click();
+  dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  const dialogEn = dialog.locator('.bonus-evidence-section').filter({ hasText: '来源与原文' }).locator('p.note');
+  await expect(dialogEn).toContainText('Foot Archers and Skirmishers +3 attack vs. buildings');
+  const dialogEnPlus3 = dialogEn.locator('.num.nw', { hasText: /^\+3$/ });
+  await expect(dialogEnPlus3).toHaveCount(1);
+  await expectSingleLine(dialogEnPlus3);
+  await page.keyboard.press('Escape');
 
   await page.goto('./#/civ/Saracens/bonus/team');
-  await expect(page.locator('#bonus h1 .num.nw')).toHaveText('+3');
+  const detailZhPlus3 = page.locator('#bonus h1 > .num.nw');
+  await expect(detailZhPlus3).toHaveText('+3');
+  await expectSingleLine(detailZhPlus3);
+  const detailEnPlus3 = page.locator('#bonus h1 small .num.nw');
+  await expect(detailEnPlus3).toHaveText('+3');
+  await expectSingleLine(detailEnPlus3);
   await expect(page.getByText('游戏说明文字与游戏数据数值不一致')).toHaveCount(0);
+
+  // #/bonuses 文明加成总览：萨拉森 +3 与 6 国骑乘单位对齐及防折行
+  await page.goto('./#/bonuses');
+  const bonusesSaracenTeam = page.locator('#bg-Saracens .bg-row').filter({ hasText: '步弓手和掷矛手对建筑的攻击力 +3' });
+  await expect(bonusesSaracenTeam).toHaveCount(1);
+  const bonusesPlus3 = bonusesSaracenTeam.locator('.num.nw', { hasText: /^\+3$/ });
+  await expect(bonusesPlus3).toHaveCount(1);
+  await expectSingleLine(bonusesPlus3);
+  const bonusesCumans = page.locator('#bg-Cumans .bg-row').filter({ hasText: '骑乘单位在封建/城堡/帝王时代的移动速度 +5/10/15%' });
+  await expect(bonusesCumans).toHaveCount(1);
+  await expectSingleLine(bonusesCumans.locator('.num.nw', { hasText: /^\+5\/10\/15%$/ }));
+  const bonusesGurjaras = page.locator('#bg-Gurjaras .bg-row').filter({ hasText: '骑乘单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%' });
+  await expect(bonusesGurjaras).toHaveCount(1);
+  await expectSingleLine(bonusesGurjaras.locator('.num.nw', { hasText: /^\+20\/30\/40%$/ }));
 
   // 6 国 Mounted Units：库曼与瞿折罗（保留官方数值与不一致提示）
   await page.goto('./#/civ/Cumans');
@@ -153,35 +181,59 @@ test('#1445 瓦兰吉 1488 归属、萨拉森 +3 全消费点与 6 国骑乘单�
   await expect(page.locator('[data-bonus-id="Gurjaras-2"]')).toContainText('骑乘单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%');
   await expect(page.locator('[data-bonus-id="Gurjaras-2"] .civ-bonus-warning')).toBeVisible();
 
-  // 萨拉森 +3 全消费点：模拟器、对比、团队加成、团队搭配、单兵 PK、混编 PK 及带入训练总价
+  // 萨拉森 +3 全消费点：模拟器、对比、文明速览、团队加成、团队搭配、单兵 PK、混编 PK 及带入训练总价
   await page.goto('./#/unit/4/Britons/4/?tab=sim');
   const simSaracen = page.locator('.simt').filter({ hasText: '萨拉森' });
   await expect(simSaracen).toContainText('+3');
-  await expectSingleLine(simSaracen.locator('.num.nw'));
+  await expectSingleLine(simSaracen.locator('.num.nw', { hasText: /^\+3$/ }));
 
   await page.goto('./#/compare?a=Saracens&b=Franks');
-  await expect(page.locator('#compare')).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
-  await expectSingleLine(page.locator('#compare .num.nw').filter({ hasText: '+3' }).first());
+  const compareTeamCell = page
+    .locator('#compare-facts tr')
+    .filter({ has: page.locator('td').first().getByText('团队加成', { exact: true }) })
+    .locator('td.compare-side-a');
+  await expect(compareTeamCell).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
+  const comparePlus3 = compareTeamCell.locator('.num.nw', { hasText: /^\+3$/ });
+  await expect(comparePlus3).toHaveCount(1);
+  await expectSingleLine(comparePlus3);
 
   await page.goto('./#/civs');
   await page.locator('#grid button[data-civ="Saracens"]').click();
   const civPreview = page.locator('#civ-preview');
   await expect(civPreview).toBeVisible();
-  await expect(civPreview).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
-  await expectSingleLine(civPreview.locator('.num.nw'));
+  const civPreviewTeam = civPreview.locator('h4:has-text("团队加成") + p');
+  await expect(civPreviewTeam).toHaveText('步弓手和掷矛手对建筑的攻击力 +3');
+  const civPreviewPlus3 = civPreviewTeam.locator('.num.nw', { hasText: /^\+3$/ });
+  await expect(civPreviewPlus3).toHaveCount(1);
+  await expectSingleLine(civPreviewPlus3);
 
   await page.goto('./#/team-bonuses?tv=1&players=Saracens%2CBritons&age=4&target=all&unit=&researched=');
   const teamCard = page.getByTestId('team-bonus-Saracens-team');
   await expect(teamCard).toContainText('+3');
-  await expectSingleLine(teamCard.locator('.num.nw'));
+  await expectSingleLine(teamCard.locator('.num.nw', { hasText: /^\+3$/ }));
 
   await page.goto('./#/team-fit?v=1&mates=Britons&candidate=Saracens');
   const fitCard = page.getByTestId('fit-source-p:Saracens-team');
   await expect(fitCard).toContainText('+3');
-  await expectSingleLine(fitCard.locator('.num.nw'));
+  await expectSingleLine(fitCard.locator('.num.nw', { hasText: /^\+3$/ }));
 
-  // 窄屏 360px 验收：天梯展开法兰克/条顿 + 混编带萨拉森团队效果与训练总价提示
+  // 单兵 PK（#/duel）步弓手配置中实见萨拉森 +3 团队开关
+  await page.goto('./#/duel?a=4.Britons.4.f.&b=38.Franks.4.f.&m=1');
+  await page.locator('#duel-a details > summary').click();
+  const singleDuelSaracen = page.locator('#duel-a .simt').filter({ hasText: '萨拉森' });
+  await expect(singleDuelSaracen).toBeVisible();
+  await expect(singleDuelSaracen).toContainText('步弓手和掷矛手对建筑的攻击力 +3');
+  const singleDuelPlus3 = singleDuelSaracen.locator('.num.nw', { hasText: /^\+3$/ });
+  await expect(singleDuelPlus3).toHaveCount(1);
+  await expectSingleLine(singleDuelPlus3);
+
+  // 窄屏 360px 验收：加成详情中英 +3、天梯展开法兰克/条顿 + 混编带萨拉森团队效果与训练总价提示
   await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('./#/civ/Saracens/bonus/team');
+  await expectSingleLine(page.locator('#bonus h1 > .num.nw', { hasText: /^\+3$/ }));
+  await expectSingleLine(page.locator('#bonus h1 small .num.nw', { hasText: /^\+3$/ }));
+  await expectCleanPage(page);
+
   await page.goto('./#/ladder?mode=arabia1v1');
   for (const [civEn, token] of [
     ['Franks', '+20%'],

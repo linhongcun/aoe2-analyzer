@@ -7,7 +7,7 @@ import { useCore } from '../../data/hooks';
 import { Icon } from './Icon';
 
 const NUM_PART = String.raw`(?:[+＋−-]\s*)?\d+(?:\.\d+)?(?:\s*\/\s*(?:[+＋−-]\s*)?\d+(?:\.\d+)?)*`;
-const UNIT_PART = String.raw`%|个村民|人口空间|生命值|每分钟|秒|分钟|木材|食物|黄金|石料|资源|头绵羊|个模板|格范围内|格范围|射程|攻击力|护甲|格|片果树丛|片|个单位|个`;
+const UNIT_PART = String.raw`%|个村民|人口空间|生命值|每分钟|秒|分钟|木材|食物|黄金|石料|资源|头绵羊|个模板|格范围内|格范围|射程|攻击力|护甲|格|片果树丛|片|个单位|个|HP\b`;
 const NUM_UNIT_RE = new RegExp(`(${NUM_PART}(?:\\s*(?:${UNIT_PART}))?)`, 'g');
 
 /** 将文本中的符号/斜杠数值与「数字+单位」包裹 .num.nw，避免窄屏折行。 */

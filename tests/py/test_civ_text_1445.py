@@ -121,6 +121,36 @@ class SaracensTeamBonusCorrection1445(unittest.TestCase):
         self.assertIn('Saracens bonus 0 corrected text is empty; review civ_text_corrections.json', result.stderr)
         self.assertIsNone(output)
 
+    def test_invalid_or_empty_rule_fails_closed_without_writing(self):
+        base = json.loads((ROOT / 'data/sources/civ_text_corrections.json').read_text(encoding='utf-8'))
+        for field, expected_msg in (
+            ('tb', 'Saracens team-bonus correction is invalid; review civ_text_corrections.json'),
+            ('tbEn', 'Saracens team-bonus-en correction is invalid; review civ_text_corrections.json'),
+        ):
+            for invalid_rule in ({}, None, {'corrected': 'x'}):
+                with self.subTest(field=field, invalid_rule=invalid_rule):
+                    mutated = json.loads(json.dumps(base))
+                    mutated['Saracens'][field] = invalid_rule
+                    result, output = self.generate(corrections_override=mutated)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn('ValueError', result.stderr)
+                    self.assertIn(expected_msg, result.stderr)
+                    self.assertIsNone(output)
+
+        for invalid_bon, expected_msg in (
+            (None, 'Saracens bonus corrections are invalid; review civ_text_corrections.json'),
+            ({'0': {}}, 'Saracens bonus 0 correction is invalid; review civ_text_corrections.json'),
+            ({'0': None}, 'Saracens bonus 0 correction is invalid; review civ_text_corrections.json'),
+        ):
+            with self.subTest(invalid_bon=invalid_bon):
+                mutated = json.loads(json.dumps(base))
+                mutated['Saracens']['bon'] = invalid_bon
+                result, output = self.generate(corrections_override=mutated)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('ValueError', result.stderr)
+                self.assertIn(expected_msg, result.stderr)
+                self.assertIsNone(output)
+
 
 class CommittedDataInvariants1445(unittest.TestCase):
     def test_civs_mounted_units_and_saracens_and_varangians(self):

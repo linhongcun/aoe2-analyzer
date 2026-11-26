@@ -110,7 +110,7 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
 export function damageByClass(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>, d: Pick<Fighter, 'armor' | 'combatAbility'>) {
   if (!fighterCanAttack(a)) return [];
   const ignoreArmor = evaluateIgnoreArmor(a, d);
-  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
+  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对骑乘减伤 −3 会扣减）
   return damageRows(a.attack, d.armor, {
     allowInvalid: true,
     ...(ignoreArmor.applied ? { ignoredCategories: new Set(ignoreArmor.categories) } : {}),

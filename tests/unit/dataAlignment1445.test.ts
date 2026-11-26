@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { civByEn } from '../../src/data';
@@ -10,7 +10,8 @@ import { damagePerHit, fighterFrom } from '../../src/domain/duel';
 import { MANUAL_TEAM_BONUSES } from '../../src/domain/effects.manual';
 import { calculateSiege } from '../../src/domain/siege';
 import { simulate } from '../../src/domain/simulator';
-import { BonusText } from '../../src/shared/ui/BonusBody';
+import BonusDetail from '../../src/features/bonuses/components/BonusDetail';
+import { BonusBodyContent, BonusText } from '../../src/shared/ui/BonusBody';
 import { ProductionTransferBanner } from '../../src/shared/ui/ProductionTransferBanner';
 import SimPanel, { ArmorClasses, BonusTable } from '../../src/shared/ui/sim/SimPanel';
 import { Linked, NumWrappedText } from '../../src/shared/ui/widgets';
@@ -150,6 +151,28 @@ describe('#1445 数据与文案对齐回归', () => {
     const bonusTextHtml = renderToStaticMarkup(createElement(BonusText, { b: saracenTeam, linked: false }));
     expect(bonusTextHtml).toContain('<span class="num nw">+3</span>');
     expect(plainText(bonusTextHtml)).toBe('步弓手和掷矛手对建筑的攻击力 +3');
+
+    const bonusDetailHtml = renderToStaticMarkup(
+      createElement(
+        MemoryRouter,
+        { initialEntries: ['/civ/Saracens/bonus/team'] },
+        createElement(Routes, null, createElement(Route, { path: '/civ/:en/bonus/:idx', element: createElement(BonusDetail) })),
+      ),
+    );
+    expect(bonusDetailHtml).toContain('<small>Foot Archers and Skirmishers <span class="num nw">+3</span> attack vs. buildings</small>');
+
+    const georgiansMounted = civBonuses(civByEn('Georgians')!).find((b) => b.idx === 2)!;
+    for (const [bonus, expectedEnFragment] of [
+      [saracenTeam, 'Foot Archers and Skirmishers <span class="num nw">+3</span> attack vs. buildings'],
+      [georgiansMounted, 'Mounted Units regenerate <span class="num nw">2/8/14 HP</span> per minute in Feudal/Castle/Imperial Age'],
+    ] as const) {
+      const evidenceHtml = renderToStaticMarkup(
+        createElement(MemoryRouter, null, createElement(BonusBodyContent, { b: bonus, core: CORE, head: false, variant: 'evidence' })),
+      );
+      expect(evidenceHtml).toContain(expectedEnFragment);
+      const headHtml = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(BonusBodyContent, { b: bonus, core: CORE, head: true })));
+      expect(headHtml).toContain(expectedEnFragment);
+    }
 
     const bannerHtml = renderToStaticMarkup(
       createElement(

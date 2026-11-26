@@ -146,7 +146,7 @@ export function BonusBodyContent({
           <p className="bz">
             <BonusText b={b} />
           </p>
-          <p className="note">{b.en}</p>
+          <p className="note">{b.en ? <NumWrappedText text={b.en} /> : ''}</p>
           <p>
             <BonusTags b={b} />
           </p>
@@ -497,7 +497,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
       </section>
       <section className="bonus-evidence-section">
         <h4>来源与原文</h4>
-        <p className="note">{b.en || '暂无英文说明。'}</p>
+        <p className="note">{b.en ? <NumWrappedText text={b.en} /> : '暂无英文说明。'}</p>
         <p>
           <BonusTags b={b} includeTeam={false} includeFresh={false} />
         </p>

@@ -19,20 +19,30 @@ out=[]
 for k,v in d['civs'].items():
     ez=parse(e[str(v['help_string_id'])]);zz=parse(z[str(v['help_string_id'])]);r=R[k]
     corrections=CORRECTIONS.get(k,{})
+    if not isinstance(corrections,dict):
+        raise ValueError(f'{k} corrections entry is invalid; review civ_text_corrections.json')
     bonuses=zz[3]
-    for index,correction in corrections.get('bon',{}).items():
-        i=int(index)
-        if not 0<=i<len(bonuses) or bonuses[i]!=correction['original']:
-            raise ValueError(f'{k} bonus {index} source changed; review civ_text_corrections.json')
-        corrected=correction.get('corrected')
-        if not isinstance(corrected,str) or not corrected.strip():
-            raise ValueError(f'{k} bonus {index} corrected text is empty; review civ_text_corrections.json')
-        bonuses[i]=corrected
+    if 'bon' in corrections:
+        bon_map=corrections['bon']
+        if not isinstance(bon_map,dict):
+            raise ValueError(f'{k} bonus corrections are invalid; review civ_text_corrections.json')
+        for index,correction in bon_map.items():
+            if not isinstance(correction,dict) or not isinstance(correction.get('original'),str):
+                raise ValueError(f'{k} bonus {index} correction is invalid; review civ_text_corrections.json')
+            i=int(index)
+            if not 0<=i<len(bonuses) or bonuses[i]!=correction['original']:
+                raise ValueError(f'{k} bonus {index} source changed; review civ_text_corrections.json')
+            corrected=correction.get('corrected')
+            if not isinstance(corrected,str) or not corrected.strip():
+                raise ValueError(f'{k} bonus {index} corrected text is empty; review civ_text_corrections.json')
+            bonuses[i]=corrected
 
     def apply_team_correction(text,key,label):
-        correction=corrections.get(key)
-        if not correction:
+        if key not in corrections:
             return text
+        correction=corrections[key]
+        if not isinstance(correction,dict) or not isinstance(correction.get('original'),str):
+            raise ValueError(f'{k} {label} correction is invalid; review civ_text_corrections.json')
         if text!=correction['original']:
             raise ValueError(f'{k} {label} source changed; review civ_text_corrections.json')
         corrected=correction.get('corrected')
