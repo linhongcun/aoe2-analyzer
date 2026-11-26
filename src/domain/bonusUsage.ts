@@ -21,6 +21,7 @@ import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
  * 科技树汇总效果（.dat tech 号 < 0，issue 332）：按 aoe2techtree@3bb43b1 文明加成英文原文把每条对应到 eco.json 的 tree 行效果，
  * 结论 = 去掉这些效果后全部开局方案重跑是否变化（见 TREE_SIM / tests/unit/v0300-332.test.ts）；核对不了的写「无法核实」再写具体原因。
  */
+import { ARMY_COST_USAGE, type EcoOnlyUnitId } from '../data/armyCostUsage';
 import { ECO as eco } from '../data/eco';
 import { CONSTRUCTION_DATA as construction } from '../data/construction';
 import { CORE } from '../data/core';
@@ -30,6 +31,7 @@ import { BONUS_USAGE_EXCLUDED } from './mechanismExclusions';
 import type { CivBonusEnt } from './civBonus';
 import { bonusDiscountCounted } from './costPolicy';
 import { DAT } from './datEffects';
+import { PRODUCTION_MODE_LABELS } from './productionMode';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
 import { RELIC_INCOME_RAW as relicRaw } from '../data/relicIncome';
 import { simSupport } from './simSupport';
@@ -47,7 +49,7 @@ export const BONUS_USAGE_CIVS = Object.freeze(CIV_MECHANISM_KEYS.filter((civ) =>
 type Cmd = { C: number; A: number; B: number };
 const relicMods = Object.values((relicRaw as { modifiers: Record<string, { civ: string; scope: string }> }).modifiers);
 
-export type UsageTool = 'sim' | 'gather' | 'cost' | 'construction' | 'relic' | 'repair';
+export type UsageTool = 'sim' | 'gather' | 'cost' | 'armyCost' | 'construction' | 'relic' | 'repair';
 export interface BonusUsageLine {
   tool: UsageTool;
   /** 工具名（中文） */
@@ -55,17 +57,59 @@ export interface BonusUsageLine {
   /** true 已计入 / false 未计入 / null 未逐条核对 */
   on: boolean | null;
   note: string;
-  /** 工具页路由（issue 331，Steve：圣物收益一行链到工具） */
+  /** 工具页路由（issue 331 圣物收益；Issue 1429 阵容新增费用） */
   href?: string;
 }
 export const USAGE_TOOL_ZH: Record<UsageTool, string> = {
   sim: '开局模拟',
   gather: '真实成本',
   cost: '训练费用',
+  armyCost: PRODUCTION_MODE_LABELS.army,
   construction: '施工工具',
   relic: '圣物收益',
   repair: '修理',
 };
+
+const ECO_UNIT_ZH: Readonly<Record<EcoOnlyUnitId, string>> = {
+  83: '村民',
+  128: '贸易车',
+  17: '贸易船',
+};
+
+/** Issue 1429：单工具半覆盖项固定文案（已计入范围与未在阵容新增费用内的部分；命中集合由对账单测锁死）。 */
+const ARMY_COST_HALF_NOTES: Readonly<Record<string, string>> = {
+  'Koreans-2': '已计入：射手护甲 3 项按免费计算；警戒箭塔、大型箭塔、炮塔是建筑科技，不在阵容新增费用内',
+  'Burmese-3': '已计入：修道院科技按折后价计算；草药不在阵容新增费用内',
+  'Italians-2': '已计入：与阵容相关的码头、大学科技按折后价计算；建筑、防御、渔船经济科技和虹吸管、燃烧弹不在阵容新增费用内',
+  'Jurchens-3': '已计入：攻城升级木材 -75%；防御工事升级和研究速度 +100% 不在阵容新增费用内',
+  'Turks-2': '已计入：化学免费，精锐炮舰升级 -50%；炮塔是建筑科技，不在阵容新增费用内',
+  'Burgundians-0':
+    '已计入：阵容含村民时计入独轮推车、手推车食物 -40%，含贸易车或贸易船时计入篷车食物 -40%（空阵容保留对应研究时同样折价）；其余经济科技和提前一个时代不在阵容新增费用内',
+  'Vietnamese-1': '已计入（阵容含村民，或空阵容保留该研究时）：独轮推车、手推车免木材；其余经济科技和研究速度 +100% 不在阵容新增费用内',
+  'Muisca-4': '已计入（阵容含贸易车或贸易船，或空阵容保留该研究时）：篷车免费；行会不在阵容新增费用内',
+  'Chinese-1': '已计入：研究费用按方案所选时代 -5/10/15%（封建/城堡/帝王）；升时代科技不在阵容新增费用内',
+};
+
+function formatEcoUnits(units: readonly EcoOnlyUnitId[]): string {
+  const names = units.map((id) => ECO_UNIT_ZH[id]);
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join('、')}或${names[names.length - 1]!}`;
+}
+
+function armyCostLine(b: CivBonusEnt): BonusUsageLine | null {
+  if (b.team) return null;
+  const entry = ARMY_COST_USAGE.bonuses[b.id];
+  if (!entry) return null;
+  const prefix = entry.ecoOnlyUnits.length ? `已计入（阵容含${formatEcoUnits(entry.ecoOnlyUnits)}，或空阵容保留该研究时）：` : '已计入：';
+  const note = ARMY_COST_HALF_NOTES[b.id] ?? `${prefix}${entry.tids.length} 项研究按${entry.allFree ? '免费' : '折后价'}计算`;
+  return {
+    tool: 'armyCost',
+    name: USAGE_TOOL_ZH.armyCost,
+    on: true,
+    note,
+    href: `/production?mode=army-cost&civ=${encodeURIComponent(b.civ)}`,
+  };
+}
 
 let scopeCache: ReturnType<typeof simScope> | null = null;
 const scope = () => (scopeCache ??= simScope(eco, buildOrders));
@@ -316,7 +360,9 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
     const lines = usageLines(nb);
     return lines.some((l) => l.on === true) ? lines : [];
   }
-  return b.src === 'eco' ? usageLines(nb) : [];
+  if (b.src === 'eco') return usageLines(nb);
+  const ac = armyCostLine(nb);
+  return ac ? [ac] : [];
 }
 
 function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
@@ -334,6 +380,8 @@ function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
         ? { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: true, note: '单位 PK「等资源」与单位详情的真实成本按折后价计算' }
         : { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: false, note: '.dat 累计乘数与说明的整数百分比对不上，显示「折扣未计入」，按原价' },
     );
+  const ac = armyCostLine(b);
+  if (ac) out.push(ac);
   const techs = new Set(bonusTechs(b).techs);
   const cc = construction.civs[b.civ];
   const rules = (cc?.automatic ?? []).filter((r) => techs.has(r.id) && !commonRules().has(r.id));

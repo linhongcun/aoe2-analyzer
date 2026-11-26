@@ -17,7 +17,8 @@ describe('#820 数据族索引', () => {
   it('当前仓库登记完整（含有界历史证据）', () => {
     const result = checkDataFamilies(process.cwd());
     expect(result.errors).toEqual([]);
-    expect(result.files).toHaveLength(17);
+    expect(result.files).toHaveLength(18);
+    expect(result.files).toContain('data/game/army_cost_usage.json');
     expect(result.files).toContain('data/content/civ-updates.json');
   });
 

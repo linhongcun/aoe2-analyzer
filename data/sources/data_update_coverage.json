@@ -121,6 +121,12 @@
       "kind": "generator"
     },
     {
+      "script": "scripts/army_cost_usage_build.ts",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
       "script": "scripts/build_orders_check.ts",
       "args": [],
       "when": "always",

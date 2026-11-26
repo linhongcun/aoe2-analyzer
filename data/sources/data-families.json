@@ -10,6 +10,14 @@
       "auditStatus": "reproduced-by-check"
     },
     {
+      "file": "data/game/army_cost_usage.json",
+      "generator": "scripts/army_cost_usage_build.ts",
+      "pin": "dat",
+      "check": ["npx vite-node scripts/army_cost_usage_build.ts --check"],
+      "tests": ["tests/unit/bonusUsageArmyCost1429.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
       "file": "data/game/siege.json",
       "generator": "scripts/siege_build.py",
       "pin": "dat",

@@ -1323,6 +1323,20 @@ table.ediff td.dn {
   margin-right: 4px;
   vertical-align: -2px;
 }
+.busage li > b > a.ulink {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-bottom: 0;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.bonusbody .busage .num {
+  color: inherit;
+  font-weight: inherit;
+}
 .bex {
   margin: 8px 0;
 }
