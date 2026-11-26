@@ -204,6 +204,15 @@
   font-weight: 700;
 }
 
+.formation-slot-kv dd {
+  min-width: 0;
+}
+
+.formation-slot-action {
+  display: grid;
+  gap: 10px;
+}
+
 .formation-slot-blocks {
   display: grid;
   gap: 10px;

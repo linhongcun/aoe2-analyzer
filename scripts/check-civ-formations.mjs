@@ -1,9 +1,26 @@
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { resolveFormationSource } from '../src/domain/civFormationsSource.mjs';
 import { isAgeProgressionSupplement, partitionableSupplementIndices } from '../src/domain/formationPartition.mjs';
 
 export const FORMATIONS_FILE = 'data/content/civ-formations.json';
 export const FORMATION_CONTRACT_FILE = 'data/reference/civ-formations-contract.json';
 const FIXED_SOURCE_COMMIT = '8d1adeacc7c97374ee6d95d9cabfceb793d080d3';
+const GAME_DATA_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '../data/game');
+
+let cachedCatalogIds;
+function getDefaultCatalogIds() {
+  if (!cachedCatalogIds) {
+    const readIds = (file) => new Set(JSON.parse(readFileSync(resolve(GAME_DATA_DIR, file), 'utf8')).map(({ id }) => id));
+    cachedCatalogIds = {
+      unit: readIds('units.json'),
+      building: readIds('buildings.json'),
+      tech: readIds('techs.json'),
+    };
+  }
+  return cachedCatalogIds;
+}
 const threeKingdoms = new Set(['Wei', 'Shu', 'Wu']);
 const PINNED_STRATEGY_URL_RE = /^https:\/\/github\.com\/linhongcun\/aoe2-analyzer\/blob\/([0-9a-f]{40})\/role\/game-strategy\.md#L([1-9]\d*)-L([1-9]\d*)$/;
 const isStrictlyAscendingLines = (lines) =>
@@ -63,7 +80,15 @@ const normalizeScenario = (scenario) => ({
   ...(scenario.conditionBranchIds ? { conditionBranchIds: [...scenario.conditionBranchIds] } : {}),
 });
 
-function validateGate(gate, gatePath, route, adjIds, branchIds, add) {
+function validateCatalogRef(entityKind, id, path, catalogIds, add) {
+  if (!['unit', 'building', 'tech'].includes(entityKind) || !Number.isInteger(id) || id < 1) {
+    add(path, '门控实体引用无效');
+  } else if (catalogIds && !catalogIds[entityKind]?.has(id)) {
+    add(path, `门控引用了目录中不存在的实体：${entityKind}#${id}`);
+  }
+}
+
+function validateGate(gate, gatePath, route, adjIds, branchIds, catalogIds, add) {
   if (!gate || typeof gate !== 'object') return;
   if (gate.kind === 'supplement') {
     const sups = route.supplements ?? [];
@@ -77,15 +102,13 @@ function validateGate(gate, gatePath, route, adjIds, branchIds, add) {
   } else if (gate.kind === 'conditionBranch') {
     if (!branchIds.has(gate.id)) add(gatePath, `门控引用了未知条件分支：${gate.id}`);
   } else if (gate.kind === 'entity') {
-    if (!['unit', 'building', 'tech'].includes(gate.entityKind) || !Number.isInteger(gate.id) || gate.id < 1) {
-      add(gatePath, '门控实体引用无效');
-    }
+    validateCatalogRef(gate.entityKind, gate.id, gatePath, catalogIds, add);
   } else {
     add(gatePath, `未知门控类型：${String(gate.kind)}`);
   }
 }
 
-function validateRouteScenarios(route, contractRoute, routePath, add) {
+function validateRouteScenarios(route, contractRoute, routePath, catalogIds, add) {
   if (route.scenarios === undefined) {
     if (contractRoute.scenarios !== undefined) add(`${routePath}/scenarios`, '局面配置缺失，与独立发布契约不一致');
     return;
@@ -174,10 +197,10 @@ function validateRouteScenarios(route, contractRoute, routePath, add) {
       }
     }
 
-    if (scenario.actionHintGate) validateGate(scenario.actionHintGate, `${scPath}/actionHintGate`, route, adjIds, branchIds, add);
-    if (scenario.summaryGate) validateGate(scenario.summaryGate, `${scPath}/summaryGate`, route, adjIds, branchIds, add);
+    if (scenario.actionHintGate) validateGate(scenario.actionHintGate, `${scPath}/actionHintGate`, route, adjIds, branchIds, catalogIds, add);
+    if (scenario.summaryGate) validateGate(scenario.summaryGate, `${scPath}/summaryGate`, route, adjIds, branchIds, catalogIds, add);
     for (const [m, caveat] of (scenario.caveats ?? []).entries()) {
-      if (caveat.whenAvailable) validateGate(caveat.whenAvailable, `${scPath}/caveats/${m}/whenAvailable`, route, adjIds, branchIds, add);
+      if (caveat.whenAvailable) validateGate(caveat.whenAvailable, `${scPath}/caveats/${m}/whenAvailable`, route, adjIds, branchIds, catalogIds, add);
     }
 
     if (scenario.links?.length) {
@@ -191,7 +214,7 @@ function validateRouteScenarios(route, contractRoute, routePath, add) {
         } else {
           seenLinkIdx.add(linkRef.index);
         }
-        if (linkRef.whenAvailable) validateGate(linkRef.whenAvailable, `${scPath}/links/${m}/whenAvailable`, route, adjIds, branchIds, add);
+        if (linkRef.whenAvailable) validateGate(linkRef.whenAvailable, `${scPath}/links/${m}/whenAvailable`, route, adjIds, branchIds, catalogIds, add);
       }
     }
 
@@ -216,7 +239,7 @@ function validateRouteScenarios(route, contractRoute, routePath, add) {
   }
 }
 
-export function formationProblems(content, contract) {
+export function formationProblems(content, contract, catalogIds = getDefaultCatalogIds()) {
   const problems = [];
   const add = (path, message) => problems.push({ path, message });
   if (!Array.isArray(content) || !contract || !Array.isArray(contract.civs)) {
@@ -279,6 +302,11 @@ export function formationProblems(content, contract) {
       }));
       if (new Set(conditionBranches.map(({ id }) => id)).size !== conditionBranches.length) add(`${routePath}/conditionBranches`, '条件分支 ID 重复');
       if (!sameArray(conditionBranches, contractRoute.conditionBranches)) add(`${routePath}/conditionBranches`, '条件分支或依赖与独立发布契约不一致');
+      for (const [bIdx, branch] of (route.conditionBranches ?? []).entries()) {
+        for (const [rIdx, dep] of (branch.displayRequires ?? []).entries()) {
+          validateCatalogRef(dep.kind, dep.id, `${routePath}/conditionBranches/${bIdx}/displayRequires/${rIdx}`, catalogIds, add);
+        }
+      }
       const source = resolveFormationSource(civ.source, route);
       if (!source || source.content !== contractRoute.source.content || source.discussion !== contractRoute.source.discussion)
         add(`${routePath}/source`, '有效来源与独立发布契约不一致');
@@ -292,12 +320,17 @@ export function formationProblems(content, contract) {
       )
         add(`${routePath}/evidence/links`, '核对链接与独立发布契约不一致');
       const actualLinkRequires = (route.evidence?.links ?? []).flatMap((link, index) => (link.requires ? [{ index, requires: link.requires.map(ref) }] : []));
+      for (const [lIdx, link] of (route.evidence?.links ?? []).entries()) {
+        for (const [rIdx, dep] of (link.requires ?? []).entries()) {
+          validateCatalogRef(dep.kind, dep.id, `${routePath}/evidence/links/${lIdx}/requires/${rIdx}`, catalogIds, add);
+        }
+      }
       if (
         Boolean(actualLinkRequires.length) !== Boolean(contractRoute.evidenceLinkRequires?.length) ||
         !sameArray(actualLinkRequires, contractRoute.evidenceLinkRequires ?? [])
       )
         add(`${routePath}/evidence/links`, '核对链接依赖与独立发布契约不一致');
-      validateRouteScenarios(route, contractRoute, routePath, add);
+      validateRouteScenarios(route, contractRoute, routePath, catalogIds, add);
       if (threeKingdoms.has(civ.civ)) {
         const lines = contractRoute.sourceLines;
         const match = typeof source?.content === 'string' ? PINNED_STRATEGY_URL_RE.exec(source.content) : null;

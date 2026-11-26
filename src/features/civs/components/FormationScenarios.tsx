@@ -17,6 +17,13 @@ export function FormationScenarios({ anchor, scenarios, openId, onChangeOpen, re
   if (scenarios.length === 0) return null;
 
   const active = openId ? (scenarios.find((sc) => sc.id === openId) ?? null) : null;
+  const hasActionContent = Boolean(
+    active &&
+    (active.summary ||
+      active.adjustments.length > 0 ||
+      active.branches.length > 0 ||
+      active.supplementNotes.some((note) => Boolean(note.condition || note.choiceHint))),
+  );
   const grouped = scenarios.length >= 6;
   const opponentItems = grouped ? scenarios.filter((sc) => sc.group === 'opponent') : [];
   const conditionItems = grouped ? scenarios.filter((sc) => sc.group === 'condition') : [];
@@ -130,119 +137,126 @@ export function FormationScenarios({ anchor, scenarios, openId, onChangeOpen, re
                 <FormationText text={active.when} />
               </dd>
             </div>
-            {active.summary && (
+            {hasActionContent && (
               <div>
                 <dt>行动结论</dt>
-                <dd>
-                  <FormationText text={active.summary} />
+                <dd className="formation-slot-action">
+                  {active.summary && (
+                    <p className="formation-slot-text">
+                      <FormationText text={active.summary} />
+                    </p>
+                  )}
+
+                  {active.adjustments.length > 0 && (
+                    <div className="formation-slot-blocks">
+                      {active.adjustments.map((block) => (
+                        <div key={block.id} className="formation-slot-block">
+                          {active.adjustments.length >= 2 && block.available && block.when && (
+                            <h6>
+                              <FormationText text={block.when} />
+                            </h6>
+                          )}
+                          {block.available ? (
+                            <>
+                              {block.text &&
+                                (block.decision ? (
+                                  <FormationDecisionText action={block.text} decision={block.decision} />
+                                ) : (
+                                  <p className="formation-slot-text">
+                                    <FormationText text={block.text} />
+                                  </p>
+                                ))}
+                              {block.candidateBoundary && (
+                                <p className="formation-meta">
+                                  候选边界：
+                                  <FormationText text={block.candidateBoundary} />
+                                </p>
+                              )}
+                              {block.fallback && (
+                                <p className="formation-slot-fallback">
+                                  <b>兜底</b>
+                                  <span>
+                                    <FormationText text={block.fallback} />
+                                  </span>
+                                </p>
+                              )}
+                            </>
+                          ) : (
+                            <p className="formation-slot-fallback">
+                              <b>兜底</b>
+                              <span>
+                                <FormationText text={block.fallback ?? '这项补充资料暂不可用'} /> <span className="formation-meta">部分补充资料暂不可用</span>
+                              </span>
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {active.branches.length > 0 && (
+                    <div className="formation-slot-blocks">
+                      {active.branches.map((branch) => (
+                        <div key={branch.id} className="formation-slot-block formation-slot-branch">
+                          {(active.branches.length >= 2 || active.adjustments.length > 0) && (
+                            <h6>
+                              <FormationText text={branch.title} />
+                            </h6>
+                          )}
+                          {branch.state === 'available' && branch.context && branch.decision ? (
+                            <dl className="formation-slot-kv">
+                              {[branch.context, branch.decision].map(({ label, text }) => (
+                                <div key={label}>
+                                  <dt>{label}</dt>
+                                  <dd>
+                                    <FormationText text={text} />
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                          ) : (
+                            <p className="formation-slot-fallback">
+                              <b>兜底</b>
+                              <span>
+                                <FormationText text={branch.partialFallback ?? '这项补充资料暂不可用'} />{' '}
+                                <span className="formation-meta">部分补充资料暂不可用</span>
+                              </span>
+                            </p>
+                          )}
+                          <p className="formation-meta">
+                            <FormationText text={branch.evidence} />
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {active.supplementNotes.length > 0 && (
+                    <div className="formation-slot-blocks">
+                      {active.supplementNotes.map((note) => (
+                        <div key={note.sourceIndex} className="formation-slot-block">
+                          {note.partialNotice ? (
+                            <p className="formation-meta">部分补充资料暂不可用</p>
+                          ) : (
+                            <>
+                              {note.condition && (
+                                <p className="formation-slot-text">
+                                  <FormationText text={note.condition} />
+                                </p>
+                              )}
+                              {note.choiceHint && <p className="formation-meta">按当前可用项按需选择</p>}
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </dd>
               </div>
             )}
           </dl>
 
-          {active.adjustments.length > 0 && (
-            <div className="formation-slot-blocks">
-              {active.adjustments.map((block) => (
-                <div key={block.id} className="formation-slot-block">
-                  {active.adjustments.length >= 2 && (
-                    <h6>
-                      <FormationText text={block.when} />
-                    </h6>
-                  )}
-                  {block.available ? (
-                    <>
-                      {block.text &&
-                        (block.decision ? (
-                          <FormationDecisionText action={block.text} decision={block.decision} />
-                        ) : (
-                          <p className="formation-slot-text">
-                            <FormationText text={block.text} />
-                          </p>
-                        ))}
-                      {block.candidateBoundary && (
-                        <p className="formation-meta">
-                          候选边界：
-                          <FormationText text={block.candidateBoundary} />
-                        </p>
-                      )}
-                      {block.fallback && (
-                        <p className="formation-slot-fallback">
-                          <b>兜底</b>
-                          <span>
-                            <FormationText text={block.fallback} />
-                          </span>
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <p className="formation-slot-fallback">
-                      <b>兜底</b>
-                      <span>
-                        <FormationText text={block.fallback ?? '这项补充资料暂不可用'} /> <span className="formation-meta">部分补充资料暂不可用</span>
-                      </span>
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {active.branches.length > 0 && (
-            <div className="formation-slot-blocks">
-              {active.branches.map((branch) => (
-                <div key={branch.id} className="formation-slot-block formation-slot-branch">
-                  {(active.branches.length >= 2 || active.adjustments.length > 0) && (
-                    <h6>
-                      <FormationText text={branch.title} />
-                    </h6>
-                  )}
-                  {branch.state === 'available' && branch.context && branch.decision ? (
-                    <dl className="formation-slot-kv">
-                      {[branch.context, branch.decision].map(({ label, text }) => (
-                        <div key={label}>
-                          <dt>{label}</dt>
-                          <dd>
-                            <FormationText text={text} />
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  ) : (
-                    <p className="formation-slot-fallback">
-                      <b>兜底</b>
-                      <span>
-                        <FormationText text={branch.partialFallback ?? '这项补充资料暂不可用'} /> <span className="formation-meta">部分补充资料暂不可用</span>
-                      </span>
-                    </p>
-                  )}
-                  <p className="formation-meta">
-                    <FormationText text={branch.evidence} />
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {active.supplementNotes.length > 0 && (
-            <div className="formation-slot-blocks">
-              {active.supplementNotes.map((note) => (
-                <div key={note.sourceIndex} className="formation-slot-block">
-                  {note.partialNotice ? (
-                    <p className="formation-meta">部分补充资料暂不可用</p>
-                  ) : (
-                    <>
-                      {note.condition && (
-                        <p className="formation-slot-text">
-                          <FormationText text={note.condition} />
-                        </p>
-                      )}
-                      {note.choiceHint && <p className="formation-meta">按当前可用项按需选择</p>}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          {!hasActionContent && active.supplementNotes.some((note) => note.partialNotice) && <p className="formation-meta">部分补充资料暂不可用</p>}
 
           {active.showPartialNotice && <p className="formation-meta">部分补充资料暂不可用</p>}
 

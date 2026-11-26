@@ -89,10 +89,17 @@ export function useFormationNavigation({
   const previous = usePreviousHistoryEntry();
   const completed = useRef<string>();
   const lastHandledHash = useRef<string>('');
+  const lastVisit = useRef<string>('');
   const focusAnchor = navigationType !== 'POP' && (state as { focusFormation?: unknown } | null)?.focusFormation === true;
   const suppressTabSwitchScroll = navigationType === 'REPLACE' && (state as { formationTabSwitch?: unknown } | null)?.formationTabSwitch === true;
 
   useEffect(() => {
+    const visitKey = `${key}:${hash}`;
+    if (lastVisit.current !== visitKey) {
+      lastVisit.current = visitKey;
+      completed.current = undefined;
+      lastHandledHash.current = '';
+    }
     if (suppressRestore) return;
     const token = readFormationReturn(civ, previous)?.token;
     const find = (id: string) => {

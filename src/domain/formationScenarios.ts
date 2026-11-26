@@ -32,7 +32,7 @@ export interface SupplementProjectionResult {
 
 export interface FormationScenarioAdjustmentBlock {
   id: string;
-  when: string;
+  when?: string;
   available: boolean;
   text?: string;
   decision?: FormationDecision;
@@ -177,8 +177,16 @@ export function projectFormationScenarios({ route, supplementResults, adjustment
     const adjIds = scenario.adjustmentIds ?? [];
     const branchIds = scenario.conditionBranchIds ?? [];
 
+    const slotPassedLinks: FormationEvidenceLink[] = [];
     if (!synthetic) {
-      for (const linkRef of scenario.links ?? []) referencedLinkIndices.add(linkRef.index);
+      for (const linkRef of scenario.links ?? []) {
+        referencedLinkIndices.add(linkRef.index);
+        const rawLink = rawLinks[linkRef.index];
+        if (!rawLink || !linkRequiresOk(linkRef.index)) continue;
+        if (linkRef.whenAvailable && !evaluateGate(linkRef.whenAvailable)) continue;
+        passingLinkIndices.add(linkRef.index);
+        slotPassedLinks.push(rawLink);
+      }
     }
 
     let avail = 0;
@@ -326,7 +334,6 @@ export function projectFormationScenarios({ route, supplementResults, adjustment
       } else {
         adjustmentBlocks.push({
           id,
-          when: adj?.when ?? chipLabel,
           available: false,
           fallback: adj?.fallback ?? DEFAULT_UNAVAILABLE_FALLBACK,
           showStatusNotice: true,
@@ -388,17 +395,7 @@ export function projectFormationScenarios({ route, supplementResults, adjustment
     }
 
     const caveats = (scenario.caveats ?? []).filter((item) => !item.whenAvailable || evaluateGate(item.whenAvailable)).map((item) => item.text);
-
-    const links: FormationEvidenceLink[] = [];
-    if (!synthetic) {
-      for (const linkRef of scenario.links ?? []) {
-        const rawLink = rawLinks[linkRef.index];
-        if (!rawLink || !linkRequiresOk(linkRef.index)) continue;
-        if (linkRef.whenAvailable && !evaluateGate(linkRef.whenAvailable)) continue;
-        passingLinkIndices.add(linkRef.index);
-        links.push(rawLink);
-      }
-    }
+    const links = slotPassedLinks;
 
     const blockAlreadyNoticed =
       adjustmentBlocks.some((block) => block.showStatusNotice) ||

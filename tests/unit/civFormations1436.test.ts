@@ -89,6 +89,21 @@ describe('#1436 推荐阵容分区与契约校验', () => {
     const noGroupBad = structuredClone(civFormationContent);
     delete noGroupBad.find((c) => c.civ === 'Sicilians')!.routes[0]!.scenarios![0]!.group;
     expect(formationProblems(noGroupBad, formationContract)).toContainEqual(expect.objectContaining({ message: expect.stringContaining('group') }));
+
+    const badEntityGate = structuredClone(civFormationContent);
+    const badEntityGateContract = structuredClone(formationContract) as {
+      civs: { civ: string; routes: { scenarios?: { id: string; actionHintGate?: { id: number } }[] }[] }[];
+    };
+    badEntityGate.find((c) => c.civ === 'Wei')!.routes[0]!.scenarios!.find((s) => s.id === 'heiguang-frontline')!.actionHintGate = {
+      kind: 'entity',
+      entityKind: 'unit',
+      id: 999999,
+      age: 4,
+    };
+    badEntityGateContract.civs.find((c) => c.civ === 'Wei')!.routes[0]!.scenarios!.find((s) => s.id === 'heiguang-frontline')!.actionHintGate!.id = 999999;
+    expect(formationProblems(badEntityGate, badEntityGateContract)).toContainEqual(
+      expect.objectContaining({ message: expect.stringContaining('门控引用了目录中不存在的实体：unit#999999') }),
+    );
   });
 
   it('校验 conditionBranches[].displayRequires 与 evidence.links[].requires 契约一致性，并兼容未迁移路线', () => {
@@ -125,6 +140,10 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     const towerFull = fullDeclared.scenarios.find((s) => s.id === 'tower-arrowslits')!;
     expect(towerFull.state).toBe('available');
     expect(towerFull.actionHint).toBe('大型箭塔＋射箭孔');
+    expect(towerFull.adjustments).toHaveLength(3);
+    expect(towerFull.adjustments.every((a) => a.available)).toBe(true);
+    expect(towerFull.adjustments[2]?.when).toBe('大型箭塔已建成且射箭孔研究已完成');
+    expect(towerFull.adjustments[2]?.text).toContain('完成射箭孔研究后可为大型箭塔提供额外箭矢');
     expect(towerFull.links.filter((l) => l.href.includes('484'))).toHaveLength(2);
     expect(fullDeclared.evidenceLinks.filter((l) => l.href.includes('484'))).toHaveLength(2);
 
@@ -132,6 +151,14 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     const towerDeg = degDeclared.scenarios.find((s) => s.id === 'tower-arrowslits')!;
     expect(towerDeg.state).toBe('partial');
     expect(towerDeg.actionHint).toBeUndefined();
+    expect(towerDeg.title).toBe('战线受压·前线箭塔支点');
+    expect(towerDeg.when).toBe('战线受压·前线箭塔支点');
+    const failedArrowslits = towerDeg.adjustments.find((a) => a.id === 'japanese-samurai-light-cavalry-adjustment-ninth')!;
+    expect(failedArrowslits.available).toBe(false);
+    expect(failedArrowslits.when).toBeUndefined();
+    expect(failedArrowslits.showStatusNotice).toBe(true);
+    expect(JSON.stringify(towerDeg)).not.toContain('大型箭塔已建成且射箭孔研究已完成');
+    expect(towerDeg.adjustments.find((a) => a.id === 'japanese-samurai-light-cavalry-adjustment-seventh')?.text).not.toContain('见本局面内的射箭孔说明');
     expect(towerDeg.links.filter((l) => l.href.includes('484'))).toHaveLength(0);
     expect(degDeclared.evidenceLinks.filter((l) => l.href.includes('484'))).toHaveLength(0);
 
@@ -144,10 +171,17 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     expect(degAuto.evidenceLinks.filter((l) => l.href.includes('484'))).toHaveLength(0);
   });
 
-  it('日本骑射路 SUP[0] 在自动合成路径只移除弹射器 59 保留射箭孔 484 时零弹射器泄漏', async () => {
+  it('日本骑射路 SUP[0] 自动合成正对照含 59/484，只移除弹射器 59 保留射箭孔 484 时零弹射器泄漏', async () => {
     const catalog = await loadCatalog();
     const jp = getCiv('Japanese');
     const strippedRoute: Formation = { ...jp.routes[1]!, scenarios: undefined };
+
+    const fullView = expectCurrent(projectFormation(strippedRoute, 'Japanese', DATA_PATCH, catalog, jp.routes, jp.source));
+    const fullSup0 = fullView.scenarios.find((s) => s.id === 'sup-0')!;
+    expect(fullSup0.state).toBe('available');
+    expect(fullSup0.entities.map((e) => e.entity.id)).toEqual([59, 484]);
+    expect(fullSup0.when).toContain('弹射器');
+
     const without59: FormationCatalog = {
       ...catalog,
       core: { ...catalog.core, techById: Object.fromEntries(Object.entries(catalog.core.techById).filter(([k]) => Number(k) !== 59)) },
@@ -242,10 +276,16 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     expect(deg.evidenceLinks.some((l) => l.label.includes('卧虎'))).toBe(false);
   });
 
-  it('S=2, B=2 混合局面下 omitSupplementConditions 精确绑定 coveredBy，且多槽共享链接按任一通过保留', async () => {
+  it('S=2, B=2 混合局面下 omitSupplementConditions 精确绑定 coveredBy（含重复文案恢复与 B1 保留），且多槽共享链接按任一通过保留', async () => {
     const catalog = await loadCatalog();
     const wei = getCiv('Wei');
     const base = structuredClone(wei.routes[0]!);
+    const duplicatedClause = '金流充裕或正面对拼重骑与步兵需要硬前排时，可将重装黑光铠骑兵升格为并列金线前排主选';
+    base.supplements[0] = {
+      mode: 'conditional',
+      condition: duplicatedClause,
+      entities: [{ kind: 'unit', id: 1944, age: 3, historicalName: '黑光铠骑兵', role: '城堡期过渡前排' }],
+    };
     base.scenarios = [
       {
         id: 'mixed-s2-b2',
@@ -268,6 +308,12 @@ describe('#1436 统一全函数投影与双路径门控', () => {
 
     const full = expectCurrent(projectFormation(base, 'Wei', DATA_PATCH, catalog, [base], wei.source));
     const mixedFull = full.scenarios.find((s) => s.id === 'mixed-s2-b2')!;
+    const fullB0 = mixedFull.branches.find((b) => b.id === 'wei-retain-black-light-cavalry')!;
+    const fullB1 = mixedFull.branches.find((b) => b.id === 'wei-siege-when-pushing-buildings')!;
+    expect(fullB0.state).toBe('available');
+    expect(fullB0.decision?.text).toContain(duplicatedClause);
+    expect(fullB1.state).toBe('available');
+    expect(fullB1.decision?.text).toBeTruthy();
     expect(mixedFull.supplementNotes.map((n) => n.sourceIndex)).toEqual([3]);
     expect(full.evidenceLinks.some((l) => l.href === base.evidence.links![0]!.href)).toBe(true);
 
@@ -277,8 +323,15 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     };
     const partial = expectCurrent(projectFormation(base, 'Wei', DATA_PATCH, without1946, [base], wei.source));
     const mixedPartial = partial.scenarios.find((s) => s.id === 'mixed-s2-b2')!;
+    const degB0 = mixedPartial.branches.find((b) => b.id === 'wei-retain-black-light-cavalry')!;
+    const degB1 = mixedPartial.branches.find((b) => b.id === 'wei-siege-when-pushing-buildings')!;
+    expect(degB0.state).toBe('partial');
+    expect(degB1.state).toBe('available');
+    expect(degB1.context?.text).toBe(fullB1.context?.text);
+    expect(degB1.decision?.text).toBe(fullB1.decision?.text);
     expect(mixedPartial.supplementNotes.map((n) => n.sourceIndex)).toEqual([0, 3]);
-    expect(mixedPartial.supplementNotes[0]?.condition).toBe(base.supplements[0]!.condition);
+    expect(mixedPartial.supplementNotes[0]?.condition).toBe(duplicatedClause);
+    expect(mixedPartial.supplementNotes[1]?.condition).toBe(base.supplements[3]!.condition);
     // 槽 1 门控失败但槽 2 通过 → 底部保留链接 0
     expect(partial.evidenceLinks.some((l) => l.href === base.evidence.links![0]!.href)).toBe(true);
 
@@ -286,6 +339,41 @@ describe('#1436 统一全函数投影与双路径门控', () => {
     base.scenarios[1]!.links = [{ index: 0, whenAvailable: { kind: 'entity', entityKind: 'unit', id: 1946, age: 4 } }];
     const bothFailed = expectCurrent(projectFormation(base, 'Wei', DATA_PATCH, without1946, [base], wei.source));
     expect(bothFailed.evidenceLinks.some((l) => l.href === base.evidence.links![0]!.href)).toBe(false);
+  });
+
+  it('隐藏局面不连带移除无门控主轴证据、波兰骑马弩保留双条件且西西里慢速步兵零重复 33/42', async () => {
+    const catalog = await loadCatalog();
+    const hind = getCiv('Hindustanis');
+    const hindRoute = hind.routes[0]!;
+    const fullHind = expectCurrent(projectFormation(hindRoute, 'Hindustanis', DATA_PATCH, catalog, hind.routes, hind.source));
+    expect(fullHind.scenarios.find((s) => s.id === 'vs-archers-ghulam')?.links.some((l) => l.label.includes('31 个火枪手'))).toBe(true);
+    expect(fullHind.evidenceLinks.some((l) => l.label.includes('31 个火枪手'))).toBe(true);
+
+    const withoutGhulam: FormationCatalog = {
+      ...catalog,
+      core: {
+        ...catalog.core,
+        unitById: Object.fromEntries(Object.entries(catalog.core.unitById).filter(([k]) => Number(k) !== 1747 && Number(k) !== 1749)),
+      },
+    };
+    const degHind = expectCurrent(projectFormation(hindRoute, 'Hindustanis', DATA_PATCH, withoutGhulam, hind.routes, hind.source));
+    expect(degHind.scenarios.find((s) => s.id === 'vs-archers-ghulam')).toBeUndefined();
+    expect(degHind.evidenceLinks.some((l) => l.label.includes('31 个火枪手'))).toBe(true);
+
+    const poles = getCiv('Poles');
+    const polesView = expectCurrent(projectFormation(poles.routes[1]!, 'Poles', DATA_PATCH, catalog, poles.routes, poles.source));
+    const hmc = polesView.scenarios.find((s) => s.id === 'hmc-vs-arbalest')!;
+    expect(hmc.adjustments[0]?.text).toContain('随骑拉扯慢速步兵');
+    expect(hmc.adjustments[0]?.text).toContain('抗轻骑切后排');
+
+    const sic = getCiv('Sicilians');
+    const sicView = expectCurrent(projectFormation(sic.routes[0]!, 'Sicilians', DATA_PATCH, catalog, sic.routes, sic.source));
+    const slowInf = sicView.scenarios.find((s) => s.id === 'vs-slow-infantry')!;
+    expect(slowInf.adjustments[0]?.text).toContain('25/28');
+    expect(slowInf.adjustments[0]?.text).toContain('33.1 格');
+    expect(slowInf.adjustments[0]?.text).not.toContain('33/42');
+    expect(slowInf.caveats[0]).toContain('射手锁甲与扳指');
+    expect(slowInf.caveats[0]).toContain('敌剩 33/42');
   });
 
   it('印加反弩炮候选零泄漏、马来 119 字保留、仅 gate 失败不误降级、多调整全失效兜底去重有序', async () => {

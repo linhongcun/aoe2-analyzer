@@ -103,11 +103,21 @@ test('#1436 西西里单路线默认收起、单槽展开、Esc 回焦、零内�
   const bodyText = await section.innerText();
   for (const forbidden of INTERNAL_MODE_LABELS) expect(bodyText).not.toContain(forbidden);
 
-  const hauberkChip = section.getByRole('button', { name: /黄金充裕·升级野战硬前排/ });
-  await hauberkChip.click();
+  const slowInfChip = section.getByRole('button', { name: /慢速步兵海·有拉扯空间/ });
+  await slowInfChip.click();
   const panel = section.locator('.formation-scenario-panel');
   await expect(panel).toHaveCount(1);
   await expect(section).toContainText('已展开 1 项 · 再次点击或按 Esc 收起');
+  await expect(panel.locator('dt', { hasText: '触发条件' })).toBeVisible();
+  await expect(panel.locator('dt', { hasText: '行动结论' })).toBeVisible();
+  await expect(panel.locator('.formation-slot-action')).toContainText('25/28');
+  await expect(panel.locator('.formation-slot-action')).not.toContainText('33/42');
+  await expect(panel.locator('.formation-slot-caveat')).toContainText('33/42');
+
+  const hauberkChip = section.getByRole('button', { name: /黄金充裕·升级野战硬前排/ });
+  await hauberkChip.click();
+  await expect(panel).toHaveCount(1);
+  await expect(panel.locator('dt', { hasText: '行动结论' })).toBeVisible();
   await expect(panel).toContainText('700 食物、600 黄金');
   await expect(panel).toContainText('16/50');
   await expect(panel).toContainText('4/22');
@@ -115,6 +125,7 @@ test('#1436 西西里单路线默认收起、单槽展开、Esc 回焦、零内�
   const donjonChip = section.getByRole('button', { name: /石头充足·已有稳定战线/ });
   await donjonChip.click();
   await expect(panel).toHaveCount(1);
+  await expect(panel.locator('dt', { hasText: '行动结论' })).toBeVisible();
   await expect(panel).toContainText('城楼');
   await expect(panel).toContainText('9 个村民');
   await expect(panel).toContainText('12/12 箭');
@@ -203,9 +214,14 @@ test('#1436 西班牙 4 路切换、越南分组单 tablist、阿兹特克/土�
   await expect(section.locator('.formation-training-price')).toHaveCount(1);
   await expect(section.locator('.formation-chip')).toHaveCount(6);
   await expect(section.locator('.formation-scenario-panel')).toHaveCount(0);
+
+  await page.goto('./#/civ/Poles#formation-poles-arbalest-winged-hussar');
+  await section.getByRole('button', { name: /需随骑兵机动拉扯慢步兵/ }).click();
+  await expect(section.locator('.formation-scenario-panel')).toContainText('随骑拉扯慢速步兵');
+  await expect(section.locator('.formation-scenario-panel')).toContainText('抗轻骑切后排');
 });
 
-test('#1436 深链定位、REPLACE 切 Tab 与 POP 锚点、非首路场景返回恢复、目标消失终止与冷读重试', async ({ page }) => {
+test('#1436 深链定位、REPLACE 切 Tab 与同文明/跨文明 POP 锚点、非首路场景返回恢复、目标消失终止与冷读重试', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/civ/Franks#formation-franks-paladin-skirmisher');
   const section = page.locator('#formations');
@@ -213,6 +229,14 @@ test('#1436 深链定位、REPLACE 切 Tab 与 POP 锚点、非首路场景返�
   await section.getByRole('tab', { name: /精锐掷斧＋轻骑/ }).click();
   await expect(page).toHaveURL(/#\/civ\/Franks#formation-franks-throwing-axeman-light-cav$/);
   expect(await page.evaluate(() => history.length)).toBe(beforeLen);
+
+  // 同文明内跳到其他章节再浏览器后退，仍需重新滚动定位到原路线锚点
+  await page.locator('.civ-chapters a', { hasText: '科技树' }).click();
+  await expect(page).toHaveURL(/#\/civ\/Franks#techtree$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/civ\/Franks#formation-franks-throwing-axeman-light-cav$/);
+  await expect(section.getByRole('tab', { name: /精锐掷斧＋轻骑/ })).toHaveAttribute('aria-selected', 'true');
+  await onScreenBelowNav(page.locator('#formation-franks-throwing-axeman-light-cav'));
 
   await page.goto('./#/civ/Spanish');
   await page.goBack();
