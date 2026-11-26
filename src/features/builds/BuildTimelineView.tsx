@@ -433,7 +433,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
             <div className="tl-sheet-body">
               <figure className="tl-cardprev" data-t="share-card">
                 <p className="tl-cardprev-title" data-t="card-title">
-                  {card.title}
+                  <NumUnitText text={card.title} />
                 </p>
                 <ul>
                   {card.cells.map((c, i) => (

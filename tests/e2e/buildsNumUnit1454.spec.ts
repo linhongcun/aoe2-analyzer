@@ -236,5 +236,17 @@ test.describe('#1454 开局流程（#/builds）数字与单位全文明防折行
     const franksAssume = await inspectWrapping(page, '.tl-assume');
     expect(franksAssume.nwTexts).toContain('1 名村民');
     expect(franksAssume.wrappedNw).toEqual([]);
+
+    // 超时分享卡标题（60 分钟内到不了城堡）在 360 宽下不拆开「60 分钟」且零溢出
+    await page.setViewportSize({ width: 360, height: 844 });
+    await page.goto('./#/builds?bo=drush-fc&house=0&civ=Franks');
+    await expect(page.locator('.tl-step .n').first()).toBeVisible();
+    await page.locator('.tl-share-sticky [data-t="share-card-btn"]').click();
+    await expect(page.locator('[data-t="card-title"]')).toBeVisible();
+    const timeoutCard = await inspectWrapping(page, '[data-t="share-card"]');
+    expect(timeoutCard.overflow).toBe(false);
+    expect(timeoutCard.nwTexts).toContain('60 分钟');
+    expect(timeoutCard.wrappedNw).toEqual([]);
+    expect(timeoutCard.wrappedFragments).toEqual([]);
   });
 });

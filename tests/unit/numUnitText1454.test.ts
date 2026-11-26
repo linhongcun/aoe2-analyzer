@@ -108,6 +108,7 @@ describe('#1454 NumUnitText 统一正则与全量开局语料保护', () => {
       patchBuild: __DATA_SOURCES__.patch.build,
       siteRoot: 'example/',
     });
+    expect(render(card.title)).toContain('<span class="nw">60 分钟</span>');
     expect(render(card.basis)).toContain('<span class="nw">4 格</span>');
   });
 });
