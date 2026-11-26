@@ -170,6 +170,7 @@ describe('#1139 西西里、哥特与波西米亚内容回归', () => {
       ['conquistador-hussar', 'approved', 'unreported', 'combined', 4, [773, 441]],
       ['paladin-skirmisher', 'approved', 'unreported', 'combined', 4, [569, 6]],
       ['handcannon-halberdier', 'approved', 'unreported', 'combined', 4, [5, 359]],
+      ['spanish-hmc-hussar', 'approved', 'pending', 'combined', 4, [2701, 441]],
     ]);
     expect(
       byCiv('Georgians').routes.map(({ id, status, playtest, composition, age, required }) => [

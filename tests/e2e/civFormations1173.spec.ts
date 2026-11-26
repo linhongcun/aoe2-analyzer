@@ -73,6 +73,6 @@ for (const width of [1120, 360]) {
 
     await page.goto(spanish + formations);
     await expect(section.getByRole('heading', { name: '步弓系延续' })).toHaveCount(0);
-    await expect(section.locator('.formation-list > article')).toHaveCount(3);
+    await expect(section.locator('.formation-list > article')).toHaveCount(4);
   });
 }

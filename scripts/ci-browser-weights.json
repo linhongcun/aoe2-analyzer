@@ -382,7 +382,8 @@
     "tests/e2e/tupiBlackwoodPair1384.spec.ts": 15000,
     "tests/e2e/civFormations1406.spec.ts": 9000,
     "tests/e2e/garrisonAndPair1404.spec.ts": 12000,
-    "tests/e2e/civFormations1400.spec.ts": 9000
+    "tests/e2e/civFormations1400.spec.ts": 9000,
+    "tests/e2e/civFormations1401.spec.ts": 9000
   },
   "cases": {}
 }

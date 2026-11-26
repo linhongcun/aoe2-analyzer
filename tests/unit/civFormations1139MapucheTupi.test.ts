@@ -19,31 +19,49 @@ const narrative = (entry: ReturnType<typeof route>) => [entry.reason, entry.limi
 describe('#1139 马普切与图皮路线边界及条件支援', () => {
   it('保留四路线状态、组成、时代、required 与固定版本', () => {
     const expected = [
-      ['Mapuche', 'mapuche-kona-bolas', 3, 'combined', [2566, 2569], 'v0.78.3 · DE 188329 · 构建 40c323a；拉扯与展示复核：v0.99.34 · DE 188329 · 55613e4a'],
-      ['Mapuche', 'mapuche-kona-slinger', 3, 'combined', [2566, 185], 'v0.78.3 · DE 188329 · 构建 40c323a；展示与机制复核：v0.99.34 · DE 188329 · 55613e4a'],
+      [
+        'Mapuche',
+        'mapuche-kona-bolas',
+        3,
+        'combined',
+        'unreported',
+        [2566, 2569],
+        'v0.78.3 · DE 188329 · 构建 40c323a；拉扯与展示复核：v0.99.34 · DE 188329 · 55613e4a',
+      ],
+      [
+        'Mapuche',
+        'mapuche-kona-slinger',
+        3,
+        'combined',
+        'unreported',
+        [2566, 185],
+        'v0.78.3 · DE 188329 · 构建 40c323a；展示与机制复核：v0.99.34 · DE 188329 · 55613e4a',
+      ],
       [
         'Tupi',
         'tupi-champi-slinger',
         4,
         'combined',
+        'unreported',
         [2554, 185],
-        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；转线口径同步：v0.99.44 · DE 188329 · f1d5aab',
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；拉扯复核：v0.99.34 · DE 188329 · 55613e4a；转线口径同步：v0.99.44 · DE 188329 · f1d5aab；第一档批 2 全工具复核：v0.99.56 · DE 188329',
       ],
       [
         'Tupi',
         'tupi-blackwood-halberdier',
         4,
         'combined',
+        'pending',
         [2581, 359],
-        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；成对训练与群战复核：v0.99.44 · DE 188329 · f1d5aab',
+        'v0.77.107、构建 da6e280 为前次观察，本次未刷新核对；载具容量复核：v0.99.12 · DE 188329 · 66620c9；成对训练与群战复核：v0.99.44 · DE 188329 · f1d5aab；第一档批 2 全工具复核：v0.99.56 · DE 188329',
       ],
     ] as const;
 
-    for (const [civ, id, age, composition, required, version] of expected) {
+    for (const [civ, id, age, composition, playtest, required, version] of expected) {
       const entry = route(civ, id);
       expect([entry.status, entry.playtest, entry.composition, entry.age, entry.required.map(({ id: unitId }) => unitId)]).toEqual([
         'approved',
-        'unreported',
+        playtest,
         composition,
         age,
         required,
@@ -217,12 +235,24 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
 
   it('来源行和固定版本URL锚点按四路线独立字面期望核对', () => {
     const MAPUCHE_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
-    const TUPI_SHA = 'b63cccc015b677017efb4a64de8ebc01cd727ffd';
+    const TUPI_SHA = 'df2e8a9b1f966f5917703ed984f9e02515c95f91';
     const expected = [
       ['Mapuche', 'mapuche-kona-bolas', MAPUCHE_SHA, 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
       ['Mapuche', 'mapuche-kona-slinger', MAPUCHE_SHA, 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],
-      ['Tupi', 'tupi-champi-slinger', TUPI_SHA, 'L1342', [1334, 1342, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
-      ['Tupi', 'tupi-blackwood-halberdier', TUPI_SHA, 'L1343', [1334, 1343, 1345, 1347, 1349, 1351, 1357, 1358, 1359, 1360, 1366, 1367, 1368, 1370, 1372]],
+      [
+        'Tupi',
+        'tupi-champi-slinger',
+        TUPI_SHA,
+        'L1413-L1459',
+        [1413, 1415, 1422, 1424, 1428, 1429, 1431, 1434, 1436, 1438, 1444, 1445, 1446, 1447, 1453, 1454, 1455, 1457, 1459],
+      ],
+      [
+        'Tupi',
+        'tupi-blackwood-halberdier',
+        TUPI_SHA,
+        'L1413-L1459',
+        [1413, 1415, 1421, 1424, 1427, 1428, 1429, 1430, 1432, 1434, 1436, 1438, 1444, 1445, 1446, 1447, 1453, 1454, 1455, 1457, 1459],
+      ],
     ] as const;
     const url = (sha: string, anchor: string) => `https://github.com/linhongcun/aoe2-analyzer/blob/${sha}/role/game-strategy.md#${anchor}`;
 

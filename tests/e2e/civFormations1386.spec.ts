@@ -64,7 +64,7 @@ const MERGED_CASES = [
   },
   {
     civ: 'Japanese',
-    count: 1,
+    count: 2,
     anchorId: 'japanese-samurai-light-cavalry',
     mustContain: ['共用城堡生产队列'],
   },

@@ -85,6 +85,11 @@ describe('#1120 与 #1139 发布契约', () => {
       ['conquistador-hussar', '精锐西班牙征服者＋翼骑兵', '已有或能维持城堡金线，能操作机动部队，并有安全接敌路径。'],
       ['paladin-skirmisher', '游侠＋精锐掷矛手', '已有骑兵路线，或能承担升级和补兵，且地形与接敌适合骑兵。'],
       ['handcannon-halberdier', '火枪手＋长戟兵', '步兵或反骑压力与现有投入使这条路线适合，且能保护较慢的推进。'],
+      [
+        'spanish-hmc-hussar',
+        '重装骑马弩兵＋翼骑兵（靶场零食物高产）',
+        '城堡产能不足、需把城堡留给巨型投石机或面对不列颠等长射程枪弓阵时，改走靶场直出且零食物消耗的重装骑马弩兵配免金翼骑兵。',
+      ],
     ]);
     expect(georgians!.routes.map((route) => [route.id, route.title, route.condition])).toEqual([
       ['monaspa-towers', '精锐莫纳斯帕＋箭塔', '能控制并保护施工位置，有石料与村民投入。不在暴露地点强行前置。'],
@@ -94,9 +99,12 @@ describe('#1120 与 #1139 发布契约', () => {
         '开阔地野战推进或不便前置箭塔时，以精锐莫纳斯帕为核心机动主力，按对手配入长戟兵、翼骑兵、重型投石车或火枪手。',
       ],
     ]);
-    expect(
-      spanish!.routes.every((route) => route.status === 'approved' && route.playtest === 'unreported' && route.age === 4 && route.composition === 'combined'),
-    ).toBe(true);
+    expect(spanish!.routes.map(({ status, playtest, age, composition }) => [status, playtest, age, composition])).toEqual([
+      ['approved', 'unreported', 4, 'combined'],
+      ['approved', 'unreported', 4, 'combined'],
+      ['approved', 'unreported', 4, 'combined'],
+      ['approved', 'pending', 4, 'combined'],
+    ]);
     expect(georgians!.routes.map(({ status, playtest, age, composition }) => [status, playtest, age, composition])).toEqual([
       ['approved', 'unreported', 4, 'combined'],
       ['approved', 'pending', 4, 'combined'],
@@ -108,14 +116,15 @@ describe('#1120 与 #1139 发布契约', () => {
       ['unit:773', 'unit:441'],
       ['unit:569', 'unit:6'],
       ['unit:5', 'unit:359'],
+      ['unit:2701', 'unit:441'],
     ]);
     expect(georgians!.routes[0]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805', 'building:235', 'tech:923']);
     expect(georgians!.routes[1]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805']);
     expect(georgians!.routes[0]!.prerequisites.map(({ kind, id, historicalName }) => [kind, id, historicalName])).toEqual([['tech', 63, '大型箭塔']]);
     expect(spanish!.source).toEqual({
-      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1373-L1419',
+      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/df2e8a9b1f966f5917703ed984f9e02515c95f91/role/game-strategy.md#L1467-L1524',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
-      boundary: '未验证混编胜负，不把单兵克制当作阵容效果。',
+      boundary: '单兵拉扯、真混编、施工工期与免金研究账本均为站内一维或固定规则模型复核，未做客户端实战胜率或维修速度验证。',
     });
     expect(georgians!.source).toEqual({
       content: 'https://github.com/linhongcun/aoe2-analyzer/blob/6c3cdc6ded5200eac43e95efb28878066b96c3d9/role/game-strategy.md#L1421-L1463',
@@ -153,6 +162,10 @@ describe('#1120 与 #1139 发布契约', () => {
       [
         ['unit', 5, '火枪手', 4],
         ['unit', 359, '长戟兵', 4],
+      ],
+      [
+        ['unit', 2701, '重装骑马弩兵', 4],
+        ['unit', 441, '翼骑兵', 4],
       ],
       [
         ['unit', 1805, '精锐莫纳斯帕', 4],
