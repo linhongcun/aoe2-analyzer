@@ -13,6 +13,10 @@ const CIV_CASES = [
       '46 名村民',
       '研究账本 · 零城堡 劲弩手＋精锐掷矛手无草药学（不含抗招降，合计 4310）',
       '研究账本 · 精锐神庙护卫＋劲弩手含草药学（不含抗招降，合计 7190）',
+      '近战护甲 5 / 远程护甲 2',
+      '静态首刀命中后击杀用时 11.4 秒，较日本劲弩 +50%',
+      '13.3 至 17.1 秒',
+      '刀数 +40%',
     ],
   },
   {
@@ -28,6 +32,9 @@ const CIV_CASES = [
       '85 名村民',
       '研究账本 · 火枪手＋长戟兵（不含抗招降，合计 3595）',
       '研究账本 · 重装骑马弩兵＋翼骑兵（不含抗招降，合计 7370）',
+      '丹麦人、撒克逊人、波兰',
+      '射程 +1 与对步兵攻击 +2',
+      '西班牙优势是满配 5/4 甲',
     ],
   },
   {
@@ -40,6 +47,9 @@ const CIV_CASES = [
       '68 名村民',
       '研究账本 · 精锐日本武士＋轻型骑兵纯野战（不含抗招降，合计 4590）',
       '研究账本 · 长戟兵＋重装骑射手＋巨型投石机（不含抗招降，合计 10765）',
+      '47 个单位',
+      '8 个单位',
+      '而非单兵骑射压倒五大骑射国',
     ],
   },
   {
@@ -55,6 +65,12 @@ const CIV_CASES = [
       '53 名村民',
       '研究账本 · 营垒精锐保加利亚骑兵（不含抗招降，合计 4142.5）',
       '研究账本 · 协议双手剑士＋重型冲车（不含抗招降，合计 4667.5）',
+      '期望 DPS 6.11',
+      '城堡时代普通草原枪兵胜保加利亚骑士剩 3/27',
+      '帝王时代精锐草原枪兵胜马镫重骑剩 7/27',
+      '37v37',
+      '13/30',
+      '20/30',
     ],
   },
   {
@@ -67,12 +83,31 @@ const CIV_CASES = [
       '54 名村民',
       '研究账本 · 精锐黑檀木步弓手＋长戟兵（不含抗招降，合计 7547.5）',
       '研究账本 · 精锐蔷琵战士＋投石手（不含抗招降，合计 6007.5）',
+      '用户报告实战用过',
+      '人口为 60',
+      '箭毒持续伤害与战败返还 15% 资源未建模',
+    ],
+  },
+  {
+    civ: 'Jurchens',
+    count: 2,
+    mustContain: [
+      '精锐草原枪兵／精锐铁浮屠＋掷弹兵／重型火箭推车',
+      '前线箭塔＋驻扎精锐火矛兵＋翼骑兵',
+      '大后期不建议走骑射主轴',
+      '期望 DPS 5.50',
+      '城堡时代普通草原枪兵',
+      '城堡剩 3/27',
+      '帝王剩 7/27',
+      '37v37',
+      '13/30',
+      '20/30',
     ],
   },
 ] as const;
 
 for (const width of [1280, 360]) {
-  test(`#1401 ${width}px 第一档批 2 五国阵容升级、六条平行主路、图皮重排与 .num.nw 单行核验`, async ({ page }) => {
+  test(`#1438 ${width}px 六国阵容策略反馈同步、图皮实战状态与 .num.nw 单行核验`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     if (width === 360) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
 
@@ -150,11 +185,18 @@ for (const width of [1280, 360]) {
 
       if (item.civ === 'Tupi') {
         await expect(cards.nth(0).locator('#formation-tupi-blackwood-halberdier')).toHaveCount(1);
-        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
         await expect(cards.nth(0)).toContainText('有城堡产能时的默认首选主路');
         await expect(cards.nth(1).locator('#formation-tupi-champi-slinger')).toHaveCount(1);
         await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);
         await expect(cards.nth(1)).toContainText('无城堡产兵窗口，或面对重型弩炮、重掷矛与纯步兵局势时选用的平行条件路线');
+      }
+
+      if (item.civ === 'Jurchens') {
+        await expect(cards.nth(0).locator('#formation-jurchens-steppe-siege-field')).toHaveCount(1);
+        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+        await expect(cards.nth(1).locator('#formation-jurchens-fire-lancer-tower')).toHaveCount(1);
+        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
       }
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
@@ -229,6 +271,21 @@ for (const width of [1280, 360]) {
       const tupMix = await extractAndVisit('Tupi', '20 名长戟兵 与 56 只精锐黑檀木步弓手 对不列颠 25 名长戟兵 与 30 名劲弩手', /A 方在此规则下获胜/);
       expect(tupMix).not.toBeNull();
       await expect(tupMix!.locator('.mix-army-result').nth(0).locator('.mix-side-head')).toContainText(/剩余\s*43\s*\/\s*76/);
+
+      // #1438 本轮新增代表链接（同人口 60、1v1 静态/接敌、满科技模拟 5/4 vs 4/2、城堡骑射含扳指）
+      await extractAndVisit('Tupi', '同人口 60 · 120 只精锐黑檀木步弓手 站桩对 60 个不列颠劲弩手（胜，剩 61/120）', /61\s*\/\s*120|A 120，剩 61/);
+      await extractAndVisit('Muisca', '1v1 · 西班牙翼骑兵 对穆伊斯卡劲弩手（击杀用时 11.4 秒）', /含接近与先手用时\s*17\.1\s*秒[\s\S]*击杀用时\s*11\.4s/);
+      await extractAndVisit(
+        'Spanish',
+        '重装骑马弩兵（西班牙 · 满科技模拟）',
+        /近战护甲\s*2\s*\+3\s*5[\s\S]*穿刺护甲\s*0\s*\+4\s*4[\s\S]*射程\s*4\s*\+3\s*7[\s\S]*攻击间隔\s*2\.50s\s*-0\.25\s*2\.25s[\s\S]*准确度\s*80%\s*\+20%\s*100%/,
+      );
+      await extractAndVisit(
+        'Spanish',
+        '重装骑马弩兵（波兰 · 满科技模拟）',
+        /近战护甲\s*2\s*\+2\s*4[\s\S]*穿刺护甲\s*0\s*\+2\s*2[\s\S]*射程\s*4\s*\+3\s*7[\s\S]*攻击间隔\s*2\.50s\s*-0\.25\s*2\.25s[\s\S]*准确度\s*80%\s*\+20%\s*100%/,
+      );
+      await extractAndVisit('Bulgarians', '预算 3000 · 30 名保加利亚骑射手（含扳指）对 30 名女真骑射手（城堡，胜，剩 20/30）', /20\s*\/\s*30|A 30，剩 20/);
     }
 
     expect(errors).toEqual([]);

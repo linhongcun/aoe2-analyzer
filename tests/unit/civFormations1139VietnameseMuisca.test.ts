@@ -9,9 +9,9 @@ import { formationProblems } from '../../scripts/check-civ-formations.mjs';
 import { assertDefinedProperties, optionalEntityAge } from './civFormationsTestUtils';
 
 const VIETNAMESE_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L795-L843';
-const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/df2e8a9b1f966f5917703ed984f9e02515c95f91/role/game-strategy.md#L1364-L1411';
+const MUISCA_SOURCE_URL = 'https://github.com/linhongcun/aoe2-analyzer/blob/798133a5f20ee5b2b7261895bca3c505495415a6/role/game-strategy.md#L1368-L1417';
 const VIETNAMESE_SOURCE_LINES = [795, 805, 809, 817, 821, 825, 826, 829, 831, 837, 838, 839, 841, 843];
-const MUISCA_SOURCE_LINES = [1364, 1366, 1370, 1374, 1375, 1384, 1385, 1390, 1392, 1394, 1400, 1401, 1402, 1408, 1409, 1411];
+const MUISCA_SOURCE_LINES = [1368, 1370, 1374, 1378, 1379, 1388, 1389, 1394, 1398, 1400, 1406, 1407, 1408, 1414, 1415, 1417];
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => {

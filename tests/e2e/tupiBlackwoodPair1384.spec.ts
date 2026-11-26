@@ -201,14 +201,14 @@ test('#1384 持续生产、训练总价与阵容新增费用（含 360px 触控�
   await assertNoOverflow(page);
 });
 
-test('#1401 图皮推荐阵容顺序：首卡精锐黑檀木步弓手＋长戟兵（待实战验证），次卡蔷琵＋投石手', async ({ page }) => {
+test('#1438 图皮推荐阵容顺序：首卡精锐黑檀木步弓手＋长戟兵（用户报告用过），次卡蔷琵＋投石手', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/civ/Tupi#formations');
   const cards = page.locator('#formations .formation-list > article');
   await expect(cards).toHaveCount(2);
   await expect(cards.nth(0).locator('#formation-tupi-blackwood-halberdier')).toHaveCount(1);
-  await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-  await expect(cards.nth(0).getByLabel('路线状态')).not.toHaveText(/用户报告用过/);
+  await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
+  await expect(cards.nth(0).getByLabel('路线状态')).not.toHaveText(/待实战验证/);
   await expect(cards.nth(0)).toContainText('有城堡产能时的默认首选主路');
   await expect(cards.nth(1).locator('#formation-tupi-champi-slinger')).toHaveCount(1);
   await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);

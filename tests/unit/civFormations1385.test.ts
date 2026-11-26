@@ -293,13 +293,14 @@ describe('#1385 批 1 · 6 国策略与阵容重构回归', () => {
     const targetSet = new Set<string>(TARGET_CIVS);
     for (const civ of civFormationContent) {
       if (targetSet.has(civ.civ)) {
-        expect(civ.source.content, civ.civ).toContain(`/blob/${DOC_SHA}/role/game-strategy.md#L`);
+        const expectedSha = civ.civ === 'Jurchens' ? '798133a5f20ee5b2b7261895bca3c505495415a6' : DOC_SHA;
+        expect(civ.source.content, civ.civ).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
         expect(
           civ.routes.map(({ id, status, playtest }) => [id, status, playtest]),
           civ.civ,
         ).toEqual(expectedOrder[civ.civ]);
         for (const r of civ.routes) {
-          expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${DOC_SHA}/role/game-strategy.md#L`);
+          expect(r.source?.content, `${civ.civ}/${r.id}`).toContain(`/blob/${expectedSha}/role/game-strategy.md#L`);
           expect(r.playtest, `${civ.civ}/${r.id}`).not.toBe('reported');
         }
       } else {
