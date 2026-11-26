@@ -316,6 +316,44 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
         expect(unitHit.errBottom).toBeLessThanOrEqual(unitHit.dockTop);
         expect(unitHit.triggerTop).toBeGreaterThanOrEqual(unitHit.topbarBottom);
         expect(unitHit.hitInsideError).toBe(true);
+
+        // 390 宽 scrollY=165 切时代：切前已可见的专用生产建筑被单位提示下推且底栏上移后，仍须露出并可命中建筑错因（R6 P2 #1）
+        await page.goto('./#/production?civ=Bohemians&age=3&techs=47&rows=5:87:1');
+        await expect(unitTrigger).toHaveAttribute('data-value', '5');
+        await page.evaluate(() => window.scrollTo(0, 165));
+        await page.getByRole('combobox', { name: '生产时代', exact: true }).selectOption('2');
+        await expect(buildingErr).toBeVisible();
+        const buildingHit = await page.evaluate(() => {
+          const err = document.getElementById('production-building-error-0')!;
+          const unit = document.getElementById('production-unit-0')!;
+          const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions')!;
+          const topbar = document.querySelector<HTMLElement>('header.topbar')!;
+          const errRect = err.getBoundingClientRect();
+          const unitRect = unit.getBoundingClientRect();
+          const dockTop = dock.getBoundingClientRect().top;
+          const topbarBottom = topbar.getBoundingClientRect().bottom;
+          const hit = document.elementFromPoint(errRect.left + errRect.width / 2, errRect.top + errRect.height / 2);
+          return {
+            errBottom: errRect.bottom,
+            dockTop,
+            unitTop: unitRect.top,
+            topbarBottom,
+            hitInsideError: !!hit && (hit === err || err.contains(hit)),
+          };
+        });
+        expect(buildingHit.errBottom).toBeLessThanOrEqual(buildingHit.dockTop);
+        expect(buildingHit.unitTop).toBeGreaterThanOrEqual(buildingHit.topbarBottom);
+        expect(buildingHit.hitInsideError).toBe(true);
+
+        // 同页外部哈希导航（location.hash 改 age=3 -> age=2）不得触发意外自动滚动（R6 P2 #2）
+        await page.goto('./#/production?civ=Bohemians&age=3&techs=47&rows=5:87:1');
+        await expect(unitTrigger).toHaveAttribute('data-value', '5');
+        await page.evaluate(() => window.scrollTo(0, 107));
+        await page.evaluate(() => {
+          window.location.hash = '#/production?civ=Bohemians&age=2&techs=47&rows=5:87:1';
+        });
+        await expect(unitErr).toBeVisible();
+        expect(await page.evaluate(() => Math.round(window.scrollY))).toBe(107);
       }
 
       expect(errors).toEqual([]);

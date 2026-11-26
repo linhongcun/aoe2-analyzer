@@ -45,7 +45,7 @@ import { productionTransferState } from '../../shared/utils/productionTransferSt
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
-import { revealVisibleFieldErrors, type FieldErrorTarget } from './revealFieldError';
+import { captureVisibleFieldIds, revealVisibleFieldErrors, type FieldErrorTarget } from './revealFieldError';
 import './production.css';
 import './trainCompare.css';
 
@@ -218,7 +218,6 @@ function ProductionBody({
   manualLink: string;
 }) {
   const location = useLocation();
-  const navigationType = useNavigationType();
   const transfer = useMemo(() => {
     const mapped = productionToTrainTotal(ctx, config);
     return {
@@ -246,8 +245,13 @@ function ProductionBody({
       }),
     [ctx, config, units],
   );
-  const prevInvalidRef = useRef<{ navKey: string; keys: Set<string> } | null>(null);
-  const pendingRevealRef = useRef<FieldErrorTarget | null>(null);
+  const prevInvalidRef = useRef<Set<string> | null>(null);
+  const pendingInteractionRef = useRef<{ visibleBefore: Set<string>; forceKey?: string } | null>(null);
+  const applyUpdate = (next: ProductionConfig, forceKey?: string) => {
+    const fieldIds = config.rows.flatMap((_, i) => [`production-unit-${i}`, `production-building-${i}`, `production-count-${i}`]);
+    pendingInteractionRef.current = { visibleBefore: captureVisibleFieldIds(fieldIds), forceKey };
+    update(next);
+  };
   useLayoutEffect(() => {
     const currentTargets: FieldErrorTarget[] = [];
     for (const s of rowStates) {
@@ -258,19 +262,25 @@ function ProductionBody({
         currentTargets.push({ key: `count:${s.index}`, fieldId: `production-count-${s.index}`, errorId: `production-count-error-${s.index}` });
     }
     const prev = prevInvalidRef.current;
-    const pending = pendingRevealRef.current;
-    pendingRevealRef.current = null;
-    prevInvalidRef.current = { navKey: location.key, keys: new Set(currentTargets.map((t) => t.key)) };
-    if (!prev || (navigationType !== 'REPLACE' && prev.navKey !== location.key)) return;
-    revealVisibleFieldErrors(currentTargets.filter((t) => !prev.keys.has(t.key) || pending?.key === t.key));
-  }, [rowStates, location.key, navigationType]);
+    const interaction = pendingInteractionRef.current;
+    pendingInteractionRef.current = null;
+    prevInvalidRef.current = new Set(currentTargets.map((t) => t.key));
+    if (!prev || !interaction) return;
+    revealVisibleFieldErrors(
+      currentTargets.filter((t) => !prev.has(t.key) || interaction.forceKey === t.key),
+      interaction.visibleBefore,
+    );
+  }, [config, rowStates]);
+  useLayoutEffect(() => {
+    pendingInteractionRef.current = null;
+  });
   const available = productionTechs(ctx, config),
     free = freeProductionTechs(ctx, config);
   const errors = [...linkErrors, ...result.errors];
   const dockNote = linkErrors.length > 0 ? '请先修正链接错误，再复制方案。' : result.errors.length > 0 ? '请先修正生产需求中的错误，再复制方案。' : shareStatus;
   const selected = effectiveProductionTechs(ctx, config);
-  const editRow = (index: number, fields: Partial<ProductionRow>) =>
-    update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
+  const editRow = (index: number, fields: Partial<ProductionRow>, forceKey?: string) =>
+    applyUpdate({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) }, forceKey);
   const related = [
     { to: '/market', label: '市场买卖预算' },
     { to: '/eco-payoff', label: '经济科技收益：固定村民对比研究投入与增量' },
@@ -306,11 +316,11 @@ function ProductionBody({
           <div className="production-settings">
             <div className="production-field">
               <label htmlFor="production-civ">文明</label>
-              <CivPicker id="production-civ" label="生产文明" value={config.civ} onChange={(civ) => update({ ...config, civ })} />
+              <CivPicker id="production-civ" label="生产文明" value={config.civ} onChange={(civ) => applyUpdate({ ...config, civ })} />
             </div>
             <label>
               时代
-              <select aria-label="生产时代" value={config.age} onChange={(e) => update({ ...config, age: Number(e.target.value) })}>
+              <select aria-label="生产时代" value={config.age} onChange={(e) => applyUpdate({ ...config, age: Number(e.target.value) })}>
                 {[1, 2, 3, 4].map((a) => (
                   <option key={a} value={a}>
                     {AGE_ZH[a]}
@@ -424,16 +434,7 @@ function ProductionBody({
                         incrementLabel={`需求 ${index + 1} 建筑数加 1`}
                         invalid={countInvalid}
                         describedBy={countInvalid ? `production-count-error-${index}` : undefined}
-                        onChange={(count) => {
-                          if (!/^\d+$/.test(count) || +count > BUILDING_LIMIT) {
-                            pendingRevealRef.current = {
-                              key: `count:${index}`,
-                              errorId: `production-count-error-${index}`,
-                              fieldId: `production-count-${index}`,
-                            };
-                          }
-                          editRow(index, { count });
-                        }}
+                        onChange={(count) => editRow(index, { count }, !/^\d+$/.test(count) || +count > BUILDING_LIMIT ? `count:${index}` : undefined)}
                       />
                       {countInvalid && (
                         <FieldError id={`production-count-error-${index}`}>
@@ -492,9 +493,9 @@ function ProductionBody({
             available={available}
             free={free}
             selected={selected}
-            onSelectEco={(techs) => update({ ...config, techs })}
-            onClear={() => update({ ...config, techs: [] })}
-            onToggle={(id) => update({ ...config, techs: toggleProductionTech(ctx, config, id) })}
+            onSelectEco={(techs) => applyUpdate({ ...config, techs })}
+            onClear={() => applyUpdate({ ...config, techs: [] })}
+            onToggle={(id) => applyUpdate({ ...config, techs: toggleProductionTech(ctx, config, id) })}
           />
         </div>
         <section className="production-summary is-sticky" aria-labelledby="production-summary-title">
