@@ -59,26 +59,37 @@ for (const width of [1280, 360]) {
     for (const item of CIV_CASES) {
       await page.goto(`./#/civ/${item.civ}#formations`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(2);
+      const tabs = section.getByRole('tab');
+      await expect(tabs).toHaveCount(2);
+      const card = section.locator('article');
+      await expect(card).toHaveCount(1);
 
-      await expect(cards.nth(0).locator(`#formation-${item.firstId}`)).toBeVisible();
-      await expect(cards.nth(1).locator(`#formation-${item.secondId}`)).toBeVisible();
-      await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(item.firstBadge);
-      await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(item.secondBadge);
+      await expect(card.locator(`#formation-${item.firstId}`)).toBeVisible();
+      await expect(card.getByLabel('路线状态')).toHaveText(item.firstBadge);
+      await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).click();
+      const chunks = [await section.innerText()];
+      const chips = card.locator('.formation-chip');
+      for (let c = 0; c < (await chips.count()); c++) {
+        await chips.nth(c).click();
+        chunks.push(await card.locator('.formation-scenario-panel').innerText());
+      }
 
-      await cards.nth(0).locator('summary').filter({ hasText: '查看攻守与调整' }).click();
-      const text = await section.innerText();
-      for (const token of item.mustContain) expect(text, `${item.civ} missing ${token}`).toContain(token);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-
-      const numTokens = cards.nth(0).locator('.num.nw');
+      const numTokens = card.locator('.num.nw');
       const count = await numTokens.count();
       expect(count).toBeGreaterThan(0);
       for (let i = 0; i < Math.min(count, 16); i++) {
         const distinctTops = await numTokens.nth(i).evaluate((el) => new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size);
         expect(distinctTops, `${item.civ} token #${i} wrapped`).toBeLessThanOrEqual(1);
       }
+
+      await tabs.nth(1).click();
+      await expect(card.locator(`#formation-${item.secondId}`)).toBeVisible();
+      await expect(card.getByLabel('路线状态')).toHaveText(item.secondBadge);
+      chunks.push(await section.innerText());
+
+      const text = chunks.join('\n');
+      for (const token of item.mustContain) expect(text, `${item.civ} missing ${token}`).toContain(token);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
   });
 }

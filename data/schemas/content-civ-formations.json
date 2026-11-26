@@ -248,7 +248,23 @@
             "$ref": "#/$defs/entityRef"
           }
         },
+        "displayRequires": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entityRef"
+          }
+        },
         "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "partialTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "partialFallback": {
           "type": "string",
           "minLength": 1
         },
@@ -261,6 +277,164 @@
         "evidence": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "scenarioGate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "index"],
+          "properties": {
+            "kind": { "const": "supplement" },
+            "index": { "type": "integer", "minimum": 0 },
+            "requireFull": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": { "const": "adjustment" },
+            "id": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": { "const": "conditionBranch" },
+            "id": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "entityKind", "id"],
+          "properties": {
+            "kind": { "const": "entity" },
+            "entityKind": { "enum": ["unit", "building", "tech"] },
+            "id": { "type": "integer", "minimum": 1 },
+            "age": { "enum": [2, 3, 4] }
+          }
+        }
+      ]
+    },
+    "scenarioOmitSupplementCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supplementIndex", "coveredBy"],
+      "properties": {
+        "supplementIndex": { "type": "integer", "minimum": 0 },
+        "coveredBy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": { "enum": ["adjustment", "conditionBranch"] },
+            "id": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" }
+          }
+        }
+      }
+    },
+    "scenarioCaveat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "whenAvailable": { "$ref": "#/$defs/scenarioGate" }
+      }
+    },
+    "scenarioLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "whenAvailable": { "$ref": "#/$defs/scenarioGate" }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "chipLabel"],
+      "anyOf": [
+        { "properties": { "supplementIndices": {} }, "required": ["supplementIndices"] },
+        { "properties": { "adjustmentIds": {} }, "required": ["adjustmentIds"] },
+        { "properties": { "conditionBranchIds": {} }, "required": ["conditionBranchIds"] }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "chipLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "actionHint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 12
+        },
+        "actionHintGate": {
+          "$ref": "#/$defs/scenarioGate"
+        },
+        "group": {
+          "enum": ["opponent", "condition"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "when": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summaryGate": {
+          "$ref": "#/$defs/scenarioGate"
+        },
+        "omitSupplementConditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scenarioOmitSupplementCondition" }
+        },
+        "caveats": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scenarioCaveat" }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scenarioLink" }
+        },
+        "supplementIndices": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "adjustmentIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" }
+        },
+        "conditionBranchIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" }
         }
       }
     },
@@ -340,7 +514,12 @@
             "required": ["label", "href"],
             "properties": {
               "label": { "type": "string", "minLength": 1 },
-              "href": { "type": "string", "format": "public-url" }
+              "href": { "type": "string", "format": "public-url" },
+              "requires": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/entityRef" }
+              }
             }
           }
         }
@@ -372,6 +551,11 @@
         "title": {
           "type": "string",
           "minLength": 1
+        },
+        "tabHint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 48
         },
         "status": {
           "enum": ["approved", "candidate", "unverified", "draft"]
@@ -443,6 +627,12 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/adjustment"
+          }
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scenario"
           }
         },
         "evidence": {

@@ -9,13 +9,18 @@ for (const width of [1280, 360]) {
     await page.goto('./' + routeHash);
 
     const formation = page.locator('#formations');
-    await expect(formation.locator('.formation-list > article')).toHaveCount(2);
-    const card = formation.locator('.formation-list > article').filter({ has: page.locator('#formation-wu-ranged-by-opponent') });
+    await expect(formation.getByRole('tab')).toHaveCount(2);
+    const card = formation.locator('article').filter({ has: page.locator('#formation-wu-ranged-by-opponent') });
     await expect(card).toHaveCount(1);
     await expect(card.locator('.formation-choice')).toHaveCount(2);
-    const siege = card.locator('.formation-supplement-group').filter({ hasText: '有明确推进目标且能安排护卫时' });
-    const launcher = siege.getByRole('link', { name: /牵引抛石机/ });
-    const research = siege.getByRole('link', { name: /卧虎/ });
+    await expect(card.locator('.formation-scenario-panel')).toHaveCount(0);
+
+    const pushChip = card.getByRole('button', { name: /有明确推进目标且能护攻城/ });
+    await pushChip.click();
+    const siege = card.locator('.formation-scenario-panel');
+    await expect(siege).toBeVisible();
+    const launcher = siege.locator('.formation-entity').filter({ hasText: '牵引抛石机' });
+    const research = siege.locator('.formation-entity').filter({ hasText: '卧虎' });
     await expect(launcher).toHaveAttribute('href', '#/unit/1942?civ=Wu');
     await expect(research).toHaveAttribute('href', '#/tech/1081?civ=Wu');
     await expect(research).toBeVisible();
@@ -37,11 +42,11 @@ for (const width of [1280, 360]) {
     expect(await launcher.evaluate((link) => Boolean(link.closest('li')?.querySelector('a[href="#/tech/1081?civ=Wu"]')))).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
-    await card.getByText('查看攻守与调整', { exact: true }).click();
+    await card.getByText('攻守配合与不默认加入', { exact: true }).click();
     await expect(card.getByText(/赤壁战术强化火焰伤害，但未证实能替代牵引抛石机拆城堡/)).toBeVisible();
-    await expect(card.getByRole('link', { name: /卧虎/ })).toHaveCount(1);
+    await expect(card.locator('.formation-entity').filter({ hasText: '卧虎' })).toHaveCount(1);
     await expect(research).toBeVisible();
-    await card.getByText('收起攻守与调整', { exact: true }).click();
+    await card.getByText('收起攻守配合与不默认加入', { exact: true }).click();
 
     await research.press('Enter');
     await expect(page).toHaveURL(/#\/tech\/1081\?civ=Wu(?:&[^#]*)?$/);
@@ -50,6 +55,8 @@ for (const width of [1280, 360]) {
     await expect(page).toHaveURL(/#\/civ\/Wu#formation-wu-ranged-by-opponent$/);
     await expect(research).toBeFocused();
     await page.reload();
+    await expect(card.locator('.formation-scenario-panel')).toHaveCount(0);
+    await pushChip.click();
     await expect(research).toBeVisible();
   });
 }

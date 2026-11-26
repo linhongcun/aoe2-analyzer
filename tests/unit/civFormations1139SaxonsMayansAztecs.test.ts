@@ -153,7 +153,7 @@ describe('#1139 Saxons, Mayans, and Aztecs', () => {
     expect(tower.attack).not.toContain('村民在前线建塔');
     expect(tower.defense).not.toContain('按压力补长戟');
     expect(tower.alternatives).not.toContain('低成本成群步兵时仍可比较');
-    expect(tower.alternatives).toContain('确需低成本成群步兵时见下方调整');
+    expect(tower.alternatives).toContain('确需低成本成群步兵时见对应局面方案');
     expect(tower.limitation).toContain('原零自选科技条件下，5 个精锐扈从显示 2+4=6 箭');
     expect(tower.limitation).toContain('含射箭槽时为 4/6 箭');
     expect(tower.limitation).toContain('伤害及胜率超出预览范围');

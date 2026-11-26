@@ -372,9 +372,14 @@ describe('#1139 文明路线契约与投影', () => {
     expect(sicilian.reason).toContain('精锐萨金特卫兵（军士）＋轻骑兵＋少量巨型投石机');
     expect(sicilian.reason).toContain('锁子甲重装骑士');
     expect(sicilian.limitation).toContain('共用城堡生产队列');
-    expect(sicilian.limitation).toContain('22 名锁子甲重装骑士');
-    expect(sicilian.limitation).toContain('敌剩 16/50');
     expect(sicilian.limitation).toContain('减少所受额外伤害不等于减少所有基础伤害');
+    const hauberkCaveat = sicilian.scenarios?.find(({ id }) => id === 'hauberk-cavalier')?.caveats?.[0]?.text ?? '';
+    expect(hauberkCaveat).toContain('700 食物、600 黄金');
+    expect(hauberkCaveat).toContain('22 名锁子甲重装骑士');
+    expect(hauberkCaveat).toContain('敌剩 16/50');
+    expect(hauberkCaveat).toContain('敌剩 4/22');
+    const hmcCaveat = sicilian.scenarios?.find(({ id }) => id === 'vs-slow-infantry')?.caveats?.[0]?.text ?? '';
+    expect(hmcCaveat).toContain('敌剩 33/42');
     expect(sicilian.evidence.scope).not.toContain('来源行');
     expect(knightContinuation?.condition).toContain('黄金和骑士科技允许');
   });

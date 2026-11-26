@@ -65,7 +65,8 @@ test('#1139 历史嵌套折叠与常规来源名称可见且可展开', async ({
 
   await page.goto('./#/civ/Spanish#formation-conquistador-hussar');
   await expect.poll(mocked).toBe(true);
-  const historical = page.locator('#formations .formation-list > article').filter({
+  const section = page.locator('#formations');
+  const historical = section.locator('article').filter({
     has: page.locator('#formation-conquistador-hussar'),
   });
   await expect(historical).toContainText('版本待复核');
@@ -77,19 +78,10 @@ test('#1139 历史嵌套折叠与常规来源名称可见且可展开', async ({
   await expect(historical).toContainText('原记录组成（非当前推荐）');
   await expect(historical.getByText('已有或能维持城堡金线')).toBeVisible();
   await expect(historical.getByText('认可状态', { exact: true })).toBeVisible();
+  await expect(history.getByText('进攻怎样配合')).toBeVisible();
 
-  const nestedDetail = historical.locator('#formation-conquistador-hussar-detail');
-  const nestedSummary = nestedDetail.locator('summary').first();
-  const closedLabel = nestedSummary.getByText('查看攻守与调整', { exact: true });
-  const openLabel = nestedSummary.getByText('收起攻守与调整', { exact: true });
-  await expect(closedLabel).toBeVisible();
-  await expect(openLabel).toBeHidden();
-  await nestedSummary.click();
-  await expect(closedLabel).toBeHidden();
-  await expect(openLabel).toBeVisible();
-  await expect(nestedDetail.getByText('进攻怎样配合')).toBeVisible();
-
-  const current = page.locator('#formations .formation-list > article').filter({
+  await section.getByRole('tab', { name: /游侠＋精锐掷矛手/ }).click();
+  const current = section.locator('article').filter({
     has: page.locator('#formation-paladin-skirmisher'),
   });
   const sources = current.locator('#formation-paladin-skirmisher-sources');
@@ -118,10 +110,10 @@ test('#1139 长 SHA 在 360px 自然换行且数字 token 保持完整', async (
   await page.setViewportSize({ width: 360, height: 900 });
   await page.goto('./#/civ/Malians#formation-malians-light-cavalry-gbeto');
   await expect.poll(mocked).toBe(true);
-  const card = page.locator('#formations .formation-list > article').filter({
+  const card = page.locator('#formations article').filter({
     has: page.locator('#formation-malians-light-cavalry-gbeto'),
   });
-  const reason = card.locator('.formation-grid p').filter({ hasText: sha });
+  const reason = card.locator('.formation-analysis p').filter({ hasText: sha });
   await expect(reason).toBeVisible();
   const hash = reason.locator('.formation-hash');
   await expect(hash).toBeVisible();

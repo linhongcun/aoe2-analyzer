@@ -57,22 +57,89 @@ for (const width of [1280, 360]) {
     for (const item of CIV_CASES) {
       await page.goto(`./#/civ/${item.civ}#formations`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.count);
+      const tabs = section.getByRole('tab');
+      await expect(tabs).toHaveCount(item.count > 1 ? item.count : 0);
+      await expect(section.locator('article')).toHaveCount(1);
 
-      // Expand all collapsible sections (including 「按对手调整」 and 「来源与核对」)
-      const allDetails = section.locator('details');
-      const detailCount = await allDetails.count();
-      expect(detailCount).toBeGreaterThanOrEqual(item.count);
-      for (let i = 0; i < detailCount; i++) {
-        const detail = allDetails.nth(i);
-        if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
-          await detail.locator('> summary').click();
+      const chunks: string[] = [];
+      let harborSeen = false;
+      for (let t = 0; t < item.count; t++) {
+        if (item.count > 1 && t > 0) await tabs.nth(t).click();
+        const card = section.locator('article');
+        const allDetails = card.locator('details');
+        for (let i = 0; i < (await allDetails.count()); i++) {
+          const detail = allDetails.nth(i);
+          if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
+            await detail.locator('> summary').click();
+          }
+          await expect(detail).toHaveJSProperty('open', true);
         }
-        await expect(detail).toHaveJSProperty('open', true);
+        const routeChunks = [await section.innerText()];
+        const chips = card.locator('.formation-chip');
+        for (let c = 0; c < (await chips.count()); c++) {
+          await chips.nth(c).click();
+          routeChunks.push(await card.locator('.formation-scenario-panel').innerText());
+        }
+        const routeText = routeChunks.join('\n');
+        chunks.push(routeText);
+
+        // Malay: clean Harbor garrison link without 233/437
+        if (item.civ === 'Malay') {
+          const harborLink = section.locator('a', { hasText: '巨港 10 条渔船 14/14 箭' });
+          if ((await harborLink.count()) > 0) {
+            await expect(harborLink).toHaveCount(1);
+            const harborHref = await harborLink.getAttribute('href');
+            expect(harborHref).toContain('#/building/1189?tab=garrison&gv=2&civ=Malay&age=4&gtechs=47%2C199%2C200%2C201&army=13%3A10%3Ae');
+            expect(harborHref).not.toMatch(/(?:233|437)/);
+            harborSeen = true;
+          }
+        }
+
+        // Chinese: exact 3-tab order, reported/pending badges, and 3rd route combined grouping
+        if (item.civ === 'Chinese') {
+          if (t === 0) {
+            await expect(card.locator('#formation-china-chu-ko-nu')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
+          }
+          if (t === 1) {
+            await expect(card.locator('#formation-china-fire-lancer-tower')).toHaveCount(1);
+          }
+          if (t === 2) {
+            await expect(card.locator('#formation-china-arbalest-zero-castle')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+            const compositionBlock = card.locator('.formation-composition');
+            await expect(compositionBlock.getByRole('heading', { name: '必出核心' })).toBeVisible();
+            await expect(compositionBlock.locator('a[href="#/unit/492?civ=Chinese"]')).toBeVisible();
+            await expect(compositionBlock.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
+            await expect(compositionBlock.locator('a[href="#/unit/546?civ=Chinese"]')).toBeVisible();
+            await expect(compositionBlock.locator('a[href="#/unit/359?civ=Chinese"]')).toBeVisible();
+
+            expect(routeText).toContain('重型冲车');
+            expect(routeText).toContain('建城后有城堡产能');
+            expect(routeText).toContain('巨型投石机');
+
+            // Zero-castle production links must NOT enable Castle tech Conscription (315)
+            const zeroCastleProdLinks = card.locator('a[href*="#/production"]');
+            await expect(zeroCastleProdLinks).toHaveCount(2);
+            for (let i = 0; i < 2; i++) {
+              const href = (await zeroCastleProdLinks.nth(i).getAttribute('href')) ?? '';
+              expect(href).not.toContain('315');
+            }
+          }
+        }
+
+        // Horizontal overflow & .num.nw single-line check
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
+        const numTokens = section.locator('.num.nw');
+        const tokenCount = await numTokens.count();
+        expect(tokenCount).toBeGreaterThan(0);
+        for (let i = 0; i < Math.min(tokenCount, 24); i++) {
+          const distinctTops = await numTokens.nth(i).evaluate((el) => new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size);
+          expect(distinctTops, `${item.civ} .num.nw #${i} wrapped`).toBeLessThanOrEqual(1);
+        }
       }
 
-      const fullText = await section.innerText();
+      const fullText = chunks.join('\n');
       for (const token of item.mustContain) {
         expect(fullText, `${item.civ} missing ${token}`).toContain(token);
       }
@@ -82,54 +149,10 @@ for (const width of [1280, 360]) {
         expect(fullText).not.toMatch(/全科技(?:重装)?骑射/);
       }
 
-      // Malay: zero stale 本轮未做新模拟 and clean Harbor garrison link without 233/437
+      // Malay: zero stale 本轮未做新模拟 and saw clean Harbor link
       if (item.civ === 'Malay') {
         expect(fullText).not.toContain('本轮未做新模拟');
-        const harborLink = section.locator('a', { hasText: '巨港 10 条渔船 14/14 箭' });
-        await expect(harborLink).toHaveCount(1);
-        const harborHref = await harborLink.getAttribute('href');
-        expect(harborHref).toContain('#/building/1189?tab=garrison&gv=2&civ=Malay&age=4&gtechs=47%2C199%2C200%2C201&army=13%3A10%3Ae');
-        expect(harborHref).not.toMatch(/(?:233|437)/);
-      }
-
-      // Chinese: exact 3-card order, reported/pending badges, and 3rd card combined grouping
-      if (item.civ === 'Chinese') {
-        await expect(cards.nth(0).locator('#formation-china-chu-ko-nu')).toHaveCount(1);
-        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
-        await expect(cards.nth(1).locator('#formation-china-fire-lancer-tower')).toHaveCount(1);
-        await expect(cards.nth(2).locator('#formation-china-arbalest-zero-castle')).toHaveCount(1);
-        await expect(cards.nth(2).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-
-        const thirdCard = cards.nth(2);
-        const compositionBlock = thirdCard.locator('.formation-composition');
-        await expect(compositionBlock.getByRole('heading', { name: '共同组成' })).toBeVisible();
-        await expect(compositionBlock.locator('a[href="#/unit/492?civ=Chinese"]')).toBeVisible();
-        await expect(compositionBlock.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
-        await expect(compositionBlock.locator('a[href="#/unit/546?civ=Chinese"]')).toBeVisible();
-        await expect(compositionBlock.locator('a[href="#/unit/359?civ=Chinese"]')).toBeVisible();
-
-        const supplementsBlock = thirdCard.locator('.formation-supplements');
-        await expect(supplementsBlock).toContainText('重型冲车');
-        await expect(supplementsBlock).toContainText('建城后有城堡产能');
-        await expect(supplementsBlock).toContainText('巨型投石机');
-
-        // Zero-castle production links must NOT enable Castle tech Conscription (315)
-        const zeroCastleProdLinks = thirdCard.locator('a[href*="#/production"]');
-        await expect(zeroCastleProdLinks).toHaveCount(2);
-        for (let i = 0; i < 2; i++) {
-          const href = (await zeroCastleProdLinks.nth(i).getAttribute('href')) ?? '';
-          expect(href).not.toContain('315');
-        }
-      }
-
-      // Horizontal overflow & .num.nw single-line check
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
-      const numTokens = section.locator('.num.nw');
-      const tokenCount = await numTokens.count();
-      expect(tokenCount).toBeGreaterThan(0);
-      for (let i = 0; i < Math.min(tokenCount, 24); i++) {
-        const distinctTops = await numTokens.nth(i).evaluate((el) => new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size);
-        expect(distinctTops, `${item.civ} .num.nw #${i} wrapped`).toBeLessThanOrEqual(1);
+        expect(harborSeen).toBe(true);
       }
     }
 
@@ -137,20 +160,26 @@ for (const width of [1280, 360]) {
     const extractAndVisit = async (civ: string, linkText: string, expectedText: RegExp) => {
       await page.goto(`./#/civ/${civ}#formations`);
       await expect(page.locator('#civ-tt-title')).toBeVisible();
-      const sourceDetails = page.locator('#formations details[id$="-sources"]');
-      await expect(sourceDetails.first()).toBeVisible();
-      const n = await sourceDetails.count();
-      for (let i = 0; i < n; i++) {
-        const detail = sourceDetails.nth(i);
+      const section = page.locator('#formations');
+      const tabs = section.getByRole('tab');
+      const routeTotal = Math.max(1, await tabs.count());
+      let href = '';
+      for (let t = 0; t < routeTotal; t++) {
+        if (t > 0) await tabs.nth(t).click();
+        const detail = section.locator('details[id$="-sources"]').first();
+        await expect(detail).toBeVisible();
         if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
           await detail.locator('summary').click();
         }
         await expect(detail).toHaveJSProperty('open', true);
+        const candidate = section.locator('a', { hasText: linkText }).first();
+        if ((await candidate.count()) > 0) {
+          await expect(candidate).toBeVisible();
+          href = (await candidate.getAttribute('href')) ?? '';
+          break;
+        }
       }
-      const link = page.locator('#formations a', { hasText: linkText }).first();
-      await expect(link).toBeVisible();
-      const href = (await link.getAttribute('href')) ?? '';
-      expect(href).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
+      expect(href, `${civ} missing link ${linkText}`).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
       const hash = new URL(href).hash;
       await page.goto(`./${hash}`);
       if (hash.includes('m=mix')) {

@@ -7,7 +7,6 @@ for (const width of [1280, 360]) {
     await page.goto(`./#/civ/Persians#${anchor}`);
     const card = page.locator('#formations article').filter({ has: page.locator(`#${anchor}`) });
     const main = card.locator('.formation-composition');
-    const support = card.locator('.formation-supplements');
     const tech = card.getByRole('link', { name: /^波斯步弓手/ });
     await expect(page.locator('#formations article')).toHaveCount(1);
     await expect(card.getByRole('heading', { level: 3 })).toHaveText('萨瓦尔＋弩手＋手推炮');
@@ -24,21 +23,20 @@ for (const width of [1280, 360]) {
     await expect(card.getByText(/研究费和每名弩手的训练费分别计算/)).toBeVisible();
     await expect(tech).toHaveCount(1);
     await expect(main.getByRole('link', { name: /^战象/ })).toHaveCount(0);
-    const elephantSupport = support.locator('.formation-supplement-group').first();
-    const citadelsSupport = support.locator('.formation-supplement-group').nth(1);
-    await expect(elephantSupport.getByRole('heading', { name: '条件补充 · 非默认主力' })).toBeVisible();
-    await expect(elephantSupport).toContainText('城堡有余力、主力能持续补员');
-    await expect(elephantSupport.locator('.num.nw')).toHaveText(['170 食物', '85 黄金']);
-    await expect(elephantSupport).toContainText('占用城堡队列');
-    await expect(citadelsSupport).toContainText('堡垒');
-    await expect(citadelsSupport).toContainText('600 木材');
+    await expect(card.locator('.formation-scenario-panel')).toHaveCount(0);
+
+    const panel = card.locator('.formation-scenario-panel');
+    await card.getByRole('button', { name: /守关键坡口、矿区或堡阵/ }).click();
+    await expect(panel).toContainText('堡垒');
+    await expect(panel).toContainText('600 木材');
+
+    const elephantChip = card.getByRole('button', { name: /城堡有余力·补强前排/ });
+    await elephantChip.click();
+    await expect(panel).toContainText('城堡有余力、主力能持续补员');
+    await expect(panel.locator('.num.nw')).toHaveText(['170 食物', '85 黄金']);
+    await expect(panel).toContainText('占用城堡队列');
     await expect(card.locator('details')).toHaveCount(2);
     await expect(card.locator('details[open]')).toHaveCount(0);
-    const mainBox = await main.boundingBox();
-    const supportBox = await support.boundingBox();
-    expect(mainBox && supportBox).toBeTruthy();
-    if (width === 1280) expect(supportBox!.x).toBeGreaterThanOrEqual(mainBox!.x + mainBox!.width);
-    else expect(supportBox!.y).toBeGreaterThanOrEqual(mainBox!.y + mainBox!.height);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
     const entities = [
@@ -49,6 +47,7 @@ for (const width of [1280, 360]) {
       ['unit', 239, '战象'],
     ] as const;
     for (const [kind, id, name] of entities) {
+      if (id === 239 && (await panel.count()) === 0) await elephantChip.click();
       const href = `#/${kind}/${id}?civ=Persians`;
       const entry = card.locator(`a[href="${href}"]`);
       expect((await entry.boundingBox())?.height).toBeGreaterThanOrEqual(44);
@@ -60,9 +59,10 @@ for (const width of [1280, 360]) {
       await expect(page).toHaveURL(new RegExp(`#/civ/Persians#${anchor}$`));
       await expect(entry).toBeFocused();
     }
-    await card.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Space');
+    await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).press('Space');
     await expect(card).toContainText('无劲弩手');
-    await expect(card).toContainText('重装骑射手');
+    await card.getByRole('button', { name: /慢速近战＋开阔拉扯空间/ }).click();
+    await expect(panel).toContainText('重装骑射手');
     await card.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
     await expect(card.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://github.com/linhongcun/aoe2-analyzer/issues/1176');
     await page.goto('./#/civ/Hindustanis#formations');

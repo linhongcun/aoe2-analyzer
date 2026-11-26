@@ -31,10 +31,13 @@ for (const width of [1280, 360]) {
       '#/tech/507?civ=Hindustanis',
       '#/unit/441?civ=Hindustanis',
       '#/unit/36?civ=Hindustanis',
-      '#/unit/207?civ=Hindustanis',
-      '#/unit/1747?civ=Hindustanis',
-      '#/unit/1749?civ=Hindustanis',
     ]);
+    await route.getByRole('button', { name: /重骑压力且黄金可承受/ }).click();
+    await expect(route.locator('.formation-scenario-panel a[href="#/unit/207?civ=Hindustanis"]')).toBeVisible();
+    await route.getByRole('button', { name: /弓手成群且有城堡产能/ }).click();
+    await expect(route.locator('.formation-scenario-panel a[href="#/unit/1747?civ=Hindustanis"]')).toBeVisible();
+    await expect(route.locator('.formation-scenario-panel a[href="#/unit/1749?civ=Hindustanis"]')).toBeVisible();
+    await route.getByRole('button', { name: /弓手成群且有城堡产能/ }).click();
     expect((await research.boundingBox())?.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

@@ -92,87 +92,107 @@ for (const width of [1280, 360]) {
     for (const item of CIV_CASES) {
       await page.goto(`./#/civ/${item.civ}#formations`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.count);
+      const tabs = section.getByRole('tab');
+      await expect(tabs).toHaveCount(item.count > 1 ? item.count : 0);
+      await expect(section.locator('article')).toHaveCount(1);
 
-      const allDetails = section.locator('details');
-      const detailCount = await allDetails.count();
-      expect(detailCount).toBeGreaterThanOrEqual(item.count);
-      for (let i = 0; i < detailCount; i++) {
-        const detail = allDetails.nth(i);
-        if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
-          await detail.locator('> summary').click();
+      const chunks: string[] = [];
+      for (let t = 0; t < item.count; t++) {
+        if (item.count > 1 && t > 0) await tabs.nth(t).click();
+        const card = section.locator('article');
+        const allDetails = card.locator('details');
+        for (let i = 0; i < (await allDetails.count()); i++) {
+          const detail = allDetails.nth(i);
+          if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
+            await detail.locator('> summary').click();
+          }
+          await expect(detail).toHaveJSProperty('open', true);
         }
-        await expect(detail).toHaveJSProperty('open', true);
+        chunks.push(await section.innerText());
+        const chips = card.locator('.formation-chip');
+        for (let c = 0; c < (await chips.count()); c++) {
+          await chips.nth(c).click();
+          chunks.push(await card.locator('.formation-scenario-panel').innerText());
+        }
+
+        if (item.civ === 'Byzantines' && t === 0) {
+          await expect(card.locator('#formation-byzantines-cataphract')).toHaveCount(1);
+        }
+        if (item.civ === 'Byzantines' && t === 1) {
+          await expect(card.locator('#formation-byzantines-halberdier-handcannon-arbalest')).toHaveCount(1);
+          await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+          const comp = card.locator('.formation-composition');
+          await expect(comp.getByRole('heading', { name: '必出核心' })).toBeVisible();
+          await expect(comp.locator('a[href="#/unit/359?civ=Byzantines"]')).toBeVisible();
+          await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
+          await expect(comp.locator('a[href="#/unit/5?civ=Byzantines"]')).toBeVisible();
+          await expect(comp.locator('a[href="#/unit/492?civ=Byzantines"]')).toBeVisible();
+
+          const zeroProdLinks = card.locator('a[href*="#/production?civ=Byzantines"]');
+          await expect(zeroProdLinks).toHaveCount(2);
+          for (let i = 0; i < 2; i++) {
+            expect((await zeroProdLinks.nth(i).getAttribute('href')) ?? '').not.toContain('315');
+          }
+        }
+
+        if (item.civ === 'Lithuanians' && t === 0) {
+          await expect(card.locator('#formation-lithuanians-leitis-skirmisher')).toHaveCount(1);
+          const tcLinks = card.locator('a[href*="tab=garrison"]');
+          await expect(tcLinks).toHaveCount(4);
+          for (let i = 0; i < 4; i++) {
+            expect((await tcLinks.nth(i).getAttribute('href')) ?? '').not.toMatch(/(?:gtechs=|%2C|,)233(?:%2C|,|&|$)/);
+          }
+        }
+        if (item.civ === 'Lithuanians' && t === 1) {
+          await expect(card.locator('#formation-lithuanians-winged-hussar-handcannon')).toHaveCount(1);
+          await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+        }
+
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
+        const numTokens = section.locator('.num.nw');
+        const tokenCount = await numTokens.count();
+        expect(tokenCount).toBeGreaterThan(0);
+        const wrapped = await numTokens.evaluateAll((els) =>
+          els
+            .map((el, i) => ({
+              i,
+              text: el.textContent ?? '',
+              tops: new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size,
+            }))
+            .filter((entry) => entry.tops > 1),
+        );
+        expect(wrapped, `${item.civ} wrapped .num.nw tokens`).toEqual([]);
       }
 
-      const fullText = await section.innerText();
+      const fullText = chunks.join('\n');
       for (const token of item.mustContain) {
         expect(fullText, `${item.civ} missing ${token}`).toContain(token);
       }
-
-      if (item.civ === 'Byzantines') {
-        await expect(cards.nth(0).locator('#formation-byzantines-cataphract')).toHaveCount(1);
-        await expect(cards.nth(1).locator('#formation-byzantines-halberdier-handcannon-arbalest')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        const comp = cards.nth(1).locator('.formation-composition');
-        await expect(comp.getByRole('heading', { name: '共同组成' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/359?civ=Byzantines"]')).toBeVisible();
-        await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/5?civ=Byzantines"]')).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/492?civ=Byzantines"]')).toBeVisible();
-
-        const zeroProdLinks = cards.nth(1).locator('a[href*="#/production?civ=Byzantines"]');
-        await expect(zeroProdLinks).toHaveCount(2);
-        for (let i = 0; i < 2; i++) {
-          expect((await zeroProdLinks.nth(i).getAttribute('href')) ?? '').not.toContain('315');
-        }
-      }
-
-      if (item.civ === 'Lithuanians') {
-        await expect(cards.nth(0).locator('#formation-lithuanians-leitis-skirmisher')).toHaveCount(1);
-        await expect(cards.nth(1).locator('#formation-lithuanians-winged-hussar-handcannon')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        const tcLinks = cards.nth(0).locator('a[href*="tab=garrison"]');
-        await expect(tcLinks).toHaveCount(4);
-        for (let i = 0; i < 4; i++) {
-          expect((await tcLinks.nth(i).getAttribute('href')) ?? '').not.toMatch(/(?:gtechs=|%2C|,)233(?:%2C|,|&|$)/);
-        }
-      }
-
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
-      const numTokens = section.locator('.num.nw');
-      const tokenCount = await numTokens.count();
-      expect(tokenCount).toBeGreaterThan(0);
-      const wrapped = await numTokens.evaluateAll((els) =>
-        els
-          .map((el, i) => ({
-            i,
-            text: el.textContent ?? '',
-            tops: new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size,
-          }))
-          .filter((entry) => entry.tops > 1),
-      );
-      expect(wrapped, `${item.civ} wrapped .num.nw tokens`).toEqual([]);
     }
 
     if (width === 1280) {
       const extractAndVisit = async (civ: string, linkText: string, expectedText: RegExp) => {
         await page.goto(`./#/civ/${civ}#formations`);
         await expect(page.locator('#civ-tt-title')).toBeVisible();
-        const sourceDetails = page.locator('#formations details[id$="-sources"]');
-        const n = await sourceDetails.count();
-        for (let i = 0; i < n; i++) {
-          const detail = sourceDetails.nth(i);
+        const section = page.locator('#formations');
+        const tabs = section.getByRole('tab');
+        const routeTotal = Math.max(1, await tabs.count());
+        let href = '';
+        for (let t = 0; t < routeTotal; t++) {
+          if (t > 0) await tabs.nth(t).click();
+          const detail = section.locator('details[id$="-sources"]').first();
           if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
             await detail.locator('summary').click();
           }
           await expect(detail).toHaveJSProperty('open', true);
+          const candidate = section.locator('a', { hasText: linkText }).first();
+          if ((await candidate.count()) > 0) {
+            await expect(candidate).toBeVisible();
+            href = (await candidate.getAttribute('href')) ?? '';
+            break;
+          }
         }
-        const link = page.locator('#formations a', { hasText: linkText }).first();
-        await expect(link).toBeVisible();
-        const href = (await link.getAttribute('href')) ?? '';
-        expect(href).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
+        expect(href, `${civ} missing link ${linkText}`).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
         const hash = new URL(href).hash;
         await page.goto(`./${hash}`);
         if (hash.includes('m=mix')) {

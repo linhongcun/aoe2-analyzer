@@ -45,20 +45,30 @@ for (const { civ, anchor, width, unit, cardCount, badge, summary, adjustment, sh
     if (civ === 'Wu') await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
     const path = `#/civ/${civ}#formation-${anchor}`;
     await page.goto(`./${path}`);
-    await expect(page.locator('#formations article')).toHaveCount(cardCount);
+    if (cardCount > 1) await expect(page.locator('#formations [role="tab"]')).toHaveCount(cardCount);
+    else await expect(page.locator('#formations [role="tab"]')).toHaveCount(0);
     const card = page.locator('#formations article').filter({ has: page.locator(`#formation-${anchor}`) });
     await expect(card).toHaveCount(1);
     await expect(card.locator('.formation-condition')).toContainText(summary);
     await expect(card.getByLabel('路线状态')).toHaveText(badge);
     await expect(card.locator('details[open]')).toHaveCount(0);
+    const panel = card.locator('.formation-scenario-panel');
     if (civ === 'Wei') {
       await expect(card.getByRole('link', { name: /^明光铠/ })).toHaveAttribute('href', '#/tech/1062?civ=Wei');
       await expect(card.locator('.formation-prerequisites .num.nw')).toHaveText(['2/4', '6/4']);
-      await expect(card.locator('.formation-supplements')).toContainText('军队成形且资源允许时');
+      await card.getByRole('button', { name: /军队成形且可承担英雄投入/ }).click();
+      await expect(panel).toContainText('已成军且能承担英雄投入');
+      await expect(panel).toContainText('曹操');
+      await card.getByRole('button', { name: /骆驼或重骑突破屏障/ }).click();
+      await expect(panel).toContainText(adjustment);
     } else if (civ === 'Shu') {
       await expect(card.getByRole('heading', { name: '先后阶段组成' })).toBeVisible();
       await expect(card.getByRole('link', { name: /^劲弩手/ })).toHaveAttribute('href', '#/unit/492?civ=Shu');
-      await expect(card.locator('.formation-supplements')).toContainText('敌方骑兵施压时');
+      await card.getByRole('button', { name: /敌方骑兵施压弓群/ }).click();
+      await expect(panel).toContainText('敌方骑兵施压');
+      await expect(panel).toContainText('长戟兵');
+      await card.getByRole('button', { name: /经济、护卫与节奏均稳住/ }).click();
+      await expect(panel).toContainText(adjustment);
     } else {
       await expect(card.getByRole('heading', { name: '按敌选择主力，不是同时必出' })).toBeVisible();
       const choices = card.locator('.formation-choice');
@@ -66,13 +76,15 @@ for (const { civ, anchor, width, unit, cardCount, badge, summary, adjustment, sh
       await expect(choices.nth(0)).toContainText('靶场直出无需城堡产能');
       await expect(choices.nth(1)).toContainText('精锐掷矛手');
       await expect(choices.nth(1)).not.toContainText('城堡产能');
-      await expect(card.locator('.formation-supplements')).toContainText('敌骑能切到我方后排时');
+      await card.getByRole('button', { name: /敌骑能切到我方后排/ }).click();
+      await expect(panel).toContainText('敌骑能切到我方后排');
+      await expect(panel).toContainText('长戟兵');
+      await expect(panel).toContainText(adjustment);
     }
 
-    await card.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Enter');
+    await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).press('Enter');
     await card.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
     await expect(card.locator('details[open]')).toHaveCount(2);
-    await expect(card.locator('.formation-adjustments').getByText(adjustment)).toBeVisible();
     await expect(card.getByRole('heading', { name: '为什么不默认加入' })).toBeVisible();
     await expect(card.getByRole('link', { name: '查看固定内容来源' })).toHaveAttribute(
       'href',

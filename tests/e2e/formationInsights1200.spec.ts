@@ -22,16 +22,14 @@ async function expectNowrap(region: Locator, pattern: RegExp) {
   await expect(value).toHaveCSS('white-space', 'nowrap');
 }
 
-test('#1200 马里：蛮王建议留在可选前线中心步骤，收起时隐藏', async ({ page }) => {
+test('#1200 马里：蛮王建议留在可选前线中心局面，默认收起时隐藏', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
   await openDetail(page, '/civ/Malians#formations', /马里/, 390);
   const card = page.locator('.formation-card').filter({ has: page.locator('#formation-malians-light-cavalry-gbeto') });
-  const toggle = card.locator('summary').filter({ hasText: '查看攻守与调整' });
-  const row = card.locator('.formation-adjustments > div').filter({ hasText: '已有前线城镇中心并已完成蛮王研究' });
-  const decision = row.locator('.formation-decision');
-  await expect(card).toContainText('机制支持（非必需主力）');
-  await expect(decision).toBeHidden();
-  await toggle.press('Enter');
+  const chip = card.getByRole('button', { name: /位置与资源足·前线阵地支点/ });
+  const decision = card.locator('.formation-scenario-panel .formation-decision');
+  await expect(decision).toHaveCount(0);
+  await chip.press('Enter');
   await expect(decision).toBeVisible();
   await expect(decision).toContainText(/空城镇中心也能射\s*8\s*箭.*满驻上限\s*18/);
   await expect(decision).toContainText('可以不为了开火而驻军');
@@ -44,32 +42,32 @@ test('#1200 马里：蛮王建议留在可选前线中心步骤，收起时隐�
   await expect(page.locator('#insights')).toHaveCount(0);
   await expect(page.locator('.civ-reading-note')).toBeVisible();
   await expectNoHScroll(page);
-  await card.locator('summary').filter({ hasText: '收起攻守与调整' }).press('Space');
-  await expect(decision).toBeHidden();
+  await chip.press('Space');
+  await expect(decision).toHaveCount(0);
 });
 
-for (const { civ, name, route, title, facts } of [
+for (const { civ, name, route, chipName, facts } of [
   {
     civ: 'Koreans',
     name: /高丽/,
     route: 'koreans-fire-lancer-garrison',
-    title: '巨投、长射程火炮',
+    chipName: /巨投或长射程火炮威胁/,
     facts: ['已研究邑城并叠满箭羽线', '约 13 射程的箭塔可压过 12 射程的普通手推炮', '火炮术后 14 射程的土耳其手推炮，塔射程不足'],
   },
   {
     civ: 'Lithuanians',
     name: /立陶宛/,
     route: 'lithuanians-leitis-skirmisher',
-    title: '完成山城堡研究后，需评估中心射程与驻矛',
+    chipName: /前线中心驻军护经济/,
     facts: ['已有城镇中心和能施工维修的村民，且能安全接敌', '驻扎掷矛手的城镇中心支援', '盖过基础射程的弩手和投石车', '盖不住投石机', '空驻军不开火'],
   },
 ]) {
-  test(`#1200 ${civ} 检查射程、前提和例外归到正确的阵容步骤`, async ({ page }) => {
-    await openDetail(page, `/civ/${civ}#formations`, name, civ === 'Koreans' ? 1280 : 390);
+  test(`#1200 ${civ} 检查射程、前提和例外归到正确的阵容局面`, async ({ page }) => {
+    await openDetail(page, `/civ/${civ}#formation-${route}`, name, civ === 'Koreans' ? 1280 : 390);
     const card = page.locator('.formation-card').filter({ has: page.locator(`#formation-${route}`) });
-    const decision = card.locator('.formation-adjustments > div').filter({ hasText: title }).locator('.formation-decision');
-    await expect(decision).toBeHidden();
-    await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+    const decision = card.locator('.formation-scenario-panel .formation-decision');
+    await expect(decision).toHaveCount(0);
+    await card.getByRole('button', { name: chipName }).click();
     await expect(decision).toBeVisible();
     for (const fact of facts) await expect(decision).toContainText(fact);
     await expect(page.locator('#formations .formation-decision')).toHaveCount(1);
@@ -78,10 +76,14 @@ for (const { civ, name, route, title, facts } of [
     await expect(page.locator('.civ-reading-note')).toBeVisible();
     if (civ === 'Lithuanians') await expectNowrap(decision, new RegExp(`^6${RANGE}9$`));
     else {
+      await expect(card.locator('.formation-limitation')).not.toContainText('14 射程');
+      await page
+        .locator('#formations')
+        .getByRole('tab', { name: /精锐高丽战车/ })
+        .click();
       const warWagon = page.locator('.formation-card').filter({ has: page.locator('#formation-koreans-war-wagon-halberdier') });
       await expect(warWagon).toBeVisible();
       await expect(warWagon).not.toContainText(/邑城|13 射程|14 射程/);
-      await expect(card.locator('.formation-limitation')).not.toContainText('14 射程');
     }
     await expectNoHScroll(page);
   });

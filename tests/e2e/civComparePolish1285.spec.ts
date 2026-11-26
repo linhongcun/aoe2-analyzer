@@ -104,11 +104,14 @@ test.describe('issue 1285 civ detail and compare polish', () => {
       await expect(shared.locator('li').nth(0)).toContainText('免费磨坊科技只节省升级投入，不意味着无限补兵。');
       await expect(shared.locator('li').nth(1)).toContainText('免费磨坊科技不意味着无限补兵。');
 
-      const cards = page.locator('#formations .formation-card');
-      const cardCount = await cards.count();
-      expect(cardCount).toBeGreaterThanOrEqual(3);
-      for (let i = 0; i < cardCount; i += 1) {
-        const text = await cards.nth(i).innerText();
+      const tabs = page.locator('#formations [role="tab"]');
+      const tabCount = await tabs.count();
+      expect(tabCount).toBeGreaterThanOrEqual(3);
+      for (let i = 0; i < tabCount; i += 1) {
+        await tabs.nth(i).click();
+        const card = page.locator('#formations .formation-card');
+        await expect(card).toHaveCount(1);
+        const text = await card.innerText();
         expect(text).not.toContain('免费磨坊科技只节省升级投入，不意味着无限补兵');
         expect(text).not.toContain('免费磨坊科技不意味着无限补兵');
       }

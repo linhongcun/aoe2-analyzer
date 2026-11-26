@@ -43,20 +43,25 @@ for (const width of [1280, 360]) {
     if (width === 360) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
 
     for (const item of CASES) {
-      await page.goto(`./#/civ/${item.civ}#formations`);
+      await page.goto(`./#/civ/${item.civ}#formation-${item.anchorId}`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.cardCount);
+      await expect(section.getByRole('tab')).toHaveCount(item.cardCount);
 
-      const targetCard = cards.filter({ has: page.locator(`#formation-${item.anchorId}`) });
+      const targetCard = section.locator('article').filter({ has: page.locator(`#formation-${item.anchorId}`) });
       await expect(targetCard).toHaveCount(1);
 
-      // 展开攻守与调整、来源与核对
+      // 展开攻守配合、来源与核对与局面面板
       for (const summary of await section.locator('summary').all()) {
         await summary.click();
       }
+      const chunks = [await section.innerText()];
+      const chips = targetCard.locator('.formation-chip');
+      for (let c = 0; c < (await chips.count()); c++) {
+        await chips.nth(c).click();
+        chunks.push(await targetCard.locator('.formation-scenario-panel').innerText());
+      }
 
-      const sectionText = await section.innerText();
+      const sectionText = chunks.join('\n');
       for (const token of item.mustContain) expect(sectionText, `${item.civ} missing ${token}`).toContain(token);
       for (const forbidden of item.mustNotContain) expect(sectionText, `${item.civ} still has ${forbidden}`).not.toContain(forbidden);
 
@@ -90,7 +95,7 @@ test('#1398 提取证据链接 hash 在本地 BASE_URL 实测图皮 70 只成对
 
   // 1. 图皮卡片提取黑檀木站桩对不列颠劲弩链接，在本地 BASE_URL 核验 70 只（35 对）与胜方剩 8
   await page.goto('./#/civ/Tupi#formations');
-  const bwCard = page.locator('#formations .formation-list > article').filter({ has: page.locator('#formation-tupi-blackwood-halberdier') });
+  const bwCard = page.locator('#formations article').filter({ has: page.locator('#formation-tupi-blackwood-halberdier') });
   await bwCard.locator('summary').filter({ hasText: '来源与核对' }).click();
   const tupiHref = await bwCard.locator('a[href*="2581.Tupi.4.f."][href*="492.Britons.4.f."]').first().getAttribute('href');
   expect(tupiHref).toBe(`${PROD_ORIGIN}#/duel?a=2581.Tupi.4.f.&b=492.Britons.4.f.&m=r&bud=3000`);
@@ -101,7 +106,7 @@ test('#1398 提取证据链接 hash 在本地 BASE_URL 实测图皮 70 只成对
 
   // 2. 立陶宛卡片提取 ra=2 烈堤司对劲弩与 ra=4 游侠对法兰克游侠链接，在本地 BASE_URL 核验圣物档位与胜负
   await page.goto('./#/civ/Lithuanians#formations');
-  const lithCard = page.locator('#formations .formation-list > article').filter({ has: page.locator('#formation-lithuanians-leitis-skirmisher') });
+  const lithCard = page.locator('#formations article').filter({ has: page.locator('#formation-lithuanians-leitis-skirmisher') });
   await lithCard.locator('summary').filter({ hasText: '来源与核对' }).click();
 
   const ra2Href = await lithCard.locator('a[href*="1236.Lithuanians.4.f."][href*="492.Britons.4.f."][href*="ra=2"]').first().getAttribute('href');

@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { CivFormationContent, FormationAdjustmentView } from '../../../domain/civFormations';
+import type { CivFormationContent, FormationEvidenceLink } from '../../../domain/civFormations';
 import { AGE_ZH } from '../../../domain/ratings';
 import { FormationDecisionText, FormationFold, FormationText } from './FormationPresentation';
 import { formationAnchor } from './useFormationNavigation';
@@ -41,16 +40,14 @@ export function StatusBadges({ route, grouped }: { route: Route; grouped: boolea
   );
 }
 
-export function FormationDetail({ route, adjustments, support }: { route: Route; adjustments: FormationAdjustmentView[]; support?: ReactNode }) {
-  const hasDetails = route.attack || route.defense || adjustments.length > 0 || route.alternatives || support;
+export function FormationTacticsFold({ route }: { route: Route }) {
+  const hasDetails = Boolean(route.attack || route.defense || route.alternatives);
   if (!hasDetails) return null;
-  const expanded = route.presentation === 'age-progression';
-  const Heading = expanded ? 'h5' : 'h4';
-  const details = (
-    <>
+  return (
+    <FormationFold id={`${formationAnchor(route.id)}-detail`} label="攻守配合与不默认加入" closeLabel="收起攻守配合与不默认加入">
       {route.attack && (
         <div>
-          <Heading>进攻怎样配合</Heading>
+          <h4>进攻怎样配合</h4>
           <p>
             <FormationText text={route.attack} />
           </p>
@@ -58,63 +55,25 @@ export function FormationDetail({ route, adjustments, support }: { route: Route;
       )}
       {route.defense && (
         <div>
-          <Heading>防守怎样配合</Heading>
+          <h4>防守怎样配合</h4>
           <p>
             <FormationText text={route.defense} />
           </p>
         </div>
       )}
-      {adjustments.length > 0 && (
-        <>
-          <Heading>对手变化时怎样调整</Heading>
-          <dl className="formation-adjustments">
-            {adjustments.map(({ id, when, text, decision, unavailable, candidateBoundary }) => (
-              <div key={id} className={decision ? 'formation-adjustment-decision' : undefined}>
-                <dt>
-                  <FormationText text={when} />
-                </dt>
-                <dd>
-                  {text && (decision ? <FormationDecisionText action={text} decision={decision} /> : <FormationText text={text} />)}
-                  {candidateBoundary && (
-                    <span className="formation-meta">
-                      {' 候选边界：'}
-                      <FormationText text={candidateBoundary} />
-                    </span>
-                  )}
-                  {unavailable && <span className="formation-meta"> 这项补充资料暂不可用</span>}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </>
-      )}
-      {support}
       {route.alternatives && (
-        <>
-          <Heading>为什么不默认加入</Heading>
+        <div>
+          <h4>为什么不默认加入</h4>
           <p>
             <FormationText text={route.alternatives} />
           </p>
-        </>
+        </div>
       )}
-    </>
-  );
-  if (expanded) {
-    return (
-      <section className="formation-expanded-group">
-        <h4>攻守与对手调整</h4>
-        {details}
-      </section>
-    );
-  }
-  return (
-    <FormationFold id={`${formationAnchor(route.id)}-detail`} label="查看攻守与调整" closeLabel="收起攻守与调整">
-      {details}
     </FormationFold>
   );
 }
 
-function SourceLinks({ source, links }: { source: Source | null; links: Route['evidence']['links'] }) {
+function SourceLinks({ source, links }: { source: Source | null; links?: readonly FormationEvidenceLink[] }) {
   if (!source) return <p className="formation-meta">来源链接暂不可用。</p>;
   return (
     <>
@@ -140,7 +99,8 @@ function SourceLinks({ source, links }: { source: Source | null; links: Route['e
   );
 }
 
-export function FormationEvidence({ route, source }: { route: Route; source: Source | null }) {
+export function FormationEvidence({ route, source, links }: { route: Route; source: Source | null; links?: readonly FormationEvidenceLink[] }) {
+  const displayLinks = links ?? route.evidence.links;
   return (
     <>
       <dl className="formation-evidence">
@@ -183,7 +143,7 @@ export function FormationEvidence({ route, source }: { route: Route; source: Sou
           </dd>
         </div>
       </dl>
-      <SourceLinks source={source} links={route.evidence.links} />
+      <SourceLinks source={source} links={displayLinks} />
     </>
   );
 }
@@ -205,6 +165,122 @@ export function HistoricalEntities({ route }: { route: Route }) {
           </li>
         ))}
       </ul>
+    </>
+  );
+}
+
+export function HistoricalFormationDetail({ route, source }: { route: Route; source: Source | null }) {
+  const relocatedCaveats = (route.scenarios ?? []).flatMap((sc) =>
+    (sc.caveats ?? []).map((caveat) => ({ title: sc.title ?? sc.chipLabel, text: caveat.text })),
+  );
+  return (
+    <>
+      <p>
+        <FormationText text={route.condition} />
+      </p>
+      <HistoricalEntities route={route} />
+      {route.reason && (
+        <p>
+          <FormationText text={route.reason} />
+        </p>
+      )}
+      {route.limitation && (
+        <p>
+          <FormationText text={route.limitation} />
+        </p>
+      )}
+      {relocatedCaveats.length > 0 && (
+        <div>
+          <h4>原记录补充边界</h4>
+          <dl className="formation-adjustments">
+            {relocatedCaveats.map(({ title, text }, index) => (
+              <div key={`${title}-${index}`}>
+                <dt>
+                  <FormationText text={title} />
+                </dt>
+                <dd>
+                  <FormationText text={text} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+      {route.attack && (
+        <div>
+          <h4>进攻怎样配合</h4>
+          <p>
+            <FormationText text={route.attack} />
+          </p>
+        </div>
+      )}
+      {route.defense && (
+        <div>
+          <h4>防守怎样配合</h4>
+          <p>
+            <FormationText text={route.defense} />
+          </p>
+        </div>
+      )}
+      {(route.adjustments ?? []).length > 0 && (
+        <div>
+          <h4>对手变化时怎样调整</h4>
+          <dl className="formation-adjustments">
+            {route.adjustments!.map(({ id, when, text, decision, fallback }) => (
+              <div key={id} className={decision ? 'formation-adjustment-decision' : undefined}>
+                <dt>
+                  <FormationText text={when} />
+                </dt>
+                <dd>
+                  {decision ? <FormationDecisionText action={text} decision={decision} /> : <FormationText text={text} />}
+                  {fallback && (
+                    <span className="formation-meta">
+                      {' 兜底：'}
+                      <FormationText text={fallback} />
+                    </span>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+      {(route.conditionBranches ?? []).length > 0 && (
+        <div>
+          <h4>条件分支</h4>
+          <dl className="formation-adjustments">
+            {route.conditionBranches!.map((branch) => (
+              <div key={branch.id}>
+                <dt>
+                  <FormationText text={branch.title} />
+                </dt>
+                <dd>
+                  <p>
+                    <b>{branch.context.label}：</b>
+                    <FormationText text={branch.context.text} />
+                  </p>
+                  <p>
+                    <b>{branch.decision.label}：</b>
+                    <FormationText text={branch.decision.text} />
+                  </p>
+                  <p className="formation-meta">
+                    <FormationText text={branch.evidence} />
+                  </p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+      {route.alternatives && (
+        <div>
+          <h4>为什么不默认加入</h4>
+          <p>
+            <FormationText text={route.alternatives} />
+          </p>
+        </div>
+      )}
+      <FormationEvidence route={route} source={source} />
     </>
   );
 }
