@@ -374,7 +374,7 @@
 
 2026-11-25 评审中连续三单暴露出“说明文案或经验记忆与固定数据不一致”：在[数据管线与未建模提示修复](https://github.com/linhongcun/aoe2-analyzer/issues/1403)里，原单和运营复核均按游戏说明把图皮 `箭毒 (1393)` 写成作用于掷矛手（`6/7`）、投石手（`185`）且建筑侧只列三座箭塔（`79/234/235`）；直查固定 `.dat` 投射物链路（[projectile_scope.py](../scripts/projectile_scope.py) 与 `army_research.json` 节点 `1393`）后才核实，箭毒在兵种侧**仅作用于步弓系 5 个单位（`4/24/492/2579/2581`）**、不含掷矛与投石，建筑侧作用于图皮全部 5 座有攻防御建筑与城镇中心（`79/234/235/82/109`，不含无攻击的 `598 哨站`）。同期[建筑模拟器修复](https://github.com/linhongcun/aoe2-analyzer/issues/1407)直查 `buildings.json` 核实西西里 `1665 城楼` 虽基础 `atk === 0` 但 `atks.length === 5`（随时代获得攻击），若按 `b.atk === 0` 写过滤验收会直接误杀其进攻科技；[死科技过滤](https://github.com/linhongcun/aoe2-analyzer/issues/1408)直查 `units.json` 核实爆破筏 `1104` 基础生命是 `40`（错显 `60`），更正了原单误写的 `45 / 67.5`。
 
-原因是游戏内文本常做笼统概括，而需求草稿里的数值和兵种名单容易沿用印象；若不回 `.dat` 和派生数据复核就把草稿写进 PRD 验收标准，会把错误清单锁死进测试。以后评审涉及科技/被动/建筑作用范围或基础数值的 Issue，必须直接查验固定 `.dat`、`data/game/*.json` 与现有派生脚本（如 `projectile_scope.py`），在验收标准里同时写明**数据规则**与**正反例锁定**（例如箭毒排除 `6/7/185/598`、无攻过滤排除 `1665 城楼`）。
+原因是游戏内文本常做笼统概括，而需求草稿里的数值和兵种名单容易沿用印象；若不回 `.dat` 和派生数据复核就把草稿写进 PRD 验收标准，会把错误清单锁死进测试。同时存在反面陷阱：当 `.dat` 通过 `res: 33`（`EffectFunction`）把部分目标交给游戏脚本执行时，仅看原始 `Type 15` 字节命令反而会漏掉本国明确对象——例如[布图马普漏算科那评审](https://github.com/linhongcun/aoe2-analyzer/issues/1464)中，[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) 只读了 `2569`/`2571` 的 `Type 15` 命令并把「科那不改价」写进测试，漏掉了 `res: 33 = 51`（`EffectFunction51`）对马普切本国城堡独特单位 `2566`/`2568` 的 `-15%` 折价，导致等资源兵量低估约 18% 及混编 PK 胜负反转。以后评审涉及科技/被动/建筑作用范围或基础数值的 Issue，必须直接查验固定 `.dat`、`data/game/*.json` 与现有派生脚本（如 `projectile_scope.py`），遇 `res: 33` 时交叉核对固定 `techs.json` 官方说明与 `trees.json` 本国明确目标（仅在三方固定源交叉锁定时补充本国目标，同时保留 `res: 33` 维持全站估算边界，不推演未核实友军侧），并在验收标准里同时写明**数据规则**与**正反例锁定**（例如箭毒排除 `6/7/185/598`、无攻过滤排除 `1665 城楼`、布图马普排除马普切 `93 长矛兵`）。
 
 ### 未实测客户端取整的非整数费用，保留两位小数并明示边界
 
@@ -399,6 +399,12 @@
 在[持续生产字段报错与无障碍修复](https://github.com/linhongcun/aoe2-analyzer/issues/1455)评审中，核查 `src/features/production/` 全部 5 个模式与既有测试时检出三类跨工具共通陷阱：一是既有端到端测试（如 [production204.spec.ts](../tests/e2e/production204.spec.ts)）以严格单元素匹配校验 `getByRole('alert')`，若把 `role="alert"` 加到每个行内字段错误元素会触发多元素冲突；二是 [ArmyCost.tsx](../src/features/production/ArmyCost.tsx) 无条件写死 `aria-describedby="army-row-error-…"`，导致合法态产生指向不存在 DOM 节点的悬空无障碍引用；三是 [Production.tsx](../src/features/production/Production.tsx) 的「复制方案链接」仅按 URL 解码错误 `linkErrors` 禁用、未拦截计算阻断错误 `result.errors`，与 [Market.tsx](../src/features/market/Market.tsx)、[ProductionTrainCompare.tsx](../src/features/production/ProductionTrainCompare.tsx) 及 [Construction.tsx](../src/features/construction/Construction.tsx) 的口径分裂，且 [production963.spec.ts](../tests/e2e/production963.spec.ts) 锁定了链接错误态的既有文案。
 
 原因是不同工具页陆续补齐字段校验时，常只看单个报错输入框的可见性，漏核整页告警地标唯一性、合法态 ARIA 清理与分享按钮阻断口径。以后评审任何计算工具的表单就近报错与无障碍需求（如 [#1460](https://github.com/linhongcun/aoe2-analyzer/issues/1460) 等同源工单），在 PRD 范围与验收中固定写清四件事：参照 [#1164](https://github.com/linhongcun/aoe2-analyzer/issues/1164) 仅在汇总错误块保留唯一 `role="alert"`、行内字段提示仅经 `id` + `aria-describedby` 关联；`aria-describedby` 必须条件输出，验收同时覆盖非法态指向有效 `id` 与合法态移除无悬空引用；统一计算阻断错误态禁用「复制方案链接」并核查既有链接错误文案测试；同路由多模式一次盘点收口（不顺手跨路由扩范围）。
+
+### 区分「缺行小计」与「已算估算态」，跨工具接入科技须锁定叠加顺序
+
+2026-11-26 评审[生产与阵容新增费用三项科技修复](https://github.com/linhongcun/aoe2-analyzer/issues/1463)与[攻城拆建筑攻方科技开关](https://github.com/linhongcun/aoe2-analyzer/issues/1469)时检出两类跨计算工具共通陷阱：一是 [ArmyResultsPanel.tsx](../src/features/production/ArmyResultsPanel.tsx) 仅有二元 `partial`（用于存在 `status !== 'ok'` 行或无效研究的「已核实项目小计」与「未计入清单」），尚无类似 [TrainTotalResult.tsx](../src/features/production/TrainTotalResult.tsx) 的独立估算态；若把含 `res: 33` 但已按可解码单价计入的方案硬塞进 `partial=true`，页面会渲染空「未计入清单」并误导为「不能代表整套阵容」，因此不能判为“纯逻辑免 UX”，必须走体验设计补齐行/合计级估算态。二是 [siege.ts](../src/domain/siege.ts) 新增攻方科技叠加时，加法与乘法科技不满足交换律，且 `data/game/effects.json` 键序（`Counterweights` 位于 `Chemistry` 之前）与科技 ID 升序（`47` 在 `454` 之前）不同：萨拉森巨型投石机（`331`）同时勾选 `47 化学（+1）` 与 `454 配重块（×1.15）`，按 [simulator.ts](../src/domain/simulator.ts) 键序算得攻击 `231`（拆城堡 `557`），若误按 URL ID 升序叠加则会算成 `231.15`（`557.15`），与单位模拟器及 PK 悄悄分叉。
+
+原因是计算引擎复用同一份 `effects.json` 或 `unitCost` 时，下游页面既容易把「排除行」与「含未解码边界的估算」混成同一个布尔开关，也容易默认参数顺序无关。以后评审把既有科技/费用能力接入第二个工具页时，必须额外核实两件事：先查目标结果面板是否已区分「部分排除（`partial`）」与「全行计入但含估算边界（`estimated`）」，缺估算 UI 态即交体验设计；涉及加/乘混合科技叠加的计算页，在 PRD 验收中明确锁定与 `simulator.ts`（`TECH_EFFECTS` 键序）同源的叠加顺序并写明非交换算例（如萨拉森 `331 + 47 + 454`），同时按 `ceil` 逐例验算击数/向上取整阈值，避免草稿把单次增伤误写成多单位总击数下降。
 
 ## 7. 接手第一轮，以及以后
 
