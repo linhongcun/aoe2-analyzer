@@ -11,7 +11,7 @@ import { armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } fro
 import { civBonuses } from '../../src/domain/civBonus';
 import { DAT } from '../../src/domain/datEffects';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
-import { buildArmyCostUsage } from '../../scripts/army_cost_usage_build';
+import { buildArmyCostUsage } from '../../scripts/army_cost_usage_lib';
 
 let ctx: ProductionContext;
 beforeAll(async () => {
@@ -20,7 +20,7 @@ beforeAll(async () => {
 });
 
 describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入口', () => {
-  it('命令级 1 对 1 归属反例：团队归零隔离、容差内跨分桶歧义、中点命令歧义、缺项与多余命令均 fail-closed', () => {
+  it('命令级 1 对 1 归属：容差跨分桶/中点歧义、缺项/多余命令 fail-closed，且混用 add C=1/-1 合法配对通过', () => {
     const spanish = civs.find((c) => c.en === 'Spanish')!;
     const spanishBonuses = civBonuses(spanish);
     const baseIdx68 = ARMY_RESEARCH.civs.Spanish!.mods.findIndex((m) => m.Type === 101 && m.A === 68 && m.B === 3 && m.C === 0 && m.D === 0);
@@ -36,7 +36,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
             },
       );
 
-    // 1) 西班牙 t:68：非团队 mul 0.5 黄金 + 团队 set 0 黄金 -> 仅摘除非团队后仍是 0 金，未归属守卫必须拦截 t:68
+    // 1) 西班牙 t:68：非团队 mul 0.5 黄金 + 团队 set 0 黄金 -> 未归属守卫拦截 t:68
     const maskedData = structuredClone(ARMY_RESEARCH);
     maskedData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
     maskedData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 0, D: 0 });
@@ -48,7 +48,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }),
     ).toThrow(/Spanish.*未归属.*68/u);
 
-    // 2) 容差内跨 Math.round 分桶歧义：非团队 0.500000 与团队 0.500008（差 8e-6 <= 1e-5）必须报错
+    // 2) 容差内跨 Math.round 分桶歧义：非团队 0.500000 与团队 0.500008（差 8e-6 <= 1e-5）
     const tolData = structuredClone(ARMY_RESEARCH);
     tolData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
     tolData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.500008 });
@@ -60,7 +60,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }),
     ).toThrow(/容差内同时|来源无法唯一确定/u);
 
-    // 3) 中点实际命令歧义：预期相差 1.5e-5（0.500000 vs 0.500015），但实际命令 D=0.500007 同时落在两者 1e-5 容差内
+    // 3) 中点实际命令歧义：预期 0.500000 vs 0.500015，实际 D=0.500007 同时落在两者 1e-5 容差内
     const midData = structuredClone(ARMY_RESEARCH);
     midData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.500007 };
     midData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.500015 });
@@ -72,7 +72,32 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }),
     ).toThrow(/同时匹配多个来源|来源无法唯一确定/u);
 
-    // 4) 缺少匹配命令 & 多余未归属命令 -> fail-closed
+    // 4) 同来源混用 add 的两种编码 (C=1, D=-60) 与 (C=-1, D=-59.999992) 匹配预期 (-60, -59.999985)：合法 1 对 1 必须通过
+    const mixedAddData = structuredClone(ARMY_RESEARCH);
+    mixedAddData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 1, D: -60 };
+    mixedAddData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: -1, D: -59.999992 });
+    const mixedAddBonuses = spanishBonuses.map((bon) =>
+      bon.id !== 'Spanish-2'
+        ? bon
+        : {
+            ...bon,
+            dat: bon.dat.map((d) =>
+              d.tech >= 0 || !d.eco.some((e) => e.tid === 68 && e.what === '黄金')
+                ? d
+                : {
+                    ...d,
+                    eco: [
+                      ...d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, op: 'add', v: -60 } : e)),
+                      { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'add', v: -59.999985 },
+                    ],
+                  },
+            ),
+          },
+    );
+    const mixedRes = buildArmyCostUsage(ctx, mixedAddData, { civList: ['Spanish'], bonusesByCiv: { Spanish: mixedAddBonuses } });
+    expect(mixedRes.bonuses['Spanish-2']?.tids).toContain(68);
+
+    // 5) 缺少匹配命令 & 多余未归属命令 -> fail-closed
     const missingData = structuredClone(ARMY_RESEARCH);
     missingData.civs.Spanish!.mods = missingData.civs.Spanish!.mods.filter((_, i) => i !== baseIdx68);
     expect(() => buildArmyCostUsage(ctx, missingData, { civList: ['Spanish'] })).toThrow(/缺少匹配/u);
@@ -82,12 +107,13 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     expect(() => buildArmyCostUsage(ctx, extraData, { civList: ['Spanish'] })).toThrow(/未归属/u);
   });
 
-  it('按时代/配置粒度与联合摘除防掩盖：帝王非团队折价不得掩盖城堡团队未归属折价，同龄叠加残余折价亦被拦截', () => {
+  it('逐时代/配置与单资源联合摘除防掩盖：跨时代、同龄同资源及异资源加价掩盖团队折价均被拦截', () => {
     const spanish = civs.find((c) => c.en === 'Spanish')!;
     const spanishBonuses = civBonuses(spanish);
     const baseIdx68 = ARMY_RESEARCH.civs.Spanish!.mods.findIndex((m) => m.Type === 101 && m.A === 68 && m.B === 3 && m.C === 0 && m.D === 0);
+    const teamHalf68 = [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.5 }];
 
-    // 1) 跨时代反例：城堡时代仅团队 mul 0.5（120 -> 60 金），帝王时代新增正节点非团队 mul 0.5（60 -> 30 金）
+    // 1) 跨时代反例：城堡仅团队 mul 0.5，帝王新增正节点非团队 mul 0.5 -> 拦截城堡 3|full|68
     const crossAgeData = structuredClone(ARMY_RESEARCH);
     crossAgeData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
     crossAgeData.nodes['99901'] = {
@@ -124,8 +150,6 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
             ],
           },
     );
-    const teamHalf68 = [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.5 }];
-
     expect(() =>
       buildArmyCostUsage(ctx, crossAgeData, {
         civList: ['Spanish'],
@@ -134,23 +158,38 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }),
     ).toThrow(/Spanish.*3\|full\|68/u);
 
-    // 2) 同龄叠加残余反例：同在城堡与帝王叠加团队 mul 0.5 与非团队 mul 0.5（120 -> 60 -> 30 金）
-    // 单项摘除非团队仍从 30 升至 60，但联合摘除全部非团队加成后仍残留 60 < 120 折价，必须被拦截
-    const stackedData = structuredClone(ARMY_RESEARCH);
-    stackedData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
-    stackedData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.6 });
-    const stackedBonuses = spanishBonuses.map((bon) =>
+    // 2) 同龄异资源加价掩盖反例：原价 220F/120G，非团队 -70F + 团队 ×0.5G + 独立节点 +20F
+    // 基线 170F/60G，联合摘除后 240F/60G（食物高于原价但黄金仍低于 120G）-> 必须拦截残余黄金折价
+    const crossResData = structuredClone(ARMY_RESEARCH);
+    crossResData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 0, C: 1, D: -70 };
+    crossResData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.5 });
+    crossResData.nodes['99902'] = {
+      name: 'Synthetic Global Food Surcharge',
+      civ: crossResData.civs.Spanish!.id,
+      location: 0,
+      cost: [],
+      time: 0,
+      requires: [],
+      count: 0,
+      mods: [{ Type: 101, A: 68, B: 0, C: 1, D: 20 }],
+      upgrades: [],
+      combatUnits: [],
+      enables: [],
+    };
+    const crossResBonuses = spanishBonuses.map((bon) =>
       bon.id !== 'Spanish-2'
         ? bon
         : {
             ...bon,
-            dat: bon.dat.map((d) => (d.tech >= 0 ? d : { ...d, eco: d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, op: 'mul', v: 0.6 } : e)) })),
+            dat: bon.dat.map((d) =>
+              d.tech >= 0 ? d : { ...d, eco: d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, what: '食物', op: 'add', v: -70 } : e)) },
+            ),
           },
     );
     expect(() =>
-      buildArmyCostUsage(ctx, stackedData, {
+      buildArmyCostUsage(ctx, crossResData, {
         civList: ['Spanish'],
-        bonusesByCiv: { Spanish: stackedBonuses },
+        bonusesByCiv: { Spanish: crossResBonuses },
         teamEcoByCiv: { Spanish: teamHalf68 },
       }),
     ).toThrow(/残余折价.*68/u);
@@ -161,7 +200,6 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     const syntheticData = structuredClone(ARMY_RESEARCH);
     syntheticData.civs.Bohemians!.mods.push({ Type: 101, A: 45, B: 3, C: 2, D: 0.5 });
 
-    // 先确认 t:45 在全可选配置被 t:785 遮蔽为 invalid(price)，而单项配置有效按半价黄金报价（由固定数据基价推导）
     const rows4 = productionUnits(ctx, { civ: 'Bohemians', age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 }).map((u) => ({
       unit: u.id,
       qty: '1',
@@ -207,7 +245,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     expect(built.bonuses['Bohemians-0']).toEqual({ tids: [45], allFree: false, ecoOnlyUnits: [] });
   });
 
-  it('CLI 入口精确判定：缺失 --check 报错、vite-node 静/动态导入零副作用、直接与 --script 冷生成一致通过', async () => {
+  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，冷生成一致', async () => {
     const execFileAsync = promisify(execFile);
     const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
     try {
@@ -227,22 +265,29 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       unlinkSync(target);
 
       const viteNodeBin = resolve('node_modules/.bin/vite-node');
-      // 1) 缺失索引时 --check 立即报错
-      await expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir })).rejects.toThrow();
+      // 1) 即使预加载将 Error.stackTraceLimit 设为 0，普通 vite-node --check 缺文件仍必须报错而非静默退出 0
+      const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
+      writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
+      await expect(
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
+          cwd: tempDir,
+          env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
+        }),
+      ).rejects.toThrow();
 
-      // 2) 普通 vite-node 与 --script 静态/动态导入生成器均不得产生文件写入副作用
+      // 2) 即使改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
       writeFileSync(
-        join(tempDir, 'import-static.ts'),
-        "import { buildArmyCostUsage } from './scripts/army_cost_usage_build';\nconsole.log(typeof buildArmyCostUsage);\n",
+        join(tempDir, 'import-lib-static.ts'),
+        "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
       );
       writeFileSync(
-        join(tempDir, 'import-dynamic.ts'),
-        "const mod = await import('./scripts/army_cost_usage_build');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
+        join(tempDir, 'import-lib-spoof.ts'),
+        "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
       );
       for (const args of [
-        ['import-static.ts', '--out', unexpectedOut],
-        ['--script', 'import-static.ts', '--out', unexpectedOut],
-        ['import-dynamic.ts', '--out', unexpectedOut],
+        ['import-lib-static.ts', '--out', unexpectedOut],
+        ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
+        ['import-lib-spoof.ts', '--out', unexpectedOut],
       ]) {
         const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
         expect(stdout.trim()).toBe('function');
@@ -250,7 +295,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         expect(existsSync(target), args.join(' ')).toBe(false);
       }
 
-      // 3) 直接调用冷生成，并同时以普通模式与 --script 模式校验 --check
+      // 3) 普通模式冷生成，并以普通模式与 --script 模式双验证 --check
       await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts'], { cwd: tempDir });
       await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
       await execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });

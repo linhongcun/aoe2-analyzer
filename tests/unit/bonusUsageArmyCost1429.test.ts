@@ -14,7 +14,7 @@ import { allCivBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
 import { PRODUCTION_MODE_LABELS } from '../../src/domain/productionMode';
 import BonusBody, { BonusBodyContent } from '../../src/shared/ui/BonusBody';
-import { buildArmyCostUsage, formatArmyCostUsageJson } from '../../scripts/army_cost_usage_build';
+import { buildArmyCostUsage, formatArmyCostUsageJson } from '../../scripts/army_cost_usage_lib';
 // @ts-expect-error 纯 JS 脚本，没有类型声明
 import { parseImports } from '../../scripts/check-layers.mjs';
 import { validateDocument } from '../../scripts/content-schema.mjs';
@@ -152,6 +152,17 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
       const civEn = id.split('-')[0]!;
       const merged = new Set([...(indexTidsByCiv[civEn] ?? []), ...entry.tids]);
       indexTidsByCiv[civEn] = [...merged].sort((a, b) => a - b);
+
+      // 逐条独立归属校验（直接读取 effects.json 绑定的 bonus.dat，不依赖生成器）：防同文明内两加成串项
+      const bon = byId(id);
+      const isGlobalRes85 = bon.dat.some((d) => d.eco.some((e) => e.res === 85));
+      if (isGlobalRes85) {
+        expect(entry.tids, `${id} global tids`).toEqual(rawDiscountedByCiv[civEn]);
+      } else {
+        const ownedTids = new Set(bon.dat.flatMap((d) => d.eco.filter((e) => e.tid !== undefined && e.what !== '研究时间').map((e) => e.tid!)));
+        const expectedPerBonus = (rawDiscountedByCiv[civEn] ?? []).filter((tid) => ownedTids.has(tid));
+        expect(entry.tids, `${id} per-bonus attribution`).toEqual(expectedPerBonus);
+      }
     }
     expect(rawDiscountedByCiv).toEqual(indexTidsByCiv);
 
@@ -421,7 +432,7 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     expect(consumerClosure.has('src/domain/armyCost.ts')).toBe(false);
     expect(consumerClosure.has('data/game/army_cost_usage.json')).toBe(true);
 
-    const generatorClosure = transitiveClosure(['scripts/army_cost_usage_build.ts']);
+    const generatorClosure = transitiveClosure(['scripts/army_cost_usage_build.ts', 'scripts/army_cost_usage_lib.ts']);
     expect(generatorClosure.has('data/game/army_cost_usage.json')).toBe(false);
     expect(generatorClosure.has('src/data/armyCostUsage.ts')).toBe(false);
     expect(generatorClosure.has('src/domain/bonusUsage.ts')).toBe(false);
