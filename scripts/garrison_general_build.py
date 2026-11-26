@@ -310,9 +310,120 @@ def generate(d, raw):
     return result, sorted(hosts)
 
 
-def tech_data(data):
-    """The construction calculator needs technology eligibility, not occupants."""
+HOST_NUMERIC_STATS = {'attack', 'reload', 'capacity', 'total', 'max', 'projectile', 'secondaryProjectile', 'garrisonType'}
+OCC_POWER_STATS = {'attack', 'reload', 'firepower', 'total', 'secondaryProjectile'}
+
+
+def _garrison_unit_mask(unit):
+    size_class = unit.get('sizeClass', 0)
+    if size_class != 0:
+        return (1 << (size_class - 1)) if 1 <= size_class <= 7 else None
+    cls = unit.get('class')
+    if cls in (4, 59):
+        return 1
+    if cls in (0, 6, 44):
+        return 2
+    if cls in (12, 23, 36, 47):
+        return 4
+    if cls in (18, 43):
+        return 8
+    if cls == 58:
+        return 16
+    if cls in (2, 20, 21, 22):
+        return 64
+    if cls in (13, 51, 54, 55):
+        return 32
+    return None
+
+
+def _is_noop_effect(effect):
+    return (effect['op'] == 'mul' and effect['value'] == 1) or (effect['op'] == 'add' and effect['value'] == 0)
+
+
+def numeric_effect_techs(data, hosts):
+    """Derive tech IDs whose fixed garrison rules alter host or occupant numeric garrison outputs."""
+    units = data['units']
+    host_set = set(hosts)
+    host_forms = set(host_set)
+    for key, binfo in data['buildings'].items():
+        if int(key) in host_set:
+            host_forms.update(binfo.get('eraForms', []))
+            host_forms.update(binfo.get('aliases', []))
+
+    shooting_hosts = [units[str(h)] for h in host_set if str(h) in units and units[str(h)]['attack'] > 0 and units[str(h)]['reload'] > 0]
+    shooting_aliases = {h: set(data['buildings'][str(h)]['aliases']) for h in host_set if str(h) in data['buildings']}
+    shooting_produces = {uid for h in host_set if str(h) in units and units[str(h)]['attack'] > 0 and units[str(h)]['reload'] > 0
+                         for uid in data['buildings'].get(str(h), {}).get('produces', [])}
+
+    def can_occupy_shooting(uid):
+        if uid in shooting_produces:
+            return True
+        u = units.get(str(uid))
+        if not u:
+            return False
+        mask = _garrison_unit_mask(u)
+        if mask is None:
+            return False
+        for b in shooting_hosts:
+            if (b['garrisonType'] & mask) == 0:
+                continue
+            aliases = shooting_aliases.get(b['id'], {b['id']})
+            if any((t['unitId'] >= 0 and t['unitId'] in aliases) or
+                   (t['unitId'] < 0 and (t['classId'] == b['class'] or (t['classId'] == 3 and b['class'] == 52)))
+                   for t in u.get('garrisonTasks', [])):
+                return True
+        return False
+
+    def has_nonzero_firepower(uid):
+        u = units.get(str(uid))
+        if not u:
+            return False
+        if u.get('firepower', 0) != 0:
+            return True
+        return any(civ.get('baseOverrides', {}).get(str(uid), {}).get('firepower', 0) != 0
+                   for civ in data['civs'].values())
+
+    roster = set(data['rosterIds'])
+    power_occupants = {uid for uid in roster if can_occupy_shooting(uid) and has_nonzero_firepower(uid)}
+    sec_proj_owners = host_forms | power_occupants
+    sec_projectiles = set()
+    for uid in sec_proj_owners:
+        u = units.get(str(uid))
+        if u and u.get('secondaryProjectile', -1) >= 0:
+            sec_projectiles.add(u['secondaryProjectile'])
+    for civ in data['civs'].values():
+        for uid_s, ov in civ.get('baseOverrides', {}).items():
+            if int(uid_s) in sec_proj_owners and ov.get('secondaryProjectile', -1) >= 0:
+                sec_projectiles.add(ov['secondaryProjectile'])
+    for rule in list(data['techs'].values()) + list(data['ageRules'].values()) + data['conditional']:
+        for e in rule.get('effects', []):
+            if e['unit'] in sec_proj_owners and e['stat'] == 'secondaryProjectile' and e['value'] >= 0:
+                sec_projectiles.add(int(e['value']))
+
+    matched = set()
+    for table in (data['ageRules'], data['techs']):
+        for tid_s, rule in table.items():
+            for e in rule.get('effects', []):
+                if _is_noop_effect(e):
+                    continue
+                uid, stat = e['unit'], e['stat']
+                if uid in host_forms and stat in HOST_NUMERIC_STATS:
+                    matched.add(int(tid_s))
+                    break
+                if uid in sec_projectiles and stat == 'attack':
+                    matched.add(int(tid_s))
+                    break
+                if uid in roster and stat in OCC_POWER_STATS and can_occupy_shooting(uid) and (
+                        uid in power_occupants or (stat == 'firepower' and e['value'] != 0)):
+                    matched.add(int(tid_s))
+                    break
+    return sorted(matched)
+
+
+def tech_data(data, hosts):
+    """The construction calculator and tech-detail consumption classifier need eligibility and numeric rule index, not occupants."""
     return {'meta': data['meta'], 'techs': {key: True for key in data['techs']},
+            'numericEffectTechs': numeric_effect_techs(data, hosts),
             'unitUpgradeTechs': data['unitUpgradeTechs'],
             'civs': {name: {field: civ[field] for field in ('free', 'disabled')}
                      for name, civ in data['civs'].items()}}
@@ -338,7 +449,7 @@ def main():
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     data, hosts = generate(load(), raw_data())
-    for path, value in ((OUT, general_data(data)), (HOSTS, hosts), (TECHS, tech_data(data))):
+    for path, value in ((OUT, general_data(data)), (HOSTS, hosts), (TECHS, tech_data(data, hosts))):
         text = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + '\n'
         if args.check:
             if not path.exists() or path.read_text() != text:

@@ -4,9 +4,11 @@
  * 绝不以 dat.eco.length > 0 冒充已编码，仅不透明 res:33 与未消费杂项资源槽归入 unencoded。
  */
 import { ECO, type EcoDataView } from '../data/eco';
+import { RELIC_INCOME_RAW } from '../data/relicIncome';
 import { BALLISTICS_TECH_ID } from './accuracyBoundary';
 import { CONVERT_RESIST_MAX_RES, CONVERT_RESIST_MIN_RES, resistDelta } from './conversion';
 import { DAT, type DatEco, type DatFile } from './datEffects';
+import { GARRISON_NUMERIC_EFFECT_TECH_IDS } from './garrisonTechs';
 import { TRADE_FEE_RES, TRIBUTE_TAX_RES } from './marketFeeFacts';
 import type { Building, Tech, Unit } from './types';
 import { isUnitCostAttribute } from './unitCost';
@@ -20,9 +22,53 @@ const PAYOFF_GATHER_TARGETS = new Set(['task:wood', 'task:gold', 'task:stone']);
 const FARM_FOOD_RES = 36;
 const FISHING_SHIP_CLASS = 21;
 
+export interface RelicModifierSummary {
+  techId?: number | null;
+  resources?: readonly number[];
+  value?: number;
+}
+
+export interface RelicDataSummary {
+  modifiers?: Readonly<Record<string, RelicModifierSummary | undefined>>;
+}
+
+function readRelicTechIds(raw: unknown): ReadonlySet<number> {
+  if (!raw || typeof raw !== 'object') return new Set();
+  const mods = (raw as RelicDataSummary).modifiers;
+  if (!mods || typeof mods !== 'object') return new Set();
+  const ids = new Set<number>();
+  for (const m of Object.values(mods)) {
+    if (
+      m &&
+      typeof m.techId === 'number' &&
+      Number.isSafeInteger(m.techId) &&
+      Array.isArray(m.resources) &&
+      m.resources.length > 0 &&
+      typeof m.value === 'number' &&
+      Number.isFinite(m.value)
+    ) {
+      ids.add(m.techId);
+    }
+  }
+  return ids;
+}
+
+const DEFAULT_RELIC_TECH_IDS: ReadonlySet<number> = readRelicTechIds(RELIC_INCOME_RAW);
+
 export type TechDataConsumptionKind = 'simulated' | 'cost' | 'consumed' | 'unencoded';
 export type TechAdoptedDomain =
-  'market' | 'eco-payoff' | 'production' | 'eco-farm' | 'eco-fishing' | 'eco-build' | 'garrison-healing' | 'building-garrison' | 'conversion' | 'army-cost';
+  | 'market'
+  | 'eco-payoff'
+  | 'production'
+  | 'relic-income'
+  | 'eco-farm'
+  | 'eco-fishing'
+  | 'eco-build'
+  | 'garrison-healing'
+  | 'building-garrison'
+  | 'building-civ-rank'
+  | 'conversion'
+  | 'army-cost';
 export type TechNoticeDomain = 'duel-unmodeled' | 'unit-civ-rank-notice' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
 export type TechConsumedDomain = 'cost-unit' | 'cost-building' | TechAdoptedDomain | TechNoticeDomain;
 
@@ -36,6 +82,8 @@ export interface TechDataConsumption {
 export interface TechConsumptionDeps {
   dat?: DatFile;
   eco?: EcoDataView;
+  relic?: RelicDataSummary | null;
+  garrisonNumericTechIds?: ReadonlySet<number>;
   unitById?: Readonly<Record<number, Unit>>;
   buildingById?: Readonly<Record<number, Building>>;
 }
@@ -48,11 +96,13 @@ const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string
   market: { label: '市场', isToolName: true },
   'eco-payoff': { label: '经济收益', isToolName: true },
   production: { label: '持续生产', isToolName: true },
+  'relic-income': { label: '圣物收益', isToolName: true },
   'eco-farm': { label: '农田食物量', isToolName: false },
   'eco-fishing': { label: '渔船采集', isToolName: false },
   'eco-build': { label: '开局模拟', isToolName: true },
   'garrison-healing': { label: '驻军回血', isToolName: true },
-  'building-garrison': { label: '建筑驻军与满科技对照', isToolName: false },
+  'building-garrison': { label: '建筑驻军', isToolName: false },
+  'building-civ-rank': { label: '建筑满科技对照', isToolName: false },
   conversion: { label: '招降说明与阵容账本', isToolName: false },
   'army-cost': { label: '阵容账本', isToolName: true },
   'duel-unmodeled': { label: '单位 PK', isToolName: false },
@@ -161,6 +211,9 @@ export function classifyTechDataConsumption(
 
   if (isMarket) adopted.push('market');
 
+  const relicTechIds = deps.relic === undefined ? DEFAULT_RELIC_TECH_IDS : readRelicTechIds(deps.relic);
+  if (relicTechIds.has(tech.id)) adopted.push('relic-income');
+
   if (inEcoTechs && !isMarket) {
     const isEcoPayoff = ecoEffects.some((e) => e.kind === 'attr' && e.attr === 'workRate' && PAYOFF_GATHER_TARGETS.has(e.target ?? ''));
     const isFarmFood = ecoEffects.some((e) => e.kind === 'res' && e.res === FARM_FOOD_RES);
@@ -200,8 +253,16 @@ export function classifyTechDataConsumption(
     adopted.push('garrison-healing');
   }
 
-  if (datEco.some((e) => e.a !== undefined && BUILDING_GARRISON_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t))) {
+  const garrisonIds = deps.garrisonNumericTechIds ?? GARRISON_NUMERIC_EFFECT_TECH_IDS;
+  const hasBuildingExtraProj = datEco.some((e) => e.a !== undefined && BUILDING_GARRISON_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t));
+  if (garrisonIds.has(tech.id) || hasBuildingExtraProj) {
     adopted.push('building-garrison');
+  }
+  const hasBuildingCivRankExtraProj =
+    (tech.type === undefined || tech.type === 'UniqueTech') &&
+    datEco.some((e) => e.a === 102 && e.op === 'add' && e.v > 0 && (deps.buildingById ? hasMultiCivBuildingTarget(e.t) : hasBuildingTarget(e.t)));
+  if (hasBuildingCivRankExtraProj) {
+    adopted.push('building-civ-rank');
   }
 
   // 与 conversion.ts / armyCost.ts:169-175 保持一致：纯 178/179 归招降说明与阵容账本；混合抗招降槽位与其余招降规则由阵容账本采用

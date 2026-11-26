@@ -147,13 +147,16 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
     );
 
     await openTech(page, '/tech/506');
-    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；持续生产与市场工具已采用固定数据编码，其余效果以游戏说明为准');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；持续生产、市场与圣物收益工具已采用固定数据编码，其余效果以游戏说明为准');
+
+    await openTech(page, '/tech/21');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；圣物收益工具已采用固定数据编码，其余效果以游戏说明为准');
 
     await openTech(page, '/tech/578');
     await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     await openTech(page, '/tech/484');
-    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑驻军与满科技对照已采用固定数据编码，其余效果以游戏说明为准');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑驻军与建筑满科技对照已采用固定数据编码，其余效果以游戏说明为准');
 
     await openTech(page, '/tech/996');
     await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
@@ -171,7 +174,18 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
       '本页不逐条模拟属性；持续生产工具已采用固定数据编码，建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准',
     );
 
+    await openTech(page, '/tech/64');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑驻军已采用固定数据编码，其余效果以游戏说明为准');
+
     await openTech(page, '/tech/102');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑驻军已采用固定数据编码，其余效果以游戏说明为准');
+
+    await openTech(page, '/tech/1069');
+    await expect(page.locator('.detail-source')).toContainText(
+      '本页不逐条模拟属性；建筑驻军已采用固定数据编码，单位 PK 与单位满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准',
+    );
+
+    await openTech(page, '/tech/34');
     await expect(page.locator('.detail-source')).toContainText('这条科技没有已解码数值规则，以游戏说明为准');
 
     await openTech(page, '/tech/1484');

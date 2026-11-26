@@ -5,11 +5,15 @@ import { Route, Routes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees, type Core } from '../../src/data';
+import { RELIC_INCOME_RAW } from '../../src/data/relicIncome';
 import { evaluateArmyCost } from '../../src/domain/armyCost';
 import { buildBuildingCivRank } from '../../src/domain/buildingCivRank';
 import { payoffAvailable } from '../../src/domain/ecoPayoff';
+import { calculateGeneralGarrison, GENERAL_GARRISON_DATA, getGarrisonTechs } from '../../src/domain/garrisonGeneral';
+import { GARRISON_NUMERIC_EFFECT_TECH_IDS } from '../../src/domain/garrisonTechs';
 import { marketFee } from '../../src/domain/market';
 import { calculateProduction, decodeProduction } from '../../src/domain/production';
+import { calculateRelicIncome, newRelicIncomeConfig, validRelicIncomeData } from '../../src/domain/relicIncome';
 import { buildTechCostChangeView, classifyTechDataConsumption, TECH_COST_PREVIEW_COUNT } from '../../src/domain/techDetailCost';
 import { techEffectEntries } from '../../src/domain/techDetailView';
 import type { Trees } from '../../src/domain/types';
@@ -41,8 +45,11 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     for (const id of [
       '34',
       '35',
+      '64',
+      '101',
       '455',
       '484',
+      '485',
       '488',
       '499',
       '506',
@@ -55,6 +62,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       '785',
       '835',
       '996',
+      '1069',
       '1379',
       '1380',
       '1393',
@@ -63,6 +71,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     ]) {
       expect(src).not.toMatch(new RegExp(`\\b${id}\\b`));
     }
+    expect(src).not.toMatch(/tech\.id\s*[!=]==?\s*\d+|\b\d+\s*[!=]==?\s*tech\.id/);
 
     const buckets = {
       simulated: [] as number[],
@@ -84,14 +93,15 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(core.techs).toHaveLength(199);
     expect(buckets.simulated).toHaveLength(109);
     expect(buckets.cost.sort((a, b) => a - b)).toEqual([455, 488, 499, 514, 625, 782, 785, 835, 1380, 1496]);
-    // 48 项其他已消费编码：含 #1446 导出的 1379 突袭与 armyCost.ts 实际消费抗招降槽位的 756 第一次十字军东征；34/35 战船与 101/102/103 时代升级不结算 ecoTechs.effects，归入 unencoded
-    expect(buckets.consumed).toHaveLength(48);
+    // 53 项其他已消费编码：含建筑驻军固定数值规则（64/101/102/103/484/485/576/1069）、圣物收益（21/506）、#1446 导出的 1379 突袭与阵容账本已读 756；34/35 战船升级无数值规则，归入 unencoded
+    expect(buckets.consumed).toHaveLength(53);
     expect(buckets.consumed).toEqual(
-      expect.arrayContaining([15, 17, 23, 45, 46, 93, 202, 233, 315, 316, 319, 438, 439, 441, 457, 493, 506, 578, 756, 1379, 1393]),
+      expect.arrayContaining([
+        15, 17, 21, 23, 45, 46, 64, 93, 101, 102, 103, 202, 233, 315, 316, 319, 438, 439, 441, 457, 485, 493, 506, 578, 756, 1069, 1379, 1393,
+      ]),
     );
     expect(buckets.unencoded.sort((a, b) => a - b)).toEqual([
-      16, 21, 28, 34, 35, 64, 101, 102, 103, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080,
-      1464, 1484,
+      16, 28, 34, 35, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
     ]);
     expect(buckets.simulated.length + buckets.cost.length + buckets.consumed.length + buckets.unencoded.length).toBe(199);
   });
@@ -270,20 +280,34 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text493).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text506 = visible(markup('/tech/506'));
-    expect(text506).toContain('本页不逐条模拟属性；持续生产与市场工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text506).toContain('本页不逐条模拟属性；持续生产、市场与圣物收益工具已采用固定数据编码，其余效果以游戏说明为准');
     expect(text506).not.toContain('经济收益');
+
+    const text21 = visible(markup('/tech/21'));
+    expect(text21).toContain('本页不逐条模拟属性；圣物收益工具已采用固定数据编码，其余效果以游戏说明为准');
 
     const text578 = visible(markup('/tech/578'));
     expect(text578).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
     expect(text578).not.toContain('持续生产');
 
     const text484 = visible(markup('/tech/484'));
-    expect(text484).toContain('本页不逐条模拟属性；建筑驻军与满科技对照已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text484).toContain('本页不逐条模拟属性；建筑驻军与建筑满科技对照已采用固定数据编码，其余效果以游戏说明为准');
     expect(text484).not.toContain('单位 PK');
 
     const text576 = visible(markup('/tech/576'));
-    expect(text576).toContain('本页不逐条模拟属性；建筑驻军与满科技对照已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text576).toContain('本页不逐条模拟属性；建筑驻军与建筑满科技对照已采用固定数据编码，其余效果以游戏说明为准');
     expect(text576).not.toContain('单位 PK');
+
+    for (const id of [64, 101, 102, 103]) {
+      const text = visible(markup(`/tech/${id}`));
+      expect(text).toContain('本页不逐条模拟属性；建筑驻军已采用固定数据编码，其余效果以游戏说明为准');
+      expect(text).not.toContain('建筑满科技对照');
+    }
+
+    for (const id of [485, 1069]) {
+      const text = visible(markup(`/tech/${id}`));
+      expect(text).toContain('本页不逐条模拟属性；建筑驻军已采用固定数据编码，单位 PK 与单位满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    }
 
     const text996 = visible(markup('/tech/996'));
     expect(text996).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
@@ -314,8 +338,8 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text65).toContain('本页不逐条模拟属性；渔船采集与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
     expect(text65).not.toContain('经济收益');
 
-    // 排除项（仅 res:33、真无编码与仅读研究费用/时间的时代和战船升级）：1484 / 21 / 573 / 34 / 35 / 101 / 102 / 103
-    for (const id of [1484, 21, 573, 34, 35, 101, 102, 103]) {
+    // 排除项（仅 res:33、真无编码、未消费资源槽与仅读研究费用/时间的战船升级）：1484 / 573 / 34 / 35 / 16 / 483 / 1080
+    for (const id of [1484, 573, 34, 35, 16, 483, 1080]) {
       const html = markup(`/tech/${id}`);
       const text = visible(html);
       expect(html).not.toContain('id="tech-cost-changes"');
@@ -364,15 +388,103 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(towerRank.rows.find((r) => r.civ === civ996)?.tags.some((t) => t.includes('强化堡垒'))).toBe(true);
     expect(classifyTechDataConsumption(core.techById[484]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'building-garrison',
+      'building-civ-rank',
     ]);
     expect(classifyTechDataConsumption(core.techById[576]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'building-garrison',
+      'building-civ-rank',
     ]);
     expect(classifyTechDataConsumption(core.techById[996]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'building-combat-notice',
     ]);
 
-    // 506 大干道：印度斯坦合法骆驼兵（329）方案在持续生产下无报错且提升采金速率、市场采用 10% 手续费，但不在经济收益工具可选清单中
+    // 101-103 时代规则、64 炮塔、485 胡尔切掷矛兵与 1069 弩箭匣：均在建筑驻军真实改变数值
+    const donjon = core.buildingById[1665]!;
+    const donjonAges = [2, 3, 4].map((age) => {
+      const res = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] });
+      return [res.baseProjectiles, res.maxProjectiles];
+    });
+    expect(donjonAges).toEqual([
+      [1, 5],
+      [2, 8],
+      [3, 12],
+    ]);
+    for (const [tid, age] of [
+      [101, 2],
+      [102, 3],
+      [103, 4],
+    ] as const) {
+      const withoutAge = {
+        ...GENERAL_GARRISON_DATA,
+        ageRules: { ...GENERAL_GARRISON_DATA.ageRules, [tid]: { ...GENERAL_GARRISON_DATA.ageRules[tid]!, effects: [] } },
+      };
+      const withRes = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] });
+      const withoutRes = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] }, withoutAge);
+      expect(withRes.baseProjectiles).toBeGreaterThan(withoutRes.baseProjectiles);
+      expect(withRes.maxProjectiles).toBeGreaterThan(withoutRes.maxProjectiles);
+      expect(classifyTechDataConsumption(core.techById[tid]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+        'building-garrison',
+      ]);
+    }
+
+    const tc = core.buildingById[109]!;
+    expect(getGarrisonTechs(ctx, tc, { civ: 'Turks', age: 4, techs: [], rows: [] }).some((t) => t.id === 64)).toBe(true);
+    const tcTurksBefore64 = calculateGeneralGarrison(ctx, tc, { civ: 'Turks', age: 4, techs: [], rows: [{ unitId: 83, count: '10', entry: 'enter' }] });
+    const tcTurksAfter64 = calculateGeneralGarrison(ctx, tc, { civ: 'Turks', age: 4, techs: [64], rows: [{ unitId: 83, count: '10', entry: 'enter' }] });
+    expect(tcTurksBefore64.errors).toEqual([]);
+    expect(tcTurksAfter64.errors).toEqual([]);
+    expect(tcTurksAfter64.buildingPower).toBeGreaterThan(tcTurksBefore64.buildingPower!);
+    expect(classifyTechDataConsumption(core.techById[64]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-garrison',
+    ]);
+
+    const mayanBefore485 = calculateGeneralGarrison(ctx, tc, { civ: 'Mayans', age: 3, techs: [], rows: [{ unitId: 6, count: '5', entry: 'enter' }] });
+    const mayanAfter485 = calculateGeneralGarrison(ctx, tc, { civ: 'Mayans', age: 3, techs: [485], rows: [{ unitId: 6, count: '5', entry: 'enter' }] });
+    expect(mayanAfter485.garrisonPower).toBeGreaterThan(mayanBefore485.garrisonPower!);
+    expect(classifyTechDataConsumption(core.techById[485]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-garrison',
+      'duel-unmodeled',
+      'unit-civ-rank-notice',
+    ]);
+
+    const castle = core.buildingById[82]!;
+    const shuBefore1069 = calculateGeneralGarrison(ctx, castle, { civ: 'Shu', age: 4, techs: [], rows: [{ unitId: 492, count: '5', entry: 'enter' }] });
+    const shuAfter1069 = calculateGeneralGarrison(ctx, castle, { civ: 'Shu', age: 4, techs: [1069], rows: [{ unitId: 492, count: '5', entry: 'enter' }] });
+    expect(shuAfter1069.garrisonPower).toBeGreaterThan(shuBefore1069.garrisonPower!);
+    expect(shuAfter1069.totalProjectiles).toBeGreaterThan(shuBefore1069.totalProjectiles!);
+    expect(classifyTechDataConsumption(core.techById[1069]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'building-garrison',
+      'duel-unmodeled',
+      'unit-civ-rank-notice',
+    ]);
+    expect(GARRISON_NUMERIC_EFFECT_TECH_IDS.has(623)).toBe(false);
+    expect(GARRISON_NUMERIC_EFFECT_TECH_IDS.has(1080)).toBe(false);
+
+    // 21 无神论 & 506 大干道：圣物收益工具直接套用固定倍率（21: ×0.5，506: ×1.1）
+    expect(validRelicIncomeData(RELIC_INCOME_RAW)).toBe(true);
+    if (!validRelicIncomeData(RELIC_INCOME_RAW)) throw new Error('invalid relic data');
+    const relicBase = calculateRelicIncome({ ...newRelicIncomeConfig(), civ: 'Burgundians', count: '1', minutes: '1' }, RELIC_INCOME_RAW);
+    const relicAtheism = calculateRelicIncome({ ...newRelicIncomeConfig(), civ: 'Burgundians', count: '1', minutes: '1', atheism: 'one' }, RELIC_INCOME_RAW);
+    expect(relicBase.resources.Gold.perMinute).toBe(30);
+    expect(relicBase.resources.Food.perMinute).toBe(20);
+    expect(relicAtheism.resources.Gold.perMinute).toBe(15);
+    expect(relicAtheism.resources.Food.perMinute).toBe(10);
+    expect(classifyTechDataConsumption(core.techById[21]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'relic-income',
+    ]);
+
+    const relicHindBase = calculateRelicIncome(
+      { ...newRelicIncomeConfig(), civ: 'Hindustanis', count: '1', minutes: '1', grandTrunkRoad: false },
+      RELIC_INCOME_RAW,
+    );
+    const relicHindGtr = calculateRelicIncome(
+      { ...newRelicIncomeConfig(), civ: 'Hindustanis', count: '1', minutes: '1', grandTrunkRoad: true },
+      RELIC_INCOME_RAW,
+    );
+    expect(relicHindBase.resources.Gold.perMinute).toBe(30);
+    expect(relicHindGtr.resources.Gold.perMinute).toBeCloseTo(33, 5);
+
+    // 506 大干道：印度斯坦合法骆驼兵（329）方案在持续生产下无报错且提升采金速率、市场采用 10% 手续费、圣物收益采用 ×1.1，但不在经济收益工具可选清单中
     const payoffIds = payoffAvailable(ctx, { civ: 'Hindustanis', age: 4 }).map((t) => t.id);
     expect(payoffIds).not.toContain(506);
     expect(marketFee({ civ: 'Hindustanis', guilds: false, unique: true })).toBe(0.1);
@@ -400,6 +512,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(classifyTechDataConsumption(core.techById[506]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'production',
       'market',
+      'relic-income',
     ]);
 
     // 756 第一次十字军东征：阵容账本从混合规则提取 res:178/179 抗招降，西西里骑士方案可正常纳入并计研究费 400 食 / 300 金

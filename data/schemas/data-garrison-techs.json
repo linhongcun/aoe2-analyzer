@@ -48,6 +48,13 @@
         "pattern": "^(0|[1-9][0-9]*)$"
       }
     },
+    "numericEffectTechs": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "uniqueItems": true
+    },
     "unitUpgradeTechs": {
       "type": "object",
       "additionalProperties": {
@@ -89,6 +96,6 @@
       }
     }
   },
-  "required": ["meta", "techs", "unitUpgradeTechs", "civs"],
+  "required": ["meta", "techs", "numericEffectTechs", "unitUpgradeTechs", "civs"],
   "additionalProperties": false
 }
