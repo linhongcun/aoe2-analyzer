@@ -41,18 +41,34 @@ describe('#1448 科技来源说明与站内工具真实消费行为一致', () =
       { tid: 279, task: 'stone', farm: '0', rateKey: 'stone', affectsDefaultRealCost: true },
       { tid: 13, task: 'farm', farm: '1', rateKey: 'farm', affectsDefaultRealCost: false },
     ];
+    const prereqChain = (tid: number): number[] => {
+      const chain: number[] = [];
+      let pre = core.techById[tid]?.pre;
+      while (pre) {
+        chain.push(pre);
+        pre = core.techById[pre]?.pre;
+      }
+      return chain;
+    };
     for (const { tid, task, farm, rateKey, affectsDefaultRealCost } of cases) {
+      const prereqs = prereqChain(tid);
       const baseCfg = { ...DEFAULT_CONSTRUCTION, civ: 'Byzantines', age: 4, builders: '4', task, farm };
-      const before = calculateConstruction(ctx, { ...baseCfg, techs: [] });
-      const after = calculateConstruction(ctx, { ...baseCfg, techs: [tid] });
+      const before = calculateConstruction(ctx, { ...baseCfg, techs: prereqs });
+      const after = calculateConstruction(ctx, { ...baseCfg, techs: [...prereqs, tid] });
       expect(before.errors, `#${tid} before`).toEqual([]);
       expect(after.errors, `#${tid} after`).toEqual([]);
-      expect(after.target!.forgone!, `#${tid} construction forgone`).toBeGreaterThan(before.target!.forgone!);
+      expect(after.target!.forgone!, `#${tid} isolated construction forgone delta`).toBeGreaterThan(before.target!.forgone!);
 
-      const rcBefore = gatherModel(4, 'Byzantines', { techIds: new Set() }).rate[rateKey];
-      const rcAfter = gatherModel(4, 'Byzantines', { techIds: new Set([tid]) }).rate[rateKey];
-      if (affectsDefaultRealCost) expect(rcAfter, `#${tid} default realCost`).toBeGreaterThan(rcBefore);
-      else expect(rcAfter, `#${tid} default realCost unchanged when farmTiles=0`).toBe(rcBefore);
+      const rcBefore = gatherModel(4, 'Byzantines', { techIds: new Set(prereqs) }).rate[rateKey];
+      const rcAfter = gatherModel(4, 'Byzantines', { techIds: new Set([...prereqs, tid]) }).rate[rateKey];
+      if (affectsDefaultRealCost) {
+        expect(rcAfter, `#${tid} isolated default realCost delta`).toBeGreaterThan(rcBefore);
+      } else {
+        expect(rcAfter, `#${tid} default realCost unchanged when farmTiles=0`).toBe(rcBefore);
+        const rcWalkBefore = gatherModel(4, 'Byzantines', { techIds: new Set(prereqs), farmTiles: 3 }).rate[rateKey];
+        const rcWalkAfter = gatherModel(4, 'Byzantines', { techIds: new Set([...prereqs, tid]), farmTiles: 3 }).rate[rateKey];
+        expect(rcWalkAfter, `#${tid} isolated realCost delta when farmTiles=3`).toBeGreaterThan(rcWalkBefore);
+      }
 
       const domains = classifyTechDataConsumption(core.techById[tid]!, false, {
         unitById: core.unitById,
