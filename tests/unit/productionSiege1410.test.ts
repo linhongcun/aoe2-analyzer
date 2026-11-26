@@ -262,29 +262,44 @@ describe('Issue 1410: 持续生产接入大干道 (506) 与跨工具零漂移隔
     expect(Number(tradeWithout.target!.toFixed(2))).toBe(163.64);
     expect(tradeWith.target).toBe(tradeWithout.target);
 
-    // 7. 开局模拟 (buildSim) 显式手动研究 506 不触发大干道采金倍率（法兰克与印度斯坦均零漂移）
+    // 7. 开局模拟 (buildSim) 显式手动研究 506 不触发大干道采金倍率（可达检查点 + 研究先于采样 + 正对照防空过）
     const ecoClone = structuredClone(ECO as unknown as EcoData);
     ecoClone.villager.trainTime = 100;
-    ecoClone.techs[506] = { ...(ecoClone.techs[506] ?? { at: 82, cost: {}, researchTime: 10 }), cost: {}, researchTime: 10 };
+    ecoClone.buildings[82] = { ...(ecoClone.buildings[82] ?? { buildTime: 1, cost: {} }), buildTime: 1, cost: {} };
+    ecoClone.techs[506] = { ...(ecoClone.techs[506] ?? { at: 82, cost: {}, researchTime: 10 }), at: 82, cost: {}, researchTime: 10 };
     const ups = Object.fromEntries(CORE.units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
     const makeGoldBo = (withResearch: boolean): BuildOrder => ({
       ...buildOrders[0]!,
       id: 'probe-1410',
-      target: { age: 4, vils: 6 },
+      target: { age: 4, vils: 4 },
       steps: [
         {
           vils: 3,
-          actions: [{ type: 'gather', task: 'gold', count: 3 }, ...(withResearch ? [{ type: 'research' as const, tech: 506 }] : [])],
+          actions: [
+            { type: 'build', building: 82 },
+            { type: 'gather', task: 'gold', count: 3 },
+          ],
         },
-        { vils: 6, actions: [] },
+        { vils: 3, actions: withResearch ? [{ type: 'research' as const, tech: 506 }] : [] },
+        { vils: 4, actions: [] },
       ],
     });
-    const franksNo506 = simulateBuild(makeGoldBo(false), 'Franks', ecoClone, ups, { autoHouses: false });
-    const franksWith506 = simulateBuild(makeGoldBo(true), 'Franks', ecoClone, ups, { autoHouses: false });
-    expect(franksWith506.steps[1]!.stock.gold).toBe(franksNo506.steps[1]!.stock.gold);
-    const hindNo506 = simulateBuild(makeGoldBo(false), 'Hindustanis', ecoClone, ups, { autoHouses: false });
-    const hindWith506 = simulateBuild(makeGoldBo(true), 'Hindustanis', ecoClone, ups, { autoHouses: false });
-    expect(hindWith506.steps[1]!.stock.gold).toBe(hindNo506.steps[1]!.stock.gold);
+    for (const civ of ['Franks', 'Hindustanis'] as const) {
+      const no506 = simulateBuild(makeGoldBo(false), civ, ecoClone, ups, { autoHouses: true });
+      const with506 = simulateBuild(makeGoldBo(true), civ, ecoClone, ups, { autoHouses: true });
+      expect(with506.steps.flatMap((s) => s.anomalies).some((a) => a.type === 'timeout')).toBe(false);
+      expect(with506.steps[1]!.action).toBe('research');
+      expect(with506.steps[1]!.doneAt).toBeLessThan(with506.steps[2]!.startAt);
+      expect(with506.steps[2]!.startAt).toBeLessThan(3600);
+      expect(with506.steps[2]!.stock.gold).toBeGreaterThan(100);
+      expect(with506.steps[2]!.stock.gold).toBe(no506.steps[2]!.stock.gold);
+    }
+    // 正对照：若 506 错误注入 ecoTechs，同一可达探针黄金库存必严格升高，确保上述零漂移断言非空过
+    const leakedEco = structuredClone(ecoClone);
+    leakedEco.ecoTechs['506'] = structuredClone(ecoClone.civEcoTechs!['506']!);
+    const baselineHind = simulateBuild(makeGoldBo(true), 'Hindustanis', ecoClone, ups, { autoHouses: true });
+    const leakedHind = simulateBuild(makeGoldBo(true), 'Hindustanis', leakedEco, ups, { autoHouses: true });
+    expect(leakedHind.steps[2]!.stock.gold).toBeGreaterThan(baselineHind.steps[2]!.stock.gold);
 
     // 8. #486 教学审计 ECO 指纹保持精确一致
     const ecoJson = JSON.parse(readFileSync(new URL('../../data/game/eco.json', import.meta.url), 'utf8')) as {
@@ -407,6 +422,26 @@ describe('Issue 1410: 六国同源经济告警去重与窄屏括注渲染', () =
     ];
     const merged = mergeProductionEcoWarnings(multiSources, ['农民可直接存放食物'], new Set(), [entry(901, 0), entry(902, 0)]);
     expect(merged).toEqual(['农民可直接存放食物（该加成另含农田采集 −5%、伐木 +10%）：该文明经济机制未计入，使用已支持的基础采集模型。']);
+
+    // 首条可合并、次条无配对且原文已含相同数值（兼容 ASCII - 与 Unicode −）：保持原位行序，且不重复追加括号
+    const inPlaceSources: CivGatherSource[] = [
+      { key: 'task:farm:workRate', label: '农田采集 −5%', techs: [901], fromTree: false },
+      { key: 'res:267', label: '独立未配对加成', techs: [999], fromTree: false },
+    ];
+    expect(mergeProductionEcoWarnings(inPlaceSources, ['农民直接存放食物（农田采集 -5%）'], new Set(), [entry(901, 0)])).toEqual([
+      '农民直接存放食物（农田采集 -5%）：该文明经济机制未计入，使用已支持的基础采集模型。',
+      '独立未配对加成：采集加成未计入，使用已支持的基础采集模型。',
+    ]);
+
+    // 原文出现其他项的相同数值（如移速 +5%）不应误抑不同项的「伐木 +5%」
+    expect(
+      mergeProductionEcoWarnings(
+        [{ key: 'task:wood:workRate', label: '伐木 +5%', techs: [903], fromTree: false }],
+        ['农民直接存放食物且村民移速 +5%'],
+        new Set(),
+        [entry(903, 0)],
+      ),
+    ).toEqual(['农民直接存放食物且村民移速 +5%（该加成另含伐木 +5%）：该文明经济机制未计入，使用已支持的基础采集模型。']);
   });
 
   it('ProductionWarningText 与 CompareNumberText 对括注整段标签套 .num.nw 并保持普通数值分段', () => {

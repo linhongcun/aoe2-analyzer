@@ -45,7 +45,9 @@ export function resolveGatherBonusIdx(source: CivGatherSource, entries: readonly
 
 export const isEconomicBonusText = (s: string) => /采集|农民|农田|伐木|采金|采石|矿工|携带|存放/.test(s) && !/免费|费用|成本/.test(s);
 
-/** 合并同源的采集未计入告警与文明加成经济文本告警；无法精确归属同一条 civ.bon 时保守保留两条原告警。 */
+const normalizeForMatch = (s: string) => s.replace(/\u2212/g, '-').replace(/\s+/g, '');
+
+/** 合并同源的采集未计入告警与文明加成经济文本告警；首条匹配来源原位输出合并行，避免移动行序或重复原文已有数值。 */
 export function mergeProductionEcoWarnings(
   unsupportedSources: readonly CivGatherSource[],
   bonuses: readonly string[],
@@ -56,29 +58,39 @@ export function mergeProductionEcoWarnings(
   bonuses.forEach((text, idx) => {
     if (isEconomicBonusText(text) && !appliedSources.has(text)) eligible.add(idx);
   });
-  const unpaired: string[] = [];
+  const resolvedIndices: (number | null)[] = [];
   const pairedLabels = new Map<number, string[]>();
   for (const source of unsupportedSources) {
     const idx = resolveGatherBonusIdx(source, datEntries);
     if (idx !== null && eligible.has(idx)) {
+      resolvedIndices.push(idx);
       const list = pairedLabels.get(idx) ?? [];
       if (!list.includes(source.label)) list.push(source.label);
       pairedLabels.set(idx, list);
     } else {
-      unpaired.push(`${source.label}：采集加成未计入，使用已支持的基础采集模型。`);
+      resolvedIndices.push(null);
     }
   }
-  const mergedBonuses: string[] = [];
-  bonuses.forEach((text, idx) => {
-    if (!eligible.has(idx)) return;
-    const paired = pairedLabels.get(idx);
-    if (paired) {
-      const extraNumeric = paired.filter((label) => /[+\u2212-]\d+/.test(label));
-      const suffix = extraNumeric.length ? `（该加成另含${extraNumeric.join('、')}）` : '';
-      mergedBonuses.push(`${text}${suffix}：该文明经济机制未计入，使用已支持的基础采集模型。`);
-    } else {
-      mergedBonuses.push(`${text}：该文明经济机制未计入（已单独列明的基础属性加成除外）。`);
+  const out: string[] = [];
+  const emitted = new Set<number>();
+  unsupportedSources.forEach((source, i) => {
+    const idx = resolvedIndices[i]!;
+    if (idx === null) {
+      out.push(`${source.label}：采集加成未计入，使用已支持的基础采集模型。`);
+      return;
     }
+    if (emitted.has(idx)) return;
+    emitted.add(idx);
+    const text = bonuses[idx]!;
+    const normText = normalizeForMatch(text);
+    const paired = pairedLabels.get(idx) ?? [];
+    const extraNumeric = paired.filter((label) => /[+\u2212-]\d+/.test(label) && !normText.includes(normalizeForMatch(label)));
+    const suffix = extraNumeric.length ? `（该加成另含${extraNumeric.join('、')}）` : '';
+    out.push(`${text}${suffix}：该文明经济机制未计入，使用已支持的基础采集模型。`);
   });
-  return [...unpaired, ...mergedBonuses];
+  bonuses.forEach((text, idx) => {
+    if (!eligible.has(idx) || emitted.has(idx)) return;
+    out.push(`${text}：该文明经济机制未计入（已单独列明的基础属性加成除外）。`);
+  });
+  return out;
 }
