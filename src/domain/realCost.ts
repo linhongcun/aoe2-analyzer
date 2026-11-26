@@ -68,6 +68,10 @@ export interface CivGatherLine {
   label: string;
   techs: number[];
 }
+export interface CivGatherSource extends CivGatherLine {
+  key: string;
+  fromTree: boolean;
+}
 export interface GatherModel {
   age: number;
   civ: string;
@@ -105,8 +109,46 @@ export const gatherBonusIdx = (civ: string): number[] => Object.values(SOURCED[c
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
 const sign = (n: number) => (n < 0 ? `\u2212${-n}` : `+${n}`);
 
-/** 不传 options 时保持原来的「所选时代经济科技全研究」口径。 */
-export function gatherModel(age: number, civ = '', options: { techIds?: ReadonlySet<number>; walkTiles?: number; farmTiles?: number } = {}): GatherModel {
+function collectCivGather(age: number, civ: string) {
+  const civMods: Record<string, { m: Mod; zh: string; techs: number[]; fromTree: boolean; exact: boolean }> = {};
+  const src = SOURCED[civ] ?? {};
+  for (const row of (eco.civEco[civ] ?? []) as { age: number; source?: string; tech?: number; effects: EffectLike[] }[]) {
+    if (row.source === 'team' || row.age > age) continue;
+    for (const e of row.effects) {
+      const r = relevant(e);
+      if (!r) continue;
+      const c = (civMods[r.key] ??= { m: { mul: 1, add: 0 }, zh: r.zh, techs: [], fromTree: false, exact: true });
+      if (row.source === 'tree') c.fromTree = true;
+      if (row.tech !== undefined && !c.techs.includes(row.tech)) c.techs.push(row.tech);
+      if (e.kind !== 'attr' || e.op !== 'mul') c.exact = false;
+      else c.m.mul *= e.v ?? 1;
+    }
+  }
+  const applied: (CivGatherLine & { source: string; key: string; mul: number })[] = [];
+  const unsupported: CivGatherSource[] = [];
+  for (const [key, c] of Object.entries(civMods)) {
+    const s = src[key];
+    if (s === 'drop') continue;
+    if (typeof s?.value === 'number') c.m = { mul: s.value, add: 0 };
+    const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
+    if (s !== undefined && c.exact) {
+      applied.push({ key, mul: c.m.mul, label, techs: c.techs, source: civByEn(civ)?.bon[s.bonus] ?? '' });
+    } else unsupported.push({ key, label, techs: c.techs, fromTree: c.fromTree });
+  }
+  return { applied, unsupported };
+}
+
+/** 未计入的文明采集加成来源（带属性/资源键与科技树标记，供持续生产同源告警合并使用）。 */
+export function gatherUnsupportedSources(age: number, civ: string): CivGatherSource[] {
+  return collectCivGather(age, civ).unsupported;
+}
+
+/** 不传 options 时保持原来的「所选时代经济科技全研究」口径；文明专属采集独科须调用方显式传 includeCivEcoTechs 才生效。 */
+export function gatherModel(
+  age: number,
+  civ = '',
+  options: { techIds?: ReadonlySet<number>; walkTiles?: number; farmTiles?: number; includeCivEcoTechs?: boolean } = {},
+): GatherModel {
   const mods: Record<string, Mod> = {};
   const push = (key: string, op: string | undefined, v: number) => {
     const m = (mods[key] ??= { mul: 1, add: 0 });
@@ -117,32 +159,21 @@ export function gatherModel(age: number, civ = '', options: { techIds?: Readonly
     const enabled = options.techIds ? options.techIds.has(Number(id)) : t.age <= age;
     if (enabled) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
   }
-
-  const civMods: Record<string, { m: Mod; zh: string; techs: number[]; exact: boolean }> = {};
-  const src = SOURCED[civ] ?? {};
-  for (const row of (eco.civEco[civ] ?? []) as { age: number; source?: string; tech?: number; effects: EffectLike[] }[]) {
-    if (row.source === 'team' || row.age > age) continue;
-    for (const e of row.effects) {
-      const r = relevant(e);
-      if (!r) continue;
-      const c = (civMods[r.key] ??= { m: { mul: 1, add: 0 }, zh: r.zh, techs: [], exact: true });
-      if (row.tech !== undefined && !c.techs.includes(row.tech)) c.techs.push(row.tech);
-      if (e.kind !== 'attr' || e.op !== 'mul') c.exact = false;
-      else c.m.mul *= e.v ?? 1;
+  if (options.includeCivEcoTechs && options.techIds && eco.civEcoTechs) {
+    for (const [id, t] of Object.entries(eco.civEcoTechs) as [string, { civ: string; age: number; effects: EffectLike[] }][]) {
+      if (t.civ === civ && t.age <= age && options.techIds.has(Number(id))) {
+        for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
+      }
     }
   }
-  const applied: GatherModel['applied'] = [],
-    unsupported: CivGatherLine[] = [];
-  for (const [key, c] of Object.entries(civMods)) {
-    const s = src[key];
-    if (s === 'drop') continue;
-    if (typeof s?.value === 'number') c.m = { mul: s.value, add: 0 };
-    const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
-    if (s !== undefined && c.exact) {
-      push(key, 'mul', c.m.mul);
-      applied.push({ label, techs: c.techs, source: civByEn(civ)?.bon[s.bonus] ?? '' });
-    } else unsupported.push({ label, techs: c.techs });
+
+  const collected = collectCivGather(age, civ);
+  const applied: GatherModel['applied'] = [];
+  for (const item of collected.applied) {
+    push(item.key, 'mul', item.mul);
+    applied.push({ label: item.label, techs: item.techs, source: item.source });
   }
+  const unsupported: CivGatherLine[] = collected.unsupported.map(({ label, techs }) => ({ label, techs }));
 
   const get = (key: string, base: number) => {
     const m = mods[key];

@@ -13,7 +13,10 @@ export const SIEGE_SPEED = 1.7;
 export const SIEGE_DEFAULT_UNIT_ID = 1258;
 export const SIEGE_DEFAULT_N = 4;
 export const SIEGE_DEFAULT_BUILDING_ID = 82;
-export const SIEGE_UNIT_IDS: readonly number[] = [1258, 422, 548, 331, 280, 550, 588, 36];
+export const SIEGE_UNIT_IDS: readonly number[] = [1258, 422, 548, 1744, 1746, 331, 280, 550, 588, 36];
+export function siegeUnitCounter(unitId: number): '头' | '台' {
+  return unitId === 1744 || unitId === 1746 ? '头' : '台';
+}
 export const SIEGE_COMPARE_IDS: readonly number[] = [109, 82, 79, 117, 487];
 /** 石墙、城门不从建筑页进入攻城工具。对照表仍按既有攻城页显示。 */
 const SIEGE_BUILDING_ENTRY_EXCLUDED = new Set([117, 487]);
@@ -147,8 +150,8 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   for (const [category, amount] of u.atks) {
     if (category === '近战' || category === '穿刺') attacks[category] = category === main ? attacker.atk : amount;
   }
-  // 旧 ram/331 简表路径保持既有模型；手推炮使用上方独立的完整类别证据。
-  const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣']);
+  // 旧 ram/331/南亚攻城象简表路径保持既有模型；手推炮使用上方独立的完整类别证据。
+  const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣', '村民', '掷矛手']);
   const armors: Record<string, number> = { 近战: defender.ma, 穿刺: defender.pa, 所有建筑: defender.barm };
   const filtered = Object.fromEntries(
     Object.entries(attacks).filter(([category, amount]) => !irrelevant.has(category) && (category in armors || amount !== 0)),

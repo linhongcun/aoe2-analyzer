@@ -5,7 +5,9 @@ import { DAT, type DatEco } from './datEffects';
 import { matchingGenericFx } from './effects';
 import { AGE_ZH } from './ratings';
 import { unitCost } from './unitCost';
-import { gatherModel, type GatherRes } from './realCost';
+import { gatherModel, gatherUnsupportedSources, type GatherRes } from './realCost';
+import { isEconomicBonusText, mergeProductionEcoWarnings, resolveGatherBonusIdx } from './productionWarnings';
+export { mergeProductionEcoWarnings, resolveGatherBonusIdx };
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, EARLY_MILITARY_TECH_AGES, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
@@ -50,18 +52,28 @@ const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as con
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
 const unique = (s: string[]) => [...new Set(s)];
 
+/** 文明专属的采集科技（仅由持续生产主工具按需勾选，不并入通用 ecoTechs）。 */
+export function isCivEcoTech(id: number): boolean {
+  return !!eco.civEcoTechs && Object.hasOwn(eco.civEcoTechs, String(id));
+}
+
 /** 勃艮第采集科技的提前时代只属于生产口径，军事科技提前（含波希米亚化学）共享 EARLY_MILITARY_TECH_AGES，均须在 techAvailability.ts 点名。 */
 export function productionTechAge(t: Tech, civ: string) {
   if (civ === 'Burgundians' && eco.ecoTechs[t.id] && isGatherTech(t)) return Math.max(1, t.age - 1);
   return Object.hasOwn(EARLY_MILITARY_TECH_AGES, civ) ? (EARLY_MILITARY_TECH_AGES[civ]?.[t.id] ?? t.age) : t.age;
 }
-function isGatherTech(t: Tech) {
-  return (eco.ecoTechs[t.id]?.effects ?? []).some(
+function isGatherEffects(effects: readonly { kind: string; target?: string; attr?: string }[] | undefined): boolean {
+  return (effects ?? []).some(
     (e) =>
       e.kind === 'attr' &&
       ['task:farm', 'task:wood', 'task:gold', 'task:stone', `class:${VILLAGER_CLASS}`].includes(e.target ?? '') &&
       ['workRate', 'carry', 'speed'].includes(e.attr ?? ''),
   );
+}
+function isGatherTech(t: Tech, civ?: string) {
+  if (isGatherEffects(eco.ecoTechs[t.id]?.effects)) return true;
+  const civTech = civ ? eco.civEcoTechs?.[t.id] : undefined;
+  return !!civTech && civTech.civ === civ && isGatherEffects(civTech.effects);
 }
 export function productionTechs(ctx: ProductionContext, config: Pick<ProductionConfig, 'civ' | 'age'>): Tech[] {
   return ctx.core.techs.filter((t) => {
@@ -70,7 +82,7 @@ export function productionTechs(ctx: ProductionContext, config: Pick<ProductionC
     if (!status?.[4]) return false;
     const d = DAT.techs[t.en];
     return (
-      isGatherTech(t) ||
+      isGatherTech(t, config.civ) ||
       [16, 47, 483, 755].includes(t.id) ||
       (!!d &&
         (d.eco.some((e) => e.a !== undefined && (costAttrs[e.a] || (e.a === 13 && e.t?.some((id) => !!ctx.core.buildingById[id])))) ||
@@ -169,8 +181,8 @@ function buildingTarget(building: number, age: number) {
   if (building === 45) return [45, 133, 47, 51][age - 1] ?? building;
   return building;
 }
-function selectedTechEffects(ctx: ProductionContext, sel: Set<number>) {
-  return [...sel].map((id) => ctx.core.techById[id]).filter((t): t is Tech => !!t && !isGatherTech(t));
+function selectedTechEffects(ctx: ProductionContext, sel: Set<number>, civ: string) {
+  return [...sel].map((id) => ctx.core.techById[id]).filter((t): t is Tech => !!t && !isGatherTech(t, civ));
 }
 function relevantTechEffects(t: Tech): DatEco[] {
   return (DAT.techs[t.en]?.eco ?? []).filter((e) => e.a !== undefined && (costAttrs[e.a] || e.a === 101 || e.a === 13));
@@ -283,16 +295,16 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
   if (config.rows.length > PRODUCTION_LIMIT) errors.push(`最多添加 ${PRODUCTION_LIMIT} 条需求。`);
   const availableTechs = new Set(productionTechs(ctx, config).map((t) => t.id));
   if (config.techs.some((id) => !availableTechs.has(id))) errors.push('方案含当前文明或时代不可用的科技，请清除不可用科技。');
-  const gather = gatherModel(config.age, config.civ, { techIds: sel, walkTiles: config.walk, farmTiles: config.farm });
-  warnings.push(...gather.unsupported.map((x) => `${x.label}：采集加成未计入，使用已支持的基础采集模型。`));
+  const gather = gatherModel(config.age, config.civ, { techIds: sel, walkTiles: config.walk, farmTiles: config.farm, includeCivEcoTechs: true });
   applied.push(...gather.applied.map((x) => x.label));
-  // .dat 还有存放收益等资源指令，不能只扫描旧真实费用支持的属性号而静默漏掉。
+  // .dat 还有存放收益等资源指令，不能只扫描旧真实费用支持的属性号而静默漏掉；同源项按 DAT 归属合并为一条。
   const civ = civByEn(config.civ);
-  const economicText = (s: string) => /采集|农民|农田|伐木|采金|采石|矿工|携带|存放/.test(s) && !/免费|费用|成本/.test(s);
-  for (const text of civ?.bon ?? [])
-    if (economicText(text) && !gather.applied.some((x) => x.source === text)) warnings.push(`${text}：该文明经济机制未计入（已单独列明的基础属性加成除外）。`);
-  if (civ && economicText(civ.tb)) warnings.push(`${civ.tb}：本文明团队经济机制未计入。`);
-  const selectedTechs = selectedTechEffects(ctx, sel);
+  const appliedSources = new Set(gather.applied.map((x) => x.source));
+  warnings.push(
+    ...mergeProductionEcoWarnings(gatherUnsupportedSources(config.age, config.civ), civ?.bon ?? [], appliedSources, DAT.civs[config.civ]?.bonus ?? []),
+  );
+  if (civ && isEconomicBonusText(civ.tb)) warnings.push(`${civ.tb}：本文明团队经济机制未计入。`);
+  const selectedTechs = selectedTechEffects(ctx, sel, config.civ);
   const selectedTechNames = new Set([...sel].map((id) => ctx.core.techById[id]?.en).filter((en): en is string => !!en));
   const conscriptionTargetsSettlement = DAT.techs.Conscription?.eco.some((e) => e.a === 13 && e.t?.includes(SETTLEMENT)) ?? false;
   config.rows.forEach((row, index) => {
