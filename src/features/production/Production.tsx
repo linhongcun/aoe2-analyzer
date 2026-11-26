@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense, useMemo } from 'react';
+import { Fragment, lazy, Suspense, useMemo, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
@@ -155,6 +155,15 @@ function AppliedText({ items }: { items: readonly string[] }) {
   );
 }
 
+function FieldError({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <p className="production-field-error" id={id}>
+      <Icon name="triangle-alert" />
+      <span>{children}</span>
+    </p>
+  );
+}
+
 function ProductionBody({
   context: ctx,
   config,
@@ -186,6 +195,7 @@ function ProductionBody({
   const available = productionTechs(ctx, config),
     free = freeProductionTechs(ctx, config);
   const errors = [...linkErrors, ...result.errors];
+  const dockNote = linkErrors.length > 0 ? '请先修正链接错误，再复制方案。' : result.errors.length > 0 ? '请先修正生产需求中的错误，再复制方案。' : shareStatus;
   const selected = effectiveProductionTechs(ctx, config);
   const editRow = (index: number, fields: Partial<ProductionRow>) =>
     update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
@@ -206,14 +216,13 @@ function ProductionBody({
         subnav={<ProductionModeNav transfer={transfer} />}
         dock={
           <CalcDock
-            note={shareStatus}
+            note={dockNote}
             resultId="production-summary-title"
-            actions={[{ label: '复制方案链接', icon: 'copy', disabled: linkErrors.length > 0, onClick: () => void share() }]}
+            actions={[{ label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void share() }]}
           />
         }
       />
       <ProductionTransferBanner />
-      {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {manualLink && (
         <label className="production-manual">
           方案链接
@@ -277,7 +286,8 @@ function ProductionBody({
             {config.rows.map((row, index) => {
               const unit = ctx.core.unitById[row.unit];
               const buildings = unit ? productionBuildings(ctx, config, unit) : [];
-              const rowUnitAvailable = units.some((u) => u.id === row.unit);
+              const unitInvalid = !units.some((u) => u.id === row.unit);
+              const buildingInvalid = !buildings.includes(row.building);
               const line = result.lines.find((l) => l.unit.id === row.unit && l.building === row.building && l.count === +row.count);
               const countInvalid = !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT;
               return (
@@ -304,28 +314,38 @@ function ProductionBody({
                       civ={config.civ}
                       allowUnavailable={false}
                       list={unitEntries}
-                      invalid={!rowUnitAvailable}
-                      unavailableText={rowUnitAvailable ? undefined : `当前不可用：${unit?.zh ?? row.unit}`}
+                      invalid={unitInvalid}
+                      describedBy={unitInvalid ? `production-unit-error-${index}` : undefined}
+                      unavailableText={unitInvalid ? `当前不可用：${unit?.zh ?? row.unit}` : undefined}
                       onChange={(u) => {
                         if (u.id === row.unit) return;
                         editRow(index, { unit: u.id, building: productionBuildings(ctx, config, u)[0]! });
                       }}
                     />
+                    {unitInvalid && <FieldError id={`production-unit-error-${index}`}>单位在当前文明、时代和科技方案下不可用，请重新选择。</FieldError>}
                   </div>
                   <div className="production-row-controls">
-                    <label>
-                      专用生产建筑
-                      <select aria-label={`需求 ${index + 1} 建筑`} value={row.building} onChange={(e) => editRow(index, { building: Number(e.target.value) })}>
-                        {!buildings.includes(row.building) && (
-                          <option value={row.building}>当前不可用：{ctx.core.buildingById[row.building]?.zh ?? row.building}</option>
-                        )}
+                    <div className="production-field">
+                      <label htmlFor={`production-building-${index}`}>专用生产建筑</label>
+                      <select
+                        id={`production-building-${index}`}
+                        aria-label={`需求 ${index + 1} 建筑`}
+                        aria-invalid={buildingInvalid || undefined}
+                        aria-describedby={buildingInvalid ? `production-building-error-${index}` : undefined}
+                        value={row.building}
+                        onChange={(e) => editRow(index, { building: Number(e.target.value) })}
+                      >
+                        {buildingInvalid && <option value={row.building}>当前不可用：{ctx.core.buildingById[row.building]?.zh ?? row.building}</option>}
                         {buildings.map((id) => (
                           <option key={id} value={id}>
                             {ctx.core.buildingById[id]?.zh}
                           </option>
                         ))}
                       </select>
-                    </label>
+                      {buildingInvalid && (
+                        <FieldError id={`production-building-error-${index}`}>生产建筑在当前单位、文明、时代和科技方案下不可用，请重新选择。</FieldError>
+                      )}
+                    </div>
                     <div className="production-field">
                       <label htmlFor={`production-count-${index}`}>建筑数量</label>
                       <QtyStepper
@@ -336,8 +356,14 @@ function ProductionBody({
                         decrementLabel={`需求 ${index + 1} 建筑数减 1`}
                         incrementLabel={`需求 ${index + 1} 建筑数加 1`}
                         invalid={countInvalid}
+                        describedBy={countInvalid ? `production-count-error-${index}` : undefined}
                         onChange={(count) => editRow(index, { count })}
                       />
+                      {countInvalid && (
+                        <FieldError id={`production-count-error-${index}`}>
+                          建筑数量须为 <span className="num nw">0–{BUILDING_LIMIT}</span> 的整数。
+                        </FieldError>
+                      )}
                     </div>
                   </div>
                   {line && (

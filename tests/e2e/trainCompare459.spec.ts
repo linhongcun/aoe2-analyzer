@@ -185,7 +185,7 @@ test('#459 invalid raw links and quantity drafts stop results and copying until 
   await page.getByRole('button', { name: '应用参数', exact: true }).click();
   await expect(rows(page)).toHaveCount(2);
   await page.getByRole('textbox', { name: '目标数量', exact: true }).fill('0');
-  await expect(page.locator('.train-compare-results')).toContainText('当前未生成结果或可复制链接');
+  await expect(page.locator('.train-compare-results')).toContainText('目标数量未应用。修正后点击“应用数量”更新对照；修正前不能复制对照链接。');
   await expect(rows(page)).toHaveCount(0);
   await expect(copy(page)).toBeDisabled();
   await expect(page.getByRole('combobox', { name: '对照单位', exact: true })).toBeDisabled();

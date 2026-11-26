@@ -392,7 +392,8 @@
     "tests/e2e/duelUnmodeled1446.spec.ts": 24000,
     "tests/e2e/techDetailCost1448.spec.ts": 18000,
     "tests/e2e/duelMainAttackType1452.spec.ts": 12000,
-    "tests/e2e/buildsNumUnit1454.spec.ts": 15000
+    "tests/e2e/buildsNumUnit1454.spec.ts": 15000,
+    "tests/e2e/productionFieldErrors1455.spec.ts": 18000
   },
   "cases": {}
 }

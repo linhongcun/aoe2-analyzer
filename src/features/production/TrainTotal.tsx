@@ -221,6 +221,10 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 const isPair = tc > 1;
                 const rowAvailable = row.unit > 0 && options.some((unit) => unit.id === row.unit);
                 const unavailableText = row.unit > 0 && !rowAvailable ? `当前不可用：${line.unit?.zh ?? row.unit}` : undefined;
+                const rowErrorId = line.status !== 'ok' ? `train-total-row-error-${index}` : undefined;
+                const unitInvalid = line.status === 'unavail' || line.status === 'pending';
+                const qtyDescribedBy = waiting || line.status === 'badqty' ? rowErrorId : undefined;
+                const unitDescribedBy = unitInvalid ? rowErrorId : undefined;
                 return (
                   <article
                     className={`train-total-row${waiting ? ' is-waiting' : line.status === 'ok' ? '' : ' is-bad'}`}
@@ -242,7 +246,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                         civ={civName ? config.civ : undefined}
                         allowUnavailable={false}
                         list={unitEntries}
-                        invalid={line.status === 'unavail' || line.status === 'pending'}
+                        invalid={unitInvalid}
+                        describedBy={unitDescribedBy}
                         unavailableText={unavailableText}
                         onChange={(unit) => {
                           const nextTc = unitTrainCount(unit);
@@ -266,6 +271,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                         incrementLabel={`兵种 ${index + 1} 数量加 ${tc}`}
                         placeholder={isPair ? `填写 ${tc}–${TRAIN_TOTAL_QTY_MAX}` : '填写 1–1000'}
                         invalid={waiting ? undefined : line.status === 'badqty'}
+                        describedBy={qtyDescribedBy}
                         onChange={(qty) => editRow(config, index, { qty }, write)}
                       />
                     </div>
@@ -305,7 +311,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                       删除
                     </button>
                     {line.status !== 'ok' && (
-                      <p className="train-total-flag">
+                      <p className="train-total-flag" id={rowErrorId}>
                         <Icon name={waiting ? 'info' : 'triangle-alert'} />
                         {waiting ? (
                           <span>
