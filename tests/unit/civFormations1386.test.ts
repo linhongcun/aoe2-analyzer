@@ -197,7 +197,7 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
     expect(imperial('Wei', 1946).stats).toMatchObject({ atk: 16, ma: 10, pa: 5 });
     expect(imperial('Shu', 1961)).toMatchObject({ stats: { hp: 100, atk: 9, ma: 3, pa: 7 }, pills: ['命中减速'] });
     expect(imperial('Shu', 474).stats).toMatchObject({ hp: 60, atk: 11, ma: 4, pa: 4, rng: 7 });
-    expect(imperial('Shu', 1966)).toMatchObject({ stats: { hp: 425, atk: 16, ma: 6, pa: 7 }, pills: ['光环 / 编队增益'] });
+    expect(imperial('Shu', 1966)).toMatchObject({ stats: { hp: 425, atk: 16, ma: 6, pa: 7 }, pills: ['光环 / 编队增益', '生命回复'] });
     expect(imperial('Sicilians', 283).stats).toMatchObject({ hp: 140, atk: 16, ma: 6, pa: 8 });
     expect(imperial('Sicilians', 2701).stats).toMatchObject({ hp: 75, atk: 12, ma: 4, pa: 2, rng: 8, rof: 2.5 });
     expect(imperial('Persians', 1813).stats).toMatchObject({ hp: 165, atk: 18, ma: 6, pa: 8 });

@@ -10,6 +10,7 @@ import {
   applicableUnmodeledTechIds,
   detectUnitUnmodeled,
   effectiveCombatAbility,
+  hasPositiveBonusDamageReduction,
   hasPositiveEcoAttr,
   normalizeCombatAbility,
   type UnmodeledKind,
@@ -45,8 +46,10 @@ function expectedKindsForBase(u: Unit, civ: string, age: number): UnmodeledKind[
   if (u.projectilePassThrough === true) out.push('pass-through');
   if (u.damagedTargetBonus === true) out.push('damaged-bonus');
   if (u.lowHpTransform === true) out.push('low-hp-transform');
+  if (typeof u.regenRate === 'number' && Number.isFinite(u.regenRate) && u.regenRate > 1e-9) out.push('regen');
   if (hasPositiveEcoAttr(civEco, u.id, 109, 1e-9)) out.push('regen');
   if (u.deathHealAura === true) out.push('death-heal');
+  if (hasPositiveBonusDamageReduction(civEco, u.id)) out.push('bonus-damage-reduction');
   return out;
 }
 
@@ -82,14 +85,13 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
       ]);
     }
 
-    // 2) 光环 / 编队增益（bit 32|64 合并出 1 枚：百夫长/莫纳斯帕/曹操/刘备/孙坚）
+    // 2) 光环 / 编队增益（bit 32|64 合并出 1 枚：百夫长/莫纳斯帕/曹操/孙坚；刘备 1966 另叠 #1446 固有生命回复）
     for (const [uid, civ, age] of [
       [1790, 'Romans', 4],
       [1792, 'Romans', 4],
       [1803, 'Georgians', 1],
       [1805, 'Georgians', 1],
       [1954, 'Wei', 4],
-      [1966, 'Shu', 4],
       [1978, 'Wu', 4],
     ] as const) {
       const res = detectUnitUnmodeled({ unit: byId[uid]!, civ, age, selectedTechs: [] });
@@ -101,6 +103,8 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
         },
       ]);
     }
+    // 1966 蜀刘备同时触发光环 + 单位固有生命回复（#1446）
+    expect(detectUnitUnmodeled({ unit: byId[1966]!, civ: 'Shu', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['光环 / 编队增益', '生命回复']);
     // 1805 格鲁吉亚精锐莫纳斯帕在封建及以上同时触发光环 + 生命回复（ca=96 仍只出 1 枚光环胶囊）
     const monaspaImp = detectUnitUnmodeled({ unit: byId[1805]!, civ: 'Georgians', age: 4, selectedTechs: [] });
     expect(monaspaImp.map((m) => m.pill)).toEqual(['光环 / 编队增益', '生命回复']);
@@ -196,7 +200,7 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
     expect(detectUnitUnmodeled({ unit: byId[83]!, civ: 'Poles', age: 2, selectedTechs: [] }).map((m) => m.pill)).toEqual(['生命回复']);
   });
 
-  it('验收 2：反例零误报（常规单位、步弓手副弹丸、狂战士、已建模无视护甲与攻城反伤位）', () => {
+  it('验收 2：反例零误报（常规单位、步弓手副弹丸、已建模无视护甲与攻城反伤位；692/694 已由 #1446 接入固有回血）', () => {
     for (const [uid, civ] of [
       [569, 'Franks'],
       [4, 'Britons'],
@@ -204,8 +208,6 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
       [492, 'Britons'],
       [359, 'Japanese'],
       [567, 'Japanese'],
-      [692, 'Vikings'],
-      [694, 'Vikings'],
       [1234, 'Lithuanians'],
       [1236, 'Lithuanians'],
       [1800, 'Armenians'],
@@ -433,7 +435,7 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
     expect(assumeCoexist).toContain('<strong>生命回复：</strong>当前未计入战斗中的生命回复（文明加成）');
 
     // 4) 全库 248 单位 + 典型科技输出文案绝不泄漏任何内部字段名
-    const forbidden = /combatAbility|hit_mode|action_type|a:109|break_off_combat/i;
+    const forbidden = /combatAbility|hit_mode|action_type|a:109|a:24|break_off_combat|rear_attack_modifier|regenRate|projectilePassThrough/i;
     for (const u of units) {
       const list = detectUnitUnmodeled({ unit: u, civ: u.civs[0]!, age: 4, selectedTechs: [techById[579]!, techById[831]!] });
       for (const m of list) {

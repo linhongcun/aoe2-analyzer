@@ -82,7 +82,7 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
   return found;
 }
 
-/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 只保留当前时代可用的战斗/费用科技，并对无数值投射物剧毒科技按作用单位裁剪。 */
+/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 只保留当前时代可用的战斗/费用科技，并对无数值投射物剧毒/直线穿透科技按作用单位裁剪。 */
 export function selectTrainingIds(
   techs: TechSpec,
   avail: readonly SimTech[],
@@ -102,7 +102,8 @@ export function selectTrainingIds(
         if (militaryTechAge(civ, item.t.id, item.t.age) > age) return false;
         if (unitId !== undefined && item.ef === null) {
           const poison = DAT.projectilePoison?.[item.t.en];
-          if (poison && !poison.units.includes(unitId)) return false;
+          const passThrough = DAT.projectilePassThrough?.[item.t.en];
+          if ((poison || passThrough) && !(poison?.units.includes(unitId) || passThrough?.units.includes(unitId))) return false;
         }
         return true;
       })

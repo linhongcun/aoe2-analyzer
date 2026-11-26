@@ -129,6 +129,8 @@ export interface Unit {
   lowHpTransform?: boolean;
   /** issue 1403：固定 DAT 阵亡回血光环标记（BloodUnitID 指向 CombatAbility & 32 实体）。 */
   deathHealAura?: boolean;
+  /** issue 1446：固定 DAT 单位固有每分钟生命回复速率（仅正值时导出，如狂战士 40、刘备 15）。 */
+  regenRate?: number;
   /** issue 1384：固定 DAT Task 156 每批训练产出数（仅 > 1 时导出，如黑檀木步弓手为 2）。 */
   trainCount?: number;
   atks: [string, number][];

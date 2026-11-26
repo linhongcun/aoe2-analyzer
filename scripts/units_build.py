@@ -133,6 +133,16 @@ def derive_death_heal_aura(source_unit, dat_units):
     return bool(target_ca & 32)
 
 
+def derive_inherent_regen(source_unit):
+    """#1446：从固定 DAT 派生单位固有每分钟生命回复速率（RegenRate，fail-closed；按 6 位小数规范化后再判正）。"""
+    val = source_unit['RegenRate']
+    if isinstance(val, bool) or not isinstance(val, (int, float)) or not math.isfinite(val) or val < 0:
+        raise ValueError(f'Invalid RegenRate: {val!r}')
+    rounded = round(float(val), 6)
+    norm = int(rounded) if rounded.is_integer() else rounded
+    return norm if norm > 0 else None
+
+
 def resolve_building_train_time(source_unit, building_id, fallback_tt=None):
     """#1403：按目录主训练建筑匹配 .dat TrainAt 槽位时间；未命中槽位时回退 .dat TrainTime，仅当 .dat 缺有效值时回退 fallback_tt。"""
     train_at = source_unit.get('TrainAt') or []
@@ -294,6 +304,9 @@ def main():
             u.update(derive_unmodeled_dat_fields(source_unit, _DU))
             if derive_death_heal_aura(source_unit, _DU):
                 u['deathHealAura'] = True
+            regen_rate = derive_inherent_regen(source_unit)
+            if regen_rate is not None:
+                u['regenRate'] = regen_rate
             u['tt'] = resolve_building_train_time(source_unit, u['b'], u['tt'])
             train_count = _derive_train_count(source_unit, u['id'])
             if train_count > 1:

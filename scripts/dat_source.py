@@ -95,6 +95,7 @@ def unit(u):
             **({'BlastDamage': t.blast_damage, 'BlastAttackLevel': t.blast_attack_level,
                 'FriendlyFireDamage': t.friendly_fire_damage} if t else {}),
             'CombatAbility': t.break_off_combat if t else 0,
+            'RegenRate': u.creatable.rear_attack_modifier if u.creatable else 0,
             'ProjectileHitMode': u.projectile.hit_mode if u.projectile else 0,
             'CombatTasks': [{'action': x.action_type, 'attr': x.search_wait_time, 'v1': x.work_value_1, 'v2': x.work_value_2, 'flag': x.combat_level_flag, 'dip': x.target_diplomacy}
                             for x in (u.bird.tasks if u.bird else []) if x.action_type in (157, 158, 160)],
@@ -148,10 +149,14 @@ def spawn_tasks_sig(u):
 def proj_hit_mode_sig(u):
     if u is None: return None
     return u.projectile.hit_mode if u.projectile else 0
+def regen_rate_sig(u):
+    if u is None: return None
+    return u.creatable.rear_attack_modifier if u.creatable else 0
 base_ct = [combat_tasks_sig(u) for u in d.civs[1].units]
 base_st = [spawn_tasks_sig(u) for u in d.civs[1].units]
 base_hm = [proj_hit_mode_sig(u) for u in d.civs[1].units]
-bad_ct, bad_st, bad_hm = [], [], []
+base_rr = [regen_rate_sig(u) for u in d.civs[1].units]
+bad_ct, bad_st, bad_hm, bad_rr = [], [], [], []
 for c in d.civs:
     if c.name == 'Gaia' or c.name in ROR: continue
     n = max(len(base_ct), len(c.units))
@@ -163,13 +168,17 @@ for c in d.civs:
             bad_st.append('%s #%s' % (c.name, i))
         if (base_hm[i] if i < len(base_hm) else None) != proj_hit_mode_sig(cu) and len(bad_hm) < 12:
             bad_hm.append('%s #%s' % (c.name, i))
-    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12: break
+        if (base_rr[i] if i < len(base_rr) else None) != regen_rate_sig(cu) and len(bad_rr) < 12:
+            bad_rr.append('%s #%s' % (c.name, i))
+    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12 and len(bad_rr) >= 12: break
 if bad_ct:
     raise SystemExit('文明单位特殊战斗任务（157/158/160）不一致（RoR 以外）：' + '；'.join(bad_ct))
 if bad_st:
     raise SystemExit('文明单位成对生成任务（156）不一致（RoR 以外）：' + '；'.join(bad_st))
 if bad_hm:
     raise SystemExit('文明投射物穿透标记不一致（RoR 以外）：' + '；'.join(bad_hm))
+if bad_rr:
+    raise SystemExit('文明单位固有生命回复不一致（RoR 以外）：' + '；'.join(bad_rr))
 out = {
   'Techs': [{'Name': t.name, 'EffectID': t.effect_id, 'Civ': t.civ, 'RequiredTechs': list(t.required_techs), 'RequiredTechCount': t.required_tech_count,
              'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1]),
@@ -220,7 +229,7 @@ def derive_train_count(source_unit, unit_id=None):
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v24.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v25.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

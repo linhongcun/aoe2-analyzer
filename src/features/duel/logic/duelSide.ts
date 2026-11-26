@@ -121,25 +121,29 @@ export function filterExplicitTechsForAge(techs: SideSpec['techs'], techById: Re
     : techs;
 }
 
-function keepsProjectilePoisonForUnit(tech: Tech | undefined, unitId: number): boolean {
-  const poison = tech ? DAT.projectilePoison?.[tech.en] : undefined;
-  if (!poison || poison.units.includes(unitId)) return true;
-  return Boolean(DAT.techs[tech!.en]?.rules.some((r) => !r.b && r.t.includes(unitId)));
+function keepsScopedProjectileTech(tech: Tech | undefined, civ: string | undefined, unitId: number): boolean {
+  if (!tech) return true;
+  const poison = DAT.projectilePoison?.[tech.en];
+  const passThrough = DAT.projectilePassThrough?.[tech.en];
+  if (!poison && !passThrough) return true;
+  if (civ !== undefined && !tech.civs.includes(civ)) return false;
+  if (poison?.units.includes(unitId) || passThrough?.units.includes(unitId)) return true;
+  return Boolean(DAT.techs[tech.en]?.rules.some((r) => !r.b && r.t.includes(unitId)));
 }
 
-/** 裁剪仅通过投射物剧毒（如箭毒 1393）生效、但对目标单位不适用的显式科技 ID，避免残留到 URL、切回时恢复勾选或阻断升级对比。 */
-export function filterExplicitTechsForUnit(techs: SideSpec['techs'], techById: Record<number, Tech>, unitId: number): SideSpec['techs'] {
+/** 裁剪通过投射物剧毒/直线穿透（如箭毒 1393、烟火之术 902、突袭 1379）生效、但对目标文明或单位不适用的显式科技 ID，避免残留到 URL、切回时恢复勾选或阻断升级对比。 */
+export function filterExplicitTechsForUnit(techs: SideSpec['techs'], techById: Record<number, Tech>, unitId: number, civ?: string): SideSpec['techs'] {
   if (!Array.isArray(techs) || !techs.length) return techs;
-  const next = techs.filter((id) => keepsProjectilePoisonForUnit(techById[id], unitId));
+  const next = techs.filter((id) => keepsScopedProjectileTech(techById[id], civ, unitId));
   return next.length === techs.length ? techs : next;
 }
 
-/** 切单位时剔除对新单位不适用的投射物剧毒显式科技 ID，其余显式科技与预设保持原样。 */
+/** 切单位时剔除对当前文明或新单位不适用的投射物剧毒/直线穿透显式科技 ID，其余显式科技与预设保持原样。 */
 export function switchSideUnit(techById: Record<number, Tech>, spec: SideSpec, nextUid: number): SideSpec {
-  return { ...spec, uid: nextUid, techs: filterExplicitTechsForUnit(spec.techs, techById, nextUid) };
+  return { ...spec, uid: nextUid, techs: filterExplicitTechsForUnit(spec.techs, techById, nextUid, spec.civ) };
 }
 
-/** 普通 PK 链接规范化：未知单位回退默认、空/未知文明回落首个可用文明，并剔除对当前单位不适用的投射物剧毒科技。 */
+/** 普通 PK 链接规范化：未知单位回退默认、空/未知文明回落首个可用文明，并剔除对当前文明或单位不适用的投射物剧毒/直线穿透科技。 */
 export function canonicalizeDuelSide(
   core: { unitById: Record<number, Unit>; techById: Record<number, Tech> } | null | undefined,
   spec: SideSpec,
@@ -154,7 +158,7 @@ export function canonicalizeDuelSide(
   return switchSideUnit(core.techById, next, next.uid);
 }
 
-/** 切文明时按目标文明实际解析出的时代裁剪显式科技，避免沿用旧文明被抬高后的 side.age 残留超时代科技。 */
+/** 切文明时按目标文明实际解析出的时代与文明/单位投射物作用域裁剪显式科技，避免沿用旧文明被抬高后的 side.age 或他国投射物科技残留。 */
 export function switchSideCiv(
   data: { byId: Record<number, Unit>; techById: Record<number, Tech>; trees: unknown },
   spec: SideSpec,
@@ -162,7 +166,8 @@ export function switchSideCiv(
   nextCiv: string,
 ): SideSpec {
   const { age: nextAge } = resolveSideAge(data, nextCiv, u, spec.age, spec.ageSet);
-  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge) };
+  const aged = filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge);
+  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv) };
 }
 
 export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number, relics = 0): SideState {
@@ -187,8 +192,9 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     Array.isArray(spec.techs) && spec.techs.length
       ? (() => {
           const next = spec.techs.filter((id) =>
-            keepsProjectilePoisonForUnit(
+            keepsScopedProjectileTech(
               ctx.techs.find((t) => t.id === id),
+              civ,
               u.id,
             ),
           );

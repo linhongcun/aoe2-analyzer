@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dat_source import DAT as DAT_SRC, load as load_dat  # noqa: E402
-from projectile_scope import guided_projectile_ids, split_projectile_units, transform_closure  # noqa: E402
+from projectile_scope import guided_projectile_ids, pass_through_projectile_ids, split_projectile_units, transform_closure  # noqa: E402
 from res_names import RES_ZH as RES  # noqa: E402
 SRC_C = ('https://raw.githubusercontent.com/linhongcun/lhc-aoe2/6fdb912e95ce1ce837eb91b6c6ffc2945a74dc90/lib/data/unitTechFx.ts', 'lhc-unitTechFx.ts')
 
@@ -749,6 +749,24 @@ def main():
         if p_units or p_blds:
             projectile_poison[t['en']] = {'units': p_units, 'buildings': p_blds}
     out['projectilePoison'] = projectile_poison
+
+    # ---- #1446 科技赋予投射物直线穿透（同弹丸 C=67 HitMode=1 且 C=119 > 0，如烟火之术 902 / 突袭 1379，零硬编码 ID，按科技文明取交集） ----
+    projectile_pass_through = {}
+    for t in techs:
+        tid = t['id']
+        eid = AT[tid]['EffectID'] if 0 <= tid < len(AT) else -1
+        raw_cmds = AE[eid]['EffectCommands'] if 0 <= eid < len(AE) else []
+        pt_pids = pass_through_projectile_ids(raw_cmds)
+        if not pt_pids:
+            continue
+        tech_civs = set(t.get('civs') or ())
+        scoped_units = [u for u in units if not tech_civs or (set(u.get('civs') or ()) & tech_civs)]
+        scoped_blds = [b for b in attacking_blds if not tech_civs or (set(b.get('civs') or ()) & tech_civs)]
+        pt_units, _ = split_projectile_units(dat_units, unit_forms, scoped_units, pt_pids)
+        pt_blds, _ = split_projectile_units(dat_units, bld_forms, scoped_blds, pt_pids)
+        if pt_units or pt_blds:
+            projectile_pass_through[t['en']] = {'units': pt_units, 'buildings': pt_blds}
+    out['projectilePassThrough'] = projectile_pass_through
 
     # ---- #1366 目录单位基础 combatAbility（属性 63 位掩码；全量 248 目录单位，供 effects.ts 零耦合折叠 a:63） ----
     combat_ability_base = {}
