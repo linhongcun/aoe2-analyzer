@@ -420,6 +420,12 @@
 
 原因是扩充管线属性白名单、隐藏规则或把手动开关升级为默认常驻时，影响面往往沿着既有规则顺序、下游白名单和状态布尔耦合反向传导到表面无关的通用科技或分享链接。以后评审同类需求时，固定补做三项反查：扩 `.dat` 导出前按全量科技扫描结果核对「是否与既有常规规则叠加出越界值」「是否落到无 `civs` 过滤的展示页」「是否给通用科技带上新 `eco` 属性从而触发 `mixedTrainingTransfer` 或未建模刷屏」；新增非阻断范围说明前先查领域层 `warnings` 是否绑定 `complete`/`balance` 阻断门控，绑定即独立字段与视觉样式；把开关改为默认常驻生效时，在 PRD 验收中显式锁定旧链幂等去重（不双算）与下游拦截逻辑的「本方 vs 盟友」分界。
 
+### 改 `effects.ts` 归类或放开 `bonusUsage` 门控前，先核弹层冷加载隔离、情景签名与实跑反事实
+
+2026-11-27 评审[文明加成归类与计入状态修复](https://github.com/linhongcun/aoe2-analyzer/issues/1497)时，独立核查暴露出三类只看单文件极易返工的隐性约束：一是 [CivDetail.tsx](../src/features/civs/components/CivDetail.tsx) 经 `BonusRows → civBonus → effects.ts` 刻意隔离于 [core.ts](../src/data/core.ts)（`units.json`/`buildings.json`）以支持 `#1122` 弹层按需冷加载（[civBonusEvidence1122.spec.ts](../tests/e2e/civBonusEvidence1122.spec.ts)），若为过滤 `Italians-3`/`Huns-0` 等零拥有目标而在 [effects.ts](../src/domain/effects.ts) 直接导入 `CORE` 会击穿冷加载分包，而若在 [effects_build.py](../scripts/effects_build.py) 直接删除原始目标又会破坏证据弹层 `Gurjaras-2` 90 目标断言与 [costPolicy.ts](../src/domain/costPolicy.ts) 跨句分组；二是 `BONUS_SRC[civ]` 参与 [positionScenarios.ts](../src/domain/positionScenarios.ts) 对 7 国（含 `Huns`）情景的审查哈希，变更 `Huns-0` 归类若不同步核验情景数值并刷新 [positionScenarioReview.json](../data/reference/domain/positionScenarioReview.json)，会把匈奴在 `#/start` 静默阻断；三是静态导出 `usageLines()` 会把 `Aztecs-2`、`Spanish-0`、`Spanish-3` 一并标成 `sim:null`，唯有实跑 `simulateBuild` 去效果反事实与 [construction.ts](../src/domain/construction.ts) 才能分清三者本质——`Aztecs-2` 实际影响 6/8 套开局、`Spanish-0` 由 `construction.json` `cd.tree` 实际计入且开局 0/8 变化、仅 `Spanish-3` 为纯战斗负号规则无 `eco`，且实跑同时检出 [buildSim.ts](../src/domain/buildSim.ts) 未校验 `requires: [252]` 致 `Bohemians-3` 提前生效的独立引擎缺陷。
+
+原因是加成归类、工具对账与证据弹层共享同一套 `effects.json` 与 `BONUS_SRC` 骨架，静态推理既看不出懒加载分包和跨模块签名，也分不清 `sim:null` 背后究竟是漏入 `TREE_SIM`、漏接 `cc.tree` 还是纯战斗误入 `treeOnly`。以后评审涉及 `effects.ts`、`BONUS_SRC` 或 `bonusUsage.ts` 的 Issue 时，固定补做三项核查：追踪运行时非 typeOnly 静态导入闭包，确认不把 `core.ts` 拖入 `CivDetail` 等懒加载页并保留原始 `.dat` 目标；凡改动 `BONUS_SRC` 触及 `SCENARIO_CIVS` 七国，同步把情景数值零漂移与 `positionScenarioReview.json` 刷新写入范围和验收；排查 `bonusUsage` 候选与 `sim:null` 时必须直接实跑 `simulateBuild` / `calculateConstruction` 反事实而非仅看静态返回，把发现的独立引擎缺陷划出非目标另单跟进，不让标签与工具当前计算脱节。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
