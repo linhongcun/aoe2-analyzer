@@ -142,7 +142,9 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
     await page.setViewportSize({ width: 390, height: 844 });
     await openTech(page, '/tech/202');
     await expect(page.locator('#tech-cost-changes')).toHaveCount(0);
-    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；经济收益工具已采用固定数据编码，其余效果以游戏说明为准');
+    await expect(page.locator('.detail-source')).toContainText(
+      '本页不逐条模拟属性；经济收益、持续生产与开局模拟工具已采用固定数据编码，其余效果以游戏说明为准',
+    );
 
     await openTech(page, '/tech/506');
     await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；持续生产与市场工具已采用固定数据编码，其余效果以游戏说明为准');
@@ -155,6 +157,12 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
 
     await openTech(page, '/tech/996');
     await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+
+    await openTech(page, '/tech/756');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；阵容账本工具已采用固定数据编码，其余效果以游戏说明为准');
+
+    await openTech(page, '/tech/1379');
+    await expect(page.locator('.detail-source')).toContainText('本页不逐条模拟属性；单位 PK 已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     await openTech(page, '/tech/1484');
     await expect(page.locator('#tech-cost-changes')).toHaveCount(0);

@@ -38,7 +38,29 @@ beforeAll(async () => {
 describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
   it('全站 199 项科技精确按数据消费规则分类，零硬编码科技 ID', () => {
     const src = readFileSync('src/domain/techDataConsumption.ts', 'utf8') + '\n' + readFileSync('src/domain/techDetailCost.ts', 'utf8');
-    for (const id of ['455', '484', '488', '499', '506', '514', '576', '578', '625', '782', '785', '835', '996', '1379', '1380', '1393', '1484', '1496']) {
+    for (const id of [
+      '34',
+      '35',
+      '455',
+      '484',
+      '488',
+      '499',
+      '506',
+      '514',
+      '576',
+      '578',
+      '625',
+      '756',
+      '782',
+      '785',
+      '835',
+      '996',
+      '1379',
+      '1380',
+      '1393',
+      '1484',
+      '1496',
+    ]) {
       expect(src).not.toMatch(new RegExp(`\\b${id}\\b`));
     }
 
@@ -62,11 +84,11 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(core.techs).toHaveLength(199);
     expect(buckets.simulated).toHaveLength(109);
     expect(buckets.cost.sort((a, b) => a - b)).toEqual([455, 488, 499, 514, 625, 782, 785, 835, 1380, 1496]);
-    // origin/main@95c56a03 已含 #1446 导出的 projectilePassThrough（1379 突袭），消费判定自动归入 consumed
-    expect(buckets.consumed).toHaveLength(52);
-    expect(buckets.consumed).toEqual(expect.arrayContaining([15, 17, 23, 45, 46, 93, 202, 233, 315, 316, 319, 438, 439, 441, 506, 578, 1379, 1393]));
+    // 51 项其他已消费编码：含 #1446 导出的 1379 突袭与 armyCost.ts 实际消费抗招降槽位的 756 第一次十字军东征；34/35 战船在 ecoTechs.effects 为空，归入 unencoded
+    expect(buckets.consumed).toHaveLength(51);
+    expect(buckets.consumed).toEqual(expect.arrayContaining([15, 17, 23, 45, 46, 93, 202, 233, 315, 316, 319, 438, 439, 441, 506, 578, 756, 1379, 1393]));
     expect(buckets.unencoded.sort((a, b) => a - b)).toEqual([
-      16, 21, 28, 64, 194, 408, 483, 487, 573, 629, 690, 754, 755, 756, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
+      16, 21, 28, 34, 35, 64, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
     ]);
     expect(buckets.simulated.length + buckets.cost.length + buckets.consumed.length + buckets.unencoded.length).toBe(199);
   });
@@ -229,9 +251,9 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text514).toContain('训练费用已按固定数据编码；未在站内消费的效果以游戏说明为准');
     expect(text514).not.toContain('这条科技没有编码数值');
 
-    // 其他已消费编码：202 双刃斧 / 315 征招 / 506 大干道 / 578 土堡 / 484 射箭孔 / 576 蛮王 / 996 强化堡垒 / 1379 突袭 / 1393 箭毒
+    // 其他已消费编码：202 双刃斧 / 315 征招 / 506 大干道 / 578 土堡 / 484 射箭孔 / 576 蛮王 / 996 强化堡垒 / 756 第一次十字军东征 / 93 弹道学 / 1379 突袭 / 1393 箭毒
     const text202 = visible(markup('/tech/202'));
-    expect(text202).toContain('本页不逐条模拟属性；经济收益工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text202).toContain('本页不逐条模拟属性；经济收益、持续生产与开局模拟工具已采用固定数据编码，其余效果以游戏说明为准');
     expect(text202).not.toContain('这条科技没有编码数值');
 
     const text315 = visible(markup('/tech/315'));
@@ -257,15 +279,26 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text996).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
     expect(text996).not.toContain('单位 PK');
 
+    const text756 = visible(markup('/tech/756'));
+    expect(text756).toContain('本页不逐条模拟属性；阵容账本工具已采用固定数据编码，其余效果以游戏说明为准');
+
+    const text93 = visible(markup('/tech/93'));
+    expect(text93).toContain('本页不逐条模拟属性；单位 PK 与科技模拟器已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+
     const text1379 = visible(markup('/tech/1379'));
-    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 与模拟器已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text1379).not.toContain('模拟器已读取');
 
     const text1393 = visible(markup('/tech/1393'));
-    expect(text1393).toContain('本页不逐条模拟属性；单位 PK 与模拟器、建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text1393).toContain('本页不逐条模拟属性；单位 PK、建筑模拟器与建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text102 = visible(markup('/tech/102'));
     expect(text102).toContain('本页不逐条模拟属性；开局模拟工具已采用固定数据编码，其余效果以游戏说明为准');
     expect(text102).not.toContain('经济收益');
+
+    const text14 = visible(markup('/tech/14'));
+    expect(text14).toContain('本页不逐条模拟属性；农田食物量已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text14).not.toContain('开局模拟');
 
     const text13 = visible(markup('/tech/13'));
     expect(text13).toContain('本页不逐条模拟属性；农田食物量、持续生产与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
@@ -275,8 +308,8 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text65).toContain('本页不逐条模拟属性；渔船采集与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
     expect(text65).not.toContain('经济收益');
 
-    // 排除项（仅 res:33 与真无编码）：1484 / 21 / 573
-    for (const id of [1484, 21, 573]) {
+    // 排除项（仅 res:33、真无编码与 ecoTechs.effects 为空的战船升级）：1484 / 21 / 573 / 34 / 35
+    for (const id of [1484, 21, 573, 34, 35]) {
       const html = markup(`/tech/${id}`);
       const text = visible(html);
       expect(html).not.toContain('id="tech-cost-changes"');
@@ -298,12 +331,14 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     }
   });
 
-  it('来源说明与站内工具真实消费行为一致（578 土堡、484/576/996 建筑科技、506 大干道）', () => {
+  it('来源说明与站内工具真实消费行为一致（578 土堡、484/576/996 建筑科技、506 大干道、756 第一次十字军东征）', () => {
     const ctx = { core, trees };
 
     // 578 土堡：持续生产跳过并提示整项未计入，建筑满科技对照在城堡行读取作未计入提示
     const prodBefore578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
     const prodAfter578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
+    expect(prodBefore578.errors).toEqual([]);
+    expect(prodAfter578.errors).toEqual([]);
     expect(prodAfter578.lines[0]!.seconds).toBe(prodBefore578.lines[0]!.seconds);
     expect(prodAfter578.warnings.some((w) => w.includes('土堡') && w.includes('整项未计入'))).toBe(true);
     const castleRank = buildBuildingCivRank(ctx, core.buildingById[82]!, 3);
@@ -331,7 +366,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       'building-combat-notice',
     ]);
 
-    // 506 大干道：持续生产改变采金速率、市场采用 10% 手续费，但不在经济收益工具可选清单中
+    // 506 大干道：印度斯坦合法骆驼兵（329）方案在持续生产下无报错且提升采金速率、市场采用 10% 手续费，但不在经济收益工具可选清单中
     const payoffIds = payoffAvailable(ctx, { civ: 'Hindustanis', age: 4 }).map((t) => t.id);
     expect(payoffIds).not.toContain(506);
     expect(marketFee({ civ: 'Hindustanis', guilds: false, unique: true })).toBe(0.1);
@@ -339,7 +374,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       civ: 'Hindustanis',
       age: 3,
       techs: [],
-      rows: [{ unit: 38, building: 101, count: '1' }],
+      rows: [{ unit: 329, building: 101, count: '1' }],
       walk: 0,
       farm: 0,
     });
@@ -347,16 +382,27 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       civ: 'Hindustanis',
       age: 3,
       techs: [506],
-      rows: [{ unit: 38, building: 101, count: '1' }],
+      rows: [{ unit: 329, building: 101, count: '1' }],
       walk: 0,
       farm: 0,
     });
+    expect(prodBefore506.errors).toEqual([]);
+    expect(prodAfter506.errors).toEqual([]);
     const goldBefore = prodBefore506.resources.find((r) => r.key === 'Gold')!.income;
     const goldAfter = prodAfter506.resources.find((r) => r.key === 'Gold')!.income;
     expect(goldAfter).toBeGreaterThan(goldBefore);
     expect(classifyTechDataConsumption(core.techById[506]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'production',
       'market',
+    ]);
+
+    // 756 第一次十字军东征：阵容账本从混合规则提取 res:178/179 抗招降，西西里骑士方案可正常纳入并计研究费 400 食 / 300 金
+    const army756 = evaluateArmyCost(ctx, { civ: 'Sicilians', age: '3', rows: [{ unit: 38, qty: '1' }], done: [], targets: ['t:756'] });
+    expect(army756.blocked).toEqual([]);
+    expect(army756.partial).toBe(false);
+    expect(army756.researchTotal).toMatchObject({ Food: 400, Gold: 300 });
+    expect(classifyTechDataConsumption(core.techById[756]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'army-cost',
     ]);
   });
 });

@@ -5,7 +5,7 @@
  */
 import { ECO, type EcoDataView } from '../data/eco';
 import { BALLISTICS_TECH_ID } from './accuracyBoundary';
-import { resistDelta } from './conversion';
+import { CONVERT_RESIST_MAX_RES, CONVERT_RESIST_MIN_RES, resistDelta } from './conversion';
 import { DAT, type DatEco, type DatFile } from './datEffects';
 import { TRADE_FEE_RES, TRIBUTE_TAX_RES } from './marketFeeFacts';
 import type { Building, Tech, Unit } from './types';
@@ -17,13 +17,14 @@ const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 63, 102, 107, 109]);
 const BUILDING_GARRISON_ATTRS = new Set([102, 107]);
 const BUILDING_COMBAT_NOTICE_ATTRS = new Set([22, 24, 109]);
 const PAYOFF_GATHER_TARGETS = new Set(['task:wood', 'task:gold', 'task:stone']);
+const AGE_PROGRESS_RES = 6;
 const FARM_FOOD_RES = 36;
 const FISHING_SHIP_CLASS = 21;
 
 export type TechDataConsumptionKind = 'simulated' | 'cost' | 'consumed' | 'unencoded';
 export type TechAdoptedDomain =
   'market' | 'eco-payoff' | 'production' | 'eco-farm' | 'eco-fishing' | 'eco-build' | 'garrison-healing' | 'building-garrison' | 'conversion' | 'army-cost';
-export type TechNoticeDomain = 'unit-combat-notice' | 'building-combat-notice';
+export type TechNoticeDomain = 'duel-unmodeled' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
 export type TechConsumedDomain = 'cost-unit' | 'cost-building' | TechAdoptedDomain | TechNoticeDomain;
 
 export interface TechDataConsumption {
@@ -55,7 +56,9 @@ const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string
   'building-garrison': { label: '建筑驻军与满科技对照', isToolName: false },
   conversion: { label: '招降说明与阵容账本', isToolName: false },
   'army-cost': { label: '阵容账本', isToolName: true },
-  'unit-combat-notice': { label: '单位 PK 与模拟器', isToolName: false },
+  'duel-unmodeled': { label: '单位 PK', isToolName: false },
+  'ballistics-notice': { label: '单位 PK 与科技模拟器', isToolName: false },
+  'building-sim-notice': { label: '建筑模拟器', isToolName: false },
   'building-combat-notice': { label: '建筑满科技对照', isToolName: false },
 };
 
@@ -140,16 +143,18 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     const hasFarmCarry = ecoEffects.some((e) => e.kind === 'attr' && e.target === 'task:farm' && e.attr === 'carry' && (e.v ?? 0) > 0);
     const isFishing =
       ecoEffects.some((e) => e.target === `class:${FISHING_SHIP_CLASS}`) || datEco.some((e) => (e.a === 13 || e.a === 14) && e.cls === FISHING_SHIP_CLASS);
+    const isAgeProgress = ecoEffects.some((e) => e.kind === 'res' && e.res === AGE_PROGRESS_RES);
 
     if (isEcoPayoff) {
-      adopted.push('eco-payoff');
+      // 7 项伐木/采矿科技同步被经济收益、持续生产与开局模拟三处采集模型采用
+      adopted.push('eco-payoff', 'production', 'eco-build');
     } else if (isFarmFood) {
+      // 磨坊农田容量仅由农田食物量采用；仅带 task:farm carry 增量的科技（如重犁）额外被持续生产与开局模拟采用
       adopted.push('eco-farm');
-      if (hasFarmCarry) adopted.push('production');
-      adopted.push('eco-build');
+      if (hasFarmCarry) adopted.push('production', 'eco-build');
     } else if (isFishing) {
       adopted.push('eco-fishing', 'eco-build');
-    } else {
+    } else if (isAgeProgress) {
       adopted.push('eco-build');
     }
   }
@@ -174,9 +179,18 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     adopted.push('building-garrison');
   }
 
+  // 与 conversion.ts / armyCost.ts:169-175 保持一致：纯 178/179 归招降说明与阵容账本；混合抗招降槽位与其余招降规则由阵容账本采用
+  const hasMixedConvertResist =
+    Boolean(datTech) &&
+    resistDelta({
+      ...datTech!,
+      rules: [],
+      eco: datEco.filter((e) => e.res === CONVERT_RESIST_MIN_RES || e.res === CONVERT_RESIST_MAX_RES),
+    }) !== null;
   if (resistDelta(datTech) !== null) {
     adopted.push('conversion');
   } else if (
+    hasMixedConvertResist ||
     datEco.some((e) => e.res !== undefined && CONVERSION_RES.has(e.res)) ||
     datEco.some((e) => e.a === 10 && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t))
   ) {
@@ -186,12 +200,20 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
   const poisonScope = dat.projectilePoison?.[tech.en];
   const passThroughScope = dat.projectilePassThrough?.[tech.en];
 
-  const hasUnitCombatNotice =
+  // 独立科技模拟器仅对弹道学等展示数据驱动 scopeNote；其余单位未建模战斗机制仅由单位 PK（duelUnmodeled）读取提示
+  if (tech.id === BALLISTICS_TECH_ID && Boolean(dat.ballistics)) {
+    notices.push('ballistics-notice');
+  }
+
+  const hasDuelUnmodeled =
     datEco.some((e) => e.a !== undefined && UNIT_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t)) ||
     (poisonScope?.units.length ?? 0) > 0 ||
-    (passThroughScope?.units.length ?? 0) > 0 ||
-    (tech.id === BALLISTICS_TECH_ID && Boolean(dat.ballistics));
-  if (hasUnitCombatNotice) notices.push('unit-combat-notice');
+    (passThroughScope?.units.length ?? 0) > 0;
+  if (hasDuelUnmodeled) notices.push('duel-unmodeled');
+
+  if ((poisonScope?.buildings.length ?? 0) > 0) {
+    notices.push('building-sim-notice');
+  }
 
   const hasBuildingCombatNotice =
     datEco.some((e) => e.a !== undefined && BUILDING_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t)) ||
@@ -203,9 +225,10 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
 
   const domains: TechConsumedDomain[] = [...adopted, ...notices];
   if (domains.length > 0) {
+    const withGap = (subject: string, verb: string) => (/[A-Za-z0-9]$/.test(subject) ? `${subject} ${verb}` : `${subject}${verb}`);
     const clauses: string[] = [];
-    if (adopted.length > 0) clauses.push(`${formatConsumers(adopted)}已采用固定数据编码`);
-    if (notices.length > 0) clauses.push(`${formatConsumers(notices)}已读取固定数据编码作机制提示`);
+    if (adopted.length > 0) clauses.push(withGap(formatConsumers(adopted), '已采用固定数据编码'));
+    if (notices.length > 0) clauses.push(withGap(formatConsumers(notices), '已读取固定数据编码作机制提示'));
     return {
       kind: 'consumed',
       domains,
