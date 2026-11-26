@@ -81,6 +81,7 @@ export function checkDirectory(root = process.cwd()) {
     problems = [];
   let formationContent;
   let formationContract;
+  const catalogSets = {};
   const visit = (path, file, symbolicLink = false) => {
     files.push(file);
     if (symbolicLink) {
@@ -98,6 +99,9 @@ export function checkDirectory(root = process.cwd()) {
     problems.push(...validation.problems);
     if (validation.valid && file === FORMATIONS_FILE) formationContent = data;
     if (validation.valid && file === FORMATION_CONTRACT_FILE) formationContract = data;
+    if (validation.valid && file === 'data/game/units.json') catalogSets.unit = new Set(data.map(({ id }) => id));
+    if (validation.valid && file === 'data/game/buildings.json') catalogSets.building = new Set(data.map(({ id }) => id));
+    if (validation.valid && file === 'data/game/techs.json') catalogSets.tech = new Set(data.map(({ id }) => id));
   };
   const walk = (directory) => {
     if (!existsSync(directory)) return;
@@ -112,8 +116,12 @@ export function checkDirectory(root = process.cwd()) {
   const contractPath = join(root, FORMATION_CONTRACT_FILE);
   if (existsSync(contractPath)) visit(contractPath, FORMATION_CONTRACT_FILE, lstatSync(contractPath).isSymbolicLink());
   else problems.push(problem(FORMATION_CONTRACT_FILE, 'coverage', '缺少文明阵容独立发布契约'));
-  if (formationContent && formationContract)
-    problems.push(...formationProblems(formationContent, formationContract).map((entry) => problem(FORMATIONS_FILE, 'formation', entry.message, entry.path)));
+  if (formationContent && formationContract) {
+    const catalogIds = catalogSets.unit && catalogSets.building && catalogSets.tech ? catalogSets : undefined;
+    problems.push(
+      ...formationProblems(formationContent, formationContract, catalogIds).map((entry) => problem(FORMATIONS_FILE, 'formation', entry.message, entry.path)),
+    );
+  }
   if (!files.includes(FORMATIONS_FILE)) problems.push(problem(FORMATIONS_FILE, 'coverage', '缺少首批阵容发布文件'));
   if (!files.length) problems.push(problem('data/content + data/game', 'coverage', '未发现任何 JSON 输入'));
   return { files: files.sort(), problems };

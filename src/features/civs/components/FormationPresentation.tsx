@@ -1,19 +1,10 @@
 import { Fragment, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import type {
-  CivFormationContent,
-  FormationConditionBranch,
-  FormationDecision,
-  FormationEntityView,
-  FormationSupplementView,
-  FormationView,
-} from '../../../domain/civFormations';
+import type { FormationDecision, FormationEntityView } from '../../../domain/civFormations';
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import type { SharedFormationClause } from '../../../domain/formationDedup';
 import { RESOURCE_IDS } from '../../../domain/resourceValue';
 import type { Cost } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
-import { formationAnchor } from './useFormationNavigation';
 
 const FORMATION_NUMBER = String.raw`[+\-−]?\d+(?:\.\d+)?`;
 const FORMATION_UNIT = String.raw`(?:%|射程|近甲|穿甲|生命值|生命|护甲|伤害|HP|倍|点|格|个村民|个|名|人|兵|箭|座|条|次|秒|分钟|年|人口|食物|黄金|木材|石料|食|木|金|石|血|攻|甲|F|G|W|S|s)`;
@@ -91,13 +82,14 @@ export function FormationFold({ id, label, closeLabel, children }: { id: string;
   return (
     <details id={id} className="formation-fold" data-formation-fold>
       <summary>
+        <Icon name="chevron-right" className="formation-fold-chev" />
         {closeLabel ? (
           <>
             <span className="formation-fold-closed">{label}</span>
             <span className="formation-fold-open">{closeLabel}</span>
           </>
         ) : (
-          label
+          <span>{label}</span>
         )}
       </summary>
       <div className="formation-fold-body">{children}</div>
@@ -109,7 +101,7 @@ export function SharedFormationNotice({ items }: { items: readonly SharedFormati
   if (!items.length) return null;
   return (
     <aside className="civ-formations-shared" aria-label="共同前提与适用限制">
-      <p className="civ-formations-shared-title">共同前提与适用限制（由多条路线相同限制自动汇总，以下路线卡片内不再重复）</p>
+      <p className="civ-formations-shared-title">共同前提与适用限制（由多条路线相同限制自动汇总，以下路线面板内不再重复）</p>
       <ul>
         {items.map((item, index) => (
           <li key={index}>
@@ -119,50 +111,6 @@ export function SharedFormationNotice({ items }: { items: readonly SharedFormati
         ))}
       </ul>
     </aside>
-  );
-}
-
-export function FormationRoutes({
-  groups = [],
-  routes,
-  renderCard,
-}: {
-  groups?: CivFormationContent['routeGroups'];
-  routes: FormationView[];
-  renderCard: (id: string, view: FormationView, grouped: boolean) => ReactNode;
-}) {
-  const { pathname, search } = useLocation();
-  const cards = routes
-    .filter((view) => view.status !== 'draft')
-    .map((view) => (view.status === 'unverified' ? { id: view.id, label: '路线依据待核实', view } : { id: view.route.id, label: view.route.title, view }));
-  const groupLabels = new Map(groups.flatMap(({ routes }) => routes.map(({ id, label }) => [id, label] as const)));
-  const card = ({ id, view }: (typeof cards)[number]) => renderCard(id, view, groupLabels.has(id));
-  return (
-    <>
-      {cards.length > 1 && (
-        <nav className="formation-jumps" aria-label="阵容路线">
-          {cards.map(({ id, label }) => (
-            <Link key={id} to={{ pathname, search, hash: `#${formationAnchor(id)}` }} state={{ focusFormation: true }}>
-              <FormationText text={groupLabels.get(id) ?? label} />
-            </Link>
-          ))}
-        </nav>
-      )}
-      <div className="formation-list">
-        {groups.map(({ title, note, routes }) => {
-          const members = cards.filter(({ id }) => routes.some((route) => route.id === id));
-          if (!members.length) return null;
-          return (
-            <div key={title} className="formation-route-group" role="group" aria-label={title}>
-              <p className="formation-route-group-title">{title}</p>
-              <p className="formation-meta">{note}</p>
-              <div className="formation-route-group-cards">{members.map(card)}</div>
-            </div>
-          );
-        })}
-        {cards.filter(({ id }) => !groupLabels.has(id)).map(card)}
-      </div>
-    </>
   );
 }
 
@@ -177,7 +125,7 @@ export function renderFormationAgeProgression(required: FormationEntityView[], c
       <h4>时代进阶</h4>
       <ol className="formation-age-progression">
         {stages.map(({ row, optional }, index) => (
-          <li key={`${row.kind}-${row.entity.id}`}>
+          <li key={`${row.kind}-${row.entity.id}-${row.rawOccurrence ?? index}`}>
             <p className="formation-stage-age">
               <span>{AGE_ZH[row.age]}</span>
               {optional && <span>有条件</span>}
@@ -187,60 +135,6 @@ export function renderFormationAgeProgression(required: FormationEntityView[], c
           </li>
         ))}
       </ol>
-    </section>
-  );
-}
-
-export function renderFormationConditionalGroups(groups: FormationSupplementView[], renderEntity: RenderFormationEntity) {
-  return (
-    <div className="formation-conditional-groups">
-      {groups.map((group, index) => (
-        <div className="formation-conditional-group" key={`${group.mode}-${index}`}>
-          {group.condition && (
-            <h5>
-              <FormationText text={group.condition} />
-            </h5>
-          )}
-          <ul className="formation-entities">
-            {group.entities.map((row) => (
-              <li key={`${row.kind}-${row.entity.id}`}>{renderEntity(row)}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function FormationConditionBranches({ id, branches }: { id: string; branches: FormationConditionBranch[] }) {
-  return (
-    <section className="formation-expanded-group" aria-labelledby={id}>
-      <h4 id={id}>条件分支</h4>
-      <div className="formation-conditional-groups">
-        {branches.map(({ id: branchId, title, context, decision, evidence }) => (
-          <div className="formation-conditional-group formation-condition-branch" key={branchId}>
-            <header>
-              <h5>
-                <FormationText text={title} />
-              </h5>
-              <span className="formation-meta">条件推论</span>
-            </header>
-            <dl>
-              {[context, decision].map(({ label, text }) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>
-                    <FormationText text={text} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <p className="formation-meta">
-              <FormationText text={evidence} />
-            </p>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }

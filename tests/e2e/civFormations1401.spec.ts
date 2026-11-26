@@ -120,118 +120,153 @@ for (const width of [1280, 360]) {
     for (const item of CIV_CASES) {
       await page.goto(`./#/civ/${item.civ}#formations`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.count);
+      const tabs = section.getByRole('tab');
+      await expect(tabs).toHaveCount(item.count > 1 ? item.count : 0);
+      await expect(section.locator('article')).toHaveCount(1);
 
-      const allDetails = section.locator('details');
-      const detailCount = await allDetails.count();
-      expect(detailCount).toBeGreaterThanOrEqual(item.count);
-      for (let i = 0; i < detailCount; i++) {
-        const detail = allDetails.nth(i);
-        if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
-          await detail.locator('> summary').click();
+      const chunks: string[] = [];
+      for (let t = 0; t < item.count; t++) {
+        if (item.count > 1 && t > 0) await tabs.nth(t).click();
+        const card = section.locator('article');
+        const allDetails = card.locator('details');
+        for (let i = 0; i < (await allDetails.count()); i++) {
+          const detail = allDetails.nth(i);
+          if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
+            await detail.locator('> summary').click();
+          }
+          await expect(detail).toHaveJSProperty('open', true);
         }
-        await expect(detail).toHaveJSProperty('open', true);
+        chunks.push(await section.innerText());
+        const chips = card.locator('.formation-chip');
+        for (let c = 0; c < (await chips.count()); c++) {
+          await chips.nth(c).click();
+          chunks.push(await card.locator('.formation-scenario-panel').innerText());
+        }
+
+        if (item.civ === 'Muisca') {
+          if (t === 0) await expect(card.locator('#formation-muisca-temple-guard-slinger')).toHaveCount(1);
+          if (t === 1) {
+            await expect(card.locator('#formation-muisca-arbalester-temple-champi')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+            const comp = card.locator('.formation-composition');
+            await expect(comp.getByRole('heading', { name: '必出核心' })).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/492?civ=Muisca"]')).toBeVisible();
+            await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/2587?civ=Muisca"]')).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/2554?civ=Muisca"]')).toBeVisible();
+          }
+          if (t === 2) {
+            await expect(card.locator('#formation-muisca-arbalester-skirmisher')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+            const zeroProd = card.locator('a', { hasText: '零城堡 劲弩手（靶场 4 座）＋精锐掷矛手（靶场 4 座）· 46 名村民（无征招）' });
+            await expect(zeroProd).toHaveCount(1);
+            expect((await zeroProd.getAttribute('href')) ?? '').not.toContain('315');
+          }
+        }
+
+        if (item.civ === 'Spanish' && t === 3) {
+          await expect(card.locator('#formation-spanish-hmc-hussar')).toHaveCount(1);
+          await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+        }
+
+        if (item.civ === 'Japanese') {
+          if (t === 0) await expect(card.locator('#formation-japanese-samurai-light-cavalry')).toHaveCount(1);
+          if (t === 1) {
+            await expect(card.locator('#formation-japanese-halberdier-hca-trebuchet')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+          }
+        }
+
+        if (item.civ === 'Bulgarians') {
+          if (t === 0) {
+            await expect(card.locator('#formation-bulgarians-krepost-konnik')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
+          }
+          if (t === 1) {
+            await expect(card.locator('#formation-bulgarians-stirrups-cav-hca-siege')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+            const comp = card.locator('.formation-composition');
+            await expect(comp.getByRole('heading', { name: '必出核心' })).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/474?civ=Bulgarians"]')).toBeVisible();
+            await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/441?civ=Bulgarians"]')).toBeVisible();
+            await expect(comp.locator('a[href="#/unit/283?civ=Bulgarians"]')).toBeVisible();
+          }
+          if (t === 2) {
+            await expect(card.locator('#formation-bulgarians-bagains-ths-siege')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+          }
+        }
+
+        if (item.civ === 'Tupi') {
+          if (t === 0) {
+            await expect(card.locator('#formation-tupi-blackwood-halberdier')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
+            await expect(card).toContainText('有城堡产能时的默认首选主路');
+          }
+          if (t === 1) {
+            await expect(card.locator('#formation-tupi-champi-slinger')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);
+            await expect(card).toContainText('无城堡产兵窗口，或面对重型弩炮、重掷矛与纯步兵局势时选用的平行条件路线');
+          }
+        }
+
+        if (item.civ === 'Jurchens') {
+          if (t === 0) {
+            await expect(card.locator('#formation-jurchens-steppe-siege-field')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+          }
+          if (t === 1) {
+            await expect(card.locator('#formation-jurchens-fire-lancer-tower')).toHaveCount(1);
+            await expect(card.getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+          }
+        }
+
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
+        const numTokens = section.locator('.num.nw');
+        const tokenCount = await numTokens.count();
+        expect(tokenCount).toBeGreaterThan(0);
+        const wrapped = await numTokens.evaluateAll((els) =>
+          els
+            .map((el, i) => ({
+              i,
+              text: el.textContent ?? '',
+              tops: new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size,
+            }))
+            .filter((entry) => entry.tops > 1),
+        );
+        expect(wrapped, `${item.civ} wrapped .num.nw tokens`).toEqual([]);
       }
 
-      const fullText = await section.innerText();
+      const fullText = chunks.join('\n');
       for (const token of item.mustContain) {
         expect(fullText, `${item.civ} missing ${token}`).toContain(token);
       }
-
-      if (item.civ === 'Muisca') {
-        await expect(cards.nth(0).locator('#formation-muisca-temple-guard-slinger')).toHaveCount(1);
-        await expect(cards.nth(1).locator('#formation-muisca-arbalester-temple-champi')).toHaveCount(1);
-        await expect(cards.nth(2).locator('#formation-muisca-arbalester-skirmisher')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        await expect(cards.nth(2).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        const comp = cards.nth(1).locator('.formation-composition');
-        await expect(comp.getByRole('heading', { name: '共同组成' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/492?civ=Muisca"]')).toBeVisible();
-        await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/2587?civ=Muisca"]')).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/2554?civ=Muisca"]')).toBeVisible();
-
-        const zeroProd = cards.nth(2).locator('a', { hasText: '零城堡 劲弩手（靶场 4 座）＋精锐掷矛手（靶场 4 座）· 46 名村民（无征招）' });
-        await expect(zeroProd).toHaveCount(1);
-        expect((await zeroProd.getAttribute('href')) ?? '').not.toContain('315');
-      }
-
-      if (item.civ === 'Spanish') {
-        await expect(cards.nth(3).locator('#formation-spanish-hmc-hussar')).toHaveCount(1);
-        await expect(cards.nth(3).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-      }
-
-      if (item.civ === 'Japanese') {
-        await expect(cards.nth(0).locator('#formation-japanese-samurai-light-cavalry')).toHaveCount(1);
-        await expect(cards.nth(1).locator('#formation-japanese-halberdier-hca-trebuchet')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-      }
-
-      if (item.civ === 'Bulgarians') {
-        await expect(cards.nth(0).locator('#formation-bulgarians-krepost-konnik')).toHaveCount(1);
-        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
-        await expect(cards.nth(1).locator('#formation-bulgarians-stirrups-cav-hca-siege')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        await expect(cards.nth(2).locator('#formation-bulgarians-bagains-ths-siege')).toHaveCount(1);
-        await expect(cards.nth(2).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        const comp = cards.nth(1).locator('.formation-composition');
-        await expect(comp.getByRole('heading', { name: '共同组成' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/474?civ=Bulgarians"]')).toBeVisible();
-        await expect(comp.getByRole('heading', { name: '备选分支（按条件择一，不同时必出）' })).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/441?civ=Bulgarians"]')).toBeVisible();
-        await expect(comp.locator('a[href="#/unit/283?civ=Bulgarians"]')).toBeVisible();
-      }
-
-      if (item.civ === 'Tupi') {
-        await expect(cards.nth(0).locator('#formation-tupi-blackwood-halberdier')).toHaveCount(1);
-        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*用户报告用过/);
-        await expect(cards.nth(0)).toContainText('有城堡产能时的默认首选主路');
-        await expect(cards.nth(1).locator('#formation-tupi-champi-slinger')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);
-        await expect(cards.nth(1)).toContainText('无城堡产兵窗口，或面对重型弩炮、重掷矛与纯步兵局势时选用的平行条件路线');
-      }
-
-      if (item.civ === 'Jurchens') {
-        await expect(cards.nth(0).locator('#formation-jurchens-steppe-siege-field')).toHaveCount(1);
-        await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-        await expect(cards.nth(1).locator('#formation-jurchens-fire-lancer-tower')).toHaveCount(1);
-        await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
-      }
-
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);
-      const numTokens = section.locator('.num.nw');
-      const tokenCount = await numTokens.count();
-      expect(tokenCount).toBeGreaterThan(0);
-      const wrapped = await numTokens.evaluateAll((els) =>
-        els
-          .map((el, i) => ({
-            i,
-            text: el.textContent ?? '',
-            tops: new Set([...el.getClientRects()].map((r) => Math.round(r.top))).size,
-          }))
-          .filter((entry) => entry.tops > 1),
-      );
-      expect(wrapped, `${item.civ} wrapped .num.nw tokens`).toEqual([]);
     }
 
     if (width === 1280) {
       const extractAndVisit = async (civ: string, linkText: string, expectedText: RegExp) => {
         await page.goto(`./#/civ/${civ}#formations`);
         await expect(page.locator('#civ-tt-title')).toBeVisible();
-        const sourceDetails = page.locator('#formations details[id$="-sources"]');
-        const n = await sourceDetails.count();
-        for (let i = 0; i < n; i++) {
-          const detail = sourceDetails.nth(i);
+        const section = page.locator('#formations');
+        const tabs = section.getByRole('tab');
+        const routeTotal = Math.max(1, await tabs.count());
+        let href = '';
+        for (let t = 0; t < routeTotal; t++) {
+          if (t > 0) await tabs.nth(t).click();
+          const detail = section.locator('details[id$="-sources"]').first();
           if (!(await detail.evaluate((el: HTMLDetailsElement) => el.open))) {
             await detail.locator('summary').click();
           }
           await expect(detail).toHaveJSProperty('open', true);
+          const candidate = section.locator('a', { hasText: linkText }).first();
+          if ((await candidate.count()) > 0) {
+            await expect(candidate).toBeVisible();
+            href = (await candidate.getAttribute('href')) ?? '';
+            break;
+          }
         }
-        const link = page.locator('#formations a', { hasText: linkText }).first();
-        await expect(link).toBeVisible();
-        const href = (await link.getAttribute('href')) ?? '';
-        expect(href).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
+        expect(href, `${civ} missing link ${linkText}`).toMatch(/^https:\/\/linhongcun\.github\.io\/aoe2-analyzer\/#\//);
         const hash = new URL(href).hash;
         await page.goto(`./${hash}`);
         if (hash.includes('m=mix')) {

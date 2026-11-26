@@ -76,17 +76,21 @@ for (const width of [1280, 360]) {
     if (width === 360) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
 
     for (const item of PARALLEL_CASES) {
-      await page.goto(`./#/civ/${item.civ}#formations`);
+      await page.goto(`./#/civ/${item.civ}#formation-${item.newId}`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.count);
-
-      const targetCard = cards.filter({ has: page.locator(`#formation-${item.newId}`) });
+      await expect(section.getByRole('tab')).toHaveCount(item.count);
+      const targetCard = section.locator('article').filter({ has: page.locator(`#formation-${item.newId}`) });
       await expect(targetCard).toHaveCount(1);
       await expect(targetCard.getByLabel('路线状态')).toHaveText(item.badge);
-      await targetCard.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+      await targetCard.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).click();
 
-      const text = await targetCard.innerText();
+      const chunks = [await targetCard.innerText()];
+      const chips = targetCard.locator('.formation-chip');
+      for (let c = 0; c < (await chips.count()); c++) {
+        await chips.nth(c).click();
+        chunks.push(await targetCard.locator('.formation-scenario-panel').innerText());
+      }
+      const text = chunks.join('\n');
       for (const token of item.mustContain) expect(text, `${item.civ} missing ${token}`).toContain(token);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
@@ -100,14 +104,23 @@ for (const width of [1280, 360]) {
     }
 
     for (const item of MERGED_CASES) {
-      await page.goto(`./#/civ/${item.civ}#formations`);
+      await page.goto(`./#/civ/${item.civ}#formation-${item.anchorId}`);
       const section = page.locator('#formations');
-      const cards = section.locator('.formation-list > article');
-      await expect(cards).toHaveCount(item.count);
+      if (item.count > 1) await expect(section.getByRole('tab')).toHaveCount(item.count);
+      else await expect(section.getByRole('tab')).toHaveCount(0);
 
-      const targetCard = cards.filter({ has: page.locator(`#formation-${item.anchorId}`) });
+      const targetCard = section.locator('article').filter({ has: page.locator(`#formation-${item.anchorId}`) });
       await expect(targetCard).toHaveCount(1);
-      const text = await section.innerText();
+      for (const summary of await targetCard.locator('details > summary').all()) {
+        await summary.click();
+      }
+      const chunks = [await section.innerText()];
+      const chips = targetCard.locator('.formation-chip');
+      for (let c = 0; c < (await chips.count()); c++) {
+        await chips.nth(c).click();
+        chunks.push(await targetCard.locator('.formation-scenario-panel').innerText());
+      }
+      const text = chunks.join('\n');
       for (const token of item.mustContain) expect(text, `${item.civ} missing ${token}`).toContain(token);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

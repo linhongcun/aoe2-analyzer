@@ -41,25 +41,24 @@ for (const width of [1280, 390]) {
     const section = page.locator(formations);
     await page.getByRole('navigation', { name: '本页章节' }).getByRole('link', { name: '推荐阵容' }).press('Enter');
     await expect(section.getByRole('heading', { level: 2 })).toBeFocused();
-    await expect(section.locator('article')).toHaveCount(4);
-    const jump = section.getByRole('navigation').getByRole('link', { name: '游侠＋精锐掷矛手' });
-    await jump.press('Enter');
+    await expect(section.getByRole('tab')).toHaveCount(4);
+    await expect(section.locator('article')).toHaveCount(1);
+    const paladinTab = section.getByRole('tab', { name: /游侠＋精锐掷矛手/ });
+    await paladinTab.press('Enter');
+    await expect(paladinTab).toHaveAttribute('aria-selected', 'true');
     const title = page.locator(`#${paladin}`);
-    await expect(title).toBeFocused();
-    await onScreenBelowNav(title);
-    await jump.press('Enter');
-    await expect(title).toBeFocused();
-    await onScreenBelowNav(title);
+    await expect(title).toBeVisible();
     const card = section.locator('article').filter({ has: title });
-    const detail = card.locator('summary').filter({ hasText: '查看攻守与调整' });
+    const detail = card.locator('summary').filter({ hasText: '攻守配合与不默认加入' });
     await detail.press('Enter');
     const sources = card.locator('summary').filter({ hasText: '来源与核对' });
     await sources.press('Space');
     await expect(card.locator('details[open]')).toHaveCount(2);
-    await expect(card.getByText('骆驼或强反骑', { exact: true })).toBeVisible();
+    await card.getByRole('button', { name: /遇到骆驼或强反骑/ }).click();
+    await expect(card.locator('.formation-scenario-panel')).toContainText('骆驼或强反骑');
     const unit = card.getByRole('link', { name: /^游侠/ });
     await expect(unit).toHaveAttribute('href', '#/unit/569?civ=Spanish');
-    for (const target of [jump, unit, card.locator('summary').first(), sources]) {
+    for (const target of [paladinTab, unit, card.locator('summary').first(), sources]) {
       const box = await target.boundingBox();
       expect(box?.height).toBeGreaterThanOrEqual(44);
       expect(box?.width).toBeGreaterThanOrEqual(44);
@@ -68,15 +67,17 @@ for (const width of [1280, 390]) {
     await expect(page).toHaveURL(/#\/unit\/569\?civ=Spanish$/);
     await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
     await page.goBack();
-    await expect(page).toHaveURL(new RegExp(`#/civ/Spanish#${paladin}$`));
+    await expect(page).toHaveURL(/#\/civ\/Spanish#formations$/);
+    await expect(paladinTab).toHaveAttribute('aria-selected', 'true');
     await expect(card.locator('details[open]')).toHaveCount(2);
     await expect(unit).toBeFocused();
     await onScreenBelowNav(unit);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.goForward();
     await page.goBack();
-    await expect(card.locator('details[open]')).toHaveCount(0);
-    await expect(unit).not.toBeFocused();
+    await expect(section.locator('article details[open]')).toHaveCount(0);
+    await expect(page.locator(`#${paladin}-unit-569`)).toHaveCount(0);
+    await page.goto(`${spanish}#${paladin}`);
     await page.reload();
     await expect(card.locator('summary')).toHaveCount(2);
     await expect(card.locator('details[open]')).toHaveCount(0);
@@ -86,9 +87,11 @@ for (const width of [1280, 390]) {
 
 test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({ page, context }) => {
   await page.goto(spanish);
+  const section = page.locator(formations);
+  await section.getByRole('tab', { name: /游侠＋精锐掷矛手/ }).click();
   const entity = page.locator(`#${paladin}-unit-569`);
   const popup = context.waitForEvent('page');
-  await entity.click({ modifiers: ['Control'] });
+  await entity.click({ modifiers: [process.platform === 'darwin' ? 'Meta' : 'Control'] });
   const details = await popup;
   await expect(details).toHaveURL(/#\/unit\/569\?civ=Spanish$/);
   await details.close();
@@ -97,14 +100,15 @@ test('#1120 无 hash 的实体返回、跨文明和现有工具入口', async ({
   await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/#\/civ\/Spanish$/);
+  await expect(section.getByRole('tab', { name: /游侠＋精锐掷矛手/ })).toHaveAttribute('aria-selected', 'true');
   await expect(entity).toBeFocused();
   await onScreenBelowNav(entity);
   await page.getByTestId('civ-kit').locator('a[href^="#/unit/"]').first().click();
   await page.goBack();
-  await expect(entity).not.toBeFocused();
+  await expect(entity).toHaveCount(0);
   await page.goto('./#/civ/Georgians#formation-monaspa-towers');
-  const section = page.locator(formations);
-  await expect(section.locator('article')).toHaveCount(2);
+  await expect(section.getByRole('tab')).toHaveCount(2);
+  await expect(section.locator('article')).toHaveCount(1);
   await onScreenBelowNav(page.locator('#formation-monaspa-towers'));
   await expect(section.getByRole('link', { name: /^大型箭塔 建筑支点/ })).toHaveAttribute('href', '#/building/235?civ=Georgians');
   await expect(section.getByRole('link', { name: /^斯万箭塔/ })).toHaveAttribute('href', '#/tech/923?civ=Georgians');
@@ -119,7 +123,7 @@ test('#1120 刷新实体详情后返回只按锚点定位', async ({ page }) => 
   await page.goto(`${spanish}#${paladin}`);
   const title = page.locator(`#${paladin}`);
   const card = page.locator(formations).locator('article').filter({ has: title });
-  await card.getByText('查看攻守与调整', { exact: true }).click();
+  await card.getByText('攻守配合与不默认加入', { exact: true }).click();
   const entity = card.locator(`#${paladin}-unit-569`);
   const paladinPage = page.getByRole('heading', { level: 1, name: /游侠/ });
   await entity.click();
@@ -140,11 +144,10 @@ test('#1137 历史快照后阵容实体返回仍由阵容 owner 恢复', async (
   await historyLink.click();
   await page.goBack();
   await expect(historyLink).toBeFocused();
-  const card = page
-    .locator(formations)
-    .locator('article')
-    .filter({ has: page.locator('#' + paladin) });
-  await card.getByText('查看攻守与调整', { exact: true }).click();
+  const section = page.locator(formations);
+  await section.getByRole('tab', { name: /游侠＋精锐掷矛手/ }).click();
+  const card = section.locator('article').filter({ has: page.locator('#' + paladin) });
+  await card.getByText('攻守配合与不默认加入', { exact: true }).click();
   const entity = card.locator('#' + paladin + '-unit-569');
   await entity.click();
   await expect(page.getByRole('heading', { level: 1, name: /游侠/ })).toBeVisible();
@@ -286,7 +289,8 @@ for (const asset of ['core', 'trees']) {
     await expect(page.getByTestId('civ-techtree')).toContainText('失败');
     fail = false;
     await section.getByRole('button', { name: '重试', exact: true }).press('Enter');
-    await expect(section.locator('article')).toHaveCount(4);
+    await expect(section.getByRole('tab')).toHaveCount(4);
+    await expect(section.locator('article')).toHaveCount(1);
     await expect(section.getByRole('heading', { level: 2 })).toBeFocused();
     await expect(section.getByText('推荐阵容已读取')).toBeVisible();
     await expect(page.getByTestId('civ-unique-units')).toBeVisible();
@@ -349,7 +353,9 @@ test('#1139 26 个文明入口均有独立路线卡', async ({ page }) => {
   };
   for (const [civ, count] of Object.entries(routes)) {
     await page.goto(`./#/civ/${civ}#formations`);
-    await expect(page.locator(formations).locator('.formation-list article')).toHaveCount(count);
+    const section = page.locator(formations);
+    await expect(section.getByRole('tab')).toHaveCount(count > 1 ? count : 0);
+    await expect(section.locator('article')).toHaveCount(1);
   }
 });
 
@@ -358,73 +364,69 @@ for (const width of [1280, 360]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('./#/civ/Vietnamese#formations');
     const section = page.locator(formations);
-    const main = section.getByRole('group', { name: '两条主路' });
-    const holding = section.getByRole('group', { name: '守家与资源点' });
-    const mobileTitle = page.locator('#formation-vietnamese-light-cav-rattan');
+    await expect(section.getByRole('tablist')).toHaveCount(1);
+    const tabs = section.getByRole('tab');
+    await expect(tabs).toHaveCount(3);
+    await expect(section).toContainText('两条主路');
+    await expect(section).toContainText('按条件择一，不同时必出');
+    await expect(section).toContainText('守家与资源点');
+    await expect(section).toContainText('仅防守 · 非主力');
+
+    const card = section.locator('article');
+    await expect(card).toHaveCount(1);
+    await expect(card.locator('#formation-vietnamese-light-cav-rattan')).toBeVisible();
+    await expect(card).toContainText('各自生产建筑');
+    await expect(card.getByLabel('路线状态')).toHaveText('讨论认可未说明实战使用');
+    await card.getByRole('button', { name: /城堡时代已有基础延续/ }).click();
+    await expect(card.getByRole('link', { name: /^藤弓兵/ })).toHaveAttribute('href', '#/unit/1129?civ=Vietnamese');
+    await card.getByRole('button', { name: /遇到受保护的敌方攻城器/ }).click();
+    await expect(card.locator('.formation-scenario-panel')).toContainText(/受保护的敌方攻城器/);
+
+    const frontTab = section.getByRole('tab', { name: /正面主路/ });
+    await frontTab.press('Enter');
     const frontTitle = page.locator('#formation-vietnamese-elephant-skirmisher');
-    const garrison = holding.getByRole('article');
-    const mobile = main.getByRole('article').filter({ has: mobileTitle });
-    const front = main.getByRole('article').filter({ has: frontTitle });
-    await expect(section.getByRole('article')).toHaveCount(3);
-    await expect(main.getByRole('article')).toHaveCount(2);
-    await expect(main).toContainText('按条件择一，不同时必出');
-    await expect(holding).toContainText('仅防守 · 非主力');
-    const mobileBox = await mobile.boundingBox();
-    const frontBox = await front.boundingBox();
-    const garrisonBox = await garrison.boundingBox();
-    expect(mobileBox && frontBox && garrisonBox).toBeTruthy();
-    if (width === 1280) {
-      expect(mobileBox!.y).toBeCloseTo(frontBox!.y);
-      expect(mobileBox!.width).toBeCloseTo(frontBox!.width);
-      expect(mobileBox!.x + mobileBox!.width).toBeLessThan(frontBox!.x);
-    } else {
-      expect(mobileBox!.x).toBeCloseTo(frontBox!.x);
-      expect(mobileBox!.y + mobileBox!.height).toBeLessThan(frontBox!.y);
-    }
-    expect(frontBox!.y + frontBox!.height).toBeLessThan(garrisonBox!.y);
-    await expect(mobile).toContainText('各自生产建筑');
-    await expect(front).toContainText('两边能持续补员');
-    for (const card of [mobile, front]) {
-      await expect(card.getByLabel('路线状态')).toHaveText('讨论认可未说明实战使用');
-      await expect(card.getByText(/敌方攻城器有护卫|发现带护卫的攻城器/)).toBeVisible();
-      await expect(card.getByRole('heading', { name: '按需攻城支援 · 非固定组成' })).toBeVisible();
-    }
-    await expect(mobile.getByRole('link', { name: /^藤弓兵/ })).toHaveAttribute('href', '#/unit/1129?civ=Vietnamese');
-    await expect(front.getByRole('link', { name: /^象兵/ })).toContainText('基础生命 250');
-    await expect(front.getByRole('link', { name: /^精锐象兵/ })).toContainText('基础生命 300');
-    const chatras = front.getByRole('link', { name: /^宝伞/ });
+    await expect(frontTitle).toBeVisible();
+    await expect(card).toContainText('两边能持续补员');
+    await expect(card.getByLabel('路线状态')).toHaveText('讨论认可未说明实战使用');
+    await expect(card.getByRole('link', { name: /^象兵/ })).toContainText('基础生命 250');
+    await card.getByRole('button', { name: /经济充裕·强化象兵生命与升级/ }).click();
+    await expect(card.getByRole('link', { name: /^精锐象兵/ })).toContainText('基础生命 300');
+    const chatras = card.getByRole('link', { name: /^宝伞/ });
     await expect(chatras).toHaveAttribute('href', '#/tech/628?civ=Vietnamese');
     await expect(chatras.locator('.num.nw')).toHaveText('+100');
 
-    const jump = section.getByRole('navigation', { name: '阵容路线' }).getByRole('link', { name: '正面主路', exact: true });
-    await jump.press('Enter');
-    await expect(frontTitle).toBeFocused();
-    await onScreenBelowNav(frontTitle);
-    await front.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Enter');
-    await front.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
-    await expect(front.getByText('收起来源与核对', { exact: true })).toBeVisible();
-    await expect(front.getByText('原讨论未说明实战使用。接敌与运营条件属于分析。')).toBeVisible();
-    await expect(front.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://github.com/linhongcun/aoe2-analyzer/issues/1172');
-    await expect(mobile.locator('details[open]')).toHaveCount(0);
+    await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).press('Enter');
+    await card.locator('summary').filter({ hasText: '来源与核对' }).press('Space');
+    await expect(card.getByText('收起来源与核对', { exact: true })).toBeVisible();
+    await expect(card.getByText('原讨论未说明实战使用。接敌与运营条件属于分析。')).toBeVisible();
+    await expect(card.getByRole('link', { name: '原讨论' })).toHaveAttribute('href', 'https://github.com/linhongcun/aoe2-analyzer/issues/1172');
 
     await chatras.click();
     await expect(page).toHaveURL(/#\/tech\/628\?civ=Vietnamese$/);
     await expect(page.getByRole('heading', { level: 1, name: /宝伞/ })).toBeVisible();
     await page.goBack();
-    await expect(page).toHaveURL(/#\/civ\/Vietnamese#formation-vietnamese-elephant-skirmisher$/);
+    await expect(page).toHaveURL(/#\/civ\/Vietnamese#formations$/);
+    await expect(frontTab).toHaveAttribute('aria-selected', 'true');
     await expect(chatras).toBeFocused();
-    await expect(front.locator('details[open]')).toHaveCount(2);
+    await expect(card.locator('details[open]')).toHaveCount(2);
     await onScreenBelowNav(chatras);
+
+    await page.goto('./#/civ/Vietnamese#formation-vietnamese-elephant-skirmisher');
     await page.reload();
-    await expect(front.locator('details[open]')).toHaveCount(0);
+    await expect(card.locator('details[open]')).toHaveCount(0);
     await onScreenBelowNav(frontTitle);
-    await garrison.locator('summary').filter({ hasText: '查看攻守与调整' }).press('Enter');
-    await expect(garrison.getByText(/已撤回/)).toBeVisible();
-    await expect(garrison.getByText(/理论面板/)).toBeVisible();
+
+    await section.getByRole('tab', { name: /守点补充/ }).click();
+    await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).press('Enter');
+    await card.getByRole('button', { name: /守点遭遇弓手压制/ }).click();
+    await expect(card).toContainText(/已撤回/);
+    await card.getByRole('button', { name: /守点遭遇骑士与游侠压力/ }).click();
+    await expect(card).toContainText(/理论面板/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.goto('./#/civ/Spanish#formations');
     await expect(section.getByRole('heading', { name: /机动主路|正面主路|火矛驻塔/ })).toHaveCount(0);
-    await expect(section.getByRole('article')).toHaveCount(4);
+    await expect(section.getByRole('tab')).toHaveCount(4);
+    await expect(section.locator('article')).toHaveCount(1);
   });
 }
 
@@ -434,12 +436,13 @@ for (const width of [360, 1280]) {
     await page.goto('./#/civ/Chinese#formations');
     const section = page.locator(formations);
     await expect(section).toContainText('用户报告用过');
+    await section.getByRole('tab').nth(2).click();
     await expect(section).toContainText('待实战验证');
 
     await page.goto('./#/civ/Malay#formation-malay-battle-elephant-progression');
     const malayProgression = page.locator('#formation-malay-battle-elephant-progression');
     await expect(malayProgression).toBeVisible();
-    const malayCard = section.locator('.formation-list > article').filter({ has: malayProgression });
+    const malayCard = section.locator('article').filter({ has: malayProgression });
     await expect(malayCard.getByRole('heading', { level: 4, name: '先后阶段组成' })).toBeVisible();
     const malayStages = malayCard.locator('.formation-entities').first().locator('.formation-entity');
     await expect(malayStages).toHaveCount(2);
@@ -447,14 +450,14 @@ for (const width of [360, 1280]) {
     await expect(malayStages.nth(1)).toContainText('帝王时代');
     await page.goto('./#/civ/Malay#formation-malay-two-handed-swordsman-sustain');
     const malaySwordsHeading = page.locator('#formation-malay-two-handed-swordsman-sustain');
-    const malaySwordsCard = section.locator('.formation-list > article').filter({ has: malaySwordsHeading });
+    const malaySwordsCard = section.locator('article').filter({ has: malaySwordsHeading });
     await expect(malaySwordsCard).toContainText('缺金');
     await expect(malaySwordsCard).toContainText('强征兵役');
     await expect(malaySwordsCard.getByRole('link', { name: /^强征兵役/ })).toHaveAttribute('href', '#/tech/625?civ=Malay');
 
     await page.goto('./#/civ/Poles#formation-poles-discount-knights');
     const poles = page.locator('#formation-poles-discount-knights');
-    const polesCard = section.locator('.formation-list > article').filter({ has: poles });
+    const polesCard = section.locator('article').filter({ has: poles });
     await expect(polesCard.getByRole('heading', { level: 4, name: '先后阶段组成' })).toBeVisible();
     const polesStages = polesCard.locator('.formation-entities').first().locator('.formation-entity');
     await expect(polesStages).toHaveCount(2);
@@ -473,17 +476,17 @@ for (const width of [360, 1280]) {
 
     await page.goto('./#/civ/Aztecs#formation-aztecs-eagle-skirmisher');
     const aztecHeading = page.locator('#formation-aztecs-eagle-skirmisher');
-    const aztec = section.locator('.formation-list > article').filter({ has: aztecHeading });
+    const aztec = section.locator('article').filter({ has: aztecHeading });
     await expect(aztec).toContainText('限定候选');
     await expect(aztec).toContainText('不是通用主路');
 
     await page.goto('./#/civs');
     await page.locator('[data-civ="Incas"]').click();
     await page.getByRole('link', { name: '打开完整文明资料' }).click();
-    await page.locator('.formation-jumps a[href$="#formation-incas-champi-candidate"]').click();
     const inca = page.locator(formations);
+    await inca.getByRole('tab', { name: /限定候选/ }).click();
     const candidateHeading = page.locator('#formation-incas-champi-candidate');
-    const candidate = inca.locator('.formation-list > article').filter({ has: candidateHeading });
+    const candidate = inca.locator('article').filter({ has: candidateHeading });
     await expect(candidate).toContainText('限定候选');
     await expect(candidate).toContainText('蔷琵战士');
     await expect(candidate).toContainText('弩炮');
@@ -495,8 +498,8 @@ for (const width of [360, 1280]) {
     await champi.click();
     await expect(page).toHaveURL(/#\/unit\/2554\?civ=Incas$/);
     const entityPageState = await page.evaluate(() => window.history.state);
-    expect(clickBefore.idx).toBe(2);
-    expect(entityPageState.idx).toBe(3);
+    expect(clickBefore.idx).toBe(1);
+    expect(entityPageState.idx).toBe(2);
     expect(entityPageState.usr.formationReturn).toBeTruthy();
     await page.goBack();
     await expect(champi).toBeFocused();
@@ -510,11 +513,11 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
   await page.goto('./#/civ/Koreans#formation-koreans-fire-lancer-garrison');
   const section = page.locator(formations);
   const heading = page.locator('#formation-koreans-fire-lancer-garrison');
-  const card = section.locator('.formation-list > article').filter({ has: heading });
+  const card = section.locator('article').filter({ has: heading });
   await expect(heading).toBeVisible();
 
-  const adjustment = card.locator('.formation-adjustments > div').filter({ hasText: '巨投、长射程火炮' });
-  await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+  await card.getByRole('button', { name: /巨投或长射程火炮威胁/ }).click();
+  const adjustment = card.locator('.formation-scenario-panel');
   await expect(adjustment.locator('.num.nw').filter({ hasText: '13 射程' })).toHaveCount(1);
   await expect(adjustment.locator('.num.nw').filter({ hasText: '14 射程' })).toHaveCount(1);
 
@@ -532,17 +535,26 @@ test('#1139 来源版本与数字单位分别不换行，固定来源链接保�
 
   await page.goto('./#/civ/Jurchens#formation-jurchens-fire-lancer-tower');
   const jurchensHeading = page.locator('#formation-jurchens-fire-lancer-tower');
-  const jurchens = page.locator(formations).locator('.formation-list > article').filter({ has: jurchensHeading });
+  const jurchens = page.locator(formations).locator('article').filter({ has: jurchensHeading });
   await expect(jurchens).toBeVisible();
-  await jurchens.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
-  for (const token of ['1/85', '64/85', '80.6/95']) {
-    await expect(jurchens.locator('.num.nw').filter({ hasText: token })).toHaveText(token);
+  await jurchens.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).click();
+  const jurchenChips = jurchens.locator('.formation-chip');
+  const seenTokens = new Set<string>();
+  for (let c = 0; c < (await jurchenChips.count()); c++) {
+    await jurchenChips.nth(c).click();
+    for (const token of ['1/85', '64/85', '80.6/95']) {
+      if ((await jurchens.locator('.num.nw').filter({ hasText: token }).count()) > 0) {
+        await expect(jurchens.locator('.num.nw').filter({ hasText: token }).first()).toHaveText(token);
+        seenTokens.add(token);
+      }
+    }
   }
+  expect([...seenTokens].sort()).toEqual(['1/85', '64/85', '80.6/95']);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
   await page.goto('./#/civ/Japanese#formation-japanese-samurai-light-cavalry');
   const japaneseHeading = page.locator('#formation-japanese-samurai-light-cavalry');
-  const japanese = page.locator(formations).locator('.formation-list > article').filter({ has: japaneseHeading });
+  const japanese = page.locator(formations).locator('article').filter({ has: japaneseHeading });
   await expect(japanese).toBeVisible();
   await japanese.locator('summary').filter({ hasText: '来源与核对' }).click();
   const japaneseScope = japanese.locator('.formation-evidence > div').filter({ hasText: '一维接敌、射程先手和近战占位' });

@@ -1,21 +1,31 @@
 import { buildingAge } from './availabilityAge';
 import type { FormationSource } from './civFormationsSource.mjs';
 import { resolveFormationSource } from './civFormationsSource.mjs';
+import { isAgeProgressionSupplement } from './formationPartition.mjs';
+import { projectFormationScenarios, type FormationScenarioView, type SupplementProjectionResult } from './formationScenarios';
 import type { Building, Cost, Tech, Trees, Unit } from './types';
 import { techAvailable, unitAvailable } from './unitAvailability';
 
-type FormationAge = 2 | 3 | 4;
+export type {
+  FormationScenarioAdjustmentBlock,
+  FormationScenarioBranchBlock,
+  FormationScenarioSupplementBlock,
+  FormationScenarioView,
+} from './formationScenarios';
+
+export type FormationAge = 2 | 3 | 4;
 type FormationStatus = 'approved' | 'candidate' | 'unverified' | 'draft';
 type FormationPlaytest = 'reported' | 'pending' | 'unreported';
 type FormationComposition = 'combined' | 'choice' | 'progression';
-type EntityKind = 'unit' | 'building' | 'tech';
+export type EntityKind = 'unit' | 'building' | 'tech';
+export type FormationScenarioGroup = 'opponent' | 'condition';
 
-interface FormationPatch {
+export interface FormationPatch {
   build: number;
   date: string;
 }
 
-interface EntityRef {
+export interface EntityRef {
   kind: EntityKind;
   id: number;
   age?: FormationAge;
@@ -27,7 +37,7 @@ export interface FormationDecision {
   exception: string;
 }
 
-interface FormationResearch {
+export interface FormationResearch {
   tech: number;
   effect: string;
   caveat?: string;
@@ -36,24 +46,24 @@ interface FormationResearch {
   trainingPrice?: { before: Cost; after: Cost };
 }
 
-interface FormationEntity extends EntityRef {
+export interface FormationEntity extends EntityRef {
   historicalName: string;
   role: string;
   research?: FormationResearch;
 }
 
-interface FormationPrerequisite extends FormationEntity {
+export interface FormationPrerequisite extends FormationEntity {
   condition?: string;
 }
 
-interface FormationChoice {
+export interface FormationChoice {
   id: string;
   title: string;
   preconditions: string[];
   entities: FormationEntity[];
 }
 
-interface FormationSupplement {
+export interface FormationSupplement {
   mode:
     | 'as-needed'
     | 'choice'
@@ -81,7 +91,7 @@ interface RouteDependency {
 
 type AdjustmentDependency = EntityRef | RouteDependency;
 
-interface Adjustment {
+export interface Adjustment {
   id: string;
   when: string;
   text: string;
@@ -94,23 +104,72 @@ export interface FormationConditionBranch {
   id: string;
   title: string;
   requires: EntityRef[];
+  displayRequires?: EntityRef[];
+  partialTitle?: string;
+  partialFallback?: string;
   context: { label: string; text: string };
   decision: { label: string; text: string };
   evidence: string;
 }
 
-interface FormationEvidence {
+export interface FormationEvidenceLink {
+  label: string;
+  href: string;
+  requires?: EntityRef[];
+}
+
+export interface FormationEvidence {
   recognition: string;
   playtest: string;
   scope: string;
   recordedVersion: string;
   sourceLines: number[];
-  links?: { label: string; href: string }[];
+  links?: FormationEvidenceLink[];
 }
 
-interface Formation {
+export type ScenarioGate =
+  | { kind: 'supplement'; index: number; requireFull?: true }
+  | { kind: 'adjustment'; id: string }
+  | { kind: 'conditionBranch'; id: string }
+  | { kind: 'entity'; entityKind: EntityKind; id: number; age?: FormationAge };
+
+export interface ScenarioOmitSupplementCondition {
+  supplementIndex: number;
+  coveredBy: { kind: 'adjustment' | 'conditionBranch'; id: string };
+}
+
+export interface ScenarioCaveat {
+  text: string;
+  whenAvailable?: ScenarioGate;
+}
+
+export interface ScenarioLink {
+  index: number;
+  whenAvailable?: ScenarioGate;
+}
+
+export interface FormationScenario {
+  id: string;
+  chipLabel: string;
+  actionHint?: string;
+  actionHintGate?: ScenarioGate;
+  group?: FormationScenarioGroup;
+  title?: string;
+  when?: string;
+  summary?: string;
+  summaryGate?: ScenarioGate;
+  omitSupplementConditions?: ScenarioOmitSupplementCondition[];
+  caveats?: ScenarioCaveat[];
+  links?: ScenarioLink[];
+  supplementIndices?: number[];
+  adjustmentIds?: string[];
+  conditionBranchIds?: string[];
+}
+
+export interface Formation {
   id: string;
   title: string;
+  tabHint?: string;
   status: FormationStatus;
   playtest: FormationPlaytest;
   composition: FormationComposition;
@@ -130,6 +189,7 @@ interface Formation {
   defense?: string;
   adjustments?: Adjustment[];
   conditionBranches?: FormationConditionBranch[];
+  scenarios?: FormationScenario[];
   alternatives?: string;
   evidence: FormationEvidence;
   source?: FormationSource;
@@ -143,7 +203,7 @@ export interface CivFormationContent {
   routeGroups?: { title: string; note: string; routes: { id: string; label: string }[] }[];
 }
 
-interface FormationCatalog {
+export interface FormationCatalog {
   core: {
     unitById: Record<number, Unit>;
     techById: Record<number, Tech>;
@@ -153,13 +213,18 @@ interface FormationCatalog {
 }
 
 export type FormationEntityView =
-  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge; research?: Omit<FormationResearch, 'tech'> & { tech: Tech } }
-  | { kind: 'tech'; entity: Tech; role: string; age: FormationAge }
-  | { kind: 'building'; entity: Building; role: string; age: FormationAge };
+  | { kind: 'unit'; entity: Unit; role: string; age: FormationAge; rawOccurrence?: number; research?: Omit<FormationResearch, 'tech'> & { tech: Tech } }
+  | { kind: 'tech'; entity: Tech; role: string; age: FormationAge; rawOccurrence?: number }
+  | { kind: 'building'; entity: Building; role: string; age: FormationAge; rawOccurrence?: number };
 
 export type FormationChoiceView = Omit<FormationChoice, 'entities'> & { entities: FormationEntityView[] };
-export type FormationSupplementView = Omit<FormationSupplement, 'entities'> & { entities: FormationEntityView[] };
-export type FormationAdjustmentView = Pick<Adjustment, 'id' | 'when' | 'decision'> & {
+export type FormationSupplementView = Omit<FormationSupplement, 'entities'> & {
+  entities: FormationEntityView[];
+  sourceIndex?: number;
+  partial?: boolean;
+  missingOptionalResearch?: boolean;
+};
+export type FormationAdjustmentView = Pick<Adjustment, 'id' | 'when' | 'decision' | 'fallback'> & {
   text?: string;
   unavailable?: boolean;
   candidateBoundary?: string;
@@ -180,6 +245,8 @@ export type FormationView =
       supplements: FormationSupplementView[];
       adjustments: FormationAdjustmentView[];
       conditionBranches?: FormationConditionBranch[];
+      scenarios: FormationScenarioView[];
+      evidenceLinks: FormationEvidenceLink[];
     };
 
 export function currentFormationPatch(source: FormationPatch, site: FormationPatch): boolean {
@@ -213,12 +280,23 @@ function availableEntity(catalog: FormationCatalog, civ: string, ref: EntityRef,
   }
 }
 
-function projectEntity(catalog: FormationCatalog, civ: string, ref: FormationEntity, routeAge: FormationAge): FormationEntityView | null {
+export function isEntityRefAvailable(catalog: FormationCatalog, civ: string, ref: EntityRef, routeAge: FormationAge): boolean {
+  return availableEntity(catalog, civ, ref, routeAge) !== null;
+}
+
+function projectEntity(
+  catalog: FormationCatalog,
+  civ: string,
+  ref: FormationEntity,
+  routeAge: FormationAge,
+): { view: FormationEntityView | null; missingOptionalResearch: boolean } {
   const row = availableEntity(catalog, civ, ref, routeAge, ref.role);
-  if (row?.kind !== 'unit' || !ref.research) return row;
+  if (row?.kind !== 'unit' || !ref.research) return { view: row, missingOptionalResearch: false };
   const tech = catalog.core.techById[ref.research.tech];
-  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) return ref.research.trainingPrice ? null : row;
-  return { ...row, research: { ...ref.research, tech } };
+  if (!tech || !techAvailable(catalog, civ, tech.id, row.age)) {
+    return ref.research.trainingPrice ? { view: null, missingOptionalResearch: false } : { view: row, missingOptionalResearch: true };
+  }
+  return { view: { ...row, research: { ...ref.research, tech } }, missingOptionalResearch: false };
 }
 
 function targetAvailable(target: Formation, civ: string, patch: FormationPatch, catalog: FormationCatalog): boolean {
@@ -241,12 +319,33 @@ export function projectFormation(
   if (!currentFormationPatch(route.patch, patch)) return { status: 'historical', route, source };
   if (!catalog) return { status: 'unavailable', route, source };
 
-  const required = route.required.map((ref) => projectEntity(catalog, civ, ref, route.age));
-  const prerequisites = route.prerequisites.map((ref) => availableEntity(catalog, civ, ref, route.age, ref.role));
+  const coreSeen = new Map<string, number>();
+  const nextCoreOcc = (ref: EntityRef) => {
+    const key = `${ref.kind}-${ref.id}`;
+    const occ = coreSeen.get(key) ?? 0;
+    coreSeen.set(key, occ + 1);
+    return occ;
+  };
+
+  const required: (FormationEntityView | null)[] = route.required.map((ref) => {
+    const rawOccurrence = nextCoreOcc(ref);
+    const { view } = projectEntity(catalog, civ, ref, route.age);
+    return view ? { ...view, rawOccurrence } : null;
+  });
   const choices = (route.choices ?? []).map((choice) => ({
     ...choice,
-    entities: choice.entities.map((ref) => projectEntity(catalog, civ, ref, route.age)),
+    entities: choice.entities.map((ref): FormationEntityView | null => {
+      const rawOccurrence = nextCoreOcc(ref);
+      const { view } = projectEntity(catalog, civ, ref, route.age);
+      return view ? { ...view, rawOccurrence } : null;
+    }),
   }));
+  const prerequisites: (FormationEntityView | null)[] = route.prerequisites.map((ref) => {
+    const rawOccurrence = nextCoreOcc(ref);
+    const view = availableEntity(catalog, civ, ref, route.age, ref.role);
+    return view ? { ...view, rawOccurrence } : null;
+  });
+
   if (
     required.some((ref) => ref === null) ||
     prerequisites.some((ref) => ref === null) ||
@@ -254,7 +353,7 @@ export function projectFormation(
   )
     return { status: 'unavailable', route, source };
 
-  const adjustments = (route.adjustments ?? []).map(({ id, when, text, decision, requires, fallback }) => {
+  const adjustments: FormationAdjustmentView[] = (route.adjustments ?? []).map(({ id, when, text, decision, requires, fallback }) => {
     let unavailable = false;
     let candidateBoundary: string | undefined;
     for (const dependency of requires ?? []) {
@@ -273,20 +372,55 @@ export function projectFormation(
       }
     }
     return unavailable
-      ? { id, when, ...(fallback ? { text: fallback } : {}), unavailable: true }
-      : { id, when, text, ...(decision ? { decision } : {}), ...(candidateBoundary ? { candidateBoundary } : {}) };
+      ? { id, when, ...(fallback ? { text: fallback, fallback } : {}), unavailable: true }
+      : { id, when, text, ...(decision ? { decision } : {}), ...(fallback ? { fallback } : {}), ...(candidateBoundary ? { candidateBoundary } : {}) };
   });
 
   const supplementViews: FormationSupplementView[] = [];
-  for (const group of route.supplements) {
-    if (group.requires?.some((ref) => !availableEntity(catalog, civ, ref, route.age))) continue;
-    const entities = group.entities.map((ref) => projectEntity(catalog, civ, ref, route.age));
-    if (group.mode === 'position-variant' && entities.some((entity) => entity === null)) continue;
-    const availableEntities = entities.filter((entity): entity is FormationEntityView => entity !== null);
-    if (availableEntities.length > 0) supplementViews.push({ ...group, entities: availableEntities });
+  const supplementResults = new Map<number, SupplementProjectionResult>();
+  for (const [sourceIndex, group] of route.supplements.entries()) {
+    const isAgeStage = isAgeProgressionSupplement(route, group);
+    const rawOccs = isAgeStage ? group.entities.map((ref) => nextCoreOcc(ref)) : undefined;
+    if (group.requires?.some((ref) => !availableEntity(catalog, civ, ref, route.age))) {
+      supplementResults.set(sourceIndex, { view: null, rawSlots: group.entities.map(() => null) });
+      continue;
+    }
+    const projected = group.entities.map((ref, idx) => {
+      const res = projectEntity(catalog, civ, ref, route.age);
+      const view = res.view && rawOccs ? { ...res.view, rawOccurrence: rawOccs[idx] } : res.view;
+      return { view, missingOptionalResearch: res.missingOptionalResearch };
+    });
+    const rawSlots = projected.map((item) => item.view);
+    if (group.mode === 'position-variant' && rawSlots.some((entity) => entity === null)) {
+      supplementResults.set(sourceIndex, { view: null, rawSlots });
+      continue;
+    }
+    const availableEntities = rawSlots.filter((entity): entity is FormationEntityView => entity !== null);
+    if (availableEntities.length === 0) {
+      supplementResults.set(sourceIndex, { view: null, rawSlots });
+      continue;
+    }
+    const partial = availableEntities.length < group.entities.length;
+    const missingOptionalResearch = projected.some((item) => item.view !== null && item.missingOptionalResearch);
+    const supView: FormationSupplementView = {
+      ...group,
+      entities: availableEntities,
+      sourceIndex,
+      partial,
+      missingOptionalResearch,
+    };
+    supplementViews.push(supView);
+    supplementResults.set(sourceIndex, { view: supView, rawSlots });
   }
 
   const conditionBranches = route.conditionBranches?.filter((branch) => branch.requires.every((ref) => availableEntity(catalog, civ, ref, route.age) !== null));
+  const { scenarios, evidenceLinks } = projectFormationScenarios({
+    route,
+    supplementResults,
+    adjustments,
+    isEntityAvailable: (ref) => isEntityRefAvailable(catalog, civ, ref, route.age),
+  });
+
   return {
     status: 'current',
     route,
@@ -300,5 +434,7 @@ export function projectFormation(
     supplements: supplementViews,
     adjustments,
     ...(conditionBranches?.length ? { conditionBranches } : {}),
+    scenarios,
+    evidenceLinks,
   };
 }

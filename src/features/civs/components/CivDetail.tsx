@@ -347,7 +347,8 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     ['civ-tool-matchup', `/matchup?me=${c.en}`, '对局助手'],
     ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;
-  const historyOpen = tab === 'history' || location.hash === '#patches' || historySnapshot?.focusId === 'encyclopedia-complete-history';
+  const historyOpen =
+    tab === 'history' || location.hash === '#patches' || (historyRestoreEnabled && historySnapshot?.focusId === 'encyclopedia-complete-history');
   return (
     <CivBackground civ={c.en} className="civ-read">
       <Breadcrumbs current={c.zh} />

@@ -76,7 +76,7 @@ describe('#1139 Japanese formation support', () => {
     const arrowSlitsSupport = entry.supplements.find(({ mode, entities }) => mode === 'mechanism-support' && entities.some(({ id }) => id === 484))!;
     expect(arrowSlitsSupport.entities.map(({ kind, id }) => [kind, id])).toEqual([['tech', 484]]);
     expect(arrowSlitsSupport.condition).toContain('射箭孔科技资料');
-    expect(arrowSlitsSupport.condition).toContain('见下方调整');
+    expect(arrowSlitsSupport.condition).toContain('见本局面说明');
     expect(arrowSlitsSupport.condition).not.toContain('额外箭矢效果');
     const conditional = entry.supplements.filter(({ mode }) => mode === 'conditional');
     expect(conditional).toHaveLength(2);
@@ -118,9 +118,9 @@ describe('#1139 Japanese formation support', () => {
     expect(adjustment('ninth').text).toContain('完成射箭孔研究后');
     expect(adjustment('tenth').text).toContain('完成弹射器研究后');
     expect(adjustment('thirteenth').text).toContain('不替代武士＋轻骑＋巨投主路');
-    expect(entry.alternatives).toContain('无城堡省金例外见下方调整');
-    expect(entry.alternatives).toContain('顺风已有骑士线的例外见下方调整');
-    expect(entry.alternatives).toContain('条件远程备选见下方调整');
+    expect(entry.alternatives).toContain('无城堡省金例外见对应局面方案');
+    expect(entry.alternatives).toContain('顺风已有骑士线的例外见对应局面方案');
+    expect(entry.alternatives).toContain('条件远程备选见对应局面方案');
     expect(entry.alternatives).not.toContain('无城堡时可将冠军剑士');
     expect(entry.alternatives).not.toContain('可比较劲弩手＋长戟兵＋巨投');
   });
@@ -146,10 +146,18 @@ describe('#1139 Japanese formation support', () => {
       {
         label: '含射箭槽 · 5 个村民 6/7 箭',
         href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=83:5:e',
+        requires: [
+          { kind: 'building', id: 235, age: 4 },
+          { kind: 'tech', id: 484, age: 3 },
+        ],
       },
       {
         label: '含射箭槽 · 5 个劲弩手 6/7 箭',
         href: 'https://linhongcun.github.io/aoe2-analyzer/#/building/235?tab=garrison&gv=2&civ=Japanese&age=4&gtechs=199,200,201,47,437,484,608&army=492:5:e',
+        requires: [
+          { kind: 'building', id: 235, age: 4 },
+          { kind: 'tech', id: 484, age: 3 },
+        ],
       },
     ]);
     expect(scope).toContain('不是招募配方或每箭伤害');

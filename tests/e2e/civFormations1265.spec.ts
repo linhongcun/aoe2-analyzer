@@ -50,19 +50,21 @@ const towerEvidenceCases = [
 for (const { civ, route, rows } of towerEvidenceCases) {
   test(`#1265 ${civ} 卡片的两档驻塔链接恢复科技、兵量和箭数`, async ({ page, context }) => {
     await page.goto(`./#/civ/${civ}#formation-${route}`);
-    const card = page.getByRole('article').filter({ has: page.locator(`#formation-${route}`) });
+    const card = page.locator('#formations article').filter({ has: page.locator(`#formation-${route}`) });
     await card.locator('summary').filter({ hasText: '来源与核对' }).click();
     await expect(card.getByRole('link', { name: /^(无|含)射箭槽/ })).toHaveCount(rows.length * 2);
     const preview = await context.newPage();
     const maxArrows = civ === 'Saxons' ? 6 : 5;
 
     if (civ === 'Saxons') {
-      await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+      await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).click();
       await expect(card).toContainText('80 木、35 金、零食物');
-      const hussar = card.getByRole('link', { name: /^翼骑兵 / });
+      await card.getByRole('button', { name: /食物宽裕且有马厩·补机动/ }).click();
+      const hussar = card.locator('.formation-scenario-panel').getByRole('link', { name: /^翼骑兵 / });
       await expect(hussar).toHaveAttribute('href', '#/unit/441?civ=Saxons');
       await expect(hussar).toContainText('80 食物');
-      const varangian = card.getByRole('link', { name: /^精锐瓦兰吉卫队 / });
+      await card.getByRole('button', { name: /需要地面近战接战补位/ }).click();
+      const varangian = card.locator('.formation-scenario-panel').getByRole('link', { name: /^精锐瓦兰吉卫队 / });
       await expect(varangian).toHaveAttribute('href', '#/unit/2704?civ=Saxons');
       await expect(varangian).toContainText('65 食物、45 金');
     }
@@ -115,9 +117,11 @@ for (const { civ, route, rows } of towerEvidenceCases) {
 
 test('#1265 日本卡片按重骑规模建议长戟并保留游侠单挑入口', async ({ page }) => {
   await page.goto('./#/civ/Japanese#formation-japanese-samurai-light-cavalry');
-  const card = page.locator('.formation-list > article').filter({ has: page.locator('#formation-japanese-samurai-light-cavalry') });
-  await card.locator('summary').filter({ hasText: '查看攻守与调整' }).click();
+  const card = page.locator('#formations article').filter({ has: page.locator('#formation-japanese-samurai-light-cavalry') });
+  await card.locator('summary').filter({ hasText: '攻守配合与不默认加入' }).click();
+  await card.getByRole('button', { name: /骑士、游侠成群冲阵/ }).click();
   await expect(card).toContainText('按敌方重骑规模评估补长戟');
+  await card.getByRole('button', { name: /遇到弩炮、手推炮群/ }).click();
   await expect(card).toContainText('接敌路径、退路和护卫');
   await card.locator('summary').filter({ hasText: '来源与核对' }).click();
   await expect(card).toContainText('一维接敌、射程先手和近战占位');

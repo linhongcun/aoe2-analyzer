@@ -6,4 +6,10 @@ export interface FormationProblem {
   message: string;
 }
 
-export function formationProblems(content: unknown, contract: unknown): FormationProblem[];
+export interface FormationCatalogIds {
+  unit: ReadonlySet<number>;
+  building: ReadonlySet<number>;
+  tech: ReadonlySet<number>;
+}
+
+export function formationProblems(content: unknown, contract: unknown, catalogIds?: FormationCatalogIds): FormationProblem[];
