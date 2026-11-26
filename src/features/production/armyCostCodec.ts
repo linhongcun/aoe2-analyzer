@@ -1,18 +1,7 @@
-import { ARMY_COST_DATA, ARMY_COST_VERSION, emptyArmyCost, type ArmyCostConfig } from '../../domain/armyCostConfig';
+import { ARMY_COST_DATA, ARMY_COST_VERSION, emptyArmyCost, encodeArmyCost, type ArmyCostConfig } from '../../domain/armyCostConfig';
 import { civByEn } from '../../data';
 
-export function encodeArmyCost(config: ArmyCostConfig, dataVersion = ARMY_COST_DATA): string {
-  return new URLSearchParams({
-    mode: 'army-cost',
-    acv: ARMY_COST_VERSION,
-    acdata: dataVersion,
-    civ: config.civ,
-    age: config.age,
-    acunits: JSON.stringify(config.rows),
-    acdone: JSON.stringify([...new Set(config.done)].sort()),
-    actargets: JSON.stringify([...new Set(config.targets)].sort()),
-  }).toString();
-}
+export { encodeArmyCost };
 export function decodeArmyCost(search: string): { config: ArmyCostConfig | null; errors: string[]; dataChanged: boolean } {
   const p = new URLSearchParams(search);
   const errors: string[] = [];
