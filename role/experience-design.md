@@ -307,6 +307,13 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 带状态胶囊的只读状态卡，左侧图标与间距已经占去 `20px`，不要在窄屏正文行尾再并排 `nowrap` 胶囊。将胶囊提升到卡片上方的子标题行（如 `.sim-team-subhead`，`justify-content: space-between` 左放短分组名、右放 `nowrap` 胶囊），卡片内正文占满整宽，辅助说明行统一按图标宽度左缩进对齐；定稿后在 `360` 宽实测确认无孤字折行与缩进错位。
 
+### 共享行内弹性组件嵌入 `#duel` 或包进 `<s>` 时，核对特异性与删除线绘制
+
+[#1496 科技模拟器研究费用折扣](https://github.com/linhongcun/aoe2-analyzer/issues/1496#体验设计)初版图目视复核检出两处隐蔽样式失效：
+
+- **删除线不穿透 `inline-flex` 子盒**：汇总卡写 `<s><OrderedCost /></s>` 时，Chromium 对 `display: inline-flex` 原子行内盒不继承父级 `<s>` 的 `text-decoration: line-through`，成图里目录原价完全没有删除线（既有 `SimEffectiveCost` 也有同类写法）。需要绘制原价删除线时，保留 `<s>` 语义标签，同时把 `text-decoration: line-through` 直接写到内层条目（如 `.sim-summary-base s .res`），出图后目视确认删除线真实落字。
+- **页面级 ID 选择器覆盖共享 `inline-flex`**：[`duel-headings.css`](../src/features/duel/duel-headings.css) 的 `#duel span.nw { display: inline-block; }`（特异性 `1,1,1`）压过了共享面板 `.simc .simc-time`（特异性 `0,2,0`）的 `display: inline-flex; gap: 3px;`，导致单位模拟器里正常的时钟图标与秒数在 `#/duel` 嵌入态贴死。凡 `src/shared/ui/` 中同时挂 `.nw` 与 `display: inline-flex` 的元素若会进入 `#/duel`，样式须补充 `#duel` 同级或更高特异性声明，并在 `#/duel` 实渲图里单独复核。
+
 ### 框里的图片按内容区定尺寸，量绘制区而不是元素盒
 
 [#1345 详情页头图标](https://github.com/linhongcun/aoe2-analyzer/issues/1345#体验设计)里，三处页头给图片写的尺寸被 `.uico.big`（`0,2,0`）覆盖，图片在桌面贴在左上角，在窄屏溢出被裁。修优先级之外，原规则本身也有问题：建筑和科技页把图片写成框的外尺寸 `80px`，窄屏写成 `.bd-icon, .bd-icon img { width: 52px }` 这种组合选择器。全站是 `border-box`，框有 `1px` 边框，内容区只有外尺寸减 `2px`，照写也会溢出 `2px`。
