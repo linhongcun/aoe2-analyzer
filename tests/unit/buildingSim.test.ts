@@ -115,10 +115,11 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     const castleHarbor = simulateBuilding(ctx, harbor, 'Malay', 3, ids('Fletching', 'Bodkin Arrow'));
     expect([castleHarbor.atk, castleHarbor.rng, castleHarbor.los]).toEqual([6, 9, 12]);
 
-    // 帝王满科技：atk=8, rng=10, los=21, minr=0, 对船 +4
+    // 帝王满科技：atk=8, rng=10, los=21, minr=0, 对船 3 + 4 = 7，保留基础对骆驼 +1（#1453）
     const fullHarbor = full('Harbor', 'Malay');
     expect([fullHarbor.atk, fullHarbor.rng, fullHarbor.los, fullHarbor.minr]).toEqual([8, 10, 21, 0]);
-    expect(fullHarbor.bonus['船只']).toBe(4);
+    expect(fullHarbor.bonus['船只']).toBe(7);
+    expect(fullHarbor.bonus['骆驼']).toBe(1);
 
     // 反例：普通船坞（45）绝不进入 IMPLIED，不误触发海上霸主组合科技 669/670/671（基础 los=8，仅加城镇瞭望/巡逻 +8 = 16）
     const dock = B('Dock');
@@ -185,5 +186,120 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     expect(buildingSimTechs(ctx, atksOnlyDonjon, 'Sicilians').map((x) => x.t.id)).toEqual(expect.arrayContaining([322, 380, 608]));
     const noAtkSyntheticTower: Building = { ...B('Watch Tower'), atk: 0, rng: 0, minr: 0, rof: 0, atks: [] };
     expect(buildingSimTechs(ctx, noAtkSyntheticTower, 'Britons').some((x) => x.t.en === 'Ballistics' || x.t.en === 'Heated Shot')).toBe(false);
+  });
+
+  it('全库 38 座建筑 buildingBase(b).bonus 与目录非主攻击类别精确对齐（#1453）', () => {
+    expect(bs).toHaveLength(38);
+    const byId = new Map(bs.map((b) => [b.id, b]));
+    const noAtksBuildings = bs.filter((b) => (b.atks?.length ?? 0) === 0);
+    expect(noAtksBuildings).toHaveLength(27);
+
+    for (const b of bs) {
+      const base = buildingBase(b);
+      expect(base.armc, `building ${b.id} armc`).toEqual({});
+      const expected: Record<string, number> = {};
+      for (const a of b.atks ?? []) {
+        if (a.classId === 3 || a.classId === 4) continue;
+        const label = a.label?.trim();
+        if (!label || label === '近战' || label === '穿刺') continue;
+        expected[label] = a.amount;
+      }
+      expect(base.bonus, `building ${b.id} (${b.zh}) bonus`).toEqual(expected);
+    }
+
+    // 全部 9 座含非零基础目标类别加成的建筑
+    const expectedNonZero: Record<number, Record<string, number>> = {
+      45: { 船只: 0, 骆驼: 1 },
+      79: { 长矛兵: 2, 所有建筑: 0, 船只: 5, 骆驼: 1 },
+      82: { 长矛兵: 2, 船只: 0, 冲车: 0, 骆驼: 0, 步兵: 0 },
+      234: { 长矛兵: 2, 所有建筑: 0, 船只: 7, 骆驼: 1 },
+      235: { 长矛兵: 2, 所有建筑: 0, 船只: 8, 骆驼: 1 },
+      236: { 船只: 40, 骆驼: 1 },
+      1189: { 船只: 3, 骆驼: 1 },
+      1251: { 长矛兵: 2, 船只: 0, 冲车: 0, 骆驼: 0 },
+      1806: { 所有建筑: 0, 船只: 5, 骆驼: 1 },
+    };
+    for (const [idStr, expected] of Object.entries(expectedNonZero)) {
+      const b = byId.get(Number(idStr))!;
+      expect(buildingBase(b).bonus, `building ${idStr}`).toEqual(expected);
+      expect(buildingBase(b).bonus['穿刺']).toBeUndefined();
+    }
+
+    // 109 城镇中心（仅穿刺 5）与 27 座无 atks 建筑 bonus 为空
+    expect(buildingBase(byId.get(109)!).bonus).toEqual({});
+    for (const b of noAtksBuildings) expect(buildingBase(b).bonus, `no-atks ${b.id}`).toEqual({});
+
+    // 1665 城楼保留显式 0 项且不含穿刺
+    expect(buildingBase(byId.get(1665)!).bonus).toEqual({ 长矛兵: 0, 所有建筑: 0, 船只: 0, 骆驼: 0 });
+
+    // 合成边界：排除 classId=4（近战）、label='近战'/'穿刺'、缺 label 或空白 label
+    const synthetic: Building = {
+      ...B('Castle'),
+      atks: [
+        { classId: 4, amount: 9, label: '自定义近战名' },
+        { classId: 3, amount: 11, label: '穿刺' },
+        { classId: 99, amount: 5, label: '近战' },
+        { classId: 98, amount: 6, label: '穿刺' },
+        { classId: 97, amount: 7 },
+        { classId: 96, amount: 8, label: '   ' },
+        { classId: 27, amount: 2, label: '长矛兵' },
+      ],
+    };
+    expect(buildingBase(synthetic).bonus).toEqual({ 长矛兵: 2 });
+  });
+
+  it('加热射击（380）与波斯堡垒（7）在目录基础加成上精确叠加，含无攻与 1665 反例（#1453）', () => {
+    const byId = new Map(bs.map((b) => [b.id, b]));
+    const hs = ids('Heated Shot');
+
+    // 四级防御塔 / 炮塔：×2.25 精确无浮点尾数，并保留其余基础加成
+    const wt = simulateBuilding(ctx, byId.get(79)!, 'Chinese', 4, hs);
+    expect(wt.bonus['船只']).toBe(11.25);
+    expect([wt.bonus['长矛兵'], wt.bonus['骆驼']]).toEqual([2, 1]);
+
+    const gt = simulateBuilding(ctx, byId.get(234)!, 'Chinese', 4, hs);
+    expect(gt.bonus['船只']).toBe(15.75);
+    expect([gt.bonus['长矛兵'], gt.bonus['骆驼']]).toEqual([2, 1]);
+
+    const keep = simulateBuilding(ctx, byId.get(235)!, 'Chinese', 4, hs);
+    expect(keep.bonus['船只']).toBe(18);
+    expect([keep.bonus['长矛兵'], keep.bonus['骆驼']]).toEqual([2, 1]);
+
+    const bbt = simulateBuilding(ctx, byId.get(236)!, 'Chinese', 4, hs);
+    expect(bbt.bonus['船只']).toBe(90);
+    expect(bbt.bonus['骆驼']).toBe(1);
+
+    // 加法 +4 建筑：在目录基础值上累加并保留其他类别
+    const harbor = simulateBuilding(ctx, byId.get(1189)!, 'Malay', 4, hs);
+    expect([harbor.bonus['船只'], harbor.bonus['骆驼']]).toEqual([7, 1]);
+
+    const church = simulateBuilding(ctx, byId.get(1806)!, 'Armenians', 4, hs);
+    expect([church.bonus['船只'], church.bonus['骆驼']]).toEqual([9, 1]);
+
+    const castle = simulateBuilding(ctx, byId.get(82)!, 'Chinese', 4, hs);
+    expect([castle.bonus['长矛兵'], castle.bonus['船只']]).toEqual([2, 4]);
+
+    const dock = simulateBuilding(ctx, byId.get(45)!, 'Chinese', 4, hs);
+    expect([dock.bonus['船只'], dock.bonus['骆驼']]).toEqual([4, 1]);
+
+    const krepost = simulateBuilding(ctx, byId.get(1251)!, 'Bulgarians', 4, hs);
+    expect([krepost.bonus['长矛兵'], krepost.bonus['船只']]).toEqual([2, 4]);
+
+    const tc = simulateBuilding(ctx, byId.get(109)!, 'Chinese', 4, hs);
+    expect(tc.bonus['船只']).toBe(4);
+
+    // 波斯城堡勾选堡垒（7）：保留长矛兵 2，新增冲车 3、步兵 3
+    const persianCastle = simulateBuilding(ctx, byId.get(82)!, 'Persians', 4, ids('Citadels'));
+    expect([persianCastle.bonus['长矛兵'], persianCastle.bonus['冲车'], persianCastle.bonus['步兵']]).toEqual([2, 3, 3]);
+
+    // 反例：未勾 380 时城堡船只保持 0；1665 城楼勾选 380 保持 0 × 2.25 = 0 且无 NaN；19 座无攻建筑传 380 不生效
+    expect(simulateBuilding(ctx, byId.get(82)!, 'Chinese', 4, new Set()).bonus['船只']).toBe(0);
+    const donjonHs = simulateBuilding(ctx, byId.get(1665)!, 'Sicilians', 4, hs);
+    expect(donjonHs.bonus).toEqual({ 长矛兵: 0, 所有建筑: 0, 船只: 0, 骆驼: 0 });
+    for (const id of [12, 49, 68, 70, 84, 87, 101, 103, 104, 209, 276, 562, 584, 598, 1021, 1734, 1754, 1808, 2556]) {
+      const b = byId.get(id)!;
+      const civ = b.civs.find((c) => buildingSimTechs(ctx, byId.get(82)!, c).some((x) => x.t.id === 380)) ?? b.civs[0]!;
+      expect(simulateBuilding(ctx, b, civ, 4, hs).bonus['船只'], `no-atk ${id}/${civ}`).toBeUndefined();
+    }
   });
 });

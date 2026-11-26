@@ -21,6 +21,13 @@ function buildingCanAttack(b: Pick<Building, 'atk' | 'rng' | 'minr' | 'rof' | 'a
 }
 
 export function buildingBase(b: Building): StatSet {
+  const bonus: Record<string, number> = {};
+  for (const a of b.atks ?? []) {
+    if (a.classId === 3 || a.classId === 4) continue;
+    const label = a.label?.trim();
+    if (!label || label === '近战' || label === '穿刺') continue;
+    bonus[label] = a.amount;
+  }
   return {
     hp: b.hp,
     atk: b.atk,
@@ -35,7 +42,7 @@ export function buildingBase(b: Building): StatSet {
     gar: b.gar,
     bt: b.bt,
     barm: b.barm,
-    bonus: {},
+    bonus,
     armc: {},
     ca: 0,
     rofx: 1,

@@ -192,6 +192,81 @@ test('已选文明时模拟器给出引擎结果，驻军不是空页', async ({
   await expect(page.locator('#building')).not.toContainText('暂未计算');
 });
 
+test('#1453 建筑科技模拟器继承目录基础类别加成并精确计算加热射击', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') errors.push(msg.text());
+  });
+
+  // 大型箭塔 235（中国 + 加热射击 380）：船只 8 +10 → 18，保留长矛兵 2、骆驼 1，过滤显式 0 所有建筑
+  await open(page, '/building/235?civ=Chinese&age=4&tab=sim&techs=380');
+  const keepRows = page.locator('#sim .bonustab tbody tr');
+  await expect(keepRows).toHaveCount(4);
+  await expect(keepRows.nth(1)).toContainText('对 长矛兵');
+  await expect(keepRows.nth(1).locator('td').nth(2)).toHaveText('2');
+  await expect(keepRows.nth(2)).toContainText('对 船只');
+  await expect(keepRows.nth(2).locator('td').nth(1)).toContainText('8');
+  await expect(keepRows.nth(2).locator('td').nth(1)).toContainText('+10');
+  await expect(keepRows.nth(2).locator('td').nth(2)).toHaveText('18');
+  await expect(keepRows.nth(3)).toContainText('对 骆驼');
+  await expect(keepRows.nth(3).locator('td').nth(2)).toHaveText('1');
+  await expect(page.locator('#sim .bonustab')).not.toContainText('所有建筑');
+
+  // 炮塔 236（中国 + 加热射击 380）：船只 40 +50 → 90，保留骆驼 1
+  await open(page, '/building/236?civ=Chinese&age=4&tab=sim&techs=380');
+  const bbtRows = page.locator('#sim .bonustab tbody tr');
+  await expect(bbtRows).toHaveCount(3);
+  await expect(bbtRows.nth(1)).toContainText('对 船只');
+  await expect(bbtRows.nth(1).locator('td').nth(1)).toContainText('40');
+  await expect(bbtRows.nth(1).locator('td').nth(1)).toContainText('+50');
+  await expect(bbtRows.nth(1).locator('td').nth(2)).toHaveText('90');
+  await expect(bbtRows.nth(2)).toContainText('对 骆驼');
+  await expect(bbtRows.nth(2).locator('td').nth(2)).toHaveText('1');
+
+  // 马来巨港 1189（加热射击 380）：船只 3 +4 → 7，保留骆驼 1
+  await open(page, '/building/1189?civ=Malay&age=4&tab=sim&techs=380');
+  const harborRows = page.locator('#sim .bonustab tbody tr');
+  await expect(harborRows).toHaveCount(3);
+  await expect(harborRows.nth(1)).toContainText('对 船只');
+  await expect(harborRows.nth(1).locator('td').nth(1)).toContainText('3');
+  await expect(harborRows.nth(1).locator('td').nth(1)).toContainText('+4');
+  await expect(harborRows.nth(1).locator('td').nth(2)).toHaveText('7');
+  await expect(harborRows.nth(2)).toContainText('对 骆驼');
+  await expect(harborRows.nth(2).locator('td').nth(2)).toHaveText('1');
+
+  // 城堡 82（中国）：勾 380 保留长矛兵 2 且船只 0 +4 → 4；未勾 380 过滤显式 0 船只
+  await open(page, '/building/82?civ=Chinese&age=4&tab=sim&techs=380');
+  const castleRows = page.locator('#sim .bonustab tbody tr');
+  await expect(castleRows).toHaveCount(3);
+  await expect(castleRows.nth(1)).toContainText('对 长矛兵');
+  await expect(castleRows.nth(1).locator('td').nth(2)).toHaveText('2');
+  await expect(castleRows.nth(2)).toContainText('对 船只');
+  await expect(castleRows.nth(2).locator('td').nth(1)).toContainText('0');
+  await expect(castleRows.nth(2).locator('td').nth(1)).toContainText('+4');
+  await expect(castleRows.nth(2).locator('td').nth(2)).toHaveText('4');
+  await expect(page.locator('#sim .bonustab')).not.toContainText('冲车');
+
+  await open(page, '/building/82?civ=Chinese&age=4&tab=sim');
+  await expect(page.locator('#sim .bonustab tbody tr')).toHaveCount(2);
+  await expect(page.locator('#sim .bonustab')).toContainText('对 长矛兵');
+  await expect(page.locator('#sim .bonustab')).not.toContainText('对 船只');
+
+  // 反例：1665 城楼勾选 380 仍为全 0，BonusTable 过滤后显示「无」
+  await open(page, '/building/1665?civ=Sicilians&age=4&tab=sim&techs=380');
+  await expect(page.locator('#sim .bonustab')).toHaveCount(0);
+  await expect(page.locator('#sim .bonusbox')).toContainText('无');
+
+  // 大型箭塔 235 各文明满科技对照：日本缺加热射击，中国不缺
+  await open(page, '/building/235');
+  const rank = page.locator('#building-civ-rank');
+  await rank.scrollIntoViewIfNeeded();
+  await expect(rank.locator('tr[data-civ="Chinese"]')).not.toContainText('加热射击');
+  await rank.locator('#bcr-search').fill('日本');
+  await expect(rank.locator('tr[data-civ="Japanese"]')).toContainText('加热射击');
+  expect(errors).toEqual([]);
+});
+
 test('#1219 炮塔攻击与船只和骆驼加成分别显示，空表和零各自保留', async ({ page }) => {
   const attacks = page.getByRole('region', { name: '攻击明细' });
   await open(page, '/building/236');
