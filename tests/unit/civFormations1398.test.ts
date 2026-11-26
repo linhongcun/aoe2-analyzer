@@ -21,7 +21,7 @@ import { isUnavail, resolve } from '../../src/features/duel/logic/duelSide';
 const DOC_SHA_1398 = 'b63cccc015b677017efb4a64de8ebc01cd727ffd';
 const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Lithuanians', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
-  ['Tupi', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
+  ['Tupi', '798133a5f20ee5b2b7261895bca3c505495415a6'],
 ]);
 const TARGET_CIVS = ['Tupi', 'Lithuanians'] as const;
 
@@ -352,7 +352,7 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
     expect(byCiv('Aztecs').source.content).toContain('/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L');
     expect(byCiv('Mayans').source.content).toContain('/blob/bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8/role/game-strategy.md#L');
     expect(byCiv('Mapuche').source.content).toContain('/blob/415863b2a3e94078129554c09378c9a9fba04b57/role/game-strategy.md#L');
-    expect(byCiv('Spanish').source.content).toContain('/blob/df2e8a9b1f966f5917703ed984f9e02515c95f91/role/game-strategy.md#L');
+    expect(byCiv('Spanish').source.content).toContain('/blob/798133a5f20ee5b2b7261895bca3c505495415a6/role/game-strategy.md#L');
     expect(byCiv('Malians').source.content).toContain('/blob/54f7f61d762a5ec6bf665431c28f549df43681f9/role/game-strategy.md#L');
 
     // 去重计数不变量

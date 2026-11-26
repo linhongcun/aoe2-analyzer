@@ -11,8 +11,8 @@ import { projectFormation, publishedFormations, type FormationView } from '../..
 import { dedupeFormationClauses } from '../../src/domain/formationDedup';
 import { FormationText } from '../../src/features/civs/components/CivFormations';
 
-const DOC_SHA_1401 = 'df2e8a9b1f966f5917703ed984f9e02515c95f91';
-const TARGET_CIVS = ['Muisca', 'Spanish', 'Japanese', 'Bulgarians', 'Tupi'] as const;
+const DOC_SHA_1401 = '798133a5f20ee5b2b7261895bca3c505495415a6';
+const TARGET_CIVS = ['Muisca', 'Spanish', 'Japanese', 'Bulgarians', 'Tupi', 'Jurchens'] as const;
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
 const route = (civ: string, id: string) => byCiv(civ).routes.find((entry) => entry.id === id)!;
@@ -51,27 +51,29 @@ function findFormationViolations(html: string, allowBulgariansLegacy = false): s
 }
 
 describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投影降级与 FormationText 守卫', () => {
-  it('仅五国重签 DOC_SHA_1401 且锚点/sourceLines 合规、其余 28 国零引用、六条新路线状态/保加利亚锁首/图皮重排与降级投影全通过', async () => {
+  it('六国重签固定策略提交 且锚点/sourceLines 合规、其余 27 国零引用、六条新路线状态/保加利亚锁首/图皮重排与降级投影全通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
     expect(civFormationContent).toHaveLength(33);
     expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
 
     const EXPECTED_ANCHORS: Record<string, readonly [number, number]> = {
-      'muisca-temple-guard-slinger': [1364, 1411],
-      'muisca-arbalester-temple-champi': [1364, 1411],
-      'muisca-arbalester-skirmisher': [1364, 1411],
-      'conquistador-hussar': [1467, 1524],
-      'paladin-skirmisher': [1467, 1524],
-      'handcannon-halberdier': [1467, 1524],
-      'spanish-hmc-hussar': [1467, 1524],
-      'japanese-samurai-light-cavalry': [1570, 1624],
-      'japanese-halberdier-hca-trebuchet': [1570, 1624],
-      'bulgarians-krepost-konnik': [1053, 1108],
-      'bulgarians-stirrups-cav-hca-siege': [1053, 1108],
-      'bulgarians-bagains-ths-siege': [1053, 1108],
-      'tupi-blackwood-halberdier': [1413, 1459],
-      'tupi-champi-slinger': [1413, 1459],
+      'muisca-temple-guard-slinger': [1368, 1417],
+      'muisca-arbalester-temple-champi': [1368, 1417],
+      'muisca-arbalester-skirmisher': [1368, 1417],
+      'conquistador-hussar': [1478, 1536],
+      'paladin-skirmisher': [1478, 1536],
+      'handcannon-halberdier': [1478, 1536],
+      'spanish-hmc-hussar': [1478, 1536],
+      'japanese-samurai-light-cavalry': [1582, 1637],
+      'japanese-halberdier-hca-trebuchet': [1582, 1637],
+      'bulgarians-krepost-konnik': [1055, 1112],
+      'bulgarians-stirrups-cav-hca-siege': [1055, 1112],
+      'bulgarians-bagains-ths-siege': [1055, 1112],
+      'tupi-blackwood-halberdier': [1419, 1470],
+      'tupi-champi-slinger': [1419, 1470],
+      'jurchens-steppe-siege-field': [700, 754],
+      'jurchens-fire-lancer-tower': [700, 754],
     };
 
     const targetSet = new Set<string>(TARGET_CIVS);
@@ -110,7 +112,7 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
         for (const r of civ.routes) expect(r.source?.content ?? '', `${civ.civ}/${r.id}`).not.toContain(DOC_SHA_1401);
       }
     }
-    expect(targetRouteCount).toBe(14);
+    expect(targetRouteCount).toBe(16);
 
     // 五国路线顺序与 status/playtest 门禁
     expect(byCiv('Muisca').routes.map(({ id, status, playtest }) => [id, status, playtest])).toEqual([
@@ -134,8 +136,12 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
       ['bulgarians-bagains-ths-siege', 'approved', 'pending'],
     ]);
     expect(byCiv('Tupi').routes.map(({ id, status, playtest }) => [id, status, playtest])).toEqual([
-      ['tupi-blackwood-halberdier', 'approved', 'pending'],
+      ['tupi-blackwood-halberdier', 'approved', 'reported'],
       ['tupi-champi-slinger', 'approved', 'unreported'],
+    ]);
+    expect(byCiv('Jurchens').routes.map(({ id, status, playtest }) => [id, status, playtest])).toEqual([
+      ['jurchens-steppe-siege-field', 'approved', 'pending'],
+      ['jurchens-fire-lancer-tower', 'approved', 'pending'],
     ]);
     expect(route('Tupi', 'tupi-blackwood-halberdier').evidence.recordedVersion).not.toContain('v0.99.34');
     expect(route('Tupi', 'tupi-blackwood-halberdier').condition).toContain('默认首选主路');
@@ -218,7 +224,7 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
     expect(sharedCounts).toEqual({ Teutons: 1, Franks: 2, Poles: 2, Mapuche: 5 });
   });
 
-  it('双边 FormationText 守卫自测通过，且五国全部 14 条路线文本与链接标签零拆词', () => {
+  it('双边 FormationText 守卫自测通过，且六国全部 16 条路线文本与链接标签零拆词', () => {
     const mustReject = [
       '0/2/4 圣物',
       '2 件',
@@ -270,6 +276,7 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
           r.defense,
           r.alternatives,
           r.evidence.scope,
+          r.evidence.recognition,
           r.evidence.playtest,
           r.evidence.recordedVersion,
           r.source?.boundary,
@@ -293,6 +300,6 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
         }
       }
     }
-    expect(checkedRoutes).toBe(14);
+    expect(checkedRoutes).toBe(16);
   });
 });

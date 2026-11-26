@@ -24,11 +24,11 @@ import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 const DOC_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
 const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Koreans', 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8'],
-  ['Spanish', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
+  ['Spanish', '798133a5f20ee5b2b7261895bca3c505495415a6'],
   ['Hindustanis', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Turks', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
-  ['Muisca', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
-  ['Tupi', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
+  ['Muisca', '798133a5f20ee5b2b7261895bca3c505495415a6'],
+  ['Tupi', '798133a5f20ee5b2b7261895bca3c505495415a6'],
 ]);
 const ADDED_BY_1386 = new Set<string>([
   'Hindustanis/hindustani-camel-ghulam-field',

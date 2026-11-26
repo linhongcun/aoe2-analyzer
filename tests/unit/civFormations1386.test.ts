@@ -25,8 +25,8 @@ const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Malians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Goths', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
   ['Poles', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
-  ['Spanish', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
-  ['Japanese', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
+  ['Spanish', '798133a5f20ee5b2b7261895bca3c505495415a6'],
+  ['Japanese', '798133a5f20ee5b2b7261895bca3c505495415a6'],
 ]);
 const BATCH_1_SHA = 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8';
 
@@ -250,7 +250,9 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
 
     // #1385 批 1 六国保持原提交不变
     for (const batch1Civ of ['Jurchens', 'Saxons', 'Wu', 'Koreans', 'Aztecs', 'Mayans']) {
-      expect(byCiv(batch1Civ).source.content, batch1Civ).toContain(`/blob/${BATCH_1_SHA}/role/game-strategy.md#L`);
+      expect(byCiv(batch1Civ).source.content, batch1Civ).toContain(
+        `/blob/${batch1Civ === 'Jurchens' ? '798133a5f20ee5b2b7261895bca3c505495415a6' : BATCH_1_SHA}/role/game-strategy.md#L`,
+      );
     }
 
     // 落位与架构约束守卫
