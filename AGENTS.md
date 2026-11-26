@@ -7,7 +7,7 @@
 - 每个 Issue 只有一个实现写者和一个实现 PR；同时在审 PR 不超过 2 个。不同角色在同一 Issue 正文按阶段交接，不另开阶段 Issue。不同 Issue 的并行处理/开发与合并发布顺序见 [MAINTENANCE「按事项并行、合并发布串行」](docs/MAINTENANCE.md#按事项并行合并发布串行)。
 - 开工前核验原 Issue 的最新范围、验收标准、非目标、阶段和状态标签、当前认领/负责人、关联 PR 与 Hold/依赖。进入软件开发即获得该 Issue 既定范围内的开发授权，无需维护者另行批准；符合阶段与认领协议的事项允许自动认领，不批量认领或扩大范围。
 - 关闭的 Issue 不重开、不重复实施；只有维护者在原 Issue 记录新的明确授权后例外。不得自行解除、绕过或清除 Hold。
-- 实际 UX 工作须在同一 Issue 正文直接嵌入覆盖主要界面和重要状态的完成态设计图。只有纯 docs/data 且无 UI 时，产品经理可在同一 Issue 记录 UX 不适用及理由；细则见 [Issue 生命周期](CONTRIBUTING.md#issue-lifecycle)。
+- 实际 UX 工作须在同一 Issue 正文直接嵌入覆盖主要界面和重要状态的完成态设计图。只有无实际 UI 改动（纯 docs/data，或经逐组件核实零界面/交互/状态/文案改动的纯逻辑修复）时，产品经理可在同一 Issue 记录 UX 不适用、理由与已核对消费组件；细则见 [Issue 生命周期](CONTRIBUTING.md#issue-lifecycle)。
 - Issue 相关设计图、截图和走查图一律通过 [GitHub Issue 原生附件](role/experience-design.md#issue-design-images)上传并嵌入原 Issue 正文。禁止提交到代码仓库或另开纯图片 PR。
 - 完成阶段交接后，按 [CONTRIBUTING「经验回写」](CONTRIBUTING.md#experience-writeback) 把跨 Issue 可复用且已核实的经验写回本角色的 [role/](role/README.md) 指南；没有就不写。
 - 独立复核、按风险选择的 CI、持续合并/发布/关闭授权，以 [CONTRIBUTING.md](CONTRIBUTING.md)、[TESTING](docs/TESTING.md) 与 [RELEASING](docs/RELEASING.md) 为准。本文件和维护说明不另授产品范围或发布权限。
@@ -127,7 +127,7 @@ CI full（每日/手动）不是普通 PR 的合并条件；默认窄冒烟失�
 
 ## 怎么读 issue
 
-阶段职责、正文结构、领取与交接按 [CONTRIBUTING「Issue 生命周期」](CONTRIBUTING.md#issue-lifecycle) 执行。每个未关闭 Issue 仅有一个阶段标签；类型、优先级、真实的 `待确认`、`阻塞`、`候选`、`已部署`仍各按本文件定义独立处理。进入软件开发即授予既定范围内的开发权限，不扩大产品范围或自动解除真实阻塞；仅因旧授权门槛产生的限制按 2026-11-15 更正清除。
+阶段职责、正文结构、领取与交接按 [CONTRIBUTING「Issue 生命周期」](CONTRIBUTING.md#issue-lifecycle) 执行。每个未关闭 Issue 仅有一个阶段标签；类型、优先级、真实的 `待确认`、`阻塞`、`候选`、`已部署`仍各按本文件定义独立处理。按 2026-11-26 维护者授权，常规产品取舍由产品经理查证事实后自主拍板推进，不再为此停在 `待确认`；进入软件开发即授予既定范围内的开发权限，不扩大产品范围或自动解除真实阻塞；仅因旧授权门槛产生的限制按 2026-11-15 更正清除。
 
 - **版本范围 issue**：标题形如「vX.Y.Z 版本范围（已冻结）」，正文按 A/B/C… 列出本版每一项的改动位置、要跟着动的测试和门禁（参考 #162）。只做范围内的项；范围定好就冻结，做的过程中发现的新问题不要顺手改，记成下一版候选（如「[v0.12.0 候选] …」或写进范围 issue 的「不在范围」）。
 - 「待村长确认」的范围还没定，不要开工。
