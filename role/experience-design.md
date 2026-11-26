@@ -339,6 +339,8 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 
 局部截图用 `page.screenshot({ fullPage: true, clip })` 时，`locator.boundingBox()` 给的是相对视口的坐标，不是相对页面的坐标。带 `?tab=` 的详情页打开后会自动滚到工作区，直接把坐标当 `clip` 用，截下来的是上方无关的区域（#1404 第一版驻军图截到的是文明选择器）。截图前先 `window.scrollTo(0, 0)`，或者给 `y` 加上 `window.scrollY`。
 
+同类整页裁切前，还要先触发首屏以下区域的懒加载图片解码。[#1478](https://github.com/linhongcun/aoe2-analyzer/issues/1478#体验设计) 的 `390` 宽未筛选截图直接从页顶 `fullPage: true` 裁切 `#unit-reverse-counters`，没有先滚动到该区交互，`<UnitIcon>` 的 `loading="lazy"` 图标从未进入视口，第一版图里三个单位图标全部空白。截屏前先将目标区 `scrollIntoViewIfNeeded()`、把区内 `<img>` 设为 `loading = 'eager'` 并等待全部 `complete && naturalWidth > 0`，在自查脚本里断言未加载图片数为 `0` 之后，再回滚 `window.scrollTo(0, 0)` 取 `clip`。
+
 结果里有一块区域无法按新数字重画时，不替换那一块，也不把它截进图里。[#1366](https://github.com/linhongcun/aoe2-analyzer/issues/1366#体验设计) 的回放舞台按改前战果绘制，只能分段截图：上段是标题和说明行，下段是重算后的结果表，中间用虚线隔开，并在图注写明「回放舞台略」。
 
 ### 原始效果指令按 `Type` 读字段，覆盖型倍率不逐条写「已计入」
