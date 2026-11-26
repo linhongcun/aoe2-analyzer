@@ -346,8 +346,10 @@ PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相�
 [#1410](https://github.com/linhongcun/aoe2-analyzer/issues/1410#体验设计) 要画持续生产里新增的「大干道」复选框和勾选后的金农人数。`productionTechs` 和 `gatherModel` 每次调用都读 `ECO.ecoTechs`，所以截稿脚本先 `import('/src/data/eco.ts')`，按 PRD 往导出对象里加一条 `506`，再改 `location.hash` 进入目标页。复选框、分组和村民数都由真实领域函数和组件给出，不用逐格改 DOM，也没有碰应用代码。
 
 - 只对调用时才读数据的函数有效。模块里写死的常量和函数内的局部集合（如 `SIEGE_UNIT_IDS`、`calculateSiege` 里的 `irrelevant`）改不到，那次攻城页仍按 [#1339](https://github.com/linhongcun/aoe2-analyzer/issues/1339#体验设计) 的办法在脚本里算。
+- 如果改的数据会在模块加载时编译成只读派生表（如 `TECH_EFFECTS`、`CIV_BONUSES`、`TEAM_BONUSES`、`BONUS_DAT`、`CORE`），等页面加载后再改导出对象已经来不及。[#1445](https://github.com/linhongcun/aoe2-analyzer/issues/1445#体验设计) 重命名护甲类 `39`、调整瓦兰吉 `1488` 归属并校正萨拉森与 6 国文明文案时，改在 Playwright 新建 `context` 后用 `context.route('**/data/game/*.json*')` 拦截 Vite 开发服务器的 JSON 模块请求，在内存按 PRD 变换 `units.json` / `effects.json` / `civs.json` 并返回 `export default ...`，让所有派生常量、伤害明细与反向克制都在应用启动前由真实代码重算，同样零改动仓库文件。
+- 重命名攻击或护甲类别并做内存投影时，要一次核对 `units.json` 的全部同类字段（`atks`、`armc`、`arms` 及 `.form.*`），不能只改 `atks` 和 `armc`。`#1445` 初次截 `#/unit/330` 时，自动断言发现「护甲」列表仍残留旧名「村民」，追查确认 `units.json` 的 `arms`（12 个单位）与 `.form.atks`（3 个子形态）共用同一张类别名表。
 - Vite 开发服务器里，注入的数据和应用共用同一个模块实例，这一页之后的渲染都会受影响。每个状态新建 `context`（见上文「多状态截稿脚本」）；注入前先进一个无关路由，注入后再切 hash。
-- 注入的条目只写 PRD 给出的字段，图注写明哪些读数依赖这条注入。
+- 注入或拦截投影的条目只写 PRD 给出的字段，图注写明哪些读数依赖该预览投影。
 
 ### 借已核实的底图出新对象，页眉页脚的上下文也要换
 
