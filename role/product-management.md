@@ -414,6 +414,12 @@
 
 原因是共享经济领域模块同时被主包路由、多套显式/默认口径工具与 `bonusUsage` 对账单测交叉绑定，只盯单一页面容易漏核隐性边界。以后评审涉及 `realCost.ts`、`civEco` 或经济加成建模的 Issue（如 [#1486](https://github.com/linhongcun/aoe2-analyzer/issues/1486)、[#1477](https://github.com/linhongcun/aoe2-analyzer/issues/1477) 等）时，固定完成四项核查：先追踪传递 import 确认模块是否落入主包，在 PRD 明确分层与零主包膨胀约束；按全站 56 国数据扫描区分时代/内部触发、`ecoTechs` 前置与非 `ecoTechs` 前置，分别写清显式 `techIds` 与默认省略 `techIds` 两种口径的验收正反例；核查全部并行读取入口（如 `gatherUnsupportedSources`、`ecoPayoff` 的 `before/after`）是否同步透传过滤参数；凡新增或变更 `SOURCED` 文明，一并核对 `bonusUsage.ts` 早退特例、`v0290-317-tool-used.json`、`v0290-322-golden.json` 及 `bonusUsage317` 反事实语义。
 
+### 扩 `.dat` 导出白名单或改常驻默认口径前，先反查既有叠加、拦截白名单与阻断字段
+
+2026-11-27 评审本批数据与引擎单时检出三类跨工具反向回归陷阱：一是在[建筑条件隐藏科技补齐](https://github.com/linhongcun/aoe2-analyzer/issues/1474)中，全量导出 `Civ=-1` 隐藏建筑科技若不反查既有规则与消费端，`947`（`minr add -1`）叠在常规 `322 射箭孔`（`minr set 0`）后会把最小射程反向减成 `-1`，而 [techDetailView.ts](../src/domain/techDetailView.ts) 渲染 `GENERIC_FX` 时不过滤 `item.civs`，保留普通修道院 `104` 会污染五条科技详情页；二是在[反伤与充能属性导出](https://github.com/linhongcun/aoe2-analyzer/issues/1482)中，按属性号把 `C=59–62, 118` 加入 [effects_build.py](../scripts/effects_build.py) 后，`a=61` 会连带落到 `199/200/201/377` 等高频通用科技上，若不将对应属性号同步写入 [mixedTrainingTransfer.ts](../src/features/duel/logic/mixedTrainingTransfer.ts) 的 `combatAttributes` 白名单并在 [duelUnmodeled.ts](../src/domain/duelUnmodeled.ts) 仅对无固有充能单位触发，会反向误拦混编跳训练总价并刷屏充能胶囊；三是在[大干道接入收益计算](https://github.com/linhongcun/aoe2-analyzer/issues/1477)与[本方常驻团队加成对齐](https://github.com/linhongcun/aoe2-analyzer/issues/1481)中，[ecoPayoff.ts](../src/domain/ecoPayoff.ts) 以 `warnings.length === 0` 锁死 `balance`，把非采金额外收益写进 `warnings` 会误锁纯采金回本，而将本方团队加成改为自动生效时若不对显式 `team` 做并集幂等去重并在 `mixedTrainingTransfer.ts` 区分「本方常驻 vs 额外盟友」，旧分享链接会双重叠加或误拦训练带入。
+
+原因是扩充管线属性白名单、隐藏规则或把手动开关升级为默认常驻时，影响面往往沿着既有规则顺序、下游白名单和状态布尔耦合反向传导到表面无关的通用科技或分享链接。以后评审同类需求时，固定补做三项反查：扩 `.dat` 导出前按全量科技扫描结果核对「是否与既有常规规则叠加出越界值」「是否落到无 `civs` 过滤的展示页」「是否给通用科技带上新 `eco` 属性从而触发 `mixedTrainingTransfer` 或未建模刷屏」；新增非阻断范围说明前先查领域层 `warnings` 是否绑定 `complete`/`balance` 阻断门控，绑定即独立字段与视觉样式；把开关改为默认常驻生效时，在 PRD 验收中显式锁定旧链幂等去重（不双算）与下游拦截逻辑的「本方 vs 盟友」分界。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
