@@ -60,6 +60,8 @@ export type TechAdoptedDomain =
   | 'market'
   | 'eco-payoff'
   | 'production'
+  | 'construction'
+  | 'real-cost'
   | 'relic-income'
   | 'eco-farm'
   | 'eco-fishing'
@@ -96,6 +98,8 @@ const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string
   market: { label: '市场', isToolName: true },
   'eco-payoff': { label: '经济收益', isToolName: true },
   production: { label: '持续生产', isToolName: true },
+  construction: { label: '多人施工', isToolName: true },
+  'real-cost': { label: '真实成本', isToolName: false },
   'relic-income': { label: '圣物收益', isToolName: true },
   'eco-farm': { label: '农田食物量', isToolName: false },
   'eco-fishing': { label: '渔船采集', isToolName: false },
@@ -223,12 +227,12 @@ export function classifyTechDataConsumption(
 
     // 时代升级科技与战船升级在开局模拟仅读取研究费用与时间，不结算 ecoTechs.effects，不计入已消费效果编码
     if (isEcoPayoff) {
-      // 7 项伐木/采矿科技同步被经济收益、持续生产与开局模拟三处采集模型采用
-      adopted.push('eco-payoff', 'production', 'eco-build');
+      // 7 项伐木/采矿科技同步被经济收益、持续生产、多人施工、真实成本与开局模拟五处采集模型采用
+      adopted.push('eco-payoff', 'production', 'construction', 'real-cost', 'eco-build');
     } else if (isFarmFood) {
-      // 磨坊农田容量仅由农田食物量采用；仅带 task:farm carry 增量的科技（如重犁）额外被持续生产与开局模拟采用
+      // 磨坊农田容量仅由农田食物量采用；仅带 task:farm carry 增量的科技（如重犁）额外被持续生产、多人施工与开局模拟采用（真实成本默认农田步距 0 不受 carry 影响）
       adopted.push('eco-farm');
-      if (hasFarmCarry) adopted.push('production', 'eco-build');
+      if (hasFarmCarry) adopted.push('production', 'construction', 'eco-build');
     } else if (isFishing) {
       adopted.push('eco-fishing', 'eco-build');
     }

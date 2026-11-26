@@ -143,7 +143,12 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
     await openTech(page, '/tech/202');
     await expect(page.locator('#tech-cost-changes')).toHaveCount(0);
     await expect(page.locator('.detail-source')).toContainText(
-      '本页不逐条模拟属性；经济收益、持续生产与开局模拟工具已采用固定数据编码，其余效果以游戏说明为准',
+      '本页不逐条模拟属性；经济收益、持续生产、多人施工、真实成本与开局模拟已采用固定数据编码，其余效果以游戏说明为准',
+    );
+
+    await openTech(page, '/tech/13');
+    await expect(page.locator('.detail-source')).toContainText(
+      '本页不逐条模拟属性；农田食物量、持续生产、多人施工与开局模拟已采用固定数据编码，其余效果以游戏说明为准',
     );
 
     await openTech(page, '/tech/506');

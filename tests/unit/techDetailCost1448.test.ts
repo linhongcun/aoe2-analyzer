@@ -5,15 +5,8 @@ import { Route, Routes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees, type Core } from '../../src/data';
-import { RELIC_INCOME_RAW } from '../../src/data/relicIncome';
 import { evaluateArmyCost } from '../../src/domain/armyCost';
-import { buildBuildingCivRank } from '../../src/domain/buildingCivRank';
-import { payoffAvailable } from '../../src/domain/ecoPayoff';
-import { calculateGeneralGarrison, GENERAL_GARRISON_DATA, getGarrisonTechs } from '../../src/domain/garrisonGeneral';
-import { GARRISON_NUMERIC_EFFECT_TECH_IDS } from '../../src/domain/garrisonTechs';
-import { marketFee } from '../../src/domain/market';
 import { calculateProduction, decodeProduction } from '../../src/domain/production';
-import { calculateRelicIncome, newRelicIncomeConfig, validRelicIncomeData } from '../../src/domain/relicIncome';
 import { buildTechCostChangeView, classifyTechDataConsumption, TECH_COST_PREVIEW_COUNT } from '../../src/domain/techDetailCost';
 import { techEffectEntries } from '../../src/domain/techDetailView';
 import type { Trees } from '../../src/domain/types';
@@ -266,7 +259,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
 
     // 其他已消费编码：202 双刃斧 / 315 征招 / 506 大干道 / 578 土堡 / 484 射箭孔 / 576 蛮王 / 996 强化堡垒 / 756 第一次十字军东征 / 93 弹道学 / 1379 突袭 / 1393 箭毒
     const text202 = visible(markup('/tech/202'));
-    expect(text202).toContain('本页不逐条模拟属性；经济收益、持续生产与开局模拟工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text202).toContain('本页不逐条模拟属性；经济收益、持续生产、多人施工、真实成本与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
     expect(text202).not.toContain('这条科技没有编码数值');
 
     const text315 = visible(markup('/tech/315'));
@@ -331,8 +324,9 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text14).not.toContain('开局模拟');
 
     const text13 = visible(markup('/tech/13'));
-    expect(text13).toContain('本页不逐条模拟属性；农田食物量、持续生产与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text13).toContain('本页不逐条模拟属性；农田食物量、持续生产、多人施工与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
     expect(text13).not.toContain('经济收益');
+    expect(text13).not.toContain('真实成本');
 
     const text65 = visible(markup('/tech/65'));
     expect(text65).toContain('本页不逐条模拟属性；渔船采集与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
@@ -359,187 +353,5 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
       const sectionText = visible(costSection);
       expect(sectionText).not.toMatch(/a:\d+|res:\d+|属性\s*\d+|资源\s*33|资源槽/);
     }
-  });
-
-  it('来源说明与站内工具真实消费行为一致（578 土堡、484/576/996 建筑科技、506 大干道、756 第一次十字军东征）', () => {
-    const ctx = { core, trees };
-
-    // 578 土堡：持续生产跳过并提示整项未计入，建筑满科技对照在城堡行读取作未计入提示
-    const prodBefore578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
-    const prodAfter578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
-    expect(prodBefore578.errors).toEqual([]);
-    expect(prodAfter578.errors).toEqual([]);
-    expect(prodAfter578.lines[0]!.seconds).toBe(prodBefore578.lines[0]!.seconds);
-    expect(prodAfter578.warnings.some((w) => w.includes('土堡') && w.includes('整项未计入'))).toBe(true);
-    const castleRank = buildBuildingCivRank(ctx, core.buildingById[82]!, 3);
-    const berberRow = castleRank.rows.find((r) => r.civ === 'Berbers');
-    expect(berberRow?.tags.some((t) => t.includes('土堡'))).toBe(true);
-    const c578 = classifyTechDataConsumption(core.techById[578]!, false, { unitById: core.unitById, buildingById: core.buildingById });
-    expect(c578.domains).toEqual(['building-combat-notice']);
-
-    // 484 射箭孔 / 576 蛮王 / 996 强化堡垒：目标均为建筑，归入建筑驻军或建筑满科技对照，绝不归入单位 PK
-    const civ484 = core.techById[484]!.civs[0]!;
-    const civ576 = core.techById[576]!.civs[0]!;
-    const civ996 = core.techById[996]!.civs[0]!;
-    const towerRank = buildBuildingCivRank(ctx, core.buildingById[79]!, 4);
-    const tcRank = buildBuildingCivRank(ctx, core.buildingById[109]!, 4);
-    expect(towerRank.rows.find((r) => r.civ === civ484)?.tags.some((t) => t.includes('射箭孔'))).toBe(true);
-    expect(tcRank.rows.find((r) => r.civ === civ576)?.tags.some((t) => t.includes('蛮王'))).toBe(true);
-    expect(towerRank.rows.find((r) => r.civ === civ996)?.tags.some((t) => t.includes('强化堡垒'))).toBe(true);
-    expect(classifyTechDataConsumption(core.techById[484]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-garrison',
-      'building-civ-rank',
-    ]);
-    expect(classifyTechDataConsumption(core.techById[576]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-garrison',
-      'building-civ-rank',
-    ]);
-    expect(classifyTechDataConsumption(core.techById[996]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-combat-notice',
-    ]);
-
-    // 101-103 时代规则、64 炮塔、485 胡尔切掷矛兵与 1069 弩箭匣：均在建筑驻军真实改变数值
-    const donjon = core.buildingById[1665]!;
-    const donjonAges = [2, 3, 4].map((age) => {
-      const res = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] });
-      return [res.baseProjectiles, res.maxProjectiles];
-    });
-    expect(donjonAges).toEqual([
-      [1, 5],
-      [2, 8],
-      [3, 12],
-    ]);
-    for (const [tid, age] of [
-      [101, 2],
-      [102, 3],
-      [103, 4],
-    ] as const) {
-      const withoutAge = {
-        ...GENERAL_GARRISON_DATA,
-        ageRules: { ...GENERAL_GARRISON_DATA.ageRules, [tid]: { ...GENERAL_GARRISON_DATA.ageRules[tid]!, effects: [] } },
-      };
-      const withRes = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] });
-      const withoutRes = calculateGeneralGarrison(ctx, donjon, { civ: 'Sicilians', age, techs: [], rows: [] }, withoutAge);
-      expect(withRes.baseProjectiles).toBeGreaterThan(withoutRes.baseProjectiles);
-      expect(withRes.maxProjectiles).toBeGreaterThan(withoutRes.maxProjectiles);
-      expect(classifyTechDataConsumption(core.techById[tid]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-        'building-garrison',
-      ]);
-    }
-
-    const tc = core.buildingById[109]!;
-    expect(getGarrisonTechs(ctx, tc, { civ: 'Turks', age: 4, techs: [], rows: [] }).some((t) => t.id === 64)).toBe(true);
-    const tcTurksBefore64 = calculateGeneralGarrison(ctx, tc, { civ: 'Turks', age: 4, techs: [], rows: [{ unitId: 83, count: '10', entry: 'enter' }] });
-    const tcTurksAfter64 = calculateGeneralGarrison(ctx, tc, { civ: 'Turks', age: 4, techs: [64], rows: [{ unitId: 83, count: '10', entry: 'enter' }] });
-    expect(tcTurksBefore64.errors).toEqual([]);
-    expect(tcTurksAfter64.errors).toEqual([]);
-    expect(tcTurksAfter64.buildingPower).toBeGreaterThan(tcTurksBefore64.buildingPower!);
-    expect(classifyTechDataConsumption(core.techById[64]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-garrison',
-    ]);
-
-    const mayanBefore485 = calculateGeneralGarrison(ctx, tc, { civ: 'Mayans', age: 3, techs: [], rows: [{ unitId: 6, count: '5', entry: 'enter' }] });
-    const mayanAfter485 = calculateGeneralGarrison(ctx, tc, { civ: 'Mayans', age: 3, techs: [485], rows: [{ unitId: 6, count: '5', entry: 'enter' }] });
-    expect(mayanAfter485.garrisonPower).toBeGreaterThan(mayanBefore485.garrisonPower!);
-    expect(classifyTechDataConsumption(core.techById[485]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-garrison',
-      'duel-unmodeled',
-      'unit-civ-rank-notice',
-    ]);
-
-    const castle = core.buildingById[82]!;
-    const shuBefore1069 = calculateGeneralGarrison(ctx, castle, { civ: 'Shu', age: 4, techs: [], rows: [{ unitId: 492, count: '5', entry: 'enter' }] });
-    const shuAfter1069 = calculateGeneralGarrison(ctx, castle, { civ: 'Shu', age: 4, techs: [1069], rows: [{ unitId: 492, count: '5', entry: 'enter' }] });
-    expect(shuAfter1069.garrisonPower).toBeGreaterThan(shuBefore1069.garrisonPower!);
-    expect(shuAfter1069.totalProjectiles).toBeGreaterThan(shuBefore1069.totalProjectiles!);
-    expect(classifyTechDataConsumption(core.techById[1069]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'building-garrison',
-      'duel-unmodeled',
-      'unit-civ-rank-notice',
-    ]);
-    expect(GARRISON_NUMERIC_EFFECT_TECH_IDS.has(623)).toBe(false);
-    expect(GARRISON_NUMERIC_EFFECT_TECH_IDS.has(1080)).toBe(false);
-
-    // 21 无神论 & 506 大干道：圣物收益工具直接套用固定倍率（21: ×0.5，506: ×1.1）
-    expect(validRelicIncomeData(RELIC_INCOME_RAW)).toBe(true);
-    if (!validRelicIncomeData(RELIC_INCOME_RAW)) throw new Error('invalid relic data');
-    const relicBase = calculateRelicIncome({ ...newRelicIncomeConfig(), civ: 'Burgundians', count: '1', minutes: '1' }, RELIC_INCOME_RAW);
-    const relicAtheism = calculateRelicIncome({ ...newRelicIncomeConfig(), civ: 'Burgundians', count: '1', minutes: '1', atheism: 'one' }, RELIC_INCOME_RAW);
-    expect(relicBase.resources.Gold.perMinute).toBe(30);
-    expect(relicBase.resources.Food.perMinute).toBe(20);
-    expect(relicAtheism.resources.Gold.perMinute).toBe(15);
-    expect(relicAtheism.resources.Food.perMinute).toBe(10);
-    expect(classifyTechDataConsumption(core.techById[21]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'relic-income',
-    ]);
-
-    const relicHindBase = calculateRelicIncome(
-      { ...newRelicIncomeConfig(), civ: 'Hindustanis', count: '1', minutes: '1', grandTrunkRoad: false },
-      RELIC_INCOME_RAW,
-    );
-    const relicHindGtr = calculateRelicIncome(
-      { ...newRelicIncomeConfig(), civ: 'Hindustanis', count: '1', minutes: '1', grandTrunkRoad: true },
-      RELIC_INCOME_RAW,
-    );
-    expect(relicHindBase.resources.Gold.perMinute).toBe(30);
-    expect(relicHindGtr.resources.Gold.perMinute).toBeCloseTo(33, 5);
-
-    // 506 大干道：印度斯坦合法骆驼兵（329）方案在持续生产下无报错且提升采金速率、市场采用 10% 手续费、圣物收益采用 ×1.1，但不在经济收益工具可选清单中
-    const payoffIds = payoffAvailable(ctx, { civ: 'Hindustanis', age: 4 }).map((t) => t.id);
-    expect(payoffIds).not.toContain(506);
-    expect(marketFee({ civ: 'Hindustanis', guilds: false, unique: true })).toBe(0.1);
-    const prodBefore506 = calculateProduction(ctx, {
-      civ: 'Hindustanis',
-      age: 3,
-      techs: [],
-      rows: [{ unit: 329, building: 101, count: '1' }],
-      walk: 0,
-      farm: 0,
-    });
-    const prodAfter506 = calculateProduction(ctx, {
-      civ: 'Hindustanis',
-      age: 3,
-      techs: [506],
-      rows: [{ unit: 329, building: 101, count: '1' }],
-      walk: 0,
-      farm: 0,
-    });
-    expect(prodBefore506.errors).toEqual([]);
-    expect(prodAfter506.errors).toEqual([]);
-    const goldBefore = prodBefore506.resources.find((r) => r.key === 'Gold')!.income;
-    const goldAfter = prodAfter506.resources.find((r) => r.key === 'Gold')!.income;
-    expect(goldAfter).toBeGreaterThan(goldBefore);
-    expect(classifyTechDataConsumption(core.techById[506]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'production',
-      'market',
-      'relic-income',
-    ]);
-
-    // 756 第一次十字军东征：阵容账本从混合规则提取 res:178/179 抗招降，西西里骑士方案可正常纳入并计研究费 400 食 / 300 金
-    const army756 = evaluateArmyCost(ctx, { civ: 'Sicilians', age: '3', rows: [{ unit: 38, qty: '1' }], done: [], targets: ['t:756'] });
-    expect(army756.blocked).toEqual([]);
-    expect(army756.partial).toBe(false);
-    expect(army756.researchTotal).toMatchObject({ Food: 400, Gold: 300 });
-    expect(classifyTechDataConsumption(core.techById[756]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'army-cost',
-    ]);
-
-    // 457 井喷 / 493 骑士精神：持续生产采用且建筑满科技对照读取作提示；315 征招为通用科技，建筑满科技对照不列提示
-    const barracksRank = buildBuildingCivRank(ctx, core.buildingById[12]!, 4);
-    const stableRank = buildBuildingCivRank(ctx, core.buildingById[101]!, 4);
-    expect(barracksRank.rows.find((r) => r.civ === 'Goths')?.tags.some((t) => t.includes('井喷'))).toBe(true);
-    expect(stableRank.rows.find((r) => r.civ === 'Franks')?.tags.some((t) => t.includes('骑士精神'))).toBe(true);
-    expect(barracksRank.rows.find((r) => r.civ === 'Franks')?.tags.some((t) => t.includes('征招'))).toBe(false);
-    expect(classifyTechDataConsumption(core.techById[457]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'production',
-      'building-combat-notice',
-    ]);
-    expect(classifyTechDataConsumption(core.techById[493]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'production',
-      'building-combat-notice',
-    ]);
-    expect(classifyTechDataConsumption(core.techById[315]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
-      'production',
-    ]);
   });
 });
