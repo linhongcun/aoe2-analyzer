@@ -1,6 +1,7 @@
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { EARLY_UNIT_AGES } from '../../../domain/availabilityAge';
+import { mainAttackType } from '../../../domain/duel';
 import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
 import { buildSimEffectiveCost, costTechBadgeMap, presetCostTechIds } from '../../../domain/simEffectiveCost';
@@ -20,7 +21,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
         <Loading />
       </div>
     );
-  const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
+  const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? (mainAttackType(u) === '穿刺' ? 'patk' : 'atk') : ic]);
   const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team, undefined, S.relics);
   const C = S.cmp ? simulate(S.ctx, u, S.cmp, 4, allNumeric(simTechs(S.ctx, u, S.cmp)), new Set()) : null;
   const cmpRelic = S.cmp && S.cmp !== S.civ ? unitRelicBonus(S.cmp, u) : null;

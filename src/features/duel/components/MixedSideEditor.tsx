@@ -3,7 +3,7 @@ import { civByEn, type Core } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedBallisticsScope } from '../../../domain/ballistics';
 import { isDuelExcludedUnit } from '../../../domain/duelBudget';
-import { fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
+import { fighterCanAttack, fighterUsesAssumeHit, mainAttackType, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { civRelicBonus, TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -408,7 +408,7 @@ export function MixedSideEditor({
                       <div>
                         <dt>攻击力</dt>
                         <dd className={fighterCanAttack(r.F) ? 'num nw' : undefined}>
-                          {fighterCanAttack(r.F) ? `${formatHp(r.S.atk)}（${r.F.ranged ? '穿刺' : '近战'}）` : NO_NORMAL_ATTACK_REASON}
+                          {fighterCanAttack(r.F) ? `${formatHp(r.S.atk)}（${mainAttackType(r.u)}）` : NO_NORMAL_ATTACK_REASON}
                         </dd>
                       </div>
                       <div>

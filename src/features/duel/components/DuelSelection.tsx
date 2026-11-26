@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { militaryTechAge } from '../../../domain/availabilityAge';
-import { DPS_UNAVAILABLE_REASON, fighterCanAttack, fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
+import { DPS_UNAVAILABLE_REASON, fighterCanAttack, fighterUsesAssumeHit, mainAttackType, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
 import { applicableUnmodeledTechIds } from '../../../domain/duelUnmodeled';
 import { formatHp } from '../../../domain/hpFormat';
 import { baseUnit, isElite } from '../../../domain/family';
@@ -117,7 +117,7 @@ export function Side({
     elite = core.fam.eliteOf[base.id];
   const eliteSelected = isElite(u, core.fam);
   const preset = Array.isArray(spec.techs) ? (spec.techs.length ? '' : 'none') : spec.techs === 'f' && side.age < 4 ? 'c' : spec.techs;
-  const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
+  const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (mainAttackType(u) === '穿刺' ? 'patk' : 'atk') : ic]);
   const onAgeChange = (nextAge: number) => {
     const nextTechs: SideSpec['techs'] = Array.isArray(spec.techs)
       ? filterExplicitTechsForAge(spec.techs, core.techById, side.civ, nextAge)
@@ -262,12 +262,12 @@ export function Side({
           [
             ['hp', '生命值', <span className="num nw">{formatHp(side.F.hp)}</span>],
             [
-              fighterCanAttack(side.F) && u.rng > 1 ? 'patk' : 'atk',
+              fighterCanAttack(side.F) && mainAttackType(u) === '穿刺' ? 'patk' : 'atk',
               '攻击',
               fighterCanAttack(side.F) ? (
                 <>
                   <span className="num nw">{r1(side.S.atk)}</span>
-                  {side.F.ranged ? '（穿刺）' : '（近战）'}
+                  {`（${mainAttackType(u)}）`}
                 </>
               ) : (
                 <span data-t={`pk-no-atk-${k}`}>{NO_NORMAL_ATTACK_REASON}</span>
