@@ -57,7 +57,7 @@ const MIX_CASES: readonly MixCase[] = [
   [
     'Muisca',
     'muisca-arbalester-skirmisher',
-    '混编 · 32 名劲弩手 与 35 名精锐掷矛手 对法兰克游侠 18 名与 25 名长戟兵（胜，剩劲弩 4、掷矛 35）',
+    '混编 · 零城堡无草药学 32 名劲弩手 与 35 名精锐掷矛手 对法兰克游侠 18 名与 25 名长戟兵（胜，剩劲弩 4、掷矛 35）',
     'a',
     [4, 35],
     [0, 0],
@@ -65,10 +65,10 @@ const MIX_CASES: readonly MixCase[] = [
   [
     'Muisca',
     'muisca-arbalester-skirmisher',
-    '混编 · 32 名劲弩手 与 35 名精锐掷矛手 对不列颠 34 名长戟兵 与 35 名劲弩手（负，敌剩长戟 3、劲弩 35）',
+    '混编 · 零城堡无草药学 32 名劲弩手 与 35 名精锐掷矛手 对不列颠 34 名长戟兵 与 35 名劲弩手（负，敌剩长戟 4、劲弩 35）',
     'b',
     [0, 0],
-    [3, 35],
+    [4, 35],
   ],
 
   // Spanish (6)
@@ -203,6 +203,14 @@ const MIX_CASES: readonly MixCase[] = [
   [
     'Tupi',
     'tupi-blackwood-halberdier',
+    '混编 · 精锐伊比拉贝玛战士 16 名与 50 只精锐黑檀木步弓手 对日本 25 名长戟兵 与 30 名劲弩手（胜，剩伊比拉贝玛 3、黑檀木 50）',
+    'a',
+    [3, 50],
+    [0, 0],
+  ],
+  [
+    'Tupi',
+    'tupi-blackwood-halberdier',
     '混编 · 20 名长戟兵 与 56 只精锐黑檀木步弓手 对马扎尔游侠 16 名与 25 名劲弩手（负，敌剩游侠 12、劲弩 25）',
     'b',
     [0, 0],
@@ -212,13 +220,13 @@ const MIX_CASES: readonly MixCase[] = [
 ];
 
 describe('#1401 第一档批 2 五国真混编（m=mix）领域回归', () => {
-  it('全部 26 条新增真混编链接解码与 DE 188329 碰撞引擎实算 100% 一致', async () => {
+  it('全部 27 条新增真混编链接解码、零城堡不含城堡科技与 DE 188329 碰撞引擎实算 100% 一致', async () => {
     const core = await loadCore();
     const trees = await loadTrees();
     const ctx = makeSimContext(core.techs, trees);
     const currentDataVer = mixedDataVersion(dataSources);
 
-    expect(MIX_CASES).toHaveLength(26);
+    expect(MIX_CASES).toHaveLength(27);
 
     for (const [civ, routeId, label, winnerExpected, aAliveExpected, bAliveExpected] of MIX_CASES) {
       const link = route(civ, routeId).evidence.links?.find((item) => item.label === label);
@@ -227,6 +235,13 @@ describe('#1401 第一档批 2 五国真混编（m=mix）领域回归', () => {
       expect(isMixedDuelLink(params), label).toBe(true);
       const dec = decodeMixedDuel(params);
       expect([dec.errors, dec.input.data, dec.input.a.civ], label).toEqual([[], currentDataVer, civ]);
+
+      if (routeId === 'muisca-arbalester-skirmisher') {
+        for (const tid of dec.input.a.techs) {
+          expect(core.techById[Number(tid)]?.b, `${label} zero castle must exclude castle tech ${tid}`).not.toBe(82);
+        }
+        expect(dec.input.a.techs, `${label} must exclude 1365`).not.toContain('1365');
+      }
 
       const sideA = resolveMixedSide(ctx, core, dec.input.a, 'a');
       const sideB = resolveMixedSide(ctx, core, dec.input.b, 'b');
@@ -244,6 +259,19 @@ describe('#1401 第一档批 2 五国真混编（m=mix）领域回归', () => {
         fight.b.rows.map(({ alive }) => alive),
         `${label} bAlive`,
       ).toEqual([...bAliveExpected]);
+    }
+
+    // 穆伊斯卡纯靶场补草药学 1365 对不列颠枪弓对照：敌剩从 4＋35 变为 3＋35（仍负）
+    const britLink = route('Muisca', 'muisca-arbalester-skirmisher').evidence.links!.find((item) => item.label.includes('对不列颠'))!;
+    const britDec = decodeMixedDuel(new URLSearchParams(new URL(britLink.href).hash.split('?')[1] ?? ''));
+    const withHerbalismA = resolveMixedSide(ctx, core, { ...britDec.input.a, techs: [...britDec.input.a.techs, '1365'] }, 'a');
+    const britB = resolveMixedSide(ctx, core, britDec.input.b, 'b');
+    expect([withHerbalismA.errors, britB.errors]).toEqual([[], []]);
+    const herbFight = contactFight(withHerbalismA.army!, britB.army!);
+    expect(herbFight.status).toBe('win');
+    if (herbFight.status === 'win') {
+      expect(herbFight.winner).toBe('b');
+      expect(herbFight.b.rows.map(({ alive }) => alive)).toEqual([3, 35]);
     }
   });
 });

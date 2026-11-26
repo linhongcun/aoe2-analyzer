@@ -218,7 +218,7 @@ describe('#1139 保加利亚与马扎尔实战/模型证据边界', () => {
       [
         'Bulgarians',
         'bulgarians-krepost-konnik',
-        'https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1053-L1108',
+        'https://github.com/linhongcun/aoe2-analyzer/blob/df2e8a9b1f966f5917703ed984f9e02515c95f91/role/game-strategy.md#L1053-L1108',
         [1053, 1057, 1061, 1062, 1063, 1067, 1069, 1073, 1076, 1079, 1089, 1090, 1091, 1092, 1093, 1095, 1101, 1102, 1103, 1104, 1106, 1108],
       ],
       [

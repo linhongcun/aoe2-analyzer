@@ -151,8 +151,10 @@ for (const width of [1280, 360]) {
       if (item.civ === 'Tupi') {
         await expect(cards.nth(0).locator('#formation-tupi-blackwood-halberdier')).toHaveCount(1);
         await expect(cards.nth(0).getByLabel('路线状态')).toHaveText(/讨论认可.*待实战验证/);
+        await expect(cards.nth(0)).toContainText('有城堡产能时的默认首选主路');
         await expect(cards.nth(1).locator('#formation-tupi-champi-slinger')).toHaveCount(1);
         await expect(cards.nth(1).getByLabel('路线状态')).toHaveText(/讨论认可.*实战未说明/);
+        await expect(cards.nth(1)).toContainText('无城堡产兵窗口，或面对重型弩炮、重掷矛与纯步兵局势时选用的平行条件路线');
       }
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${item.civ} overflow`).toBe(true);

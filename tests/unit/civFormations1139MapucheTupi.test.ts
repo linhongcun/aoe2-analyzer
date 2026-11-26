@@ -235,7 +235,7 @@ describe('#1139 马普切与图皮路线边界及条件支援', () => {
 
   it('来源行和固定版本URL锚点按四路线独立字面期望核对', () => {
     const MAPUCHE_SHA = '415863b2a3e94078129554c09378c9a9fba04b57';
-    const TUPI_SHA = 'c86b7cc5f934f72aaec66374c072a0b897de2ac7';
+    const TUPI_SHA = 'df2e8a9b1f966f5917703ed984f9e02515c95f91';
     const expected = [
       ['Mapuche', 'mapuche-kona-bolas', MAPUCHE_SHA, 'L1185-L1221', [1185, 1187, 1191, 1195, 1196, 1198, 1202, 1204, 1210, 1211, 1212, 1219, 1221]],
       ['Mapuche', 'mapuche-kona-slinger', MAPUCHE_SHA, 'L1200', [1187, 1191, 1200, 1204, 1211, 1218, 1221]],

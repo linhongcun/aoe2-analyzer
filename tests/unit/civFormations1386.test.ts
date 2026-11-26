@@ -25,8 +25,8 @@ const SUPERSEDED_BY_LATER = new Map<string, string>([
   ['Malians', '54f7f61d762a5ec6bf665431c28f549df43681f9'],
   ['Goths', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
   ['Poles', '372fbdd43c4902b9d03ef1dc69dcf203cb2f8e6e'],
-  ['Spanish', 'c86b7cc5f934f72aaec66374c072a0b897de2ac7'],
-  ['Japanese', 'c86b7cc5f934f72aaec66374c072a0b897de2ac7'],
+  ['Spanish', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
+  ['Japanese', 'df2e8a9b1f966f5917703ed984f9e02515c95f91'],
 ]);
 const BATCH_1_SHA = 'bc3c0bc5e50f7e3e7f92ab159d8b8e965f0023b8';
 

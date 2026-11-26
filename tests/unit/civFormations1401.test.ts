@@ -11,7 +11,7 @@ import { projectFormation, publishedFormations, type FormationView } from '../..
 import { dedupeFormationClauses } from '../../src/domain/formationDedup';
 import { FormationText } from '../../src/features/civs/components/CivFormations';
 
-const DOC_SHA_1401 = 'c86b7cc5f934f72aaec66374c072a0b897de2ac7';
+const DOC_SHA_1401 = 'df2e8a9b1f966f5917703ed984f9e02515c95f91';
 const TARGET_CIVS = ['Muisca', 'Spanish', 'Japanese', 'Bulgarians', 'Tupi'] as const;
 
 const byCiv = (civ: string) => civFormationContent.find((entry) => entry.civ === civ)!;
@@ -25,7 +25,7 @@ const UNWRAPPED_RELIC_OR_JIAN = /<span class="num nw">[^<]*\d[^<]*<\/span>\s*(?:
 const UNWRAPPED_ZHI = /<span class="num nw">[^<]*\d[^<]*<\/span>\s*只/g;
 const BARE_NUM_DUI = /<span class="num nw">[+\-−]?\d+(?:\.\d+)?(?:\s*(?:\/|:|–|—|-|至|\u2192)\s*[+\-−]?\d+(?:\.\d+)?)*<\/span>\s*对/g;
 
-function findFormationViolations(html: string): string[] {
+function findFormationViolations(html: string, allowBulgariansLegacy = false): string[] {
   const hits: string[] = [];
   for (const m of html.matchAll(BOUNDARY_SPLIT_RE)) hits.push(m[0]);
   for (const m of html.matchAll(UNWRAPPED_RELIC_OR_JIAN)) hits.push(m[0]);
@@ -39,11 +39,12 @@ function findFormationViolations(html: string): string[] {
     const idx = m.index ?? 0;
     const before = html.slice(0, idx);
     const after = html.slice(idx + m[0].length);
+    const allowedLegacy =
+      allowBulgariansLegacy &&
+      ((/(?:目录值|射程|每击)\s*$/.test(before) && /^\s*<span class="num nw">[+\-−]?\d+(?:\.\d+)?<\/span>/.test(after)) ||
+        (/^<span class="num nw">1<\/span>\s*对$/.test(m[0]) && /<span class="num nw">1<\/span>v$/.test(before)));
     const allowed =
-      (/预算\s*$/.test(before) && /^\s*<span class="num nw">/.test(after)) ||
-      (/圣物数\s*$/.test(before) && /^(?:战果|胜负)/.test(after)) ||
-      /(?:目录值|射程|每击)\s*$/.test(before) ||
-      /<span class="num nw">1<\/span>v$/.test(before);
+      (/预算\s*$/.test(before) && /^\s*<span class="num nw">/.test(after)) || (/圣物数\s*$/.test(before) && /^(?:战果|胜负)/.test(after)) || allowedLegacy;
     if (!allowed) hits.push(m[0]);
   }
   return hits;
@@ -137,6 +138,11 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
       ['tupi-champi-slinger', 'approved', 'unreported'],
     ]);
     expect(route('Tupi', 'tupi-blackwood-halberdier').evidence.recordedVersion).not.toContain('v0.99.34');
+    expect(route('Tupi', 'tupi-blackwood-halberdier').condition).toContain('默认首选主路');
+    expect(route('Tupi', 'tupi-blackwood-halberdier').condition).not.toContain('按敌方情况选择的主路之一');
+    expect(route('Tupi', 'tupi-champi-slinger').condition).toContain('无城堡产兵窗口');
+    expect(route('Tupi', 'tupi-champi-slinger').condition).toContain('重型弩炮、重掷矛与纯步兵');
+    expect(route('Tupi', 'tupi-champi-slinger').condition).not.toContain('按敌方情况选择的主路之一');
 
     // 组合结构与缺失分支/前置投影降级、as-needed 局部隐藏
     const core = await loadCore();
@@ -227,9 +233,13 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
       '11 项',
       '预算 3000 对法兰克游侠',
       '35 对',
+      '目录值 4800 对上述城堡',
+      '射程 8 对长戟兵',
+      '每击 13 对单位',
+      '1v35 对黑檀木',
     ];
     for (const bad of mustReject) {
-      expect(findFormationViolations(renderFormationText(bad)).length, `expected reject: ${bad}`).toBeGreaterThan(0);
+      expect(findFormationViolations(renderFormationText(bad), true).length, `expected reject: ${bad}`).toBeGreaterThan(0);
     }
     const mustAllow = [
       '持续生产 · 精锐神庙护卫（兵营 3 座）＋投石手（靶场 4 座）· 89 名村民（含征招）',
@@ -240,11 +250,17 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
     for (const ok of mustAllow) {
       expect(findFormationViolations(renderFormationText(ok)), `expected allow: ${ok}`).toEqual([]);
     }
+    const bulgariansLegacyAllow = ['目录值 4800 对 2600', '射程 8 对 7', '每击 13 对 13', '接触 1v1 对西班牙、匈奴游侠'];
+    for (const legacy of bulgariansLegacyAllow) {
+      expect(findFormationViolations(renderFormationText(legacy), false).length, `expected reject outside Bulgarians legacy: ${legacy}`).toBeGreaterThan(0);
+      expect(findFormationViolations(renderFormationText(legacy), true), `expected allow in Bulgarians legacy: ${legacy}`).toEqual([]);
+    }
 
     let checkedRoutes = 0;
     for (const civName of TARGET_CIVS) {
       for (const r of byCiv(civName).routes) {
         checkedRoutes += 1;
+        const allowBulgariansLegacy = civName === 'Bulgarians' && r.id === 'bulgarians-krepost-konnik';
         const texts = [
           r.title,
           r.condition,
@@ -273,7 +289,7 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
         ].filter((v): v is string => Boolean(v));
 
         for (const text of texts) {
-          expect(findFormationViolations(renderFormationText(text)), `${civName}/${r.id} violation in: ${text}`).toEqual([]);
+          expect(findFormationViolations(renderFormationText(text), allowBulgariansLegacy), `${civName}/${r.id} violation in: ${text}`).toEqual([]);
         }
       }
     }

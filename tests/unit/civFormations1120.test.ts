@@ -122,7 +122,7 @@ describe('#1120 与 #1139 发布契约', () => {
     expect(georgians!.routes[1]!.required.map(({ kind, id }) => `${kind}:${id}`)).toEqual(['unit:1805']);
     expect(georgians!.routes[0]!.prerequisites.map(({ kind, id, historicalName }) => [kind, id, historicalName])).toEqual([['tech', 63, '大型箭塔']]);
     expect(spanish!.source).toEqual({
-      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/c86b7cc5f934f72aaec66374c072a0b897de2ac7/role/game-strategy.md#L1467-L1524',
+      content: 'https://github.com/linhongcun/aoe2-analyzer/blob/df2e8a9b1f966f5917703ed984f9e02515c95f91/role/game-strategy.md#L1467-L1524',
       discussion: 'https://app.devin.ai/sessions/0324fdbe099145518bae6f421b8925c4',
       boundary: '单兵拉扯、真混编、施工工期与免金研究账本均为站内一维或固定规则模型复核，未做客户端实战胜率或维修速度验证。',
     });
