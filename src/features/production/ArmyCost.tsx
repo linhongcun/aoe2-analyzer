@@ -308,8 +308,9 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                   {config.rows.map((row, index) => {
                     const unit = context?.core.unitById[row.unit];
                     const line = result?.training.lines[index];
-                    const tc = unitTrainCount(unit);
-                    const isPair = tc > 1;
+                    const tc = unitTrainCount(unit),
+                      isPair = tc > 1,
+                      rowHasError = Boolean(line && line.status !== 'ok' && line.reason);
                     return (
                       <article className="army-unit-row" key={index}>
                         <div className="army-section-heading">
@@ -349,11 +350,11 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                             <input
                               aria-label={`兵种 ${index + 1} 数量`}
                               id={`army-qty-${index}`}
-                              aria-describedby={`army-row-error-${index}`}
+                              aria-describedby={rowHasError ? `army-row-error-${index}` : undefined}
                               className="num"
                               inputMode="numeric"
                               value={row.qty}
-                              aria-invalid={!/^\d+$/.test(row.qty) || +row.qty < 1 || +row.qty > 1000}
+                              aria-invalid={!/^\d+$/.test(row.qty) || +row.qty < 1 || +row.qty > 1000 || undefined}
                               onChange={(e) => rowEdit(index, { qty: e.target.value })}
                             />
                           </label>
@@ -362,7 +363,7 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                             {line?.cost ? <CostView c={line.cost} /> : <span>待核算</span>}
                           </div>
                         </div>
-                        {line?.status !== 'ok' && line?.reason && (
+                        {rowHasError && line?.reason && (
                           <p className="army-warning" id={`army-row-error-${index}`}>
                             <Icon name="triangle-alert" />
                             {line.reason.replace(/研究费用不计。?/g, '')}

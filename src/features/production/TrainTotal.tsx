@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { PRODUCTION_LIMIT, encodeProduction, productionUnits, type ProductionContext } from '../../domain/production';
 import { defaultTrainQty, defaultTrainUnit, evaluateTrainTotal, TRAIN_TOTAL_QTY_MAX, type TrainTotalConfig } from '../../domain/trainTotal';
@@ -65,8 +65,28 @@ export function TrainTotalLinkError({ errors }: { errors: string[] }) {
 export function TrainTotal({ context }: { context: ProductionContext }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const decoded = useMemo(() => decodeTrainTotal(location.search), [location.search]);
-  const config = decoded.config;
+  const [observed, setObserved] = useState({ key: location.key, search: location.search });
+  const [rawQtys, setRawQtys] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  if (observed.key !== location.key || observed.search !== location.search) {
+    setObserved({ key: location.key, search: location.search });
+    if (navigationType !== 'REPLACE' || rawQtys.search !== location.search) setRawQtys({ search: location.search, drafts: {} });
+  }
+  const activeDrafts = useMemo(
+    () => (observed.key === location.key && rawQtys.search === location.search ? rawQtys.drafts : {}),
+    [observed.key, location.key, rawQtys, location.search],
+  );
+  const config = useMemo(
+    () =>
+      Object.keys(activeDrafts).length === 0
+        ? decoded.config
+        : {
+            ...decoded.config,
+            rows: decoded.config.rows.map((r, i) => (Object.hasOwn(activeDrafts, i) ? { ...r, qty: activeDrafts[i]! } : r)),
+          },
+    [decoded.config, activeDrafts],
+  );
   const transfer = useMemo(() => {
     const mapped = trainTotalToProduction(context, config);
     return { to: '/production?' + encodeProduction(mapped.config), state: productionTransferState(mapped.notice) };
@@ -79,14 +99,28 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
     incomplete: result.incomplete,
   });
   const share = useShareLink({
-    stateKey: location.search,
+    stateKey: JSON.stringify([location.search, activeDrafts]),
     successMessage: '链接已复制，包含当前全部设置。',
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const write = (next: TrainTotalConfig) => {
-    const search = '?' + encodeTrainTotal(next);
+    const nextDrafts: Record<number, string> = {};
+    const urlConfig: TrainTotalConfig = {
+      ...next,
+      rows: next.rows.map((r, i) => {
+        if (r.qty.includes(',')) {
+          nextDrafts[i] = r.qty;
+          return { ...r, qty: '' };
+        }
+        return r;
+      }),
+    };
+    const search = '?' + encodeTrainTotal(urlConfig);
     const clearNotice = search !== location.search && readProductionTransfer(location.state)?.source === 'mixed-duel';
-    navigate({ pathname: '/production', search }, { replace: true, state: clearNotice ? withoutProductionTransfer(location.state) : location.state });
+    setRawQtys({ search, drafts: nextDrafts });
+    if (search !== location.search) {
+      navigate({ pathname: '/production', search }, { replace: true, state: clearNotice ? withoutProductionTransfer(location.state) : location.state });
+    }
     share.reset();
   };
   const blocked = result.blocked.length > 0;
@@ -122,7 +156,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 onClick={() =>
                   void share.copy(() => {
                     const url = new URL(window.location.href);
-                    url.hash = '/production?' + encodeTrainTotal(config);
+                    const safeConfig = { ...config, rows: config.rows.map((r) => (r.qty.includes(',') ? { ...r, qty: '' } : r)) };
+                    url.hash = '/production?' + encodeTrainTotal(safeConfig);
                     return url.href;
                   })
                 }
@@ -221,6 +256,10 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                 const isPair = tc > 1;
                 const rowAvailable = row.unit > 0 && options.some((unit) => unit.id === row.unit);
                 const unavailableText = row.unit > 0 && !rowAvailable ? `当前不可用：${line.unit?.zh ?? row.unit}` : undefined;
+                const rowErrorId = line.status !== 'ok' ? `train-total-row-error-${index}` : undefined;
+                const unitInvalid = line.status === 'unavail' || line.status === 'pending';
+                const qtyDescribedBy = waiting || line.status === 'badqty' ? rowErrorId : undefined;
+                const unitDescribedBy = unitInvalid ? rowErrorId : undefined;
                 return (
                   <article
                     className={`train-total-row${waiting ? ' is-waiting' : line.status === 'ok' ? '' : ' is-bad'}`}
@@ -242,7 +281,8 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                         civ={civName ? config.civ : undefined}
                         allowUnavailable={false}
                         list={unitEntries}
-                        invalid={line.status === 'unavail' || line.status === 'pending'}
+                        invalid={unitInvalid}
+                        describedBy={unitDescribedBy}
                         unavailableText={unavailableText}
                         onChange={(unit) => {
                           const nextTc = unitTrainCount(unit);
@@ -266,6 +306,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                         incrementLabel={`兵种 ${index + 1} 数量加 ${tc}`}
                         placeholder={isPair ? `填写 ${tc}–${TRAIN_TOTAL_QTY_MAX}` : '填写 1–1000'}
                         invalid={waiting ? undefined : line.status === 'badqty'}
+                        describedBy={qtyDescribedBy}
                         onChange={(qty) => editRow(config, index, { qty }, write)}
                       />
                     </div>
@@ -305,7 +346,7 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
                       删除
                     </button>
                     {line.status !== 'ok' && (
-                      <p className="train-total-flag">
+                      <p className="train-total-flag" id={rowErrorId}>
                         <Icon name={waiting ? 'info' : 'triangle-alert'} />
                         {waiting ? (
                           <span>

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, civByEn } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { CostView } from '../../shared/ui/art';
+import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { ProductionCrumbs, ProductionModeNav } from './ProductionModeNav';
@@ -103,7 +104,8 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
                   type="text"
                   inputMode="numeric"
                   value={draft}
-                  aria-invalid={invalidDraft}
+                  aria-invalid={invalidDraft || undefined}
+                  aria-describedby={invalidDraft ? 'train-compare-target-error' : undefined}
                   onChange={(event) => {
                     setDraft(event.target.value);
                     reset();
@@ -113,6 +115,14 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
               <button className="btn" type="submit">
                 应用数量
               </button>
+              {invalidDraft && (
+                <p className="train-compare-field-error" id="train-compare-target-error">
+                  <Icon name="triangle-alert" />
+                  <span>
+                    目标数量须为 <span className="num nw">1–1000</span> 的整数。
+                  </span>
+                </p>
+              )}
             </form>
           </div>
           <p className="note">
@@ -156,8 +166,14 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
           <h2 id="train-compare-results-title">训练对照结果</h2>
           {changed && (
             <p className="note" role={invalidDraft ? 'alert' : 'status'}>
-              <CompareNumberText text={invalidDraft ? '目标数量须为 1–1000 的整数，请修正后应用。' : '应用数量后更新对照。'} />
-              当前未生成结果或可复制链接。
+              {invalidDraft ? (
+                '目标数量未应用。修正后点击“应用数量”更新对照；修正前不能复制对照链接。'
+              ) : (
+                <>
+                  <CompareNumberText text="应用数量后更新对照。" />
+                  当前未生成结果或可复制链接。
+                </>
+              )}
             </p>
           )}
           {!changed &&

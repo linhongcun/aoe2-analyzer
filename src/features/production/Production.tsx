@@ -1,5 +1,5 @@
-import { Fragment, lazy, Suspense, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Fragment, lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
@@ -45,6 +45,7 @@ import { productionTransferState } from '../../shared/utils/productionTransferSt
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
+import { captureVisibleFieldIds, revealVisibleFieldErrors, type FieldErrorTarget } from './revealFieldError';
 import './production.css';
 import './trainCompare.css';
 
@@ -98,9 +99,29 @@ export default function Production() {
 
 function LegacyProduction({ context }: { context: ProductionContext }) {
   const location = useLocation(),
-    navigate = useNavigate();
+    navigate = useNavigate(),
+    navigationType = useNavigationType();
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
-  const config = decoded.config;
+  const [observed, setObserved] = useState({ key: location.key, search: location.search });
+  const [rawCounts, setRawCounts] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  if (observed.key !== location.key || observed.search !== location.search) {
+    setObserved({ key: location.key, search: location.search });
+    if (navigationType !== 'REPLACE' || rawCounts.search !== location.search) setRawCounts({ search: location.search, drafts: {} });
+  }
+  const activeDrafts = useMemo(
+    () => (observed.key === location.key && rawCounts.search === location.search ? rawCounts.drafts : {}),
+    [observed.key, location.key, rawCounts, location.search],
+  );
+  const config = useMemo(
+    () =>
+      Object.keys(activeDrafts).length === 0
+        ? decoded.config
+        : {
+            ...decoded.config,
+            rows: decoded.config.rows.map((r, i) => (Object.hasOwn(activeDrafts, i) ? { ...r, count: activeDrafts[i]! } : r)),
+          },
+    [decoded.config, activeDrafts],
+  );
   const {
     copy,
     status: shareStatus,
@@ -112,7 +133,22 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const update = (next: ProductionConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true, state: location.state });
+    const nextDrafts: Record<number, string> = {};
+    const urlConfig: ProductionConfig = {
+      ...next,
+      rows: next.rows.map((r, i) => {
+        if (/[,:]/.test(r.count)) {
+          nextDrafts[i] = r.count;
+          return { ...r, count: '' };
+        }
+        return r;
+      }),
+    };
+    const nextSearch = '?' + encodeProduction(urlConfig);
+    setRawCounts({ search: nextSearch, drafts: nextDrafts });
+    if (nextSearch !== location.search) {
+      navigate({ pathname: '/production', search: nextSearch }, { replace: true, state: location.state });
+    }
     resetShare();
   };
   return (
@@ -155,6 +191,15 @@ function AppliedText({ items }: { items: readonly string[] }) {
   );
 }
 
+function FieldError({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <p className="production-field-error" id={id}>
+      <Icon name="triangle-alert" />
+      <span>{children}</span>
+    </p>
+  );
+}
+
 function ProductionBody({
   context: ctx,
   config,
@@ -183,12 +228,59 @@ function ProductionBody({
   const result = calculateProduction(ctx, config);
   const units = useMemo(() => productionUnits(ctx, config), [ctx, config]);
   const unitEntries = useMemo(() => units.map((u) => ({ u })), [units]);
+  const rowStates = useMemo(
+    () =>
+      config.rows.map((row, index) => {
+        const unit = ctx.core.unitById[row.unit];
+        const buildings = unit ? productionBuildings(ctx, config, unit) : [];
+        return {
+          row,
+          index,
+          unit,
+          buildings,
+          unitInvalid: !units.some((u) => u.id === row.unit),
+          buildingInvalid: !buildings.includes(row.building),
+          countInvalid: !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT,
+        };
+      }),
+    [ctx, config, units],
+  );
+  const prevInvalidRef = useRef<Set<string> | null>(null);
+  const pendingInteractionRef = useRef<{ visibleBefore: Set<string>; forceKey?: string } | null>(null);
+  const applyUpdate = (next: ProductionConfig, forceKey?: string) => {
+    const fieldIds = config.rows.flatMap((_, i) => [`production-unit-${i}`, `production-building-${i}`, `production-count-${i}`]);
+    pendingInteractionRef.current = { visibleBefore: captureVisibleFieldIds(fieldIds), forceKey };
+    update(next);
+  };
+  useLayoutEffect(() => {
+    const currentTargets: FieldErrorTarget[] = [];
+    for (const s of rowStates) {
+      if (s.unitInvalid) currentTargets.push({ key: `unit:${s.index}`, fieldId: `production-unit-${s.index}`, errorId: `production-unit-error-${s.index}` });
+      if (s.buildingInvalid)
+        currentTargets.push({ key: `building:${s.index}`, fieldId: `production-building-${s.index}`, errorId: `production-building-error-${s.index}` });
+      if (s.countInvalid)
+        currentTargets.push({ key: `count:${s.index}`, fieldId: `production-count-${s.index}`, errorId: `production-count-error-${s.index}` });
+    }
+    const prev = prevInvalidRef.current;
+    const interaction = pendingInteractionRef.current;
+    pendingInteractionRef.current = null;
+    prevInvalidRef.current = new Set(currentTargets.map((t) => t.key));
+    if (!prev || !interaction) return;
+    revealVisibleFieldErrors(
+      currentTargets.filter((t) => !prev.has(t.key) || interaction.forceKey === t.key),
+      interaction.visibleBefore,
+    );
+  }, [config, rowStates]);
+  useLayoutEffect(() => {
+    pendingInteractionRef.current = null;
+  });
   const available = productionTechs(ctx, config),
     free = freeProductionTechs(ctx, config);
   const errors = [...linkErrors, ...result.errors];
+  const dockNote = linkErrors.length > 0 ? '请先修正链接错误，再复制方案。' : result.errors.length > 0 ? '请先修正生产需求中的错误，再复制方案。' : shareStatus;
   const selected = effectiveProductionTechs(ctx, config);
-  const editRow = (index: number, fields: Partial<ProductionRow>) =>
-    update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
+  const editRow = (index: number, fields: Partial<ProductionRow>, forceKey?: string) =>
+    applyUpdate({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) }, forceKey);
   const related = [
     { to: '/market', label: '市场买卖预算' },
     { to: '/eco-payoff', label: '经济科技收益：固定村民对比研究投入与增量' },
@@ -206,14 +298,13 @@ function ProductionBody({
         subnav={<ProductionModeNav transfer={transfer} />}
         dock={
           <CalcDock
-            note={shareStatus}
+            note={dockNote}
             resultId="production-summary-title"
-            actions={[{ label: '复制方案链接', icon: 'copy', disabled: linkErrors.length > 0, onClick: () => void share() }]}
+            actions={[{ label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void share() }]}
           />
         }
       />
       <ProductionTransferBanner />
-      {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {manualLink && (
         <label className="production-manual">
           方案链接
@@ -225,11 +316,11 @@ function ProductionBody({
           <div className="production-settings">
             <div className="production-field">
               <label htmlFor="production-civ">文明</label>
-              <CivPicker id="production-civ" label="生产文明" value={config.civ} onChange={(civ) => update({ ...config, civ })} />
+              <CivPicker id="production-civ" label="生产文明" value={config.civ} onChange={(civ) => applyUpdate({ ...config, civ })} />
             </div>
             <label>
               时代
-              <select aria-label="生产时代" value={config.age} onChange={(e) => update({ ...config, age: Number(e.target.value) })}>
+              <select aria-label="生产时代" value={config.age} onChange={(e) => applyUpdate({ ...config, age: Number(e.target.value) })}>
                 {[1, 2, 3, 4].map((a) => (
                   <option key={a} value={a}>
                     {AGE_ZH[a]}
@@ -274,12 +365,8 @@ function ProductionBody({
             <p className="note">
               最多 {PRODUCTION_LIMIT} 条，每条建筑数量上限 {BUILDING_LIMIT}；填 0 可暂停。单位列表随文明、时代和解锁科技变化。
             </p>
-            {config.rows.map((row, index) => {
-              const unit = ctx.core.unitById[row.unit];
-              const buildings = unit ? productionBuildings(ctx, config, unit) : [];
-              const rowUnitAvailable = units.some((u) => u.id === row.unit);
+            {rowStates.map(({ row, index, unit, buildings, unitInvalid, buildingInvalid, countInvalid }) => {
               const line = result.lines.find((l) => l.unit.id === row.unit && l.building === row.building && l.count === +row.count);
-              const countInvalid = !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT;
               return (
                 <article className="production-row" key={index} data-testid="production-row">
                   <div className="production-section-title">
@@ -304,28 +391,38 @@ function ProductionBody({
                       civ={config.civ}
                       allowUnavailable={false}
                       list={unitEntries}
-                      invalid={!rowUnitAvailable}
-                      unavailableText={rowUnitAvailable ? undefined : `当前不可用：${unit?.zh ?? row.unit}`}
+                      invalid={unitInvalid}
+                      describedBy={unitInvalid ? `production-unit-error-${index}` : undefined}
+                      unavailableText={unitInvalid ? `当前不可用：${unit?.zh ?? row.unit}` : undefined}
                       onChange={(u) => {
                         if (u.id === row.unit) return;
                         editRow(index, { unit: u.id, building: productionBuildings(ctx, config, u)[0]! });
                       }}
                     />
+                    {unitInvalid && <FieldError id={`production-unit-error-${index}`}>单位在当前文明、时代和科技方案下不可用，请重新选择。</FieldError>}
                   </div>
                   <div className="production-row-controls">
-                    <label>
-                      专用生产建筑
-                      <select aria-label={`需求 ${index + 1} 建筑`} value={row.building} onChange={(e) => editRow(index, { building: Number(e.target.value) })}>
-                        {!buildings.includes(row.building) && (
-                          <option value={row.building}>当前不可用：{ctx.core.buildingById[row.building]?.zh ?? row.building}</option>
-                        )}
+                    <div className="production-field">
+                      <label htmlFor={`production-building-${index}`}>专用生产建筑</label>
+                      <select
+                        id={`production-building-${index}`}
+                        aria-label={`需求 ${index + 1} 建筑`}
+                        aria-invalid={buildingInvalid || undefined}
+                        aria-describedby={buildingInvalid ? `production-building-error-${index}` : undefined}
+                        value={row.building}
+                        onChange={(e) => editRow(index, { building: Number(e.target.value) })}
+                      >
+                        {buildingInvalid && <option value={row.building}>当前不可用：{ctx.core.buildingById[row.building]?.zh ?? row.building}</option>}
                         {buildings.map((id) => (
                           <option key={id} value={id}>
                             {ctx.core.buildingById[id]?.zh}
                           </option>
                         ))}
                       </select>
-                    </label>
+                      {buildingInvalid && (
+                        <FieldError id={`production-building-error-${index}`}>生产建筑在当前单位、文明、时代和科技方案下不可用，请重新选择。</FieldError>
+                      )}
+                    </div>
                     <div className="production-field">
                       <label htmlFor={`production-count-${index}`}>建筑数量</label>
                       <QtyStepper
@@ -336,8 +433,14 @@ function ProductionBody({
                         decrementLabel={`需求 ${index + 1} 建筑数减 1`}
                         incrementLabel={`需求 ${index + 1} 建筑数加 1`}
                         invalid={countInvalid}
-                        onChange={(count) => editRow(index, { count })}
+                        describedBy={countInvalid ? `production-count-error-${index}` : undefined}
+                        onChange={(count) => editRow(index, { count }, !/^\d+$/.test(count) || +count > BUILDING_LIMIT ? `count:${index}` : undefined)}
                       />
+                      {countInvalid && (
+                        <FieldError id={`production-count-error-${index}`}>
+                          建筑数量须为 <span className="num nw">0–{BUILDING_LIMIT}</span> 的整数。
+                        </FieldError>
+                      )}
                     </div>
                   </div>
                   {line && (
@@ -390,9 +493,9 @@ function ProductionBody({
             available={available}
             free={free}
             selected={selected}
-            onSelectEco={(techs) => update({ ...config, techs })}
-            onClear={() => update({ ...config, techs: [] })}
-            onToggle={(id) => update({ ...config, techs: toggleProductionTech(ctx, config, id) })}
+            onSelectEco={(techs) => applyUpdate({ ...config, techs })}
+            onClear={() => applyUpdate({ ...config, techs: [] })}
+            onToggle={(id) => applyUpdate({ ...config, techs: toggleProductionTech(ctx, config, id) })}
           />
         </div>
         <section className="production-summary is-sticky" aria-labelledby="production-summary-title">
