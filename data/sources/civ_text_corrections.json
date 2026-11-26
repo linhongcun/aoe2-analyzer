@@ -43,5 +43,14 @@
         "note": "#1408：文明介绍120155的英文为 provide +15 population space；中文译文将「人口空间」误写为「人口控件」，全站56文明仅此处出现。"
       }
     }
+  },
+  "Tatars": {
+    "ct": {
+      "original": "丝护甲 (斥候骑兵系和草原枪兵的近战护甲 +1/远程护甲 +1)",
+      "name_string_id": 17309,
+      "help_string_id": 28309,
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
+      "note": "#1440：文明介绍120182的中文漏译「骑射手」（英文含 Cavalry Archers）；采用同版本科技687的名称17309与研究说明28309。"
+    }
   }
 }
