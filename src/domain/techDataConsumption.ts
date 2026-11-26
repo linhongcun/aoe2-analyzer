@@ -17,14 +17,13 @@ const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 63, 102, 107, 109]);
 const BUILDING_GARRISON_ATTRS = new Set([102, 107]);
 const BUILDING_COMBAT_NOTICE_ATTRS = new Set([22, 24, 109]);
 const PAYOFF_GATHER_TARGETS = new Set(['task:wood', 'task:gold', 'task:stone']);
-const AGE_PROGRESS_RES = 6;
 const FARM_FOOD_RES = 36;
 const FISHING_SHIP_CLASS = 21;
 
 export type TechDataConsumptionKind = 'simulated' | 'cost' | 'consumed' | 'unencoded';
 export type TechAdoptedDomain =
   'market' | 'eco-payoff' | 'production' | 'eco-farm' | 'eco-fishing' | 'eco-build' | 'garrison-healing' | 'building-garrison' | 'conversion' | 'army-cost';
-export type TechNoticeDomain = 'duel-unmodeled' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
+export type TechNoticeDomain = 'duel-unmodeled' | 'unit-civ-rank-notice' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
 export type TechConsumedDomain = 'cost-unit' | 'cost-building' | TechAdoptedDomain | TechNoticeDomain;
 
 export interface TechDataConsumption {
@@ -57,6 +56,7 @@ const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string
   conversion: { label: '招降说明与阵容账本', isToolName: false },
   'army-cost': { label: '阵容账本', isToolName: true },
   'duel-unmodeled': { label: '单位 PK', isToolName: false },
+  'unit-civ-rank-notice': { label: '单位满科技对照', isToolName: false },
   'ballistics-notice': { label: '单位 PK 与科技模拟器', isToolName: false },
   'building-sim-notice': { label: '建筑模拟器', isToolName: false },
   'building-combat-notice': { label: '建筑满科技对照', isToolName: false },
@@ -66,21 +66,26 @@ function formatConsumers(domains: readonly (TechAdoptedDomain | TechNoticeDomain
   const unique = [...new Set(domains)];
   const labels = unique.map((d) => DOMAIN_LABEL[d].label);
   const appendTool = unique.length > 0 && unique.every((d) => DOMAIN_LABEL[d].isToolName);
+  const joinAnd = (left: string, right: string) => (/[A-Za-z0-9]$/.test(left) ? `${left} 与${right}` : `${left}与${right}`);
   let text: string;
   if (labels.length <= 1) {
     text = labels[0] ?? '站内';
   } else if (labels.some((l) => l.includes('与'))) {
     text = labels.join('、');
   } else if (labels.length === 2) {
-    text = `${labels[0]}与${labels[1]}`;
+    text = joinAnd(labels[0]!, labels[1]!);
   } else {
-    text = `${labels.slice(0, -1).join('、')}与${labels[labels.length - 1]}`;
+    text = joinAnd(labels.slice(0, -1).join('、'), labels[labels.length - 1]!);
   }
   return appendTool ? `${text}工具` : text;
 }
 
 /** 按站内工具/数据层实际解码消费的规则分类单条科技，生成底部 DetailSource 三态说明。 */
-export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSimEntries: boolean, deps: TechConsumptionDeps = {}): TechDataConsumption {
+export function classifyTechDataConsumption(
+  tech: Pick<Tech, 'id' | 'en'> & Partial<Pick<Tech, 'type' | 'civs'>>,
+  hasSimEntries: boolean,
+  deps: TechConsumptionDeps = {},
+): TechDataConsumption {
   if (hasSimEntries) {
     return {
       kind: 'simulated',
@@ -100,6 +105,25 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     Boolean(ids?.length && (deps.unitById ? ids.some((id) => !!deps.unitById![id]) : !deps.buildingById));
   const hasBuildingTarget = (ids: readonly number[] | undefined): boolean =>
     Boolean(ids?.length && (deps.buildingById ? ids.some((id) => !!deps.buildingById![id]) : false));
+  const techOwnedByEntity = (civs: readonly string[]) => !tech.civs?.length || tech.civs.some((c) => civs.includes(c));
+  const hasMultiCivUnitTarget = (ids: readonly number[] | undefined): boolean =>
+    Boolean(
+      ids?.length &&
+      deps.unitById &&
+      ids.some((id) => {
+        const u = deps.unitById![id];
+        return Boolean(u && u.civs.length >= 2 && techOwnedByEntity(u.civs));
+      }),
+    );
+  const hasMultiCivBuildingTarget = (ids: readonly number[] | undefined): boolean =>
+    Boolean(
+      ids?.length &&
+      deps.buildingById &&
+      ids.some((id) => {
+        const b = deps.buildingById![id];
+        return Boolean(b && b.civs.length >= 2 && techOwnedByEntity(b.civs));
+      }),
+    );
 
   const costEffects = validCostEffectsOf(datEco);
   if (costEffects.length > 0) {
@@ -143,8 +167,8 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     const hasFarmCarry = ecoEffects.some((e) => e.kind === 'attr' && e.target === 'task:farm' && e.attr === 'carry' && (e.v ?? 0) > 0);
     const isFishing =
       ecoEffects.some((e) => e.target === `class:${FISHING_SHIP_CLASS}`) || datEco.some((e) => (e.a === 13 || e.a === 14) && e.cls === FISHING_SHIP_CLASS);
-    const isAgeProgress = ecoEffects.some((e) => e.kind === 'res' && e.res === AGE_PROGRESS_RES);
 
+    // 时代升级科技与战船升级在开局模拟仅读取研究费用与时间，不结算 ecoTechs.effects，不计入已消费效果编码
     if (isEcoPayoff) {
       // 7 项伐木/采矿科技同步被经济收益、持续生产与开局模拟三处采集模型采用
       adopted.push('eco-payoff', 'production', 'eco-build');
@@ -154,20 +178,21 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
       if (hasFarmCarry) adopted.push('production', 'eco-build');
     } else if (isFishing) {
       adopted.push('eco-fishing', 'eco-build');
-    } else if (isAgeProgress) {
-      adopted.push('eco-build');
     }
   }
 
-  // 与 production.ts 保持一致：含资源标记（如 res:33）的工作速率科技在持续生产中整项跳过，仅由建筑满科技对照读取作提示
+  // 与 production.ts 和 buildingCivRank.ts:201,238 保持一致：
+  // 不含资源标记的工作速率科技由持续生产采用；含正倍率 a:13 的特色科技同步由建筑满科技对照读取作提示
   const hasBuildingWorkRate = !inEcoTechs && datEco.some((e) => e.a === 13 && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t));
   if (hasBuildingWorkRate) {
-    if (hasResMarker) {
-      if (datEco.some((e) => e.a === 13 && e.op === 'mul' && e.v > 0 && hasBuildingTarget(e.t))) {
-        notices.push('building-combat-notice');
-      }
-    } else {
+    if (!hasResMarker) {
       adopted.push('production');
+    }
+    const isUniqueWorkRateRank =
+      (tech.type === undefined || tech.type === 'UniqueTech') &&
+      datEco.some((e) => e.a === 13 && e.op === 'mul' && e.v > 0 && (deps.buildingById ? hasMultiCivBuildingTarget(e.t) : true));
+    if (isUniqueWorkRateRank) {
+      notices.push('building-combat-notice');
     }
   }
 
@@ -205,11 +230,18 @@ export function classifyTechDataConsumption(tech: Pick<Tech, 'id' | 'en'>, hasSi
     notices.push('ballistics-notice');
   }
 
-  const hasDuelUnmodeled =
-    datEco.some((e) => e.a !== undefined && UNIT_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t)) ||
-    (poisonScope?.units.length ?? 0) > 0 ||
-    (passThroughScope?.units.length ?? 0) > 0;
-  if (hasDuelUnmodeled) notices.push('duel-unmodeled');
+  const duelUnmodeledTargetIds = [
+    ...datEco.filter((e) => e.a !== undefined && UNIT_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op)).flatMap((e) => e.t ?? []),
+    ...(poisonScope?.units ?? []),
+    ...(passThroughScope?.units ?? []),
+  ];
+  const hasDuelUnmodeled = hasUnitTarget(duelUnmodeledTargetIds) || (poisonScope?.units.length ?? 0) > 0 || (passThroughScope?.units.length ?? 0) > 0;
+  if (hasDuelUnmodeled) {
+    notices.push('duel-unmodeled');
+    if (hasMultiCivUnitTarget(duelUnmodeledTargetIds)) {
+      notices.push('unit-civ-rank-notice');
+    }
+  }
 
   if ((poisonScope?.buildings.length ?? 0) > 0) {
     notices.push('building-sim-notice');

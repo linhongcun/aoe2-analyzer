@@ -84,11 +84,14 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(core.techs).toHaveLength(199);
     expect(buckets.simulated).toHaveLength(109);
     expect(buckets.cost.sort((a, b) => a - b)).toEqual([455, 488, 499, 514, 625, 782, 785, 835, 1380, 1496]);
-    // 51 项其他已消费编码：含 #1446 导出的 1379 突袭与 armyCost.ts 实际消费抗招降槽位的 756 第一次十字军东征；34/35 战船在 ecoTechs.effects 为空，归入 unencoded
-    expect(buckets.consumed).toHaveLength(51);
-    expect(buckets.consumed).toEqual(expect.arrayContaining([15, 17, 23, 45, 46, 93, 202, 233, 315, 316, 319, 438, 439, 441, 506, 578, 756, 1379, 1393]));
+    // 48 项其他已消费编码：含 #1446 导出的 1379 突袭与 armyCost.ts 实际消费抗招降槽位的 756 第一次十字军东征；34/35 战船与 101/102/103 时代升级不结算 ecoTechs.effects，归入 unencoded
+    expect(buckets.consumed).toHaveLength(48);
+    expect(buckets.consumed).toEqual(
+      expect.arrayContaining([15, 17, 23, 45, 46, 93, 202, 233, 315, 316, 319, 438, 439, 441, 457, 493, 506, 578, 756, 1379, 1393]),
+    );
     expect(buckets.unencoded.sort((a, b) => a - b)).toEqual([
-      16, 21, 28, 34, 35, 64, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
+      16, 21, 28, 34, 35, 64, 101, 102, 103, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080,
+      1464, 1484,
     ]);
     expect(buckets.simulated.length + buckets.cost.length + buckets.consumed.length + buckets.unencoded.length).toBe(199);
   });
@@ -258,6 +261,13 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
 
     const text315 = visible(markup('/tech/315'));
     expect(text315).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，其余效果以游戏说明为准');
+    expect(text315).not.toContain('建筑满科技对照');
+
+    const text457 = visible(markup('/tech/457'));
+    expect(text457).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+
+    const text493 = visible(markup('/tech/493'));
+    expect(text493).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text506 = visible(markup('/tech/506'));
     expect(text506).toContain('本页不逐条模拟属性；持续生产与市场工具已采用固定数据编码，其余效果以游戏说明为准');
@@ -286,15 +296,11 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text93).toContain('本页不逐条模拟属性；单位 PK 与科技模拟器已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text1379 = visible(markup('/tech/1379'));
-    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+    expect(text1379).toContain('本页不逐条模拟属性；单位 PK 与单位满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
     expect(text1379).not.toContain('模拟器已读取');
 
     const text1393 = visible(markup('/tech/1393'));
-    expect(text1393).toContain('本页不逐条模拟属性；单位 PK、建筑模拟器与建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
-
-    const text102 = visible(markup('/tech/102'));
-    expect(text102).toContain('本页不逐条模拟属性；开局模拟工具已采用固定数据编码，其余效果以游戏说明为准');
-    expect(text102).not.toContain('经济收益');
+    expect(text1393).toContain('本页不逐条模拟属性；单位 PK、单位满科技对照、建筑模拟器与建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text14 = visible(markup('/tech/14'));
     expect(text14).toContain('本页不逐条模拟属性；农田食物量已采用固定数据编码，其余效果以游戏说明为准');
@@ -308,8 +314,8 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text65).toContain('本页不逐条模拟属性；渔船采集与开局模拟已采用固定数据编码，其余效果以游戏说明为准');
     expect(text65).not.toContain('经济收益');
 
-    // 排除项（仅 res:33、真无编码与 ecoTechs.effects 为空的战船升级）：1484 / 21 / 573 / 34 / 35
-    for (const id of [1484, 21, 573, 34, 35]) {
+    // 排除项（仅 res:33、真无编码与仅读研究费用/时间的时代和战船升级）：1484 / 21 / 573 / 34 / 35 / 101 / 102 / 103
+    for (const id of [1484, 21, 573, 34, 35, 101, 102, 103]) {
       const html = markup(`/tech/${id}`);
       const text = visible(html);
       expect(html).not.toContain('id="tech-cost-changes"');
@@ -403,6 +409,24 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(army756.researchTotal).toMatchObject({ Food: 400, Gold: 300 });
     expect(classifyTechDataConsumption(core.techById[756]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
       'army-cost',
+    ]);
+
+    // 457 井喷 / 493 骑士精神：持续生产采用且建筑满科技对照读取作提示；315 征招为通用科技，建筑满科技对照不列提示
+    const barracksRank = buildBuildingCivRank(ctx, core.buildingById[12]!, 4);
+    const stableRank = buildBuildingCivRank(ctx, core.buildingById[101]!, 4);
+    expect(barracksRank.rows.find((r) => r.civ === 'Goths')?.tags.some((t) => t.includes('井喷'))).toBe(true);
+    expect(stableRank.rows.find((r) => r.civ === 'Franks')?.tags.some((t) => t.includes('骑士精神'))).toBe(true);
+    expect(barracksRank.rows.find((r) => r.civ === 'Franks')?.tags.some((t) => t.includes('征招'))).toBe(false);
+    expect(classifyTechDataConsumption(core.techById[457]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'production',
+      'building-combat-notice',
+    ]);
+    expect(classifyTechDataConsumption(core.techById[493]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'production',
+      'building-combat-notice',
+    ]);
+    expect(classifyTechDataConsumption(core.techById[315]!, false, { unitById: core.unitById, buildingById: core.buildingById }).domains).toEqual([
+      'production',
     ]);
   });
 });
