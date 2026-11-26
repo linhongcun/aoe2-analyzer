@@ -45,6 +45,7 @@ import { productionTransferState } from '../../shared/utils/productionTransferSt
 import { ProductionTransferBanner } from '../../shared/ui/ProductionTransferBanner';
 import { ProductionWarningText } from '../../shared/ui/ProductionWarningText';
 import { formatProductionNumber as num, ProductionResources } from './ProductionResources';
+import { revealVisibleFieldErrors, type FieldErrorTarget } from './revealFieldError';
 import './production.css';
 import './trainCompare.css';
 
@@ -217,28 +218,7 @@ function ProductionBody({
   manualLink: string;
 }) {
   const location = useLocation();
-  const pendingRevealRef = useRef<{ errorId: string; fieldId: string } | null>(null);
-  useLayoutEffect(() => {
-    const pending = pendingRevealRef.current;
-    if (!pending) return;
-    pendingRevealRef.current = null;
-    const errorEl = document.getElementById(pending.errorId);
-    const fieldEl = document.getElementById(pending.fieldId);
-    if (!errorEl || !fieldEl) return;
-    const errRect = errorEl.getBoundingClientRect();
-    const fieldRect = fieldEl.getBoundingClientRect();
-    const topbar = document.querySelector<HTMLElement>('header.topbar');
-    const topLimit = (topbar?.getBoundingClientRect().bottom ?? 0) + 4;
-    if (fieldRect.bottom <= topLimit || fieldRect.top >= window.innerHeight) return;
-    const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions');
-    const dockFixed = dock && getComputedStyle(dock).position === 'fixed';
-    const bottomLimit = (dockFixed ? Math.min(window.innerHeight, dock.getBoundingClientRect().top) : window.innerHeight) - 8;
-    if (errRect.bottom > bottomLimit) {
-      const maxScroll = Math.max(0, Math.floor(fieldRect.top - topLimit));
-      const delta = Math.min(Math.ceil(errRect.bottom - bottomLimit), maxScroll);
-      if (delta > 0) window.scrollBy(0, delta);
-    }
-  }, [config.rows]);
+  const navigationType = useNavigationType();
   const transfer = useMemo(() => {
     const mapped = productionToTrainTotal(ctx, config);
     return {
@@ -249,6 +229,41 @@ function ProductionBody({
   const result = calculateProduction(ctx, config);
   const units = useMemo(() => productionUnits(ctx, config), [ctx, config]);
   const unitEntries = useMemo(() => units.map((u) => ({ u })), [units]);
+  const rowStates = useMemo(
+    () =>
+      config.rows.map((row, index) => {
+        const unit = ctx.core.unitById[row.unit];
+        const buildings = unit ? productionBuildings(ctx, config, unit) : [];
+        return {
+          row,
+          index,
+          unit,
+          buildings,
+          unitInvalid: !units.some((u) => u.id === row.unit),
+          buildingInvalid: !buildings.includes(row.building),
+          countInvalid: !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT,
+        };
+      }),
+    [ctx, config, units],
+  );
+  const prevInvalidRef = useRef<{ navKey: string; keys: Set<string> } | null>(null);
+  const pendingRevealRef = useRef<FieldErrorTarget | null>(null);
+  useLayoutEffect(() => {
+    const currentTargets: FieldErrorTarget[] = [];
+    for (const s of rowStates) {
+      if (s.unitInvalid) currentTargets.push({ key: `unit:${s.index}`, fieldId: `production-unit-${s.index}`, errorId: `production-unit-error-${s.index}` });
+      if (s.buildingInvalid)
+        currentTargets.push({ key: `building:${s.index}`, fieldId: `production-building-${s.index}`, errorId: `production-building-error-${s.index}` });
+      if (s.countInvalid)
+        currentTargets.push({ key: `count:${s.index}`, fieldId: `production-count-${s.index}`, errorId: `production-count-error-${s.index}` });
+    }
+    const prev = prevInvalidRef.current;
+    const pending = pendingRevealRef.current;
+    pendingRevealRef.current = null;
+    prevInvalidRef.current = { navKey: location.key, keys: new Set(currentTargets.map((t) => t.key)) };
+    if (!prev || (navigationType !== 'REPLACE' && prev.navKey !== location.key)) return;
+    revealVisibleFieldErrors(currentTargets.filter((t) => !prev.keys.has(t.key) || pending?.key === t.key));
+  }, [rowStates, location.key, navigationType]);
   const available = productionTechs(ctx, config),
     free = freeProductionTechs(ctx, config);
   const errors = [...linkErrors, ...result.errors];
@@ -340,13 +355,8 @@ function ProductionBody({
             <p className="note">
               最多 {PRODUCTION_LIMIT} 条，每条建筑数量上限 {BUILDING_LIMIT}；填 0 可暂停。单位列表随文明、时代和解锁科技变化。
             </p>
-            {config.rows.map((row, index) => {
-              const unit = ctx.core.unitById[row.unit];
-              const buildings = unit ? productionBuildings(ctx, config, unit) : [];
-              const unitInvalid = !units.some((u) => u.id === row.unit);
-              const buildingInvalid = !buildings.includes(row.building);
+            {rowStates.map(({ row, index, unit, buildings, unitInvalid, buildingInvalid, countInvalid }) => {
               const line = result.lines.find((l) => l.unit.id === row.unit && l.building === row.building && l.count === +row.count);
-              const countInvalid = !/^\d+$/.test(row.count) || +row.count > BUILDING_LIMIT;
               return (
                 <article className="production-row" key={index} data-testid="production-row">
                   <div className="production-section-title">
@@ -417,6 +427,7 @@ function ProductionBody({
                         onChange={(count) => {
                           if (!/^\d+$/.test(count) || +count > BUILDING_LIMIT) {
                             pendingRevealRef.current = {
+                              key: `count:${index}`,
                               errorId: `production-count-error-${index}`,
                               fieldId: `production-count-${index}`,
                             };

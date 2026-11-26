@@ -288,6 +288,36 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
       await expect(page.locator('#production-unit-0')).not.toHaveAttribute('aria-describedby');
       await expect(page.locator('#production-building-0')).not.toHaveAttribute('aria-describedby');
 
+      if (width === 390) {
+        // 390 宽临界滚动下切时代触发单位不可用，固定底栏撑高后仍须露出并可命中 #production-unit-error-0（R5 P2）
+        await page.goto('./#/production?civ=Bohemians&age=3&techs=47&rows=5:87:1');
+        await expect(unitTrigger).toHaveAttribute('data-value', '5');
+        await page.evaluate(() => window.scrollTo(0, 107));
+        await page.getByRole('combobox', { name: '生产时代', exact: true }).selectOption('2');
+        await expect(unitErr).toBeVisible();
+        const unitHit = await page.evaluate(() => {
+          const err = document.getElementById('production-unit-error-0')!;
+          const trigger = document.getElementById('production-unit-0')!;
+          const dock = document.querySelector<HTMLElement>('header.tool-head .tool-head-actions')!;
+          const topbar = document.querySelector<HTMLElement>('header.topbar')!;
+          const errRect = err.getBoundingClientRect();
+          const triggerRect = trigger.getBoundingClientRect();
+          const dockTop = dock.getBoundingClientRect().top;
+          const topbarBottom = topbar.getBoundingClientRect().bottom;
+          const hit = document.elementFromPoint(errRect.left + errRect.width / 2, errRect.top + errRect.height / 2);
+          return {
+            errBottom: errRect.bottom,
+            dockTop,
+            triggerTop: triggerRect.top,
+            topbarBottom,
+            hitInsideError: !!hit && (hit === err || err.contains(hit)),
+          };
+        });
+        expect(unitHit.errBottom).toBeLessThanOrEqual(unitHit.dockTop);
+        expect(unitHit.triggerTop).toBeGreaterThanOrEqual(unitHit.topbarBottom);
+        expect(unitHit.hitInsideError).toBe(true);
+      }
+
       expect(errors).toEqual([]);
     });
 
