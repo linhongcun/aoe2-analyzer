@@ -229,6 +229,7 @@
       "damagedTargetBonus": { "type": "boolean" },
       "lowHpTransform": { "type": "boolean" },
       "deathHealAura": { "type": "boolean" },
+      "regenRate": { "type": "number", "exclusiveMinimum": 0 },
       "atks": {
         "type": "array",
         "items": {

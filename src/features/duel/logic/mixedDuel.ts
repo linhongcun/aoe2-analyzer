@@ -143,7 +143,9 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
         .filter(({ t, ef }) => {
           if (ef !== null) return true;
           const poison = DAT.projectilePoison?.[t.en];
-          return !poison || poison.units.includes(u.id);
+          const passThrough = DAT.projectilePassThrough?.[t.en];
+          if (!poison && !passThrough) return true;
+          return Boolean(poison?.units.includes(u.id) || passThrough?.units.includes(u.id));
         })
         .map(({ t, ef, chargeOnly }) => ({ t, numeric: !!ef, cost: false, partial: false, chargeOnly: !!chargeOnly })),
       ...costs.map(({ tech, supported, partial }) => ({

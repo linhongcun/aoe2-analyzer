@@ -33,6 +33,7 @@ export function resolveUnitForm(core: Core | null, id: number | undefined) {
           damagedTargetBonus: undefined,
           lowHpTransform: undefined,
           deathHealAura: undefined,
+          regenRate: undefined,
           trainCount: undefined,
         }
       : catalogTarget;

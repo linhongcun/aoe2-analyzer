@@ -388,7 +388,8 @@
     "tests/e2e/civText1440.spec.ts": 6000,
     "tests/e2e/productionSiege1410.spec.ts": 18000,
     "tests/e2e/civFormations1436.spec.ts": 18000,
-    "tests/e2e/dataAlignment1445.spec.ts": 24000
+    "tests/e2e/dataAlignment1445.spec.ts": 24000,
+    "tests/e2e/duelUnmodeled1446.spec.ts": 24000
   },
   "cases": {}
 }

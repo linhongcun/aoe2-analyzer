@@ -1,8 +1,9 @@
-"""从固定 .dat 原始效果命令推导弹丸引导/剧毒科技的作用单位集合（#1328）。
+"""从固定 .dat 原始效果命令推导弹丸引导/剧毒/直线穿透科技的作用单位集合（#1328 / #1403 / #1446）。
 
 供 scripts/army_research_build.py 与 scripts/effects_build.py 共享，保证三处入口
 （科技模拟器、单位/混编 PK、阵容新增费用）使用完全同一套无硬编码推导逻辑。
 """
+import math
 
 
 def transform_closure(dat_units, catalog_ids=None):
@@ -52,6 +53,42 @@ def guided_projectile_ids(commands, attrs=(19,)):
                 raise ValueError(f'guided_projectile_ids encountered class-scoped projectile command: {c!r}')
             out.add(c['A'])
     return out
+
+
+def pass_through_projectile_ids(commands):
+    """从原始 EffectCommands 字典列表提取同时满足 C=67 (HitMode=1) 且 C=119 > 0 (PassThroughDamage) 的具体弹丸 ID 集合（#1446）。
+
+    显式契约：commands 必须是原始 .dat EffectCommands 字典列表（遇非字典立即抛 TypeError）；
+    对 C in (67, 119) 且 Type in (0, 4, 5, 10, 14, 15) 仅接受具体弹丸（A >= 0）的 Type=0（set）与有限数值 D，
+    遇按类（A < 0）、非 Type=0、bool 或非有限 D 立即 fail-closed 抛 ValueError；
+    同弹丸按命令顺序覆盖（后续 set 0 可清除前序正值）。
+    """
+    hit_mode = {}
+    pass_dmg = {}
+    for c in commands:
+        if not isinstance(c, dict):
+            raise TypeError(f'pass_through_projectile_ids expects raw EffectCommands dict items, got {type(c).__name__}')
+        attr = c['C']
+        if isinstance(attr, bool) or attr not in (67, 119):
+            continue
+        t = c['Type']
+        if isinstance(t, bool):
+            raise ValueError(f'pass_through_projectile_ids encountered bool command type: {c!r}')
+        if t not in (0, 4, 5, 10, 14, 15):
+            continue
+        if t != 0:
+            raise ValueError(f'pass_through_projectile_ids encountered unsupported command type {t!r}: {c!r}')
+        a = c['A']
+        if type(a) is not int or a < 0:
+            raise ValueError(f'pass_through_projectile_ids encountered invalid/class-scoped projectile target: {c!r}')
+        d = c['D']
+        if isinstance(d, bool) or not isinstance(d, (int, float)) or not math.isfinite(d):
+            raise ValueError(f'pass_through_projectile_ids encountered non-finite command value: {c!r}')
+        if attr == 67:
+            hit_mode[a] = float(d)
+        else:
+            pass_dmg[a] = float(d)
+    return {pid for pid, hm in hit_mode.items() if abs(hm - 1.0) < 1e-6 and pass_dmg.get(pid, 0.0) > 1e-9}
 
 
 def split_projectile_units(dat_units, forms_by_uid, catalog_units, guided_pids):

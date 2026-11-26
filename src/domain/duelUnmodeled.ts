@@ -19,7 +19,8 @@ export type UnmodeledKind =
   | 'damaged-bonus'
   | 'low-hp-transform'
   | 'regen'
-  | 'death-heal';
+  | 'death-heal'
+  | 'bonus-damage-reduction';
 
 export interface UnmodeledMechanism {
   kind: UnmodeledKind;
@@ -113,6 +114,32 @@ const hasPositiveExtraProjectiles = (eco: readonly DatEco[] | undefined, unitId:
   hasPositiveEcoAttr(eco, unitId, 102, 1) || hasPositiveEcoAttr(eco, unitId, 107, 1);
 const hasPositiveRegen = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 109, EPS);
 const hasProjectilePoison = (techEn: string, unitId: number): boolean => DAT.projectilePoison?.[techEn]?.units.includes(unitId) ?? false;
+const hasProjectilePassThrough = (techEn: string, unitId: number): boolean => DAT.projectilePassThrough?.[techEn]?.units.includes(unitId) ?? false;
+
+/**
+ * issue 1446：检测文明加成中的额外伤害减免（a:24），按命令顺序计算有限数值 set/add/mul 生效结果，
+ * 支持后续 set 0 / mul 0 覆盖前序正值，并防御 NaN / Infinity。
+ */
+export function hasPositiveBonusDamageReduction(eco: readonly DatEco[] | undefined, unitId: number): boolean {
+  if (!eco?.length) return false;
+  let matched = false;
+  let val = 0;
+  for (const item of eco) {
+    if (item.a !== 24 || !item.t?.includes(unitId)) continue;
+    if (typeof item.v !== 'number' || !Number.isFinite(item.v)) continue;
+    if (item.op === 'set') {
+      matched = true;
+      val = item.v;
+    } else if (item.op === 'add') {
+      matched = true;
+      val += item.v;
+    } else if (item.op === 'mul') {
+      matched = true;
+      val *= item.v;
+    }
+  }
+  return matched && Number.isFinite(val) && val > EPS;
+}
 
 function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitId: number, baseCombatAbility: number): boolean {
   if (!eco?.length) return false;
@@ -123,7 +150,8 @@ function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitI
 
 /**
  * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）、额外弹矢（a:102/107）、生命回复（a:109）、
- * 投射物剧毒（DAT.projectilePoison）或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
+ * 投射物剧毒（DAT.projectilePoison）、投射物直线穿透（DAT.projectilePassThrough）
+ * 或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
  * 供单兵种 SimPanel 开放勾选（与混编模式及 issue 943 费用科技一致；不进入 f/c 自动预设）。
  */
 export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number, baseCombatAbility = 0): Set<number> {
@@ -135,6 +163,7 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
       hasPositiveExtraProjectiles(eco, unitId) ||
       hasPositiveRegen(eco, unitId) ||
       hasProjectilePoison(t.en, unitId) ||
+      hasProjectilePassThrough(t.en, unitId) ||
       changesUnmodeledCombatAbility(eco, unitId, baseCombatAbility)
     ) {
       ids.add(t.id);
@@ -343,12 +372,22 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     });
   }
 
-  // 9. 直线穿透（主投射物 hit_mode === 1）
+  // 9. 直线穿透（主投射物 hit_mode === 1；及已选科技赋予的投射物直线穿透）
   if (unit.projectilePassThrough === true) {
     out.push({
       kind: 'pass-through',
       pill: '直线穿透',
       detail: '当前只按主目标逐击结算，未计入投射物穿过主目标、命中同一直线上其他单位的伤害；对密集阵型的实际输出通常高于此处估算。',
+    });
+  }
+  for (const tech of selectedTechs) {
+    if (!hasProjectilePassThrough(tech.en, unit.id)) continue;
+    out.push({
+      kind: 'pass-through',
+      pill: `直线穿透 · ${tech.zh}`,
+      detail: `当前只按主目标逐击结算，未计入投射物穿过主目标、命中同一直线上其他单位的伤害（已选科技「${tech.zh}」；未勾选该科技时本项不会触发）；对密集阵型的实际输出通常高于此处估算。`,
+      techId: tech.id,
+      techEn: tech.en,
     });
   }
 
@@ -370,7 +409,14 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     });
   }
 
-  // 12. 生命回复（effects.json a:109；同文明跨时代加成展平合并出 1 枚，已选科技逐项出胶囊）
+  // 12. 生命回复（单位固有 regenRate、文明加成 a:109、已选科技 a:109 各自保留来源说明，互不合并）
+  if (typeof unit.regenRate === 'number' && Number.isFinite(unit.regenRate) && unit.regenRate > EPS) {
+    out.push({
+      kind: 'regen',
+      pill: '生命回复',
+      detail: '当前未计入战斗中的生命回复（单位固有）；持久战中实际生存能力通常高于此处估算。',
+    });
+  }
   const civEco = activeCivBonuses.flatMap((entry) => entry.eco);
   if (hasPositiveRegen(civEco, unit.id)) {
     out.push({
@@ -396,6 +442,15 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
       kind: 'death-heal',
       pill: '同伴阵亡回血',
       detail: '当前未计入附近格查战士被击败时的生命回复；成群作战、持续减员时实际生存能力通常高于此处估算。',
+    });
+  }
+
+  // 14. 额外伤害减免（文明加成 a:24，覆盖孟加拉象兵系与西西里陆军；建筑科技 Citadels 不进入文明加成）
+  if (hasPositiveBonusDamageReduction(civEco, unit.id)) {
+    out.push({
+      kind: 'bonus-damage-reduction',
+      pill: '额外伤害减免',
+      detail: '当前未计入受到的额外伤害减免（文明加成）；面对克制加成攻击时，实际生存能力通常高于此处估算。',
     });
   }
 

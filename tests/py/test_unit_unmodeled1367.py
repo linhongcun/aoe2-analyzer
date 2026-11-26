@@ -43,7 +43,7 @@ class UnitUnmodeled1367Tests(unittest.TestCase):
         self.assertIn('!= combat_tasks_sig(cu)', dump)
         self.assertIn('!= proj_hit_mode_sig(cu)', dump)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v24.%s.json', parse_src)
+        self.assertIn('dat.v25.%s.json', parse_src)
         self.assertNotIn('dat.v22.%s.json', parse_src)
 
     def test_derive_unmodeled_dat_fields_fail_closed_and_semantics(self):
