@@ -100,7 +100,12 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
   const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
+  const [observedSearch, setObservedSearch] = useState(location.search);
   const [rawCounts, setRawCounts] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  if (observedSearch !== location.search) {
+    setObservedSearch(location.search);
+    if (rawCounts.search !== location.search) setRawCounts({ search: location.search, drafts: {} });
+  }
   const activeDrafts = useMemo(() => (rawCounts.search === location.search ? rawCounts.drafts : {}), [rawCounts, location.search]);
   const config = useMemo(
     () =>
@@ -129,20 +134,14 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
       rows: next.rows.map((r, i) => {
         if (/[,:]/.test(r.count)) {
           nextDrafts[i] = r.count;
-          const safe = decoded.config.rows[i]?.count;
-          return { ...r, count: safe !== undefined && !/[,:]/.test(safe) ? safe : DEFAULT_PRODUCTION_COUNT };
+          return { ...r, count: '' };
         }
         return r;
       }),
     };
     const nextSearch = '?' + encodeProduction(urlConfig);
-    if (
-      nextSearch === location.search ||
-      (Object.keys(nextDrafts).length > 0 && decoded.errors.length === 0 && encodeProduction(urlConfig) === encodeProduction(decoded.config))
-    ) {
-      setRawCounts({ search: location.search, drafts: nextDrafts });
-    } else {
-      setRawCounts({ search: nextSearch, drafts: nextDrafts });
+    setRawCounts({ search: nextSearch, drafts: nextDrafts });
+    if (nextSearch !== location.search) {
       navigate({ pathname: '/production', search: nextSearch }, { replace: true, state: location.state });
     }
     resetShare();

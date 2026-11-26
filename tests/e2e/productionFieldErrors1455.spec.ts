@@ -174,6 +174,27 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
         await expect(countInput).not.toHaveAttribute('aria-invalid');
         await expect(countInput).not.toHaveAttribute('aria-describedby');
         await expect(copyBtn).toBeEnabled();
+
+        // 删行重排不借用被删行数量 + 离开后浏览器后退不复活旧草稿（R3 P1 / P2）
+        await page.goto('./#/production?rows=83:109:7,38:101:2');
+        await page.locator('#production-count-1').fill('1:2');
+        await page.getByRole('button', { name: '删除需求 1', exact: true }).click();
+        await expect(page.getByTestId('production-row')).toHaveCount(1);
+        await expect(countInput).toHaveValue('1:2');
+        await expect(countError).toBeVisible();
+        await expect.poll(() => new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('rows')).toBe('38:101:');
+        await page.reload();
+        await expect(countInput).toHaveValue('');
+        await expect(countError).toBeVisible();
+
+        await page.goto('./#/production?rows=83:109:7');
+        await countInput.fill('1,000');
+        await expect(countInput).toHaveValue('1,000');
+        await page.goto('./#/production?rows=83:109:3');
+        await expect(countInput).toHaveValue('3');
+        await page.goBack();
+        await expect(countInput).toHaveValue('');
+        await expect(countError).toBeVisible();
       }
 
       expect(errors).toEqual([]);
@@ -350,6 +371,14 @@ test.describe('#1455 生产页四模式字段旁报错、条件 ARIA 与报错�
     await expect(ttQty).toHaveAttribute('aria-invalid', 'true');
     await expect(ttQty).toHaveAttribute('aria-describedby', 'train-total-row-error-0');
     await expect(page.getByTestId('train-total-result')).not.toContainText('无法识别');
+
+    // 离开同模式另一查询再浏览器后退，不复活旧含逗号草稿（R3 P2）
+    await page.goto('./#/production?mode=train-total&civ=Franks&age=4&units=38:5');
+    await expect(ttQty).toHaveValue('5');
+    await page.goBack();
+    await expect(ttQty).toHaveValue('');
+    await expect(ttQty).not.toHaveAttribute('aria-invalid');
+    await expect(ttQty).toHaveAttribute('aria-describedby', 'train-total-row-error-0');
 
     await ttQty.fill('');
     await expect(ttFlag).toBeVisible();

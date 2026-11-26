@@ -66,7 +66,12 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
   const location = useLocation();
   const navigate = useNavigate();
   const decoded = useMemo(() => decodeTrainTotal(location.search), [location.search]);
+  const [observedSearch, setObservedSearch] = useState(location.search);
   const [rawQtys, setRawQtys] = useState<{ search: string; drafts: Record<number, string> }>({ search: location.search, drafts: {} });
+  if (observedSearch !== location.search) {
+    setObservedSearch(location.search);
+    if (rawQtys.search !== location.search) setRawQtys({ search: location.search, drafts: {} });
+  }
   const activeDrafts = useMemo(() => (rawQtys.search === location.search ? rawQtys.drafts : {}), [rawQtys, location.search]);
   const config = useMemo(
     () =>
