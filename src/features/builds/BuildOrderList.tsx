@@ -10,6 +10,7 @@ import TimelineLoader from './TimelineLoader';
 import { BuildContext } from './BuildContext';
 import { displayBuildMap } from './buildMapLabel';
 import { readBuildsFocus } from './buildsFocus';
+import { NumUnitText } from './NumUnitText';
 import './catalog.css';
 
 /** 资料标注适用文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
@@ -135,7 +136,9 @@ export default function BuildOrderList() {
                     </>
                   )}
                 </p>
-                <p className="bo-catalog-summary">{b.summary}</p>
+                <p className="bo-catalog-summary">
+                  <NumUnitText text={b.summary} />
+                </p>
                 <p className="bo-catalog-civs">
                   <span className="bo-catalog-caption">资料标注适用文明</span>
                   {civs.length

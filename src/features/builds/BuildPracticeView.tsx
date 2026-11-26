@@ -28,7 +28,6 @@ export function buildPracticeUrl(params: URLSearchParams, view: 'practice' | 'pr
 function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: BuildTimeline; name: PracticeNames }) {
   const { step, simulation } = item;
   const noNeed = `${civByEn(timeline.civ)?.zh ?? timeline.civ}不需要`;
-  const cartUnits = timeline.civ === 'Armenians' || timeline.civ === 'Georgians';
   return (
     <>
       <div className="bp-step-meta">
@@ -44,13 +43,13 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
             part.skip ? (
               <span key={i}>
                 <s>
-                  <NumUnitText text={part.text} cartUnits={cartUnits} />
+                  <NumUnitText text={part.text} />
                 </s>
                 <small>（{noNeed}）</small>
               </span>
             ) : (
               <span key={i}>
-                <NumUnitText text={part.text} cartUnits={cartUnits} />
+                <NumUnitText text={part.text} />
               </span>
             ),
           )}
@@ -67,12 +66,12 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
                 {skip ? (
                   <>
                     <s>
-                      <NumUnitText text={text} cartUnits={cartUnits} />
+                      <NumUnitText text={text} />
                     </s>
                     （跳过，{noNeed}）
                   </>
                 ) : (
-                  <NumUnitText text={text} cartUnits={cartUnits} />
+                  <NumUnitText text={text} />
                 )}
               </li>
             );
@@ -102,7 +101,9 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
       {simulation.anomalies.length > 0 && (
         <ul className="bp-anomalies" aria-label="模拟等待与限制">
           {simulation.anomalies.map((anomaly, i) => (
-            <li key={i}>{anomaly.reasonZh}</li>
+            <li key={i}>
+              <NumUnitText text={anomaly.reasonZh} />
+            </li>
           ))}
         </ul>
       )}
@@ -128,7 +129,6 @@ export default function BuildPracticeView({
   civNotes: string[];
 }) {
   const core = useCore();
-  const cartUnits = timeline.civ === 'Armenians' || timeline.civ === 'Georgians';
   const rows = useMemo(() => practiceSteps(order, timeline), [order, timeline]);
   const [completed, setCompleted] = useState(0);
   const zone = useRef<HTMLDivElement>(null);
@@ -241,7 +241,7 @@ export default function BuildPracticeView({
             <ul className="note">
               {civNotes.map((note, i) => (
                 <li key={i}>
-                  {timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? <NumUnitText text={note} cartUnits={cartUnits} /> : note}
+                  <NumUnitText text={note} />
                 </li>
               ))}
             </ul>
@@ -309,7 +309,9 @@ export default function BuildPracticeView({
       <div className={`bp-checklist${mode === 'practice' ? ' bp-print-only' : ''}`} data-testid="practice-checklist">
         <header className="bp-print-heading">
           <h2>{order.name.zh} · 完整步骤单</h2>
-          <p>{order.summary}</p>
+          <p>
+            <NumUnitText text={order.summary} />
+          </p>
         </header>
         <ol>
           {rows.map((item) => (
@@ -345,11 +347,7 @@ export default function BuildPracticeView({
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (
             <li key={i}>
-              {timeline.civ === 'Wei' || timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? (
-                <NumUnitText text={assumption} cartUnits={cartUnits} />
-              ) : (
-                assumption
-              )}
+              <NumUnitText text={assumption} />
             </li>
           ))}
         </ul>

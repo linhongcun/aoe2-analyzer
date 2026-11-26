@@ -50,7 +50,6 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const v = useMemo(() => buildView(tl, (id) => UNIT_ZH[id] ?? id), [tl]);
   // #42 匈奴（huns-flag-* 稿）：只有文明被支持、按它计算且它不需要房子时才出现；置灰时 simCiv 是 Generic，这里恒为 false
   const noHouses = tl.noHouses;
-  const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
   const noNeedZh = `${civByEn(simCiv)?.zh ?? simCiv}不需要`;
   const genericTl = useMemo(
     () => (noHouses ? simulateBuild(bo, 'Generic', eco, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
@@ -227,7 +226,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       <div className="tl-desk-only">
         <h1 className="tl-title">{bo.name.zh}</h1>
         <p className="note">
-          {bo.summary}
+          <NumUnitText text={bo.summary} />
           {source && ` · 来源 ${source}`}
         </p>
       </div>
@@ -362,11 +361,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           </ul>
           {civNotes.length > 0 && (
             <p className="tl-civ-note" data-t="civ-note">
-              {tl.civ === 'Bengalis' || tl.civ === 'Poles' || cartUnits ? (
-                <NumUnitText text={civNotes.join('；')} cartUnits={cartUnits} />
-              ) : (
-                civNotes.join('；')
-              )}
+              <NumUnitText text={civNotes.join('；')} />
             </p>
           )}
         </TimelineSummary>
@@ -438,7 +433,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
             <div className="tl-sheet-body">
               <figure className="tl-cardprev" data-t="share-card">
                 <p className="tl-cardprev-title" data-t="card-title">
-                  {card.title}
+                  <NumUnitText text={card.title} />
                 </p>
                 <ul>
                   {card.cells.map((c, i) => (
@@ -466,7 +461,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
                   ))}
                 </ul>
                 <figcaption data-t="card-basis">
-                  {tl.civ === 'Bengalis' || tl.civ === 'Poles' || cartUnits ? <NumUnitText text={card.basis} cartUnits={cartUnits} /> : card.basis}
+                  <NumUnitText text={card.basis} />
                 </figcaption>
                 <span className="tl-cardprev-url" data-t="card-url">
                   {card.url}

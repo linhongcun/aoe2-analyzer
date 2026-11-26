@@ -39,7 +39,6 @@ export function TimelineSteps({
   set: (key: string, value: string | null) => void;
 }) {
   const core = useCore();
-  const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
   const groups = villagerGroups(tl);
@@ -120,11 +119,15 @@ export function TimelineSteps({
                   {noteParts(st.note ?? '', st.houseText, noHouses).map((x, k) =>
                     x.skip ? (
                       <span key={k} className="tl-skip" data-t="house-skip">
-                        <s>{cartUnits ? <NumUnitText text={x.text} cartUnits /> : x.text}</s>
+                        <s>
+                          <NumUnitText text={x.text} />
+                        </s>
                         <span className="tl-no-need">{noNeedZh}</span>
                       </span>
                     ) : (
-                      <span key={k}>{cartUnits ? <NumUnitText text={x.text} cartUnits /> : x.text}</span>
+                      <span key={k}>
+                        <NumUnitText text={x.text} />
+                      </span>
                     ),
                   )}
                   {st.siteAdded && (
@@ -173,7 +176,7 @@ export function TimelineSteps({
                     .filter((a) => a.type === 'prereq_wait')
                     .map((a, k) => (
                       <span key={'pre' + k} className="note" data-t="prereq-detail">
-                        {prereqDetail(a)}
+                        <NumUnitText text={prereqDetail(a)} />
                       </span>
                     ))}
                   {sel.cost && (

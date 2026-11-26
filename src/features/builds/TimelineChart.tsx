@@ -212,7 +212,9 @@ export function TimelineChart({
         <div role="dialog" aria-label="估算说明" className="tl-assume">
           <ul>
             {tl.model.assumptions.map((a, i) => (
-              <li key={i}>{tl.civ === 'Wei' || bengali ? <NumUnitText text={a} /> : a}</li>
+              <li key={i}>
+                <NumUnitText text={a} />
+              </li>
             ))}
           </ul>
           <span className="note">模型版本 {tl.model.version}</span>

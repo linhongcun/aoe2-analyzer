@@ -60,8 +60,8 @@ describe('#197 格鲁吉亚免费起始与付费模板公开口径', () => {
     expect(buildShareCard({ ...input, civEn: 'Franks', civZh: '法兰克' }).basis).toBe(`按法兰克计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`);
   });
 
-  it('新增1辆、80木、20食物不换行，普通默认数字DOM保持', () => {
-    const html = renderToStaticMarkup(createElement(NumUnitText, { text: `${START}；${PAID}`, cartUnits: true }));
+  it('1辆、80木、20食物与常规数字走统一 NumUnitText 不换行', () => {
+    const html = renderToStaticMarkup(createElement(NumUnitText, { text: `${START}；${PAID}` }));
     expect(html).toContain('<span class="nw">1辆</span>');
     expect(html).toContain('<span class="nw">80木</span>');
     expect(html).toContain('<span class="nw">20食物</span>');
