@@ -394,6 +394,12 @@
 
 原因是 `.dat` 派生数组的「非空」只说明上游存在原始指令，不等于站内工具已解码其语义，也不等于类别下的每个单位对该文明都可用。以后裁定「是否已编码」或从 `.dat` 效果自动生成面向玩家的展示清单时：状态判定必须锚定站内实际解码消费的规则类目（明确排除不透明 `res:33` 与未消费杂项），并在正反例验收里同时锁定「已消费不漏报」与「未解码不误报」；面向单文明科技展开类别目标前，先按所属文明可用性二次过滤，并对大集合（如全军折扣）约定摘要与展开形态。
 
+### 表单就近报错与无障碍收口时，同步约束唯一 `role="alert"`、条件 `aria-describedby` 与阻断态禁复制
+
+在[持续生产字段报错与无障碍修复](https://github.com/linhongcun/aoe2-analyzer/issues/1455)评审中，核查 `src/features/production/` 全部 5 个模式与既有测试时检出三类跨工具共通陷阱：一是既有端到端测试（如 [production204.spec.ts](../tests/e2e/production204.spec.ts)）以严格单元素匹配校验 `getByRole('alert')`，若把 `role="alert"` 加到每个行内字段错误元素会触发多元素冲突；二是 [ArmyCost.tsx](../src/features/production/ArmyCost.tsx) 无条件写死 `aria-describedby="army-row-error-…"`，导致合法态产生指向不存在 DOM 节点的悬空无障碍引用；三是 [Production.tsx](../src/features/production/Production.tsx) 的「复制方案链接」仅按 URL 解码错误 `linkErrors` 禁用、未拦截计算阻断错误 `result.errors`，与 [Market.tsx](../src/features/market/Market.tsx)、[ProductionTrainCompare.tsx](../src/features/production/ProductionTrainCompare.tsx) 及 [Construction.tsx](../src/features/construction/Construction.tsx) 的口径分裂，且 [production963.spec.ts](../tests/e2e/production963.spec.ts) 锁定了链接错误态的既有文案。
+
+原因是不同工具页陆续补齐字段校验时，常只看单个报错输入框的可见性，漏核整页告警地标唯一性、合法态 ARIA 清理与分享按钮阻断口径。以后评审任何计算工具的表单就近报错与无障碍需求（如 [#1460](https://github.com/linhongcun/aoe2-analyzer/issues/1460) 等同源工单），在 PRD 范围与验收中固定写清四件事：参照 [#1164](https://github.com/linhongcun/aoe2-analyzer/issues/1164) 仅在汇总错误块保留唯一 `role="alert"`、行内字段提示仅经 `id` + `aria-describedby` 关联；`aria-describedby` 必须条件输出，验收同时覆盖非法态指向有效 `id` 与合法态移除无悬空引用；统一计算阻断错误态禁用「复制方案链接」并核查既有链接错误文案测试；同路由多模式一次盘点收口（不顺手跨路由扩范围）。
+
 ## 7. 接手第一轮，以及以后
 
 第一轮自己做完这些，再谈改什么：
