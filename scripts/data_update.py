@@ -136,6 +136,7 @@ def main():
     for name in ('effects', 'eco', 'market', 'garrison', 'garrison_general', 'trade_income',
                  'construction', 'team_bonuses', 'garrison_healing', 'relic_income', 'generate_resource', 'charge_attack', 'army_research'):
         run(sys.executable, 'scripts/%s_build.py' % name)
+    run('npx', 'vite-node', 'scripts/army_cost_usage_build.ts')
     run('npx', 'vite-node', 'scripts/build_orders_check.ts')
     run('npx', 'vite-node', 'scripts/effects_audit.ts')
     run(sys.executable, 'scripts/stats_crosscheck.py')

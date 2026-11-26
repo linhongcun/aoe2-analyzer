@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-army-cost-usage.json",
+  "title": "Derived army cost research discount bonus usage index",
+  "type": "object",
+  "required": ["meta", "bonuses"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["generatedBy", "patch", "commit", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "generatedBy": { "const": "scripts/army_cost_usage_build.ts" },
+        "patch": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "bonuses": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z]+-[0-9]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["tids", "allFree", "ecoOnlyUnits"],
+        "additionalProperties": false,
+        "properties": {
+          "tids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "integer", "minimum": 0 }
+          },
+          "allFree": { "type": "boolean" },
+          "ecoOnlyUnits": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "enum": [83, 128, 17] }
+          }
+        }
+      }
+    }
+  }
+}

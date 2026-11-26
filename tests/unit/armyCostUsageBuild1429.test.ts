@@ -1,0 +1,308 @@
+import { execFile } from 'node:child_process';
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { promisify } from 'node:util';
+import { beforeAll, describe, expect, it } from 'vitest';
+import { ARMY_RESEARCH } from '../../src/data/armyResearch';
+import { CORE } from '../../src/data/core';
+import { civs, loadCore, loadTrees } from '../../src/data/index';
+import { armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } from '../../src/domain/armyCost';
+import { civBonuses } from '../../src/domain/civBonus';
+import { DAT } from '../../src/domain/datEffects';
+import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
+import { buildArmyCostUsage } from '../../scripts/army_cost_usage_lib';
+
+let ctx: ProductionContext;
+beforeAll(async () => {
+  await loadCore();
+  ctx = { core: CORE, trees: await loadTrees() };
+});
+
+describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入口', () => {
+  it('命令级 1 对 1 归属：容差跨分桶/中点歧义、缺项/多余命令 fail-closed，且混用 add C=1/-1 合法配对通过', () => {
+    const spanish = civs.find((c) => c.en === 'Spanish')!;
+    const spanishBonuses = civBonuses(spanish);
+    const baseIdx68 = ARMY_RESEARCH.civs.Spanish!.mods.findIndex((m) => m.Type === 101 && m.A === 68 && m.B === 3 && m.C === 0 && m.D === 0);
+    expect(baseIdx68).toBeGreaterThanOrEqual(0);
+
+    const patchSpanish68 = (op: string, v: number) =>
+      spanishBonuses.map((bon) =>
+        bon.id !== 'Spanish-2'
+          ? bon
+          : {
+              ...bon,
+              dat: bon.dat.map((d) => (d.tech >= 0 ? d : { ...d, eco: d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, op, v } : e)) })),
+            },
+      );
+
+    // 1) 西班牙 t:68：非团队 mul 0.5 黄金 + 团队 set 0 黄金 -> 未归属守卫拦截 t:68
+    const maskedData = structuredClone(ARMY_RESEARCH);
+    maskedData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
+    maskedData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 0, D: 0 });
+    expect(() =>
+      buildArmyCostUsage(ctx, maskedData, {
+        civList: ['Spanish'],
+        bonusesByCiv: { Spanish: patchSpanish68('mul', 0.5) },
+        teamEcoByCiv: { Spanish: [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'set', v: 0 }] },
+      }),
+    ).toThrow(/Spanish.*未归属.*68/u);
+
+    // 2) 容差内跨 Math.round 分桶歧义：非团队 0.500000 与团队 0.500008（差 8e-6 <= 1e-5）
+    const tolData = structuredClone(ARMY_RESEARCH);
+    tolData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
+    tolData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.500008 });
+    expect(() =>
+      buildArmyCostUsage(ctx, tolData, {
+        civList: ['Spanish'],
+        bonusesByCiv: { Spanish: patchSpanish68('mul', 0.5) },
+        teamEcoByCiv: { Spanish: [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.500008 }] },
+      }),
+    ).toThrow(/容差内同时|来源无法唯一确定/u);
+
+    // 3) 中点实际命令歧义：预期 0.500000 vs 0.500015，实际 D=0.500007 同时落在两者 1e-5 容差内
+    const midData = structuredClone(ARMY_RESEARCH);
+    midData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.500007 };
+    midData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.500015 });
+    expect(() =>
+      buildArmyCostUsage(ctx, midData, {
+        civList: ['Spanish'],
+        bonusesByCiv: { Spanish: patchSpanish68('mul', 0.5) },
+        teamEcoByCiv: { Spanish: [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.500015 }] },
+      }),
+    ).toThrow(/同时匹配多个来源|来源无法唯一确定/u);
+
+    // 4) 同来源混用 add 的两种编码 (C=1, D=-60) 与 (C=-1, D=-59.999992) 匹配预期 (-60, -59.999985)：合法 1 对 1 必须通过
+    const mixedAddData = structuredClone(ARMY_RESEARCH);
+    mixedAddData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 1, D: -60 };
+    mixedAddData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: -1, D: -59.999992 });
+    const mixedAddBonuses = spanishBonuses.map((bon) =>
+      bon.id !== 'Spanish-2'
+        ? bon
+        : {
+            ...bon,
+            dat: bon.dat.map((d) =>
+              d.tech >= 0 || !d.eco.some((e) => e.tid === 68 && e.what === '黄金')
+                ? d
+                : {
+                    ...d,
+                    eco: [
+                      ...d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, op: 'add', v: -60 } : e)),
+                      { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'add', v: -59.999985 },
+                    ],
+                  },
+            ),
+          },
+    );
+    const mixedRes = buildArmyCostUsage(ctx, mixedAddData, { civList: ['Spanish'], bonusesByCiv: { Spanish: mixedAddBonuses } });
+    expect(mixedRes.bonuses['Spanish-2']?.tids).toContain(68);
+
+    // 5) 缺少匹配命令 & 多余未归属命令 -> fail-closed
+    const missingData = structuredClone(ARMY_RESEARCH);
+    missingData.civs.Spanish!.mods = missingData.civs.Spanish!.mods.filter((_, i) => i !== baseIdx68);
+    expect(() => buildArmyCostUsage(ctx, missingData, { civList: ['Spanish'] })).toThrow(/缺少匹配/u);
+
+    const extraData = structuredClone(ARMY_RESEARCH);
+    extraData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 0, C: 2, D: 0.5 });
+    expect(() => buildArmyCostUsage(ctx, extraData, { civList: ['Spanish'] })).toThrow(/未归属/u);
+  });
+
+  it('逐时代/配置与单资源联合摘除防掩盖：跨时代、同龄同资源及异资源加价掩盖团队折价均被拦截', () => {
+    const spanish = civs.find((c) => c.en === 'Spanish')!;
+    const spanishBonuses = civBonuses(spanish);
+    const baseIdx68 = ARMY_RESEARCH.civs.Spanish!.mods.findIndex((m) => m.Type === 101 && m.A === 68 && m.B === 3 && m.C === 0 && m.D === 0);
+    const teamHalf68 = [...(DAT.civs.Spanish?.team.eco ?? []), { tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.5 }];
+
+    // 1) 跨时代反例：城堡仅团队 mul 0.5，帝王新增正节点非团队 mul 0.5 -> 拦截城堡 3|full|68
+    const crossAgeData = structuredClone(ARMY_RESEARCH);
+    crossAgeData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 3, C: 2, D: 0.5 };
+    crossAgeData.nodes['99901'] = {
+      name: 'Synthetic Imp Iron Casting Discount',
+      civ: crossAgeData.civs.Spanish!.id,
+      location: 0,
+      cost: [],
+      time: 0,
+      requires: [103],
+      count: 1,
+      mods: [{ Type: 101, A: 68, B: 3, C: 2, D: 0.5 }],
+      upgrades: [],
+      combatUnits: [],
+      enables: [],
+    };
+    const crossAgeBonuses = spanishBonuses.map((bon) =>
+      bon.id !== 'Spanish-2'
+        ? bon
+        : {
+            ...bon,
+            dat: [
+              ...bon.dat.map((d) => (d.tech >= 0 ? d : { ...d, eco: d.eco.filter((e) => !(e.tid === 68 && e.what === '黄金')) })),
+              {
+                tech: 99901,
+                name: 'Synthetic Imp Iron Casting Discount',
+                age: 4,
+                req: [],
+                combat: false,
+                rules: [],
+                eco: [{ tech: 'Iron Casting', tid: 68, what: '黄金', op: 'mul', v: 0.5 }],
+                idx: 2,
+                linked: 'auto' as const,
+              },
+            ],
+          },
+    );
+    expect(() =>
+      buildArmyCostUsage(ctx, crossAgeData, {
+        civList: ['Spanish'],
+        bonusesByCiv: { Spanish: crossAgeBonuses },
+        teamEcoByCiv: { Spanish: teamHalf68 },
+      }),
+    ).toThrow(/Spanish.*3\|full\|68/u);
+
+    // 2) 同龄异资源加价掩盖反例：原价 220F/120G，非团队 -70F + 团队 ×0.5G + 独立节点 +20F
+    // 基线 170F/60G，联合摘除后 240F/60G（食物高于原价但黄金仍低于 120G）-> 必须拦截残余黄金折价
+    const crossResData = structuredClone(ARMY_RESEARCH);
+    crossResData.civs.Spanish!.mods[baseIdx68] = { Type: 101, A: 68, B: 0, C: 1, D: -70 };
+    crossResData.civs.Spanish!.mods.push({ Type: 101, A: 68, B: 3, C: 2, D: 0.5 });
+    crossResData.nodes['99902'] = {
+      name: 'Synthetic Global Food Surcharge',
+      civ: crossResData.civs.Spanish!.id,
+      location: 0,
+      cost: [],
+      time: 0,
+      requires: [],
+      count: 0,
+      mods: [{ Type: 101, A: 68, B: 0, C: 1, D: 20 }],
+      upgrades: [],
+      combatUnits: [],
+      enables: [],
+    };
+    const crossResBonuses = spanishBonuses.map((bon) =>
+      bon.id !== 'Spanish-2'
+        ? bon
+        : {
+            ...bon,
+            dat: bon.dat.map((d) =>
+              d.tech >= 0 ? d : { ...d, eco: d.eco.map((e) => (e.tid === 68 && e.what === '黄金' ? { ...e, what: '食物', op: 'add', v: -70 } : e)) },
+            ),
+          },
+    );
+    expect(() =>
+      buildArmyCostUsage(ctx, crossResData, {
+        civList: ['Spanish'],
+        bonusesByCiv: { Spanish: crossResBonuses },
+        teamEcoByCiv: { Spanish: teamHalf68 },
+      }),
+    ).toThrow(/残余折价.*68/u);
+  });
+
+  it('单项回退可观察性：波希米亚仅帝王可用的 t:45（信念）在全可选被 t:785 遮蔽时必须靠 single:45 回退捕获', () => {
+    const bohemians = civs.find((c) => c.en === 'Bohemians')!;
+    const syntheticData = structuredClone(ARMY_RESEARCH);
+    syntheticData.civs.Bohemians!.mods.push({ Type: 101, A: 45, B: 3, C: 2, D: 0.5 });
+
+    const rows4 = productionUnits(ctx, { civ: 'Bohemians', age: 4, techs: [...PRODUCTION_UNLOCK_TECH_IDS], rows: [], walk: 0, farm: 0 }).map((u) => ({
+      unit: u.id,
+      qty: '1',
+    }));
+    const base4 = { ...emptyArmyCost('Bohemians', '4'), rows: rows4 };
+    const choices4 = armyResearchChoices(ctx, base4, false, syntheticData);
+    expect(choices4).toContain(45);
+    expect(evaluateArmyCost(ctx, { ...base4, targets: choices4.map(researchKey) }, syntheticData).ledger.find((e) => e.id === 45)).toMatchObject({
+      status: 'invalid',
+      problem: 'price',
+    });
+    const base45 = Object.fromEntries(ARMY_RESEARCH.nodes['45']!.cost.filter(([, , en]) => en).map(([r, v]) => [r, v]));
+    expect(evaluateArmyCost(ctx, { ...base4, targets: ['t:45'] }, syntheticData).ledger.find((e) => e.id === 45)).toMatchObject({
+      status: 'planned',
+      cost: { Food: base45[0], Gold: base45[3]! * 0.5 },
+    });
+
+    const syntheticBonuses = civBonuses(bohemians).map((bon) =>
+      bon.id !== 'Bohemians-0'
+        ? bon
+        : {
+            ...bon,
+            dat: [
+              ...bon.dat,
+              {
+                tech: -1,
+                name: 'Synthetic Faith Discount',
+                age: 1,
+                req: [],
+                combat: false,
+                rules: [],
+                eco: [{ tech: 'Faith', tid: 45, what: '黄金', op: 'mul', v: 0.5 }],
+                idx: 0,
+                linked: 'auto' as const,
+              },
+            ],
+          },
+    );
+    const built = buildArmyCostUsage(ctx, syntheticData, {
+      civList: ['Bohemians'],
+      bonusesByCiv: { Bohemians: syntheticBonuses },
+    });
+    expect(built.bonuses['Bohemians-0']).toEqual({ tids: [45], allFree: false, ecoOnlyUnits: [] });
+  });
+
+  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，冷生成一致', async () => {
+    const execFileAsync = promisify(execFile);
+    const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
+    try {
+      mkdirSync(join(tempDir, 'data'), { recursive: true });
+      cpSync(resolve('src'), join(tempDir, 'src'), { recursive: true });
+      cpSync(resolve('scripts'), join(tempDir, 'scripts'), { recursive: true });
+      cpSync(resolve('data/game'), join(tempDir, 'data/game'), { recursive: true });
+      cpSync(resolve('data/sources'), join(tempDir, 'data/sources'), { recursive: true });
+      cpSync(resolve('data/patch-notes'), join(tempDir, 'data/patch-notes'), { recursive: true });
+      cpSync(resolve('package.json'), join(tempDir, 'package.json'));
+      cpSync(resolve('tsconfig.json'), join(tempDir, 'tsconfig.json'));
+      cpSync(resolve('vite.config.ts'), join(tempDir, 'vite.config.ts'));
+      symlinkSync(resolve('node_modules'), join(tempDir, 'node_modules'));
+
+      const target = join(tempDir, 'data/game/army_cost_usage.json');
+      const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
+      unlinkSync(target);
+
+      const viteNodeBin = resolve('node_modules/.bin/vite-node');
+      // 1) 即使预加载将 Error.stackTraceLimit 设为 0，普通 vite-node --check 缺文件仍必须报错而非静默退出 0
+      const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
+      writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
+      await expect(
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
+          cwd: tempDir,
+          env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
+        }),
+      ).rejects.toThrow();
+
+      // 2) 即使改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
+      writeFileSync(
+        join(tempDir, 'import-lib-static.ts'),
+        "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
+      );
+      writeFileSync(
+        join(tempDir, 'import-lib-spoof.ts'),
+        "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
+      );
+      for (const args of [
+        ['import-lib-static.ts', '--out', unexpectedOut],
+        ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
+        ['import-lib-spoof.ts', '--out', unexpectedOut],
+      ]) {
+        const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
+        expect(stdout.trim()).toBe('function');
+        expect(existsSync(unexpectedOut), args.join(' ')).toBe(false);
+        expect(existsSync(target), args.join(' ')).toBe(false);
+      }
+
+      // 3) 普通模式冷生成，并以普通模式与 --script 模式双验证 --check
+      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts'], { cwd: tempDir });
+      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
+      await execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
+
+      expect(readFileSync(target, 'utf8')).toBe(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8'));
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  }, 90_000);
+});

@@ -36,13 +36,14 @@ describe('Issue 1403 数据管线与未建模提示卡全站对齐', () => {
   it('项 1：10 国被动链接与计入档口径一致（区分来源已链接与工具已计入）', () => {
     const bonOf = (civEn: string, idx: number) => civBonuses(civs.find((c) => c.en === civEn)!).find((b) => b.idx === idx)!;
 
-    // 新关联后变为 eco；勃艮第-0 与越南-1 经开局模拟去效果验证为已计入（all）
+    // 新关联后变为 eco；勃艮第-0 与越南-1 经开局模拟去效果验证为已计入（all）；
+    // Issue 1429 接入「阵容新增费用」后，保加利亚-1 与勃艮第-1 为 sim:false + armyCost:true → part
     expect(bonOf('Bulgarians', 1).src).toBe('eco');
-    expect(bonusLevel(bonOf('Bulgarians', 1))).toBe('none');
+    expect(bonusLevel(bonOf('Bulgarians', 1))).toBe('part');
     expect(bonOf('Burgundians', 0).src).toBe('eco');
     expect(bonusLevel(bonOf('Burgundians', 0))).toBe('all');
     expect(bonOf('Burgundians', 1).src).toBe('eco');
-    expect(bonusLevel(bonOf('Burgundians', 1))).toBe('none');
+    expect(bonusLevel(bonOf('Burgundians', 1))).toBe('part');
     // 勃艮第-2 移除误链后回到纯文本，无开局模拟行
     expect(bonOf('Burgundians', 2).src).toBe('text');
     expect(bonusUsage(bonOf('Burgundians', 2))).toEqual([]);

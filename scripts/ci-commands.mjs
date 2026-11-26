@@ -50,6 +50,7 @@ export const DATA_CHECKS = [
     'charge_attack',
     'army_research',
   ].map((name) => python(name, `scripts/${name}_build.py`, '--check')),
+  ['army-cost-usage', 'npx', ['vite-node', 'scripts/army_cost_usage_build.ts', '--check']],
   python('patches', 'scripts/patches_build.py', '--check'),
   python('history', 'scripts/history_build.py', '--check'),
   python('civ-updates', 'scripts/civ_history_build.py', '--check'),

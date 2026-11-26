@@ -72,6 +72,17 @@ const bengaliQuantity = (text: string, linked: boolean) =>
       part
     ),
   );
+const USAGE_NUM_RE = /([+-]?\d+(?:\/\d+)*(?:\.\d+)?\s*(?:%|项|个?村民|人口|[个套]模板|套开局))/g;
+const formatUsageNote = (text: string) =>
+  text.split(USAGE_NUM_RE).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
 export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boolean }) {
   if (b.id === 'Bengalis-0') return bengaliQuantity(b.zh, linked);
   if (b.civ !== 'Sicilians' && (b.civ !== 'Tatars' || b.idx !== 2)) return linked ? <Linked text={b.zh} /> : b.zh;
@@ -113,18 +124,7 @@ export function BonusBodyContent({
   const groups = bonusAffects(b, core.units, core.buildings);
   const mayanTimeline = b.id === 'Mayans-1';
   const sicilianConstruction = b.id === 'Sicilians-4';
-  const usage =
-    b.encoded &&
-    !mayanTimeline &&
-    !sicilianConstruction &&
-    b.id !== 'Chinese-2' &&
-    b.id !== 'Mapuche-1' &&
-    b.id !== 'Gurjaras-0' &&
-    b.id !== 'Gurjaras-1' &&
-    b.id !== 'Poles-0' &&
-    b.id !== 'Poles-2'
-      ? []
-      : bonusUsage(b);
+  const usage = bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
@@ -183,7 +183,7 @@ export function BonusBodyContent({
                     l.name
                   )}
                 </b>
-                ：{b.id === 'Bengalis-0' || b.civ === 'Poles' ? bengaliQuantity(l.note, false) : l.note}
+                ：{formatUsageNote(l.note)}
               </li>
             ))}
           </ul>
@@ -468,7 +468,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
                       item.name
                     )}
                   </b>
-                  ：{b.id === 'Bengalis-0' || b.civ === 'Poles' ? bengaliQuantity(item.note, false) : item.note}
+                  ：{formatUsageNote(item.note)}
                 </li>
               ))}
             </ul>
