@@ -383,25 +383,36 @@ describe('#1463 含未解码资源标记的折后训练单价估算放行与 fai
     { unit: 2571, qty: '20' },
   ];
 
-  it('AC4：马普切 t:1380 位于目标与已完成时均放行 2571 折后价、标记行估算且不误触发 partial', () => {
+  it('AC4：马普切 t:1380 位于目标与已完成时均放行 2568/2571 双行折后价、标记行估算且不误触发 partial', () => {
     const asTarget = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows, targets: ['t:1380'] });
     expect(asTarget.blocked).toEqual([]);
     expect(asTarget.partial).toBe(false);
     expect(asTarget.hasValue).toBe(true);
-    expect(asTarget.training.lines[0]).toMatchObject({ status: 'ok', estimatedTechs: [] });
+    expect(asTarget.training.lines[0]).toMatchObject({
+      status: 'ok',
+      cost: { Food: 55, Gold: 34 },
+      subtotal: { Food: 1100, Wood: 0, Gold: 680, Stone: 0 },
+      estimatedTechs: ['布图马普'],
+    });
     expect(asTarget.training.lines[1]).toMatchObject({
       status: 'ok',
       cost: { Wood: 42.5, Gold: 47 },
       subtotal: { Food: 0, Wood: 850, Gold: 940, Stone: 0 },
       estimatedTechs: ['布图马普'],
     });
-    expect(asTarget.trainingTotal).toEqual({ Food: 1300, Wood: 850, Gold: 1740, Stone: 0 });
+    expect(asTarget.trainingTotal).toEqual({ Food: 1100, Wood: 850, Gold: 1620, Stone: 0 });
     expect(asTarget.researchTotal).toEqual({ Food: 2100, Wood: 0, Gold: 1750, Stone: 0 });
-    expect(asTarget.total).toEqual({ Food: 3400, Wood: 850, Gold: 3490, Stone: 0 });
+    expect(asTarget.total).toEqual({ Food: 3200, Wood: 850, Gold: 3370, Stone: 0 });
 
     const asDone = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows, done: ['t:1380'] });
     expect(asDone.partial).toBe(false);
     expect(asDone.hasValue).toBe(true);
+    expect(asDone.training.lines[0]).toMatchObject({
+      status: 'ok',
+      cost: { Food: 55, Gold: 34 },
+      subtotal: { Food: 1100, Wood: 0, Gold: 680, Stone: 0 },
+      estimatedTechs: ['布图马普'],
+    });
     expect(asDone.training.lines[1]).toMatchObject({
       status: 'ok',
       cost: { Wood: 42.5, Gold: 47 },
@@ -409,11 +420,18 @@ describe('#1463 含未解码资源标记的折后训练单价估算放行与 fai
       estimatedTechs: ['布图马普'],
     });
     expect(asDone.trainingTotal).toEqual(asTarget.trainingTotal);
-    expect(asDone.researchTotal.Food ?? 0).toBeLessThan(asTarget.researchTotal.Food ?? 0);
+    expect(asDone.researchTotal).toEqual({ Food: 1600, Wood: 0, Gold: 1300, Stone: 0 });
+    expect(asDone.total).toEqual({ Food: 2700, Wood: 850, Gold: 2920, Stone: 0 });
 
-    // 取消 t:1380 后恢复精确态
+    // 取消 t:1380 后双行均恢复原价与精确态
     const without1380 = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows });
     expect(without1380.partial).toBe(false);
+    expect(without1380.training.lines[0]).toMatchObject({
+      status: 'ok',
+      cost: { Food: 65, Gold: 40 },
+      subtotal: { Food: 1300, Wood: 0, Gold: 800, Stone: 0 },
+      estimatedTechs: [],
+    });
     expect(without1380.training.lines[1]).toMatchObject({
       status: 'ok',
       cost: { Wood: 50, Gold: 55 },
@@ -429,7 +447,7 @@ describe('#1463 含未解码资源标记的折后训练单价估算放行与 fai
       targets: ['t:1380'],
     });
     expect(withBadQty.partial).toBe(true);
-    expect(withBadQty.training.lines[0]?.status).toBe('ok');
+    expect(withBadQty.training.lines[0]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
     expect(withBadQty.training.lines[1]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
     expect(withBadQty.training.lines[2]?.status).toBe('badqty');
 
@@ -439,6 +457,7 @@ describe('#1463 含未解码资源标记的折后训练单价估算放行与 fai
       targets: ['t:1380', 't:315'],
     });
     expect(withInvalidTarget.partial).toBe(true);
+    expect(withInvalidTarget.training.lines[0]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
     expect(withInvalidTarget.training.lines[1]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
     expect(withInvalidTarget.ledger.find((e) => e.id === 315)?.status).toBe('invalid');
   });

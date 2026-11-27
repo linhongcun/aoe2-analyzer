@@ -191,11 +191,17 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(v835.extraRows).toHaveLength(20);
     expect(new Set([...v835.previewRows, ...v835.extraRows].map((r) => r.id)).size).toBe(23);
 
-    // 5. 1380 布图马普：展示 2569/2571 -15% 费用变化，同时保留未解码提示并链回单位详情（不产生被拦截的账本死链）
+    // 5. 1380 布图马普：#1464 补齐本国城堡独特单位 2566/2568 后共展示 4 行（≤ 折叠阈值 6 不折叠），保留未解码提示并链回单位详情
     const v1380 = buildTechCostChangeView(core.techById[1380]!, false, core, trees)!;
     expect(v1380.hasUndecoded).toBe(true);
-    expect(v1380.rows.map((r) => r.id)).toEqual([2569, 2571]);
+    expect(v1380.rows.map((r) => r.id)).toEqual([2569, 2571, 2566, 2568]);
+    expect(v1380.previewRows).toHaveLength(4);
+    expect(v1380.extraRows).toEqual([]);
     expect(v1380.rows[0]!.after).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(v1380.rows[2]!.after).toEqual({ Food: 55, Gold: 34 });
+    expect(v1380.rows[2]!.deltaText).toBe('-10食 / -6金');
+    expect(v1380.rows[3]!.after).toEqual({ Food: 55, Gold: 34 });
+    expect(v1380.rows[3]!.deltaText).toBe('-10食 / -6金');
     expect(v1380.rulePills).toContain('含未解码效果');
     expect(v1380.actions.every((a) => a.kind === 'unit' && a.to.startsWith('/unit/'))).toBe(true);
     expect(v1380.boundaryNote).toContain('其余效果以游戏说明为准');

@@ -138,7 +138,7 @@ test('#1463 持续生产 1404 静默放行、578/1380 估算放行与 army-suppl
   await expect(page.locator('.production-warnings')).not.toContainText('整项未计入');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
-  // 3. 马普切 1380 布图马普：1280 深色，2571 单价重算为 42.5 木 47 金并输出估算告警
+  // 3. 马普切 1380 布图马普：1280 深色，2568（55 食 34 金）与 2571（42.5 木 47 金）双行重算并输出估算告警
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/production?civ=Mapuche&age=4&walk=3&farm=1&techs=315&rows=2568:82:2,2571:87:4');
   await page.evaluate(() => {
@@ -148,6 +148,8 @@ test('#1463 持续生产 1404 静默放行、578/1380 估算放行与 army-suppl
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   const beforeTotal = await page.getByTestId('production-total').textContent();
   await page.getByRole('checkbox', { name: '布图马普', exact: true }).check();
+  await expect(page.getByTestId('production-row').nth(0)).toContainText('55');
+  await expect(page.getByTestId('production-row').nth(0)).toContainText('34');
   await expect(page.getByTestId('production-row').nth(1)).toContainText('42.5');
   await expect(page.getByTestId('production-row').nth(1)).toContainText('47');
   await expect(page.getByTestId('production-total')).not.toHaveText(beforeTotal!);

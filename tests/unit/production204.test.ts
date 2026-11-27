@@ -227,7 +227,7 @@ describe('#1463 带 res 标记独特科技过滤与 fail-closed 回归', () => {
     expect(with315And578.warnings.some((w) => w.includes('整项未计入'))).toBe(false);
   });
 
-  it('AC3：马普切布图马普（1380）对 2571 折后价参与每分钟开销与村民核算并保留估算告警', () => {
+  it('AC3：马普切布图马普（1380）对 2568/2571 双行折后价参与每分钟开销与村民核算并保留估算告警', () => {
     const rows = [
       { unit: 2568, building: 82, count: '2' },
       { unit: 2571, building: 87, count: '4' },
@@ -235,6 +235,10 @@ describe('#1463 带 res 标记独特科技过滤与 fail-closed 回归', () => {
     const base = run({ civ: 'Mapuche', age: 4, techs: [315], rows });
     const with1380 = run({ civ: 'Mapuche', age: 4, techs: [315, 1380], rows });
     expect(with1380.errors).toEqual([]);
+    expect(with1380.lines[0]!.cost).toEqual({ Food: 55, Gold: 34 });
+    expect(with1380.lines[0]!.spend.Food).toBeLessThan(base.lines[0]!.spend.Food);
+    expect(with1380.lines[0]!.spend.Gold).toBeLessThan(base.lines[0]!.spend.Gold);
+    expect(with1380.lines[0]!.applied).toContain('布图马普');
     expect(with1380.lines[1]!.cost).toEqual({ Wood: 42.5, Gold: 47 });
     expect(with1380.lines[1]!.spend.Wood).toBeLessThan(base.lines[1]!.spend.Wood);
     expect(with1380.lines[1]!.spend.Gold).toBeLessThan(base.lines[1]!.spend.Gold);

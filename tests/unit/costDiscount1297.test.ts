@@ -5,6 +5,7 @@ import { CORE } from '../../src/data/core';
 import { buildingDiscountView, parseBuildingDiscountAge } from '../../src/domain/buildingDetailView';
 import { buildingSimTechs } from '../../src/domain/buildingSim';
 import { DAT } from '../../src/domain/datEffects';
+import { countForBudget } from '../../src/domain/duel';
 import { duelToTrainTotal } from '../../src/domain/productionTransfer';
 import {
   applicableSimCostTechs,
@@ -32,7 +33,7 @@ const techInput = (id: number): UnitCostTech => {
 };
 
 describe('unitCost 单条 effect 过滤与 a:100 零键防护（#1297）', () => {
-  it('Butalmapu (1380) 对掷石绳骑兵放行 -15% 且不写出 Food/Stone 零键，对科那不改价', () => {
+  it('Butalmapu (1380) 对掷石绳骑兵与科那/精锐科那均放行 -15% 且不写出零键，对非城堡独特单位（93 长矛兵）不改价', () => {
     for (const id of [2569, 2571]) {
       const unit = CORE.unitById[id]!;
       const priced = unitCost(unit, 'Mapuche', 4, [techInput(1380)]);
@@ -46,13 +47,26 @@ describe('unitCost 单条 effect 过滤与 a:100 零键防护（#1297）', () =>
       expect(priced.undecoded).toEqual([{ techId: 1380, tech: '布图马普', reason: '含未解码的资源或条件效果', res: 33, op: 'set' }]);
     }
 
+    // #1464：科那/精锐科那（65 食 40 金）× 0.85 = 55.25 食 34 金；按 roundHalfPrice（x.25 向下取整）为 55 食 34 金（与游戏实测一致）
     for (const id of [2566, 2568]) {
       const kona = CORE.unitById[id]!;
       const priced = unitCost(kona, 'Mapuche', 4, [techInput(1380)]);
-      expect(priced.cost).toEqual(kona.cost);
-      expect(priced.appliedTechs).toEqual([]);
-      expect(priced.undecoded).toHaveLength(1);
+      expect(priced.exact).toEqual({ Food: 55.25, Gold: 34 });
+      expect(priced.cost).toEqual({ Food: 55, Gold: 34 });
+      expect(priced.exact.Wood).toBeUndefined();
+      expect(priced.exact.Stone).toBeUndefined();
+      expect(priced.cost.Wood).toBeUndefined();
+      expect(priced.cost.Stone).toBeUndefined();
+      expect(priced.appliedTechs).toEqual([{ id: 1380, zh: '布图马普' }]);
+      expect(priced.undecoded).toEqual([{ techId: 1380, tech: '布图马普', reason: '含未解码的资源或条件效果', res: 33, op: 'set' }]);
     }
+
+    // 非城堡独特单位反例：马普切 93 长矛兵不改价
+    const spearman = CORE.unitById[93]!;
+    const spearPriced = unitCost(spearman, 'Mapuche', 4, [techInput(1380)]);
+    expect(spearPriced.cost).toEqual(spearman.cost);
+    expect(spearPriced.appliedTechs).toEqual([]);
+    expect(spearPriced.undecoded).toHaveLength(1);
   });
 
   it('丝绸之路 (499) 与刹帝利 (835) 乘法不污染不存在的资源键，混合 res + 非法 op 仍整项跳过', () => {
@@ -199,6 +213,26 @@ describe('模拟器有效训练/建造价（全部 11 项费用科技与 5 种�
     expect(partialChanged.cost).toEqual({ Wood: 42.5, Gold: 47 });
     expect(partialChanged.undecodedTechNames).toEqual(['布图马普']);
 
+    // #1464：科那 2566 / 精锐科那 2568 模拟器同步进入 partial 费用科技链路，长矛兵 93 保持 plain
+    for (const id of [2566, 2568]) {
+      const kona = CORE.unitById[id]!;
+      const konaTechs = applicableSimCostTechs(sim, kona, 'Mapuche');
+      expect(konaTechs).toHaveLength(1);
+      expect(konaTechs[0]!.tech.id).toBe(1380);
+      expect(konaTechs[0]!.partial).toBe(true);
+      expect(costTechBadgeMap(konaTechs).get(1380)).toBe('partial');
+      expect(presetCostTechIds(konaTechs, 'all').has(1380)).toBe(false);
+      const konaAvail = buildSimEffectiveCost(kona, 'unit', 'Mapuche', 4, new Set(), konaTechs);
+      expect(konaAvail.kind).toBe('available');
+      expect(konaAvail.availablePartialOnly).toBe(true);
+      const konaChanged = buildSimEffectiveCost(kona, 'unit', 'Mapuche', 4, new Set([1380]), konaTechs);
+      expect(konaChanged.kind).toBe('changed-with-undecoded');
+      expect(konaChanged.cost).toEqual({ Food: 55, Gold: 34 });
+      expect(konaChanged.undecodedTechNames).toEqual(['布图马普']);
+    }
+    const mapucheSpear = CORE.unitById[93]!;
+    expect(buildSimEffectiveCost(mapucheSpear, 'unit', 'Mapuche', 4, new Set(), applicableSimCostTechs(sim, mapucheSpear, 'Mapuche')).kind).toBe('plain');
+
     const knight = CORE.unitById[38]!;
     const plain = buildSimEffectiveCost(knight, 'unit', 'Franks', 4, new Set(), applicableSimCostTechs(sim, knight, 'Franks'));
     expect(plain.kind).toBe('plain');
@@ -305,6 +339,25 @@ describe('下游 partial 闭环（混编 PK、单兵交接、训练总价与 PK 
     const manualInput = { ...input, techs: ['1380'] };
     const blocked = mixedTrainingTransfer(prodCtx, manualInput, 'a', resolveMixedSide(sim, CORE, manualInput, 'a'));
     expect(blocked).toMatchObject({ errors: [{ field: 'mix-a-techs', message: expect.stringContaining('布图马普') }] });
+
+    // #1464：混编 2568 + 2571 同时适用 1380 且保留 partial=true，满科技预设跳过、手选仍拦截
+    const dualInput = {
+      civ: 'Mapuche',
+      age: '4',
+      team: [] as string[],
+      techs: [] as string[],
+      rows: [
+        { uid: '2568', qty: '22' },
+        { uid: '2571', qty: '22' },
+      ],
+    };
+    const dualView = resolveMixedSide(sim, CORE, dualInput, 'a');
+    const dual1380 = dualView.techs.find((item) => item.t.id === 1380);
+    expect(dual1380).toMatchObject({ cost: false, partial: true, rows: [0, 1] });
+    const dualManual = { ...dualInput, techs: ['1380'] };
+    expect(mixedTrainingTransfer(prodCtx, dualManual, 'a', resolveMixedSide(sim, CORE, dualManual, 'a'))).toMatchObject({
+      errors: [{ field: 'mix-a-techs', message: expect.stringContaining('布图马普') }],
+    });
   });
 
   it('单兵 PK 到训练总价交接：满科技不带入 1380，手选 1380 可正常带入', () => {
@@ -316,32 +369,38 @@ describe('下游 partial 闭环（混编 PK、单兵交接、训练总价与 PK 
     expect(manual.config.techs).toContain(1380);
   });
 
-  it('训练总价感知 partial：2569 与 93/2566 科技栏与行说明均无自相矛盾且保持 incomplete=true', () => {
-    const onBolas = evaluateTrainTotal(prodCtx, {
+  it('训练总价感知 partial：2568/2571 双行折价与 93 反例均无自相矛盾且保持 incomplete=true', () => {
+    const onDual = evaluateTrainTotal(prodCtx, {
       civ: 'Mapuche',
       age: 4,
       ageRaw: null,
       techs: [1380],
-      rows: [{ unit: 2569, qty: '2' }],
+      rows: [
+        { unit: 2568, qty: '20' },
+        { unit: 2571, qty: '20' },
+      ],
     });
-    expect(onBolas.incomplete).toBe(true);
-    expect(onBolas.lines[0]?.cost).toEqual({ Wood: 42.5, Gold: 47 });
-    const bolasNotes = onBolas.lines[0]?.notes.join('\n') ?? '';
-    expect(bolasNotes).toContain('已按可解码条目计入：布图马普');
-    expect(bolasNotes).not.toContain('单价未改');
-    const bolasChoice = onBolas.techs.find((t) => t.id === 1380);
-    expect(bolasChoice?.partial).toBe(true);
-    expect(bolasChoice?.hint).toContain('已按可解码条目计入至少一行，另含未解码效果');
+    expect(onDual.incomplete).toBe(true);
+    expect(onDual.lines[0]?.cost).toEqual({ Food: 55, Gold: 34 });
+    expect(onDual.lines[0]?.subtotal).toEqual({ Food: 1100, Gold: 680 });
+    expect(onDual.lines[1]?.cost).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(onDual.lines[1]?.subtotal).toEqual({ Wood: 850, Gold: 940 });
+    expect(onDual.total).toEqual({ Food: 1100, Wood: 850, Gold: 1620 });
+    for (const line of onDual.lines) {
+      const notes = line.notes.join('\n');
+      expect(notes).toContain('已按可解码条目计入：布图马普');
+      expect(notes).not.toContain('单价未改');
+    }
+    const dualChoice = onDual.techs.find((t) => t.id === 1380);
+    expect(dualChoice?.partial).toBe(true);
+    expect(dualChoice?.hint).toContain('已按可解码条目计入至少一行，另含未解码效果');
 
     const onOther = evaluateTrainTotal(prodCtx, {
       civ: 'Mapuche',
       age: 4,
       ageRaw: null,
       techs: [1380],
-      rows: [
-        { unit: 93, qty: '1' },
-        { unit: 2566, qty: '1' },
-      ],
+      rows: [{ unit: 93, qty: '1' }],
     });
     expect(onOther.incomplete).toBe(true);
     for (const line of onOther.lines) {
@@ -351,7 +410,7 @@ describe('下游 partial 闭环（混编 PK、单兵交接、训练总价与 PK 
     expect(otherChoice?.hint).toContain('可解码费用条目未作用到当前已计入的单位，另含未解码效果');
   });
 
-  it('单位 PK 卡头常显行与模拟 avail 一致呈现 partial 边界', () => {
+  it('单位 PK 卡头常显行与模拟 avail 一致呈现 partial 边界（含 2568 科那等资源 3000 预算 33 名）', () => {
     const resolved = resolve(sim, CORE.unitById, { uid: 2571, civ: 'Mapuche', age: 4, techs: [1380], team: [] }, 2571);
     expect(isUnavail(resolved)).toBe(false);
     if (isUnavail(resolved)) return;
@@ -360,6 +419,25 @@ describe('下游 partial 闭环（混编 PK、单兵交接、训练总价与 PK 
     expect(view.lines[0]).toMatchObject({ kind: 'applied', partial: true });
     expect(view.lines[0]?.text).toContain('另含未解码效果，当前价格非完整最终价');
     expect(simTechs(sim, CORE.unitById[2571]!, 'Mapuche').some((row) => row.t.id === 1380)).toBe(true);
+
+    // #1464：精锐科那 2568 默认满科技 f 跳过 1380（28 名）；手选 1380 折至 55 食 34 金 = 89（3000 预算 33 名、投入 2937）
+    const konaFull = resolve(sim, CORE.unitById, { uid: 2568, civ: 'Mapuche', age: 4, techs: 'f', team: [] }, 2568);
+    expect(isUnavail(konaFull)).toBe(false);
+    if (isUnavail(konaFull)) return;
+    expect(konaFull.sel.has(1380)).toBe(false);
+    expect(konaFull.training.price.cost).toEqual({ Food: 65, Gold: 40 });
+    expect(countForBudget(konaFull.training.price.cost, 3000)).toBe(28);
+
+    const konaPicked = resolve(sim, CORE.unitById, { uid: 2568, civ: 'Mapuche', age: 4, techs: [1380], team: [] }, 2568);
+    expect(isUnavail(konaPicked)).toBe(false);
+    if (isUnavail(konaPicked)) return;
+    expect(konaPicked.training.price.cost).toEqual({ Food: 55, Gold: 34 });
+    const count = countForBudget(konaPicked.training.price.cost, 3000);
+    expect(count).toBe(33);
+    expect(count! * ((konaPicked.training.price.cost.Food ?? 0) + (konaPicked.training.price.cost.Gold ?? 0))).toBe(2937);
+    const konaView = trainingLines(konaPicked.training, konaPicked.sel);
+    expect(konaView.lines[0]).toMatchObject({ kind: 'applied', partial: true });
+    expect(konaView.lines[0]?.text).toContain('另含未解码效果，当前价格非完整最终价');
   });
 
   it('trainTotal 跨单位合并费用科技候选保守保留 partial（不因后单位无 partial 而洗白）', () => {
