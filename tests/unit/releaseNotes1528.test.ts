@@ -298,7 +298,7 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     });
     expect(decidePrepareAction({ eventName: 'push', ref: 'refs/heads/main', headSha: SHA_A, remoteSha: SHA_B, pendingCount: 1 })).toMatchObject({
       action: 'superseded',
-      checkRemoteRun: false,
+      checkRemoteRun: true,
     });
 
     // 常规 workflow_dispatch(expected_sha = B1) 命中尖端且 0 片段 → direct；若残留片段必报错杜绝循环
@@ -458,19 +458,23 @@ if (args[0] === 'api') {
     const b1 = execFileSync('git', ['--git-dir', bare, 'rev-parse', 'refs/heads/main'], { encoding: 'utf8' }).trim();
     expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${b1}`]);
 
-    // 落后补派发面对「已取消 push + 成功只读 deploy=false」仍应补派发且不带 expected_sha
+    // 落后补派发与入队逆序的旧 push 面对「已取消 push + 成功只读 deploy=false」均应补派发且不带 expected_sha
     writeFileSync(join(repo, 'release-notes', '2101.json'), JSON.stringify({ issue: 2101, summary: '并发新功能（#2101）。' }));
     g('add', '.');
     g('commit', '-m', 'feat(#2101): next');
     const a2 = g('rev-parse', 'HEAD');
     g('push', 'origin', 'main');
     g('checkout', '-q', b1);
-    writeFileSync(logFile, '');
-    writeFileSync(outFile, '');
-    const healEnv = { ...prepEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', DEPLOY_INPUT: 'true', EXPECTED_SHA: '', GITHUB_SHA: b1 };
-    expect(spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--prepare'], { cwd: repo, env: healEnv }).status).toBe(0);
-    expect(readFileSync(outFile, 'utf8')).toContain('action=superseded\n');
-    expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
+    for (const healEnv of [
+      { ...prepEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', DEPLOY_INPUT: 'true', EXPECTED_SHA: '', GITHUB_SHA: b1 },
+      { ...prepEnv, GITHUB_EVENT_NAME: 'push', GITHUB_SHA: b1 },
+    ]) {
+      writeFileSync(logFile, '');
+      writeFileSync(outFile, '');
+      expect(spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--prepare'], { cwd: repo, env: healEnv }).status).toBe(0);
+      expect(readFileSync(outFile, 'utf8')).toContain('action=superseded\n');
+      expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
+    }
     expect(
       decidePrepareAction({
         eventName: 'workflow_dispatch',

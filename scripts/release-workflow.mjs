@@ -124,17 +124,12 @@ export function decidePrepareAction({ eventName, ref, headSha, remoteSha, expect
   }
 
   if (remoteSha !== headSha) {
-    if (isDispatch) {
-      return {
-        action: 'superseded',
-        checkRemoteRun: true,
-        reason: `origin/main（${remoteSha.slice(0, 7)}）已领先当前补派发/手动部署检出（${headSha.slice(0, 7)}），检查并交接给最新尖端`,
-      };
-    }
     return {
       action: 'superseded',
-      checkRemoteRun: false,
-      reason: `origin/main（${remoteSha.slice(0, 7)}）已领先当前 push（${headSha.slice(0, 7)}），退让合并处理`,
+      checkRemoteRun: true,
+      reason: isDispatch
+        ? `origin/main（${remoteSha.slice(0, 7)}）已领先当前补派发/手动部署检出（${headSha.slice(0, 7)}），检查并交接给最新尖端`
+        : `origin/main（${remoteSha.slice(0, 7)}）已领先当前 push（${headSha.slice(0, 7)}），检查最新尖端部署资格并按需自愈`,
     };
   }
   if (pendingCount > 0) return { action: 'bump', checkRemoteRun: false, reason: `发现 ${pendingCount} 份待发布片段，执行统一版本递增` };
