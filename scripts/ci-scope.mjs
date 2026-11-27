@@ -30,7 +30,6 @@ const maintenanceFiles = new Set([
   'scripts/check-pr-title.mjs',
   'scripts/ci-scope.mjs',
   'scripts/ci-run.mjs',
-  'scripts/ci-browser-weights.json',
   'scripts/ci-commands.mjs',
   'scripts/deployment-smoke.mjs',
   'scripts/smoke-diagnostics.mjs',

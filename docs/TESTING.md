@@ -117,10 +117,10 @@ Kent 只确认这次改动的功能是否正常，用与 diff 直接相关的 Vi
 
 CI 由 `.github/workflows/` 下的两个验证工作流组成（Release 另见 [RELEASING](RELEASING.md)）：
 
-| 工作流                  | 触发                                    | 内容                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ----------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 工作流                  | 触发                                    | 内容                                                                                                                                                                                                                                                                                          |
+| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ci.yml`（CI / Deploy） | PR、main push、手动触发                 | `check` 在 PR 检查标题。纯 Markdown 文档 PR 只再跑文档边界检查。其他改动和事件安装依赖，运行 `node scripts/ci-commands.mjs static`（lint、tsc、严格内容结构、来源、校验器、分层），安装 Chromium、构建并跑窄冒烟。main push 通过后用同一份 `dist` 发布 Pages，并上传 `site` 供 Release 打包。 |
-| `full.yml`（CI full）   | 每日北京时间 02:30，或 Actions 手动触发 | 同样的 static，再加 `unused:check`、对比度、`introductions:check`、全部 Vitest、`node scripts/ci-commands.mjs data`（Python 测试、`.dat` 复现、生成数据与报告一致性、开局库校验）、构建和整站 Playwright。不部署，不触发 Release。                                                                                                                                                                   |
+| `full.yml`（CI full）   | 每日北京时间 02:30，或 Actions 手动触发 | 同样的 static，再加 `unused:check`、对比度、`introductions:check`、全部 Vitest、`node scripts/ci-commands.mjs data`（Python 测试、`.dat` 复现、生成数据与报告一致性、开局库校验）、构建和整站 Playwright。不部署，不触发 Release。                                                            |
 
 窄冒烟固定 7 条，由 `scripts/ci-scope.mjs` 的 `GATE_NARROW_SMOKE` 和 `BUILD_IDENTITY_TITLE` 定义、`ci-commands.mjs` 以 `--grep` 选出：`tests/e2e/smoke.spec.ts` 的首页、`#civs`、`#/civ/Franks`、`#unit/569` 无控制台错误，Ctrl+K 搜索，法兰克圣骑士满科技 192 HP；加 `tests/e2e/ciBuild659.spec.ts` 的构建身份（页脚版本与提交等于本次检出）。改这组用例的标题要同步改 `GATE_NARROW_SMOKE`。
 
@@ -130,7 +130,7 @@ CI 由 `.github/workflows/` 下的两个验证工作流组成（Release 另见 [
 
 CI full 失败不阻塞 PR 合并，但须有人认领：定位真实失败，建 Issue 或修复，不提高超时、增加重试或放宽断言。#338 的 hash 与表格检查、24 条冷路由、四宽与明暗矩阵都只在 CI full 或本地排查时跑。
 
-CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`。e2e 权重文件 `scripts/ci-browser-weights.json` 仍由 `lint:browser-weights` 要求覆盖每个 spec（新增 spec 要加一条权重），它不再用于分片。
+CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`。已退役的历史 e2e 分片权重文件（`scripts/ci-browser-weights.json`）及 `lint:browser-weights` 门禁已移除，新增 `tests/e2e/*.spec.ts` 无需另行登记权重。
 
 ## 7. 合并前要绿什么（摘要）
 

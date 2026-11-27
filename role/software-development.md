@@ -137,7 +137,7 @@ npm run dev          # Vite，默认 http://localhost:5173
 npm run build        # page_metadata、tsc、vite build、static_pages
 npx tsc -p . --noEmit
 npm test             # vitest run，只收集 tests/unit/**/*.test.ts
-npm run lint         # 含浏览器权重、内容相关的一组检查；不等于下面的 static 阶段全文
+npm run lint         # 含注册表、数据族、费用/可用性、文档边界、颜色与 CSS 检查；不等于下面的 static 阶段全文
 npx playwright install chromium   # 第一次跑 e2e
 npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter=line
 ```
@@ -157,7 +157,7 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 全部单测、`data`、`unused`/对比度/简介检查和整站 Playwright 在 **CI full**（`.github/workflows/full.yml`，每日北京时间 02:30 或 Actions 手动触发）运行，不部署。CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`；README 写的是本机 Node 20+、Python 3.10+。
 
-e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:browser-weights`：每个 `tests/e2e/*.spec.ts` 都要有一条正整数权重，多出来的条目也不行；新增 spec 却忘了权重，`static` 会失败。权重现在只是历史记录，不用于分片。
+历史 e2e 分片权重文件 `scripts/ci-browser-weights.json` 及 `lint:browser-weights` 门禁已移除（#1523），新增 `tests/e2e/*.spec.ts` 无需再手动登记权重。
 
 CI 作业被跳过不等于通过：`deploy` 在 PR 上不运行；`check` 失败就没有部署。不要把 skip 或本地命令写成「CI 实跑」。
 
