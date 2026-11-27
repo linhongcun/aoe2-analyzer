@@ -1,42 +1,27 @@
 # 产品经理交接
 
-给接下来做产品判断的人。这里写我怎么看这个站、怎么裁范围、怎样才算验收，以及几件已经付过代价的事。它不是路线图，不是功能百科，也不是开工授权。Issue 生命周期和单项正文记录以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为准。
+给接手产品判断与需求评审的人。本文说明如何看待这个站、怎么裁范围、怎样算验收，以及按主题归档的踩坑清单。它不是路线图，也不是开工授权；Issue 生命周期、角色职责与授权以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为准。
 
-事实和判断分开。和实现直接相关的句子，对照的是 2026-11-13 的 `main` [`0db9c309`](https://github.com/linhongcun/aoe2-analyzer/commit/0db9c30924dc5a2acaa66d3924d2f655fc17a6c2)。上午桌面走查的基线，是当时已经部署的构建 [`471c136`](https://github.com/linhongcun/aoe2-analyzer/commit/471c13684c24754fc817defedfb4b7f924fa08e3)（[`#979`](https://github.com/linhongcun/aoe2-analyzer/pull/979)）。那之后 `main` 又有多次提交，多数是布局。我没有在晚间现网上把上午点过的路径再点一遍。
-
-三句话不要混：
-
-- 「源码仍是」只表示读到 `0db9c309`。
-- 「上午看到」只表示构建 `471c136` 上的那次桌面操作。
-- 应用号、源码、PR 合入、Pages 部署、现网点击，各算各的。页脚「构建」才是某一次部署的身份。
-
-我没有逐条验算全部内容，也没有覆盖全部文明和科技组合。上午走查没有做手机、经济公式和复盘备份恢复。这些留在文末，不要从本文补成已经验收。
-
-默认值、单位编号、允许列表会变。写新规格前打开链接里的文件，不要把本文抄成永恒规范。
+- **事实与判断分开**：具体数值、默认值、单位编号和允许列表以当前 `origin/main` 源码及 [data_sources.json](../data/sources/data_sources.json) 为准，写规格前先读对应文件，不凭记忆照抄。
+- **版本三列分读**：应用号（`package.json`）、数据版本（`data_sources.json`）与线上页脚「构建」（7 位 SHA）各算各的；只有页脚构建对上提交，才算玩家已可用。
 
 ## 1. 这个站解决什么
 
-这是帝国时代 II 决定版的中文资料站和计算工具。玩家用它做三件事：
+帝国时代 II 决定版（AoE2 DE）的中文资料站和计算工具（线上：<https://linhongcun.github.io/aoe2-analyzer/>，Hash 路由 `#/…`），服务玩家三件事：
 
-1. **查一份资料，并知道数字是哪一种价。** 文明、单位、科技、建筑、加成。目录里的价是基础值。
-2. **为一局做准备。** 记下模式、地图和文明，再跳到还能用的工具。对局助手给的是通用参考。开局流程是声明假设下的时间线。
-3. **用有限模型回答一个算得清的问题。** 持续造要多少、买这些兵要多少、这个科技把属性改成什么样、两边近似谁先倒下。
+1. **查资料并分清价格口径**：文明、单位、科技、建筑、科技树与加成；目录价是基础值。
+2. **为一局做准备**：记录模式、地图与文明并跳到对应工具；对局助手是通用参考，开局流程是声明假设下的时间线。
+3. **用有限模型算清具体问题**：持续生产、训练总价、科技模拟、单位 PK、驻军预览、多人施工与驻军回血。
 
-明确不做的事：
+**明确不做的事**：
 
-- 不是官方客户端。开一局写明不估算本局胜率，也没有连上游戏大厅。见 [StartGame.tsx](../src/features/home/components/StartGame.tsx)。
-- 不解析录像。手填复盘是本机草稿。
-- 不把模型结果写成实战或胜率保证。单位 PK、开局时间线、攻城估算都是近似或理想条件。
-- 不接实时官方天梯，不把主观 1–10 写成胜率。
-- 不编造游戏数值，先分清来源和版本。基础游戏值先追溯钉扎数据及其生成链；生成结果可能有导入错、语义错或版本错，不是绝对真理。与官方资料或客户端实测冲突时，记下版本、来源和差异再核实。不以记忆改值，也不用本站数据直接裁掉外部证据。主观评分、天梯快照、用户输入和模型输出各自声明来源与假设。本站未支持的效果要说出来，缺来源标「未核实」。
+- 不是官方客户端：不连大厅、不估本局胜率（见 [StartGame.tsx](../src/features/home/components/StartGame.tsx)）、不解析录像（复盘为本机草稿）。
+- 不把近似模型写成实战或胜率保证，不接实时官方天梯，不把 1–10 主观评分写成胜率。
+- 不编造游戏数值：先追溯固定 `.dat` 与生成链，冲突时记录版本、来源和差异再核实；未支持效果显式说明，缺来源标「未核实」。
 
-站点主题的维护表述见 [MAINTENANCE 第 1 节](../docs/MAINTENANCE.md)。线上是 <https://linhongcun.github.io/aoe2-analyzer/>，路由是 hash，`#/…`。
-
-接手先自己把上面三件事走完，系统掌握入口、功能怎么衔接、输入输出和限制、上下文带什么丢什么。不要等真的要用了再临时翻。第 7 节是这一轮的点击顺序。页面登记在 [pageRegistry.ts](../src/shared/nav/pageRegistry.ts)。首页和工具菜单共用同一套分组：新手入门、对局计划、经济计算、资料。新增可见页面先改登记表，不要另维护一份名单。
+页面唯一登记表在 [pageRegistry.ts](../src/shared/nav/pageRegistry.ts)（首页与工具菜单共用分组：新手入门、对局计划、经济计算、资料）；新增或改名可见页面先改登记表，不另建平行名单。
 
 ## 2. 按玩家任务看边界
-
-下面只写容易混用的口径，以及 `0db9c309` 上已核对的实现。不罗列全部路由。
 
 ### 三种钱
 
@@ -46,438 +31,104 @@
 | 有效训练价   | 已选且本站已支持的费用效果之后，训练一名要多少 | 持续生产、训练总价、单位 PK 的每名训练价 | 已经含研究费，或「转型还要再花多少」 |
 | 累计研究费用 | 勾选的这些科技，研究本身要多少、多久           | 单位页的科技模拟器工作区                 | 每名兵的训练价                       |
 
-选单位列表的常显句是「造价为目录基础值，不是该文明折后训练价」。见 [SimulatorHub.tsx](../src/features/simulator/components/SimulatorHub.tsx)。工作区写明累计研究费用不是训练价。见 [UnitDetail.tsx](../src/features/units/components/UnitDetail.tsx)。
-
-单位详情的目录造价旁，还有一块有条件的「折后训练价」。只有已选文明、该文明能训练、折扣组对得上、并且至少有一条已计入时才出现；对不上就写「折扣未计入」；没有已计入项就不单列。见 [unitDetailView.ts](../src/domain/unitDetailView.ts) 的 `discountView`。这是目录区的文明折扣，不是模拟器工作区的输出。
-
-2026-11-13 上午，在构建 `471c136` 上打开模拟器、勾选锻造，看到的是攻击变化和累计研究费用。那次没有在模拟器里看到折后训练价。不要写成「单位模拟一定显示折后训练价」。晚间单位详情有布局提交，我没有再点现网确认这块还好不好找。
-
-研究费不要悄悄算进训练费。训练总价的正式说明把科技研究、单位升级、建筑、住房和其他转型投入排除在外；前置科技只影响能不能选这个形态。见 [trainTotalCopy.ts](../src/features/production/trainTotalCopy.ts)。单位 PK 的每名训练价同样不摊研究费，也不从派出预算里扣。见 [trainingCostView.ts](../src/features/duel/logic/trainingCostView.ts)。
-
-有效训练价的叠加在 [unitCost.ts](../src/domain/unitCost.ts)。未完整计入的效果要标出来。训练总价在这种情况下标题侧标「估算」，不能把结果说成完整准确的总价。
-
-目录展示用的时代投影只用于展示和筛选，禁止拿去算生产、费用、战斗或开局模拟。见 [displayAge.ts](../src/features/units/displayAge.ts)。模拟器选单位如果做了这份投影，链接里只带单位和可选文明，不得把投影副本传进模拟。见 [hubList.ts](../src/features/simulator/hubList.ts)。
+- 单位详情目录区有条件展示「折后训练价」（见 [unitDetailView.ts](../src/domain/unitDetailView.ts) `discountView`），与工作区研究费用分开；[SimulatorHub.tsx](../src/features/simulator/components/SimulatorHub.tsx) 与 [UnitDetail.tsx](../src/features/units/components/UnitDetail.tsx) 须维持各自口径声明。
+- 研究费、升级费、建筑与住房均不摊入训练价（见 [trainTotalCopy.ts](../src/features/production/trainTotalCopy.ts)、[trainingCostView.ts](../src/features/duel/logic/trainingCostView.ts)）。有效训练价叠加在 [unitCost.ts](../src/domain/unitCost.ts)，未完整计入时须标「估算」。
+- 目录展示用时代投影（[displayAge.ts](../src/features/units/displayAge.ts)）严禁传入生产、费用、战斗或开局计算。
 
 ### 生产页的三种任务
 
-三个模式在同一路由 `#/production`，用页内「生产模式」切换。见 [ProductionModeNav.tsx](../src/features/production/ProductionModeNav.tsx)。
+三模式共用 `#/production`（[ProductionModeNav.tsx](../src/features/production/ProductionModeNav.tsx)），默认时代分别看 [production.ts](../src/domain/production.ts) 与 [trainTotal.ts](../src/domain/trainTotal.ts)：
 
-| 模式           | 玩家任务                                                           | 数量指什么             | 结果里有什么                                                          |
-| -------------- | ------------------------------------------------------------------ | ---------------------- | --------------------------------------------------------------------- |
-| 持续生产       | 已经有若干座生产建筑时，估每分钟开销和村民                         | 建筑数                 | 每分钟资源与村民。有效训练价。不含研究、农田补种、住房、建筑建设      |
-| 训练总价       | 同一文明、同一时代，几种兵各买多少，食物、木材、黄金和石头一共多少 | 单位个数               | 当前单价乘数量再相加。不含研究费。不会自动算两套方案的差              |
-| 跨文明训练对照 | 同一骑兵形态、一座马厩，比已选文明的间隔和单价                     | 目标个数，用来算总耗时 | 单个间隔、单个费用、N 个总耗时。没有 N 个总费用。不计研究时间和研究费 |
+| 模式           | 玩家任务                                       | 数量含义 | 输出边界                                                               |
+| -------------- | ---------------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| 持续生产       | 已有若干生产建筑，估每分钟开销与村民           | 建筑数   | 每分钟资源与村民；不含研究、补田、住房、建造                           |
+| 训练总价       | 同文明同时代买多批兵，算食木金石总计           | 单位个数 | 有效单价 × 数量求和；不含研究费，不自动算两方案差额                    |
+| 跨文明训练对照 | 同形态、一座马厩比多文明间隔与单价（固定入口） | 目标个数 | 单间隔、单价、N 个总耗时；无 N 个总费用，规则看 `trainCompareCodec.ts` |
 
-切换时不要假设方案还在：
+切模式时不得把建筑数与训练数互换；跨文明对照回到固定入口。
 
-- 当前这一项保留自己的地址。
-- 进训练总价，只带合法文明和合法时代。不带科技、单位行，也不把持续生产的建筑行当成训练数量。
-- 从训练总价回持续生产，只带合法文明和时代。
-- 进对照，回到固定入口，不带走当前文明或训练总价方案。
+### 模拟、PK、对局准备与天梯
 
-默认时代两边不一样。持续生产的默认在 [production.ts](../src/domain/production.ts) 的 `DEFAULT_PRODUCTION`，训练总价的默认在 [trainTotal.ts](../src/domain/trainTotal.ts) 的 `TRAIN_TOTAL_DEFAULT_AGE`。写规格前打开这两处，不要背。
+- **科技模拟器与 PK**：模拟器列表只挑单位，属性变化与累计研究费在单位详情工作区；单位 PK 忽略走位、地形与部分特殊效果，对局助手不自动带入双方；对局助手坚持通用参考，不加自动优势建议（[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 已关闭）。
+- **开一局与开局流程**：开一局仅传递手动选择不做自动推荐；开局流程到达时间按通用参数现算，未计入文明保留文明名并按通用计算。
+- **主观评分与天梯快照**：文明对比雷达是维护者 1–10 主观整数（[civ_ratings.json](../data/sources/civ_ratings.json)，[Compare.tsx](../src/features/compare/components/Compare.tsx) 常显「评分性质」，[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭）；天梯（[LadderTeam.tsx](../src/features/ladder/LadderTeam.tsx)）为静态快照，其自身补丁号与本站钉扎数据版本分开读，不互相混抄。
 
-对照的允许单位、时代锁和固定入口在 [trainCompareCodec.ts](../src/features/production/trainCompareCodec.ts)。写本文时只允许三名骑兵形态，时代必须是城堡，数量有上下限。页上仍写「所选形态已解锁」。这句和「这个文明在城堡时代造不了」可以同时出现。第 6 节说明为什么这是交互问题。
+### 跨页上下文语义
 
-登记表这一页的名字、说明、`metaTitle` 仍只有「持续生产」，没有「训练总价」「训练对照」的搜索别名。浏览器标题走登记表，所以后两个模式的标签标题仍是「持续生产」；页内主标题会换成当前模式。搜索索引用的是登记名和 `searchAliases`，见 [hooks.ts](../src/features/search/hooks.ts)。
-
-### 模拟、PK、对局准备
-
-科技模拟器的列表只负责挑单位。属性变化和累计研究费用发生在单位详情的模拟工作区。筛选记在本机，不写进可分享地址。
-
-单位 PK 回答「这样的设置下，近似谁更占优、这点预算大约能出几名」。它忽略射程、走位、地形、冲锋和一部分特殊效果；页上应保持这个边界。它和训练总价不是同一个问题。对局助手里的「单位 PK」不自动带入当前双方。
-
-对局助手的页头写明：早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。见 [Matchup.tsx](../src/features/matchup/components/Matchup.tsx)。[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 已关闭，不要把自动优势建议加回去。
-
-开一局只保存玩家写下的选择，再按页面自己的规则带到别的工具。它不是自动推荐。跳到对局助手时带手动选择的我方和对手；开局列表不会因为带了文明就只剩这一文明。地图和路位不要假设已经传进开局流程。天梯打开的是静态快照，不按这一局筛选。
-
-开局流程的到达时间按通用参数现算，不是开局 JSON 里手写的预计时间。链接里的文明若还没计入模拟，应保留文明名并改按通用计算，避免通用数字配上这个文明的名字传出去。公式正确性我没有在这次交接里验算。
-
-### 天梯快照和主观评分
-
-文明对比的雷达是维护者整理的 1–10 主观整数，不是胜率，也不是精确战力。资料行不由这些分数推导。限制写在常显的「评分性质」里。见 [Compare.tsx](../src/features/compare/components/Compare.tsx)。分数来自 [civ_ratings.json](../data/sources/civ_ratings.json)。[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭。上午在 `471c136` 上确认这段限制是可见的，这是正向设计，不要再报成「没写口径」。轴名要展开才列全，不要据此宣称旧验收句已经逐字满足，也不要重开。
-
-天梯是静态快照。页面写明不实时抓取、不推算缺失分段；胜率不是平衡建议。快照自己的补丁、截止和样本单位，以那一页的说明为准，可以和本站钉住的数据版本不同。见 [LadderTeam.tsx](../src/features/ladder/LadderTeam.tsx)。本站钉扎看 [data_sources.json](../data/sources/data_sources.json) 和页脚「数据版本」。写本文时这份钉扎仍是 DE Update 188329。不要把天梯页上的另一个补丁号抄进百科，当成当前单位数据。
-
-### 从文明页往外走，文明还在不在
-
-这是两套产品语义，不是某一条链接漏了参数。
-
-- 文明页兵种行，独特单位和区域单位都链到 `/unit/:id`，不带文明。同页科技链到 `/tech/:id`。见 [CivDetail.tsx](../src/features/civs/components/CivDetail.tsx)。
-- 同页「用这个文明继续」会带上文明：开局流程、持续生产、训练总价、对局助手。
-- 科技树格子的链接带 `?civ=`。见 [CivTechTree.tsx](../src/features/tree/components/CivTechTree.tsx)。上午没有逐格点开，这句是读源码，不是晚间又点过现网。
-- 模拟器在已经筛选文明时，进入单位会带上 `tab=sim` 和文明。见 [hubList.ts](../src/features/simulator/hubList.ts)。
-- 源码里另有 `CivRegionalUnits`，链接会带文明，但当前文明页没有挂上它。不要把它当成玩家正在走的路径。
-
-上午在 `471c136`：从印度斯坦点古拉姆，到 `#/unit/1747`，单位页不指定文明；从模拟器筛选印度斯坦再进古拉姆，链接带文明。玩家会觉得「我正看着这个文明」，两条入口却不一样。要不要让兵种行也预填，先裁这条链接的任务是「打开单位百科」还是「带着当前文明继续算」。第 6 节写怎样避免盲改。
-
-旧地址 `#/tree/:civ` 会转到该文明详情的科技树章节。见 [routes.tsx](../src/app/routes.tsx)。README 仍把它写成独立模块，这是文档漂移，不是运行时又有一个科技树站。
+- 文明页兵种行链到不带文明的 `/unit/:id`（百科语义），同页「用这个文明继续」及科技树格子（[CivTechTree.tsx](../src/features/tree/components/CivTechTree.tsx)）、已筛文明的模拟器（[hubList.ts](../src/features/simulator/hubList.ts)）才带文明；[CivDetail.tsx](../src/features/civs/components/CivDetail.tsx) 未挂载 `CivRegionalUnits`；旧 `#/tree/:civ` 重定向到文明页科技树章节（[routes.tsx](../src/app/routes.tsx)）。
 
 ## 3. 需求怎么决定
 
-我按这个顺序看一个提议，缺一截就不拍板：
+评审按七步核齐，缺项不拍板：**场景 → 当前路径与断点 → 证据与影响（写明构建/SHA） → 最小范围与非目标 → 候选方案与代价 → 可核对验收标准 → 需求评审记录（评审人/日期/结论/遗留）**，全部写入原 Issue「产品经理」节即 PRD（含用户故事/主路径）。
 
-1. **场景。** 谁在什么时候要完成哪件已有任务。
-2. **当前路径和断点。** 从哪个入口进来，在哪一步接不上、看不懂，或口径变了。
-3. **证据和影响。** 源码、某一次部署上的点击，或两者。写明构建。影响的是找得到、接得上，还是算出来的数不可信。
-4. **最小范围和非目标。** 这次只动断点。写明不做什么，尤其不顺便改计价、不扩大到没看过的文明组合。
-5. **候选方案和代价。** 每个方案改动玩家会看见的哪句话、哪条链接。代价包括丢掉的上下文、要改的登记和搜索、可能误伤的相邻工具。
-6. **验证标准。** 主路径怎样算正常，空、错、部分、失效怎样算正常。需要看到哪一种视口，就写那一种。
-7. **评审记录。** 以上写进「产品经理」节就是 PRD；用户故事或主路径单列一行。评审完成时留一条记录：评审人、日期、结论、遗留问题。
+优先级先保证已有任务找得到、接得上、口径一致。四类不混进同一单：
 
-优先级先给已经存在的任务：让它找得到、前后连贯、口径和页面声明一致。不以功能数量或个人喜好排序。
+| 类型     | 判断                                         | 例子                                         |
+| -------- | -------------------------------------------- | -------------------------------------------- |
+| 缺陷     | 与页面自身声明相反，或走进无出口死路         | 对照允许选出当前条件下零文明可造的形态       |
+| 设计债   | 功能存在，但发现路径、标题或上下文与任务脱节 | 历史案例：新增子模式后搜索别名与标签标题滞后 |
+| 功能建议 | 现有任务做不到，需要新能力                   | 文明页兵种行是否预填文明（须先裁语义）       |
+| 数据待核 | 数字或公式未对上固定数据                     | 经济/开局公式未核实前不写成「已证实算错」    |
 
-四类不要放进同一张工单：
+已关闭 Issue 不重开；明确 `Hold`、维护者标待其决定的 `待确认` 与真实外部数据/依赖 `阻塞` 不越权解除。
 
-| 类型     | 判断                                                 | 本站例子                                               |
-| -------- | ---------------------------------------------------- | ------------------------------------------------------ |
-| 缺陷     | 页面按自己的声明，结果相反，或走进一条没有出口的操作 | 对照允许选择一个当前条件下没有文明能造的形态           |
-| 设计债   | 功能在，发现路径、标题或上下文和任务不一致           | 训练总价能打开，搜索和浏览器标题仍是「持续生产」       |
-| 功能建议 | 现有任务做不到，需要新能力                           | 要不要让文明页兵种行预填文明。这要先裁语义             |
-| 数据待核 | 数字或公式还没对上固定数据                           | 经济小工具、开局模拟、场景建议。先别写成已经证实的算错 |
+## 4. 设计先行，授权与交接
 
-下面三条只是我建议先看的注意力，不是开工授权，也不要据此开实施单：
-
-1. 搜索和浏览器标题还停在「持续生产」。
-2. 文明页兵种链接和模拟器入口的语义还没裁，不要先加参数。
-3. 对照的死路先处理「能选但没有可用文明」，不要先怀疑计价。
-
-已关闭的 [#978](https://github.com/linhongcun/aoe2-analyzer/issues/978)、[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889)、[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888)、[#272](https://github.com/linhongcun/aoe2-analyzer/issues/272) 不要因为本文重开。带明确 Hold、维护者标注待其亲自决定的「待确认」或真实外部数据/依赖「阻塞」的事项不动；常规产品取舍按 [CONTRIBUTING 2026-11-26 授权](../CONTRIBUTING.md#issue-lifecycle)由产品经理查证事实后自主拍板推进，不再新增产品取舍类「待确认」卡住进度。维护者的持续发布授权只覆盖已经获准实现的更新，不能理解成可以自行认领所有开放 issue。见 [CONTRIBUTING](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)。
-
-## 4. 设计先行，授权和提单分开
-
-现行职责以 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色) 为准。站点由维护者自己使用。产品写核心任务、范围和取舍；设计负责好用和美观；运营反馈找不找得到、顺不顺、看得懂看不懂，但那不是上线门禁。
-
-我按这个顺序推进一件要改界面的事：
-
-1. 产品先写清玩家问题、核心任务、范围、不要做、怎样算正常。事实和假设分开。拿成熟系统或官方资料作对照时，写出处和适用边界。这节即 PRD，须含用户故事或主路径及需求评审记录。
-2. 每次体验设计交付都必须把完成态、可直接查看的设计图嵌入同一 Issue 正文，覆盖本次范围的主要界面和重要状态；文字、规格、线框或本地 ZIP 不能替代设计图。只有无实际 UI 改动（纯 docs/data，或经逐组件核实零界面/交互/状态/文案改动的纯逻辑修复）时不走 UX，由产品在体验设计节记录“不适用”、理由、已核对消费组件和范围（及实现中若触及界面/文案须留开发阶段协调 UX 补稿）后直接交软件开发；进入软件开发即获既定范围内的开发授权。这不适用于实际 UX 工作。
-3. 初始需求评审须写清范围、非目标和验收标准后再交体验设计。UX 完成后由体验设计者按原范围自查规格、图片可查看性及重要状态，直接交软件开发，不返回 `阶段:产品经理`或增加 PM 设计确认。缺图、图不可查看、状态/文案/规格不全或范围不符时，留在当前阶段记录缺项并串行请对应角色补齐原 Issue；初始评审缺范围/验收仍留在 `阶段:产品经理`。进入软件开发后发现问题，留在开发阶段记录阻塞并串行协调补齐，不回退、不扩大范围。进入开发即获授权，无需另设审批；角色按认领串行更新正文，不并行编辑。
-4. 按维护者 2026-11-15 更正，进入软件开发阶段即获得该 Issue 既定范围内的开发授权，无需再次请示；按维护者 2026-11-26 授权，常规产品取舍与待拍板项由产品经理查证事实后自主拍板推进，不再为此停下等待回复（上线后如发现问题再重提需求迭代修正）。范围、设计、授权依据和交接都更新在原 Issue 正文，不另提实施单。符合阶段与认领协议的事项允许自动认领；移除仅因禁止自动认领或缺少另行实施授权产生的限制，保留范围、设计与真实阻塞检查。
-5. 一个事项一个 Issue、一个实现 PR；不同角色依阶段在同一 Issue 正文交接。网站实现用 `Relates`，真实部署、线上核对和正式 Release 之后再关闭。纯仓库文档交付写明“仓库交付，无网站发布”，不标 `已部署`，可按合入即完成规则使用 `Fixes`。见 [TESTING 的交接说明](../docs/TESTING.md) 与 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
-
-设计通过只表示这张图落在已定范围内。它不等于引擎算对，也不等于现网已经是这张图。研究费用不会因为设计稿里出现了，就自动进入训练价。
-
-我不替开发写实现步骤，不替设计定颜色、字号和具体摆放，不替测试认证某一笔游戏数字已经算对。验收只看这次的核心任务、相关计算有没有按声明核对，以及必要的显示。
-
-测试和审阅的现行规则：
-
-- 独立复核由实现者之外完成，记下实际提交、范围、结果和未解决问题。见 [持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)。
-- 每份改动做必要冒烟，加上和这次 diff 直接相关的测试。纯布局不重跑无关计算或数据。报告分开写实际执行、CI 范围和未验证项。见 [TESTING](../docs/TESTING.md) 文首，以及 [验证投入](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
-- 不把四宽截图、先红用例写成每份 PR 的门禁。视口证据按第 5 节，按这次会坏的宽度准备。
-- 不同且相互独立、已获授权的 Issue 可由不同执行者在独立 worktree/分支并行处理/开发；每个具体执行者最多认领一个事项，同一 Issue 一个实现者、一个 PR。重叠段落或行为须先协调集成顺序，真实依赖和 Issue 原授权顺序优先；合并/发布由唯一集成执行者按序推进。历史暂停和单项授权仍以 MAINTENANCE 的当前状态为准，不得借并行扩大范围或恢复未授权的双线。具体规则见 [MAINTENANCE「按事项并行、合并发布串行」](../docs/MAINTENANCE.md#按事项并行合并发布串行)。
-
-旧设计索引曾记录「视觉 PR 须在 15 分钟内回复」；这只是历史记录，不是现行交接门槛。可查[基线索引原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/README.md)。当前交付按 [CONTRIBUTING](../CONTRIBUTING.md#issue-lifecycle) 在原 Issue 正文交接；视口检查按改动影响选择，不设固定矩阵。
+1. **PRD 先行**：写清问题、范围、非目标、用户故事、验收与依据，不替开发写实现步骤，不替设计定配色字号。
+2. **UX 路径二选一**：凡涉及任何布局、交互、视觉状态或新增/改动可见文案，必走 `阶段:体验设计` 并在正文嵌入完成态设计图；**仅**无实际 UI 改动（纯 docs/data，或经逐组件核实零布局/交互/状态/文案改动的纯逻辑修复）由产品经理在「体验设计」节写明不适用理由、已核对消费组件、依据 CONTRIBUTING 2026-11-26 授权及「触及 UI 须留开发协调 UX 补稿」约束后直交 `阶段:软件开发`。
+3. **单向交接与自主拍板**：UX 完成后按原范围自查直交 `阶段:软件开发`，不设 PM 设计确认往返；按 2026-11-15 更正进入 `阶段:软件开发` 即获既定范围内开发授权；按 2026-11-26 授权常规产品取舍由 PM 核实事实后自主拍板并留痕推进，不挂 `待确认` 卡进度。
+4. **验证与并发**：独立复核与按风险选测见 [TESTING](../docs/TESTING.md) 与 [CONTRIBUTING](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)；跨 Issue 并行与串行集成顺序见 [MAINTENANCE](../docs/MAINTENANCE.md#按事项并行合并发布串行)。网站实现 PR 用 `Relates #N`，纯仓库交付可 `Fixes #N` 且不标 `已部署`。
 
 ## 5. 怎样验收
 
-看一次改动，我问这些，而不是收齐一张固定矩阵：
-
-- **主路径。** 玩家按页面承诺的任务，从入口到结果走通。
-- **空、错、部分、失效。** 没有输入、链接非法、只有一部分行能算、快照过期或本站不支持时，页面说什么，有没有假的完整结果。
-- **跨页。** 文明、时代、科技、返回、分享。记下带了什么、丢了什么，页面有没有说明。生产三种模式的参数不能互相当成同一种数量。
-- **费用和时间。** 数字旁边能看出是目录价、有效训练价还是累计研究费；时间是游戏时间还是别的换算。研究投入不进训练费。未支持的效果有字。
-- **视口。** 这次改动会在桌面或手机上坏掉，就看那种，并写明实际打开的宽度。不要求每次都做 360、375、390、1280。没打开的宽度不要写成已覆盖。数字和「数字+单位」在窄宽下折成两行，仍然是显示问题；这是单条规则，不是四宽仪式。
-- **部署身份。** 用页脚的「构建」对上那一次部署，再谈现网。应用号来自 `package.json`，单独不能证明已上线，也不能证明未上线。见 [Layout.tsx](../src/app/Layout.tsx)。
-- **和范围一致。** 只核这次声明要改的计算或数据。不要用删掉断言来掩盖算错。也不要因为相邻工具没验算，就写成已经全部正确。
-
-设计通过之后，计算和数据仍要按这次范围核对。产品点头不等于引擎验收，也不等于现网验收。
+- **主路径与异常态**：主路径走通；空、错、部分、失效和不支持态有明确说明，不给假完整结果。
+- **跨页与费用口径**：明示携带与丢弃的上下文；目录价、有效训练价、累计研究费分清，研究费不进训练费。
+- **视口与数字不换行**：只核本次会坏的桌面/窄屏宽度并写明实测宽度（不设四宽仪式）；数值与「数字+单位」在窄屏不折行（`.num`/`.nw`）。
+- **部署身份与范围一致**：现网以页脚构建 SHA 为准；只核本次声明改动的计算与数据，不删断言掩盖算错。
 
 ## 6. 已经付过代价的经验
 
-本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订条目，没有可复用经验就不写。
+本节按主题归档；完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 合并或修订条目（单条 3–5 行，无新经验不写）。
 
-### 训练总价已经上线时，应用号还是旧的
+### 需求定界与自主拍板
 
-训练总价曾经只停在设计。2026-11-13 上午它随 [`471c136`](https://github.com/linhongcun/aoe2-analyzer/commit/471c13684c24754fc817defedfb4b7f924fa08e3) 进入 `main`（[#979](https://github.com/linhongcun/aoe2-analyzer/pull/979)），并部署成同一构建。那次提交里的应用号仍是 `v0.77.81`。[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) 已关闭。
+- **常规取舍先查先例再自主拍板，正文留痕**：收到运营「待拍板」清单先分三类——代码规则或已关闭先例已有答案的直接引用定案（如 `presetUpTo`、[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) 未建模可勾选、[#271](https://github.com/linhongcun/aoe2-analyzer/issues/271) `unitOptionLabel`），设计细节交 UX，真正产品取舍按 2026-11-26 授权核清最新源码、`.dat` 与连带消费端后直拍。严守 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10) 不为保旧加兼容层，在「决定与依据」写明定案、放弃方案、事实依据与已知边界，不碰 Hold/阻塞/偏离主题红线。反例：早期误推保旧方案、未核方案事实句（风琴炮/掷弹兵）或把 21 题全抛维护者。[#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054) · [#1263](https://github.com/linhongcun/aoe2-analyzer/issues/1263) · [#1322](https://github.com/linhongcun/aoe2-analyzer/issues/1322) · [#1364](https://github.com/linhongcun/aoe2-analyzer/issues/1364)–[#1369](https://github.com/linhongcun/aoe2-analyzer/issues/1369)
+- **覆盖范围按数据规则写，先分清「死路」与「缺口」**：范围写「凡数据满足某条件都算」并要求全目录遍历单测，排除也写规则而非手写 ID 名单（篇幅问题交 UX 不靠砍范围）；归类缺陷或功能建议前先查对象在其他入口能否计算。反例：[#1325](https://github.com/linhongcun/aoe2-analyzer/issues/1325) 手工表错 1 漏 2、[#1339](https://github.com/linhongcun/aoe2-analyzer/issues/1339) 漏 76 步兵、[#1340](https://github.com/linhongcun/aoe2-analyzer/issues/1340) 马普切聚落仅缺额外地点而非不可生产。
+- **判断上线看页脚构建，资料片/实拍/提示不越界外推**：应用号改过不能证明或否认部署，上线结论只对页脚构建 SHA（[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) / [PR #979](https://github.com/linhongcun/aoe2-analyzer/pull/979)）；购买目录收录不等于支持该玩法（[#1222](https://github.com/linhongcun/aoe2-analyzer/issues/1222) 编年史）；无版本号实拍仅采可辨色系不取官方色号、不外推他类（[#1216](https://github.com/linhongcun/aoe2-analyzer/issues/1216)）；文明提示按实际决策步骤归并，不按文明名整组搬迁（[#1200](https://github.com/linhongcun/aoe2-analyzer/issues/1200)）。
 
-若只看应用号，会以为功能还没上线，或反过来，看见后来的版本号就以为某一笔布局也已经在现网。写本文时 `main` 的应用号已是 `v0.77.92`。这只说明版本字段又改过，不能代替页脚构建。
+### 数据来源、`.dat` 语义与消费端全量核查
 
-避免：要说「玩家已经能用」，先看页脚构建和这次提交是不是同一个。应用号、数据版本、构建分三列读。不要重开 #978。
+- **机制清单以 `.dat` 效果链路为准，遇 `res: 33` 三方交叉锁定**：绝不凭游戏说明或记忆写作用名单，直接核查固定 `.dat`、`data/game/*.json` 与派生脚本（如 `projectile_scope.py`），并在验收中锁定正反例；遇 `res: 33`（`EffectFunction`）须交叉核对固定 `techs.json` 说明与 `trees.json` 本国目标，同时保留 `res: 33` 维持估算边界。反例：[#1403](https://github.com/linhongcun/aoe2-analyzer/issues/1403) 箭毒仅作用于步弓 5 单位与 5 座有攻建筑（不含 `6/7/185/598`）；[#1407](https://github.com/linhongcun/aoe2-analyzer/issues/1407) 城楼 `atk===0` 但 `atks.length===5`；[#1408](https://github.com/linhongcun/aoe2-analyzer/issues/1408) 爆破筏基础生命为 `40`；[#1464](https://github.com/linhongcun/aoe2-analyzer/issues/1464) 仅看 `Type 15` 漏算布图马普对科那 `2566/2568` 的 `-15%` 折价。
+- **改共享数据前双向核查字段级消费端（防漏改也防空验收）**：裁定源数据错译是否不可见前，按字段名全仓检索组件、对比页、拼音索引与元数据（[#1264](https://github.com/linhongcun/aoe2-analyzer/issues/1264) `civ.it` 仍在 [Compare.tsx](../src/features/compare/components/Compare.tsx) 渲染）；写纯数据页面验收前，核实目标组件确实读该字段而非只读同文件其他键，并核查条目从「仅文本」变可计算后对预设与 [mixedTrainingTransfer.ts](../src/features/duel/logic/mixedTrainingTransfer.ts) 的连锁影响（[#1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293) / [PR #1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318) `TechDetail` 不读 `eco`）。
+- **区分「原始派生非空」与「站内已解码」，先找不该显示的反例**：判定「是否已编码」锚定站内真实解码类目，排除不透明 `res: 33` 与未消费杂项（[#1448](https://github.com/linhongcun/aoe2-analyzer/issues/1448)、[#1446](https://github.com/linhongcun/aoe2-analyzer/issues/1446)）；向玩家展开单文明类别目标前先按文明可用性过滤；新字段验收必配正反例，区分零值、显式 `false` 与未知，能进目录不等于能进计算（[#1220](https://github.com/linhongcun/aoe2-analyzer/issues/1220) 骆驼容量、[#1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225) 重复研究）。
+- **扩 `.dat` 导出白名单或改 `effects.ts`/`BONUS_SRC` 前核三类反向回归**：扩导出前全量扫描是否与既有规则叠加越界（[#1474](https://github.com/linhongcun/aoe2-analyzer/issues/1474) `947` 叠 `322` 得 `minr=-1`）、是否污染无 `civs` 过滤展示页（`techDetailView.ts`）、是否给通用科技带上新 `eco` 属性误拦 `mixedTrainingTransfer` 或刷屏未建模胶囊（[#1482](https://github.com/linhongcun/aoe2-analyzer/issues/1482)）；改 `effects.ts`/`BONUS_SRC` 时守住 `CivDetail` 弹层冷加载隔离（禁静态引入 `CORE`）、同步核验 `SCENARIO_CIVS` 七国 `positionScenarioReview.json` 签名，并对 `sim:null` 实跑 `simulateBuild`/`calculateConstruction` 反事实而非静态推断（[#1497](https://github.com/linhongcun/aoe2-analyzer/issues/1497)）。
 
-### 功能在，按它的名字搜不到
+### 工具口径、跨页衔接与共享计算引擎
 
-训练总价和训练对照已经在生产页里，文明页也能进训练总价。登记表和页面 meta 仍只有「持续生产」。搜索只索引登记名和别名。
+- **跨模式统一展示或声称同源前，逐一核查底层函数调用点**：表面复用组件背后可能挂不同引擎（[#1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294) 1v1 与群战、[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) 详情折后价与 `unitCost`、[#1324](https://github.com/linhongcun/aoe2-analyzer/issues/1324) 驻军预览不经 `simulate`），未核到调用点不写成「修一处全生效」；跨工具接入加/乘混合科技须锁定与 `simulator.ts`（`TECH_EFFECTS` 键序）一致的叠加顺序，并用非交换算例（萨拉森 `331 + 47 + 454`）与 `ceil` 逐例验算（[#1469](https://github.com/linhongcun/aoe2-analyzer/issues/1469)）。
+- **分清「缺行小计 (`partial`)」「已算估算 (`estimated`)」与阻断 `warnings`**：全行计入但含未解码边界（如 `res: 33`）不得塞进 `partial`（会渲空未计入清单，缺估算态须走 UX [#1463](https://github.com/linhongcun/aoe2-analyzer/issues/1463)）；新增非阻断提示前核查领域 `warnings` 是否绑死 `balance`（如 `ecoPayoff.ts` [#1477](https://github.com/linhongcun/aoe2-analyzer/issues/1477)）；未实测客户端取整的非整数研究费按两位小数去尾数保留并明示边界，向账本新增 `.dat` 指令须逐字段核对翻译（[#1402](https://github.com/linhongcun/aoe2-analyzer/issues/1402)、[#1409](https://github.com/linhongcun/aoe2-analyzer/issues/1409) `res:85`）。
+- **改共享采集引擎 (`realCost.ts`) 或常驻开关前核清主包、前置与幂等**：`realCost.ts` 经 `Home` 落入主包链，严禁静态导入 `CORE`/`trees.json`；全站扫描区分三类 `requires`（时代/内部、`ecoTechs` 前置、非 `ecoTechs` 前置）在显式与缺省 `techIds` 两种口径的表现，同步透传 `gatherUnsupportedSources` 并核对 `bonusUsage317` 反事实（[#1473](https://github.com/linhongcun/aoe2-analyzer/issues/1473)）；开关升默认常驻须锁定旧链幂等去重与本方/盟友分界（[#1481](https://github.com/linhongcun/aoe2-analyzer/issues/1481)）。
+- **战斗机制正式建模连核运行期成对抵消、对照续显与阵容实算**：边界排查须同扫 `units.json` 与 `effects.json` 运行期规则（如 [#1500](https://github.com/linhongcun/aoe2-analyzer/issues/1500) 日本 `190` 对弓 `+2`/对矛 `-2` 须同乘 `1-r`）；移除未建模提示时同步核查 [UnitCivRankTable.tsx](../src/features/units/components/UnitCivRankTable.tsx) 已计入标签与 [DamageBreakdown.tsx](../src/features/duel/components/DamageBreakdown.tsx) 折算依据，更新受影响 `civFormations*.test.ts`/`bonusUsage317` 实算断言但不越权改固定来源文案。
+- **发现路径、跨页带文明与空态死路先裁语义**：发现入口（登记名/`searchAliases`/标签标题）落后于功能单独处理；跨页带文明跳计算器须写清哪些工具传参、按确定性规则落到合法初始实体（附缺兵反例并明示非最优推荐 [#1284](https://github.com/linhongcun/aoe2-analyzer/issues/1284)）；遇到「能选但零文明可用」（如对照城堡选游侠）先修空态与可选范围，不先怀疑计价。
 
-上午在构建 `471c136` 上，搜「训练总价」「训练对照」没有页面命中，搜「持续生产」有。页内主标题已是当前模式，浏览器标签仍是「持续生产」。`0db9c309` 的这条登记没有改掉。我没有在晚间现网上再搜一次。
+### 表单、无障碍、视觉资产与 UX 适用判定
 
-这是发现入口落后于功能，不是计价错误。避免：玩家会用来找它的名字，要进登记表的 label 或 `searchAliases`，并让浏览器标题和页内标题一致。导航要不要改成更上位的「生产」，是另一次取舍，不要和「先让两个词搜得到」绑成一单。本文不为此开工。
+- **纯逻辑修复走 UX 不适用须逐组件核实并写清三件事**：逐条验收核实零布局、交互、状态与可见文案改动后，在「体验设计」节写明（1）理由与已核对消费组件、（2）依据 CONTRIBUTING 2026-11-26 授权、（3）实现触及 UI 须留在开发阶段串行协调 UX 补稿，再直交 `阶段:软件开发`；涉及哪怕一句新增/修改文案或新 UI 状态仍须走 UX 附图。[#1323](https://github.com/linhongcun/aoe2-analyzer/issues/1323)–[#1326](https://github.com/linhongcun/aoe2-analyzer/issues/1326) · [#1334](https://github.com/linhongcun/aoe2-analyzer/issues/1334) · [#1407](https://github.com/linhongcun/aoe2-analyzer/issues/1407)
+- **表单就近报错与深链规范化分界**：汇总错误块保留唯一 `role="alert"`、行内字段提示仅经条件 `aria-describedby`（合法态移除防悬空）、计算阻断态禁用复制链接、同路由多模式一次收口（[#1455](https://github.com/linhongcun/aoe2-analyzer/issues/1455)、[#1460](https://github.com/linhongcun/aoe2-analyzer/issues/1460)）；「深链自动规范化 + 步进器」页面拆分外部非法深链与页内保草稿报错，`<input type="number">` 改 `type="text"` 前全仓查 E2E 是否锁 `spinbutton`，同步约束步进器与快捷芯片清错（[#1472](https://github.com/linhongcun/aoe2-analyzer/issues/1472)）。
+- **氛围插画先核素材异构、分层门禁与复合对比度**：PRD 固定写清五项——比例/体积/共图反例（`backgrounds.json` 异构与 2 对共图）与列表页体量取舍、跨模块下沉同步 `check-layers`/`check-docs-boundary`、遮罩走令牌/`mask-image`（`check-colors` 禁非令牌 `rgba()`）并人工核对「图+遮罩+字」复合 AA 及首屏焦区、并行方案互斥、自制图与原版游戏素材版权区分。[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313) · [#1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314)
 
-### 文明页丢掉文明，模拟器留着
+### 目录扩充、内容契约与规范维护
 
-文明页兵种区统一链到不带文明的单位页。这是基础百科的写法，不是某一行漏了查询参数。模拟器在选了文明之后会把文明带进模拟工作区。科技树格子在源码里带 `?civ=`，和兵种行不是同一条规则。
+- **共享内容源并行修订拆清格式、纠错、展示与目录总数**：固定来源未因主干重排失效时，纯格式单不动 JSON 保持纯仓库交付，重叠文明点名归属并定集成顺序（[#1264](https://github.com/linhongcun/aoe2-analyzer/issues/1264)–[#1268](https://github.com/linhongcun/aoe2-analyzer/issues/1268)）；多卡重复提示在并行修订期限定在展示组件层去重（[#1285](https://github.com/linhongcun/aoe2-analyzer/issues/1285)）；扩充收录先拿新增样本跑内容与契约 `maxItems` 并查旧测试筛选方式，PRD 分列净增、集成后全站总数与历史批次原名单（[#1439](https://github.com/linhongcun/aoe2-analyzer/issues/1439)）。
+- **来源归属、图谱对账与阵容/混编核验**：来源页夹杂他物须按固定 ID 逐条裁归属（[#1084](https://github.com/linhongcun/aoe2-analyzer/issues/1084)）；迁移按稳定 key 对账全图谱，不凭旧 `archive-only` 估算（[#1085](https://github.com/linhongcun/aoe2-analyzer/issues/1085)）；路线宣称「零城堡」先解码核对链接有无城堡独科或征招 `315` 并清无关科技（[#1441](https://github.com/linhongcun/aoe2-analyzer/issues/1441)–[#1444](https://github.com/linhongcun/aoe2-analyzer/issues/1444)）；引用混编战果须记全双方文明/时代/科技/队加及每排兵种、顺序与人数（[#1441](https://github.com/linhongcun/aoe2-analyzer/issues/1441)）。
+- **改角色或规范文档做三项反查**：核对新旧角色 PR 权限与 [check-pr-title.mjs](../scripts/check-pr-title.mjs) 闭环及禁止触碰代码/`data/`/核心规范红线；全仓检索文件名与 `#锚点` 外部引用锁定须保留锚点；同步核查 `README.md`、`docs/README.md`、`AGENTS.md`、`role/README.md` 索引口径与同文件集成顺序。[#1302](https://github.com/linhongcun/aoe2-analyzer/issues/1302)
 
-上午的具体路径：印度斯坦的古拉姆到 `#/unit/1747`，单位页不指定文明；模拟器筛选之后的古拉姆链接带 `civ=Hindustanis`。玩家从「正在看印度斯坦」点进去，会以为单位页已经是这个文明。
+## 7. 接手与长期原则
 
-避免：先写清这条链接要完成的任务。百科链接可以不预填，但页面要让人知道还要自己选文明。若决定改成带着上下文继续，就改这一条任务，并看返回、分享和模拟入口是否还一致。没裁语义之前，不要看见模拟器带了参数，就把文明页也一律加上。`CivRegionalUnits` 未挂到当前页，不能拿它证明主路径已经带文明。
+接手先核对 `origin/main` 与线上页脚三列，快速走一遍第 1 节三类任务与核心工具入口，再进入评审。改动玩家可见能力时顺手核查登记表名与 `searchAliases`、浏览器标题、站内入口及 README 路由描述（不为此无关扩范围）。关于数据入口（页眉「数据版本」与页脚）维持现状，不重开 [#272](https://github.com/linhongcun/aoe2-analyzer/issues/272)。
 
-### 城堡时代却能选游侠，是死路，不是已经证明的算错
-
-对照把时代固定在城堡，单位仍可选骑士、重装骑士和游侠，文案写「所选形态已解锁」。能不能生产，看这个文明在该时代是否过得了马厩门槛。提前解锁表里，勃艮第把重装骑士放到城堡；游侠没有这条提前。见 [availabilityAge.ts](../src/domain/availabilityAge.ts) 和 [production.ts](../src/domain/production.ts) 里 `trainingUnitAge` 与当前时代的比较。
-
-上午在 `471c136` 上：选重装骑士，只有勃艮第有结果，其余请求不可用；选游侠，已选文明全部不可用，结果标题是所选形态不可用；不带文明集合、直接打开游侠的链接，已选是 0，没有结果，也没有不可用说明。当天的文明个数会随数据和默认集合变，不要抄进新规格。
-
-这是「控件允许一个模型会全部拒绝的选择」。它没有证明单价算错。`0db9c309` 的允许列表、时代锁和「已解锁」文案还在；这几个文件自 `471c136` 以来没有被那串布局提交改到。晚间没有再点现网。
-
-避免：先看空态。要么不要提供当前条件下没有文明能造的选项，要么改时代档，要么在没有可用文明时写清原因。直达链接选中 0 个文明时，也不要沉默。在这条死路还在时，不要先开一笔「费用算错」的单。本文不为此开工。
-
-从另外两个模式切到对照会丢掉当前方案，这是现在的切换规则，不是上面这条死路。改死路时不要顺手改掉切换规则，除非范围里写了。
-
-### 产品取舍如何拍板（2026-11-26 维护者授权自主拍板）
-
-[#1054](https://github.com/linhongcun/aoe2-analyzer/issues/1054)（2026-11-17）、[空间碰撞模型](https://github.com/linhongcun/aoe2-analyzer/issues/1263)、[战斗回放](https://github.com/linhongcun/aoe2-analyzer/issues/1294)（2026-11-21 至 22 日）与[零准确度单位](https://github.com/linhongcun/aoe2-analyzer/issues/1322)（2026-11-22）的早期几轮拍板曾暴露三类质量坑：一是把保守保旧项（并列旧模型、保留旧进度条）标成推荐，违背 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10) 不为旧行为加兼容层的约定；二是定案后没回源码核清连带影响（如盈亏平衡复用同一群战函数、1v1 与群战不同源）；三是方案说明里的事实句未先逐条核对（对风琴炮和掷弹兵误写「实战输出不会高于此」）。
-
-2026-11-26 维护者正式明确授权：后续需要拍板的常规产品取舍直接由产品经理自主拍板推进，不再停下提问或贴 `待确认` 卡住进度；若上线或后续巡检发现问题，再重提需求迭代修正，同时仍应尽量做出正确的决策（见 [CONTRIBUTING「2026-11-26 维护者产品自主拍板授权」](../CONTRIBUTING.md#issue-lifecycle)）。
-
-以后拍板遵守四条纪律：
-
-1. **先核事实再定案**：对照最新 `origin/main` 源码、固定 `.dat`/游戏数据、现有规则与已关闭先例，核清方案说明里的每一句事实以及连带改动的消费端/分享链接/模式同源性，再选定方案。
-2. **对照「开发执行」做取舍**：不为保住旧模型、旧开关、旧链接口径加兼容层；除非对玩家有明确独立价值，优先一步替换或统一口径，避免分期带来长期双口径漂移。
-3. **正文留痕便于回溯**：在原 Issue「产品经理」节的「决定与依据」写清最终拍板结论、放弃的备选方案、事实依据与已知边界；后续若发现偏差，运营或分析师可据此精准重提需求。
-4. **守住不越界红线**：仍不解除维护者明确设置的 Hold、不越过真实外部依赖/固定数据缺口（`阻塞`）、不偏离「资料 + 计算」主题开无关大功能。仅当维护者主动发问或确涉 Hold/重大方向变化时，再单独给出少量互斥选择题（先逐句核实选项内事实，放在批量汇总之前）。
-
-### 来源页的归属，不能代替条目归属
-
-[#1084](https://github.com/linhongcun/aoe2-analyzer/issues/1084) 的需求评审核对发现，城镇中心来源页的更新日志夹有村民自愈、研究科技得金等条目，瞭望箭塔页也有引入草药、异教的记录。建筑来源索引与本站目录的条目总数相同，名称却有采矿营地/采矿场、定居点/聚落等差异；条数对上并不能证明身份逐项对上。见[本轮来源与范围核对](https://app.devin.ai/sessions/429379609cbe4ad880517da084876cb9)。这些是来源内容的观察，不是已经证实的游戏机制。
-
-原因是页面按资料主题组织，原文可能涉及其他实体、升级或文明条件。避免：先用固定目录 ID 和证据核对身份，再逐条裁定效果实际作用于谁、具有什么条件；不能把整页都归给页名对象，也不能仅凭同名或同数值合并。覆盖验收分别写清目录对象、已检查章节、原始条目及处理结论的分母；来源已定位不等于已检查，条目已处理不等于事实已核实。保留原文、映射或待核/排除理由，让下个角色能复查，未检查的范围不要计为完成。
-
-### 早期迁移标记，不等于当前共享图谱的缺项
-
-[#1085](https://github.com/linhongcun/aoe2-analyzer/issues/1085) 需求评审按旧档案 key 对账时发现，根 `legacyMap` 仍标为 `archive-only` 的补给研究时间、行会市场价格等记录，已由单位或建筑阶段接入共享主张；另有条目确实尚未接入。只按旧标记估算待迁移量，会把已有证据重复导入。见[本轮对账与产品决定](https://app.devin.ai/sessions/81803449c8884447a06bb33630c814ba)。
-
-原因是早期按文明迁移的处置与后来跨实体新增的共享证据分处不同记录，历史处置不是当前图谱的完整状态。避免：先用稳定 key 对照原件及全部已发布 event/claim/effect，再区分“已有主张但缺本实体投影”和“确无主张”；核对身份、条件与核验等级后，分别补关系或补主张。PRD 的迁移分母与验收写逐 key 去向，既不因旧 `archive-only` 重建事件，也不因已有主张就宣称本实体页面已接入；不改旧处置字段来凑完成率。
-
-### 游戏实拍能认出单位，不一定能认出版号
-
-在[科技树用色评审](https://github.com/linhongcun/aoe2-analyzer/issues/1216)里，旧版官方图例能说明当时的配色，固定版本的树数据能确认单位身份，两者都不能证明现版节点长什么样。维护者后来补的两张孟加拉实拍能用提示文字和建筑分支定位战车、骑象射手，也看得出卡片底色，不必把悬停亮框猜成身份色。
-
-复评时先写清新证据回答了哪个问题。这次接受的是「让两类单位沿用实拍中可辨的深紫、蓝紫色系」，不是「精确复刻指定版本」。照片未显示版本号，模组状态也未知：不从拍屏取官方色号，不把单位结论外推到建筑和科技。把收窄后的结论放在原单历史暂缓记录之前；设计验收仍要能用形状或文字辨别，不让颜色成为唯一线索。
-
-### 先找一个不该显示的反例，再决定字段怎么用
-
-[驻军容量](https://github.com/linhongcun/aoe2-analyzer/issues/1220)评审里，运输船的基础容量能回答玩家的问题，但骆驼系也有非零原值，含义未核，不能据此写「能载人」。[重复研究](https://github.com/linhongcun/aoe2-analyzer/issues/1225)则相反：显式的 `false` 是有意义的值，不是缺失；即使是 `true`，也不能在普通对局中标为「可重复」。
-
-写验收时把「保留哪个源值」和「在什么条件下能告诉玩家什么」分开。按固定版本和对象 ID 各选一条应显示、一条不应显示的记录，区分零值、否和未知。能进目录不等于能进计算：若来源只支持查询基础值，就不要用它承诺实战结果。
-
-### 购买目录收录了资料片，不等于本站支持它的玩法
-
-[编年史评审](https://github.com/linhongcun/aoe2-analyzer/issues/1222)起于上游有文明树、本站没有。购买页确实列了内容包，但雅典树用的是编年史的「古典时代」，不能当成常规 DE 的「城堡时代」。这不是补一个漏字段，而是要不要支持另一套游戏规则。
-
-遇到类似缺口，先分开问：玩家要查购买信息、查玩法，还是用工具计算？后两项不能由第一项推定。按维护者的决定，编年史玩法不纳入本站；这不要求删除已有购买资料，也不替罗马复兴等其他模式作决定。
-
-### 提示跟着玩家要做的决定走，不只看文明名
-
-[文明提示归并](https://github.com/linhongcun/aoe2-analyzer/issues/1200)里，同是波斯提示，卡曼达兰会改变弩手补员时要付哪种资源，适合放进补员步骤；城镇中心生命值却不影响这条路线里的决定，应留在原栏。按文明整组搬迁，要么会让玩家把无关提示当成指令，要么会删掉仍可查的知识。
-
-评审时拿同一版本的提示逐条对照实际路线：能说清「在哪一步、什么前提下、行动有何不同」才归入该步。验收既查迁入处的前提和行动，也查没有对应步骤的提示仍能找到；不为搬完清单编一条新路线。
-
-### 单一页面没复现源数据错译，不代表全站不可见
-
-在[数据与策略纠错评审](https://github.com/linhongcun/aoe2-analyzer/issues/1264)里，波希米亚的 `Bohemians.it` 在 `data/game/civs.json` 中把胡斯革新写反成「消耗黄金，而不消耗食物」，但运营复核文明页和科技详情页均未复现——因为文明详情已改为直接展示 `tech.desc`。
-
-原因是同一数据字段常被多个页面复用，单页改用新数据源后，旧字段仍可能在其他入口直接渲染：全仓核对消费端后发现[文明对比页](../src/features/compare/components/Compare.tsx)的「帝王科技」行仍直接读 `civ.it`。以后裁定一条源数据错译是否“玩家不可见”前，先按字段名全仓检索组件、搜索/拼音索引、对比页与元数据生成，确认全部消费端后再定优先级与修复路径，不因主详情页已绕过就降级忽略。
-
-### 纯数据单走 UX 不适用时，页面验收只写这一页真读的字段
-
-[巨型投石机漏映射修复](https://github.com/linhongcun/aoe2-analyzer/issues/1293)的评审里，我按纯数据缺陷记了 UX 不适用，非目标写「不修改任何前端页面组件」，理由是模拟器和科技详情页都直接读 `effects.json`。验收标准却要求 `#/tech/461` 显示溅射半径 `+0.5`。开发核对后发现，[科技详情页](../src/features/techs/components/TechDetail.tsx)只渲染 `rules` 和游戏说明，不读这条科技的 `eco`，而溅射半径正落在 `eco` 里。这条验收和非目标不能同时成立。开发在原 Issue 的技术方案里把它改成数据层断言，并写明要在页面上显示须另提界面需求，随 [#1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318) 交付。
-
-同一次修复还带出一处评审没列的行为变化。弹射器对巨型投石机从「仅文本」变成可计算之后，日本混编点「满科技」预设会自动勾上它；它的 `eco` 里有一条[训练带入逻辑](../src/features/duel/logic/mixedTrainingTransfer.ts)尚不认识的工作效率项，「计算训练费用」因此被保守拦下。数据没有错，拦截也是既有规则，但玩家会在一个没写进范围的页面上看到变化。
-
-原因是我只核到「这一页读不读这个文件」，没核到「这一页读不读这个字段」。同一个文件里，`rules` 和 `eco` 各有各的读取方。以后写纯数据单，每条页面级验收先找到渲染它的组件和它读的字段；找不到，就写成数据层验收，或者承认有界面改动、不走 UX 不适用。修复会让一条记录从「仅文本」变成可计算、从空变成非空时，再按字段查一遍其余读取方（预设、带入、计价、搜索），把会跟着变的行为写进范围或非目标。上一条防的是漏掉读取方，这一条防的是假定有读取方。
-
-### 只改计算、不动界面的单子，经逐组件核实后可直判 UX 不适用
-
-2026-11-22 这批十条里，有五条修的是计算或可用性判断：[显式零值攻击类别](https://github.com/linhongcun/aoe2-analyzer/issues/1323)、[升时代自动效果](https://github.com/linhongcun/aoe2-analyzer/issues/1324)、[提前解锁时代](https://github.com/linhongcun/aoe2-analyzer/issues/1325)、[强化教堂训练](https://github.com/linhongcun/aoe2-analyzer/issues/1326)、[混编带入训练费用](https://github.com/linhongcun/aoe2-analyzer/issues/1334)，2026-11-25 又遇到[建筑模拟器三项缺陷](https://github.com/linhongcun/aoe2-analyzer/issues/1407)。当时因 [CONTRIBUTING](../CONTRIBUTING.md#issue-lifecycle) 仅写「纯 docs/data 且无 UI」，曾逐批请示维护者，维护者两次均同意直接交软件开发（「不涉及就不用管」）。
-
-2026-11-26 维护者进一步授权产品经理自主拍板不卡进度，且 [CONTRIBUTING](../CONTRIBUTING.md#issue-lifecycle) 已同步将 UX 不适用范围更新为「无实际 UI 改动（纯 docs/data，或经逐组件核实零界面布局、交互、状态与玩家可见文案改动的纯逻辑修复）」。以后遇到纯逻辑/计算修复：先按上一条办法逐条验收核对实际渲染组件，确认不新增也不改动任何布局、交互、状态或玩家可见文案后，由产品经理直接在「体验设计」节写明三件事并交 `阶段:软件开发`——（1）无界面改动的理由与已核对的消费组件；（2）依据 [CONTRIBUTING 2026-11-26 授权](../CONTRIBUTING.md#issue-lifecycle)；（3）实现中若发现需要触及界面、状态或文案，须留在开发阶段串行协调 UX 补稿。凡涉及哪怕一句新增/修改文案或新 UI 状态的事项，仍须走 `阶段:体验设计` 并嵌入完成态设计图。
-
-### 批量修订共享内容源时，先拆清格式、纠错与内容边界
-
-同一批评审的[事实纠错](https://github.com/linhongcun/aoe2-analyzer/issues/1264)、[三批阵容修订](https://github.com/linhongcun/aoe2-analyzer/issues/1265)（含 [#1266](https://github.com/linhongcun/aoe2-analyzer/issues/1266)、[#1267](https://github.com/linhongcun/aoe2-analyzer/issues/1267)）与[策略文档格式规范化](https://github.com/linhongcun/aoe2-analyzer/issues/1268)同时触及 `role/game-strategy.md` 和 `data/content/civ-formations.json`，且越南、波斯、印度斯坦、马来、波希米亚、中国、女真跨单重叠。运营核实显示，既有线上阵容的固定来源行指向历史提交，仅重排 `main` 上的文档不会打断既有链接。
-
-原因是若未分开「文档阅读结构」与「线上固定来源契约」，在纯格式单里顺手刷新 JSON 来源会把纯文档交付拖成涉网交付，并让后续内容单反复冲突返工。以后批量评审共享同一内容源的事项时，先核对固定契约是否真的因主干重排失效；未失效时让纯格式单不动 JSON 保持纯仓库交付，在每张单的非目标里点名重叠对象的归属单号，并写出建议集成顺序（事实纠错 → 纯格式统一 → 分批内容修订）。
-
-### 新增收录对象时，分别核对全站总数和历史批次
-
-评审草原四国时，运营找到了七份写死全站文明数和路线数的测试。把四个文明临时加进样本后，内容和发布契约却各自报了 `maxItems`。两份 schema 都把文明数锁在 33。还有一份回归用“排除后来新增的文明”选出最初的 28 国，新文明也会落入这组，即使全站总数已经改对，历史断言仍会失败。[草原四国评审](https://github.com/linhongcun/aoe2-analyzer/issues/1439)
-
-以后评审扩充目录，先拿新增一项的样本跑内容和契约两侧的校验，再查旧测试怎样选出它要保护的对象。PRD 分别写清本次净增、集成后全站总数和原批次要保留的名单。多批共改同一目录时，后合入的一批按最新基线重算总数，历史批次仍按原名单验收。
-
-### 复核混编战果时，记录双方每排的单位和人数
-
-同样写「萨拉森翼骑兵＋马穆鲁克对不列颠枪弓」，固定我方配兵后，对方用 33 长戟＋28 劲弩，我方剩 13 名马穆鲁克；换成既有回归里的 34 长戟＋35 劲弩，对方反而剩 16 名劲弩手。两套输入都能计算。「约 4000 资源」和兵种名称不足以复现胜负。[五国阵容评审与复算条件](https://github.com/linhongcun/aoe2-analyzer/issues/1441)
-
-下次评审引用混编结果，先从链接还原双方的文明、时代、科技、队加，以及每排的兵种、顺序和人数，再核实际投入与逐排幸存数。若草稿只给了预算和结论，在原 Issue 补一组可重开的输入；条件不同的历史用例可作对照。路线允许换兵时，把战果写在实际参战的分支下。
-
-### 跨页带文明跳计算器时，先约定目标页的合法初始实体
-
-在[对局助手跨工具联动评审](https://github.com/linhongcun/aoe2-analyzer/issues/1284)里，从 `#/matchup` 带入双方文明跳转 `#/duel` 时，[Duel.tsx](../src/features/duel/components/Duel.tsx) 默认 A/B 单位是游侠与长戟兵；如果只替换双方文明而不约束目标页初始单位，选到无游侠或无长戟文明（如阿兹特克、玛雅）一跳进去就会落入「造不了该单位」的不可用态（见 [DuelSelection.tsx](../src/features/duel/components/DuelSelection.tsx)），无法直接出属性与战斗结果。
-
-原因是跨页只传上下文文明却没有对齐目标计算器的实体可用性契约；而为了避死路又容易滑向违背 [#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 的“自动推荐最优对抗兵种”。以后裁定带文明跳转计算工具时，PRD 须同时写清三件事：哪些下游工具确实与文明相关、哪些本就独立不硬传参；目标页按确定性规则落到该文明真实可用的合法初始实体（验收必附缺兵文明反例）；并明示初始单位只是可算占位而非最优推荐。
-
-### 内容数据正在并行修订时，展示冗余先限定在渲染层收口
-
-在[文明详情与对比精修评审](https://github.com/linhongcun/aoe2-analyzer/issues/1285)里，法兰克推荐阵容的 3 条路线在页面上重复出现多次“免费磨坊”限制说明，同时 `data/content/civ-formations.json` 正由开发阶段的 [#1265](https://github.com/linhongcun/aoe2-analyzer/issues/1265)–[#1267](https://github.com/linhongcun/aoe2-analyzer/issues/1267) 分批修订。若在展示精修单里直接删改 JSON 文本去重，既会引发跨单合并冲突，也会破坏单条路线数据自包含与发布契约。
-
-原因是把「单条内容记录保持自包含」与「多卡同屏展示不刷屏」混成了同一步改动。以后评审多卡/多行重复提示的体验优化前，先查对应内容 JSON 是否有在研开放单；当数据需逐条自包含或正被并行修订时，将去重收口限定在[展示组件层](../src/features/civs/components/CivFormations.tsx)（合并跨卡完全相同的通用提示、保留单卡独有限制），并在非目标中明确禁止改动共享 JSON 与契约文件。
-
-### 拆角色或改规范文档时，同时核查权限闭环、跨文件锚点与索引口径
-
-在[产品运营与游戏分析师角色拆分评审](https://github.com/linhongcun/aoe2-analyzer/issues/1302)里，拟将独立于五阶段之外的「游戏分析师」从产品运营中拆出并接管 [game-strategy.md](game-strategy.md) 时，发现两处单看目标文件容易漏掉的断层：一是 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 与 [MAINTENANCE](../docs/MAINTENANCE.md) 当时均将纯文档回写 PR 例外挂钩于阶段交接之后，若只移除产品运营对攻略文档的写入句而不为非流水线角色补明纯文档 PR 范围、红线和标题规则，会直接造成权限空白；二是全仓反查后才发现 [game-strategy.md](game-strategy.md) 仍引用 [印度斯坦训练总价案例](product-operations.md#印度斯坦混编要的是训练总价)，且评审基线中 `README.md`、`docs/README.md` 与 `role/README.md` 存在「四个角色的交接」、遗漏产品运营入口和「八文明案例」等跨文档漂移。
-
-原因是规范与角色文档往往通过隐性权限前提和页内锚点互相咬合，局部删改会打破闭环。以后评审已获维护者授权的角色拆分、模板改名或流程规范调整前，固定完成三项反查：核对新旧角色对应的 PR 触发条件与 [PR 标题校验](../scripts/check-pr-title.mjs) 是否形成无死角闭环（同时写清严禁触碰代码、`data/` 与核心规范的红线）；按文件名与 `#锚点` 全仓检索外部引用，把必须保留的标题锚点写进验收标准；一并核查 `README.md`、`docs/README.md`、`AGENTS.md`、`role/README.md` 索引口径，并与同文件在研开放单约定集成顺序。
-
-### 跨模式统一展示前，先核对各模式底层计算是否同源
-
-在[战斗可视化回放评审](https://github.com/linhongcun/aoe2-analyzer/issues/1294)里，维护者拍板将 1v1、群战、等资源与混编统一升级为同一套战线可视化舞台（含 1v1 展示双方接近、先手射击与近战对砍）。核查评审基线源码后发现，[duel.ts](../src/domain/duel.ts) 与 [battleReplay.ts](../src/domain/battleReplay.ts) 当时的 1v1 仍按 `t=0` 贴脸估算（忽略射程与接近），与群战/混编所用的 [contactFight.ts](../src/domain/contactFight.ts) 并不同源；同期[详情页折后价评审](https://github.com/linhongcun/aoe2-analyzer/issues/1297)里，生产/PK 已走 [unitCost.ts](../src/domain/unitCost.ts)，而单位与建筑详情页当时仍停留在 `discountedCost` 或原始 `b.cost`。
-
-原因是界面上看似只是「复用同一个展示组件」，实则不同模式背后可能挂着两套口径不同的领域函数；若不先对齐数据源就硬画统一视图，要么让动画/价格与实际结算结果自相矛盾，要么在实现阶段悄悄改变核心算法却缺少验收与降级规格。以后裁定跨模式统一展示或跨页对齐能力前，先逐模式核查底层领域函数是否同源：不同源时须在 PRD 中明确「统一切换同源引擎并写出不支持项的降级反例（如自爆或缺少碰撞数据的单位）」，或明示分口径展示，绝不允许界面呈现与结算脱节的装饰性过程。
-
-2026-11-22 在[升时代自动效果](https://github.com/linhongcun/aoe2-analyzer/issues/1324)里我又错了一次，方向相反。PRD 写「模拟器、PK、建筑驻军预览都经 `simulate` 套用这些效果」，交接后复查才发现[建筑驻军预览](../src/domain/garrisonGeneral.ts)有自己的属性计算，不经 `simulate`，只好在原 Issue 里带日期更正。写「这几处同源、修一处都生效」之前，每一处都要查到调用点；查不到的写成未核实，不列进范围。同一批的[强化教堂训练](https://github.com/linhongcun/aoe2-analyzer/issues/1326)和[弹道学适用](https://github.com/linhongcun/aoe2-analyzer/issues/1328)是逐个列了调用方才写的，没有出这个问题。
-
-### 复用或新增氛围插画前，先核素材异构反例、分层门禁与复合对比度
-
-在[文明素描原画复用评审](https://github.com/linhongcun/aoe2-analyzer/issues/1313)与[首页古典油画氛围评审](https://github.com/linhongcun/aoe2-analyzer/issues/1314)里，逐项核查后发现四类容易在设计与开发阶段返工的隐性约束：一是 [backgrounds.json](../data/reference/civs/backgrounds.json) 收录的 56 张文明素描并非同一比例（36 张近似 `1:1` 方图、20 张 `~1.89:1` 宽图），且 [backgrounds.source.json](../data/reference/civs/backgrounds.source.json) 存在 2 对上游共图文明（波希米亚/条顿、意大利/西西里），若盲目接入 `#/civs` 56 格列表还会触发约 4.20 MiB 流量负担；二是跨功能复用原有 `src/features/civs/assets/` 资产会同时触发 [check-layers.mjs](../scripts/check-layers.mjs) 的 `feature-to-feature` 与 `shared-upward` 双向限制，必须整体下沉共享层并同步 [check-docs-boundary.mjs](../scripts/check-docs-boundary.mjs) 白名单；三是 [check-colors.mjs](../scripts/check-colors.mjs) 禁止在非 `tokens.css` 写硬编码颜色或 `rgba()` 遮罩，且 [contrast.py](../scripts/contrast.py) 不校验「图片 + 遮罩 + 文字」复合对比度；四是新增至 `public/img/` 的运行时图片须经 `img()` 兼容 GitHub Pages 子路径。
-
-原因是静态素材改造表面只改视觉，实则牵动比例分布、网络体量、分层/颜色/图片边界门禁与双主题版权口径。以后评审复用或新增氛围插画需求前，先核素材清单的比例、体积与共图反例，在 PRD 中写清五件事：单页加载体量与列表页取舍；跨模块共享时的资产迁移与门禁清单；双主题遮罩走令牌/`mask-image` 并人工复核复合 WCAG AA 对比度（及桌面首屏高度与窄屏焦区）；并行视觉方案的页面归属互斥；自制/AI 氛围图与 Microsoft 原版游戏素材的版权区分声明。
-
-### 覆盖范围按数据规则写，不按单位名单写
-
-2026-11-22 连着几单都撞上手写的 ID 名单。[提前解锁时代](https://github.com/linhongcun/aoe2-analyzer/issues/1325)的手工表登记了 9 条，对照文明树错了 1 条，另漏了 2 条；[升时代自动变化](https://github.com/linhongcun/aoe2-analyzer/issues/1339)的详情区写死只对斥候骑兵出现，数据里另有骆驼斥候、弗拉芒民兵、运输船和 76 个步兵的同类效果一直没显示。运营问要不要把追踪术的 76 个步兵列为非目标，理由是信息太多；可一旦排除，代码里就又多一张名单。
-
-以后写覆盖范围，写「凡数据里满足某条件的都算」，并在验收里要求一条遍历全部目录对象的测试，不写「这几个单位」。条件之外的确实要排除，写成规则（如「组合触发的不算」「作用于建筑的不算」），不写 ID。担心信息太多，交给设计处理篇幅，不用砍范围来解决。
-
-同一轮我还归错了一次类：我提 [#1340](https://github.com/linhongcun/aoe2-analyzer/issues/1340) 时把马普切聚落说成「和强化教堂同类的生产不可用」，提单前查数据才发现这些单位在兵营、靶场照常能算，缺的只是一个额外地点。归类成「死路」还是「功能缺口」，先查目标对象在别的入口能不能用，再下结论；这决定它是缺陷还是功能建议（见第 3 节的分类表）。
-
-### 运营列的待拍板项，先查现有规则和先例能不能回答
-
-2026-11-23 这一批五单（[#1364](https://github.com/linhongcun/aoe2-analyzer/issues/1364)、[#1366](https://github.com/linhongcun/aoe2-analyzer/issues/1366)、[#1367](https://github.com/linhongcun/aoe2-analyzer/issues/1367)、[#1368](https://github.com/linhongcun/aoe2-analyzer/issues/1368)、[#1369](https://github.com/linhongcun/aoe2-analyzer/issues/1369)），产品运营一共列了 21 个「待产品经理拍板」项。逐项回源码和先例查过之后，真正要问维护者的只剩 2 个：科技树去角标后要不要保留「不能只靠颜色」的旧约定，以及单位 PK 里要不要保留零造价的精锐钦察 `1260`。其余的都有现成答案，举几例：
-
-- 「乌兹钢要不要纳入满科技预设」：[`presetUpTo`](../src/domain/simulator.ts) 只纳入有效果的科技。乌兹钢一旦建模就有了效果，自动进入预设，不用另定策略。
-- 「回血科技能不能勾选、进不进预设」：[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) 的 `applicableUnmodeledTechIds` 已经让这类科技可勾选、不改数值；它们没有效果，按上面的 `presetUpTo` 也不进预设。沿用即可。
-- 「同名单位在选择器里怎么区分」：团队规划已有 [#271](https://github.com/linhongcun/aoe2-analyzer/issues/271) 的 `unitOptionLabel` 规则，挪到共享层共用，不另写一套。
-- 「改策略文档后，固定来源指针沿用旧提交还是重签」：契约里本来就混用 9 个固定提交，可见以往是哪条改了正文才重签哪条。
-- 「要不要走体验设计」「覆盖范围列不列名单」：分别由 CONTRIBUTING 的 UX 不适用条件和上一条「覆盖范围按数据规则写」回答。
-
-原因是运营列问题时按「这里有个选择」列，不区分这是产品取舍、已有规则，还是实现细节；照单全问，维护者要答二十来题，其中大半的答案仓库里早就有。
-
-以后拿到待拍板清单，先逐项分三类：
-
-1. 现有代码规则或已关闭 Issue 的先例已经回答的，在 PRD「决定与依据」里写明依据的文件、行号或单号，直接定。
-2. 属于设计取舍的，写约束交体验设计。
-3. 影响玩家可见结果、且仓库里查不到现成依据的产品取舍，按 2026-11-26 维护者自主拍板授权，先查清最新源码、固定 `.dat` 数据与玩家核心任务，再对照 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10) 直接拍板定案推进，在「决定与依据」写清定案、放弃的备选方案与已知边界，不再停下向维护者提问或挂「待确认」卡住进度；若后续巡检发现偏差，再重提需求迭代修正。
-
-无论照先例还是自主拍板定下的，都要再查一遍它会连带改变什么，例如乌兹钢进预设后，达罗毗荼步兵和骑兵的满科技结果都会变，这要写进范围。
-
-### 机制作用清单以 `.dat` 效果链路为准，不凭说明文案反推
-
-2026-11-25 评审中连续三单暴露出“说明文案或经验记忆与固定数据不一致”：在[数据管线与未建模提示修复](https://github.com/linhongcun/aoe2-analyzer/issues/1403)里，原单和运营复核均按游戏说明把图皮 `箭毒 (1393)` 写成作用于掷矛手（`6/7`）、投石手（`185`）且建筑侧只列三座箭塔（`79/234/235`）；直查固定 `.dat` 投射物链路（[projectile_scope.py](../scripts/projectile_scope.py) 与 `army_research.json` 节点 `1393`）后才核实，箭毒在兵种侧**仅作用于步弓系 5 个单位（`4/24/492/2579/2581`）**、不含掷矛与投石，建筑侧作用于图皮全部 5 座有攻防御建筑与城镇中心（`79/234/235/82/109`，不含无攻击的 `598 哨站`）。同期[建筑模拟器修复](https://github.com/linhongcun/aoe2-analyzer/issues/1407)直查 `buildings.json` 核实西西里 `1665 城楼` 虽基础 `atk === 0` 但 `atks.length === 5`（随时代获得攻击），若按 `b.atk === 0` 写过滤验收会直接误杀其进攻科技；[死科技过滤](https://github.com/linhongcun/aoe2-analyzer/issues/1408)直查 `units.json` 核实爆破筏 `1104` 基础生命是 `40`（错显 `60`），更正了原单误写的 `45 / 67.5`。
-
-原因是游戏内文本常做笼统概括，而需求草稿里的数值和兵种名单容易沿用印象；若不回 `.dat` 和派生数据复核就把草稿写进 PRD 验收标准，会把错误清单锁死进测试。同时存在反面陷阱：当 `.dat` 通过 `res: 33`（`EffectFunction`）把部分目标交给游戏脚本执行时，仅看原始 `Type 15` 字节命令反而会漏掉本国明确对象——例如[布图马普漏算科那评审](https://github.com/linhongcun/aoe2-analyzer/issues/1464)中，[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) 只读了 `2569`/`2571` 的 `Type 15` 命令并把「科那不改价」写进测试，漏掉了 `res: 33 = 51`（`EffectFunction51`）对马普切本国城堡独特单位 `2566`/`2568` 的 `-15%` 折价，导致等资源兵量低估约 18% 及混编 PK 胜负反转。以后评审涉及科技/被动/建筑作用范围或基础数值的 Issue，必须直接查验固定 `.dat`、`data/game/*.json` 与现有派生脚本（如 `projectile_scope.py`），遇 `res: 33` 时交叉核对固定 `techs.json` 官方说明与 `trees.json` 本国明确目标（仅在三方固定源交叉锁定时补充本国目标，同时保留 `res: 33` 维持全站估算边界，不推演未核实友军侧），并在验收标准里同时写明**数据规则**与**正反例锁定**（例如箭毒排除 `6/7/185/598`、无攻过滤排除 `1665 城楼`、布图马普排除马普切 `93 长矛兵`）。
-
-### 未实测客户端取整的非整数费用，保留两位小数并明示边界
-
-在[阵容研究费四类缺陷](https://github.com/linhongcun/aoe2-analyzer/issues/1402)与[中国研究费倍率与不可达节点修复](https://github.com/linhongcun/aoe2-analyzer/issues/1409)中，[armyCost.ts](../src/domain/armyCost.ts) 原先对所有折后非整数研究费一律 fail-closed 归零，导致全站 11 国 38 项研究（保加利亚鼓风炉 `137.5`、图皮弩手 `87.5` / 纵火 `37.5` 等）及中国帝王 `-15%` 绝大多数科技长期降级 `partial=true` 或全线不可算。2026-11-25 请示维护者后，维护者明确拍板「小数点后面保留两个小数就行」——既不凭猜测写死未实测的客户端整数取整，也不为此长期闭锁主要文明。
-
-同时核查渲染消费端 [ArmyLedger.tsx](../src/features/production/ArmyLedger.tsx) 还抓出一处隐性前端缺陷：中国 `res:85` 在 `.dat` 中编码为 `Type=1, A=85, B=0, C=-1, D=0.8500000238418579`，若只改领域层而按“纯逻辑”跳过体验设计，账本展开后会按资源/操作映射错显为「食物加上 0.8500000238418579」。以后遇到固定 `.dat` 折扣产生非整数费用且尚无客户端取整实证时，优先按「`Math.round(v * 100) / 100` 保留至多两位小数（去 `.00` 与 float32 尾数）＋页面/账本明示未做客户端取整实测」落地；凡向研究账本或依据面板新增 `.dat` 指令类型，裁定 UX 适用性前务必逐字段核对渲染组件如何把 `Type/A/B/C/D` 译成玩家可见文案。
-
-### 路线宣称「零城堡」前，核对链接里有没有城堡独科和征招 `315`
-
-在 2026-11-26 连续四批阵容评审（[#1441](https://github.com/linhongcun/aoe2-analyzer/issues/1441)、[#1442](https://github.com/linhongcun/aoe2-analyzer/issues/1442)、[#1443](https://github.com/linhongcun/aoe2-analyzer/issues/1443)、[#1444](https://github.com/linhongcun/aoe2-analyzer/issues/1444)）里，多条标注「零城堡」的路线，其草拟的持续生产与研究链接里仍勾着城堡独特科技（`b=82`）和征招（`315`，同样建在城堡），把所需村民数抬高了 25%–33%，与「零城堡」承诺直接自相矛盾；同时持续生产草稿还带入了与所选陆军无关的科技（如造船匠 `373`、丝绸之路 `499`、罗斯堡垒 `455`、环游世界 `1404`，以及非火药路线里的化学 `47`）。
-
-原因是生成链接时默认勾满该文明全部可用科技，没有逐项反查科技建筑前置和单位适用面。以后评审任何标注「零城堡 / 无城堡」的路线或生产链接时，必须解码核对 `techs` 与 `actargets`：若保留 `315` 或城堡独科，文案改为「不占城堡产兵队列（点出对应城堡独科/征招仍需补 1 座城堡）」，不再称「零城堡」；若主打纯无城版本，则移除 `315` 与城堡独科并重算纯无城村民数；同时清掉不改当前兵种产速、采集或造价的无关科技。
-
-### 区分「原始派生非空」与「站内已解码消费」，类别目标须按文明过滤
-
-在[科技详情编码来源修复](https://github.com/linhongcun/aoe2-analyzer/issues/1448)里，[TechDetail.tsx](../src/features/techs/components/TechDetail.tsx) 原先只看属性模拟条目 `techEffectEntries` 是否为空，把 61 项已被费用、采集、生产、市场、招降或 PK 工具真实消费的科技（含 10 项费用编码科技与 7 项采集科技）一刀切写成「没有编码数值」；但若反过来简单改判 `DAT.techs[].eco.length > 0`，又会把仅含通用脚本槽 `res:33` 的 8 项科技（如丹麦哈马思克 `1484`、无神论 `21`）与 9 项站内未消费的杂项资源科技误报成「已编码」。同批的[未建模提示补齐](https://github.com/linhongcun/aoe2-analyzer/issues/1446)里，`1484` 同样因 `res:33` 被全站 18 项科技与 12 项文明加成复用而无法在不破坏零硬编码 ID 原则下自动识别；而将 10 项费用编码科技展开到正文时，`.dat` 类别目标里还混有所属文明不可训练的单位（如马来强征兵役 `625` 含罗马军 `1793`、波兰贵族特权 `782` 含游侠 `569` 与萨瓦尔 `1813`、瞿折罗刹帝利 `835` 覆盖全目录 197 个单位）。
-
-原因是 `.dat` 派生数组的「非空」只说明上游存在原始指令，不等于站内工具已解码其语义，也不等于类别下的每个单位对该文明都可用。以后裁定「是否已编码」或从 `.dat` 效果自动生成面向玩家的展示清单时：状态判定必须锚定站内实际解码消费的规则类目（明确排除不透明 `res:33` 与未消费杂项），并在正反例验收里同时锁定「已消费不漏报」与「未解码不误报」；面向单文明科技展开类别目标前，先按所属文明可用性二次过滤，并对大集合（如全军折扣）约定摘要与展开形态。
-
-### 表单就近报错与无障碍收口时，同步约束唯一 `role="alert"`、条件 `aria-describedby` 与阻断态禁复制
-
-在[持续生产字段报错与无障碍修复](https://github.com/linhongcun/aoe2-analyzer/issues/1455)评审中，核查 `src/features/production/` 全部 5 个模式与既有测试时检出三类跨工具共通陷阱：一是既有端到端测试（如 [production204.spec.ts](../tests/e2e/production204.spec.ts)）以严格单元素匹配校验 `getByRole('alert')`，若把 `role="alert"` 加到每个行内字段错误元素会触发多元素冲突；二是 [ArmyCost.tsx](../src/features/production/ArmyCost.tsx) 无条件写死 `aria-describedby="army-row-error-…"`，导致合法态产生指向不存在 DOM 节点的悬空无障碍引用；三是 [Production.tsx](../src/features/production/Production.tsx) 的「复制方案链接」仅按 URL 解码错误 `linkErrors` 禁用、未拦截计算阻断错误 `result.errors`，与 [Market.tsx](../src/features/market/Market.tsx)、[ProductionTrainCompare.tsx](../src/features/production/ProductionTrainCompare.tsx) 及 [Construction.tsx](../src/features/construction/Construction.tsx) 的口径分裂，且 [production963.spec.ts](../tests/e2e/production963.spec.ts) 锁定了链接错误态的既有文案。
-
-原因是不同工具页陆续补齐字段校验时，常只看单个报错输入框的可见性，漏核整页告警地标唯一性、合法态 ARIA 清理与分享按钮阻断口径。以后评审任何计算工具的表单就近报错与无障碍需求（如 [#1460](https://github.com/linhongcun/aoe2-analyzer/issues/1460) 等同源工单），在 PRD 范围与验收中固定写清四件事：参照 [#1164](https://github.com/linhongcun/aoe2-analyzer/issues/1164) 仅在汇总错误块保留唯一 `role="alert"`、行内字段提示仅经 `id` + `aria-describedby` 关联；`aria-describedby` 必须条件输出，验收同时覆盖非法态指向有效 `id` 与合法态移除无悬空引用；统一计算阻断错误态禁用「复制方案链接」并核查既有链接错误文案测试；同路由多模式一次盘点收口（不顺手跨路由扩范围）。
-
-2026-11-26 评审[攻城拆建筑数量非法输入反馈](https://github.com/linhongcun/aoe2-analyzer/issues/1472)时，针对「深链自动规范化 + `<input type="number">` 步进器」型计算器（与 [#1483](https://github.com/linhongcun/aoe2-analyzer/issues/1483) 同源）又核出三类易漏点：一是 [siege.ts](../src/domain/siege.ts) 的 `decodeSiege` 对全部 URL 参数做加载期静默规范化并由 [siege308.test.ts](../tests/unit/siege308.test.ts) 锁定，必须把「外部非法深链规范化」与「页面内手工编辑保草稿报错」拆开裁定，避免把深链单测误当静默改值合理性，也避免仅给单一参数加一次性深链提示条造成同页参数语义分裂；二是原生 `<input type="number">` 会把非数字草稿吞成空串，改用 `type="text" inputMode="numeric"` 前须先全仓检索 `tests/e2e/` 是否锁定 `getByRole('spinbutton')`（攻城页均走 `getByLabel` 可直接替换，而市场与驻军预览用例依赖 `spinbutton`）；三是非法草稿态要同步约束周边控件——步进按钮复用 [qtyStepper.ts](../src/domain/qtyStepper.ts) 从当前草稿确定性恢复，常用快捷芯片清空 `aria-pressed` 且点非法前同值芯片也能清错，切换单位/建筑等无关控件不得静默吞掉非法草稿。
-
-### 区分「缺行小计」与「已算估算态」，跨工具接入科技须锁定叠加顺序
-
-2026-11-26 评审[生产与阵容新增费用三项科技修复](https://github.com/linhongcun/aoe2-analyzer/issues/1463)与[攻城拆建筑攻方科技开关](https://github.com/linhongcun/aoe2-analyzer/issues/1469)时检出两类跨计算工具共通陷阱：一是 [ArmyResultsPanel.tsx](../src/features/production/ArmyResultsPanel.tsx) 仅有二元 `partial`（用于存在 `status !== 'ok'` 行或无效研究的「已核实项目小计」与「未计入清单」），尚无类似 [TrainTotalResult.tsx](../src/features/production/TrainTotalResult.tsx) 的独立估算态；若把含 `res: 33` 但已按可解码单价计入的方案硬塞进 `partial=true`，页面会渲染空「未计入清单」并误导为「不能代表整套阵容」，因此不能判为“纯逻辑免 UX”，必须走体验设计补齐行/合计级估算态。二是 [siege.ts](../src/domain/siege.ts) 新增攻方科技叠加时，加法与乘法科技不满足交换律，且 `data/game/effects.json` 键序（`Counterweights` 位于 `Chemistry` 之前）与科技 ID 升序（`47` 在 `454` 之前）不同：萨拉森巨型投石机（`331`）同时勾选 `47 化学（+1）` 与 `454 配重块（×1.15）`，按 [simulator.ts](../src/domain/simulator.ts) 键序算得攻击 `231`（拆城堡 `557`），若误按 URL ID 升序叠加则会算成 `231.15`（`557.15`），与单位模拟器及 PK 悄悄分叉。
-
-原因是计算引擎复用同一份 `effects.json` 或 `unitCost` 时，下游页面既容易把「排除行」与「含未解码边界的估算」混成同一个布尔开关，也容易默认参数顺序无关。以后评审把既有科技/费用能力接入第二个工具页时，必须额外核实两件事：先查目标结果面板是否已区分「部分排除（`partial`）」与「全行计入但含估算边界（`estimated`）」，缺估算 UI 态即交体验设计；涉及加/乘混合科技叠加的计算页，在 PRD 验收中明确锁定与 `simulator.ts`（`TECH_EFFECTS` 键序）同源的叠加顺序并写明非交换算例（如萨拉森 `331 + 47 + 454`），同时按 `ceil` 逐例验算击数/向上取整阈值，避免草稿把单次增伤误写成多单位总击数下降。
-
-### 改共享经济采集引擎前，核清主包依赖链、三类 `requires` 与 `bonusUsage` 反事实联动
-
-2026-11-26 评审[亚美尼亚骡车科技与 `collectCivGather` 前置过滤修复](https://github.com/linhongcun/aoe2-analyzer/issues/1473)时，沿 [realCost.ts](../src/domain/realCost.ts) 全仓反查暴露出四类容易返工的隐性约束：一是 [realCost.ts](../src/domain/realCost.ts) 表面只服务懒加载计算页，实际经 `Home → RouteContinuity → routeProfiles → scenarioBudget` 处于主包依赖链，若直接静态 import `CORE`（`techs.json`）或直读 `trees.json`，会触发主包目录膨胀或违反 [check-layers.mjs](../scripts/check-layers.mjs) / [dataBudget282.test.ts](../tests/unit/dataBudget282.test.ts)；二是全站 56 国 `civEco` 触及采集且带 `requires` 的 10 条记录混含三类不同语义——非目录/时代触发（柏柏尔 `104`/`101` 不得被过滤）、`ecoTechs` 采集前置（亚美尼亚可用 5 项与禁用 `221`/`279`）以及非 `ecoTechs` 科技前置（波希米亚修道院科技 `252` 狂热），在「显式 `techIds`」与「默认省略 `techIds`」两种口径下表现并不相同；三是 [production.ts](../src/domain/production.ts) 的 `gatherUnsupportedSources` 与 `gatherModel` 分开调用，未同步透传 `techIds` 会持续残余伪告警；四是 [bonusUsage317.test.ts](../tests/unit/bonusUsage317.test.ts) 强制约束 [bonusUsage.ts](../src/domain/bonusUsage.ts) 的 `gather` 行与 `gatherModel(4, civ).applied` 严格等价，且 `bonusTechs` 会把采集条目带入开局模拟反事实快照（对要求整族 7/7 完整的 [armenianEconomy.ts](../src/domain/armenianEconomy.ts) 只删 5 条可用项会误触发 fail-closed）。
-
-原因是共享经济领域模块同时被主包路由、多套显式/默认口径工具与 `bonusUsage` 对账单测交叉绑定，只盯单一页面容易漏核隐性边界。以后评审涉及 `realCost.ts`、`civEco` 或经济加成建模的 Issue（如 [#1486](https://github.com/linhongcun/aoe2-analyzer/issues/1486)、[#1477](https://github.com/linhongcun/aoe2-analyzer/issues/1477) 等）时，固定完成四项核查：先追踪传递 import 确认模块是否落入主包，在 PRD 明确分层与零主包膨胀约束；按全站 56 国数据扫描区分时代/内部触发、`ecoTechs` 前置与非 `ecoTechs` 前置，分别写清显式 `techIds` 与默认省略 `techIds` 两种口径的验收正反例；核查全部并行读取入口（如 `gatherUnsupportedSources`、`ecoPayoff` 的 `before/after`）是否同步透传过滤参数；凡新增或变更 `SOURCED` 文明，一并核对 `bonusUsage.ts` 早退特例、`v0290-317-tool-used.json`、`v0290-322-golden.json` 及 `bonusUsage317` 反事实语义。
-
-### 扩 `.dat` 导出白名单或改常驻默认口径前，先反查既有叠加、拦截白名单与阻断字段
-
-2026-11-27 评审本批数据与引擎单时检出三类跨工具反向回归陷阱：一是在[建筑条件隐藏科技补齐](https://github.com/linhongcun/aoe2-analyzer/issues/1474)中，全量导出 `Civ=-1` 隐藏建筑科技若不反查既有规则与消费端，`947`（`minr add -1`）叠在常规 `322 射箭孔`（`minr set 0`）后会把最小射程反向减成 `-1`，而 [techDetailView.ts](../src/domain/techDetailView.ts) 渲染 `GENERIC_FX` 时不过滤 `item.civs`，保留普通修道院 `104` 会污染五条科技详情页；二是在[反伤与充能属性导出](https://github.com/linhongcun/aoe2-analyzer/issues/1482)中，按属性号把 `C=59–62, 118` 加入 [effects_build.py](../scripts/effects_build.py) 后，`a=61` 会连带落到 `199/200/201/377` 等高频通用科技上，若不将对应属性号同步写入 [mixedTrainingTransfer.ts](../src/features/duel/logic/mixedTrainingTransfer.ts) 的 `combatAttributes` 白名单并在 [duelUnmodeled.ts](../src/domain/duelUnmodeled.ts) 仅对无固有充能单位触发，会反向误拦混编跳训练总价并刷屏充能胶囊；三是在[大干道接入收益计算](https://github.com/linhongcun/aoe2-analyzer/issues/1477)与[本方常驻团队加成对齐](https://github.com/linhongcun/aoe2-analyzer/issues/1481)中，[ecoPayoff.ts](../src/domain/ecoPayoff.ts) 以 `warnings.length === 0` 锁死 `balance`，把非采金额外收益写进 `warnings` 会误锁纯采金回本，而将本方团队加成改为自动生效时若不对显式 `team` 做并集幂等去重并在 `mixedTrainingTransfer.ts` 区分「本方常驻 vs 额外盟友」，旧分享链接会双重叠加或误拦训练带入。
-
-原因是扩充管线属性白名单、隐藏规则或把手动开关升级为默认常驻时，影响面往往沿着既有规则顺序、下游白名单和状态布尔耦合反向传导到表面无关的通用科技或分享链接。以后评审同类需求时，固定补做三项反查：扩 `.dat` 导出前按全量科技扫描结果核对「是否与既有常规规则叠加出越界值」「是否落到无 `civs` 过滤的展示页」「是否给通用科技带上新 `eco` 属性从而触发 `mixedTrainingTransfer` 或未建模刷屏」；新增非阻断范围说明前先查领域层 `warnings` 是否绑定 `complete`/`balance` 阻断门控，绑定即独立字段与视觉样式；把开关改为默认常驻生效时，在 PRD 验收中显式锁定旧链幂等去重（不双算）与下游拦截逻辑的「本方 vs 盟友」分界。
-
-### 改 `effects.ts` 归类或放开 `bonusUsage` 门控前，先核弹层冷加载隔离、情景签名与实跑反事实
-
-2026-11-27 评审[文明加成归类与计入状态修复](https://github.com/linhongcun/aoe2-analyzer/issues/1497)时，独立核查暴露出三类只看单文件极易返工的隐性约束：一是 [CivDetail.tsx](../src/features/civs/components/CivDetail.tsx) 经 `BonusRows → civBonus → effects.ts` 刻意隔离于 [core.ts](../src/data/core.ts)（`units.json`/`buildings.json`）以支持 `#1122` 弹层按需冷加载（[civBonusEvidence1122.spec.ts](../tests/e2e/civBonusEvidence1122.spec.ts)），若为过滤 `Italians-3`/`Huns-0` 等零拥有目标而在 [effects.ts](../src/domain/effects.ts) 直接导入 `CORE` 会击穿冷加载分包，而若在 [effects_build.py](../scripts/effects_build.py) 直接删除原始目标又会破坏证据弹层 `Gurjaras-2` 90 目标断言与 [costPolicy.ts](../src/domain/costPolicy.ts) 跨句分组；二是 `BONUS_SRC[civ]` 参与 [positionScenarios.ts](../src/domain/positionScenarios.ts) 对 7 国（含 `Huns`）情景的审查哈希，变更 `Huns-0` 归类若不同步核验情景数值并刷新 [positionScenarioReview.json](../data/reference/domain/positionScenarioReview.json)，会把匈奴在 `#/start` 静默阻断；三是静态导出 `usageLines()` 会把 `Aztecs-2`、`Spanish-0`、`Spanish-3` 一并标成 `sim:null`，唯有实跑 `simulateBuild` 去效果反事实与 [construction.ts](../src/domain/construction.ts) 才能分清三者本质——`Aztecs-2` 实际影响 6/8 套开局、`Spanish-0` 由 `construction.json` `cd.tree` 实际计入且开局 0/8 变化、仅 `Spanish-3` 为纯战斗负号规则无 `eco`，且实跑同时检出 [buildSim.ts](../src/domain/buildSim.ts) 未校验 `requires: [252]` 致 `Bohemians-3` 提前生效的独立引擎缺陷。
-
-原因是加成归类、工具对账与证据弹层共享同一套 `effects.json` 与 `BONUS_SRC` 骨架，静态推理既看不出懒加载分包和跨模块签名，也分不清 `sim:null` 背后究竟是漏入 `TREE_SIM`、漏接 `cc.tree` 还是纯战斗误入 `treeOnly`。以后评审涉及 `effects.ts`、`BONUS_SRC` 或 `bonusUsage.ts` 的 Issue 时，固定补做三项核查：追踪运行时非 typeOnly 静态导入闭包，确认不把 `core.ts` 拖入 `CivDetail` 等懒加载页并保留原始 `.dat` 目标；凡改动 `BONUS_SRC` 触及 `SCENARIO_CIVS` 七国，同步把情景数值零漂移与 `positionScenarioReview.json` 刷新写入范围和验收；排查 `bonusUsage` 候选与 `sim:null` 时必须直接实跑 `simulateBuild` / `calculateConstruction` 反事实而非仅看静态返回，把发现的独立引擎缺陷划出非目标另单跟进，不让标签与工具当前计算脱节。
-
-### 战斗机制从未建模升级为正式结算时，连核运行期成对抵消、满科技对照续显与阵容实算单测
-
-2026-11-27 评审[额外伤害减免（`a:24`）接入伤害核心](https://github.com/linhongcun/aoe2-analyzer/issues/1500)时，独立核查暴露出三处单看基础目录或单兵公式极易漏掉的连锁问题：一是运营仅扫描 `units.json` 基础 `atks` 得出「负攻击行与 33 个 `a:24` 单位无交集」，而全量扫描 `effects.json` 规则才检出真实在役反例——日本 `tech 190` 对骑射手（`39/474`）编码了成对规则 `对弓手 +2` 与 `对掷矛手 -2`，打西西里掷矛手（`6/7`）时若只折减正值额外伤害行，会把净加成错扣成 `-0.8`（总伤反降至 `4.2`，低于无加成的 `5`），须按引擎 Step 3 对全部非基础类同乘 `(1 - r)` 才能保持 `+1.2 - 1.2 = 0`；二是从 [duelUnmodeled.ts](../src/domain/duelUnmodeled.ts) 移除「未计入：额外伤害减免」后，若不在 [unitCivRank.ts](../src/domain/unitCivRank.ts) 参照 `ignoreArmorTech` 补入独立结构化的已计入标签，11 列基础面板表会直接丢失孟加拉与西西里的核心文明特质；三是 [civFormations1386.test.ts](../tests/unit/civFormations1386.test.ts) 对已发布的西西里推荐阵容链接现场重跑 `groupFight`（西西里锁子甲重骑对法兰克长戟由剩 `16/50` 变为 `2/50`），且把 `a:24` 折叠进 `CIV_BONUSES` 会将 `Bengalis-2`/`Sicilians-2` 的 `BONUS_SRC` 从 `eco` 转为 `dat` 并改变 [bonusUsage317.test.ts](../tests/unit/bonusUsage317.test.ts) 计数与快照。
-
-原因是把战斗机制从「仅提示」升级为「进公式」会同时改写伤害拆解口径、移除既有对照表线索，并牵动依赖实时战斗引擎的下游回归。以后评审同类战斗机制正式建模需求（如溅射、充能、近战反伤等）时，固定完成三项核查：排查公式边界反例必须同时扫描 `units.json` 基础值与 `effects.json` 运行期规则（尤其正负成对抵消项）；移除 `detectUnitUnmodeled` 旧提示的同时，核查 [UnitCivRankTable.tsx](../src/features/units/components/UnitCivRankTable.tsx) 是否需要平滑切换为已计入行内标签，并在 [DamageBreakdown.tsx](../src/features/duel/components/DamageBreakdown.tsx) 标清折算依据；全仓检索 `tests/unit/civFormations*.test.ts` 与 `bonusUsage317` 对受影响文明的实算断言，明确「本单同步更新实时引擎测试断言，但不越权改写 `role/game-strategy.md` 与 `civ-formations.json` 固定来源文案」。
-
-## 7. 接手第一轮，以及以后
-
-第一轮自己做完这些，再谈改什么：
-
-1. 对一下最新 `main` 和线上页脚。读应用号、数据版本、构建。构建和 `main` 不一致时，现网以构建为准，源码以 `main` 为准，不要用应用号填空。
-2. 走完第 1 节的三件任务。至少包括：从一个文明进单位，看目录价和有没有折后价，再打开模拟器看研究费；同一文明打开持续生产和训练总价，看时代和数量各是什么；打开对照，看不可用文明怎么说；开一局跳到对局助手，看带了哪两个文明；打开文明对比的「评分性质」和天梯的快照说明。
-3. 搜「持续生产」「训练总价」「训练对照」。登记、页内标题、浏览器标题是否还是三套说法。
-4. 要提范围时，按第 3 节写下场景、断点、证据构建、不做的事、怎样算正常。常规产品取舍按 2026-11-26 授权查证事实后直接拍板定案；仅涉及明确 Hold 或偏离「资料 + 计算」主题的重大方向变化时，停在建议并交维护者确认。
-5. 把没核的边界写进交接。上午没做的手机、经济公式、全部文明与科技组合、复盘备份恢复，不要在口头上补成已完成。
-
-以后改一处玩家能看见的能力时，一起看四件事：登记表里的名字和别名、浏览器标题、站内入口、README 是否还在描述旧路由。README 至今仍写独立的 `#/tree/:civ`，工具表也没有写生产页的另外两个模式。这是给站外读者的过时说明。改到相关功能时顺手改 README；不要为了这句话单独扩范围，也不要把它当成线上回归。
-
-关于数据仍主要从页眉「数据版本」和页脚进入，登记表允许它不进首页。#272 已关闭，不要为了这个残留重开。
-
-这里不新增例行会议、固定巡检或新的权限。已有的发布、审阅和关闭授权仍以 CONTRIBUTING 为准。
-
-## 长期原则
-
-- 先让已有任务找得到、接得上、口径和声明一致，再谈新功能。
-- 三种钱、三种生产任务、天梯快照和主观评分，不混用。
-- 链接带不带文明、时代、科技，由这条链接的任务决定，不由相邻页面有没有参数决定。
-- 能选但没有可用结果时，先修路径和空态，再怀疑公式。
-- 未支持的效果说出来。不编造游戏事实，不把研究费悄悄计入训练费。
-- 上线看部署构建。设计通过、PR 合入、应用号变化，都不能单独代替现网。
-- 验收证据覆盖这次会坏的状态和视口，并写明没看什么。
-- 建议和授权分开。关闭了的事项不因为又看见现象就重开，除非范围确实没完成，或有新的、分开的问题。
-
-## 写这份文档时的事实与待核
-
-**当时已经核对的：**
-
-- `471c136` 的应用号是 `v0.77.81`。训练总价在这次构建上已部署。[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) 已关闭。
-- `0db9c309` 的应用号是 `v0.77.92`。生产页登记仍只有「持续生产」。文明页兵种行仍不带文明。对照仍锁城堡，并仍提供游侠。科技树格子的源码链接带 `?civ=`。
-- 数据钉扎在写本文时仍是 DE Update 188329，见 [data_sources.json](../data/sources/data_sources.json)。
-- 上午桌面走查覆盖了搜索、文明页到单位、三种生产里的若干单例、模拟器一笔锻造、文明对比的评分性质、天梯和更新历史的部分说明。那不是全站验收，也不是公式认证。
-
-**待核，不要写成已经知道：**
-
-- 晚间现网页脚构建是不是 `0db9c309`。布局提交是否已经部署，打开页脚看。
-- 手机视口。上午没做。晚间 `main` 有多笔写明在改手机布局的提交，那些现网结果本文没有点。
-- 市场、经济科技收益、商路、圣物、施工、驻军回血的公式。上午只留下当时页面上的说明和个别输出，没有验算。
-- 全部文明与科技组合。两三个单例不能外推。
-- 手填复盘的备份和恢复。上午只看到空白页的说明。
-- 开局模拟内部公式，以及开一局场景建议的模型。
-- 单位详情在晚间布局之后，「折后训练价」在现网上是否仍只出现在目录造价栏、是否容易和模拟器工作区混淆。源码条件见第 2 节，现网观感未再点。
-
-## 这份文档放在哪
-
-角色文档集中在 `role/`。体验设计原则与交接在 [experience-design.md](experience-design.md)，维护队列在 [MAINTENANCE.md](../docs/MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进体验设计指南或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。
+- 先让已有任务找得到、接得上、口径与声明一致，再谈新功能。
+- 三种钱、三种生产任务、天梯快照与主观评分绝不混用。
+- 链接是否带文明/时代/科技由该链接的任务决定；能选但无结果先修路径与空态，再怀疑公式。
+- 未支持效果明说，不编造数值，不把研究费悄悄摊进训练费。
+- 上线只看页脚构建 SHA；验收写明实测视口与未验证项；已关闭事项无新问题不重开。
