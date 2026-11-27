@@ -80,7 +80,7 @@ const ECO_UNIT_ZH: Readonly<Record<EcoOnlyUnitId, string>> = {
 const ARMY_COST_HALF_NOTES: Readonly<Record<string, string>> = {
   'Koreans-2': '已计入：射手护甲 3 项按免费计算；警戒箭塔、大型箭塔、炮塔是建筑科技，不在阵容新增费用内',
   'Burmese-3': '已计入：修道院科技按折后价计算；草药不在阵容新增费用内',
-  'Italians-2': '已计入：与阵容相关的码头、大学科技按折后价计算；建筑、防御、渔船经济科技和虹吸管、燃烧弹不在阵容新增费用内',
+  'Italians-2': '已计入：与阵容相关的码头、大学科技按折后价计算；建筑、防御、渔船经济科技和燃烧弹不在阵容新增费用内',
   'Jurchens-3': '已计入：攻城升级木材 -75%；防御工事升级和研究速度 +100% 不在阵容新增费用内',
   'Turks-2': '已计入：化学免费，精锐炮舰升级 -50%；炮塔是建筑科技，不在阵容新增费用内',
   'Burgundians-0':

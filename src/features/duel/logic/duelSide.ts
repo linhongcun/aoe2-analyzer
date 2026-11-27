@@ -2,7 +2,7 @@ import { civByEn } from '../../../data';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
-import { DAT } from '../../../domain/datEffects';
+import { keepsScopedUnmodeledTech } from '../../../domain/duelUnmodeledEco';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
 import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
@@ -121,29 +121,25 @@ export function filterExplicitTechsForAge(techs: SideSpec['techs'], techById: Re
     : techs;
 }
 
-function keepsScopedProjectileTech(tech: Tech | undefined, civ: string | undefined, unitId: number): boolean {
-  if (!tech) return true;
-  const poison = DAT.projectilePoison?.[tech.en];
-  const passThrough = DAT.projectilePassThrough?.[tech.en];
-  if (!poison && !passThrough) return true;
-  if (civ !== undefined && !tech.civs.includes(civ)) return false;
-  if (poison?.units.includes(unitId) || passThrough?.units.includes(unitId)) return true;
-  return Boolean(DAT.techs[tech.en]?.rules.some((r) => !r.b && r.t.includes(unitId)));
-}
-
-/** 裁剪通过投射物剧毒/直线穿透（如箭毒 1393、烟火之术 902、突袭 1379）生效、但对目标文明或单位不适用的显式科技 ID，避免残留到 URL、切回时恢复勾选或阻断升级对比。 */
-export function filterExplicitTechsForUnit(techs: SideSpec['techs'], techById: Record<number, Tech>, unitId: number, civ?: string): SideSpec['techs'] {
+/** 裁剪按固定数据限定单位作用域的未建模科技（投射物剧毒/直线穿透、近战反伤 a:118、科技充能 a:62）中对目标文明或单位不适用的显式 ID，避免残留到 URL、切回时恢复勾选或阻断升级对比。 */
+export function filterExplicitTechsForUnit(
+  techs: SideSpec['techs'],
+  techById: Record<number, Tech>,
+  unitId: number,
+  civ?: string,
+  baseChargeType = 0,
+): SideSpec['techs'] {
   if (!Array.isArray(techs) || !techs.length) return techs;
-  const next = techs.filter((id) => keepsScopedProjectileTech(techById[id], civ, unitId));
+  const next = techs.filter((id) => keepsScopedUnmodeledTech(techById[id], civ, unitId, baseChargeType));
   return next.length === techs.length ? techs : next;
 }
 
-/** 切单位时剔除对当前文明或新单位不适用的投射物剧毒/直线穿透显式科技 ID，其余显式科技与预设保持原样。 */
-export function switchSideUnit(techById: Record<number, Tech>, spec: SideSpec, nextUid: number): SideSpec {
-  return { ...spec, uid: nextUid, techs: filterExplicitTechsForUnit(spec.techs, techById, nextUid, spec.civ) };
+/** 切单位时剔除对当前文明或新单位不适用的作用域未建模显式科技 ID，其余显式科技与预设保持原样。 */
+export function switchSideUnit(techById: Record<number, Tech>, spec: SideSpec, nextUid: number, baseChargeType = 0): SideSpec {
+  return { ...spec, uid: nextUid, techs: filterExplicitTechsForUnit(spec.techs, techById, nextUid, spec.civ, baseChargeType) };
 }
 
-/** 普通 PK 链接规范化：未知单位回退默认、空/未知文明回落首个可用文明，并剔除对当前文明或单位不适用的投射物剧毒/直线穿透科技。 */
+/** 普通 PK 链接规范化：未知单位回退默认、空/未知文明回落首个可用文明，并剔除对当前文明或单位不适用的作用域未建模科技。 */
 export function canonicalizeDuelSide(
   core: { unitById: Record<number, Unit>; techById: Record<number, Tech> } | null | undefined,
   spec: SideSpec,
@@ -155,10 +151,10 @@ export function canonicalizeDuelSide(
     const u = core.unitById[next.uid]?.civs.length ? core.unitById[next.uid]! : core.unitById[fallback.uid];
     if (u?.civs.length) next = { ...next, civ: u.civs[0]! };
   }
-  return switchSideUnit(core.techById, next, next.uid);
+  return switchSideUnit(core.techById, next, next.uid, core.unitById[next.uid]?.chargeType ?? 0);
 }
 
-/** 切文明时按目标文明实际解析出的时代与文明/单位投射物作用域裁剪显式科技，避免沿用旧文明被抬高后的 side.age 或他国投射物科技残留。 */
+/** 切文明时按目标文明实际解析出的时代与作用域未建模科技规则裁剪显式科技，避免沿用旧文明被抬高后的 side.age 或他国作用域科技残留。 */
 export function switchSideCiv(
   data: { byId: Record<number, Unit>; techById: Record<number, Tech>; trees: unknown },
   spec: SideSpec,
@@ -168,7 +164,7 @@ export function switchSideCiv(
   const { age: nextAge } = resolveSideAge(data, nextCiv, u, spec.age, spec.ageSet);
   const aged = filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge);
   const team = spec.team.filter((id) => TEAM_BONUSES[id]?.[0] !== spec.civ && TEAM_BONUSES[id]?.[0] !== nextCiv);
-  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv), team };
+  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv, u.chargeType ?? 0), team };
 }
 
 export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number, relics = 0): SideState {
@@ -193,10 +189,11 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
     Array.isArray(spec.techs) && spec.techs.length
       ? (() => {
           const next = spec.techs.filter((id) =>
-            keepsScopedProjectileTech(
+            keepsScopedUnmodeledTech(
               ctx.techs.find((t) => t.id === id),
               civ,
               u.id,
+              u.chargeType ?? 0,
             ),
           );
           return next.length === spec.techs.length ? spec.techs : next;
@@ -204,7 +201,7 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
       : spec.techs;
   const resolvedSpec = resolvedTechs === spec.techs ? spec : { ...spec, techs: resolvedTechs };
   const costs = applicableTrainingTechs(ctx, u, civ, age, earlyAgeMarker);
-  const sel = selectTrainingIds(resolvedSpec.techs, avail, age, costs, civ, u.id);
+  const sel = selectTrainingIds(resolvedSpec.techs, avail, age, costs, civ, u.id, u.chargeType ?? 0);
   const relicBonus = unitRelicBonus(civ, u);
   const effectiveRelics = relicBonus ? Math.min(relicBonus.maxRelics, Math.max(0, Math.floor(Number.isFinite(relics) ? relics : 0))) : 0;
   const intrinsicIgnoreArmor = hasIgnoreArmor(u.combatAbility);

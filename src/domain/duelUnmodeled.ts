@@ -3,8 +3,32 @@
  * 100% 由固定 DAT / units.json / effects.json 数据驱动，零硬编码单位或科技 ID 白名单。
  */
 import { applyCombatAbilityEco, DAT, type DatEco } from './datEffects';
+import {
+  hasPositiveBonusDamageReduction,
+  hasPositiveDamageReflection,
+  hasPositiveEcoAttr,
+  hasPositiveExtraProjectiles,
+  hasPositiveRegen,
+  hasPositiveSplash,
+  hasProjectilePassThrough,
+  hasProjectilePoison,
+  isSingleShotChargeProjectileEco,
+  keepsScopedUnmodeledTech,
+  resolveTechChargeGrant,
+  type TechChargeGrant,
+} from './duelUnmodeledEco';
 import type { SimTech } from './simulator';
 import type { Tech, Unit } from './types';
+
+export {
+  hasPositiveBonusDamageReduction,
+  hasPositiveDamageReflection,
+  hasPositiveEcoAttr,
+  isSingleShotChargeProjectileEco,
+  keepsScopedUnmodeledTech,
+  resolveTechChargeGrant,
+  type TechChargeGrant,
+};
 
 export type UnmodeledKind =
   | 'charge'
@@ -20,7 +44,8 @@ export type UnmodeledKind =
   | 'low-hp-transform'
   | 'regen'
   | 'death-heal'
-  | 'bonus-damage-reduction';
+  | 'bonus-damage-reduction'
+  | 'damage-reflection';
 
 export interface UnmodeledMechanism {
   kind: UnmodeledKind;
@@ -87,60 +112,6 @@ export function effectiveCombatAbility(baseCa: number | undefined, unitId: numbe
   return normalizeCombatAbility(ca);
 }
 
-/**
- * 针对单一属性号独立聚合 eco 效果净值，避免 a:102 与 a:107 混加错抵，
- * 过滤 Druzhina 对远程步兵 +0.5/-0.5 抵消，并严格区分 set 0 与正值 set。
- */
-export function hasPositiveEcoAttr(eco: readonly DatEco[] | undefined, unitId: number, attr: number, minSet: number): boolean {
-  if (!eco?.length) return false;
-  let addSum = 0;
-  let mulProd = 1;
-  let maxSet: number | null = null;
-  let matched = false;
-  for (const item of eco) {
-    if (item.a !== attr || !item.t?.includes(unitId)) continue;
-    matched = true;
-    if (item.op === 'add') addSum += item.v;
-    else if (item.op === 'mul') mulProd *= item.v;
-    else if (item.op === 'set') maxSet = maxSet === null ? item.v : Math.max(maxSet, item.v);
-  }
-  if (!matched) return false;
-  const setOk = maxSet !== null && (minSet > EPS ? maxSet >= minSet - EPS : maxSet > EPS);
-  return addSum > EPS || mulProd > 1 + EPS || setOk;
-}
-
-const hasPositiveSplash = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 22, EPS);
-const hasPositiveExtraProjectiles = (eco: readonly DatEco[] | undefined, unitId: number) =>
-  hasPositiveEcoAttr(eco, unitId, 102, 1) || hasPositiveEcoAttr(eco, unitId, 107, 1);
-const hasPositiveRegen = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 109, EPS);
-const hasProjectilePoison = (techEn: string, unitId: number): boolean => DAT.projectilePoison?.[techEn]?.units.includes(unitId) ?? false;
-const hasProjectilePassThrough = (techEn: string, unitId: number): boolean => DAT.projectilePassThrough?.[techEn]?.units.includes(unitId) ?? false;
-
-/**
- * issue 1446：检测文明加成中的额外伤害减免（a:24），按命令顺序计算有限数值 set/add/mul 生效结果，
- * 支持后续 set 0 / mul 0 覆盖前序正值，并防御 NaN / Infinity。
- */
-export function hasPositiveBonusDamageReduction(eco: readonly DatEco[] | undefined, unitId: number): boolean {
-  if (!eco?.length) return false;
-  let matched = false;
-  let val = 0;
-  for (const item of eco) {
-    if (item.a !== 24 || !item.t?.includes(unitId)) continue;
-    if (typeof item.v !== 'number' || !Number.isFinite(item.v)) continue;
-    if (item.op === 'set') {
-      matched = true;
-      val = item.v;
-    } else if (item.op === 'add') {
-      matched = true;
-      val += item.v;
-    } else if (item.op === 'mul') {
-      matched = true;
-      val *= item.v;
-    }
-  }
-  return matched && Number.isFinite(val) && val > EPS;
-}
-
 function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitId: number, baseCombatAbility: number): boolean {
   if (!eco?.length) return false;
   const before = normalizeCombatAbility(baseCombatAbility);
@@ -150,11 +121,12 @@ function changesUnmodeledCombatAbility(eco: readonly DatEco[] | undefined, unitI
 
 /**
  * 返回当前文明/单位可用科技列表中，具备净正溅射（a:22）、额外弹矢（a:102/107）、生命回复（a:109）、
+ * 近战伤害反弹（a:118）、科技赋予充能攻击（a:62，限固有 chargeType === 0）、
  * 投射物剧毒（DAT.projectilePoison）、投射物直线穿透（DAT.projectilePassThrough）
  * 或改变未建模 combatAbility 位（bit 4/32|64/128）的科技 ID 集合，
  * 供单兵种 SimPanel 开放勾选（与混编模式及 issue 943 费用科技一致；不进入 f/c 自动预设）。
  */
-export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number, baseCombatAbility = 0): Set<number> {
+export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: number, baseCombatAbility = 0, baseChargeType = 0): Set<number> {
   const ids = new Set<number>();
   for (const { t } of avail) {
     const eco = DAT.techs[t.en]?.eco;
@@ -162,6 +134,8 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
       hasPositiveSplash(eco, unitId) ||
       hasPositiveExtraProjectiles(eco, unitId) ||
       hasPositiveRegen(eco, unitId) ||
+      hasPositiveDamageReflection(eco, unitId) ||
+      resolveTechChargeGrant(eco, unitId, baseChargeType) !== null ||
       hasProjectilePoison(t.en, unitId) ||
       hasProjectilePassThrough(t.en, unitId) ||
       changesUnmodeledCombatAbility(eco, unitId, baseCombatAbility)
@@ -172,7 +146,7 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
   return ids;
 }
 
-function detectChargeMechanism(unit: Unit): UnmodeledMechanism | null {
+function detectChargeMechanism(unit: Pick<Unit, 'chargeType' | 'chargeEvent' | 'chargeMultiProjectiles'>): UnmodeledMechanism | null {
   const ct = unit.chargeType ?? 0;
   if (!Number.isFinite(ct) || ct <= 0) return null;
   if (ct === 4) {
@@ -260,6 +234,19 @@ function detectOnHitMechanism(effect: Unit['onHitEffect']): UnmodeledMechanism {
   };
 }
 
+function formatTechChargeMechanism(base: UnmodeledMechanism, tech: Tech): UnmodeledMechanism {
+  const insert = `（已选科技「${tech.zh}」；未勾选该科技时本项不会触发）`;
+  const semiIdx = base.detail.indexOf('；');
+  const detail = semiIdx >= 0 ? `${base.detail.slice(0, semiIdx)}${insert}${base.detail.slice(semiIdx)}` : `${base.detail}${insert}`;
+  return {
+    kind: 'charge',
+    pill: `${base.pill} · ${tech.zh}`,
+    detail,
+    techId: tech.id,
+    techEn: tech.en,
+  };
+}
+
 /**
  * 检测单个参战单位在给定文明、时代与已选科技下命中的未建模机制。
  * 与 simulate() 同口径：直接遵循传入的 selectedTechs，不做二次隐式时代截断或自动补选。
@@ -273,11 +260,20 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     (entry) => entry.age <= age && (!entry.req.length || entry.req.every((reqEn) => selectedEn.has(reqEn))),
   );
 
-  // 1. 充能机制（严格按固定源 chargeType / chargeEvent / chargeMultiProjectiles 分型）
+  // 1. 充能机制（严格按固定源 chargeType / chargeEvent / chargeMultiProjectiles 分型；固有 chargeType === 0 时补充已选科技赋予的 a:62 充能）
   const charge = detectChargeMechanism(unit);
   if (charge) out.push(charge);
+  const baseChargeType = unit.chargeType ?? 0;
+  const techChargeById = new Map<number, TechChargeGrant>();
+  for (const tech of selectedTechs) {
+    const grant = resolveTechChargeGrant(DAT.techs[tech.en]?.eco, unit.id, baseChargeType);
+    if (!grant) continue;
+    techChargeById.set(tech.id, grant);
+    const granted = detectChargeMechanism({ chargeType: grant.chargeType, chargeEvent: grant.chargeEvent, chargeMultiProjectiles: false });
+    if (granted) out.push(formatTechChargeMechanism(granted, tech));
+  }
 
-  // 2. 多弹丸 / 额外弹矢（固有 + 文明加成合并为 1 枚胶囊；已选科技按项列出）
+  // 2. 多弹丸 / 额外弹矢（固有 + 文明加成合并为 1 枚胶囊；已选科技按项列出，单发充能远程抑制冗余额外弹矢）
   const intrinsicMulti = (unit.totalProjectiles ?? 0) > 1;
   const civMulti = activeCivBonuses.some((entry) => hasPositiveExtraProjectiles(entry.eco, unit.id));
   if (intrinsicMulti || civMulti) {
@@ -291,7 +287,9 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     });
   }
   for (const tech of selectedTechs) {
-    if (!hasPositiveExtraProjectiles(DAT.techs[tech.en]?.eco, unit.id)) continue;
+    const techEco = DAT.techs[tech.en]?.eco;
+    if (!hasPositiveExtraProjectiles(techEco, unit.id)) continue;
+    if (isSingleShotChargeProjectileEco(techEco, unit.id, techChargeById.get(tech.id) ?? null)) continue;
     out.push({
       kind: 'multi-projectile',
       pill: `额外弹矢 · ${tech.zh}`,
@@ -451,6 +449,18 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
       kind: 'bonus-damage-reduction',
       pill: '额外伤害减免',
       detail: '当前未计入受到的额外伤害减免（文明加成）；面对克制加成攻击时，实际生存能力通常高于此处估算。',
+    });
+  }
+
+  // 15. 近战伤害反弹（已选科技 a:118 > 0，如契丹札甲）
+  for (const tech of selectedTechs) {
+    if (!hasPositiveDamageReflection(DAT.techs[tech.en]?.eco, unit.id)) continue;
+    out.push({
+      kind: 'damage-reflection',
+      pill: `近战伤害反弹 · ${tech.zh}`,
+      detail: `当前未计入受到近战攻击时的伤害反弹（已选科技「${tech.zh}」；未勾选该科技时本项不会触发）；近战对拼时实际换血能力通常高于此处估算。`,
+      techId: tech.id,
+      techEn: tech.en,
     });
   }
 

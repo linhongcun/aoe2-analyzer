@@ -267,8 +267,8 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     const selTechIds = [...sel].sort((a, b) => a - b);
     const simTechIds = selTechIds.filter((id) => allowedSimIds.has(id));
 
-    // 显式合并当前时代可用未建模特色科技 ID
-    const unmodeledSet = applicableUnmodeledTechIds(avail, u.id, u.combatAbility ?? 0);
+    // 显式合并当前时代可用未建模特色科技与数据驱动常规未建模科技 ID
+    const unmodeledSet = applicableUnmodeledTechIds(avail, u.id, u.combatAbility ?? 0, u.chargeType ?? 0);
     const activeUnmodeledTechIds = avail
       .filter((x) => unmodeledSet.has(x.t.id) && militaryTechAge(civ, x.t.id, x.t.age) <= age)
       .map((x) => x.t.id)

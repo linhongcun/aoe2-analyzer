@@ -10,6 +10,7 @@ import { militaryTechAge } from './availabilityAge';
 import { civStatus } from './civStatus';
 import { priceAge } from './costDiscount';
 import { DAT } from './datEffects';
+import { keepsScopedUnmodeledTech } from './duelUnmodeledEco';
 import { presetUpTo, type SimContext, type SimTech } from './simulator';
 import type { TechSpec } from './duelState';
 import type { Cost, Tech, Unit } from './types';
@@ -82,7 +83,7 @@ export function applicableTrainingTechs(ctx: SimContext, unit: Unit, civ: string
   return found;
 }
 
-/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 只保留当前时代可用的战斗/费用科技，并对无数值投射物剧毒/直线穿透科技按作用单位裁剪。 */
+/** f / c 扩展费用科技（跳过含未解码边界的 partial 项）；显式 id 只保留当前时代可用的战斗/费用科技，并对按数据限定作用域的无数值未建模科技按文明与单位裁剪。 */
 export function selectTrainingIds(
   techs: TechSpec,
   avail: readonly SimTech[],
@@ -90,6 +91,7 @@ export function selectTrainingIds(
   costs: readonly TrainingCostTech[],
   civ: string,
   unitId?: number,
+  baseChargeType = 0,
 ): Set<number> {
   if (techs === 'f' || techs === 'c') {
     const sel = presetUpTo(avail, age, civ);
@@ -100,11 +102,7 @@ export function selectTrainingIds(
     ...avail
       .filter((item) => {
         if (militaryTechAge(civ, item.t.id, item.t.age) > age) return false;
-        if (unitId !== undefined && item.ef === null) {
-          const poison = DAT.projectilePoison?.[item.t.en];
-          const passThrough = DAT.projectilePassThrough?.[item.t.en];
-          if ((poison || passThrough) && !(poison?.units.includes(unitId) || passThrough?.units.includes(unitId))) return false;
-        }
+        if (unitId !== undefined && item.ef === null && !keepsScopedUnmodeledTech(item.t, civ, unitId, baseChargeType)) return false;
         return true;
       })
       .map((item) => item.t.id),

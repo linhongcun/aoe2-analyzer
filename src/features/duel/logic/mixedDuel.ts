@@ -7,7 +7,7 @@ import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { mixedFighterError, type MixedFighter } from '../../../domain/mixedFight';
 import { prereqChain } from '../../../domain/prereq';
 import { parseRelicCount } from '../../../domain/relicParams';
-import { DAT } from '../../../domain/datEffects';
+import { keepsScopedUnmodeledTech } from '../../../domain/duelUnmodeledEco';
 import { civStatus, simTechs, type SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
 import { unitAvailable } from '../../../domain/unitAvailability';
@@ -151,10 +151,7 @@ export function resolveMixedSide(ctx: SimContext, core: Core, input: MixedSideIn
       ...avail
         .filter(({ t, ef }) => {
           if (ef !== null) return true;
-          const poison = DAT.projectilePoison?.[t.en];
-          const passThrough = DAT.projectilePassThrough?.[t.en];
-          if (!poison && !passThrough) return true;
-          return Boolean(poison?.units.includes(u.id) || passThrough?.units.includes(u.id));
+          return keepsScopedUnmodeledTech(t, input.civ, u.id, u.chargeType ?? 0);
         })
         .map(({ t, ef, chargeOnly }) => ({ t, numeric: !!ef, cost: false, partial: false, chargeOnly: !!chargeOnly })),
       ...costs.map(({ tech, supported, partial }) => ({

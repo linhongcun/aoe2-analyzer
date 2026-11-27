@@ -69,7 +69,7 @@ def build(d):
         return c['Type'] in (101, 102, 103) or (c['Type'] in (1, 6) and c['A'] == 85)
 
     nodes = {}
-    combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 63, 102, 107, 108, 109}
+    combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 59, 60, 61, 62, 63, 102, 107, 108, 109, 118}
     build_tech_ids = set(d['BuildTech'].values())
     fx_triggered_ids = fx_triggered_techs(d['Effects'])
     for i, t in enumerate(d['Techs']):

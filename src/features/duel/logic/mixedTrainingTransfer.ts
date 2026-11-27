@@ -15,8 +15,10 @@ export type MixedTrainingTransfer = { errors: MixedFieldError[] } | { to: string
 const unlockIds: readonly number[] = PRODUCTION_UNLOCK_TECH_IDS;
 // Pinned .dat (empires2_x2_p1.dat, DE Update 188329) + UGC Guide combat attributes in eco:
 // 10 monk faith recharge, 22 blast width, 24 bonus damage resistance,
-// 63 Combat Ability (type_50.break_off_combat bitfield), 102/107 projectiles, 108 garrison heal, 109 HP regen.
-const combatAttributes = new Set([10, 22, 24, 63, 102, 107, 108, 109]);
+// 59-62 charge attack (max charge / recharge rate / charge event / charge type),
+// 63 Combat Ability (type_50.break_off_combat bitfield), 102/107 projectiles, 108 garrison heal, 109 HP regen,
+// 118 melee damage reflection.
+const combatAttributes = new Set([10, 22, 24, 59, 60, 61, 62, 63, 102, 107, 108, 109, 118]);
 // Pinned .dat + UGC Guide non-pricing operational attributes:
 // 13 Work Rate (bird.work_rate: pack/unpack, heal, gather, trade, building train/research speed),
 // 14 Carry Capacity (unit.resource_capacity).

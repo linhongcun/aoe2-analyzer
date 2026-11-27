@@ -180,7 +180,7 @@ export function Side({
             civ={side.civ}
             list={fams}
             formatLabel={formatUnitLabel}
-            onChange={(x) => onChange(switchSideUnit(core.techById, spec, x.id))}
+            onChange={(x) => onChange(switchSideUnit(core.techById, spec, x.id, x.chargeType ?? 0))}
           />
           {elite && (
             <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
@@ -190,7 +190,7 @@ export function Side({
                 aria-checked={u.id === base.id}
                 tabIndex={u.id === base.id ? 0 : -1}
                 className={u.id === base.id ? 'on' : undefined}
-                onClick={() => onChange(switchSideUnit(core.techById, spec, base.id))}
+                onClick={() => onChange(switchSideUnit(core.techById, spec, base.id, base.chargeType ?? 0))}
               >
                 普通
               </button>
@@ -200,7 +200,7 @@ export function Side({
                 aria-checked={eliteSelected}
                 tabIndex={eliteSelected ? 0 : -1}
                 className={eliteSelected ? 'on' : undefined}
-                onClick={() => onChange(switchSideUnit(core.techById, spec, elite.id))}
+                onClick={() => onChange(switchSideUnit(core.techById, spec, elite.id, elite.chargeType ?? 0))}
               >
                 精锐
               </button>
@@ -357,7 +357,11 @@ export function Side({
               ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
             ]}
             selectableWithoutEffect={
-              new Set([...side.training.costs.map((item) => item.tech.id), ...applicableUnmodeledTechIds(side.avail, u.id, u.combatAbility ?? 0), ...side.sel])
+              new Set([
+                ...side.training.costs.map((item) => item.tech.id),
+                ...applicableUnmodeledTechIds(side.avail, u.id, u.combatAbility ?? 0, u.chargeType ?? 0),
+                ...side.sel,
+              ])
             }
             presetExtra={(scope) => {
               const limit = scope === 'all' ? 4 : scope;
@@ -446,7 +450,7 @@ function UnavailSide({
             <button
               type="button"
               className="pk-act pri"
-              onClick={() => onChange({ ...switchSideUnit(context.core.techById, spec, sub.id), age: Math.max(spec.age, sub.age) })}
+              onClick={() => onChange({ ...switchSideUnit(context.core.techById, spec, sub.id, sub.chargeType ?? 0), age: Math.max(spec.age, sub.age) })}
             >
               换成{sub.zh}
             </button>
@@ -465,7 +469,7 @@ function UnavailSide({
             civ={side.civ}
             list={fams}
             formatLabel={formatUnitLabel}
-            onChange={(x) => onChange(switchSideUnit(context.core.techById, spec, x.id))}
+            onChange={(x) => onChange(switchSideUnit(context.core.techById, spec, x.id, x.chargeType ?? 0))}
           />
         </div>
         <div className="duel-civ-slot">

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { breakEven } from '../../src/domain/breakEven';
+import { DAT, type DatEco } from '../../src/domain/datEffects';
 import { fighterFrom, groupFight } from '../../src/domain/duel';
 import { contactFight, contactFighterError } from '../../src/domain/contactFight';
 import { applicableUnmodeledTechIds, collectDuelUnmodeled, detectUnitUnmodeled, hasPositiveEcoAttr } from '../../src/domain/duelUnmodeled';
@@ -218,12 +219,25 @@ describe('#1296 未建模机制精准判定（全量 24 充能单位 + 5 类机�
     expect(cataWithLog.map((m) => m.pill)).toEqual(['践踏 / 溅射伤害 · 后勤学']);
     expect(cataWithLog[0]!.techEn).toBe('Logistica');
 
-    // 瓦兰吉卫队（2704）选哥瑟砍（1474）：近战单位使用“常规近战主攻击”文案而非“主箭”
+    // 瓦兰吉卫队（2704）选哥瑟砍（1474）：#1482 按 a:62=6 + 单发 a:107=1 合并为「充能远程攻击 · 哥瑟砍」，抑制冗余「额外弹矢」
     const gothikon = techById[1474]!;
     const vgWithGoth = detectUnitUnmodeled({ unit: byId[2704]!, civ: 'Varangians', age: 4, selectedTechs: [gothikon] });
-    expect(vgWithGoth.map((m) => m.pill)).toEqual(['额外弹矢 · 哥瑟砍']);
-    expect(vgWithGoth[0]!.detail).toContain('常规近战主攻击');
-    expect(vgWithGoth[0]!.detail).not.toContain('主箭');
+    expect(vgWithGoth.map((m) => m.pill)).toEqual(['充能远程攻击 · 哥瑟砍']);
+    expect(vgWithGoth[0]!.detail).toBe(
+      '当前仅按基础主攻击逐击结算，未计入充能远程攻击（已选科技「哥瑟砍」；未勾选该科技时本项不会触发）；实战输出或压制能力可能高于此处估算。',
+    );
+    // 近战单位若由纯多弹丸科技（无 a:62 且 a:107 set 2）触发额外弹矢，仍使用“常规近战主攻击”文案而非“主箭”
+    const synthMeleeMulti = { ...gothikon, id: 991296, en: '__SynthMeleeMulti1296__', zh: '合成近战副弹丸' };
+    const datTechs = DAT.techs as Record<string, { id: number; eco: DatEco[]; rules: unknown[] }>;
+    datTechs[synthMeleeMulti.en] = { id: synthMeleeMulti.id, eco: [{ a: 107, op: 'set', v: 2, t: [2704] }], rules: [] };
+    try {
+      const meleeMulti = detectUnitUnmodeled({ unit: byId[2704]!, civ: 'Varangians', age: 4, selectedTechs: [synthMeleeMulti] });
+      expect(meleeMulti.map((m) => m.pill)).toEqual(['额外弹矢 · 合成近战副弹丸']);
+      expect(meleeMulti[0]!.detail).toContain('常规近战主攻击');
+      expect(meleeMulti[0]!.detail).not.toContain('主箭');
+    } finally {
+      delete datTechs[synthMeleeMulti.en];
+    }
 
     // 皇家卫队（513）：近战步兵（567 冠军）触发溅射，远程步兵（281 掷斧兵 +0.5/-0.5 抵消）不误触发
     const druzhina = techById[513]!;

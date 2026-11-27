@@ -86,7 +86,8 @@ test('#1296 深色主题 VgNotes 同卡整合去重 + SimPanel 手动勾选/取�
   const card = page.locator('[data-t="pk-unmodeled"]');
   await expect(card).toBeVisible();
   await expect(card.locator('[data-t="pk-unmodeled-item"]')).toHaveCount(2);
-  await expect(card).toContainText('额外弹矢 · 哥瑟砍');
+  await expect(card).toContainText('充能远程攻击 · 哥瑟砍');
+  await expect(card).not.toContainText('额外弹矢 · 哥瑟砍');
   await expect(card).toContainText('践踏 / 溅射伤害 · 后勤学');
   // 瓦兰吉专区内抑去重复的 vg-gothikon，保留 h4 小标题、产金与已计入加成行
   const vg = card.locator('[data-t="pk-vg"]');
