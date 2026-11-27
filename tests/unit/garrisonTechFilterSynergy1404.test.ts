@@ -323,7 +323,7 @@ describe('Issue 1404: R6 与 Devin Review 改序/形态预算/同伴协同/精�
     expect(apAfter.garrisonPower).toBeCloseTo(2, 5);
 
     // 5. R7 P2-1: 10 项容量空置控制科技 × 7 项净零数值科技去重求解准确返回 [] 且耗时远低于 1 秒
-    const perfIds = independentBritonsIds(17, [16, 47, 483, 755]);
+    const perfIds = independentBritonsIds(17, [16, 47, 483]);
     expect(perfIds).toHaveLength(17);
     const perfData = cloneIsolated(perfIds);
     perfData.unitUpgradeTechs = {};

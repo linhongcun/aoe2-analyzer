@@ -125,11 +125,17 @@ test('#1324 持续生产：鹰斥候（751）、城楼萨金特（1660）与弗�
   await expect(page.getByRole('alert')).toHaveCount(0);
   await expect(page.getByTestId('production-row').first()).toContainText('12 秒 / 个');
 
-  // 勃艮第弗拉芒民兵（1699）：帝王 + 弗拉芒革命（755）自动应用 774 → 14 秒 / 个
-  await page.goto('./#/production?civ=Burgundians&age=4&techs=755&rows=1699%3A12%3A1');
+  // 勃艮第弗拉芒民兵（1699）：无需弗拉芒革命（755），封建 16 秒 / 个，城堡与帝王自动应用 774 → 14 秒 / 个
+  await page.goto('./#/production?civ=Burgundians&age=2&rows=1699%3A12%3A1');
   await expect(page.getByRole('alert')).toHaveCount(0);
-  await expect(page.getByTestId('production-row').first()).toContainText('14 秒 / 个');
-  await expect(page.getByTestId('production-row').first()).toContainText('城堡时代自动训练时间修正');
+  await expect(page.getByTestId('production-row').first()).toContainText('16 秒 / 个');
+
+  for (const age of [3, 4]) {
+    await page.goto(`./#/production?civ=Burgundians&age=${age}&rows=1699%3A12%3A1`);
+    await expect(page.getByRole('alert')).toHaveCount(0);
+    await expect(page.getByTestId('production-row').first()).toContainText('14 秒 / 个');
+    await expect(page.getByTestId('production-row').first()).toContainText('城堡时代自动训练时间修正');
+  }
 
   expect(errors).toEqual([]);
 });

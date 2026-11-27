@@ -314,19 +314,21 @@ describe('#1339 单位详情升时代自动变化领域逻辑', () => {
     expect(donjonProd.errors).toEqual([]);
     expect(donjonBt.after).toBeCloseTo(donjonProd.lines[0]!.seconds, 6);
 
-    // 弗拉芒民兵 1699 在持续生产中需帝王 + 弗拉芒革命（755）解锁兵营训练
+    // 弗拉芒民兵 1699 自封建时代起可直接在兵营训练，城堡/帝王自动应用 16s → 14s（无需 755）
     const flemishBt = (unitAgeChanges(core.unitById[1699]!, 'Burgundians') as Extract<ReturnType<typeof unitAgeChanges>, { state: 'ready' }>).upgradeStages
       .find((s) => s.age === 3)!
       .rows.find((r) => r.key === 'bt')!;
-    const flemishProd = calculateProduction(prodCtx, {
-      ...DEFAULT_PRODUCTION,
-      civ: 'Burgundians',
-      age: 4,
-      techs: [755],
-      rows: [{ unit: 1699, building: 12, count: '1' }],
-    });
-    expect(flemishProd.errors).toEqual([]);
-    expect(flemishBt.after).toBeCloseTo(flemishProd.lines[0]!.seconds, 6);
+    for (const age of [3, 4]) {
+      const flemishProd = calculateProduction(prodCtx, {
+        ...DEFAULT_PRODUCTION,
+        civ: 'Burgundians',
+        age,
+        techs: [],
+        rows: [{ unit: 1699, building: 12, count: '1' }],
+      });
+      expect(flemishProd.errors).toEqual([]);
+      expect(flemishBt.after).toBeCloseTo(flemishProd.lines[0]!.seconds, 6);
+    }
     expect(flemishBt.after).toBe(14);
   });
 

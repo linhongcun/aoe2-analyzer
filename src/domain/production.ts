@@ -22,7 +22,7 @@ export const PRODUCTION_LIMIT = 12;
 export const BUILDING_LIMIT = 100;
 export const DEFAULT_PRODUCTION_COUNT = '1';
 /** 只决定能否训练的科技。编号必须与 productionBuildings 里的门槛一致。 */
-export const PRODUCTION_UNLOCK_TECH_IDS = [16, 47, 483, 755] as const;
+export const PRODUCTION_UNLOCK_TECH_IDS = [16, 47, 483] as const;
 export interface ProductionRow {
   unit: number;
   building: number;
@@ -83,7 +83,7 @@ export function productionTechs(ctx: ProductionContext, config: Pick<ProductionC
     const d = DAT.techs[t.en];
     return (
       isGatherTech(t, config.civ) ||
-      [16, 47, 483, 755].includes(t.id) ||
+      (PRODUCTION_UNLOCK_TECH_IDS as readonly number[]).includes(t.id) ||
       (!!d &&
         (d.eco.some((e) => e.a !== undefined && (costAttrs[e.a] || (e.a === 13 && e.t?.some((id) => !!ctx.core.buildingById[id])))) ||
           d.rules.some((r) => !r.b && r.fx.some((f) => f.s === 'bt'))))
@@ -149,7 +149,6 @@ export function productionBuildings(ctx: ProductionContext, config: ProductionCo
       // 训练时代包含文明提前解锁与长矛兵下限。
       if (trainingUnitAge(config.civ, u.id, u.age) > config.age) return false;
       if (site?.tech !== undefined && !selected.has(site.tech)) return false;
-      if (u.id === 1699 && !selected.has(755)) return false;
       // 化学的解锁对象来自固定 techs.json #47，单位形态升级不能替代该前置。
       if ([5, 36, 420, 691].includes(u.id) && !selected.has(47)) return false;
       return true;
