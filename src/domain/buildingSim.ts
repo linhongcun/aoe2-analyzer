@@ -5,7 +5,7 @@
 import type { Building, Effect, StatSet } from './types';
 import { DAT } from './datEffects';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
-import { BUILDING_CIV_BONUSES, BUILDING_EFFECTS, BUILDING_TEXT_ONLY, genericFx } from './effects';
+import { BUILDING_CIV_BONUSES, BUILDING_EFFECTS, BUILDING_TEXT_ONLY, GENERIC_FX, genericBuildingTriggerReqs, genericFx } from './effects';
 export type { BPred, BCivBonus } from './buildingEffects.manual';
 export { BUILDING_CIV_BONUSES, BUILDING_EFFECTS };
 
@@ -52,20 +52,48 @@ export function buildingBase(b: Building): StatSet {
 /** 仅文本层中的进攻类建筑科技（无攻建筑同样过滤） */
 const OFFENSIVE_TEXT_ONLY = new Set(['Heated Shot', 'Ballistics']);
 
+function directBuildingSimTechs(
+  ctx: SimContext,
+  b: Building,
+  civ: string,
+  canAttack: boolean,
+  st: Record<string, number>,
+): { t: SimTech['t']; ef: Effect[] }[] {
+  const r: { t: SimTech['t']; ef: Effect[] }[] = [];
+  const seen = new Set<number>();
+  Object.keys(BUILDING_EFFECTS).forEach((n) => {
+    const t = ctx.techByEn[n];
+    if (!t || !st['t' + t.id] || seen.has(t.id)) return;
+    if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
+    const rawEf = BUILDING_EFFECTS[n]!.filter(([f]) => f(b)).flatMap((x) => x[1]);
+    const ef = canAttack ? rawEf : rawEf.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s));
+    if (ef.length) {
+      seen.add(t.id);
+      r.push({ t, ef });
+    }
+  });
+  return r;
+}
+
 export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): SimTech[] {
   const st = civStatus(ctx.trees, civ);
-  const r: SimTech[] = [];
-  const seen = new Set<number>();
   const canAttack = buildingCanAttack(b);
+  const direct = directBuildingSimTechs(ctx, b, civ, canAttack, st);
+  const r: SimTech[] = [...direct];
+  const seen = new Set<number>(direct.map((x) => x.t.id));
   const has = (n: string) => {
     const t = ctx.techByEn[n];
     return t && st['t' + t.id] ? t : null;
   };
-  Object.keys(BUILDING_EFFECTS).forEach((n) => {
-    const t = has(n);
+  // 条件建筑隐藏科技（如强化教堂的箭羽/锥子箭/护腕/化学/斯万箭塔）：按单一未隐含触发前置去重并入可选列表
+  GENERIC_FX.forEach((g) => {
+    if (!g.b || (g.civs && !g.civs.includes(civ)) || !g.pred(b)) return;
+    const rem = genericBuildingTriggerReqs(g, b);
+    if (rem.length !== 1) return;
+    const t = has(rem[0]!);
     if (!t || seen.has(t.id)) return;
-    const rawEf = BUILDING_EFFECTS[n]!.filter(([f]) => f(b)).flatMap((x) => x[1]);
-    const ef = canAttack ? rawEf : rawEf.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s));
+    if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
+    const ef = canAttack ? g.fx : g.fx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s));
     if (ef.length) {
       seen.add(t.id);
       r.push({ t, ef });
@@ -107,13 +135,18 @@ export function simulateBuilding(ctx: SimContext, b: Building, civ: string, age:
   (BUILDING_CIV_BONUSES[civ] ?? []).forEach(([f, g]) => {
     if (f(b)) applyEffects(S, g(age));
   });
-  buildingSimTechs(ctx, b, civ).forEach(({ t, ef }) => {
-    if (ef && sel.has(t.id)) applyEffects(S, ef);
+  const st = civStatus(ctx.trees, civ);
+  const canAttack = buildingCanAttack(b);
+  // 仅对直接建筑规则（BUILDING_EFFECTS）施加一次；GENERIC_FX 统一由下方 genericFx 施加，结构上杜绝双重叠加
+  directBuildingSimTechs(ctx, b, civ, canAttack, st).forEach(({ t, ef }) => {
+    if (sel.has(t.id)) applyEffects(S, ef);
   });
-  applyEffects(
-    S,
-    genericFx(b, true, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),
-  );
+  const hasOwnedSelected = (n: string) => {
+    const t = ctx.techByEn[n];
+    return !!t && !!st['t' + t.id] && (t.type !== 'UniqueTech' || t.civs.includes(civ)) && sel.has(t.id);
+  };
+  const gfx = genericFx(b, true, age, hasOwnedSelected, civ);
+  applyEffects(S, canAttack ? gfx : gfx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s)));
   S.bt = Math.round(S.bt * 10) / 10;
   return S;
 }

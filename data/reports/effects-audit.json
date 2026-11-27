@@ -17,9 +17,9 @@
     "total": 106,
     "dat": 106
   },
-  "genericHiddenTechs": 16,
+  "genericHiddenTechs": 23,
   "manualMismatches": {
-    "techGroups": 55,
+    "techGroups": 59,
     "civBonuses": 15,
     "teamBonuses": 10
   },

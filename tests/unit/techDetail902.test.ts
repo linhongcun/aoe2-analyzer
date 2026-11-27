@@ -211,6 +211,49 @@ describe('#902 科技详情按源码规则呈现', () => {
     expect(trained).not.toContain('建造速度');
     expect(techEffectText(884, '建造速度 +50%')).toBe('训练速度 +50%');
   });
+
+  it('#1474：箭羽/锥子箭/护腕/化学/斯万箭塔作用对象命中强化教堂（1806）、排除修道院（104）且省略自指前缀', async () => {
+    const trees = await loadTrees();
+    const known = civs.map((civ) => civ.en);
+    for (const tid of [199, 200, 201, 47, 923]) {
+      const tech = core.techById[tid]!;
+      const entries = techEffectEntries(tech, core.units, core.buildings);
+      const allBuildingIds = entries.flatMap((entry) => entry.buildings.map((b) => b.id));
+      expect(allBuildingIds, `tech ${tid} includes 1806`).toContain(1806);
+      expect(allBuildingIds, `tech ${tid} excludes 104`).not.toContain(104);
+      const churchEntry = entries.find((entry) => entry.kind === 'combo' && entry.buildings.some((b) => b.id === 1806));
+      expect(churchEntry, `tech ${tid} combo entry`).toBeDefined();
+      expect(churchEntry!.req).toEqual([tech.en]);
+      expect(churchEntry!.buildings.map((b) => b.id)).toEqual([1806]);
+    }
+
+    // 按文明筛选：亚美尼亚保留 1806，法兰克过滤后不含 1806 也不含 104
+    const fletching = core.techById[199]!;
+    const fEntries = techEffectEntries(fletching, core.units, core.buildings);
+    const armFiltered = applyTechCivFilter('Armenians', fletching.civs, known, fEntries, civStatus(trees, 'Armenians'));
+    expect(armFiltered.kind).toBe('narrowed');
+    expect(armFiltered.entries.flatMap((e) => e.buildings.map((b) => b.id))).toContain(1806);
+    expect(armFiltered.entries.flatMap((e) => e.buildings.map((b) => b.id))).not.toContain(104);
+    const frFiltered = applyTechCivFilter('Franks', fletching.civs, known, fEntries, civStatus(trees, 'Franks'));
+    expect(frFiltered.kind).toBe('narrowed');
+    expect(frFiltered.entries.flatMap((e) => e.buildings.map((b) => b.id))).not.toContain(1806);
+    expect(frFiltered.entries.flatMap((e) => e.buildings.map((b) => b.id))).not.toContain(104);
+
+    // 自指 combo 省略「需要<本科技>：」前缀，保留 data-kind="combo" 与 data-req，同时保留多科技组合前缀
+    const fletchingHtml = markup('/tech/199');
+    expect(fletchingHtml).toContain('data-kind="combo"');
+    expect(fletchingHtml).toContain('data-req="Fletching"');
+    const fletchingSummaries = summaries(fletchingHtml);
+    expect(fletchingSummaries).toContain('+1 攻击，+2 射程（作用于下方完整名单）');
+    expect(fletchingSummaries.some((s) => s.startsWith('需要箭羽：'))).toBe(false);
+    expect(fletchingSummaries.some((s) => s.startsWith('需要箭羽、海上霸主：'))).toBe(true);
+
+    const svanHtml = markup('/tech/923');
+    expect(svanHtml).toContain('data-req="Svan Towers"');
+    const svanSummaries = summaries(svanHtml);
+    expect(svanSummaries).toContain('+2 攻击（作用于下方完整名单）');
+    expect(svanSummaries.some((s) => s.startsWith('需要斯万箭塔：'))).toBe(false);
+  });
 });
 
 describe('256 倍科技特殊规则', () => {

@@ -21,7 +21,13 @@ import {
   type BuildingGarrisonArrowsState,
 } from '../../src/domain/buildingCivRank';
 import { calculateConstruction, decodeConstruction } from '../../src/domain/construction';
-import { calculateGeneralGarrison, getFreeGarrisonTechs, getGarrisonTechs, readGeneralGarrison } from '../../src/domain/garrisonGeneral';
+import {
+  calculateGeneralGarrison,
+  explainGeneralGarrison,
+  getFreeGarrisonTechs,
+  getGarrisonTechs,
+  readGeneralGarrison,
+} from '../../src/domain/garrisonGeneral';
 import type { Building, Trees } from '../../src/domain/types';
 
 const trees = treesRaw as unknown as Trees;
@@ -261,7 +267,7 @@ describe('建筑详情各文明满科技对照（#1393）', () => {
     expect(sw2.rows[0]!.civ).toBe('Cumans');
     expect(sw2.rows[0]!.earlyUnlock).toBe(true);
 
-    // 强化教堂 1806：空驻 0 / 满驻 5，两国均拥有 322 故无缺近射孔
+    // 强化教堂 1806（#1474）：空驻 0 / 满驻 5，接入 931/942–946 后攻/射程/护甲与驻军预览及独科标签完全一致
     const church = buildBuildingCivRank(ctx, building(1806), 4, readyArrows(building(1806), 4));
     expect(church.rows).toHaveLength(2);
     for (const r of church.rows) {
@@ -269,8 +275,66 @@ describe('建筑详情各文明满科技对照（#1393）', () => {
       expect(r.maxProj).toBe(5);
       expect(r.missingTechs.map((t) => t.id)).not.toContain(322);
     }
-    expect(church.rows.find((r) => r.civ === 'Armenians')!.missingTechs.map((t) => t.id)).toEqual([51]);
-    expect(church.rows.find((r) => r.civ === 'Georgians')!.missingTechs.map((t) => t.id)).toEqual([380]);
+    const armChurch = church.rows.find((r) => r.civ === 'Armenians')!;
+    const geoChurch = church.rows.find((r) => r.civ === 'Georgians')!;
+    expect(armChurch.hp).toBeCloseTo(2640, 6);
+    expect(formatBuildingRankMetric('hp', armChurch.hp)).toBe('2640');
+    expect([armChurch.atk, armChurch.rng, armChurch.ma, armChurch.pa, armChurch.barm]).toEqual([9, 8, 6, 12, 3]);
+    expect(geoChurch.hp).toBeCloseTo(2904, 6);
+    expect(formatBuildingRankMetric('hp', geoChurch.hp)).toBe('2904');
+    expect([geoChurch.atk, geoChurch.rng, geoChurch.ma, geoChurch.pa, geoChurch.barm]).toEqual([11, 8, 7, 13, 6]);
+    expect(armChurch.missingTechs.map((t) => t.id)).toEqual([51]);
+    expect(geoChurch.missingTechs.map((t) => t.id)).toEqual([380]);
+    expect(geoChurch.tags).toContain('斯万箭塔（已计入）');
+    expect(armChurch.tags).not.toContain('斯万箭塔（已计入）');
+    expect(church.champions.map((c) => [c.col, c.formattedValue, c.civs[0]?.civ])).toEqual([
+      ['hp', '2904', 'Georgians'],
+      ['atk', '11', 'Georgians'],
+      ['ma', '7', 'Georgians'],
+      ['pa', '13', 'Georgians'],
+      ['barm', '6', 'Georgians'],
+    ]);
+    // 与同页驻军预览副弹丸攻击严格对齐（格鲁吉亚 11、亚美尼亚 9）
+    const geoGarrison = explainGeneralGarrison(ctx, building(1806), {
+      civ: 'Georgians',
+      age: 4,
+      techs: geoChurch.garrisonTechIds,
+      rows: [{ unitId: 83, count: '5', entry: 'enter' }],
+    });
+    const armGarrison = explainGeneralGarrison(ctx, building(1806), {
+      civ: 'Armenians',
+      age: 4,
+      techs: armChurch.garrisonTechIds,
+      rows: [{ unitId: 83, count: '5', entry: 'enter' }],
+    });
+    expect(geoGarrison.buildingThreshold?.attack).toBe(11);
+    expect(armGarrison.buildingThreshold?.attack).toBe(9);
+    // 强化教堂城堡时代：不计 942 帝王护甲、不计护腕/化学，格鲁吉亚仍计斯万箭塔
+    const churchCastle = buildBuildingCivRank(ctx, building(1806), 3, readyArrows(building(1806), 3));
+    const armChurch3 = churchCastle.rows.find((r) => r.civ === 'Armenians')!;
+    const geoChurch3 = churchCastle.rows.find((r) => r.civ === 'Georgians')!;
+    expect([armChurch3.hp, armChurch3.atk, armChurch3.rng, armChurch3.ma, armChurch3.pa, armChurch3.barm]).toEqual([2640, 7, 7, 5, 11, 3]);
+    expect([geoChurch3.hp, geoChurch3.atk, geoChurch3.rng, geoChurch3.ma, geoChurch3.pa, geoChurch3.barm]).toEqual([2640, 9, 7, 5, 11, 3]);
+    expect(armChurch3.missingTechs).toEqual([]);
+    expect(geoChurch3.missingTechs.map((t) => t.id)).toEqual([380]);
+    expect(geoChurch3.tags).toContain('斯万箭塔（已计入）');
+    expect(churchCastle.champions.map((c) => [c.col, c.formattedValue, c.civs[0]?.civ])).toEqual([['atk', '9', 'Georgians']]);
+
+    // 聚落 2556（#1474）：帝王自动计入 1356 帝王 +1/+1 护甲，城堡及以前不计入
+    const settlementImp = buildBuildingCivRank(ctx, building(2556), 4);
+    expect(settlementImp.rows.find((r) => r.civ === 'Mapuche')).toMatchObject({ hp: 1210, ma: 3, pa: 10, barm: 6 });
+    expect(settlementImp.rows.find((r) => r.civ === 'Incas')).toMatchObject({ hp: 1100, ma: 2, pa: 9, barm: 3 });
+    expect(settlementImp.rows.find((r) => r.civ === 'Muisca')).toMatchObject({ hp: 1100, ma: 2, pa: 9, barm: 3 });
+    expect(settlementImp.rows.find((r) => r.civ === 'Tupi')).toMatchObject({ hp: 1000, ma: 1, pa: 8, barm: 0 });
+    expect(settlementImp.champions.find((c) => c.col === 'ma')).toMatchObject({ formattedValue: '3', civs: [{ civ: 'Mapuche', civZh: '马普切' }] });
+    expect(settlementImp.champions.find((c) => c.col === 'pa')).toMatchObject({ formattedValue: '10', civs: [{ civ: 'Mapuche', civZh: '马普切' }] });
+    const settlementCastle = buildBuildingCivRank(ctx, building(2556), 3);
+    for (const civ of ['Mapuche', 'Incas', 'Muisca']) {
+      expect(settlementCastle.rows.find((r) => r.civ === civ)).toMatchObject({ ma: 1, pa: 8 });
+    }
+    expect(settlementCastle.rows.find((r) => r.civ === 'Tupi')).toMatchObject({ ma: 0, pa: 7 });
+    expect(settlementCastle.champions.map((c) => c.col)).not.toContain('ma');
+    expect(settlementCastle.champions.map((c) => c.col)).not.toContain('pa');
 
     // 炮塔 236：拜占庭希腊之火、土耳其火炮术，及 6 国缺加热射击（#1453）
     const bbt = buildBuildingCivRank(ctx, building(236), 4);

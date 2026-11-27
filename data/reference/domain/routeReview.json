@@ -1,13 +1,13 @@
 {
   "version": "feudal-castle-review-1",
   "effects": {
-    "Britons": "547e5b3e",
-    "Ethiopians": "19f20305",
-    "Franks": "4ef92696",
-    "Mayans": "ba52eb1a",
-    "Vietnamese": "86657171",
-    "Berbers": "2a8dd1c7",
-    "Huns": "794da2cd"
+    "Britons": "7095dfee",
+    "Ethiopians": "ebba9075",
+    "Franks": "e0d11688",
+    "Mayans": "37e3687a",
+    "Vietnamese": "492ac4e1",
+    "Berbers": "8e61920d",
+    "Huns": "080f58fd"
   },
   "units": {
     "4": {

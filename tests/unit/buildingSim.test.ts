@@ -6,7 +6,7 @@ import { matchingGenericFx } from '../../src/domain/effects';
 import { formatHp } from '../../src/domain/hpFormat';
 import { buildingType } from '../../src/domain/buildings';
 import { applicableSimCostTechs, mergeSimCostTechs } from '../../src/domain/simEffectiveCost';
-import { allNumeric } from '../../src/domain/simulator';
+import { allNumeric, totalCost } from '../../src/domain/simulator';
 import type { Building, Effect } from '../../src/domain/types';
 import { ctx, tech } from './helpers';
 
@@ -301,5 +301,76 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
       const civ = b.civs.find((c) => buildingSimTechs(ctx, byId.get(82)!, c).some((x) => x.t.id === 380)) ?? b.civs[0]!;
       expect(simulateBuilding(ctx, b, civ, 4, hs).bonus['船只'], `no-atk ${id}/${civ}`).toBeUndefined();
     }
+  });
+
+  it('强化教堂（1806）与聚落（2556）条件隐藏科技闭环消费、无双算、无 947 负射程且不污染修道院（#1474）', () => {
+    const church = B('Fortified Church');
+    const geoAvail = buildingSimTechs(ctx, church, 'Georgians');
+    const armAvail = buildingSimTechs(ctx, church, 'Armenians');
+
+    expect(
+      geoAvail
+        .filter((x) => x.ef)
+        .map((x) => x.t.id)
+        .sort((a, b) => a - b),
+    ).toEqual([8, 47, 50, 51, 54, 199, 200, 201, 280, 322, 923]);
+    expect(
+      armAvail
+        .filter((x) => x.ef)
+        .map((x) => x.t.id)
+        .sort((a, b) => a - b),
+    ).toEqual([8, 47, 50, 54, 199, 200, 201, 280, 322, 380]);
+
+    // 累计研究费用与研究时长对齐 UX 规格
+    expect(totalCost(geoAvail, allNumeric(geoAvail))).toEqual({ cost: { Food: 2225, Gold: 850, Wood: 575, Stone: 150 }, time: 490 });
+    expect(totalCost(armAvail, allNumeric(armAvail))).toEqual({ cost: { Food: 1975, Gold: 750, Wood: 375, Stone: 150 }, time: 405 });
+
+    // 帝王一键满科技（无双算，最小射程严格为 0，且保留 #1453 基础对船/骆驼加成）
+    const armFull = full('Fortified Church', 'Armenians');
+    expect([armFull.hp, armFull.ma, armFull.pa, armFull.barm, armFull.atk, armFull.rng, armFull.minr, armFull.los, armFull.bt]).toEqual([
+      2640, 6, 12, 3, 9, 8, 0, 18, 41.7,
+    ]);
+    expect([armFull.bonus['船只'], armFull.bonus['骆驼']]).toEqual([9, 1]);
+
+    const geoFull = full('Fortified Church', 'Georgians');
+    expect(geoFull.hp).toBeCloseTo(2904, 6);
+    expect(formatHp(geoFull.hp)).toBe('2904');
+    expect([geoFull.ma, geoFull.pa, geoFull.barm, geoFull.atk, geoFull.rng, geoFull.minr, geoFull.los, geoFull.bt]).toEqual([7, 13, 6, 11, 8, 0, 18, 41.7]);
+
+    // 逐步切换箭羽/锥子箭/护腕/化学与近射孔，及城堡时代不计 942 帝王护甲
+    const armCastleEmpty = simulateBuilding(ctx, church, 'Armenians', 3, new Set());
+    expect([armCastleEmpty.ma, armCastleEmpty.pa, armCastleEmpty.atk, armCastleEmpty.rng, armCastleEmpty.minr]).toEqual([4, 10, 5, 4, 1]);
+    const armImpEmpty = simulateBuilding(ctx, church, 'Armenians', 4, new Set());
+    expect([armImpEmpty.ma, armImpEmpty.pa, armImpEmpty.atk, armImpEmpty.rng, armImpEmpty.minr]).toEqual([5, 11, 5, 4, 1]);
+    const armFletch = simulateBuilding(ctx, church, 'Armenians', 4, ids('Fletching'));
+    expect([armFletch.atk, armFletch.rng]).toEqual([6, 6]);
+    const armBodkin = simulateBuilding(ctx, church, 'Armenians', 4, ids('Fletching', 'Bodkin Arrow'));
+    expect([armBodkin.atk, armBodkin.rng]).toEqual([7, 7]);
+    const armBracer = simulateBuilding(ctx, church, 'Armenians', 4, ids('Fletching', 'Bodkin Arrow', 'Bracer'));
+    expect([armBracer.atk, armBracer.rng]).toEqual([8, 8]);
+    const armChem = simulateBuilding(ctx, church, 'Armenians', 4, ids('Fletching', 'Bodkin Arrow', 'Bracer', 'Chemistry'));
+    expect([armChem.atk, armChem.rng]).toEqual([9, 8]);
+    expect(simulateBuilding(ctx, church, 'Armenians', 4, ids('Murder Holes')).minr).toBe(0);
+    // 越权传入他国独科 923 对亚美尼亚 fail-closed 不生效
+    expect(simulateBuilding(ctx, church, 'Armenians', 4, new Set([923])).atk).toBe(5);
+
+    // 聚落（2556）：帝王计入 1356 +1/+1 护甲，城堡及以前不计入，无进攻科技泄漏
+    const settlement = B('Settlement');
+    expect([full('Settlement', 'Mapuche').ma, full('Settlement', 'Mapuche').pa]).toEqual([3, 10]);
+    expect([full('Settlement', 'Incas').ma, full('Settlement', 'Incas').pa]).toEqual([2, 9]);
+    expect([full('Settlement', 'Muisca').ma, full('Settlement', 'Muisca').pa]).toEqual([2, 9]);
+    expect([full('Settlement', 'Tupi').ma, full('Settlement', 'Tupi').pa]).toEqual([1, 8]);
+    const mapucheCastle = simulateBuilding(ctx, settlement, 'Mapuche', 3, ids('Masonry'));
+    expect([mapucheCastle.ma, mapucheCastle.pa]).toEqual([1, 8]);
+    expect(simulateBuilding(ctx, settlement, 'Tupi', 3, new Set())).toMatchObject({ ma: 0, pa: 7 });
+
+    // 反例：普通修道院（104）零漂移，船坞（45）与瞭望箭塔（79）不被组合规则污染
+    const monastery = B('Monastery');
+    const frMonasteryIds = buildingSimTechs(ctx, monastery, 'Franks').map((x) => x.t.id);
+    for (const forbidden of [47, 199, 200, 201, 923]) expect(frMonasteryIds).not.toContain(forbidden);
+    const frMonasteryFull = full('Monastery', 'Franks');
+    expect([frMonasteryFull.hp, frMonasteryFull.ma, frMonasteryFull.pa, frMonasteryFull.atk, frMonasteryFull.rng]).toEqual([2541, 2, 9, 0, 0]);
+    expect(buildingSimTechs(ctx, B('Dock'), 'Malay').some((x) => x.t.en === 'Thalassocracy' && x.ef !== null)).toBe(false);
+    expect(buildingSimTechs(ctx, B('Watch Tower'), 'Britons').some((x) => x.t.en === 'Guard Tower' && x.ef !== null)).toBe(false);
   });
 });

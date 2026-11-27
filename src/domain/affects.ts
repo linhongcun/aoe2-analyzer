@@ -107,9 +107,15 @@ export function techAffects(t: Tech, units: readonly Unit[], buildings: readonly
       const ef = br.filter(([f]) => f(b)).flatMap((x) => x[1]);
       if (ef.length) add(BUILDING_TYPE_ZH[b.type] + '建筑', ef, undefined, b);
     });
-  // .dat 组合触发的隐藏科技（如 Thalassocracy + Fletching → 巨港；Arrowslits + Keep）
+  // .dat 组合触发的隐藏科技（如 Thalassocracy + Fletching → 巨港；Arrowslits + Keep；仅依赖本科技的建筑条件规则直接归入建筑分组）
   GENERIC_FX.filter((g) => g.req.includes(t.en)).forEach((g) => {
-    const label = '组合触发（需 ' + g.req.filter((r) => r !== t.en).join(' + ') + '）';
+    const others = g.req.filter((r) => r !== t.en);
+    if (!others.length) {
+      if (g.b) buildings.forEach((b) => g.pred(b) && add(BUILDING_TYPE_ZH[b.type] + '建筑', g.fx, undefined, b));
+      else units.forEach((u) => g.pred(u) && add(unitGroup(u), g.fx, u));
+      return;
+    }
+    const label = '组合触发（需 ' + others.join(' + ') + '）';
     if (g.b) buildings.forEach((b) => g.pred(b) && add(label, g.fx, undefined, b));
     else units.forEach((u) => g.pred(u) && add(label, g.fx, u));
   });
