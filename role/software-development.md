@@ -63,7 +63,7 @@ Playwright 未设 `BASE_URL` 时自起 `vite preview --port 4173` 读取 `dist/`
 
 ## 7. 从改动到上线
 
-1. 基于最新 `origin/main` 建独立 worktree 分支；核对原 Issue 处于 `阶段:软件开发`、无重复 open PR 与硬阻塞，在「软件开发」节补 TRD（`feature`/`data` 先完成独立技术评审，`bug`/`docs`/`chore` 并入 PR 复核）。网站实现 PR 在 `release-notes/<issue>.json` 写面向玩家的更新片段（`issue`、`summary`、默认 `patch` 的 `bump`），不再手工修改 `package.json`、`package-lock.json` 与 `CHANGELOG.md` 顶部；纯文档与无需网站交付的工程 PR 不提交片段。
+1. 基于最新 `origin/main` 建独立 worktree 分支；核对原 Issue 处于 `阶段:软件开发`、无重复 open PR 与硬阻塞，在「软件开发」节补 TRD（`feature`/`data` 开 PR 前先由实现者之外的非 Codex、非 Devin 独立代理完成只读技术评审，`bug`/`docs`/`chore` 并入 PR 复核）。网站实现 PR 在 `release-notes/<issue>.json` 写面向玩家的更新片段（`issue`、`summary`、默认 `patch` 的 `bump`），不再手工修改 `package.json`、`package-lock.json` 与 `CHANGELOG.md` 顶部；纯文档与无需网站交付的工程 PR 不提交片段。
 2. 改数据脚本后本地重生成并提交产物（默认 CI 不跑 `data` 阶段）；跑直接相关单测/E2E 与必要冒烟。
 3. 由实现者之外的非 Codex、非 Devin 独立代理复核最终 HEAD（记 SHA、范围、结论与遗留；按维护者 2026-11-27 决定，**0 P0 / 0 P1 即结论通过**，P2 仅作非阻断备注不打回，按务实威胁模型聚焦验收标准与真实回归）；纯文档/纯样式不动逻辑测试可走 CI 绿轻量规则。
 4. PR 标题符合 [check-pr-title.mjs](../scripts/check-pr-title.mjs) Conventional Commits；默认 `squash` 合并（双提交策略 PR 中 Commit 2 钉 Commit 1 `DOC_SHA` 时必须常规 `merge` 保留祖先链，如 [#1369](https://github.com/linhongcun/aoe2-analyzer/issues/1369)/[#1398](https://github.com/linhongcun/aoe2-analyzer/issues/1398)）。网站实现 PR 写 `Relates #N`，合入即完成的纯仓库文档可 `Fixes #N`（经验回写 PR 只写 `Relates #N`）。
