@@ -273,6 +273,10 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       const target = join(tempDir, 'data/game/army_cost_usage.json');
       const upperTarget = join(tempDir, 'data/game/ARMY_COST_USAGE.JSON');
       const unicodeFoldTarget = join(tempDir, 'data/game/army_co\u017ft_usage.json');
+      const nestedGameDir = join(tempDir, 'data/game/nested');
+      mkdirSync(nestedGameDir, { recursive: true });
+      const nestedSentinel = join(nestedGameDir, 'sentinel.json');
+      writeFileSync(nestedSentinel, '{"sentinel":"nested"}\n');
       const gameDirAlias = join(tempDir, 'game-dir-alias');
       symlinkSync(join(tempDir, 'data/game'), gameDirAlias);
       const aliasTarget = join(gameDirAlias, 'army_cost_usage.json');
@@ -347,6 +351,9 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         expect(
           execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', unicodeFoldTarget], { cwd: tempDir }),
         ).rejects.toThrow(/--out/),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', nestedSentinel], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', aliasTarget], { cwd: tempDir })).rejects.toThrow(
           /--out/,
         ),
@@ -385,6 +392,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       expect(existsSync(target)).toBe(false);
       expect(existsSync(upperTarget)).toBe(false);
       expect(existsSync(unicodeFoldTarget)).toBe(false);
+      expect(readFileSync(nestedSentinel, 'utf8')).toBe('{"sentinel":"nested"}\n');
       expect(existsSync(join(tempDir, 'must-not-exist.json'))).toBe(false);
       expect(existsSync(join(tempDir, '--check'))).toBe(false);
       if (process.platform !== 'win32') {
@@ -392,12 +400,26 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         expect(existsSync(join(tempDir, 'literal\\item.json'))).toBe(true);
       }
 
-      // 4) 普通模式与 --script 模式双验证 --check，并与已提交的 data/game/army_cost_usage.json 核对 meta 与该文明条目完全一致
+      // 4) 默认快照本身指向外部文件的符号链接时，仍独立保护 data/game/ 及其外部目标，同时允许向外部同目录的其他文件写出/校验；
+      //    并行完成普通模式与 --script 模式双验证 --check，并与已提交的 data/game/army_cost_usage.json 核对 meta 与该文明条目一致
       //    （全 56 文明字节级复现另由 bonusUsageArmyCost1429.test.ts 与 DATA_CHECKS 覆盖）
+      const externalSnapshot = join(tempDir, 'external-snapshot.json');
+      writeFileSync(externalSnapshot, '{"sentinel":"external"}\n');
+      symlinkSync(externalSnapshot, target);
+      const directSentinel = join(tempDir, 'data/game/direct-sentinel.json');
+      writeFileSync(directSentinel, '{"sentinel":"direct"}\n');
       await Promise.all([
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', directSentinel], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', externalSnapshot], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
         execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
         execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
       ]);
+      expect(readFileSync(directSentinel, 'utf8')).toBe('{"sentinel":"direct"}\n');
+      expect(readFileSync(externalSnapshot, 'utf8')).toBe('{"sentinel":"external"}\n');
       const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
       expect(readFileSync(subsetOut, 'utf8')).toBe(formatArmyCostUsageJson(builtSpanish));
       const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;

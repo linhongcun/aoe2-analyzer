@@ -101,17 +101,27 @@ function sameInode(a: string, b: string): boolean {
   }
 }
 
+function isWithinDir(targetPath: string, protectedDir: string): boolean {
+  let cur = targetPath;
+  while (true) {
+    if (cur === protectedDir || sameInode(cur, protectedDir)) return true;
+    const parent = dirname(cur);
+    if (parent === cur) return false;
+    cur = parent;
+  }
+}
+
 function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_USAGE_DEST): boolean {
   const ca = resolveFsPath(candidate);
   const cb = resolveFsPath(defaultDest);
-  if (ca === null || cb === null) return true;
+  const protectedDir = resolveFsPath(dirname(defaultDest));
+  if (ca === null || cb === null || protectedDir === null) return true;
   if (ca === cb) return true;
   if (sameInode(candidate, defaultDest) || sameInode(ca, cb)) return true;
-  // Block any --civ write into data/game/ (including firmlink aliases and arbitrary Unicode/case
+  // Block any --civ write into data/game/ at any nesting depth (resolving data/game/ independently
+  // of the default snapshot target, including firmlink aliases and arbitrary Unicode/case
   // equivalents on case-insensitive filesystems such as APFS `army_coſt_usage.json`).
-  const defaultDir = dirname(cb);
-  const candDir = dirname(ca);
-  return ca === defaultDir || candDir === defaultDir || sameInode(ca, defaultDir) || sameInode(candDir, defaultDir);
+  return isWithinDir(ca, protectedDir);
 }
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {
