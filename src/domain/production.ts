@@ -16,13 +16,14 @@ import { formatProductionNumber, ratePerMinute } from './formatTime';
 import { toggleSelected } from './prereq';
 import { unitTrainCount } from './trainBatch';
 import { MAPUCHE_CIV, MAPUCHE_SETTLEMENT_UNITS, SETTLEMENT, trainingAtBuilding } from './unitTrainingSites';
+import { requiredTrainingUnlockTech, TRAINING_UNLOCK_TECH_ID_SET, TRAINING_UNLOCK_TECH_IDS } from './trainingUnlocks';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
 export const BUILDING_LIMIT = 100;
 export const DEFAULT_PRODUCTION_COUNT = '1';
-/** 只决定能否训练的科技。编号必须与 productionBuildings 里的门槛一致。 */
-export const PRODUCTION_UNLOCK_TECH_IDS = [16, 47, 483] as const;
+/** 只决定能否训练的科技。统一派生自 trainingUnlocks 单一真源，保持对外导出兼容。 */
+export const PRODUCTION_UNLOCK_TECH_IDS = TRAINING_UNLOCK_TECH_IDS;
 export interface ProductionRow {
   unit: number;
   building: number;
@@ -83,7 +84,7 @@ export function productionTechs(ctx: ProductionContext, config: Pick<ProductionC
     const d = DAT.techs[t.en];
     return (
       isGatherTech(t, config.civ) ||
-      (PRODUCTION_UNLOCK_TECH_IDS as readonly number[]).includes(t.id) ||
+      TRAINING_UNLOCK_TECH_ID_SET.has(t.id) ||
       (!!d &&
         (d.eco.some((e) => e.a !== undefined && (costAttrs[e.a] || (e.a === 13 && e.t?.some((id) => !!ctx.core.buildingById[id])))) ||
           d.rules.some((r) => !r.b && r.fx.some((f) => f.s === 'bt'))))
@@ -148,9 +149,9 @@ export function productionBuildings(ctx: ProductionContext, config: ProductionCo
       if (!cell) return false;
       // 训练时代包含文明提前解锁与长矛兵下限。
       if (trainingUnitAge(config.civ, u.id, u.age) > config.age) return false;
-      if (site?.tech !== undefined && !selected.has(site.tech)) return false;
-      // 化学的解锁对象来自固定 techs.json #47，单位形态升级不能替代该前置。
-      if ([5, 36, 420, 691].includes(u.id) && !selected.has(47)) return false;
+      // 统一按 trainingUnlocks 核验训练解锁门槛（含条件建筑与化学等全局解锁）。
+      const requiredUnlock = site?.tech ?? requiredTrainingUnlockTech(u.id, b.id);
+      if (requiredUnlock !== undefined && !selected.has(requiredUnlock)) return false;
       return true;
     })
     .map((b) => b[0]);
