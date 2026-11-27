@@ -1,6 +1,6 @@
 /** 工具：单位 PK（1v1 / N vs M / 等资源 / 混编），URL 与结果协调。 */
 import { useEffect, useLayoutEffect, useMemo, useRef, type MutableRefObject, type ReactNode } from 'react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
@@ -21,10 +21,13 @@ import '../../../shared/ui/contextLinks.css';
 import { fmtClock, realCostOf } from '../../../domain/realCost';
 import { extractDuelSourceParams, readDuelMatchupContext } from '../logic/duelContext';
 import { buildEnterMixedParams, formatBreakEvenSide, rawUid, resolveDuelKiteEligibility, techFieldInvalid } from '../logic/duelKiteView';
+import { readLinkAdjustedParams, resolveDuelMixedHint, swapDuelNumericDrafts } from '../logic/duelNumericDraft';
 import { swapSingleDuelParams } from '../logic/duelSwap';
 import { DUEL_COST_MODEL } from '../logic/trainingCostView';
 import { Icon } from '../../../shared/ui/Icon';
+import { DuelFieldErrors, DuelNumericField, DuelParamAdjustedNotice } from './DuelNumericFeedback';
 import { DuelNPairHints, pairBatchQtyPatch } from './DuelTradeAndBudget';
+import { useDuelNumericState } from './useDuelNumericState';
 import { radioKeyboard } from './radioKeyboard';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
@@ -80,12 +83,14 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const [sp, setSp] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const hasUpgrade = ['base', 'fixed', 'basev', 'baser', 'fixedr'].some((key) => sp.has(key));
-  // issue 772 / issue 1368：坏单位 id / 乱码科技回退，或 1260 精锐钦察（库曼雇佣兵）替换为 1233 时给出明确提示，
+  // issue 772 / issue 1368 / issue 1483：坏单位 id / 乱码科技回退、1260 替换为 1233 或外部深链数值参数调整时给出提示，
   // 并把标记放进 history state，让地址栏 replace 后提示保留一次；之后用户改动任意参数自然清除。
-  const linkState = location.state as { duelLinkInvalid?: boolean; duelUnitReplaced?: boolean } | null;
+  const linkState = location.state as { duelLinkInvalid?: boolean; duelUnitReplaced?: boolean; duelParamsAdjusted?: unknown } | null;
   const linkStateInvalid = linkState?.duelLinkInvalid ?? false;
   const linkStateReplaced = linkState?.duelUnitReplaced ?? false;
+  const linkStateAdjusted = useMemo(() => readLinkAdjustedParams(linkState?.duelParamsAdjusted), [linkState?.duelParamsAdjusted]);
   const uidInvalid =
     !!core &&
     (['a', 'b'] as const).some((key) => {
@@ -104,7 +109,8 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
   const unitReplaced = linkStateReplaced || unitReplacedInUrl;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
   const productionContext = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
-  const { mode, na, nb, bud, vils, mins } = decodeDuelParams(sp);
+  const decodedParams = useMemo(() => decodeDuelParams(sp), [sp]);
+  const { mode, na, nb, bud, vils, mins } = decodedParams;
   const kite = decodeDuelKite(sp);
   const relics = decodeDuelRelics(sp);
   const eq = mode === 'r' || mode === 't';
@@ -118,12 +124,6 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
     () => (core && ctx ? resolve(ctx, core.unitById, parseDuelSpec(bParam, DEF_B, hasUpgrade), DEF_B.uid, relics.b) : null),
     [core, ctx, bParam, hasUpgrade, relics.b],
   );
-  const set = (k: Record<string, string>, drop: string[] = []) => {
-    const n = new URLSearchParams(sp);
-    Object.entries(k).forEach(([a, b]) => n.set(a, b));
-    drop.forEach((d) => n.delete(d));
-    setSp(n, { replace: true });
-  };
   // issue 102：地址栏始终带完整的 a、b、m（等资源再带 bud，N vs M 再带 na/nb），反馈链接读地址栏即可复现当前对阵
   const canon = new URLSearchParams(sp);
   const uiKiteEligible = resolveDuelKiteEligibility(mode, A, B);
@@ -138,22 +138,34 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
     canon.set('m', mode);
   }
   const incoming = sp.toString();
-  const canonStr = canonDuelRelics(
-    canonDuelKite(canonDuelParams(canon, { mode, na, nb, bud, vils, mins }), kite, canonKiteEligible),
-    relics,
-    canonRelicMax,
-  ).toString();
+  const canonStr = canonDuelRelics(canonDuelKite(canonDuelParams(canon, decodedParams), kite, canonKiteEligible), relics, canonRelicMax).toString();
+  const canonSearch = canonStr ? `?${canonStr}` : '';
+  const { activeDrafts, numericErrors, hasNumericErrors, visibleParamsAdjusted, applySearch, set, onNumericChange, fieldVal } = useDuelNumericState({
+    sp,
+    setSp,
+    location,
+    navigationType,
+    decodedParams,
+    canonSearch,
+    linkStateAdjusted,
+  });
   const matchupContext = readDuelMatchupContext(sp);
 
   useEffect(() => {
     if (canonStr === incoming) return;
     const nextState =
-      invalidLink || unitReplaced ? { ...(invalidLink ? { duelLinkInvalid: true } : {}), ...(unitReplaced ? { duelUnitReplaced: true } : {}) } : undefined;
+      invalidLink || unitReplaced || visibleParamsAdjusted.length > 0
+        ? {
+            ...(invalidLink ? { duelLinkInvalid: true } : {}),
+            ...(unitReplaced ? { duelUnitReplaced: true } : {}),
+            ...(visibleParamsAdjusted.length > 0 ? { duelParamsAdjusted: visibleParamsAdjusted } : {}),
+          }
+        : undefined;
     // setSearchParams 会丢掉 #duel-model。只在这个锚点上改用带 hash 的跳转，其它地址仍走原来的补齐。
     if (location.hash === '#duel-model')
-      navigate({ pathname: location.pathname, search: `?${canonStr}`, hash: location.hash }, { replace: true, state: nextState });
+      navigate({ pathname: location.pathname, search: canonSearch, hash: location.hash }, { replace: true, state: nextState });
     else setSp(new URLSearchParams(canonStr), { replace: true, state: nextState });
-  }, [canonStr, incoming, setSp, navigate, location.pathname, location.hash, invalidLink, unitReplaced]);
+  }, [canonStr, canonSearch, incoming, setSp, navigate, location.pathname, location.hash, invalidLink, unitReplaced, visibleParamsAdjusted]);
 
   useEffect(() => {
     if (location.hash !== '#duel-model') return;
@@ -239,20 +251,21 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
       </section>
     );
 
-  const hasNegative = !isUnavail(A) && !isUnavail(B) && [...damageByClass(A.F, B.F), ...damageByClass(B.F, A.F)].some((row) => row.damage < 0);
-  const formulaTitle =
-    isUnavail(A) || isUnavail(B)
-      ? '存在不可用单位，本场伤害未计算；简式仅适用于匹配类别没有负伤害贡献的情形。'
-      : hasNegative
-        ? '本场存在负伤害贡献；只对目标已入库且具有的护甲类别求和。'
-        : '本场双方已匹配类别均无负伤害贡献，使用等价简式；一般规则保留负攻击扣减。';
+  const hasUnavail = isUnavail(A) || isUnavail(B);
+  const hasNegative = !hasUnavail && [...damageByClass(A.F, B.F), ...damageByClass(B.F, A.F)].some((row) => row.damage < 0);
+  const formulaTitle = hasUnavail
+    ? '存在不可用单位，本场伤害未计算；简式仅适用于匹配类别没有负伤害贡献的情形。'
+    : hasNegative
+      ? '本场存在负伤害贡献；只对目标已入库且具有的护甲类别求和。'
+      : '本场双方已匹配类别均无负伤害贡献，使用等价简式；一般规则保留负攻击扣减。';
   const damageFormula = hasNegative ? FULL_DAMAGE : SIMPLE_DAMAGE;
-  const upd = (k: 'a' | 'b', s: SideSpec) =>
-    set({ [k]: fmtSide(s), ...pairBatchQtyPatch(mode, k, (k === 'a' ? A : B).u, core.unitById[s.uid], k === 'a' ? na : nb) });
-  const tcA = !isUnavail(A) ? unitTrainCount(A.u) : 1;
-  const tcB = !isUnavail(B) ? unitTrainCount(B.u) : 1;
+  const upd = (k: 'a' | 'b', s: SideSpec) => {
+    const qtyKey = k === 'a' ? 'na' : 'nb';
+    const pairPatch = activeDrafts[qtyKey] !== undefined ? {} : pairBatchQtyPatch(mode, k, (k === 'a' ? A : B).u, core.unitById[s.uid], k === 'a' ? na : nb);
+    set({ [k]: fmtSide(s), ...pairPatch });
+  };
   const enterMixed = (viaKeyboard: boolean) => {
-    if (isUnavail(A) || isUnavail(B)) {
+    if (hasUnavail || hasNumericErrors) {
       pendingModeFocusRef.current = null;
       return;
     }
@@ -260,6 +273,11 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
     pendingModeFocusRef.current = viaKeyboard ? 'mix' : null;
     setSp(buildEnterMixedParams(A, B, mode, { na, nb, cntA, cntB }, { a: effKiteA, b: effKiteB }), source ? { state: { duelSource: source } } : undefined);
   };
+  const sideCntA = hasNumericErrors ? null : cntA;
+  const sideCntB = hasNumericErrors ? null : cntB;
+  const sideBatchesA = hasNumericErrors ? null : (budgetA?.batches ?? null);
+  const sideBatchesB = hasNumericErrors ? null : (budgetB?.batches ?? null);
+  const sideBud = mode === 'r' && !hasNumericErrors ? bud : 0;
 
   return (
     <>
@@ -275,59 +293,45 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             {DUEL_UNIT_REPLACED_NOTE}
           </p>
         )}
+        <DuelParamAdjustedNotice items={visibleParamsAdjusted} />
         {contextBar}
         <DuelModeBar
           active={eq ? 'r' : mode}
-          mixedDisabled={isUnavail(A) || isUnavail(B)}
-          mixedHint="请先修正不可用单位，再进入混编。"
+          mixedDisabled={hasUnavail || hasNumericErrors}
+          mixedHint={resolveDuelMixedHint(hasUnavail, hasNumericErrors)}
           onSelect={(nextMode, _trigger, viaKeyboard) => {
             if (nextMode === 'mix') {
               enterMixed(viaKeyboard);
               return;
             }
-            set({ m: nextMode }, ['be']);
+            set({ m: nextMode }, ['be'], nextMode !== (eq ? 'r' : mode));
           }}
         >
           {mode === 'n' && (
-            <div className="duel-mode-extra">
-              <label>
-                A 数量{' '}
-                <input
-                  id="duel-na"
-                  type="number"
-                  min={tcA}
-                  step={tcA}
-                  max={200}
-                  value={na}
-                  onChange={(e) => set({ na: e.target.value })}
-                  style={{ width: 64 }}
-                />
-              </label>
-              <label>
-                B 数量{' '}
-                <input
-                  id="duel-nb"
-                  type="number"
-                  min={tcB}
-                  step={tcB}
-                  max={200}
-                  value={nb}
-                  onChange={(e) => set({ nb: e.target.value })}
-                  style={{ width: 64 }}
-                />
-              </label>
-            </div>
+            <>
+              <div className="duel-mode-extra">
+                <DuelNumericField fieldKey="na" label="A 数量" value={fieldVal('na', na)} invalid={activeDrafts.na !== undefined} onChange={onNumericChange} />
+                <DuelNumericField fieldKey="nb" label="B 数量" value={fieldVal('nb', nb)} invalid={activeDrafts.nb !== undefined} onChange={onNumericChange} />
+              </div>
+              <DuelFieldErrors errors={numericErrors} />
+            </>
           )}
           {mode === 'r' && (
-            <div className="duel-mode-extra">
-              <label>
-                资源预算{' '}
-                <input id="duel-bud" type="number" min={100} step={500} value={bud} onChange={(e) => set({ bud: e.target.value })} style={{ width: 90 }} />
-              </label>
-            </div>
+            <>
+              <div className="duel-mode-extra">
+                <DuelNumericField
+                  fieldKey="bud"
+                  label="资源预算"
+                  value={fieldVal('bud', bud)}
+                  invalid={activeDrafts.bud !== undefined}
+                  onChange={onNumericChange}
+                />
+              </div>
+              <DuelFieldErrors errors={numericErrors} />
+            </>
           )}
         </DuelModeBar>
-        {mode === 'n' && <DuelNPairHints A={A} B={B} na={na} nb={nb} />}
+        {mode === 'n' && <DuelNPairHints A={A} B={B} na={activeDrafts.na !== undefined ? null : na} nb={activeDrafts.nb !== undefined ? null : nb} />}
         {eq && (
           <div className="rc-seg">
             <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>
@@ -337,7 +341,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
                 aria-checked={mode === 'r'}
                 tabIndex={mode === 'r' ? 0 : -1}
                 className={mode === 'r' ? 'on' : undefined}
-                onClick={() => set({ m: 'r' }, ['vil', 'min'])}
+                onClick={() => set({ m: 'r' }, ['vil', 'min'], mode !== 'r')}
               >
                 等资源
               </button>
@@ -347,7 +351,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
                 aria-checked={mode === 't'}
                 tabIndex={mode === 't' ? 0 : -1}
                 className={mode === 't' ? 'on' : undefined}
-                onClick={() => set({ m: 't' })}
+                onClick={() => set({ m: 't' }, [], mode !== 't')}
               >
                 <Icon name="clock" className="ic" />
                 等采集时间
@@ -357,28 +361,43 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
         )}
         {mode === 't' && (
           <div className="rc-budget" data-t="rc-budget">
-            <span>
-              村民时间 <b data-t="rc-budget-text">{`${vils} 个村民 × ${fmtClock(mins * 60)}`}</b>
+            <span className="rc-budget-summary">
+              村民时间{' '}
+              {hasNumericErrors ? (
+                <b data-t="rc-budget-text" className="rc-budget-invalid">
+                  待修正输入
+                </b>
+              ) : (
+                <b data-t="rc-budget-text">{`${vils} 个村民 × ${fmtClock(mins * 60)}`}</b>
+              )}
             </span>
-            <label>
-              村民 <input id="duel-vil" type="number" min={1} max={200} value={vils} onChange={(e) => set({ vil: e.target.value })} />
-            </label>
-            <label>
-              分钟 <input id="duel-min" type="number" min={1} max={120} value={mins} onChange={(e) => set({ min: e.target.value })} />
-            </label>
+            <DuelNumericField fieldKey="vil" label="村民" value={fieldVal('vil', vils)} invalid={activeDrafts.vil !== undefined} onChange={onNumericChange} />
+            <DuelNumericField fieldKey="min" label="分钟" value={fieldVal('min', mins)} invalid={activeDrafts.min !== undefined} onChange={onNumericChange} />
+            <DuelFieldErrors errors={numericErrors} />
           </div>
         )}
-        <DuelStage A={A} B={B} mode={mode} cntA={cntA} cntB={cntB} bud={bud} kite={kiteOpt} budgetErrorParts={budgetErrorParts}>
+        <DuelStage
+          A={A}
+          B={B}
+          mode={mode}
+          cntA={sideCntA}
+          cntB={sideCntB}
+          bud={sideBud}
+          kite={kiteOpt}
+          budgetErrorParts={hasNumericErrors ? null : budgetErrorParts}
+          inputErrors={numericErrors}
+        >
           <div className="duel-sides">
             <Side
               k="a"
               side={A}
               fams={fams}
               onChange={(s) => upd('a', s)}
-              count={cntA}
-              batches={budgetA?.batches ?? null}
-              bud={mode === 'r' ? bud : 0}
+              count={sideCntA}
+              batches={sideBatchesA}
+              bud={sideBud}
               time={mode === 't' ? [vils, mins] : null}
+              hideTimeCount={mode === 't' && hasNumericErrors}
               context={productionContext!}
               canKite={uiKiteEligible?.a ?? false}
               kite={effKiteA}
@@ -391,7 +410,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               type="button"
               className="duel-swap"
               aria-label="互换 A、B 双方"
-              onClick={() => setSp(swapSingleDuelParams(sp, A, B, { mode, na, nb, bud, vils, mins }), { replace: true })}
+              onClick={() => applySearch(swapSingleDuelParams(sp, A, B, decodedParams), swapDuelNumericDrafts(mode, activeDrafts))}
             >
               <Icon name="arrow-left-right" />
               <span className="duel-swap-short" aria-hidden="true">
@@ -406,10 +425,11 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
               side={B}
               fams={fams}
               onChange={(s) => upd('b', s)}
-              count={cntB}
-              batches={budgetB?.batches ?? null}
-              bud={mode === 'r' ? bud : 0}
+              count={sideCntB}
+              batches={sideBatchesB}
+              bud={sideBud}
               time={mode === 't' ? [vils, mins] : null}
+              hideTimeCount={mode === 't' && hasNumericErrors}
               context={productionContext!}
               canKite={uiKiteEligible?.b ?? false}
               kite={effKiteB}
@@ -424,7 +444,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
           ctx={ctx}
           byId={core.unitById}
           params={sp}
-          available={!isUnavail(A) && !isUnavail(B)}
+          available={!hasUnavail}
           onSave={(a, b) => {
             const next: Record<string, string> = {
               a: fmtSide(a),
@@ -439,16 +459,16 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             else drop.push('baser');
             if (b.relics && b.relics > 0) next.fixedr = String(b.relics);
             else drop.push('fixedr');
-            set(next, drop);
+            set(next, drop, true);
           }}
           onClear={() => set({}, ['base', 'fixed', 'basev', 'baser', 'fixedr'])}
           onNormalize={(values) => set(values)}
         />
-        {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
-        {!isUnavail(A) && !isUnavail(B) && (
+        {!hasUnavail && <DamageBreakdown ctx={ctx} a={A} b={B} />}
+        {!hasUnavail && (
           <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ, relics: A.relics }} b={{ ...B.spec, civ: B.civ, relics: B.relics }} />
         )}
-        {!eq && !isUnavail(A) && !isUnavail(B) && (
+        {!eq && !hasNumericErrors && !hasUnavail && (
           // issue 25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
           <BreakEven
             key={mode}
@@ -460,7 +480,7 @@ function DuelCalculator({ resources, pendingModeFocusRef, after }: DuelCalcProps
             auto={sp.get('be') === '1'}
             kite={kiteOpt}
             onComputed={() => set({ be: '1' })}
-            onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'])}
+            onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'], true)}
           />
         )}
         <p className="note duel-note" id="duel-model">

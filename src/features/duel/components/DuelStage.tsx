@@ -4,8 +4,10 @@ import { formatDuelBudgetErrorText, type DuelBudgetPart } from '../../../domain/
 import type { KiteOptions } from '../../../domain/contactKite';
 import { fmtSide, type Mode } from '../../../domain/duelState';
 import { Icon } from '../../../shared/ui/Icon';
+import type { DuelNumericError } from '../logic/duelNumericDraft';
 import { isUnavail, type SideState } from '../logic/duelSide';
 import { summarizeGroup, summarizeOneVOne } from '../logic/duelSummary';
+import { DuelInputInvalidCard } from './DuelNumericFeedback';
 import { DuelStickyResult } from './DuelStickyResult';
 import { Group, OneVOne } from './DuelResults';
 
@@ -18,6 +20,7 @@ export function DuelStage({
   bud,
   kite,
   budgetErrorParts,
+  inputErrors = [],
   children,
 }: {
   A: SideState;
@@ -28,29 +31,36 @@ export function DuelStage({
   bud: number;
   kite?: KiteOptions;
   budgetErrorParts?: readonly DuelBudgetPart[] | null;
+  inputErrors?: readonly DuelNumericError[];
   children: ReactNode;
 }) {
   const [resEl, setResEl] = useState<HTMLDivElement | null>(null);
   const resHeadingRef = useRef<HTMLHeadingElement>(null);
+  const hasInputErrors = inputErrors.length > 0;
   const kA = Number(Boolean(kite?.a));
   const kB = Number(Boolean(kite?.b));
-  const oneResult = useMemo(() => (mode === '1' && !isUnavail(A) && !isUnavail(B) ? oneVOneFight(A.F, B.F, kite ? { kite } : {}) : null), [mode, A, B, kite]);
+  const oneResult = useMemo(
+    () => (mode === '1' && !hasInputErrors && !isUnavail(A) && !isUnavail(B) ? oneVOneFight(A.F, B.F, kite ? { kite } : {}) : null),
+    [mode, hasInputErrors, A, B, kite],
+  );
   const groupResult = useMemo(() => {
-    if (mode === '1' || isUnavail(A) || isUnavail(B)) return null;
+    if (mode === '1' || hasInputErrors || isUnavail(A) || isUnavail(B)) return null;
     if (budgetErrorParts) return { status: 'error' as const, reason: formatDuelBudgetErrorText(budgetErrorParts), winner: null };
     return groupFight(A.F, cntA ?? 0, B.F, cntB ?? 0, { recordReplay: true, ...(kite ? { kite } : {}) });
-  }, [mode, A, B, cntA, cntB, kite, budgetErrorParts]);
+  }, [mode, hasInputErrors, A, B, cntA, cntB, kite, budgetErrorParts]);
   const stickySummary = useMemo(() => {
-    if (isUnavail(A) || isUnavail(B)) return null;
+    if (hasInputErrors || isUnavail(A) || isUnavail(B)) return null;
     if (mode === '1' && oneResult) return summarizeOneVOne(A, B, oneResult);
     if (mode !== '1' && groupResult && cntA !== null && cntB !== null) return summarizeGroup(A, B, groupResult, { na: cntA, nb: cntB });
     return null;
-  }, [mode, A, B, cntA, cntB, oneResult, groupResult]);
+  }, [mode, hasInputErrors, A, B, cntA, cntB, oneResult, groupResult]);
   return (
     <>
       <DuelStickyResult summary={stickySummary} targetEl={resEl} headingRef={resHeadingRef} />
       {children}
-      {isUnavail(A) || isUnavail(B) ? (
+      {hasInputErrors ? (
+        <DuelInputInvalidCard errors={inputErrors} />
+      ) : isUnavail(A) || isUnavail(B) ? (
         <div id="duel-pending" className="posbox duel-pending">
           <p data-t="pk-pending">
             <Icon name="info" className="ic" />

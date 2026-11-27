@@ -118,15 +118,19 @@ test('#1384 单位 PK 等资源 3000/3020/100、等采集时间、N vs M 与混�
   await assertSingleLine(page.locator('#duel-a [data-t="rc-sum"] .rc-res'));
   await assertNoOverflow(page);
 
-  // N vs M：step=2、min=2、旧链接奇数提示且切换精锐保留原奇数
+  // N vs M：#1483 改为 text+numeric 严格整数输入，移除原生 step/min 避免奇数 stepMismatch；旧链接奇数保留并展示成对提示
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/duel?a=2581.Tupi.4.f.&b=492.Britons.4.f.&m=n&na=11&nb=10');
-  await expect(page.locator('#duel-na')).toHaveAttribute('step', '2');
-  await expect(page.locator('#duel-na')).toHaveAttribute('min', '2');
+  const naInput = page.locator('#duel-na');
+  await expect(naInput).toHaveAttribute('type', 'text');
+  await expect(naInput).toHaveAttribute('inputmode', 'numeric');
+  expect(await naInput.getAttribute('step')).toBeNull();
+  expect(await naInput.getAttribute('min')).toBeNull();
+  expect(await naInput.getAttribute('aria-invalid')).toBeNull();
   await expect(page.locator('[data-t="duel-n-pair-hint-a"]')).toContainText('成对训练');
   await expect(page.locator('[data-t="duel-n-pair-hint-a"]')).toContainText('按 6 对计费');
   await page.locator('#duel-a .eseg button', { hasText: '普通' }).click();
-  await expect(page.locator('#duel-na')).toHaveValue('11');
+  await expect(naInput).toHaveValue('11');
 
   // 混编模式：成对提示与清空数量时不出现 ± 2 只 / NaN 对 / 0 对
   await page.locator('#duel [role="radiogroup"][aria-label="模式"] button[data-mode="mix"]').click();

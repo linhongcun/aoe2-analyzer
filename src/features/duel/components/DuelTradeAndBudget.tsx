@@ -13,14 +13,17 @@ export function pairBatchQtyPatch(mode: string, k: 'a' | 'b', prevUnit: Unit, ne
   return { [k === 'a' ? 'na' : 'nb']: String(ceilToBatch(qty, unitTrainCount(nextUnit), 200)) };
 }
 
-/** N vs M 模式下成对单位在场数为奇数时的提示行（不打断输入栏 Tab 序，360px 独立换行）。 */
-export function DuelNPairHints({ A, B, na, nb }: { A: SideState; B: SideState; na: number; nb: number }) {
+/** N vs M 模式下成对单位在场数为奇数时的提示行（不打断输入栏 Tab 序，360px 独立换行）。仅对数量合法的一侧渲染。 */
+export function DuelNPairHints({ A, B, na, nb }: { A: SideState; B: SideState; na: number | null; nb: number | null }) {
   const oddSides = (
     [
       ['A', A, na],
       ['B', B, nb],
     ] as const
-  ).filter(([, side, qty]) => !isUnavail(side) && unitTrainCount(side.u) > 1 && Math.floor(qty) % unitTrainCount(side.u) !== 0);
+  ).filter((entry): entry is readonly ['A' | 'B', SideState, number] => {
+    const [, side, qty] = entry;
+    return qty !== null && !isUnavail(side) && unitTrainCount(side.u) > 1 && Math.floor(qty) % unitTrainCount(side.u) !== 0;
+  });
   if (!oddSides.length) return null;
   return (
     <div className="duel-n-pair-hints" data-t="duel-n-pair-hints">
