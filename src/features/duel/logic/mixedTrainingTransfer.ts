@@ -2,7 +2,7 @@ import { DAT, toEffects, type DatEco } from '../../../domain/datEffects';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { NON_PRICING_RESOURCE_SET } from '../../../domain/gameIds';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
-import { PRODUCTION_UNLOCK_TECH_IDS, productionBuildings, type ProductionContext } from '../../../domain/production';
+import { PRODUCTION_UNLOCK_TECH_IDS, freeProductionTechs, productionBuildings, type ProductionContext } from '../../../domain/production';
 import type { ProductionTransferNotice } from '../../../domain/productionTransfer';
 import { emptyTrainTotal, encodeTrainTotal, evaluateTrainTotal } from '../../../domain/trainTotal';
 import type { Unit } from '../../../domain/types';
@@ -97,6 +97,20 @@ export function mixedTrainingTransfer(context: ProductionContext, input: MixedSi
     }
   }
   if (errors.length) return { errors };
+
+  // Issue 1468: 按数据驱动规则自动补齐合法阵容在当前文明与时代下可用且非免费的训练解锁前置（如化学 47、无政府 16、掠夺者 483）。
+  const freeUnlocks = freeProductionTechs(context, { civ: input.civ, age });
+  for (const unit of units) {
+    const currentTechs = [...pricing, ...unlocks];
+    if (productionBuildings(context, { ...setup, techs: currentTechs }, unit).length > 0) continue;
+    for (const id of unlockIds) {
+      if (freeUnlocks.has(id) || unlocks.includes(id)) continue;
+      if (productionBuildings(context, { ...setup, techs: [...currentTechs, id] }, unit).length > 0) {
+        unlocks.push(id);
+        break;
+      }
+    }
+  }
 
   const config = { ...emptyTrainTotal(input.civ, age), rows, techs: [...new Set([...pricing, ...unlocks])] };
   const result = evaluateTrainTotal(context, config);
