@@ -18,6 +18,10 @@
 
 ## [Unreleased]
 
+## [0.99.73] - 2026-11-27
+
+- 重构发布流程（#1528）：将三段版本号递增与更新日志条目生成从功能 PR 解耦至合入 main 后的自动化汇总阶段，功能 PR 改为提交零冲突独立 JSON 片段（`release-notes/<issue>.json`），合入后自动汇总更新版本与 `CHANGELOG.md` 并沿同一构建产物完成 GitHub Pages 部署与正式 Release 发布。
+
 ## [0.99.72] - 2026-11-27
 
 - 重构文明提前时代、科技树点亮与禁用科技底层公共原语（#1527）：在严格保持 `#869` 四套顶层科技可用性边界不变的前提下，将勃艮第采集科技提前时代（`earlyEcoGatherTechAge`）、科技树点亮/最早行时代遍历（`treeNodeEarliestAge` / `hasLitTreeNode` / `litTreeIds`）及「文明拥有 + 树格点亮 + `.dat` 未禁用」校验（`isCivTechEnabled` / `disabledTechSet`）收口到零数据依赖的 `src/domain/availabilityAge.ts`，并将采集属性判定（`hasGatherAttrEffect`）在 `realCost.ts` 与 `production.ts` 间共享；同步升级 `scripts/check-tech-availability.mjs` 的辅助函数归属传播并补齐全 56 文明采集经济科技提前时代与 `.dat` 禁用集合对账单测；站内所有页面交互、计算口径与分包体积保持完全等价。
