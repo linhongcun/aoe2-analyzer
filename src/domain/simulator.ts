@@ -163,8 +163,9 @@ export function simulate(
       );
     }
   });
-  TEAM_BONUSES.forEach(([, note, f, ef], i) => {
-    if (team.has(i) && f(u)) apply(ef(u), `团队加成：${note}`);
+  TEAM_BONUSES.forEach(([teamCiv, note, f, ef], i) => {
+    const isOwn = teamCiv === civ;
+    if ((isOwn || team.has(i)) && f(u)) apply(ef(u), `${isOwn ? '本方常驻团队加成' : '团队加成'}：${note}`);
   });
   apply(
     genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),

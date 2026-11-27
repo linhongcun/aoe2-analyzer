@@ -314,14 +314,16 @@ describe('#1325 验收 3–5：3 项军事科技提前解锁（阵容费用、PK
     expect(bohXbowC.sel.has(47)).toBe(true);
     expect(presetUpTo(simTechs(sim, ctx.core.unitById[5]!, 'Bohemians'), 3, 'Bohemians').has(47)).toBe(false);
 
-    // 2. 女真攻城单位（火箭推车 1904 / 弩炮 279）：攻城技师 +1 射程、+1 视野、对建筑 ×1.2
+    // 2. 女真攻城单位（火箭推车 1904 / 弩炮 279）：攻城技师 +1 射程、+1 视野、对建筑 ×1.2（女真另含本方常驻团队火药视野 +2，见 #1481）
     const jurRocketC = resolve(sim, ctx.core.unitById, { uid: 1904, civ: 'Jurchens', age: 3, ageSet: true, techs: 'c', team: [] }, 1904);
+    const jurRocketBase = resolve(sim, ctx.core.unitById, { uid: 1904, civ: 'Jurchens', age: 3, ageSet: true, techs: [], team: [] }, 1904);
     const khiRocketC = resolve(sim, ctx.core.unitById, { uid: 1904, civ: 'Khitans', age: 3, ageSet: true, techs: 'c', team: [] }, 1904);
-    if (isUnavail(jurRocketC) || isUnavail(khiRocketC)) throw new Error('Expected Rocket Carts available');
+    if (isUnavail(jurRocketC) || isUnavail(jurRocketBase) || isUnavail(khiRocketC)) throw new Error('Expected Rocket Carts available');
     expect(jurRocketC.sel.has(377)).toBe(true);
     expect(khiRocketC.sel.has(377)).toBe(false);
     expect(jurRocketC.S.rng).toBe(khiRocketC.S.rng + 1);
-    expect(jurRocketC.S.los).toBe(khiRocketC.S.los + 1);
+    expect(jurRocketC.S.los).toBe(jurRocketBase.S.los + 1);
+    expect(jurRocketC.S.los).toBe(khiRocketC.S.los + 3);
 
     const jurScorpC = resolve(sim, ctx.core.unitById, { uid: 279, civ: 'Jurchens', age: 3, ageSet: true, techs: 'c', team: [] }, 279);
     if (isUnavail(jurScorpC)) throw new Error('Expected Jurchens Scorpion available');

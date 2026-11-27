@@ -256,7 +256,9 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
     <section ref={sectionRef} className="bd-section ucr" id="building-civ-rank" aria-label="各文明满科技对照">
       <div className="ucr-head">
         <h2>各文明满科技对照</h2>
-        <p className="ucr-sub">每个文明按建筑科技模拟器的「满科技」研究完本时代能研究的建筑科技与造价科技，只列客观数值，不给综合分。</p>
+        <p className="ucr-sub">
+          每个文明按建筑科技模拟器的「满科技」自动计入本方常驻团队加成，并研究完本时代能研究的建筑科技与造价科技；只列客观数值，不给综合分。
+        </p>
       </div>
 
       {!data || !ctx || !bounds ? (
@@ -483,6 +485,7 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
             )}
             {data.hasEstimatedCost && <li>「估算」：含尚未完全解码的造价科技，总价按已解码部分计算。</li>}
             <li>「缺」：本时代其他文明能研究、这个文明研究不了的通用科技。</li>
+            <li>各文明数值已自动计入本方常驻团队加成，未计额外盟友团队加成。</li>
           </ul>
         </>
       )}

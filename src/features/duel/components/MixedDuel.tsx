@@ -220,7 +220,7 @@ export function MixedDuel({ resources, pendingModeFocusRef }: { resources: CoreT
           s.team
             .filter((item) => /^(0|[1-9]\d*)$/.test(item) && Number.isSafeInteger(+item))
             .map(Number)
-            .filter((id) => Boolean(TEAM_BONUSES[id])),
+            .filter((id) => Boolean(TEAM_BONUSES[id]) && TEAM_BONUSES[id]![0] !== s.civ),
         ),
       ];
       return fmtSide({ uid: +s.rows[0]!.uid, civ: s.civ, age, ageSet: true, techs, team });

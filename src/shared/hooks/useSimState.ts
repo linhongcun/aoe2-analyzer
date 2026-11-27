@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { parsePath, resolvePath, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../data/hooks';
 import { EARLY_UNIT_AGES, militaryTechAge } from '../../domain/availabilityAge';
-import { unitRelicBonus, type CivRelicBonus } from '../../domain/effects';
+import { TEAM_BONUSES, unitRelicBonus, type CivRelicBonus } from '../../domain/effects';
 import { readQueryRelics, stripQueryRelics, withQueryRelics } from '../../domain/relicParams';
 import { decideSimCanonical, makeSimContext, simTechs, unitHashLocation, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
 import { applicableSimCostTechs, mergeSimCostTechs, type SimCostTech } from '../../domain/simEffectiveCost';
@@ -89,7 +89,8 @@ export function useSimState(u: Unit, rt: SimRoute, navigationAdapter?: SimNaviga
     if (result.kind === 'navigate') nav(next, { replace: true, state: result.state });
   };
   const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => {
-    const pathname = unitPath(u.id, civ, age, sel, team);
+    const extraTeam = [...new Set(team)].filter((i) => TEAM_BONUSES[i]?.[0] !== civ);
+    const pathname = unitPath(u.id, civ, age, sel, extraTeam);
     const nextBonus = unitRelicBonus(civ, u);
     const rawSearch = navigationAdapter ? (currentHashLocation()?.search ?? location.search) : location.search;
     const nextSearch = nextBonus ? rawSearch : stripQueryRelics(rawSearch);

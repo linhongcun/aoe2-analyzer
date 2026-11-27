@@ -20,6 +20,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CivIcon, StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { CivArtLayer } from '../../../shared/ui/CivArtLayer';
 import { Icon } from '../../../shared/ui/Icon';
+import { NumWrappedText } from '../../../shared/ui/widgets';
 import { RangeB } from '../../../shared/ui/RangeB';
 import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
@@ -129,6 +130,8 @@ export function Side({
   const onCivChange = (nextCiv: string) =>
     onChange(switchSideCiv({ byId: context.core.unitById, techById: context.core.techById, trees: context.trees }, spec, u, nextCiv));
   const civObj = civByEn(side.civ);
+  const ownTeamLabels = TEAM_BONUSES.filter(([teamCiv, , f]) => teamCiv === side.civ && f(u)).map(([, label]) => label);
+  const extraTeam = new Set(spec.team.filter((id) => TEAM_BONUSES[id]?.[0] !== side.civ));
   return (
     <div className={`duel-side side-${k} civ-art-host`} id={`duel-${k}`}>
       <CivArtLayer civ={side.civ} side={k} variant="head-band" mirror={k === 'b'} />
@@ -323,6 +326,15 @@ export function Side({
           </div>
         ))}
       </dl>
+      {ownTeamLabels.length > 0 && (
+        <p className="duel-own-team" data-t={`duel-own-team-${k}`}>
+          <Icon name="check" className="ic sim-team-own-ic" />
+          <span>
+            本方常驻团队加成（已自动计入）：
+            <NumWrappedText text={ownTeamLabels.join('；')} />
+          </span>
+        </p>
+      )}
       <div className="duel-card-foot">
         <details className="duel-tech">
           <summary>
@@ -338,7 +350,7 @@ export function Side({
             civ={side.civ}
             age={side.age}
             sel={side.sel}
-            team={new Set(spec.team)}
+            team={extraTeam}
             cmp=""
             avail={[
               ...side.avail,
@@ -362,8 +374,17 @@ export function Side({
             cmpStats={null}
             civNotes={civBonusNotes(u, side.civ)}
             armorClasses={Object.entries(side.S.armc)}
-            teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
-            go={(civ, age, sel, team) => onChange({ uid: u.id, civ, age, ageSet: true, techs: [...sel], team: [...team] })}
+            teamBonuses={TEAM_BONUSES.map(([civ, label, f]) => ({ civ, label, ok: f(u) }))}
+            go={(civ, age, sel, team) =>
+              onChange({
+                uid: u.id,
+                civ,
+                age,
+                ageSet: true,
+                techs: [...sel],
+                team: [...team].filter((id) => TEAM_BONUSES[id]?.[0] !== civ),
+              })
+            }
             setCmp={() => {}}
           />
         </details>

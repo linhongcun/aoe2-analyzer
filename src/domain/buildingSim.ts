@@ -5,7 +5,15 @@
 import type { Building, Effect, StatSet } from './types';
 import { DAT } from './datEffects';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
-import { BUILDING_CIV_BONUSES, BUILDING_EFFECTS, BUILDING_TEXT_ONLY, GENERIC_FX, genericBuildingTriggerReqs, genericFx } from './effects';
+import {
+  BUILDING_CIV_BONUSES,
+  BUILDING_EFFECTS,
+  BUILDING_TEXT_ONLY,
+  GENERIC_FX,
+  TEAM_BUILDING_BONUSES,
+  genericBuildingTriggerReqs,
+  genericFx,
+} from './effects';
 export type { BPred, BCivBonus } from './buildingEffects.manual';
 export { BUILDING_CIV_BONUSES, BUILDING_EFFECTS };
 
@@ -130,7 +138,14 @@ export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): Sim
 
 export const buildingCivNotes = (b: Building, civ: string) => (BUILDING_CIV_BONUSES[civ] ?? []).filter(([f]) => f(b)).map((x) => x[2]);
 
-export function simulateBuilding(ctx: SimContext, b: Building, civ: string, age: number, sel: ReadonlySet<number>): StatSet {
+export function simulateBuilding(
+  ctx: SimContext,
+  b: Building,
+  civ: string,
+  age: number,
+  sel: ReadonlySet<number>,
+  team: ReadonlySet<number> = new Set(),
+): StatSet {
   const S = buildingBase(b);
   (BUILDING_CIV_BONUSES[civ] ?? []).forEach(([f, g]) => {
     if (f(b)) applyEffects(S, g(age));
@@ -140,6 +155,12 @@ export function simulateBuilding(ctx: SimContext, b: Building, civ: string, age:
   // 仅对直接建筑规则（BUILDING_EFFECTS）施加一次；GENERIC_FX 统一由下方 genericFx 施加，结构上杜绝双重叠加
   directBuildingSimTechs(ctx, b, civ, canAttack, st).forEach(({ t, ef }) => {
     if (sel.has(t.id)) applyEffects(S, ef);
+  });
+  TEAM_BUILDING_BONUSES.forEach(([teamCiv, , f, ef], i) => {
+    if ((teamCiv === civ || team.has(i)) && f(b)) {
+      const fx = ef(b);
+      applyEffects(S, canAttack ? fx : fx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s)));
+    }
   });
   const hasOwnedSelected = (n: string) => {
     const t = ctx.techByEn[n];

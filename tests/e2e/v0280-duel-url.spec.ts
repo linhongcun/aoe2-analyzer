@@ -98,7 +98,7 @@ async function configured657(page: Page, item: (typeof references657)[number]) {
         inputs.map((input) => Number(input.closest('label')!.querySelector('a')!.getAttribute('href')!.split('/').at(-1))).sort((x, y) => x - y),
       );
     expect(selected).toEqual(side.selected);
-    await expect(panel.locator('.simg').filter({ hasText: '团队加成（开关）' }).locator('input:checked')).toHaveCount(0);
+    await expect(panel.locator('[data-t="sim-team-group"] input:checked')).toHaveCount(0);
   }
   const row = (label: string) =>
     page

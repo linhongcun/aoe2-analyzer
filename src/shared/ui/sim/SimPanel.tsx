@@ -19,7 +19,9 @@ import { NumWrappedText } from '../widgets';
 import { fmtStat } from '../../utils/simFormat';
 import { DATA_SOURCES } from '../../utils/dataInfo';
 import { SimEffectiveCost } from './SimEffectiveCost';
+import { SimTeamBonusCard, splitSimTeamBonuses, type SimTeamBonusItem } from './SimTeamBonusCard';
 
+export type { SimTeamBonusItem };
 export type StatRow = [NumStat, string, string];
 export interface SimPanelProps {
   civs: string[];
@@ -37,7 +39,7 @@ export interface SimPanelProps {
   cmpStats: StatSet | null;
   civNotes: string[];
   armorClasses?: [string, number][];
-  teamBonuses: { label: string; ok: boolean }[];
+  teamBonuses: SimTeamBonusItem[];
   go: (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => void;
   setCmp: (c: string) => void;
   /** 嵌入模式（单位 PK 等）：不显示标题、文明与对比选择器；id 加前缀以免重复 */
@@ -250,8 +252,10 @@ export default function SimPanel(p: SimPanelProps) {
       p.team,
     );
   };
+  const { own: ownTeamBonuses } = splitSimTeamBonuses(p.civ, p.teamBonuses);
+  const extraTeamFor = (civ: string, ids: Iterable<number>) => [...ids].filter((idx) => p.teamBonuses[idx]?.civ !== civ);
   const teamToggle = (i: number) => {
-    const n = new Set(p.team);
+    const n = new Set(extraTeamFor(p.civ, p.team));
     n.has(i) ? n.delete(i) : n.add(i);
     p.go(p.civ, p.age, p.sel, n);
   };
@@ -265,7 +269,7 @@ export default function SimPanel(p: SimPanelProps) {
       <div className="bar">
         {!p.embedded && (
           <>
-            文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, p.team)} allowed={p.civs} />{' '}
+            文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, extraTeamFor(en, p.team))} allowed={p.civs} />{' '}
           </>
         )}
         {!p.hideAge && (
@@ -328,6 +332,12 @@ export default function SimPanel(p: SimPanelProps) {
         <p className="note">
           已计入文明加成：
           <NumWrappedText text={p.civNotes.join('；')} />
+        </p>
+      )}
+      {ownTeamBonuses.length > 0 && (
+        <p className="note" data-t="sim-own-team-note">
+          已自动计入本方常驻团队加成：
+          <NumWrappedText text={ownTeamBonuses.map((item) => item.label).join('；')} />
         </p>
       )}
       {p.cmpRelicNote && (
@@ -400,24 +410,7 @@ export default function SimPanel(p: SimPanelProps) {
             </div>
           ))}
           {!p.avail.length && <p className="note">该文明没有可影响此对象的已编码科技</p>}
-          <div className="simg">
-            <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>团队加成（开关）</Subheading>
-            {p.teamBonuses.some((x) => x.ok) ? (
-              p.teamBonuses.map(
-                (x, i) =>
-                  x.ok && (
-                    <label key={i} className="simt">
-                      <input type="checkbox" checked={p.team.has(i)} onChange={() => teamToggle(i)} />
-                      <span>
-                        <NumWrappedText text={x.label} />
-                      </span>
-                    </label>
-                  ),
-              )
-            ) : (
-              <span className="note">无适用的已编码团队加成</span>
-            )}
-          </div>
+          <SimTeamBonusCard civ={p.civ} team={p.team} teamBonuses={p.teamBonuses} headingLevel={p.headingLevel} onToggle={teamToggle} />
         </div>
         <div>
           {p.effectiveCost && <SimEffectiveCost view={p.effectiveCost} headingLevel={p.headingLevel} />}

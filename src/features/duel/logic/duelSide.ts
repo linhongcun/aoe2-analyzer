@@ -4,7 +4,7 @@ import type { CostDiscount } from '../../../domain/costDiscount';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
 import { DAT } from '../../../domain/datEffects';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
-import { unitRelicBonus } from '../../../domain/effects';
+import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker, type TrainingQuote } from '../../../domain/duelTrainingCost';
 import { simTechs, simulate, type SimContext } from '../../../domain/simulator';
 import type { StatSet, Tech, Trees, Unit } from '../../../domain/types';
@@ -167,7 +167,8 @@ export function switchSideCiv(
 ): SideSpec {
   const { age: nextAge } = resolveSideAge(data, nextCiv, u, spec.age, spec.ageSet);
   const aged = filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge);
-  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv) };
+  const team = spec.team.filter((id) => TEAM_BONUSES[id]?.[0] !== nextCiv);
+  return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv), team };
 }
 
 export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number, relics = 0): SideState {
