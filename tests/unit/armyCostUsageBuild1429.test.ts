@@ -272,46 +272,48 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }
       return dir;
     };
+    const isFsAlias = (parent: string, a: string, b: string) => {
+      const probe = mkdtempSync(join(parent, 'fs-probe-'));
+      try {
+        writeFileSync(join(probe, a), 'x');
+        return existsSync(join(probe, b));
+      } finally {
+        rmSync(probe, { recursive: true, force: true });
+      }
+    };
     try {
-      // 拆成 4 个独立极轻量夹具并行验证，将总波次压至 2 轮（总耗时稳定 < 15s）
+      const mkDir = (p: string) => (mkdirSync(p, { recursive: true }), p);
+      const writeFile = (p: string, s: string) => (writeFileSync(p, s), p);
       const tempDir = createIsolatedFixture();
       const extExistingDir = createIsolatedFixture();
       const extDanglingDir = createIsolatedFixture();
       const extSharpSDir = createIsolatedFixture();
+      const extFullwidthDir = createIsolatedFixture();
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
       const upperTarget = join(tempDir, 'data/game/ARMY_COST_USAGE.JSON');
       const unicodeFoldTarget = join(tempDir, 'data/game/army_co\u017ft_usage.json');
-      const nestedGameDir = join(tempDir, 'data/game/nested');
-      mkdirSync(nestedGameDir, { recursive: true });
-      const nestedSentinel = join(nestedGameDir, 'sentinel.json');
-      writeFileSync(nestedSentinel, '{"sentinel":"nested"}\n');
-      const deepGameDir = join(tempDir, 'data/game/deeper/still/inside');
-      mkdirSync(deepGameDir, { recursive: true });
-      const deepSentinel = join(deepGameDir, 'sentinel.json');
-      writeFileSync(deepSentinel, '{"sentinel":"deep-hardlink"}\n');
+      const nestedSentinel = writeFile(join(mkDir(join(tempDir, 'data/game/nested')), 'sentinel.json'), '{"sentinel":"nested"}\n');
+      const deepSentinel = writeFile(join(mkDir(join(tempDir, 'data/game/deeper/still/inside')), 'sentinel.json'), '{"sentinel":"deep-hardlink"}\n');
       const externalHardlink = join(tempDir, 'external-hardlink.json');
       linkSync(deepSentinel, externalHardlink);
+      const externalSymlinkTarget = writeFile(join(tempDir, 'external-symlink-target.json'), '{"sentinel":"game-symlink-outside"}\n');
+      const gameSymlinkOutside = join(tempDir, 'data/game/symlink-outside.json');
+      symlinkSync(externalSymlinkTarget, gameSymlinkOutside);
       const gameDirAlias = join(tempDir, 'game-dir-alias');
       symlinkSync(join(tempDir, 'data/game'), gameDirAlias);
       const aliasTarget = join(gameDirAlias, 'army_cost_usage.json');
-      // 经不同深度的目录 symlink 访问包含 `..` 的相对断链：必须按真实父目录解析目标并拦截
-      const nestedRealDir = join(tempDir, 'nested/deep');
-      mkdirSync(nestedRealDir, { recursive: true });
+      const nestedRealDir = mkDir(join(tempDir, 'nested/deep'));
       symlinkSync('../../data/game/army_cost_usage.json', join(nestedRealDir, 'broken-rel.json'));
       const nestedDirAlias = join(tempDir, 'nested-dir-alias');
       symlinkSync(nestedRealDir, nestedDirAlias);
       const brokenRelViaDirAlias = join(nestedDirAlias, 'broken-rel.json');
-      // 符号链接后紧跟 `..`（portal -> data/sub，链接指向 portal/../game/army_cost_usage.json）、非目录穿行 `blocker/..` 以及深层符号链接链/环链
-      const dataSubDir = join(tempDir, 'data/sub');
-      mkdirSync(dataSubDir, { recursive: true });
-      symlinkSync(dataSubDir, join(tempDir, 'portal'));
+      symlinkSync(mkDir(join(tempDir, 'data/sub')), join(tempDir, 'portal'));
       const portalDotDotLink = join(tempDir, 'portal-dotdot.json');
       symlinkSync('portal/../game/army_cost_usage.json', portalDotDotLink);
-      writeFileSync(join(tempDir, 'blocker'), 'not-a-dir\n');
+      writeFile(join(tempDir, 'blocker'), 'not-a-dir\n');
       const blockerTraversal = 'blocker/../must-not-exist.json';
-      const chainDir = join(tempDir, 'chain');
-      mkdirSync(chainDir, { recursive: true });
+      const chainDir = mkDir(join(tempDir, 'chain'));
       let chainPrev = target;
       for (let i = 0; i < 18; i++) {
         const hop = join(chainDir, `hop-${i}.json`);
@@ -319,59 +321,64 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         chainPrev = hop;
       }
       const deepChainTarget = chainPrev;
-      const loopA = join(chainDir, 'loop-a.json');
-      const loopB = join(chainDir, 'loop-b.json');
+      const [loopA, loopB] = [join(chainDir, 'loop-a.json'), join(chainDir, 'loop-b.json')];
       symlinkSync(loopB, loopA);
       symlinkSync(loopA, loopB);
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
-      const siblingGameDir = join(tempDir, 'data/game-other');
-      mkdirSync(siblingGameDir, { recursive: true });
-      const siblingGameOut = join(siblingGameDir, 'out.json');
-      const literalDir = join(tempDir, 'literal');
-      mkdirSync(literalDir, { recursive: true });
-      const protectedChild = join(literalDir, 'item.json');
-      writeFileSync(protectedChild, '{"keep":true}\n');
+      const siblingGameOut = join(mkDir(join(tempDir, 'data/game-other')), 'out.json');
+      const protectedChild = writeFile(join(mkDir(join(tempDir, 'literal')), 'item.json'), '{"keep":true}\n');
 
       // 夹具 B：默认快照指向已存在外部文件的符号链接，仍独立保护 data/game/ 与外部目标
-      const existingTarget = join(extExistingDir, 'data/game/army_cost_usage.json');
-      const externalSnapshot = join(extExistingDir, 'external-snapshot.json');
-      writeFileSync(externalSnapshot, '{"sentinel":"external"}\n');
-      symlinkSync(externalSnapshot, existingTarget);
-      const directSentinel = join(extExistingDir, 'data/game/direct-sentinel.json');
-      writeFileSync(directSentinel, '{"sentinel":"direct"}\n');
+      const externalSnapshot = writeFile(join(extExistingDir, 'external-snapshot.json'), '{"sentinel":"external"}\n');
+      symlinkSync(externalSnapshot, join(extExistingDir, 'data/game/army_cost_usage.json'));
+      const directSentinel = writeFile(join(extExistingDir, 'data/game/direct-sentinel.json'), '{"sentinel":"direct"}\n');
 
-      // 夹具 C：默认快照指向尚不存在外部文件 MISSING-DEFAULT.json 的断链，阻断大小写/长 s 别名且保留同目录普通文件可写
+      // 夹具 C：默认快照指向外部断链 MISSING-DEFAULT.json，按 OS 内核实际等价拦截别名，拒绝尾部 `/` 断链且在写失败时清理空文件
       const danglingSnapLink = join(extDanglingDir, 'data/game/army_cost_usage.json');
-      const externalDir = join(extDanglingDir, 'external');
-      mkdirSync(externalDir, { recursive: true });
+      const externalDir = mkDir(join(extDanglingDir, 'external'));
       const danglingTarget = join(externalDir, 'MISSING-DEFAULT.json');
       const danglingLowerAlias = join(externalDir, 'missing-default.json');
       const danglingUnicodeAlias = join(externalDir, 'mi\u017fsing-default.json');
       const externalRegularOut = join(externalDir, 'regular-subset.json');
+      const trailingSlashAlias = join(externalDir, 'trailing-slash-alias.json');
+      const validDanglingAlias = join(externalDir, 'valid-dangling-alias.json');
+      const enospcOut = join(externalDir, 'enospc-out.json');
       symlinkSync(danglingTarget, danglingSnapLink);
+      symlinkSync('redirected.json/', trailingSlashAlias);
+      symlinkSync('redirected-ok.json', validDanglingAlias);
 
-      // 夹具 D：默认快照指向尚不存在外部文件 ẞ.json（U+1E9E）的断链，阻断 APFS 等价别名 ss.json / ß.json 且保留同目录普通文件可写
+      // 夹具 D：默认快照指向外部断链 ẞ.json（U+1E9E），在折叠卷上由内核拦截 ss.json / ß.json 且保留普通文件可写
       const sharpSSnapLink = join(extSharpSDir, 'data/game/army_cost_usage.json');
-      const sharpSExtDir = join(extSharpSDir, 'external');
-      mkdirSync(sharpSExtDir, { recursive: true });
-      const sharpSTarget = join(sharpSExtDir, '\u1e9e.json');
-      const sharpSSsAlias = join(sharpSExtDir, 'ss.json');
-      const sharpSLowerAlias = join(sharpSExtDir, '\u00df.json');
-      const sharpSRegularOut = join(sharpSExtDir, 'regular-subset.json');
-      symlinkSync(sharpSTarget, sharpSSnapLink);
+      const sharpSExtDir = mkDir(join(extSharpSDir, 'external'));
+      const [sharpSSsAlias, sharpSLowerAlias, sharpSRegularOut] = [
+        join(sharpSExtDir, 'ss.json'),
+        join(sharpSExtDir, '\u00df.json'),
+        join(sharpSExtDir, 'regular-subset.json'),
+      ];
+      symlinkSync(join(sharpSExtDir, '\u1e9e.json'), sharpSSnapLink);
 
-      // 1) 预加载将 Error.stackTraceLimit 设为 0 时，--check 缺文件仍必须报错而非静默退出 0；
-      //    --civ 缺 --out、data/game 任意深度/硬链接/别名、外部默认快照及其断链别名、非目录穿行、深链/环链及 --out --check 均须 fail-closed 拦截
-      const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
-      writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
+      // 夹具 E：默认快照指向外部断链全角 Ａ.json（U+FF21），OS 不等价时 ASCII A.json 必须可新建、覆写并通过 --check
+      const fullwidthSnapLink = join(extFullwidthDir, 'data/game/army_cost_usage.json');
+      const fullwidthExtDir = mkDir(join(extFullwidthDir, 'external'));
+      symlinkSync(join(fullwidthExtDir, '\uff21.json'), fullwidthSnapLink);
+      const fullwidthAsciiOut = join(fullwidthExtDir, 'A.json');
 
-      // 2) 改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
-      writeFileSync(
+      const lowerIsAlias = isFsAlias(tempDir, 'MISSING-DEFAULT.json', 'missing-default.json');
+      const longSIsAlias = isFsAlias(tempDir, 'MISSING-DEFAULT.json', 'mi\u017fsing-default.json');
+      const sharpSSsIsAlias = isFsAlias(tempDir, '\u1e9e.json', 'ss.json');
+      const sharpSLowerIsAlias = isFsAlias(tempDir, '\u1e9e.json', '\u00df.json');
+
+      const zeroStackPreload = writeFile(join(tempDir, 'zero-stack.cjs'), 'Error.stackTraceLimit = 0;\n');
+      const enospcPreload = writeFile(
+        join(extDanglingDir, 'enospc-fd.cjs'),
+        "const fs = require('node:fs');\nconst { syncBuiltinESMExports } = require('node:module');\nconst orig = fs.writeFileSync;\nfs.writeFileSync = function (file, ...rest) { if (typeof file === 'number' && file > 2) { const e = new Error('ENOSPC: no space left on device'); e.code = 'ENOSPC'; throw e; } return orig.call(this, file, ...rest); };\nsyncBuiltinESMExports();\n",
+      );
+      writeFile(
         join(tempDir, 'import-lib-static.ts'),
         "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
       );
-      writeFileSync(
+      writeFile(
         join(tempDir, 'import-lib-spoof.ts'),
         "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
       );
@@ -389,12 +396,20 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
             env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
           }),
         ).rejects.toThrow(),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', enospcOut], {
+            cwd: extDanglingDir,
+            env: { ...process.env, NODE_OPTIONS: `--require ${enospcPreload}` },
+          }),
+        ).rejects.toThrow(/ENOSPC/),
         expectOutBlocked(tempDir, '--civ', 'Spanish'),
         ...[
           upperTarget,
           unicodeFoldTarget,
           nestedSentinel,
           externalHardlink,
+          gameSymlinkOutside,
+          externalSymlinkTarget,
           aliasTarget,
           brokenRelViaDirAlias,
           portalDotDotLink,
@@ -406,54 +421,73 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         ].map((out) => expectOutBlocked(tempDir, '--civ', 'Spanish', '--out', out)),
         expectOutBlocked(extExistingDir, '--civ', 'Spanish', '--out', directSentinel),
         expectOutBlocked(extExistingDir, '--civ', 'Spanish', '--out', externalSnapshot),
-        ...[danglingTarget, danglingLowerAlias, danglingUnicodeAlias].map((out) => expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', out)),
-        ...[sharpSSsAlias, sharpSLowerAlias].map((out) => expectOutBlocked(extSharpSDir, '--civ', 'Spanish', '--out', out)),
+        expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingTarget),
+        expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', trailingSlashAlias),
+        ...(lowerIsAlias ? [expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingLowerAlias)] : []),
+        ...(longSIsAlias ? [expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingUnicodeAlias)] : []),
+        ...(sharpSSsIsAlias ? [expectOutBlocked(extSharpSDir, '--civ', 'Spanish', '--out', sharpSSsAlias)] : []),
+        ...(sharpSLowerIsAlias ? [expectOutBlocked(extSharpSDir, '--civ', 'Spanish', '--out', sharpSLowerAlias)] : []),
         ...importRuns.map(async (args) => {
           const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
           expect(stdout.trim()).toBe('function');
         }),
-        // 3) CLI 普通模式写入单文明子集（含同前缀兄弟目录 data/game-other/out.json 与外部同目录普通文件），并校验 POSIX 字面反斜杠不改写同名子目录文件
         runBuild(tempDir, '--civ', 'Spanish', '--out', subsetOut),
         runBuild(tempDir, '--civ', 'Spanish', '--out', siblingGameOut),
         runBuild(extDanglingDir, '--civ', 'Spanish', '--out', externalRegularOut),
+        runBuild(extDanglingDir, '--civ', 'Spanish', '--out', validDanglingAlias),
         runBuild(extSharpSDir, '--civ', 'Spanish', '--out', sharpSRegularOut),
+        runBuild(extFullwidthDir, '--civ', 'Spanish', '--out', fullwidthAsciiOut),
         ...(process.platform !== 'win32' ? [runBuild(tempDir, '--civ', 'Spanish', '--out', 'literal\\item.json')] : []),
       ]);
-      expect(existsSync(unexpectedOut)).toBe(false);
-      expect(existsSync(target)).toBe(false);
-      expect(existsSync(upperTarget)).toBe(false);
-      expect(existsSync(unicodeFoldTarget)).toBe(false);
+      for (const absent of [
+        unexpectedOut,
+        target,
+        upperTarget,
+        unicodeFoldTarget,
+        danglingSnapLink,
+        join(externalDir, 'redirected.json'),
+        enospcOut,
+        sharpSSnapLink,
+        fullwidthSnapLink,
+        join(tempDir, 'must-not-exist.json'),
+        join(tempDir, '--check'),
+        ...(lowerIsAlias ? [danglingLowerAlias] : []),
+        ...(longSIsAlias ? [danglingUnicodeAlias] : []),
+        ...(sharpSSsIsAlias ? [sharpSSsAlias] : []),
+        ...(sharpSLowerIsAlias ? [sharpSLowerAlias] : []),
+      ]) {
+        expect(existsSync(absent)).toBe(false);
+      }
       expect(readFileSync(nestedSentinel, 'utf8')).toBe('{"sentinel":"nested"}\n');
       expect(readFileSync(deepSentinel, 'utf8')).toBe('{"sentinel":"deep-hardlink"}\n');
+      expect(readFileSync(externalSymlinkTarget, 'utf8')).toBe('{"sentinel":"game-symlink-outside"}\n');
       expect(readFileSync(directSentinel, 'utf8')).toBe('{"sentinel":"direct"}\n');
       expect(readFileSync(externalSnapshot, 'utf8')).toBe('{"sentinel":"external"}\n');
-      expect(existsSync(danglingSnapLink)).toBe(false);
-      expect(existsSync(danglingLowerAlias)).toBe(false);
-      expect(existsSync(danglingUnicodeAlias)).toBe(false);
-      expect(existsSync(sharpSSnapLink)).toBe(false);
-      expect(existsSync(sharpSSsAlias)).toBe(false);
-      expect(existsSync(sharpSLowerAlias)).toBe(false);
-      expect(existsSync(join(tempDir, 'must-not-exist.json'))).toBe(false);
-      expect(existsSync(join(tempDir, '--check'))).toBe(false);
       if (process.platform !== 'win32') {
         expect(readFileSync(protectedChild, 'utf8')).toBe('{"keep":true}\n');
         expect(existsSync(join(tempDir, 'literal\\item.json'))).toBe(true);
       }
 
-      // 4) 并行完成普通模式与 --script 模式双验证 --check（含同前缀兄弟目录与外部断链同目录普通文件），并与已提交快照核对一致
+      // 并行完成普通模式与 --script 模式双验证 --check（含覆盖写入全角断链同目录 ASCII A.json），并与已提交快照核对一致
       await Promise.all([
         runBuild(tempDir, '--civ', 'Spanish', '--check', '--out', subsetOut),
         execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
         runBuild(tempDir, '--civ', 'Spanish', '--check', '--out', siblingGameOut),
         runBuild(extDanglingDir, '--civ', 'Spanish', '--check', '--out', externalRegularOut),
+        runBuild(extDanglingDir, '--civ', 'Spanish', '--check', '--out', validDanglingAlias),
         runBuild(extSharpSDir, '--civ', 'Spanish', '--check', '--out', sharpSRegularOut),
+        (async () => {
+          await runBuild(extFullwidthDir, '--civ', 'Spanish', '--out', fullwidthAsciiOut);
+          await runBuild(extFullwidthDir, '--civ', 'Spanish', '--check', '--out', fullwidthAsciiOut);
+        })(),
       ]);
 
       const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
       const expectedSpanishJson = formatArmyCostUsageJson(builtSpanish);
-      expect(readFileSync(subsetOut, 'utf8')).toBe(expectedSpanishJson);
-      expect(readFileSync(externalRegularOut, 'utf8')).toBe(expectedSpanishJson);
-      expect(readFileSync(sharpSRegularOut, 'utf8')).toBe(expectedSpanishJson);
+      for (const out of [subsetOut, externalRegularOut, validDanglingAlias, sharpSRegularOut, fullwidthAsciiOut]) {
+        expect(readFileSync(out, 'utf8')).toBe(expectedSpanishJson);
+      }
+      expect(existsSync(fullwidthSnapLink)).toBe(false);
       const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;
       expect(builtSpanish.meta).toEqual(committed.meta);
       expect(builtSpanish.bonuses['Spanish-2']).toEqual(committed.bonuses['Spanish-2']);
