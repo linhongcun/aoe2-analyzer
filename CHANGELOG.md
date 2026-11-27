@@ -18,6 +18,10 @@
 
 ## [Unreleased]
 
+## [0.99.75] - 2026-11-27
+
+- 修复多人施工（#/construction）与驻军回血（#/garrison-healing）非法数值输入缺少字段旁就近报错、错态边框及 aria-invalid / aria-describedby 关联的问题，并消除多人施工坏链接锁定态重复警告（#1460）
+
 ## [0.99.74] - 2026-11-27
 
 - 修复自动递增版本部署 Pages 后未自动触发正式 Release 的问题（#1528）。
