@@ -10,7 +10,7 @@ import units from '../../data/game/units.json';
 import techs from '../../data/game/techs.json';
 import buildings from '../../data/game/buildings.json';
 import { pyMatch, score, search, TIER, type SearchItem } from '../../src/domain/search';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 /** v0.9.0 验收（#145）。Kent 写，先失败，功能做完后应全部通过。 */
 
@@ -165,8 +165,8 @@ describe('F #138 已核实的文明采集加成计入「等采集时间」', () 
     expect(gatherModel(3, 'Romans').rate.farm).toBeCloseTo(base * 1.05, 6);
     expect(gatherModel(3, 'Romans').rate.farm).toBeCloseTo(0.5565, 4);
   });
-  it('F3 罗马金/木/石：比通用快，但不超过 +5%（含往返路程）', () => {
-    const b = gatherModel(3).rate,
+  it('F3 罗马金/木/石：比同可用科技基准快，但不超过 +5%（含往返路程）', () => {
+    const b = gatherModel(3, '', { techIds: defaultGatherEcoTechIds(3, 'Romans') }).rate,
       r = gatherModel(3, 'Romans').rate;
     for (const t of ['gold', 'wood', 'stone'] as const) {
       expect(r[t], t).toBeGreaterThan(b[t]);
@@ -180,12 +180,12 @@ describe('F #138 已核实的文明采集加成计入「等采集时间」', () 
         String(age),
       ).toEqual(['村民采集速度 +5%']);
   });
-  it('F5 没有来源或本版不计的仍「未计入」且速度等于通用：马里、玛雅、波兰、葡萄牙、蜀、西西里、高棉、波希米亚（#1473 亚美尼亚已正式建模）', () => {
+  it('F5 没有来源或本版不计的仍「未计入」且速度等于同可用科技基准：马里、玛雅、波兰、葡萄牙、蜀、西西里、高棉、波希米亚（#1473 亚美尼亚已正式建模）', () => {
     for (const c of ['Malians', 'Mayans', 'Poles', 'Portuguese', 'Shu', 'Sicilians', 'Khmer', 'Bohemians']) {
       const g = gatherModel(4, c);
       expect(g.applied, c).toEqual([]);
       expect(g.unsupported.length, c).toBeGreaterThan(0);
-      expect(g.rate, c).toEqual(gatherModel(4).rate);
+      expect(g.rate, c).toEqual(gatherModel(4, '', { techIds: defaultGatherEcoTechIds(4, c) }).rate);
     }
   });
   it('F7 斯拉夫：农田采集 +15%（来源值 ×1.15，不用 eco.json 的 1.23），农田 0.5300 × 1.15 = 0.6095/秒', () => {

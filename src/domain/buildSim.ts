@@ -106,6 +106,8 @@ export interface EcoData {
     string,
     { civ: string; name?: string; en?: string; at?: string; age: number; researchTime?: number; cost?: Cost; effects: EffectRow['effects'] }
   >;
+  /** 固定 .dat 各文明 TechTreeID（Type=102）禁用通用采集经济科技的文明名单（Issue 1486） */
+  ecoTechDisabledCivs?: Record<string, readonly string[]>;
   civEco: Record<string, EffectRow[]>;
   /** 升级时代前置建筑条件树（scripts/eco_build.py 从 .dat 时代科技 101/102/103 的前置展开；缺省视为无条件） */
   ageReq?: Record<string, { tech: number; req: AgeReqNode | null }>;

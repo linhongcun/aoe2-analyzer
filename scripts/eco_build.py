@@ -153,6 +153,20 @@ def eff(d, eid):
     return d['Effects'][eid]['EffectCommands'] if 0 <= eid < len(d['Effects']) else []
 
 
+def extract_disabled_gather_techs(commands, gather_eco_tech_ids, civ_name):
+    """Fail-closed extraction of disabled gather ecoTech IDs from a civ TechTreeID command list."""
+    disabled = set()
+    for cmd in commands:
+        if cmd['Type'] == 102:
+            dv = cmd['D']
+            if isinstance(dv, bool) or not isinstance(dv, (int, float)) or not math.isfinite(dv) or abs(dv - round(dv)) >= 1e-6:
+                raise ValueError('文明 %s TechTreeID 禁用科技命令 D 值无效：%r' % (civ_name, dv))
+            tid = int(round(dv))
+            if tid in gather_eco_tech_ids:
+                disabled.add(tid)
+    return disabled
+
+
 def split_tree_effects(effects):
     """固定 .dat 用研究时间设为 0 标记自动免费科技；仅免某种资源仍是费用修正（#393）。"""
     free_ids = {x['tech'] for x in effects if x['kind'] == 'techTime' and x['op'] == 'set' and x['v'] == 0}
@@ -286,13 +300,23 @@ def main():
                     'age': age_of(i),
                     'effects': ef,
                 }
+    # 通用采集经济科技禁用清单（#1486：来自固定 .dat 各文明 TechTreeID Type=102，单独置顶避免改动 ecoTechs 破坏 #486 审计指纹）
+    gather_eco_tech_ids = {
+        int(tid)
+        for tid, rec in out['ecoTechs'].items()
+        if any(e['kind'] == 'attr' and e['attr'] in GATHER_ATTRS and e['target'] in GATHER_TARGETS for e in rec['effects'])
+    }
+    eco_tech_disabled = {str(tid): [] for tid in sorted(gather_eco_tech_ids)}
     # 文明经济效果
     out['civEco'] = {}
     for c in civs:
         e = fx['civs'].get(c['en'], {}); k = dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))
         if k is None: continue
         dc = d['Civs'][k]; rows = []
-        tree, free = split_tree_effects(decode(eff(d, dc['TechTreeID']), T))
+        raw_tree_cmds = eff(d, dc['TechTreeID'])
+        for tid in sorted(extract_disabled_gather_techs(raw_tree_cmds, gather_eco_tech_ids, c['en'])):
+            eco_tech_disabled[str(tid)].append(c['en'])
+        tree, free = split_tree_effects(decode(raw_tree_cmds, T))
         if tree or c['en'] in ('Slavs', 'Khmer', 'Romans'):
             row = {'source': 'tree', 'name': 'Tech tree', 'age': 1, 'effects': tree}
             if c['en'] == 'Slavs':
@@ -379,6 +403,9 @@ def main():
         if c['en'] == 'Khmer':
             out['khmerFarm'] = slavic_farm(d, k)
             out['khmerPrerequisites'] = {'civId': k, 'nodes': {str(tid): raw_tech_context(d, tid) for tid in KHMER_PREREQUISITE_TECHS}}
+    out['ecoTechDisabledCivs'] = {
+        tid: sorted(names) for tid, names in sorted(eco_tech_disabled.items(), key=lambda kv: int(kv[0]))
+    }
     # 升级时代的前置建筑（#3 根因 3）：时代科技 101/102/103 的非时代前置（Shadow Node+ 659/660/661）按 .dat 展开成条件树。
     # 叶子：建成时触发该科技的建筑（Building.tech_id，dat_source BuildTech）；或本文明专属、无前置的科技（如高棉 638，自动满足）。
     # 节点：{n: 需满足的子项个数, of: [...]}；叶子：{b: [建筑 id], zh: 名称} / {civ: [文明]}；无法在开局中满足的叶子（由效果触发的 Port built 等）略去。

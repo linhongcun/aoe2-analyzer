@@ -401,6 +401,22 @@
         "pattern": "^(0|[1-9][0-9]*)$"
       }
     },
+    "ecoTechDisabledCivs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
     "civEco": {
       "type": "object",
       "additionalProperties": {
@@ -651,7 +667,20 @@
       "$ref": "#/$defs/slavicFarm"
     }
   },
-  "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEcoTechs", "civEco", "ageReq"],
+  "required": [
+    "meta",
+    "units",
+    "buildings",
+    "techs",
+    "villager",
+    "animals",
+    "fishingShip",
+    "ecoTechs",
+    "civEcoTechs",
+    "ecoTechDisabledCivs",
+    "civEco",
+    "ageReq"
+  ],
   "additionalProperties": false,
   "$defs": {
     "effect": {

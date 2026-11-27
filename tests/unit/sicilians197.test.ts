@@ -8,7 +8,7 @@ import { CONSTRUCTION_DATA } from '../../src/data/construction';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
@@ -372,7 +372,7 @@ describe('#197 西西里真实施工与农田储量边界', () => {
     expect(assumptions).toContain('续种');
     for (const age of [1, 2, 3, 4]) {
       const real = gatherModel(age, 'Sicilians');
-      expect(real.rate).toEqual(gatherModel(age).rate);
+      expect(real.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Sicilians') }).rate);
       expect(real.applied).toEqual([]);
       expect(real.unsupported).toEqual([{ label: '农田食物储量', techs: [772] }]);
     }

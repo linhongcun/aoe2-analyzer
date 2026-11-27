@@ -4,7 +4,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
@@ -166,7 +166,7 @@ describe('#197 葡萄牙采果兼产木材', () => {
     expect(civSimNotes(E, 'Portuguese').join('')).toContain('连续收入估算');
     for (const age of [1, 2, 3, 4]) {
       expect(gatherModel(age, 'Portuguese').unsupported.map((x) => x.label)).toEqual(['采浆果同时产木材']);
-      expect(gatherModel(age, 'Portuguese').rate).toEqual(gatherModel(age).rate);
+      expect(gatherModel(age, 'Portuguese').rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Portuguese') }).rate);
     }
   });
 });

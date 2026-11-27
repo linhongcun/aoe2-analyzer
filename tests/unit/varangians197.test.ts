@@ -4,7 +4,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((unit) => unit.up).map((unit) => [unit.id, unit.up])) as UpgradeData;
@@ -295,7 +295,7 @@ describe('#197 瓦兰吉牧羊、狩猎和捕鱼兼产黄金', () => {
       const original = gatherModel(age, 'Varangians');
       expect(original.unsupported).toEqual([]);
       expect(original.applied).toEqual([]);
-      expect(original.rate).toEqual(gatherModel(age).rate);
+      expect(original.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Varangians') }).rate);
     }
   });
 });
