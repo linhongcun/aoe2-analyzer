@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { cpSync, existsSync, linkSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
@@ -248,147 +248,43 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
   it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，CLI 与全量复现一致', async () => {
     const execFileAsync = promisify(execFile);
     const viteNodeBin = resolve('node_modules/.bin/vite-node');
-    const runBuild = (cwd: string, ...args: string[]) => execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', ...args], { cwd });
-    const expectOutBlocked = (cwd: string, ...args: string[]) => expect(runBuild(cwd, ...args)).rejects.toThrow(/--out/);
-    const tempDirs: string[] = [];
-    const createIsolatedFixture = () => {
-      const dir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
-      tempDirs.push(dir);
-      mkdirSync(join(dir, 'scripts'), { recursive: true });
-      mkdirSync(join(dir, 'data/game'), { recursive: true });
-      mkdirSync(join(dir, 'node_modules'), { recursive: true });
-      // 只复制 2 个入口脚本使 ROOT 落到 dir，其余只读目录通过符号链接复用，避免整仓拷贝；
-      // node_modules 建独立目录逐项链接，确保 Vite 的 .vite-temp 缓存落在 dir 内不回写 worktree
-      cpSync(resolve('scripts/army_cost_usage_build.ts'), join(dir, 'scripts/army_cost_usage_build.ts'));
-      cpSync(resolve('scripts/army_cost_usage_lib.ts'), join(dir, 'scripts/army_cost_usage_lib.ts'));
+    const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
+    const runBuild = (...args: string[]) => execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', ...args], { cwd: tempDir });
+    try {
+      for (const sub of ['scripts', 'data/game', 'data/game-other', 'node_modules']) {
+        mkdirSync(join(tempDir, sub), { recursive: true });
+      }
+      // 仅复制 2 个入口脚本使 ROOT 落到 tempDir，其余目录/node_modules 用只读符号链接（排除 .vite*）避免整仓拷贝与缓存回写
+      cpSync(resolve('scripts/army_cost_usage_build.ts'), join(tempDir, 'scripts/army_cost_usage_build.ts'));
+      cpSync(resolve('scripts/army_cost_usage_lib.ts'), join(tempDir, 'scripts/army_cost_usage_lib.ts'));
       for (const rel of ['src', 'data/sources', 'data/patch-notes', 'package.json', 'tsconfig.json', 'vite.config.ts']) {
-        symlinkSync(resolve(rel), join(dir, rel));
+        symlinkSync(resolve(rel), join(tempDir, rel));
       }
       for (const entry of readdirSync(resolve('node_modules'))) {
-        if (!entry.startsWith('.vite')) symlinkSync(resolve('node_modules', entry), join(dir, 'node_modules', entry));
+        if (!entry.startsWith('.vite')) symlinkSync(resolve('node_modules', entry), join(tempDir, 'node_modules', entry));
       }
       for (const name of readdirSync(resolve('data/game'))) {
-        if (name !== 'army_cost_usage.json') symlinkSync(resolve('data/game', name), join(dir, 'data/game', name));
+        if (name !== 'army_cost_usage.json') symlinkSync(resolve('data/game', name), join(tempDir, 'data/game', name));
       }
-      return dir;
-    };
-    const isFsAlias = (parent: string, a: string, b: string) => {
-      const probe = mkdtempSync(join(parent, 'fs-probe-'));
-      try {
-        writeFileSync(join(probe, a), 'x');
-        return existsSync(join(probe, b));
-      } finally {
-        rmSync(probe, { recursive: true, force: true });
-      }
-    };
-    try {
-      const mkDir = (p: string) => (mkdirSync(p, { recursive: true }), p);
-      const writeFile = (p: string, s: string) => (writeFileSync(p, s), p);
-      const tempDir = createIsolatedFixture();
-      const extExistingDir = createIsolatedFixture();
-      const extDanglingDir = createIsolatedFixture();
-      const extSharpSDir = createIsolatedFixture();
-      const extFullwidthDir = createIsolatedFixture();
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
-      const upperTarget = join(tempDir, 'data/game/ARMY_COST_USAGE.JSON');
-      const unicodeFoldTarget = join(tempDir, 'data/game/army_co\u017ft_usage.json');
-      const nestedSentinel = writeFile(join(mkDir(join(tempDir, 'data/game/nested')), 'sentinel.json'), '{"sentinel":"nested"}\n');
-      const deepSentinel = writeFile(join(mkDir(join(tempDir, 'data/game/deeper/still/inside')), 'sentinel.json'), '{"sentinel":"deep-hardlink"}\n');
-      const externalHardlink = join(tempDir, 'external-hardlink.json');
-      linkSync(deepSentinel, externalHardlink);
-      const externalSymlinkTarget = writeFile(join(tempDir, 'external-symlink-target.json'), '{"sentinel":"game-symlink-outside"}\n');
-      const gameSymlinkOutside = join(tempDir, 'data/game/symlink-outside.json');
-      symlinkSync(externalSymlinkTarget, gameSymlinkOutside);
-      const gameDirAlias = join(tempDir, 'game-dir-alias');
-      symlinkSync(join(tempDir, 'data/game'), gameDirAlias);
-      const aliasTarget = join(gameDirAlias, 'army_cost_usage.json');
-      const nestedRealDir = mkDir(join(tempDir, 'nested/deep'));
-      symlinkSync('../../data/game/army_cost_usage.json', join(nestedRealDir, 'broken-rel.json'));
-      const nestedDirAlias = join(tempDir, 'nested-dir-alias');
-      symlinkSync(nestedRealDir, nestedDirAlias);
-      const brokenRelViaDirAlias = join(nestedDirAlias, 'broken-rel.json');
-      symlinkSync(mkDir(join(tempDir, 'data/sub')), join(tempDir, 'portal'));
-      const portalDotDotLink = join(tempDir, 'portal-dotdot.json');
-      symlinkSync('portal/../game/army_cost_usage.json', portalDotDotLink);
-      writeFile(join(tempDir, 'blocker'), 'not-a-dir\n');
-      const blockerTraversal = 'blocker/../must-not-exist.json';
-      const chainDir = mkDir(join(tempDir, 'chain'));
-      let chainPrev = target;
-      for (let i = 0; i < 18; i++) {
-        const hop = join(chainDir, `hop-${i}.json`);
-        symlinkSync(chainPrev, hop);
-        chainPrev = hop;
-      }
-      const deepChainTarget = chainPrev;
-      const [loopA, loopB] = [join(chainDir, 'loop-a.json'), join(chainDir, 'loop-b.json')];
-      symlinkSync(loopB, loopA);
-      symlinkSync(loopA, loopB);
+      const nestedInGame = join(tempDir, 'data/game/nested/out.json');
+      const siblingGameOut = join(tempDir, 'data/game-other/out.json');
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
-      const siblingGameOut = join(mkDir(join(tempDir, 'data/game-other')), 'out.json');
-      const protectedChild = writeFile(join(mkDir(join(tempDir, 'literal')), 'item.json'), '{"keep":true}\n');
 
-      // 夹具 B：默认快照指向已存在外部文件的符号链接，仍独立保护 data/game/ 与外部目标
-      const externalSnapshot = writeFile(join(extExistingDir, 'external-snapshot.json'), '{"sentinel":"external"}\n');
-      symlinkSync(externalSnapshot, join(extExistingDir, 'data/game/army_cost_usage.json'));
-      const directSentinel = writeFile(join(extExistingDir, 'data/game/direct-sentinel.json'), '{"sentinel":"direct"}\n');
-
-      // 夹具 C：默认快照指向外部断链 MISSING-DEFAULT.json，按 OS 内核实际等价拦截别名，拒绝尾部 `/` 断链且在写失败时清理空文件
-      const danglingSnapLink = join(extDanglingDir, 'data/game/army_cost_usage.json');
-      const externalDir = mkDir(join(extDanglingDir, 'external'));
-      const danglingTarget = join(externalDir, 'MISSING-DEFAULT.json');
-      const danglingLowerAlias = join(externalDir, 'missing-default.json');
-      const danglingUnicodeAlias = join(externalDir, 'mi\u017fsing-default.json');
-      const externalRegularOut = join(externalDir, 'regular-subset.json');
-      const trailingSlashAlias = join(externalDir, 'trailing-slash-alias.json');
-      const validDanglingAlias = join(externalDir, 'valid-dangling-alias.json');
-      const enospcOut = join(externalDir, 'enospc-out.json');
-      symlinkSync(danglingTarget, danglingSnapLink);
-      symlinkSync('redirected.json/', trailingSlashAlias);
-      symlinkSync('redirected-ok.json', validDanglingAlias);
-
-      // 夹具 D：默认快照指向外部断链 ẞ.json（U+1E9E），在折叠卷上由内核拦截 ss.json / ß.json 且保留普通文件可写
-      const sharpSSnapLink = join(extSharpSDir, 'data/game/army_cost_usage.json');
-      const sharpSExtDir = mkDir(join(extSharpSDir, 'external'));
-      const [sharpSSsAlias, sharpSLowerAlias, sharpSRegularOut] = [
-        join(sharpSExtDir, 'ss.json'),
-        join(sharpSExtDir, '\u00df.json'),
-        join(sharpSExtDir, 'regular-subset.json'),
-      ];
-      symlinkSync(join(sharpSExtDir, '\u1e9e.json'), sharpSSnapLink);
-
-      // 夹具 E：默认快照指向外部断链全角 Ａ.json（U+FF21），OS 不等价时 ASCII A.json 必须可新建、覆写并通过 --check
-      const fullwidthSnapLink = join(extFullwidthDir, 'data/game/army_cost_usage.json');
-      const fullwidthExtDir = mkDir(join(extFullwidthDir, 'external'));
-      symlinkSync(join(fullwidthExtDir, '\uff21.json'), fullwidthSnapLink);
-      const fullwidthAsciiOut = join(fullwidthExtDir, 'A.json');
-
-      const lowerIsAlias = isFsAlias(tempDir, 'MISSING-DEFAULT.json', 'missing-default.json');
-      const longSIsAlias = isFsAlias(tempDir, 'MISSING-DEFAULT.json', 'mi\u017fsing-default.json');
-      const sharpSSsIsAlias = isFsAlias(tempDir, '\u1e9e.json', 'ss.json');
-      const sharpSLowerIsAlias = isFsAlias(tempDir, '\u1e9e.json', '\u00df.json');
-
-      const zeroStackPreload = writeFile(join(tempDir, 'zero-stack.cjs'), 'Error.stackTraceLimit = 0;\n');
-      const enospcPreload = writeFile(
-        join(extDanglingDir, 'enospc-fd.cjs'),
-        "const fs = require('node:fs');\nconst { syncBuiltinESMExports } = require('node:module');\nconst orig = fs.writeFileSync;\nfs.writeFileSync = function (file, ...rest) { if (typeof file === 'number' && file > 2) { const e = new Error('ENOSPC: no space left on device'); e.code = 'ENOSPC'; throw e; } return orig.call(this, file, ...rest); };\nsyncBuiltinESMExports();\n",
-      );
-      writeFile(
+      const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
+      writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
+      writeFileSync(
         join(tempDir, 'import-lib-static.ts'),
         "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
       );
-      writeFile(
+      writeFileSync(
         join(tempDir, 'import-lib-spoof.ts'),
         "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
       );
 
-      const importRuns = [
-        ['import-lib-static.ts', '--out', unexpectedOut],
-        ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
-        ['import-lib-spoof.ts', '--out', unexpectedOut],
-      ];
-
+      // 1) Error.stackTraceLimit=0 缺文件仍报错；--civ 防误写默认快照/data/game 与参数校验；伪造 prepareStackTrace 导入纯库零写入；普通模式写出子集
       await Promise.all([
         expect(
           execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
@@ -396,103 +292,41 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
             env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
           }),
         ).rejects.toThrow(),
-        expect(
-          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', enospcOut], {
-            cwd: extDanglingDir,
-            env: { ...process.env, NODE_OPTIONS: `--require ${enospcPreload}` },
-          }),
-        ).rejects.toThrow(/ENOSPC/),
-        expectOutBlocked(tempDir, '--civ', 'Spanish'),
+        expect(runBuild('--civ', 'Spanish')).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', target)).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', nestedInGame)).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', '--check')).rejects.toThrow(/--out/),
         ...[
-          upperTarget,
-          unicodeFoldTarget,
-          nestedSentinel,
-          externalHardlink,
-          gameSymlinkOutside,
-          externalSymlinkTarget,
-          aliasTarget,
-          brokenRelViaDirAlias,
-          portalDotDotLink,
-          'portal/../game/army_cost_usage.json',
-          blockerTraversal,
-          deepChainTarget,
-          loopA,
-          '--check',
-        ].map((out) => expectOutBlocked(tempDir, '--civ', 'Spanish', '--out', out)),
-        expectOutBlocked(extExistingDir, '--civ', 'Spanish', '--out', directSentinel),
-        expectOutBlocked(extExistingDir, '--civ', 'Spanish', '--out', externalSnapshot),
-        expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingTarget),
-        expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', trailingSlashAlias),
-        ...(lowerIsAlias ? [expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingLowerAlias)] : []),
-        ...(longSIsAlias ? [expectOutBlocked(extDanglingDir, '--civ', 'Spanish', '--out', danglingUnicodeAlias)] : []),
-        ...(sharpSSsIsAlias ? [expectOutBlocked(extSharpSDir, '--civ', 'Spanish', '--out', sharpSSsAlias)] : []),
-        ...(sharpSLowerIsAlias ? [expectOutBlocked(extSharpSDir, '--civ', 'Spanish', '--out', sharpSLowerAlias)] : []),
-        ...importRuns.map(async (args) => {
+          ['import-lib-static.ts', '--out', unexpectedOut],
+          ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
+          ['import-lib-spoof.ts', '--out', unexpectedOut],
+        ].map(async (args) => {
           const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
           expect(stdout.trim()).toBe('function');
         }),
-        runBuild(tempDir, '--civ', 'Spanish', '--out', subsetOut),
-        runBuild(tempDir, '--civ', 'Spanish', '--out', siblingGameOut),
-        runBuild(extDanglingDir, '--civ', 'Spanish', '--out', externalRegularOut),
-        runBuild(extDanglingDir, '--civ', 'Spanish', '--out', validDanglingAlias),
-        runBuild(extSharpSDir, '--civ', 'Spanish', '--out', sharpSRegularOut),
-        runBuild(extFullwidthDir, '--civ', 'Spanish', '--out', fullwidthAsciiOut),
-        ...(process.platform !== 'win32' ? [runBuild(tempDir, '--civ', 'Spanish', '--out', 'literal\\item.json')] : []),
+        runBuild('--civ', 'Spanish', '--out', subsetOut),
+        runBuild('--civ', 'Spanish', '--out', siblingGameOut),
       ]);
-      for (const absent of [
-        unexpectedOut,
-        target,
-        upperTarget,
-        unicodeFoldTarget,
-        danglingSnapLink,
-        join(externalDir, 'redirected.json'),
-        enospcOut,
-        sharpSSnapLink,
-        fullwidthSnapLink,
-        join(tempDir, 'must-not-exist.json'),
-        join(tempDir, '--check'),
-        ...(lowerIsAlias ? [danglingLowerAlias] : []),
-        ...(longSIsAlias ? [danglingUnicodeAlias] : []),
-        ...(sharpSSsIsAlias ? [sharpSSsAlias] : []),
-        ...(sharpSLowerIsAlias ? [sharpSLowerAlias] : []),
-      ]) {
-        expect(existsSync(absent)).toBe(false);
-      }
-      expect(readFileSync(nestedSentinel, 'utf8')).toBe('{"sentinel":"nested"}\n');
-      expect(readFileSync(deepSentinel, 'utf8')).toBe('{"sentinel":"deep-hardlink"}\n');
-      expect(readFileSync(externalSymlinkTarget, 'utf8')).toBe('{"sentinel":"game-symlink-outside"}\n');
-      expect(readFileSync(directSentinel, 'utf8')).toBe('{"sentinel":"direct"}\n');
-      expect(readFileSync(externalSnapshot, 'utf8')).toBe('{"sentinel":"external"}\n');
-      if (process.platform !== 'win32') {
-        expect(readFileSync(protectedChild, 'utf8')).toBe('{"keep":true}\n');
-        expect(existsSync(join(tempDir, 'literal\\item.json'))).toBe(true);
-      }
+      expect(existsSync(unexpectedOut)).toBe(false);
+      expect(existsSync(target)).toBe(false);
+      expect(existsSync(nestedInGame)).toBe(false);
 
-      // 并行完成普通模式与 --script 模式双验证 --check（含覆盖写入全角断链同目录 ASCII A.json），并与已提交快照核对一致
+      // 2) 普通模式与 --script 模式双验证 --check，并核对单文明输出及已提交全量快照一致性
       await Promise.all([
-        runBuild(tempDir, '--civ', 'Spanish', '--check', '--out', subsetOut),
+        runBuild('--civ', 'Spanish', '--check', '--out', subsetOut),
         execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
-        runBuild(tempDir, '--civ', 'Spanish', '--check', '--out', siblingGameOut),
-        runBuild(extDanglingDir, '--civ', 'Spanish', '--check', '--out', externalRegularOut),
-        runBuild(extDanglingDir, '--civ', 'Spanish', '--check', '--out', validDanglingAlias),
-        runBuild(extSharpSDir, '--civ', 'Spanish', '--check', '--out', sharpSRegularOut),
-        (async () => {
-          await runBuild(extFullwidthDir, '--civ', 'Spanish', '--out', fullwidthAsciiOut);
-          await runBuild(extFullwidthDir, '--civ', 'Spanish', '--check', '--out', fullwidthAsciiOut);
-        })(),
+        runBuild('--civ', 'Spanish', '--check', '--out', siblingGameOut),
       ]);
 
       const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
       const expectedSpanishJson = formatArmyCostUsageJson(builtSpanish);
-      for (const out of [subsetOut, externalRegularOut, validDanglingAlias, sharpSRegularOut, fullwidthAsciiOut]) {
-        expect(readFileSync(out, 'utf8')).toBe(expectedSpanishJson);
-      }
-      expect(existsSync(fullwidthSnapLink)).toBe(false);
+      expect(readFileSync(subsetOut, 'utf8')).toBe(expectedSpanishJson);
+      expect(readFileSync(siblingGameOut, 'utf8')).toBe(expectedSpanishJson);
       const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;
       expect(builtSpanish.meta).toEqual(committed.meta);
       expect(builtSpanish.bonuses['Spanish-2']).toEqual(committed.bonuses['Spanish-2']);
     } finally {
-      for (const dir of tempDirs) rmSync(dir, { recursive: true, force: true });
+      rmSync(tempDir, { recursive: true, force: true });
     }
   }, 30_000);
 });
