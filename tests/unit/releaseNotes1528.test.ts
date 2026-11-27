@@ -365,7 +365,7 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     expect(verifyPart).toContain('  verify:\n');
     expect(verifyPart).not.toMatch(/^\s*concurrency:/m);
     expect(releasePart).toContain("    needs: verify\n    if: ${{ needs.verify.outputs.eligible == 'true' }}");
-    expect(releasePart).toContain('concurrency: { group: release, cancel-in-progress: false }');
+    expect(releasePart).toContain('concurrency: { group: release, cancel-in-progress: false, queue: max }');
 
     expect(buildDispatchCiDeployArgs()).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
     expect(buildDispatchCiDeployArgs(SHA_B)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${SHA_B}`]);

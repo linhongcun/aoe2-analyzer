@@ -6,12 +6,12 @@
 
 ## 准备、合并与网站部署
 
-1. 普通网站实现更新从最新 `main` 建实现分支，一个 issue、一个 PR 直接对 `main`；**不再在功能 PR 中手工递增 `package.json`、`package-lock.json` 或修改 `CHANGELOG.md` 顶部**，而是在 `release-notes/<issue>.json`（或 `release-notes/<issue>-<slug>.json`）提交零冲突变更片段（JSON 字段：`issue` 必填正整数且与文件名前缀一致、`summary` 必填单行中文说明且含 `#<issue>`、`bump` 可选默认 `patch`，可选 `patch`/`minor`/`major`；由 `npm run lint:release-notes` 与 PR 防重检查把关）。纯文档 PR 与无需网站发布的纯仓库工程 PR 不提交片段，不会触发版本号递增与网站 Release。仅确需多项冻结集成时才建立 `release/vX.Y.Z`。
+1. 普通网站实现更新从最新 `main` 建实现分支，一个 issue、一个 PR 直接对 `main`；**不再在功能 PR 中手工递增 `package.json`、`package-lock.json` 或修改 `CHANGELOG.md` 顶部**，而是在 `release-notes/<issue>.json`（或 `release-notes/<issue>-<slug>.json`）提交零冲突变更片段（JSON 字段：`issue` 必填正整数且与文件名前缀一致、`summary` 必填单行中文说明且含 `#<issue>`、`bump` 可选默认 `patch`，可选 `patch`/`minor`/`major`；由 `npm run lint:release-notes` 与 PR 防重检查把关）。纯文档 PR 与无需网站发布的纯仓库工程 PR 不提交片段，不会触发版本号递增；若当前版本已有正式 Release，后续 `Release` 自动幂等跳过（仅在当前版本尚未发布正式 Release 时可用于补全发布）。仅确需多项冻结集成时才建立 `release/vX.Y.Z`。
 2. 完成实现者之外的独立复核，以及按 TESTING 选择的一次适用验证。
 3. 合入 `main`。PR 的 CI / Deploy `check` 必须成功；它每次实跑，不复用其他 run 的结果。
 4. `main` push 进入 `CI / Deploy` 的 `prepare` 阶段（`scripts/release-workflow.mjs --prepare`）：
    - **有待发布片段（`release-notes/*.json`）时**：由 `scripts/release-notes.mjs --apply` 统一按 `issue` 升序合并片段、按 `major > minor > patch` 递增唯一三段版本号、以 `Asia/Shanghai` 日期调用 `scripts/changelog.mjs` 的 `insertVersionSection` 写入 `CHANGELOG.md`（位于 `[Unreleased]` 正文之后、已有版本之前）并同步更新 `package.json` 与 `package-lock.json`、删除已消费片段；提交 `chore(release): vX.Y.Z` 推送至 `main`（使用内置 `GITHUB_TOKEN`，不触发递归 `on: push`），再通过 `actions: write` 派发 `workflow_dispatch`（`deploy=true`、`expected_sha=<BUMP_SHA>`）触发精确部署提交的 `CI / Deploy`（原 `push` 运行的 `check`/`deploy` 在 job 级跳过，不写假绿）。若未来对 `main` 启用 branch protection，须放行 `github-actions[bot]` 或改为 release PR/GitHub App 令牌。
-   - **无待发布片段时**（纯文档 PR、无网站发布的纯仓库工程 PR、或无片段的手工版本热修）：不递增版本号，直接进入本次运行的 `check` → `deploy`。
+   - **无待发布片段时**（纯文档 PR、无网站发布的纯仓库工程 PR、或无片段的手工版本热修）：不递增版本号，直接进入本次运行的 `check` → `deploy`（若当前版本已有正式 Release 则自动幂等跳过；若当前版本尚未发布正式 Release，则本次部署产物会接续完成该版本的正式 Release）。
 5. `check` 在最终部署提交（`BUMP_SHA` 或无片段 `main` 尖端）上重新执行同一套 `static`、构建与 7 条窄冒烟（含 `ciBuild659` 核对页脚版本与 7 位构建 SHA 等于本次提交），成功后 `deploy` 用官方 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物。冒烟失败则不部署。全部单测、`data` 与整站浏览器在 CI full（每日/手动）运行，不作为这次部署的门禁。
 
 普通 UI 更新不重生成未变数据，不默认执行无关计算与整站扫描。核心计算、依赖、共享基础设施和未知范围仍完整验证一次；涉及数据、生成脚本、来源等变化时才做相应数据管线。不要为凑项数或固定周期推迟已就绪的授权更新。
