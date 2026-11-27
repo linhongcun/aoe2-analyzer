@@ -98,7 +98,7 @@ describe('#820 数据族索引', () => {
         path.startsWith('docs/data/') ||
         path.startsWith('docs/design/') ||
         path.startsWith('tests/') ||
-        (path.startsWith('scripts/') && path !== 'scripts/ci-browser-weights.json')
+        path.startsWith('scripts/')
       );
     });
     expect(misplaced).toEqual([]);
