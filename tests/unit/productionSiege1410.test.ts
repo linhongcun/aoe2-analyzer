@@ -471,7 +471,7 @@ describe('Issue 1410: 攻城拆建筑接入南亚装甲战象 (1744) 与攻城�
     }
 
     const decoded = decodeSiege('?unit=1744&n=4&bldg=82&civ=Gurjaras', CORE);
-    expect(decoded).toEqual({ unit: 1744, n: 4, bldg: 82, civ: 'Gurjaras', armor: [] });
+    expect(decoded).toEqual({ unit: 1744, n: 4, bldg: 82, civ: 'Gurjaras', armor: [], techs: [] });
     expect(encodeSiege(decoded)).toBe('unit=1744&n=4&bldg=82&civ=Gurjaras');
 
     expect(siegeUnitEntryVerified(armoredElephant, castle)).toBe(true);

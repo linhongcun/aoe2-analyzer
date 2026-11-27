@@ -147,7 +147,8 @@ test.describe('#1410 持续生产大干道、六国经济告警去重与攻城�
     await expect(page.getByRole('button', { name: '减少一头', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: '增加一头', exact: true })).toBeVisible();
     await expect(page.locator('.siege-compare table')).toHaveAttribute('aria-label', '同组合对照：4 头装甲战象');
-    await expect(page.locator('.siege-compare caption')).toHaveText('同组合对照 · 4 头装甲战象');
+    await expect(page.locator('.siege-compare .siege-compare-title')).toHaveText('同组合对照 · 4 头装甲战象');
+    await expect(page.getByTestId('siege-compare-conditions')).toHaveText('攻方：瞿折罗；无攻方科技（基础值）');
 
     // 切到攻城战象 + 孟加拉：不报错且数值准确
     await unitSelect.selectOption('1746');

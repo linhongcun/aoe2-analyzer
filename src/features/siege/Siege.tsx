@@ -1,26 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, type Core } from '../../data';
-import { useCore } from '../../data/hooks';
+import { useCore, useTrees } from '../../data/hooks';
 import {
   calculateSiege,
   decideSiegeCanonical,
   decodeSiege,
   encodeSiege,
   siegeArmorTechs,
+  siegeAttackerTechs,
   siegeUnitCounter,
   SIEGE_COMPARE_IDS,
+  SIEGE_MANGONEL_IDS,
   SIEGE_MANGONEL_REASON,
   SIEGE_MAX_COUNT,
   SIEGE_STONE_DEFENSE_REASON,
   SIEGE_UNIT_IDS,
+  toggleSiegeTech,
   type SiegeConfig,
 } from '../../domain/siege';
+import type { Trees } from '../../domain/types';
 import FeedbackLink, { SiegeFeedbackNote } from '../../shared/ui/FeedbackLink';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { siegeCivNote, siegeConditionSummary, siegeTechsEmptyNote, siegeTechsHint } from './siegeDisplay';
 import './siege.css';
 
 const num = (n: number) => String(Number(n.toFixed(2)));
@@ -32,8 +37,9 @@ const unverifiedBody = (reason: string) => (ONE_REASON.has(reason) ? reason : `$
 
 export default function Siege() {
   const core = useCore();
-  return core ? (
-    <SiegeTool core={core} />
+  const trees = useTrees();
+  return core && trees ? (
+    <SiegeTool core={core} trees={trees} />
   ) : (
     <section className="pane">
       <Loading />
@@ -41,10 +47,11 @@ export default function Siege() {
   );
 }
 
-function SiegeTool({ core }: { core: Core }) {
+function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const config = useMemo(() => decodeSiege(location.search, core), [location.search, core]);
+  const catalog = useMemo(() => ({ ...core, trees }), [core, trees]);
+  const config = useMemo(() => decodeSiege(location.search, catalog), [location.search, catalog]);
   const canonical = '?' + encodeSiege(config);
   // HashRouter 的 replace 导航调用 history.replaceState，保持分享状态且不堆积编辑历史。
   // 读地址栏而不是这次渲染的 location：下一次导航可能已经写进 hash，旧的 replace 不能把它盖回去。
@@ -56,9 +63,14 @@ function SiegeTool({ core }: { core: Core }) {
   const share = useShareLink({ stateKey: canonical });
   const u = core.unitById[config.unit]!;
   const b = core.buildingById[config.bldg]!;
-  const result = calculateSiege(u, b, config.n, config.civ, config.armor);
+  const attackerTechs = useMemo(() => siegeAttackerTechs(u, config.civ, catalog), [u, config.civ, catalog]);
+  const result = calculateSiege(u, b, config.n, config.civ, config.armor, config.techs, catalog);
   const armorTechs = siegeArmorTechs(b);
   const counter = siegeUnitCounter(u.id);
+  const civNote = siegeCivNote(u, config.civ, attackerTechs, config.techs);
+  const techsHint = siegeTechsHint(u, attackerTechs, core.techById);
+  const conditions = siegeConditionSummary(u, config.civ, attackerTechs, config.techs, armorTechs, config.armor, core.techById);
+  const allTechsSelected = attackerTechs.length > 0 && config.techs.length === attackerTechs.length;
   const title = (
     <>
       <span className="num nw">
@@ -69,7 +81,7 @@ function SiegeTool({ core }: { core: Core }) {
   );
   const update = (patch: Partial<SiegeConfig>) => {
     setEmptyCount(null);
-    const next = decodeSiege('?' + encodeSiege({ ...config, ...patch }), core);
+    const next = decodeSiege('?' + encodeSiege({ ...config, ...patch }), catalog);
     if (next.bldg !== config.bldg) setGarrison(false);
     navigate({ pathname: '/siege', search: '?' + encodeSiege(next) }, { replace: true });
   };
@@ -169,8 +181,48 @@ function SiegeTool({ core }: { core: Core }) {
                   </option>
                 ))}
               </select>
-              {config.civ && <p className="siege-note">按单位所处时代计入已生成的文明属性加成；科技前置、独特科技及团队加成未计入。</p>}
+              <p className="siege-note siege-civ-note">{civNote}</p>
             </div>
+            <fieldset className="siege-field siege-techs" data-testid="siege-attacker-techs">
+              <legend>攻方攻城科技</legend>
+              {attackerTechs.length > 0 ? (
+                <>
+                  <div className="siege-techs-bar">
+                    <button type="button" disabled={allTechsSelected} onClick={() => update({ techs: attackerTechs.map((t) => t.id) })}>
+                      攻方满科技
+                    </button>
+                    <button type="button" disabled={config.techs.length === 0} onClick={() => update({ techs: [] })}>
+                      清空
+                    </button>
+                    <span className="siege-techs-count nw">
+                      已选{' '}
+                      <span className="num nw">
+                        {config.techs.length}/{attackerTechs.length}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="siege-toggles">
+                    {attackerTechs.map((t) => {
+                      const checked = config.techs.includes(t.id);
+                      return (
+                        <label className={checked ? 'siege-check siege-check-active' : 'siege-check'} key={t.id}>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => update({ techs: toggleSiegeTech(t.id, config.techs, attackerTechs, core.techById) })}
+                          />
+                          <span>{t.zh}</span>
+                          {t.type === 'UniqueTech' && <span className="siege-tech-tag nw">独科</span>}
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {techsHint && <p className="siege-note siege-techs-hint">{techsHint}</p>}
+                </>
+              ) : (
+                <p className="siege-note siege-techs-empty">{siegeTechsEmptyNote(u, config.civ)}</p>
+              )}
+            </fieldset>
           </section>
           <section className="siege-panel" aria-labelledby="siege-target-title">
             <h2 id="siege-target-title">目标</h2>
@@ -187,23 +239,26 @@ function SiegeTool({ core }: { core: Core }) {
             <fieldset className="siege-field siege-armor">
               <legend>守方建筑护甲科技</legend>
               <div className="siege-toggles">
-                {armorTechs.map((t) => (
-                  <label className="siege-check" key={t.id}>
-                    <input
-                      type="checkbox"
-                      checked={config.armor.includes(t.id)}
-                      onChange={(e) => update({ armor: e.target.checked ? [...config.armor, t.id] : config.armor.filter((id) => id !== t.id) })}
-                    />
-                    {core.techById[t.id]!.zh}
-                  </label>
-                ))}
+                {armorTechs.map((t) => {
+                  const checked = config.armor.includes(t.id);
+                  return (
+                    <label className={checked ? 'siege-check siege-check-active' : 'siege-check'} key={t.id}>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) => update({ armor: e.target.checked ? [...config.armor, t.id] : config.armor.filter((id) => id !== t.id) })}
+                      />
+                      {core.techById[t.id]!.zh}
+                    </label>
+                  );
+                })}
               </div>
               {!armorTechs.length && <p className="siege-note">当前建筑没有可核实的砌石、建筑学效果，未提供选项。</p>}
             </fieldset>
             {b.gar > 0 && (
               <div className="siege-field">
                 <span className="siege-label">驻军</span>
-                <label className="siege-check">
+                <label className={garrison ? 'siege-check siege-check-active' : 'siege-check'}>
                   <input type="checkbox" checked={garrison} onChange={(e) => setGarrison(e.target.checked)} />
                   驻满村民
                 </label>
@@ -227,6 +282,14 @@ function SiegeTool({ core }: { core: Core }) {
             {result.verified ? (
               <section className="siege-result" data-testid="siege-result" aria-labelledby="siege-result-title">
                 <h2 id="siege-result-title">{title}</h2>
+                <div className="siege-conds" data-testid="siege-conditions">
+                  <span className="siege-cond nw">{conditions.civText}</span>
+                  <span className={conditions.techActive ? 'siege-cond siege-cond-active' : 'siege-cond siege-cond-muted'}>
+                    {conditions.techActive && <Icon name="flask-conical" />}
+                    <span>{conditions.techText}</span>
+                  </span>
+                  {conditions.armorText && <span className="siege-cond">{conditions.armorText}</span>}
+                </div>
                 <dl className="siege-metrics">
                   <div>
                     <dt>击数</dt>
@@ -261,7 +324,7 @@ function SiegeTool({ core }: { core: Core }) {
               <section className="siege-unverified" data-testid="siege-unverified" role="status" aria-labelledby="siege-unverified-why">
                 <h2 id="siege-unverified-why">
                   <Icon name="circle-alert" />
-                  {[280, 550, 588].includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
+                  {SIEGE_MANGONEL_IDS.includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
                 </h2>
                 <p data-testid="siege-unverified-reason">{unverifiedBody(result.reason)}</p>
                 <div className="siege-gap-feedback">
@@ -276,11 +339,16 @@ function SiegeTool({ core }: { core: Core }) {
             <section className="siege-panel siege-compare" data-testid="siege-compare">
               <table aria-label={`同组合对照：${config.n} ${counter}${u.zh}`}>
                 <caption>
-                  同组合对照 ·{' '}
-                  <span className="num nw">
-                    {config.n} {counter}
+                  <span className="siege-compare-title">
+                    同组合对照 ·{' '}
+                    <span className="num nw">
+                      {config.n} {counter}
+                    </span>
+                    {u.zh}
                   </span>
-                  {u.zh}
+                  <span className="siege-compare-cond" data-testid="siege-compare-conditions">
+                    {conditions.compareLine}
+                  </span>
                 </caption>
                 <thead>
                   <tr>
@@ -293,7 +361,7 @@ function SiegeTool({ core }: { core: Core }) {
                 <tbody>
                   {SIEGE_COMPARE_IDS.map((id) => {
                     const target = core.buildingById[id]!;
-                    const row = calculateSiege(u, target, config.n, config.civ, config.armor);
+                    const row = calculateSiege(u, target, config.n, config.civ, config.armor, config.techs, catalog);
                     return (
                       <tr key={id} aria-current={config.bldg === id ? 'true' : undefined}>
                         <th scope="row">
