@@ -33,7 +33,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
       civ={S.civ}
       age={S.age}
       sel={S.sel}
-      team={S.team}
+      team={new Set([...S.team].filter((i) => TEAM_BONUSES[i]?.[0] !== S.civ))}
       cmp={S.cmp}
       avail={S.avail}
       selectableWithoutEffect={new Set(S.costTechs.map((item) => item.tech.id))}
@@ -50,7 +50,7 @@ export default function Simulator({ u, route, navigationAdapter }: { u: Unit; ro
       cmpStats={C}
       civNotes={civBonusNotes(u, S.civ)}
       armorClasses={Object.entries(cur.armc)}
-      teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
+      teamBonuses={TEAM_BONUSES.map(([civ, label, f]) => ({ civ, label, ok: f(u) }))}
       go={go}
       setCmp={setCmp}
       statHeadings={{

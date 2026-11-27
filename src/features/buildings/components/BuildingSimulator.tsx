@@ -3,7 +3,15 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { buildingHasAttack } from '../../../domain/buildingDetailView';
-import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
+import {
+  buildingBase,
+  buildingCivNotes,
+  buildingSimTechs,
+  filterBuildingExtraTeam,
+  parseBuildingTeamParam,
+  simulateBuilding,
+} from '../../../domain/buildingSim';
+import { TEAM_BUILDING_BONUSES } from '../../../domain/effects';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
 import { applicableSimCostTechs, buildSimEffectiveCost, costTechBadgeMap, mergeSimCostTechs, presetCostTechIds } from '../../../domain/simEffectiveCost';
 import type { Building } from '../../../domain/types';
@@ -16,7 +24,7 @@ import { healingLink } from '../../../domain/garrisonHealing';
 
 const nums = (s: string | null) => (s ?? '').split(',').filter(Boolean).map(Number);
 
-/** 建筑科技模拟器；状态在查询参数中：#/building/:id?tab=sim&civ=X&age=4&techs=1,2&cmp=Y */
+/** 建筑科技模拟器；状态在查询参数中：#/building/:id?tab=sim&civ=X&age=4&techs=1,2&team=0&cmp=Y */
 export default function BuildingSimulator({ b }: { b: Building }) {
   const core = useCore(),
     trees = useTrees(),
@@ -40,14 +48,18 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const avail = mergeSimCostTechs(buildingSimTechs(ctx, b, civ), costTechs);
   const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
+  const team = new Set(filterBuildingExtraTeam(b, civ, parseBuildingTeamParam(q.get('team'))));
   const effectiveCost = buildSimEffectiveCost(b, 'building', civ, age, sel, costTechs);
   const cmp = b.civs.includes(q.get('cmp') ?? '') ? q.get('cmp')! : '';
-  const write = (c: string, a: number, s: Iterable<number>, cm: string) => {
+  const write = (c: string, a: number, s: Iterable<number>, t: Iterable<number>, cm: string) => {
     const p = new URLSearchParams(loc.search);
     p.set('tab', 'sim');
     p.set('civ', c);
     p.set('age', String(a));
     p.set('techs', [...s].join(','));
+    const extraTeam = filterBuildingExtraTeam(b, c, t);
+    if (extraTeam.length) p.set('team', extraTeam.join(','));
+    else p.delete('team');
     if (cm) p.set('cmp', cm);
     else p.delete('cmp');
     nav(`/building/${b.id}?${p.toString()}`, { replace: true });
@@ -116,7 +128,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
         civ={civ}
         age={age}
         sel={sel}
-        team={new Set()}
+        team={team}
         cmp={cmp}
         avail={avail}
         selectableWithoutEffect={costTechIds}
@@ -128,12 +140,12 @@ export default function BuildingSimulator({ b }: { b: Building }) {
         rows={rows}
         statHeadings={{ base: '目录基础', current: '当前设置下的近似模拟值', full: () => '对照' }}
         base={buildingBase(b)}
-        cur={simulateBuilding(ctx, b, civ, age, sel)}
+        cur={simulateBuilding(ctx, b, civ, age, sel, team)}
         cmpStats={C}
         civNotes={buildingCivNotes(b, civ)}
-        teamBonuses={[]}
-        go={(c, a, s) => write(c, a, s, cmp)}
-        setCmp={(cm) => write(civ, age, sel, cm)}
+        teamBonuses={TEAM_BUILDING_BONUSES.map(([teamCiv, label, f]) => ({ civ: teamCiv, label, ok: f(b) }))}
+        go={(c, a, s, t) => write(c, a, s, t, cmp)}
+        setCmp={(cm) => write(civ, age, sel, team, cm)}
       />
     </>
   );

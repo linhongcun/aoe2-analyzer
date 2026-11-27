@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees, type Core } from '../../src/data';
 import { DAT, type DatGeneric } from '../../src/domain/datEffects';
-import { CIV_BONUSES } from '../../src/domain/effects';
+import { CIV_BONUSES, TEAM_BONUSES } from '../../src/domain/effects';
 import { calculateProduction, DEFAULT_PRODUCTION, type ProductionContext } from '../../src/domain/production';
 import { makeSimContext, simulate, type SimContext } from '../../src/domain/simulator';
 import type { Trees, Unit } from '../../src/domain/types';
@@ -44,7 +44,7 @@ function readSimStat(unit: Unit, sim: ReturnType<typeof simulate>, key: string):
   return sim[key as 'hp' | 'atk' | 'ma' | 'pa' | 'los' | 'spd' | 'bt'];
 }
 
-/** 选取对该单位无文明加成的模拟文明；对 17 个唯一且自带文明加成的单位传空串，751 传 Mayans（有 387 无文明加成）。 */
+/** 选取对该单位无文明加成且无本方常驻团队加成的模拟文明；对唯一且自带文明/团队加成的单位传空串，751 传 Mayans（有 387 无加成）。 */
 function pickNoBonusCiv(unit: Unit): string {
   const needsCivScoped = DAT.generic.some(
     (entry) => entry.req.length === 0 && !entry.any && (entry.civs?.length ?? 0) > 0 && entry.rules.some((rule) => !rule.b && rule.t.includes(unit.id)),
@@ -52,7 +52,9 @@ function pickNoBonusCiv(unit: Unit): string {
   const candidates = needsCivScoped
     ? unit.civs.filter((c) => DAT.generic.every((e) => !e.civs || !e.rules.some((r) => !r.b && r.t.includes(unit.id)) || e.civs.includes(c)))
     : unit.civs;
-  const clean = candidates.find((civ) => !(CIV_BONUSES[civ] ?? []).some(([pred]) => pred(unit)));
+  const clean = candidates.find(
+    (civ) => !(CIV_BONUSES[civ] ?? []).some(([pred]) => pred(unit)) && !TEAM_BONUSES.some(([tc, , pred]) => tc === civ && pred(unit)),
+  );
   return clean ?? '';
 }
 

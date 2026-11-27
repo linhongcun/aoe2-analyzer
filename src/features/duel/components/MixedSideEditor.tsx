@@ -4,7 +4,7 @@ import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedBallisticsScope } from '../../../domain/ballistics';
 import { isDuelExcludedUnit } from '../../../domain/duelBudget';
 import { fighterCanAttack, fighterUsesAssumeHit, mainAttackType, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
-import { civRelicBonus, TEAM_BONUSES } from '../../../domain/effects';
+import { civRelicBonus } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { toggleTech } from '../../../domain/prereq';
@@ -22,10 +22,11 @@ import { PairHintLine } from '../../../shared/ui/PairTrainingHint';
 import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import { NumWrappedText } from '../../../shared/ui/widgets';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
-import { mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
+import { filterMixedTeamOnCivChange, mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
 import { mixedSideCanKite, mixedSideHasMeleeFront } from '../logic/duelKiteView';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
+import { computeMixedTeamState, formatMixedRowTeamEffects, MixedOwnTeamSummary, MixedTeamChecklist } from './MixedTeamSection';
 import { RangedModeToggle } from './RangedModeToggle';
 import { UnitPicker } from '../../../shared/ui/UnitPicker';
 import '../unmodeled-notes.css';
@@ -107,6 +108,7 @@ export function MixedSideEditor({
   };
   const civObj = civByEn(input.civ);
   const artCiv = resolveSideArtCiv([civObj?.en]);
+  const teamState = computeMixedTeamState(input.civ, view.rows, input.team);
   return (
     <section className={`mix-side side-${side} civ-art-host`} aria-labelledby={`${prefix}-title`}>
       <CivArtLayer civ={artCiv} side={side} variant="head-band" mirror={side === 'b'} />
@@ -134,7 +136,13 @@ export function MixedSideEditor({
             value={input.civ}
             emptyText="选择文明"
             compactTrigger
-            onChange={(civ) => emitChange({ ...input, civ })}
+            onChange={(civ) =>
+              emitChange({
+                ...input,
+                civ,
+                team: filterMixedTeamOnCivChange(input.civ, civ, input.team),
+              })
+            }
           />
           {fieldErrors('civ')}
         </div>
@@ -158,7 +166,7 @@ export function MixedSideEditor({
         </div>
       </div>
       <MixedTrainingAction side={side} input={input} transfer={transfer} focusField={focusField} />
-      <p className="note">本方共用科技 / 团队效果；修改上下文不会自动替换单位或删除科技。</p>
+      <p className="note">本方常驻团队加成已自动计入；下方仅按需勾选共用科技与额外盟友团队加成；修改上下文不会自动替换单位或删除科技。</p>
       <div className="bar mix-presets" aria-label={`${label}科技预设`}>
         <button type="button" onClick={() => preset('none')}>
           无科技
@@ -198,9 +206,13 @@ export function MixedSideEditor({
           onChange={(k) => onChange(k ? { ...input, kite: true } : { ...input, kite: undefined })}
         />
       )}
+      <MixedOwnTeamSummary side={side} own={teamState.own} />
       <details className="mix-techs">
         <summary>
-          自选科技与团队效果 <span className="num nw">（数值科技 {numeric} 项）</span>
+          自选科技与额外盟友团队加成{' '}
+          <span className="num nw">
+            （数值科技 {numeric} 项{teamState.extraAllyCount > 0 ? ` · 额外盟友 ${teamState.extraAllyCount} 项` : ''}）
+          </span>
         </summary>
         <div id={`${prefix}-techs`} tabIndex={-1} className="mix-checklist" aria-label={`${label}共用科技`}>
           <h3>共用科技</h3>
@@ -267,39 +279,15 @@ export function MixedSideEditor({
           })}
           {!view.techs.length && <p className="note">选择有效单位与文明后显示适用科技。</p>}
         </div>
-        <div id={`${prefix}-team`} tabIndex={-1} className="mix-checklist" aria-label={`${label}团队效果`}>
-          <h3>团队效果</h3>
-          {fieldErrors('team')}
-          {input.team
-            .filter((id) => !/^(0|[1-9]\d*)$/.test(id) || !TEAM_BONUSES[+id])
-            .map((id, i) => (
-              <p className="mix-field-error" key={`${id}-${i}`}>
-                未知团队效果：{id || '空值'}{' '}
-                <button type="button" onClick={() => onChange({ ...input, team: input.team.filter((raw) => raw !== id) })}>
-                  移除此效果
-                </button>
-              </p>
-            ))}
-          {TEAM_BONUSES.map(([, name, applies], i) => (
-            <label key={i} className="mix-check">
-              <input
-                type="checkbox"
-                checked={input.team.includes(String(i))}
-                onChange={(e) => onChange({ ...input, team: e.target.checked ? [...input.team, String(i)] : input.team.filter((id) => id !== String(i)) })}
-              />
-              <span>
-                <NumWrappedText text={name} />
-                <small>
-                  适用行：
-                  {view.rows
-                    .map((r, i) => (r.unit && applies(r.unit) ? i + 1 : null))
-                    .filter((n) => n !== null)
-                    .join('、') || '当前全部不适用'}
-                </small>
-              </span>
-            </label>
-          ))}
-        </div>
+        <MixedTeamChecklist
+          prefix={prefix}
+          label={label}
+          input={input}
+          own={teamState.own}
+          ally={teamState.ally}
+          fieldErrors={fieldErrors('team')}
+          onChange={onChange}
+        />
       </details>
       <p className="note mix-queue-note">从上到下依次受击。最前一行清空后，下一行顶上。</p>
       <div id={`${prefix}-rows`} tabIndex={-1}>
@@ -480,15 +468,7 @@ export function MixedSideEditor({
                     </p>
                     <p className="note">
                       本行团队数值效果：
-                      <NumWrappedText
-                        text={
-                          input.team
-                            .map(Number)
-                            .filter((id) => TEAM_BONUSES[id]?.[2](r.u))
-                            .map((id) => TEAM_BONUSES[id]![1])
-                            .join('、') || '无'
-                        }
-                      />
+                      <NumWrappedText text={formatMixedRowTeamEffects(r.civ, r.u, input.team)} />
                     </p>
                     <p className="note">
                       常驻文明加成：

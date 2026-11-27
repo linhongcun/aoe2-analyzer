@@ -47,11 +47,12 @@ export function upgradePlan(ctx: SimContext, byId: Record<number, Unit>, spec: U
   if (!Number.isInteger(spec.age) || spec.age < 1 || spec.age > 4 || spec.age < trainingUnitAge(spec.civ, u.id, u.age))
     return { ok: false, reason: '所选时代无效，或尚未解锁该单位。' };
 
-  const team = sortedUnique(spec.team);
-  for (const id of team) {
+  const rawTeam = sortedUnique(spec.team);
+  for (const id of rawTeam) {
     const bonus = TEAM_BONUSES[id];
     if (!Number.isInteger(id) || !bonus || !bonus[2](u)) return { ok: false, reason: '团队加成不存在或不适用于该单位。' };
   }
+  const team = rawTeam.filter((id) => TEAM_BONUSES[id]?.[0] !== spec.civ);
 
   const avail = simTechs(ctx, u, spec.civ);
   const numeric = new Set(avail.filter(({ ef }) => ef?.length).map(({ t }) => t.id));

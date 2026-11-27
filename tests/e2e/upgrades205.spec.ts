@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-const PINS = JSON.parse(readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../data/sources/data_sources.json');
+const PINS = JSON.parse(
+  readFileSync(new URL('../../data/sources/data_sources.json', import.meta.url), 'utf8'),
+) as typeof import('../../data/sources/data_sources.json');
 
 const KNIGHT = '38.Byzantines.3..';
 const PIKEMAN = '358.Byzantines.3..';
@@ -233,8 +235,9 @@ const invalidatingChanges: [string, (page: Page) => Promise<unknown>][] = [
     async (page) => {
       await techCheckbox(page, 'a', '锻造');
       await page
-        .locator('#duel-a .simg')
-        .filter({ has: page.getByRole('heading', { name: '团队加成（开关）', exact: true }) })
+        .locator('#duel-a [data-t="sim-team-group"]')
+        .filter({ has: page.getByRole('heading', { name: '团队加成', exact: true }) })
+        .locator('[data-t="sim-team-ally"]')
         .getByRole('checkbox')
         .first()
         .check();

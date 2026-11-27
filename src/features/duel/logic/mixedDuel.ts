@@ -53,6 +53,15 @@ export function mixedSideRelicMatchedUnits(civ: string, rows: readonly MixedRowV
   return names;
 }
 
+/** 混编单侧切换文明时，同时剥离原文明（兼容旧链残留）与目标文明自身的团队索引，避免原文明隐藏本方索引泄漏为新文明的额外盟友。 */
+export function filterMixedTeamOnCivChange(prevCiv: string, nextCiv: string, rawTeam: readonly string[]): string[] {
+  return rawTeam.filter((raw) => {
+    if (!(/^(0|[1-9]\d*)$/.test(raw) && Number.isSafeInteger(+raw))) return true;
+    const owner = TEAM_BONUSES[+raw]?.[0];
+    return owner !== prevCiv && owner !== nextCiv;
+  });
+}
+
 /** 混编单侧若不再含圣物命中单位行，移除其 relics 字段。 */
 export function stripIneligibleMixedRelics(core: Core, sideInput: MixedSideInput): MixedSideInput {
   if (!sideInput.relics) return sideInput;

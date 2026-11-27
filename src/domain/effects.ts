@@ -10,7 +10,7 @@ import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, t
 import { hasIgnoreArmor, hasResistIgnoreArmor } from './damageCore';
 import { applyCombatAbilityEco, DAT, extractCombatAbilityEffects, idPred, toEffects, type DatConditionalEntry, type DatEco, type DatEntry } from './datEffects';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES, type CivBonus, type EffectRule } from './effects.manual';
-import type { Effect, Unit, UnitPred } from './types';
+import type { Building, Effect, Unit, UnitPred } from './types';
 
 export type { CivBonus, EffectRule } from './effects.manual';
 export { BUILDING_TEXT_ONLY } from './buildingEffects.manual';
@@ -244,6 +244,10 @@ export function activeRelicBonus(
 /** [文明, 说明, 适用判定, 该单位获得的效果] */
 export type TeamBonus = [string, string, UnitPred, (u: { id: number }) => Effect[]];
 export const TEAM_BONUSES: TeamBonus[] = [];
+/** [文明, 说明, 适用判定, 该建筑获得的效果] */
+export type BuildingTeamBonus = [string, string, BPred, (b: Building) => Effect[]];
+/** 按固定文明表稳定排序的建筑类已编码团队加成（与 TEAM_BLD 同源） */
+export const TEAM_BUILDING_BONUSES: BuildingTeamBonus[] = [];
 export const TEAM_ECO: Record<string, DatEco[]> = {};
 /** 团队加成对建筑的数值效果（如埃塞俄比亚哨塔视野、库曼木栅栏生命值、吴房屋建造速度） */
 export const TEAM_BLD: Record<string, [BPred, Effect[]][]> = {};
@@ -257,7 +261,11 @@ civs.forEach((c) => {
   if (d?.team.combat && [...rules, ...brules].some((r) => r[1].length)) {
     if (rules.some((r) => r[1].length))
       TEAM_BONUSES.push([c.en, label, (u) => rules.some(([f, fx]) => fx.length && f(u)), (u) => rules.filter(([f]) => f(u)).flatMap(([, fx]) => fx)]);
-    TEAM_BLD[c.en] = brules.filter((r) => r[1].length);
+    const validBrules = brules.filter((r) => r[1].length);
+    TEAM_BLD[c.en] = validBrules;
+    if (validBrules.length) {
+      TEAM_BUILDING_BONUSES.push([c.en, label, (b) => validBrules.some(([f]) => f(b)), (b) => validBrules.filter(([f]) => f(b)).flatMap(([, fx]) => fx)]);
+    }
     src.team = 'dat';
     return;
   }

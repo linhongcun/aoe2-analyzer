@@ -96,7 +96,7 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     }
   });
 
-  it('马来巨港（1189）补齐 IMPLIED 激活 669/670/671 恢复 atk=8, rng=10, los=21，船坞（45）不受影响（#1407）', () => {
+  it('马来巨港（1189）补齐 IMPLIED 激活 669/670/671 恢复 atk=8, rng=10, los=27（含本方常驻团队 +6），船坞（45）不受影响（#1407 / #1481）', () => {
     const harbor = B('Harbor');
     const availIds = buildingSimTechs(ctx, harbor, 'Malay')
       .filter((x) => x.ef)
@@ -107,25 +107,25 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     const matchedHarbor = matchingGenericFx(harbor, true, 4, (n) => ['Fletching', 'Bodkin Arrow', 'Bracer'].includes(n), 'Malay');
     expect(matchedHarbor.map((g) => g.tech).sort((a, b) => a - b)).toEqual([669, 670, 671]);
 
-    // 未选箭术科技时保持基础属性
+    // 未选箭术科技时保持基础攻射并自动计入马来常驻团队视野 +6（10 + 6 = 16）
     const emptyHarbor = simulateBuilding(ctx, harbor, 'Malay', 4, new Set());
-    expect([emptyHarbor.atk, emptyHarbor.rng, emptyHarbor.los]).toEqual([3, 7, 10]);
+    expect([emptyHarbor.atk, emptyHarbor.rng, emptyHarbor.los]).toEqual([3, 7, 16]);
 
-    // 城堡时代：箭羽 + 锥子箭触发 669/670
+    // 城堡时代：箭羽 + 锥子箭触发 669/670，并计入马来常驻团队视野 +6（12 + 6 = 18）
     const castleHarbor = simulateBuilding(ctx, harbor, 'Malay', 3, ids('Fletching', 'Bodkin Arrow'));
-    expect([castleHarbor.atk, castleHarbor.rng, castleHarbor.los]).toEqual([6, 9, 12]);
+    expect([castleHarbor.atk, castleHarbor.rng, castleHarbor.los]).toEqual([6, 9, 18]);
 
-    // 帝王满科技：atk=8, rng=10, los=21, minr=0, 对船 3 + 4 = 7，保留基础对骆驼 +1（#1453）
+    // 帝王满科技：atk=8, rng=10, los=27（21 + 马来常驻团队 6）, minr=0, 对船 3 + 4 = 7，保留基础对骆驼 +1（#1453 / #1481）
     const fullHarbor = full('Harbor', 'Malay');
-    expect([fullHarbor.atk, fullHarbor.rng, fullHarbor.los, fullHarbor.minr]).toEqual([8, 10, 21, 0]);
+    expect([fullHarbor.atk, fullHarbor.rng, fullHarbor.los, fullHarbor.minr]).toEqual([8, 10, 27, 0]);
     expect(fullHarbor.bonus['船只']).toBe(7);
     expect(fullHarbor.bonus['骆驼']).toBe(1);
 
-    // 反例：普通船坞（45）绝不进入 IMPLIED，不误触发海上霸主组合科技 669/670/671（基础 los=8，仅加城镇瞭望/巡逻 +8 = 16）
+    // 反例：普通船坞（45）绝不进入 IMPLIED，不误触发海上霸主组合科技 669/670/671（基础 los=8 + 城镇瞭望/巡逻 +8 + 马来常驻团队 +6 = 22）
     const dock = B('Dock');
     expect(matchingGenericFx(dock, true, 4, (n) => ['Fletching', 'Bodkin Arrow', 'Bracer'].includes(n), 'Malay')).toEqual([]);
     const fullDock = full('Dock', 'Malay');
-    expect([fullDock.atk, fullDock.rng, fullDock.los]).toEqual([7, 6, 16]);
+    expect([fullDock.atk, fullDock.rng, fullDock.los]).toEqual([7, 6, 22]);
   });
 
   it('全站 19 座无攻建筑过滤 322/380 等纯进攻科技，强制保留西西里城楼（1665）全部进攻科技（#1407）', () => {

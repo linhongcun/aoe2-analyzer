@@ -265,11 +265,30 @@ export function MixedResult({
             view = key === 'a' ? a : b;
           const showMode = mixedSideCanKite(view);
           const showRelics = mixedSideRelicMatchedUnits(s.civ, view.rows).length > 0;
+          const ownTeamLabels = TEAM_BONUSES.filter(([teamCiv, , applies]) => teamCiv === s.civ && view.rows.some((r) => r.unit && applies(r.unit))).map(
+            ([, label]) => `${label}（已自动计入）`,
+          );
+          const extraAllyLabels = [
+            ...new Set(
+              s.team
+                .filter((raw) => /^(0|[1-9]\d*)$/.test(raw) && Number.isSafeInteger(+raw))
+                .map(Number)
+                .filter((id) => Boolean(TEAM_BONUSES[id]) && TEAM_BONUSES[id]![0] !== s.civ),
+            ),
+          ].map((id) => TEAM_BONUSES[id]![1]);
           return (
             <p key={key}>
               {key.toUpperCase()}：{civByEn(s.civ)?.zh ?? s.civ} / {AGE_ZH[+s.age]} / 科技：
-              {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'} / 团队效果：
-              <NumWrappedText text={s.team.map((id) => TEAM_BONUSES[+id]?.[1] ?? id).join('、') || '无'} />
+              {s.techs.map((id) => view.techs.find((o) => String(o.t.id) === id)?.t.zh ?? id).join('、') || '无科技'}
+              {ownTeamLabels.length > 0 && (
+                <>
+                  {' '}
+                  / 本方常驻团队加成：
+                  <NumWrappedText text={ownTeamLabels.join('、')} />
+                </>
+              )}
+              {' / 额外盟友团队加成：'}
+              <NumWrappedText text={extraAllyLabels.join('、') || '无'} />
               {showMode && <> / 作战模式：{s.kite === true ? '边走边射（拉扯）' : '站桩输出'}</>}
               {showRelics && (
                 <>

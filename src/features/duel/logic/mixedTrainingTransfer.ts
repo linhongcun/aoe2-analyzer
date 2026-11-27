@@ -82,8 +82,9 @@ export function mixedTrainingTransfer(context: ProductionContext, input: MixedSi
       fail('techs', `${tech.zh}有尚未核实的训练条件。`);
     }
   }
-  for (const id of input.team.map(Number)) {
+  for (const id of new Set(input.team.map(Number))) {
     const [civ, name] = TEAM_BONUSES[id]!;
+    if (civ === input.civ) continue;
     const data = DAT.civs[civ]?.team;
     if (
       !data?.combat ||
