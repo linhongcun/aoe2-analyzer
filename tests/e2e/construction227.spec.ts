@@ -137,3 +137,137 @@ for (const width of [360, 375, 390, 1280])
       expect(small).toBe(0);
       await page.screenshot({ path: testInfo.outputPath(`construction227-${width}-${theme}.png`), fullPage: true });
     });
+
+async function assertNumNwSingleLine(page: Page, selector: string) {
+  const wraps = await page.locator(selector).evaluateAll(
+    (nodes) =>
+      nodes.filter((node) => {
+        const tops = [...node.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top));
+        return tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 4;
+      }).length,
+  );
+  expect(wraps).toBe(0);
+}
+
+test.describe('#1460 多人施工字段级就近报错与无障碍关联', () => {
+  for (const [width, height] of [
+    [360, 800],
+    [390, 844],
+    [1280, 800],
+  ] as const) {
+    test(`@${width} 四字段独立报错、同屏可见、无悬空引用与恢复`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto(href());
+
+      const fields = [
+        { label: '施工人数', invalid: '-2', valid: '4', id: 'construction-error-builders', text: '施工人数须为 1–200 的整数。', sibling: '基准人数' },
+        { label: '基准人数', invalid: '201', valid: '1', id: 'construction-error-baseline', text: '基准人数须为 1–200 的整数。', sibling: '施工人数' },
+        {
+          label: '施工停采木金石单程距离',
+          invalid: '-1',
+          valid: '3',
+          id: 'construction-error-walk',
+          text: '木金石单程距离须为 0–10 格，最多三位小数。',
+          sibling: '施工停采农田单程距离',
+        },
+        {
+          label: '施工停采农田单程距离',
+          invalid: '11',
+          valid: '0',
+          id: 'construction-error-farm',
+          text: '农田单程距离须为 0–10 格，最多三位小数。',
+          sibling: '施工停采木金石单程距离',
+        },
+      ] as const;
+
+      for (const f of fields) {
+        const input = page.getByLabel(f.label, { exact: true });
+        const sibling = page.getByLabel(f.sibling, { exact: true });
+        await input.scrollIntoViewIfNeeded();
+        await input.fill(f.invalid);
+        await expect(input).toHaveAttribute('aria-invalid', 'true');
+        await expect(input).toHaveAttribute('aria-describedby', f.id);
+        await expect(sibling).not.toHaveAttribute('aria-invalid');
+        await expect(sibling).not.toHaveAttribute('aria-describedby');
+
+        const hint = page.locator('#' + f.id);
+        await expect(hint).toBeVisible();
+        await expect(hint).toHaveText(f.text);
+        await expect(hint).not.toHaveAttribute('role', 'alert');
+        await expect(page.getByRole('alert')).toHaveCount(1);
+        await expect(page.getByRole('button', { name: '复制方案链接' })).toBeDisabled();
+
+        const inputBox = (await input.boundingBox())!;
+        const hintBox = (await hint.boundingBox())!;
+        expect(hintBox.y).toBeGreaterThanOrEqual(inputBox.y + inputBox.height - 2);
+        expect(hintBox.y).toBeLessThan(inputBox.y + inputBox.height + 64);
+        expect(hintBox.y + hintBox.height).toBeLessThanOrEqual(height + 2);
+
+        const borderBad = await input.evaluate((el) => getComputedStyle(el).borderTopColor);
+        const borderGood = await sibling.evaluate((el) => getComputedStyle(el).borderTopColor);
+        expect(borderBad).not.toBe(borderGood);
+
+        if (width >= 1280 && f.label === '施工人数') {
+          const siblingBox = (await sibling.boundingBox())!;
+          expect(Math.abs(inputBox.y - siblingBox.y)).toBeLessThan(2);
+          await input.focus();
+          await page.keyboard.press('Tab');
+          await expect(sibling).toBeFocused();
+        }
+
+        await assertNumNwSingleLine(page, `#${f.id} .num.nw`);
+
+        await input.fill(f.valid);
+        await expect(input).not.toHaveAttribute('aria-invalid');
+        await expect(input).not.toHaveAttribute('aria-describedby');
+        await expect(hint).toHaveCount(0);
+      }
+
+      await expect(page.getByRole('alert')).toHaveCount(0);
+      await expect(page.getByRole('button', { name: '复制方案链接' })).toBeEnabled();
+      await expect(page.getByTestId('construction-seconds')).toHaveText('12.5 秒');
+    });
+  }
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`多字段同时非法各自绑定对应提示（${theme}），且无 WCAG AA 违规`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await page.goto(href());
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await page.getByLabel('施工人数', { exact: true }).fill('1.5');
+      await page.getByLabel('基准人数', { exact: true }).fill('0');
+      await page.getByLabel('施工停采木金石单程距离', { exact: true }).fill('10.001');
+      await page.getByLabel('施工停采农田单程距离', { exact: true }).fill('-1');
+
+      await expect(page.getByRole('alert')).toHaveCount(1);
+      for (const id of ['construction-error-builders', 'construction-error-baseline', 'construction-error-walk', 'construction-error-farm']) {
+        await expect(page.locator('#' + id)).toHaveCount(1);
+        await expect(page.locator(`[aria-describedby="${id}"]`)).toHaveCount(1);
+      }
+      await assertNumNwSingleLine(page, '.construction-field-error .num.nw');
+      const violations = (await new AxeBuilder({ page }).include('.construction-page').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
+      expect(violations).toEqual([]);
+    });
+  }
+
+  test('坏链接锁定态与非字段错误保持唯一 alert 且不给输入框标错', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(href({ builders: '-1' }));
+    await expect(page.getByRole('alert')).toHaveCount(1);
+    await expect(page.locator('.construction-page [aria-invalid="true"]')).toHaveCount(0);
+    await expect(page.locator('.construction-page [aria-describedby]')).toHaveCount(0);
+    await expect(page.locator('.construction-field-error')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '重置为默认方案' })).toBeVisible();
+
+    await page.goto(href({ building: '199' }));
+    await expect(page.getByRole('alert')).toHaveCount(1);
+    await expect(page.locator('.construction-page [aria-invalid="true"]')).toHaveCount(0);
+    await expect(page.locator('.construction-field-error')).toHaveCount(0);
+
+    await page.goto(href({ building: '235', civ: 'Britons', age: '4' }));
+    await expect(page.getByRole('alert')).toHaveCount(1);
+    await expect(page.locator('.construction-page [aria-invalid="true"]')).toHaveCount(0);
+    await expect(page.locator('.construction-field-error')).toHaveCount(0);
+  });
+});

@@ -213,4 +213,43 @@ describe('#227 construction', () => {
     expect(parsed.config.techs).toEqual([50]);
     expect(parsed.config.buildingId).toBe(82);
   });
+  it('reports independent per-field errors without cross-marking paired valid inputs (issue 1460)', () => {
+    const badBuilders = calc({ builders: '-2' });
+    expect(badBuilders.fieldErrors).toEqual({ builders: '施工人数须为 1–200 的整数。' });
+    expect(badBuilders.errors).toEqual(['施工人数须为 1–200 的整数。']);
+
+    const badBaseline = calc({ baseline: '201' });
+    expect(badBaseline.fieldErrors).toEqual({ baseline: '基准人数须为 1–200 的整数。' });
+    expect(badBaseline.errors).toEqual(['基准人数须为 1–200 的整数。']);
+
+    const badWalkNoTask = calc({ task: '', walk: '-1' });
+    expect(badWalkNoTask.fieldErrors).toEqual({ walk: '木金石单程距离须为 0–10 格，最多三位小数。' });
+    expect(badWalkNoTask.errors).toEqual(['木金石单程距离须为 0–10 格，最多三位小数。']);
+
+    const badFarmNoTask = calc({ task: '', farm: '10.001' });
+    expect(badFarmNoTask.fieldErrors).toEqual({ farm: '农田单程距离须为 0–10 格，最多三位小数。' });
+    expect(badFarmNoTask.errors).toEqual(['农田单程距离须为 0–10 格，最多三位小数。']);
+
+    const allBad = calc({ builders: '0', baseline: '1.5', walk: '-1', farm: '11' });
+    expect(allBad.fieldErrors).toEqual({
+      builders: '施工人数须为 1–200 的整数。',
+      baseline: '基准人数须为 1–200 的整数。',
+      walk: '木金石单程距离须为 0–10 格，最多三位小数。',
+      farm: '农田单程距离须为 0–10 格，最多三位小数。',
+    });
+    expect(allBad.errors).toHaveLength(4);
+  });
+  it('keeps non-field errors out of fieldErrors (issue 1460)', () => {
+    const fishTrap = calc({ buildingId: 199 });
+    expect(fishTrap.errors.length).toBeGreaterThan(0);
+    expect(fishTrap.fieldErrors).toEqual({});
+
+    const missingShape = calc({ civ: 'Britons', buildingId: 235, age: 4 });
+    expect(missingShape.errors.length).toBeGreaterThan(0);
+    expect(missingShape.fieldErrors).toEqual({});
+
+    const tcGate = calc({ buildingId: 109, age: 3, hasTownCenter: false });
+    expect(tcGate.errors.length).toBeGreaterThan(0);
+    expect(tcGate.fieldErrors).toEqual({});
+  });
 });
