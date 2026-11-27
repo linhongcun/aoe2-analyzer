@@ -6,7 +6,19 @@
  *   npx vite-node scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  *   npx vite-node --script scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  */
-import { existsSync, lstatSync, readFileSync, readlinkSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import {
+  closeSync,
+  existsSync,
+  lstatSync,
+  openSync,
+  readdirSync,
+  readFileSync,
+  readlinkSync,
+  realpathSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { basename, dirname, join, parse } from 'node:path';
 import { ARMY_RESEARCH } from '../src/data/armyResearch';
 import { CORE } from '../src/data/core';
@@ -102,9 +114,12 @@ function sameInode(a: string, b: string): boolean {
 }
 
 function canonicalFilename(name: string): string {
+  // Two-pass case fold (lower -> upper -> lower) folds both ẞ (U+1E9E) and ß (U+00DF)
+  // to `ss`, along with ſ (U+017F) -> `s`, ς/σ -> `σ`, and NFD/NFC equivalents.
   return name
     .replace(/[\u00AD\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
     .normalize('NFKC')
+    .toLowerCase()
     .toUpperCase()
     .toLowerCase()
     .normalize('NFKC');
@@ -124,6 +139,42 @@ function isWithinDir(targetPath: string, protectedDir: string): boolean {
   }
 }
 
+function sharesInodeWithDirTree(targetPath: string, rootDir: string): boolean {
+  let targetStat;
+  try {
+    targetStat = statSync(targetPath);
+  } catch (err) {
+    return (err as NodeJS.ErrnoException).code !== 'ENOENT';
+  }
+  if (targetStat.nlink <= 1) return false;
+  const stack = [rootDir];
+  while (stack.length > 0) {
+    const dir = stack.pop()!;
+    let entries: string[];
+    try {
+      entries = readdirSync(dir);
+    } catch {
+      return true;
+    }
+    for (const name of entries) {
+      const entryPath = join(dir, name);
+      let st;
+      try {
+        st = lstatSync(entryPath);
+      } catch {
+        return true;
+      }
+      if (st.isSymbolicLink()) continue;
+      if (st.isDirectory()) {
+        stack.push(entryPath);
+      } else if (st.dev === targetStat.dev && st.ino === targetStat.ino) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_USAGE_DEST): boolean {
   const ca = resolveFsPath(candidate);
   const cb = resolveFsPath(defaultDest);
@@ -131,13 +182,44 @@ function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_U
   if (ca === null || cb === null || protectedDir === null) return true;
   if (samePathOrInode(ca, cb) || sameInode(candidate, defaultDest)) return true;
   // Block any --civ write into data/game/ at any nesting depth (resolving data/game/ independently
-  // of the default snapshot target, including firmlink aliases and arbitrary Unicode/case
-  // equivalents on case-insensitive filesystems such as APFS `army_coſt_usage.json`).
-  if (isWithinDir(ca, protectedDir)) return true;
+  // of the default snapshot target, including firmlink aliases, hardlinks into data/game/, and
+  // arbitrary Unicode/case equivalents on case-insensitive filesystems such as APFS).
+  if (isWithinDir(ca, protectedDir) || sharesInodeWithDirTree(ca, protectedDir)) return true;
   // When the default snapshot resolves to a non-existent external path (e.g. a dangling symlink),
   // sameInode cannot match it yet; also block case/Unicode-folding aliases in that same directory
   // while keeping unrelated sibling files in the external directory writable.
   return samePathOrInode(dirname(ca), dirname(cb)) && canonicalFilename(basename(ca)) === canonicalFilename(basename(cb));
+}
+
+function writeOutputSafely(out: string, text: string, isSubset: boolean, defaultDest = DEFAULT_ARMY_COST_USAGE_DEST): void {
+  if (isSubset && !existsSync(defaultDest)) {
+    const ca = resolveFsPath(out);
+    const cb = resolveFsPath(defaultDest);
+    if (ca === null || cb === null) {
+      throw new Error('--civ requires an explicit --out path outside data/game and distinct from the default snapshot');
+    }
+    if (samePathOrInode(dirname(ca), dirname(cb)) && !existsSync(ca)) {
+      // OS-kernel exact guard for any volume-specific equivalence (e.g. APFS Unicode case-folding)
+      // when defaultDest is a dangling symlink pointing into the same external directory.
+      const fd = openSync(ca, 'wx');
+      let createdAlias = false;
+      try {
+        if (sameInode(ca, defaultDest)) {
+          createdAlias = true;
+        } else {
+          writeFileSync(fd, text, 'utf8');
+        }
+      } finally {
+        closeSync(fd);
+        if (createdAlias) unlinkSync(ca);
+      }
+      if (createdAlias) {
+        throw new Error('--civ requires an explicit --out path outside data/game and distinct from the default snapshot');
+      }
+      return;
+    }
+  }
+  writeFileSync(out, text, 'utf8');
 }
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {
@@ -183,6 +265,6 @@ if (check) {
   }
   console.log(`army cost usage pinned reproduction OK (${Object.keys(payload.bonuses).length} bonuses)`);
 } else {
-  writeFileSync(out, text, 'utf8');
+  writeOutputSafely(out, text, Boolean(civList?.length));
   console.log(`wrote ${out} (${Object.keys(payload.bonuses).length} bonuses)`);
 }
