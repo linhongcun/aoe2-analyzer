@@ -66,7 +66,7 @@ export default tseslint.config(
   {
     // main@cca7e56 已超过 600 行、且不在 #288 拆分范围的固定基线。
     // 不按 glob 或当前行数动态豁免，新文件不会进入此名单。
-    files: ['src/domain/buildSim.ts', 'src/domain/garrisonGeneral.ts', 'src/shared/nav/pageRegistry.ts', 'tests/e2e/smoke.spec.ts'],
+    files: ['src/domain/buildSim.ts', 'src/shared/nav/pageRegistry.ts', 'tests/e2e/smoke.spec.ts'],
     rules: { 'maintenance/max-new-file-lines': 'off' },
   },
 );
