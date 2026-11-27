@@ -134,3 +134,50 @@ test('#214 生产页与科技详情入口，前后导航保持URL', async ({ pag
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('eco-payoff-page')).toBeVisible();
 });
+
+test('#1473 亚美尼亚骡车科技与波希米亚未研狂热回本（1280 & 360 窄屏不折行无溢出）', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  const checkLayout = async (width: number) => {
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const wrapped = await page.locator('main .num, main .nw').evaluateAll((els) =>
+      els.flatMap((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const tops = [...range.getClientRects()].filter((r) => r.width > 0).map((r) => r.top);
+        return tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 6 ? [el.textContent] : [];
+      }),
+    );
+    expect(wrapped, `width=${width}`).toEqual([]);
+  };
+
+  for (const width of [1280, 360]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/eco-payoff?civ=Armenians&age=2&target=202&known=&distance=3&minutes=10&food=0&wood=10&gold=0&stone=0');
+    await expect(page.getByTestId('eco-balance')).toHaveText('从现在起约 3:18');
+    await expect(page.getByTestId('eco-gain-Wood')).toHaveText('353.47');
+    await expect(page.locator('.eco-warnings')).toHaveCount(0);
+    await checkLayout(width);
+
+    await page.goto('./#/eco-payoff?civ=Armenians&age=3&target=203&known=202&distance=3&minutes=10&food=0&wood=12&gold=0&stone=0');
+    await expect(page.getByTestId('eco-balance')).toHaveText('从现在起约 4:55');
+    await expect(page.getByTestId('eco-gain-Wood')).toHaveText('453.77');
+    await expect(page.locator('.eco-warnings')).toHaveCount(0);
+    await checkLayout(width);
+
+    await page.goto('./#/eco-payoff?civ=Armenians&age=4&target=182&known=55&distance=3&minutes=10&food=0&wood=0&gold=12&stone=0');
+    await expect(page.getByTestId('eco-balance')).toHaveText('从现在起约 6:40');
+    await expect(page.getByTestId('eco-gain-Gold')).toHaveText('319.15');
+    await expect(page.locator('.eco-warnings')).toHaveCount(0);
+    await checkLayout(width);
+
+    await page.goto('./#/eco-payoff?civ=Bohemians&age=3&target=203&known=202&distance=3&minutes=10&food=0&wood=12&gold=0&stone=0');
+    await expect(page.getByTestId('eco-balance')).toHaveText('从现在起约 6:28');
+    await expect(page.locator('.eco-warnings')).toHaveCount(0);
+    await checkLayout(width);
+  }
+  expect(errors).toEqual([]);
+});

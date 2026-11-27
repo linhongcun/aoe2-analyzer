@@ -81,8 +81,7 @@ describe('A #162 7 个文明的「未计入」原因写到具体文明', () => {
     expect(rows.filter((s) => s.includes('波兰采石换金'))).toEqual(['未计入：波兰 波兰采石换金（石矿工兼产黄金，未建模）']);
   });
 
-  it('A5 范围外文明不受影响：亚美尼亚/波希米亚/玛雅原因不变，未知文明仍兜底', () => {
-    expect(uncountedText('Armenians', '亚美尼亚', '伐木 +7%')).toBe('未计入：亚美尼亚 伐木 +7%（需研究科技，未建模）');
+  it('A5 范围外文明不受影响：波希米亚/玛雅原因不变，未知文明仍兜底（#1473 亚美尼亚已建模不再走未计入）', () => {
     expect(uncountedText('Bohemians', '波希米亚', '村民移速 +15%')).toBe('未计入：波希米亚 村民移速 +15%（需研究科技，未建模）');
     expect(uncountedText('Mayans', '玛雅', '采金 −13%')).toContain('（资源多持续 15%，不是采集变快，暂不计入）');
     expect(uncountedText('NoSuchCiv', '某文明', 'x')).toBe(`未计入：某文明 x${FALLBACK}`);

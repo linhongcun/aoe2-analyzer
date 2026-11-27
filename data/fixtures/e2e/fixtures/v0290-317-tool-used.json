@@ -1,5 +1,13 @@
 [
   {
+    "civ": "Armenians",
+    "idx": 1,
+    "src": "text",
+    "zh": "骡车科技效率 +40%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
     "civ": "Berbers",
     "idx": 0,
     "src": "dat",

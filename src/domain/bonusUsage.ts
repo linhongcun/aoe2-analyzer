@@ -38,7 +38,7 @@ import { simSupport } from './simSupport';
 import { jurchenContext, JURCHEN_DECAY_NOTE, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { WEI_SPAWN_NOTE } from './weiEconomy';
 import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
-import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
+import { armenianContext, ARMENIAN_RESEARCH_IDS, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
 import { georgianContext } from './georgianEconomy';
 import { slavicContext, SLAVIC_FARM_NOTE } from './slavicEconomy';
 import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerEconomy';
@@ -133,6 +133,7 @@ const gatherLines = (b: CivBonusEnt) => {
  * 没有可对应的 tech（科技树汇总效果，或采集行来自科技树汇总行）时 treeOnly = true。
  */
 export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean } {
+  if (b.id === 'Armenians-1') return { techs: [...ARMENIAN_RESEARCH_IDS], treeOnly: false };
   const dat = b.dat.map((d) => d.tech).filter((t) => t > 0);
   const g = gatherLines(b);
   const techs = [...new Set([...dat, ...g.flatMap((l) => l.techs)])];
@@ -260,6 +261,11 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
       note: on ? '已计入起始免费骡车与逐次付费骡车；移动和自动复用未模拟' : '暂不支持该文明，整页按通用文明计算，本条未计入',
     };
   }
+  if (b.id === 'Armenians-1') {
+    const context = armenianContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.research?.length;
+    return { tool: 'sim', name, on, note: on ? ARMENIAN_RESEARCH_NOTE : '暂不支持该文明，整页按通用文明计算，本条未计入' };
+  }
   const { techs, treeOnly } = bonusTechs(b);
   const currentScope = BONUS_USAGE_CIVS.includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
@@ -315,11 +321,6 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
     const context = khmerContext(eco);
     const on = currentSimSupport(eco, b.civ, buildOrders).supported && context.noPrerequisites;
     return [{ tool: 'sim', name: USAGE_TOOL_ZH.sim, on, note: on ? KHMER_PREREQUISITE_NOTE : '暂不支持该文明，整页按通用文明计算，本条未计入' }];
-  }
-  if (b.id === 'Armenians-1') {
-    const context = armenianContext(eco);
-    const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.research?.length;
-    return [{ tool: 'sim', name: USAGE_TOOL_ZH.sim, on, note: on ? ARMENIAN_RESEARCH_NOTE : '暂不支持该文明，整页按通用文明计算，本条未计入' }];
   }
   if (b.id === 'Bengalis-0')
     return [

@@ -306,13 +306,19 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
   if (config.rows.length > PRODUCTION_LIMIT) errors.push(`最多添加 ${PRODUCTION_LIMIT} 条需求。`);
   const availableTechs = new Set(productionTechs(ctx, config).map((t) => t.id));
   if (config.techs.some((id) => !availableTechs.has(id))) errors.push('方案含当前文明或时代不可用的科技，请清除不可用科技。');
-  const gather = gatherModel(config.age, config.civ, { techIds: sel, walkTiles: config.walk, farmTiles: config.farm, includeCivEcoTechs: true });
+  const gatherOpts = { techIds: sel, availableTechIds: litTreeIds(ctx.trees, config.civ, 't') };
+  const gather = gatherModel(config.age, config.civ, { ...gatherOpts, walkTiles: config.walk, farmTiles: config.farm, includeCivEcoTechs: true });
   applied.push(...gather.applied.map((x) => x.label));
   // .dat 还有存放收益等资源指令，不能只扫描旧真实费用支持的属性号而静默漏掉；同源项按 DAT 归属合并为一条。
   const civ = civByEn(config.civ);
   const appliedSources = new Set(gather.applied.map((x) => x.source));
   warnings.push(
-    ...mergeProductionEcoWarnings(gatherUnsupportedSources(config.age, config.civ), civ?.bon ?? [], appliedSources, DAT.civs[config.civ]?.bonus ?? []),
+    ...mergeProductionEcoWarnings(
+      gatherUnsupportedSources(config.age, config.civ, gatherOpts),
+      civ?.bon ?? [],
+      appliedSources,
+      DAT.civs[config.civ]?.bonus ?? [],
+    ),
   );
   if (civ && isEconomicBonusText(civ.tb)) warnings.push(`${civ.tb}：本文明团队经济机制未计入。`);
   const selectedTechs = selectedTechEffects(ctx, sel, config.civ);

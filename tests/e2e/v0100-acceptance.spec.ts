@@ -12,11 +12,8 @@ async function openTime(page: Page, a: string, b = 'Magyars', age = 3) {
   await expect(page.locator('[data-t="rc-b"]')).toBeVisible();
 }
 
-test.describe('A #156 未计入原因改为「需研究科技，未建模」', () => {
-  for (const [en, zh] of [
-    ['Armenians', '亚美尼亚'],
-    ['Bohemians', '波希米亚'],
-  ] as const) {
+test.describe('A #156 未计入原因改为「需研究科技，未建模」（#1473 亚美尼亚已正式建模）', () => {
+  for (const [en, zh] of [['Bohemians', '波希米亚']] as const) {
     test(`A1 ${zh}：显示「需研究科技，未建模」，仍无已计入采集加成`, async ({ page }) => {
       await openTime(page, en);
       const side = page.locator('[data-t="rc-a"]');
@@ -80,16 +77,13 @@ async function unsupportedLines(page: Page) {
 test.describe('B #156 窄屏下「未计入」行不换行', () => {
   for (const width of [360, 375, 390]) {
     for (const [a, b, title] of [
-      ['Armenians', 'Bohemians', '亚美尼亚与波希米亚'],
+      ['Bohemians', 'Magyars', '波希米亚'],
       ['Mayans', 'Magyars', '玛雅较长原因'],
     ] as const) {
       test(`B1 @${width} ${title}：文字一行可读，页面不横向滚动`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await openTime(page, a, b, 4);
         await expect(page.locator('[data-t="rc-a"]').locator(UNSUPPORTED).first()).toBeVisible();
-        if (b === 'Bohemians') {
-          await expect(page.locator('[data-t="rc-b"]').locator(UNSUPPORTED).first()).toBeVisible();
-        }
 
         const rows = await unsupportedLines(page);
         expect(rows.length).toBeGreaterThan(0);
@@ -191,5 +185,17 @@ test.describe('D #156 PK 等采集时间的已计入行标出来源', () => {
     await expect(page.locator('[data-t="rc-a"]')).toHaveCount(0);
     await toggle.getByRole('radio', { name: '等采集时间', exact: true }).click();
     await checkSources();
+  });
+
+  test('D3 #1473 亚美尼亚：等采集时间展示三条已计入骡车加成且零未计入行', async ({ page }) => {
+    await openTime(page, 'Armenians', 'Magyars', 4);
+    const side = page.locator('[data-t="rc-a"]');
+    const rows = side.locator(APPLIED);
+    await expect(rows).toHaveCount(3);
+    await expect(side.locator(UNSUPPORTED)).toHaveCount(0);
+    await expect(side).toContainText('已计入：亚美尼亚 伐木 +14%（来源：aoe2techtree 文明描述：骡车科技效率 +40%）');
+    await expect(side).toContainText('已计入：亚美尼亚 采金 +11%（来源：aoe2techtree 文明描述：骡车科技效率 +40%）');
+    await expect(side).toContainText('已计入：亚美尼亚 采石 +5%（来源：aoe2techtree 文明描述：骡车科技效率 +40%）');
+    expect(await side.locator('[data-t="rc-total"]').innerText()).not.toBe(await page.locator('[data-t="rc-b"] [data-t="rc-total"]').innerText());
   });
 });

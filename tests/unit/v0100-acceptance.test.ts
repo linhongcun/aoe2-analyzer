@@ -9,20 +9,8 @@ import { search, pyMatch, PY_RESERVE, TIER, score, type SearchItem } from '../..
 
 /** v0.10.0 验收（#156）。Kent 写，先失败，功能做完后应全部通过。 */
 
-describe('A #156 亚美尼亚、波希米亚「未计入」原因改为「需研究科技，未建模」', () => {
+describe('A #156 波希米亚「未计入」原因改为「需研究科技，未建模」（#1473 亚美尼亚已正式建模）', () => {
   const CASES = [
-    // aoe2techtree 120193：Mule Cart technology effects +40% / 骡车科技效率 +40%
-    {
-      en: 'Armenians',
-      zh: '亚美尼亚',
-      ages: [2, 3, 4] as const,
-      bonus: '骡车科技效率 +40%',
-      labelsByAge: {
-        2: ['伐木 +7%', '采金 +5%', '采石 +5%'],
-        3: ['伐木 +14%', '采金 +11%', '采石 +11%'],
-        4: ['伐木 +18%', '采金 +11%', '采石 +11%'],
-      } as Record<number, string[]>,
-    },
     // aoe2techtree 120188：Fervor and Sanctity affect Villagers / 狂热和圣洁会影响村民
     {
       en: 'Bohemians',
@@ -257,5 +245,26 @@ describe('D #156 已计入采集加成携带 aoe2techtree 原文要点（civs.js
 
   it('D2 边界：通用文明没有已计入行，不凭空生成来源', () => {
     for (const age of [1, 2, 3, 4]) expect(gatherModel(age).applied).toEqual([]);
+  });
+
+  it('D3 #1473 亚美尼亚：封建至帝王时代 applied 携带「骡车科技效率 +40%」且零未计入行', () => {
+    const bonus = '骡车科技效率 +40%';
+    expect(civs.find((c) => c.en === 'Armenians')?.bon).toContain(bonus);
+    expect(gatherModel(1, 'Armenians').applied).toEqual([]);
+    expect(gatherModel(1, 'Armenians').unsupported).toEqual([]);
+    const expectedByAge: Record<number, string[]> = {
+      2: ['伐木 +7%', '采金 +5%', '采石 +5%'],
+      3: ['伐木 +14%', '采金 +11%', '采石 +5%'],
+      4: ['伐木 +14%', '采金 +11%', '采石 +5%'],
+    };
+    for (const age of [2, 3, 4]) {
+      const g = gatherModel(age, 'Armenians');
+      expect(
+        g.applied.map((line) => line.label),
+        `Armenians@${age}`,
+      ).toEqual(expectedByAge[age]);
+      expect(g.unsupported, `Armenians@${age}`).toEqual([]);
+      for (const line of g.applied) expect(line.source).toBe(bonus);
+    }
   });
 });

@@ -227,3 +227,45 @@ test('#1504 持续生产排除罗斯堡垒（455）并支持旧链接一键恢�
   await expect(page.getByTestId('production-total')).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('#1473 亚美尼亚持续生产、等采集时间与加成详情（1280 & 360 窄屏）', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  const checkLayout = async (label: string) => {
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), label).toBe(true);
+    const wrapped = await page.locator('main .num, main .nw').evaluateAll((els) =>
+      els.flatMap((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const tops = [...range.getClientRects()].filter((r) => r.width > 0).map((r) => r.top);
+        return tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 6 ? [el.textContent] : [];
+      }),
+    );
+    expect(wrapped, label).toEqual([]);
+  };
+
+  for (const width of [1280, 360]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/production?civ=Armenians&age=4&walk=3&farm=1&techs=202,203,55,182,278,213,249,315&rows=567:12:4,1802:82:2');
+    await expect(page.getByTestId('production-total')).toHaveText('合计 81 人');
+    await expect(page.locator('.production-warnings')).toHaveCount(0);
+    await expect(page.locator('main')).toContainText('已计入采集加成：伐木 +14%；采金 +11%；采石 +5%');
+    await checkLayout(`production@${width}`);
+
+    await page.goto('./#/duel?a=4.Armenians.4.f.&b=4.Magyars.4.f.&m=t');
+    await expect(page.locator('[data-t="rc-a"] [data-t="rc-applied"]')).toHaveCount(3);
+    await expect(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveCount(0);
+    await checkLayout(`duel@${width}`);
+
+    await page.goto('./#/civ/Armenians/bonus/1');
+    await expect(page.locator('#bonus .dhead .tag').filter({ hasText: /^已计入$/ })).toHaveCount(1);
+    await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+    await expect(page.locator('#bonus .bonusbody [data-usage="gather"]')).toHaveAttribute('data-on', 'true');
+    await expect(page.locator('#bonus .bonusbody [data-usage="gather"]')).toContainText('采集速度已计入（伐木 +14%、采金 +11%、采石 +5%）');
+    await checkLayout(`bonus1@${width}`);
+  }
+  expect(errors).toEqual([]);
+});

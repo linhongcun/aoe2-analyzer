@@ -180,8 +180,8 @@ describe('F #138 已核实的文明采集加成计入「等采集时间」', () 
         String(age),
       ).toEqual(['村民采集速度 +5%']);
   });
-  it('F5 没有来源或本版不计的仍「未计入」且速度等于通用：马里、玛雅、波兰、葡萄牙、蜀、西西里、高棉、亚美尼亚、波希米亚', () => {
-    for (const c of ['Malians', 'Mayans', 'Poles', 'Portuguese', 'Shu', 'Sicilians', 'Khmer', 'Armenians', 'Bohemians']) {
+  it('F5 没有来源或本版不计的仍「未计入」且速度等于通用：马里、玛雅、波兰、葡萄牙、蜀、西西里、高棉、波希米亚（#1473 亚美尼亚已正式建模）', () => {
+    for (const c of ['Malians', 'Mayans', 'Poles', 'Portuguese', 'Shu', 'Sicilians', 'Khmer', 'Bohemians']) {
       const g = gatherModel(4, c);
       expect(g.applied, c).toEqual([]);
       expect(g.unsupported.length, c).toBeGreaterThan(0);

@@ -66,7 +66,7 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     expect(bad).toEqual([]);
   });
 
-  test(`src=text 加成（${text.length} 条：凯尔特伐木、朝鲜采石、突厥采金）已被真实成本计入：标「已计入」并写明工具（Steve 2026-10-21 定，#330）`, async ({
+  test(`src=text 加成（${text.length} 条：亚美尼亚骡车科技、凯尔特伐木、朝鲜采石、突厥采金）已被真实成本计入：标「已计入」并写明工具（Steve 2026-10-21 定，#330 / #1473）`, async ({
     page,
   }) => {
     const bad: string[] = [];

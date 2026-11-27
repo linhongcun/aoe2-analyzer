@@ -11,7 +11,7 @@ import {
   PAYOFF_TARGETS,
   type EcoPayoffConfig,
 } from '../../src/domain/ecoPayoff';
-import { gatherModel } from '../../src/domain/realCost';
+import { fmtClock, gatherModel } from '../../src/domain/realCost';
 import type { ProductionContext } from '../../src/domain/production';
 
 let ctx: ProductionContext;
@@ -139,7 +139,7 @@ describe('issue 214 固定数据经济科技收益', () => {
       factor = eco.civEco.Portuguese!.flatMap((r) => r.effects).find((e) => e.kind === 'res' && e.res === 86)!.v!;
     expect(r.time).toBeCloseTo(eco.techs['202']!.researchTime * factor, 10);
   });
-  it.each(['Armenians', 'Aztecs', 'Danes', 'Muisca', 'Wei', 'Spanish', 'Khitans'])('%s不完整机制禁止有限平衡结论', (civ) => {
+  it.each(['Aztecs', 'Danes', 'Muisca', 'Wei', 'Spanish', 'Khitans'])('%s不完整机制禁止有限平衡结论', (civ) => {
     const r = run({ civ });
     expect(r.errors).toEqual([]);
     expect(r.warnings.length).toBeGreaterThan(0);
@@ -190,5 +190,175 @@ describe('issue 214 固定数据经济科技收益', () => {
   });
   it('直接科研API的零项补全不改变通用价格', () => {
     expect(payoffResearch({ civ: 'Franks', age: 2 }, ctx.core.techById[202]!).cost).toEqual(eco.techs['202']!.cost);
+  });
+});
+
+describe('Issue 1473 亚美尼亚骡车科技 +40% 与波希米亚前置过滤', () => {
+  const workersOf = (key: 'Food' | 'Wood' | 'Gold' | 'Stone', n: string) => ({
+    Food: '0',
+    Wood: '0',
+    Gold: '0',
+    Stone: '0',
+    [key]: n,
+  });
+
+  it.each([
+    {
+      name: '封建双刃斧 202（无推车）',
+      age: 2,
+      target: 202,
+      known: [] as number[],
+      res: 'Wood' as const,
+      n: '10',
+      beforeMin: 18.1,
+      afterMin: 21.79,
+      gainPerMin: 36.88,
+      gain: 353.47,
+      balSec: 198.95,
+      balClock: '3:18',
+    },
+    {
+      name: '城堡弓锯 203（已研 202，无推车）',
+      age: 3,
+      target: 203,
+      known: [202],
+      res: 'Wood' as const,
+      n: '12',
+      beforeMin: 21.79,
+      afterMin: 25.92,
+      gainPerMin: 49.5,
+      gain: 453.77,
+      balSec: 295.8,
+      balClock: '4:55',
+    },
+    {
+      name: '城堡弓锯 203（已研 202 + 213 推车）',
+      age: 3,
+      target: 203,
+      known: [202, 213],
+      res: 'Wood' as const,
+      n: '12',
+      beforeMin: 23.62,
+      afterMin: 28.54,
+      gainPerMin: 59.09,
+      gain: 541.62,
+      balSec: 264.68,
+      balClock: '4:24',
+    },
+    {
+      name: '封建金矿开采 55（无推车）',
+      age: 2,
+      target: 55,
+      known: [] as number[],
+      res: 'Gold' as const,
+      n: '10',
+      beforeMin: 17.74,
+      afterMin: 20.51,
+      gainPerMin: 27.71,
+      gain: 263.2,
+      balSec: 310.01,
+      balClock: '5:10',
+    },
+    {
+      name: '帝王钻井采金法 182（已研 55，无推车）',
+      age: 4,
+      target: 182,
+      known: [55],
+      res: 'Gold' as const,
+      n: '12',
+      beforeMin: 20.51,
+      afterMin: 23.55,
+      gainPerMin: 36.47,
+      gain: 319.15,
+      balSec: 400.5,
+      balClock: '6:40',
+    },
+    {
+      name: '帝王钻井采金法 182（已研 55 + 213 + 249）',
+      age: 4,
+      target: 182,
+      known: [55, 213, 249],
+      res: 'Gold' as const,
+      n: '12',
+      beforeMin: 24.0,
+      afterMin: 28.26,
+      gainPerMin: 51.2,
+      gain: 447.98,
+      balSec: 331.34,
+      balClock: '5:31',
+    },
+    {
+      name: '封建石矿开采 278（无推车）',
+      age: 2,
+      target: 278,
+      known: [] as number[],
+      res: 'Stone' as const,
+      n: '10',
+      beforeMin: 17.01,
+      afterMin: 19.7,
+      gainPerMin: 26.92,
+      gain: 255.75,
+      balSec: 306.24,
+      balClock: '5:06',
+    },
+  ])('亚美尼亚 $name 叠加骡车 +40% 并给出精确平衡时间', ({ age, target, known, res, n, beforeMin, afterMin, gainPerMin, gain, balSec, balClock }) => {
+    const r = run({ civ: 'Armenians', age, target, known, workers: workersOf(res, n), distance: '3', minutes: '10' });
+    expect(r.errors).toEqual([]);
+    expect(r.warnings).toEqual([]);
+    expect(r.complete).toBe(true);
+    expect(r.state).toBe('ready');
+    const row = r.resources.find((x) => x.key === res)!;
+    expect(row.beforeRate * 60).toBeCloseTo(beforeMin, 2);
+    expect(row.afterRate * 60).toBeCloseTo(afterMin, 2);
+    expect(row.gainPerMinute).toBeCloseTo(gainPerMin, 2);
+    expect(row.gain).toBeCloseTo(gain, 2);
+    expect(r.balance).toBeCloseTo(balSec, 2);
+    expect(fmtClock(r.balance!)).toBe(balClock);
+  });
+
+  it('亚美尼亚禁用双人锯 221 与钻井采石法 279 仍判不可用，且各时代零伪告警', () => {
+    expect(run({ civ: 'Armenians', age: 4, target: 221, known: [202, 203] }).state).toBe('invalid');
+    expect(run({ civ: 'Armenians', age: 3, target: 279, known: [278] }).state).toBe('invalid');
+    for (const [age, target, known] of [
+      [2, 202, []],
+      [3, 203, [202]],
+      [4, 182, [55]],
+    ] as const) {
+      const r = run({ civ: 'Armenians', age, target, known: [...known] });
+      expect(r.warnings).toEqual([]);
+      expect(r.warnings.join()).not.toContain('伐木 +18%');
+      expect(r.warnings.join()).not.toContain('采石 +11%');
+    }
+  });
+
+  it('波希米亚城堡弓锯未研究狂热 252 时不再触发村民移速 +15% 伪告警并正常给出平衡时间', () => {
+    const r = run({ civ: 'Bohemians', age: 3, target: 203, known: [202], workers: workersOf('Wood', '12'), distance: '3', minutes: '10' });
+    expect(r.errors).toEqual([]);
+    expect(r.warnings).toEqual([]);
+    expect(r.complete).toBe(true);
+    expect(r.balance).toBeCloseTo(388.54, 2);
+    expect(fmtClock(r.balance!)).toBe('6:28');
+  });
+
+  it('合并去重 before.unsupported 与 after.unsupported：目标科技本身触发未建模行时不漏报', () => {
+    const franksRows = eco.civEco.Franks ?? (eco.civEco.Franks = []);
+    const probe = {
+      age: 2,
+      source: 'bonus',
+      tech: 999999,
+      name: 'probe-1473',
+      requires: [202],
+      effects: [{ kind: 'attr', target: 'task:wood', attr: 'workRate', op: 'mul', v: 1.05 }],
+    };
+    franksRows.push(probe as unknown as (typeof franksRows)[number]);
+    try {
+      const r = run({ civ: 'Franks', age: 2, target: 202, known: [] });
+      expect(r.errors).toEqual([]);
+      expect(r.warnings).toContain('伐木 +5%：采集机制未完整计入。');
+      expect(r.complete).toBe(false);
+      expect(r.balance).toBeNull();
+    } finally {
+      franksRows.pop();
+    }
   });
 });

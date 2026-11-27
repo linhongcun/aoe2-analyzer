@@ -22,7 +22,10 @@ describe('#197 亚美尼亚公开口径与原工具边界', () => {
     expect(bonus(0)).toMatchObject({ src: 'eco', encoded: false });
     expect(bonus(1)).toMatchObject({ src: 'text', encoded: false });
     expect(bonusUsage(bonus(0)).find((line) => line.tool === 'sim')).toMatchObject({ on: true, note: '已计入逐次付费骡车费用；移动和自动复用未模拟' });
-    expect(bonusUsage(bonus(1))).toEqual([{ tool: 'sim', name: '开局模拟', on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' }]);
+    expect(bonusUsage(bonus(1))).toEqual([
+      { tool: 'sim', name: '开局模拟', on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' },
+      { tool: 'gather', name: '真实成本', on: true, note: '采集速度已计入（伐木 +14%、采金 +11%、采石 +5%）' },
+    ]);
   });
 
   it('跟练的骡车使用辆；通用普通建筑量词保留座', () => {

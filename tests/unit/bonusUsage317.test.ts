@@ -17,6 +17,7 @@ import { bonusTechs, bonusUsage, showEcoSourceTag, usageLevel } from '../../src/
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';
 import { gatherModel } from '../../src/domain/realCost';
+import { armenianContext, ARMENIAN_RESEARCH_IDS } from '../../src/domain/armenianEconomy';
 import { discountedCost } from '../../src/domain/costDiscount';
 import { calculateConstruction, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
 import { loadTrees } from '../../src/data';
@@ -159,6 +160,15 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Koreans-3', 'Turks-0']);
     expect(line(bon('Koreans-3'), 'cost').map((l) => l.on)).toEqual([true]);
     expect(line(bon('Armenians-1'), 'sim')[0]).toMatchObject({ on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' });
+    expect(line(bon('Armenians-1'), 'gather')).toEqual([
+      { tool: 'gather', name: '真实成本', on: true, note: '采集速度已计入（伐木 +14%、采金 +11%、采石 +5%）' },
+    ]);
+    expect(usageLevel(bonusUsage(bon('Armenians-1')))).toBe('all');
+    expect(bonusTechs(bon('Armenians-1'))).toEqual({ techs: [...ARMENIAN_RESEARCH_IDS], treeOnly: false });
+    // Issue 1473：反事实移除 Armenians-1 完整原子组 960–966 不得触发 armenianEconomy 组完整性假失败
+    const armWithoutResearch = without('Armenians', bonusTechs(bon('Armenians-1')).techs);
+    expect(armenianContext(armWithoutResearch).reasons).toEqual([]);
+    expect(armenianContext(armWithoutResearch).research).toEqual([]);
     for (const [id, label] of [
       ['Celts-0', '伐木 +15%'],
       ['Koreans-0', '采石 +20%'],
