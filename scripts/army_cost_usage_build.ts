@@ -13,9 +13,9 @@ import { CORE } from '../src/data/core';
 import { loadTrees } from '../src/data/index';
 import { buildArmyCostUsage, DEFAULT_ARMY_COST_USAGE_DEST, formatArmyCostUsageJson } from './army_cost_usage_lib';
 
-function canonicalPath(filePath: string, depth = 0): string {
+function canonicalPath(filePath: string, symlinkDepth = 0): string {
   const abs = resolve(filePath);
-  if (depth > 16) return abs;
+  if (symlinkDepth > 16) return abs;
   if (existsSync(abs)) {
     try {
       return realpathSync(abs);
@@ -23,22 +23,17 @@ function canonicalPath(filePath: string, depth = 0): string {
       return abs;
     }
   }
+  const parent = dirname(abs);
+  const resolvedParent = parent !== abs ? canonicalPath(parent, symlinkDepth) : parent;
+  const normalized = join(resolvedParent, basename(abs));
   try {
-    if (lstatSync(abs).isSymbolicLink()) {
-      return canonicalPath(resolve(dirname(abs), readlinkSync(abs)), depth + 1);
+    if (lstatSync(normalized).isSymbolicLink()) {
+      return canonicalPath(resolve(resolvedParent, readlinkSync(normalized)), symlinkDepth + 1);
     }
   } catch {
-    // Not a symlink; fall through to canonicalizing its parent directory.
+    // Missing path or non-symlink.
   }
-  const parent = dirname(abs);
-  if (existsSync(parent)) {
-    try {
-      return join(realpathSync(parent), basename(abs));
-    } catch {
-      return abs;
-    }
-  }
-  return abs;
+  return normalized;
 }
 
 function sameInode(a: string, b: string): boolean {
@@ -59,8 +54,10 @@ function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_U
   const cb = canonicalPath(b);
   if (a === b || ca === cb) return true;
   if (sameInode(a, b) || sameInode(ca, cb)) return true;
-  // Also catch firmlink/symlink aliases (e.g. macOS /System/Volumes/Data/...) when the file does not exist yet.
-  return basename(ca) === basename(cb) && sameInode(dirname(ca), dirname(cb));
+  // Fail-closed for firmlink/symlink aliases (e.g. macOS /System/Volumes/Data/...) and
+  // case-insensitive filename variants (e.g. ARMY_COST_USAGE.JSON) even when the snapshot is missing.
+  const sameName = basename(ca).toLowerCase() === basename(cb).toLowerCase();
+  return sameName && (dirname(ca) === dirname(cb) || sameInode(dirname(ca), dirname(cb)));
 }
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {

@@ -271,15 +271,23 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
+      const upperTarget = join(tempDir, 'data/game/ARMY_COST_USAGE.JSON');
       const gameDirAlias = join(tempDir, 'game-dir-alias');
       symlinkSync(join(tempDir, 'data/game'), gameDirAlias);
       const aliasTarget = join(gameDirAlias, 'army_cost_usage.json');
+      // 经不同深度的目录 symlink 访问包含 `..` 的相对断链：必须按真实父目录解析目标并拦截
+      const nestedRealDir = join(tempDir, 'nested/deep');
+      mkdirSync(nestedRealDir, { recursive: true });
+      symlinkSync('../../data/game/army_cost_usage.json', join(nestedRealDir, 'broken-rel.json'));
+      const nestedDirAlias = join(tempDir, 'nested-dir-alias');
+      symlinkSync(nestedRealDir, nestedDirAlias);
+      const brokenRelViaDirAlias = join(nestedDirAlias, 'broken-rel.json');
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
       const viteNodeBin = resolve('node_modules/.bin/vite-node');
 
       // 1) 预加载将 Error.stackTraceLimit 设为 0 时，--check 缺文件仍必须报错而非静默退出 0；
-      //    --civ 缺 --out、指向默认快照的路径别名（含目录 symlink / macOS firmlink）以及 --out --check 均须 fail-closed 拦截
+      //    --civ 缺 --out、大小写变体、目录 symlink、经目录 symlink 的相对断链及 --out --check 均须 fail-closed 拦截
       const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
       writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
 
@@ -307,9 +315,15 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
           }),
         ).rejects.toThrow(),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish'], { cwd: tempDir })).rejects.toThrow(/--out/),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', upperTarget], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', aliasTarget], { cwd: tempDir })).rejects.toThrow(
           /--out/,
         ),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', brokenRelViaDirAlias], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', '--check'], { cwd: tempDir })).rejects.toThrow(
           /--out/,
         ),
@@ -320,6 +334,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       ]);
       expect(existsSync(unexpectedOut)).toBe(false);
       expect(existsSync(target)).toBe(false);
+      expect(existsSync(upperTarget)).toBe(false);
       expect(existsSync(join(tempDir, '--check'))).toBe(false);
 
       // 3) CLI 普通模式写入单文明子集，再以普通模式与 --script 模式双验证 --check；
