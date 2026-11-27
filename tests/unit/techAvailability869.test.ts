@@ -9,7 +9,7 @@ const KHITANS_474 = 'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Khita
 const BOHEMIANS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Bohemians:47=3';
 const JURCHENS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Jurchens:377=3';
 const PERSIANS = 'age-map:src/domain/availabilityAge.ts:EARLY_MILITARY_TECH_AGES:Persians:436=3';
-const BURGUNDIANS = 'civ-age:src/domain/production.ts:productionTechAge:Burgundians:max(literal:1,age-1):ecoTechs+isGatherTech';
+const BURGUNDIANS = 'civ-age:src/domain/availabilityAge.ts:earlyEcoGatherTechAge:Burgundians:max(literal:1,age-1):plain';
 const DISPLAY = 'display-age:src/domain/availabilityAge.ts:displayUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
 const SPEARMAN_FLOOR = 'unit-civ:src/domain/availabilityAge.ts:trainingUnitAge:SPEARMAN_UNIT_ID:Armenians=1:other=2';
 const SPEARMAN_ARMENIAN = 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain';
@@ -27,8 +27,8 @@ const KNOWN = [
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:1258=2',
   'age-map:src/domain/availabilityAge.ts:EARLY_UNIT_AGES:Cumans:422=3',
   KHITANS_474,
-  SPEARMAN_ARMENIAN,
   BURGUNDIANS,
+  SPEARMAN_ARMENIAN,
   DISPLAY,
   SPEARMAN_FLOOR,
 ];
@@ -254,5 +254,58 @@ describe('#869 科技可用性例外必须点名', () => {
     const commentOnly = questionFileErrors(questions, [{ name: shared, text: '// civStatus\n// simTechs\nexport const note = 1;\n' }]);
     expect(commentOnly.some((error: string) => error.includes('没有以值导入'))).toBe(true);
     expect(commentOnly.some((error: string) => error.includes('不能是同一个文件'))).toBe(false);
+  });
+
+  it('#1527 下沉至 availabilityAge 的辅助函数仍向四套调用方传播 usedBy 并拦截漏报或误报 differs', () => {
+    const entries = [
+      {
+        name: 'src/domain/availabilityAge.ts',
+        text: `
+          export const EARLY_CUSTOM = { Franks: { 22: 1 } };
+          export function customHelper(civ: string, id: number, age: number) {
+            return EARLY_CUSTOM[civ]?.[id] ?? age;
+          }
+          export function earlyGather(t: { age: number }, civ: string, ok: boolean) {
+            if (civ === 'Burgundians' && ok) return Math.max(1, t.age - 1);
+            return t.age;
+          }
+        `,
+      },
+      {
+        name: 'src/domain/production.ts',
+        text: `
+          import { customHelper as customAge, earlyGather } from './availabilityAge';
+          export function productionTechAge(t: { id: number; age: number }, civ: string) {
+            if (t.id === 202) return earlyGather(t, civ, true);
+            return customAge(civ, t.id, t.age);
+          }
+        `,
+      },
+      {
+        name: 'src/domain/unitAvailability.ts',
+        text: `
+          import { customHelper } from './availabilityAge';
+          export function techAvailable(civ: string, id: number, age: number) {
+            return customHelper(civ, id, age) <= age;
+          }
+        `,
+      },
+    ];
+    const mapKey = 'age-map:src/domain/availabilityAge.ts:EARLY_CUSTOM:Franks:22=1';
+    const fnKey = 'civ-age:src/domain/availabilityAge.ts:earlyGather:Burgundians:max(literal:1,age-1):plain';
+    const valid = auditSources(entries, [
+      { site: mapKey, role: 'tech-age', differs: ['civStatus', 'simTechs'], because: '经 customHelper 供 techAvailable 与 productionTechs 共用。' },
+      { site: fnKey, role: 'tech-age', differs: ['civStatus', 'techAvailable', 'simTechs'], because: '经 earlyGather 仅由 productionTechAge 使用。' },
+    ]);
+    expect(valid.errors).toEqual([]);
+    expect(valid.sites.find((s) => s.key === mapKey)?.usedBy).toEqual(['techAvailable', 'productionTechs']);
+    expect(valid.sites.find((s) => s.key === fnKey)?.usedBy).toEqual(['productionTechs']);
+
+    const wrongDiffers = auditSources(entries, [
+      { site: mapKey, role: 'tech-age', differs: ALL, because: '错误把已传播的辅助函数表写成四套全不含。' },
+      { site: fnKey, role: 'tech-age', differs: ALL, because: '错误把已传播的辅助函数分支写成四套全不含。' },
+    ]);
+    expect(wrongDiffers.errors.some((e: string) => e.includes(mapKey) && e.includes('differs 必须是 civStatus、simTechs'))).toBe(true);
+    expect(wrongDiffers.errors.some((e: string) => e.includes(fnKey) && e.includes('differs 必须是 civStatus、techAvailable、simTechs'))).toBe(true);
   });
 });

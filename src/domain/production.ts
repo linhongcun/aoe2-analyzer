@@ -5,11 +5,11 @@ import { DAT, type DatEco } from './datEffects';
 import { matchingGenericFx } from './effects';
 import { AGE_ZH } from './ratings';
 import { unitCost } from './unitCost';
-import { gatherModel, gatherUnsupportedSources, type GatherRes } from './realCost';
+import { gatherModel, gatherUnsupportedSources, hasGatherAttrEffect, type GatherRes } from './realCost';
 import { isEconomicBonusText, mergeProductionEcoWarnings, resolveGatherBonusIdx } from './productionWarnings';
 export { mergeProductionEcoWarnings, resolveGatherBonusIdx };
 import type { Cost, Tech, Trees, Unit } from './types';
-import { buildingAge, EARLY_MILITARY_TECH_AGES, trainingUnitAge } from './availabilityAge';
+import { buildingAge, earlyEcoGatherTechAge, litTreeIds, militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { formatProductionNumber, ratePerMinute } from './formatTime';
@@ -60,27 +60,18 @@ export function isCivEcoTech(id: number): boolean {
 
 /** 勃艮第采集科技的提前时代只属于生产口径，军事科技提前（含波希米亚化学）共享 EARLY_MILITARY_TECH_AGES，均须在 techAvailability.ts 点名。 */
 export function productionTechAge(t: Tech, civ: string) {
-  if (civ === 'Burgundians' && eco.ecoTechs[t.id] && isGatherTech(t)) return Math.max(1, t.age - 1);
-  return Object.hasOwn(EARLY_MILITARY_TECH_AGES, civ) ? (EARLY_MILITARY_TECH_AGES[civ]?.[t.id] ?? t.age) : t.age;
-}
-function isGatherEffects(effects: readonly { kind: string; target?: string; attr?: string }[] | undefined): boolean {
-  return (effects ?? []).some(
-    (e) =>
-      e.kind === 'attr' &&
-      ['task:farm', 'task:wood', 'task:gold', 'task:stone', `class:${VILLAGER_CLASS}`].includes(e.target ?? '') &&
-      ['workRate', 'carry', 'speed'].includes(e.attr ?? ''),
-  );
+  if (eco.ecoTechs[t.id] && isGatherTech(t)) return earlyEcoGatherTechAge(t, civ, true);
+  return militaryTechAge(civ, t.id, t.age);
 }
 function isGatherTech(t: Tech, civ?: string) {
-  if (isGatherEffects(eco.ecoTechs[t.id]?.effects)) return true;
+  if (hasGatherAttrEffect(eco.ecoTechs[t.id]?.effects)) return true;
   const civTech = civ ? eco.civEcoTechs?.[t.id] : undefined;
-  return !!civTech && civTech.civ === civ && isGatherEffects(civTech.effects);
+  return !!civTech && civTech.civ === civ && hasGatherAttrEffect(civTech.effects);
 }
 export function productionTechs(ctx: ProductionContext, config: Pick<ProductionConfig, 'civ' | 'age'>): Tech[] {
+  const litTechs = litTreeIds(ctx.trees, config.civ, 't');
   return ctx.core.techs.filter((t) => {
-    if (!t.civs.includes(config.civ) || productionTechAge(t, config.civ) > config.age) return false;
-    const status = ctx.trees.t[config.civ]?.flatMap((b) => b[3]).find((c) => c[2] === 't' && c[3] === t.id);
-    if (!status?.[4]) return false;
+    if (!t.civs.includes(config.civ) || productionTechAge(t, config.civ) > config.age || !litTechs.has(t.id)) return false;
     const d = DAT.techs[t.en];
     return (
       isGatherTech(t, config.civ) ||

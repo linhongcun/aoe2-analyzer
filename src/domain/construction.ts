@@ -7,7 +7,7 @@ import { civStatus } from './simulator';
 import { gatherModel, type GatherModel } from './realCost';
 import { productionTechAge, productionTechs } from './production';
 import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
-import { buildingAge as constructionBuildingAge } from './availabilityAge';
+import { buildingAge as constructionBuildingAge, isCivTechEnabled } from './availabilityAge';
 import { AGE_TECH_IDS } from './gameIds';
 import { TOWN_CENTER_ID, townCenterBuildTimeNote } from './buildTimeFacts';
 import { toggleSelected } from './prereq';
@@ -76,7 +76,7 @@ export function constructionBuildings(ctx: ConstructionContext, config: Pick<Con
 }
 function legalTechs(ctx: ConstructionContext, config: Pick<ConstructionConfig, 'civ' | 'age'>) {
   const status = civStatus(ctx.trees, config.civ);
-  return ctx.core.techs.filter((t) => t.civs.includes(config.civ) && productionTechAge(t, config.civ) <= config.age && status['t' + t.id]);
+  return ctx.core.techs.filter((t) => isCivTechEnabled(t, config.civ, status) && productionTechAge(t, config.civ) <= config.age);
 }
 const shapeTechs = (id: number) => (id === 236 ? [64] : (GARRISON_TECH_DATA.unitUpgradeTechs?.[id] ?? []));
 export function constructionTechs(ctx: ConstructionContext, config: ConstructionConfig) {

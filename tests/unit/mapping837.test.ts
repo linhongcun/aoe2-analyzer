@@ -75,9 +75,10 @@ describe('反制、提前解锁与建筑类型映射（issue 837）', () => {
     const availability = readFileSync('src/domain/availabilityAge.ts', 'utf8');
     const production = readFileSync('src/domain/production.ts', 'utf8');
     const garrison = readFileSync('src/domain/garrisonGeneral.ts', 'utf8');
+    const garrisonSnapshot = readFileSync('src/domain/garrison/snapshot.ts', 'utf8');
     const display = readFileSync('src/features/units/displayAge.ts', 'utf8');
     expect(availability).toContain('Math.floor(row / 2) + 1');
-    for (const source of [production, garrison, display]) {
+    for (const source of [production, garrison, garrisonSnapshot, display]) {
       expect(source).not.toContain('Math.floor(row / 2) + 1');
       expect(source).not.toContain('id === 93');
       expect(source).not.toContain('u.id === 93');

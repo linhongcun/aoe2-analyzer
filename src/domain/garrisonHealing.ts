@@ -17,6 +17,7 @@ import {
 import { civStatus, makeSimContext, simTechs, simulate } from './simulator';
 import { TEAM_BONUSES } from './effects';
 import { productionTechAge } from './production';
+import { disabledTechSet, isCivTechEnabled } from './availabilityAge';
 import { FEMALE_VILLAGER_ID, VILLAGER_UNIT_ID } from './gameIds';
 import { isHealingUnlockTechForBuilding } from './trainingUnlocks';
 
@@ -102,7 +103,7 @@ export function getHealingCandidates(ctx: HealingContext, c: HealingConfig) {
 /** Includes HP changes triggered by other technologies (notably Aztec monastery research). */
 export function availableHealingTechs(ctx: HealingContext, c: HealingConfig): Tech[] {
   const state = civStatus(ctx.trees, c.civ);
-  const disabled = new Set(GENERAL_GARRISON_DATA.civs[c.civ]?.disabled ?? []);
+  const disabled = disabledTechSet(GENERAL_GARRISON_DATA.civs, c.civ);
   const unit = simUnit(ctx, c);
   const ids = new Set<number>(Object.keys(GARRISON_HEALING_DATA.rateTechs).map(Number));
   if (unit) for (const item of simTechs(makeSimContext(ctx.core.techs, ctx.trees), unit, c.civ)) if (item.ef?.some((e) => e.s === 'hp')) ids.add(item.t.id);
@@ -123,9 +124,7 @@ export function availableHealingTechs(ctx: HealingContext, c: HealingConfig): Te
     }
   };
   for (const id of [...ids]) addPre(id);
-  return ctx.core.techs.filter(
-    (t) => ids.has(t.id) && t.civs.includes(c.civ) && state['t' + t.id] === 1 && !disabled.has(t.id) && productionTechAge(t, c.civ) <= c.age,
-  );
+  return ctx.core.techs.filter((t) => ids.has(t.id) && isCivTechEnabled(t, c.civ, state, disabled) && productionTechAge(t, c.civ) <= c.age);
 }
 
 export function freeHealingTechs(ctx: HealingContext, c: HealingConfig): number[] {

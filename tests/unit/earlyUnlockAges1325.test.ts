@@ -11,6 +11,7 @@ import {
   militaryTechAge,
   SPEARMAN_UNIT_ID,
   trainingUnitAge,
+  treeNodeEarliestAge,
   treeRowAge,
 } from '../../src/domain/availabilityAge';
 import { analyzeChampi } from '../../src/domain/champiCounters';
@@ -59,11 +60,8 @@ const trainConfig = (overrides: Partial<TrainTotalConfig> = {}): TrainTotalConfi
 });
 
 function treeEarliestAge(civ: string, kind: 'u' | 't', id: number): number | null {
-  const ages = (ctx.trees.t[civ] ?? [])
-    .flatMap((block) => block[3])
-    .filter((cell) => cell[2] === kind && cell[3] === id && cell[4] === 1)
-    .map((cell) => treeRowAge(cell[0]));
-  return ages.length ? Math.min(...ages) : null;
+  const age = treeNodeEarliestAge(ctx.trees, civ, kind, id);
+  return Number.isFinite(age) ? age : null;
 }
 
 describe('#1325 全量 56 文明单位与军事科技提前解锁时代防漂移对照', () => {

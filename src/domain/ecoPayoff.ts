@@ -3,6 +3,7 @@ import { ECO as eco } from '../data/eco';
 import { civByEn } from '../data';
 import { DAT } from './datEffects';
 import { freeProductionTechs, productionTechAge, type ProductionContext } from './production';
+import { isCivTechEnabled } from './availabilityAge';
 import { gatherModel, type GatherRes } from './realCost';
 import { civStatus } from './simulator';
 import type { Cost, Tech } from './types';
@@ -33,9 +34,7 @@ const op = (n: number, kind: string | undefined, v: number) => (kind === 'set' ?
 const unique = (x: string[]) => [...new Set(x)];
 export function payoffAvailable(ctx: ProductionContext, config: Pick<EcoPayoffConfig, 'civ' | 'age'>): Tech[] {
   const st = civStatus(ctx.trees, config.civ);
-  return ctx.core.techs.filter(
-    (t) => PAYOFF_BASELINE.includes(t.id) && t.civs.includes(config.civ) && st['t' + t.id] === 1 && productionTechAge(t, config.civ) <= config.age,
-  );
+  return ctx.core.techs.filter((t) => PAYOFF_BASELINE.includes(t.id) && isCivTechEnabled(t, config.civ, st) && productionTechAge(t, config.civ) <= config.age);
 }
 
 /** 非零倍率读取 eco（其科研 op 已修正），零值由 effects 保留的明确 set0 补齐。 */

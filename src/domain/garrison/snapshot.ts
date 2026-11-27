@@ -3,7 +3,7 @@ import { freeGarrisonTechs, implicitShapeTechs } from '../garrisonTechs';
 import type { Building, Tech } from '../types';
 import { civStatus } from '../simulator';
 import { productionTechAge } from '../production';
-import { trainingUnitAge } from '../availabilityAge';
+import { disabledTechSet, isCivTechEnabled, trainingUnitAge } from '../availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, VILLAGER_UNIT_ID } from '../gameIds';
 import { requiredTrainingUnlockTech, TRAINING_UNLOCK_TECH_ID_SET } from '../trainingUnlocks';
 import type { GeneralGarrisonConfig } from '../garrisonUrl';
@@ -57,10 +57,9 @@ export function availableTechs(
   data: GeneralGarrisonData,
   status: Record<string, number> = civStatus(ctx.trees, config.civ),
 ): Tech[] {
-  const disabled = new Set(data.civs[config.civ]?.disabled ?? []);
+  const disabled = disabledTechSet(data.civs, config.civ);
   return ctx.core.techs.filter(
-    (t) =>
-      t.civs.includes(config.civ) && status['t' + t.id] === 1 && !disabled.has(t.id) && productionTechAge(t, config.civ) <= config.age && !!data.techs[t.id],
+    (t) => isCivTechEnabled(t, config.civ, status, disabled) && productionTechAge(t, config.civ) <= config.age && !!data.techs[t.id],
   );
 }
 
@@ -186,7 +185,7 @@ export function snapshot(
   const selected = unique([...config.techs, ...freeGarrisonTechs(ctx, b, config, techData, status, index.shapeUpgrades)]);
   const productionLocations: Record<number, number[]> = {};
   const known = new Set([104]);
-  const disabled = new Set(civ?.disabled ?? []);
+  const disabled = disabledTechSet(data.civs, config.civ);
   const implied = implicitShapeTechs(ctx, b, config, techData, index.shapeUpgrades);
   for (const tid of implied) known.add(tid);
   // Exact tower shape means the line upgrade has already been researched.

@@ -4,6 +4,7 @@ import type { Core } from '../data';
 import type { Building, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
+import { disabledTechSet, isCivTechEnabled } from './availabilityAge';
 
 export interface GarrisonTechData {
   techs: Record<string, unknown>;
@@ -63,19 +64,13 @@ export function freeGarrisonTechs(
 ): number[] {
   const freeList = data.civs[config.civ]?.free ?? [];
   if (!freeList.length) return [];
-  const disabled = new Set(data.civs[config.civ]?.disabled ?? []);
+  const disabled = disabledTechSet(data.civs, config.civ);
   const availCache = new Map<number, boolean>();
-  const isAvailable = (tid: number): boolean => {
+  const isEligible = (tid: number): boolean => {
     const cached = availCache.get(tid);
     if (cached !== undefined) return cached;
     const t = ctx.core.techById[tid];
-    const ok =
-      !!t &&
-      t.civs.includes(config.civ) &&
-      status['t' + t.id] === 1 &&
-      !disabled.has(t.id) &&
-      productionTechAge(t, config.civ) <= config.age &&
-      !!data.techs[t.id];
+    const ok = !!t && isCivTechEnabled(t, config.civ, status, disabled) && productionTechAge(t, config.civ) <= config.age && !!data.techs[t.id];
     availCache.set(tid, ok);
     return ok;
   };
@@ -94,7 +89,7 @@ export function freeGarrisonTechs(
     changed = false;
     for (const id of freeList) {
       const pre = ctx.core.techById[id]?.pre;
-      if (accepted.has(id) || !isAvailable(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && isAvailable(pre) && !known.has(pre))) continue;
+      if (accepted.has(id) || !isEligible(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && isEligible(pre) && !known.has(pre))) continue;
       accepted.add(id);
       known.add(id);
       changed = true;
