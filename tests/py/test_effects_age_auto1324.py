@@ -7,7 +7,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from effects_build import (  # noqa: E402
+    age_alias_techs,
     build_generic_entries,
+    building_activation_markers,
     global_disabled_techs,
     regional_unit_unlocks,
 )
@@ -256,6 +258,208 @@ class EffectsAgeAuto1324(unittest.TestCase):
             self.assertIn(existing, by_tech)
         self.assertNotIn('civs', by_tech[20])
         self.assertEqual([g['tech'] for g in generic], sorted(g['tech'] for g in generic))
+
+    def test_age_alias_and_building_conditional_hidden_techs_1474(self):
+        AT = [_tech(name=f'T{i}') for i in range(1500)]
+        AE = [{'EffectCommands': []} for _ in range(1500)]
+        AC = [
+            {'Name': 'Gaia', 'TechTreeID': -1},
+            {'Name': 'Armenians', 'TechTreeID': 10},
+            {'Name': 'Georgians', 'TechTreeID': 11},
+            {'Name': 'Mapuche', 'TechTreeID': 12},
+            {'Name': 'Franks', 'TechTreeID': 13},
+        ]
+        # 全局开局禁用 79：禁用 1353（聚落解锁）、935（被禁用的文明替换反例）与 953（被全局禁用的建筑条件隐藏科技反例）
+        AT[79] = _tech(civ=-1, loc=-1, eid=79, req=[-1, -1], need=0, name='Disable Regionals')
+        AE[79] = {'EffectCommands': [_cmd(102, d=1353.0), _cmd(102, d=935.0), _cmd(102, d=953.0)]}
+        AE[12] = {'EffectCommands': [_cmd(8, a=1353, b=12, d=1.0)]}
+
+        # 时代别名：115（合法 need=1）、134（非法 need=2 不可达）、427（无 Age 名）、606（含资源消耗）
+        AT[115] = _tech(civ=-1, loc=-1, eid=-1, req=[103], need=1, name='Dupl. Imperial Age')
+        AT[134] = _tech(civ=-1, loc=-1, eid=-1, req=[101], need=2, name='Archery Rg Upgrade -- Age Two')
+        AT[427] = _tech(civ=-1, loc=-1, eid=-1, req=[102], need=1, name='Genitour (make avail)')
+        AT[606] = _tech(civ=-1, loc=-1, eid=-1, req=[103], need=1, name='Imperial Age Costed')
+        AT[606]['Cost'] = [[0, 1, 1]]
+
+        # 建筑激活/替换标记：
+        # 930（格鲁吉亚替换 104 -> 1806）、941（亚美尼亚替换 104 -> 1806）、1353（聚落解锁 2556）
+        AT[930] = _tech(civ=2, loc=-1, eid=930, req=[], need=0, name='Fortified Church (Georgians)')
+        AE[930] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[941] = _tech(civ=1, loc=-1, eid=941, req=[], need=0, name='Fortified Church (Armenians)')
+        AE[941] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[1353] = _tech(civ=-1, loc=-1, eid=1353, req=[104], need=1, name='Settlement (make avail)')
+        AE[1353] = {'EffectCommands': [_cmd(2, a=2556, b=1)]}
+        # 反例标记：935（被全局禁用）、936（带 Cost）、937（不可达 need=2）、938（该文明不拥有目标建筑）、939（混合非 Type=3 命令）
+        AT[935] = _tech(civ=1, loc=-1, eid=935, req=[], need=0, name='Disabled Replace')
+        AE[935] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[936] = _tech(civ=1, loc=-1, eid=936, req=[], need=0, name='Costed Replace')
+        AT[936]['Cost'] = [[7, 1, 1]]
+        AE[936] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[937] = _tech(civ=1, loc=-1, eid=937, req=[999], need=2, name='Unreachable Replace')
+        AE[937] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[938] = _tech(civ=4, loc=-1, eid=938, req=[], need=0, name='Unowned Replace')
+        AE[938] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+        AT[939] = _tech(civ=1, loc=-1, eid=939, req=[], need=0, name='Mixed Replace')
+        AE[939] = {'EffectCommands': [_cmd(3, a=104, b=1806), _cmd(4, a=1806, c=0, d=100.0)]}
+        # 额外合法标记用于多标记互斥/多建筑粒度测试：940（亚美尼亚+格鲁吉亚双建筑 1806/1807）与 948（同为亚美尼亚，与 941 重叠）
+        AT[940] = _tech(civ=1, loc=-1, eid=940, req=[], need=0, name='Multi Bld Marker')
+        AE[940] = {'EffectCommands': [_cmd(3, a=104, b=1806), _cmd(3, a=104, b=1807)]}
+        AT[948] = _tech(civ=1, loc=-1, eid=948, req=[], need=0, name='Overlap Arm Marker')
+        AE[948] = {'EffectCommands': [_cmd(3, a=104, b=1806)]}
+
+        ours = {
+            104: {'id': 104, 'en': 'Monastery', '_b': 1, 'civs': ['Franks']},
+            1806: {'id': 1806, 'en': 'Fortified Church', '_b': 1, 'civs': ['Armenians', 'Georgians']},
+            1807: {'id': 1807, 'en': 'Test Church B', '_b': 1, 'civs': ['Armenians']},
+            2556: {'id': 2556, 'en': 'Settlement', '_b': 1, 'civs': ['Mapuche']},
+        }
+        tech_by_id = {
+            101: {'id': 101, 'en': 'Feudal Age'},
+            102: {'id': 102, 'en': 'Castle Age'},
+            103: {'id': 103, 'en': 'Imperial Age'},
+            199: {'id': 199, 'en': 'Fletching'},
+            322: {'id': 322, 'en': 'Murder Holes'},
+        }
+        adat = {'Armenians': 1, 'Georgians': 2, 'Mapuche': 3, 'Franks': 4}
+        catalog_civ_ens = ['Armenians', 'Georgians', 'Mapuche', 'Franks']
+
+        disabled = global_disabled_techs(AT, AE)
+        aliases = age_alias_techs(AT, tech_by_id, disabled=disabled)
+        self.assertEqual(aliases, {115: 4})
+        self.assertNotIn(134, aliases)
+
+        markers = building_activation_markers(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, disabled=disabled)
+        self.assertEqual(set(markers.keys()), {930, 941, 1353, 940, 948})
+        self.assertEqual(markers[930], {'civs': ['Georgians'], 'buildings': frozenset({1806}), 'age': 1})
+        self.assertEqual(markers[941], {'civs': ['Armenians'], 'buildings': frozenset({1806}), 'age': 1})
+        self.assertEqual(markers[1353], {'civs': ['Mapuche'], 'buildings': frozenset({2556}), 'age': 1})
+
+        # 合法条件建筑隐藏科技：942（115 时代别名 + 930/941，含 104 应被过滤）、943（199 + 930/941）、1356（103 + 1353）
+        AT[942] = _tech(civ=-1, loc=-1, eid=942, req=[115, 930, 941], need=2, name='FC Age4')
+        AE[942] = {'EffectCommands': [_cmd(4, a=104, c=0, d=10.0), _cmd(4, a=1806, c=0, d=10.0)]}
+        AT[943] = _tech(civ=-1, loc=-1, eid=943, req=[199, 930, 941], need=2, name='FC Fletching')
+        AE[943] = {'EffectCommands': [_cmd(4, a=104, c=12, d=1.0), _cmd(4, a=1806, c=12, d=2.0)]}
+        AT[1356] = _tech(civ=-1, loc=-1, eid=1356, req=[103, 1353], need=2, name='Settlement Age4')
+        AE[1356] = {'EffectCommands': [_cmd(4, a=2556, c=0, d=5.0)]}
+        # 947（322 Murder Holes 已对 1806 设 minr=0 → minr-1 被语义剔除）
+        AT[947] = _tech(civ=-1, loc=-1, eid=947, req=[322, 930, 941], need=2, name='FC Murder Holes')
+        AE[947] = {'EffectCommands': [_cmd(4, a=104, c=20, d=-1.0), _cmd(4, a=1806, c=20, d=-1.0)]}
+        # 949（单建筑×单属性粒度：同规则命中 1806 与 1807，仅 1806 被 322 设 minr=0，应只保留 1807）
+        AT[949] = _tech(civ=-1, loc=-1, eid=949, req=[322, 940], need=2, name='Partial Zero Filter')
+        AE[949] = {'EffectCommands': [_cmd(4, a=1806, c=20, d=-1.0), _cmd(4, a=1807, c=20, d=-1.0)]}
+        # 反例：950（文明重叠 941+948）、951（建筑集不同 930+940）、952（带 Cost）、953（被全局禁用）
+        AT[950] = _tech(civ=-1, loc=-1, eid=950, req=[199, 941, 948], need=2, name='Reject Overlap Civs')
+        AE[950] = {'EffectCommands': [_cmd(4, a=1806, c=12, d=1.0)]}
+        AT[951] = _tech(civ=-1, loc=-1, eid=951, req=[199, 930, 940], need=2, name='Reject Mismatch Blds')
+        AE[951] = {'EffectCommands': [_cmd(4, a=1806, c=12, d=1.0)]}
+        AT[952] = _tech(civ=-1, loc=-1, eid=952, req=[199, 930, 941], need=2, name='Reject Costed')
+        AT[952]['Cost'] = [[7, 1, 1]]
+        AE[952] = {'EffectCommands': [_cmd(4, a=1806, c=12, d=1.0)]}
+        AT[953] = _tech(civ=-1, loc=-1, eid=953, req=[199, 930, 941], need=2, name='Reject Globally Disabled')
+        AE[953] = {'EffectCommands': [_cmd(4, a=1806, c=12, d=1.0)]}
+
+        def a_cmds(eid):
+            if eid is None or eid < 0 or eid >= len(AE):
+                return []
+            return [(c['Type'], c['A'], c['B'], c['C'], c['D']) for c in AE[eid]['EffectCommands']]
+
+        def compile_cmds(cmds):
+            by_fx = {}
+            for tp, a, _b, attr, d in cmds:
+                if tp not in (0, 4, 5) or a not in ours:
+                    continue
+                stat = {0: 'hp', 12: 'rng', 20: 'minr'}.get(attr)
+                if not stat:
+                    continue
+                fx = [{'s': stat, 'v': int(d)}]
+                key = json.dumps(fx)
+                by_fx.setdefault(key, []).append(a)
+            rules = []
+            for k, ids in by_fx.items():
+                rules.append({'t': sorted(ids), 'fx': json.loads(k), 'b': 1})
+            return rules, []
+
+        tech_rules_by_en = {
+            'Murder Holes': {'rules': [{'t': [104, 1806], 'fx': [{'op': 'set', 's': 'minr', 'v': 0}], 'b': 1}]},
+        }
+        entries = build_generic_entries(
+            AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds,
+            tech_rules_by_en=tech_rules_by_en,
+        )
+        by_tech = {e['tech']: e for e in entries}
+
+        self.assertEqual(by_tech[942], {
+            'tech': 942, 'name': 'FC Age4', 'age': 4, 'req': [], 'any': False,
+            'civs': ['Armenians', 'Georgians'],
+            'rules': [{'t': [1806], 'fx': [{'s': 'hp', 'v': 10}], 'b': 1}],
+        })
+        self.assertEqual(by_tech[943], {
+            'tech': 943, 'name': 'FC Fletching', 'age': 1, 'req': ['Fletching'], 'any': False,
+            'civs': ['Armenians', 'Georgians'],
+            'rules': [{'t': [1806], 'fx': [{'s': 'rng', 'v': 2}], 'b': 1}],
+        })
+        self.assertEqual(by_tech[1356], {
+            'tech': 1356, 'name': 'Settlement Age4', 'age': 4, 'req': [], 'any': False,
+            'civs': ['Mapuche'],
+            'rules': [{'t': [2556], 'fx': [{'s': 'hp', 'v': 5}], 'b': 1}],
+        })
+        self.assertEqual(by_tech[949]['rules'], [{'t': [1807], 'fx': [{'s': 'minr', 'v': -1}], 'b': 1}])
+        self.assertEqual(by_tech[949]['civs'], ['Armenians'])
+        for rejected in (947, 950, 951, 952, 953):
+            self.assertNotIn(rejected, by_tech)
+
+    def test_committed_effects_json_has_expected_building_conditional_entries_1474(self):
+        fx = json.loads((ROOT / 'data/game/effects.json').read_text(encoding='utf-8'))
+        generic = fx['generic']
+        by_tech = {g['tech']: g for g in generic}
+
+        self.assertEqual(len(generic), 23)
+        self.assertEqual([g['tech'] for g in generic], sorted(g['tech'] for g in generic))
+
+        expected = {
+            931: {
+                'tech': 931, 'name': 'Fortified Church + Svan Towers', 'age': 1,
+                'req': ['Svan Towers'], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'atk', 'v': 2}], 'b': 1}],
+            },
+            942: {
+                'tech': 942, 'name': 'Fortified Church Age4 upgrade', 'age': 4,
+                'req': [], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'ma', 'v': 1}, {'s': 'pa', 'v': 1}], 'b': 1}],
+            },
+            943: {
+                'tech': 943, 'name': 'Fortified Church + Fletching', 'age': 1,
+                'req': ['Fletching'], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'atk', 'v': 1}, {'s': 'rng', 'v': 2}], 'b': 1}],
+            },
+            944: {
+                'tech': 944, 'name': 'Fortified Church + Bodkin', 'age': 1,
+                'req': ['Bodkin Arrow'], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'atk', 'v': 1}, {'s': 'rng', 'v': 1}], 'b': 1}],
+            },
+            945: {
+                'tech': 945, 'name': 'Fortified Church + Bracer', 'age': 1,
+                'req': ['Bracer'], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'atk', 'v': 1}, {'s': 'rng', 'v': 1}], 'b': 1}],
+            },
+            946: {
+                'tech': 946, 'name': 'Fortified Church + Chemistry', 'age': 1,
+                'req': ['Chemistry'], 'any': False, 'civs': ['Armenians', 'Georgians'],
+                'rules': [{'t': [1806], 'fx': [{'s': 'atk', 'v': 1}], 'b': 1}],
+            },
+            1356: {
+                'tech': 1356, 'name': 'Settlement Age4 upgrade', 'age': 4,
+                'req': [], 'any': False, 'civs': ['Incas', 'Mapuche', 'Muisca', 'Tupi'],
+                'rules': [{'t': [2556], 'fx': [{'s': 'ma', 'v': 1}, {'s': 'pa', 'v': 1}], 'b': 1}],
+            },
+        }
+        for tid, exp in expected.items():
+            self.assertEqual(by_tech[tid], exp)
+            for r in by_tech[tid]['rules']:
+                self.assertNotIn(104, r['t'])
+
+        for excluded in (947, 1354, 1355):
+            self.assertNotIn(excluded, by_tech)
 
 
 if __name__ == '__main__':

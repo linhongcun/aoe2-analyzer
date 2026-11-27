@@ -50,4 +50,13 @@ describe('tech affects (same rules as simulator)', () => {
     const m = textMentions(t, L, Object.fromEntries(units.map((u) => [u.id, u])), Object.fromEntries(bs.map((b) => [b.id, b])));
     expect(m.units.length + m.buildings.length).toBeGreaterThan(0);
   });
+
+  it('#1474：单科技触发的建筑条件隐藏规则归入建筑分组（无空括号），命中强化教堂且排除修道院', () => {
+    for (const en of ['Fletching', 'Bodkin Arrow', 'Bracer', 'Chemistry', 'Svan Towers']) {
+      const a = flat(en);
+      expect(a.buildings, `${en} includes Fortified Church`).toContain('Fortified Church');
+      expect(a.buildings, `${en} excludes Monastery`).not.toContain('Monastery');
+      expect(a.groups, `${en} no empty combo label`).not.toContain('组合触发（需 ）');
+    }
+  });
 });

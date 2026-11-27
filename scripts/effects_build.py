@@ -428,11 +428,138 @@ def regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens):
     return unlocks
 
 
-def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds, build_tech_ids=(), fx_triggered_ids=None):
-    """导出通用与限定文明隐藏科技：时代科技自身单位属性（101/102/103）+ 常规/区域解锁隐藏科技。"""
+NON_NEGATIVE_STATS = frozenset({'minr', 'rng', 'hp', 'atk', 'los', 'gar', 'bt'})
+
+
+def age_alias_techs(AT, tech_by_id, disabled=(), build_tech_ids=(), fx_triggered_ids=()):
+    """识别 .dat 中指向 AGE_TECH 的时代别名隐藏科技（如 115 Dupl. Imperial Age -> 4）。"""
+    aliases = {}
+    for i, t in enumerate(AT):
+        if i in AGE_TECH or i in tech_by_id or i in disabled or i in fx_triggered_ids:
+            continue
+        if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] >= 0:
+            continue
+        if tech_resource_costs(t) or is_unreachable_tech(i, t, build_tech_ids, fx_triggered_ids):
+            continue
+        rq = [r for r in t['RequiredTechs'] if r >= 0]
+        need = t['RequiredTechCount'] or len(rq)
+        if len(rq) == 1 and need == 1 and rq[0] in AGE_TECH and 'Age' in (t.get('Name') or ''):
+            aliases[i] = AGE_TECH[rq[0]]
+    return aliases
+
+
+def building_activation_markers(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, disabled=None, build_tech_ids=(), fx_triggered_ids=()):
+    """识别两类目录建筑激活/替换隐藏标记：
+    (a) 文明专属建筑替换隐藏科技（Civ > 0，Type=3 全部升级为该文明实际拥有的目录建筑，如 930/941 -> 1806）；
+    (b) 开局全局禁用并由目录文明 TechTreeID 重新启用的纯目录建筑解锁隐藏科技（Type=2, B=1，如 1353 -> 2556）。
+    """
+    if disabled is None:
+        disabled = global_disabled_techs(AT, AE)
+    catalog_civ_set = set(catalog_civ_ens)
+    dat_to_en = {ai: en for en, ai in adat.items() if en in catalog_civ_set}
+    reenabled = defaultdict(set)
+    for en in catalog_civ_ens:
+        ai = adat.get(en)
+        if ai is None or ai >= len(AC):
+            continue
+        eid = AC[ai]['TechTreeID']
+        if eid is None or eid < 0 or eid >= len(AE):
+            continue
+        for c in AE[eid]['EffectCommands']:
+            if c['Type'] == 8 and c['B'] == 12 and abs(float(c['D']) - 1.0) < 1e-9:
+                reenabled[c['A']].add(en)
+    markers = {}
+    for i, t in enumerate(AT):
+        if i in tech_by_id or t['ResearchLocation'] > 0 or t['EffectID'] < 0:
+            continue
+        if tech_resource_costs(t) or is_unreachable_tech(i, t, build_tech_ids, fx_triggered_ids):
+            continue
+        eid = t['EffectID']
+        if eid >= len(AE):
+            continue
+        cmds = AE[eid]['EffectCommands']
+        if not cmds:
+            continue
+        if t['Civ'] > 0:
+            if i in disabled:
+                continue
+            en = dat_to_en.get(t['Civ'])
+            if not en:
+                continue
+            if not all(c['Type'] == 3 and c['B'] in ours and ours[c['B']].get('_b') for c in cmds):
+                continue
+            bids = frozenset(c['B'] for c in cmds if en in ours[c['B']].get('civs', ()))
+            if not bids:
+                continue
+            markers[i] = {'civs': [en], 'buildings': bids, 'age': 1}
+        elif t['Civ'] == -1 and i in disabled:
+            rq = [x for x in t['RequiredTechs'] if x >= 0]
+            need = t['RequiredTechCount'] or len(rq)
+            if not all(x in AGE_TECH or x == 104 for x in rq) or len(rq) != need:
+                continue
+            if not all(c['Type'] == 2 and c['B'] == 1 and c['A'] in ours and ours[c['A']].get('_b') for c in cmds):
+                continue
+            civ_list = sorted(reenabled.get(i, ()))
+            if not civ_list:
+                continue
+            bids = frozenset(c['A'] for c in cmds)
+            unlock_age = max([AGE_TECH[x] for x in rq if x in AGE_TECH] or [1])
+            markers[i] = {'civs': civ_list, 'buildings': bids, 'age': unlock_age}
+    return markers
+
+
+def _filter_redundant_building_rules(rules, kept_bids, mine, tech_rules_by_en):
+    """按单建筑×单属性粒度过滤与触发科技已设 0 的非负属性相矛盾的负 add 增量（如 322 设 minr=0 后的 947 minr-1），并按 fx 归并。"""
+    zero_set_by_bid = defaultdict(set)
+    if tech_rules_by_en and mine:
+        for tn in mine:
+            trec = tech_rules_by_en.get(tn)
+            if not isinstance(trec, dict):
+                continue
+            for tr in trec.get('rules') or ():
+                if not tr.get('b'):
+                    continue
+                zero_stats = {
+                    f['s']
+                    for f in (tr.get('fx') or ())
+                    if f.get('op') == 'set' and f.get('v') == 0 and f.get('s') in NON_NEGATIVE_STATS
+                }
+                if zero_stats:
+                    for bid in tr.get('t') or ():
+                        zero_set_by_bid[bid].update(zero_stats)
+    groups = defaultdict(list)
+    for r in rules:
+        if not r.get('b'):
+            continue
+        for bid in r['t']:
+            if bid not in kept_bids:
+                continue
+            zstats = zero_set_by_bid.get(bid)
+            fx = [
+                f
+                for f in r['fx']
+                if not (zstats and f.get('s') in zstats and f.get('op', 'add') == 'add' and f.get('v', 0) < 0)
+            ]
+            if fx:
+                groups[json.dumps(fx, ensure_ascii=False, sort_keys=True)].append(bid)
+    out = []
+    for k, ids in groups.items():
+        out.append({'t': sorted(set(ids)), 'fx': json.loads(k), 'b': 1})
+    out.sort(key=lambda r: (-len(r['t']), r['t'][0]))
+    return out
+
+
+def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds, build_tech_ids=(), fx_triggered_ids=None, tech_rules_by_en=None):
+    """导出通用与限定文明隐藏科技：时代科技自身单位属性（101/102/103）+ 常规/区域解锁/建筑条件隐藏科技。"""
     if fx_triggered_ids is None:
         fx_triggered_ids = fx_triggered_techs(AE)
+    disabled = global_disabled_techs(AT, AE)
     unlocks = regional_unit_unlocks(AT, AE, AC, ours, adat, catalog_civ_ens)
+    age_aliases = age_alias_techs(AT, tech_by_id, disabled=disabled, build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids)
+    bld_markers = building_activation_markers(
+        AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens,
+        disabled=disabled, build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids,
+    )
     generic = []
     for i, t in enumerate(AT):
         if i in AGE_TECH:
@@ -467,30 +594,88 @@ def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a
             continue
         # 区域单位解锁隐藏前置（严格全量 AND，如 387 = 城堡时代 102 + 鹰斥候解锁 433）
         unlock_reqs = [r for r in other if r in unlocks]
-        if not unlock_reqs or len(unlock_reqs) != len(other):
+        if unlock_reqs and len(unlock_reqs) == len(other):
+            if len(ages) + len(mine) + len(unlock_reqs) != need:
+                continue
+            civ_list = sorted(set.intersection(*(set(unlocks[r]['civs']) for r in unlock_reqs)))
+            if not civ_list:
+                continue
+            reg_ages = [unlocks[r]['age'] for r in unlock_reqs]
+            cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
+            rules, _eco = compile_cmds(cmds)
+            if not rules or any(r.get('b') for r in rules):
+                continue
+            unlocked_units = set().union(*(unlocks[r]['units'] for r in unlock_reqs))
+            rule_units = {uid for r in rules for uid in r['t']}
+            if not rule_units or not rule_units.issubset(unlocked_units):
+                continue
+            generic.append({
+                'tech': i,
+                'name': t['Name'],
+                'age': max(ages + reg_ages or [1]),
+                'req': mine,
+                'any': False,
+                'civs': civ_list,
+                'rules': rules,
+            })
             continue
-        if len(ages) + len(mine) + len(unlock_reqs) != need:
+        # 建筑条件隐藏科技（need == 2：单触发项 + 一个或一组两两互斥的同建筑集文明建筑激活/替换标记）
+        if i in disabled or tech_resource_costs(t):
             continue
-        civ_list = sorted(set.intersection(*(set(unlocks[r]['civs']) for r in unlock_reqs)))
-        if not civ_list:
+        alias_ages = [age_aliases[r] for r in other if r in age_aliases]
+        rem_other = [r for r in other if r not in age_aliases]
+        if len(ages) + len(alias_ages) + len(mine) != 1 or need != 2:
             continue
-        reg_ages = [unlocks[r]['age'] for r in unlock_reqs]
+        marker_reqs = [r for r in rem_other if r in bld_markers]
+        if not marker_reqs or len(marker_reqs) != len(rem_other):
+            continue
+        if len(marker_reqs) == 1:
+            target_buildings = bld_markers[marker_reqs[0]]['buildings']
+            civ_set = set(bld_markers[marker_reqs[0]]['civs'])
+        else:
+            bsets = [bld_markers[r]['buildings'] for r in marker_reqs]
+            if len(set(bsets)) != 1:
+                continue
+            civ_set = set()
+            disjoint = True
+            for r in marker_reqs:
+                rcivs = set(bld_markers[r]['civs'])
+                if civ_set & rcivs:
+                    disjoint = False
+                    break
+                civ_set.update(rcivs)
+            if not disjoint:
+                continue
+            target_buildings = bsets[0]
+        if not civ_set or not target_buildings:
+            continue
         cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
         rules, _eco = compile_cmds(cmds)
-        if not rules or any(r.get('b') for r in rules):
+        if not rules or any(not r.get('b') for r in rules):
             continue
-        unlocked_units = set().union(*(unlocks[r]['units'] for r in unlock_reqs))
-        rule_units = {uid for r in rules for uid in r['t']}
-        if not rule_units or not rule_units.issubset(unlocked_units):
+        kept_bids = {
+            bid
+            for bid in target_buildings
+            if bid in ours and ours[bid].get('_b') and (set(ours[bid].get('civs', ())) & civ_set)
+        }
+        if not kept_bids:
             continue
+        filtered_rules = _filter_redundant_building_rules(rules, kept_bids, mine, tech_rules_by_en)
+        if not filtered_rules:
+            continue
+        used_bids = {bid for r in filtered_rules for bid in r['t']}
+        civ_list = sorted(c for c in civ_set if any(c in ours[bid].get('civs', ()) for bid in used_bids))
+        if not civ_list:
+            continue
+        marker_ages = [bld_markers[r]['age'] for r in marker_reqs]
         generic.append({
             'tech': i,
             'name': t['Name'],
-            'age': max(ages + reg_ages or [1]),
+            'age': max(ages + alias_ages + marker_ages or [1]),
             'req': mine,
             'any': False,
             'civs': civ_list,
-            'rules': rules,
+            'rules': filtered_rules,
         })
     return generic
 
@@ -696,7 +881,7 @@ def main():
     # ---- 通用/限定文明隐藏科技（Civ=-1、不可研究）与时代科技自身单位属性（101/102/103） ----
     out['generic'] = build_generic_entries(
         AT, AE, AC, ours, tech_by_id, adat, [c['en'] for c in civs], a_cmds, compile_cmds,
-        build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids,
+        build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids, tech_rules_by_en=out['techs'],
     )
 
     # ---- 文明：bonus techs + tech tree + team ----

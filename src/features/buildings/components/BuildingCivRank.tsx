@@ -453,8 +453,8 @@ export function BuildingCivRank({ building, core }: BuildingCivRankProps) {
             )}
             {building.id === FORTIFIED_CHURCH_ID && churchSample && churchSample.baseProj !== null && churchSample.maxProj !== null && (
               <li>
-                强化教堂须驻守圣物才会射箭：空驻军时 <span className="num nw">{churchSample.baseProj} 支</span>，每件圣物 <span className="num nw">+1 支</span>
-                ，与村民合计最多 <span className="num nw">{churchSample.maxProj} 支</span>。
+                强化教堂空驻军不开火（基础 <span className="num nw">{churchSample.baseProj} 支</span>），村民与圣物均可提供额外箭矢：每名村民或每件圣物各{' '}
+                <span className="num nw">+1 支</span>，合计最多 <span className="num nw">{churchSample.maxProj} 支</span>。
               </li>
             )}
             {tcBuildTimes && tcBuildTimes.construction !== null && tcBuildTimes.construction !== building.bt && (

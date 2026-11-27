@@ -181,11 +181,13 @@ test('四类边界与非 A 类零拉取 garrisonGeneral：炮塔、船坞、养�
   await expect(page.locator('.bd-jump').getByRole('button', { name: '各文明对照' })).toHaveCount(0);
   await expect(page.locator('#building-civs').getByRole('link', { name: '看各文明满科技对照' })).toHaveCount(0);
 
-  // 强化教堂（1806，A 类）：滚入后按需加载，空驻 0 / 满驻 5 且带圣物注释
+  // 强化教堂（1806，A 类）：滚入后按需加载，空驻 0 / 满驻 5 且更正后的村民/圣物射箭脚注准确
   await page.goto('./#/building/1806');
   await section.scrollIntoViewIfNeeded();
-  await expect(section.locator('.ucr-notes')).toContainText('强化教堂须驻守圣物才会射箭');
-  await expect(section.locator('.ucr-notes')).toContainText('5 支');
+  await expect(section.locator('.ucr-notes')).toContainText(
+    '强化教堂空驻军不开火（基础 0 支），村民与圣物均可提供额外箭矢：每名村民或每件圣物各 +1 支，合计最多 5 支。',
+  );
+  await expect(section.locator('.ucr-notes')).not.toContainText('强化教堂须驻守圣物才会射箭');
 });
 
 test('A 类懒加载占位、失败重试与「打开」列三入口联动无红框', async ({ page }) => {
@@ -302,4 +304,99 @@ test('窄屏 360 浅色 / 390 深色手风琴与平板 768/900 零页面溢出',
     await section.scrollIntoViewIfNeeded();
     await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank');
   }
+});
+
+test('#1474：强化教堂与聚落条件隐藏科技模拟、满科技对照、脚注与科技页去自指前缀', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') errors.push(msg.text());
+  });
+
+  // 1. 强化教堂模拟器（格鲁吉亚 & 亚美尼亚，1280 浅色 + 360 窄屏）
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/building/1806?civ=Georgians&tab=sim');
+  await expect(page.locator('#sim')).toBeVisible();
+  await page.locator('#sim').getByRole('button', { name: '满科技', exact: true }).click();
+  const simTab = page.locator('#sim table.simtab');
+  const researchSummary = page.locator('#sim').getByRole('region', { name: '累计研究' });
+  await expect(researchSummary).toContainText('累计研究费用（11 项）');
+  await expect(researchSummary.locator('.sim-summary-time')).toContainText('490');
+  await expect(simTab.locator('tr', { hasText: '生命值' })).toContainText('2904');
+  await expect(simTab.locator('tr', { hasText: '近战护甲' })).toContainText('7');
+  await expect(simTab.locator('tr', { hasText: '穿刺护甲' })).toContainText('13');
+  await expect(simTab.locator('tr', { hasText: '攻击力' })).toContainText('11');
+  await expect(simTab.locator('tr', { hasText: /^射程/ })).toContainText('8');
+  await expect(simTab.locator('tr', { hasText: '最小射程' })).toContainText('0');
+  // 取消/重勾近射孔：最小射程 1 <-> 0（绝不出现 -1）
+  const murderHoles = page.locator('#sim label.simt', { hasText: '近射孔' }).locator('input[type="checkbox"]');
+  await murderHoles.uncheck();
+  await expect(simTab.locator('tr', { hasText: '最小射程' }).locator('b')).toHaveText('1');
+  await murderHoles.check();
+  await expect(simTab.locator('tr', { hasText: '最小射程' }).locator('b')).toHaveText('0');
+
+  await page.setViewportSize({ width: 360, height: 800 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/building/1806?civ=Armenians&tab=sim');
+  await page.locator('#sim').getByRole('button', { name: '满科技', exact: true }).click();
+  await expect(researchSummary).toContainText('累计研究费用（10 项）');
+  await expect(researchSummary.locator('.sim-summary-time')).toContainText('405');
+  await expect(page.locator('#sim')).not.toContainText('斯万箭塔');
+  await expect(simTab.locator('tr', { hasText: '攻击力' })).toContainText('9');
+  await expect(simTab.locator('tr', { hasText: /^射程/ })).toContainText('8');
+  await expect(simTab.locator('tr', { hasText: '近战护甲' })).toContainText('6');
+  await expect(simTab.locator('tr', { hasText: '穿刺护甲' })).toContainText('12');
+
+  // 2. 强化教堂各文明满科技对照（1280 浅/深 + 390 展开）
+  await page.goto('./#/building/1806');
+  const section = page.locator('#building-civ-rank');
+  await section.scrollIntoViewIfNeeded();
+  await expect(section.locator('.ucr-champs')).toContainText('攻击最高');
+  await expect(section.locator('.ucr-champs')).toContainText('11');
+  await expect(section.locator('tr[data-civ="Georgians"]')).toContainText('斯万箭塔（已计入）');
+  await expect(section.locator('.ucr-notes')).toContainText(
+    '强化教堂空驻军不开火（基础 0 支），村民与圣物均可提供额外箭矢：每名村民或每件圣物各 +1 支，合计最多 5 支。',
+  );
+  await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank', true);
+  await setTheme(page, 'dark');
+  await section.scrollIntoViewIfNeeded();
+  await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank', true);
+  await setTheme(page, 'light');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await section.scrollIntoViewIfNeeded();
+  await section.locator('tr[data-civ="Georgians"] .ucr-exp-btn').click();
+  await expect(section.locator('tr[data-civ-detail="Georgians"]')).toContainText('11');
+  await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank');
+
+  // 3. 聚落帝王护甲（马普切 3/10，城堡 1/8；1280 浅 + 360 深）
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/building/2556?civ=Mapuche&tab=sim');
+  await page.locator('#sim').getByRole('button', { name: '满科技', exact: true }).click();
+  await expect(simTab.locator('tr', { hasText: '近战护甲' }).locator('b')).toHaveText('3');
+  await expect(simTab.locator('tr', { hasText: '穿刺护甲' }).locator('b')).toHaveText('10');
+  await page.locator('#sim').getByRole('button', { name: '城堡预设', exact: true }).click();
+  await expect(simTab.locator('tr', { hasText: '近战护甲' }).locator('b')).toHaveText('1');
+  await expect(simTab.locator('tr', { hasText: '穿刺护甲' }).locator('b')).toHaveText('8');
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('./#/building/2556');
+  await setTheme(page, 'dark');
+  await section.scrollIntoViewIfNeeded();
+  await expect(section.locator('.ucr-champs')).toContainText('近甲最高');
+  await assertNoOverflowAndNoNumWrap(page, '#building-civ-rank');
+  await setTheme(page, 'light');
+
+  // 4. 科技详情页（#/tech/199）：命中强化教堂、零误出普通修道院且省略自指前缀
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/tech/199');
+  const affects = page.locator('#affects');
+  await expect(affects).toBeVisible();
+  await expect(affects).toContainText('强化教堂');
+  await expect(affects).not.toContainText('修道院');
+  const comboSelf = affects.locator('[data-t="effect-summary"][data-kind="combo"][data-req="Fletching"]');
+  await expect(comboSelf).toHaveText('+1 攻击，+2 射程（作用于下方完整名单）');
+  await expect(affects.locator('[data-t="effect-summary"][data-req="Fletching|Thalassocracy"]').first()).toContainText('需要箭羽、海上霸主：');
+
+  expect(errors).toEqual([]);
 });

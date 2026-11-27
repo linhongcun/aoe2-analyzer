@@ -109,7 +109,8 @@ export default function TechAffects({
       {entries.map((entry) => {
         const body = effectClause(entry.parts, (text) => techEffectText(tech.id, text));
         const summary = tech.id === 437 ? body : effectSummary(entry.parts, (text) => techEffectText(tech.id, text));
-        const text = entry.kind === 'combo' ? `需要${entry.req.map((en) => techZh(techs, en)).join('、')}：${summary}` : summary;
+        const selfOnlyCombo = entry.kind === 'combo' && entry.req.length > 0 && entry.req.every((en) => en === tech.en);
+        const text = entry.kind === 'combo' && !selfOnlyCombo ? `需要${entry.req.map((en) => techZh(techs, en)).join('、')}：${summary}` : summary;
         return (
           <p className="td-summary" data-t="effect-summary" data-kind={entry.kind} data-rule={entry.id} data-req={entry.req.join('|')} key={entry.id}>
             <SummaryText text={text} techId={tech.id} />

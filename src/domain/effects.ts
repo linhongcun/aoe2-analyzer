@@ -321,6 +321,11 @@ const IMPLIED: Record<string, string[]> = {
   'Bombard Tower': ['Bombard Tower'],
   Harbor: ['Thalassocracy', 'Harbor'],
 };
+/** 返回组合隐藏规则中尚未由实体自身隐含的剩余科技前置（供建筑模拟器与满科技对照共享 IMPLIED 单一事实来源） */
+export function genericBuildingTriggerReqs(g: Pick<GenericFx, 'req'>, x: { en: string }): string[] {
+  const imp = IMPLIED[x.en] ?? [x.en];
+  return g.req.filter((r) => !imp.includes(r));
+}
 /** 在给定时代、已选科技与文明下，对某单位/建筑生效的通用/限定文明隐藏效果条目；有 civs 限制且未传入文明时 fail-closed 不匹配 */
 export function matchingGenericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean, civ?: string): GenericFx[] {
   const imp = IMPLIED[x.en] ?? [x.en];

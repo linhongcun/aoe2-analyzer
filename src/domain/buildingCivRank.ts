@@ -33,7 +33,7 @@ import { civStatus } from './civStatus';
 import { calculateConstruction, constructionTechs, DEFAULT_CONSTRUCTION } from './construction';
 import { DAT } from './datEffects';
 import { costSum } from './duel';
-import { BUILDING_EFFECTS } from './effects';
+import { BUILDING_EFFECTS, GENERIC_FX, genericBuildingTriggerReqs } from './effects';
 import { applicableSimCostTechs, buildSimEffectiveCost, presetCostTechIds } from './simEffectiveCost';
 import { makeSimContext, type SimContext } from './simulator';
 import type { Building, StatSet, Tech, Trees } from './types';
@@ -164,10 +164,23 @@ function displayedStatsDiffer(a: StatSet, b: StatSet, cat: BuildingRankCategory,
 
 function findGenericBuildingCandidates(simCtx: SimContext, b: Building): Tech[] {
   const out: Tech[] = [];
+  const seen = new Set<number>();
   for (const [en, rules] of Object.entries(BUILDING_EFFECTS)) {
     const t = simCtx.techByEn[en];
-    if (!t || t.type === 'UniqueTech') continue;
-    if (rules.some(([pred]) => pred(b))) out.push(t);
+    if (!t || t.type === 'UniqueTech' || seen.has(t.id)) continue;
+    if (rules.some(([pred]) => pred(b))) {
+      seen.add(t.id);
+      out.push(t);
+    }
+  }
+  for (const g of GENERIC_FX) {
+    if (!g.b || !g.pred(b)) continue;
+    const rem = genericBuildingTriggerReqs(g, b);
+    if (rem.length !== 1) continue;
+    const t = simCtx.techByEn[rem[0]!];
+    if (!t || t.type === 'UniqueTech' || seen.has(t.id)) continue;
+    seen.add(t.id);
+    out.push(t);
   }
   return out;
 }
@@ -200,19 +213,23 @@ function deriveUniqueTechTags(
   for (const t of ctx.core.techs) {
     if (t.type !== 'UniqueTech' || !t.civs.includes(civ) || !st['t' + t.id] || militaryTechAge(civ, t.id, t.age) > age) continue;
     const dt = DAT.techs[t.en];
-    if (!dt) continue;
-    const matchingRules = dt.rules.filter((r) => r.b && r.t.includes(b.id));
-    const ecoHits = dt.eco.filter((e) => e.t?.includes(b.id));
+    const matchingRules = (dt?.rules ?? []).filter((r) => r.b && r.t.includes(b.id));
+    const genericRules = GENERIC_FX.filter((g) => {
+      if (!g.b || g.age > age || (g.civs && !g.civs.includes(civ)) || !g.pred(b)) return false;
+      const rem = genericBuildingTriggerReqs(g, b);
+      return rem.length === 1 && rem[0] === t.en;
+    });
+    const ecoHits = (dt?.eco ?? []).filter((e) => e.t?.includes(b.id));
     const hasPoison = DAT.projectilePoison?.[t.en]?.buildings.includes(b.id) ?? false;
-    if (!matchingRules.length && !ecoHits.length && !hasPoison) continue;
+    if (!matchingRules.length && !genericRules.length && !ecoHits.length && !hasPoison) continue;
 
-    if (matchingRules.length && sel.has(t.id)) {
+    if ((matchingRules.length || genericRules.length) && sel.has(t.id)) {
       const without = new Set(sel);
       without.delete(t.id);
       const baseWithout = simulateBuilding(simCtx, b, civ, age, without);
       if (displayedStatsDiffer(fullStats, baseWithout, category, hasValidConstruction)) {
         tags.push(`${t.zh}（已计入）`);
-      } else if (matchingRules.some((r) => r.fx.some((f) => f.s === 'rof'))) {
+      } else if (matchingRules.some((r) => r.fx.some((f) => f.s === 'rof')) || genericRules.some((g) => g.fx.some((f) => f.s === 'rof'))) {
         tags.push(`未计入：攻速加快 · ${t.zh}`);
       }
     }

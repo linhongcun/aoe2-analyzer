@@ -30,7 +30,7 @@
 | 仅经济/费用类 .dat 结构化效果（文本展示） | 0                                   | 117                                  | 141                              |
 | 仅文本                                    | 215                                 | 67                                   | 37                               |
 | 数值编码的科技                            | 32                                  | 98                                   | **106**（.dat 106 + 手工 0）     |
-| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 16                               |
+| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 23                               |
 
 （手工 CivBonus 条目 45 个，按加成文本序号去重后 51 条。）
 
@@ -145,6 +145,10 @@
 ### Heated Shot
 
 - 手工 `—` → .dat `vs 船只 +4`：兵营(Barracks)、磨坊(Mill)、房屋(House)、城镇中心(Town Center)、伐木场(Lumber Camp)、采矿场(Mining Camp)、哨站(Outpost)、大庄园(Folwark)、骡车(Mule Cart)、聚落(Settlement)、市场(Market)、靶场(Archery Range) 等 20 个
+- 手工 `—` → .dat `vs 船只 +6.25`：瞭望箭塔(Watch Tower)
+- 手工 `—` → .dat `vs 船只 +8.75`：警戒箭塔(Guard Tower)
+- 手工 `—` → .dat `vs 船只 +10`：大型箭塔(Keep)
+- 手工 `—` → .dat `vs 船只 +50`：炮塔(Bombard Tower)
 
 ### Town Watch
 
@@ -386,9 +390,16 @@ Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsv
 - 671 `Thalassocracy + Bracer`：时代 ≥ 1，需 Bracer + Thalassocracy → 2 个目标 [{"s":"los","v":1},{"s":"rng","v":1}]
 - 774 `Flemish Militia Age3`：时代 ≥ 3 → 1 个目标 [{"s":"atk","v":3},{"s":"bonus","v":1,"vs":"船只"},{"s":"bonus","v":1,"vs":"骆驼"},{"s":"bonus","v":1,"vs":"骑兵"},{"op":"mul","s":"bt","v":0.875},{"s":"hp","v":15}]
 - 797 `Flemish Militia Age4`：时代 ≥ 4 → 1 个目标 [{"s":"atk","v":3},{"s":"bonus","v":1,"vs":"船只"},{"s":"bonus","v":1,"vs":"骆驼"},{"s":"bonus","v":1,"vs":"骑兵"},{"s":"hp","v":5}]
+- 931 `Fortified Church + Svan Towers`：时代 ≥ 1，限 Armenians / Georgians，需 Svan Towers → 1 个目标 [{"s":"atk","v":2}]
+- 942 `Fortified Church Age4 upgrade`：时代 ≥ 4，限 Armenians / Georgians → 1 个目标 [{"s":"ma","v":1},{"s":"pa","v":1}]
+- 943 `Fortified Church + Fletching`：时代 ≥ 1，限 Armenians / Georgians，需 Fletching → 1 个目标 [{"s":"atk","v":1},{"s":"rng","v":2}]
+- 944 `Fortified Church + Bodkin`：时代 ≥ 1，限 Armenians / Georgians，需 Bodkin Arrow → 1 个目标 [{"s":"atk","v":1},{"s":"rng","v":1}]
+- 945 `Fortified Church + Bracer`：时代 ≥ 1，限 Armenians / Georgians，需 Bracer → 1 个目标 [{"s":"atk","v":1},{"s":"rng","v":1}]
+- 946 `Fortified Church + Chemistry`：时代 ≥ 1，限 Armenians / Georgians，需 Chemistry → 1 个目标 [{"s":"atk","v":1}]
 - 1163 `Shadow Transport Ship -- Age Three`：时代 ≥ 3 → 1 个目标 [{"s":"gar","v":5}]
 - 1164 `Shadow Transport Ship -- Age Four`：时代 ≥ 4 → 1 个目标 [{"s":"gar","v":10}]
+- 1356 `Settlement Age4 upgrade`：时代 ≥ 4，限 Incas / Mapuche / Muisca / Tupi → 1 个目标 [{"s":"ma","v":1},{"s":"pa","v":1}]
 
 ---
 
-差异小计：科技 55 组、文明加成 15 条、团队加成 10 条。
+差异小计：科技 59 组、文明加成 15 条、团队加成 10 条。
