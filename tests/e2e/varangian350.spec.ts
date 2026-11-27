@@ -77,7 +77,8 @@ test('#350 其他文明只列各自常驻加成；后勤学/哥瑟砍勾选后�
   await ensureTechOpen();
   const gothBox = page.locator('#duel-a label.simt').filter({ has: page.getByRole('link', { name: '哥瑟砍', exact: true }) });
   await gothBox.locator('input').check();
-  await expect(page.locator('[data-t="pk-unmodeled"]')).toContainText('额外弹矢 · 哥瑟砍');
+  await expect(page.locator('[data-t="pk-unmodeled"]')).toContainText('充能远程攻击 · 哥瑟砍');
+  await expect(page.locator('[data-t="pk-unmodeled"]')).not.toContainText('额外弹矢 · 哥瑟砍');
   await expect(page.locator('[data-t="pk-vg-line"]')).toHaveCount(2);
   await gothBox.locator('input').uncheck();
   await expect(page.locator('[data-t="pk-unmodeled"]')).toHaveCount(0);

@@ -15,7 +15,7 @@ import { isUnitCostAttribute } from './unitCost';
 
 export const TECH_COST_OPS = new Set(['set', 'mul', 'add']);
 const CONVERSION_RES = new Set([27, 28, 29, 192, 193]);
-const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 63, 102, 107, 109]);
+const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 62, 63, 102, 107, 109, 118]);
 const BUILDING_GARRISON_ATTRS = new Set([102, 107]);
 const BUILDING_COMBAT_NOTICE_ATTRS = new Set([22, 24, 109]);
 const PAYOFF_GATHER_TARGETS = new Set(['task:wood', 'task:gold', 'task:stone']);

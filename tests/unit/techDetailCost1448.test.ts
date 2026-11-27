@@ -86,15 +86,15 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(core.techs).toHaveLength(199);
     expect(buckets.simulated).toHaveLength(109);
     expect(buckets.cost.sort((a, b) => a - b)).toEqual([455, 488, 499, 514, 625, 782, 785, 835, 1380, 1496]);
-    // 53 项其他已消费编码：含建筑驻军固定数值规则（64/101/102/103/484/485/576/1069）、圣物收益（21/506）、#1446 导出的 1379 突袭与阵容账本已读 756；34/35 战船升级无数值规则，归入 unencoded
-    expect(buckets.consumed).toHaveLength(53);
+    // 55 项其他已消费编码：含建筑驻军固定数值规则（64/101/102/103/484/485/576/1069）、圣物收益（21/506）、#1446 导出的 1379 突袭、#1482 导出的 909 虹吸管与 1006 札甲及阵容账本已读 756；34/35 战船升级无数值规则，归入 unencoded
+    expect(buckets.consumed).toHaveLength(55);
     expect(buckets.consumed).toEqual(
       expect.arrayContaining([
-        15, 17, 21, 23, 45, 46, 64, 93, 101, 102, 103, 202, 233, 315, 316, 319, 438, 439, 441, 457, 485, 493, 506, 578, 756, 1069, 1379, 1393,
+        15, 17, 21, 23, 45, 46, 64, 93, 101, 102, 103, 202, 233, 315, 316, 319, 438, 439, 441, 457, 485, 493, 506, 578, 756, 909, 1006, 1069, 1379, 1393,
       ]),
     );
     expect(buckets.unencoded.sort((a, b) => a - b)).toEqual([
-      16, 28, 34, 35, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 909, 910, 924, 1006, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
+      16, 28, 34, 35, 194, 408, 483, 487, 573, 629, 690, 754, 755, 834, 910, 924, 1007, 1012, 1013, 1014, 1061, 1070, 1080, 1464, 1484,
     ]);
     expect(buckets.simulated.length + buckets.cost.length + buckets.consumed.length + buckets.unencoded.length).toBe(199);
   });
@@ -320,6 +320,12 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     const text1379 = visible(markup('/tech/1379'));
     expect(text1379).toContain('本页不逐条模拟属性；单位 PK 与单位满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
     expect(text1379).not.toContain('模拟器已读取');
+
+    for (const id of [909, 1006]) {
+      const text = visible(markup(`/tech/${id}`));
+      expect(text).toContain('本页不逐条模拟属性；单位 PK 与单位满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
+      expect(text).not.toContain('没有已解码数值规则');
+    }
 
     const text1393 = visible(markup('/tech/1393'));
     expect(text1393).toContain('本页不逐条模拟属性；单位 PK、单位满科技对照、建筑模拟器与建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');

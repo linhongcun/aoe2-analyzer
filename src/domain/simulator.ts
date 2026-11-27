@@ -4,6 +4,7 @@ import { militaryTechAge } from './availabilityAge';
 import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
 import { activeRelicBonus, CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
 import { DAT } from './datEffects';
+import { hasPositiveDamageReflection, resolveTechChargeGrant } from './duelUnmodeledEco';
 import { applyEffectValue } from './numericEffects';
 
 export interface SimContext {
@@ -95,6 +96,16 @@ export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
   });
   ctx.techs
     .filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && !r.some((x) => x.t.id === t.id) && !DAT.techs[t.en]?.excluded?.includes(u.id))
+    .forEach((t) => r.push({ t, ef: null }));
+  // issue 1482：按固定数据补充无 rules 但带单位级近战反伤（a:118）或科技赋予充能（a:62）的常规研究科技（如虹吸管 909）
+  const baseChargeType = u.chargeType ?? 0;
+  ctx.techs
+    .filter((t) => {
+      if (t.type === 'UniqueTech' || st['t' + t.id] !== 1 || !t.civs.includes(civ)) return false;
+      if (r.some((x) => x.t.id === t.id) || DAT.techs[t.en]?.excluded?.includes(u.id)) return false;
+      const eco = DAT.techs[t.en]?.eco;
+      return hasPositiveDamageReflection(eco, u.id) || resolveTechChargeGrant(eco, u.id, baseChargeType) !== null;
+    })
     .forEach((t) => r.push({ t, ef: null }));
   TEXT_ONLY_TECHS.forEach((n) => {
     const t = ctx.techByEn[n];
