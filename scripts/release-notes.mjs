@@ -301,6 +301,20 @@ function writeGithubOutput(values) {
   }
 }
 
+function resolveCommitRef(ref, root) {
+  const value = String(ref ?? '').trim();
+  if (!value || SHA_RE.test(value) || value.startsWith('-')) return value;
+  try {
+    return execFileSync('git', ['rev-parse', '--verify', '--end-of-options', `${value}^{commit}`], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }).trim();
+  } catch {
+    return value;
+  }
+}
+
 export function main(argv = process.argv.slice(2)) {
   let mode = '';
   let root = process.cwd();
@@ -339,7 +353,7 @@ export function main(argv = process.argv.slice(2)) {
   }
 
   if (mode === 'check-pr') {
-    const result = checkPullRequestReleaseNotes(base, head, root);
+    const result = checkPullRequestReleaseNotes(resolveCommitRef(base, root), resolveCommitRef(head, root), root);
     if (!result.ok) {
       console.error(`PR 发布片段防重检查失败（${result.errors.length} 项）：`);
       for (const error of result.errors) console.error(`- ${error}`);

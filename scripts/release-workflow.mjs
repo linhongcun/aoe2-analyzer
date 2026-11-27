@@ -13,12 +13,34 @@ import { applyReleaseNotes, checkReleaseNotes } from './release-notes.mjs';
 
 const SHA_RE = /^[0-9a-f]{40}$/;
 const RUN_ID_RE = /^[1-9]\d*$/;
-const REPO_RE = /^[\w.-]+\/[\w.-]+$/;
+const REPO_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})\/(?!\.{1,2}$)[A-Za-z0-9._-]+$/;
 const BOT_NAME = 'github-actions[bot]';
 const BOT_EMAIL = '41898282+github-actions[bot]@users.noreply.github.com';
 
 function requireSha(value, label) {
   if (typeof value !== 'string' || !SHA_RE.test(value)) throw new Error(`${label} 必须是 40 位提交 SHA，收到「${value}」`);
+}
+
+function validateRepository(repository) {
+  const repoText = String(repository ?? '').trim();
+  if (!REPO_RE.test(repoText)) throw new Error(`仓库标识非法：${repoText}`);
+  return repoText;
+}
+
+export function parseResolveReleaseTarget({ ciRunId, repository }) {
+  const idText = String(ciRunId ?? '').trim();
+  if (!RUN_ID_RE.test(idText)) throw new Error(`CI_RUN_ID 必须是正整数，收到「${idText}」`);
+  return { ciRunId: idText, repository: validateRepository(repository) };
+}
+
+export function buildDispatchCiDeployArgs(expectedSha = '') {
+  const expected = String(expectedSha ?? '').trim();
+  const args = ['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true'];
+  if (expected) {
+    requireSha(expected, 'expected_sha');
+    args.push('-f', `expected_sha=${expected}`);
+  }
+  return args;
 }
 
 /**
@@ -27,16 +49,14 @@ function requireSha(value, label) {
  * - 手工 workflow_dispatch：传入任何无效或未完成部署的 ci_run_id 一律报错。
  */
 export function resolveReleaseSourceRun({ eventName, ciRunId, repository, run, jobs }) {
-  const idText = String(ciRunId ?? '').trim();
-  if (!RUN_ID_RE.test(idText)) throw new Error(`CI_RUN_ID 必须是正整数，收到「${idText}」`);
-  if (!REPO_RE.test(String(repository ?? ''))) throw new Error(`仓库标识非法：${repository}`);
+  const { ciRunId: idText, repository: repoText } = parseResolveReleaseTarget({ ciRunId, repository });
   if (!run || typeof run !== 'object') throw new Error('缺少上游 CI / Deploy run 数据');
   if (
     run.name !== 'CI / Deploy' ||
     run.path !== '.github/workflows/ci.yml' ||
     !['push', 'workflow_dispatch'].includes(run.event) ||
     run.head_branch !== 'main' ||
-    run.head_repository?.full_name !== repository ||
+    run.head_repository?.full_name !== repoText ||
     run.status !== 'completed' ||
     run.conclusion !== 'success' ||
     !SHA_RE.test(String(run.head_sha ?? ''))
@@ -164,11 +184,11 @@ function sleepMs(ms) {
   Atomics.wait(arr, 0, 0, ms);
 }
 
-function dispatchCiDeploy(expectedSha) {
+function dispatchCiDeploy(expectedSha = '') {
+  const args = buildDispatchCiDeployArgs(expectedSha);
+  const cmdHint = ['gh', ...args].join(' ');
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const res = spawnSync('gh', ['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${expectedSha}`], {
-      encoding: 'utf8',
-    });
+    const res = spawnSync('gh', args, { encoding: 'utf8' });
     if (res.status === 0) return;
     const msg = (res.stderr || res.stdout || '').trim();
     if (attempt < 2) {
@@ -176,14 +196,16 @@ function dispatchCiDeploy(expectedSha) {
       sleepMs(5000);
       continue;
     }
-    throw new Error(`派发 CI / Deploy 失败（可手工恢复：gh workflow run ci.yml --ref main -f deploy=true -f expected_sha=${expectedSha}）：${msg}`);
+    throw new Error(`派发 CI / Deploy 失败（可手工恢复：${cmdHint}）：${msg}`);
   }
 }
 
 function runResolveRelease() {
   const eventName = process.env.GITHUB_EVENT_NAME ?? '';
-  const ciRunId = process.env.CI_RUN_ID ?? '';
-  const repository = process.env.GITHUB_REPOSITORY ?? '';
+  const { ciRunId, repository } = parseResolveReleaseTarget({
+    ciRunId: process.env.CI_RUN_ID ?? '',
+    repository: process.env.GITHUB_REPOSITORY ?? '',
+  });
   const run = ghApiJson(`repos/${repository}/actions/runs/${ciRunId}`);
   const jobPages = ghApiJson(`repos/${repository}/actions/runs/${ciRunId}/jobs?filter=latest&per_page=100`, { paginate: true });
   const jobs = Array.isArray(jobPages) ? jobPages.flatMap((page) => page?.jobs ?? []) : [];
@@ -220,11 +242,12 @@ function runPrepare(root = process.cwd()) {
   console.log(`prepare 决策：${decision.action}（${decision.reason}）`);
 
   if (decision.action === 'superseded') {
-    if (decision.checkRemoteRun && repository) {
-      const data = ghApiJson(`repos/${repository}/actions/workflows/ci.yml/runs?branch=main&head_sha=${remoteSha}&per_page=20`);
+    if (decision.checkRemoteRun && repository.trim()) {
+      const repoText = validateRepository(repository);
+      const data = ghApiJson(`repos/${repoText}/actions/workflows/ci.yml/runs?branch=main&head_sha=${remoteSha}&per_page=20`);
       if (!hasActiveOrSucceededRun(data?.workflow_runs)) {
         console.log(`检测到最新尖端 ${remoteSha.slice(0, 7)} 缺少未取消的 CI / Deploy 运行，自动补派发`);
-        dispatchCiDeploy(remoteSha);
+        dispatchCiDeploy();
       }
     }
     writeGithubOutput({ action: 'superseded', bump_sha: '', version: `v${checked.version}` });
@@ -236,6 +259,7 @@ function runPrepare(root = process.cwd()) {
     return 0;
   }
 
+  const repoText = validateRepository(repository);
   const applied = applyReleaseNotes(root);
   if (!applied.changed) throw new Error('内部错误：待消费片段非空但未产生变更');
 
@@ -262,7 +286,7 @@ function runPrepare(root = process.cwd()) {
   let apiOutcome = 'stale';
   let lastApiSha = '';
   for (let attempt = 1; attempt <= 3; attempt++) {
-    const refObj = ghApiJson(`repos/${repository}/git/ref/heads/main`);
+    const refObj = ghApiJson(`repos/${repoText}/git/ref/heads/main`);
     lastApiSha = String(refObj?.object?.sha ?? '');
     if (SHA_RE.test(lastApiSha)) {
       apiOutcome = classifyApiMainSha({ baseSha: headSha, bumpSha, apiSha: lastApiSha });

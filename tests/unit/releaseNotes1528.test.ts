@@ -1,7 +1,7 @@
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { delimiter, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 // @ts-expect-error scripts/*.mjs are plain Node modules
 import { changelogOrderErrors } from '../../scripts/changelog.mjs';
@@ -22,7 +22,17 @@ const {
   highestBump,
   validateFragment,
 } = releaseNotes;
-const { classifyApiMainSha, classifyPushFailure, decidePrepareAction, hasActiveOrSucceededRun, resolveReleaseSourceRun } = releaseWorkflow;
+const {
+  buildDispatchCiDeployArgs,
+  classifyApiMainSha,
+  classifyPushFailure,
+  decidePrepareAction,
+  hasActiveOrSucceededRun,
+  parseResolveReleaseTarget,
+  resolveReleaseSourceRun,
+} = releaseWorkflow;
+const RELEASE_NOTES_CLI = resolve('scripts/release-notes.mjs');
+const RELEASE_WORKFLOW_CLI = resolve('scripts/release-workflow.mjs');
 
 const tempDirs: string[] = [];
 afterEach(() => {
@@ -317,81 +327,19 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     });
 
     // 常规 workflow_dispatch(expected_sha = B1) 命中尖端且 0 片段 → direct；若残留片段必报错杜绝循环
-    expect(
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_B,
-        remoteSha: SHA_B,
-        expectedSha: SHA_B,
-        pendingCount: 0,
-        deployInput: true,
-      }),
-    ).toMatchObject({ action: 'direct' });
-    expect(() =>
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_B,
-        remoteSha: SHA_B,
-        expectedSha: SHA_B,
-        pendingCount: 1,
-        deployInput: true,
-      }),
-    ).toThrow(/不变量破坏/);
-
+    const d = (extra: Record<string, unknown>) => decidePrepareAction({ eventName: 'workflow_dispatch', ref: 'refs/heads/main', deployInput: true, ...extra });
+    expect(d({ headSha: SHA_B, remoteSha: SHA_B, expectedSha: SHA_B, pendingCount: 0 })).toMatchObject({ action: 'direct' });
+    expect(() => d({ headSha: SHA_B, remoteSha: SHA_B, expectedSha: SHA_B, pendingCount: 1 })).toThrow(/不变量破坏/);
     // P1-1 反向并发竞态：workflow_dispatch(expected=B) 实际检出最新尖端 C（顶掉了 pending push(C)）
-    expect(
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_C,
-        remoteSha: SHA_C,
-        expectedSha: SHA_B,
-        pendingCount: 0,
-        deployInput: true,
-      }),
-    ).toMatchObject({ action: 'direct' });
-    expect(
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_C,
-        remoteSha: SHA_C,
-        expectedSha: SHA_B,
-        pendingCount: 1,
-        deployInput: true,
-      }),
-    ).toMatchObject({ action: 'bump' });
-
+    expect(d({ headSha: SHA_C, remoteSha: SHA_C, expectedSha: SHA_B, pendingCount: 0 })).toMatchObject({ action: 'direct' });
+    expect(d({ headSha: SHA_C, remoteSha: SHA_C, expectedSha: SHA_B, pendingCount: 1 })).toMatchObject({ action: 'bump' });
     // Git/API 延迟（检出旧 A 而 origin/main 已是 expected B）→ 报错不静默漏部署
-    expect(() =>
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_A,
-        remoteSha: SHA_B,
-        expectedSha: SHA_B,
-        pendingCount: 0,
-        deployInput: true,
-      }),
-    ).toThrow(/同步延迟/);
-
+    expect(() => d({ headSha: SHA_A, remoteSha: SHA_B, expectedSha: SHA_B, pendingCount: 0 })).toThrow(/同步延迟/);
     // 已被更远提交 D 超越 → superseded 且检查远端是否需补派
-    expect(
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: SHA_C,
-        remoteSha: SHA_D,
-        expectedSha: SHA_B,
-        pendingCount: 0,
-        deployInput: true,
-      }),
-    ).toMatchObject({ action: 'superseded', checkRemoteRun: true });
+    expect(d({ headSha: SHA_C, remoteSha: SHA_D, expectedSha: SHA_B, pendingCount: 0 })).toMatchObject({ action: 'superseded', checkRemoteRun: true });
   });
 
-  it('classifyPushFailure / classifyApiMainSha / hasActiveOrSucceededRun 覆盖全部断连与并发状态', () => {
+  it('classifyPushFailure / classifyApiMainSha / hasActiveOrSucceededRun 与参数构造校验', () => {
     expect(classifyPushFailure({ baseSha: SHA_A, bumpSha: SHA_B, newRemoteSha: SHA_B })).toBe('already-pushed');
     expect(classifyPushFailure({ baseSha: SHA_A, bumpSha: SHA_B, newRemoteSha: SHA_C })).toBe('superseded');
     expect(classifyPushFailure({ baseSha: SHA_A, bumpSha: SHA_B, newRemoteSha: SHA_A })).toBe('failed');
@@ -401,5 +349,120 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     expect(hasActiveOrSucceededRun([{ status: 'completed', conclusion: 'cancelled' }])).toBe(false);
     expect(hasActiveOrSucceededRun([{ status: 'queued', conclusion: null }])).toBe(true);
     expect(hasActiveOrSucceededRun([{ status: 'completed', conclusion: 'success' }])).toBe(true);
+    expect(buildDispatchCiDeployArgs()).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
+    expect(buildDispatchCiDeployArgs(SHA_B)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${SHA_B}`]);
+    expect(() => buildDispatchCiDeployArgs('not-a-sha')).toThrow(/40 位提交 SHA/);
+    expect(parseResolveReleaseTarget({ ciRunId: ' 45956929125 ', repository: ' linhongcun/aoe2-analyzer ' })).toEqual({
+      ciRunId: '45956929125',
+      repository: 'linhongcun/aoe2-analyzer',
+    });
+    expect(() => parseResolveReleaseTarget({ ciRunId: '123/evil', repository: 'linhongcun/aoe2-analyzer' })).toThrow(/正整数/);
+    expect(() => parseResolveReleaseTarget({ ciRunId: '123', repository: '../evil' })).toThrow(/仓库标识非法/);
+    expect(() => parseResolveReleaseTarget({ ciRunId: '123', repository: 'owner/..' })).toThrow(/仓库标识非法/);
+  });
+
+  it('CLI 端到端校验：--resolve-run 先验后调 API、--prepare 自愈不传 expected_sha、--check-pr 解析符号 ref', () => {
+    const mockDir = mkdtempSync(join(tmpdir(), 'aoe2-gh-mock-'));
+    const bare = mkdtempSync(join(tmpdir(), 'aoe2-bare-1528-'));
+    tempDirs.push(mockDir, bare);
+    const logFile = join(mockDir, 'gh.log');
+    const outFile = join(mockDir, 'github.out');
+    const ghBin = join(mockDir, 'gh');
+    const readCalls = () =>
+      readFileSync(logFile, 'utf8')
+        .trim()
+        .split('\n')
+        .map((l) => JSON.parse(l));
+    writeFileSync(
+      ghBin,
+      `#!/usr/bin/env node
+const fs = require('node:fs');
+const { execFileSync } = require('node:child_process');
+const args = process.argv.slice(2);
+fs.appendFileSync(process.env.MOCK_GH_LOG, JSON.stringify(args) + '\\n');
+if (args[0] === 'api') {
+  const ep = args[1] || '';
+  if (ep.endsWith('/runs/45956929125')) console.log(JSON.stringify(${JSON.stringify(baseRun)}));
+  else if (ep.includes('/runs/45956929125/jobs')) console.log(JSON.stringify([{ jobs: ${JSON.stringify(okJobs)} }]));
+  else if (ep.includes('/actions/workflows/ci.yml/runs')) console.log(JSON.stringify({ workflow_runs: [] }));
+  else if (ep.endsWith('/git/ref/heads/main')) {
+    const sha = execFileSync('git', ['--git-dir', process.env.MOCK_BARE_DIR, 'rev-parse', 'refs/heads/main'], { encoding: 'utf8' }).trim();
+    console.log(JSON.stringify({ object: { sha } }));
+  } else process.exit(1);
+}
+`,
+      'utf8',
+    );
+    chmodSync(ghBin, 0o755);
+    const mockEnv = {
+      ...process.env,
+      PATH: `${mockDir}${delimiter}${process.env.PATH ?? ''}`,
+      MOCK_GH_LOG: logFile,
+      GITHUB_OUTPUT: outFile,
+      MOCK_BARE_DIR: bare,
+    };
+
+    // P1-2：非法 CI_RUN_ID 在触发 gh api 前即直接报错；首尾空白先裁剪再拼 API 路径
+    expect(
+      spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--resolve-run'], {
+        env: { ...mockEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', CI_RUN_ID: '123/evil', GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' },
+      }).status,
+    ).not.toBe(0);
+    expect(existsSync(logFile)).toBe(false);
+    expect(
+      spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--resolve-run'], {
+        env: { ...mockEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', CI_RUN_ID: ' 45956929125 ', GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' },
+      }).status,
+    ).toBe(0);
+    expect(readFileSync(outFile, 'utf8')).toContain(`eligible=true\nsha=${SHA_B}\n`);
+    expect(readCalls()[0]).toEqual(['api', 'repos/linhongcun/aoe2-analyzer/actions/runs/45956929125']);
+
+    // P1-1 / P2-1：真实 bare remote + workdir 验符号 ref、正常 bump（带 expected_sha）与并发自愈（不带 expected_sha）
+    execFileSync('git', ['init', '--bare', '-b', 'main', bare], { stdio: 'pipe' });
+    const repo = makeFixtureRepo('0.99.72');
+    const g = (...a: string[]) => execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=t@e.invalid', ...a], { cwd: repo, encoding: 'utf8' }).trim();
+    g('init', '-b', 'main');
+    g('remote', 'add', 'origin', bare);
+    g('add', '.');
+    g('commit', '-m', 'base');
+    g('push', '-u', 'origin', 'main');
+    writeFileSync(join(repo, 'release-notes', '2100.json'), JSON.stringify({ issue: 2100, summary: '新增片段（#2100）。' }));
+    g('add', '.');
+    g('commit', '-m', 'feat(#2100): note');
+    const a1 = g('rev-parse', 'HEAD');
+    g('push', 'origin', 'main');
+    expect(spawnSync(process.execPath, [RELEASE_NOTES_CLI, '--check-pr', '--root', repo, '--base', 'HEAD~1', '--head', 'HEAD']).status).toBe(0);
+    expect(spawnSync(process.execPath, [RELEASE_NOTES_CLI, '--check-pr', '--root', repo, '--base', 'no-such-ref', '--head', 'HEAD']).status).not.toBe(0);
+
+    writeFileSync(logFile, '');
+    writeFileSync(outFile, '');
+    const prepEnv = { ...mockEnv, GITHUB_EVENT_NAME: 'push', GITHUB_REF: 'refs/heads/main', GITHUB_SHA: a1, GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' };
+    expect(spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--prepare'], { cwd: repo, env: prepEnv }).status).toBe(0);
+    const b1 = execFileSync('git', ['--git-dir', bare, 'rev-parse', 'refs/heads/main'], { encoding: 'utf8' }).trim();
+    expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${b1}`]);
+
+    writeFileSync(join(repo, 'release-notes', '2101.json'), JSON.stringify({ issue: 2101, summary: '并发新功能（#2101）。' }));
+    g('add', '.');
+    g('commit', '-m', 'feat(#2101): next');
+    const a2 = g('rev-parse', 'HEAD');
+    g('push', 'origin', 'main');
+    g('checkout', '-q', b1);
+    writeFileSync(logFile, '');
+    writeFileSync(outFile, '');
+    const healEnv = { ...prepEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', DEPLOY_INPUT: 'true', EXPECTED_SHA: b1, GITHUB_SHA: b1 };
+    expect(spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--prepare'], { cwd: repo, env: healEnv }).status).toBe(0);
+    expect(readFileSync(outFile, 'utf8')).toContain('action=superseded\n');
+    expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
+    expect(
+      decidePrepareAction({
+        eventName: 'workflow_dispatch',
+        ref: 'refs/heads/main',
+        headSha: a2,
+        remoteSha: a2,
+        expectedSha: '',
+        pendingCount: 1,
+        deployInput: true,
+      }),
+    ).toMatchObject({ action: 'bump' });
   });
 });

@@ -119,7 +119,7 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 - 纯 Markdown 文档 PR 跑标题和文档边界检查。其他 PR、main push 与手动默认 CI 实跑 static、真实构建和 7 条窄冒烟。范围与命令见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及 `.github/workflows/ci.yml`。
 - `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，只供本地判断该补哪些直接相关测试和数据管线，不改变 CI 范围。
-- main push 成功后用同一份 `dist` 部署 Pages 并上传 `site` 产物；Release 直接打包该产物并核对版本/tag，不二次构建。
+- `main` 部署流（`push` 或 `deploy=true` `workflow_dispatch`）的 `check` 成功后用同一份 `dist` 部署 Pages 并上传 `site` 产物；Release 直接打包该产物并核对版本/tag，不二次构建。
 - 全量单测、数据检查、`unused`/对比度/简介检查和整站浏览器回归在 `.github/workflows/full.yml`（每日及手动）运行，不部署、不触发 Release，也不是普通 PR 的合并条件。真实失败仍须认领定位，不提高超时、增加重试或放宽断言掩盖问题。
 - 本地先做一次必要验证。没有新修改、真实失败或未解决问题时不扩大或重复测试；需要定位失败时收窄到具体问题。报告实际执行、跳过或中止范围，不把目标或局部计时写成完成承诺。
 
