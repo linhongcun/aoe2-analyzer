@@ -111,6 +111,36 @@
 .army-decimal-note svg {
   color: var(--color-warn);
 }
+.army-result-heading {
+  margin-bottom: var(--space-3);
+}
+.army-estimate-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border: 1px solid var(--color-warn);
+  border-radius: var(--radius-pill);
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.army-estimate-note {
+  margin: var(--space-3) 0;
+  border-color: var(--color-warn);
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+.army-estimate-note svg {
+  color: var(--color-warn);
+}
+.army-unit-row .army-estimate-note {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+}
 .army-boundary svg,
 .army-warning svg {
   flex-shrink: 0;

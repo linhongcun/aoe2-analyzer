@@ -126,7 +126,7 @@ export function unitCost(
     const markers = effects.filter((effect) => effect.res !== undefined);
     for (const effect of markers) undecoded.push({ techId: tech.id, tech: tech.zh, reason: '含未解码的资源或条件效果', res: effect.res, op: effect.op });
     const costEffects = effects.filter((effect) => isUnitCostAttribute(effect.a) && effect.t?.includes(u.id));
-    const invalid = costEffects.filter((effect) => !COST_OPS.has(effect.op));
+    const invalid = costEffects.filter((effect) => !COST_OPS.has(effect.op) || !Number.isFinite(effect.v) || (effect.op === 'mul' && effect.v <= 0));
     if (invalid.length) {
       for (const effect of invalid)
         undecoded.push({

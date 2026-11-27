@@ -109,3 +109,89 @@ for (const width of [390, 1280])
     await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
     await expect(menu).toBeHidden();
   });
+
+test('#1463 持续生产 1404 静默放行、578/1380 估算放行与 army-supply 透传', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+
+  // 1. 葡萄牙 1404 环游世界：27 -> 20.25 秒，产量 11.85 / 分钟，无环游世界未计入告警（1280 浅色）
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/production?civ=Portuguese&age=4&walk=3&farm=1&techs=&rows=442:45:4');
+  await expect(page.getByTestId('production-row')).toContainText('27 秒 / 个');
+  await page.getByRole('checkbox', { name: '环游世界', exact: true }).check();
+  await expect(page.getByTestId('production-row')).toContainText('20.25 秒 / 个');
+  await expect(page.getByTestId('production-row')).toContainText('11.85 个 / 分钟');
+  await expect(page.getByTestId('production-row')).toContainText('环游世界');
+  await expect(page.locator('.production-warnings')).not.toContainText('环游世界');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  // 2. 柏柏尔 578 土堡：360 浅色，征招 18.8 -> 15.04 秒，新估算告警文案
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('./#/production?civ=Berbers&age=4&walk=3&farm=1&techs=315&rows=1009:82:2');
+  await expect(page.getByTestId('production-row')).toContainText('18.8 秒 / 个');
+  await page.getByRole('checkbox', { name: '土堡', exact: true }).check();
+  await expect(page.getByTestId('production-row')).toContainText('15.04 秒 / 个');
+  await expect(page.locator('.production-warnings')).toContainText('土堡：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+  await expect(page.locator('.production-warnings')).not.toContainText('整项未计入');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  // 3. 马普切 1380 布图马普：1280 深色，2571 单价重算为 42.5 木 47 金并输出估算告警
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/production?civ=Mapuche&age=4&walk=3&farm=1&techs=315&rows=2568:82:2,2571:87:4');
+  await page.evaluate(() => {
+    localStorage.setItem('aoe2-theme', 'dark');
+  });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const beforeTotal = await page.getByTestId('production-total').textContent();
+  await page.getByRole('checkbox', { name: '布图马普', exact: true }).check();
+  await expect(page.getByTestId('production-row').nth(1)).toContainText('42.5');
+  await expect(page.getByTestId('production-row').nth(1)).toContainText('47');
+  await expect(page.getByTestId('production-total')).not.toHaveText(beforeTotal!);
+  await expect(page.locator('.production-warnings')).toContainText('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  // 4. army-supply 透传布图马普：390 浅色，从含 t:1380 的账本进入并选计划口径纳入布图马普
+  await page.setViewportSize({ width: 390, height: 844 });
+  const armyParams = new URLSearchParams({
+    mode: 'army-cost',
+    acv: '1',
+    acdata: '188329',
+    civ: 'Mapuche',
+    age: '4',
+    acunits: JSON.stringify([
+      { unit: 2568, qty: '20' },
+      { unit: 2571, qty: '20' },
+    ]),
+    acdone: '[]',
+    actargets: JSON.stringify(['t:1380']),
+  });
+  await page.goto(`./#/production?${armyParams.toString()}`);
+  await page.evaluate(() => {
+    localStorage.setItem('aoe2-theme', 'light');
+  });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.getByRole('link', { name: '用这些兵种规划持续生产' }).click();
+  await expect(page.getByTestId('army-supply-page')).toBeVisible();
+  await page.getByRole('radio', { name: '按所选计划研究完成后估算' }).check();
+  await page.getByRole('checkbox', { name: '纳入布图马普' }).check();
+  await page.getByRole('checkbox', { name: '第 1 行 确认形态' }).check();
+  await page.getByRole('combobox', { name: '第 1 行 专用生产建筑' }).selectOption('82');
+  await page.getByRole('textbox', { name: '第 1 行 建筑座数' }).fill('2');
+  await page.getByRole('checkbox', { name: '第 2 行 确认形态' }).check();
+  await page.getByRole('combobox', { name: '第 2 行 专用生产建筑' }).selectOption('87');
+  await page.getByRole('textbox', { name: '第 2 行 建筑座数' }).fill('4');
+  await expect(page.getByTestId('production-total')).toBeVisible();
+  await expect(page.locator('.production-warnings')).toContainText('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  // 返回原账本仍完整保留估算态
+  await page.getByRole('link', { name: '返回原阵容账本', exact: true }).click();
+  await expect(page.getByTestId('army-cost-page')).toBeVisible();
+  await expect(page.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
+  expect(errors).toEqual([]);
+});

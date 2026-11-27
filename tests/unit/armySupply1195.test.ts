@@ -103,4 +103,32 @@ describe('阵容账本的持续生产交接', () => {
     expect(productionMode('?mode=army-cost&civ=Goths').kind).toBe('army');
     expect(productionMode('?civ=Goths&age=4').kind).toBe('legacy');
   });
+
+  it('#1463 AC3：含布图马普（t:1380）的马普切账本在计划口径纳入后按折后单价重算并透传估算告警', () => {
+    const source = {
+      ...emptyArmyCost('Mapuche', '4'),
+      rows: [
+        { unit: 2568, qty: '20' },
+        { unit: 2571, qty: '20' },
+      ],
+      targets: ['t:1380'],
+    };
+    const research = armySupplyResearch(ctx, source);
+    expect(research.planned.find((choice) => choice.entry.id === 1380)?.supported).toBe(true);
+    const mapucheRows = [
+      { building: 82, count: '2', confirmed: true },
+      { building: 87, count: '4', confirmed: true },
+    ];
+    const current = projectArmySupply(ctx, source, { ...emptyArmySupply(source), stance: 'current', rows: mapucheRows }, research);
+    const planned = projectArmySupply(ctx, source, { ...emptyArmySupply(source), stance: 'plan', planned: [1380], rows: mapucheRows }, research);
+    expect(current.config).not.toBeNull();
+    expect(planned.config).not.toBeNull();
+    const baseProd = calculateProduction(ctx, current.config!);
+    const estProd = calculateProduction(ctx, planned.config!);
+    expect(baseProd.errors).toEqual([]);
+    expect(estProd.errors).toEqual([]);
+    expect(estProd.lines[1]!.cost).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(estProd.total).toBeLessThan(baseProd.total);
+    expect(estProd.warnings).toContain('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+  });
 });

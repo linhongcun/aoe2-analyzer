@@ -239,12 +239,15 @@ export function classifyTechDataConsumption(
   }
 
   // 与 production.ts 和 buildingCivRank.ts:201,238 保持一致：
-  // 不含资源标记的工作速率科技由持续生产采用；含正倍率 a:13 的特色科技同步由建筑满科技对照读取作提示
-  const hasBuildingWorkRate = !inEcoTechs && datEco.some((e) => e.a === 13 && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t));
+  // 含有效建筑工作效率效果的科技由持续生产采用（含未解码资源标记时按估算计入）；
+  // 含正倍率 a:13 的特色科技同步由建筑满科技对照读取作提示
+  const hasBuildingWorkRate =
+    !inEcoTechs &&
+    datEco.some(
+      (e) => e.a === 13 && TECH_COST_OPS.has(e.op) && Number.isFinite(e.v) && ((e.op !== 'mul' && e.op !== 'set') || e.v > 0) && hasBuildingTarget(e.t),
+    );
   if (hasBuildingWorkRate) {
-    if (!hasResMarker) {
-      adopted.push('production');
-    }
+    adopted.push('production');
     const isUniqueWorkRateRank =
       (tech.type === undefined || tech.type === 'UniqueTech') &&
       datEco.some((e) => e.a === 13 && e.op === 'mul' && e.v > 0 && (deps.buildingById ? hasMultiCivBuildingTarget(e.t) : true));

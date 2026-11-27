@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 function armyCostUrl({
@@ -210,6 +211,108 @@ test('#1409 喷火船/快速喷火船/中国龙舟恢复核算与土耳其时代
   await impEntry.getByRole('button', { name: '移除无效研究' }).click();
   await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
   await expect(page.getByRole('heading', { name: '未计入清单' })).toHaveCount(0);
+
+  expect(errors).toEqual([]);
+});
+
+test('#1463 阵容新增费用布图马普估算态、partial 共存分层、深浅对比度与取消恢复', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+
+  const rows = [
+    { unit: 2568, qty: '20' },
+    { unit: 2571, qty: '20' },
+  ];
+
+  // 1. 1280 浅色：主态（!partial && estimated），无「未计入清单」
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(armyCostUrl({ civ: 'Mapuche', age: '4', rows, targets: ['t:1380'] }));
+  const resultsCard = page.locator('.army-results > .army-card').first();
+  await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
+  await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
+  await expect(resultsCard.locator('[data-t="army-estimate-note"]')).toHaveText(
+    '有 1 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，训练费与本期合计仅为估算。',
+  );
+  await expect(page.getByRole('heading', { name: '未计入清单' })).toHaveCount(0);
+  await expect(resultsCard.locator('.army-primary')).toContainText('3,400');
+  await expect(resultsCard.locator('.army-primary')).toContainText('850');
+  await expect(resultsCard.locator('.army-primary')).toContainText('3,490');
+
+  const row2 = page.locator('.army-unit-row').nth(1);
+  await expect(row2).toContainText('42.5');
+  await expect(row2).toContainText('47');
+  await expect(row2.locator('.army-line-total')).toContainText('850');
+  await expect(row2.locator('.army-line-total')).toContainText('940');
+  await expect(row2.locator('[data-t="army-row-estimate-note"]')).toHaveText(
+    '已按可解码条目计入：布图马普；另含未解码资源或条件效果，本行单价与训练费仅为估算。',
+  );
+  await expect(row2.locator('#army-row-error-1')).toHaveCount(0);
+  await expect(row2.locator('.army-warning')).toHaveCount(0);
+  await assertNoWrapOrOverflow(page);
+
+  // 浅色估算卡与徽标 WCAG AA 对比度核验
+  const lightAxe = await new AxeBuilder({ page })
+    .include('[data-t="army-estimate-badge"]')
+    .include('[data-t="army-estimate-note"]')
+    .include('[data-t="army-row-estimate-note"]')
+    .withRules(['color-contrast'])
+    .analyze();
+  expect(lightAxe.violations).toEqual([]);
+
+  // 2. 360 深色：主态窄屏单行排布、无折行、无溢出、深色对比度通过
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await assertNoWrapOrOverflow(page);
+  const darkAxe = await new AxeBuilder({ page })
+    .include('[data-t="army-estimate-badge"]')
+    .include('[data-t="army-estimate-note"]')
+    .include('[data-t="army-row-estimate-note"]')
+    .withRules(['color-contrast'])
+    .analyze();
+  expect(darkAxe.violations).toEqual([]);
+
+  // 3. acdone=["t:1380"] 已完成态同样放行估算
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(armyCostUrl({ civ: 'Mapuche', age: '4', rows, done: ['t:1380'] }));
+  await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
+  await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
+  await expect(row2.locator('[data-t="army-row-estimate-note"]')).toBeVisible();
+
+  // 4. 共存态（partial && estimated）：1280 & 390 浅色
+  await page.goto(armyCostUrl({ civ: 'Mapuche', age: '4', rows: [...rows, { unit: 6, qty: '0' }], targets: ['t:1380'] }));
+  await expect(resultsCard.locator('h2')).toHaveText('已核实项目小计');
+  await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
+  await expect(resultsCard.locator('[data-t="army-estimate-note"]')).toHaveText(
+    '有 1 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，已计入部分仍仅为估算。未计入项目另见下方「未计入清单」。',
+  );
+  const uncounted = page.locator('.army-card').filter({ has: page.getByRole('heading', { name: '未计入清单' }) });
+  await expect(uncounted).toBeVisible();
+  await expect(uncounted).toContainText('第 3 行');
+  await expect(uncounted).not.toContainText('第 2 行');
+  await assertNoWrapOrOverflow(page);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertNoWrapOrOverflow(page);
+
+  // 5. 取消勾选 t:1380 后估算徽标与说明立即消失，恢复精确态
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(armyCostUrl({ civ: 'Mapuche', age: '4', rows, targets: ['t:1380'] }));
+  await page.getByRole('button', { name: '编辑研究' }).click();
+  const targetSection = page.locator('.army-editor-columns fieldset', { has: page.locator('legend', { hasText: '本次目标' }) });
+  await targetSection.getByRole('checkbox', { name: /布图马普/ }).uncheck();
+  await page.getByRole('button', { name: '完成编辑' }).click();
+  await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
+  await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveCount(0);
+  await expect(resultsCard.locator('[data-t="army-estimate-note"]')).toHaveCount(0);
+  await expect(page.locator('[data-t="army-row-estimate-note"]')).toHaveCount(0);
 
   expect(errors).toEqual([]);
 });
