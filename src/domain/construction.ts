@@ -54,8 +54,15 @@ export interface ConstructionLine {
   forgone: number | null;
   extraForgone: number | null;
 }
+export interface ConstructionFieldErrors {
+  builders?: string;
+  baseline?: string;
+  walk?: string;
+  farm?: string;
+}
 export interface ConstructionResult {
   errors: string[];
+  fieldErrors: ConstructionFieldErrors;
   warnings: string[];
   applied: string[];
   selected: Set<number>;
@@ -134,6 +141,7 @@ function change(base: number, c: Command) {
 export function calculateConstruction(ctx: ConstructionContext, config: ConstructionConfig): ConstructionResult {
   const result: ConstructionResult = {
     errors: [],
+    fieldErrors: {},
     warnings: [],
     applied: [],
     selected: new Set(),
@@ -163,8 +171,26 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
     base = count(config.baseline),
     walk = distance(config.walk),
     farm = distance(config.farm);
-  if (n === null || base === null) errors.push(`施工人数和基准人数须为 1–${CONSTRUCTION_LIMIT} 的整数。`);
-  if (walk === null || farm === null) errors.push('采集单程距离须为 0–10 格的有限数，最多三位小数。');
+  if (n === null) {
+    const message = `施工人数须为 1–${CONSTRUCTION_LIMIT} 的整数。`;
+    result.fieldErrors.builders = message;
+    errors.push(message);
+  }
+  if (base === null) {
+    const message = `基准人数须为 1–${CONSTRUCTION_LIMIT} 的整数。`;
+    result.fieldErrors.baseline = message;
+    errors.push(message);
+  }
+  if (walk === null) {
+    const message = '木金石单程距离须为 0–10 格，最多三位小数。';
+    result.fieldErrors.walk = message;
+    errors.push(message);
+  }
+  if (farm === null) {
+    const message = '农田单程距离须为 0–10 格，最多三位小数。';
+    result.fieldErrors.farm = message;
+    errors.push(message);
+  }
   if (config.task !== '' && !(config.task in CONSTRUCTION_TASKS)) errors.push('原采集任务无效。');
   if (typeof config.hasTownCenter !== 'boolean') errors.push('请明确是否已完成过首座城镇中心。');
   const legal = new Set(legalTechs(ctx, config).map((t) => t.id));

@@ -336,3 +336,149 @@ for (const width of [360, 375, 390, 1280])
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: info.outputPath(`garrisonHealing229-${theme}-${width}.png`), fullPage: true });
     });
+
+async function assertHealingNumNwSingleLine(page: Page, selector: string) {
+  const wraps = await page.locator(selector).evaluateAll(
+    (nodes) =>
+      nodes.filter((node) => {
+        const tops = [...node.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top));
+        return tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 4;
+      }).length,
+  );
+  expect(wraps).toBe(0);
+}
+
+test.describe('#1460 驻军回血字段级就近报错、窄屏双列并排与边界反例', () => {
+  for (const [width, height] of [
+    [360, 800],
+    [390, 844],
+    [1280, 800],
+  ] as const) {
+    test(`@${width} 双字段独立/同错、整宽兄弟节点、动态上限与恢复`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto(url());
+
+      // Single field invalid: currentHp = -10
+      await current(page).scrollIntoViewIfNeeded();
+      await current(page).fill('-10');
+      await expect(current(page)).toHaveAttribute('aria-invalid', 'true');
+      await expect(current(page)).toHaveAttribute('aria-describedby', 'healing-error-current-hp');
+      await expect(target(page)).not.toHaveAttribute('aria-invalid');
+      await expect(target(page)).not.toHaveAttribute('aria-describedby');
+      const curErr = page.locator('#healing-error-current-hp');
+      await expect(curErr).toBeVisible();
+      await expect(curErr).toHaveText('当前 HP 须为大于 0 的数字；0 生命不能复活。');
+      await expect(curErr).not.toHaveAttribute('role', 'alert');
+      await expect(page.locator('#healing-error-target-hp')).toHaveCount(0);
+      await expect(page.getByRole('alert')).toHaveCount(1);
+      await expect(copy(page)).toBeDisabled();
+
+      const curBorder = await current(page).evaluate((el) => getComputedStyle(el).borderTopColor);
+      const tgtBorder = await target(page).evaluate((el) => getComputedStyle(el).borderTopColor);
+      expect(curBorder).not.toBe(tgtBorder);
+
+      // Both inputs remain side-by-side and top-aligned; error spans full width below them.
+      const curBox = (await current(page).boundingBox())!;
+      const tgtBox = (await target(page).boundingBox())!;
+      const curErrBox = (await curErr.boundingBox())!;
+      expect(Math.abs(curBox.y - tgtBox.y)).toBeLessThan(2);
+      expect(tgtBox.x).toBeGreaterThan(curBox.x + curBox.width - 1);
+      expect(curErrBox.y).toBeGreaterThanOrEqual(curBox.y + curBox.height - 2);
+      expect(curErrBox.width).toBeGreaterThan(curBox.width + 20);
+      expect(curErrBox.y + curErrBox.height).toBeLessThanOrEqual(height + 2);
+      await assertHealingNumNwSingleLine(page, '#healing-error-current-hp .num.nw');
+
+      // Both fields invalid simultaneously: ordered currentHp -> targetHp.
+      await target(page).fill('999');
+      const tgtErr = page.locator('#healing-error-target-hp');
+      await expect(target(page)).toHaveAttribute('aria-invalid', 'true');
+      await expect(target(page)).toHaveAttribute('aria-describedby', 'healing-error-target-hp');
+      await expect(tgtErr).toBeVisible();
+      await expect(tgtErr).toHaveText('目标 HP 不能超过最大生命 25 HP。');
+      await expect(tgtErr).not.toHaveAttribute('role', 'alert');
+      await expect(page.getByRole('alert')).toHaveCount(1);
+      const curErrBox2 = (await curErr.boundingBox())!;
+      const tgtErrBox = (await tgtErr.boundingBox())!;
+      expect(tgtErrBox.y).toBeGreaterThan(curErrBox2.y);
+      expect(tgtErrBox.width).toBeGreaterThan(tgtBox.width + 20);
+      await assertHealingNumNwSingleLine(page, '.healing-field-error .num.nw');
+
+      // Tab order remains intact while errors are rendered.
+      await current(page).focus();
+      await current(page).press('Tab');
+      await expect(target(page)).toBeFocused();
+
+      // Dynamic maxHp drop when unchecking Loom: only targetHp errors.
+      await current(page).fill('10');
+      await target(page).fill('25');
+      await expect(page.locator('.healing-field-error')).toHaveCount(0);
+      await expect(current(page)).not.toHaveAttribute('aria-invalid');
+      await expect(target(page)).not.toHaveAttribute('aria-invalid');
+      await expect(current(page)).not.toHaveAttribute('aria-describedby');
+      await expect(target(page)).not.toHaveAttribute('aria-describedby');
+
+      const loom = page.getByRole('checkbox', { name: '织布机', exact: true });
+      await loom.check();
+      await target(page).fill('40');
+      await expect(result(page)).toHaveAttribute('data-status', 'valid');
+      await loom.uncheck();
+      await expect(current(page)).not.toHaveAttribute('aria-invalid');
+      await expect(target(page)).toHaveAttribute('aria-invalid', 'true');
+      await expect(target(page)).toHaveAttribute('aria-describedby', 'healing-error-target-hp');
+      await expect(tgtErr).toHaveText('目标 HP 不能超过最大生命 25 HP。');
+
+      // Recovery restores valid calculation and copy button.
+      await target(page).fill('25');
+      await expect(page.locator('.healing-field-error')).toHaveCount(0);
+      await expect(target(page)).not.toHaveAttribute('aria-invalid');
+      await expect(target(page)).not.toHaveAttribute('aria-describedby');
+      await expect(copy(page)).toBeEnabled();
+    });
+  }
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`非法态 Axe WCAG AA 零违规（${theme}）`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await page.goto(url());
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await current(page).fill('0');
+      await target(page).fill('999');
+      await expect(page.locator('.healing-field-error')).toHaveCount(2);
+      const violations = (await new AxeBuilder({ page }).include('[data-testid="garrison-healing-page"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
+      expect(violations).toEqual([]);
+    });
+  }
+
+  test('锁定态与边界反例零误标', async ({ page }) => {
+    // Locked broken link: single alert, no aria-invalid / inline error on disabled inputs.
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(url({ current: '-10' }));
+    await expect(page.getByRole('alert')).toHaveCount(1);
+    await expect(panel(page).locator('[aria-invalid="true"]')).toHaveCount(0);
+    await expect(panel(page).locator('[aria-describedby]')).toHaveCount(0);
+    await expect(page.locator('.healing-field-error')).toHaveCount(0);
+
+    // Complete state (currentHp >= targetHp): zero field errors.
+    await page.goto(url({ current: '20', target: '10' }));
+    await expect(result(page)).toHaveAttribute('data-status', 'complete');
+    await expect(panel(page).locator('[aria-invalid="true"]')).toHaveCount(0);
+    await expect(page.locator('.healing-field-error')).toHaveCount(0);
+
+    // Aztec monk with Sanctity + Herbal Medicine (beforeHerbal invalid, main valid): zero field errors.
+    await page.goto(url({ civ: 'Aztecs', u: '125', techs: '231,441', target: '55' }));
+    await expect(result(page)).toHaveAttribute('data-status', 'valid');
+    await expect(page.getByTestId('healing-before')).toHaveAttribute('data-status', 'invalid');
+    await expect(panel(page).locator('[aria-invalid="true"]')).toHaveCount(0);
+    await expect(page.locator('.healing-field-error')).toHaveCount(0);
+
+    // Mule cart (maxHp === null): negative currentHp errors, 10/20 has zero field errors.
+    await page.goto(url({ b: '1806', civ: 'Armenians', u: '1808', current: '10', target: '20' }));
+    await expect(result(page)).toHaveAttribute('data-status', 'unverified');
+    await expect(panel(page).locator('[aria-invalid="true"]')).toHaveCount(0);
+    await current(page).fill('-1');
+    await expect(current(page)).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.locator('#healing-error-current-hp')).toHaveText('当前 HP 须为大于 0 的数字；0 生命不能复活。');
+    await expect(target(page)).not.toHaveAttribute('aria-invalid');
+  });
+});

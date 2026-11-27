@@ -236,4 +236,62 @@ describe('#229 strict share configuration', () => {
     expect(healingLink(ctx, { buildingId: 1806, civ: 'Britons', age: 3 })).toBeNull();
     expect(healingLink(ctx, { buildingId: 999999, civ: 'Britons', age: 3 })).toBeNull();
   });
+  it('reports independent currentHp and targetHp fieldErrors with dynamic maxHp and boundary counterexamples (issue 1460)', () => {
+    const badCurrent = calc({ currentHp: '-10' });
+    expect(badCurrent.fieldErrors).toEqual({ currentHp: '当前 HP 须为大于 0 的数字；0 生命不能复活。' });
+    expect(badCurrent.errors).toEqual(['当前 HP 须为大于 0 的数字；0 生命不能复活。']);
+
+    const infCurrent = calc({ currentHp: 'Infinity' });
+    expect(infCurrent.fieldErrors).toEqual({ currentHp: '当前 HP 须为大于 0 的数字；0 生命不能复活。' });
+    expect(infCurrent.errors).toEqual(['当前 HP 须为大于 0 的数字；0 生命不能复活。']);
+
+    const badTarget = calc({ targetHp: '0' });
+    expect(badTarget.fieldErrors).toEqual({ targetHp: '目标 HP 须为大于 0 的数字。' });
+    expect(badTarget.errors).toEqual(['目标 HP 须为大于 0 的数字。']);
+
+    const overTarget = calc({ targetHp: '999' });
+    expect(overTarget.fieldErrors).toEqual({ targetHp: '目标 HP 不能超过最大生命 25 HP。' });
+    expect(overTarget.errors).toEqual(['目标 HP 不能超过最大生命 25 HP。']);
+
+    const overWithLoom = calc({ techs: [22], targetHp: '41' });
+    expect(overWithLoom.fieldErrors).toEqual({ targetHp: '目标 HP 不能超过最大生命 40 HP。' });
+
+    const bothBad = calc({ currentHp: '0', targetHp: '999' });
+    expect(bothBad.fieldErrors).toEqual({
+      currentHp: '当前 HP 须为大于 0 的数字；0 生命不能复活。',
+      targetHp: '目标 HP 不能超过最大生命 25 HP。',
+    });
+    expect(bothBad.errors).toEqual(['当前 HP 须为大于 0 的数字；0 生命不能复活。', '目标 HP 不能超过最大生命 25 HP。']);
+
+    const overCurrentOnly = calc({ currentHp: '30', targetHp: '20' });
+    expect(overCurrentOnly.fieldErrors).toEqual({ currentHp: '当前 HP 不能超过最大生命 25 HP。' });
+
+    // Complete state (currentHp >= targetHp) must not report field errors.
+    const complete = calc({ currentHp: '20', targetHp: '10' });
+    expect(complete.status).toBe('complete');
+    expect(complete.fieldErrors).toEqual({});
+    expect(complete.errors).toEqual([]);
+
+    // Aztec monk with Sanctity + Herbal Medicine: beforeHerbal fails maxHp=50, main stays valid with zero fieldErrors.
+    const aztec = calc({ civ: 'Aztecs', unitId: 125, techs: [231, 441], currentHp: '10', targetHp: '55' });
+    expect(aztec.status).toBe('valid');
+    expect(aztec.beforeHerbal.status).toBe('invalid');
+    expect(aztec.fieldErrors).toEqual({});
+
+    // Unverified maxHp === null (mule cart): format check applies, over-max check does not.
+    const muleBad = calc({ buildingId: 1806, civ: 'Armenians', unitId: 1808, currentHp: '-1', targetHp: '20' });
+    expect(muleBad.status).toBe('invalid');
+    expect(muleBad.fieldErrors).toEqual({ currentHp: '当前 HP 须为大于 0 的数字；0 生命不能复活。' });
+    const muleValid = calc({ buildingId: 1806, civ: 'Armenians', unitId: 1808, currentHp: '10', targetHp: '20' });
+    expect(muleValid.status).toBe('unverified');
+    expect(muleValid.fieldErrors).toEqual({});
+
+    // Non-field errors leave fieldErrors empty.
+    const ineligible = calc({ buildingId: 104, unitId: 125, entry: 'enter' });
+    expect(ineligible.status).toBe('ineligible');
+    expect(ineligible.fieldErrors).toEqual({});
+    const badTech = calc({ techs: [999999] });
+    expect(badTech.errors.length).toBeGreaterThan(0);
+    expect(badTech.fieldErrors).toEqual({});
+  });
 });

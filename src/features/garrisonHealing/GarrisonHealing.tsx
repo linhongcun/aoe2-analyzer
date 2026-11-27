@@ -19,12 +19,25 @@ import { getGarrisonBuildingAge, type GarrisonCandidate, type GarrisonEntry } fr
 import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './garrisonHealing.css';
 
 const num = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
+const NUM_UNIT_RE = /(\d+(?:\.\d+)?(?:\s*(?:生命|HP))?)/g;
+function renderNumText(text: string) {
+  return text.split(NUM_UNIT_RE).map((part, index) =>
+    index % 2 === 1 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 const ENTRY_LABEL: Record<GarrisonEntry, string> = { enter: '从外部进入', created: '生产后留驻', deposit: '存放圣物' };
 const entries = (candidate: GarrisonCandidate | undefined): GarrisonEntry[] => [
   ...(candidate?.canEnter ? ['enter' as const] : []),
@@ -82,6 +95,8 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
   const selected = new Set([...result.selected, ...free]);
   const locked = decoded.errors.length > 0;
   const errors = [...new Set([...decoded.errors, ...result.errors])];
+  const currentHpError = !locked ? result.fieldErrors.currentHp : undefined;
+  const targetHpError = !locked ? result.fieldErrors.targetHp : undefined;
   const unitName = candidate?.zh ?? ctx.core.unitById[config.unitId]?.zh ?? `单位 ${config.unitId}`;
   const blocked = locked || result.status === 'invalid';
   const unshareable = blocked || (result.status === 'ineligible' && config.entry !== 'deposit');
@@ -234,6 +249,8 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
                 type="text"
                 inputMode="decimal"
                 aria-label="当前 HP"
+                aria-invalid={currentHpError ? true : undefined}
+                aria-describedby={currentHpError ? 'healing-error-current-hp' : undefined}
                 value={config.currentHp}
                 onChange={(event) => update({ ...config, currentHp: event.target.value })}
               />
@@ -244,10 +261,28 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
                 type="text"
                 inputMode="decimal"
                 aria-label="目标 HP"
+                aria-invalid={targetHpError ? true : undefined}
+                aria-describedby={targetHpError ? 'healing-error-target-hp' : undefined}
                 value={config.targetHp}
                 onChange={(event) => update({ ...config, targetHp: event.target.value })}
               />
             </label>
+            {(currentHpError || targetHpError) && (
+              <div className="healing-span healing-field-errors">
+                {currentHpError && (
+                  <p id="healing-error-current-hp" className="healing-field-error">
+                    <Icon name="triangle-alert" />
+                    <span>{renderNumText(currentHpError)}</span>
+                  </p>
+                )}
+                {targetHpError && (
+                  <p id="healing-error-target-hp" className="healing-field-error">
+                    <Icon name="triangle-alert" />
+                    <span>{renderNumText(targetHpError)}</span>
+                  </p>
+                )}
+              </div>
+            )}
           </fieldset>
           <p className="note" data-testid="healing-max-hp">
             所选单位最大 HP：{result.maxHp === null ? '待核实' : <strong className="healing-number">{num(result.maxHp)} HP</strong>}。
@@ -304,7 +339,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
               {!locked && (
                 <ul>
                   {errors.map((error) => (
-                    <li key={error}>{error}</li>
+                    <li key={error}>{renderNumText(error)}</li>
                   ))}
                 </ul>
               )}

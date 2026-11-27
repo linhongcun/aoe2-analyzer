@@ -41,8 +41,13 @@ export interface HealingComparison {
   hpPerMinute: number | null;
   seconds: number | null;
 }
+export interface HealingFieldErrors {
+  currentHp?: string;
+  targetHp?: string;
+}
 export interface HealingResult extends HealingComparison {
   errors: string[];
+  fieldErrors: HealingFieldErrors;
   warnings: string[];
   selected: number[];
   free: number[];
@@ -231,13 +236,27 @@ export function calculateGarrisonHealing(ctx: HealingContext, c: HealingConfig, 
     const tech = ctx.core.techById[id];
     if (tech?.pre && available.has(tech.pre) && !selected.includes(tech.pre)) errors.push(`${tech.zh}缺少前置科技。`);
   }
-  if (!validHp(c.currentHp) || !validHp(c.targetHp)) errors.push('当前生命和目标生命须为大于 0 的有限数字；0 生命不能复活。');
+  const fieldErrors: HealingFieldErrors = {};
   const maxHp = maxHealingHp(ctx, c);
-  if (maxHp !== null && (Number(c.currentHp) > maxHp || Number(c.targetHp) > maxHp)) errors.push(`当前生命和目标生命均不能超过最大生命 ${maxHp}。`);
+  if (!validHp(c.currentHp)) {
+    fieldErrors.currentHp = '当前 HP 须为大于 0 的数字；0 生命不能复活。';
+    errors.push(fieldErrors.currentHp);
+  } else if (maxHp !== null && Number(c.currentHp) > maxHp) {
+    fieldErrors.currentHp = `当前 HP 不能超过最大生命 ${maxHp} HP。`;
+    errors.push(fieldErrors.currentHp);
+  }
+  if (!validHp(c.targetHp)) {
+    fieldErrors.targetHp = '目标 HP 须为大于 0 的数字。';
+    errors.push(fieldErrors.targetHp);
+  } else if (maxHp !== null && Number(c.targetHp) > maxHp) {
+    fieldErrors.targetHp = `目标 HP 不能超过最大生命 ${maxHp} HP。`;
+    errors.push(fieldErrors.targetHp);
+  }
   const unavailable = emptyComparison('unverified', '尚不能比较此配置。', maxHp);
   const result: HealingResult = {
     ...emptyComparison('invalid', errors[0] ?? '', maxHp),
     errors,
+    fieldErrors,
     warnings,
     selected,
     free,

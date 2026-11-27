@@ -6,6 +6,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { ToolGrid } from '../../shared/ui/ToolShell';
 import {
@@ -24,6 +25,18 @@ import { useShareLink } from '../../shared/ui/useShareLink';
 import './construction.css';
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
+const NUM_UNIT_RE = /(\d+(?:\.\d+)?(?:[–-]\d+(?:\.\d+)?)?(?:\s*格)?)/g;
+function renderNumText(text: string) {
+  return text.split(NUM_UNIT_RE).map((part, index) =>
+    index % 2 === 1 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 export default function Construction() {
   const core = useCore(),
     trees = useTrees(),
@@ -52,6 +65,22 @@ export default function Construction() {
     result = calculateConstruction(ctx, config);
   const errors = [...decoded.errors, ...result.errors],
     locked = decoded.errors.length > 0;
+  const fieldHint = (id: string, message: string | undefined) => {
+    if (locked || !message) return { props: {}, hint: null };
+    return {
+      props: { 'aria-invalid': true as const, 'aria-describedby': id },
+      hint: (
+        <span id={id} className="construction-field-error">
+          <Icon name="triangle-alert" />
+          <span>{renderNumText(message)}</span>
+        </span>
+      ),
+    };
+  };
+  const buildersError = fieldHint('construction-error-builders', result.fieldErrors.builders);
+  const baselineError = fieldHint('construction-error-baseline', result.fieldErrors.baseline);
+  const walkError = fieldHint('construction-error-walk', result.fieldErrors.walk);
+  const farmError = fieldHint('construction-error-farm', result.fieldErrors.farm);
   const update = (next: ConstructionConfig) => {
     if (locked) return;
     const search = '?' + encodeConstruction(next);
@@ -110,7 +139,7 @@ export default function Construction() {
           <p>方案链接损坏，已暂停计算与编辑。请显式重置。</p>
           <ul>
             {decoded.errors.map((e) => (
-              <li key={e}>{e}</li>
+              <li key={e}>{renderNumText(e)}</li>
             ))}
           </ul>
         </div>
@@ -153,11 +182,25 @@ export default function Construction() {
               </label>
               <label>
                 施工人数
-                <input aria-label="施工人数" inputMode="numeric" value={config.builders} onChange={(e) => update({ ...config, builders: e.target.value })} />
+                <input
+                  {...buildersError.props}
+                  aria-label="施工人数"
+                  inputMode="numeric"
+                  value={config.builders}
+                  onChange={(e) => update({ ...config, builders: e.target.value })}
+                />
+                {buildersError.hint}
               </label>
               <label>
                 基准人数
-                <input aria-label="基准人数" inputMode="numeric" value={config.baseline} onChange={(e) => update({ ...config, baseline: e.target.value })} />
+                <input
+                  {...baselineError.props}
+                  aria-label="基准人数"
+                  inputMode="numeric"
+                  value={config.baseline}
+                  onChange={(e) => update({ ...config, baseline: e.target.value })}
+                />
+                {baselineError.hint}
               </label>
             </div>
             <label className="construction-check">
@@ -191,11 +234,11 @@ export default function Construction() {
             完工与工时
           </h2>
           {errors.length > 0 ? (
-            <div className="construction-errors" role="alert">
+            <div className="construction-errors" role={locked ? undefined : 'alert'}>
               <p>当前方案无法计算，请修正以下项目：</p>
               <ul>
                 {[...new Set(errors)].map((e) => (
-                  <li key={e}>{e}</li>
+                  <li key={e}>{renderNumText(e)}</li>
                 ))}
               </ul>
               <button type="button" className="btn" onClick={reset}>
@@ -275,15 +318,24 @@ export default function Construction() {
             <label>
               木金石单程距离
               <input
+                {...walkError.props}
                 aria-label="施工停采木金石单程距离"
                 inputMode="decimal"
                 value={config.walk}
                 onChange={(e) => update({ ...config, walk: e.target.value })}
               />
+              {walkError.hint}
             </label>
             <label>
               农田单程距离
-              <input aria-label="施工停采农田单程距离" inputMode="decimal" value={config.farm} onChange={(e) => update({ ...config, farm: e.target.value })} />
+              <input
+                {...farmError.props}
+                aria-label="施工停采农田单程距离"
+                inputMode="decimal"
+                value={config.farm}
+                onChange={(e) => update({ ...config, farm: e.target.value })}
+              />
+              {farmError.hint}
             </label>
           </div>
         </fieldset>
