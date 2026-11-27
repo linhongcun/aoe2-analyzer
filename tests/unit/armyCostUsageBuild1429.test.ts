@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
@@ -11,7 +11,7 @@ import { armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } fro
 import { civBonuses } from '../../src/domain/civBonus';
 import { DAT } from '../../src/domain/datEffects';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
-import { buildArmyCostUsage } from '../../scripts/army_cost_usage_lib';
+import { buildArmyCostUsage, formatArmyCostUsageJson } from '../../scripts/army_cost_usage_lib';
 
 let ctx: ProductionContext;
 beforeAll(async () => {
@@ -245,37 +245,36 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     expect(built.bonuses['Bohemians-0']).toEqual({ tids: [45], allFree: false, ecoOnlyUnits: [] });
   });
 
-  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，冷生成一致', async () => {
+  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，CLI 与全量复现一致', async () => {
     const execFileAsync = promisify(execFile);
+    const viteNodeBin = resolve('node_modules/.bin/vite-node');
     const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
+    const runBuild = (...args: string[]) => execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', ...args], { cwd: tempDir });
     try {
-      mkdirSync(join(tempDir, 'data'), { recursive: true });
-      cpSync(resolve('src'), join(tempDir, 'src'), { recursive: true });
-      cpSync(resolve('scripts'), join(tempDir, 'scripts'), { recursive: true });
-      cpSync(resolve('data/game'), join(tempDir, 'data/game'), { recursive: true });
-      cpSync(resolve('data/sources'), join(tempDir, 'data/sources'), { recursive: true });
-      cpSync(resolve('data/patch-notes'), join(tempDir, 'data/patch-notes'), { recursive: true });
-      cpSync(resolve('package.json'), join(tempDir, 'package.json'));
-      cpSync(resolve('tsconfig.json'), join(tempDir, 'tsconfig.json'));
-      cpSync(resolve('vite.config.ts'), join(tempDir, 'vite.config.ts'));
-      symlinkSync(resolve('node_modules'), join(tempDir, 'node_modules'));
+      for (const sub of ['scripts', 'data/game', 'data/game-other', 'node_modules']) {
+        mkdirSync(join(tempDir, sub), { recursive: true });
+      }
+      // 仅复制 2 个入口脚本使 ROOT 落到 tempDir，其余目录/node_modules 用只读符号链接（排除 .vite*）避免整仓拷贝与缓存回写
+      cpSync(resolve('scripts/army_cost_usage_build.ts'), join(tempDir, 'scripts/army_cost_usage_build.ts'));
+      cpSync(resolve('scripts/army_cost_usage_lib.ts'), join(tempDir, 'scripts/army_cost_usage_lib.ts'));
+      for (const rel of ['src', 'data/sources', 'data/patch-notes', 'package.json', 'tsconfig.json', 'vite.config.ts']) {
+        symlinkSync(resolve(rel), join(tempDir, rel));
+      }
+      for (const entry of readdirSync(resolve('node_modules'))) {
+        if (!entry.startsWith('.vite')) symlinkSync(resolve('node_modules', entry), join(tempDir, 'node_modules', entry));
+      }
+      for (const name of readdirSync(resolve('data/game'))) {
+        if (name !== 'army_cost_usage.json') symlinkSync(resolve('data/game', name), join(tempDir, 'data/game', name));
+      }
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
+      const nestedInGame = join(tempDir, 'data/game/nested/out.json');
+      const siblingGameOut = join(tempDir, 'data/game-other/out.json');
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
-      unlinkSync(target);
+      const subsetOut = join(tempDir, 'spanish-usage.json');
 
-      const viteNodeBin = resolve('node_modules/.bin/vite-node');
-      // 1) 即使预加载将 Error.stackTraceLimit 设为 0，普通 vite-node --check 缺文件仍必须报错而非静默退出 0
       const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
       writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
-      await expect(
-        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
-          cwd: tempDir,
-          env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
-        }),
-      ).rejects.toThrow();
-
-      // 2) 即使改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
       writeFileSync(
         join(tempDir, 'import-lib-static.ts'),
         "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
@@ -284,25 +283,50 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         join(tempDir, 'import-lib-spoof.ts'),
         "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
       );
-      for (const args of [
-        ['import-lib-static.ts', '--out', unexpectedOut],
-        ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
-        ['import-lib-spoof.ts', '--out', unexpectedOut],
-      ]) {
-        const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
-        expect(stdout.trim()).toBe('function');
-        expect(existsSync(unexpectedOut), args.join(' ')).toBe(false);
-        expect(existsSync(target), args.join(' ')).toBe(false);
-      }
 
-      // 3) 普通模式冷生成，并以普通模式与 --script 模式双验证 --check
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts'], { cwd: tempDir });
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
-      await execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
+      // 1) Error.stackTraceLimit=0 缺文件仍报错；--civ 防误写默认快照/data/game 与参数校验；伪造 prepareStackTrace 导入纯库零写入；普通模式写出子集
+      await Promise.all([
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
+            cwd: tempDir,
+            env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
+          }),
+        ).rejects.toThrow(),
+        expect(runBuild('--civ', 'Spanish')).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', target)).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', nestedInGame)).rejects.toThrow(/--out/),
+        expect(runBuild('--civ', 'Spanish', '--out', '--check')).rejects.toThrow(/--out/),
+        ...[
+          ['import-lib-static.ts', '--out', unexpectedOut],
+          ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
+          ['import-lib-spoof.ts', '--out', unexpectedOut],
+        ].map(async (args) => {
+          const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
+          expect(stdout.trim()).toBe('function');
+        }),
+        runBuild('--civ', 'Spanish', '--out', subsetOut),
+        runBuild('--civ', 'Spanish', '--out', siblingGameOut),
+      ]);
+      expect(existsSync(unexpectedOut)).toBe(false);
+      expect(existsSync(target)).toBe(false);
+      expect(existsSync(nestedInGame)).toBe(false);
 
-      expect(readFileSync(target, 'utf8')).toBe(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8'));
+      // 2) 普通模式与 --script 模式双验证 --check，并核对单文明输出及已提交全量快照一致性
+      await Promise.all([
+        runBuild('--civ', 'Spanish', '--check', '--out', subsetOut),
+        execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
+        runBuild('--civ', 'Spanish', '--check', '--out', siblingGameOut),
+      ]);
+
+      const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
+      const expectedSpanishJson = formatArmyCostUsageJson(builtSpanish);
+      expect(readFileSync(subsetOut, 'utf8')).toBe(expectedSpanishJson);
+      expect(readFileSync(siblingGameOut, 'utf8')).toBe(expectedSpanishJson);
+      const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;
+      expect(builtSpanish.meta).toEqual(committed.meta);
+      expect(builtSpanish.bonuses['Spanish-2']).toEqual(committed.bonuses['Spanish-2']);
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }
-  }, 90_000);
+  }, 30_000);
 });
