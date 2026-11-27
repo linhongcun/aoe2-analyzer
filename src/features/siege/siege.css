@@ -52,6 +52,7 @@
 }
 .siege-page button:disabled {
   opacity: 0.55;
+  cursor: not-allowed;
 }
 .siege-page :is(button, input, select, a):focus-visible {
   outline: 2px solid var(--color-accent);
@@ -145,9 +146,16 @@
   padding: 0;
   border-radius: var(--radius-sm);
 }
+.siege-stepper button:first-child {
+  border-radius: 7px 0 0 7px;
+}
+.siege-stepper button:last-child {
+  border-radius: 0 7px 7px 0;
+}
 .siege-stepper input {
   width: 52px;
   min-height: 44px;
+  box-sizing: border-box;
   border: 0;
   border-left: 1px solid var(--color-border);
   border-right: 1px solid var(--color-border);
@@ -155,13 +163,31 @@
   text-align: center;
   font-size: 16px;
   font-weight: 600;
-  padding: 0;
+  padding: 0 4px;
   background: var(--color-surface);
   color: var(--color-text);
-  appearance: textfield;
 }
-.siege-stepper input::-webkit-inner-spin-button {
-  appearance: none;
+.siege-stepper.is-invalid {
+  border-color: var(--color-bad);
+}
+.siege-stepper.is-invalid input {
+  background: var(--color-bad-soft);
+  border-left-color: var(--color-bad);
+  border-right-color: var(--color-bad);
+  color: var(--color-text);
+}
+.siege-field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 6px 0 0;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--color-bad);
+}
+.siege-field-error .ic {
+  margin-top: 1px;
+  color: var(--color-bad);
 }
 .siege-armor,
 .siege-techs {
@@ -442,6 +468,29 @@
 .siege-unverified .fblink:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+.siege-invalid {
+  border: 1px solid var(--color-bad);
+  background: var(--color-bad-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  color: var(--color-text);
+}
+.siege-invalid h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bad);
+}
+.siege-invalid p {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--color-text);
 }
 @media (min-width: 960px) {
   .siege-grid {

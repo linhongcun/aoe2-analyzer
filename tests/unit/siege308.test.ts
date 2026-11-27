@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import buildingsRaw from '../../data/game/buildings.json';
 import { unit, tech } from './helpers';
 import type { Building } from '../../src/domain/types';
-import { calculateSiege, decodeSiege, encodeSiege, SIEGE_MAX_COUNT } from '../../src/domain/siege';
+import { calculateSiege, decodeSiege, encodeSiege, parseSiegeCountInput, SIEGE_MAX_COUNT } from '../../src/domain/siege';
+import { canStepQuantity, stepQuantity } from '../../src/domain/qtyStepper';
 import { score, TIER, withSearchPy } from '../../src/domain/search';
 
 const buildings = buildingsRaw as unknown as Building[];
@@ -67,5 +68,40 @@ describe('攻城拆建筑 #308', () => {
     expect(config.armor).toEqual([50, 51]);
     expect(decodeSiege('?' + encodeSiege(config), catalog)).toEqual(config);
     expect(decodeSiege('?bldg=117&armor=50,51&civ=Unknown', catalog)).toMatchObject({ armor: [], civ: '' });
+  });
+});
+
+describe('Issue 1472: 攻城数量输入严格正整数校验与步进恢复', () => {
+  const bounds = { min: 1, max: SIEGE_MAX_COUNT };
+
+  it.each([
+    ['1', 1],
+    ['4', 4],
+    ['6', 6],
+    [String(SIEGE_MAX_COUNT), SIEGE_MAX_COUNT],
+  ])('合法正整数 %j 解析为 %i', (raw, expected) => {
+    expect(parseSiegeCountInput(raw)).toBe(expected);
+  });
+
+  it.each(['', '0', '-1', String(SIEGE_MAX_COUNT + 1), '1.5', 'abc', '1e2', ' 4', '4 ', ' 4 ', '+4', '04', '99999999999999999999'])(
+    '非法草稿 %j 返回 null',
+    (raw) => {
+      expect(parseSiegeCountInput(raw)).toBeNull();
+    },
+  );
+
+  it('复用 qtyStepper 对非法草稿的禁用与恢复行为覆盖全部边界', () => {
+    expect([canStepQuantity('41', -1, bounds), canStepQuantity('41', 1, bounds)]).toEqual([true, false]);
+    expect(stepQuantity('41', -1, bounds)).toBe('40');
+    for (const low of ['0', '-1', '']) {
+      expect([canStepQuantity(low, -1, bounds), canStepQuantity(low, 1, bounds)]).toEqual([false, true]);
+      expect(stepQuantity(low, 1, bounds)).toBe('1');
+    }
+    expect([canStepQuantity('1.5', -1, bounds), canStepQuantity('1.5', 1, bounds)]).toEqual([true, true]);
+    expect([stepQuantity('1.5', -1, bounds), stepQuantity('1.5', 1, bounds)]).toEqual(['1', '2']);
+    for (const nonDec of ['abc', '1e2']) {
+      expect([canStepQuantity(nonDec, -1, bounds), canStepQuantity(nonDec, 1, bounds)]).toEqual([true, true]);
+      expect([stepQuantity(nonDec, -1, bounds), stepQuantity(nonDec, 1, bounds)]).toEqual(['1', '1']);
+    }
   });
 });

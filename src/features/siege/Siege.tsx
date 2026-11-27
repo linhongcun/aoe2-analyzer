@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { civs, type Core } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
+import { canStepQuantity, stepQuantity } from '../../domain/qtyStepper';
 import {
   calculateSiege,
   decideSiegeCanonical,
   decodeSiege,
   encodeSiege,
+  parseSiegeCountInput,
   siegeArmorTechs,
   siegeAttackerTechs,
   siegeUnitCounter,
@@ -33,6 +35,7 @@ const num = (n: number) => String(Number(n.toFixed(2)));
 const real = (n: number) => n.toFixed(1);
 const buildingIcon = (id: number): IconName => (id === 82 ? 'castle' : id === 79 ? 'tower-control' : 'building-2');
 const ONE_REASON = new Set([SIEGE_MANGONEL_REASON, SIEGE_STONE_DEFENSE_REASON]);
+const SIEGE_COUNT_BOUNDS = { min: 1, max: SIEGE_MAX_COUNT } as const;
 const unverifiedBody = (reason: string) => (ONE_REASON.has(reason) ? reason : `${reason} 核实前不显示击数与用时，避免给出错误数字。`);
 
 export default function Siege() {
@@ -50,21 +53,38 @@ export default function Siege() {
 function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const catalog = useMemo(() => ({ ...core, trees }), [core, trees]);
   const config = useMemo(() => decodeSiege(location.search, catalog), [location.search, catalog]);
   const canonical = '?' + encodeSiege(config);
+  const [observed, setObserved] = useState({ key: location.key, search: location.search });
+  const [countDraft, setCountDraft] = useState<{ search: string; fromSearch?: string; value: string } | null>(null);
+  const locationChanged = observed.key !== location.key || observed.search !== location.search;
+  const syncedDraft = locationChanged
+    ? navigationType === 'REPLACE' && countDraft?.search === location.search
+      ? { search: location.search, value: countDraft.value }
+      : null
+    : countDraft;
+  if (locationChanged) {
+    setObserved({ key: location.key, search: location.search });
+    if (syncedDraft !== countDraft) setCountDraft(syncedDraft);
+  }
+  const activeDraft = syncedDraft && (syncedDraft.search === location.search || syncedDraft.fromSearch === location.search) ? syncedDraft.value : null;
+  const isCountInvalid = activeDraft !== null;
+  const countInputValue = activeDraft ?? String(config.n);
+  const canDecrement = canStepQuantity(countInputValue, -1, SIEGE_COUNT_BOUNDS);
+  const canIncrement = canStepQuantity(countInputValue, 1, SIEGE_COUNT_BOUNDS);
   // HashRouter 的 replace 导航调用 history.replaceState，保持分享状态且不堆积编辑历史。
   // 读地址栏而不是这次渲染的 location：下一次导航可能已经写进 hash，旧的 replace 不能把它盖回去。
   useEffect(() => {
     if (decideSiegeCanonical(window.location.hash, canonical).kind === 'replace') navigate({ pathname: '/siege', search: canonical }, { replace: true });
   }, [canonical, location.search, navigate]);
   const [garrison, setGarrison] = useState(false);
-  const [emptyCount, setEmptyCount] = useState<string | null>(null);
-  const share = useShareLink({ stateKey: canonical });
+  const share = useShareLink({ stateKey: JSON.stringify([canonical, activeDraft]) });
   const u = core.unitById[config.unit]!;
   const b = core.buildingById[config.bldg]!;
   const attackerTechs = useMemo(() => siegeAttackerTechs(u, config.civ, catalog), [u, config.civ, catalog]);
-  const result = calculateSiege(u, b, config.n, config.civ, config.armor, config.techs, catalog);
+  const result = isCountInvalid ? null : calculateSiege(u, b, config.n, config.civ, config.armor, config.techs, catalog);
   const armorTechs = siegeArmorTechs(b);
   const counter = siegeUnitCounter(u.id);
   const civNote = siegeCivNote(u, config.civ, attackerTechs, config.techs);
@@ -80,12 +100,28 @@ function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
     </>
   );
   const update = (patch: Partial<SiegeConfig>) => {
-    setEmptyCount(null);
+    const clearsDraft = patch.n !== undefined;
     const next = decodeSiege('?' + encodeSiege({ ...config, ...patch }), catalog);
+    const nextSearch = '?' + encodeSiege(next);
+    if (clearsDraft) {
+      setCountDraft(null);
+    } else if (activeDraft !== null) {
+      setCountDraft(
+        nextSearch !== location.search ? { search: nextSearch, fromSearch: location.search, value: activeDraft } : { search: nextSearch, value: activeDraft },
+      );
+    }
     if (next.bldg !== config.bldg) setGarrison(false);
-    navigate({ pathname: '/siege', search: '?' + encodeSiege(next) }, { replace: true });
+    if (nextSearch !== location.search) {
+      navigate({ pathname: '/siege', search: nextSearch }, { replace: true });
+    }
   };
   const changeCount = (value: number) => update({ n: Math.max(1, Math.min(SIEGE_MAX_COUNT, value)) });
+  const onCountChange = (raw: string) => {
+    const parsed = parseSiegeCountInput(raw);
+    if (parsed === null) {
+      setCountDraft(canonical !== location.search ? { search: canonical, fromSearch: location.search, value: raw } : { search: canonical, value: raw });
+    } else update({ n: parsed });
+  };
   const shareControls = (
     <div className="siege-share">
       {/* 常驻 live region：只播报「已复制」等状态，改输入不重读结果卡。 */}
@@ -114,7 +150,10 @@ function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
           {
             label: share.copied ? '已复制' : '复制分享链接',
             icon: 'copy',
-            onClick: () => void share.copy(window.location.href),
+            disabled: isCountInvalid,
+            onClick: () => {
+              if (!isCountInvalid) void share.copy(window.location.href);
+            },
           },
         ]}
       />
@@ -139,37 +178,50 @@ function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
             <div className="siege-field">
               <label htmlFor="siege-count">数量</label>
               <div className="siege-quantity">
-                <div className="siege-stepper">
-                  <button type="button" aria-label={`减少一${counter}`} disabled={config.n === 1} onClick={() => changeCount(config.n - 1)}>
+                <div className={isCountInvalid ? 'siege-stepper is-invalid' : 'siege-stepper'}>
+                  <button
+                    type="button"
+                    aria-label={`减少一${counter}`}
+                    disabled={!canDecrement}
+                    onClick={() => changeCount(Number(stepQuantity(countInputValue, -1, SIEGE_COUNT_BOUNDS)))}
+                  >
                     <Icon name="minus" />
                   </button>
                   <input
                     id="siege-count"
                     className="num"
-                    type="number"
+                    type="text"
                     inputMode="numeric"
-                    min={1}
-                    max={SIEGE_MAX_COUNT}
-                    step={1}
-                    value={emptyCount === canonical ? '' : config.n}
-                    onChange={(e) => {
-                      if (!e.target.value) setEmptyCount(canonical);
-                      else update({ n: Number(e.target.value) });
-                    }}
-                    onBlur={() => setEmptyCount(null)}
+                    value={countInputValue}
+                    aria-invalid={isCountInvalid ? true : undefined}
+                    aria-describedby={isCountInvalid ? 'siege-count-error' : undefined}
+                    onChange={(e) => onCountChange(e.target.value)}
                   />
-                  <button type="button" aria-label={`增加一${counter}`} disabled={config.n === SIEGE_MAX_COUNT} onClick={() => changeCount(config.n + 1)}>
+                  <button
+                    type="button"
+                    aria-label={`增加一${counter}`}
+                    disabled={!canIncrement}
+                    onClick={() => changeCount(Number(stepQuantity(countInputValue, 1, SIEGE_COUNT_BOUNDS)))}
+                  >
                     <Icon name="plus" />
                   </button>
                 </div>
                 <div className="siege-chips" role="group" aria-label="常用数量">
                   {[1, 4, 6].map((n) => (
-                    <button type="button" className="num" key={n} aria-pressed={config.n === n} onClick={() => changeCount(n)}>
+                    <button type="button" className="num" key={n} aria-pressed={!isCountInvalid && config.n === n} onClick={() => changeCount(n)}>
                       {n}
                     </button>
                   ))}
                 </div>
               </div>
+              {isCountInvalid && (
+                <p id="siege-count-error" className="siege-field-error">
+                  <Icon name="triangle-alert" />
+                  <span>
+                    数量须为 <span className="num nw">1–{SIEGE_MAX_COUNT}</span> 的整数。
+                  </span>
+                </p>
+              )}
             </div>
             <div className="siege-field">
               <label htmlFor="siege-civ">攻方文明</label>
@@ -278,64 +330,82 @@ function SiegeTool({ core, trees }: { core: Core; trees: Trees }) {
               按展开态持续攻击；不含打包／展开切换，耗时待确认。
             </p>
           )}
-          <div aria-live="polite" aria-atomic="true">
-            {result.verified ? (
-              <section className="siege-result" data-testid="siege-result" aria-labelledby="siege-result-title">
-                <h2 id="siege-result-title">{title}</h2>
-                <div className="siege-conds" data-testid="siege-conditions">
-                  <span className="siege-cond nw">{conditions.civText}</span>
-                  <span className={conditions.techActive ? 'siege-cond siege-cond-active' : 'siege-cond siege-cond-muted'}>
-                    {conditions.techActive && <Icon name="flask-conical" />}
-                    <span>{conditions.techText}</span>
-                  </span>
-                  {conditions.armorText && <span className="siege-cond">{conditions.armorText}</span>}
-                </div>
-                <dl className="siege-metrics">
-                  <div>
-                    <dt>击数</dt>
-                    <dd className="num" data-testid="siege-hits">
-                      {result.hits}
-                    </dd>
+          {isCountInvalid ? (
+            <section className="siege-invalid" data-testid="siege-invalid" role="alert" aria-labelledby="siege-invalid-title">
+              <h2 id="siege-invalid-title">
+                <Icon name="triangle-alert" />
+                <span>输入无效，暂停计算</span>
+              </h2>
+              <p>
+                攻城数量须为 <span className="num nw">1–{SIEGE_MAX_COUNT}</span> 的整数。请修改「数量」，或点步进按钮、常用数量
+                <span className="nw">
+                  （<span className="num">1</span> / <span className="num">4</span> / <span className="num">6</span>）
+                </span>
+                恢复计算。
+              </p>
+            </section>
+          ) : (
+            <div aria-live="polite" aria-atomic="true">
+              {result?.verified ? (
+                <section className="siege-result" data-testid="siege-result" aria-labelledby="siege-result-title">
+                  <h2 id="siege-result-title">{title}</h2>
+                  <div className="siege-conds" data-testid="siege-conditions">
+                    <span className="siege-cond nw">{conditions.civText}</span>
+                    <span className={conditions.techActive ? 'siege-cond siege-cond-active' : 'siege-cond siege-cond-muted'}>
+                      {conditions.techActive && <Icon name="flask-conical" />}
+                      <span>{conditions.techText}</span>
+                    </span>
+                    {conditions.armorText && <span className="siege-cond">{conditions.armorText}</span>}
                   </div>
-                  <div className="siege-primary">
-                    <dt>游戏秒</dt>
-                    <dd className="num" data-testid="siege-game-seconds">
-                      {num(result.gameSeconds)}
-                    </dd>
+                  <dl className="siege-metrics">
+                    <div>
+                      <dt>击数</dt>
+                      <dd className="num" data-testid="siege-hits">
+                        {result.hits}
+                      </dd>
+                    </div>
+                    <div className="siege-primary">
+                      <dt>游戏秒</dt>
+                      <dd className="num" data-testid="siege-game-seconds">
+                        {num(result.gameSeconds)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>现实秒</dt>
+                      <dd className="num" data-testid="siege-real-seconds">
+                        {real(result.realSeconds)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="siege-result-foot">
+                    <span>
+                      现实秒 = 游戏秒 ÷ <span className="num">1.7</span>（标准速度）
+                    </span>
+                    <span className="siege-data">
+                      <Icon name="database" />
+                      <span className="num">DE {__DATA_SOURCES__.patch.build}</span>
+                    </span>
                   </div>
-                  <div>
-                    <dt>现实秒</dt>
-                    <dd className="num" data-testid="siege-real-seconds">
-                      {real(result.realSeconds)}
-                    </dd>
-                  </div>
-                </dl>
-                <div className="siege-result-foot">
-                  <span>
-                    现实秒 = 游戏秒 ÷ <span className="num">1.7</span>（标准速度）
-                  </span>
-                  <span className="siege-data">
-                    <Icon name="database" />
-                    <span className="num">DE {__DATA_SOURCES__.patch.build}</span>
-                  </span>
-                </div>
-              </section>
-            ) : (
-              <section className="siege-unverified" data-testid="siege-unverified" role="status" aria-labelledby="siege-unverified-why">
-                <h2 id="siege-unverified-why">
-                  <Icon name="circle-alert" />
-                  {SIEGE_MANGONEL_IDS.includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
-                </h2>
-                <p data-testid="siege-unverified-reason">{unverifiedBody(result.reason)}</p>
-                <div className="siege-gap-feedback">
-                  <FeedbackLink kind="data" label="反馈数据缺口" />
-                  <SiegeFeedbackNote />
-                </div>
-              </section>
-            )}
-          </div>
+                </section>
+              ) : (
+                result && (
+                  <section className="siege-unverified" data-testid="siege-unverified" role="status" aria-labelledby="siege-unverified-why">
+                    <h2 id="siege-unverified-why">
+                      <Icon name="circle-alert" />
+                      {SIEGE_MANGONEL_IDS.includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
+                    </h2>
+                    <p data-testid="siege-unverified-reason">{unverifiedBody(result.reason)}</p>
+                    <div className="siege-gap-feedback">
+                      <FeedbackLink kind="data" label="反馈数据缺口" />
+                      <SiegeFeedbackNote />
+                    </div>
+                  </section>
+                )
+              )}
+            </div>
+          )}
           {shareControls}
-          {result.verified && (
+          {!isCountInvalid && result?.verified && (
             <section className="siege-panel siege-compare" data-testid="siege-compare">
               <table aria-label={`同组合对照：${config.n} ${counter}${u.zh}`}>
                 <caption>

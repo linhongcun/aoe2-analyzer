@@ -28,6 +28,13 @@ export function isRegularSiegeUnit(unitId: number): boolean {
 export function siegeUnitCounter(unitId: number): '头' | '台' {
   return unitId === 1744 || unitId === 1746 ? '头' : '台';
 }
+
+/** 仅接受严格十进制正整数且落在 [1, SIEGE_MAX_COUNT]（拒绝空串、前导零、正负号、空白、小数、科学计数法与非数字）。 */
+export function parseSiegeCountInput(raw: string): number | null {
+  if (!/^[1-9]\d*$/.test(raw)) return null;
+  const n = Number(raw);
+  return Number.isSafeInteger(n) && n >= 1 && n <= SIEGE_MAX_COUNT ? n : null;
+}
 export const SIEGE_COMPARE_IDS: readonly number[] = [109, 82, 79, 117, 487];
 /** 石墙、城门不从建筑页进入攻城工具。对照表仍按既有攻城页显示。 */
 const SIEGE_BUILDING_ENTRY_EXCLUDED = new Set([117, 487]);
