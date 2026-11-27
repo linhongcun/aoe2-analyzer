@@ -14,7 +14,7 @@ import { civByEn } from '../data';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
-import { VILLAGER_CLASS } from './gameIds';
+import { AGE_BY_TECH, VILLAGER_CLASS } from './gameIds';
 import { effectiveGatherRate } from './gatherRate';
 import { formatClock, ratePerMinute } from './formatTime';
 
@@ -88,6 +88,7 @@ export interface GatherModel {
  * - Celts 120162「Lumberjacks work +15% faster」、Koreans 120167「Stone miners work +20% faster」、
  *   Turks 120159「Gold miners work +25% faster」→ 与 eco.json 一致，用 eco.json 值
  * - Berbers 120176「Villagers move +5% faster in Dark Age, +10% faster starting in Feudal Age」→ 与 eco.json 一致
+ * - Armenians 120193「Mule Cart technology effects +40%」→ 对应经济科技（202/203/55/182/278）已研时叠加 eco.json 固定倍率（t:960/961/963/964/965），禁用项（221/279）跳过
  * value：数字 = 用来源值；'eco' = 用 eco.json 值；'drop' = 不计也不列。未列出的条目记「未计入」。
  * bonus：civs.json 的 bon 序号，取 aoe2techtree 中文文明描述中的对应要点作为展示来源。
  */
@@ -98,6 +99,11 @@ const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: num
   Koreans: { 'task:stone:workRate': { value: 'eco', bonus: 0 } },
   Turks: { 'task:gold:workRate': { value: 'eco', bonus: 0 } },
   Berbers: { [`${VIL}:speed`]: { value: 'eco', bonus: 0 } },
+  Armenians: {
+    'task:wood:workRate': { value: 'eco', bonus: 1 },
+    'task:gold:workRate': { value: 'eco', bonus: 1 },
+    'task:stone:workRate': { value: 'eco', bonus: 1 },
+  },
 };
 
 /** issue 331：一组效果里有没有采集模型会读的项（村民采集/搬运/移动、资源产量）；团队行本身在 gatherModel 里一律跳过 */
@@ -108,22 +114,85 @@ export const hasGatherAttrEffect = (effects: readonly EffectLike[] | undefined):
   (effects ?? []).some((e) => e.kind === 'attr' && relevant(e) !== null);
 
 /** issue 317：真实成本采集模型计入了哪些文明加成（civs.json bon 序号）；与 gatherModel 的 applied 同一张 SOURCED 表 */
-export const gatherBonusIdx = (civ: string): number[] => Object.values(SOURCED[civ] ?? {}).flatMap((s) => (s === 'drop' ? [] : [s.bonus]));
+export const gatherBonusIdx = (civ: string): number[] => [
+  ...new Set(Object.values(Object.hasOwn(SOURCED, civ) ? SOURCED[civ]! : {}).flatMap((s) => (s === 'drop' ? [] : [s.bonus]))),
+];
 
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
 const sign = (n: number) => (n < 0 ? `\u2212${-n}` : `+${n}`);
 
-function collectCivGather(age: number, civ: string) {
-  const civMods: Record<string, { m: Mod; zh: string; techs: number[]; fromTree: boolean; exact: boolean }> = {};
-  const src = SOURCED[civ] ?? {};
-  for (const row of (eco.civEco[civ] ?? []) as { age: number; source?: string; tech?: number; effects: EffectLike[] }[]) {
+export interface CivGatherOptions {
+  techIds?: ReadonlySet<number>;
+  availableTechIds?: ReadonlySet<number>;
+}
+export interface GatherModelOptions extends CivGatherOptions {
+  walkTiles?: number;
+  farmTiles?: number;
+  includeCivEcoTechs?: boolean;
+}
+
+const ECO_TECHS = eco.ecoTechs as Record<string, { age: number; effects: EffectLike[] }>;
+const CIV_INFRA_KEYS = {
+  Armenians: 'armenianInfrastructure',
+  Georgians: 'georgianInfrastructure',
+  Mapuche: 'mapucheInfrastructure',
+  Poles: 'polesInfrastructure',
+} as const;
+const EMPTY_TECH_SET: ReadonlySet<number> = new Set();
+const disabledTechCache = new WeakMap<readonly { Type: number; D: number }[], ReadonlySet<number>>();
+
+function civDisabledTechs(civ: string): ReadonlySet<number> {
+  const infraKey = Object.hasOwn(CIV_INFRA_KEYS, civ) ? CIV_INFRA_KEYS[civ as keyof typeof CIV_INFRA_KEYS] : undefined;
+  const commands = infraKey ? eco[infraKey]?.treeCommands : undefined;
+  if (!commands) return EMPTY_TECH_SET;
+  let disabled = disabledTechCache.get(commands);
+  if (!disabled) {
+    disabled = new Set(commands.filter((c) => c.Type === 102).map((c) => c.D));
+    disabledTechCache.set(commands, disabled);
+  }
+  return disabled;
+}
+
+/** 提取属于可研究目录科技的前置 ID（排除时代与非目录内部 .dat 触发科技，如 104/101）。 */
+const researchablePrereqs = (requires?: readonly number[]): number[] =>
+  (requires ?? []).filter((id) => !Object.hasOwn(AGE_BY_TECH, id) && Object.hasOwn(eco.techs, String(id)));
+
+function collectCivGather(age: number, civ: string, options: CivGatherOptions = {}) {
+  const civMods: Record<string, { m: Mod; zh: string; techs: number[]; fromTree: boolean; exact: boolean; uncertain: boolean }> = {};
+  const src = Object.hasOwn(SOURCED, civ) ? SOURCED[civ]! : {};
+  const disabled = civDisabledTechs(civ);
+  const rows = (Object.hasOwn(eco.civEco, civ) ? eco.civEco[civ] : undefined) as
+    { age: number; source?: string; tech?: number; requires?: number[]; effects: EffectLike[] }[] | undefined;
+  for (const row of rows ?? []) {
     if (row.source === 'team' || row.age > age) continue;
+    const prereqs = researchablePrereqs(row.requires);
+    if (prereqs.some((id) => disabled.has(id) || (options.availableTechIds !== undefined && !options.availableTechIds.has(id)))) {
+      continue;
+    }
+    let rowUncertain = false;
+    if (options.techIds !== undefined) {
+      if (prereqs.some((id) => !options.techIds!.has(id))) continue;
+    } else if (prereqs.length > 0) {
+      let skip = false;
+      for (const id of prereqs) {
+        if (Object.hasOwn(ECO_TECHS, String(id))) {
+          if (ECO_TECHS[String(id)]!.age > age) {
+            skip = true;
+            break;
+          }
+        } else {
+          rowUncertain = true;
+        }
+      }
+      if (skip) continue;
+    }
     for (const e of row.effects) {
       const r = relevant(e);
       if (!r) continue;
-      const c = (civMods[r.key] ??= { m: { mul: 1, add: 0 }, zh: r.zh, techs: [], fromTree: false, exact: true });
+      const c = (civMods[r.key] ??= { m: { mul: 1, add: 0 }, zh: r.zh, techs: [], fromTree: false, exact: true, uncertain: false });
       if (row.source === 'tree') c.fromTree = true;
       if (row.tech !== undefined && !c.techs.includes(row.tech)) c.techs.push(row.tech);
+      if (rowUncertain) c.uncertain = true;
       if (e.kind !== 'attr' || e.op !== 'mul') c.exact = false;
       else c.m.mul *= e.v ?? 1;
     }
@@ -131,11 +200,11 @@ function collectCivGather(age: number, civ: string) {
   const applied: (CivGatherLine & { source: string; key: string; mul: number })[] = [];
   const unsupported: CivGatherSource[] = [];
   for (const [key, c] of Object.entries(civMods)) {
-    const s = src[key];
+    const s = Object.hasOwn(src, key) ? src[key] : undefined;
     if (s === 'drop') continue;
     if (typeof s?.value === 'number') c.m = { mul: s.value, add: 0 };
     const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
-    if (s !== undefined && c.exact) {
+    if (s !== undefined && c.exact && !c.uncertain) {
       applied.push({ key, mul: c.m.mul, label, techs: c.techs, source: civByEn(civ)?.bon[s.bonus] ?? '' });
     } else unsupported.push({ key, label, techs: c.techs, fromTree: c.fromTree });
   }
@@ -143,23 +212,19 @@ function collectCivGather(age: number, civ: string) {
 }
 
 /** 未计入的文明采集加成来源（带属性/资源键与科技树标记，供持续生产同源告警合并使用）。 */
-export function gatherUnsupportedSources(age: number, civ: string): CivGatherSource[] {
-  return collectCivGather(age, civ).unsupported;
+export function gatherUnsupportedSources(age: number, civ: string, options: CivGatherOptions = {}): CivGatherSource[] {
+  return collectCivGather(age, civ, options).unsupported;
 }
 
 /** 不传 options 时保持原来的「所选时代经济科技全研究」口径；文明专属采集独科须调用方显式传 includeCivEcoTechs 才生效。 */
-export function gatherModel(
-  age: number,
-  civ = '',
-  options: { techIds?: ReadonlySet<number>; walkTiles?: number; farmTiles?: number; includeCivEcoTechs?: boolean } = {},
-): GatherModel {
+export function gatherModel(age: number, civ = '', options: GatherModelOptions = {}): GatherModel {
   const mods: Record<string, Mod> = {};
   const push = (key: string, op: string | undefined, v: number) => {
     const m = (mods[key] ??= { mul: 1, add: 0 });
     if (op === 'mul') m.mul *= v;
     else if (op === 'add') m.add += v;
   };
-  for (const [id, t] of Object.entries(eco.ecoTechs) as [string, { age: number; effects: EffectLike[] }][]) {
+  for (const [id, t] of Object.entries(ECO_TECHS)) {
     const enabled = options.techIds ? options.techIds.has(Number(id)) : t.age <= age;
     if (enabled) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
   }
@@ -171,7 +236,7 @@ export function gatherModel(
     }
   }
 
-  const collected = collectCivGather(age, civ);
+  const collected = collectCivGather(age, civ, options);
   const applied: GatherModel['applied'] = [];
   for (const item of collected.applied) {
     push(item.key, 'mul', item.mul);

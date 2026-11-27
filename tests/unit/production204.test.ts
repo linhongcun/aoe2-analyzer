@@ -360,3 +360,45 @@ describe('#1504 持续生产费用科技目标实体校验（排除纯建筑造�
     expect(row.line.applied).not.toContain('罗斯堡垒');
   });
 });
+
+describe('Issue 1473 持续生产亚美尼亚骡车科技与波希米亚前置过滤', () => {
+  it('AC2：亚美尼亚帝王 4 营冠军剑士 + 2 堡精锐复合弓精确计入 960/961/963/964/965，合计 81 人且零告警', () => {
+    const decoded = decodeProduction('?civ=Armenians&age=4&walk=3&farm=1&techs=202,203,55,182,278,213,249,315&rows=567:12:4,1802:82:2');
+    expect(decoded.errors).toEqual([]);
+    const res = calculateProduction(ctx, decoded.config);
+    expect(res.errors).toEqual([]);
+    expect(res.warnings).toEqual([]);
+    expect(res.applied).toEqual(['伐木 +14%', '采金 +11%', '采石 +5%']);
+    const byKey = Object.fromEntries(res.resources.map((r) => [r.key, r]));
+    expect(byKey.Food!.income).toBeCloseTo(30.07, 2);
+    expect(byKey.Wood!.income).toBeCloseTo(31.74, 2);
+    expect(byKey.Gold!.income).toBeCloseTo(28.26, 2);
+    expect(byKey.Stone!.income).toBeCloseTo(22.89, 2);
+    expect(byKey.Food!.villagers).toBeCloseTo(25.27, 2);
+    expect(byKey.Wood!.villagers).toBeCloseTo(17.6, 2);
+    expect(byKey.Gold!.villagers).toBeCloseTo(36.17, 2);
+    expect(byKey.Food!.rounded).toBe(26);
+    expect(byKey.Wood!.rounded).toBe(18);
+    expect(byKey.Gold!.rounded).toBe(37);
+    expect(byKey.Stone!.rounded === 0).toBe(true);
+    expect(res.total).toBe(81);
+  });
+
+  it('AC2 反例：未勾骡车经济科技时不触发 +40% 采集加速也不输出伪告警', () => {
+    const res = run({ civ: 'Armenians', age: 4, techs: [], rows: [{ unit: 567, building: 12, count: '4' }] });
+    expect(res.errors).toEqual([]);
+    expect(res.applied).toEqual([]);
+    expect(res.warnings).toEqual([]);
+    const generic = gatherModel(4, '', { techIds: new Set(), walkTiles: 3, farmTiles: 1 });
+    expect(res.resources.find((r) => r.key === 'Wood')!.income).toBeCloseTo(generic.rate.wood * 60, 10);
+    expect(res.resources.find((r) => r.key === 'Gold')!.income).toBeCloseTo(generic.rate.gold * 60, 10);
+  });
+
+  it('AC3：波希米亚城堡/帝王时代未含狂热 252 时不再输出村民移速 +15% 伪告警', () => {
+    for (const age of [3, 4]) {
+      const res = run({ civ: 'Bohemians', age, techs: [], rows: [{ unit: 83, building: 109, count: '1' }] });
+      expect(res.errors).toEqual([]);
+      expect(res.warnings.some((w) => w.includes('村民移速 +15%'))).toBe(false);
+    }
+  });
+});

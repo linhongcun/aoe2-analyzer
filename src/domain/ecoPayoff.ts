@@ -3,7 +3,7 @@ import { ECO as eco } from '../data/eco';
 import { civByEn } from '../data';
 import { DAT } from './datEffects';
 import { freeProductionTechs, productionTechAge, type ProductionContext } from './production';
-import { isCivTechEnabled } from './availabilityAge';
+import { isCivTechEnabled, litTreeIds } from './availabilityAge';
 import { gatherModel, type GatherRes } from './realCost';
 import { civStatus } from './simulator';
 import type { Cost, Tech } from './types';
@@ -178,10 +178,11 @@ export function calculateEcoPayoff(ctx: ProductionContext, config: EcoPayoffConf
   if (errors.length || !target) return result;
   const isKnown = known.has(target.id);
   const afterKnown = new Set([...known, target.id]);
-  const before = gatherModel(config.age, config.civ, { techIds: known, walkTiles: distance });
-  const after = gatherModel(config.age, config.civ, { techIds: afterKnown, walkTiles: distance });
+  const availableTechIds = litTreeIds(ctx.trees, config.civ, 't');
+  const before = gatherModel(config.age, config.civ, { techIds: known, availableTechIds, walkTiles: distance });
+  const after = gatherModel(config.age, config.civ, { techIds: afterKnown, availableTechIds, walkTiles: distance });
   const research = payoffResearch(config, target);
-  warnings.push(...research.warnings, ...before.unsupported.map((x) => `${x.label}：采集机制未完整计入。`));
+  warnings.push(...research.warnings, ...[...before.unsupported, ...after.unsupported].map((x) => `${x.label}：采集机制未完整计入。`));
   const special: Record<string, string> = {
     Danes: '丹麦村民存放食物的额外收益未计入，食物劳动量折算不完整。',
     Muisca: '穆伊斯卡自身团队天然黄金机制尚未完整核实。',

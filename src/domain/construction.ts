@@ -7,7 +7,7 @@ import { civStatus } from './simulator';
 import { gatherModel, type GatherModel } from './realCost';
 import { productionTechAge, productionTechs } from './production';
 import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
-import { buildingAge as constructionBuildingAge, isCivTechEnabled } from './availabilityAge';
+import { buildingAge as constructionBuildingAge, isCivTechEnabled, litTreeIds } from './availabilityAge';
 import { AGE_TECH_IDS } from './gameIds';
 import { TOWN_CENTER_ID, townCenterBuildTimeNote } from './buildTimeFacts';
 import { toggleSelected } from './prereq';
@@ -282,7 +282,12 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   if (config.civ === 'Sicilians') warnings.push('西西里施工加成须已完成过首座城镇中心；本开关同时控制城堡与防御工事加成。');
   let gather: GatherModel | null = null;
   if (config.task) {
-    gather = gatherModel(config.age, config.civ, { techIds: result.selected, walkTiles: walk, farmTiles: farm });
+    gather = gatherModel(config.age, config.civ, {
+      techIds: result.selected,
+      availableTechIds: litTreeIds(ctx.trees, config.civ, 't'),
+      walkTiles: walk,
+      farmTiles: farm,
+    });
     result.gather = gather;
     warnings.push(...gather.unsupported.map((x) => `${x.label}未计入：停采量采用已支持的采集模型。`));
     warnings.push('停采量为该方案全部施工者占用的估计损失；基准增量另列，不等于提前完工收益。不计盟友经济加成及特殊存放机制。');
