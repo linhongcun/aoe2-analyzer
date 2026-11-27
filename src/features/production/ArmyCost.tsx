@@ -391,6 +391,12 @@ export default function ArmyCost({ context, loadingError }: { context: Productio
                           line.qtyValue % tc !== 0 && (
                             <PairOddBillingHint qty={line.qtyValue} batches={line.billedBatches} delivered={line.deliveredQty} dataT="army-cost-pair-hint" />
                           )}
+                        {line?.status === 'ok' && line.estimatedTechs.length > 0 && (
+                          <p className="army-boundary army-estimate-note" data-t="army-row-estimate-note" role="note">
+                            <Icon name="triangle-alert" />
+                            <span>已按可解码条目计入：{line.estimatedTechs.join('、')}；另含未解码资源或条件效果，本行单价与训练费仅为估算。</span>
+                          </p>
+                        )}
                       </article>
                     );
                   })}

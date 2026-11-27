@@ -280,8 +280,7 @@ describe('#1448 科技详情数据消费分类与结构化费用变化', () => {
     expect(text21).toContain('本页不逐条模拟属性；圣物收益工具已采用固定数据编码，其余效果以游戏说明为准');
 
     const text578 = visible(markup('/tech/578'));
-    expect(text578).toContain('本页不逐条模拟属性；建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
-    expect(text578).not.toContain('持续生产');
+    expect(text578).toContain('本页不逐条模拟属性；持续生产工具已采用固定数据编码，建筑满科技对照已读取固定数据编码作机制提示，其余效果以游戏说明为准');
 
     const text484 = visible(markup('/tech/484'));
     expect(text484).toContain('本页不逐条模拟属性；建筑驻军与建筑满科技对照已采用固定数据编码，其余效果以游戏说明为准');

@@ -14,6 +14,7 @@ import {
   type ResearchEntry,
 } from '../../src/domain/armyCost';
 import { AGE_TECH_IDS } from '../../src/domain/gameIds';
+import { DAT } from '../../src/domain/datEffects';
 import { evalConditionNode } from '../../src/domain/armyResearchRules';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS } from '../../src/domain/production';
 import { ArmyLedger } from '../../src/features/production/ArmyLedger';
@@ -372,6 +373,125 @@ describe('#1409 Chinese res:85 global research discount, unreachable count>requi
         cost: null,
         reason: '不属于当前阵容的战斗、训练费用或形态研究；未计入',
       });
+    }
+  });
+});
+
+describe('#1463 含未解码资源标记的折后训练单价估算放行与 fail-closed 防护', () => {
+  const mapucheRows = [
+    { unit: 2568, qty: '20' },
+    { unit: 2571, qty: '20' },
+  ];
+
+  it('AC4：马普切 t:1380 位于目标与已完成时均放行 2571 折后价、标记行估算且不误触发 partial', () => {
+    const asTarget = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows, targets: ['t:1380'] });
+    expect(asTarget.blocked).toEqual([]);
+    expect(asTarget.partial).toBe(false);
+    expect(asTarget.hasValue).toBe(true);
+    expect(asTarget.training.lines[0]).toMatchObject({ status: 'ok', estimatedTechs: [] });
+    expect(asTarget.training.lines[1]).toMatchObject({
+      status: 'ok',
+      cost: { Wood: 42.5, Gold: 47 },
+      subtotal: { Food: 0, Wood: 850, Gold: 940, Stone: 0 },
+      estimatedTechs: ['布图马普'],
+    });
+    expect(asTarget.trainingTotal).toEqual({ Food: 1300, Wood: 850, Gold: 1740, Stone: 0 });
+    expect(asTarget.researchTotal).toEqual({ Food: 2100, Wood: 0, Gold: 1750, Stone: 0 });
+    expect(asTarget.total).toEqual({ Food: 3400, Wood: 850, Gold: 3490, Stone: 0 });
+
+    const asDone = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows, done: ['t:1380'] });
+    expect(asDone.partial).toBe(false);
+    expect(asDone.hasValue).toBe(true);
+    expect(asDone.training.lines[1]).toMatchObject({
+      status: 'ok',
+      cost: { Wood: 42.5, Gold: 47 },
+      subtotal: { Food: 0, Wood: 850, Gold: 940, Stone: 0 },
+      estimatedTechs: ['布图马普'],
+    });
+    expect(asDone.trainingTotal).toEqual(asTarget.trainingTotal);
+    expect(asDone.researchTotal.Food ?? 0).toBeLessThan(asTarget.researchTotal.Food ?? 0);
+
+    // 取消 t:1380 后恢复精确态
+    const without1380 = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: mapucheRows });
+    expect(without1380.partial).toBe(false);
+    expect(without1380.training.lines[1]).toMatchObject({
+      status: 'ok',
+      cost: { Wood: 50, Gold: 55 },
+      subtotal: { Food: 0, Wood: 1000, Gold: 1100, Stone: 0 },
+      estimatedTechs: [],
+    });
+  });
+
+  it('AC4：估算态与 partial 共存（非法数量行或无效研究）时，估算行保持 ok 且不进入未计入项', () => {
+    const withBadQty = evaluateArmyCost(ctx, {
+      ...makeArmyCost('Mapuche', '4'),
+      rows: [...mapucheRows, { unit: 6, qty: '0' }],
+      targets: ['t:1380'],
+    });
+    expect(withBadQty.partial).toBe(true);
+    expect(withBadQty.training.lines[0]?.status).toBe('ok');
+    expect(withBadQty.training.lines[1]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
+    expect(withBadQty.training.lines[2]?.status).toBe('badqty');
+
+    const withInvalidTarget = evaluateArmyCost(ctx, {
+      ...makeArmyCost('Mapuche', '4'),
+      rows: mapucheRows,
+      targets: ['t:1380', 't:315'],
+    });
+    expect(withInvalidTarget.partial).toBe(true);
+    expect(withInvalidTarget.training.lines[1]).toMatchObject({ status: 'ok', estimatedTechs: ['布图马普'] });
+    expect(withInvalidTarget.ledger.find((e) => e.id === 315)?.status).toBe('invalid');
+  });
+
+  it('AC5：非法 op、非正/非有限 mul 与未解码文明折扣在 evaluateArmyCost 中仍 fail-closed 拒算', () => {
+    const originalButalmapu = DAT.techs.Butalmapu!;
+    const originalDiscounts = DAT.costDiscounts;
+    try {
+      for (const badEco of [
+        { a: 100, op: 'div', v: 2, t: [2569, 2571], cls: null, unit: null },
+        { a: 100, op: 'mul', v: 0, t: [2569, 2571], cls: null, unit: null },
+        { a: 100, op: 'mul', v: -0.85, t: [2569, 2571], cls: null, unit: null },
+        { a: 100, op: 'mul', v: Number.NaN, t: [2569, 2571], cls: null, unit: null },
+      ]) {
+        DAT.techs.Butalmapu = { ...originalButalmapu, eco: [{ res: 33, name: '资源33', op: 'set', v: 51 }, badEco] };
+        const res = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: [{ unit: 2571, qty: '20' }], targets: ['t:1380'] });
+        expect(res.partial).toBe(true);
+        expect(res.training.lines[0]).toMatchObject({
+          status: 'unavail',
+          reason: '目标状态训练费用修正未核实',
+          cost: null,
+          subtotal: null,
+          estimatedTechs: [],
+        });
+      }
+
+      // 未解码文明折扣（quote.discount.unsupported）仍拒算
+      DAT.techs.Butalmapu = originalButalmapu;
+      DAT.costDiscounts = {
+        ...originalDiscounts,
+        Mapuche: [
+          ...(originalDiscounts?.Mapuche ?? []),
+          {
+            idx: null,
+            text: null,
+            ok: false,
+            techs: [],
+            groups: [{ units: [2571], res: ['Wood'], tiers: { '4': 0.77 } }],
+          },
+        ],
+      };
+      const badDiscount = evaluateArmyCost(ctx, { ...makeArmyCost('Mapuche', '4'), rows: [{ unit: 2571, qty: '20' }], targets: ['t:1380'] });
+      expect(badDiscount.partial).toBe(true);
+      expect(badDiscount.training.lines[0]).toMatchObject({
+        status: 'unavail',
+        reason: '目标状态训练费用修正未核实',
+        cost: null,
+        subtotal: null,
+        estimatedTechs: [],
+      });
+    } finally {
+      DAT.techs.Butalmapu = originalButalmapu;
+      DAT.costDiscounts = originalDiscounts;
     }
   });
 });

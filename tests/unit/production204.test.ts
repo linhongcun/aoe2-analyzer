@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees } from '../../src/data';
 import ecoRaw from '../../data/game/eco.json';
-import { DAT } from '../../src/domain/datEffects';
+import { DAT, type DatFx } from '../../src/domain/datEffects';
 import { gatherModel } from '../../src/domain/realCost';
 import {
   calculateProduction,
@@ -145,10 +145,14 @@ describe('#204 持续生产固定数据回归', () => {
     expect(productionBuildings(ctx, plan({ civ: 'Franks', age: 2 }), spear)).toEqual([12]);
     expect(productionBuildings(ctx, plan({ civ: 'Armenians', age: 1 }), ctx.core.unitById[77]!)).toEqual([]);
   });
-  it('丹麦存放食物收益及未知条件科技有具体未计入说明', () => {
+  it('丹麦存放食物收益保留未计入说明，土堡按可解码城堡加速计入并提示仅为估算', () => {
     expect(run({ civ: 'Danes' }).warnings.some((w) => w.includes('存放'))).toBe(true);
-    const r = run({ civ: 'Berbers', age: 4, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }] });
-    expect(r.warnings.some((w) => w.includes('土堡') && w.includes('未计入'))).toBe(true);
+    const base = run({ civ: 'Berbers', age: 4, techs: [], rows: [{ unit: 1007, building: 82, count: '1' }] });
+    const withKasbah = run({ civ: 'Berbers', age: 4, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }] });
+    expect(withKasbah.errors).toEqual([]);
+    expect(withKasbah.lines[0]!.seconds).toBeCloseTo(base.lines[0]!.seconds / 1.25, 8);
+    expect(withKasbah.lines[0]!.applied).toContain('土堡');
+    expect(withKasbah.warnings).toContain('土堡：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
   });
   it('空、零和非法需求不会输出无穷、NaN或负数配置', () => {
     expect(run({ rows: [] }).total).toBe(0);
@@ -184,5 +188,101 @@ describe('#204 持续生产固定数据回归', () => {
     expect(bad.config.rows[0]!.count).toBe('-1');
     expect(decodeProduction('?rows=').config.rows).toEqual([]);
     expect(decodeProduction('?rows=not-valid').errors.length).toBeGreaterThan(0);
+  });
+});
+
+describe('#1463 带 res 标记独特科技过滤与 fail-closed 回归', () => {
+  it('AC1：葡萄牙环游世界（1404）经共享 res:203 白名单静默放行，全站仅 1404 命中该白名单', () => {
+    const base = run({ civ: 'Portuguese', age: 4, techs: [], rows: [{ unit: 442, building: 45, count: '4' }] });
+    const with1404 = run({ civ: 'Portuguese', age: 4, techs: [1404], rows: [{ unit: 442, building: 45, count: '4' }] });
+    expect(base.errors).toEqual([]);
+    expect(with1404.errors).toEqual([]);
+    expect(base.lines[0]!.seconds).toBeCloseTo(27, 8);
+    expect(with1404.lines[0]!.seconds).toBeCloseTo(20.25, 8);
+    expect(base.lines[0]!.perMinute).toBeCloseTo(8.8888889, 5);
+    expect(with1404.lines[0]!.perMinute).toBeCloseTo(11.8518519, 5);
+    expect(with1404.lines[0]!.applied).toContain('环游世界');
+    expect(with1404.total).toBeGreaterThan(base.total);
+    expect(with1404.warnings.some((w) => w.includes('环游世界'))).toBe(false);
+
+    // 全站仅 1404 含 res:203 标记，无其他科技受白名单误伤
+    const techsWith203 = Object.entries(DAT.techs)
+      .filter(([, d]) => d.eco.some((e) => e.res === 203))
+      .map(([, d]) => d.id);
+    expect(techsWith203).toEqual([1404]);
+  });
+
+  it('AC2：柏柏尔土堡（578）单勾与叠征招（315）均生效并输出逐字估算告警', () => {
+    const rows = [{ unit: 1009, building: 82, count: '2' }];
+    const base = run({ civ: 'Berbers', age: 4, techs: [], rows });
+    const only578 = run({ civ: 'Berbers', age: 4, techs: [578], rows });
+    const with315 = run({ civ: 'Berbers', age: 4, techs: [315], rows });
+    const with315And578 = run({ civ: 'Berbers', age: 4, techs: [315, 578], rows });
+    expect(base.lines[0]!.seconds).toBeCloseTo(25, 8);
+    expect(only578.lines[0]!.seconds).toBeCloseTo(20, 8);
+    expect(with315.lines[0]!.seconds).toBeCloseTo(25 / 1.33, 8);
+    expect(with315And578.lines[0]!.seconds).toBeCloseTo(25 / (1.33 * 1.25), 8);
+    expect(with315And578.lines[0]!.applied).toEqual(expect.arrayContaining(['征招', '土堡']));
+    expect(with315And578.warnings).toContain('土堡：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+    expect(with315And578.warnings.some((w) => w.includes('整项未计入'))).toBe(false);
+  });
+
+  it('AC3：马普切布图马普（1380）对 2571 折后价参与每分钟开销与村民核算并保留估算告警', () => {
+    const rows = [
+      { unit: 2568, building: 82, count: '2' },
+      { unit: 2571, building: 87, count: '4' },
+    ];
+    const base = run({ civ: 'Mapuche', age: 4, techs: [315], rows });
+    const with1380 = run({ civ: 'Mapuche', age: 4, techs: [315, 1380], rows });
+    expect(with1380.errors).toEqual([]);
+    expect(with1380.lines[1]!.cost).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(with1380.lines[1]!.spend.Wood).toBeLessThan(base.lines[1]!.spend.Wood);
+    expect(with1380.lines[1]!.spend.Gold).toBeLessThan(base.lines[1]!.spend.Gold);
+    expect(with1380.total).toBeLessThan(base.total);
+    expect(with1380.lines[1]!.applied).toContain('布图马普');
+    expect(with1380.warnings).toContain('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
+  });
+
+  it('AC5：非法 op 或非正/非有限 mul 倍率在 calculateProduction 中仍 fail-closed 整项跳过', () => {
+    const originalKasbah = DAT.techs.Kasbah!;
+    const originalCircum = DAT.techs.Circumnavigation!;
+    const berberBase = run({ civ: 'Berbers', age: 4, techs: [], rows: [{ unit: 1009, building: 82, count: '1' }] });
+    const portBase = run({ civ: 'Portuguese', age: 4, techs: [], rows: [{ unit: 442, building: 45, count: '1' }] });
+    try {
+      for (const badEco of [
+        { a: 13, op: 'div', v: 2, t: [82], cls: null, unit: 82 },
+        { a: 13, op: 'mul', v: 0, t: [82], cls: null, unit: 82 },
+        { a: 13, op: 'mul', v: -1.25, t: [82], cls: null, unit: 82 },
+        { a: 13, op: 'mul', v: Number.NaN, t: [82], cls: null, unit: 82 },
+        { a: 13, op: 'set', v: 0, t: [82], cls: null, unit: 82 },
+      ]) {
+        DAT.techs.Kasbah = { ...originalKasbah, eco: [{ res: 33, name: '资源33', op: 'set', v: 52 }, badEco] };
+        const res = run({ civ: 'Berbers', age: 4, techs: [578], rows: [{ unit: 1009, building: 82, count: '1' }] });
+        expect(res.errors).toEqual([]);
+        expect(res.lines[0]!.seconds).toBe(berberBase.lines[0]!.seconds);
+        expect(res.lines[0]!.applied).not.toContain('土堡');
+        expect(res.warnings).toContain('土堡：含未解码的资源或条件效果，生产效果整项未计入。');
+      }
+
+      for (const badFx of [
+        { s: 'bt', op: 'div', v: 2 },
+        { s: 'bt', op: 'mul', v: 0 },
+        { s: 'bt', op: 'mul', v: -0.75 },
+        { s: 'bt', op: 'mul', v: Number.NaN },
+      ]) {
+        DAT.techs.Circumnavigation = {
+          ...originalCircum,
+          rules: [{ t: [442], fx: [badFx as unknown as DatFx] }],
+        };
+        const res = run({ civ: 'Portuguese', age: 4, techs: [1404], rows: [{ unit: 442, building: 45, count: '1' }] });
+        expect(res.errors).toEqual([]);
+        expect(res.lines[0]!.seconds).toBe(portBase.lines[0]!.seconds);
+        expect(res.lines[0]!.applied).not.toContain('环游世界');
+        expect(res.warnings).toContain('环游世界：含未解码的资源或条件效果，生产效果整项未计入。');
+      }
+    } finally {
+      DAT.techs.Kasbah = originalKasbah;
+      DAT.techs.Circumnavigation = originalCircum;
+    }
   });
 });

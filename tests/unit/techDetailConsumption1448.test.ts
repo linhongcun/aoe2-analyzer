@@ -84,19 +84,19 @@ describe('#1448 科技来源说明与站内工具真实消费行为一致', () =
     const ctx = { core, trees };
     const deps = { unitById: core.unitById, buildingById: core.buildingById };
 
-    // 578 土堡：持续生产跳过并提示整项未计入，建筑满科技对照在城堡行读取作未计入提示
+    // 578 土堡：#1463 起持续生产按可解码城堡加速计入并输出估算告警，建筑满科技对照在城堡行读取作机制提示
     const prodBefore578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
     const prodAfter578 = calculateProduction(ctx, { civ: 'Berbers', age: 3, techs: [578], rows: [{ unit: 1007, building: 82, count: '1' }], walk: 0, farm: 0 });
     expect(prodBefore578.errors).toEqual([]);
     expect(prodAfter578.errors).toEqual([]);
-    expect(prodAfter578.lines[0]!.seconds).toBe(prodBefore578.lines[0]!.seconds);
-    expect(prodAfter578.warnings.some((w) => w.includes('土堡') && w.includes('整项未计入'))).toBe(true);
+    expect(prodAfter578.lines[0]!.seconds).toBeCloseTo(prodBefore578.lines[0]!.seconds / 1.25, 8);
+    expect(prodAfter578.warnings).toContain('土堡：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
     expect(
       buildBuildingCivRank(ctx, core.buildingById[82]!, 3)
         .rows.find((r) => r.civ === 'Berbers')
         ?.tags.some((t) => t.includes('土堡')),
     ).toBe(true);
-    expect(classifyTechDataConsumption(core.techById[578]!, false, deps).domains).toEqual(['building-combat-notice']);
+    expect(classifyTechDataConsumption(core.techById[578]!, false, deps).domains).toEqual(['production', 'building-combat-notice']);
 
     // 484 射箭孔 / 576 蛮王 / 996 强化堡垒
     const towerRank = buildBuildingCivRank(ctx, core.buildingById[79]!, 4);

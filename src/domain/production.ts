@@ -10,7 +10,7 @@ import { isEconomicBonusText, mergeProductionEcoWarnings, resolveGatherBonusIdx 
 export { mergeProductionEcoWarnings, resolveGatherBonusIdx };
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, earlyEcoGatherTechAge, litTreeIds, militaryTechAge, trainingUnitAge } from './availabilityAge';
-import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
+import { isAgeTech, NON_PRICING_RESOURCE_SET, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { formatProductionNumber, ratePerMinute } from './formatTime';
 import { toggleSelected } from './prereq';
@@ -175,6 +175,22 @@ function buildingTarget(building: number, age: number) {
 function selectedTechEffects(ctx: ProductionContext, sel: Set<number>, civ: string) {
   return [...sel].map((id) => ctx.core.techById[id]).filter((t): t is Tech => !!t && !isGatherTech(t, civ));
 }
+const VALID_PRODUCTION_OPS = new Set(['set', 'mul', 'add']);
+
+function isValidProductionEcoEffect(e: DatEco): boolean {
+  if (!VALID_PRODUCTION_OPS.has(e.op) || !Number.isFinite(e.v)) return false;
+  if (e.op === 'mul' && e.v <= 0) return false;
+  if ((e.a === 13 || e.a === 101) && e.op === 'set' && e.v <= 0) return false;
+  return true;
+}
+
+function isValidProductionTimeEffect(f: { op?: string; v: number }): boolean {
+  const op = f.op ?? 'add';
+  if (!VALID_PRODUCTION_OPS.has(op) || !Number.isFinite(f.v)) return false;
+  if ((op === 'mul' || op === 'set') && f.v <= 0) return false;
+  return true;
+}
+
 function relevantTechEffects(t: Tech): DatEco[] {
   return (DAT.techs[t.en]?.eco ?? []).filter((e) => e.a !== undefined && (costAttrs[e.a] || e.a === 101 || e.a === 13));
 }
@@ -347,11 +363,15 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
           .flatMap((r) => r.fx)
           .filter((f) => f.s === 'bt') ?? [];
       if (!effects.length && !time.length) continue;
-      // 资源标记可能附带未编码条件；整项排除，避免只实现一半。费用本身由 unitCost 套用。
-      if (d?.eco.some((e) => e.res !== undefined) || effects.some((e) => !['set', 'mul', 'add'].includes(e.op))) {
+      // 按单条效果过滤：非法 op 或非正/非有限倍率仍整项跳过；
+      // 仅含白名单非生产/非计价资源标记（如 res:203 地图探索）静默放行；
+      // 含白名单外未解码资源标记（如 res:33）但至少一条合法生产/费用效果生效时放行并给出估算告警。
+      const hasInvalid = effects.some((e) => !isValidProductionEcoEffect(e)) || time.some((f) => !isValidProductionTimeEffect(f));
+      if (hasInvalid) {
         warnings.push(`${t.zh}：含未解码的资源或条件效果，生产效果整项未计入。`);
         continue;
       }
+      const hasUnknownRes = d?.eco.some((e) => e.res !== undefined && !NON_PRICING_RESOURCE_SET.has(e.res)) ?? false;
       for (const e of effects) {
         if (e.a === 13 && e.t?.includes(row.building)) cycleOps.push({ kind: 'work', op: e.op, v: e.v });
         else if (e.a === 101 && e.t?.includes(u.id)) cycleOps.push({ kind: 'train', op: e.op, v: e.v });
@@ -359,6 +379,9 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       for (const f of time) cycleOps.push({ kind: 'train', op: f.op, v: f.v });
       costTechs.push({ id: t.id, en: t.en, zh: t.zh });
       notes.push(t.zh);
+      if (hasUnknownRes) {
+        warnings.push(`${t.zh}：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。`);
+      }
     }
     for (const g of matchingGenericFx(u, false, config.age, (name) => selectedTechNames.has(name), config.civ)) {
       let appliedGenericBt = false;

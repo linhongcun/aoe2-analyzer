@@ -33,12 +33,22 @@ export function ArmyResultsPanel({
   onRemoveResearch: (key: string) => void;
 }) {
   const decimalCount = result?.ledger.filter((e) => e.status === 'planned' && hasDecimalCost(e.cost)).length ?? 0;
+  const estimatedLines = result?.hasValue ? result.training.lines.filter((l) => l.status === 'ok' && l.estimatedTechs.length > 0) : [];
+  const estimatedCount = estimatedLines.length;
+  const estimatedTechNames = [...new Set(estimatedLines.flatMap((l) => l.estimatedTechs))];
   return (
     <div className="army-results">
       <section className="army-card">
-        <h2 ref={resultRef} tabIndex={-1}>
-          {result?.partial ? '已核实项目小计' : '本期新增费用合计'}
-        </h2>
+        <div className="army-section-heading army-result-heading">
+          <h2 ref={resultRef} tabIndex={-1}>
+            {result?.partial ? '已核实项目小计' : '本期新增费用合计'}
+          </h2>
+          {estimatedCount > 0 && (
+            <span className="army-estimate-badge" data-t="army-estimate-badge">
+              含估算项
+            </span>
+          )}
+        </div>
         {result?.blocked.length ? (
           <div role="alert">
             {result.blocked.map((e) => (
@@ -53,6 +63,19 @@ export function ArmyResultsPanel({
         ) : (
           <>
             <p className="note">{result.partial ? '仅包含已核实部分，不能代表整套阵容。' : '训练费与一次性研究费分别列示，再按资源相加。'}</p>
+            {estimatedCount > 0 && (
+              <p className="army-boundary army-estimate-note" data-t="army-estimate-note" role="note">
+                <Icon name="triangle-alert" />
+                <span>
+                  有{' '}
+                  <span className="nw">
+                    <span className="num">{estimatedCount}</span> 行
+                  </span>
+                  训练费已按可解码条目计入（{estimatedTechNames.join('、')}）；另含未解码资源或条件效果，
+                  {result.partial ? '已计入部分仍仅为估算。未计入项目另见下方「未计入清单」。' : '训练费与本期合计仅为估算。'}
+                </span>
+              </p>
+            )}
             <ResourceGrid cost={result.total} primary />
             <h3>训练费</h3>
             <ResourceGrid cost={result.trainingTotal} />

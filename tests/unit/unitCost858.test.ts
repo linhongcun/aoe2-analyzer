@@ -76,6 +76,12 @@ describe('单位费用叠加（#858）', () => {
     expect(badOp.cost).toEqual({ Wood: 25, Gold: 45 });
     expect(badOp.appliedTechs).toEqual([]);
     expect(badOp.undecoded).toEqual([{ techId: 1, tech: '探针', reason: '费用效果操作未解码', attr: 104, op: 'div' }]);
+    for (const v of [0, -0.5, Number.NaN]) {
+      const badMul = unitCost(base, 'Persians', 3, [probe([{ a: 100, op: 'mul', v, t: [4] }])]);
+      expect(badMul.cost).toEqual({ Wood: 25, Gold: 45 });
+      expect(badMul.appliedTechs).toEqual([]);
+      expect(badMul.undecoded).toEqual([{ techId: 1, tech: '探针', reason: '费用效果操作未解码', attr: 100, op: 'mul' }]);
+    }
   });
 
   it('legacy 取整在半数边界与 roundHalfPrice 分开', () => {
@@ -118,7 +124,7 @@ describe('unitCost 与现有调用点（#858）', () => {
     expect(priced.undecoded).toEqual([]);
   });
 
-  it('稳态生产的已选科技费用与 unitCost 相同，资源标记仍整项排除', () => {
+  it('稳态生产的已选科技费用与 unitCost 相同，含未解码资源标记时按单条效果放行并输出估算告警', () => {
     const rows = [{ unit: 4, building: 87, count: '1' }];
     const line = calculateProduction(ctx, { ...DEFAULT_PRODUCTION, civ: 'Persians', rows, techs: [488] }).lines[0]!;
     const tech = ctx.core.techById[488]!;
@@ -128,10 +134,14 @@ describe('unitCost 与现有调用点（#858）', () => {
     const bolas = [{ unit: 2569, building: 87, count: '1' }];
     const plain = calculateProduction(ctx, { ...DEFAULT_PRODUCTION, civ: 'Mapuche', age: 4, rows: bolas, techs: [] });
     const marked = calculateProduction(ctx, { ...DEFAULT_PRODUCTION, civ: 'Mapuche', age: 4, rows: bolas, techs: [1380] });
+    const butalmapu = ctx.core.techById[1380]!;
+    const expectedBolas = unitCost({ id: 2569, cost: E.units[2569]!.cost }, 'Mapuche', 4, [{ id: butalmapu.id, en: butalmapu.en, zh: butalmapu.zh }]);
     expect(plain.errors).toEqual([]);
     expect(marked.errors).toEqual([]);
-    expect(marked.lines[0]!.cost).toEqual(plain.lines[0]!.cost);
-    expect(marked.warnings.some((warning) => warning.includes('布图马普') && warning.includes('未计入'))).toBe(true);
+    expect(marked.lines[0]!.cost).toEqual(expectedBolas.cost);
+    expect(marked.lines[0]!.cost).toEqual({ Wood: 42.5, Gold: 47 });
+    expect(marked.lines[0]!.applied).toContain('布图马普');
+    expect(marked.warnings).toContain('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');
   });
 
   it('路线与城堡情景的现有科技包不改变折扣价', () => {

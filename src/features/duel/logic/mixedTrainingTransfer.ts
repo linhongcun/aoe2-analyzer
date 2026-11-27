@@ -1,5 +1,6 @@
 import { DAT, toEffects, type DatEco } from '../../../domain/datEffects';
 import { TEAM_BONUSES } from '../../../domain/effects';
+import { NON_PRICING_RESOURCE_SET } from '../../../domain/gameIds';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { PRODUCTION_UNLOCK_TECH_IDS, productionBuildings, type ProductionContext } from '../../../domain/production';
 import type { ProductionTransferNotice } from '../../../domain/productionTransfer';
@@ -20,12 +21,8 @@ const combatAttributes = new Set([10, 22, 24, 63, 102, 107, 108, 109]);
 // 13 Work Rate (bird.work_rate: pack/unpack, heal, gather, trade, building train/research speed),
 // 14 Carry Capacity (unit.resource_capacity).
 const nonPricingAttributes = new Set([13, 14]);
-// Pinned .dat + UGC Guide non-pricing player resources:
-// 203 Map Reveal (0 normal / 1 explored / 2 all visible; Portuguese Circumnavigation 1404 sets -1).
-const nonPricingResources = new Set([203]);
-
 export function hasUnsupportedTransferResourceOrCost(eco: readonly DatEco[]): boolean {
-  return eco.some((effect) => (effect.res !== undefined && !nonPricingResources.has(effect.res)) || (isUnitCostAttribute(effect.a) && !effect.t?.length));
+  return eco.some((effect) => (effect.res !== undefined && !NON_PRICING_RESOURCE_SET.has(effect.res)) || (isUnitCostAttribute(effect.a) && !effect.t?.length));
 }
 
 export function isUnclassifiedTransferEcoEffect(
@@ -33,7 +30,7 @@ export function isUnclassifiedTransferEcoEffect(
   armyUnitIds: ReadonlySet<number>,
   unitById: Readonly<Record<number, Unit | undefined>>,
 ): boolean {
-  if (effect.res !== undefined) return !nonPricingResources.has(effect.res);
+  if (effect.res !== undefined) return !NON_PRICING_RESOURCE_SET.has(effect.res);
   if (isUnitCostAttribute(effect.a)) return !effect.t?.length;
   if (effect.a !== undefined && (combatAttributes.has(effect.a) || nonPricingAttributes.has(effect.a))) return false;
   // Attribute effects whose explicit catalog unit targets are all outside this side's army cannot alter its training price.

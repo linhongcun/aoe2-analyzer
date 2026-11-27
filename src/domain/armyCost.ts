@@ -15,7 +15,7 @@ import {
   type ArmyResearchPrice,
 } from './armyResearchRules';
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
-import { AGE_BY_TECH } from './gameIds';
+import { AGE_BY_TECH, NON_PRICING_RESOURCE_SET } from './gameIds';
 import { productionBuildings, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from './production';
 import { makeSimContext, simTechs, civStatus } from './simulator';
 import type { Cost, Unit } from './types';
@@ -147,6 +147,8 @@ export interface ArmyTrainingLine {
   cost: Cost | null;
   subtotal: Cost | null;
   reason: string;
+  /** 已按可解码条目计入但另含未解码资源或条件效果的估算科技名列表（去重）。 */
+  estimatedTechs: string[];
 }
 function productionShell(civ: string, age: number, techs: number[] = []) {
   return { civ, age, techs, rows: [], walk: 0, farm: 0 };
@@ -391,7 +393,16 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     lines: config.rows.map((row) => {
       const unit = ctx.core.unitById[row.unit] ?? null;
       const qtyValue = /^\d+$/.test(row.qty) && +row.qty >= 1 && +row.qty <= 1000 ? +row.qty : null;
-      const base = { unit, trainCount: unitTrainCount(unit), qtyValue, billedBatches: null, deliveredQty: null, cost: null, subtotal: null };
+      const base = {
+        unit,
+        trainCount: unitTrainCount(unit),
+        qtyValue,
+        billedBatches: null,
+        deliveredQty: null,
+        cost: null,
+        subtotal: null,
+        estimatedTechs: [] as string[],
+      };
       if (blocked.length) return { ...base, status: 'unavail', reason: '文明或时代无效，原行已保留' };
       if (!unit) return { ...base, status: 'pending', reason: row.unit ? '无法识别单位形态，原行已保留' : '请选择兵种形态' };
       if (!productionBuildings(ctx, productionShell(config.civ, age, activeTechs), unit).length)
@@ -423,7 +434,14 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
         .filter(({ tech }) => all.has(tech.id) && ledger.get(researchKey(tech.id))?.problem !== 'identity')
         .map(({ tech }) => tech);
       const quote = unitCost(unit, config.civ, priceAge(unit.age, age), techs);
-      if (quote.undecoded.length || quote.discount.unsupported.length) badRows.set(index, '目标状态训练费用修正未核实');
+      const unknownUndecoded = quote.undecoded.filter((u) => u.attr !== undefined || u.res === undefined || !NON_PRICING_RESOURCE_SET.has(u.res));
+      const hasInvalidCostOp = unknownUndecoded.some((u) => u.attr !== undefined || u.res === undefined);
+      const appliedIds = new Set(quote.appliedTechs.map((t) => t.id));
+      const canPrice =
+        !quote.discount.unsupported.length &&
+        !hasInvalidCostOp &&
+        (unknownUndecoded.length === 0 || (quote.appliedTechs.length > 0 && unknownUndecoded.every((u) => appliedIds.has(u.techId))));
+      if (!canPrice) badRows.set(index, '目标状态训练费用修正未核实');
       else {
         const batches = batchesForQty(line.qtyValue!, line.trainCount);
         line.billedBatches = batches;
@@ -431,6 +449,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
         line.cost = quote.cost;
         line.subtotal = {};
         for (const r of ARMY_RES) line.subtotal[r] = (quote.cost[r] ?? 0) * batches;
+        line.estimatedTechs = [...new Set(unknownUndecoded.map((u) => u.tech))];
       }
     }
     if (badRows.has(index)) {
@@ -440,6 +459,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
       line.deliveredQty = null;
       line.cost = null;
       line.subtotal = null;
+      line.estimatedTechs = [];
     }
     if (line.subtotal) addArmyCost(trainingTotal, line.subtotal);
   }
