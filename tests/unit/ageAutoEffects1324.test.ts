@@ -189,11 +189,18 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
     expect(castleC.lines[0]!.seconds).toBeCloseTo(12, 6);
     expect(castleC.lines[0]!.applied).not.toContain('城堡时代自动训练时间修正');
 
-    // 勃艮第弗拉芒民兵（1699）：经已有通用隐藏科技 774 自动 16 * 0.875 = 14s
-    const flemish = prod({ civ: 'Burgundians', age: 4, techs: [755], rows: [{ unit: 1699, building: 12, count: '1' }] });
-    expect(flemish.errors).toEqual([]);
-    expect(flemish.lines[0]!.seconds).toBeCloseTo(14, 6);
-    expect(flemish.lines[0]!.applied).toContain('城堡时代自动训练时间修正');
+    // 勃艮第弗拉芒民兵（1699）：封建 16s 直训，城堡/帝王经通用隐藏科技 774 自动 16 * 0.875 = 14s（均无需 755）
+    const flemishF = prod({ civ: 'Burgundians', age: 2, rows: [{ unit: 1699, building: 12, count: '1' }] });
+    const flemishC = prod({ civ: 'Burgundians', age: 3, rows: [{ unit: 1699, building: 12, count: '1' }] });
+    const flemishI = prod({ civ: 'Burgundians', age: 4, rows: [{ unit: 1699, building: 12, count: '1' }] });
+    expect(flemishF.errors).toEqual([]);
+    expect(flemishF.lines[0]!.seconds).toBeCloseTo(16, 6);
+    expect(flemishF.lines[0]!.applied).not.toContain('城堡时代自动训练时间修正');
+    for (const flemish of [flemishC, flemishI]) {
+      expect(flemish.errors).toEqual([]);
+      expect(flemish.lines[0]!.seconds).toBeCloseTo(14, 6);
+      expect(flemish.lines[0]!.applied).toContain('城堡时代自动训练时间修正');
+    }
   });
 
   it('非法 bt 通用隐藏效果会被校验拦下、给出告警且不写入已应用注记', () => {

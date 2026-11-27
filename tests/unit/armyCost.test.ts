@@ -43,11 +43,16 @@ describe('army research pinned data', () => {
     expect(chinesePrice.modifiers.filter((m) => m.applied && m.command.A === 85).map((m) => m.nodeId)).toEqual([352]);
     expect(chinesePrice.modifiers.filter((m) => m.superseded && m.command.A === 85).map((m) => m.nodeId)).toEqual([304, 350, 351]);
   });
-  it('quotes Flemish militia training independently of its unlock resource marker', () => {
-    const r = evaluateArmyCost(ctx, { ...makeArmyCost('Burgundians'), rows: [{ unit: 1699, qty: '2' }] });
-    expect(r.training.lines[0]?.status).toBe('ok');
-    expect(r.trainingTotal).toMatchObject({ Food: 70, Gold: 50 });
-    expect(r.ledger.find((e) => e.id === 755)?.status).toBe('planned');
+  it('quotes Flemish militia training directly from Feudal Age without requiring Flemish Revolution (755)', () => {
+    for (const age of ['2', '3', '4'] as const) {
+      const r = evaluateArmyCost(ctx, { ...makeArmyCost('Burgundians', age), rows: [{ unit: 1699, qty: '2' }] });
+      expect(r.training.lines[0]?.status).toBe('ok');
+      expect(r.trainingTotal).toMatchObject({ Food: 70, Gold: 50 });
+      expect(r.researchTotal).toEqual({});
+      expect(r.total).toMatchObject({ Food: 70, Gold: 50 });
+      expect(r.ledger.find((e) => e.id === 755)).toBeUndefined();
+      expect(r.partial).toBe(false);
+    }
   });
   it('offers scoped text combat research but excludes pure production speed', () => {
     const config = { ...makeArmyCost('Britons'), rows: [{ unit: 4, qty: '1' }] };

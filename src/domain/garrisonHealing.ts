@@ -109,11 +109,7 @@ export function availableHealingTechs(ctx: HealingContext, c: HealingConfig): Te
   // route even when they change no HP (Anarchy, Marauders, Chemistry, etc.).
   const locations = new Set(GENERAL_GARRISON_DATA.buildings[c.buildingId]?.predecessors ?? [c.buildingId]);
   for (const tech of ctx.core.techs)
-    if (
-      GENERAL_GARRISON_DATA.techs[tech.id]?.trainingLocations?.some((e) => locations.has(e.location)) ||
-      (tech.id === 47 && [87, 49].includes(c.buildingId)) ||
-      (tech.id === 755 && c.buildingId === 1806)
-    )
+    if (GENERAL_GARRISON_DATA.techs[tech.id]?.trainingLocations?.some((e) => locations.has(e.location)) || (tech.id === 47 && [87, 49].includes(c.buildingId)))
       ids.add(tech.id);
   const addPre = (id: number) => {
     const pre = ctx.core.techById[id]?.pre;

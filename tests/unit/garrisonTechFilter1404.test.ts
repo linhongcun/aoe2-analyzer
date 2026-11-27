@@ -67,7 +67,8 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     expect(seenByTech.get(515)).toEqual(['Magyars/82']);
     expect(seenByTech.get(16)).toEqual(['Goths/12']);
     expect(seenByTech.get(483)).toEqual(['Huns/101']);
-    expect(seenByTech.get(755)).toEqual(['Burgundians/12']);
+    // DE 188329 起弗拉芒民兵（1699）封建兵营直训，弗拉芒革命（755）不再解锁单位训练
+    expect(seenByTech.get(755)).toBeUndefined();
     expect(seenByTech.get(7)).toEqual(['Persians/82']);
     expect(seenByTech.get(576)).toEqual(['Malians/109']);
     // 马来巨港 1189 精确只保留 47/199/200/201
@@ -103,12 +104,17 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     expect(techIds(87, 'Burgundians', 4)).not.toContain(755);
     expect(calculateGeneralGarrison(ctx, range, cfg('Burgundians', 4, [], [{ unitId: 1699, count: '1', entry: 'created' }])).errors.length).toBeGreaterThan(0);
 
-    // 兵营 12 正常保留无政府 16 与弗拉芒革命 755 及其自产留驻
+    // 兵营 12 正常保留无政府 16 及其自产留驻；勃艮第 1699 自封建起无需 755 即可留驻，且 755 不再出现在兵营驻军科技中
     expect(techIds(12, 'Goths', 4)).toContain(16);
     expect(calculateGeneralGarrison(ctx, barracks, cfg('Goths', 4, [16], [{ unitId: 41, count: '1', entry: 'created' }])).errors).toEqual([]);
     expect(calculateGeneralGarrison(ctx, barracks, cfg('Goths', 4, [16], [{ unitId: 759, count: '1', entry: 'created' }])).errors).toEqual([]);
-    expect(techIds(12, 'Burgundians', 4)).toContain(755);
-    expect(calculateGeneralGarrison(ctx, barracks, cfg('Burgundians', 4, [755], [{ unitId: 1699, count: '1', entry: 'created' }])).errors).toEqual([]);
+    expect(techIds(12, 'Burgundians', 4)).not.toContain(755);
+    for (const age of [2, 3, 4]) {
+      expect(calculateGeneralGarrison(ctx, barracks, cfg('Burgundians', age, [], [{ unitId: 1699, count: '1', entry: 'created' }])).errors).toEqual([]);
+    }
+    expect(
+      calculateGeneralGarrison(ctx, barracks, cfg('Burgundians', 4, [755], [{ unitId: 1699, count: '1', entry: 'created' }])).errors.length,
+    ).toBeGreaterThan(0);
 
     // 强化教堂 1806 仍保留僧侣(125)/牧师战士(1811) 自产留驻与圣物存放(285)
     const armChurchCands = getGarrisonCandidates(ctx, church, cfg('Armenians', 4));
@@ -423,7 +429,7 @@ describe('Issue 1404: getGarrisonTechs 数据驱动过滤与正例锁定', () =>
     // 4. R11 P2-3: 11 项把 TC 容量设为 15（与初始/基线恒等）的科技均识别为常量无效果，不触发超限误留
     const status = civStatus(ctx.trees, 'Britons');
     const shape = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
-    const skip = new Set([16, 47, 483, 755, ...GENERAL_GARRISON_DATA.civs.Britons!.disabled]);
+    const skip = new Set([16, 47, 483, ...GENERAL_GARRISON_DATA.civs.Britons!.disabled]);
     const capIds = ctx.core.techs
       .filter((t) => !t.pre && !shape.has(t.id) && !skip.has(t.id) && t.civs.includes('Britons') && status['t' + t.id] === 1)
       .map((t) => t.id)

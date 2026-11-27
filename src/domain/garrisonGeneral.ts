@@ -501,7 +501,6 @@ function candidate(
   if ([5, 36, 420, 691].includes(id) && !state.known.has(47)) canCreate = false;
   if ([759, 761].includes(id) && b.id === 12 && !state.known.has(16)) canCreate = false;
   if ([886, 887].includes(id) && b.id === 101 && !state.known.has(483)) canCreate = false;
-  if (id === 1699 && !state.known.has(755)) canCreate = false;
   const core = ctx.core.unitById[id] ?? (id === FEMALE_VILLAGER_ID ? ctx.core.unitById[VILLAGER_UNIT_ID] : undefined) ?? ctx.core.buildingById[id];
   return {
     id,
@@ -545,7 +544,6 @@ const EXPLICIT_CREATE_UNLOCKS: readonly { techId: number; unitIds: readonly numb
   { techId: 47, unitIds: [5, 36, 420, 691] },
   { techId: 16, unitIds: [759, 761], buildingId: 12 },
   { techId: 483, unitIds: [886, 887], buildingId: 101 },
-  { techId: 755, unitIds: [1699] },
 ];
 const EXPLICIT_CREATE_UNLOCK_IDS = new Set<number>(EXPLICIT_CREATE_UNLOCKS.map((g) => g.techId));
 const MAX_EXACT_CONTROL_SUBSETS = 1024;
