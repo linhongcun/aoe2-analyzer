@@ -3,14 +3,50 @@ on:
   push: { branches: [main] }
   pull_request: { branches: [main] }
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: '从 main 部署 Pages 并触发自动 Release（由版本汇总步骤自动调用，或人工恢复部署）'
+        required: false
+        default: false
+        type: boolean
+      expected_sha:
+        description: '可选：校验本次部署的精确 main 提交 SHA（防并发覆盖）'
+        required: false
+        default: ''
+        type: string
 permissions: { contents: read }
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ (github.event_name == 'workflow_dispatch' && inputs.deploy != true) && format('ci-readonly-{0}-{1}', github.ref, github.run_id) || format('ci-{0}', github.ref) }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
+  prepare:
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy == true)) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: { contents: write, actions: write }
+    outputs:
+      action: ${{ steps.plan.outputs.action }}
+      bump_sha: ${{ steps.plan.outputs.bump_sha }}
+      version: ${{ steps.plan.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20.19.5' }
+      - name: Consume pending release notes and dispatch deploy
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          DEPLOY_INPUT: ${{ inputs.deploy == true }}
+        run: node scripts/release-workflow.mjs --prepare
   check:
+    needs: prepare
+    if: ${{ !failure() && !cancelled() && (github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && (inputs.deploy != true || github.ref != 'refs/heads/main')) || (needs.prepare.result == 'success' && needs.prepare.outputs.action == 'direct')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      deploy_eligible: ${{ steps.target.outputs.deploy_eligible }}
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: "${{ github.event_name == 'pull_request' && 2 || 1 }}" }
@@ -26,6 +62,11 @@ jobs:
         if: github.event_name == 'pull_request'
         env: { PR_TITLE: '${{ github.event.pull_request.title }}' }
         run: node scripts/check-pr-title.mjs
+      - name: PR release-notes guard
+        if: github.event_name == 'pull_request' && steps.scope.outputs.docs_only != 'true'
+        env:
+          PR_BASE_SHA: '${{ github.event.pull_request.base.sha }}'
+        run: node scripts/release-notes.mjs --check-pr
       - name: Documentation boundary
         if: steps.scope.outputs.docs_only == 'true'
         run: node scripts/check-docs-boundary.mjs
@@ -49,18 +90,26 @@ jobs:
       - name: Narrow browser smoke against this build
         if: steps.scope.outputs.docs_only != 'true'
         run: node scripts/ci-commands.mjs smoke
+      - name: Mark deployment eligibility
+        id: target
+        run: |
+          if [ "${{ github.ref == 'refs/heads/main' && needs.prepare.result == 'success' && needs.prepare.outputs.action == 'direct' }}" = "true" ]; then
+            echo "deploy_eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_eligible=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/upload-artifact@v4
         if: failure()
         with: { name: browser-diagnostics, path: test-results, if-no-files-found: ignore }
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.target.outputs.deploy_eligible == 'true'
         with: { name: site, path: dist, if-no-files-found: error }
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.target.outputs.deploy_eligible == 'true'
         with: { path: dist }
   deploy:
     needs: check
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' && needs.check.outputs.deploy_eligible == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: { pages: write, id-token: write }

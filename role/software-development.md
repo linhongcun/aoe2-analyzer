@@ -59,15 +59,15 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 Playwright 未设 `BASE_URL` 时自起 `vite preview --port 4173` 读取 `dist/`，须先 `npm run build`。
 
-**默认 CI（`.github/workflows/ci.yml`）**：纯 Markdown PR 仅跑标题与文档边界检查；其余 PR 与 `main` push 跑 `static`（`node scripts/ci-commands.mjs static`：含 `lint`、`tsc`、`content:check --strict`、`check-source-presentation`、`content:validators --check`、`lint:layers --strict`）→ `build` → `smoke`（`GATE_NARROW_SMOKE` 7 条窄冒烟含 `ciBuild659`）；仅 `main` push 成功后用同份 `dist` `deploy` Pages 并上传 `site` 产物。全量单测、`data`、对比度与整站 E2E 归 `.github/workflows/full.yml`（每日/手动，不部署）。`ci-browser-weights.json` 与 `lint:browser-weights` 已移除（[#1523](https://github.com/linhongcun/aoe2-analyzer/issues/1523)）。被跳过的作业不等于通过。
+**默认 CI（`.github/workflows/ci.yml`）**：纯 Markdown PR 仅跑标题与文档边界检查；其余 PR 与 `main` 部署流跑 `static`（`node scripts/ci-commands.mjs static`：含 `lint`〔含 `lint:release-notes`〕、`tsc`、`content:check --strict`、`check-source-presentation`、`content:validators --check`、`lint:layers --strict`）→ `build` → `smoke`（`GATE_NARROW_SMOKE` 7 条窄冒烟含 `ciBuild659`）；PR 另跑 `release-notes.mjs --check-pr` 防片段与手工改版本混用。`main` push 先由 `prepare` 消费 `release-notes/*.json`（若有）推送唯一版本提交并派发该提交的 `deploy=true` `CI / Deploy`，成功后用同份 `dist` `deploy` Pages、上传 `site` 产物并接续 `Release`；无片段提交不递增版本。全量单测、`data`、对比度与整站 E2E 归 `.github/workflows/full.yml`（每日/手动，不部署）。`ci-browser-weights.json` 与 `lint:browser-weights` 已移除（[#1523](https://github.com/linhongcun/aoe2-analyzer/issues/1523)）。被跳过的作业不等于通过。
 
 ## 7. 从改动到上线
 
-1. 基于最新 `origin/main` 建独立 worktree 分支；核对原 Issue 处于 `阶段:软件开发`、无重复 open PR 与硬阻塞，在「软件开发」节补 TRD（`feature`/`data` 先完成独立技术评审，`bug`/`docs`/`chore` 并入 PR 复核）。
+1. 基于最新 `origin/main` 建独立 worktree 分支；核对原 Issue 处于 `阶段:软件开发`、无重复 open PR 与硬阻塞，在「软件开发」节补 TRD（`feature`/`data` 先完成独立技术评审，`bug`/`docs`/`chore` 并入 PR 复核）。网站实现 PR 在 `release-notes/<issue>.json` 写面向玩家的更新片段（`issue`、`summary`、默认 `patch` 的 `bump`），不再手工修改 `package.json`、`package-lock.json` 与 `CHANGELOG.md` 顶部；纯文档与无需网站交付的工程 PR 不提交片段。
 2. 改数据脚本后本地重生成并提交产物（默认 CI 不跑 `data` 阶段）；跑直接相关单测/E2E 与必要冒烟。
 3. 由实现者之外的非 Codex、非 Devin 独立代理复核最终 HEAD（记 SHA、范围、结论与遗留；按维护者 2026-11-27 决定，**0 P0 / 0 P1 即结论通过**，P2 仅作非阻断备注不打回，按务实威胁模型聚焦验收标准与真实回归）；纯文档/纯样式不动逻辑测试可走 CI 绿轻量规则。
 4. PR 标题符合 [check-pr-title.mjs](../scripts/check-pr-title.mjs) Conventional Commits；默认 `squash` 合并（双提交策略 PR 中 Commit 2 钉 Commit 1 `DOC_SHA` 时必须常规 `merge` 保留祖先链，如 [#1369](https://github.com/linhongcun/aoe2-analyzer/issues/1369)/[#1398](https://github.com/linhongcun/aoe2-analyzer/issues/1398)）。网站实现 PR 写 `Relates #N`，合入即完成的纯仓库文档可 `Fixes #N`（经验回写 PR 只写 `Relates #N`）。
-5. 核对 `main` 上 squash/merge 后的实际 SHA：`check` 与 `deploy` 全绿、Pages 完成、线上页脚 7 位构建与该 SHA 一致且改动可见、正式非 draft Release 与 tag/产物通过（见 [RELEASING.md](../docs/RELEASING.md)），再转 `阶段:已上线` + `已部署`（纯仓库交付不标 `已部署`）、写复盘并关闭原 Issue。
+5. 核对合入后 `main` 最终部署提交（带片段 PR 为 `prepare` 推送的 `chore(release): vX.Y.Z` 提交 SHA，无片段为合并提交 SHA）：`check` 与 `deploy` 全绿、Pages 完成、线上页脚版本与 7 位构建与该 SHA 一致且改动可见、正式非 draft Release 与 tag/产物通过（见 [RELEASING.md](../docs/RELEASING.md)），再转 `阶段:已上线` + `已部署`（纯仓库交付不标 `已部署`）、写复盘并关闭原 Issue。
 
 ## 8. 已经核对过的失败和后续上线
 

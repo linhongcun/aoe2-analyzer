@@ -26,6 +26,9 @@ const displayFiles = new Map([
 const feedbackPaths = new Set(['src/shared/ui/FeedbackLink.tsx', 'src/shared/utils/feedback.ts']);
 const maintenanceFiles = new Set([
   'scripts/release.mjs',
+  'scripts/release-notes.mjs',
+  'scripts/release-workflow.mjs',
+  'scripts/changelog.mjs',
   'scripts/prepare-release.mjs',
   'scripts/check-pr-title.mjs',
   'scripts/ci-scope.mjs',
@@ -720,6 +723,8 @@ export function planChanges(changes) {
       full = true;
     } else if (path.startsWith('docs/') || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
       // Ordinary documentation does not change product logic or generated data.
+    } else if (path === 'release-notes/.gitkeep' || /^release-notes\/[1-9]\d*(?:-[a-z0-9]+(?:-[a-z0-9]+)*)?\.json$/.test(path)) {
+      // Zero-conflict release-note fragment metadata; does not alter product logic or generated data.
     } else if (shellFiles.has(path)) {
       full = true;
     } else if (displayFiles.has(path)) {

@@ -6,18 +6,21 @@
 
 ## 准备、合并与网站部署
 
-1. 普通更新从最新 main 建实现分支，一个 issue、一个 PR 直接对 main；只有确需多项冻结集成时才建立 `release/vX.Y.Z`。版本号为三段，`package.json` 与锁文件一并更新。CHANGELOG 用 `scripts/changelog.mjs` 的 `insertVersionSection` 插在 Unreleased 正文之后、已有版本之前。
+1. 普通网站实现更新从最新 `main` 建实现分支，一个 issue、一个 PR 直接对 `main`；**不再在功能 PR 中手工递增 `package.json`、`package-lock.json` 或修改 `CHANGELOG.md` 顶部**，而是在 `release-notes/<issue>.json`（或 `release-notes/<issue>-<slug>.json`）提交零冲突变更片段（JSON 字段：`issue` 必填正整数且与文件名前缀一致、`summary` 必填单行中文说明且含 `#<issue>`、`bump` 可选默认 `patch`，可选 `patch`/`minor`/`major`；由 `npm run lint:release-notes` 与 PR 防重检查把关）。纯文档 PR 与无需网站发布的纯仓库工程 PR 不提交片段，不会触发版本号递增；若当前版本已有正式 Release，后续 `Release` 自动幂等跳过（仅在当前版本尚未发布正式 Release 时可用于补全发布）。仅确需多项冻结集成时才建立 `release/vX.Y.Z`。
 2. 完成实现者之外的独立复核，以及按 TESTING 选择的一次适用验证。
-3. 合入 main。PR 的 CI / Deploy `check` 必须成功；它每次实跑，不复用其他 run 的结果。
-4. main push 重新执行同一 `check`（static、构建、7 条窄冒烟，页脚身份等于本次提交），成功后 `deploy` 用官方 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物。冒烟失败则不部署。全部单测、data 与整站浏览器在 CI full（每日/手动）运行，不作为这次部署的门禁。
+3. 合入 `main`。PR 的 CI / Deploy `check` 必须成功；它每次实跑，不复用其他 run 的结果。
+4. `main` push 进入 `CI / Deploy` 的 `prepare` 阶段（`scripts/release-workflow.mjs --prepare`）：
+   - **有待发布片段（`release-notes/*.json`）时**：由 `scripts/release-notes.mjs --apply` 统一按 `issue` 升序合并片段、按 `major > minor > patch` 递增唯一三段版本号、以 `Asia/Shanghai` 日期调用 `scripts/changelog.mjs` 的 `insertVersionSection` 写入 `CHANGELOG.md`（位于 `[Unreleased]` 正文之后、已有版本之前）并同步更新 `package.json` 与 `package-lock.json`、删除已消费片段；提交 `chore(release): vX.Y.Z` 推送至 `main`（使用内置 `GITHUB_TOKEN`，不触发递归 `on: push`），再通过 `actions: write` 派发 `workflow_dispatch`（`deploy=true`、`expected_sha=<BUMP_SHA>`）触发精确部署提交的 `CI / Deploy`（原 `push` 运行的 `check`/`deploy` 在 job 级跳过，不写假绿）。若未来对 `main` 启用 branch protection，须放行 `github-actions[bot]` 或改为 release PR/GitHub App 令牌。
+   - **无待发布片段时**（纯文档 PR、无网站发布的纯仓库工程 PR、或无片段的手工版本热修）：不递增版本号，直接进入本次运行的 `check` → `deploy`（若当前版本已有正式 Release 则自动幂等跳过；若当前版本尚未发布正式 Release，则本次部署产物会接续完成该版本的正式 Release）。
+5. `check` 在最终部署提交（`BUMP_SHA` 或无片段 `main` 尖端）上重新执行同一套 `static`、构建与 7 条窄冒烟（含 `ciBuild659` 核对页脚版本与 7 位构建 SHA 等于本次提交），成功后 `deploy` 用官方 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物。冒烟失败则不部署。全部单测、`data` 与整站浏览器在 CI full（每日/手动）运行，不作为这次部署的门禁。
 
 普通 UI 更新不重生成未变数据，不默认执行无关计算与整站扫描。核心计算、依赖、共享基础设施和未知范围仍完整验证一次；涉及数据、生成脚本、来源等变化时才做相应数据管线。不要为凑项数或固定周期推迟已就绪的授权更新。
 
 ## 自动接续正式 Release
 
-`.github/workflows/release.yml` 在同仓库 main 的成功 push 型 CI / Deploy 完成后自动接续；手动恢复时在 Actions 里填入该次成功 run 的 ID。它先通过 GitHub API 核对该 run 确为 main 的成功 push 型 CI / Deploy，再检出其 `head_sha` 并读取 `package.json` 版本。
+`.github/workflows/release.yml` 在同仓库 `main` 的成功 `CI / Deploy`（`push` 或由 `prepare` / 人工触发的 `deploy=true` `workflow_dispatch`）完成后自动接续；手动恢复时在 Actions 里填入该次成功部署 run 的 ID。它先在可信 `main` 上运行 `scripts/release-workflow.mjs --resolve-run` 核对该 run 确为同仓库 `main` 成功完成的 `CI / Deploy` 且 `check` 与 `deploy` 两个 job 均为 `success`（仅做版本汇总、被新提交取代或只读 `deploy=false` 等跳过 `deploy` 的 run 在自动触发时优雅跳过，手动传入无效 run ID 时明确报错），随后精确检出其 `head_sha`（`fetch-depth: 0` + `git fetch origin main --tags`）并从 `git show "${DEPLOYED_SHA}:package.json"` 读取版本。
 
-若 `vX.Y.Z` 已是正式 Release 则幂等跳过；若已有同名 tag 却不指向该提交则失败，不覆盖 tag。否则下载该 run 的 `site` 产物（即部署的那份 `dist`），压成 `aoe2-analyzer-site-vX.Y.Z.zip` 并生成 `SHA256SUMS.txt`，以该提交为 target 创建 tag 与 Release，说明指向该提交的 CHANGELOG；已存在 draft 时补齐附件并转正式。
+若 `vX.Y.Z` 已是正式 Release 则幂等跳过；若已有同名 tag 却不指向该提交则失败，不覆盖 tag。否则下载该 run 的 `site` 产物（即部署的那份 `dist`），压成 `aoe2-analyzer-site-vX.Y.Z.zip` 并生成 `SHA256SUMS.txt`，以该提交为 target 创建 tag 与 Release，说明指向该提交的 CHANGELOG；已存在 draft 时补齐附件并转正式。若 `prepare` 推送后派发 `CI / Deploy` 遇瞬时故障，执行 `gh workflow run ci.yml --ref main -f deploy=true -f expected_sha=<BUMP_SHA>` 即可幂等恢复部署与发版且不会二次递增版本。
 
 不从 tag 二次构建 ZIP，也不在 Release 里重跑浏览器验证：产物就是 CI 已验证并部署的字节。缺少产物应明确失败，不能用重新构建另一份网站掩盖来源问题。
 

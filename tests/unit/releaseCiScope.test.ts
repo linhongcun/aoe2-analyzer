@@ -28,6 +28,7 @@ describe('#427 按实际变更选择验证范围', () => {
         change('tests/e2e/civDlcFilters.spec.ts'),
         change('docs/README.md'),
         change('CHANGELOG.md'),
+        change('release-notes/1528.json'),
         change('package.json', packageText('0.33.0'), packageText('0.33.1')),
         change('package-lock.json', lockText('0.33.0'), lockText('0.33.1')),
       ]),
@@ -40,6 +41,8 @@ describe('#427 按实际变更选择验证范围', () => {
       change('.github/workflows/release.yml'),
       change('scripts/ci-scope.mjs'),
       change('scripts/prepare-release.mjs'),
+      change('scripts/release-notes.mjs'),
+      change('scripts/release-workflow.mjs'),
       change('tests/unit/releaseCiScope.test.ts'),
       change('docs/TESTING.md'),
     ];
