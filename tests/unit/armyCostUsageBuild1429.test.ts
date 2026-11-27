@@ -282,12 +282,31 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       const nestedDirAlias = join(tempDir, 'nested-dir-alias');
       symlinkSync(nestedRealDir, nestedDirAlias);
       const brokenRelViaDirAlias = join(nestedDirAlias, 'broken-rel.json');
+      // 符号链接后紧跟 `..`（portal -> data/sub，链接指向 portal/../game/army_cost_usage.json）以及深层符号链接链（18 层与超限环链）
+      const dataSubDir = join(tempDir, 'data/sub');
+      mkdirSync(dataSubDir, { recursive: true });
+      symlinkSync(dataSubDir, join(tempDir, 'portal'));
+      const portalDotDotLink = join(tempDir, 'portal-dotdot.json');
+      symlinkSync('portal/../game/army_cost_usage.json', portalDotDotLink);
+      const chainDir = join(tempDir, 'chain');
+      mkdirSync(chainDir, { recursive: true });
+      let chainPrev = target;
+      for (let i = 0; i < 18; i++) {
+        const hop = join(chainDir, `hop-${i}.json`);
+        symlinkSync(chainPrev, hop);
+        chainPrev = hop;
+      }
+      const deepChainTarget = chainPrev;
+      const loopA = join(chainDir, 'loop-a.json');
+      const loopB = join(chainDir, 'loop-b.json');
+      symlinkSync(loopB, loopA);
+      symlinkSync(loopA, loopB);
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
       const viteNodeBin = resolve('node_modules/.bin/vite-node');
 
       // 1) 预加载将 Error.stackTraceLimit 设为 0 时，--check 缺文件仍必须报错而非静默退出 0；
-      //    --civ 缺 --out、大小写变体、目录 symlink、经目录 symlink 的相对断链及 --out --check 均须 fail-closed 拦截
+      //    --civ 缺 --out、大小写变体、目录 symlink、经目录 symlink 的相对断链、portal/..、深层符号链接链/环链及 --out --check 均须 fail-closed 拦截
       const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
       writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
 
@@ -324,6 +343,18 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         expect(
           execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', brokenRelViaDirAlias], { cwd: tempDir }),
         ).rejects.toThrow(/--out/),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', portalDotDotLink], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', 'portal/../game/army_cost_usage.json'], {
+            cwd: tempDir,
+          }),
+        ).rejects.toThrow(/--out/),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', deepChainTarget], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', loopA], { cwd: tempDir })).rejects.toThrow(/--out/),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', '--check'], { cwd: tempDir })).rejects.toThrow(
           /--out/,
         ),

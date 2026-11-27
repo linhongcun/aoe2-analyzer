@@ -7,33 +7,77 @@
  *   npx vite-node --script scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  */
 import { existsSync, lstatSync, readFileSync, readlinkSync, realpathSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, parse, resolve } from 'node:path';
 import { ARMY_RESEARCH } from '../src/data/armyResearch';
 import { CORE } from '../src/data/core';
 import { loadTrees } from '../src/data/index';
 import { buildArmyCostUsage, DEFAULT_ARMY_COST_USAGE_DEST, formatArmyCostUsageJson } from './army_cost_usage_lib';
 
-function canonicalPath(filePath: string, symlinkDepth = 0): string {
-  const abs = resolve(filePath);
-  if (symlinkDepth > 16) return abs;
-  if (existsSync(abs)) {
+const MAX_SYMLINK_HOPS = 40;
+
+/**
+ * Resolve a filesystem path in POSIX segment order (following symlinks before collapsing `..`),
+ * supporting non-existent leaf targets and failing closed (returning null) on symlink loops,
+ * excessive hop depth, or unexpected filesystem errors.
+ */
+function resolveFsPath(filePath: string): string | null {
+  const root = parse(filePath).root;
+  let current: string;
+  let pending: string[];
+  if (root) {
+    current = root;
+    pending = filePath.slice(root.length).split(/[/\\]+/);
+  } else {
     try {
-      return realpathSync(abs);
+      current = realpathSync(process.cwd());
     } catch {
-      return abs;
+      return null;
+    }
+    pending = filePath.split(/[/\\]+/);
+  }
+  let symlinkHops = 0;
+  while (pending.length > 0) {
+    const seg = pending.shift()!;
+    if (!seg || seg === '.') continue;
+    if (seg === '..') {
+      current = dirname(current);
+      continue;
+    }
+    const next = join(current, seg);
+    let stat;
+    try {
+      stat = lstatSync(next);
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        current = next;
+        continue;
+      }
+      return null;
+    }
+    if (stat.isSymbolicLink()) {
+      if (++symlinkHops > MAX_SYMLINK_HOPS) return null;
+      let linkTarget: string;
+      try {
+        linkTarget = readlinkSync(next);
+      } catch {
+        return null;
+      }
+      const targetRoot = parse(linkTarget).root;
+      if (targetRoot) {
+        current = targetRoot;
+        pending.unshift(...linkTarget.slice(targetRoot.length).split(/[/\\]+/));
+      } else {
+        pending.unshift(...linkTarget.split(/[/\\]+/));
+      }
+      continue;
+    }
+    try {
+      current = realpathSync(next);
+    } catch {
+      return null;
     }
   }
-  const parent = dirname(abs);
-  const resolvedParent = parent !== abs ? canonicalPath(parent, symlinkDepth) : parent;
-  const normalized = join(resolvedParent, basename(abs));
-  try {
-    if (lstatSync(normalized).isSymbolicLink()) {
-      return canonicalPath(resolve(resolvedParent, readlinkSync(normalized)), symlinkDepth + 1);
-    }
-  } catch {
-    // Missing path or non-symlink.
-  }
-  return normalized;
+  return current;
 }
 
 function sameInode(a: string, b: string): boolean {
@@ -48,12 +92,11 @@ function sameInode(a: string, b: string): boolean {
 }
 
 function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_USAGE_DEST): boolean {
-  const a = resolve(candidate);
-  const b = resolve(defaultDest);
-  const ca = canonicalPath(a);
-  const cb = canonicalPath(b);
-  if (a === b || ca === cb) return true;
-  if (sameInode(a, b) || sameInode(ca, cb)) return true;
+  const ca = resolveFsPath(candidate);
+  const cb = resolveFsPath(defaultDest);
+  if (ca === null || cb === null) return true;
+  if (ca === cb) return true;
+  if (sameInode(candidate, defaultDest) || sameInode(ca, cb)) return true;
   // Fail-closed for firmlink/symlink aliases (e.g. macOS /System/Volumes/Data/...) and
   // case-insensitive filename variants (e.g. ARMY_COST_USAGE.JSON) even when the snapshot is missing.
   const sameName = basename(ca).toLowerCase() === basename(cb).toLowerCase();
@@ -62,7 +105,7 @@ function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_U
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {
   let check = false;
-  let out = DEFAULT_ARMY_COST_USAGE_DEST;
+  let rawOut = DEFAULT_ARMY_COST_USAGE_DEST;
   const civs: string[] = [];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]!;
@@ -70,7 +113,7 @@ function parseArgs(argv: readonly string[]): { check: boolean; out: string; civL
     else if (arg === '--out') {
       const next = argv[++i];
       if (!next || next.startsWith('-')) throw new Error('--out requires a file path');
-      out = resolve(next);
+      rawOut = next;
     } else if (arg === '--civ') {
       const next = argv[++i];
       if (!next || next.startsWith('-')) throw new Error('--civ requires a civilization name');
@@ -84,9 +127,10 @@ function parseArgs(argv: readonly string[]): { check: boolean; out: string; civL
       throw new Error(`Unknown argument: ${arg}`);
     }
   }
-  if (civs.length && targetsDefaultDest(out)) {
+  if (civs.length && targetsDefaultDest(rawOut)) {
     throw new Error('--civ requires an explicit --out path distinct from the default snapshot');
   }
+  const out = resolveFsPath(rawOut) ?? resolve(rawOut);
   return { check, out, ...(civs.length ? { civList: civs } : {}) };
 }
 
