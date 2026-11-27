@@ -18,6 +18,10 @@
 
 ## [Unreleased]
 
+## [0.99.72] - 2026-11-27
+
+- 重构文明提前时代、科技树点亮与禁用科技底层公共原语（#1527）：在严格保持 `#869` 四套顶层科技可用性边界不变的前提下，将勃艮第采集科技提前时代（`earlyEcoGatherTechAge`）、科技树点亮/最早行时代遍历（`treeNodeEarliestAge` / `hasLitTreeNode` / `litTreeIds`）及「文明拥有 + 树格点亮 + `.dat` 未禁用」校验（`isCivTechEnabled` / `disabledTechSet`）收口到零数据依赖的 `src/domain/availabilityAge.ts`，并将采集属性判定（`hasGatherAttrEffect`）在 `realCost.ts` 与 `production.ts` 间共享；同步升级 `scripts/check-tech-availability.mjs` 的辅助函数归属传播并补齐全 56 文明采集经济科技提前时代与 `.dat` 禁用集合对账单测；站内所有页面交互、计算口径与分包体积保持完全等价。
+
 ## [0.99.71] - 2026-11-27
 
 - 重构建筑驻军核心模块（#1526）：将 2,657 行的 `src/domain/garrisonGeneral.ts` 按严格无环职责内部拆分为 `src/domain/garrison/` 下的类型数据、快照候选、科技过滤与火力结算等 ≤ 500 行子模块，保留原有对外导出 100% 兼容并清理 `eslint.config.js` 超长文件豁免；站内驻军预览与驻军回血计算口径、交互及分包体积保持完全等价。

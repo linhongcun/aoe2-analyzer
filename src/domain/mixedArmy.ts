@@ -4,6 +4,7 @@ import rules from '../../data/content/mixed-army-rules.json';
 import { CORE } from '../data/core';
 import { civs } from '../data';
 import { GARRISON_TECH_DATA } from './garrisonTechs';
+import { hasLitTreeNode } from './availabilityAge';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';
 
 // Keep the reviewed prose intact; finite execution metadata is maintained by the same IDs.
@@ -275,10 +276,7 @@ export function mixedUnitPrerequisites(ctx: ProductionContext, input: MixedPrere
   if (!knownCivs.has(input.civ) || !Number.isInteger(input.age) || input.age < 1 || input.age > 4)
     return { ...result, reasons: ['文明或时代无效，请先修正输入。'] };
   const finalBuildings = potentialBuildings(ctx, input.civ, 4, input.unitId);
-  if (
-    !unit.civs.includes(input.civ) ||
-    !(ctx.trees.t[input.civ] ?? []).some((block) => block[3].some((cell) => cell[2] === 'u' && cell[3] === input.unitId && cell[4] === 1))
-  )
+  if (!unit.civs.includes(input.civ) || !hasLitTreeNode(ctx.trees, input.civ, 'u', input.unitId))
     return { ...result, status: 'civ-unavailable', reasons: [`本文明无法训练${unit.zh}。`] };
   if (!finalBuildings.length || (unit.from_ !== null && !mixedFormNeedsConfirmation(ctx, unit.id)))
     return { ...result, reasons: [`${unit.zh}的特殊前置或形态索引尚未可靠核对。`] };
@@ -322,11 +320,7 @@ export function mixedArmyConfirmationErrors(ctx: ProductionContext, config: Mixe
     const tech = ctx.core.techById[id];
     if (!tech) continue;
     if (!mixedArmyUnlockTechIds().includes(id)) errors.push(`${tech.zh}不是本页收录的必要研究，请移除此确认。`);
-    else if (
-      !tech.civs.includes(config.civ) ||
-      productionTechAge(tech, config.civ) > config.age ||
-      !(ctx.trees.t[config.civ] ?? []).some((block) => block[3].some((cell) => cell[2] === 't' && cell[3] === id && cell[4] === 1))
-    )
+    else if (!tech.civs.includes(config.civ) || productionTechAge(tech, config.civ) > config.age || !hasLitTreeNode(ctx.trees, config.civ, 't', id))
       errors.push(`${tech.zh}的完成确认与当前文明或时代不符，请核对并移除此确认。`);
   }
   for (const id of config.completedBuildings) {

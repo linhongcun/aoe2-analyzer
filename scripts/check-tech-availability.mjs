@@ -208,6 +208,7 @@ function civAge(file, fnName, civ, fingerprint, parts) {
   const cond = [...parts].sort().join('+') || 'plain';
   return {
     kind: 'civ-age',
+    file,
     key: `civ-age:${file}:${fnName}:${civ}:${fingerprint}:${cond}`,
     owner: fnName,
     usedBy: [],
@@ -298,6 +299,7 @@ function displayFromExpression(expr) {
 function displaySite(file, token, pair) {
   return {
     kind: 'display-age',
+    file,
     key: `display-age:${file}:displayUnitAge:${token}:${pair.civ}=${pair.yes}:other=${pair.no}`,
     owner: 'displayUnitAge',
     usedBy: [],
@@ -348,6 +350,7 @@ function collectFunctionSites(fn, file, fnName) {
     if (token && thenFp && elseFp) {
       sites.push({
         kind: 'unit-floor',
+        file,
         key: `unit-floor:${file}:${fnName}:${token}:then=${literalNumber(thenFp)}:else=${literalNumber(elseFp)}`,
         owner: fnName,
         usedBy: [],
@@ -362,6 +365,7 @@ function collectFunctionSites(fn, file, fnName) {
       if (civ && yes && no) {
         sites.push({
           kind: 'unit-civ',
+          file,
           key: `unit-civ:${file}:${fnName}:${token}:${civ}=${literalNumber(yes)}:other=${literalNumber(no)}`,
           owner: fnName,
           usedBy: [],
@@ -418,6 +422,7 @@ function collectAgeMaps(sf, file, fns) {
         for (const entry of entries) {
           sites.push({
             kind: 'age-map',
+            file,
             key: `age-map:${file}:${node.name.text}:${entry.civ}:${entry.id}=${entry.age}`,
             owner: node.name.text,
             constName: node.name.text,
@@ -444,21 +449,56 @@ function bodyReferences(fn, name) {
   return found;
 }
 
+function fnReferencesTarget(caller, targetFile, targetName, aliases) {
+  if (caller.file === targetFile && bodyReferences(caller.fn, targetName)) return true;
+  for (const alias of aliases) {
+    if (alias.importer === caller.file && alias.from === targetFile && alias.exported === targetName && bodyReferences(caller.fn, alias.local)) return true;
+  }
+  return false;
+}
+
 function applyUsedBy(sites, scannedFns, aliases) {
+  const fnSets = new Map();
+  for (const fn of scannedFns) {
+    const sets = new Set();
+    if (OWNER_SET[fn.name]) sets.add(OWNER_SET[fn.name]);
+    fnSets.set(fn, sets);
+  }
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const caller of scannedFns) {
+      const callerSets = fnSets.get(caller);
+      if (!callerSets?.size) continue;
+      for (const callee of scannedFns) {
+        if (callee === caller) continue;
+        if (!fnReferencesTarget(caller, callee.file, callee.name, aliases)) continue;
+        const calleeSets = fnSets.get(callee);
+        for (const set of callerSets) {
+          if (!calleeSets.has(set)) {
+            calleeSets.add(set);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+  const fnByKey = new Map(scannedFns.map((fn) => [`${fn.file}:${fn.name}`, fn]));
   for (const site of sites) {
     const used = new Set();
     if (OWNER_SET[site.owner]) used.add(OWNER_SET[site.owner]);
     if (site.enclosing && OWNER_SET[site.enclosing]) used.add(OWNER_SET[site.enclosing]);
-    const names = new Set();
+    const ownerFn = site.file ? fnByKey.get(`${site.file}:${site.owner}`) : undefined;
+    if (ownerFn) for (const set of fnSets.get(ownerFn) ?? []) used.add(set);
+    const enclosingFn = site.file && site.enclosing ? fnByKey.get(`${site.file}:${site.enclosing}`) : undefined;
+    if (enclosingFn) for (const set of fnSets.get(enclosingFn) ?? []) used.add(set);
     if (site.constName) {
-      names.add(site.constName);
-      for (const alias of aliases) if (alias.exported === site.constName) names.add(alias.local);
-    }
-    if (names.size) {
       for (const fn of scannedFns) {
-        const set = OWNER_SET[fn.name];
-        if (!set) continue;
-        for (const name of names) if (bodyReferences(fn.fn, name)) used.add(set);
+        const sets = fnSets.get(fn);
+        if (!sets?.size) continue;
+        if (fnReferencesTarget(fn, site.file, site.constName, aliases)) {
+          for (const set of sets) used.add(set);
+        }
       }
     }
     site.usedBy = IDS.filter((id) => used.has(id));
@@ -484,7 +524,7 @@ function importBindings(sf, file, root, files) {
     const named = stmt.importClause?.namedBindings;
     if (!named || !ts.isNamedImports(named)) continue;
     const from = resolveImport(file, stmt.moduleSpecifier.text, root, files);
-    if (!from || !from.startsWith('src/domain/') || SCAN_FILES.includes(from)) continue;
+    if (!from || !from.startsWith('src/domain/')) continue;
     for (const spec of named.elements) {
       if (spec.isTypeOnly) continue;
       bindings.push({ exported: spec.propertyName?.text ?? spec.name.text, local: spec.name.text, from, importer: file });
@@ -520,7 +560,7 @@ function collectFromFiles(fileMap, root) {
     }
   }
   for (const alias of aliases) {
-    if (!alias.from.startsWith('src/domain/')) continue;
+    if (!alias.from.startsWith('src/domain/') || SCAN_FILES.includes(alias.from)) continue;
     let text;
     try {
       text = loadText(alias.from, root, fileMap);
@@ -536,6 +576,7 @@ function collectFromFiles(fileMap, root) {
     for (const entry of entries) {
       sites.push({
         kind: 'age-map',
+        file: alias.from,
         key: `age-map:${alias.from}:${alias.exported}:${entry.civ}:${entry.id}=${entry.age}`,
         owner: alias.exported,
         constName: alias.exported,

@@ -133,10 +133,10 @@ export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
       '波斯帕提亚战术（科技 436）在文明树为城堡时代（3），目录时代为 4；供 techAvailable 与 productionTechAge 等时代判断，civStatus 与 simTechs 不按时代过滤。',
   },
   {
-    site: 'civ-age:src/domain/production.ts:productionTechAge:Burgundians:max(literal:1,age-1):ecoTechs+isGatherTech',
+    site: 'civ-age:src/domain/availabilityAge.ts:earlyEcoGatherTechAge:Burgundians:max(literal:1,age-1):plain',
     role: 'tech-age',
     differs: ['civStatus', 'techAvailable', 'simTechs'],
-    because: '生产口径对采集科技使用目录时代减一，最低为黑暗。科技树点亮、目录与树行时代、模拟器规则都不读这条提前。',
+    because: '生产口径对采集科技经 earlyEcoGatherTechAge 使用目录时代减一，最低为黑暗。科技树点亮、目录与树行时代、模拟器规则都不读这条提前。',
   },
   {
     site: 'civ-age:src/domain/availabilityAge.ts:trainingUnitAge:Armenians:literal:1:plain',

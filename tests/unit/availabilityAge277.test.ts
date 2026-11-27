@@ -1,10 +1,23 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { loadCore, loadTrees } from '../../src/data';
+import { civs, loadCore, loadTrees } from '../../src/data';
+import { ARMY_RESEARCH } from '../../src/data/armyResearch';
+import { ECO as eco } from '../../src/data/eco';
 import { calculateConstruction, constructionBuildingAge, constructionBuildings, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
 import { calculateGeneralGarrison, getGarrisonBuildingAge, getGarrisonCandidates } from '../../src/domain/garrisonGeneral';
-import { DEFAULT_PRODUCTION, productionBuildings, type ProductionContext } from '../../src/domain/production';
+import { GARRISON_TECH_DATA } from '../../src/domain/garrisonTechs';
+import { DEFAULT_PRODUCTION, productionBuildings, productionTechAge, type ProductionContext } from '../../src/domain/production';
+import { hasGatherAttrEffect } from '../../src/domain/realCost';
+import { civStatus } from '../../src/domain/simulator';
 import { defaultTeamPlan, teamPlanErrors } from '../../src/domain/teamPlan';
-import { buildingAge } from '../../src/domain/availabilityAge';
+import {
+  buildingAge,
+  disabledTechSet,
+  earlyEcoGatherTechAge,
+  hasLitTreeNode,
+  isCivTechEnabled,
+  litTreeIds,
+  treeNodeEarliestAge,
+} from '../../src/domain/availabilityAge';
 import type { Trees } from '../../src/domain/types';
 
 let ctx: ProductionContext;
@@ -83,5 +96,83 @@ describe('#277 库曼攻城武器厂的时代在四个工具中一致', () => {
         checked++;
       }
     expect(checked).toBeGreaterThan(1000);
+  });
+});
+
+describe('#1527 底层文明可用性原语全 56 文明对账守卫', () => {
+  it('原型链键不会误命中科技树点亮、禁用集合与采集提前时代原语', () => {
+    for (const civ of ['constructor', 'toString', '__proto__', 'hasOwnProperty']) {
+      expect(earlyEcoGatherTechAge({ age: 2 }, civ, true)).toBe(2);
+      expect(treeNodeEarliestAge(ctx.trees, civ, 't', 47)).toBe(Infinity);
+      expect(hasLitTreeNode(ctx.trees, civ, 't', 47)).toBe(false);
+      expect(litTreeIds(ctx.trees, civ, 't').size).toBe(0);
+      expect(disabledTechSet(GARRISON_TECH_DATA.civs, civ).size).toBe(0);
+    }
+  });
+
+  it('全 56 文明通用采集经济科技提前时代与 trees.json 零漂移（勃艮第 11 项采集 vs 5 项非采集经济边界）', () => {
+    expect(civs).toHaveLength(56);
+    const mismatches: string[] = [];
+    const burgundianGatherEarly: number[] = [];
+    const burgundianNonGatherEarly: number[] = [];
+    const nonBurgundianEcoEarly: string[] = [];
+    let gatherPairsChecked = 0;
+
+    for (const civ of civs) {
+      const litTechs = litTreeIds(ctx.trees, civ.en, 't');
+      for (const [idStr, ecoEntry] of Object.entries(eco.ecoTechs)) {
+        const tid = Number(idStr);
+        const tech = ctx.core.techById[tid];
+        if (!tech || !litTechs.has(tid)) continue;
+        const rowAge = treeNodeEarliestAge(ctx.trees, civ.en, 't', tid);
+        expect(Number.isFinite(rowAge), `${civ.en} t${tid}`).toBe(true);
+        const isGather = hasGatherAttrEffect(ecoEntry.effects);
+        if (isGather) {
+          gatherPairsChecked++;
+          const earlyAge = earlyEcoGatherTechAge(tech, civ.en, true);
+          const prodAge = productionTechAge(tech, civ.en);
+          if (earlyAge !== rowAge || prodAge !== rowAge) {
+            mismatches.push(`${civ.en} t${tid}(${tech.zh}): tree=${rowAge}, earlyEco=${earlyAge}, prod=${prodAge}`);
+          }
+          if (civ.en === 'Burgundians' && rowAge !== tech.age) burgundianGatherEarly.push(tid);
+        } else {
+          expect(earlyEcoGatherTechAge(tech, civ.en, false), `${civ.en} non-gather t${tid}`).toBe(tech.age);
+          if (civ.en === 'Burgundians' && rowAge !== tech.age) burgundianNonGatherEarly.push(tid);
+        }
+        if (civ.en !== 'Burgundians' && rowAge !== tech.age) nonBurgundianEcoEarly.push(`${civ.en}:${tid}=${rowAge}`);
+      }
+    }
+
+    expect(gatherPairsChecked).toBeGreaterThan(500);
+    expect(mismatches).toEqual([]);
+    expect(nonBurgundianEcoEarly).toEqual([]);
+    expect(burgundianGatherEarly.sort((a, b) => a - b)).toEqual([13, 14, 55, 182, 202, 203, 213, 221, 249, 278, 279]);
+    expect(burgundianNonGatherEarly.sort((a, b) => a - b)).toEqual([12, 15, 48, 65, 906]);
+    expect(earlyEcoGatherTechAge({ age: 1 }, 'Burgundians', true)).toBe(1);
+  });
+
+  it('全 56 文明 garrison_techs 与 army_research 禁用集合一致，且底层点亮/禁用原语与 civStatus 对齐', () => {
+    expect(civs).toHaveLength(56);
+    const garrisonTechIds = Object.keys(GARRISON_TECH_DATA.techs).map(Number);
+    expect(garrisonTechIds.length).toBeGreaterThan(0);
+
+    for (const civ of civs) {
+      const gtDisabled = disabledTechSet(GARRISON_TECH_DATA.civs, civ.en);
+      const arDisabled = disabledTechSet(ARMY_RESEARCH.civs, civ.en);
+      for (const tid of garrisonTechIds) {
+        expect(gtDisabled.has(tid), `${civ.en} disabled parity t${tid}`).toBe(arDisabled.has(tid));
+      }
+
+      const status = civStatus(ctx.trees, civ.en);
+      const litTechs = litTreeIds(ctx.trees, civ.en, 't');
+      for (const tech of ctx.core.techs) {
+        const expectedLit = status['t' + tech.id] === 1;
+        expect(litTechs.has(tech.id), `${civ.en} litTreeIds t${tech.id}`).toBe(expectedLit);
+        expect(hasLitTreeNode(ctx.trees, civ.en, 't', tech.id), `${civ.en} hasLitTreeNode t${tech.id}`).toBe(expectedLit);
+        expect(isCivTechEnabled(tech, civ.en, status, gtDisabled), `${civ.en} isCivTechEnabled t${tech.id}`).toBe(
+          tech.civs.includes(civ.en) && expectedLit && !gtDisabled.has(tech.id),
+        );
+      }
+    }
   });
 });

@@ -4,6 +4,7 @@ import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
+import { isCivTechEnabled } from './availabilityAge';
 import { AGE_TECH_IDS, VILLAGER_UNIT_ID } from './gameIds';
 import { toggleSelected } from './prereq';
 
@@ -66,8 +67,7 @@ export function garrisonTechs(ctx: GarrisonContext, b: Building, civ: string, ag
   const status = civStatus(ctx.trees, civ);
   return ctx.core.techs.filter(
     (t) =>
-      t.civs.includes(civ) &&
-      status['t' + t.id] === 1 &&
+      isCivTechEnabled(t, civ, status) &&
       productionTechAge(t, civ) <= age &&
       GARRISON_DATA.techs[t.id]?.effects.some((e) => e.unit === b.id || e.unit === VILLAGER_UNIT_ID),
   );
