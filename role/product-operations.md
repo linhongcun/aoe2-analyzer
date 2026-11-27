@@ -1,107 +1,65 @@
 # 产品运营交接
 
-给接手本站日常使用、体验巡检和玩家反馈核实的人。职责以 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色) 为准：运营面向平台本身，回答信息能否找到、操作是否顺畅、结果能否看懂，并写明具体场景和卡点；深度游戏策略、文明阵容共创与 `game-strategy.md` 的日常维护归属独立于平台流水线之外的[游戏分析师](game-analyst.md)。Issue 阶段和交接按 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)；同一正文持续记录，不另开评审/实施 Issue。本文只记录已经用过的问法和口径。范围、设计和开发验收仍看 CONTRIBUTING、[TESTING](../docs/TESTING.md) 与 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10)。
+给接手本站体验巡检与玩家反馈核实的人。职责以 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色) 与 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle) 为准：运营面向平台本身，回答信息能否找到、操作是否顺畅、结果能否看懂，并沉淀可复核 BRD；深度文明策略与 [game-strategy.md](game-strategy.md) 主维护归属独立于流水线之外的[游戏分析师](game-analyst.md)。
 
-站点目前主要由维护者自己使用。PC（约 1280）上的路径要走通，窄屏保持能读、能点。旧布局、旧入口和旧链接可以按该页的核心任务改掉。观察用来提改进，不是上线门禁，也不进入 CI 或全尺寸矩阵。玩法入口见 [`src/features/gameGuide/`](../src/features/gameGuide/)、[`src/features/mixedArmy/`](../src/features/mixedArmy/) 和 [内容购买目录来源](../docs/DATA-UPDATE.md#content-catalog)，本文不写攻略。
+站点主要由维护者使用，PC（约 1280）主路径走通、窄屏能读能点；运营观察用来提改进，不是上线门禁。玩法入口见 [`src/features/gameGuide/`](../src/features/gameGuide/)、[`src/features/mixedArmy/`](../src/features/mixedArmy/) 与 [内容购买目录来源](../docs/DATA-UPDATE.md#content-catalog)。
 
 ## 谁处理什么
 
-运营在 `阶段:产品运营` 收集玩家反馈和功能建议，在同一 Issue 正文记录可复核场景、实际卡点、观察/复现证据和未核实项，再交 `阶段:产品经理`。需求范围和优先级由产品（Steve）定；运营不替产品作决定、不排期、不另开后续阶段 Issue，也不做每个 PR 的全站验收。与具体文明打法相关的策略研究、阵容共创以及[文明阵容经验与分析方法](game-strategy.md)的主维护归属独立于平台之外的[游戏分析师](game-analyst.md)；游戏分析师在压测工具或分析机制时发现平台缺口，会按现有模板提 Issue 进入五阶段流程，由运营在 `阶段:产品运营` 正常受理核实。其余阶段和同一正文模板见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
+运营在 `阶段:产品运营` 受理玩家与游戏分析师提交的平台反馈，在同一 Issue 正文记录可复核场景、实际卡点、观察/复现证据、未核实项、业务目标与怎样判断做成，交 `阶段:产品经理`。范围与优先级由产品定，运营不代裁范围、不定级、不另开阶段 Issue、不做每 PR 全站验收。
 
 ## 从实际问题走一遍
 
-先有一局里的问题，再沿玩家会走的页面查和算。例如：印度斯坦使用翼骑兵、火枪手和少量手推炮，若改换一批帝王骆驼兵，黄金差多少。
+先锁定真实一局问题，再沿玩家路径在站内查和算。比较前先分清四组口径：
 
-比较之前先分开口径：
+- 目录基础值 vs 选定文明/时代/科技后的有效值；
+- 单名单位训练价 vs 科技一次研发费 vs 转型总投入；
+- 固定数量训练总价 vs 持续生产每分钟消耗；
+- 单兵 PK 近似模型 vs 混编交战。
 
-- 目录上的基础值，以及选定文明、时代和科技之后的有效值。
-- 一名单位的训练价，一项科技的一次研发费，一次转型的总投入。
-- 固定数量的训练总价，以及持续生产里按每分钟计算的消耗。
-- 单兵模型给出的结果，以及混编时要另外看的交战。
-
-下结论前确认这些单位在该文明、该时代可训练，并记下页脚三行：站点版本（`vX.Y.Z`）、数据版本、构建。三者各记各的，站点版本不能代替构建。正式结论用页脚上的数据包；公开测试服（PUP）不混进去。某批历史资料的分法见 [HISTORY-DATA](../docs/reports/HISTORY-DATA.md)，只约束该批。
-
-本站不够用时，再查当次能打开的官方补丁或资料。查不到就标待核，不凭记忆补数。
-
-核对涉及阵容搭配或多兵种转型的平台反馈时，运营仍严守上文的数据口径与版本核验要求，不凭记忆补数、不把未记录的对局感觉写成结论；具体的阵容判断方法、多兵种转型核算、建筑驻军与推进配合均归属[游戏分析师交接](game-analyst.md)与[文明阵容经验与分析方法](game-strategy.md)单源维护，避免两处漂移。
+下结论前核实单位在该文明与时代可训练，并记录页脚三行（站点版本 `vX.Y.Z`、数据版本、构建 SHA；三者各记各的，正式结论不混 PUP）。站内不足再查当次可打开的官方资料，查不到标待核，不凭记忆补数。
 
 ## 两个改进入口
 
 ### 波斯步弓手：目录价看不出省金
 
-波斯步弓手（卡曼达兰）让弓兵训练免金，改为多耗木材。旧的单位 PK 仍显示目录价 25 木、45 金，省下的黄金要手算。提出的场景是：已经选择该科技时，PK 给出有效训练价，并写明哪些效果已计入、哪些未计入。产品核实后，这项显示进入 PK（[#943](https://github.com/linhongcun/aoe2-analyzer/issues/943)）。DE 188329 当次核到满科技波斯弩兵为 50 木、0 金。一次研究费用另计，不摊进每名训练价。
-
-要补上的是目录价和有效训练价之间的断层。核对之前保持为待核现象，不为波斯单独写公式。
+卡曼达兰让波斯弓兵免金改耗木，旧 PK 仍只显目录价 25 木 45 金。产品核实后在 PK 引入有效训练价与计入/未计入说明（[#943](https://github.com/linhongcun/aoe2-analyzer/issues/943)，DE 188329 满科技弩兵 50 木 0 金；研究费另计）。要点：补齐目录价与有效训练价断层，不为单一文明写特例。
 
 ### 印度斯坦：混编要的是训练总价
 
-需要同一文明、同一时代的多行单位：每行数量、有效单价、小计，以及食物、木材、黄金合计，合计不含研究费。当时持续生产按每分钟消耗计算，固定军队总价只能逐个详情手加。设计通过后，持续生产增加了训练总价（`#/production?mode=train-total`，[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978)）。火枪手和手推炮能否训练受化学控制，研究费不进总价；原始规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue204-production-spec.md)。
-
-当次有效训练价：20 翼骑兵 + 20 火枪手 + 2 手推炮 = 2500 食、450 木、1450 金。把 20 翼骑兵换成 20 帝王骆驼兵后为 2000 食、450 木、2650 金，差额为多 1200 金、少 500 食。差额只比训练资源，不含战力、研究、升级和已有兵力。换数据版本后重算。
+同文明同时代多兵种固定编队需要每行数量、有效单价与资源合计（不含研究费），而持续生产算每分钟消耗。随后在 `#/production?mode=train-total` 落地训练总价（[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978)）：20 翼骑兵 + 20 火枪手 + 2 手推炮（2500 食 450 木 1450 金）换 20 帝王骆驼兵（2000 食 450 木 2650 金）差额为多 1200 金、少 500 食（仅比训练资源，换版本重算）。
 
 ## 反馈怎么写
 
-先查已有 issue。功能建议用 [功能建议模板](../.github/ISSUE_TEMPLATE/feature_request.md)，游戏事实用 [数据错误模板](../.github/ISSUE_TEMPLATE/data_error.md) 并附来源。疑似缺陷写下复现、截图和页脚三行，用 [问题报告模板](../.github/ISSUE_TEMPLATE/bug_report.md) 交给测试；运营不宣判是否成立。页脚链接会带上页面和数据版本，场景仍要自己写全。只记录真实出现的需求。
-
-一条反馈写上：实际目标与场景；当次站点版本、数据版本、构建和完整 URL；做了什么、页面上找到什么；卡点以及对判断的影响；希望得到的结果（写明总价还是每分钟、含不含研究费）；截图或资料出处；已知边界；业务目标与预期收益（做成后玩家或站点得到什么）；怎样判断做成了。这些就是 BRD，写在 Issue「产品运营」节。
-
-模板末尾的实现者清单若与现行 TESTING 不一致，以 CONTRIBUTING 和 TESTING 为准。
+先查重再按模板提单：[功能建议](../.github/ISSUE_TEMPLATE/feature_request.md)、[数据错误](../.github/ISSUE_TEMPLATE/data_error.md)（附来源）、[问题报告](../.github/ISSUE_TEMPLATE/bug_report.md)（写复现、截图与页脚三行，不替测试宣判）。每份 BRD 写清：实际目标与场景、页脚三行与完整 URL、操作与页面所见、卡点影响、期望口径（总价/每分钟、含不含研究费）、出处/截图、已知边界、业务目标/预期收益与怎样判断做成。
 
 ## 用好工具再提需求
 
-维护者的要求：一定要用好已有工具，否则做再好的工具也白做；工具不好用就把诉求提出来，形成“用→反馈→改进”的循环。运营先按[文明阵容经验](game-strategy.md#讨论前先用的站内工具)的工具表把问题在站内走一遍，再判断是入口没找到、口径不符，还是功能缺失。
+先按 [讨论前先用的站内工具](game-strategy.md#讨论前先用的站内工具) 把问题在站内走通，再分清「自己没找到入口（补文档）」与「工具断层/缺口（提需求，如 [#1051](https://github.com/linhongcun/aoe2-analyzer/issues/1051)–[#1055](https://github.com/linhongcun/aoe2-analyzer/issues/1055)）」。
 
-### 方式比较
+### 方式与默认选择
 
-手动浏览和 Playwright 都是在操作线上页面；自动化脚本仅操作界面并读取站点结果，不自行重算代替站点。
+| 方式                    | 适合场景                         | 边界与注意事项                                       |
+| ----------------------- | -------------------------------- | ---------------------------------------------------- |
+| 手动浏览线上站点        | 初次找入口、看布局视觉、少量查询 | 重复对照较慢，易漏记输入                             |
+| Playwright / 现有浏览器 | 批量切换参数、提取结果、留截图   | DOM 读取 ≠ 视觉检查，先核实最终 URL 与加载状态       |
+| 分享链接                | 交接可复现配置                   | 站点可能规范化或忽略参数，打开后须复核实际选择与页脚 |
+| 仓库源码与固定数据      | 解释页面机制与未覆盖边界         | 与线上构建未必一致，不得把自算结果冒充站点页面输出   |
 
-| 方式                           | 适合                                                     | 优点                                                                       | 缺点与边界                                                                                                                                |
-| ------------------------------ | -------------------------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 手动浏览线上站点               | 初次找入口、理解控件、观察布局和视觉状态，或只需少量查询 | 直接看到实际界面，容易发现未预期的文案、状态和视觉问题，不依赖脚本选择器   | 重复配置和抄录较慢，容易漏记输入；不适合大量重复对照或精确提取多组结果                                                                    |
-| Playwright 连接现有 Chrome/CDP | 重复配置同一页面、切换参数对照，或提取页面实际渲染的结果 | 可复用线上页面，把操作、输入核对、结果读取和截图做成可重复步骤             | 依赖可用的 CDP 浏览器和正确页面；DOM 读取不等于视觉检查，页面结构变化也会使选择器失效。先核对 URL、文明、单位、时代、表单和科技等实际状态 |
-| 页面参数/分享链接              | 保存或交接一组待复现的页面输入                           | 打开即可尝试恢复相同配置，减少重复填写                                     | 链接只代表待加载的参数，不保证页面按预期恢复；站点可能规范化或忽略参数。打开后仍须核对实际选择项、结果和页脚版本                          |
-| 仓库代码与固定数据             | 页面没有说明效果来源、模型机制或适用边界时补查           | 可追到实现、字段、测试和固定数据来源，帮助解释页面为何如此显示或哪里未覆盖 | 反映的是仓库代码/数据版本，未必与当前线上构建一致；不能代替线上页面结果，也不能把原始数据自行计算冒充本站输出                             |
-
-### 默认选择与复现
-
-1. 先打开线上对应工具；不熟悉页面或要判断视觉呈现时，先手动浏览并确认输入入口和结果区域。单次少量查询、交互不确定或需要观察外观时继续手动完成。
-2. 同一页面要反复切换输入或提取多组结果时，若已有可用的 Chrome/CDP，再用 Playwright 操作页面 DOM。每次先确认目标页面和关键输入确实加载，再读取结果；需要视觉证据时另存页面截图。没有现成 CDP 时直接手动核对，不为一次简单查询额外搭建环境。
-3. 保存页面参数链接供复现；在新会话中重新打开后，检查实际 URL、选择项和页面结果，不以链接本身作为已复现的证据。
-4. 只有页面无法说明来源或机制时再查仓库代码、测试和固定数据，并把这类解释与线上页面观察分开记录。它们不能补成没有在站点上得到的计算结果。
-
-实操样例：[运行记录](https://app.devin.ai/sessions/1cc8e089a08f47f089a6afff4a11d9a0)核对了葡萄牙普通风琴炮、帝王时代的单位 PK 输入，再通过 DOM 读取射程行，确认攻城技师开关前后可逆。可从[关闭](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1001.Portuguese.4..&b=5.Portuguese.4.f.&m=1)或[开启](https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1001.Portuguese.4.377.&b=5.Portuguese.4.f.&m=1)状态复跑；链接仅作入口，打开后仍须核对实际页面状态。
-
-记录可复用结论时，写明日期、页脚的站点版本/数据版本/构建、完整页面 URL、模式与输入、页面实际显示的结果，以及已知限制和未验证项；视觉结论附对应截图。脚本日志里的单次执行时间不等于任务总耗时；若没有把准备、编写和结果分析都纳入同口径对照，不据此声称提速比例。交战或预测模型只说明页面模型覆盖的输入和假设，不是实战必然结果；配置无效、缺数据或页面未覆盖的情况标为未验证，不据此推断实战表现。
-
-2026-11-15 的一次复盘可作样例。四文明阵容讨论中实际用到文明页、单位页、科技页、建筑驻军预览、训练总价、持续生产；同时暴露两类问题：
-
-- 不了解工具：多人施工、驻军回血、攻城拆建筑、单位 PK、文明对比本可直接回答“前线建塔要几名村民”“卫兵能否和骑士对砍”这类问题，却靠文明页定性或跑去站外。这是运营自己的问题，解决办法是先读工具表。
-- 工具不顺手：从单位页到不了驻军预览、多兵种成型投入要跨三个页面手算、只能看“我克制谁”、PK 每方一种单位、俗称搜不到。这些按模板写成 [#1051](https://github.com/linhongcun/aoe2-analyzer/issues/1051)–[#1055](https://github.com/linhongcun/aoe2-analyzer/issues/1055)，每条附完整 URL、操作观察、对判断的影响、去重结果、未核实项和当次页脚三行，再交需求评审。
-
-两类要分开写：前者补进文档，后者才提需求；不把自己没找到入口写成功能缺失，也不因为可以手算就不反馈。
+默认先手动走通线上工具；需重复对照再借自动化读取 DOM 并配截图；源码/数据查证与线上观察分开写。记录结论时附日期、页脚三行、完整 URL、模式输入、实显结果与未验证项（单次脚本耗时≠任务总耗时；不把模型输出写成实战必然结果）。
 
 ### 怎样核实反馈里的判断
 
-- **先分清玩家要查的方向。** “这艘运输船能装几名步兵”不是“这个单位能进哪些建筑”；不能因为已有驻军预览，就把[载量反馈 #1220](https://github.com/linhongcun/aoe2-analyzer/issues/1220)当作重复需求。若两个入口本应说的是同一件事，就固定文明从两头查：[僧侣训练地点 #1230](https://github.com/linhongcun/aoe2-analyzer/issues/1230)里，不列颠的僧侣详情写强化教堂，修道院的生产清单却列了僧侣；换成亚美尼亚，强化教堂确实列有僧侣。把矛盾和成立的条件一起交给评审，不笼统地报“建筑错了”。
-- **字段缺多少，和字段表示什么，分开核。** 先按 ID 对照同版目录与固定上游，分清条目未收录、已收录但缺字段、字段有值。[重复研究 #1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225)原报的 41 是上游值为假的科技数；当时本站收录的 199 项科技都缺该字段。再取一真一假核对含义：织布机为真、城镇瞭望为假，说的是启用 256 倍科技时能否重研，不是普通局的研究次数。保留原报，在旁边写清更正的分母、例子和依据。
-- **把站点读数、源字段和客户端实测分开写。** [铁浮屠攻击间隔 #1231](https://github.com/linhongcun/aoe2-analyzer/issues/1231)中，普通与精锐详情都显示 2.15 秒，1.8 秒来自固定数据的显示用字段。要说“游戏面板显示 1.8 秒”，还缺同版客户端面板及条件；要说实战攻击间隔，则需另行计时。把缺的证据标出来，不用字段名代替观察，也不据此要求改 PK 公式。
-- **“有提示”不等于玩家在出错处能看到。** [市场与圣物收益 #1164](https://github.com/linhongcun/aoe2-analyzer/issues/1164)里，输入负数后已有错误文字，但窄屏上它在视口外。复现时记下字段、输入、移出焦点后的可见内容，再用同宽度下会在字段旁提示的经济科技收益页作对照。DOM 能核对字段是否关联说明；没用读屏软件实际听过，就不报告播报结果。
-- **先核提报前提里的字段和组件是否真存在，再交产品拍板。** 受理“基于已有字段或能力扩展”的需求前，先核查数据 JSON 实际键名、同兵种多变体/多建筑 ID（如城堡版与营垒版、打包态与展开态）与现有组件挂载点，把“已具备 / 部分具备 / 尚未导出”分开写明。[单位 PK 未建模提示 #1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296)（[PR #1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321)）原报以为可按 `units.json` 已有字段自动标出全部未建模机制，当时逐键核对全部 52 个字段后发现：未导出多弹丸字段（无法自动识别诸葛弩 `73`/`559`）、下马 `form` 只挂在营垒版保加利亚骑兵（`1254`/`1255`）而城堡版（`1225`/`1227`）缺失、`blastDamage=-5` 并非溅射半径（多弹丸字段与城堡版 `form` 后由 [PR #1321](https://github.com/linhongcun/aoe2-analyzer/pull/1321) 补齐）；[战斗可视化 #1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294) 核出 `#/duel` 已有双进度条 `BattleReplay.tsx` 但混编结果组件 `MixedResult.tsx` 未接入该回放，且 `contactFight.ts` 的 `Timeline` 仅有 `[time, aliveA, aliveB]`、缺空间坐标。提前拆清前置差距，评审才能按真实成本定范围。
-- **单点数据缺陷顺手做一次全量同源扫描，锁定真实波及面。** 遇到单条数据或效果缺失反馈，对同类全集（全量文明、全量科技或全量单位）做一次只读扫描，把精确分母与完整命中清单写入 BRD，既防漏修也防盲目扩范围。[独特科技漏映射 #1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293)（[PR #1318](https://github.com/linhongcun/aoe2-analyzer/pull/1318)）原报仅扫 33 个文明，扩至全量 56 文明扫描 `effects.json` 后确认全站仅战狼号（`461`）与弹射器（`59`）两项对本国单位命中为 0，根因在 `scripts/effects_build.py` 丢弃了未导出的展开态巨型投石机 ID `42`；[布图马普折后价 #1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297)（[PR #1320](https://github.com/linhongcun/aoe2-analyzer/pull/1320)）全量扫描 `effects.json` 全部 196 项科技效果与 56 个文明加成后，确认马普切 `Butalmapu (1380)` 是全站唯一同时含费用属性与 `res` 标记的条目。
-- **线上取证同步核对地址规范化回落、路由就绪态与容器实测尺寸。** 线上复现不能只看输入链接或首帧 DOM，须核对最终 URL、目标页渲染就绪及页脚三行（站点版本、数据版本、构建）；涉及版式或视觉氛围的需求，同时量出桌面 1280 与窄屏 390 下关键容器的实际像素宽高。[单位 PK #1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296) 与 [#1298](https://github.com/linhongcun/aoe2-analyzer/issues/1298) 中，`#/duel` 收到无效模式参数（如 `m=2`）会静默回落为 `1v1`，须核对跳转后的规范参数（如 `m=n`、`m=r`）与实际模式；[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313) 跨 SPA 路由切换（如 `#/civ/...` 切 `#/compare`）须等目标页就绪再读状态，避免读到旧路由残留节点；[首页视觉氛围 #1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314) 实测线上桌面 1280 `.home-mast` 为 `1200×178 px`（窄屏 390 为 `358×153 px`），量化基线直接支撑后续定出 `180–240 px` 高度红线与首屏 4 卡不被挤出视口。
-- **文档、模板与视觉资产类需求，提前核查“活动引用 vs 历史留痕”与仓库静态门禁。** 受理规范清理或视觉素材需求时，按最新 `origin/main` 核对实际行号，分清须改的活动引用与不可改动的冻结证据/固定 SHA 历史留痕，并顺手排查相关静态门禁约束写入 BRD。[Issue 模板小节对齐 #1290](https://github.com/linhongcun/aoe2-analyzer/issues/1290)（[PR #1315](https://github.com/linhongcun/aoe2-analyzer/pull/1315)）实测排除两处待查行假阳性，并排查 `src/shared/utils/feedback.ts` 确认不触及前端，直接支撑纯文档单走 UX 不适用路径；[收拢 `docs/design/` #1304](https://github.com/linhongcun/aoe2-analyzer/issues/1304)（[PR #1317](https://github.com/linhongcun/aoe2-analyzer/pull/1317)）因前序 [PR #1303](https://github.com/linhongcun/aoe2-analyzer/pull/1303) 刚合入，核出 `role/product-management.md` 引用行已由 L340 移至 L346；[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313) 与 [#1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314)（另见产品经理回写 [PR #1316](https://github.com/linhongcun/aoe2-analyzer/pull/1316)）提前核出 `scripts/check-layers.mjs`（禁 `feature-to-feature` 与 `shared-upward`）、`scripts/check-colors.mjs`（禁 `src/` 非 `tokens.css` 写硬编码 `rgba()` 遮罩）、`scripts/check-docs-boundary.mjs`（`IMAGE_HOMES`）及 `data/reference/civs/backgrounds.source.json` 中 2 对上游共图文明（波希米亚/条顿、意大利/西西里），避免下游返工。
-- **把“并行重叠单提醒”与“待产品经理拍板清单”作为 BRD 交接固定件。** 多单并行推进时，交接前固定扫描开放 Issue 与开放 PR，列出同文件或同路由重叠关系；维护者口头表达的高优意向原样转述、不越权贴 `P0`/`P1` 标签；范围增减、分期切分、样式互斥等未决裁决项整理成编号清单交给产品经理，运营只提供事实与利弊、不代作决定。例如 [#1302](https://github.com/linhongcun/aoe2-analyzer/issues/1302)/[#1290](https://github.com/linhongcun/aoe2-analyzer/issues/1290)/[#1304](https://github.com/linhongcun/aoe2-analyzer/issues/1304) 共改规范、[#1279](https://github.com/linhongcun/aoe2-analyzer/issues/1279)/[#1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294)–[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296)/[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313) 共改 `#/duel`、[#1298](https://github.com/linhongcun/aoe2-analyzer/issues/1298)–[#1300](https://github.com/linhongcun/aoe2-analyzer/issues/1300) 共改 `role/game-strategy.md`，以及 [#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313) 与 [#1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314) 工具页头底图边界互斥，提前显式标出可显著减少下游串行冲突与来回返工。
+本节随工作继续积累；完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 合并或修订条目（单条 3–5 行，无新经验不写）。
 
-本节随工作继续积累：完成阶段交接后按 [CONTRIBUTING「经验回写」](../CONTRIBUTING.md#experience-writeback) 追加或修订平台体验核实、取证与反馈归类经验，没有可复用经验就不写。文明阵容与玩法策略经验归属[游戏分析师交接](game-analyst.md)与[文明阵容经验与分析方法](game-strategy.md)，不由运营回写。
+- **分清查询方向并双向核对**：载具载量（[#1220](https://github.com/linhongcun/aoe2-analyzer/issues/1220)）≠ 单位可进建筑，不误判重复；两个入口应一致时固定文明从两头查（如 [#1230](https://github.com/linhongcun/aoe2-analyzer/issues/1230) 不列颠 vs 亚美尼亚僧侣训练地点），把成立条件与矛盾一并交评审。
+- **区分字段缺失、值域与客户端实测**：按 ID 对照同版目录与固定上游，分清未收录、缺字段与显式假值并取真假双例核含义（[#1225](https://github.com/linhongcun/aoe2-analyzer/issues/1225) 重复研究为 256 倍模式规则）；把站点读数、源显示字段与客户端实测分开写，缺证据标待核（[#1231](https://github.com/linhongcun/aoe2-analyzer/issues/1231) 铁浮屠 `2.15s` vs `1.8s`）。
+- **核对可见位置、前置字段与组件挂载**：报错存在不等于窄屏视口内可见，记录字段、输入与失焦所见并找同宽正对照，未用读屏不报播报结论（[#1164](https://github.com/linhongcun/aoe2-analyzer/issues/1164)）；受理扩展需求前先核 JSON 实际键名、多变体 ID（城堡/营垒、打包/展开）与组件挂载点，拆清「已具备/部分/未导出」（[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296)、[#1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294)）。
+- **单点数据缺陷顺手全量同源扫描**：遇单条缺漏即对全量文明/科技/单位做只读扫描，把精确分母与完整命中写入 BRD，防漏修或盲扩范围（[#1293](https://github.com/linhongcun/aoe2-analyzer/issues/1293) 全 56 国仅战狼号 `461` 与弹射器 `59` 命中为 0；[#1297](https://github.com/linhongcun/aoe2-analyzer/issues/1297) 全 196 科技仅布图马普 `1380` 同时含费用与 `res`）。
+- **线上取证核规范化 URL、就绪态与容器实测尺寸**：核对跳转后最终 URL（如 `#/duel` 非法 `m=2` 回落 `1v1` [#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296)/[#1298](https://github.com/linhongcun/aoe2-analyzer/issues/1298)）、SPA 切换目标页就绪（[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313)）与页脚三行；版式/氛围单实量 1280 与 390 关键容器像素宽高支撑后续红线（[#1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314)）。
+- **文档与视觉资产先分「活动引用 vs 历史留痕」并核静态门禁**：按最新 `origin/main` 核准行号，分清须改引用与不可改冻结证据/SHA，顺手查 `check-layers`、`check-colors`、`check-docs-boundary` 及素材共图反例写入 BRD（[#1290](https://github.com/linhongcun/aoe2-analyzer/issues/1290)、[#1304](https://github.com/linhongcun/aoe2-analyzer/issues/1304)、[#1313](https://github.com/linhongcun/aoe2-analyzer/issues/1313)、[#1314](https://github.com/linhongcun/aoe2-analyzer/issues/1314)）。
+- **交接固定附「并行重叠单」与「待产品经理拍板清单」**：交接前扫描开放 Issue/PR 标出同文件或同路由重叠（如 [#1302](https://github.com/linhongcun/aoe2-analyzer/issues/1302)/[#1290](https://github.com/linhongcun/aoe2-analyzer/issues/1290)/[#1304](https://github.com/linhongcun/aoe2-analyzer/issues/1304)、[#1294](https://github.com/linhongcun/aoe2-analyzer/issues/1294)–[#1296](https://github.com/linhongcun/aoe2-analyzer/issues/1296)）；维护者高优意向原样转述不越权贴 `P0/P1`，未决裁决整理成编号清单交给产品拍板。
 
-## 单据状态
+## 单据状态与策略归属
 
-历史上曾把流程写成需求、设计、产品评审后另建实施 Issue；训练总价案例中，设计通过后没有实施 Issue，当时开放 Issue 为零而需求未交付。这是历史交接缺口的记录，不是现行流程。现在由同一 Issue 正文按五个阶段继续更新，具体规范见 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)；本段旧状态词不作为阶段标签。
-
-[CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 是现行统一规范：产品决定、授权依据、体验规格、完成态设计图和交接都留在同一 Issue 正文；每次实际 UX 交付都须将可直接查看的设计图嵌入正文。UX 完成后直接交软件开发；无实际 UI 改动（纯 docs/data，或经逐组件核实零界面/交互/状态/文案改动的纯逻辑修复）时由产品记录 UX 不适用、理由、已核对消费组件和范围后直接交开发。进入软件开发即获既定范围内的开发授权，无需维护者再次批准。阶段单向推进，缺项留在当前阶段串行补齐原 Issue。
-
-2026-11-13 曾有「设计通过后可直接开实施 issue、不必再问」的建议，用来避免有稿无单；现行同一 Issue 生命周期已取代另开实施单的做法。2026-11-15 维护者进一步明确进入软件开发即获开发授权，移除禁止自动认领和另行索要实施许可的限制；运营仍只处理 `阶段:产品运营`，不代行 PM、UX 或开发。双路暂停和设计索引里的短时回复是历史记录，不作为运营步骤，也不扩大产品范围或排路线图。
-
-## 文明策略与玩法经验归属
-
-文明阵容案例、三段格式规范与玩法分析方法已交由独立于平台之外的[游戏分析师](game-analyst.md)统一维护在[文明阵容经验与分析方法](game-strategy.md)（原运营侧留存的越南、土耳其、马来等文明笔记说明均已归口该文档，不再在本指南重复维护）。产品运营在日常巡检或受理反馈中若涉及具体文明玩法，直接查阅该文档与其中的[讨论前先用的站内工具](game-strategy.md#讨论前先用的站内工具)总表即可。
+所有阶段产物、设计图与交接均留在同一 Issue 正文单向流转，以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一现行规范（不另建实施单；进入软件开发即获既定范围开发授权；运营仅处理 `阶段:产品运营`）。文明阵容案例、三段格式与玩法分析方法统一归属[游戏分析师](game-analyst.md)维护在 [game-strategy.md](game-strategy.md)，本指南不重复维护。

@@ -27,4 +27,4 @@
 | 产品运营   | [product-operations.md「用好工具再提需求」](product-operations.md#用好工具再提需求)                                                                                                                   |
 | 游戏分析师 | [game-analyst.md「深度分析与工具压测经验」](game-analyst.md#深度分析与工具压测经验)；文明阵容等游戏经验按[该文件的维护要求](game-strategy.md#怎样读与继续维护)写 [game-strategy.md](game-strategy.md) |
 
-每条写清现象、原因、以后怎么做并附出处链接；相近条目合并，过时条目改正或删除。四角色只改本角色指南，游戏分析师仅可按规则维护 [game-analyst.md](game-analyst.md) 与 [game-strategy.md](game-strategy.md)；本文件不在回写范围内。
+单份平台角色指南建议控制在 **~30 KB** 以内；回写须归入既有主题桶并优先合并或修订相近条目，每条 3–5 行写清「触发场景 → 规则/做法 → 关键反例与 Issue/PR 链接」，禁止混塞无关主题或抄录长篇复盘；过时或已由 CI、静态检查与单测彻底锁死的条目直接删除或改写。四角色只改本角色指南，游戏分析师仅可按规则维护 [game-analyst.md](game-analyst.md) 与 [game-strategy.md](game-strategy.md)；本文件不在回写范围内。
