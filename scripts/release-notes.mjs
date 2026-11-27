@@ -83,6 +83,7 @@ export function validateFragment(filename, data) {
     const trimmed = data.summary.trim();
     if (trimmed.length < 5 || trimmed.length > 2000) errors.push(`${label}：summary 去除首尾空白后长度需在 5–2000 字符之间`);
     if (/^(?:[-*+]\s|#)/.test(trimmed)) errors.push(`${label}：summary 不要以列表符号（- / *）或 Markdown 标题（#）开头`);
+    if (!/\p{Script=Han}/u.test(trimmed)) errors.push(`${label}：summary 须为面向玩家的中文更新说明（至少包含中文字符）`);
     if (Number.isSafeInteger(data.issue) && data.issue >= 1 && !new RegExp(`#${data.issue}(?!\\d)`).test(trimmed)) {
       errors.push(`${label}：summary 须包含对应 Issue 编号 #${data.issue}`);
     }

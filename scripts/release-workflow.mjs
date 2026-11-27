@@ -125,7 +125,11 @@ export function decidePrepareAction({ eventName, ref, headSha, remoteSha, expect
 
   if (remoteSha !== headSha) {
     if (isDispatch) {
-      throw new Error(`手动部署检出 ${headSha.slice(0, 7)} 落后于 origin/main（${remoteSha.slice(0, 7)}），请在最新 main 重试`);
+      return {
+        action: 'superseded',
+        checkRemoteRun: true,
+        reason: `origin/main（${remoteSha.slice(0, 7)}）已领先当前补派发/手动部署检出（${headSha.slice(0, 7)}），检查并交接给最新尖端`,
+      };
     }
     return {
       action: 'superseded',
@@ -155,9 +159,39 @@ export function classifyApiMainSha({ baseSha, bumpSha, apiSha }) {
   return 'stale';
 }
 
-export function hasActiveOrSucceededRun(runs) {
+/**
+ * 判断某次 CI / Deploy 运行是否具备部署资格（排除 deploy=false 只读运行、仅 bump/superseded 跳过 deploy 的运行与非部署事件）。
+ */
+export function isDeployCapableRun(run, jobs = []) {
+  if (!run || !['push', 'workflow_dispatch'].includes(run.event)) return false;
+  if (run.status === 'completed') {
+    if (run.conclusion !== 'success') return false;
+    return (
+      Array.isArray(jobs) &&
+      jobs.some((j) => j?.name === 'check' && j.status === 'completed' && j.conclusion === 'success') &&
+      jobs.some((j) => j?.name === 'deploy' && j.status === 'completed' && j.conclusion === 'success')
+    );
+  }
+  if (run.event === 'push') return true;
+  if (!Array.isArray(jobs) || jobs.length === 0) return false;
+  const prepareJob = jobs.find((j) => j?.name === 'prepare');
+  if (!prepareJob || (prepareJob.status === 'completed' && prepareJob.conclusion !== 'success')) return false;
+  const checkJob = jobs.find((j) => j?.name === 'check');
+  if (checkJob && checkJob.status === 'completed' && checkJob.conclusion !== 'success') return false;
+  const deployJob = jobs.find((j) => j?.name === 'deploy');
+  if (deployJob && deployJob.status === 'completed' && deployJob.conclusion !== 'success') return false;
+  return true;
+}
+
+export function hasActiveOrSucceededRun(runs, getJobs = () => [], excludeRunId = null) {
   if (!Array.isArray(runs)) return false;
-  return runs.some((run) => run && (run.status !== 'completed' || run.conclusion === 'success'));
+  return runs.some((run) => {
+    if (!run || !['push', 'workflow_dispatch'].includes(run.event)) return false;
+    if (excludeRunId !== null && String(run.id ?? '') === String(excludeRunId)) return false;
+    if (run.status === 'completed' && run.conclusion !== 'success') return false;
+    if (run.status !== 'completed' && run.event === 'push') return true;
+    return isDeployCapableRun(run, getJobs(run));
+  });
 }
 
 function writeGithubOutput(values) {
@@ -200,6 +234,13 @@ function dispatchCiDeploy(expectedSha = '') {
   }
 }
 
+function fetchRunJobs(repoText, runId) {
+  const id = String(runId ?? '').trim();
+  if (!RUN_ID_RE.test(id)) return [];
+  const jobPages = ghApiJson(`repos/${repoText}/actions/runs/${id}/jobs?filter=latest&per_page=100`, { paginate: true });
+  return Array.isArray(jobPages) ? jobPages.flatMap((page) => page?.jobs ?? []) : [];
+}
+
 function runResolveRelease() {
   const eventName = process.env.GITHUB_EVENT_NAME ?? '';
   const { ciRunId, repository } = parseResolveReleaseTarget({
@@ -207,11 +248,10 @@ function runResolveRelease() {
     repository: process.env.GITHUB_REPOSITORY ?? '',
   });
   const run = ghApiJson(`repos/${repository}/actions/runs/${ciRunId}`);
-  const jobPages = ghApiJson(`repos/${repository}/actions/runs/${ciRunId}/jobs?filter=latest&per_page=100`, { paginate: true });
-  const jobs = Array.isArray(jobPages) ? jobPages.flatMap((page) => page?.jobs ?? []) : [];
+  const jobs = fetchRunJobs(repository, ciRunId);
   const result = resolveReleaseSourceRun({ eventName, ciRunId, repository, run, jobs });
   console.log(result.reason);
-  writeGithubOutput({ eligible: result.eligible, sha: result.sha });
+  writeGithubOutput({ eligible: result.eligible, sha: result.sha, ci_run_id: ciRunId });
   return 0;
 }
 
@@ -245,8 +285,9 @@ function runPrepare(root = process.cwd()) {
     if (decision.checkRemoteRun && repository.trim()) {
       const repoText = validateRepository(repository);
       const data = ghApiJson(`repos/${repoText}/actions/workflows/ci.yml/runs?branch=main&head_sha=${remoteSha}&per_page=20`);
-      if (!hasActiveOrSucceededRun(data?.workflow_runs)) {
-        console.log(`检测到最新尖端 ${remoteSha.slice(0, 7)} 缺少未取消的 CI / Deploy 运行，自动补派发`);
+      const currentRunId = process.env.GITHUB_RUN_ID ? process.env.GITHUB_RUN_ID.trim() : null;
+      if (!hasActiveOrSucceededRun(data?.workflow_runs, (run) => fetchRunJobs(repoText, run.id), currentRunId)) {
+        console.log(`检测到最新尖端 ${remoteSha.slice(0, 7)} 缺少具备部署资格的 CI / Deploy 运行，自动补派发`);
         dispatchCiDeploy();
       }
     }

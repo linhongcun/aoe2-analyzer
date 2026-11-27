@@ -10,10 +10,9 @@ on:
         description: '已成功部署的 main 分支 CI / Deploy run ID；用该次产物恢复发布'
         required: true
         type: string
-permissions: { contents: write, actions: read }
-concurrency: { group: release, cancel-in-progress: false }
+permissions: { contents: read, actions: read }
 jobs:
-  release:
+  verify:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
       ((github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch') &&
@@ -21,7 +20,11 @@ jobs:
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    outputs:
+      eligible: ${{ steps.source.outputs.eligible }}
+      sha: ${{ steps.source.outputs.sha }}
+      ci_run_id: ${{ steps.source.outputs.ci_run_id }}
     env:
       GH_TOKEN: ${{ github.token }}
       CI_RUN_ID: ${{ github.event.workflow_run.id || inputs.ci_run_id }}
@@ -34,15 +37,25 @@ jobs:
       - name: Resolve deployed commit and verify check + deploy jobs
         id: source
         run: node scripts/release-workflow.mjs --resolve-run
+
+  release:
+    needs: verify
+    if: ${{ needs.verify.outputs.eligible == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: { contents: write, actions: read }
+    concurrency: { group: release, cancel-in-progress: false }
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CI_RUN_ID: ${{ needs.verify.outputs.ci_run_id }}
+    steps:
       - name: Checkout exact deployed commit
-        if: steps.source.outputs.eligible == 'true'
         uses: actions/checkout@v4
-        with: { ref: '${{ steps.source.outputs.sha }}', fetch-depth: 0 }
+        with: { ref: '${{ needs.verify.outputs.sha }}', fetch-depth: 0 }
       - name: Decide whether this version still needs a Release
         id: decide
-        if: steps.source.outputs.eligible == 'true'
         env:
-          DEPLOYED_SHA: ${{ steps.source.outputs.sha }}
+          DEPLOYED_SHA: ${{ needs.verify.outputs.sha }}
         run: |
           git fetch -q origin main --tags
           version="v$(git show "${DEPLOYED_SHA}:package.json" | node -e 'console.log(JSON.parse(require("fs").readFileSync(0, "utf8")).version)')"
@@ -58,24 +71,24 @@ jobs:
           fi
           echo "publish=true" >> "$GITHUB_OUTPUT"
       - name: Download the exact deployed site
-        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
+        if: steps.decide.outputs.publish == 'true'
         uses: actions/download-artifact@v4
-        with: { name: site, path: dist, run-id: '${{ env.CI_RUN_ID }}', github-token: '${{ github.token }}' }
+        with: { name: site, path: dist, run-id: '${{ needs.verify.outputs.ci_run_id }}', github-token: '${{ github.token }}' }
       - name: Package the deployed site
-        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
+        if: steps.decide.outputs.publish == 'true'
         run: |
           version=${{ steps.decide.outputs.version }}
           (cd dist && zip -qr "../aoe2-analyzer-site-$version.zip" .)
           sha256sum "aoe2-analyzer-site-$version.zip" > SHA256SUMS.txt
       - name: Publish Release
-        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
+        if: steps.decide.outputs.publish == 'true'
         run: |
           version=${{ steps.decide.outputs.version }}
-          notes="变更内容见 https://github.com/${GITHUB_REPOSITORY}/blob/${{ steps.source.outputs.sha }}/CHANGELOG.md"
+          notes="变更内容见 https://github.com/${GITHUB_REPOSITORY}/blob/${{ needs.verify.outputs.sha }}/CHANGELOG.md"
           if gh release view "$version" >/dev/null 2>&1; then
             gh release upload "$version" "aoe2-analyzer-site-$version.zip" SHA256SUMS.txt --clobber
-            gh release edit "$version" --draft=false --target "${{ steps.source.outputs.sha }}" --notes "$notes"
+            gh release edit "$version" --draft=false --target "${{ needs.verify.outputs.sha }}" --notes "$notes"
           else
             gh release create "$version" "aoe2-analyzer-site-$version.zip" SHA256SUMS.txt \
-              --target "${{ steps.source.outputs.sha }}" --title "$version" --notes "$notes"
+              --target "${{ needs.verify.outputs.sha }}" --title "$version" --notes "$notes"
           fi
