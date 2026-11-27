@@ -77,7 +77,11 @@ export function productionTechs(ctx: ProductionContext, config: Pick<ProductionC
       isGatherTech(t, config.civ) ||
       TRAINING_UNLOCK_TECH_ID_SET.has(t.id) ||
       (!!d &&
-        (d.eco.some((e) => e.a !== undefined && (costAttrs[e.a] || (e.a === 13 && e.t?.some((id) => !!ctx.core.buildingById[id])))) ||
+        (d.eco.some(
+          (e) =>
+            e.a !== undefined &&
+            ((costAttrs[e.a] && e.t?.some((id) => !!ctx.core.unitById[id])) || (e.a === 13 && e.t?.some((id) => !!ctx.core.buildingById[id]))),
+        ) ||
           d.rules.some((r) => !r.b && r.fx.some((f) => f.s === 'bt'))))
     );
   });
