@@ -127,6 +127,8 @@ describe('阵容账本的持续生产交接', () => {
     const estProd = calculateProduction(ctx, planned.config!);
     expect(baseProd.errors).toEqual([]);
     expect(estProd.errors).toEqual([]);
+    expect(estProd.lines[0]!.cost).toEqual({ Food: 55, Gold: 34 });
+    expect(estProd.lines[0]!.applied).toContain('布图马普');
     expect(estProd.lines[1]!.cost).toEqual({ Wood: 42.5, Gold: 47 });
     expect(estProd.total).toBeLessThan(baseProd.total);
     expect(estProd.warnings).toContain('布图马普：已按可解码生产或费用效果计入；另含未解码资源或条件效果，结果仅为估算。');

@@ -116,10 +116,14 @@ test.describe('#1448 科技详情结构化费用变化与三态来源说明', ()
     await techDetails.locator('summary').click();
     await expect(techDetails.locator('[data-t="cost-tech-row"]')).toHaveCount(11);
 
-    // 1380 布图马普：已解码费用变化 + 未解码提示
+    // 1380 布图马普：#1464 补齐科那/精锐科那后共展示 4 行（掷石绳骑兵 + 科那）与未解码提示
     await openTech(page, '/tech/1380?civ=Mapuche');
     const sec1380 = page.locator('#tech-cost-changes');
-    await expect(sec1380.locator('[data-t="cost-change-row"]')).toHaveCount(2);
+    await expect(sec1380.locator('[data-t="cost-change-row"]')).toHaveCount(4);
+    await expect(sec1380).toContainText('科那');
+    await expect(sec1380).toContainText('精锐科那');
+    await expect(sec1380).toContainText('-10食');
+    await expect(sec1380).toContainText('-6金');
     await expect(sec1380).toContainText('含未解码效果');
     await expect(page.locator('.detail-source')).toContainText('部分训练费用已按固定数据编码；其余效果以游戏说明为准');
 

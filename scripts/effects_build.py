@@ -8,7 +8,7 @@
 
 用法：python3 scripts/effects_build.py   （下载缓存在 scripts/.cache/）
 """
-import json, os, re, sys, urllib.request
+import json, math, os, re, sys, urllib.request
 from collections import defaultdict
 from pathlib import Path
 
@@ -56,12 +56,92 @@ UNIT_FORM_ALIASES = {42: 331}
 RELIC_RESOURCE_ID = 7
 # .dat 乘法抵消浮点残差容差（如穆伊斯卡草药学 1365 对弓兵类 ×1.15 后对掷矛/投石/格查 ×0.87 = 1.0005）
 MUL_IDENTITY_EPS = 1e-3
+# #1464：马普切「布图马普（1380）」经 Resource 33 = 51（EffectFunction51）覆盖本国城堡独特单位 -15% 造价
+BUTALMAPU_TECH_ID = 1380
+EFFECT_FUNCTION_RES_ID = 33
+BUTALMAPU_EFFECT_FN = 51
+CASTLE_BLD_ID = 82
+
+
+def _is_finite_number(x):
+    """排除 bool 与 NaN/Inf，仅接受有限数值。"""
+    return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 
 
 def r6(x):
     """规范到 6 位小数（接近整数时取 int），供 effects 与 army_research 双管线共用。"""
     x = float(x)
     return int(x) if abs(x - round(x)) < 1e-9 else round(x, 6)
+
+
+def castle_unique_units(trees, units_by_id, civ_en):
+    """从固定 trees.json 与 units.json 推导指定文明在城堡（82）可训练的本国独特单位 ID（升序去重）。"""
+    blocks = (trees.get('t') or {}).get(civ_en) if isinstance(trees, dict) else None
+    if not isinstance(blocks, list):
+        return []
+    found = set()
+    for block in blocks:
+        if not isinstance(block, list) or len(block) < 4 or block[0] != CASTLE_BLD_ID:
+            continue
+        cells = block[3]
+        if not isinstance(cells, list):
+            continue
+        for cell in cells:
+            if not isinstance(cell, list) or len(cell) < 5 or cell[2] != 'u' or cell[4] != 1:
+                continue
+            uid = cell[3]
+            if not isinstance(uid, int) or isinstance(uid, bool):
+                continue
+            u = units_by_id.get(uid)
+            if (
+                isinstance(u, dict)
+                and not u.get('_b')
+                and u.get('type') == 'UniqueUnit'
+                and u.get('b') == CASTLE_BLD_ID
+                and u.get('civs') == [civ_en]
+            ):
+                found.add(uid)
+    return sorted(found)
+
+
+def supplement_script_cost_eco(tech, eco, trees, units_by_id):
+    """#1464：在三重固定数据校验全部通过时，为布图马普（1380）补齐马普切本国城堡独特单位 -15% 费用条目。
+
+    完整保留原 eco 顺序（含 res:33 set 51），不原地修改入参；任一守卫不满足则 fail-closed 原样返回。
+    """
+    out = list(eco)
+    if not isinstance(tech, dict) or tech.get('id') != BUTALMAPU_TECH_ID:
+        return out
+    if tech.get('civs') != ['Mapuche']:
+        return out
+    desc = tech.get('desc') or ''
+    desc_en = tech.get('descEn') or ''
+    if '-15%' not in desc or '-15%' not in desc_en:
+        return out
+    has_effect_fn = any(
+        isinstance(e, dict)
+        and e.get('res') == EFFECT_FUNCTION_RES_ID
+        and e.get('op') == 'set'
+        and _is_finite_number(e.get('v'))
+        and r6(e['v']) == BUTALMAPU_EFFECT_FN
+        for e in out
+    )
+    if not has_effect_fn:
+        return out
+    cost_cmds = [e for e in out if isinstance(e, dict) and e.get('a') == 100]
+    if not cost_cmds or not all(
+        e.get('op') == 'mul' and _is_finite_number(e.get('v')) and r6(e['v']) == 0.85
+        for e in cost_cmds
+    ):
+        return out
+    targets = castle_unique_units(trees, units_by_id, 'Mapuche')
+    if not targets:
+        return out
+    existing = {uid for e in cost_cmds for uid in (e.get('t') or ())}
+    for uid in targets:
+        if uid not in existing:
+            out.append({'a': 100, 'op': 'mul', 'v': 0.85, 't': [uid], 'cls': None, 'unit': uid})
+    return out
 
 
 def is_identity_mul(v):
@@ -422,6 +502,8 @@ def main():
     blds = json.load(open(ROOT / 'data/game/buildings.json'))
     techs = json.load(open(ROOT / 'data/game/techs.json'))
     civs = json.load(open(ROOT / 'data/game/civs.json'))
+    trees = json.load(open(ROOT / 'data/game/trees.json'))
+    units_by_id = {u['id']: u for u in units}
     ours = {u['id']: u for u in units}
     ours.update({b['id']: dict(b, _b=1) for b in blds})
     forms = building_age_forms(A, [b['id'] for b in blds])
@@ -602,6 +684,7 @@ def main():
         if t['id'] in AGE_TECH: continue
         cmds, ok = merged_cmds(t['id'])
         rules, eco, excluded = compile_cmds(cmds, return_excluded=True)
+        eco = supplement_script_cost_eco(t, eco, trees, units_by_id)
         age, pre = age_req(t['id'])
         rec = {'id': t['id'], 'combat': ok, 'rules': rules, 'eco': eco}
         if excluded:

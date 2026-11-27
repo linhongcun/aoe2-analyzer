@@ -228,7 +228,7 @@ test('#1297 驻军预览态切顶部折后卡时代不破坏驻军科技与结�
   await expect(page.locator('#building-garrison')).not.toContainText('暂不能计算');
 });
 
-test('#1297 马普切 2571 + 布图马普 1380 折后价与未解码边界提示（科那不误折价）', async ({ page }) => {
+test('#1297 / #1464 马普切 2571 与科那 2566/2568 + 布图马普 1380 折后价、PK 与训练总价（93 长矛兵不误折价）', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/unit/2571?civ=Mapuche&tab=sim');
   const row1380 = page.locator('#sim label.simt').filter({ has: page.getByRole('link', { name: '布图马普', exact: true }) });
@@ -246,9 +246,47 @@ test('#1297 马普切 2571 + 布图马普 1380 折后价与未解码边界提示
   const text = await card.innerText();
   expect(text).not.toMatch(/res:\s*33|a:\s*100/i);
 
-  // 科那 2566 维持原价，不编造 -15%
-  await page.goto('./#/unit/2566?civ=Mapuche&tab=sim');
-  await expect(page.locator('[data-t="sim-effective-cost"]')).toHaveAttribute('data-state', 'plain');
+  // #1464：科那 2566 与精锐科那 2568 均可勾选 1380，满科技不自动勾选，勾选后显示 55 食 34 金与未解码提示
+  for (const uid of [2566, 2568]) {
+    await page.goto(`./#/unit/${uid}?civ=Mapuche&tab=sim`);
+    const konaRow = page.locator('#sim label.simt').filter({ has: page.getByRole('link', { name: '布图马普', exact: true }) });
+    await expect(konaRow.locator('[data-t="sim-cost-badge"]')).toHaveText('影响造价');
+    await expect(konaRow.locator('[data-t="sim-undecoded-badge"]')).toHaveText('含未解码效果');
+    await expect(konaRow.locator('input[type="checkbox"]')).not.toBeChecked();
+    await expect(card).toHaveAttribute('data-state', 'available');
+    await konaRow.locator('input[type="checkbox"]').check();
+    await expect(card).toHaveAttribute('data-state', 'changed-with-undecoded');
+    await expect(card.locator('[data-t="sim-effective-price"]')).toContainText('55');
+    await expect(card.locator('[data-t="sim-effective-price"]')).toContainText('34');
+    await expect(card.locator('[data-t="sim-effective-price"] [data-zero="true"]')).toHaveCount(0);
+    await expect(card.locator('[data-t="sim-effective-undecoded"]')).toContainText('另含未解码的条件或资源触发效果');
+  }
+
+  // 反例：马普切长矛兵 93 保持 plain，不误折价
+  await page.goto('./#/unit/93?civ=Mapuche&tab=sim');
+  await expect(card).toHaveAttribute('data-state', 'plain');
+
+  // 单兵等资源 PK（3000 预算）：默认满科技 f 跳过 1380 派 28 名，手选 1380 派 33 名（单价 89，投入 2937）
+  await page.goto('./#/duel?a=2568.Mapuche.4.f.&b=359.Britons.4.f.&m=r&bud=3000');
+  await expect(page.locator('#duel')).toContainText('28');
+  await page.goto('./#/duel?a=2568.Mapuche.4.1380.&b=359.Britons.4.f.&m=r&bud=3000');
+  await expect(page.locator('#duel')).toContainText('33');
+  await expect(page.locator('#duel')).toContainText('2937');
+  await expect(page.locator('#duel')).toContainText('另含未解码效果，当前价格非完整最终价');
+
+  // 训练总价：20 精锐科那 + 20 精锐掷石绳骑兵（含 1380）双行折价且保留估算标记
+  await page.goto('./#/production?mode=train-total&civ=Mapuche&age=4&techs=1380&units=2568:20,2571:20');
+  const trainTotalResult = page.getByRole('region', { name: /训练总价/ });
+  await expect(trainTotalResult).toContainText('估算，未完整计入');
+  await expect(trainTotalResult).toContainText('1,100');
+  await expect(trainTotalResult).toContainText('850');
+  await expect(trainTotalResult).toContainText('1,620');
+  await expect(trainTotalResult).toContainText('已计入：布图马普（食物 −10，黄金 −6）');
+  await expect(trainTotalResult).toContainText('已计入：布图马普（木材 −7.5，黄金 −8）');
+
+  // 训练总价反例：马普切 93 长矛兵不改单价且保留估算说明
+  await page.goto('./#/production?mode=train-total&civ=Mapuche&age=4&techs=1380&units=93:1');
+  await expect(page.getByRole('region', { name: /训练总价/ })).toContainText('布图马普含未解码资源或条件效果，对本单位未改单价，结果仅为估算。');
 });
 
 test('#1297 窄屏 360/390 与 1280 浅深主题：无溢出、数字不折行、44px 触控区与 WCAG AA 对比度', async ({ page }) => {

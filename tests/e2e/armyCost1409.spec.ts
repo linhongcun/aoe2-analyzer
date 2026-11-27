@@ -234,12 +234,23 @@ test('#1463 阵容新增费用布图马普估算态、partial 共存分层、深
   await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
   await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
   await expect(resultsCard.locator('[data-t="army-estimate-note"]')).toHaveText(
-    '有 1 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，训练费与本期合计仅为估算。',
+    '有 2 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，训练费与本期合计仅为估算。',
   );
   await expect(page.getByRole('heading', { name: '未计入清单' })).toHaveCount(0);
-  await expect(resultsCard.locator('.army-primary')).toContainText('3,400');
+  await expect(resultsCard.locator('.army-primary')).toContainText('3,200');
   await expect(resultsCard.locator('.army-primary')).toContainText('850');
-  await expect(resultsCard.locator('.army-primary')).toContainText('3,490');
+  await expect(resultsCard.locator('.army-primary')).toContainText('3,370');
+
+  const row1 = page.locator('.army-unit-row').nth(0);
+  await expect(row1).toContainText('55');
+  await expect(row1).toContainText('34');
+  await expect(row1.locator('.army-line-total')).toContainText('1100');
+  await expect(row1.locator('.army-line-total')).toContainText('680');
+  await expect(row1.locator('[data-t="army-row-estimate-note"]')).toHaveText(
+    '已按可解码条目计入：布图马普；另含未解码资源或条件效果，本行单价与训练费仅为估算。',
+  );
+  await expect(row1.locator('#army-row-error-0')).toHaveCount(0);
+  await expect(row1.locator('.army-warning')).toHaveCount(0);
 
   const row2 = page.locator('.army-unit-row').nth(1);
   await expect(row2).toContainText('42.5');
@@ -284,6 +295,7 @@ test('#1463 阵容新增费用布图马普估算态、partial 共存分层、深
   await page.goto(armyCostUrl({ civ: 'Mapuche', age: '4', rows, done: ['t:1380'] }));
   await expect(resultsCard.locator('h2')).toHaveText('本期新增费用合计');
   await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
+  await expect(row1.locator('[data-t="army-row-estimate-note"]')).toBeVisible();
   await expect(row2.locator('[data-t="army-row-estimate-note"]')).toBeVisible();
 
   // 4. 共存态（partial && estimated）：1280 & 390 浅色
@@ -291,11 +303,12 @@ test('#1463 阵容新增费用布图马普估算态、partial 共存分层、深
   await expect(resultsCard.locator('h2')).toHaveText('已核实项目小计');
   await expect(resultsCard.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
   await expect(resultsCard.locator('[data-t="army-estimate-note"]')).toHaveText(
-    '有 1 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，已计入部分仍仅为估算。未计入项目另见下方「未计入清单」。',
+    '有 2 行训练费已按可解码条目计入（布图马普）；另含未解码资源或条件效果，已计入部分仍仅为估算。未计入项目另见下方「未计入清单」。',
   );
   const uncounted = page.locator('.army-card').filter({ has: page.getByRole('heading', { name: '未计入清单' }) });
   await expect(uncounted).toBeVisible();
   await expect(uncounted).toContainText('第 3 行');
+  await expect(uncounted).not.toContainText('第 1 行');
   await expect(uncounted).not.toContainText('第 2 行');
   await assertNoWrapOrOverflow(page);
 
