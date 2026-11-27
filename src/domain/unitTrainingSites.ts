@@ -1,4 +1,5 @@
 import type { Unit } from './types';
+import { CONDITIONAL_TRAINING_FAMILIES } from './trainingUnlocks';
 
 const MONK = 125;
 const WARRIOR_PRIEST = 1811;
@@ -22,31 +23,8 @@ export const MAPUCHE_SETTLEMENT_UNITS = [
 
 const mapucheSettlementById = new Map<number, number>(MAPUCHE_SETTLEMENT_UNITS.map(({ id, primary }) => [id, primary]));
 
-// DE 188329 的哥特与匈奴文明树把这些次要节点标为 ResearchRequired。
-// 普通、精锐及各建筑节点仍保留独立 ID。
-const GATED_FAMILIES = [
-  {
-    civ: 'Goths',
-    building: 12,
-    tech: 16,
-    pairs: [
-      [41, 759],
-      [555, 761],
-    ],
-  },
-  {
-    civ: 'Huns',
-    building: 101,
-    tech: 483,
-    pairs: [
-      [755, 886],
-      [757, 887],
-    ],
-  },
-] as const;
-
 const variants = new Map<number, { primary: number; alternate: number; civ: string; building: number; tech: number }>();
-for (const { civ, building, tech, pairs } of GATED_FAMILIES) {
+for (const { civ, building, tech, pairs } of CONDITIONAL_TRAINING_FAMILIES) {
   for (const [primary, alternate] of pairs) {
     const variant = { primary, alternate, civ, building, tech };
     variants.set(primary, variant);

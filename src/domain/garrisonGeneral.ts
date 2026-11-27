@@ -9,6 +9,7 @@ import { civStatus } from './simulator';
 import { productionTechAge } from './production';
 import { buildingAge as getGarrisonBuildingAge, trainingUnitAge } from './availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
+import { requiredTrainingUnlockTech, TRAINING_UNLOCK_GATES, TRAINING_UNLOCK_TECH_ID_SET } from './trainingUnlocks';
 import { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow } from './garrisonUrl';
 
 export { writeGeneralGarrison, type GarrisonEntry, type GeneralGarrisonConfig, type GeneralGarrisonRow };
@@ -403,7 +404,7 @@ function buildStaticIndex(data: GeneralGarrisonData): StaticGarrisonIndex {
   const queue: number[] = [];
   const byId = new Map<number, GeneralGarrisonRule[]>();
   for (const r of allRules) {
-    if (r.effects.length > 0 || (r.trainingLocations?.length ?? 0) > 0 || EXPLICIT_CREATE_UNLOCK_IDS.has(r.id) || !!data.techs[r.id]) {
+    if (r.effects.length > 0 || (r.trainingLocations?.length ?? 0) > 0 || TRAINING_UNLOCK_TECH_ID_SET.has(r.id) || !!data.techs[r.id]) {
       if (!usefulIds.has(r.id)) {
         usefulIds.add(r.id);
         queue.push(r.id);
@@ -498,9 +499,8 @@ function candidate(
     !!carrier?.specialTasks?.some((t) => t.action === 136 && (predecessors.includes(t.unitId) || (t.unitId < 0 && t.classId === B.class)));
   if (relic) canCreate = false;
   // A present unit is a completed shape. Its prerequisite unlock must still be selected for a production-only route.
-  if ([5, 36, 420, 691].includes(id) && !state.known.has(47)) canCreate = false;
-  if ([759, 761].includes(id) && b.id === 12 && !state.known.has(16)) canCreate = false;
-  if ([886, 887].includes(id) && b.id === 101 && !state.known.has(483)) canCreate = false;
+  const requiredUnlock = requiredTrainingUnlockTech(id, b.id);
+  if (requiredUnlock !== undefined && !state.known.has(requiredUnlock)) canCreate = false;
   const core = ctx.core.unitById[id] ?? (id === FEMALE_VILLAGER_ID ? ctx.core.unitById[VILLAGER_UNIT_ID] : undefined) ?? ctx.core.buildingById[id];
   return {
     id,
@@ -540,12 +540,6 @@ export function getGarrisonCandidates(
 }
 
 const BUILDING_SHOOTING_STATS = new Set<GarrisonStat>(['attack', 'reload', 'total', 'max', 'projectile', 'secondaryProjectile']);
-const EXPLICIT_CREATE_UNLOCKS: readonly { techId: number; unitIds: readonly number[]; buildingId?: number }[] = [
-  { techId: 47, unitIds: [5, 36, 420, 691] },
-  { techId: 16, unitIds: [759, 761], buildingId: 12 },
-  { techId: 483, unitIds: [886, 887], buildingId: 101 },
-];
-const EXPLICIT_CREATE_UNLOCK_IDS = new Set<number>(EXPLICIT_CREATE_UNLOCKS.map((g) => g.techId));
 const MAX_EXACT_CONTROL_SUBSETS = 1024;
 const MAX_EXACT_STATES = 1024;
 const MAX_EXACT_SHAPE_BITS = 10;
@@ -825,7 +819,7 @@ function computeGarrisonTechs(
         (e.stat === 'attack' && (prelimDynamicSecProj || prelimSecProjs.has(e.unit))),
     ) ||
     (r.trainingLocations ?? []).some(relocTouchesBuilding) ||
-    EXPLICIT_CREATE_UNLOCKS.some(
+    TRAINING_UNLOCK_GATES.some(
       (gate) => gate.techId === r.id && (gate.buildingId === undefined || gate.buildingId === b.id) && gate.unitIds.some(canBuildingProduceUnit),
     );
   const activeDynIds = new Set<number>();
@@ -1203,7 +1197,7 @@ function computeGarrisonTechs(
     if (!isControl && (rule.trainingLocations ?? []).some(relocTouchesBuilding)) isControl = true;
     if (
       !isControl &&
-      EXPLICIT_CREATE_UNLOCKS.some(
+      TRAINING_UNLOCK_GATES.some(
         (gate) => gate.techId === t.id && (gate.buildingId === undefined || gate.buildingId === b.id) && gate.unitIds.some(canBuildingProduceUnit),
       )
     ) {
@@ -1657,7 +1651,7 @@ function computeGarrisonTechs(
 
     let needCandScan = bA.garrisonType !== bB.garrisonType;
     if (!needCandScan) {
-      for (const gate of EXPLICIT_CREATE_UNLOCKS) {
+      for (const gate of TRAINING_UNLOCK_GATES) {
         if (gate.buildingId !== undefined && gate.buildingId !== b.id) continue;
         if (sA.known.has(gate.techId) !== sB.known.has(gate.techId)) {
           needCandScan = true;
@@ -2123,8 +2117,8 @@ function computeGarrisonTechs(
         const capPos = B && B.capacity > 0 ? 1 : 0;
         const gType = B ? B.garrisonType : -1;
         let unlockMask = 0;
-        for (let i = 0; i < EXPLICIT_CREATE_UNLOCKS.length; i++) {
-          if (st.known.has(EXPLICIT_CREATE_UNLOCKS[i]!.techId)) unlockMask |= 1 << i;
+        for (let i = 0; i < TRAINING_UNLOCK_GATES.length; i++) {
+          if (st.known.has(TRAINING_UNLOCK_GATES[i]!.techId)) unlockMask |= 1 << i;
         }
         const reqSig = sortedNonCtrlPrereqIds.filter((id) => st.known.has(id)).join(',');
         const selPower = st.selected.filter((id) => powerSelectedIds.has(id)).join(',');

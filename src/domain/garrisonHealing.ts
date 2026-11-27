@@ -18,6 +18,7 @@ import { civStatus, makeSimContext, simTechs, simulate } from './simulator';
 import { TEAM_BONUSES } from './effects';
 import { productionTechAge } from './production';
 import { FEMALE_VILLAGER_ID, VILLAGER_UNIT_ID } from './gameIds';
+import { isHealingUnlockTechForBuilding } from './trainingUnlocks';
 
 export type HealingContext = GeneralGarrisonContext;
 export interface HealingConfig {
@@ -109,7 +110,10 @@ export function availableHealingTechs(ctx: HealingContext, c: HealingConfig): Te
   // route even when they change no HP (Anarchy, Marauders, Chemistry, etc.).
   const locations = new Set(GENERAL_GARRISON_DATA.buildings[c.buildingId]?.predecessors ?? [c.buildingId]);
   for (const tech of ctx.core.techs)
-    if (GENERAL_GARRISON_DATA.techs[tech.id]?.trainingLocations?.some((e) => locations.has(e.location)) || (tech.id === 47 && [87, 49].includes(c.buildingId)))
+    if (
+      GENERAL_GARRISON_DATA.techs[tech.id]?.trainingLocations?.some((e) => locations.has(e.location)) ||
+      isHealingUnlockTechForBuilding(tech.id, c.buildingId)
+    )
       ids.add(tech.id);
   const addPre = (id: number) => {
     const pre = ctx.core.techById[id]?.pre;
