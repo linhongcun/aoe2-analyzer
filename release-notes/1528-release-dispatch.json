@@ -1,0 +1,5 @@
+{
+  "bump": "patch",
+  "issue": 1528,
+  "summary": "修复自动递增版本部署 Pages 后未自动触发正式 Release 的问题（#1528）。"
+}

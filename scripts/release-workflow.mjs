@@ -236,13 +236,40 @@ function fetchRunJobs(repoText, runId) {
   return Array.isArray(jobPages) ? jobPages.flatMap((page) => page?.jobs ?? []) : [];
 }
 
+export function shouldWaitForUpstreamRun({ eventName, repository, run }) {
+  if (eventName !== 'workflow_dispatch' || !run || typeof run !== 'object') return false;
+  return (
+    run.name === 'CI / Deploy' &&
+    run.path === '.github/workflows/ci.yml' &&
+    ['push', 'workflow_dispatch'].includes(run.event) &&
+    run.head_branch === 'main' &&
+    run.head_repository?.full_name === repository &&
+    run.status !== 'completed'
+  );
+}
+
+export function waitForUpstreamRunCompletion(fetchRun, { eventName, repository, sleepFn = sleepMs, maxAttempts = 12, intervalMs = 5000 }) {
+  let run = fetchRun();
+  for (let attempt = 1; attempt <= maxAttempts && shouldWaitForUpstreamRun({ eventName, repository, run }); attempt++) {
+    console.log(
+      `上游 CI / Deploy #${run.id ?? ''} 仍在收尾（status=${run.status}），等待 ${Math.round(intervalMs / 1000)} 秒后重试（${attempt}/${maxAttempts}）`,
+    );
+    sleepFn(intervalMs);
+    run = fetchRun();
+  }
+  return run;
+}
+
 function runResolveRelease() {
   const eventName = process.env.GITHUB_EVENT_NAME ?? '';
   const { ciRunId, repository } = parseResolveReleaseTarget({
     ciRunId: process.env.CI_RUN_ID ?? '',
     repository: process.env.GITHUB_REPOSITORY ?? '',
   });
-  const run = ghApiJson(`repos/${repository}/actions/runs/${ciRunId}`);
+  const run = waitForUpstreamRunCompletion(() => ghApiJson(`repos/${repository}/actions/runs/${ciRunId}`), {
+    eventName,
+    repository,
+  });
   const jobs = fetchRunJobs(repository, ciRunId);
   const result = resolveReleaseSourceRun({ eventName, ciRunId, repository, run, jobs });
   console.log(result.reason);

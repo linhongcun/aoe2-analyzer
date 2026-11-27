@@ -31,6 +31,8 @@ const {
   isDeployCapableRun,
   parseResolveReleaseTarget,
   resolveReleaseSourceRun,
+  shouldWaitForUpstreamRun,
+  waitForUpstreamRunCompletion,
 } = releaseWorkflow;
 const RELEASE_NOTES_CLI = resolve('scripts/release-notes.mjs');
 const RELEASE_WORKFLOW_CLI = resolve('scripts/release-workflow.mjs');
@@ -59,10 +61,7 @@ function makeFixtureRepo(version = '0.99.72') {
   return dir;
 }
 
-const SHA_A = 'a'.repeat(40);
-const SHA_B = 'b'.repeat(40);
-const SHA_C = 'c'.repeat(40);
-const SHA_D = 'd'.repeat(40);
+const [SHA_A, SHA_B, SHA_C, SHA_D] = ['a', 'b', 'c', 'd'].map((c) => c.repeat(40)) as [string, string, string, string];
 
 describe('#1528 release-notes 纯函数与片段校验', () => {
   it('按 semver 递增 patch / minor / major，合并按最高级别取胜', () => {
@@ -263,26 +262,16 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
         ...over,
       });
     expect(r()).toMatchObject({ eligible: true, sha: SHA_B });
-    expect(
-      r({
-        run: { ...baseRun, event: 'push' },
-        jobs: [
-          { name: 'prepare', status: 'completed', conclusion: 'success' },
-          { name: 'check', status: 'completed', conclusion: 'skipped' },
-          { name: 'deploy', status: 'completed', conclusion: 'skipped' },
-        ],
-      }),
-    ).toMatchObject({ eligible: false, sha: SHA_B });
-    // 手工恢复传入未部署 run 必须报错；非法 CI_RUN_ID / PR 事件 / 异仓均报错
-    expect(() =>
-      r({
-        eventName: 'workflow_dispatch',
-        jobs: [
-          { name: 'check', status: 'completed', conclusion: 'success' },
-          { name: 'deploy', status: 'completed', conclusion: 'skipped' },
-        ],
-      }),
-    ).toThrow(/未同时完成成功的 check 与 deploy/);
+    expect(r({ eventName: 'workflow_dispatch' })).toMatchObject({ eligible: true, sha: SHA_B });
+    const skipped = [okJobs[0], { name: 'check', status: 'completed', conclusion: 'skipped' }, { name: 'deploy', status: 'completed', conclusion: 'skipped' }];
+    expect(r({ run: { ...baseRun, event: 'push' }, jobs: skipped })).toMatchObject({ eligible: false, sha: SHA_B });
+    // 手工恢复传入未部署/失败 run 必须报错；非法 CI_RUN_ID / PR 事件 / 异仓均报错
+    expect(() => r({ eventName: 'workflow_dispatch', jobs: [okJobs[1], { name: 'deploy', status: 'completed', conclusion: 'skipped' }] })).toThrow(
+      /未同时完成成功的 check 与 deploy/,
+    );
+    expect(() => r({ eventName: 'workflow_dispatch', jobs: [okJobs[1], { name: 'deploy', status: 'completed', conclusion: 'failure' }] })).toThrow(
+      /未同时完成成功的 check 与 deploy/,
+    );
     expect(() => r({ eventName: 'workflow_dispatch', ciRunId: '123/evil' })).toThrow(/正整数/);
     expect(() => r({ ciRunId: '1', run: { ...baseRun, event: 'pull_request' } })).toThrow();
     expect(() => r({ ciRunId: '1', run: { ...baseRun, head_repository: { full_name: 'fork/aoe2-analyzer' } } })).toThrow();
@@ -324,40 +313,27 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     expect(classifyApiMainSha({ baseSha: SHA_A, bumpSha: SHA_B, apiSha: SHA_A })).toBe('stale');
 
     // R2 P1-1：已取消 push + 成功/进行中的只读 workflow_dispatch(deploy=false) 不得阻断补派发
-    const roJobs = [
-      { name: 'prepare', status: 'completed', conclusion: 'skipped' },
-      { name: 'check', status: 'completed', conclusion: 'success' },
-      { name: 'deploy', status: 'completed', conclusion: 'skipped' },
-    ];
-    const jobsById: Record<number, { name: string; status: string; conclusion: string | null }[]> = {
+    const j = (name: string, status: string, conclusion: string | null) => ({ name, status, conclusion });
+    const roJobs = [j('prepare', 'completed', 'skipped'), j('check', 'completed', 'success'), j('deploy', 'completed', 'skipped')];
+    const jobsById: Record<number, ReturnType<typeof j>[]> = {
       1: roJobs,
-      2: [
-        { name: 'prepare', status: 'completed', conclusion: 'skipped' },
-        { name: 'check', status: 'in_progress', conclusion: null },
-      ],
-      3: [
-        { name: 'prepare', status: 'completed', conclusion: 'success' },
-        { name: 'check', status: 'in_progress', conclusion: null },
-      ],
+      2: [j('prepare', 'completed', 'skipped'), j('check', 'in_progress', null)],
+      3: [j('prepare', 'completed', 'success'), j('check', 'in_progress', null)],
       4: okJobs,
     };
     const lookup = (r: { id: number }) => jobsById[r.id] ?? [];
-    expect(
-      hasActiveOrSucceededRun(
-        [
-          { id: 10, event: 'push', status: 'completed', conclusion: 'cancelled' },
-          { id: 1, event: 'workflow_dispatch', status: 'completed', conclusion: 'success' },
-          { id: 2, event: 'workflow_dispatch', status: 'in_progress', conclusion: null },
-        ],
-        lookup,
-      ),
-    ).toBe(false);
+    const inactiveRuns = [
+      { id: 10, event: 'push', status: 'completed', conclusion: 'cancelled' },
+      { id: 1, event: 'workflow_dispatch', status: 'completed', conclusion: 'success' },
+      { id: 2, event: 'workflow_dispatch', status: 'in_progress', conclusion: null },
+    ];
+    expect(hasActiveOrSucceededRun(inactiveRuns, lookup)).toBe(false);
     expect(hasActiveOrSucceededRun([{ id: 11, event: 'push', status: 'queued', conclusion: null }], lookup)).toBe(true);
     expect(hasActiveOrSucceededRun([{ id: 3, event: 'workflow_dispatch', status: 'in_progress', conclusion: null }], lookup)).toBe(true);
     expect(hasActiveOrSucceededRun([{ id: 4, event: 'push', status: 'completed', conclusion: 'success' }], lookup)).toBe(true);
     expect(isDeployCapableRun({ event: 'push', status: 'completed', conclusion: 'success' }, roJobs)).toBe(false);
 
-    // R2 P1-3：release.yml 不设工作流级 concurrency，必须先在 verify 校验资格后再进 release 作业并发组
+    // R2 P1-3 与 workflow_dispatch 显式派发 Release：release.yml 隔离并发组，ci.yml deploy 显式派发 release.yml 且 --resolve-run 短时等待收尾
     const releaseYml = readFileSync(resolve('.github/workflows/release.yml'), 'utf8');
     const [headerPart = '', jobsPart = ''] = releaseYml.split('\njobs:\n');
     const [verifyPart = '', releasePart = ''] = jobsPart.split('\n  release:\n');
@@ -366,15 +342,48 @@ describe('#1528 release-workflow 纯决策逻辑（prepare 与 release.yml）', 
     expect(verifyPart).not.toMatch(/^\s*concurrency:/m);
     expect(releasePart).toContain("    needs: verify\n    if: ${{ needs.verify.outputs.eligible == 'true' }}");
     expect(releasePart).toContain('concurrency: { group: release, cancel-in-progress: false, queue: max }');
+    const deployPart = readFileSync(resolve('.github/workflows/ci.yml'), 'utf8').split('\n  deploy:\n')[1] ?? '';
+    expect(deployPart).toContain('actions: write');
+    expect(deployPart).toContain("if: ${{ success() && github.event_name == 'workflow_dispatch' }}");
+    expect(deployPart).toContain('continue-on-error: true');
+    expect(deployPart).toContain('::warning title=Release 自动派发失败::');
+    expect(deployPart).toContain('GITHUB_STEP_SUMMARY');
+    expect(deployPart).toContain('gh workflow run release.yml --repo "$GITHUB_REPOSITORY" --ref main -f "ci_run_id=${CI_RUN_ID}"');
+
+    const repo = 'linhongcun/aoe2-analyzer';
+    const inProg = { ...baseRun, status: 'in_progress', conclusion: null };
+    expect(shouldWaitForUpstreamRun({ eventName: 'workflow_dispatch', repository: repo, run: inProg })).toBe(true);
+    for (const [ev, runCase] of [
+      ['workflow_run', inProg],
+      ['workflow_dispatch', baseRun],
+      ['workflow_dispatch', { ...inProg, event: 'pull_request' }],
+      ['workflow_dispatch', { ...inProg, head_branch: 'feat/x' }],
+      ['workflow_dispatch', { ...inProg, head_repository: { full_name: 'fork/aoe2-analyzer' } }],
+      ['workflow_dispatch', { ...inProg, path: '.github/workflows/full.yml' }],
+      ['workflow_dispatch', { ...inProg, name: 'Other' }],
+    ] as const) {
+      let [p, s] = [0, 0];
+      expect(shouldWaitForUpstreamRun({ eventName: ev, repository: repo, run: runCase })).toBe(false);
+      waitForUpstreamRunCompletion(() => (++p, runCase), { eventName: ev, repository: repo, sleepFn: () => s++, maxAttempts: 5 });
+      expect([p, s]).toEqual([1, 0]);
+    }
+    const waitBase = { eventName: 'workflow_dispatch', repository: repo };
+    let polls = 0;
+    const waited = waitForUpstreamRunCompletion(() => (++polls < 3 ? inProg : baseRun), { ...waitBase, sleepFn: () => {}, maxAttempts: 5 });
+    expect([polls, waited.status]).toEqual([3, 'completed']);
+    let [ep, es] = [0, 0];
+    const exhausted = waitForUpstreamRunCompletion(() => (++ep, inProg), { ...waitBase, sleepFn: () => es++, maxAttempts: 12 });
+    expect([ep, es, exhausted.status]).toEqual([13, 12, 'in_progress']);
+    expect(() => resolveReleaseSourceRun({ ...waitBase, ciRunId: '45956929125', run: exhausted, jobs: okJobs })).toThrow(/status=in_progress/);
 
     expect(buildDispatchCiDeployArgs()).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
     expect(buildDispatchCiDeployArgs(SHA_B)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true', '-f', `expected_sha=${SHA_B}`]);
     expect(() => buildDispatchCiDeployArgs('not-a-sha')).toThrow(/40 位提交 SHA/);
     expect(parseResolveReleaseTarget({ ciRunId: ' 45956929125 ', repository: ' linhongcun/aoe2-analyzer ' })).toEqual({
       ciRunId: '45956929125',
-      repository: 'linhongcun/aoe2-analyzer',
+      repository: repo,
     });
-    expect(() => parseResolveReleaseTarget({ ciRunId: '123/evil', repository: 'linhongcun/aoe2-analyzer' })).toThrow(/正整数/);
+    expect(() => parseResolveReleaseTarget({ ciRunId: '123/evil', repository: repo })).toThrow(/正整数/);
     expect(() => parseResolveReleaseTarget({ ciRunId: '123', repository: '../evil' })).toThrow(/仓库标识非法/);
     expect(() => parseResolveReleaseTarget({ ciRunId: '123', repository: 'owner/..' })).toThrow(/仓库标识非法/);
   });
@@ -421,17 +430,13 @@ if (args[0] === 'api') {
       MOCK_BARE_DIR: bare,
     };
 
-    expect(
+    const runResolve = (id: string) =>
       spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--resolve-run'], {
-        env: { ...mockEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', CI_RUN_ID: '123/evil', GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' },
-      }).status,
-    ).not.toBe(0);
+        env: { ...mockEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', CI_RUN_ID: id, GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' },
+      }).status;
+    expect(runResolve('123/evil')).not.toBe(0);
     expect(existsSync(logFile)).toBe(false);
-    expect(
-      spawnSync(process.execPath, [RELEASE_WORKFLOW_CLI, '--resolve-run'], {
-        env: { ...mockEnv, GITHUB_EVENT_NAME: 'workflow_dispatch', CI_RUN_ID: ' 45956929125 ', GITHUB_REPOSITORY: 'linhongcun/aoe2-analyzer' },
-      }).status,
-    ).toBe(0);
+    expect(runResolve(' 45956929125 ')).toBe(0);
     expect(readFileSync(outFile, 'utf8')).toContain(`eligible=true\nsha=${SHA_B}\nci_run_id=45956929125\n`);
     expect(readCalls()[0]).toEqual(['api', 'repos/linhongcun/aoe2-analyzer/actions/runs/45956929125']);
 
@@ -475,16 +480,15 @@ if (args[0] === 'api') {
       expect(readFileSync(outFile, 'utf8')).toContain('action=superseded\n');
       expect(readCalls().at(-1)).toEqual(['workflow', 'run', 'ci.yml', '--ref', 'main', '-f', 'deploy=true']);
     }
-    expect(
-      decidePrepareAction({
-        eventName: 'workflow_dispatch',
-        ref: 'refs/heads/main',
-        headSha: a2,
-        remoteSha: a2,
-        expectedSha: '',
-        pendingCount: 1,
-        deployInput: true,
-      }),
-    ).toMatchObject({ action: 'bump' });
+    const dispatchBump = {
+      eventName: 'workflow_dispatch',
+      ref: 'refs/heads/main',
+      headSha: a2,
+      remoteSha: a2,
+      expectedSha: '',
+      pendingCount: 1,
+      deployInput: true,
+    };
+    expect(decidePrepareAction(dispatchBump)).toMatchObject({ action: 'bump' });
   });
 });
