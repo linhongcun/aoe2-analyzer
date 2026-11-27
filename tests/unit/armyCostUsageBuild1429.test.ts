@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
@@ -11,7 +11,7 @@ import { armyResearchChoices, emptyArmyCost, evaluateArmyCost, researchKey } fro
 import { civBonuses } from '../../src/domain/civBonus';
 import { DAT } from '../../src/domain/datEffects';
 import { productionUnits, PRODUCTION_UNLOCK_TECH_IDS, type ProductionContext } from '../../src/domain/production';
-import { buildArmyCostUsage } from '../../scripts/army_cost_usage_lib';
+import { buildArmyCostUsage, formatArmyCostUsageJson } from '../../scripts/army_cost_usage_lib';
 
 let ctx: ProductionContext;
 beforeAll(async () => {
@@ -245,37 +245,35 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     expect(built.bonuses['Bohemians-0']).toEqual({ tids: [45], allFree: false, ecoOnlyUnits: [] });
   });
 
-  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，冷生成一致', async () => {
+  it('纯库与 CLI 分离：Error.stackTraceLimit=0 仍必执行校验，伪造 prepareStackTrace 导入纯库零副作用，CLI 与全量复现一致', async () => {
     const execFileAsync = promisify(execFile);
     const tempDir = mkdtempSync(join(tmpdir(), 'army-cost-usage-cold-'));
     try {
-      mkdirSync(join(tempDir, 'data'), { recursive: true });
-      cpSync(resolve('src'), join(tempDir, 'src'), { recursive: true });
-      cpSync(resolve('scripts'), join(tempDir, 'scripts'), { recursive: true });
-      cpSync(resolve('data/game'), join(tempDir, 'data/game'), { recursive: true });
-      cpSync(resolve('data/sources'), join(tempDir, 'data/sources'), { recursive: true });
-      cpSync(resolve('data/patch-notes'), join(tempDir, 'data/patch-notes'), { recursive: true });
-      cpSync(resolve('package.json'), join(tempDir, 'package.json'));
-      cpSync(resolve('tsconfig.json'), join(tempDir, 'tsconfig.json'));
-      cpSync(resolve('vite.config.ts'), join(tempDir, 'vite.config.ts'));
-      symlinkSync(resolve('node_modules'), join(tempDir, 'node_modules'));
+      mkdirSync(join(tempDir, 'scripts'), { recursive: true });
+      mkdirSync(join(tempDir, 'data/game'), { recursive: true });
+      // 只复制 2 个入口脚本使 ROOT 落到 tempDir，其余只读目录通过符号链接复用，避免整仓拷贝
+      cpSync(resolve('scripts/army_cost_usage_build.ts'), join(tempDir, 'scripts/army_cost_usage_build.ts'));
+      cpSync(resolve('scripts/army_cost_usage_lib.ts'), join(tempDir, 'scripts/army_cost_usage_lib.ts'));
+      for (const rel of ['src', 'node_modules', 'data/sources', 'data/patch-notes', 'package.json', 'tsconfig.json', 'vite.config.ts']) {
+        symlinkSync(resolve(rel), join(tempDir, rel));
+      }
+      for (const name of readdirSync(resolve('data/game'))) {
+        if (name !== 'army_cost_usage.json') {
+          symlinkSync(resolve('data/game', name), join(tempDir, 'data/game', name));
+        }
+      }
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
-      unlinkSync(target);
-
+      const subsetOut = join(tempDir, 'spanish-usage.json');
       const viteNodeBin = resolve('node_modules/.bin/vite-node');
-      // 1) 即使预加载将 Error.stackTraceLimit 设为 0，普通 vite-node --check 缺文件仍必须报错而非静默退出 0
+
+      // 1) 预加载将 Error.stackTraceLimit 设为 0 时，--check 缺文件仍必须报错而非静默退出 0；
+      //    --civ 缺少显式 --out 也必须 fail-closed 拦截，防止误覆写仓库默认快照
       const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
       writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
-      await expect(
-        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
-          cwd: tempDir,
-          env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
-        }),
-      ).rejects.toThrow();
 
-      // 2) 即使改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
+      // 2) 改写 Error.prepareStackTrace 伪造调用栈，静/动态导入纯库 army_cost_usage_lib 均绝对零写入副作用
       writeFileSync(
         join(tempDir, 'import-lib-static.ts'),
         "import { buildArmyCostUsage } from './scripts/army_cost_usage_lib';\nconsole.log(typeof buildArmyCostUsage);\n",
@@ -284,25 +282,44 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         join(tempDir, 'import-lib-spoof.ts'),
         "Error.prepareStackTrace = () => 'ViteNodeRunner.executeFile';\nconst mod = await import('./scripts/army_cost_usage_lib');\nconsole.log(typeof mod.buildArmyCostUsage);\n",
       );
-      for (const args of [
+
+      const importRuns = [
         ['import-lib-static.ts', '--out', unexpectedOut],
         ['--script', 'import-lib-static.ts', '--out', unexpectedOut],
         ['import-lib-spoof.ts', '--out', unexpectedOut],
-      ]) {
-        const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
-        expect(stdout.trim()).toBe('function');
-        expect(existsSync(unexpectedOut), args.join(' ')).toBe(false);
-        expect(existsSync(target), args.join(' ')).toBe(false);
-      }
+      ];
 
-      // 3) 普通模式冷生成，并以普通模式与 --script 模式双验证 --check
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts'], { cwd: tempDir });
-      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
-      await execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--check'], { cwd: tempDir });
+      await Promise.all([
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--check', '--out', target], {
+            cwd: tempDir,
+            env: { ...process.env, NODE_OPTIONS: `--require ${zeroStackPreload}` },
+          }),
+        ).rejects.toThrow(),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish'], { cwd: tempDir })).rejects.toThrow(/--out/),
+        ...importRuns.map(async (args) => {
+          const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
+          expect(stdout.trim()).toBe('function');
+        }),
+      ]);
+      expect(existsSync(unexpectedOut)).toBe(false);
+      expect(existsSync(target)).toBe(false);
 
-      expect(readFileSync(target, 'utf8')).toBe(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8'));
+      // 3) CLI 普通模式写入单文明子集，再以普通模式与 --script 模式双验证 --check；
+      //    并与已提交的 data/game/army_cost_usage.json 核对 meta 与该文明条目完全一致
+      //    （全 56 文明字节级复现另由 bonusUsageArmyCost1429.test.ts 与 DATA_CHECKS 覆盖）
+      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', subsetOut], { cwd: tempDir });
+      await Promise.all([
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
+        execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
+      ]);
+      const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
+      expect(readFileSync(subsetOut, 'utf8')).toBe(formatArmyCostUsageJson(builtSpanish));
+      const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;
+      expect(builtSpanish.meta).toEqual(committed.meta);
+      expect(builtSpanish.bonuses['Spanish-2']).toEqual(committed.bonuses['Spanish-2']);
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }
-  }, 90_000);
+  }, 30_000);
 });
