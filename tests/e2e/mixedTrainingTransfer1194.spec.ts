@@ -216,3 +216,143 @@ test('#1334 日本巨型投石机与亚美尼亚牧师战士点「满科技」�
 
   expect(errors).toEqual([]);
 });
+
+test('#1468 存量火药混编链接、波希米亚城堡火枪、土耳其免费化学与无政府/掠夺者均可一键带入训练总价', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  const hindustaniStockCases: { label: string; sideA: MixedDuelInput['a'] }[] = [
+    {
+      label: '印度斯坦 6 攻城战象 + 28 火枪（存量链接不含 47）',
+      sideA: {
+        civ: 'Hindustanis',
+        age: '4',
+        techs: ['67', '81', '211', '435', '39', '68', '82', '212', '75', '80', '219', '377', '507'],
+        team: [],
+        rows: [
+          { uid: '1746', qty: '6' },
+          { uid: '5', qty: '28' },
+        ],
+      },
+    },
+    {
+      label: '印度斯坦 25 翼骑兵 + 21 火枪（存量链接不含 47）',
+      sideA: {
+        civ: 'Hindustanis',
+        age: '4',
+        techs: ['67', '81', '211', '435', '39', '68', '82', '212', '75', '80', '219', '507'],
+        team: [],
+        rows: [
+          { uid: '441', qty: '25' },
+          { uid: '5', qty: '21' },
+        ],
+      },
+    },
+  ];
+
+  for (const item of hindustaniStockCases) {
+    await open(page, { ...fixture, a: item.sideA });
+    const sideA = page.locator('section.mix-side.side-a');
+    await expect(sideA.getByRole('complementary', { name: '暂不能带入 A 方' }), item.label).toHaveCount(0);
+    await expect(action(page, 'A'), item.label).toBeVisible();
+    await sideA.getByRole('button', { name: '满科技', exact: true }).click();
+    await expect(sideA.getByRole('complementary', { name: '暂不能带入 A 方' }), `${item.label}:满科技`).toHaveCount(0);
+    await action(page, 'A').click();
+
+    const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+    expect(params.get('techs')?.split(','), item.label).toContain('47');
+    const summary = page.getByTestId('production-transfer');
+    await expect(summary, item.label).toContainText('已带入混编 PK 的 A 方');
+    await expect(summary, item.label).toContainText('训练解锁条件：化学');
+    await expect(summary, item.label).toContainText('合计只含训练费。');
+    const result = page.getByTestId('train-total-result');
+    await expect(result, item.label).not.toContainText('部分训练费用');
+    const transferredText = await result.innerText();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), item.label).toBe(true);
+
+    const manualUnits = item.sideA.rows.map((r) => `${r.uid}:${r.qty}`).join(',');
+    await page.goto(`./#/production?mode=train-total&civ=Hindustanis&age=4&techs=47&units=${encodeURIComponent(manualUnits)}`);
+    await expect(result, `${item.label}:手填对照`).toHaveText(transferredText, { useInnerText: true });
+  }
+
+  const presetCases: {
+    label: string;
+    sideA: MixedDuelInput['a'];
+    preset: '满科技' | '当前时代科技';
+    expectedTech: string | null;
+    expectedUnlockBanner: string | null;
+  }[] = [
+    {
+      label: '波希米亚城堡 358 长枪 + 5 火枪',
+      sideA: {
+        civ: 'Bohemians',
+        age: '3',
+        techs: [],
+        team: [],
+        rows: [
+          { uid: '358', qty: '10' },
+          { uid: '5', qty: '10' },
+        ],
+      },
+      preset: '当前时代科技',
+      expectedTech: '47',
+      expectedUnlockBanner: '训练解锁条件：化学',
+    },
+    {
+      label: '土耳其帝王 441 翼骑 + 5 火枪（免费化学不写 techs=47）',
+      sideA: {
+        civ: 'Turks',
+        age: '4',
+        techs: [],
+        team: [],
+        rows: [
+          { uid: '441', qty: '10' },
+          { uid: '5', qty: '10' },
+        ],
+      },
+      preset: '满科技',
+      expectedTech: null,
+      expectedUnlockBanner: null,
+    },
+    {
+      label: '哥特兵营近卫军（759）自动带无政府（16）',
+      sideA: { civ: 'Goths', age: '4', techs: [], team: [], rows: [{ uid: '759', qty: '12' }] },
+      preset: '满科技',
+      expectedTech: '16',
+      expectedUnlockBanner: '训练解锁条件：无政府',
+    },
+    {
+      label: '匈奴马厩答刺罕骑兵（886）自动带掠夺者（483）',
+      sideA: { civ: 'Huns', age: '4', techs: [], team: [], rows: [{ uid: '886', qty: '10' }] },
+      preset: '满科技',
+      expectedTech: '483',
+      expectedUnlockBanner: '训练解锁条件：掠夺者',
+    },
+  ];
+
+  for (const item of presetCases) {
+    await open(page, { ...fixture, a: item.sideA });
+    const sideA = page.locator('section.mix-side.side-a');
+    await sideA.getByRole('button', { name: item.preset, exact: true }).click();
+    await expect(sideA.getByRole('complementary', { name: '暂不能带入 A 方' }), item.label).toHaveCount(0);
+    await action(page, 'A').click();
+
+    const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+    const techs = params.get('techs')?.split(',').filter(Boolean) ?? [];
+    if (item.expectedTech) expect(techs, item.label).toContain(item.expectedTech);
+    else expect(techs, item.label).not.toContain('47');
+
+    const summary = page.getByTestId('production-transfer');
+    await expect(summary, item.label).toContainText('已带入混编 PK 的 A 方');
+    if (item.expectedUnlockBanner) await expect(summary, item.label).toContainText(item.expectedUnlockBanner);
+    else await expect(summary, item.label).not.toContainText('训练解锁条件：');
+    await expect(page.getByTestId('train-total-result'), item.label).not.toContainText('部分训练费用');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), item.label).toBe(true);
+  }
+
+  expect(errors).toEqual([]);
+});
