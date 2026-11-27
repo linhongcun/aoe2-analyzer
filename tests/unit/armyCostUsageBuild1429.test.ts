@@ -251,11 +251,18 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
     try {
       mkdirSync(join(tempDir, 'scripts'), { recursive: true });
       mkdirSync(join(tempDir, 'data/game'), { recursive: true });
-      // 只复制 2 个入口脚本使 ROOT 落到 tempDir，其余只读目录通过符号链接复用，避免整仓拷贝
+      mkdirSync(join(tempDir, 'node_modules'), { recursive: true });
+      // 只复制 2 个入口脚本使 ROOT 落到 tempDir，其余只读目录通过符号链接复用，避免整仓拷贝；
+      // node_modules 建独立目录逐项链接，确保 Vite 的 .vite-temp 缓存落在 tempDir 内不回写 worktree
       cpSync(resolve('scripts/army_cost_usage_build.ts'), join(tempDir, 'scripts/army_cost_usage_build.ts'));
       cpSync(resolve('scripts/army_cost_usage_lib.ts'), join(tempDir, 'scripts/army_cost_usage_lib.ts'));
-      for (const rel of ['src', 'node_modules', 'data/sources', 'data/patch-notes', 'package.json', 'tsconfig.json', 'vite.config.ts']) {
+      for (const rel of ['src', 'data/sources', 'data/patch-notes', 'package.json', 'tsconfig.json', 'vite.config.ts']) {
         symlinkSync(resolve(rel), join(tempDir, rel));
+      }
+      for (const entry of readdirSync(resolve('node_modules'))) {
+        if (!entry.startsWith('.vite')) {
+          symlinkSync(resolve('node_modules', entry), join(tempDir, 'node_modules', entry));
+        }
       }
       for (const name of readdirSync(resolve('data/game'))) {
         if (name !== 'army_cost_usage.json') {
@@ -264,12 +271,15 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       }
 
       const target = join(tempDir, 'data/game/army_cost_usage.json');
+      const gameDirAlias = join(tempDir, 'game-dir-alias');
+      symlinkSync(join(tempDir, 'data/game'), gameDirAlias);
+      const aliasTarget = join(gameDirAlias, 'army_cost_usage.json');
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
       const viteNodeBin = resolve('node_modules/.bin/vite-node');
 
       // 1) 预加载将 Error.stackTraceLimit 设为 0 时，--check 缺文件仍必须报错而非静默退出 0；
-      //    --civ 缺少显式 --out 也必须 fail-closed 拦截，防止误覆写仓库默认快照
+      //    --civ 缺 --out、指向默认快照的路径别名（含目录 symlink / macOS firmlink）以及 --out --check 均须 fail-closed 拦截
       const zeroStackPreload = join(tempDir, 'zero-stack.cjs');
       writeFileSync(zeroStackPreload, 'Error.stackTraceLimit = 0;\n');
 
@@ -297,6 +307,12 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
           }),
         ).rejects.toThrow(),
         expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish'], { cwd: tempDir })).rejects.toThrow(/--out/),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', aliasTarget], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', '--check'], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
         ...importRuns.map(async (args) => {
           const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
           expect(stdout.trim()).toBe('function');
@@ -304,6 +320,7 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       ]);
       expect(existsSync(unexpectedOut)).toBe(false);
       expect(existsSync(target)).toBe(false);
+      expect(existsSync(join(tempDir, '--check'))).toBe(false);
 
       // 3) CLI 普通模式写入单文明子集，再以普通模式与 --script 模式双验证 --check；
       //    并与已提交的 data/game/army_cost_usage.json 核对 meta 与该文明条目完全一致

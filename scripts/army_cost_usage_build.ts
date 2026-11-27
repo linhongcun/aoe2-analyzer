@@ -6,12 +6,62 @@
  *   npx vite-node scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  *   npx vite-node --script scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  */
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, lstatSync, readFileSync, readlinkSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join, resolve } from 'node:path';
 import { ARMY_RESEARCH } from '../src/data/armyResearch';
 import { CORE } from '../src/data/core';
 import { loadTrees } from '../src/data/index';
 import { buildArmyCostUsage, DEFAULT_ARMY_COST_USAGE_DEST, formatArmyCostUsageJson } from './army_cost_usage_lib';
+
+function canonicalPath(filePath: string, depth = 0): string {
+  const abs = resolve(filePath);
+  if (depth > 16) return abs;
+  if (existsSync(abs)) {
+    try {
+      return realpathSync(abs);
+    } catch {
+      return abs;
+    }
+  }
+  try {
+    if (lstatSync(abs).isSymbolicLink()) {
+      return canonicalPath(resolve(dirname(abs), readlinkSync(abs)), depth + 1);
+    }
+  } catch {
+    // Not a symlink; fall through to canonicalizing its parent directory.
+  }
+  const parent = dirname(abs);
+  if (existsSync(parent)) {
+    try {
+      return join(realpathSync(parent), basename(abs));
+    } catch {
+      return abs;
+    }
+  }
+  return abs;
+}
+
+function sameInode(a: string, b: string): boolean {
+  if (!existsSync(a) || !existsSync(b)) return false;
+  try {
+    const sa = statSync(a);
+    const sb = statSync(b);
+    return sa.dev === sb.dev && sa.ino === sb.ino;
+  } catch {
+    return false;
+  }
+}
+
+function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_USAGE_DEST): boolean {
+  const a = resolve(candidate);
+  const b = resolve(defaultDest);
+  const ca = canonicalPath(a);
+  const cb = canonicalPath(b);
+  if (a === b || ca === cb) return true;
+  if (sameInode(a, b) || sameInode(ca, cb)) return true;
+  // Also catch firmlink/symlink aliases (e.g. macOS /System/Volumes/Data/...) when the file does not exist yet.
+  return basename(ca) === basename(cb) && sameInode(dirname(ca), dirname(cb));
+}
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {
   let check = false;
@@ -22,11 +72,12 @@ function parseArgs(argv: readonly string[]): { check: boolean; out: string; civL
     if (arg === '--check') check = true;
     else if (arg === '--out') {
       const next = argv[++i];
-      if (!next) throw new Error('--out requires a file path');
+      if (!next || next.startsWith('-')) throw new Error('--out requires a file path');
       out = resolve(next);
     } else if (arg === '--civ') {
       const next = argv[++i];
-      const names = (next ?? '')
+      if (!next || next.startsWith('-')) throw new Error('--civ requires a civilization name');
+      const names = next
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);
@@ -36,8 +87,8 @@ function parseArgs(argv: readonly string[]): { check: boolean; out: string; civL
       throw new Error(`Unknown argument: ${arg}`);
     }
   }
-  if (civs.length && out === DEFAULT_ARMY_COST_USAGE_DEST) {
-    throw new Error('--civ requires an explicit --out path');
+  if (civs.length && targetsDefaultDest(out)) {
+    throw new Error('--civ requires an explicit --out path distinct from the default snapshot');
   }
   return { check, out, ...(civs.length ? { civList: civs } : {}) };
 }
