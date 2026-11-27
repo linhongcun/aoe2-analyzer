@@ -197,3 +197,33 @@ test('#1463 持续生产 1404 静默放行、578/1380 估算放行与 army-suppl
   await expect(page.locator('[data-t="army-estimate-badge"]')).toHaveText('含估算项');
   expect(errors).toEqual([]);
 });
+
+test('#1504 持续生产排除罗斯堡垒（455）并支持旧链接一键恢复', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+
+  const castle = page.getByRole('group', { name: '城堡', exact: true });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./#/production?civ=Slavs&age=3');
+  await expect(page.getByRole('heading', { name: '已研究科技' })).toBeVisible();
+  await expect(castle).toHaveCount(0);
+
+  await page.goto('./#/production?civ=Slavs&age=4&techs=455&rows=878:82:2');
+  await expect(castle.getByRole('checkbox', { name: '征招' })).toBeVisible();
+  await expect(castle.getByRole('checkbox')).toHaveCount(1);
+  const alert = page.getByRole('alert');
+  await expect(alert).toHaveCount(1);
+  await expect(alert).toContainText('方案含当前文明或时代不可用的科技');
+  const copy = page.getByRole('button', { name: '复制方案链接', exact: true });
+  await expect(copy).toBeDisabled();
+
+  await page.getByRole('button', { name: '清除无效链接与不可用科技' }).click();
+  await expect(alert).toHaveCount(0);
+  await expect(copy).toBeEnabled();
+  await expect(page).not.toHaveURL(/techs=455/);
+  await expect(page.getByTestId('production-total')).toBeVisible();
+  expect(errors).toEqual([]);
+});

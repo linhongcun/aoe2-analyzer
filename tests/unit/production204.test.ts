@@ -1,14 +1,18 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { loadCore, loadTrees } from '../../src/data';
+import { civs, loadCore, loadTrees } from '../../src/data';
 import ecoRaw from '../../data/game/eco.json';
+import { litTreeIds } from '../../src/domain/availabilityAge';
 import { DAT, type DatFx } from '../../src/domain/datEffects';
 import { gatherModel } from '../../src/domain/realCost';
+import { defaultTeamPlan, teamPlanErrors } from '../../src/domain/teamPlan';
+import { compareTraining } from '../../src/features/production/trainCompareModel';
 import {
   calculateProduction,
   decodeProduction,
   encodeProduction,
   freeProductionTechs,
   productionBuildings,
+  productionTechAge,
   productionTechs,
   toggleProductionTech,
   DEFAULT_PRODUCTION,
@@ -288,5 +292,71 @@ describe('#1463 带 res 标记独特科技过滤与 fail-closed 回归', () => {
       DAT.techs.Kasbah = originalKasbah;
       DAT.techs.Circumnavigation = originalCircum;
     }
+  });
+});
+
+describe('#1504 持续生产费用科技目标实体校验（排除纯建筑造价科技）', () => {
+  it('动态遍历全库费用科技：56 文明 × 4 时代排除纯建筑造价 455，保留全部单位费用与非费用生产科技', () => {
+    const costAttrSet = new Set([100, 103, 104, 105, 106]);
+    const unitCostIds: number[] = [];
+    const buildingOnlyCostIds: number[] = [];
+    for (const tech of ctx.core.techs) {
+      const costEco = (DAT.techs[tech.en]?.eco ?? []).filter((e) => e.a !== undefined && costAttrSet.has(e.a));
+      if (!costEco.length) continue;
+      const targetsUnit = costEco.some((e) => e.t?.some((id) => !!ctx.core.unitById[id]));
+      const targetsBuilding = costEco.some((e) => e.t?.some((id) => !!ctx.core.buildingById[id]));
+      if (targetsUnit) unitCostIds.push(tech.id);
+      else if (targetsBuilding) buildingOnlyCostIds.push(tech.id);
+    }
+    unitCostIds.sort((a, b) => a - b);
+    buildingOnlyCostIds.sort((a, b) => a - b);
+    expect(buildingOnlyCostIds).toEqual([455]);
+    expect(unitCostIds).toEqual([373, 488, 499, 514, 625, 782, 785, 835, 1380, 1496]);
+
+    const allCostIds = new Set([...unitCostIds, ...buildingOnlyCostIds]);
+    for (const { en: civ } of civs) {
+      const lit = litTreeIds(ctx.trees, civ, 't');
+      for (const age of [1, 2, 3, 4]) {
+        const expected = unitCostIds.filter((id) => {
+          const tech = ctx.core.techById[id]!;
+          return lit.has(id) && tech.civs.includes(civ) && productionTechAge(tech, civ) <= age;
+        });
+        const actual = productionTechs(ctx, { civ, age })
+          .map((t) => t.id)
+          .filter((id) => allCostIds.has(id))
+          .sort((a, b) => a - b);
+        expect(actual, `${civ}/${age}`).toEqual(expected);
+      }
+    }
+
+    // 确认三类非费用生产科技（a=13 建筑工作效率、rules bt 训练时间、采集与解锁科技）无回归
+    const has = (civ: string, age: number, id: number) => productionTechs(ctx, { civ, age }).some((t) => t.id === id);
+    expect(has('Slavs', 4, 315)).toBe(true);
+    expect(has('Goths', 4, 457)).toBe(true);
+    expect(has('Franks', 4, 493)).toBe(true);
+    expect(has('Berbers', 3, 578)).toBe(true);
+    expect(has('Portuguese', 3, 1404)).toBe(true);
+    expect(has('Goths', 3, 16)).toBe(true);
+    expect(has('Bohemians', 3, 47)).toBe(true);
+    expect(has('Huns', 3, 483)).toBe(true);
+    expect(has('Slavs', 2, 202)).toBe(true);
+  });
+
+  it('旧链接 techs=455 与团战计划均报既有不可用错误，训练对照排除 455 且计算口径不变', () => {
+    const { config } = decodeProduction('?civ=Slavs&age=4&techs=455&rows=878:82:2');
+    expect(calculateProduction(ctx, config).errors).toContain('方案含当前文明或时代不可用的科技，请清除不可用科技。');
+
+    const plan = defaultTeamPlan();
+    plan.players[0]!.civ = 'Slavs';
+    for (const phase of plan.phases.filter((p) => p.age >= 3)) phase.players[0]!.completedUnlockTechIds = [455];
+    expect(teamPlanErrors(plan, ctx).filter((s) => s.includes('罗斯堡垒研究确认与文明、时代或本工具范围不符'))).toHaveLength(2);
+
+    const compare = compareTraining(ctx, { civs: ['Slavs'], unit: 38, n: 1, age: 3 });
+    expect(compare.rows).toHaveLength(1);
+    const row = compare.rows[0]!;
+    expect(row.techs).not.toContain(455);
+    expect(row.line.cost).toEqual({ Food: 60, Gold: 75 });
+    expect(row.line.seconds).toBeCloseTo(eco.units['38']!.trainTime, 8);
+    expect(row.line.applied).not.toContain('罗斯堡垒');
   });
 });
