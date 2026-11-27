@@ -7,7 +7,9 @@ export { AGE_ZH };
 
 export function PkAvailability({
   target,
+  targetLabel,
   counter,
+  counterLabel,
   targetCiv,
   counterCiv,
   age,
@@ -19,7 +21,9 @@ export function PkAvailability({
   showReady = true,
 }: {
   target: Unit;
+  targetLabel?: string;
   counter: Unit;
+  counterLabel?: string;
   targetCiv: string;
   counterCiv: string;
   age: number;
@@ -90,8 +94,8 @@ export function PkAvailability({
     );
   if (!availability[0] || !availability[1]) {
     const unavailable = [
-      !availability[0] ? `${target.zh}（${civByEn(targetCiv)?.zh ?? targetCiv}）` : '',
-      !availability[1] ? `${counter.zh}（${civByEn(counterCiv)?.zh ?? counterCiv}）` : '',
+      !availability[0] ? `${targetLabel ?? target.zh}（${civByEn(targetCiv)?.zh ?? targetCiv}）` : '',
+      !availability[1] ? `${counterLabel ?? counter.zh}（${civByEn(counterCiv)?.zh ?? counterCiv}）` : '',
     ]
       .filter(Boolean)
       .join('、');

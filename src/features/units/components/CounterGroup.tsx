@@ -1,6 +1,14 @@
 import { Link } from 'react-router-dom';
 import type { Core } from '../../../data';
-import { hasValidCombatPairs, reverseCounterDuelHref, type ReverseCounterGroup } from '../../../domain/reverseCounters';
+import {
+  hasValidCombatPairs,
+  resolveReverseCounterPkMember,
+  reverseCounterBuildingsText,
+  reverseCounterDuelHref,
+  reverseCounterUnitLabel,
+  type ReverseCounterCatalogMeta,
+  type ReverseCounterGroup,
+} from '../../../domain/reverseCounters';
 import type { Unit, Trees } from '../../../domain/types';
 import { UnitIcon } from '../../../shared/ui/art';
 import { PkSummary } from './ReverseCounterPkSummary';
@@ -11,6 +19,7 @@ export const pkButtonId = (category: string, id: number) => `reverse-counter-pk-
 
 export function CounterGroup({
   group,
+  catalogMeta,
   collapsed,
   expanded,
   onToggle,
@@ -18,6 +27,7 @@ export function CounterGroup({
   onOpenPk,
   openPk,
   target,
+  targetLabel,
   targetCiv,
   enemyCiv,
   age,
@@ -33,6 +43,7 @@ export function CounterGroup({
   returnFocus,
 }: {
   group: ReverseCounterGroup;
+  catalogMeta: ReverseCounterCatalogMeta;
   collapsed: boolean;
   expanded: boolean;
   onToggle: () => void;
@@ -40,6 +51,7 @@ export function CounterGroup({
   onOpenPk: (id: number, buttonId: string) => void;
   openPk: number | null;
   target: Unit;
+  targetLabel: string;
   targetCiv: string;
   enemyCiv: string;
   age: number | null;
@@ -57,6 +69,7 @@ export function CounterGroup({
   const detailOnly = !core.unitById[target.id];
   const visibleRows = expanded ? group.rows : group.rows.slice(0, 5);
   const ariaId = groupId(group.category);
+  const queryTrees = treesPending || treesError ? null : trees;
   return (
     <section className="ud-reverse-group" data-reverse-group="" data-t="reverse-counter-group" id={ariaId} tabIndex={-1}>
       <button type="button" className="ud-reverse-group-toggle" aria-expanded={!collapsed} aria-controls={`${ariaId}-rows`} onClick={onToggle}>
@@ -80,11 +93,15 @@ export function CounterGroup({
           {visibleRows.map((row) => {
             const id = rowId(group.category, row.unit.id);
             const buttonId = pkButtonId(group.category, row.unit.id);
-            const counterCombatValid = hasValidCombatPairs(row.unit);
+            const displayLabel = reverseCounterUnitLabel(core, row.unit, catalogMeta, group.rows);
+            const buildingsText = reverseCounterBuildingsText(core, row, catalogMeta);
+            const resolvedMember = resolveReverseCounterPkMember(row, core, queryTrees, enemyCiv, age);
+            const counterCombatValid = hasValidCombatPairs(resolvedMember);
             const rowPkAllowed = pkAllowed && counterCombatValid;
             const selectedMember = row.members.find((member) => member.id === openPk) ?? null;
             const selectedRow = selectedMember ? { ...row, unit: selectedMember } : null;
-            const selectedPkAllowed = rowPkAllowed && !!selectedMember && hasValidCombatPairs(selectedMember);
+            const selectedLabel = selectedMember ? reverseCounterUnitLabel(core, selectedMember, catalogMeta, group.rows) : displayLabel;
+            const selectedPkAllowed = pkAllowed && !!selectedMember && hasValidCombatPairs(selectedMember);
             const duelHref =
               selectedMember && selectedPkAllowed && trees && !treesError && !treesPending && targetCiv && enemyCiv
                 ? reverseCounterDuelHref(target, selectedMember, core, trees, targetCiv, enemyCiv, age ?? 4)
@@ -95,8 +112,11 @@ export function CounterGroup({
                   <Link id={`${id}-unit-link`} className="ud-reverse-unit" to={`/unit/${row.unit.id}`} data-t="reverse-counter-link">
                     <UnitIcon u={row.unit} />
                     <span>
-                      <strong>{row.unit.zh}</strong>
-                      <small>{row.unit.en}</small>
+                      <strong>{displayLabel}</strong>
+                      <span className="ud-reverse-unit-sub">
+                        <small>{row.unit.en}</small>
+                        {buildingsText && <span className="ud-reverse-buildings">{buildingsText}</span>}
+                      </span>
                     </span>
                   </Link>
                   <span className="ud-reverse-value">
@@ -119,7 +139,7 @@ export function CounterGroup({
                       data-t="reverse-counter-pk"
                       disabled={!rowPkAllowed}
                       aria-expanded={!!selectedMember}
-                      onClick={() => onOpenPk(row.unit.id, buttonId)}
+                      onClick={() => onOpenPk(resolvedMember.id, buttonId)}
                     >
                       核对 PK
                     </button>
@@ -127,7 +147,7 @@ export function CounterGroup({
                 </div>
                 {!detailOnly && !rowPkAllowed && (
                   <p className="ud-reverse-pk-disabled" role="status">
-                    {counterCombatValid ? pkUnavailableReason : `敌方单位${row.unit.zh}的攻击、护甲或护甲类别资料异常，不能生成 PK。`}
+                    {counterCombatValid ? pkUnavailableReason : `敌方单位${displayLabel}的攻击、护甲或护甲类别资料异常，不能生成 PK。`}
                   </p>
                 )}
                 {selectedRow && (
@@ -136,6 +156,9 @@ export function CounterGroup({
                     row={selectedRow}
                     buttonId={buttonId}
                     target={target}
+                    targetLabel={targetLabel}
+                    counterLabel={selectedLabel}
+                    buildingsText={buildingsText}
                     targetCiv={targetCiv}
                     enemyCiv={enemyCiv}
                     age={age}

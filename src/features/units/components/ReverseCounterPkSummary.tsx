@@ -30,6 +30,9 @@ interface PkSummaryProps {
   row: ReverseCounterUnit;
   buttonId: string;
   target: Unit;
+  targetLabel?: string;
+  counterLabel?: string;
+  buildingsText?: string | null;
   targetCiv: string;
   enemyCiv: string;
   age: number | null;
@@ -49,6 +52,9 @@ export function PkSummary({
   row,
   buttonId,
   target,
+  targetLabel,
+  counterLabel,
+  buildingsText,
   targetCiv,
   enemyCiv,
   age,
@@ -62,6 +68,8 @@ export function PkSummary({
   unavailableReason,
   returnFocus,
 }: PkSummaryProps) {
+  const resolvedTargetLabel = targetLabel ?? target.zh;
+  const resolvedCounterLabel = counterLabel ?? row.unit.zh;
   return (
     <div className="ud-reverse-pk" role="region" aria-label="核对单位 PK">
       <h3 tabIndex={-1} id={`reverse-counter-pk-title-${row.unit.id}`}>
@@ -72,7 +80,7 @@ export function PkSummary({
           <span>A · 本单位</span>
           <Link id={`${id}-target-link`} className="ud-reverse-pk-link" to={`/unit/${target.id}`}>
             <UnitIcon u={target} />
-            <span>{target.zh}</span>
+            <span>{resolvedTargetLabel}</span>
           </Link>
           <span>{civByEn(targetCiv)?.zh ?? '未选择本单位文明'}</span>
         </div>
@@ -80,9 +88,10 @@ export function PkSummary({
           <span>B · 敌方单位</span>
           <Link id={`${id}-counter-link`} className="ud-reverse-pk-link" to={`/unit/${row.unit.id}`}>
             <UnitIcon u={row.unit} />
-            <span>{row.unit.zh}</span>
+            <span>{resolvedCounterLabel}</span>
           </Link>
           <span>{civByEn(enemyCiv)?.zh ?? '未选择敌方文明'}</span>
+          {buildingsText && <span className="ud-reverse-pk-meta">训练建筑：{buildingsText}</span>}
         </div>
       </div>
       <p className="ud-reverse-pk-era">
@@ -96,7 +105,9 @@ export function PkSummary({
       )}
       <PkAvailability
         target={target}
+        targetLabel={resolvedTargetLabel}
         counter={row.unit}
+        counterLabel={resolvedCounterLabel}
         targetCiv={targetCiv}
         counterCiv={enemyCiv}
         age={age ?? 4}
