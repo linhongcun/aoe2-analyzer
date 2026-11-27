@@ -1,6 +1,8 @@
 import { damageRows } from './damageCore';
 import { fmtSide } from './duelState';
 import { unitAvailable } from './unitAvailability';
+import { unitOptionLabel } from './unitOptionLabel';
+import { cleanBuildingName } from './unitOrder';
 import type { Trees, Unit } from './types';
 
 export interface ReverseCounterFilter {
@@ -30,9 +32,23 @@ export interface ReverseCounterResult {
   problems: string[];
 }
 
+export interface ReverseCounterCatalogMeta {
+  /** 目录级按同 formKey + 不同训练建筑折叠后的规范代表集合。 */
+  canonicalUnits: Unit[];
+  /** 属于多建筑等价类的全部单位 ID（含代表与非代表成员）。 */
+  multiBuildingUnitIds: ReadonlySet<number>;
+  /** 多建筑等价类映射：成员 ID -> 规范代表 ID。 */
+  canonicalIdByUnitId: ReadonlyMap<number, number>;
+}
+
 interface AvailabilityCore {
   unitById: Record<number, Unit>;
 }
+
+type BuildingMap = Record<number, { zh: string } | undefined>;
+type BuildingLookup = { core: { buildingById: BuildingMap } } | { buildingById: BuildingMap } | BuildingMap;
+
+const NON_COMBAT_FORM_KEYS = new Set(['id', 'b', 'bz', 'ben', 'from_', 'civs', 'tt', 'age']);
 
 const UNKNOWN_CLASS = '类别名称无法识别；这部分数据没有参与匹配。';
 const INVALID_DATA = '目录中的类别或数值异常，结果可能不完整。';
@@ -85,24 +101,138 @@ function stableValue(value: unknown): string | null {
   return values.some((item) => item === null) ? null : `{${values.join(',')}}`;
 }
 
-function formKey(unit: Unit, unitById: Record<number, Unit>, visiting = new Set<number>()): string | null {
-  if (!Number.isSafeInteger(unit.id) || !Number.isSafeInteger(unit.b) || visiting.has(unit.id)) return null;
-  const next = new Set(visiting).add(unit.id);
-  let predecessor: string | null = 'none';
+/** Issue 1478：按全部战斗属性、造价与中英文名生成多建筑等价键，剥离非战斗生产元数据且不递归展开 from_。 */
+export function reverseCounterFormKey(unit: Unit, unitById?: Record<number, Unit>): string | null {
+  if (!Number.isSafeInteger(unit.id) || !Number.isSafeInteger(unit.b)) return null;
   if (unit.from_ !== null) {
     if (!Number.isSafeInteger(unit.from_)) return null;
-    const parent = unitById[unit.from_];
-    if (!parent) return null;
-    predecessor = formKey(parent, unitById, next);
-    if (predecessor === null) return null;
+    if (unitById && !unitById[unit.from_]) return null;
   }
   const base = Object.fromEntries(
     Object.entries(unit)
-      .filter(([key]) => !['id', 'b', 'bz', 'ben', 'from_'].includes(key))
+      .filter(([key]) => !NON_COMBAT_FORM_KEYS.has(key))
       .sort(([a], [b]) => a.localeCompare(b)),
   );
-  const normalized = stableValue({ base, predecessor });
-  return normalized === null ? null : normalized;
+  return stableValue(base);
+}
+
+function canMergeMultiBuilding<T extends { b: number }>(items: readonly T[]): boolean {
+  if (items.length < 2) return false;
+  const buildingCounts = new Map<number, number>();
+  for (const item of items) buildingCounts.set(item.b, (buildingCounts.get(item.b) ?? 0) + 1);
+  if ([...buildingCounts.values()].some((count) => count > 1)) return false;
+  return buildingCounts.size >= 2;
+}
+
+/** Issue 1478：基于完整目录折叠多建筑等价类，供名称去歧义与建筑胶囊共用的元数据。 */
+export function buildReverseCounterCatalogMeta(units: readonly Unit[], unitById?: Record<number, Unit>): ReverseCounterCatalogMeta {
+  const sorted = units
+    .filter((unit) => !!unit && typeof unit === 'object')
+    .slice()
+    .sort((a, b) => (Number.isSafeInteger(a.id) ? a.id : Number.MAX_SAFE_INTEGER) - (Number.isSafeInteger(b.id) ? b.id : Number.MAX_SAFE_INTEGER));
+  const keyed = new Map<string, Unit[]>();
+  const unkeyed: Unit[] = [];
+  for (const unit of sorted) {
+    const key = reverseCounterFormKey(unit, unitById);
+    if (key === null) {
+      unkeyed.push(unit);
+      continue;
+    }
+    const bucket = keyed.get(key) ?? [];
+    bucket.push(unit);
+    keyed.set(key, bucket);
+  }
+  const canonicalUnits: Unit[] = [...unkeyed];
+  const multiBuildingUnitIds = new Set<number>();
+  const canonicalIdByUnitId = new Map<number, number>();
+  for (const bucket of keyed.values()) {
+    if (!canMergeMultiBuilding(bucket)) {
+      canonicalUnits.push(...bucket);
+      continue;
+    }
+    const members = bucket.slice().sort((a, b) => a.id - b.id);
+    const representative = members[0]!;
+    canonicalUnits.push(representative);
+    for (const member of members) {
+      multiBuildingUnitIds.add(member.id);
+      canonicalIdByUnitId.set(member.id, representative.id);
+    }
+  }
+  canonicalUnits.sort((a, b) => a.id - b.id);
+  return { canonicalUnits, multiBuildingUnitIds, canonicalIdByUnitId };
+}
+
+function resolveBuildingMap(lookup: BuildingLookup | undefined): BuildingMap | undefined {
+  if (!lookup) return undefined;
+  if ('core' in lookup) return lookup.core.buildingById;
+  if ('buildingById' in lookup) return lookup.buildingById;
+  return lookup;
+}
+
+/**
+ * Issue 1478：在反向查询中为展示单位计算去歧义主标题。
+ * 以目录级多建筑折叠代表集为 siblings 基底，并按等价类替换为当前可见代表，
+ * 避免合并多建筑单位或筛选收窄单建筑成员被误标建筑后缀，同时稳定区分独立同名单位。
+ */
+export function reverseCounterUnitLabel(
+  lookup: BuildingLookup | undefined,
+  unit: Unit,
+  meta: ReverseCounterCatalogMeta,
+  groupRows?: readonly Pick<ReverseCounterUnit, 'unit'>[],
+): string {
+  const byCanonicalId = new Map<number, Unit>();
+  for (const canonical of meta.canonicalUnits) byCanonicalId.set(canonical.id, canonical);
+  if (groupRows) {
+    for (const row of groupRows) {
+      const canonicalId = meta.canonicalIdByUnitId.get(row.unit.id) ?? row.unit.id;
+      byCanonicalId.set(canonicalId, row.unit);
+    }
+  }
+  const ownCanonicalId = meta.canonicalIdByUnitId.get(unit.id) ?? unit.id;
+  byCanonicalId.set(ownCanonicalId, unit);
+  return unitOptionLabel(resolveBuildingMap(lookup), unit, [...byCanonicalId.values()]);
+}
+
+/** Issue 1478：仅为多建筑合并行或由多建筑等价类筛选收窄为单建筑的行生成训练建筑文案。 */
+export function reverseCounterBuildingsText(
+  lookup: BuildingLookup | undefined,
+  row: Pick<ReverseCounterUnit, 'unit' | 'members'>,
+  meta: Pick<ReverseCounterCatalogMeta, 'multiBuildingUnitIds'>,
+): string | null {
+  const members = row.members.length ? row.members : [row.unit];
+  const showBuildings = members.length > 1 || members.some((member) => meta.multiBuildingUnitIds.has(member.id));
+  if (!showBuildings) return null;
+  const byId = resolveBuildingMap(lookup);
+  const names: string[] = [];
+  const sorted = members.slice().sort((a, b) => a.id - b.id);
+  for (const member of sorted) {
+    const name = byId?.[member.b]?.zh || (member.bz ? cleanBuildingName(member.bz) : '');
+    if (name && !names.includes(name)) names.push(name);
+  }
+  return names.length ? names.join(' / ') : null;
+}
+
+/** Issue 1478：按选定敌方文明与时代从合并行成员中解析首个可用形态；不可核验或全部不可用时回落代表形态。 */
+export function resolveReverseCounterPkMember(
+  row: Pick<ReverseCounterUnit, 'unit' | 'members'>,
+  core: AvailabilityCore,
+  trees: Trees | null,
+  enemyCiv: string,
+  age: number | null,
+): Unit {
+  const effectiveAge = age ?? 4;
+  if (!trees || !enemyCiv || ![1, 2, 3, 4].includes(effectiveAge) || !validTreeCiv(trees, enemyCiv)) {
+    return row.unit;
+  }
+  const ordered = [row.unit, ...row.members.filter((member) => member.id !== row.unit.id)];
+  for (const member of ordered) {
+    try {
+      if (unitAvailable({ core, trees }, enemyCiv, member.id, effectiveAge)) return member;
+    } catch {
+      // 忽略异常成员，继续尝试其余成员并最终回落代表形态
+    }
+  }
+  return row.unit;
 }
 
 function validTreeCiv(trees: Trees, civ: string): boolean {
@@ -285,7 +415,7 @@ export function reverseCounters(
       missingArmor: 'skip',
     }).rows.filter((row) => row.damage > 0);
     if (!rows.length) continue;
-    if (formKey(candidate, core.unitById) === null) problems.add(INVALID_DATA);
+    if (reverseCounterFormKey(candidate, core.unitById) === null) problems.add(INVALID_DATA);
     for (const row of rows) {
       const group = byCategory.get(row.category) ?? [];
       group.push({ unit: candidate, members: [candidate], attack: row.attack, armor: row.armor, damage: row.damage });
@@ -301,7 +431,7 @@ export function reverseCounters(
     const keyed = new Map<string, ReverseCounterUnit[]>();
     const unkeyed: ReverseCounterUnit[] = [];
     for (const row of rawRows) {
-      const key = formKey(row.unit, core.unitById);
+      const key = reverseCounterFormKey(row.unit, core.unitById);
       if (key === null) {
         unkeyed.push(row);
         continue;
@@ -312,10 +442,7 @@ export function reverseCounters(
     }
     const merged: ReverseCounterUnit[] = [...unkeyed];
     for (const rows of keyed.values()) {
-      const buildingCounts = new Map<number, number>();
-      for (const row of rows) buildingCounts.set(row.unit.b, (buildingCounts.get(row.unit.b) ?? 0) + 1);
-      const hasDuplicateBuilding = [...buildingCounts.values()].some((count) => count > 1);
-      if (rows.length < 2 || hasDuplicateBuilding || new Set(rows.map((row) => row.unit.b)).size < 2) {
+      if (!canMergeMultiBuilding(rows.map((row) => row.unit))) {
         merged.push(...rows);
         continue;
       }

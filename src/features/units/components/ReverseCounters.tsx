@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { CounterGroup, rowId, pkButtonId } from './CounterGroup';
 import { civs, type Core } from '../../../data';
-import { hasValidCombatPairs, reverseCounters, type ReverseCounterFilter } from '../../../domain/reverseCounters';
+import {
+  buildReverseCounterCatalogMeta,
+  hasValidCombatPairs,
+  reverseCounterBuildingsText,
+  reverseCounterUnitLabel,
+  reverseCounters,
+  type ReverseCounterFilter,
+} from '../../../domain/reverseCounters';
 import type { Trees, Unit } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
@@ -85,6 +92,8 @@ export function ReverseCounters({
     setActiveSessionIdentity(currentSession.identity);
   }
   const queryTrees = treesError || treesPending ? null : trees;
+  const catalogMeta = useMemo(() => buildReverseCounterCatalogMeta(core.units, core.unitById), [core]);
+  const targetLabel = useMemo(() => reverseCounterUnitLabel(core, target, catalogMeta), [core, target, catalogMeta]);
   const rawResult = useMemo(() => reverseCounters(rawTarget, core.units, core, civNames, queryTrees, filter), [rawTarget, core, queryTrees, filter]);
   const baseResult = useMemo(() => reverseCounters(rawTarget, core.units, core, civNames, null, { civ: '', age: null }), [rawTarget, core]);
   const result = useMemo(() => {
@@ -124,7 +133,15 @@ export function ReverseCounters({
   }, [sessionStateReady, openPk, corePending, coreError, result, core]);
   const pkSummaryMode = selectPkSummaryMode(sessionStateReady && !!openPk, result.state, !!filteredPkRow, !!basePkRow);
   const pkAllowed = result.state === 'ready' && targetIssues.length === 0 && !corePending && !coreError;
-  const pkUnavailableReason = getPkUnavailableReason(target.zh, targetDataWarning, corePending, coreError, result.state);
+  const pkUnavailableReason = getPkUnavailableReason(targetLabel, targetDataWarning, corePending, coreError, result.state);
+  const resolvePkButtonId = useCallback(
+    (category: string, id: number) => {
+      const group = result.groups.find((item) => item.category === category);
+      const row = group?.rows.find((item) => item.members.some((member) => member.id === id));
+      return pkButtonId(category, row?.unit.id ?? id);
+    },
+    [result.groups],
+  );
 
   if (sessionStateReady && !defaultGroupsReady && result.groups.some((group) => group.rows.length)) {
     const first = result.groups.find((group) => group.rows.length)?.category;
@@ -185,7 +202,7 @@ export function ReverseCounters({
     state: restoreNoteState,
     setNoteState: setRestoreNoteState,
     setOriginButton,
-    pkButtonId,
+    pkButtonId: resolvePkButtonId,
   });
 
   useEffect(() => {
@@ -203,7 +220,7 @@ export function ReverseCounters({
     setDefaultGroupsReady(false);
     setCollapsed([]);
   };
-  const closePk = (focusId = originButton || (openPk ? pkButtonId(openPk.category, openPk.id) : '')) => {
+  const closePk = (focusId = originButton || (openPk ? resolvePkButtonId(openPk.category, openPk.id) : '')) => {
     restoreNoteHelpers.invalidateRestoreNote(restoreNoteState, currentSessionIdentity, setRestoreNoteState);
     markRestored();
     setOpenPk(null);
@@ -380,6 +397,7 @@ export function ReverseCounters({
         <CounterGroup
           key={group.category}
           group={group}
+          catalogMeta={catalogMeta}
           collapsed={collapsed.includes(group.category)}
           expanded={expandedRows.includes(group.category)}
           onToggle={() => toggleGroup(group.category)}
@@ -389,6 +407,7 @@ export function ReverseCounters({
           onOpenPk={(id, buttonId) => openPkForRow(group.category, id, buttonId)}
           openPk={pkSummaryMode === 'filtered' && openPk?.category === group.category ? openPk.id : null}
           target={target}
+          targetLabel={targetLabel}
           targetCiv={targetCiv}
           enemyCiv={filter.civ}
           age={filter.age}
@@ -408,8 +427,11 @@ export function ReverseCounters({
         <RetainedPkSummary
           id={rowId(openPk.category, openPk.id)}
           row={basePkRow}
-          buttonId={pkButtonId(openPk.category, openPk.id)}
+          buttonId={resolvePkButtonId(openPk.category, openPk.id)}
           target={target}
+          targetLabel={targetLabel}
+          counterLabel={reverseCounterUnitLabel(core, basePkRow.unit, catalogMeta)}
+          buildingsText={reverseCounterBuildingsText(core, basePkRow, catalogMeta)}
           targetCiv={targetCiv}
           enemyCiv={filter.civ}
           age={filter.age}

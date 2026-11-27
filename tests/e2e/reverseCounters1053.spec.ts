@@ -3,6 +3,7 @@ import { reverseCounterSessionKey } from '../../src/features/units/reverseCounte
 import { treesWithoutBohemianHandCannoneer } from './reverseCounterTreeFixture';
 import './reverseCounters1053LocationAndDesign';
 import './reverseCounters1053RestoreCancellation';
+import './reverseCounters1478Dedupe';
 
 const reverseSessionKey = (targetId: number, civ: string, pathname: string, search = '', hash = '') =>
   reverseCounterSessionKey(targetId, civ, { pathname, search, hash })!;
@@ -260,7 +261,7 @@ test('目标单位或本单位文明变化时不共享敌方筛选或已打开 P
   await expect(otherCivPanel.locator('.ud-reverse-restore')).toHaveCount(0);
 });
 
-test('默认 761、Mayans 多类别目录与 1658/1660 仍是独立形态', async ({ page }) => {
+test('默认 761、Mayans 多类别目录与 1658/1660 合并形态', async ({ page }) => {
   await page.goto('./#/unit/761');
   const defaultPanel = page.locator('#unit-reverse-counters');
   await expect(defaultPanel).toBeVisible();
@@ -294,12 +295,13 @@ test('默认 761、Mayans 多类别目录与 1658/1660 仍是独立形态', asyn
   await selectCiv(page, '#reverse-counter-civ', 'Sicilians');
   await page.locator('#reverse-counter-age').selectOption('4');
   const serjeantGroup = formsPanel.locator('[data-reverse-group]').filter({ hasText: '冲击步兵' });
-  const serjeantGroupToggle = serjeantGroup.locator('.ud-reverse-group-toggle');
-  if ((await serjeantGroupToggle.getAttribute('aria-expanded')) === 'false') await serjeantGroupToggle.click();
+  if ((await serjeantGroup.locator('.ud-reverse-group-toggle').getAttribute('aria-expanded')) === 'false') {
+    await serjeantGroup.locator('.ud-reverse-group-toggle').click();
+  }
   const moreSerjeants = serjeantGroup.locator('.ud-reverse-more');
   if (await moreSerjeants.count()) await moreSerjeants.click();
-  await expect(formsPanel.locator('a[href="#/unit/1658"]')).toHaveCount(1);
-  await expect(formsPanel.locator('a[href="#/unit/1660"]')).toHaveCount(1);
+  await expect(serjeantGroup.locator('a[href="#/unit/1658"]')).toHaveCount(1);
+  await expect(serjeantGroup.locator('a[href="#/unit/1660"]')).toHaveCount(0);
 });
 
 test('40 的城堡时代 PK、83 基础空结果与 Britons 黑暗时代筛选空结果', async ({ page }) => {
