@@ -16,7 +16,7 @@ jobs:
   release:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
-      (github.event.workflow_run.event == 'push' &&
+      ((github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch') &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.head_repository.full_name == github.repository)
@@ -26,46 +26,49 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       CI_RUN_ID: ${{ github.event.workflow_run.id || inputs.ci_run_id }}
     steps:
-      - name: Resolve deployed commit and version
+      - name: Checkout trusted main for source run verification
+        uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20.19.5' }
+      - name: Resolve deployed commit and verify check + deploy jobs
         id: source
-        run: |
-          run_json=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${CI_RUN_ID}")
-          echo "$run_json" | node -e '
-            const run = JSON.parse(require("fs").readFileSync(0, "utf8"));
-            if (run.name !== "CI / Deploy" || run.event !== "push" || run.head_branch !== "main" || run.conclusion !== "success")
-              throw new Error("Source run is not a successful main CI / Deploy push run");
-            require("fs").appendFileSync(process.env.GITHUB_OUTPUT, "sha=" + run.head_sha + "\n");
-          '
-      - uses: actions/checkout@v4
+        run: node scripts/release-workflow.mjs --resolve-run
+      - name: Checkout exact deployed commit
+        if: steps.source.outputs.eligible == 'true'
+        uses: actions/checkout@v4
         with: { ref: '${{ steps.source.outputs.sha }}', fetch-depth: 0 }
       - name: Decide whether this version still needs a Release
         id: decide
+        if: steps.source.outputs.eligible == 'true'
+        env:
+          DEPLOYED_SHA: ${{ steps.source.outputs.sha }}
         run: |
-          version="v$(node -p 'require("./package.json").version')"
+          git fetch -q origin main --tags
+          version="v$(git show "${DEPLOYED_SHA}:package.json" | node -e 'console.log(JSON.parse(require("fs").readFileSync(0, "utf8")).version)')"
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          git fetch -q origin main
-          if [ "$(git rev-parse origin/main)" != "${{ steps.source.outputs.sha }}" ]; then
+          if [ "$(git rev-parse origin/main)" != "${DEPLOYED_SHA}" ]; then
             echo "Run ${CI_RUN_ID} is no longer the main tip; a newer deployment will publish its own Release"; echo "publish=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
           if gh release view "$version" --json isDraft --jq .isDraft 2>/dev/null | grep -q false; then
             echo "Release $version already published; nothing to do"; echo "publish=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          if git rev-parse -q --verify "refs/tags/$version" >/dev/null && [ "$(git rev-list -n1 "$version")" != "${{ steps.source.outputs.sha }}" ]; then
+          if git rev-parse -q --verify "refs/tags/$version" >/dev/null && [ "$(git rev-list -n1 "$version")" != "${DEPLOYED_SHA}" ]; then
             echo "Tag $version points elsewhere; refusing to overwrite"; exit 1
           fi
           echo "publish=true" >> "$GITHUB_OUTPUT"
       - name: Download the exact deployed site
-        if: steps.decide.outputs.publish == 'true'
+        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
         uses: actions/download-artifact@v4
         with: { name: site, path: dist, run-id: '${{ env.CI_RUN_ID }}', github-token: '${{ github.token }}' }
       - name: Package the deployed site
-        if: steps.decide.outputs.publish == 'true'
+        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
         run: |
           version=${{ steps.decide.outputs.version }}
           (cd dist && zip -qr "../aoe2-analyzer-site-$version.zip" .)
           sha256sum "aoe2-analyzer-site-$version.zip" > SHA256SUMS.txt
       - name: Publish Release
-        if: steps.decide.outputs.publish == 'true'
+        if: steps.source.outputs.eligible == 'true' && steps.decide.outputs.publish == 'true'
         run: |
           version=${{ steps.decide.outputs.version }}
           notes="变更内容见 https://github.com/${GITHUB_REPOSITORY}/blob/${{ steps.source.outputs.sha }}/CHANGELOG.md"

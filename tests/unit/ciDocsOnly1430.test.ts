@@ -15,6 +15,7 @@ describe('documentation-only PR checks', () => {
 
   it.each([
     'CHANGELOG.md',
+    'release-notes/1528.json',
     'docs/reports/ECO-DATA.md',
     'docs/patch-notes/188329.md',
     'docs/assets/photo.png',

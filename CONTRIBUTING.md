@@ -134,8 +134,8 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 - **设计**：体验设计交付时，完成态设计图必须直接嵌入同一 Issue 的“体验设计”节，覆盖范围内主要界面和重要状态；文字、线框、本地文件或复杂规格链接不能代替设计图。复杂、可复用规格可作为补充附件或链接；只有无实际 UI 改动（纯 docs/data，或经逐组件核实零界面/交互/状态/文案改动的纯逻辑修复）时由产品经理记录不适用、理由与已核对的消费组件。按本次改动影响说明状态和实际核对的视口，不设固定四宽门禁，以 [TESTING](docs/TESTING.md) 为准。开工后发现的范围外问题另行记录，不扩展已冻结范围。
 - **失败用例**：不要求每个 issue 先交失败用例。计算或数据改动按 [TESTING](docs/TESTING.md) 做针对性正确性检查。
 - **合并顺序**：不同角色在同一 Issue 上按阶段串行交接；软件实现阶段由一名执行者负责该 Issue/PR。不同 Issue（包括改动同一文件）可在独立分支并行处理/开发；重叠段落或行为须先协调集成顺序，真实依赖按原授权及依赖约束推进。详细冲突核对、验证、复核与集成/发布顺序见 [MAINTENANCE「按事项并行、合并发布串行」](docs/MAINTENANCE.md#按事项并行合并发布串行)。
-- **版本与分支**：普通更新在实现 PR 中同时更新 `package.json`、锁文件和 CHANGELOG，PR 直接以最新 main 为目标。仅多项冻结集成时建 `release/vX.Y.Z`，相关 PR 以该分支为目标并更新到其最新提交。
-- **热修**：线上数据错误仍可独立提到 main，按三段补丁版本发布；若另有活动集成分支，随后同步回去。
+- **版本与分支**：普通网站实现 PR 在 `release-notes/<issue>.json`（或 `<issue>-<slug>.json`）提交零冲突变更片段（含 `issue`、`summary` 与默认 `patch` 的 `bump`），不再手工修改 `package.json`、`package-lock.json` 与 `CHANGELOG.md` 顶部，PR 直接以最新 `main` 为目标；合入 `main` 后由 `CI / Deploy` 的 `prepare` 阶段自动汇总递增三段版本号、写入 `CHANGELOG.md` 并触发同一构建产物的部署与 Release。纯文档 PR 与无需网站发布的纯仓库工程 PR 不提交片段。仅多项冻结集成时建 `release/vX.Y.Z`，相关 PR 以该分支为目标并更新到其最新提交。
+- **热修**：线上数据错误仍可独立提到 `main`，附带 `release-notes/<issue>.json` 按三段补丁版本自动发布（紧急情况无片段时亦兼容手工三段补丁提交）；若另有活动集成分支，随后同步回去。
 
 ### 2. 开发和验收
 
@@ -150,14 +150,14 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 ### 3. 发版
 
-- **默认流程**：实现 PR 完成独立复核和适用验证 → 合入 main → main 的 `check` 实跑 static、构建真实 SHA 并做窄冒烟 → `deploy` 用同一份 `dist` 发布 Pages 并上传 `site` 产物 → Release 核对来源 run、版本与 tag，打包同一已部署产物并正式发布 → 核对 issue 已完成。多项 release 分支集成仍可使用同一流程。
-- **成功含义**：只有 main 上该提交的 `check` 与 `deploy` 实际成功才算已部署。PR 绿灯、代码祖先关系或他人口头结论都不能代表 main 已部署成功；需要时核对实际线上页脚的版本与构建号。
+- **默认流程**：实现 PR（网站改动附 `release-notes/<issue>.json`）完成独立复核和适用验证 → 合入 `main` → `main` `CI / Deploy` `prepare` 消费待发布片段并生成唯一版本提交 `chore(release): vX.Y.Z`、派发该提交的 `CI / Deploy`（无片段提交直接走本次 `check` → `deploy`）→ `check` 在最终提交实跑 static、构建真实 SHA 并做窄冒烟 → `deploy` 用同一份 `dist` 发布 Pages 并上传 `site` 产物 → `Release` 核对来源 run（`check` 与 `deploy` 均成功）、版本与 tag，打包同一已部署产物并正式发布 → 核对 issue 已完成。多项 release 分支集成仍可使用同一流程。
+- **成功含义**：只有 `main` 上最终部署提交（`BUMP_SHA` 或无片段 `main` 尖端）的 `check` 与 `deploy` 实际成功才算已部署。PR 绿灯、仅完成 `prepare`、代码祖先关系或他人口头结论都不能代表 `main` 已部署成功；需要时核对实际线上页脚的版本与构建号。
 - **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）保留 `--dry-run`、`--site-url`、`--footer-timeout`，无需为普通更新创建 release 分支。若使用 release 分支，则继续检查其集成关系；普通更新以已部署 main 为发布源。已有 tag 指向不符时退出，不覆盖 tag。
-- **产物复用**：main 的 `check` 成功后，同一份 dist 既发布到 Pages，也上传为 `site` 产物。Release 只下载经 GitHub API 核实的同仓库 main 成功 push 型 CI / Deploy run 的该产物，核对版本与 tag 后生成 ZIP 和 SHA256SUMS；缺少或不符时明确失败，不回退为再构建一份未经部署的 ZIP，也不回退为整站线上回归。
+- **产物复用**：`main` 的 `check` 成功后，同一份 dist 既发布到 Pages，也上传为 `site` 产物。Release 只下载经 GitHub API 核实的同仓库 `main` 成功 `CI / Deploy` run（`push` 或 `deploy=true` `workflow_dispatch`，且 `check` 与 `deploy` 均成功）的该产物，核对版本与 tag 后生成 ZIP 和 SHA256SUMS；缺少或不符时明确失败，不回退为再构建一份未经部署的 ZIP，也不回退为整站线上回归。
 - **重跑与失败**：每一步看远端仓库、部署和产物的真实状态；修复原因后可以同版本恢复，已完成且一致的步骤幂等跳过。页面部署、draft Release 和正式发布是不同状态。不要用本地站点代替真实线上核对，也不要用管道吞掉失败退出码。
-- **公告**：玩家可见的版本更新说明写在根目录 CHANGELOG。需要外部公告时仍由 hongcun 明确决定；说明中的数字须依据实际部署或 tag 提交核对、经独立复核后写入该版本条目，外部渠道由 hongcun 本人发布。
+- **公告**：玩家可见的版本更新说明通过 `release-notes/<issue>.json` 在合入 `main` 后汇总写入根目录 `CHANGELOG.md`。需要外部公告时仍由 hongcun 明确决定；说明中的数字须依据实际部署或 tag 提交核对、经独立复核后写入该版本条目，外部渠道由 hongcun 本人发布。
 
-部署只由 main 的 push 接续；nightly/手动完整检查不部署、不发 Release。main CI/Deploy 实际成功后自动接续正式 Release，手动调度用于恢复。按持续发布授权继续到真实线上核对、正式 Release、tag 和附件验证，不停在 PR 或 draft。详见 [RELEASING.md](docs/RELEASING.md)。
+部署只由 `main` 的 `push` 或其接续的 `deploy=true` `workflow_dispatch` 触发；nightly/手动完整检查（`full.yml`）与只读手动 `CI / Deploy`（`deploy=false`）不部署、不发 Release。`main` `CI / Deploy` 实际部署成功后自动接续正式 Release，手动调度用于恢复。按持续发布授权继续到真实线上核对、正式 Release、tag 和附件验证，不停在 PR 或 draft。详见 [RELEASING.md](docs/RELEASING.md)。
 
 ### 4. 沟通
 
