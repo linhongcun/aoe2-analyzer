@@ -1,12 +1,40 @@
 /**
- * issue 281：单位 PK 的 URL 数值参数（m / na / nb / bud / vil / min）的解码与规范化写回。
+ * issue 281 / issue 1483：单位 PK 的 URL 数值参数（m / na / nb / bud / vil / min）的解码、校验、调整检测与规范化写回。
  * 纯函数，不依赖 React；单位/文明/科技（a、b）的解析见 duelState.ts。
- * 行为与原先 Duel.tsx 里的写法逐字一致：非数字、0、缺省一律取默认；超界钳到上下限；
- * na/nb/bud 不取整（与旧版一致），vil/min 先向下取整再判断。
+ * 外部深链 5 项数值参数统一按 Math.floor 向下取整后规范化（非数字、0、0 < x < 1、缺省回落默认，越界钳到上下限）；
+ * 页面内手工编辑通过 parseDuelNumericInput 严格校验十进制正整数闭区间，非法值仅留草稿不写回 URL。
  */
 import type { Mode } from './duelState';
 import { DEFAULT_MIN, DEFAULT_VILS } from './realCost';
 import { DEFAULT_MAX_RELICS, parseRelicCount } from './relicParams';
+
+export type DuelNumericKey = 'na' | 'nb' | 'bud' | 'vil' | 'min';
+
+export interface DuelNumericBound {
+  readonly min: number;
+  readonly max: number;
+  readonly def: number;
+}
+
+export const DUEL_NUMERIC_BOUNDS: Readonly<Record<DuelNumericKey, DuelNumericBound>> = {
+  na: { min: 1, max: 200, def: 10 },
+  nb: { min: 1, max: 200, def: 10 },
+  bud: { min: 100, max: 100000, def: 3000 },
+  vil: { min: 1, max: 200, def: DEFAULT_VILS },
+  min: { min: 1, max: 120, def: DEFAULT_MIN },
+};
+
+export const DUEL_MODE_NUMERIC_KEYS: Readonly<Record<Mode, readonly DuelNumericKey[]>> = {
+  '1': [],
+  n: ['na', 'nb'],
+  r: ['bud'],
+  t: ['vil', 'min'],
+};
+
+export interface DuelNumericAdjustment {
+  readonly key: DuelNumericKey;
+  readonly value: number;
+}
 
 export interface DuelParams {
   /** '1' 1v1；'n' N vs M；'r' 等资源（预算）；'t' 等资源（等采集时间） */
@@ -28,18 +56,60 @@ export interface ParamReader {
 }
 
 const MODES: readonly string[] = ['1', 'n', 'r', 't'];
+const STRICT_POS_INT_RE = /^[1-9]\d*$/;
 const clamp = (lo: number, hi: number, v: number) => Math.max(lo, Math.min(hi, v));
+const decodeInt = (raw: string | null, { min, max, def }: DuelNumericBound) => clamp(min, max, Math.floor(Number(raw)) || def);
+
+/** issue 1483：页面内手工输入严格十进制正整数闭区间校验；非法返回 null，交由页面保留原始草稿。 */
+export function parseDuelNumericInput(key: DuelNumericKey, raw: string): number | null {
+  if (!STRICT_POS_INT_RE.test(raw)) return null;
+  const n = Number(raw);
+  const { min, max } = DUEL_NUMERIC_BOUNDS[key];
+  return Number.isSafeInteger(n) && n >= min && n <= max ? n : null;
+}
+
+export function duelNumericValue(p: DuelParams, key: DuelNumericKey): number {
+  switch (key) {
+    case 'na':
+      return p.na;
+    case 'nb':
+      return p.nb;
+    case 'bud':
+      return p.bud;
+    case 'vil':
+      return p.vils;
+    case 'min':
+      return p.mins;
+  }
+}
 
 export function decodeDuelParams(q: ParamReader): DuelParams {
   const m = q.get('m');
   return {
     mode: (MODES.includes(m ?? '') ? m : '1') as Mode,
-    na: clamp(1, 200, Number(q.get('na')) || 10),
-    nb: clamp(1, 200, Number(q.get('nb')) || 10),
-    bud: clamp(100, 100000, Number(q.get('bud')) || 3000),
-    vils: clamp(1, 200, Math.floor(Number(q.get('vil'))) || DEFAULT_VILS),
-    mins: clamp(1, 120, Math.floor(Number(q.get('min'))) || DEFAULT_MIN),
+    na: decodeInt(q.get('na'), DUEL_NUMERIC_BOUNDS.na),
+    nb: decodeInt(q.get('nb'), DUEL_NUMERIC_BOUNDS.nb),
+    bud: decodeInt(q.get('bud'), DUEL_NUMERIC_BOUNDS.bud),
+    vils: decodeInt(q.get('vil'), DUEL_NUMERIC_BOUNDS.vil),
+    mins: decodeInt(q.get('min'), DUEL_NUMERIC_BOUNDS.min),
   };
+}
+
+/**
+ * issue 1483：检测外部深链在当前激活模式下显式传入的非法、越界、空串或非严格十进制整数数值参数。
+ * 仅缺省参数补齐或合法值（含 m=t&vil=10&min=10 省略默认）返回空数组，不误报。
+ */
+export function adjustedDuelNumericParams(q: ParamReader, decoded: DuelParams): DuelNumericAdjustment[] {
+  const out: DuelNumericAdjustment[] = [];
+  for (const key of DUEL_MODE_NUMERIC_KEYS[decoded.mode]) {
+    const raw = q.get(key);
+    if (raw === null) continue;
+    const value = duelNumericValue(decoded, key);
+    if (!STRICT_POS_INT_RE.test(raw) || String(value) !== raw) {
+      out.push({ key, value });
+    }
+  }
+  return out;
 }
 
 /**

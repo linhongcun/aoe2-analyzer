@@ -47,6 +47,19 @@ test('用例清单与录制结果一一对应', () => {
   expect(DUEL_URL).toHaveLength(17);
 });
 
+/** #1483：含外部非法/越界/小数/非严格整数数值参数的用例在首次打开时展示顶部一次性调整提示，重开规范链接时不展示。 */
+const ADJUSTED_URL_CASES = new Set([
+  'pk-url:n-empty-values',
+  'pk-url:n-decimals',
+  'pk-url:n-infinity',
+  'pk-url:r-non-numeric',
+  'pk-url:r-exponent',
+  'pk-url:r-over-max',
+  'pk-url:r-plus-sign',
+  'pk-url:t-negative-and-text',
+  'pk-url:t-decimal-and-hex',
+]);
+
 test.describe('历史 URL 边界：保留规范地址并复现当前结果', () => {
   for (const c of DUEL_URL)
     test(c.id, async ({ page }) => {
@@ -54,7 +67,18 @@ test.describe('历史 URL 边界：保留规范地址并复现当前结果', () 
       const got = await capturePage(page, c);
       expect(got.hash, `${c.id} 规范化后的地址`).toBe(want.hash);
       await expect(page.locator('#duel-res')).toBeVisible();
-      expect(await capturePage(page, { ...c, url: './' + want.hash }), `${c.id} 再次打开规范化地址`).toEqual(got);
+      const notice = page.locator('[data-t="duel-param-adjusted"]');
+      const expectAdjusted = ADJUSTED_URL_CASES.has(c.id);
+      if (expectAdjusted) {
+        await expect(notice).toBeVisible();
+        await expect(notice).toHaveAttribute('role', 'status');
+      } else {
+        await expect(notice).toHaveCount(0);
+      }
+      const reopened = await capturePage(page, { ...c, url: './' + want.hash });
+      await expect(notice).toHaveCount(0);
+      const comparable = expectAdjusted ? { ...got, lines: got.lines.filter((line) => !line.startsWith('链接中的数值参数无效或越界，已调整为 ')) } : got;
+      expect(reopened, `${c.id} 再次打开规范化地址`).toEqual(comparable);
     });
 });
 

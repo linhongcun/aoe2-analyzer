@@ -52,6 +52,7 @@ export function Side({
   batches,
   bud,
   time,
+  hideTimeCount = false,
   context,
   canKite = false,
   kite = false,
@@ -70,6 +71,8 @@ export function Side({
   bud: number;
   /** issue 88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
   time: [number, number] | null;
+  /** issue 1483：等采集时间数值输入非法时保留单单位采集用时，仅隐藏派出数量行 */
+  hideTimeCount?: boolean;
   context: ProductionContext;
   canKite?: boolean;
   kite?: boolean;
@@ -169,6 +172,7 @@ export function Side({
           vils={time[0]}
           min={time[1]}
           trainCount={tc}
+          hideCount={hideTimeCount}
         />
       )}
       <div className="duel-pickers">

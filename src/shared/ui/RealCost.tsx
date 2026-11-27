@@ -50,6 +50,7 @@ export function RealCostBlock({
   min,
   headingLevel,
   trainCount = 1,
+  hideCount = false,
 }: {
   k: 'a' | 'b';
   civ: string;
@@ -61,11 +62,13 @@ export function RealCostBlock({
   /** 默认保持共享说明的 h4；单位 PK 显式使用 h3。 */
   headingLevel?: 3 | 4;
   trainCount?: number;
+  /** issue 1483：等采集时间数值输入非法时保留单单位用时与口径浮层，仅隐藏过期的派出数量行。 */
+  hideCount?: boolean;
 }) {
   const { g, rc } = realCostOf(d, age, civ);
   const tc = Number.isInteger(trainCount) && trainCount > 1 ? trainCount : 1;
   const isPair = tc > 1;
-  const batches = countForTime(rc.total, vils, min);
+  const batches = hideCount ? 0 : countForTime(rc.total, vils, min);
   const count = batches * tc;
   const res = ORDER.filter((r) => d.base[r]);
   return (
@@ -108,24 +111,26 @@ export function RealCostBlock({
               {rc.hasFood && <NoSeed />}
             </td>
           </tr>
-          <tr className="pk-count" data-t="rc-count">
-            <td>派出数量</td>
-            <td>
-              <span className="rc-count-val">
-                <b className="rc-big tl-num">{rc.total > 0 ? count : '—'}</b>
-                {rc.total > 0 && isPair && batches > 0 && (
-                  <span className="pk-count-batches num nw" data-t="rc-batches">
-                    {batches} 对
-                  </span>
-                )}
-                {rc.total > 0 && count === 0 && (
-                  <span className="rc-under-one num nw" data-t="pk-under-one">
-                    {isPair ? `不足 1 对（${tc} 只）` : '不足 1 个'}
-                  </span>
-                )}
-              </span>
-            </td>
-          </tr>
+          {!hideCount && (
+            <tr className="pk-count" data-t="rc-count">
+              <td>派出数量</td>
+              <td>
+                <span className="rc-count-val">
+                  <b className="rc-big tl-num">{rc.total > 0 ? count : '—'}</b>
+                  {rc.total > 0 && isPair && batches > 0 && (
+                    <span className="pk-count-batches num nw" data-t="rc-batches">
+                      {batches} 对
+                    </span>
+                  )}
+                  {rc.total > 0 && count === 0 && (
+                    <span className="rc-under-one num nw" data-t="pk-under-one">
+                      {isPair ? `不足 1 对（${tc} 只）` : '不足 1 个'}
+                    </span>
+                  )}
+                </span>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
       {d.applied.map((a) => (

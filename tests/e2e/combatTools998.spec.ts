@@ -17,9 +17,11 @@ test('#998 模式与比法单选键盘、Tab 和输入隔离', async ({ page }) 
   await page.keyboard.press('Tab');
   const number = page.locator('#duel-na');
   await expect(number).toBeFocused();
-  const before = Number(await number.inputValue());
   await page.keyboard.press('ArrowUp');
-  await expect(number).toHaveValue(String(before + 1));
+  await expect(number).toBeFocused();
+  await expect(mode.getByRole('radio', { name: 'N vs M', exact: true })).toHaveAttribute('aria-checked', 'true');
+  await number.fill('11');
+  await expect(number).toHaveValue('11');
   await expect(mode.getByRole('radio', { name: 'N vs M', exact: true })).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('Shift+Tab');
   await selected(mode, 'N vs M');
