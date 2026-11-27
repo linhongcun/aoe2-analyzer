@@ -310,6 +310,9 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
       symlinkSync(loopA, loopB);
       const unexpectedOut = join(tempDir, 'unexpected-import-output.json');
       const subsetOut = join(tempDir, 'spanish-usage.json');
+      const siblingGameDir = join(tempDir, 'data/game-other');
+      mkdirSync(siblingGameDir, { recursive: true });
+      const siblingGameOut = join(siblingGameDir, 'out.json');
       const literalDir = join(tempDir, 'literal');
       mkdirSync(literalDir, { recursive: true });
       const protectedChild = join(literalDir, 'item.json');
@@ -382,8 +385,9 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
           const { stdout } = await execFileAsync(viteNodeBin, args, { cwd: tempDir });
           expect(stdout.trim()).toBe('function');
         }),
-        // 3) CLI 普通模式写入单文明子集，并校验 POSIX 上字面反斜杠文件名不得改写同名子目录文件
+        // 3) CLI 普通模式写入单文明子集（含同前缀兄弟目录 data/game-other/out.json），并校验 POSIX 上字面反斜杠文件名不得改写同名子目录文件
         execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', subsetOut], { cwd: tempDir }),
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', siblingGameOut], { cwd: tempDir }),
         ...(process.platform !== 'win32'
           ? [execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', 'literal\\item.json'], { cwd: tempDir })]
           : []),
@@ -417,11 +421,40 @@ describe('Issue 1429 生成器归属守卫、单项回退与 CLI 无副作用入
         ).rejects.toThrow(/--out/),
         execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
         execFileAsync(viteNodeBin, ['--script', 'scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', subsetOut], { cwd: tempDir }),
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', siblingGameOut], { cwd: tempDir }),
       ]);
       expect(readFileSync(directSentinel, 'utf8')).toBe('{"sentinel":"direct"}\n');
       expect(readFileSync(externalSnapshot, 'utf8')).toBe('{"sentinel":"external"}\n');
+
+      // 5) 默认快照为指向尚不存在外部文件的断链时，阻断该目标及其大小写/Unicode 折叠别名，同时保留同目录普通文件可写、可校验
+      const externalDir = join(tempDir, 'external');
+      mkdirSync(externalDir, { recursive: true });
+      const danglingTarget = join(externalDir, 'MISSING-DEFAULT.json');
+      const danglingLowerAlias = join(externalDir, 'missing-default.json');
+      const danglingUnicodeAlias = join(externalDir, 'mi\u017fsing-default.json');
+      const externalRegularOut = join(externalDir, 'regular-subset.json');
+      rmSync(target, { force: true });
+      symlinkSync(danglingTarget, target);
+      await Promise.all([
+        expect(execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', danglingTarget], { cwd: tempDir })).rejects.toThrow(
+          /--out/,
+        ),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', danglingLowerAlias], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
+        expect(
+          execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', danglingUnicodeAlias], { cwd: tempDir }),
+        ).rejects.toThrow(/--out/),
+        execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--out', externalRegularOut], { cwd: tempDir }),
+      ]);
+      expect(existsSync(target)).toBe(false);
+      expect(existsSync(danglingLowerAlias)).toBe(false);
+      expect(existsSync(danglingUnicodeAlias)).toBe(false);
+      await execFileAsync(viteNodeBin, ['scripts/army_cost_usage_build.ts', '--civ', 'Spanish', '--check', '--out', externalRegularOut], { cwd: tempDir });
+
       const builtSpanish = buildArmyCostUsage(ctx, ARMY_RESEARCH, { civList: ['Spanish'] });
       expect(readFileSync(subsetOut, 'utf8')).toBe(formatArmyCostUsageJson(builtSpanish));
+      expect(readFileSync(externalRegularOut, 'utf8')).toBe(formatArmyCostUsageJson(builtSpanish));
       const committed = JSON.parse(readFileSync(resolve('data/game/army_cost_usage.json'), 'utf8')) as typeof builtSpanish;
       expect(builtSpanish.meta).toEqual(committed.meta);
       expect(builtSpanish.bonuses['Spanish-2']).toEqual(committed.bonuses['Spanish-2']);

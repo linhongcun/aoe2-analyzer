@@ -7,7 +7,7 @@
  *   npx vite-node --script scripts/army_cost_usage_build.ts [--check] [--out <path>] [--civ <CivEn>]
  */
 import { existsSync, lstatSync, readFileSync, readlinkSync, realpathSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, parse } from 'node:path';
+import { basename, dirname, join, parse } from 'node:path';
 import { ARMY_RESEARCH } from '../src/data/armyResearch';
 import { CORE } from '../src/data/core';
 import { loadTrees } from '../src/data/index';
@@ -101,10 +101,23 @@ function sameInode(a: string, b: string): boolean {
   }
 }
 
+function canonicalFilename(name: string): string {
+  return name
+    .replace(/[\u00AD\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
+    .normalize('NFKC')
+    .toUpperCase()
+    .toLowerCase()
+    .normalize('NFKC');
+}
+
+function samePathOrInode(a: string, b: string): boolean {
+  return a === b || sameInode(a, b);
+}
+
 function isWithinDir(targetPath: string, protectedDir: string): boolean {
   let cur = targetPath;
   while (true) {
-    if (cur === protectedDir || sameInode(cur, protectedDir)) return true;
+    if (samePathOrInode(cur, protectedDir)) return true;
     const parent = dirname(cur);
     if (parent === cur) return false;
     cur = parent;
@@ -116,12 +129,15 @@ function targetsDefaultDest(candidate: string, defaultDest = DEFAULT_ARMY_COST_U
   const cb = resolveFsPath(defaultDest);
   const protectedDir = resolveFsPath(dirname(defaultDest));
   if (ca === null || cb === null || protectedDir === null) return true;
-  if (ca === cb) return true;
-  if (sameInode(candidate, defaultDest) || sameInode(ca, cb)) return true;
+  if (samePathOrInode(ca, cb) || sameInode(candidate, defaultDest)) return true;
   // Block any --civ write into data/game/ at any nesting depth (resolving data/game/ independently
   // of the default snapshot target, including firmlink aliases and arbitrary Unicode/case
   // equivalents on case-insensitive filesystems such as APFS `army_coſt_usage.json`).
-  return isWithinDir(ca, protectedDir);
+  if (isWithinDir(ca, protectedDir)) return true;
+  // When the default snapshot resolves to a non-existent external path (e.g. a dangling symlink),
+  // sameInode cannot match it yet; also block case/Unicode-folding aliases in that same directory
+  // while keeping unrelated sibling files in the external directory writable.
+  return samePathOrInode(dirname(ca), dirname(cb)) && canonicalFilename(basename(ca)) === canonicalFilename(basename(cb));
 }
 
 function parseArgs(argv: readonly string[]): { check: boolean; out: string; civList?: string[] } {
