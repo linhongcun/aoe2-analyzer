@@ -60,7 +60,7 @@ describe('攻城拆建筑 #308', () => {
   });
 
   it('非法深链回落默认，数量有界，文明与护甲标记规范化', () => {
-    expect(decodeSiege('?unit=invalid&bldg=99999&n=-1', catalog)).toEqual({ unit: 1258, n: 4, bldg: 82, civ: '', armor: [] });
+    expect(decodeSiege('?unit=invalid&bldg=99999&n=-1', catalog)).toEqual({ unit: 1258, n: 4, bldg: 82, civ: '', armor: [], techs: [] });
     expect(decodeSiege('?n=99999', catalog).n).toBe(SIEGE_MAX_COUNT);
     expect(decodeSiege('?n=1.5', catalog).n).toBe(4);
     const config = decodeSiege('?unit=1258&n=1&bldg=82&civ=Celts&armor=51,50,50,999', catalog);

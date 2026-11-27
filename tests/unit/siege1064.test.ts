@@ -103,7 +103,7 @@ describe('#1064 pinned direct cannon hit', () => {
 
   it('keeps valid selected techs/civs in URLs while independently refusing unsupported results', () => {
     const config = decodeSiege('?unit=36&n=2&bldg=82&civ=Portuguese&armor=50', CORE);
-    expect(config).toEqual({ unit: 36, n: 2, bldg: 82, civ: 'Portuguese', armor: [50] });
+    expect(config).toEqual({ unit: 36, n: 2, bldg: 82, civ: 'Portuguese', armor: [50], techs: [] });
     expect(decodeSiege('?' + encodeSiege(config), CORE)).toEqual(config);
     expect(calculateSiege(cannon, castle, config.n, config.civ, config.armor).verified).toBe(false);
   });
