@@ -112,6 +112,14 @@ export function MixedTeamChecklist({
             </button>
           </p>
         ))}
+      {[...new Set(input.team.filter((id, idx) => isValidTeamIndex(id) && TEAM_BONUSES[+id]![0] === input.civ && input.team.indexOf(id) !== idx))].map((id) => (
+        <p className="mix-field-error" key={`dup-own-${id}`}>
+          重复的本方团队效果：{id}{' '}
+          <button type="button" onClick={() => onChange({ ...input, team: withoutOwn(input.team) })}>
+            移除重复项
+          </button>
+        </p>
+      ))}
       {own.length === 0 && ally.length === 0 ? (
         <p className="note sim-team-empty">当前阵容无适用的已编码团队加成。</p>
       ) : (

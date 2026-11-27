@@ -138,6 +138,21 @@ export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): Sim
 
 export const buildingCivNotes = (b: Building, civ: string) => (BUILDING_CIV_BONUSES[civ] ?? []).filter(([f]) => f(b)).map((x) => x[2]);
 
+/** 严格解析建筑模拟器 ?team= 中的规范非负整数索引，防止空白或非规范字符串被 Number() 静默转为 0（库曼）。 */
+export function parseBuildingTeamParam(raw: string | null): number[] {
+  return (raw ?? '')
+    .split(',')
+    .filter((token) => /^(0|[1-9]\d*)$/.test(token) && Number.isSafeInteger(+token))
+    .map(Number);
+}
+
+/** 过滤建筑模拟器的额外盟友团队索引：去重、按升序排列，并剔除越界、本方常驻及不适用于当前建筑的项。 */
+export function filterBuildingExtraTeam(b: Building, civ: string, ids: Iterable<number>): number[] {
+  return [...new Set(ids)]
+    .filter((i) => Number.isInteger(i) && i >= 0 && i < TEAM_BUILDING_BONUSES.length && TEAM_BUILDING_BONUSES[i]![0] !== civ && TEAM_BUILDING_BONUSES[i]![2](b))
+    .sort((x, y) => x - y);
+}
+
 export function simulateBuilding(
   ctx: SimContext,
   b: Building,

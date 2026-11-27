@@ -3,7 +3,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { buildingHasAttack } from '../../../domain/buildingDetailView';
-import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
+import {
+  buildingBase,
+  buildingCivNotes,
+  buildingSimTechs,
+  filterBuildingExtraTeam,
+  parseBuildingTeamParam,
+  simulateBuilding,
+} from '../../../domain/buildingSim';
 import { TEAM_BUILDING_BONUSES } from '../../../domain/effects';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
 import { applicableSimCostTechs, buildSimEffectiveCost, costTechBadgeMap, mergeSimCostTechs, presetCostTechIds } from '../../../domain/simEffectiveCost';
@@ -41,14 +48,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const avail = mergeSimCostTechs(buildingSimTechs(ctx, b, civ), costTechs);
   const ok = new Set(avail.filter((x) => (x.ef || costTechIds.has(x.t.id)) && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
-  const filterExtraTeam = (targetCiv: string, ids: Iterable<number>) =>
-    [...new Set(ids)]
-      .filter(
-        (i) =>
-          Number.isInteger(i) && i >= 0 && i < TEAM_BUILDING_BONUSES.length && TEAM_BUILDING_BONUSES[i]![0] !== targetCiv && TEAM_BUILDING_BONUSES[i]![2](b),
-      )
-      .sort((x, y) => x - y);
-  const team = new Set(filterExtraTeam(civ, nums(q.get('team'))));
+  const team = new Set(filterBuildingExtraTeam(b, civ, parseBuildingTeamParam(q.get('team'))));
   const effectiveCost = buildSimEffectiveCost(b, 'building', civ, age, sel, costTechs);
   const cmp = b.civs.includes(q.get('cmp') ?? '') ? q.get('cmp')! : '';
   const write = (c: string, a: number, s: Iterable<number>, t: Iterable<number>, cm: string) => {
@@ -57,7 +57,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     p.set('civ', c);
     p.set('age', String(a));
     p.set('techs', [...s].join(','));
-    const extraTeam = filterExtraTeam(c, t);
+    const extraTeam = filterBuildingExtraTeam(b, c, t);
     if (extraTeam.length) p.set('team', extraTeam.join(','));
     else p.delete('team');
     if (cm) p.set('cmp', cm);

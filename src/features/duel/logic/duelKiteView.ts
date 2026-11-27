@@ -2,7 +2,7 @@ import { civByEn } from '../../../data';
 import { contactFight, contactFighterError, type ArmyRow, type ContactSummary } from '../../../domain/contactFight';
 import { isKiteEligible, type KiteSummary } from '../../../domain/contactKite';
 import type { DuelKite } from '../../../domain/duelParams';
-import { unitRelicBonus } from '../../../domain/effects';
+import { TEAM_BONUSES, unitRelicBonus } from '../../../domain/effects';
 import type { Mode } from '../../../domain/duelState';
 import { encodeMixedDuel, mixedDataVersion, type MixedSideInput } from '../../../domain/mixedDuelParams';
 import { MIXED_RULE } from '../../../domain/mixedFight';
@@ -40,7 +40,7 @@ export function buildEnterMixedParams(
     civ: s.civ,
     age: String(s.age),
     techs: [...s.sel].map(String),
-    team: s.spec.team.map(String),
+    team: [...new Set(s.spec.team.filter((id) => Boolean(TEAM_BONUSES[id]) && TEAM_BONUSES[id]![0] !== s.civ))].map(String),
     rows: [{ uid: String(s.u.id), qty }],
     ...(kOn ? { kite: true } : {}),
     ...(s.relics > 0 ? { relics: String(s.relics) } : {}),

@@ -167,7 +167,7 @@ export function switchSideCiv(
 ): SideSpec {
   const { age: nextAge } = resolveSideAge(data, nextCiv, u, spec.age, spec.ageSet);
   const aged = filterExplicitTechsForAge(spec.techs, data.techById, nextCiv, nextAge);
-  const team = spec.team.filter((id) => TEAM_BONUSES[id]?.[0] !== nextCiv);
+  const team = spec.team.filter((id) => TEAM_BONUSES[id]?.[0] !== spec.civ && TEAM_BONUSES[id]?.[0] !== nextCiv);
   return { ...spec, civ: nextCiv, techs: filterExplicitTechsForUnit(aged, data.techById, u.id, nextCiv), team };
 }
 

@@ -2,19 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { CORE } from '../../src/data/core';
 import { loadTrees } from '../../src/data';
 import { buildBuildingCivRank } from '../../src/domain/buildingCivRank';
-import { buildingSimTechs, simulateBuilding } from '../../src/domain/buildingSim';
+import { buildingSimTechs, filterBuildingExtraTeam, parseBuildingTeamParam, simulateBuilding } from '../../src/domain/buildingSim';
 import { calculateConstruction, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
 import { damageSources } from '../../src/domain/damageBreakdown';
 import { groupFight } from '../../src/domain/duel';
 import { TEAM_BLD, TEAM_BONUSES, TEAM_BUILDING_BONUSES } from '../../src/domain/effects';
 import { formatHp } from '../../src/domain/hpFormat';
 import { mixedFight } from '../../src/domain/mixedFight';
+import { decodeMixedDuel } from '../../src/domain/mixedDuelParams';
 import { calculateProduction, DEFAULT_PRODUCTION } from '../../src/domain/production';
 import { allNumeric, makeSimContext, simTechs, simulate } from '../../src/domain/simulator';
 import { buildUnitCivRank } from '../../src/domain/unitCivRank';
 import { upgradeComparison, upgradePlan } from '../../src/domain/upgradeComparison';
+import { buildEnterMixedParams } from '../../src/features/duel/logic/duelKiteView';
 import { isUnavail, resolve, switchSideCiv } from '../../src/features/duel/logic/duelSide';
-import { resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
+import { filterMixedTeamOnCivChange, resolveMixedSide } from '../../src/features/duel/logic/mixedDuel';
 import { mixedTrainingTransfer } from '../../src/features/duel/logic/mixedTrainingTransfer';
 import { resolveSideBudgetCount } from '../../src/domain/duelBudget';
 import { unitTrainCount } from '../../src/domain/trainBatch';
@@ -275,6 +277,59 @@ describe('#1481 全站统一本方常驻团队加成与 4 国建筑 TEAM_BLD', (
       'Romans',
     );
     expect(switched.team).toEqual([khmerIdx]);
+
+    // 从携带旧链本方索引的罗马切到不列颠时，同步剥离原文明（罗马）索引，保留高棉额外盟友
+    const switchedAway = switchSideCiv(
+      { byId: CORE.unitById, techById: CORE.techById, trees },
+      { uid: 542, civ: 'Romans', age: 4, ageSet: true, techs: 'f', team: [romansIdx, khmerIdx] },
+      CORE.unitById[542]!,
+      'Britons',
+    );
+    expect(switchedAway.team).toEqual([khmerIdx]);
+    expect(
+      switchSideCiv(
+        { byId: CORE.unitById, techById: CORE.techById, trees },
+        { uid: 542, civ: 'Romans', age: 4, ageSet: true, techs: 'f', team: [romansIdx] },
+        CORE.unitById[542]!,
+        'Britons',
+      ).team,
+    ).toEqual([]);
+
+    // 混编切文明时同步剥离原文明与目标文明本方索引，不把原文明旧链残留泄漏为新文明额外盟友
+    expect(filterMixedTeamOnCivChange('Romans', 'Britons', [String(romansIdx)])).toEqual([]);
+    expect(filterMixedTeamOnCivChange('Romans', 'Britons', [String(romansIdx), String(khmerIdx)])).toEqual([String(khmerIdx)]);
+    expect(filterMixedTeamOnCivChange('Romans', 'Khmer', [String(romansIdx), String(khmerIdx)])).toEqual([]);
+    const turksIdx = String(unitTeamIndex('Turks'));
+    expect(filterMixedTeamOnCivChange('Turks', 'Britons', [turksIdx])).toEqual([]);
+
+    // 单兵旧链进入混编时剥离本方索引与无效/重复索引，保留有效额外盟友
+    const enterMixed = buildEnterMixedParams(aLegacy, bLegacy, 'r', { na: 26, nb: 20, cntA: 26, cntB: 20 }, { a: false, b: false });
+    const decodedEnter = decodeMixedDuel(enterMixed);
+    expect(decodedEnter.errors).toEqual([]);
+    expect(decodedEnter.input.a.team).toEqual([]);
+    expect(decodedEnter.input.b.team).toEqual([]);
+    const aWithExtra = resolve(
+      simCtx,
+      CORE.unitById,
+      { uid: 542, civ: 'Romans', age: 4, ageSet: true, techs: 'f', team: [romansIdx, khmerIdx, khmerIdx, 999] },
+      542,
+    );
+    if (isUnavail(aWithExtra)) throw new Error('Expected available');
+    const enterMixedWithAlly = buildEnterMixedParams(aWithExtra, bAuto, 'r', { na: 26, nb: 20, cntA: 26, cntB: 20 }, { a: false, b: false });
+    expect(decodeMixedDuel(enterMixedWithAlly).input.a.team).toEqual([String(khmerIdx)]);
+
+    // 建筑模拟器 ?team= 严格解析：空白、+、小数、负零、十六进制、科学计数、负数与空串均返回空；越界、本方与不适用建筑由 filterBuildingExtraTeam 拦截
+    for (const bad of [' ', '\t', '+', 'abc, ', '0.0', '-0', '0x0', '1e0', '-1', '']) {
+      expect(parseBuildingTeamParam(bad), `parseBuildingTeamParam(${JSON.stringify(bad)})`).toEqual([]);
+    }
+    expect(parseBuildingTeamParam('99')).toEqual([99]);
+    expect(parseBuildingTeamParam('0, ,1,0.0,abc,0')).toEqual([0, 1, 0]);
+    const palisadeWall = CORE.buildingById[72]!;
+    const outpostBld = CORE.buildingById[598]!;
+    expect(filterBuildingExtraTeam(palisadeWall, 'Franks', parseBuildingTeamParam(' ,+,0.0,-0,0x0,1e0'))).toEqual([]);
+    expect(filterBuildingExtraTeam(palisadeWall, 'Franks', parseBuildingTeamParam('0,1,99'))).toEqual([0]);
+    expect(filterBuildingExtraTeam(palisadeWall, 'Cumans', parseBuildingTeamParam('0'))).toEqual([]);
+    expect(filterBuildingExtraTeam(outpostBld, 'Franks', parseBuildingTeamParam('0,1'))).toEqual([1]);
 
     // upgradePlan / upgradeComparison 对本方团队索引幂等去重
     const upEmpty = upgradePlan(simCtx, CORE.unitById, { uid: 542, civ: 'Romans', age: 4, techs: [], team: [] });

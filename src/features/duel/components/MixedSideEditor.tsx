@@ -4,7 +4,7 @@ import { militaryTechAge } from '../../../domain/availabilityAge';
 import { formatMixedBallisticsScope } from '../../../domain/ballistics';
 import { isDuelExcludedUnit } from '../../../domain/duelBudget';
 import { fighterCanAttack, fighterUsesAssumeHit, mainAttackType, NO_NORMAL_ATTACK_REASON } from '../../../domain/duel';
-import { civRelicBonus, TEAM_BONUSES } from '../../../domain/effects';
+import { civRelicBonus } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
 import { toggleTech } from '../../../domain/prereq';
@@ -22,7 +22,7 @@ import { PairHintLine } from '../../../shared/ui/PairTrainingHint';
 import { RelicCountSelector } from '../../../shared/ui/RelicCountSelector';
 import { NumWrappedText } from '../../../shared/ui/widgets';
 import { resolveSideArtCiv } from '../../../shared/utils/civBackgrounds';
-import { mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
+import { filterMixedTeamOnCivChange, mixedSideRelicMatchedUnits, resolveMixedSide, stripIneligibleMixedRelics, type MixedSideView } from '../logic/mixedDuel';
 import { mixedSideCanKite, mixedSideHasMeleeFront } from '../logic/duelKiteView';
 import type { MixedTrainingTransfer } from '../logic/mixedTrainingTransfer';
 import { MixedTrainingAction } from './MixedTrainingAction';
@@ -140,7 +140,7 @@ export function MixedSideEditor({
               emitChange({
                 ...input,
                 civ,
-                team: input.team.filter((raw) => !(/^(0|[1-9]\d*)$/.test(raw) && TEAM_BONUSES[+raw]?.[0] === civ)),
+                team: filterMixedTeamOnCivChange(input.civ, civ, input.team),
               })
             }
           />

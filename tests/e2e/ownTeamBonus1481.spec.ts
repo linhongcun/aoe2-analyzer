@@ -135,7 +135,9 @@ test('#1481 建筑模拟器 4 国 TEAM_BLD、?team= 分享与木栅栏满科技�
   await expect(bcr.locator('tbody tr[data-civ]').first()).toHaveAttribute('data-civ', 'Cumans');
   await expect(bcr.locator('tr[data-civ="Cumans"]')).toContainText('200');
 
-  // 4. 无适用团队加成的建筑（法兰克城堡 82）保留四态空态文案
+  // 4. 无适用团队加成的建筑（法兰克城堡 82）保留四态空态文案，且非法 ?team=%20 不得误启用库曼（索引 0）
+  await page.goto('./#/building/72?civ=Franks&tab=sim&team=%20');
+  await expect(page.locator('#sim table.simtab tr', { hasText: '生命值' }).locator('b')).toHaveText('250');
   await page.goto('./#/building/82?civ=Franks&tab=sim');
   await expect(page.locator('[data-t="sim-team-group"]')).toContainText('无适用的已编码团队加成');
 
@@ -162,6 +164,16 @@ test('#1481 单兵与混编 PK 默认本方常驻团队加成、罗马逆转战�
   await page.locator('#duel-a details.duel-tech > summary').click();
   await expect(page.locator('#duel-a [data-t="sim-team-own"]')).toContainText('已自动计入');
   await expect(page.locator('#duel-a [data-t="sim-team-ally"]')).not.toContainText('罗马：');
+
+  // 1b. 旧链携带本方索引（罗马 team=15）切离文明到不列颠时，不得将罗马泄漏为额外盟友
+  await page.goto('./#/duel?a=542.Romans.4.f.15&b=542.Khmer.4.f.&m=r&bud=3000');
+  await expect(page.locator('#duel-res')).toBeVisible();
+  await page.locator('#duel-a-civ').click();
+  await page.getByRole('option', { name: /不列颠/ }).click();
+  await expect(page.locator('#duel-a')).toContainText('不列颠');
+  await expect(page.locator('[data-t="duel-own-team-a"]')).toHaveCount(0);
+  await page.locator('#duel-a details.duel-tech > summary').click();
+  await expect(page.locator('#duel-a [data-t="sim-team-ally"] label.sim-team-check', { hasText: '罗马' }).locator('input')).not.toBeChecked();
 
   // 2. 混编 PK：罗马 33 长戟 + 18 重型弩炮 vs 不列颠 33 长戟 + 28 劲弩（默认 team=[] 逆转胜）
   const mixInput: MixedDuelInput = {
@@ -218,6 +230,36 @@ test('#1481 单兵与混编 PK 默认本方常驻团队加成、罗马逆转战�
   await expectSingleLine(page.locator('[data-t="mix-a-own-team"] .num.nw, #mix-a-team .sim-team-auto-badge, #mix-a-team .num.nw'));
   await expectNoOverflow(page);
   expect((await new AxeBuilder({ page }).include('#mix-a-team').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+
+  // 3. 混编旧链携带本方索引（罗马 team=["15"]）切离文明到不列颠时，不得将罗马泄漏为额外盟友
+  await setTheme(page, 'light');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const legacyMixInput: MixedDuelInput = {
+    ...mixInput,
+    a: { ...mixInput.a, team: ['15'] },
+  };
+  await page.goto('./#/duel?' + encodeMixedDuel(legacyMixInput));
+  await expect(page.locator('[data-t="mix-a-own-team"]')).toContainText('罗马');
+  await page.locator('#mix-a-civ').click();
+  await page.getByRole('option', { name: /不列颠/ }).click();
+  await expect(page.locator('.side-a .mix-side-civ')).toContainText('不列颠');
+  await expect(page.locator('[data-t="mix-a-own-team"]')).toHaveCount(0);
+  await page.locator('.side-a details.mix-techs > summary').click();
+  await expect(page.locator('#mix-a-team [data-t="mix-a-team-ally"] label.mix-check', { hasText: '罗马' }).locator('input')).not.toBeChecked();
+
+  // 4. 畸形混编链接含重复本方索引时提供脱困按钮
+  const dupOwnMixInput: MixedDuelInput = {
+    ...mixInput,
+    a: { ...mixInput.a, team: ['15', '15'] },
+  };
+  await page.goto('./#/duel?' + encodeMixedDuel(dupOwnMixInput));
+  const mixTechsDetails = page.locator('.side-a details.mix-techs');
+  if (!(await mixTechsDetails.evaluate((el) => (el as HTMLDetailsElement).open))) {
+    await mixTechsDetails.locator('> summary').click();
+  }
+  await page.locator('#mix-a-team').getByRole('button', { name: '移除重复项' }).click();
+  await expect(page.locator('#mix-a-team')).not.toContainText('重复的本方团队效果');
+  await expect(page.getByRole('button', { name: '计算混编结果', exact: true })).toBeEnabled();
 
   expect(errors).toEqual([]);
 });
