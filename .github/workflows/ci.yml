@@ -112,9 +112,26 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && needs.check.outputs.deploy_eligible == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions: { pages: write, id-token: write }
+    permissions: { pages: write, id-token: write, actions: write }
     concurrency: { group: pages, cancel-in-progress: false }
     environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
     steps:
       - id: deploy
         uses: actions/deploy-pages@v4
+      - name: Dispatch Release workflow for workflow_dispatch deploy
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CI_RUN_ID: ${{ github.run_id }}
+        run: |
+          for attempt in 1 2; do
+            if gh workflow run release.yml --repo "$GITHUB_REPOSITORY" --ref main -f "ci_run_id=${CI_RUN_ID}"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 2 ]; then
+              echo "gh workflow run release.yml 第 ${attempt} 次失败，5 秒后重试"
+              sleep 5
+            fi
+          done
+          echo "派发 Release 失败（可手工恢复：gh workflow run release.yml --ref main -f ci_run_id=${CI_RUN_ID}）" >&2
+          exit 1

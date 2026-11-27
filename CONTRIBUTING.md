@@ -157,7 +157,7 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 - **重跑与失败**：每一步看远端仓库、部署和产物的真实状态；修复原因后可以同版本恢复，已完成且一致的步骤幂等跳过。页面部署、draft Release 和正式发布是不同状态。不要用本地站点代替真实线上核对，也不要用管道吞掉失败退出码。
 - **公告**：玩家可见的版本更新说明通过 `release-notes/<issue>.json` 在合入 `main` 后汇总写入根目录 `CHANGELOG.md`。需要外部公告时仍由 hongcun 明确决定；说明中的数字须依据实际部署或 tag 提交核对、经独立复核后写入该版本条目，外部渠道由 hongcun 本人发布。
 
-部署只由 `main` 的 `push` 或其接续的 `deploy=true` `workflow_dispatch` 触发；nightly/手动完整检查（`full.yml`）与只读手动 `CI / Deploy`（`deploy=false`）不部署、不发 Release。`main` `CI / Deploy` 实际部署成功后自动接续正式 Release，手动调度用于恢复。按持续发布授权继续到真实线上核对、正式 Release、tag 和附件验证，不停在 PR 或 draft。详见 [RELEASING.md](docs/RELEASING.md)。
+部署只由 `main` 的 `push` 或其接续的 `deploy=true` `workflow_dispatch` 触发；nightly/手动完整检查（`full.yml`）与只读手动 `CI / Deploy`（`deploy=false`）不部署、不发 Release。`main` `CI / Deploy` 实际部署成功后自动接续正式 Release（`push` 走 `workflow_run`，`workflow_dispatch` 由 `deploy` 作业显式派发 `release.yml`），手动调度用于恢复。按持续发布授权继续到真实线上核对、正式 Release、tag 和附件验证，不停在 PR 或 draft。详见 [RELEASING.md](docs/RELEASING.md)。
 
 ### 4. 沟通
 

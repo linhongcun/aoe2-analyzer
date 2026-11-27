@@ -18,7 +18,7 @@
 
 ## 自动接续正式 Release
 
-`.github/workflows/release.yml` 在同仓库 `main` 的成功 `CI / Deploy`（`push` 或由 `prepare` / 人工触发的 `deploy=true` `workflow_dispatch`）完成后自动接续；手动恢复时在 Actions 里填入该次成功部署 run 的 ID。它先在可信 `main` 上运行 `scripts/release-workflow.mjs --resolve-run` 核对该 run 确为同仓库 `main` 成功完成的 `CI / Deploy` 且 `check` 与 `deploy` 两个 job 均为 `success`（仅做版本汇总、被新提交取代或只读 `deploy=false` 等跳过 `deploy` 的 run 在自动触发时优雅跳过，手动传入无效 run ID 时明确报错），随后精确检出其 `head_sha`（`fetch-depth: 0` + `git fetch origin main --tags`）并从 `git show "${DEPLOYED_SHA}:package.json"` 读取版本。
+`.github/workflows/release.yml` 在同仓库 `main` 的成功 `CI / Deploy` 完成后自动接续：`push` 部署由 `on: workflow_run` 自动触发；由 `prepare` 或人工通过 `workflow_dispatch`（`deploy=true`）执行的部署在 `deploy` 成功后显式调用 `gh workflow run release.yml -f ci_run_id=${{ github.run_id }}` 触发（规避 `GITHUB_TOKEN` 派发的运行不触发下游 `workflow_run` 的限制）；手动恢复时亦可在 Actions 里填入该次成功部署 run 的 ID。它先在无并发组的前置 `verify` 作业于可信 `main` 上运行 `scripts/release-workflow.mjs --resolve-run`（若上游 `CI / Deploy` 尚在收尾则短时轮询至 `completed`），核对该 run 确为同仓库 `main` 成功完成的 `CI / Deploy` 且 `check` 与 `deploy` 两个 job 均为 `success`（仅做版本汇总、被新提交取代或只读 `deploy=false` 等跳过 `deploy` 的 run 在自动触发时优雅跳过，不进入 `release` 并发组；手动传入无效 run ID 时明确报错），随后在串行 `release` 作业（`queue: max`）精确检出其 `head_sha`（`fetch-depth: 0` + `git fetch origin main --tags`）并从 `git show "${DEPLOYED_SHA}:package.json"` 读取版本。
 
 若 `vX.Y.Z` 已是正式 Release 则幂等跳过；若已有同名 tag 却不指向该提交则失败，不覆盖 tag。否则下载该 run 的 `site` 产物（即部署的那份 `dist`），压成 `aoe2-analyzer-site-vX.Y.Z.zip` 并生成 `SHA256SUMS.txt`，以该提交为 target 创建 tag 与 Release，说明指向该提交的 CHANGELOG；已存在 draft 时补齐附件并转正式。若 `prepare` 推送后派发 `CI / Deploy` 遇瞬时故障，执行 `gh workflow run ci.yml --ref main -f deploy=true -f expected_sha=<BUMP_SHA>` 即可幂等恢复部署与发版且不会二次递增版本。
 
