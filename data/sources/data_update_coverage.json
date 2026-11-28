@@ -127,6 +127,12 @@
       "kind": "generator"
     },
     {
+      "script": "scripts/sim_research_prices_build.ts",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
       "script": "scripts/build_orders_check.ts",
       "args": [],
       "when": "always",

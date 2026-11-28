@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-sim-research-prices.json",
+  "title": "Derived lightweight simulator passive research-price and order-modifier index",
+  "type": "object",
+  "required": ["meta", "civs", "orderModifiers"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["generatedBy", "patch", "commit", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "generatedBy": { "const": "scripts/sim_research_prices_build.ts" },
+        "patch": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "civs": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "propertyNames": { "pattern": "^[0-9]+$" },
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind", "entry"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": { "const": "all" },
+                "entry": { "$ref": "#/$defs/priceEntry" }
+              }
+            },
+            {
+              "type": "object",
+              "required": ["kind", "ages"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": { "const": "byAge" },
+                "ages": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "propertyNames": { "enum": ["1", "2", "3", "4"] },
+                  "additionalProperties": { "$ref": "#/$defs/priceEntry" }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderModifiers": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[0-9]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["civ", "targets"],
+        "additionalProperties": false,
+        "properties": {
+          "civ": { "type": ["string", "null"] },
+          "targets": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "integer", "minimum": 0 }
+          },
+          "global": { "const": true }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "costMap": {
+      "type": "object",
+      "propertyNames": { "enum": ["Food", "Wood", "Gold", "Stone"] },
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
+    "priceEntry": {
+      "type": "object",
+      "required": ["cost"],
+      "additionalProperties": false,
+      "properties": {
+        "cost": {
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/costMap" }]
+        },
+        "free": { "const": true },
+        "zero": { "const": true },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -31,6 +31,7 @@ export const SCHEMA_CATALOG = {
       ['eco', 'eco'],
       ['army_research', 'army-research'],
       ['army_cost_usage', 'army-cost-usage'],
+      ['sim_research_prices', 'sim-research-prices'],
       ['construction', 'construction'],
       ['garrison', 'garrison'],
       ['garrison_general', 'garrison-general'],

@@ -18,6 +18,14 @@
       "auditStatus": "reproduced-by-check"
     },
     {
+      "file": "data/game/sim_research_prices.json",
+      "generator": "scripts/sim_research_prices_build.ts",
+      "pin": "dat",
+      "check": ["npx vite-node scripts/sim_research_prices_build.ts --check"],
+      "tests": ["tests/unit/simResearchCost1496.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
       "file": "data/game/siege.json",
       "generator": "scripts/siege_build.py",
       "pin": "dat",
