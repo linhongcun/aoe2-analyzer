@@ -18,4 +18,11 @@ export {
 } from './garrison/types';
 export { getGarrisonCandidates } from './garrison/snapshot';
 export { getGarrisonTechs } from './garrison/techFilter';
-export { calculateGeneralGarrison, explainGeneralGarrison, getFreeGarrisonTechs, readGeneralGarrison, toggleGeneralGarrisonTech } from './garrison/calculate';
+export {
+  calculateGeneralGarrison,
+  explainGeneralGarrison,
+  getFreeGarrisonTechs,
+  partitionGarrisonTechs,
+  readGeneralGarrison,
+  toggleGeneralGarrisonTech,
+} from './garrison/calculate';

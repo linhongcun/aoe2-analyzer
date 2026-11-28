@@ -6,6 +6,7 @@ import {
   getGarrisonCandidates,
   getGarrisonBuildingAge,
   getGarrisonTechs,
+  partitionGarrisonTechs,
   readGeneralGarrison,
   toggleGeneralGarrisonTech,
   writeGeneralGarrison,
@@ -56,8 +57,7 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
   const available = getGarrisonTechs(ctx, b, config);
   const free = new Set(getFreeGarrisonTechs(ctx, b, config));
   const selected = new Set([...config.techs, ...free]);
-  const availableManual = available.filter((tech) => !free.has(tech.id));
-  const automatic = [...free].flatMap((id) => (ctx.core.techById[id] ? [ctx.core.techById[id]] : []));
+  const { manual: availableManual, automatic } = partitionGarrisonTechs(available, free);
   const candidates = getGarrisonCandidates(ctx, b, config);
   const compatible = candidates.filter((u) => u.canEnter || u.canCreate || u.canDeposit);
   const {

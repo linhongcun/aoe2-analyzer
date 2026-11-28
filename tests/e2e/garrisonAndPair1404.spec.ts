@@ -163,3 +163,93 @@ test('Issue 1404 军队补给页成对产出说明（未确认/正常/暂停 0 �
   await assertAllNwSingleLine(pairHint, 3);
   await assertNoOverflow(page);
 });
+
+test('Issue 1505 建筑驻军预览免费自动生效科技状态栏裁剪（1280 与 390 正反例）', async ({ page }) => {
+  const networkErrors: string[] = [];
+  page.on('requestfailed', (req) => networkErrors.push(`${req.url()} (${req.failure()?.errorText ?? 'failed'})`));
+  page.on('response', (res) => {
+    if (res.status() >= 400) networkErrors.push(`${res.status()} ${res.url()}`);
+  });
+  const preview = page.getByTestId('garrison-preview');
+  const statusBar = preview.locator('.garrison-tech-status');
+  const selectAll = preview.getByRole('button', { name: '全选当前时代可用相关科技' });
+  const clearAll = preview.getByRole('button', { name: '清空自选科技' });
+
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+
+    // 1. 斯拉夫城堡 82 与兵营 12：不再误显纵火、软甲
+    await page.goto('./#/building/82?tab=garrison&gv=2&civ=Slavs&age=4&gtechs=&army=');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|纵火|软甲/);
+    await assertAllNwSingleLine(statusBar, 1);
+    await assertNoOverflow(page);
+
+    await page.goto('./#/building/12?tab=garrison&gv=2&civ=Slavs&age=4&gtechs=&army=');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('当前时代无影响驻军的可选科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|纵火|软甲/);
+    await assertNoOverflow(page);
+
+    // 2. 土耳其兵营 12（负例隐藏化学）、靶场 87（仅免费正例）、城堡 82（射击正例）
+    await page.goto('./#/building/12?tab=garrison&gv=2&civ=Turks&age=4&gtechs=&army=');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('当前时代无影响驻军的可选科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|化学/);
+    await assertNoOverflow(page);
+
+    await page.goto('./#/building/87?tab=garrison&gv=2&civ=Turks&age=4&gtechs=&army=');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('当前时代无影响驻军的可选科技');
+    await expect(statusBar).toContainText('免费自动生效 1 项（化学）');
+    await expect(preview.getByRole('checkbox', { name: '化学（免费）', exact: true })).toBeChecked();
+    await expect(preview.getByRole('checkbox', { name: '化学（免费）', exact: true })).toBeDisabled();
+    await assertAllNwSingleLine(statusBar, 1);
+    await assertNoOverflow(page);
+
+    await page.goto('./#/building/82?tab=garrison&gv=2&civ=Turks&age=4&gtechs=&army=83%3A5%3Ae');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('免费自动生效 1 项（化学）');
+    await expect(preview.getByRole('checkbox', { name: '化学（免费）', exact: true })).toBeChecked();
+    await expect(preview.getByRole('checkbox', { name: '化学（免费）', exact: true })).toBeDisabled();
+    await expect(preview.getByTestId('garrison-total')).toHaveText('7');
+    await assertAllNwSingleLine(statusBar, 2);
+    await assertNoOverflow(page);
+
+    // 3. 高丽城镇中心 109：空自选无免费项；全选解锁免费「炮塔」；清空恢复未勾选手动项
+    await page.goto('./#/building/109?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=&army=83%3A0%3Ae');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|炮塔/);
+    await expect(preview.getByRole('checkbox', { name: '炮塔', exact: true })).not.toBeChecked();
+    await selectAll.click();
+    await expect(statusBar).toContainText('免费自动生效 1 项（炮塔）');
+    await expect(preview.getByRole('checkbox', { name: '炮塔（免费）', exact: true })).toBeChecked();
+    await expect(preview.getByRole('checkbox', { name: '炮塔（免费）', exact: true })).toBeDisabled();
+    const korTcTechs = new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('gtechs')?.split(',') ?? [];
+    expect(korTcTechs).not.toContain('64');
+    await assertAllNwSingleLine(statusBar, 2);
+    await assertNoOverflow(page);
+    await clearAll.click();
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|炮塔/);
+    await expect(preview.getByRole('checkbox', { name: '炮塔', exact: true })).not.toBeChecked();
+    await expect(preview.getByRole('checkbox', { name: '炮塔', exact: true })).toBeEnabled();
+
+    // 4. 高丽大型箭塔 235：空自选与全选均不泄漏形态前提「大型箭塔 / 警戒箭塔」及无关「炮塔」
+    await page.goto('./#/building/235?tab=garrison&gv=2&civ=Koreans&age=4&gtechs=&army=83%3A0%3Ae');
+    await expect(preview.getByRole('alert')).toHaveCount(0);
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|大型箭塔|警戒箭塔|炮塔/);
+    await selectAll.click();
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|大型箭塔|警戒箭塔|炮塔/);
+    await assertAllNwSingleLine(statusBar, 1);
+    await assertNoOverflow(page);
+    await clearAll.click();
+    await expect(statusBar).toContainText('无免费自动科技');
+    await expect(statusBar).not.toContainText(/免费自动生效|大型箭塔|警戒箭塔|炮塔/);
+  }
+  expect(networkErrors).toEqual([]);
+});
