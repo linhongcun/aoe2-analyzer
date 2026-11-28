@@ -90,6 +90,15 @@ Object.entries(MANUAL_BUILDING_EFFECTS).forEach(([en, r]) => {
 // ---------------- 文明加成 ----------------
 export const CIV_BONUSES: Record<string, CivBonus[]> = {};
 export const BUILDING_CIV_BONUSES: Record<string, BCivBonus[]> = {};
+/** 带精确生效时代的常驻文明加成条目（null 表示手工回退，按目标时代一次性求值） */
+interface AgedPermanentBonus<P> {
+  pred: P;
+  age: number | null;
+  fx: (age: number) => Effect[];
+  note: string;
+}
+const AGED_CIV_BONUSES: Record<string, AgedPermanentBonus<UnitPred>[]> = {};
+const AGED_BUILDING_CIV_BONUSES: Record<string, AgedPermanentBonus<BPred>[]> = {};
 /** 由科技触发的文明加成（如印加村民吃步兵铁匠铺、契丹近战攻击升级翻倍）：civ → 科技英文名 → 规则 */
 export interface TechExtra {
   age: number;
@@ -210,6 +219,8 @@ civs.forEach((c) => {
   }
   const U: CivBonus[] = [],
     B: BCivBonus[] = [];
+  const AU: AgedPermanentBonus<UnitPred>[] = [],
+    AB: AgedPermanentBonus<BPred>[] = [];
   const keys = [...c.bon.map((_, i) => String(i)), 'hidden'];
   keys.forEach((k) => {
     const es = byIdxPermanent[k] ?? [];
@@ -229,15 +240,27 @@ civs.forEach((c) => {
           if (e.req.length) {
             const ex = (CIV_TECH_EXTRAS[c.en] ??= {});
             e.req.forEach((tn) => (ex[tn] ??= []).push({ age: e.age, pred: idPred(r.t), fx, b: !!r.b, idx: idx >= 0 ? idx : null }));
-          } else if (r.b) B.push([idPred(r.t) as BPred, gate(e.age, fx), label, idx]);
-          else U.push([idPred(r.t) as UnitPred, gate(e.age, fx), label, idx]);
+          } else if (r.b) {
+            const pred = idPred(r.t) as BPred;
+            const gated = gate(e.age, fx);
+            B.push([pred, gated, label, idx]);
+            AB.push({ pred, age: e.age, fx: gated, note: label });
+          } else {
+            const pred = idPred(r.t) as UnitPred;
+            const gated = gate(e.age, fx);
+            U.push([pred, gated, label, idx]);
+            AU.push({ pred, age: e.age, fx: gated, note: label });
+          }
         });
         bdrGroups.forEach(({ uids, fx }) => {
           if (e.req.length) {
             const ex = (CIV_TECH_EXTRAS[c.en] ??= {});
             e.req.forEach((tn) => (ex[tn] ??= []).push({ age: e.age, pred: idPred(uids), fx, b: false, idx: idx >= 0 ? idx : null }));
           } else {
-            U.push([idPred(uids) as UnitPred, gate(e.age, fx), label, idx]);
+            const pred = idPred(uids) as UnitPred;
+            const gated = gate(e.age, fx);
+            U.push([pred, gated, label, idx]);
+            AU.push({ pred, age: e.age, fx: gated, note: label });
           }
         });
       });
@@ -258,12 +281,47 @@ civs.forEach((c) => {
     if (mu.length || mb.length) {
       U.push(...mu);
       B.push(...mb);
+      mu.forEach(([pred, fn, note]) => AU.push({ pred, age: null, fx: fn, note }));
+      mb.forEach(([pred, fn, note]) => AB.push({ pred, age: null, fx: fn, note }));
       src[k] = 'manual';
     } else src[k] = (byIdx[k] ?? []).some((e) => e.eco.length) ? 'eco' : 'text';
   });
   CIV_BONUSES[c.en] = U;
   BUILDING_CIV_BONUSES[c.en] = B;
+  AGED_CIV_BONUSES[c.en] = AU;
+  AGED_BUILDING_CIV_BONUSES[c.en] = AB;
 });
+
+const EMPTY_FX: readonly Effect[] = [];
+const EMPTY_AGED_BONUSES: readonly { note: string; fx: readonly Effect[] }[] = [];
+
+/** 返回某文明在推进至 targetAge 过程中、于指定时代 stepAge 触发的常驻单位文明加成（issue 1517） */
+export function civBonusesForAge(civ: string, u: Unit, stepAge: number, targetAge: number): readonly { note: string; fx: readonly Effect[] }[] {
+  const list = AGED_CIV_BONUSES[civ];
+  if (!list?.length) return EMPTY_AGED_BONUSES;
+  let out: { note: string; fx: readonly Effect[] }[] | null = null;
+  for (const item of list) {
+    if (item.age !== null ? item.age !== stepAge : stepAge !== targetAge) continue;
+    if (!item.pred(u)) continue;
+    const fx = item.fx(item.age === null ? targetAge : stepAge);
+    if (fx.length) (out ??= []).push({ note: item.note, fx });
+  }
+  return out ?? EMPTY_AGED_BONUSES;
+}
+
+/** 返回某文明在推进至 targetAge 过程中、于指定时代 stepAge 触发的常驻建筑文明加成（issue 1517） */
+export function buildingCivBonusesForAge(civ: string, b: Building, stepAge: number, targetAge: number): readonly Effect[] {
+  const list = AGED_BUILDING_CIV_BONUSES[civ];
+  if (!list?.length) return EMPTY_FX;
+  let out: Effect[] | null = null;
+  for (const item of list) {
+    if (item.age !== null ? item.age !== stepAge : stepAge !== targetAge) continue;
+    if (!item.pred(b)) continue;
+    const fx = item.fx(item.age === null ? targetAge : stepAge);
+    if (fx.length) (out ??= []).push(...fx);
+  }
+  return out ?? EMPTY_FX;
+}
 
 /** 查询某文明是否具有 .dat 驻守圣物条件加成 */
 export function civRelicBonus(civ: string): CivRelicBonus | null {
@@ -398,4 +456,33 @@ export function matchingGenericFx(x: { id: number; en: string }, isBld: boolean,
 /** 在给定时代、已选科技与文明下，对某单位/建筑生效的通用/限定文明隐藏效果 */
 export function genericFx(x: { id: number; en: string }, isBld: boolean, age: number, has: (tech: string) => boolean, civ?: string): Effect[] {
   return matchingGenericFx(x, isBld, age, has, civ).flatMap((g) => g.fx);
+}
+/** 仅返回在精确时代 age 触发且无科技前置（req 为空）的通用/限定文明自动升级效果（issue 1517） */
+export function ageAutoGenericFx(x: { id: number; en: string }, isBld: boolean, age: number, civ?: string): readonly Effect[] {
+  let out: Effect[] | null = null;
+  for (const g of GENERIC_FX) {
+    if (g.b !== isBld || g.req.length !== 0 || g.age !== age) continue;
+    if (g.civs && (civ === undefined || !g.civs.includes(civ))) continue;
+    if (g.pred(x)) (out ??= []).push(...g.fx);
+  }
+  return out ?? EMPTY_FX;
+}
+/** 仅返回带科技前置（req 非空）且时代 <= age 的组合隐藏效果（issue 1517） */
+export function conditionalGenericFx(
+  x: { id: number; en: string },
+  isBld: boolean,
+  age: number,
+  has: (tech: string) => boolean,
+  civ?: string,
+): readonly Effect[] {
+  let out: Effect[] | null = null;
+  let imp: string[] | null = null;
+  for (const g of GENERIC_FX) {
+    if (g.b !== isBld || g.req.length === 0 || age < g.age) continue;
+    if (g.civs && (civ === undefined || !g.civs.includes(civ))) continue;
+    if (!g.pred(x)) continue;
+    imp ??= IMPLIED[x.en] ?? [x.en];
+    if (g.req.every((r) => imp!.includes(r) || has(r))) (out ??= []).push(...g.fx);
+  }
+  return out ?? EMPTY_FX;
 }

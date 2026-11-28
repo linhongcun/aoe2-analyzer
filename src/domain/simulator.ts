@@ -2,7 +2,17 @@
 import type { Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { militaryTechAge } from './availabilityAge';
 import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
-import { activeRelicBonus, CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
+import {
+  activeRelicBonus,
+  ageAutoGenericFx,
+  CIV_BONUSES,
+  CIV_TECH_EXTRAS,
+  civBonusesForAge,
+  conditionalGenericFx,
+  TEAM_BONUSES,
+  TECH_EFFECTS,
+  TEXT_ONLY_TECHS,
+} from './effects';
 import { DAT } from './datEffects';
 import { getProjectileGuidanceScope, hasPositiveDamageReflection, projectileGuidanceUnitScopeNote, resolveTechChargeGrant } from './duelUnmodeledEco';
 import { applyEffectValue } from './numericEffects';
@@ -162,13 +172,19 @@ export function simulate(
 ): SimStats {
   const S: SimStats = baseStats(u);
   const apply = (list: readonly Effect[], source: string, techId?: number) => {
+    if (!list.length) return;
     const before = trace ? { ...S, bonus: { ...S.bonus }, armc: { ...S.armc } } : null;
     applyEffects(S, list);
     if (trace && before) trace({ source, techId, before, after: { ...S, bonus: { ...S.bonus }, armc: { ...S.armc } } });
   };
-  (CIV_BONUSES[civ] ?? []).forEach(([f, g, note]) => {
-    if (f(u)) apply(g(age), `文明加成：${note}`);
-  });
+  const maxAge = Math.floor(age);
+  // issue 1517（方案 B1）：按年代序逐时代先施加无前置时代自动升级，再施加同代常驻文明加成
+  for (let a = 1; a <= maxAge; a++) {
+    apply(ageAutoGenericFx(u, false, a, civ), '时代与单位特殊规则');
+    for (const { note, fx } of civBonusesForAge(civ, u, a, maxAge)) {
+      apply(fx, `文明加成：${note}`);
+    }
+  }
   const relicFx = activeRelicBonus(civ, u, age, relics);
   if (relicFx) {
     apply(relicFx.fx, `文明加成：驻守圣物 ${relicFx.appliedRelics} 件（每件 +${relicFx.bonus.perRelicAtk}，最多 +${relicFx.bonus.maxAtk}）`);
@@ -195,7 +211,7 @@ export function simulate(
     if ((isOwn || team.has(i)) && f(u)) apply(ef(u), `${isOwn ? '本方常驻团队加成' : '团队加成'}：${note}`);
   });
   apply(
-    genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),
+    conditionalGenericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id), civ),
     '时代与单位特殊规则',
   );
   S.rof = S.rof / S.rofx;

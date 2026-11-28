@@ -8,13 +8,15 @@ import { DAT } from './datEffects';
 import { getProjectileGuidanceScope, projectileGuidanceBuildingScopeNote } from './duelUnmodeledEco';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
 import {
+  ageAutoGenericFx,
   BUILDING_CIV_BONUSES,
   BUILDING_EFFECTS,
   BUILDING_TEXT_ONLY,
+  buildingCivBonusesForAge,
+  conditionalGenericFx,
   GENERIC_FX,
   TEAM_BUILDING_BONUSES,
   genericBuildingTriggerReqs,
-  genericFx,
 } from './effects';
 export type { BPred, BCivBonus } from './buildingEffects.manual';
 export { BUILDING_CIV_BONUSES, BUILDING_EFFECTS };
@@ -184,27 +186,32 @@ export function simulateBuilding(
   team: ReadonlySet<number> = new Set(),
 ): StatSet {
   const S = buildingBase(b);
-  (BUILDING_CIV_BONUSES[civ] ?? []).forEach(([f, g]) => {
-    if (f(b)) applyEffects(S, g(age));
-  });
   const st = civStatus(ctx.trees, civ);
   const canAttack = buildingCanAttack(b);
-  // 仅对直接建筑规则（BUILDING_EFFECTS）施加一次；GENERIC_FX 统一由下方 genericFx 施加，结构上杜绝双重叠加
+  const filterOff = (fx: readonly Effect[]) => (!fx.length || canAttack ? fx : fx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s)));
+  const maxAge = Math.floor(age);
+  // issue 1517（方案 B1）：按年代序逐时代先施加无前置建筑自动规则，再施加同代常驻建筑文明加成
+  for (let a = 1; a <= maxAge; a++) {
+    const autoFx = filterOff(ageAutoGenericFx(b, true, a, civ));
+    if (autoFx.length) applyEffects(S, autoFx);
+    const civFx = buildingCivBonusesForAge(civ, b, a, maxAge);
+    if (civFx.length) applyEffects(S, civFx);
+  }
+  // 仅对直接建筑规则（BUILDING_EFFECTS）施加一次；带前置组合规则统一由下方 conditionalGenericFx 施加，结构上杜绝双重叠加
   directBuildingSimTechs(ctx, b, civ, canAttack, st).forEach(({ t, ef }) => {
     if (sel.has(t.id)) applyEffects(S, ef);
   });
   TEAM_BUILDING_BONUSES.forEach(([teamCiv, , f, ef], i) => {
     if ((teamCiv === civ || team.has(i)) && f(b)) {
-      const fx = ef(b);
-      applyEffects(S, canAttack ? fx : fx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s)));
+      applyEffects(S, filterOff(ef(b)));
     }
   });
   const hasOwnedSelected = (n: string) => {
     const t = ctx.techByEn[n];
     return !!t && !!st['t' + t.id] && (t.type !== 'UniqueTech' || t.civs.includes(civ)) && sel.has(t.id);
   };
-  const gfx = genericFx(b, true, age, hasOwnedSelected, civ);
-  applyEffects(S, canAttack ? gfx : gfx.filter((e) => !OFFENSIVE_BUILDING_STATS.has(e.s)));
+  const condFx = filterOff(conditionalGenericFx(b, true, age, hasOwnedSelected, civ));
+  if (condFx.length) applyEffects(S, condFx);
   S.bt = Math.round(S.bt * 10) / 10;
   return S;
 }
