@@ -178,8 +178,17 @@ describe('#1296 未建模机制精准判定（全量 24 充能单位 + 5 类机�
     for (const uid of [1968, 1970, 1901, 1903, 1948, 1952]) {
       expect(pillOf(uid)!.pill).toBe('充能多箭齐射');
     }
-    for (const uid of [2569, 2571, 2705, 2706, 2711, 2712, 831, 832]) {
+    for (const uid of [2569, 2571, 2705, 2706, 831, 832]) {
       expect(pillOf(uid)!.pill).toBe('充能远程攻击');
+    }
+    // issue 1522：约姆斯维京（2711/2712，chargeTarget=320 仅船只+建筑）无对手与陆战均不报充能远程攻击，对船只（442）保留
+    for (const uid of [2711, 2712]) {
+      expect(byId[uid]!.chargeTarget).toBe(320);
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [] })).toEqual([]);
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [], opponents: [byId[569]!] })).toEqual([]);
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [], opponents: [byId[442]!] }).map((m) => m.pill)).toEqual([
+        '充能远程攻击',
+      ]);
     }
 
     // 吴精锐火焰弓（1970）：仅 2 枚胶囊（充能多箭齐射 + 固有溅射伤害），无冗余多弹丸胶囊
@@ -342,5 +351,113 @@ describe('#1296 未建模机制精准判定（全量 24 充能单位 + 5 类机�
     expect(rofLines).toHaveLength(2);
     expect(new Set(rofLines.map((l) => `${l.rowKey}-${l.note.id}`)).size).toBe(2);
     expect(rofLines.every((l) => l.distinctRow)).toBe(true);
+  });
+
+  it('issue 1522：基于 chargeTarget 的对手感知与无对手战场语义过滤（约姆斯维京 320 / 喷火船虹吸管 64 / 保护哥瑟砍 127）', () => {
+    const siphons = techById[909]!;
+    const gothikon = techById[1474]!;
+
+    // 1) 关键目录单位 chargeTarget 导出精确核对
+    for (const [uid, expected] of [
+      [2711, 320],
+      [2712, 320],
+      [529, 64],
+      [532, 64],
+      [1103, 64],
+      [1302, 64],
+      [2703, 127],
+      [2704, 127],
+      [831, -1],
+      [832, -1],
+      [1968, 191],
+      [1970, 191],
+      [2569, 63],
+      [2571, 63],
+      [1901, 127],
+      [1903, 127],
+      [1948, 127],
+      [2705, 127],
+      [2706, 127],
+      [1952, 127],
+    ] as const) {
+      expect(byId[uid]!.chargeTarget, `unit ${uid} chargeTarget`).toBe(expected);
+    }
+
+    // 2) 约姆斯维京（2711/2712）：陆战 1v1 与陆地混编抑制；对船只（442）与含船混编保留
+    for (const uid of [2711, 2712]) {
+      expect(
+        collectDuelUnmodeled([
+          { side: 'a', badge: 'A', unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B', unit: byId[569]!, civ: 'Franks', age: 4, selectedTechs: [] },
+        ]),
+      ).toEqual([]);
+      expect(
+        collectDuelUnmodeled([
+          { side: 'a', badge: 'A1', unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [] },
+          { side: 'a', badge: 'A2', unit: byId[2701]!, civ: 'Danes', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B1', unit: byId[569]!, civ: 'Franks', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B2', unit: byId[359]!, civ: 'Franks', age: 4, selectedTechs: [] },
+        ]),
+      ).toEqual([]);
+      expect(
+        collectDuelUnmodeled([
+          { side: 'a', badge: 'A', unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B', unit: byId[442]!, civ: 'Franks', age: 4, selectedTechs: [] },
+        ]).map((e) => [e.badge, e.unit.id, e.mechanisms.map((m) => m.pill)]),
+      ).toEqual([['A', uid, ['充能远程攻击']]]);
+      expect(
+        collectDuelUnmodeled([
+          { side: 'a', badge: 'A1', unit: byId[uid]!, civ: 'Danes', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B1', unit: byId[569]!, civ: 'Franks', age: 4, selectedTechs: [] },
+          { side: 'b', badge: 'B2', unit: byId[442]!, civ: 'Franks', age: 4, selectedTechs: [] },
+        ]).map((e) => [e.badge, e.unit.id, e.mechanisms.map((m) => m.pill)]),
+      ).toEqual([['A1', uid, ['充能远程攻击']]]);
+    }
+
+    // 3) 喷火船系（529/532/1103/1302）+ 909 虹吸管（chargeTarget=64）：对陆地 569 抑制；对船只 442/532 与无对手均保留
+    for (const [uid, civ] of [
+      [529, 'Byzantines'],
+      [532, 'Byzantines'],
+      [1103, 'Byzantines'],
+      [1302, 'Chinese'],
+    ] as const) {
+      expect(
+        collectDuelUnmodeled([
+          { side: 'a', badge: 'A', unit: byId[uid]!, civ, age: 4, selectedTechs: [siphons] },
+          { side: 'b', badge: 'B', unit: byId[569]!, civ: 'Franks', age: 4, selectedTechs: [] },
+        ]),
+      ).toEqual([]);
+      for (const shipId of [442, 532]) {
+        expect(
+          collectDuelUnmodeled([
+            { side: 'a', badge: 'A', unit: byId[uid]!, civ, age: 4, selectedTechs: [siphons] },
+            { side: 'b', badge: 'B', unit: byId[shipId]!, civ: 'Japanese', age: 4, selectedTechs: [] },
+          ]).map((e) => [e.badge, e.unit.id, e.mechanisms.map((m) => m.pill)]),
+        ).toEqual([['A', uid, ['充能远程攻击 · 虹吸管']]]);
+      }
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ, age: 4, selectedTechs: [siphons] }).map((m) => m.pill)).toEqual(['充能远程攻击 · 虹吸管']);
+    }
+
+    // 4) 红线防误杀：瓦兰吉卫队（2703/2704）+ 1474 哥瑟砍（a:62=6, a:61=3 但 chargeTarget=127）陆战/海战/无对手全部保留
+    for (const uid of [2703, 2704]) {
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Varangians', age: 4, selectedTechs: [gothikon] }).map((m) => m.pill)).toEqual([
+        '充能远程攻击 · 哥瑟砍',
+      ]);
+      for (const oppId of [569, 442]) {
+        expect(
+          collectDuelUnmodeled([
+            { side: 'a', badge: 'A', unit: byId[uid]!, civ: 'Varangians', age: 4, selectedTechs: [gothikon] },
+            { side: 'b', badge: 'B', unit: byId[oppId]!, civ: 'Franks', age: 4, selectedTechs: [] },
+          ]).map((e) => [e.badge, e.unit.id, e.mechanisms.map((m) => m.pill)]),
+        ).toEqual([['A', uid, ['充能远程攻击 · 哥瑟砍']]]);
+      }
+    }
+
+    // 5) 合成边界：纯建筑掩码 256（无陆战位且无船只位）对船与无对手均抑制；非有限数回退保守放行
+    const bldOnlyShip = { ...byId[532]!, chargeType: 6, chargeTarget: 256 };
+    expect(detectUnitUnmodeled({ unit: bldOnlyShip, civ: 'Byzantines', age: 4, selectedTechs: [] })).toEqual([]);
+    expect(detectUnitUnmodeled({ unit: bldOnlyShip, civ: 'Byzantines', age: 4, selectedTechs: [], opponents: [byId[442]!] })).toEqual([]);
+    const nanTarget = { ...byId[2712]!, chargeTarget: Number.NaN };
+    expect(detectUnitUnmodeled({ unit: nanTarget, civ: 'Danes', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['充能远程攻击']);
   });
 });

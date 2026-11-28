@@ -42,7 +42,7 @@ class PopulationSpace1499Tests(unittest.TestCase):
         self.assertIn('def pop_space_sig(u):', dump)
         self.assertIn('!= pop_space_sig(cu)', dump)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v26.%s.json', parse_src)
+        self.assertIn('dat.v27.%s.json', parse_src)
         self.assertNotIn('dat.v25.%s.json', parse_src)
 
     def test_scripts_register_attr_110_without_hardcoded_tech_ids(self):

@@ -83,14 +83,25 @@ test('#350 其他文明只列各自常驻加成；后勤学/哥瑟砍勾选后�
   await gothBox.locator('input').uncheck();
   await expect(page.locator('[data-t="pk-unmodeled"]')).toHaveCount(0);
 
-  await page.goto('./#/duel?a=2704.Danes.4.f.&b=567.Teutons.4.f.&m=1');
-  await expect(page.locator('[data-id="danes-spd"]')).toContainText('已计入：丹麦人 移动速度 +10%');
-  await expect(page.locator('[data-id="danes-hamask"]')).toContainText('哈马思克');
-  await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('产生的黄金');
+  // issue 1522：丹麦 2704 在满科技与 0 项无科技态均只保留移速 +10%，绝不无条件输出哈马思克
+  for (const href of ['./#/duel?a=2704.Danes.4.f.&b=567.Teutons.4.f.&m=1', './#/duel?a=2704.Danes.4..&b=569.Franks.4..&m=r&bud=3000']) {
+    await page.goto(href);
+    await expect(page.locator('[data-t="pk-vg-line"]')).toHaveCount(1);
+    await expect(page.locator('[data-id="danes-spd"]')).toContainText('已计入：丹麦人 移动速度 +10%');
+    await expect(page.locator('[data-id="danes-hamask"]')).toHaveCount(0);
+    await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('哈马思克');
+    await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('产生的黄金');
+  }
 
-  await page.goto('./#/duel?a=2704.Saxons.4.f.&b=567.Teutons.4.f.&m=1');
-  await expect(page.locator('[data-t="pk-vg-line"]')).toHaveCount(1);
-  await expect(page.locator('[data-id="sax-shield"]')).toContainText('未计入：撒克逊人 盾墙（成群时额外护甲）');
+  // issue 1522：撒克逊 2704 在满科技与 0 项无科技态均仅留默认产金并隐藏「相关加成是否计入」小标题（对齐拜占庭），绝不输出盾墙
+  for (const href of ['./#/duel?a=2704.Saxons.4.f.&b=567.Teutons.4.f.&m=1', './#/duel?a=2704.Saxons.4..&b=569.Franks.4..&m=r&bud=3000']) {
+    await page.goto(href);
+    await expect(page.locator('[data-t="pk-vg-line"]')).toHaveCount(0);
+    await expect(page.locator('[data-id="sax-shield"]')).toHaveCount(0);
+    await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('盾墙');
+    await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('相关加成是否计入');
+    await expect(page.locator('[data-t="pk-vg-gold"]')).toHaveAttribute('data-mul', 'default');
+  }
 
   await page.goto('./#/duel?a=2704.Vikings.4.f.&b=567.Teutons.4.f.&m=1');
   await expect(page.locator('[data-id="vik-hp"]')).toHaveAttribute('data-status', 'counted');

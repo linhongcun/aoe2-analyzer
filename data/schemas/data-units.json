@@ -180,6 +180,7 @@
       },
       "chargeType": { "type": "integer" },
       "chargeEvent": { "type": "integer" },
+      "chargeTarget": { "type": "integer" },
       "maxCharge": { "type": "number", "minimum": 0 },
       "rechargeRate": { "type": "number", "minimum": 0 },
       "rechargeDuration": { "type": "number", "minimum": 0 },

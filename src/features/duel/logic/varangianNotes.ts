@@ -24,7 +24,7 @@ function formatSeconds(rof: number): string {
 /**
  * 一方是瓦兰吉卫队系时，列出本场对该文明生效的相关加成。
  * 其他文明不列出瓦兰吉人专属的攻速与产金。
- * 注：需勾选生效的独特科技（瓦兰吉哥瑟砍 1474、拜占庭后勤学 61）统一由 duelUnmodeled 按勾选态触发，不在此无条件覆盖。
+ * 注：独特科技不在此按时代无条件硬编码（哥瑟砍 1474、后勤学 61 由 duelUnmodeled 按勾选态触发；哈马思克 1484、盾墙 1464 按 issue 1522 移除残留硬编码）。
  */
 export function varangianPkNotes(unitId: number, civ: string, age: number, rof?: number, group = false, usesContact = group): VgNote[] {
   if (!VG_IDS.has(unitId)) return [];
@@ -53,23 +53,6 @@ export function varangianPkNotes(unitId: number, civ: string, age: number, rof?:
       label: '移动速度 +10%',
       status: usesContact ? 'counted' : 'uncounted',
       reason: usesContact ? '已反映在接敌移动速度' : '单挑不计移动速度',
-    });
-    if (age >= 3) {
-      notes.push({
-        id: 'danes-hamask',
-        civ,
-        label: '哈马思克（失去生命值时可造成更多伤害）',
-        status: 'uncounted',
-        reason: '特殊能力不计入单位 PK',
-      });
-    }
-  } else if (civ === 'Saxons' && age >= 4) {
-    notes.push({
-      id: 'sax-shield',
-      civ,
-      label: '盾墙（成群时额外护甲）',
-      status: 'uncounted',
-      reason: '特殊能力不计入单位 PK',
     });
   } else if (civ === 'Vikings' && age >= 2) {
     notes.push({

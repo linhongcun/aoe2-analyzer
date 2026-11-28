@@ -89,6 +89,7 @@ def unit(u):
             'Projectiles': [t.projectile_unit_id if t else -1, u.creatable.secondary_projectile_unit if u.creatable else -1],
             'ChargeProjectile': u.creatable.charge_projectile_unit if u.creatable else -1,
             'ChargeEvent': u.creatable.charge_event if u.creatable else 0,
+            'ChargeTarget': u.creatable.charge_target if u.creatable else 0,
             'RechargeRate': u.creatable.recharge_rate if u.creatable else 0,
             'TotalProjectiles': round(u.creatable.total_projectiles, 4) if u.creatable else 0,
             'MaxTotalProjectiles': int(u.creatable.max_total_projectiles) if u.creatable else 0,
@@ -156,12 +157,16 @@ def regen_rate_sig(u):
 def pop_space_sig(u):
     if u is None: return None
     return tuple(r.amount for r in u.resource_storages if r.type == 4)
+def charge_target_sig(u):
+    if u is None: return None
+    return u.creatable.charge_target if u.creatable else 0
 base_ct = [combat_tasks_sig(u) for u in d.civs[1].units]
 base_st = [spawn_tasks_sig(u) for u in d.civs[1].units]
 base_hm = [proj_hit_mode_sig(u) for u in d.civs[1].units]
 base_rr = [regen_rate_sig(u) for u in d.civs[1].units]
 base_ps = [pop_space_sig(u) for u in d.civs[1].units]
-bad_ct, bad_st, bad_hm, bad_rr, bad_ps = [], [], [], [], []
+base_cht = [charge_target_sig(u) for u in d.civs[1].units]
+bad_ct, bad_st, bad_hm, bad_rr, bad_ps, bad_cht = [], [], [], [], [], []
 for c in d.civs:
     if c.name == 'Gaia' or c.name in ROR: continue
     n = max(len(base_ct), len(c.units))
@@ -177,7 +182,9 @@ for c in d.civs:
             bad_rr.append('%s #%s' % (c.name, i))
         if (base_ps[i] if i < len(base_ps) else None) != pop_space_sig(cu) and len(bad_ps) < 12:
             bad_ps.append('%s #%s' % (c.name, i))
-    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12 and len(bad_rr) >= 12 and len(bad_ps) >= 12: break
+        if (base_cht[i] if i < len(base_cht) else None) != charge_target_sig(cu) and len(bad_cht) < 12:
+            bad_cht.append('%s #%s' % (c.name, i))
+    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12 and len(bad_rr) >= 12 and len(bad_ps) >= 12 and len(bad_cht) >= 12: break
 if bad_ct:
     raise SystemExit('文明单位特殊战斗任务（157/158/160）不一致（RoR 以外）：' + '；'.join(bad_ct))
 if bad_st:
@@ -188,6 +195,8 @@ if bad_rr:
     raise SystemExit('文明单位固有生命回复不一致（RoR 以外）：' + '；'.join(bad_rr))
 if bad_ps:
     raise SystemExit('文明单位人口空间存储不一致（RoR 以外）：' + '；'.join(bad_ps))
+if bad_cht:
+    raise SystemExit('文明单位充能目标掩码不一致（RoR 以外）：' + '；'.join(bad_cht))
 out = {
   'Techs': [{'Name': t.name, 'EffectID': t.effect_id, 'Civ': t.civ, 'RequiredTechs': list(t.required_techs), 'RequiredTechCount': t.required_tech_count,
              'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1]),
@@ -238,7 +247,7 @@ def derive_train_count(source_unit, unit_id=None):
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v26.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v27.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

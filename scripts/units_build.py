@@ -143,6 +143,14 @@ def derive_inherent_regen(source_unit):
     return norm if norm > 0 else None
 
 
+def derive_charge_target(source_unit):
+    """#1522：从固定 DAT 派生单位充能目标位掩码（ChargeTarget，fail-closed；非零整数含 -1 与正整数掩码均导出，不限 chargeType > 0）。"""
+    val = source_unit['ChargeTarget']
+    if type(val) is not int:
+        raise ValueError(f'Invalid ChargeTarget: {val!r}')
+    return val if val != 0 else None
+
+
 def resolve_building_train_time(source_unit, building_id, fallback_tt=None):
     """#1403：按目录主训练建筑匹配 .dat TrainAt 槽位时间；未命中槽位时回退 .dat TrainTime，仅当 .dat 缺有效值时回退 fallback_tt。"""
     train_at = source_unit.get('TrainAt') or []
@@ -301,6 +309,9 @@ def main():
                 and not (type(tp) in (int, float) and tp > 1)
             ):
                 u['chargeMultiProjectiles'] = True
+            charge_target = derive_charge_target(source_unit)
+            if charge_target is not None:
+                u['chargeTarget'] = charge_target
             u.update(derive_unmodeled_dat_fields(source_unit, _DU))
             if derive_death_heal_aura(source_unit, _DU):
                 u['deathHealAura'] = True
