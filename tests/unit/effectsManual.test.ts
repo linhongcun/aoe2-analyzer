@@ -43,7 +43,7 @@ describe('#795 手工回退效果表', () => {
 
   it('BUILDING_TEXT_ONLY 仍是独立文本层', async () => {
     const effects = await loadEffects(() => {});
-    expect(Object.keys(effects.BUILDING_TEXT_ONLY)).toContain('Ballistics');
+    expect(Object.keys(effects.BUILDING_TEXT_ONLY)).not.toContain('Ballistics');
     expect(Object.keys(effects.BUILDING_TEXT_ONLY)).toContain('Keep');
     expect(effects.TECH_SRC.Fletching).toBe('dat');
   });

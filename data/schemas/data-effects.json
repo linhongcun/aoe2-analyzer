@@ -239,9 +239,17 @@
             "minimum": 0
           },
           "uniqueItems": true
+        },
+        "buildings": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
         }
       },
-      "required": ["units", "chargeOnly"],
+      "required": ["units", "chargeOnly", "buildings"],
       "additionalProperties": false
     },
     "projectilePoison": {

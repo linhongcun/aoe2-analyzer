@@ -10,8 +10,6 @@ const is =
   (b) =>
     names.includes(b.en);
 const TOWERS = ['Watch Tower', 'Guard Tower', 'Keep'];
-/** 射箭的防御工事（受箭术系/化学影响） */
-const ARROW_FORT = is(...TOWERS, 'Castle', 'Krepost');
 /** Wiki Fletching/Bodkin/Bracer：Harbors、Kreposts、Bombard Towers 亦受益 */
 const FLETCH_BLD = is(...TOWERS, 'Castle', 'Krepost', 'Harbor', 'Bombard Tower');
 const DEFENSIVE = is(...TOWERS, 'Castle', 'Krepost', 'Donjon', 'Bombard Tower');
@@ -81,7 +79,6 @@ export const MANUAL_BUILDING_EFFECTS: Record<string, [BPred, Effect[]][]> = {
 /** 相关但不计入数值的科技（线路升级或不便数值化） */
 export const BUILDING_TEXT_ONLY: Record<string, BPred> = {
   'Heated Shot': is(...TOWERS),
-  Ballistics: ARROW_FORT,
   'Guard Tower': is('Watch Tower'),
   Keep: is('Guard Tower'),
   'Fortified Wall': is('Stone Wall'),
