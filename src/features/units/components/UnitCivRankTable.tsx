@@ -25,6 +25,8 @@ interface UnitCivRankTableProps {
   sortCol: RankSortCol;
   sortDir: SortDir;
   selected: readonly string[];
+  /** issue 1567：允许勾选进入单位 PK（默认 data.canDuel && data.rows.length >= 2；科技筛选命中 < 2 家时关闭以隐藏无效单选圈） */
+  allowSelect?: boolean;
   expandedCiv: string | null;
   preserveSearch: string;
   onSort: (col: RankSortCol) => void;
@@ -173,13 +175,14 @@ export function UnitCivRankTable({
   sortCol,
   sortDir,
   selected,
+  allowSelect,
   expandedCiv,
   preserveSearch,
   onSort,
   onToggleSelect,
   onToggleExpand,
 }: UnitCivRankTableProps) {
-  const showSelectCol = data.canDuel && data.rows.length >= 2;
+  const showSelectCol = allowSelect ?? (data.canDuel && data.rows.length >= 2);
   const applicableSet = new Set(data.applicableCols);
   const slotOf = (civ: string): 'A' | 'B' | null => {
     const idx = selected.indexOf(civ);

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Link, UNSAFE_NavigationContext, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { entityCivLink } from '../../../domain/civRoute';
@@ -16,6 +16,7 @@ import type { Trees, Unit } from '../../../domain/types';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
 import { unitTypeLabel, unitWorkspaceOpen, upgradeNotes, withUnitTab, discountView, replaceUnitCiv } from '../../../domain/unitDetailView';
 import { supportsUnitCivRank } from '../../../domain/unitCivRank';
+import { stripUnitRankQuery } from '../../../domain/unitCivRankFilter';
 import { trainingSites } from '../../../domain/unitTrainingSites';
 import { AgeImg, CivChip, CostView, DlcBadge, UnitIcon } from '../../../shared/ui/art';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
@@ -35,7 +36,6 @@ import { unitSiegeHref } from '../siegeEntry';
 import { resolveUnitForm } from '../unitFormDetail';
 import { UnitNotes } from './UnitNotes';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
-import { CONVERSION_ANCHOR, MONK_ID } from '../conversion';
 import { ConversionMechanics } from './ConversionMechanics';
 import { FishingGather } from './FishingGather';
 import { UnitAgeChanges } from './UnitAgeChanges';
@@ -56,6 +56,7 @@ import { UpgradeLine } from './UpgradeLine';
 import { UnitTrainingConditions } from './UnitTrainingConditions';
 import { FormAccess, FormBar, FormDifference, FormRelatedTechLink } from './UnitForms';
 import { AvailableCivsHeader, UnitCivRank } from './UnitCivRank';
+import { useUnitDetailScroll } from '../useUnitDetailScroll';
 import './unit-detail.css';
 import './unit-detail-1283.css';
 
@@ -90,6 +91,8 @@ export default function UnitDetail() {
   const opp = civByEn(params.get('opp') ?? '');
   const targetProjection = rawTarget ? projectUnitForDetail(rawTarget) : null;
   const u = targetProjection?.unit;
+  const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
+  const showCivRank = supportsUnitCivRank(u, !!alternate, invalidCombatProjection);
   const entityHistory = useEntityHistory(u ? 'unit/' + u.id : undefined, tab === 'history');
   const savedReverseSession = readReverseCounterSession(reverseCounterSessionKey(rt?.id ?? null, context?.en ?? '', loc), loc);
   const hasSavedReverseReaderLocation = !!(savedReverseSession?.anchor || savedReverseSession?.fallbackAnchor);
@@ -103,15 +106,14 @@ export default function UnitDetail() {
     const query = next.toString();
     nav({ pathname: loc.pathname, search: query ? `?${query}` : '' }, { state: loc.state });
   };
-
-  useEffect(() => {
-    if (hasSavedReverseReaderLocation) return;
-    if (workspace) document.getElementById('unit-sim')?.scrollIntoView({ block: 'start' });
-    else if (tab === 'rel') document.getElementById('unit-related')?.scrollIntoView({ block: 'start' });
-    else if (tab === 'history' && !entityHistory.empty) document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
-    else if (u?.id === MONK_ID && loc.hash === '#' + CONVERSION_ANCHOR) document.getElementById(CONVERSION_ANCHOR)?.scrollIntoView({ block: 'start' });
-    else scrollTo(0, 0);
-  }, [u?.id, workspace, tab, loc.hash, hasSavedReverseReaderLocation, entityHistory.empty]);
+  const { markRankQuerySync } = useUnitDetailScroll(loc, {
+    unitId: u?.id,
+    workspace,
+    hasSavedReverseReaderLocation,
+    entityHistoryEmpty: entityHistory.empty,
+    showCivRank,
+    treesReady: Boolean(trees),
+  });
 
   if (!core)
     return (
@@ -172,8 +174,6 @@ export default function UnitDetail() {
     training?.kind === 'unavailable' ? '当前文明不可训练' : site ? (building?.zh ?? '资料待核') : (building?.zh ?? u.bz.replace(/\s+/g, ''));
   const trainingBuildingLabel = extraBuildings.length ? [baseBuildingLabel, ...extraBuildings].join('、') : baseBuildingLabel;
   const siegeHref = unitSiegeHref(u, core.buildingById[82]);
-  const invalidCombatProjection = targetProjection?.invalidFields.some((field) => ['atks', 'armc', 'arms'].includes(field)) ?? false;
-  const showCivRank = supportsUnitCivRank(u, !!alternate, invalidCombatProjection);
   const showEngine = workspace && (!context || canTrain) && !invalidCombatProjection;
   const simulatorRoute = routeWithQueryCiv(rt, context && canTrain ? context.en : undefined, u.civs);
   const simNavigationAdapter: SimNavigationAdapter = ({ current, next, civ, maxRelics }) => {
@@ -183,7 +183,7 @@ export default function UnitDetail() {
     if (!sameUnitSimLocation(current, rendered)) return { kind: 'ignore' };
     return { kind: 'navigate', state: advanceUnitSimReturnState(loc.state, current, next, u.id, u.civs, civ, maxRelics ?? 0) };
   };
-  const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
+  const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + stripUnitRankQuery(loc.search);
   const setCiv = (en: string) => {
     const next = replaceUnitCiv(loc.pathname, loc.search, en);
     nav({ pathname: next.pathname, search: next.search }, { replace: true });
@@ -508,7 +508,7 @@ export default function UnitDetail() {
         </div>
       </section>
 
-      {showCivRank && <UnitCivRank key={u.id} unit={u} core={core} trees={trees} treeWaiting={treeWaiting} />}
+      {showCivRank && <UnitCivRank key={u.id} unit={u} core={core} trees={trees} treeWaiting={treeWaiting} onRankQuerySync={markRankQuerySync} />}
 
       {alternate ? (
         workspace && (

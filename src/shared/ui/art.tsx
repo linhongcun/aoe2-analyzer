@@ -14,7 +14,7 @@ export const CivIcon = ({ c, alt }: { c: Pick<Civ, 'en'>; alt?: string }) => (
 export const UnitIcon = ({ u, big }: { u: Unit; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`units/${u.pic}.webp`)} alt="" loading="lazy" decoding="async" />
 );
-export const TechIcon = ({ t, big }: { t: Tech; big?: boolean }) => (
+export const TechIcon = ({ t, big }: { t: Pick<Tech, 'pic'>; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`techs/${t.pic}.webp`)} alt="" loading="lazy" />
 );
 /** 单位链接；传入 elite 时表示“普通+精锐”合并条目，名称后带「精锐」小标 */

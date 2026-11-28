@@ -16,6 +16,7 @@ import { formatHp } from './hpFormat';
 import { applicableSimCostTechs } from './simEffectiveCost';
 import { simTechs, simulate, unitPath, type SimContext } from './simulator';
 import type { Tech, Unit } from './types';
+import { deriveUnitRankFilterTechs, type UnitCivRankFilterTech } from './unitCivRankFilter';
 
 export type { SortDir };
 export type RankCombatKind = 'normal' | 'suicide' | 'non-attacking';
@@ -115,6 +116,8 @@ export interface UnitCivRankResult {
   defaultSortCol: RankMetricCol;
   applicableCols: readonly RankMetricCol[];
   rows: UnitCivRankRow[];
+  /** issue 1567：当前时代存在文明差异的适用通用/区域科技候选池（age ASC, id ASC） */
+  filterTechs: UnitCivRankFilterTech[];
   bestValues: Partial<Record<RankMetricCol, number>>;
   champions: UnitCivRankChampion[];
   commonMechanisms: string[];
@@ -378,33 +381,10 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     RANK_COL_META_BY_KEY[defaultSortCol].bestDir,
   );
 
+  const filterTechs = deriveUnitRankFilterTechs(unionList, rows);
+
   // 3. 最优值与各项第一：仅当领先者少于半数（且对 n = 2 退化边界放行 1/2 唯一胜出）
-  const bestValues: Partial<Record<RankMetricCol, number>> = {};
-  const champions: UnitCivRankChampion[] = [];
-  if (rows.length >= 2) {
-    for (const meta of RANK_METRIC_COLS) {
-      if (!applicableCols.includes(meta.col)) continue;
-      const valid = rows.filter((r) => r[meta.col] !== null);
-      if (valid.length < 2) continue;
-      let best = quantizeRankMetric(meta.col, valid[0]![meta.col]!);
-      for (let i = 1; i < valid.length; i++) {
-        const v = quantizeRankMetric(meta.col, valid[i]![meta.col]!);
-        if (meta.bestDir === 'desc' ? v > best : v < best) best = v;
-      }
-      const leaders = valid.filter((r) => Math.abs(quantizeRankMetric(meta.col, r[meta.col]!) - best) <= EPS);
-      const qualifies = leaders.length < valid.length / 2 || (valid.length === 2 && leaders.length === 1);
-      if (!qualifies) continue;
-      bestValues[meta.col] = best;
-      champions.push({
-        col: meta.col,
-        label: meta.championLabel,
-        bestDir: meta.bestDir,
-        value: best,
-        formattedValue: formatRankMetric(meta.col, best),
-        civs: leaders.map((r) => ({ civ: r.civ, civZh: r.civZh })),
-      });
-    }
-  }
+  const { bestValues, champions } = computeUnitCivRankSummary(rows, applicableCols);
 
   return {
     unitId: u.id,
@@ -419,6 +399,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     defaultSortCol,
     applicableCols,
     rows,
+    filterTechs,
     bestValues,
     champions,
     commonMechanisms,
@@ -426,6 +407,39 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     hasRelicBonus: rows.some((r) => Boolean(r.relicBonus)),
     hasBonusDamageReduction: rows.some((r) => (r.bonusDamageReduction ?? 0) > 0),
   };
+}
+
+/** 按指定文明行子集重算各列最优值与「各项第一」（少于半数领先，n = 2 放行 1/2 唯一胜出；< 2 家返回空）。 */
+export function computeUnitCivRankSummary(
+  rows: readonly UnitCivRankRow[],
+  applicableCols: readonly RankMetricCol[],
+): { bestValues: Partial<Record<RankMetricCol, number>>; champions: UnitCivRankChampion[] } {
+  const bestValues: Partial<Record<RankMetricCol, number>> = {};
+  const champions: UnitCivRankChampion[] = [];
+  if (rows.length < 2) return { bestValues, champions };
+  for (const meta of RANK_METRIC_COLS) {
+    if (!applicableCols.includes(meta.col)) continue;
+    const valid = rows.filter((r) => r[meta.col] !== null);
+    if (valid.length < 2) continue;
+    let best = quantizeRankMetric(meta.col, valid[0]![meta.col]!);
+    for (let i = 1; i < valid.length; i++) {
+      const v = quantizeRankMetric(meta.col, valid[i]![meta.col]!);
+      if (meta.bestDir === 'desc' ? v > best : v < best) best = v;
+    }
+    const leaders = valid.filter((r) => Math.abs(quantizeRankMetric(meta.col, r[meta.col]!) - best) <= EPS);
+    const qualifies = leaders.length < valid.length / 2 || (valid.length === 2 && leaders.length === 1);
+    if (!qualifies) continue;
+    bestValues[meta.col] = best;
+    champions.push({
+      col: meta.col,
+      label: meta.championLabel,
+      bestDir: meta.bestDir,
+      value: best,
+      formattedValue: formatRankMetric(meta.col, best),
+      civs: leaders.map((r) => ({ civ: r.civ, civZh: r.civZh })),
+    });
+  }
+  return { bestValues, champions };
 }
 
 export function isRankBestCell(result: Pick<UnitCivRankResult, 'bestValues'>, col: RankMetricCol, value: number | null): boolean {
