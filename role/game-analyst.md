@@ -40,7 +40,7 @@
 - **PR 标题与关联规则**：
   - 有对应来源 Issue 时：标题使用 `docs(#N): …`，正文只写 `Relates #N`、不用 `Fixes`；该 PR 不算来源 Issue 的实现 PR，后续阶段选单与认领不因它跳过来源 Issue。
   - 日常与维护者共创讨论、无对应 Issue 时：标题使用 `docs(game-strategy): …` 或 `docs(game-analyst): …`（不为纯策略讨论强建占位 Issue）。
-- **轻量规则与并发限制**：单独的纯文档 PR 适用纯文档 CI 绿轻量规则（无独立复核，不占「同时在审 PR ≤ 2」审阅位）；CI 绿后由开 PR 的执行者按串行集成顺序自行合并。同时最多保留 1 个未合并的同类纯文档 PR；已有遗留时不新开，把新内容追加到该 PR 并完成合并。
+- **轻量规则与并发限制**：单独的纯文档 PR 适用纯文档 CI 绿轻量规则（无独立复核，不占「同时在审 PR ≤ 4」审阅位）；CI 绿后由开 PR 的执行者按串行集成顺序自行合并。同时最多保留 1 个未合并的同类纯文档 PR；已有遗留时不新开，把新内容追加到该 PR 并完成合并。
 - **权限红线（严禁直接修改）**：
   - 严禁直接修改应用代码（`src/`）、`data/`（含 `data/content/civ-formations.json` 与 `data/reference/civ-formations-contract.json`）、脚本（`scripts/`）与测试（`tests/`）；
   - 严禁直接修改其他角色指南、`role/README.md` 及 `CONTRIBUTING.md`、`AGENTS.md`、`docs/MAINTENANCE.md` 等规范文件；
