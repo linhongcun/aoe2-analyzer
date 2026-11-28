@@ -25,6 +25,7 @@ type Eff = { kind: string; attr?: string; target?: string; op?: string; v?: numb
 const E = eco as unknown as {
   villager: { speed: number; tasks: Record<string, { workRate: number; carry: number }> };
   ecoTechs: Record<string, { effects: Eff[] }>;
+  ecoTechDisabledCivs: Record<string, string[]>;
   civEco: Record<string, { tech?: number; effects: Eff[] }[]>;
 };
 const v = (tech: number, target: string, attr: string, civ?: string) => {
@@ -46,6 +47,7 @@ const farm = T.farm!.workRate;
 const LABEL_REASON: Record<string, string> = { 波兰庄园农田加成: '大庄园替代磨坊，未建模' };
 const UNCOUNTED_CASES = [
   ['Danes', '捕鱼船和村民存放的食物 +5%', '存放食物，未建模'],
+  ['Khitans', '牧场取代农田', '按农田算，未建模'],
   ['Malians', '村民存放的黄金额外 +10%', '存放黄金加成，未建模'],
   ['Poles', '石矿工不仅能产生石料，还能产生黄金', '石矿工兼产黄金，未建模'],
   ['Portuguese', '采果工不仅能产生食物，还能产生木材', '采果兼产木材，未建模'],
@@ -428,6 +430,60 @@ describe('issue 1521 丹麦食物存放加成 res:299 未计入提示与非目�
       for (const age of [1, 2, 3, 4]) {
         expect(gatherModel(age, civ).unsupported, `${civ}@${age}`).toEqual([]);
         expect(gatherUnsupportedSources(age, civ), `${civ}@${age}`).toEqual([]);
+      }
+    }
+  });
+});
+
+describe('Issue 1532 契丹牧场取代农田未计入提示与全站唯一命中', () => {
+  it('契丹全 4 时代在默认与显式 techIds 口径均返回 civ:pasture（bonusIdx: 0）且维持基准速率；RealCostBlock 渲染 UX 定稿文案', () => {
+    for (const age of [1, 2, 3, 4]) {
+      const baseRate = gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Khitans') }).rate;
+      for (const opts of [undefined, { techIds: new Set<number>() }, { techIds: new Set([202, 203, 55]) }]) {
+        const g = gatherModel(age, 'Khitans', opts);
+        expect(g.applied, `age=${age}`).toEqual([]);
+        expect(g.unsupported, `age=${age}`).toEqual([{ label: '牧场取代农田', techs: [] }]);
+        expect(gatherUnsupportedSources(age, 'Khitans', opts), `age=${age}`).toEqual([
+          { key: 'civ:pasture', label: '牧场取代农田', techs: [], fromTree: false, bonusIdx: 0 },
+        ]);
+        if (opts === undefined) expect(g.rate, `age=${age}`).toEqual(baseRate);
+      }
+    }
+
+    const expected = '未计入：契丹 牧场取代农田（按农田算，未建模）';
+    for (const unitId of [441, 1372, 474]) {
+      const unit = (units as Unit[]).find((u) => u.id === unitId)!;
+      const html = renderToStaticMarkup(
+        createElement(RealCostBlock, {
+          k: 'b',
+          civ: 'Khitans',
+          civZh: '契丹',
+          age: 4,
+          d: discountedCost(unit, 'Khitans', 4),
+          vils: DEFAULT_VILS,
+          min: DEFAULT_MIN,
+        }),
+      );
+      const rows = [...html.matchAll(/data-t="rc-unsupported">.*?<span title="([^"]*)">([^<]*)<\/span>/g)];
+      expect(
+        rows.map((r) => [r[1], r[2]]),
+        `unit=${unitId}`,
+      ).toEqual([[expected, expected]]);
+      expect(html).not.toContain('来源：aoe2techtree 文明描述');
+    }
+  });
+
+  it('全站 56 国仅契丹命中 civ:pasture（与 ecoTechDisabledCivs 13/14 一致），聚落 4 国及未知文明零误报', () => {
+    expect(E.ecoTechDisabledCivs['13']).toEqual(['Khitans']);
+    expect(E.ecoTechDisabledCivs['14']).toEqual(['Khitans']);
+    for (const age of [1, 2, 3, 4]) {
+      const matched = civs.filter((c) => gatherUnsupportedSources(age, c.en).some((s) => s.key === 'civ:pasture')).map((c) => c.en);
+      expect(matched, `age=${age}`).toEqual(['Khitans']);
+      for (const civ of ['Incas', 'Mapuche', 'Muisca', 'Tupi', '', 'Unknown']) {
+        expect(
+          gatherUnsupportedSources(age, civ).some((s) => s.key === 'civ:pasture'),
+          `${civ}@${age}`,
+        ).toBe(false);
       }
     }
   });

@@ -23,8 +23,11 @@ function matchesGatherSourceKey(e: DatEco, key: string): boolean {
   return false;
 }
 
-/** 解析未计入采集来源在 DAT.civs[civ].bonus 中对应的唯一 civ.bon 序号；来源混合、缺失、含 null 或多值一律返回 null。 */
+/** 解析未计入采集来源在 DAT.civs[civ].bonus 中对应的唯一 civ.bon 序号；优先采用显式非负整数 bonusIdx，否则反查 DAT，来源混合、缺失、含 null 或多值一律返回 null。 */
 export function resolveGatherBonusIdx(source: CivGatherSource, entries: readonly DatEntry[]): number | null {
+  if (typeof source.bonusIdx === 'number' && Number.isInteger(source.bonusIdx) && source.bonusIdx >= 0) {
+    return source.bonusIdx;
+  }
   if (source.techs.length > 0 && source.fromTree) return null;
   const indices = new Set<number>();
   if (source.techs.length > 0) {

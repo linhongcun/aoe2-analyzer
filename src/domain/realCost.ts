@@ -76,6 +76,8 @@ export interface CivGatherLine {
 export interface CivGatherSource extends CivGatherLine {
   key: string;
   fromTree: boolean;
+  /** Issue 1532：无法从 DAT.civs[civ].bonus 反查时显式指定对应的 civ.bon 序号 */
+  bonusIdx?: number;
 }
 export interface GatherModel {
   age: number;
@@ -243,6 +245,10 @@ function collectCivGather(age: number, civ: string, options: CivGatherOptions = 
     if (s !== undefined && c.exact && !c.uncertain) {
       applied.push({ key, mul: c.m.mul, label, techs: c.techs, source: civByEn(civ)?.bon[s.bonus] ?? '' });
     } else unsupported.push({ key, label, techs: c.techs, fromTree: c.fromTree });
+  }
+  // Issue 1532：同时禁用重犁(13)与马轭(14)的文明（全站 56 国唯一命中契丹）用牧场取代农田，不在 civEco 采集行内
+  if (validCiv !== '' && isEcoTechDisabledForCiv(13, validCiv) && isEcoTechDisabledForCiv(14, validCiv)) {
+    unsupported.push({ key: 'civ:pasture', label: '牧场取代农田', techs: [], fromTree: false, bonusIdx: 0 });
   }
   return { applied, unsupported };
 }

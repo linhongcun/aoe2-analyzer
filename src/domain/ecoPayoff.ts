@@ -187,7 +187,6 @@ export function calculateEcoPayoff(ctx: ProductionContext, config: EcoPayoffConf
     Muisca: '穆伊斯卡自身团队天然黄金机制尚未完整核实。',
     Wei: '魏研究经济科技赠送村民未计入；本模型固定村民人数。',
     Spanish: '西班牙研究科技获得黄金的奖励未计入。',
-    Khitans: '契丹的牧场食物机制不在农田基准模型内。',
   };
   if (special[config.civ]) warnings.push(special[config.civ]!);
   if (config.civ === 'Vietnamese' && config.age === 4) warnings.push('越南纸币及其与伐木科技的额外产金联动未计入。');

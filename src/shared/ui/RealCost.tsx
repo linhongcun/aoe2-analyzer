@@ -13,6 +13,7 @@ const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 const UNCOUNTED_REASON: Record<string, string> = {
   Bohemians: '需研究科技，未建模',
   Danes: '存放食物，未建模',
+  Khitans: '按农田算，未建模',
   Mayans: '资源多持续 15%，不是采集变快，暂不计入',
   Malians: '存放黄金加成，未建模',
   Poles: '石矿工兼产黄金，未建模',
