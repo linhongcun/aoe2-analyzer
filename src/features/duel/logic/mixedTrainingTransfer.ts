@@ -1,4 +1,5 @@
 import { DAT, toEffects, type DatEco } from '../../../domain/datEffects';
+import { getProjectileGuidanceScope } from '../../../domain/duelUnmodeledEco';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { NON_PRICING_RESOURCE_SET } from '../../../domain/gameIds';
 import type { MixedSideInput } from '../../../domain/mixedDuelParams';
@@ -72,14 +73,17 @@ export function mixedTrainingTransfer(context: ProductionContext, input: MixedSi
     const unclassifiedEffect =
       data.eco.some((effect) => isUnclassifiedTransferEcoEffect(effect, armyUnitIds, context.core.unitById)) ||
       data.rules.some((rule) => toEffects(rule.fx).length !== rule.fx.length);
+    const hasGuidance = Boolean(getProjectileGuidanceScope(tech.en));
     if (unclassifiedEffect) {
       fail('techs', `${tech.zh}有尚未核实的训练条件。`);
     } else if (priceEffect || unlock) {
       if (priceEffect) pricing.push(id);
       if (unlock) unlocks.push(id);
-    } else if (data.rules.length || data.eco.length || tech.en === 'Ballistics' || unlockIds.includes(id)) {
+    } else if (data.rules.length || data.eco.length || tech.en === 'Ballistics' || hasGuidance || unlockIds.includes(id)) {
       const combatOnly =
-        tech.en === 'Ballistics' || (data.rules.length && !data.eco.length && data.rules.every((rule) => rule.fx.every((effect) => effect.s !== 'bt')));
+        tech.en === 'Ballistics' ||
+        (hasGuidance && !data.rules.length && !data.eco.length) ||
+        (data.rules.length && !data.eco.length && data.rules.every((rule) => rule.fx.every((effect) => effect.s !== 'bt')));
       omitted.push(`${tech.zh}（${combatOnly ? '仅影响战斗' : '不改变本方训练单价或解锁'}）`);
     } else {
       fail('techs', `${tech.zh}有尚未核实的训练条件。`);

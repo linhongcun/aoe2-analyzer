@@ -4,15 +4,19 @@
  */
 import { applyCombatAbilityEco, DAT, type DatEco } from './datEffects';
 import {
+  getProjectileGuidanceScope,
   hasPositiveDamageReflection,
   hasPositiveEcoAttr,
   hasPositiveExtraProjectiles,
   hasPositiveRegen,
   hasPositiveSplash,
+  hasProjectileGuidance,
   hasProjectilePassThrough,
   hasProjectilePoison,
   isSingleShotChargeProjectileEco,
   keepsScopedUnmodeledTech,
+  projectileGuidanceDuelDetail,
+  projectileGuidanceLabel,
   resolveTechChargeGrant,
   type TechChargeGrant,
 } from './duelUnmodeledEco';
@@ -42,7 +46,8 @@ export type UnmodeledKind =
   | 'low-hp-transform'
   | 'regen'
   | 'death-heal'
-  | 'damage-reflection';
+  | 'damage-reflection'
+  | 'projectile-guidance';
 
 export interface UnmodeledMechanism {
   kind: UnmodeledKind;
@@ -135,6 +140,7 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
       resolveTechChargeGrant(eco, unitId, baseChargeType) !== null ||
       hasProjectilePoison(t.en, unitId) ||
       hasProjectilePassThrough(t.en, unitId) ||
+      hasProjectileGuidance(t.en, unitId) ||
       changesUnmodeledCombatAbility(eco, unitId, baseCombatAbility)
     ) {
       ids.add(t.id);
@@ -450,6 +456,15 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
       techId: tech.id,
       techEn: tech.en,
     });
+  }
+
+  // 15. 投射物追踪与弹速提升（已选科技 DAT.projectileGuidance，不改动面板与 PK 数值）
+  for (const tech of selectedTechs) {
+    const scope = getProjectileGuidanceScope(tech.en);
+    if (!scope || !tech.civs.includes(civ) || !scope.units.includes(unit.id)) continue;
+    const label = projectileGuidanceLabel(scope);
+    const detail = projectileGuidanceDuelDetail(scope, tech.zh);
+    if (label && detail) out.push({ kind: 'projectile-guidance', pill: `${label} · ${tech.zh}`, detail, techId: tech.id, techEn: tech.en });
   }
 
   return out;

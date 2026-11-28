@@ -110,6 +110,10 @@ export interface DatProjectileScope {
   units: number[];
   buildings: number[];
 }
+export interface DatProjectileGuidanceScope extends DatProjectileScope {
+  tracking: boolean;
+  speed: boolean;
+}
 export type DatProjectilePoison = DatProjectileScope;
 export interface DatFile {
   costDiscounts: Record<string, DatCostDiscount[]>;
@@ -120,6 +124,7 @@ export interface DatFile {
   ballistics?: DatBallistics;
   projectilePoison?: Record<string, DatProjectileScope>;
   projectilePassThrough?: Record<string, DatProjectileScope>;
+  projectileGuidance?: Record<string, DatProjectileGuidanceScope>;
   combatAbilityBase?: Record<string, number>;
 }
 export const DAT = raw as unknown as DatFile;

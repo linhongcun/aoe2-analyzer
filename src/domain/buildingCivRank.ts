@@ -32,6 +32,7 @@ import { finiteOr, fmtTrim, RANK_EPS } from './civRankShared';
 import { civStatus } from './civStatus';
 import { calculateConstruction, constructionTechs, DEFAULT_CONSTRUCTION } from './construction';
 import { DAT } from './datEffects';
+import { getProjectileGuidanceScope, projectileGuidanceLabel } from './duelUnmodeledEco';
 import { costSum } from './duel';
 import { BUILDING_EFFECTS, GENERIC_FX, genericBuildingTriggerReqs } from './effects';
 import { applicableSimCostTechs, buildSimEffectiveCost, presetCostTechIds } from './simEffectiveCost';
@@ -221,7 +222,9 @@ function deriveUniqueTechTags(
     });
     const ecoHits = (dt?.eco ?? []).filter((e) => e.t?.includes(b.id));
     const hasPoison = DAT.projectilePoison?.[t.en]?.buildings.includes(b.id) ?? false;
-    if (!matchingRules.length && !genericRules.length && !ecoHits.length && !hasPoison) continue;
+    const guidanceScope = getProjectileGuidanceScope(t.en);
+    const guidanceLabel = guidanceScope?.buildings.includes(b.id) ? projectileGuidanceLabel(guidanceScope) : null;
+    if (!matchingRules.length && !genericRules.length && !ecoHits.length && !hasPoison && !guidanceLabel) continue;
 
     if ((matchingRules.length || genericRules.length) && sel.has(t.id)) {
       const without = new Set(sel);
@@ -256,6 +259,7 @@ function deriveUniqueTechTags(
     if (workRate) tags.push(`未计入：训练速度 ×${fmtTrim(workRate.v, 2)} · ${t.zh}`);
 
     if (hasPoison) tags.push(`未计入：命中后持续伤害 · ${t.zh}`);
+    if (guidanceLabel) tags.push(`未计入：${guidanceLabel} · ${t.zh}`);
   }
   return [...new Set(tags)];
 }

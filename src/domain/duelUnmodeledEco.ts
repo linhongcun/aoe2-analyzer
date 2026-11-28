@@ -2,7 +2,7 @@
  * issue 1482：单位 PK 未建模机制的纯 eco/充能/作用域谓词（下层无环纯函数模块，仅依赖 datEffects / unitCost / types）。
  * 100% 由固定 DAT 导出数据驱动，零硬编码单位或科技 ID 白名单。
  */
-import { DAT, type DatEco } from './datEffects';
+import { DAT, type DatEco, type DatFile, type DatProjectileGuidanceScope } from './datEffects';
 import type { Tech } from './types';
 import { isUnitCostAttribute } from './unitCost';
 
@@ -42,6 +42,48 @@ export const hasPositiveExtraProjectiles = (eco: readonly DatEco[] | undefined, 
 export const hasPositiveRegen = (eco: readonly DatEco[] | undefined, unitId: number) => hasPositiveEcoAttr(eco, unitId, 109, EPS);
 export const hasProjectilePoison = (techEn: string, unitId: number): boolean => DAT.projectilePoison?.[techEn]?.units.includes(unitId) ?? false;
 export const hasProjectilePassThrough = (techEn: string, unitId: number): boolean => DAT.projectilePassThrough?.[techEn]?.units.includes(unitId) ?? false;
+
+/** issue 1509：读取有效投射物追踪/弹速范围（要求 tracking || speed 至少一项为真，支持测试注入 dat）。 */
+export function getProjectileGuidanceScope(techEn: string, dat: DatFile = DAT): DatProjectileGuidanceScope | undefined {
+  const scope = dat.projectileGuidance?.[techEn];
+  return scope && (scope.tracking || scope.speed) ? scope : undefined;
+}
+
+export const hasProjectileGuidance = (techEn: string, unitId: number): boolean => getProjectileGuidanceScope(techEn)?.units.includes(unitId) ?? false;
+
+export function projectileGuidanceLabel(scope: Pick<DatProjectileGuidanceScope, 'tracking' | 'speed'>): string | null {
+  if (scope.tracking && scope.speed) return '弹丸追踪与提速';
+  if (scope.tracking) return '弹丸追踪';
+  if (scope.speed) return '弹丸提速';
+  return null;
+}
+
+export function projectileGuidanceUnitScopeNote(scope: Pick<DatProjectileGuidanceScope, 'tracking' | 'speed'>): string | null {
+  if (scope.tracking && scope.speed) return '研究后该单位投射物具备移动目标追踪并提升飞行速度；面板数值（含移速）与 PK 伤害均未计入。';
+  if (scope.tracking) return '研究后该单位投射物具备移动目标追踪；面板数值与 PK 伤害均未计入。';
+  if (scope.speed) return '研究后该单位投射物飞行速度提升；面板数值（含移速）与 PK 伤害均未计入。';
+  return null;
+}
+
+export function projectileGuidanceBuildingScopeNote(scope: Pick<DatProjectileGuidanceScope, 'tracking' | 'speed'>): string | null {
+  if (scope.tracking && scope.speed) return '研究后本建筑投射物具备移动目标追踪并提升飞行速度；面板数值未计入。';
+  if (scope.tracking) return '研究后本建筑投射物具备移动目标追踪；面板数值未计入。';
+  if (scope.speed) return '研究后本建筑投射物飞行速度提升；面板数值未计入。';
+  return null;
+}
+
+export function projectileGuidanceDuelDetail(scope: Pick<DatProjectileGuidanceScope, 'tracking' | 'speed'>, techZh: string): string | null {
+  if (scope.tracking && scope.speed) {
+    return `当前未计入弹丸对移动目标的追踪提前量与弹丸飞行速度提升（已选科技「${techZh}」；未勾选该科技时本项不会触发）；面板与 PK 数值不变，对移动目标与拉扯作战的实际命中表现可能更优。`;
+  }
+  if (scope.tracking) {
+    return `当前未计入弹丸对移动目标的追踪提前量（已选科技「${techZh}」；未勾选该科技时本项不会触发）；面板与 PK 数值不变，对移动目标与拉扯作战的实际命中表现可能更优。`;
+  }
+  if (scope.speed) {
+    return `当前未计入弹丸飞行速度提升（已选科技「${techZh}」；未勾选该科技时本项不会触发）；面板与 PK 数值不变，对移动目标与远距离交火的实际命中表现可能更优。`;
+  }
+  return null;
+}
 
 /**
  * 按命令顺序计算单一属性号的有限数值 set/add/mul 生效结果，
@@ -168,23 +210,25 @@ export function isSingleShotChargeProjectileEco(eco: readonly DatEco[] | undefin
 }
 
 /**
- * 统一裁剪按固定数据限定单位作用域的未建模科技（投射物剧毒、投射物直线穿透、近战伤害反弹 a:118、科技赋予充能 a:62）。
- * 非上述四类作用域科技原样保留（返回 true）；命中作用域的科技须通过文明归属校验，
+ * 统一裁剪按固定数据限定单位作用域的未建模科技（投射物剧毒、投射物直线穿透、投射物追踪/弹速、近战伤害反弹 a:118、科技赋予充能 a:62）。
+ * 非上述五类作用域科技原样保留（返回 true）；命中作用域的科技须通过文明归属校验，
  * 且对目标单位仍具备任一有效规则、未建模或费用效果（如 997 在 1948 楼船上的 a:107 set 11）方可保留。
  */
 export function keepsScopedUnmodeledTech(tech: Tech | undefined, civ: string | undefined, unitId: number, baseChargeType = 0): boolean {
   if (!tech) return true;
   const poison = DAT.projectilePoison?.[tech.en];
   const passThrough = DAT.projectilePassThrough?.[tech.en];
+  const guidance = getProjectileGuidanceScope(tech.en);
   const datTech = DAT.techs[tech.en];
   const eco = datTech?.eco;
   const hasAnyReflection = hasAnyPositiveDamageReflection(eco);
   const hasAnyCharge = hasAnyPositiveTechCharge(eco);
-  if (!poison && !passThrough && !hasAnyReflection && !hasAnyCharge) return true;
+  if (!poison && !passThrough && !guidance && !hasAnyReflection && !hasAnyCharge) return true;
   if (civ !== undefined && !tech.civs.includes(civ)) return false;
   if (
     poison?.units.includes(unitId) ||
     passThrough?.units.includes(unitId) ||
+    guidance?.units.includes(unitId) ||
     hasPositiveDamageReflection(eco, unitId) ||
     resolveTechChargeGrant(eco, unitId, baseChargeType) !== null ||
     hasPositiveExtraProjectiles(eco, unitId) ||
