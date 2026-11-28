@@ -1335,9 +1335,30 @@ table.ediff td.dn {
 }
 .bonusbody .busage .num,
 .bonusbody .datfx .num,
-.bonusbody .affef .tag .num {
+.bonusbody .note .num,
+.bonusbody .affef .num,
+.bonusbody .affef .tag .num,
+.bonusbody .bex .num,
+.bonusbody .bonus-tech-unavail .num,
+.bonusbody .bonus-tech-list .num,
+.bonusbody .bonus-raw-unowned .num {
   color: inherit;
   font-weight: inherit;
+}
+.bonusbody .bex .bex-val,
+.bonusbody .bex .bex-val.num {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.bonusbody .bex .up,
+.bonusbody .bex .up.num {
+  color: var(--color-good);
+  font-weight: 700;
+}
+.bonusbody .bex .bex-delta.up,
+.bonusbody .bex .bex-delta.up.num {
+  color: var(--color-good);
+  font-weight: 600;
 }
 .bex {
   margin: 8px 0;

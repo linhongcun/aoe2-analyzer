@@ -2,9 +2,21 @@
  * 文明加成 / 团队加成作为一等实体（与科技同等对待）。
  * 数值效果与模拟器同源：effects.ts 合成的 CIV_BONUSES / BUILDING_CIV_BONUSES / TEAM_BONUSES（.dat 优先、手工回退，按 bon 序号关联）。
  */
-import { effectKey, effectParts, unitGroup, type AffectGroup, type AffectRow } from './affects';
+import { effectKey, effectParts, unitGroup } from './affects';
 import { buildingBase, type BCivBonus, type BPred } from './buildingSim';
 import { BUILDING_TYPE_ZH } from './buildings';
+import {
+  bonusUnavailableTechs,
+  buildTechByEn,
+  buildTechFxAffects,
+  buildTechFxExample,
+  datEntryUnavailableTechs,
+  type BonusAffectGroup,
+  type BonusAffectRow,
+  type TechExampleBlock,
+  type TechExampleKind,
+  type TechTriggerMeta,
+} from './civBonusTechFx';
 import type { DatConditionalEntry, DatEco, DatEntry } from './datEffects';
 import {
   activeRelicBonus,
@@ -26,7 +38,9 @@ import {
 } from './effects';
 import { formatHp } from './hpFormat';
 import { applyEffects, baseStats } from './simulator';
-import type { Building, Civ, Effect, NumStat, StatSet, Unit } from './types';
+import type { Building, Civ, Effect, NumStat, StatSet, Tech, Unit } from './types';
+
+export { bonusUnavailableTechs, buildTechByEn, datEntryUnavailableTechs, type BonusAffectGroup, type TechExampleBlock, type TechTriggerMeta };
 
 export type BonusCat = '经济' | '军事' | '建筑' | '科技' | '费用' | '海军' | '僧侣' | '其他';
 export const BONUS_CATS: BonusCat[] = ['经济', '军事', '建筑', '科技', '费用', '海军', '僧侣', '其他'];
@@ -169,12 +183,18 @@ export const bldEffects = (b: CivBonusEnt, x: Building, age: number): Effect[] =
   ...b.teamBld.filter(([f]) => f(x)).flatMap(([, fx]) => fx),
 ];
 
-/** 作用对象（与模拟器同一判定）。按帝王时代数值合并同效果；civOnly=true 时只列该文明拥有的单位/建筑（团队加成列全部） */
-export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: readonly Building[], civOnly = true): AffectGroup[] {
-  const G = new Map<string, Map<string, AffectRow>>();
+/** 作用对象（与模拟器同一判定）。按帝王时代数值合并同效果；civOnly=true 时只列该文明拥有的单位/建筑（团队加成列全部）；传入 techs 时覆盖科技触发型加成（b.techFx）并按 t.civs 过滤本文明不可研究前置 */
+export function bonusAffects(
+  b: CivBonusEnt,
+  units: readonly Unit[],
+  buildings: readonly Building[],
+  civOnly = true,
+  techs?: readonly Tech[],
+): BonusAffectGroup[] {
+  const G = new Map<string, Map<string, BonusAffectRow>>();
   const add = (g: string, ef: Effect[], u?: Unit, x?: Building) => {
     const k = effectKey(ef);
-    const m = G.get(g) ?? new Map<string, AffectRow>();
+    const m = G.get(g) ?? new Map<string, BonusAffectRow>();
     G.set(g, m);
     const r = m.get(k) ?? { effect: k, parts: effectParts(ef), units: [], buildings: [] };
     m.set(k, r);
@@ -189,7 +209,7 @@ export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: 
     if (b.relicFx && b.relicFx.unitIds.has(u.id)) {
       const g = unitGroup(u);
       const label = `每件圣物 攻击 +${b.relicFx.perRelicAtk}（最多 +${b.relicFx.maxAtk}）`;
-      const m = G.get(g) ?? new Map<string, AffectRow>();
+      const m = G.get(g) ?? new Map<string, BonusAffectRow>();
       G.set(g, m);
       const r = m.get(label) ?? { effect: label, parts: [{ icon: 'atk', text: label }], units: [], buildings: [] };
       m.set(label, r);
@@ -201,7 +221,17 @@ export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: 
     const ef = bldEffects(b, x, 4);
     if (ef.length) add(BUILDING_TYPE_ZH[x.type] + '建筑', ef, undefined, x);
   });
-  return [...G.entries()].map(([group, m]) => ({ group, rows: [...m.values()] }));
+  const baseGroups: BonusAffectGroup[] = [...G.entries()].map(([group, m]) => ({ group, rows: [...m.values()] }));
+  if (!b.techFx.length || !techs?.length) return baseGroups;
+  const techGroups = buildTechFxAffects(b, units, techs, civOnly);
+  if (!baseGroups.length) return techGroups;
+  const merged = new Map<string, BonusAffectRow[]>(baseGroups.map((g) => [g.group, [...g.rows]]));
+  for (const tg of techGroups) {
+    const existing = merged.get(tg.group);
+    if (existing) existing.push(...tg.rows);
+    else merged.set(tg.group, [...tg.rows]);
+  }
+  return [...merged.entries()].map(([group, rows]) => ({ group, rows }));
 }
 
 export interface RelicExampleRow {
@@ -218,6 +248,12 @@ export interface Example {
   rows: [number[], NumStat, number, number][];
   /** 条件触发圣物加成的 0..maxRelics 件逐档示例行 */
   relicRows?: RelicExampleRow[];
+  /** 科技触发加成的示例块列表 */
+  techBlocks?: TechExampleBlock[];
+  /** 科技触发示例的模式（用于区块副标题与注记口径） */
+  techMode?: TechExampleKind;
+  /** 科技触发示例中因本文明无法研究而排除的前置科技 */
+  unavailableTechs?: Tech[];
 }
 const STATS: NumStat[] = ['hp', 'atk', 'ma', 'pa', 'rng', 'spd', 'los', 'rof', 'gar', 'bt', 'minr'];
 function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): Example['rows'] {
@@ -242,8 +278,8 @@ function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): 
   });
   return out;
 }
-/** 代表性数值示例：优先选该文明拥有的、受影响的最高时代单位/建筑 */
-export function bonusExample(b: CivBonusEnt, units: readonly Unit[], buildings: readonly Building[], prefer?: string): Example | null {
+/** 代表性数值示例：优先选该文明拥有的、受影响的最高时代单位/建筑；传入 techs 时覆盖科技触发型加成（b.techFx） */
+export function bonusExample(b: CivBonusEnt, units: readonly Unit[], buildings: readonly Building[], prefer?: string, techs?: readonly Tech[]): Example | null {
   if (b.relicFx) {
     const us = units.filter((u) => u.civs.length && b.relicFx!.unitIds.has(u.id) && u.civs.includes(b.civ));
     const pick = us.find((u) => u.en === prefer) ?? [...us].sort((x, y) => y.age - x.age || y.hp - x.hp)[0];
@@ -271,6 +307,10 @@ export function bonusExample(b: CivBonusEnt, units: readonly Unit[], buildings: 
   if (bx) {
     const rows = diffRows(buildingBase(bx), (a) => bldEffects(b, bx, a), ages);
     if (rows.length) return { name: bx.zh, kind: 'building', id: bx.id, rows };
+  }
+  if (b.techFx.length && techs?.length) {
+    const techEx = buildTechFxExample(b, units, techs, prefer);
+    if (techEx) return techEx;
   }
   return null;
 }
