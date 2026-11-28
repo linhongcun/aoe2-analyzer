@@ -6,7 +6,7 @@ import { civByEn } from '../data';
 import { militaryTechAge, trainingUnitAge } from './availabilityAge';
 import { cmpNum, filterCivRankRows, finiteOr, fmtTrim, RANK_EPS, type SortDir } from './civRankShared';
 import { civStatus } from './civStatus';
-import { hasIgnoreArmor } from './damageCore';
+import { clampBonusDamageResistance, hasIgnoreArmor } from './damageCore';
 import { costSum, DPS_UNAVAILABLE_REASON, NO_NORMAL_ATTACK_REASON, unitHasNormalAttack } from './duel';
 import { fmtSide, type SideSpec } from './duelState';
 import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingAgeMarker } from './duelTrainingCost';
@@ -82,6 +82,8 @@ export interface UnitCivRankRow {
   missingTechs: UnitCivRankMissingTech[];
   relicBonus?: UnitCivRankRelicBonus;
   ignoreArmorTech?: string;
+  /** issue 1500：文明常驻额外伤害减免比例（0..1，已计入模拟器与 PK，绝不进 unmodeledPills） */
+  bonusDamageReduction?: number;
   unmodeledPills: string[];
   /** 与 duelSide.resolve(..., 'f') 一致的满科技所选 ID（有序） */
   selTechIds: number[];
@@ -118,6 +120,7 @@ export interface UnitCivRankResult {
   commonMechanisms: string[];
   hasEstimatedCost: boolean;
   hasRelicBonus: boolean;
+  hasBonusDamageReduction: boolean;
 }
 
 export interface UnitCivRankFilterResult {
@@ -315,6 +318,8 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
           }
         : undefined;
 
+    const bonusDamageReduction = clampBonusDamageResistance(S.bdr);
+
     pending.push({
       row: {
         civ,
@@ -335,6 +340,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
         missingTechs: [],
         ...(relicBonus ? { relicBonus } : {}),
         ...(ignoreArmorTech ? { ignoreArmorTech } : {}),
+        ...(bonusDamageReduction > 0 ? { bonusDamageReduction } : {}),
         unmodeledPills: rawPills,
         selTechIds,
         simTechIds,
@@ -418,6 +424,7 @@ export function buildUnitCivRank(ctx: SimContext, u: Unit, requestedAge = 4): Un
     commonMechanisms,
     hasEstimatedCost: rows.some((r) => r.estimatedCost),
     hasRelicBonus: rows.some((r) => Boolean(r.relicBonus)),
+    hasBonusDamageReduction: rows.some((r) => (r.bonusDamageReduction ?? 0) > 0),
   };
 }
 

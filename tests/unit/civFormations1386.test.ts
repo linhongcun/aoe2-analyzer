@@ -95,7 +95,8 @@ const DUEL_CASES: readonly DuelCase[] = [
   ['Malians', 'malians-farimba-cav-champ-field', '预算 3000 · 22 名死士重装骑士 对法兰克游侠 22 名（游侠剩 2/22）', false, 'b', 2, 22, null, null],
   ['Malians', 'malians-farimba-cav-champ-field', '预算 3000 · 26 名死士重装骆驼兵 对法兰克游侠 22 名（剩 3/26）', false, 'a', 3, 26, null, null],
   ['Malians', 'malians-farimba-cav-champ-field', '预算 3000 · 42 名冠军剑士 对 42 个不列颠劲弩手（剩 16/42）', false, 'a', 16, 42, null, null],
-  ['Sicilians', 'sicilians-serjeant-light-cavalry', '预算 3000 · 22 名锁子甲重装骑士 对 50 个法兰克长戟兵（长戟剩 16/50）', false, 'b', 16, 50, null, null],
+  // Issue 1500 接入西西里额外伤害减免（-40%）后，锁子甲重装骑士对法兰克长戟兵实时实算由 B 剩 16/50 变为 2/50（保留既有阵容历史文案）
+  ['Sicilians', 'sicilians-serjeant-light-cavalry', '预算 3000 · 22 名锁子甲重装骑士 对 50 个法兰克长戟兵（长戟剩 16/50）', false, 'b', 2, 50, null, null],
   ['Sicilians', 'sicilians-serjeant-light-cavalry', '预算 3000 · 22 名锁子甲重装骑士 对法兰克游侠 22 名（游侠剩 4/22）', false, 'b', 4, 22, null, null],
   [
     'Sicilians',

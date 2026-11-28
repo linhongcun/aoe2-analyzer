@@ -112,35 +112,35 @@ async function expandUnitCivRank(page: Page) {
   if (await moreBtn.count()) await moreBtn.click();
 }
 
-test('Issue 1446 a:24 额外伤害减免与单位固有生命回复（单兵/群战/等资源、1280 浅/深 + 360）及曹操反例', async ({ page }) => {
+test('Issue 1446 / 1500 a:24 已接入移除未建模告警与单位固有生命回复（单兵/群战/等资源、1280 浅/深 + 360）及曹操反例', async ({ page }) => {
   const errors = attachErrorGuard(page);
   const card = page.locator('[data-t="pk-unmodeled"]');
 
-  // 1) 孟加拉精锐骑象射手 875（单兵 m=1，1280 浅色 + 360 深色）
+  // 1) 孟加拉精锐骑象射手 875（Issue 1500 后已建模：无未建模警告卡，改出已计入说明行）
   for (const [width, theme] of [
     [1280, 'light'],
     [360, 'dark'],
   ] as const) {
     await openHash(page, '/duel?a=875.Bengalis.4.f.&b=359.Franks.4.f.&m=1', width, theme);
-    await expect(card).toBeVisible();
-    await expect(card.locator('.pk-unm-pill')).toHaveText(['额外伤害减免']);
-    await expect(card).toContainText('当前未计入受到的额外伤害减免（文明加成）；面对克制加成攻击时，实际生存能力通常高于此处估算。');
+    await expect(card).toHaveCount(0);
+    await expect(page.locator('[data-t="bdr-note-a"]')).toBeVisible();
     await checkLayoutPillsNwAndAxe(page, '#duel-res', width);
   }
 
-  // 2) 孟加拉精锐象兵 1134（群战 m=n，1280 深色）：固有溅射伤害 + 额外伤害减免双机制叠加
+  // 2) 孟加拉精锐象兵 1134（群战 m=n，1280 深色）：移除额外伤害减免告警后仅保留固有溅射伤害
   await openHash(page, '/duel?a=1134.Bengalis.4.f.&b=359.Franks.4.f.&m=n&na=10&nb=20', 1280, 'dark');
-  await expect(card.locator('.pk-unm-pill')).toHaveText(['固有溅射伤害', '额外伤害减免']);
-  await expect(card.locator('.pk-unm-desc')).toHaveCount(2);
+  await expect(card.locator('.pk-unm-pill')).toHaveText(['固有溅射伤害']);
+  await expect(card.locator('.pk-unm-desc')).toHaveCount(1);
   await checkLayoutPillsNwAndAxe(page, '#duel-res', 1280);
 
-  // 3) 西西里重装骑士 283（等资源 m=r，360 浅色）与精锐萨金特 1659（单兵 m=1，1280 浅色）
+  // 3) 西西里重装骑士 283（等资源 m=r，360 浅色）与精锐萨金特 1659（单兵 m=1，1280 浅色）：已建模，警告卡隐藏
   await openHash(page, '/duel?a=283.Sicilians.4.f.&b=359.Franks.4.f.&m=r&bud=3000', 360, 'light');
-  await expect(card.locator('.pk-unm-pill')).toHaveText(['额外伤害减免']);
+  await expect(card).toHaveCount(0);
+  await expect(page.locator('[data-t="bdr-note-a"]')).toBeVisible();
   await checkLayoutPillsNwAndAxe(page, '#duel-res', 360);
 
   await openHash(page, '/duel?a=1659.Sicilians.4.f.&b=567.Japanese.4.f.&m=1', 1280, 'light');
-  await expect(card.locator('.pk-unm-pill')).toHaveText(['额外伤害减免']);
+  await expect(card).toHaveCount(0);
 
   // 4) 维京狂战士 692 / 精锐狂战士 694（单位固有生命回复）
   for (const uid of [692, 694]) {
@@ -401,10 +401,12 @@ test('Issue 1446 混编精确行匹配与单位满科技对照（#/unit/283, #/u
   await expect(page.locator('.mixed-duel')).toContainText('1379');
   await expect(mixCard).toHaveCount(0);
 
-  // 3) 单位满科技对照：#/unit/283（西西里额外伤害减免）、#/unit/5（意大利烟火之术 + f 跳转）、#/unit/185（马普切突袭 + 显式 ID 跳转）与 360px .nw 分段
+  // 3) 单位满科技对照：#/unit/283（Issue 1500 后西西里改显已计入标签）、#/unit/5（意大利烟火之术 + f 跳转）、#/unit/185（马普切突袭 + 显式 ID 跳转）与 360px .nw 分段
   await openHash(page, '/unit/283', 1280, 'light');
   await expandUnitCivRank(page);
-  await expect(page.locator('#unit-civ-rank tr[data-civ="Sicilians"]')).toContainText('未计入：额外伤害减免');
+  const sic283 = page.locator('#unit-civ-rank tr[data-civ="Sicilians"]');
+  await expect(sic283).not.toContainText('未计入：额外伤害减免');
+  await expect(sic283.locator('[data-t="ucr-bdr-tag"]')).toHaveText('额外伤害减免 -40%（已计入）');
 
   await openHash(page, '/unit/5', 1280, 'light');
   await expandUnitCivRank(page);

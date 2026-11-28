@@ -4,7 +4,7 @@
  */
 import raw from '../../data/game/effects.json';
 import { applyEffectValue } from './numericEffects';
-import type { Effect } from './types';
+import type { Effect, NumStat } from './types';
 
 export type DatOp = 'add' | 'mul' | 'set';
 export interface DatFx {
@@ -132,9 +132,36 @@ export function toEffects(fx: readonly DatFx[]): Effect[] {
     if (f.s === 'rof') out.push({ s: 'rof', v: f.v });
     else if (f.s === 'bonus' && f.vs) out.push(f.op === 'mul' ? { s: 'bonus', vs: f.vs, v: f.v, op: 'mul' } : { s: 'bonus', vs: f.vs, v: f.v });
     else if (f.s === 'armc' && f.vs) out.push(f.op === 'mul' ? { s: 'armc', vs: f.vs, v: f.v, op: 'mul' } : { s: 'armc', vs: f.vs, v: f.v });
-    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<Effect['s'], 'rof' | 'bonus' | 'armc' | 'ca'>, op: f.op ?? 'add', v: f.v } as Effect);
+    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<NumStat, 'rof'>, op: f.op ?? 'add', v: f.v } as Effect);
   });
   return out;
+}
+
+/** 按原 .dat 顺序提取属性 24（额外伤害减免）命令；严格白名单校验 op 与有限数值，未知 op 不静默回退为 add。 */
+export function extractBonusDamageResistanceEffects(eco: readonly DatEco[] | undefined, unitId: number): Effect[] {
+  if (!eco?.length) return [];
+  const out: Effect[] = [];
+  for (const item of eco) {
+    if (
+      item.a === 24 &&
+      item.t?.includes(unitId) &&
+      (item.op === 'add' || item.op === 'mul' || item.op === 'set') &&
+      typeof item.v === 'number' &&
+      Number.isFinite(item.v)
+    ) {
+      out.push({ s: 'bdr', op: item.op, v: item.v });
+    }
+  }
+  return out;
+}
+
+/** 共享属性 24（额外伤害减免）折叠纯函数：按原 .dat 顺序叠加 set/add/mul。 */
+export function applyBonusDamageResistanceEco(baseBdr: number, eco: readonly DatEco[] | undefined, unitId: number): number {
+  let bdr = baseBdr;
+  for (const effect of extractBonusDamageResistanceEffects(eco, unitId)) {
+    if (effect.s === 'bdr') bdr = applyEffectValue(bdr, effect.op, effect.v);
+  }
+  return bdr;
 }
 
 /** 按原 .dat 顺序提取属性 63（combatAbility）命令；严格白名单校验 op 与有限数值，未知 op 不静默回退为 add。 */

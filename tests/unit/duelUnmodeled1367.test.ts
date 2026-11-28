@@ -10,7 +10,6 @@ import {
   applicableUnmodeledTechIds,
   detectUnitUnmodeled,
   effectiveCombatAbility,
-  hasPositiveBonusDamageReduction,
   hasPositiveEcoAttr,
   normalizeCombatAbility,
   type UnmodeledKind,
@@ -49,7 +48,6 @@ function expectedKindsForBase(u: Unit, civ: string, age: number): UnmodeledKind[
   if (typeof u.regenRate === 'number' && Number.isFinite(u.regenRate) && u.regenRate > 1e-9) out.push('regen');
   if (hasPositiveEcoAttr(civEco, u.id, 109, 1e-9)) out.push('regen');
   if (u.deathHealAura === true) out.push('death-heal');
-  if (hasPositiveBonusDamageReduction(civEco, u.id)) out.push('bonus-damage-reduction');
   return out;
 }
 

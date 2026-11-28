@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { damageBreakdown, damageSources } from '../../../domain/damageBreakdown';
-import { hasIgnoreArmor } from '../../../domain/damageCore';
+import { formatBdrMultiplier, formatBdrSigned, hasIgnoreArmor } from '../../../domain/damageCore';
 import { fighterUsesAssumeHit, NO_NORMAL_ATTACK_REASON, type Fighter } from '../../../domain/duel';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
@@ -22,7 +22,7 @@ interface Side {
 }
 const n = (v: number) => Number(v.toFixed(3));
 function formatSourceLabel(text: string) {
-  const parts = text.split(/(\d+\s*件|\+\d+)/g);
+  const parts = text.split(/(\d+\s*件|[+-]?\d+(?:\.\d+)?%|\+\d+)/g);
   if (parts.length === 1) return text;
   return parts.map((part, idx) =>
     idx % 2 ? (
@@ -42,7 +42,7 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
       <p className="note">
         每类攻击只与同类护甲相减，再合计；负攻击可能扣减伤害，有普通攻击时总伤害最低为 <span className="num nw">1</span>
         。常规远程期望伤害另计命中率；目录准确度为 <span className="num nw">0%</span>{' '}
-        的特殊远程攻击按每击命中主目标估算。攻击方「无视护甲」时，目标的近战、穿刺护甲不扣；目标「抵抗无视护甲」时照扣。
+        的特殊远程攻击按每击命中主目标估算。攻击方「无视护甲」时，目标的近战、穿刺护甲不扣；目标「抵抗无视护甲」时照扣。目标带「额外伤害减免」时，近战、穿刺之外的每类伤害按减免比例折减后再合计。
       </p>
       {(
         [
@@ -62,8 +62,35 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                 <ul className="damage-classes">
                   {d.rows.map((row) => (
                     <li key={row.category}>
-                      {row.category}：攻击 <b className="nw">{n(row.attack)}</b>，目标护甲 <b className="nw">{n(row.armor)}</b>
-                      {row.ignored && <span className="nw">（已无视）</span>}，伤害 <b className="nw">{n(row.damage)}</b>
+                      {row.category}：
+                      <span className="nw">
+                        攻击 <b className="num">{n(row.attack)}</b>
+                      </span>
+                      ，
+                      <span className="nw">
+                        目标护甲 <b className="num">{n(row.armor)}</b>
+                      </span>
+                      {row.ignored && <span className="nw">（已无视）</span>}
+                      {row.bonusDamageReduction !== undefined && row.rawDamage !== undefined && (
+                        <>
+                          {Math.abs(row.rawDamage - row.attack) > 1e-9 && (
+                            <>
+                              ，
+                              <span className="nw">
+                                减免前 <b className="num">{n(row.rawDamage)}</b>
+                              </span>
+                            </>
+                          )}
+                          ，
+                          <span className="nw">
+                            额外伤害 <span className="num">{formatBdrSigned(row.bonusDamageReduction)}</span>
+                          </span>
+                        </>
+                      )}
+                      ，
+                      <span className="nw">
+                        伤害 <b className="num">{n(row.damage)}</b>
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -75,6 +102,13 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                 {d.ignoreArmor.resisted && (
                   <p className="note" data-t={`damage-ignore-armor-${side}`}>
                     目标抵抗无视护甲，本击照常扣{d.ignoreArmor.categories.join('、')}护甲。
+                  </p>
+                )}
+                {d.bonusDamageReduction.active && (
+                  <p className="note" data-t={`damage-bdr-${side}`}>
+                    目标自带额外伤害减免 <span className="num nw">{formatBdrSigned(d.bonusDamageReduction.rate)}</span>：上述非基础类别均先按同类相减再乘以{' '}
+                    <span className="num nw">{formatBdrMultiplier(d.bonusDamageReduction.rate)}</span>（近战、穿刺主攻击不折减
+                    {d.bonusDamageReduction.hasNegativeBonus ? '；正负额外伤害行同比例折减以保持抵消' : ''}）。
                   </p>
                 )}
                 {d.minimum > 0 && (
@@ -131,6 +165,10 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
                       {change.kind === 'boolean' ? (
                         <span className="nw">
                           {change.before ? '开启' : '未开启'} 至 {change.after ? '开启' : '未开启'}
+                        </span>
+                      ) : change.kind === 'bdr' ? (
+                        <span className="num nw">
+                          {formatBdrSigned(change.before)} 至 {formatBdrSigned(change.after)}
                         </span>
                       ) : (
                         <>

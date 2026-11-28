@@ -1,3 +1,4 @@
+import { formatBdrPercent } from '../../../domain/damageCore';
 import { damageByClass, type Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
 
@@ -21,7 +22,12 @@ export function CounterSummary({ a, b }: { a: Fighter; b: Fighter }) {
       </span>
       {rows.map((x) => (
         <span key={`${x.side}-${x.category}`} className="duel-counter">
-          {x.side} · {x.name}对{x.category} <b className="nw">+{Number(x.damage.toFixed(2))}</b>
+          {x.side} · {x.name}对{x.category} <b className="num nw">+{Number(x.damage.toFixed(2))}</b>
+          {x.bonusDamageReduction !== undefined && (
+            <span className="note nw">
+              （已减 <span className="num">{formatBdrPercent(x.bonusDamageReduction)}</span>）
+            </span>
+          )}
         </span>
       ))}
     </div>

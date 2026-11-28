@@ -5,10 +5,10 @@ import { describe, expect, it } from 'vitest';
 import { civs } from '../../src/data';
 import { CORE } from '../../src/data/core';
 import { splitMechTagSegments } from '../../src/domain/civRankShared';
-import { DAT, type DatEco } from '../../src/domain/datEffects';
+import { applyBonusDamageResistanceEco, DAT, type DatEco } from '../../src/domain/datEffects';
 import { fighterFrom, groupFight, oneVOneFight } from '../../src/domain/duel';
 import { applicableTrainingTechs, selectTrainingIds } from '../../src/domain/duelTrainingCost';
-import { applicableUnmodeledTechIds, collectDuelUnmodeled, detectUnitUnmodeled, hasPositiveBonusDamageReduction } from '../../src/domain/duelUnmodeled';
+import { applicableUnmodeledTechIds, collectDuelUnmodeled, detectUnitUnmodeled } from '../../src/domain/duelUnmodeled';
 import { presetUpTo, simTechs, simulate } from '../../src/domain/simulator';
 import type { Tech, Unit } from '../../src/domain/types';
 import { buildCivRankDuelHref, buildUnitCivRank } from '../../src/domain/unitCivRank';
@@ -23,7 +23,6 @@ import { ctx, techById, trees, units } from './helpers';
 const byId = CORE.unitById;
 const html = (node: ReturnType<typeof createElement>) => renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, node));
 
-const BDR_DETAIL = '当前未计入受到的额外伤害减免（文明加成）；面对克制加成攻击时，实际生存能力通常高于此处估算。';
 const INHERENT_REGEN_DETAIL = '当前未计入战斗中的生命回复（单位固有）；持久战中实际生存能力通常高于此处估算。';
 const techPassThroughDetail = (zh: string) =>
   `当前只按主目标逐击结算，未计入投射物穿过主目标、命中同一直线上其他单位的伤害（已选科技「${zh}」；未勾选该科技时本项不会触发）；对密集阵型的实际输出通常高于此处估算。`;
@@ -63,19 +62,19 @@ describe('Issue 1446 单位 PK 未建模提示补齐（a:24 / 单位固有回血
       Pirotechnia: { units: [5], buildings: [] },
     });
 
-    // 3) a:24 单位 PK 额外伤害减免在全站 56 文明 × 248 单位中精确仅命中孟加拉 846（10 象兵）与西西里 771（8 类陆军）
-    const hitsByCiv: Record<string, number[]> = {};
+    // 3) Issue 1500 已将 a:24 额外伤害减免接入伤害核心：不再产出未建模提示，改由 simulate(...).bdr 精确命中孟加拉 6 象兵与西西里 27 陆军
+    const bdrByCiv: Record<string, number[]> = {};
     for (const c of civs) {
       const hitIds: number[] = [];
       for (const u of units) {
         if (!u.civs.includes(c.en)) continue;
         const mechs = detectUnitUnmodeled({ unit: u, civ: c.en, age: 4, selectedTechs: [] });
-        if (mechs.some((m) => m.kind === 'bonus-damage-reduction')) hitIds.push(u.id);
+        expect(mechs.some((m) => m.pill === '额外伤害减免')).toBe(false);
+        if (simulate(ctx, u, c.en, 4, new Set(), new Set()).bdr > 0) hitIds.push(u.id);
       }
-      if (hitIds.length) hitsByCiv[c.en] = hitIds.sort((a, b) => a - b);
+      if (hitIds.length) bdrByCiv[c.en] = hitIds.sort((a, b) => a - b);
     }
-    expect(Object.keys(hitsByCiv).sort()).toEqual(['Bengalis', 'Sicilians']);
-    // 孟加拉 846 底层 a:24 精确覆盖 10 个象兵 ID（含孟加拉自身可训练的 6 个象兵单位）
+    expect(Object.keys(bdrByCiv).sort()).toEqual(['Bengalis', 'Sicilians']);
     const bengaliA24Targets = [
       ...new Set(
         DAT.civs
@@ -85,91 +84,53 @@ describe('Issue 1446 单位 PK 未建模提示补齐（a:24 / 单位固有回血
       ),
     ].sort((a, b) => a - b);
     expect(bengaliA24Targets).toEqual([239, 558, 873, 875, 1120, 1122, 1132, 1134, 1744, 1746]);
-    for (const uid of bengaliA24Targets) {
-      expect(
-        detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Bengalis', age: 4, selectedTechs: [] }).some((m) => m.kind === 'bonus-damage-reduction'),
-        `Bengalis a:24 target ${uid}`,
-      ).toBe(true);
-    }
-    expect(hitsByCiv.Bengalis).toEqual([873, 875, 1132, 1134, 1744, 1746]);
-    // 孟加拉战车（1759/1761）不在 846 作用名单内
-    expect(hitsByCiv.Bengalis).not.toContain(1759);
-    expect(hitsByCiv.Bengalis).not.toContain(1761);
-    // 西西里 771 底层 8 类陆军 a:24 命令与精确 27 个可用单位 ID 全集（排除海军、攻城、村民、僧侣）
+    expect(bdrByCiv.Bengalis).toEqual([873, 875, 1132, 1134, 1744, 1746]);
+    expect(bdrByCiv.Bengalis).not.toContain(1759);
+    expect(bdrByCiv.Bengalis).not.toContain(1761);
     const sicilian771A24 = DAT.civs.Sicilians!.bonus.filter((b) => b.tech === 771).flatMap((b) => b.eco.filter((e) => e.a === 24));
     expect(sicilian771A24).toHaveLength(8);
     expect(sicilian771A24.map((e) => e.cls).sort((a, b) => (a ?? -1) - (b ?? -1))).toEqual([0, 6, 12, 23, 35, 36, 44, 47]);
-    for (const e of sicilian771A24) {
-      expect(e.op).toBe('set');
-      expect(e.v).toBe(0.4);
-    }
-    const sicilianA24AllTargets = [
-      ...new Set(
-        DAT.civs
-          .Sicilians!.bonus.flatMap((b) => b.eco)
-          .filter((e) => e.a === 24)
-          .flatMap((e) => e.t ?? []),
-      ),
-    ].sort((a, b) => a - b);
     const sicilian771Targets = [...new Set(sicilian771A24.flatMap((e) => e.t ?? []))].sort((a, b) => a - b);
-    expect(sicilianA24AllTargets).toEqual(sicilian771Targets);
     expect(sicilian771Targets).toHaveLength(197);
     const expectedSicilianAvail = [
       4, 6, 7, 24, 38, 74, 75, 77, 93, 283, 358, 359, 440, 448, 473, 492, 546, 567, 1658, 1659, 1660, 1661, 1786, 1787, 1788, 2700, 2701,
     ];
-    expect(
-      units
-        .filter((u) => u.civs.includes('Sicilians') && sicilian771Targets.includes(u.id))
-        .map((u) => u.id)
-        .sort((a, b) => a - b),
-    ).toEqual(expectedSicilianAvail);
-    expect(hitsByCiv.Sicilians).toEqual(expectedSicilianAvail);
+    expect(bdrByCiv.Sicilians).toEqual(expectedSicilianAvail);
     for (const excluded of [83, 125, 280, 331, 442, 539, 548]) {
-      expect(hitsByCiv.Sicilians).not.toContain(excluded);
+      expect(bdrByCiv.Sicilians).not.toContain(excluded);
     }
-    // 波斯城堡专属 Citadels (7) 仅针对建筑 82，对波斯所有单位均不触发单位 PK 额外伤害减免
     const citadels = techById[7]!;
     for (const u of units) {
       if (!u.civs.includes('Persians')) continue;
-      const mechs = detectUnitUnmodeled({ unit: u, civ: 'Persians', age: 4, selectedTechs: [citadels] });
-      expect(
-        mechs.some((m) => m.kind === 'bonus-damage-reduction'),
-        `Persians ${u.id}`,
-      ).toBe(false);
+      expect(simulate(ctx, u, 'Persians', 4, new Set([citadels.id]), new Set()).bdr, `Persians ${u.id}`).toBe(0);
     }
   });
 
-  it('P2 边界：hasPositiveBonusDamageReduction 有限数值与顺序 set/add/mul 覆盖消歧', () => {
+  it('P2 边界：applyBonusDamageResistanceEco 有限数值与顺序 set/add/mul 覆盖消歧', () => {
     const e24 = (op: string, v: number, t = [875]): DatEco => ({ a: 24, op, v, t });
-    expect(hasPositiveBonusDamageReduction(undefined, 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0.25)], 875)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0.4, [283])], 283)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', -0.25)], 875)).toBe(false);
-    // 顺序 set / mul / add 覆盖消歧
-    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('set', 0)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0), e24('set', 0.25)], 875)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('mul', 0)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('mul', 0), e24('set', 0.25)], 875)).toBe(true);
-    expect(hasPositiveBonusDamageReduction([e24('add', 0.25), e24('add', -0.25)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', 0.25), e24('add', -0.25)], 875)).toBe(false);
-    // 非有限数防护
-    expect(hasPositiveBonusDamageReduction([e24('set', Number.NaN)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', Number.POSITIVE_INFINITY)], 875)).toBe(false);
-    expect(hasPositiveBonusDamageReduction([e24('set', Number.NEGATIVE_INFINITY)], 875)).toBe(false);
+    expect(applyBonusDamageResistanceEco(0, undefined, 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0.25)], 875)).toBe(0.25);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0.4, [283])], 283)).toBe(0.4);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', -0.25)], 875)).toBe(-0.25);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0.25), e24('set', 0)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0), e24('set', 0.25)], 875)).toBe(0.25);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0.25), e24('mul', 0)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('mul', 0), e24('set', 0.25)], 875)).toBe(0.25);
+    expect(applyBonusDamageResistanceEco(0, [e24('add', 0.25), e24('add', -0.25)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', 0.25), e24('add', -0.25)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', Number.NaN)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', Number.POSITIVE_INFINITY)], 875)).toBe(0);
+    expect(applyBonusDamageResistanceEco(0, [e24('set', Number.NEGATIVE_INFINITY)], 875)).toBe(0);
   });
 
   it('文案逐字对齐 UX 规格、来源分离、副形态 regenRate 零透传与零内部字段泄漏', () => {
-    // 1) a:24 额外伤害减免（孟加拉 875 单机制 / 1134 与固有溅射叠加；西西里 283 / 1659）
-    expect(detectUnitUnmodeled({ unit: byId[875]!, civ: 'Bengalis', age: 4, selectedTechs: [] })).toEqual([
-      { kind: 'bonus-damage-reduction', pill: '额外伤害减免', detail: BDR_DETAIL },
-    ]);
-    expect(detectUnitUnmodeled({ unit: byId[1134]!, civ: 'Bengalis', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['固有溅射伤害', '额外伤害减免']);
+    // 1) Issue 1500 后 a:24 已正式建模：孟加拉 875 与西西里 283/1659 不再报未建模，1134 仅保留固有溅射伤害
+    expect(detectUnitUnmodeled({ unit: byId[875]!, civ: 'Bengalis', age: 4, selectedTechs: [] })).toEqual([]);
+    expect(detectUnitUnmodeled({ unit: byId[1134]!, civ: 'Bengalis', age: 4, selectedTechs: [] }).map((m) => m.pill)).toEqual(['固有溅射伤害']);
     for (const uid of [283, 1659]) {
-      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Sicilians', age: 4, selectedTechs: [] })).toEqual([
-        { kind: 'bonus-damage-reduction', pill: '额外伤害减免', detail: BDR_DETAIL },
-      ]);
+      expect(detectUnitUnmodeled({ unit: byId[uid]!, civ: 'Sicilians', age: 4, selectedTechs: [] })).toEqual([]);
     }
 
     // 2) 单位固有生命回复（692/694 单机制；1966 刘备光环 + 固有生命回复；反例 1954 曹操 / 1978 孙坚无生命回复且保留光环）
@@ -498,15 +459,18 @@ describe('Issue 1446 单位 PK 未建模提示补齐（a:24 / 单位固有回血
     expect(mapNeg.errors.some((e) => e.field === 'mix-a-techs')).toBe(true);
   });
 
-  it('单位满科技对照（#1387）：未计入标签、f 与显式 ID 跳转、单文明共有机制上提与 .nw 语义分段', () => {
-    // 1) 重装骑士 283：西西里行出现「额外伤害减免」
+  it('单位满科技对照（#1387）：额外伤害减免已转已计入字段、未计入标签、f 与显式 ID 跳转、单文明共有机制上提与 .nw 语义分段', () => {
+    // 1) 重装骑士 283：Issue 1500 后西西里行改由 bonusDamageReduction 承载，不再进 unmodeledPills
     const cavRank = buildUnitCivRank(ctx, byId[283]!, 4);
-    expect(cavRank.rows.find((r) => r.civ === 'Sicilians')!.unmodeledPills).toContain('额外伤害减免');
+    expect(cavRank.rows.find((r) => r.civ === 'Sicilians')!.bonusDamageReduction).toBe(0.4);
+    expect(cavRank.rows.find((r) => r.civ === 'Sicilians')!.unmodeledPills).not.toContain('额外伤害减免');
+    expect(cavRank.rows.find((r) => r.civ === 'Franks')!.bonusDamageReduction).toBeUndefined();
     expect(cavRank.rows.find((r) => r.civ === 'Franks')!.unmodeledPills).not.toContain('额外伤害减免');
 
-    // 2) 精锐骑象射手 875：孟加拉行出现「额外伤害减免」
+    // 2) 精锐骑象射手 875：Issue 1500 后孟加拉行改由 bonusDamageReduction 承载，不再进 unmodeledPills
     const eaRank = buildUnitCivRank(ctx, byId[875]!, 4);
-    expect(eaRank.rows.find((r) => r.civ === 'Bengalis')!.unmodeledPills).toContain('额外伤害减免');
+    expect(eaRank.rows.find((r) => r.civ === 'Bengalis')!.bonusDamageReduction).toBe(0.25);
+    expect(eaRank.rows.find((r) => r.civ === 'Bengalis')!.unmodeledPills).not.toContain('额外伤害减免');
 
     // 3) 火枪手 5：意大利行出现「直线穿透 · 烟火之术」，且 PK 跳转链接保持 f 预设（902 已在 selTechIds 中）
     const hcRank = buildUnitCivRank(ctx, byId[5]!, 4);

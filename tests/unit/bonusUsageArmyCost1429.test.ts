@@ -341,7 +341,7 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     }
 
     const datNonTeam = ALL.filter((b) => !b.team && b.src === 'dat');
-    expect(datNonTeam).toHaveLength(74);
+    expect(datNonTeam).toHaveLength(76);
     const datWithUsage = datNonTeam
       .filter((b) => bonusUsage(b).length > 0)
       .map((b) => b.id)

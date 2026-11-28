@@ -53,6 +53,7 @@ export function buildingBase(b: Building): StatSet {
     bonus,
     armc: {},
     ca: 0,
+    bdr: 0,
     rofx: 1,
   };
 }

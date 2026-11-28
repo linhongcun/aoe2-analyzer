@@ -419,6 +419,11 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
             {data.hasEstimatedCost && <li>「估算」：含尚未完全解码的造价科技，总价按已解码部分计算。</li>}
             <li>各文明数值与训练时间均已自动计入本方常驻团队加成，未计额外盟友团队加成，也未计征招及建筑工作效率加成（完整产兵周期见「持续生产」）。</li>
             <li>「缺」：本时代其他文明能研究、这个文明研究不了的通用科技。</li>
+            {data.hasBonusDamageReduction && (
+              <li data-t="ucr-bdr-note">
+                「额外伤害减免」：文明常驻减免非基础克制伤害，已计入科技模拟器与单位 PK，不改变上表 <span className="num nw">11</span> 列基础面板与排序。
+              </li>
+            )}
             {data.hasRelicBonus && <UnitCivRankRelicNotes rows={data.rows} />}
           </ul>
         </>

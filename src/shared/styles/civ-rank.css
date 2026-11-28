@@ -445,6 +445,14 @@
   color: var(--color-good);
   font-weight: 600;
 }
+/* issue 1500：已计入的防御/战斗机制行内标签（不进 unmodeledPills），实底绿区隔于灰底「未计入：…」与虚线条件圣物标签 */
+.ucr-tag.is-modeled {
+  column-gap: 4px;
+  row-gap: 0;
+  background: var(--color-good-soft);
+  color: var(--color-good);
+  font-weight: 600;
+}
 .ucr-tag.is-mech {
   background: var(--color-tag);
   color: var(--color-text-2);

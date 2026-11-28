@@ -8,7 +8,18 @@
 import { civs } from '../data';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, type BPred } from './buildingEffects.manual';
 import { hasIgnoreArmor, hasResistIgnoreArmor } from './damageCore';
-import { applyCombatAbilityEco, DAT, extractCombatAbilityEffects, idPred, toEffects, type DatConditionalEntry, type DatEco, type DatEntry } from './datEffects';
+import {
+  applyBonusDamageResistanceEco,
+  applyCombatAbilityEco,
+  DAT,
+  extractBonusDamageResistanceEffects,
+  extractCombatAbilityEffects,
+  idPred,
+  toEffects,
+  type DatConditionalEntry,
+  type DatEco,
+  type DatEntry,
+} from './datEffects';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES, type CivBonus, type EffectRule } from './effects.manual';
 import type { Building, Effect, Unit, UnitPred } from './types';
 
@@ -113,6 +124,32 @@ export const BONUS_SRC: Record<string, Record<string, BonusSrc>> = {};
 export const BONUS_DAT: Record<string, Record<string, (DatEntry | DatConditionalEntry)[]>> = {};
 
 const gate = (age: number, fx: Effect[]) => (a: number) => (a >= age ? fx : []);
+
+/** 从文明加成 eco 提取目录单位级属性 24（额外伤害减免）规则；以 combatAbilityBase 过滤目录单位（零建筑、不导入 core.ts）。 */
+function extractUnitBdrGroups(eco: readonly DatEco[] | undefined): { uids: number[]; fx: Effect[] }[] {
+  if (!eco?.length) return [];
+  const targets = new Set<number>();
+  for (const item of eco) {
+    if (item.a !== 24 || !item.t?.length) continue;
+    for (const uid of item.t) {
+      if (Object.hasOwn(combatAbilityBase, String(uid))) targets.add(uid);
+    }
+  }
+  if (!targets.size) return [];
+  const groups = new Map<string, { uids: number[]; fx: Effect[] }>();
+  for (const uid of targets) {
+    const afterBdr = applyBonusDamageResistanceEco(0, eco, uid);
+    if (!Number.isFinite(afterBdr) || afterBdr <= 1e-9) continue;
+    const fx = extractBonusDamageResistanceEffects(eco, uid);
+    if (!fx.length) continue;
+    const key = JSON.stringify(fx);
+    const bucket = groups.get(key);
+    if (bucket) bucket.uids.push(uid);
+    else groups.set(key, { uids: [uid], fx });
+  }
+  return [...groups.values()];
+}
+
 civs.forEach((c) => {
   const d = DAT.civs[c.en];
   const src: Record<string, BonusSrc> = (BONUS_SRC[c.en] = {});
@@ -179,19 +216,31 @@ civs.forEach((c) => {
     const idx = k === 'hidden' ? -1 : +k;
     const label = idx >= 0 ? c.bon[idx]! : '隐藏加成（.dat 中存在、加成文本未列出）';
     // .dat 为当前固定补丁：不再按文本一致性回退；fresh 仅供审计/页面提示；零本文明可拥有目标的 rules 不计入战斗属性编码
-    const numeric = es.filter((e) => e.combat && !e.rulesUnowned && e.rules.some((r) => toEffects(r.fx).length));
-    if (numeric.length) {
-      numeric.forEach((e) =>
-        e.rules.forEach((r) => {
-          const fx = toEffects(r.fx);
-          if (!fx.length) return;
+    const entries = es
+      .map((e) => ({
+        e,
+        rules: e.combat && !e.rulesUnowned ? e.rules.map((r) => ({ r, fx: toEffects(r.fx) })).filter((x) => x.fx.length > 0) : [],
+        bdrGroups: e.combat ? extractUnitBdrGroups(e.eco) : [],
+      }))
+      .filter((x) => x.rules.length > 0 || x.bdrGroups.length > 0);
+    if (entries.length) {
+      entries.forEach(({ e, rules, bdrGroups }) => {
+        rules.forEach(({ r, fx }) => {
           if (e.req.length) {
             const ex = (CIV_TECH_EXTRAS[c.en] ??= {});
             e.req.forEach((tn) => (ex[tn] ??= []).push({ age: e.age, pred: idPred(r.t), fx, b: !!r.b, idx: idx >= 0 ? idx : null }));
           } else if (r.b) B.push([idPred(r.t) as BPred, gate(e.age, fx), label, idx]);
           else U.push([idPred(r.t) as UnitPred, gate(e.age, fx), label, idx]);
-        }),
-      );
+        });
+        bdrGroups.forEach(({ uids, fx }) => {
+          if (e.req.length) {
+            const ex = (CIV_TECH_EXTRAS[c.en] ??= {});
+            e.req.forEach((tn) => (ex[tn] ??= []).push({ age: e.age, pred: idPred(uids), fx, b: false, idx: idx >= 0 ? idx : null }));
+          } else {
+            U.push([idPred(uids) as UnitPred, gate(e.age, fx), label, idx]);
+          }
+        });
+      });
       if (idx >= 0) src[k] = 'dat';
       return;
     }

@@ -20,6 +20,8 @@ export interface Fighter {
   accuracyMode?: AccuracyMode;
   /** 生效 combatAbility（属性 63）位掩码；缺省按 0 计以兼容手构测试对象。 */
   combatAbility?: number;
+  /** 额外伤害减免比例（属性 24，0..1）；缺省按 0 计以兼容手构测试对象。 */
+  bonusDamageResistance?: number;
   ranged: boolean;
   rng: number;
   cost: Cost;
@@ -92,6 +94,7 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
     canAttack,
     accuracyMode,
     combatAbility: S.ca,
+    bonusDamageResistance: S.bdr,
     ranged: u.rng > 1,
     rng: S.rng,
     cost: u.cost,
@@ -106,18 +109,25 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
   };
 }
 
-/** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
-export function damageByClass(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>, d: Pick<Fighter, 'armor' | 'combatAbility'>) {
+/** 本场匹配的攻击类别；计算和展示共用，保留零伤害、负攻击扣减及额外伤害减免（属性 24）。 */
+export function damageByClass(
+  a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>,
+  d: Pick<Fighter, 'armor' | 'combatAbility' | 'bonusDamageResistance'>,
+) {
   if (!fighterCanAttack(a)) return [];
   const ignoreArmor = evaluateIgnoreArmor(a, d);
-  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对骑乘减伤 −3 会扣减）
+  // Fandom「Armor class」第 2–3 步：先同类相减，再对全部非基础类别统一乘 (1 - bdr)
   return damageRows(a.attack, d.armor, {
     allowInvalid: true,
     ...(ignoreArmor.applied ? { ignoredCategories: new Set(ignoreArmor.categories) } : {}),
+    ...(d.bonusDamageResistance !== undefined ? { bonusDamageResistance: d.bonusDamageResistance } : {}),
   }).rows;
 }
 /** 单次命中伤害（不含命中率）；无普通攻击返回 0。 */
-export function damagePerHit(a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>, d: Pick<Fighter, 'armor' | 'combatAbility'>): number {
+export function damagePerHit(
+  a: Pick<Fighter, 'attack' | 'canAttack' | 'contact' | 'combatAbility'>,
+  d: Pick<Fighter, 'armor' | 'combatAbility' | 'bonusDamageResistance'>,
+): number {
   if (!fighterCanAttack(a)) return 0;
   return totalDamage(damageByClass(a, d));
 }

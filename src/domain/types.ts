@@ -208,13 +208,16 @@ export interface StatSet {
   armc: Record<string, number>;
   /** 生效 combatAbility（属性 63）位掩码，由基础值经 a:63 科技算术叠加得出。 */
   ca: number;
+  /** 额外伤害减免比例（属性 24，0..1，如孟加拉象兵 0.25、西西里陆军 0.4；基础值为 0）。 */
+  bdr: number;
   rofx: number;
 }
-export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx' | 'armc' | 'ca'>;
-/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成）；armc 为护甲类别加减；ca 为属性 63 位掩码算术改写 */
+export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx' | 'armc' | 'ca' | 'bdr'>;
+/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成）；armc 为护甲类别加减；ca 为属性 63 位掩码算术改写；bdr 为属性 24 额外伤害减免 */
 export type Effect =
   | { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number }
   | { s: 'ca'; op?: 'add' | 'mul' | 'set'; v: number }
+  | { s: 'bdr'; op?: 'add' | 'mul' | 'set'; v: number }
   | { s: 'rof'; v: number }
   | { s: 'bonus'; vs: string; v: number; op?: 'add' | 'mul' }
   | { s: 'armc'; vs: string; v: number; op?: 'add' | 'mul' };
