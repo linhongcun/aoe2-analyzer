@@ -11,11 +11,30 @@ import type { Civ, Tech, Unit } from './types';
 /** 一份目标里，本文明可用单位的升级线多过这个数，就当成整类效果，不拿来点名区域单位。 */
 const SPECIFIC_LINE_LIMIT = 3;
 
+export interface KitUnitItem {
+  u: Unit;
+  upgrade?: Unit;
+  upgradeLabel?: string;
+}
+
+/** 仅当终阶是起始单位的直接精锐配对（Elite ...）时显示「含精锐」，其余非精锐或多阶终阶显示真实形态名。 */
+export function kitUpgradeLabel(base: Unit, upgrade: Unit | undefined, fam: Families): string | undefined {
+  if (!upgrade || upgrade.id === base.id) return undefined;
+  return fam.eliteOf[base.id]?.id === upgrade.id ? '含精锐' : `含${upgrade.zh}`;
+}
+
 export function civUniqueUnits(civ: string, units: readonly Unit[], fam: Families) {
   return collapse(
     units.filter((unit) => unit.type === 'UniqueUnit' && unit.civs.includes(civ)),
     fam,
   );
+}
+
+export function civUniqueUnitItems(civ: string, units: readonly Unit[], fam: Families): KitUnitItem[] {
+  return civUniqueUnits(civ, units, fam).map(({ u, elite }) => {
+    const upgradeLabel = kitUpgradeLabel(u, elite, fam);
+    return elite && upgradeLabel ? { u, upgrade: elite, upgradeLabel } : { u };
+  });
 }
 
 export function civUniqueTechs(civ: string, techs: readonly Tech[]): Tech[] {
@@ -35,6 +54,17 @@ export function relatedRegionalLines(civ: Civ, units: readonly Unit[], techs: re
     }
   }
   return lines.filter((line) => line.some((unit) => cited.has(unit.id)));
+}
+
+export function relatedRegionalUnitItems(civ: Civ, units: readonly Unit[], techs: readonly Tech[], fam: Families): KitUnitItem[] {
+  return relatedRegionalLines(civ, units, techs).flatMap((line) => {
+    const base = line[0];
+    if (!base) return [];
+    const tail = line.length > 1 ? line[line.length - 1] : undefined;
+    const upgrade = tail && tail.id !== base.id ? tail : undefined;
+    const upgradeLabel = kitUpgradeLabel(base, upgrade, fam);
+    return [upgrade && upgradeLabel ? { u: base, upgrade, upgradeLabel } : { u: base }];
+  });
 }
 
 function textRegionalIds(civ: Civ, units: readonly Unit[], techs: readonly Tech[]): Set<number> {

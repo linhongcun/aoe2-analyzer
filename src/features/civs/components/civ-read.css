@@ -479,6 +479,7 @@
   gap: 12px;
   align-items: center;
   min-height: 44px;
+  margin: 0;
   padding: 10px 8px;
   border-top: 1px solid var(--civ-line);
   color: var(--civ-ink);
@@ -1005,10 +1006,45 @@
     height: 64px;
   }
 
-  .civ-read .brow-h,
-  .civ-read .kit-row {
+  .civ-read .brow-h {
     padding-right: 0;
     padding-left: 0;
+  }
+
+  .civ-read .kit-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 10px;
+    row-gap: 6px;
+    align-items: center;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .civ-read .kit-row .kit-icons {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .civ-read .kit-row .kit-meta {
+    display: contents;
+  }
+
+  .civ-read .kit-row .kit-name {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .civ-read .kit-row .kit-age {
+    grid-column: 3;
+    grid-row: 1;
+    margin-left: 0;
+  }
+
+  .civ-read .kit-row .kit-sub {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
   /* ≤600：标题卡保留插画。完整容纳，文字一侧淡出；不增加卡高，也不接收点击。 */
