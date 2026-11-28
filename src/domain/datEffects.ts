@@ -184,6 +184,7 @@ const ECO_ATTR: Record<number, string> = {
   24: '受到的克制伤害',
   108: '驻扎回血',
   109: '每分钟回血',
+  110: '人口空间',
   63: '特殊能力标记',
   59: '最大充能',
   60: '充能速率',
@@ -199,6 +200,7 @@ const CLS_ZH: Record<number, string> = {
   6: '步兵',
   12: '骑兵',
   13: '攻城武器',
+  18: '僧侣',
   20: '运输船',
   21: '渔船',
   22: '战船',
@@ -207,6 +209,7 @@ const CLS_ZH: Record<number, string> = {
   35: '冲车',
   36: '骑射手',
   39: '城门',
+  43: '携圣物僧侣',
   44: '大象弓手',
   47: '侦察骑兵',
   51: '攻城武器',
@@ -237,6 +240,10 @@ export function ecoText(x: DatEco, nameOf: (id: number) => string | undefined): 
         ? (CLS_ZH[x.cls] ?? `类别 ${x.cls}`)
         : '';
   const attr = ECO_ATTR[x.a ?? -1] ?? `属性 ${x.a}`;
+  if (x.a === 110 && x.op === 'set' && Number.isFinite(x.v) && x.v < 0) {
+    const absV = Math.round(Math.abs(x.v) * 1000) / 1000;
+    return `${who ? `${who} ` : ''}每名占 ${absV} 人口`;
+  }
   if (x.op === 'mul' && x.byAge && x.byAge.length > 1) {
     const ps = x.byAge.map((v) => Math.round((v - 1) * 1000) / 10);
     const same = ps.every((p) => p >= 0) || ps.every((p) => p < 0);

@@ -70,6 +70,7 @@ def build(d):
 
     nodes = {}
     combat_attrs = {0, 1, 2, 5, 8, 9, 10, 11, 12, 20, 22, 24, 59, 60, 61, 62, 63, 102, 107, 108, 109, 118}
+    population_attrs = {110}
     build_tech_ids = set(d['BuildTech'].values())
     fx_triggered_ids = fx_triggered_techs(d['Effects'])
     for i, t in enumerate(d['Techs']):
@@ -81,6 +82,7 @@ def build(d):
         direct_combat = direct_combat_units(commands, units, combat_forms, dat_units, combat_attrs)
         combat_units = sorted(set(proj_all) | direct_combat)
         charge_only = sorted(set(proj_charge_only) - direct_combat)
+        population_units = sorted(direct_combat_units(commands, units, combat_forms, dat_units, population_attrs))
         upgrades = [[c['A'], c['B']] for c in commands if c['Type'] == 3]
         enables = [c['A'] for c in commands if c['Type'] == 2 and c['B'] == 1]
         label = (
@@ -103,6 +105,8 @@ def build(d):
         )
         if charge_only:
             node['chargeOnlyCombatUnits'] = charge_only
+        if population_units:
+            node['populationUnits'] = population_units
         nodes[str(i)] = node
     civs = {}
     for i, c in enumerate(d['Civs']):

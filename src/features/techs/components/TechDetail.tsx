@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
-import { buildTechCostChangeView, classifyTechDataConsumption } from '../../../domain/techDetailCost';
+import { buildTechCostChangeView, buildTechPopulationChangeView, classifyTechDataConsumption } from '../../../domain/techDetailCost';
 import { techEffectEntries, techTypeMark } from '../../../domain/techDetailView';
 import { TECH_AKA } from '../../../data/aliases';
 import { AgeImg, BuildingIcon, CivChip, CivIcon, CostView, TechIcon, TechLink, TechReleaseBadge } from '../../../shared/ui/art';
@@ -22,6 +22,7 @@ import { ConversionTechLink } from './ConversionTechLink';
 import { MarketFeeTechLinks } from './MarketFeeTechLinks';
 import TechAffects from './TechAffects';
 import { TechCostChanges } from './TechCostChanges';
+import { TechPopulationChanges } from './TechPopulationChanges';
 import { TechRepeatableRule } from './TechRepeatableRule';
 import '../../../shared/ui/contextLinks.css';
 import './tech-detail.css';
@@ -77,6 +78,7 @@ export default function TechDetail() {
   const aliases = TECH_AKA[tech.id]?.filter((name) => name.toLowerCase() !== tech.en.toLowerCase() && name !== tech.zh);
   const entries = techEffectEntries(tech, core.units, core.buildings);
   const costChanges = buildTechCostChangeView(tech, entries.length > 0, core, trees);
+  const popChanges = buildTechPopulationChangeView(tech, entries.length > 0, core, trees);
   const consumption = classifyTechDataConsumption(tech, entries.length > 0, { unitById: core.unitById, buildingById: core.buildingById });
   const previous = tech.pre != null ? core.techById[tech.pre] : undefined;
   const next = core.techs.filter((item) => item.pre === tech.id);
@@ -145,6 +147,11 @@ export default function TechDetail() {
         {costChanges && (
           <button type="button" onClick={() => jump('tech-cost-changes')}>
             费用变化
+          </button>
+        )}
+        {popChanges && (
+          <button type="button" onClick={() => jump('tech-population-changes')}>
+            人口空间变化
           </button>
         )}
         {entries.length > 0 && (
@@ -221,6 +228,8 @@ export default function TechDetail() {
       </section>
 
       {costChanges && <TechCostChanges key={tech.id} view={costChanges} unitById={core.unitById} buildingById={core.buildingById} techById={core.techById} />}
+
+      {popChanges && <TechPopulationChanges key={tech.id} view={popChanges} unitById={core.unitById} buildingById={core.buildingById} />}
 
       {entries.length > 0 && <TechAffects tech={tech} entries={entries} units={core.units} unitById={core.unitById} fam={core.fam} techs={core.techs} />}
 

@@ -371,7 +371,7 @@ describe('#1409 Chinese res:85 global research discount, unreachable count>requi
         status: 'invalid',
         manual: true,
         cost: null,
-        reason: '不属于当前阵容的战斗、训练费用或形态研究；未计入',
+        reason: '不属于当前阵容的战斗、训练费用、人口空间或形态研究；未计入',
       });
     }
   });

@@ -14,6 +14,7 @@ import type { Building, Tech, Unit } from './types';
 import { isUnitCostAttribute } from './unitCost';
 
 export const TECH_COST_OPS = new Set(['set', 'mul', 'add']);
+export const POPULATION_SPACE_ATTR = 110;
 const CONVERSION_RES = new Set([27, 28, 29, 192, 193]);
 const UNIT_COMBAT_NOTICE_ATTRS = new Set([22, 62, 63, 102, 107, 109, 118]);
 const BUILDING_GARRISON_ATTRS = new Set([102, 107]);
@@ -92,6 +93,12 @@ export interface TechConsumptionDeps {
 
 export function validCostEffectsOf(datEco: readonly DatEco[]): DatEco[] {
   return datEco.filter((e) => isUnitCostAttribute(e.a) && TECH_COST_OPS.has(e.op) && (e.t?.length ?? 0) > 0);
+}
+
+export function validPopulationEffectsOf(datEco: readonly DatEco[]): DatEco[] {
+  return datEco.filter(
+    (e) => e.a === POPULATION_SPACE_ATTR && e.op === 'set' && typeof e.v === 'number' && Number.isFinite(e.v) && e.v < 0 && (e.t?.length ?? 0) > 0,
+  );
 }
 
 const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string; isToolName: boolean }> = {
@@ -287,6 +294,18 @@ export function classifyTechDataConsumption(
     datEco.some((e) => e.res !== undefined && CONVERSION_RES.has(e.res)) ||
     datEco.some((e) => e.a === 10 && TECH_COST_OPS.has(e.op) && hasUnitTarget(e.t))
   ) {
+    adopted.push('army-cost');
+  }
+
+  const hasPopulationSpace = validPopulationEffectsOf(datEco).some((e) => {
+    if (!e.t?.length) return false;
+    if (!deps.unitById) return hasUnitTarget(e.t);
+    return e.t.some((id) => {
+      const u = deps.unitById![id];
+      return Boolean(u && techOwnedByEntity(u.civs));
+    });
+  });
+  if (hasPopulationSpace && !adopted.includes('army-cost')) {
     adopted.push('army-cost');
   }
 

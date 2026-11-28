@@ -51,7 +51,7 @@ class BallisticsScope1328Tests(unittest.TestCase):
         self.assertIn("'ChargeEvent': u.creatable.charge_event if u.creatable else 0", dat_source._DUMP)
         self.assertIn("'RechargeRate': u.creatable.recharge_rate if u.creatable else 0", dat_source._DUMP)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v25.%s.json', parse_src)
+        self.assertIn('dat.v26.%s.json', parse_src)
         self.assertNotIn('dat.v20.%s.json', parse_src)
 
     def test_is_regular_cooldown_charge_matches_unit_charge_predicate_and_fails_closed(self):
