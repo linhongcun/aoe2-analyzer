@@ -274,8 +274,8 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
       expect(selected.e2e).toContain('tests/e2e/conversion731.spec.ts');
     }
   });
-  it.each(['src/features/bonuses/components/BonusDetail.tsx', 'src/features/bonuses/components/RomanArmor710.tsx', 'src/features/bonuses/romanArmor710.ts'])(
-    '%s keeps the full Roman armor coverage',
+  it.each(['src/features/bonuses/components/BonusDetail.tsx', 'src/domain/civBonus.ts', 'src/domain/civBonusTechFx.ts', 'src/shared/ui/BonusBody.tsx'])(
+    '%s keeps the full bonus coverage',
     (path) => {
       for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: false, browser: 'full' });
     },
@@ -285,14 +285,12 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     'src/features/duel/components/DuelSelection.tsx',
     'src/features/civs/components/CivDetail.tsx',
     'src/features/civs/components/BonusRows.tsx',
-  ])('%s is not a new Roman mechanism consumer', (path) => {
+  ])('%s is not a new Roman charge consumer', (path) => {
     for (const env of [pr, main]) {
       const selected = browser([change(path)], env);
       expect(selected.full).toBe(false);
-      for (const name of ['romanCharge710', 'romanArmor710']) {
-        expect(selected.unit).not.toContain(`tests/unit/${name}.test.ts`);
-        expect(selected.e2e).not.toContain(`tests/e2e/${name}.spec.ts`);
-      }
+      expect(selected.unit).not.toContain('tests/unit/romanCharge710.test.ts');
+      expect(selected.e2e).not.toContain('tests/e2e/romanCharge710.spec.ts');
     }
   });
   it.each(['data/game/charge_attack.json', 'scripts/charge_attack_build.py'])('%s keeps real data reproduction', (path) => {

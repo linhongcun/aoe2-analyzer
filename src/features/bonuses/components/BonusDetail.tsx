@@ -7,7 +7,6 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
 import { NumWrappedText } from '../../../shared/ui/widgets';
 import BonusList from './BonusList';
-import RomanArmor710 from './RomanArmor710';
 
 /** #/civ/:en/bonus/:idx（idx 为序号或 team） */
 export default function BonusDetail() {
@@ -36,12 +35,7 @@ export default function BonusDetail() {
         {
           key: 'ov',
           label: '效果',
-          content: (
-            <>
-              <BonusBody b={b} head={false} />
-              {b.id === 'Romans-1' && <RomanArmor710 b={b} />}
-            </>
-          ),
+          content: <BonusBody b={b} head={false} />,
         },
       ]}
       sidebar={

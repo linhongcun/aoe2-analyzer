@@ -2,19 +2,26 @@
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { useCore } from '../../data/hooks';
-import { bonusAffects, bonusExample, type CivBonusEnt } from '../../domain/civBonus';
-import { groupLines } from '../../domain/family';
+import {
+  bonusAffects,
+  bonusExample,
+  bonusUnavailableTechs,
+  buildTechByEn,
+  datEntryUnavailableTechs,
+  type BonusAffectGroup,
+  type CivBonusEnt,
+} from '../../domain/civBonus';
+import { bonusLevel, bonusUsage, LEVEL_ZH, showEcoSourceTag } from '../../domain/bonusUsage';
+import { ecoText } from '../../domain/datEffects';
+import { collapse } from '../../domain/family';
 import { linkify } from '../../domain/linker';
 import { AGE_ZH } from '../../domain/ratings';
-import { BuildingLink, StatIcon, UnitLinks } from './art';
-import { BonusExampleTable, RelicConditionCallout } from './BonusConditionBlocks';
+import type { Tech, Unit } from '../../domain/types';
+import { BuildingLink, UnitLinks } from './art';
+import { BonusExampleSection, RelicConditionCallout } from './BonusConditionBlocks';
+import { BonusAffectList, BonusRawEvidenceEntry } from './BonusTechAffects';
 import { Icon } from './Icon';
 import { Linked, Loading, NumWrappedText } from './widgets';
-import { LineChip } from './LineChip';
-import type { Unit } from '../../domain/types';
-import { collapse } from '../../domain/family';
-import { ecoText } from '../../domain/datEffects';
-import { bonusLevel, bonusUsage, LEVEL_ZH, showEcoSourceTag } from '../../domain/bonusUsage';
 
 const SRC_TAG: Record<string, [string, string]> = {
   dat: ['ok', '数值来自游戏数据'],
@@ -23,19 +30,6 @@ const SRC_TAG: Record<string, [string, string]> = {
   text: ['txt', '游戏数据无对应记录'],
 };
 
-const STAT_ZH: Record<string, [string, string]> = {
-  hp: ['生命值', 'hp'],
-  atk: ['攻击', 'atk'],
-  ma: ['近战护甲', 'marm'],
-  pa: ['穿刺护甲', 'parm'],
-  rng: ['射程', 'range'],
-  spd: ['移动速度', 'speed'],
-  los: ['视野', ''],
-  rof: ['攻击间隔', 'rof'],
-  gar: ['驻扎容量', ''],
-  bt: ['建造/生产时间', 'time'],
-  minr: ['最小射程', ''],
-};
 const ageTxt = (a: number[]) => a.map((x) => AGE_ZH[x]!.slice(0, 2)).join('/');
 
 export function BonusTags({ b, includeTeam = true, includeFresh = true }: { b: CivBonusEnt; includeTeam?: boolean; includeFresh?: boolean }) {
@@ -111,6 +105,46 @@ export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boole
   );
 }
 
+function BonusUsageList({ b, usage }: { b: CivBonusEnt; usage: ReturnType<typeof bonusUsage> }) {
+  return (
+    <>
+      {b.team && usage.every((item) => item.on === false) && <p>各工具均未计入：本文明自己的和队友给的这条团队加成都不计，逐项如下。</p>}
+      <ul>
+        {usage.map((item) => (
+          <li key={item.tool} data-usage={item.tool} data-on={String(item.on)}>
+            <Icon name={USAGE_ICON[String(item.on) as keyof typeof USAGE_ICON]} className={'ic' + (item.on === false ? ' warn' : '')} />
+            <b>
+              {item.href ? (
+                <Link className="ulink" to={item.href}>
+                  {item.name}
+                </Link>
+              ) : (
+                item.name
+              )}
+            </b>
+            ：{formatUsageNote(item.note)}
+          </li>
+        ))}
+      </ul>
+      <p>{usageFootnote(b)}</p>
+    </>
+  );
+}
+
+function TextOnlyWarning({ b }: { b: CivBonusEnt }) {
+  return (
+    <p className="note">
+      <Icon name="triangle-alert" className="ic warn" />
+      仅文本，未计入数值：
+      {b.src === 'eco'
+        ? '经济/费用类效果，结构化数值见下方「游戏数据原始效果」；模拟器属性面板不计算。'
+        : b.cats.includes('经济') || b.cats.includes('费用')
+          ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
+          : '该效果尚未编码进模拟器，以游戏原文为准。'}
+    </p>
+  );
+}
+
 type CoreData = NonNullable<ReturnType<typeof useCore>>;
 
 export default function BonusBody({ b, compact, head = true }: { b: CivBonusEnt; compact?: boolean; head?: boolean }) {
@@ -132,9 +166,11 @@ export function BonusBodyContent({
   head?: boolean;
   variant?: 'default' | 'evidence';
 }) {
-  const groups = bonusAffects(b, core.units, core.buildings);
+  const groups = bonusAffects(b, core.units, core.buildings, true, core.techs);
+  const unavailTechs = bonusUnavailableTechs(b, core.techs);
+  const techByEn = buildTechByEn(core.techs);
   const usage = bonusUsage(b);
-  const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
+  const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined, core.techs);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
     ? linkify(b.zh, core.linker).flatMap((s) => (s.href !== undefined && (s.kind === 'unit' || s.kind === 'building') ? [{ kind: s.kind, href: s.href }] : []))
@@ -153,7 +189,21 @@ export function BonusBodyContent({
     : '根据说明文字推断，非结构化对象名单。';
   const rawCount = b.dat.length + (b.eco.length ? 1 : 0);
   if (variant === 'evidence')
-    return <BonusEvidenceSections b={b} core={core} compact={compact} groups={groups} usage={usage} ex={ex} mu={mu} mb={mb} mentionNote={mentionNote} />;
+    return (
+      <BonusEvidenceSections
+        b={b}
+        core={core}
+        compact={compact}
+        groups={groups}
+        unavailTechs={unavailTechs}
+        techByEn={techByEn}
+        usage={usage}
+        ex={ex}
+        mu={mu}
+        mb={mb}
+        mentionNote={mentionNote}
+      />
+    );
   return (
     <div className={'bonusbody' + (compact ? ' compact' : '')}>
       {head && (
@@ -169,53 +219,14 @@ export function BonusBodyContent({
       )}
       {b.team && <p className="note">团队加成对你和所有盟友生效（包括你自己）。</p>}
       {b.relicFx && <RelicConditionCallout relicFx={b.relicFx} />}
-      {ex && (
-        <div className="bex">
-          <h4>
-            数值示例：
-            <Link className="ulink" to={ex.kind === 'unit' ? `/unit/${ex.id}` : `/building/${ex.id}`}>
-              {ex.name}
-            </Link>
-            <small className="note">{ex.relicRows?.length ? '（基础值，仅计这一条加成；按驻守圣物件数，城堡时代起）' : '（基础值，仅计这一条加成）'}</small>
-          </h4>
-          <BonusExampleTable b={b} ex={ex} />
-        </div>
-      )}
+      {ex && <BonusExampleSection b={b} ex={ex} variant="default" />}
       {usage.length > 0 && (
         <div className="note busage">
           <p>各工具计入情况：</p>
-          {b.team && usage.every((l) => l.on === false) && <p>各工具均未计入：本文明自己的和队友给的这条团队加成都不计，逐项如下。</p>}
-          <ul>
-            {usage.map((l) => (
-              <li key={l.tool} data-usage={l.tool} data-on={String(l.on)}>
-                <Icon name={USAGE_ICON[String(l.on) as keyof typeof USAGE_ICON]} className={'ic' + (l.on === false ? ' warn' : '')} />
-                <b>
-                  {l.href ? (
-                    <Link className="ulink" to={l.href}>
-                      {l.name}
-                    </Link>
-                  ) : (
-                    l.name
-                  )}
-                </b>
-                ：{formatUsageNote(l.note)}
-              </li>
-            ))}
-          </ul>
-          <p>{usageFootnote(b)}</p>
+          <BonusUsageList b={b} usage={usage} />
         </div>
       )}
-      {!b.encoded && usage.length === 0 && (
-        <p className="note">
-          <Icon name="triangle-alert" className="ic warn" />
-          仅文本，未计入数值：
-          {b.src === 'eco'
-            ? '经济/费用类效果，结构化数值见下方「游戏数据原始效果」；模拟器属性面板不计算。'
-            : b.cats.includes('经济') || b.cats.includes('费用')
-              ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
-              : '该效果尚未编码进模拟器，以游戏原文为准。'}
-        </p>
-      )}
+      {!b.encoded && usage.length === 0 && <TextOnlyWarning b={b} />}
       <p className="note">
         措辞帮助：<Link to="/glossary/rate-and-time">速率与耗时</Link> · <Link to="/glossary/stronger-effect">科技效果更强</Link>
       </p>
@@ -224,32 +235,7 @@ export function BonusBodyContent({
       ) : !b.encoded && mu.length + mb.length > 0 ? (
         <h4>作用对象</h4>
       ) : null}
-      {groups.map((g) => (
-        <div className="affg" key={g.group}>
-          <h5>{g.group}</h5>
-          {g.rows.map((r) => (
-            <div className="affrow" key={r.effect}>
-              <div className="affef">
-                {r.parts.map((p, i) => (
-                  <span key={i} className="tag">
-                    {p.icon && <StatIcon k={p.icon} t={p.text} />}
-                    <NumWrappedText text={p.text} />
-                  </span>
-                ))}
-                {!b.team && b.ages && b.ages.length > 1 && <small className="note">（帝王时代数值）</small>}
-              </div>
-              <div className="uchips">
-                {groupLines(r.units, core.units, core.unitById, core.fam).map((l) => (
-                  <LineChip key={'l' + l.members[0]!.u.id} g={l} />
-                ))}
-                {r.buildings.map((x) => (
-                  <BuildingLink key={'b' + x.id} b={x} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ))}
+      <BonusAffectList b={b} core={core} groups={groups} unavailTechs={unavailTechs} />
       {!b.encoded && mu.length + mb.length > 0 && (
         <>
           <p className="note">{mentionNote}</p>
@@ -269,6 +255,12 @@ export function BonusBodyContent({
           <ul>
             {b.dat.map((e) => {
               const fxCount = e.rules.reduce((n, r) => n + r.fx.length, 0);
+              const unavailReqs = datEntryUnavailableTechs(e.req, b, techByEn);
+              const rulesNote = e.rulesUnowned
+                ? '（仅指向本文明不可用对象，未计入战斗属性）'
+                : unavailReqs.length > 0
+                  ? `（前置科技${unavailReqs.map((t) => `「${t.zh}」`).join('、')}本文明无法研究，未计入上方对象明细）`
+                  : '（见上方作用对象）';
               return (
                 <li key={e.tech}>
                   <code>
@@ -286,7 +278,7 @@ export function BonusBodyContent({
                     <small className="note">
                       {' '}
                       · 属性命令 <span className="num nw">{fxCount} 条</span>
-                      {e.rulesUnowned ? '（仅指向本文明不可用对象，未计入战斗属性）' : '（见上方作用对象）'}
+                      {rulesNote}
                     </small>
                   )}
                   {e.eco.length > 0 && (
@@ -320,7 +312,9 @@ type EvidenceProps = {
   b: CivBonusEnt;
   core: CoreData;
   compact?: boolean;
-  groups: ReturnType<typeof bonusAffects>;
+  groups: readonly BonusAffectGroup[];
+  unavailTechs: readonly Tech[];
+  techByEn: ReadonlyMap<string, Tech>;
   usage: ReturnType<typeof bonusUsage>;
   ex: ReturnType<typeof bonusExample>;
   mu: Unit[];
@@ -328,133 +322,13 @@ type EvidenceProps = {
   mentionNote: string;
 };
 
-function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb, mentionNote }: EvidenceProps) {
-  const rawEntry = (entry: (typeof b.dat)[number]) => {
-    return (
-      <article className="bonus-raw-entry" key={entry.tech}>
-        <h5>{entry.name}</h5>
-        <dl className="bonus-raw-meta">
-          <div>
-            <dt>科技 ID</dt>
-            <dd>
-              <code>{entry.tech}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>时代</dt>
-            <dd>
-              {AGE_ZH[entry.age] ?? `时代 ${entry.age}`} <code>age={entry.age}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>前置</dt>
-            <dd>
-              {entry.req.length ? entry.req.join(' + ') : '无'} <code>req={JSON.stringify(entry.req)}</code>
-            </dd>
-          </div>
-          {'condition' in entry && entry.condition.kind === 'relics' && (
-            <div>
-              <dt>条件</dt>
-              <dd>
-                驻守圣物 ≥ <span className="num nw">{entry.condition.min} 件</span>
-              </dd>
-            </div>
-          )}
-        </dl>
-        {entry.rules.length > 0 && entry.rulesUnowned && (
-          <p className="bonus-raw-unowned" data-t="bonus-raw-unowned-note">
-            <Icon name="info" className="ic" />
-            <span>以下属性命令仅指向本文明不可用对象，未计入战斗属性；原始记录保留供核查。</span>
-          </p>
-        )}
-        {entry.rules.length > 0 && (
-          <ul className="bonus-raw-rules">
-            {entry.rules.map((rule, ruleIndex) => (
-              <li key={ruleIndex} data-raw-rule-index={ruleIndex} data-raw-target-count={rule.t.length}>
-                {rule.fx.map((fx, fxIndex) => (
-                  <div className="bonus-raw-fx" key={fxIndex}>
-                    <strong>
-                      {STAT_ZH[fx.s]?.[0] ?? (fx.s === 'bonus' ? '额外伤害倍率' : fx.s === 'armc' ? '护甲类别效果' : fx.s)} ·{' '}
-                      {fx.op === 'mul' ? '乘算' : fx.op === 'set' ? '设定' : fx.op === 'add' ? '加值' : '运算未标记'}
-                    </strong>
-                    <span>
-                      {fx.op === 'mul' ? `×${fx.v}` : fx.v}
-                      {fx.vs ? ` · 对象类别 ${fx.vs}` : ''}
-                    </span>
-                    <small>
-                      <code>
-                        s={fx.s} · op={fx.op ?? '（未记录）'} · v={fx.v} · vs={fx.vs ?? '（未记录）'} · b={rule.b ?? '（未记录）'}
-                      </code>
-                    </small>
-                  </div>
-                ))}
-                <p className="bonus-raw-target-title">
-                  原始规则 {ruleIndex + 1} · b={rule.b ?? '（未记录）'} · 关联对象 ID（t，共 {rule.t.length} 项）
-                  {rule.b ? ' · 建筑目标（b=1）' : ''}
-                </p>
-                {rule.t.slice(0, 12).map((id, targetIndex) => {
-                  const target = rule.b ? core.buildingById[id] : core.unitById[id];
-                  return (
-                    <Link className="bonus-raw-target" key={`${id}-${targetIndex}`} data-raw-target-id={id} to={`${rule.b ? '/building' : '/unit'}/${id}`}>
-                      {target?.zh ?? '对象'} <code>#{id}</code>
-                    </Link>
-                  );
-                })}
-                {rule.t.length > 12 && (
-                  <details className="bonus-raw-more-targets">
-                    <summary>其余 {rule.t.length - 12} 个对象 ID</summary>
-                    {rule.t.slice(12).map((id, targetIndex) => (
-                      <span key={`${id}-${targetIndex + 12}`} data-raw-target-id={id}>
-                        <code>#{id}</code>{' '}
-                      </span>
-                    ))}
-                  </details>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-        {entry.eco.length > 0 && (
-          <ul>
-            {entry.eco.map((item, index) => (
-              <li key={index}>{ecoText(item, (id) => core.unitById[id]?.zh ?? core.buildingById[id]?.zh)}</li>
-            ))}
-          </ul>
-        )}
-      </article>
-    );
-  };
+function BonusEvidenceSections({ b, core, compact, groups, unavailTechs, techByEn, usage, ex, mu, mb, mentionNote }: EvidenceProps) {
   const rawPresent = b.dat.length > 0 || b.eco.length > 0;
   return (
     <div className={'bonusbody' + (compact ? ' compact' : '')}>
       <section className="bonus-evidence-section">
         <h4>作用对象</h4>
-        {groups.map((group) => (
-          <div className="affg" key={group.group}>
-            <h5>{group.group}</h5>
-            {group.rows.map((row) => (
-              <div className="affrow" key={row.effect}>
-                <div className="affef">
-                  {row.parts.map((part, index) => (
-                    <span key={index} className="tag">
-                      {part.icon && <StatIcon k={part.icon} t={part.text} />}
-                      <NumWrappedText text={part.text} />
-                    </span>
-                  ))}
-                  {!b.team && b.ages && b.ages.length > 1 && <small className="note">（帝王时代数值）</small>}
-                </div>
-                <div className="uchips">
-                  {groupLines(row.units, core.units, core.unitById, core.fam).map((line) => (
-                    <LineChip key={'l' + line.members[0]!.u.id} g={line} />
-                  ))}
-                  {row.buildings.map((building) => (
-                    <BuildingLink key={'b' + building.id} b={building} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
+        <BonusAffectList b={b} core={core} groups={groups} unavailTechs={unavailTechs} />
         {!b.encoded && mu.length + mb.length > 0 && <p className="note">{mentionNote}</p>}
         {!groups.length && !mu.length && !mb.length && <p className="note">暂无结构化对象明细。不代表这条加成没有效果。</p>}
         {!b.encoded && mu.length + mb.length > 0 && (
@@ -467,58 +341,17 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb, me
         )}
       </section>
       {b.relicFx && <RelicConditionCallout relicFx={b.relicFx} />}
-      {ex && (
-        <section className="bonus-evidence-section">
-          <h4>数值示例</h4>
-          <div className="bex">
-            <h5>
-              <Link className="ulink" to={ex.kind === 'unit' ? `/unit/${ex.id}` : `/building/${ex.id}`}>
-                {ex.name}
-              </Link>
-              <small className="note">{ex.relicRows?.length ? '（基础值，仅计这一条加成；按驻守圣物件数，城堡时代起）' : '（基础值，仅计这一条加成）'}</small>
-            </h5>
-            <BonusExampleTable b={b} ex={ex} />
-          </div>
-        </section>
-      )}
+      {ex && <BonusExampleSection b={b} ex={ex} variant="evidence" />}
       <section className="bonus-evidence-section">
         <h4>本站工具计入情况</h4>
         {usage.length ? (
           <div className="note busage">
-            {b.team && usage.every((item) => item.on === false) && <p>各工具均未计入：本文明自己的和队友给的这条团队加成都不计，逐项如下。</p>}
-            <ul>
-              {usage.map((item) => (
-                <li key={item.tool} data-usage={item.tool} data-on={String(item.on)}>
-                  <Icon name={USAGE_ICON[String(item.on) as keyof typeof USAGE_ICON]} className={'ic' + (item.on === false ? ' warn' : '')} />
-                  <b>
-                    {item.href ? (
-                      <Link className="ulink" to={item.href}>
-                        {item.name}
-                      </Link>
-                    ) : (
-                      item.name
-                    )}
-                  </b>
-                  ：{formatUsageNote(item.note)}
-                </li>
-              ))}
-            </ul>
-            <p>{usageFootnote(b)}</p>
+            <BonusUsageList b={b} usage={usage} />
           </div>
         ) : (
           <p className="note">暂无逐工具明细；以各工具的实际说明为准。</p>
         )}
-        {!b.encoded && !usage.length && (
-          <p className="note">
-            <Icon name="triangle-alert" className="ic warn" />
-            仅文本，未计入数值：
-            {b.src === 'eco'
-              ? '经济/费用类效果，结构化数值见下方「游戏数据原始效果」；模拟器属性面板不计算。'
-              : b.cats.includes('经济') || b.cats.includes('费用')
-                ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
-                : '该效果尚未编码进模拟器，以游戏原文为准。'}
-          </p>
-        )}
+        {!b.encoded && !usage.length && <TextOnlyWarning b={b} />}
       </section>
       <section className="bonus-evidence-section">
         <h4>来源与原文</h4>
@@ -540,7 +373,9 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb, me
             <summary>
               展开原始记录（<span className="num nw">{b.dat.length + (b.eco.length ? 1 : 0)} 条</span>）
             </summary>
-            {b.dat.map(rawEntry)}
+            {b.dat.map((entry) => (
+              <BonusRawEvidenceEntry key={entry.tech} b={b} core={core} entry={entry} techByEn={techByEn} />
+            ))}
             {b.eco.length > 0 && (
               <section>
                 <h5>团队加成经济项</h5>

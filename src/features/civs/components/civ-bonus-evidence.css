@@ -121,6 +121,25 @@
   vertical-align: baseline;
 }
 
+/* issue 1513：弹层内单位芯片、科技芯片、折叠摘要与示例单位链接均保证 44px 可点高度；不可研究内联链接采用实线下划线 */
+.civ-bonus-dialog-scroll .uchips .ulink,
+.civ-bonus-dialog-scroll .bonus-tech-chip,
+.civ-bonus-dialog-scroll .bonus-tech-list > summary,
+.civ-bonus-dialog-scroll .bex-tech-title a.ulink,
+.civ-bonus-dialog-scroll .bex-chain-unit a.ulink {
+  min-height: 44px;
+}
+
+.civ-bonus-dialog-scroll .bonus-tech-unavail a.ulink {
+  min-height: 44px;
+  margin-block: -10px;
+  padding-inline: 2px;
+  vertical-align: baseline;
+  border-bottom: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .bonus-evidence-section {
   margin: 24px 0;
 }

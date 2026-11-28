@@ -375,7 +375,7 @@ describe('#1496 科技模拟器同源研究费用计算', () => {
     badExtra.unexpected = 1;
     expect(validateDocument('data/game/sim_research_prices.json', badExtra).valid).toBe(false);
 
-    // 2) 静态传递闭包：SimPanel / simulator / simResearchCost / romanArmor710 均不引入 army_research.json；生成器不自引产物
+    // 2) 静态传递闭包：SimPanel / simulator / simResearchCost / civBonus / BonusBody 均不引入 army_research.json；生成器不自引产物
     const transitiveClosure = (entries: string[]) => {
       const seen = new Set<string>();
       const queue = [...entries];
@@ -395,7 +395,9 @@ describe('#1496 科技模拟器同源研究费用计算', () => {
       'src/shared/ui/sim/SimPanel.tsx',
       'src/domain/simulator.ts',
       'src/domain/simResearchCost.ts',
-      'src/features/bonuses/romanArmor710.ts',
+      'src/domain/civBonus.ts',
+      'src/domain/civBonusTechFx.ts',
+      'src/shared/ui/BonusBody.tsx',
     ]);
     expect(uiClosure.has('data/game/army_research.json')).toBe(false);
     expect(uiClosure.has('src/data/armyResearch.ts')).toBe(false);
