@@ -103,6 +103,28 @@
         "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
         "note": "#1445：英文原文为 Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age，统一译作「骑乘单位」。"
       }
+    },
+    "it": {
+      "original": "阿兹瑙里骑兵 (骑兵单位所占人口空间 -20%)",
+      "corrected": "阿兹瑙里骑兵 (骑乘单位所占人口空间 -20%)",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：英文原文为 Mounted Units take -20% population space，全站 Mounted Units 统一译作「骑乘单位」。"
+    }
+  },
+  "Ethiopians": {
+    "ct": {
+      "original": "龙脉 (弯刀勇士和骆驼骑兵受到骑兵单位的伤害 -3)",
+      "corrected": "龙脉 (弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3)",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：英文原文为 Shotel Warriors and Camel Riders receive -3 damage from Mounted Units，全站 Mounted Units 统一译作「骑乘单位」。"
+    }
+  },
+  "Wei": {
+    "it": {
+      "original": "明光铠 (骑兵单位近战护甲 +4)",
+      "corrected": "明光铠 (骑乘单位近战护甲 +4)",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：英文原文为 Mounted Units +4 melee armor，全站 Mounted Units 统一译作「骑乘单位」，保留上游英文尾部 Ming Guang Armor。"
     }
   },
   "Gurjaras": {

@@ -285,3 +285,60 @@ test('#1445 瓦兰吉 1488 归属、萨拉森 +3 全消费点与 6 国骑乘单�
 
   expect(errors).toEqual([]);
 });
+
+for (const width of [1280, 390] as const) {
+  test(`#1493 五项 Mounted Units 科技与三国独特科技简述对齐（${width}px）`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    await page.setViewportSize({ width, height: 900 });
+
+    const techCases: [number, string][] = [
+      [574, '弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3。'],
+      [435, '骑乘单位的生命值 +20。'],
+      [924, '骑乘单位所占人口空间 -20%。'],
+      [1062, '骑乘单位近战护甲 +4。'],
+      [39, '骑乘单位的移动速度 +10%。'],
+    ];
+    for (const [id, expected] of techCases) {
+      await page.goto(`./#/tech/${id}`);
+      const notes = page.locator('#tech-notes');
+      await expect(notes).toContainText(expected);
+      await expect(notes).not.toContainText('骑兵单位');
+      await expect(notes).not.toContainText('骑马单位');
+      await expectCleanPage(page);
+    }
+
+    const civCases: [string, string][] = [
+      ['Ethiopians', '弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3。'],
+      ['Georgians', '骑乘单位所占人口空间 -20%。'],
+      ['Wei', '骑乘单位近战护甲 +4。'],
+    ];
+    for (const [civ, expected] of civCases) {
+      await page.goto(`./#/civ/${civ}`);
+      const uniqueTechs = page.getByTestId('civ-unique-techs');
+      await expect(uniqueTechs).toContainText(expected);
+      await expect(uniqueTechs).not.toContainText('骑兵单位');
+      await expect(uniqueTechs).not.toContainText('骑马单位');
+      await expectCleanPage(page);
+    }
+
+    await page.goto('./#/compare?a=Ethiopians&b=Wei');
+    const factsEthWei = page.locator('#compare-facts');
+    await expect(factsEthWei).toContainText('弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3');
+    await expect(factsEthWei).toContainText('骑乘单位近战护甲 +4');
+    await expect(factsEthWei).not.toContainText('骑兵单位');
+    await expectCleanPage(page);
+
+    await page.goto('./#/compare?a=Georgians&b=Wei');
+    const factsGeoWei = page.locator('#compare-facts');
+    await expect(factsGeoWei).toContainText('骑乘单位所占人口空间 -20%');
+    await expect(factsGeoWei).toContainText('骑乘单位近战护甲 +4');
+    await expect(factsGeoWei).not.toContainText('骑兵单位');
+    await expectCleanPage(page);
+
+    expect(errors).toEqual([]);
+  });
+}

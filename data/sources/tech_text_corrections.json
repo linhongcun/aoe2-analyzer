@@ -1,10 +1,50 @@
 {
+  "39": {
+    "desc": {
+      "original": "骑马单位的移动速度 +10%。",
+      "corrected": "骑乘单位的移动速度 +10%。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：畜牧（39）英文说明为 Mounted Units move +10% faster.；DE 188329 效果目标涵盖全部 92 个骑乘单位（含象兵、骆驼与战车等），全站 Mounted Units 统一译作「骑乘单位」。"
+    }
+  },
+  "435": {
+    "desc": {
+      "original": "骑兵单位的生命值 +20。",
+      "corrected": "骑乘单位的生命值 +20。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：血统（435）英文说明为 Mounted Units +20 HP.；DE 188329 效果目标涵盖全部 92 个骑乘单位（含骑射手、蒙古突骑、骑象射手等），简中原文将 Mounted Units 误译为骑兵单位。"
+    }
+  },
+  "574": {
+    "desc": {
+      "original": "弯刀勇士和骆驼骑兵受到骑兵单位的伤害 -3。",
+      "corrected": "弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：龙脉（574）英文说明为 Shotel Warriors and Camel Riders receive -3 damage from Mounted Units.；与 #1445 护甲类 39「骑乘减伤」保持全站术语一致。"
+    }
+  },
   "875": {
     "desc": {
       "original": "民兵系、火枪骑兵和瓦兰吉卫队的远程护甲 +1。",
       "corrected": "民兵系、火矛兵和瓦兰吉卫队的远程护甲 +1。",
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
       "note": "#1329：软甲（875）英文说明为 Militia-line, Fire Lancers and Varangian Guards +1 pierce armor.；DE 188329 效果目标含火矛兵（1901）与精锐火矛兵（1903），简中原文将 Fire Lancers 误译为火枪骑兵。"
+    }
+  },
+  "924": {
+    "desc": {
+      "original": "骑兵单位所占人口空间 -20%。",
+      "corrected": "骑乘单位所占人口空间 -20%。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：阿兹瑙里骑兵（924）英文说明为 Mounted Units take -20% population space.；仅按官方英文原文与 #1445 术语口径将 Mounted Units 统一译作「骑乘单位」。"
+    }
+  },
+  "1062": {
+    "desc": {
+      "original": "骑兵单位近战护甲 +4。",
+      "corrected": "骑乘单位近战护甲 +4。",
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/en/strings.json",
+      "note": "#1493：明光铠（1062）英文说明为 Mounted Units +4 melee armor.；DE 188329 效果目标涵盖全部 92 个骑乘单位（含魏自有鲜卑掠骑兵 1952），简中原文将 Mounted Units 误译为骑兵单位。"
     }
   }
 }

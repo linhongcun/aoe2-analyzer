@@ -81,7 +81,7 @@ describe('#1266 七个文明阵容的机制与条件边界', () => {
   it('格鲁吉亚减人口和高地减伤按机制表述，掷矛支援保留护甲短板', () => {
     const route = formationContent('Georgians').routes[0]!;
     expect(civStatus(ctx.trees, 'Georgians').t219).toBe(0);
-    expect(techById[924]!.desc).toContain('骑兵单位所占人口空间 -20%');
+    expect(techById[924]!.desc).toContain('骑乘单位所占人口空间 -20%');
     expect(civByEn('Georgians')!.bon).toContain('在高海拔战斗时，单位和建筑受到的伤害 -15%');
     expect(route.limitation).toContain('满人口阵容战果未模拟');
     expect(route.adjustments?.find(({ id }) => id === 'ranged')?.text).toContain('缺射手锁甲');
