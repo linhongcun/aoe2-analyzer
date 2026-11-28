@@ -1019,7 +1019,7 @@ def main():
             if e['idx'] is not None: groups[e['idx']].append(e)
         fr = {}
         for idx, es in groups.items():
-            fr[str(idx)] = freshness(c['bonEn'][idx], es)
+            fr[str(idx)] = freshness(c['bonEn'][idx], es, civ_en=c['en'], ours=ours, filed_idx=idx, bon_en=c['bonEn'])
         fr['team'] = freshness(c['tbEn'], [{'age': 1, 'rules': ent['team']['rules'], 'eco': ent['team']['eco'], 'combat': ent['team']['combat']}])
         ent['fresh'] = fr
 
@@ -1228,7 +1228,117 @@ def candidates(kind, op, v):
 
 
 COST_RES = {100: ['Food', 'Wood', 'Gold', 'Stone'], 103: ['Food'], 104: ['Wood'], 105: ['Gold'], 106: ['Stone']}
+COST_RES_WORDS = (('wood', 'Wood'), ('food', 'Food'), ('gold', 'Gold'), ('stone', 'Stone'))
 AGE_N = {'Dark': 1, 'Feudal': 2, 'Castle': 3, 'Imperial': 4}
+
+
+def load_reviewed_split_cost_groups(path=None):
+    """Issue 1512：直接从单一事实源 src/domain/costPolicy.ts 解析 REVIEWED_SPLIT_COST_GROUPS（fail-closed，零重复硬编码 ID）。"""
+    src_path = Path(path) if path is not None else (ROOT / 'src/domain/costPolicy.ts')
+    src = src_path.read_text(encoding='utf-8')
+    m = re.search(r'export\s+const\s+REVIEWED_SPLIT_COST_GROUPS\b[^=]*=\s*\[(.*?)\];', src, re.S)
+    if not m:
+        raise ValueError(f'REVIEWED_SPLIT_COST_GROUPS not found in {src_path}')
+    rows = []
+    for blk in re.findall(r'\{[^{}]+\}', m.group(1)):
+        civ_m = re.search(r"civ:\s*'([^']+)'", blk)
+        filed_m = re.search(r'filedAt:\s*(\d+)', blk)
+        sent_m = re.search(r'sentence:\s*(\d+)', blk)
+        res_m = re.search(r'res:\s*\[([^\]]+)\]', blk)
+        raw_m = re.search(r'raw:\s*([0-9]+(?:\.[0-9]+)?)', blk)
+        units_m = re.search(r'units:\s*\[([^\]]+)\]', blk)
+        if not all((civ_m, filed_m, sent_m, res_m, raw_m, units_m)):
+            raise ValueError(f'Invalid REVIEWED_SPLIT_COST_GROUPS entry in {src_path}: {blk}')
+        res = tuple(re.findall(r"'([^']+)'", res_m.group(1)))
+        units = tuple(sorted(int(x) for x in re.findall(r'\d+', units_m.group(1))))
+        if not res or not units:
+            raise ValueError(f'Empty res/units in REVIEWED_SPLIT_COST_GROUPS entry in {src_path}: {blk}')
+        rows.append(
+            {
+                'civ': civ_m.group(1),
+                'filed_at': int(filed_m.group(1)),
+                'sentence': int(sent_m.group(1)),
+                'res': res,
+                'raw': r6(float(raw_m.group(1))),
+                'units': units,
+            }
+        )
+    if not rows:
+        raise ValueError(f'REVIEWED_SPLIT_COST_GROUPS is empty in {src_path}')
+    return tuple(rows)
+
+
+# 仅用于 freshness() 排除归属另一句的同科技打包费用组，不改变 effects.json 中 bonus/eco/costDiscounts。
+REVIEWED_SPLIT_COST_GROUPS = load_reviewed_split_cost_groups()
+
+
+def unit_cost_sentence(text, age):
+    """与 src/domain/costPolicy.ts unitCostSentence 同口径：费用句须含 cost(s)、有效百分比与明确资源词。"""
+    if not re.search(r'\bcosts?\b', text, re.I):
+        return None
+    parsed = text_pcts(text, 1)
+    if not parsed or age not in parsed:
+        return None
+    lower = text.lower()
+    res = tuple(r for w, r in COST_RES_WORDS if w in lower)
+    if not res:
+        return None
+    return {'pct': parsed[age], 'res': res}
+
+
+def is_reviewed_split_cost_eco(civ_en, filed_idx, entry_age, x, bon_en):
+    """Issue 1512：按与 costPolicy.ts REVIEWED_SPLIT_COST_GROUPS 同源的 fail-closed 规则识别归属另一句的费用组。"""
+    if civ_en is None or filed_idx is None or not bon_en:
+        return False
+    if x.get('op') != 'mul' or x.get('a') not in COST_RES:
+        return False
+    x_v = x.get('v')
+    if not _is_finite_number(x_v):
+        return False
+    raw_t = x.get('t') or ()
+    if not raw_t:
+        return False
+    x_res = set(COST_RES[x['a']])
+    x_units = tuple(sorted(raw_t))
+    effective_ages = [a for a in (1, 2, 3, 4) if a >= entry_age]
+    if not effective_ages:
+        return False
+    pct = round((1 - x_v) * 100)
+    for row in REVIEWED_SPLIT_COST_GROUPS:
+        if (
+            row['civ'] == civ_en
+            and row['filed_at'] == filed_idx
+            and set(row['res']) == x_res
+            and len(row['res']) == len(x_res)
+            and r6(x_v) == row['raw']
+            and row['units'] == x_units
+        ):
+            sidx = row['sentence']
+            if not (0 <= sidx < len(bon_en)):
+                continue
+            line = bon_en[sidx]
+            expected_res = set(row['res'])
+            if all(
+                (sent := unit_cost_sentence(line, a)) is not None
+                and sent['pct'] == pct
+                and set(sent['res']) == expected_res
+                and len(sent['res']) == len(expected_res)
+                for a in effective_ages
+            ):
+                return True
+    return False
+
+
+def is_owned_target(tid, is_bld, civ_en, ours):
+    """判断目标对象是否属于当前文明可拥有目录对象；无文明/目录上下文（团队加成或轻量单测）时保留全量。"""
+    if civ_en is None or ours is None:
+        return True
+    obj = ours.get(tid)
+    if obj is None:
+        return False
+    if is_bld is not None and bool(obj.get('_b')) != is_bld:
+        return False
+    return civ_en in (obj.get('civs') or ())
 
 
 def text_pcts(text, start):
@@ -1293,38 +1403,53 @@ def cost_discounts(out, civs):
     return res
 
 
-def freshness(text, es):
+def freshness(text, es, *, civ_en=None, ours=None, filed_idx=None, bon_en=None):
     """返回 {'ok': bool|None, 'dat': [...], 'text': [...]}；ok=None 表示无可比数值。"""
     nums = {float(x) for x in re.findall(r'\d+(?:\.\d+)?', text)}
     if not nums: return {'ok': None, 'dat': [], 'text': []}
     seen = []
-    # 战斗：按 stat 取首个规则的首个单位，逐时代累计
+    # 战斗：按本文明可拥有目标逐个建键、逐时代累计（Issue 1512：不再用首目标 r['t'][0] 代表整组）
     stat_series = defaultdict(lambda: {a: None for a in (1, 2, 3, 4)})
     for e in sorted(es, key=lambda e: e['age']):
         if e.get('req') or e.get('rulesUnowned'): continue  # 由科技触发，或规则目标均为非本文明可拥有对象
         for r in e['rules']:
+            is_bld = bool(r.get('b'))
+            tids = list(dict.fromkeys(tid for tid in (r.get('t') or ()) if is_owned_target(tid, is_bld, civ_en, ours)))
+            if not tids: continue
             for f in r['fx']:
-                k = (f['s'], f.get('op', 'add'), f.get('vs'), r['t'][0])
-                if k[0] == 'armc': continue
+                if f['s'] == 'armc': continue
+                op = f.get('op', 'add')
+                for tid in tids:
+                    k = (f['s'], op, f.get('vs'), ('b' if is_bld else 'u', tid))
+                    ser = stat_series[k]
+                    for a in (1, 2, 3, 4):
+                        if a >= e['age']:
+                            cur = ser[a]
+                            if f['s'] == 'rof': ser[a] = (1 + (0 if cur is None else cur)) * (1 + f['v']) - 1
+                            elif op == 'mul': ser[a] = (1 if cur is None else cur) * f['v']
+                            elif op == 'set': ser[a] = f['v']
+                            else: ser[a] = (0 if cur is None else cur) + f['v']
+    # 经济：对称跳过前置科技触发项；按命令顺序对本文明可拥有目标累计（空 t 按 (cls, unit) 兜底）
+    for e in sorted(es, key=lambda e: e['age']):
+        if e.get('req'): continue
+        for x in e['eco']:
+            if 'a' not in x or x['a'] not in (100, 103, 104, 105, 106, 13, 14, 109, 101): continue
+            if is_reviewed_split_cost_eco(civ_en, filed_idx, e['age'], x, bon_en): continue
+            raw_t = x.get('t') or ()
+            if raw_t:
+                tkeys = [('id', tid) for tid in dict.fromkeys(raw_t) if is_owned_target(tid, None, civ_en, ours)]
+                if not tkeys: continue
+            else:
+                tkeys = [('raw', x.get('cls'), x.get('unit'))]
+            for tk in tkeys:
+                k = ('eco%d' % x['a'], x['op'], tk)
                 ser = stat_series[k]
                 for a in (1, 2, 3, 4):
                     if a >= e['age']:
                         cur = ser[a]
-                        if f['s'] == 'rof': ser[a] = (1 + (cur or 0)) * (1 + f['v']) - 1
-                        elif k[1] == 'mul': ser[a] = (cur or 1) * f['v']
-                        elif k[1] == 'set': ser[a] = f['v']
-                        else: ser[a] = (cur or 0) + f['v']
-    for e in sorted(es, key=lambda e: e['age']):
-        done = set()
-        for x in e['eco']:
-            if 'a' not in x or x['a'] not in (100, 103, 104, 105, 106, 13, 14, 109, 101) or x['a'] in done: continue
-            done.add(x['a'])
-            k = ('eco%d' % x['a'], x['op'], json.dumps(x.get('t', [])[:1]))
-            ser = stat_series[k]
-            for a in (1, 2, 3, 4):
-                if a >= e['age']:
-                    cur = ser[a]
-                    ser[a] = (cur or 1) * x['v'] if x['op'] == 'mul' else x['v'] if x['op'] == 'set' else (cur or 0) + x['v']
+                        if x['op'] == 'mul': ser[a] = (1 if cur is None else cur) * x['v']
+                        elif x['op'] == 'set': ser[a] = x['v']
+                        else: ser[a] = (0 if cur is None else cur) + x['v']
     for k, ser in stat_series.items():
         vals = []
         for a in (1, 2, 3, 4):
@@ -1332,12 +1457,16 @@ def freshness(text, es):
             if v is not None and (vals == [] or abs(vals[-1] - v) > 1e-6): vals.append(v)
         seen.append((k[0], k[1], vals))
     if not seen: return {'ok': None, 'dat': [], 'text': sorted(nums)}
-    ok = True; dat = []
+    ok = True; dat = []; dat_seen = set()
     for kind, op, vals in seen:
         for v in vals:
             if op == 'set' or (op == 'add' and v == 0) or (op == 'mul' and abs(v - 1) < 1e-6): continue
             cs = candidates(kind, op, v)
-            dat.append(sorted(cs)[0] if len(cs) == 1 else sorted(cs))
+            item = sorted(cs)[0] if len(cs) == 1 else sorted(cs)
+            item_key = tuple(item) if isinstance(item, list) else item
+            if item_key not in dat_seen:
+                dat_seen.add(item_key)
+                dat.append(item)
             tol = 0.01 if (op == 'add' and kind != 'rof' and not kind.startswith('eco')) else 1  # 绝对加值须精确，百分比允许取整误差
             if not any(abs(cn - n) <= tol for cn in cs for n in nums): ok = False
     return {'ok': ok if dat else None, 'dat': dat, 'text': sorted(nums)}
