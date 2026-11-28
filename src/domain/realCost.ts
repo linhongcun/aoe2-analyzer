@@ -1,7 +1,7 @@
 /**
  * #88 真实费用 / 等采集时间（纯函数）。口径：issue 120 Steve 定稿 + Kent 用例草稿（评论 6157773161）。
- * - 数值全部来自 data/game/eco.json（.dat 导出）：villager.tasks、ecoTechs、civEco，不写死速度。
- * - 采集速度按所选时代，该时代及以前的经济科技（ecoTechs）全算；选了文明再叠加文明加成。
+ * - 数值全部来自 data/game/eco.json（.dat 导出）：villager.tasks、ecoTechs、ecoTechDisabledCivs、civEco，不写死速度。
+ * - 采集速度默认按所选文明在所选时代实际可研究的通用采集经济科技（含科技树禁用与勃艮第提前一时代）计算；未选文明按通用全科技兜底；选了文明再叠加文明加成。
  * - 每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度；有效速度 = 携带量 ÷ 每趟；单价耗时 = 价格 ÷ 有效速度。
  * - 金、木、石离放置点 3 格（往返 6 格）；食物按农田，贴着磨坊（往返 0 格，有效速度 = workRate）。
  * - 播种耗时：eco.json 没有，不计入（页面写「播种耗时未核实，不计入」，不出数字）。
@@ -14,6 +14,7 @@ import { civByEn } from '../data';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
+import { earlyEcoGatherTechAge } from './availabilityAge';
 import { AGE_BY_TECH, VILLAGER_CLASS } from './gameIds';
 import { effectiveGatherRate } from './gatherRate';
 import { formatClock, ratePerMinute } from './formatTime';
@@ -132,6 +133,7 @@ export interface GatherModelOptions extends CivGatherOptions {
 }
 
 const ECO_TECHS = eco.ecoTechs as Record<string, { age: number; effects: EffectLike[] }>;
+const ECO_TECH_DISABLED = new Map<string, ReadonlySet<string>>(Object.entries(eco.ecoTechDisabledCivs ?? {}).map(([id, list]) => [id, new Set(list)]));
 const CIV_INFRA_KEYS = {
   Armenians: 'armenianInfrastructure',
   Georgians: 'georgianInfrastructure',
@@ -153,6 +155,28 @@ function civDisabledTechs(civ: string): ReadonlySet<number> {
   return disabled;
 }
 
+function isEcoTechDisabledForCiv(id: string | number, civ: string): boolean {
+  return ECO_TECH_DISABLED.get(String(id))?.has(civ) ?? false;
+}
+
+function isDefaultEcoTechEnabled(id: string, t: { age: number; effects: EffectLike[] }, age: number, validCiv: string): boolean {
+  if (!validCiv) return t.age <= age;
+  if (isEcoTechDisabledForCiv(id, validCiv)) return false;
+  return earlyEcoGatherTechAge(t, validCiv, hasGatherAttrEffect(t.effects)) <= age;
+}
+
+/** 省略 options.techIds 时默认启用的通用采集经济科技 ID 集合（按文明科技树禁用与勃艮第提前时代过滤；空/未知文明回退通用全科技）。 */
+export function defaultGatherEcoTechIds(age: number, civ = ''): Set<number> {
+  const validCiv = civ !== '' && civByEn(civ) !== undefined ? civ : '';
+  const enabled = new Set<number>();
+  for (const [id, t] of Object.entries(ECO_TECHS)) {
+    if (hasGatherAttrEffect(t.effects) && isDefaultEcoTechEnabled(id, t, age, validCiv)) {
+      enabled.add(Number(id));
+    }
+  }
+  return enabled;
+}
+
 /** 提取属于可研究目录科技的前置 ID（排除时代与非目录内部 .dat 触发科技，如 104/101）。 */
 const researchablePrereqs = (requires?: readonly number[]): number[] =>
   (requires ?? []).filter((id) => !Object.hasOwn(AGE_BY_TECH, id) && Object.hasOwn(eco.techs, String(id)));
@@ -161,12 +185,20 @@ function collectCivGather(age: number, civ: string, options: CivGatherOptions = 
   const civMods: Record<string, { m: Mod; zh: string; techs: number[]; fromTree: boolean; exact: boolean; uncertain: boolean }> = {};
   const src = Object.hasOwn(SOURCED, civ) ? SOURCED[civ]! : {};
   const disabled = civDisabledTechs(civ);
+  const validCiv = civ !== '' && civByEn(civ) !== undefined ? civ : '';
   const rows = (Object.hasOwn(eco.civEco, civ) ? eco.civEco[civ] : undefined) as
     { age: number; source?: string; tech?: number; requires?: number[]; effects: EffectLike[] }[] | undefined;
   for (const row of rows ?? []) {
     if (row.source === 'team' || row.age > age) continue;
     const prereqs = researchablePrereqs(row.requires);
-    if (prereqs.some((id) => disabled.has(id) || (options.availableTechIds !== undefined && !options.availableTechIds.has(id)))) {
+    if (
+      prereqs.some(
+        (id) =>
+          disabled.has(id) ||
+          (validCiv !== '' && isEcoTechDisabledForCiv(id, validCiv)) ||
+          (options.availableTechIds !== undefined && !options.availableTechIds.has(id)),
+      )
+    ) {
       continue;
     }
     let rowUncertain = false;
@@ -176,7 +208,7 @@ function collectCivGather(age: number, civ: string, options: CivGatherOptions = 
       let skip = false;
       for (const id of prereqs) {
         if (Object.hasOwn(ECO_TECHS, String(id))) {
-          if (ECO_TECHS[String(id)]!.age > age) {
+          if (!isDefaultEcoTechEnabled(String(id), ECO_TECHS[String(id)]!, age, validCiv)) {
             skip = true;
             break;
           }
@@ -216,7 +248,7 @@ export function gatherUnsupportedSources(age: number, civ: string, options: CivG
   return collectCivGather(age, civ, options).unsupported;
 }
 
-/** 不传 options 时保持原来的「所选时代经济科技全研究」口径；文明专属采集独科须调用方显式传 includeCivEcoTechs 才生效。 */
+/** 不传 options.techIds 时按该文明在所选时代可研究的通用采集经济科技（空/未知文明回退通用全科技）；文明专属采集独科须调用方显式传 includeCivEcoTechs 才生效。 */
 export function gatherModel(age: number, civ = '', options: GatherModelOptions = {}): GatherModel {
   const mods: Record<string, Mod> = {};
   const push = (key: string, op: string | undefined, v: number) => {
@@ -224,9 +256,11 @@ export function gatherModel(age: number, civ = '', options: GatherModelOptions =
     if (op === 'mul') m.mul *= v;
     else if (op === 'add') m.add += v;
   };
+  const activeTechIds = options.techIds ?? defaultGatherEcoTechIds(age, civ);
   for (const [id, t] of Object.entries(ECO_TECHS)) {
-    const enabled = options.techIds ? options.techIds.has(Number(id)) : t.age <= age;
-    if (enabled) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
+    if (activeTechIds.has(Number(id))) {
+      for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
+    }
   }
   if (options.includeCivEcoTechs && options.techIds && eco.civEcoTechs) {
     for (const [id, t] of Object.entries(eco.civEcoTechs) as [string, { civ: string; age: number; effects: EffectLike[] }][]) {
@@ -242,7 +276,20 @@ export function gatherModel(age: number, civ = '', options: GatherModelOptions =
     push(item.key, 'mul', item.mul);
     applied.push({ label: item.label, techs: item.techs, source: item.source });
   }
-  const unsupported: CivGatherLine[] = collected.unsupported.map(({ label, techs }) => ({ label, techs }));
+  const unsupported: CivGatherLine[] = [];
+  const unsupportedByLabel = new Map<string, CivGatherLine>();
+  for (const item of collected.unsupported) {
+    const existing = unsupportedByLabel.get(item.label);
+    if (existing) {
+      for (const tid of item.techs) {
+        if (!existing.techs.includes(tid)) existing.techs.push(tid);
+      }
+    } else {
+      const line: CivGatherLine = { label: item.label, techs: [...item.techs] };
+      unsupportedByLabel.set(item.label, line);
+      unsupported.push(line);
+    }
+  }
 
   const get = (key: string, base: number) => {
     const m = mods[key];

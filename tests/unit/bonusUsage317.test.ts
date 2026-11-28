@@ -16,7 +16,7 @@ import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
 import { bonusTechs, bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import { armenianContext, ARMENIAN_RESEARCH_IDS } from '../../src/domain/armenianEconomy';
 import { discountedCost } from '../../src/domain/costDiscount';
 import { calculateConstruction, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
@@ -123,10 +123,11 @@ describe('issue 317 罗马', () => {
     // #197 最后一批：完整887与独立农田供给核验后，采集与施工均计入。
     expect(simSupport('Romans')).toBe(true);
     expect(line(b, 'sim')[0]!.note).toContain('村民采集与建造加成已计入');
-    // 真实成本：村民采集 ×1.05 已计入
+    // 真实成本：村民采集 ×1.05 已计入（#1486：罗马缺双人锯 221，与同可用科技基准对照）
     const g = gatherModel(4, 'Romans');
     expect(g.applied.map((a) => [a.label, a.techs])).toContainEqual(['村民采集速度 +5%', [887]]);
-    expect(g.rate.wood).toBeGreaterThan(gatherModel(4, '').rate.wood);
+    expect(g.rate.wood).toBeGreaterThan(gatherModel(4, '', { techIds: defaultGatherEcoTechIds(4, 'Romans') }).rate.wood);
+    expect(g.rate.farm).toBeGreaterThan(gatherModel(4, '').rate.farm);
   });
   it('第 1 条：施工工具计入建造 +5%（与旧口径对照）', async () => {
     const ctx = { core, trees: await loadTrees() };

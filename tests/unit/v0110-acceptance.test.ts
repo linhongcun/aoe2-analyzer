@@ -4,7 +4,7 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import civs from '../../data/game/civs.json';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, score, TIER, type SearchItem } from '../../src/domain/search';
 
@@ -59,11 +59,11 @@ describe('A #162 7 个文明的「未计入」原因写到具体文明', () => {
       }
     });
 
-    it(`A3 ${c.zh}：不计入规则不变，applied 为空、速度等于通用`, () => {
+    it(`A3 ${c.zh}：不计入规则不变，applied 为空、速度与同可用科技基准一致`, () => {
       for (const age of [1, 2, 3, 4]) {
         const g = gatherModel(age, c.en);
         expect(g.applied).toEqual([]);
-        expect(g.rate).toEqual(gatherModel(age).rate);
+        expect(g.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, c.en) }).rate);
       }
     });
   }
@@ -74,10 +74,10 @@ describe('A #162 7 个文明的「未计入」原因写到具体文明', () => {
     expect(r).not.toMatch(/\d/);
   });
 
-  it('A6 波兰 4 条未计入行按各自加成写原因：大庄园行与采石行不同', () => {
+  it('A6 波兰未计入行按各自加成去重显示：大庄园行合并为 1 行，与采石行不同（#1486）', () => {
     const rows = gatherModel(4, 'Poles').unsupported.map((l) => uncountedText('Poles', '波兰', l.label));
-    expect(rows).toHaveLength(4);
-    expect(rows.filter((s) => s.includes('波兰庄园农田加成'))).toEqual(Array(3).fill('未计入：波兰 波兰庄园农田加成（大庄园替代磨坊，未建模）'));
+    expect(rows).toHaveLength(2);
+    expect(rows.filter((s) => s.includes('波兰庄园农田加成'))).toEqual(['未计入：波兰 波兰庄园农田加成（大庄园替代磨坊，未建模）']);
     expect(rows.filter((s) => s.includes('波兰采石换金'))).toEqual(['未计入：波兰 波兰采石换金（石矿工兼产黄金，未建模）']);
   });
 

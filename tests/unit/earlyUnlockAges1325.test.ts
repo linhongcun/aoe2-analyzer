@@ -376,8 +376,9 @@ describe('#1325 验收 3–5：3 项军事科技提前解锁（阵容费用、PK
     expect(unitAvailable(ctx, 'Franks', 93, 1)).toBe(false);
     expect(unitAvailable(ctx, 'Franks', 93, 2)).toBe(true);
 
-    // 非目标守卫：realCost 勃艮第不因本次改动提前启用封建经济科技
-    expect(gatherModel(1, 'Burgundians').rate).toEqual(gatherModel(1, 'Franks').rate);
+    // #1486：realCost 勃艮第按提前一时代启用通用采集科技（黑暗时代等同通用封建，快于法兰克黑暗）
+    expect(gatherModel(1, 'Burgundians').rate).toEqual(gatherModel(2, '').rate);
+    expect(gatherModel(1, 'Burgundians').rate.wood).toBeGreaterThan(gatherModel(1, 'Franks').rate.wood);
   });
 });
 

@@ -4,7 +4,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { animalFood, civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((unit) => unit.up).map((unit) => [unit.id, unit.up])) as UpgradeData;
@@ -250,7 +250,7 @@ describe('#197 鞑靼牧羊产量与工作率配对', () => {
     expect(simSupport(E, 'Slavs', buildOrders).supported).toBe(true);
     expect(simSupport(E, 'Poles', buildOrders)).toEqual({ supported: true, reasons: [] });
     for (const age of [1, 2, 3, 4]) {
-      expect(gatherModel(age, 'Tatars')).toEqual({ ...gatherModel(age), civ: 'Tatars' });
+      expect(gatherModel(age, 'Tatars')).toEqual({ ...gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Tatars') }), civ: 'Tatars' });
       expect(gatherModel(age, 'Tatars').applied).toEqual([]);
       expect(gatherModel(age, 'Tatars').unsupported).toEqual([]);
     }

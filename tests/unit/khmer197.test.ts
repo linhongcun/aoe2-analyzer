@@ -5,7 +5,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { ageReqOk, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const clone = () => structuredClone(E);
@@ -235,7 +235,7 @@ describe('Khmer no-return-walk and separate supply in the public helper and real
   });
   it.each([1, 2, 3, 4])('independent realCost age%s stays its original unsourced Khmer contract', (age) => {
     const r = gatherModel(age, 'Khmer');
-    expect(r.rate).toEqual(gatherModel(age, '').rate);
+    expect(r.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Khmer') }).rate);
     expect(r.applied).toEqual([]);
     expect(r.unsupported).toEqual([{ label: '农田采集 −5%', techs: [654] }]);
   });

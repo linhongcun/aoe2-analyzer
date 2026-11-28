@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import civsRaw from '../../data/game/civs.json';
 import { civBonuses } from '../../src/domain/civBonus';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import type { Civ } from '../../src/domain/types';
 import toolUsed from '../../data/fixtures/e2e/fixtures/v0290-317-tool-used.json';
 import { units } from './helpers';
@@ -53,7 +53,7 @@ describe('#317 文明加成「是否计入」与工具实际计算一致', () =>
       const g = gatherModel(age, 'Romans');
       expect(g.applied, `${age}`).toEqual([{ label: '村民采集速度 +5%', techs: [887], source: '村民收集、建造和修理的速度 +5%' }]);
       const rome = g.rate,
-        base = gatherModel(age, '').rate;
+        base = gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Romans') }).rate;
       // 农田另乘 1.038095 是否重复计算由 #197 跟踪；真实成本只乘 1.05，这里锁住现状不变
       expect(rome.farm / base.farm, `${age} farm`).toBeCloseTo(1.05, 12);
       for (const task of ['wood', 'gold', 'stone'] as const) {

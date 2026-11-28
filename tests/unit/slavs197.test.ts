@@ -5,7 +5,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
@@ -201,7 +201,7 @@ describe('#197 Slavs-only steady farm supply and farmer consumption', () => {
   });
   it.each([1, 2, 3, 4])('independent realCost age%s retains its original sourced ×1.15 contract', (age) => {
     const r = gatherModel(age, 'Slavs');
-    const generic = gatherModel(age, '');
+    const generic = gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Slavs') });
     expect(r.applied.map((x) => x.label)).toEqual(['农田采集 +15%']);
     expect(r.unsupported).toEqual([]);
     expect(r.rate.farm / generic.rate.farm).toBeCloseTo(1.15, 12);

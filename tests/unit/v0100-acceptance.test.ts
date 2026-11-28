@@ -3,7 +3,7 @@ import civs from '../../data/game/civs.json';
 import units from '../../data/game/units.json';
 import buildings from '../../data/game/buildings.json';
 import techs from '../../data/game/techs.json';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, pyMatch, PY_RESERVE, TIER, score, type SearchItem } from '../../src/domain/search';
 
@@ -45,11 +45,11 @@ describe('A #156 波希米亚「未计入」原因改为「需研究科技，未
     });
   }
 
-  it('A3 玛雅原因不变，仍未计入且速度等于通用', () => {
+  it('A3 玛雅原因不变，仍未计入且速度与同可用科技基准一致', () => {
     const g = gatherModel(4, 'Mayans');
     expect(g.applied).toEqual([]);
     expect(g.unsupported.length).toBeGreaterThan(0);
-    expect(g.rate).toEqual(gatherModel(4).rate);
+    expect(g.rate).toEqual(gatherModel(4, '', { techIds: defaultGatherEcoTechIds(4, 'Mayans') }).rate);
     for (const line of g.unsupported) {
       expect(uncountedText('Mayans', '玛雅', line.label)).toBe(`未计入：玛雅 ${line.label}（资源多持续 15%，不是采集变快，暂不计入）`);
     }

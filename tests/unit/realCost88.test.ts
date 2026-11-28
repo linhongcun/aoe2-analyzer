@@ -7,7 +7,17 @@ import civs from '../../data/game/civs.json';
 import eco from '../../data/game/eco.json';
 import units from '../../data/game/units.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
-import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock, gatherBonusIdx, gatherModel, gatherUnsupportedSources, realCost } from '../../src/domain/realCost';
+import {
+  countForTime,
+  DEFAULT_MIN,
+  DEFAULT_VILS,
+  defaultGatherEcoTechIds,
+  fmtClock,
+  gatherBonusIdx,
+  gatherModel,
+  gatherUnsupportedSources,
+  realCost,
+} from '../../src/domain/realCost';
 import type { Unit } from '../../src/domain/types';
 import { RealCostBlock, uncountedText } from '../../src/shared/ui/RealCost';
 
@@ -227,7 +237,7 @@ describe('#145 / #162 未计入原因按文明说明', () => {
   it('玛雅改为「资源多持续 15%，不是采集变快，暂不计入」', () => {
     expect(new Set(paren(lines('Mayans', '玛雅')))).toEqual(new Set(['（资源多持续 15%，不是采集变快，暂不计入）']));
   });
-  it.each(UNCOUNTED_CASES)('%s 原因归纳自「%s」，各时代仍按通用速度', (civ, source, reason) => {
+  it.each(UNCOUNTED_CASES)('%s 原因归纳自「%s」，各时代仍按同可用科技基准速度', (civ, source, reason) => {
     const data = civs.find((c) => c.en === civ)!;
     expect(data.bon).toContain(source);
     const want = (label: string) => LABEL_REASON[label] ?? reason;
@@ -235,14 +245,17 @@ describe('#145 / #162 未计入原因按文明说明', () => {
     for (const age of [1, 2, 3, 4]) {
       const g = gatherModel(age, civ);
       expect(g.applied).toEqual([]);
-      expect(g.rate).toEqual(gatherModel(age).rate);
+      expect(g.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, civ) }).rate);
       for (const a of g.unsupported) expect(uncountedText(civ, data.zh, a.label)).toBe(`未计入：${data.zh} ${a.label}（${want(a.label)}）`);
     }
   });
-  it('波兰按加成行分别写：大庄园三行「大庄园替代磨坊，未建模」，采石行「石矿工兼产黄金，未建模」', () => {
+  it('波兰按加成行分别写：大庄园去重为 1 行「大庄园替代磨坊，未建模」，采石行「石矿工兼产黄金，未建模」（#1486）', () => {
     const rows = gatherModel(4, 'Poles').unsupported.map((a) => uncountedText('Poles', '波兰', a.label));
-    expect(rows.filter((r) => r.includes('（大庄园替代磨坊，未建模）'))).toHaveLength(3);
+    expect(rows.filter((r) => r.includes('（大庄园替代磨坊，未建模）'))).toHaveLength(1);
     expect(rows.filter((r) => r.includes('（石矿工兼产黄金，未建模）'))).toHaveLength(1);
+    // gatherUnsupportedSources 保持按原始 res key 输出供 productionWarnings 归并
+    const rawSources = gatherUnsupportedSources(4, 'Poles');
+    expect(rawSources.map((s) => s.key)).toEqual(['res:237', 'res:238', 'res:239', 'res:241']);
   });
   it('未覆盖的文明保留通用原因', () => {
     expect(uncountedText('Unknown', '未知文明', '采集加成')).toBe('未计入：未知文明 采集加成（数据读不准，按通用速度算）');
@@ -280,16 +293,17 @@ describe('Issue 1473 亚美尼亚正式建模与全 56 文明 civEco 前置/禁�
 
     for (const age of [3, 4]) {
       const g = gatherModel(age, 'Armenians');
+      const base = gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Armenians') });
       expect(g.unsupported, `age=${age}`).toEqual([]);
       expect(g.applied, `age=${age}`).toEqual([
         { label: '伐木 +14%', techs: [960, 961], source: '骡车科技效率 +40%' },
         { label: '采金 +11%', techs: [963, 964], source: '骡车科技效率 +40%' },
         { label: '采石 +5%', techs: [965], source: '骡车科技效率 +40%' },
       ]);
-      expect(g.rate.wood).toBeGreaterThan(gatherModel(age).rate.wood);
-      expect(g.rate.gold).toBeGreaterThan(gatherModel(age).rate.gold);
-      expect(g.rate.stone).toBeGreaterThan(gatherModel(age).rate.stone);
-      expect(g.rate.farm).toBe(gatherModel(age).rate.farm);
+      expect(g.rate.wood).toBeGreaterThan(base.rate.wood);
+      expect(g.rate.gold).toBeGreaterThan(base.rate.gold);
+      expect(g.rate.stone).toBeGreaterThan(base.rate.stone);
+      expect(g.rate.farm).toBe(base.rate.farm);
     }
 
     const html = renderToStaticMarkup(
@@ -347,13 +361,28 @@ describe('Issue 1473 亚美尼亚正式建模与全 56 文明 civEco 前置/禁�
     }
   });
 
-  it('全站其余 54 文明在默认与显式口径下 applied/unsupported 零漂移，且 gatherUnsupportedSources 与 gatherModel 一致', () => {
+  it('全站其余 54 文明在默认与显式口径下 applied/unsupported 零漂移，且 gatherUnsupportedSources 按 label 去重后与 gatherModel 一致', () => {
+    const dedupByLabel = (rows: readonly { label: string; techs: number[] }[]) => {
+      const out: { label: string; techs: number[] }[] = [];
+      const seen = new Map<string, { label: string; techs: number[] }>();
+      for (const item of rows) {
+        const prev = seen.get(item.label);
+        if (prev) {
+          for (const tid of item.techs) if (!prev.techs.includes(tid)) prev.techs.push(tid);
+        } else {
+          const line = { label: item.label, techs: [...item.techs] };
+          seen.set(item.label, line);
+          out.push(line);
+        }
+      }
+      return out;
+    };
     for (const c of civs) {
       for (const age of [1, 2, 3, 4]) {
         const def = gatherModel(age, c.en);
         const exp = gatherModel(age, c.en, { techIds: new Set() });
-        expect(gatherUnsupportedSources(age, c.en).map(({ label, techs }) => ({ label, techs }))).toEqual(def.unsupported);
-        expect(gatherUnsupportedSources(age, c.en, { techIds: new Set() }).map(({ label, techs }) => ({ label, techs }))).toEqual(exp.unsupported);
+        expect(dedupByLabel(gatherUnsupportedSources(age, c.en))).toEqual(def.unsupported);
+        expect(dedupByLabel(gatherUnsupportedSources(age, c.en, { techIds: new Set() }))).toEqual(exp.unsupported);
         if (c.en !== 'Armenians' && c.en !== 'Bohemians') {
           expect(exp.applied, `${c.en}@${age}`).toEqual(def.applied);
           expect(exp.unsupported, `${c.en}@${age}`).toEqual(def.unsupported);

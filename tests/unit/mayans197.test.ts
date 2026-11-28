@@ -5,7 +5,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import { civBonuses } from '../../src/domain/civBonus';
 import { bonusUsage } from '../../src/domain/bonusUsage';
 import { civs } from '../../src/data';
@@ -429,7 +429,7 @@ describe('#197 玛雅起始、队列与墙团队开关', () => {
     expect(bonusUsage(bonus).find((line) => line.tool === 'sim')).toMatchObject({ on: true, note: '已计入资源产量与工作率配对；储量和耗尽未模拟' });
     for (const age of [1, 2, 3, 4]) {
       const result = gatherModel(age, 'Mayans');
-      expect(result.rate).toEqual(gatherModel(age, '').rate);
+      expect(result.rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Mayans') }).rate);
       expect(result.applied).toEqual([]);
       expect(result.unsupported.length).toBeGreaterThan(0);
     }

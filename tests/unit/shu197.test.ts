@@ -4,7 +4,7 @@ import units from '../../data/game/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import type { BuildOrder, Task } from '../../src/domain/buildOrder';
 import { civSimNotes, gatherRate, simSupport, simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { gatherModel } from '../../src/domain/realCost';
+import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries(units.filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
@@ -188,7 +188,7 @@ describe('#197 蜀伐木兼产食物', () => {
     expect(civSimNotes(E, 'Shu').join('')).toContain('伐木兼产食物按连续收入估算');
     for (const age of [1, 2, 3, 4]) {
       expect(gatherModel(age, 'Shu').unsupported.map((x) => x.label)).toContain('伐木同时产食物');
-      expect(gatherModel(age, 'Shu').rate).toEqual(gatherModel(age).rate);
+      expect(gatherModel(age, 'Shu').rate).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Shu') }).rate);
     }
   });
   it('提示明确骑士模板不是蜀合法开局，不自动替换黑光铠骑兵', () => {
