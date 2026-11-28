@@ -320,8 +320,9 @@ describe('Issue 1410: 持续生产接入大干道 (506) 与跨工具零漂移隔
   });
 });
 
-describe('Issue 1410: 六国同源经济告警去重与窄屏括注渲染', () => {
+describe('Issue 1410 / issue 1521: 七国同源经济告警去重与窄屏括注渲染', () => {
   const expectedMerged: Record<string, string[]> = {
+    Danes: ['捕鱼船和村民存放的食物 +5%：该文明经济机制未计入，使用已支持的基础采集模型。'],
     Malians: ['村民存放的黄金额外 +10%：该文明经济机制未计入，使用已支持的基础采集模型。'],
     Aztecs: ['村民携带量 +3：该文明经济机制未计入，使用已支持的基础采集模型。'],
     Khmer: ['农民不需要磨坊或城镇中心就可以存放食物（该加成另含农田采集 −5%）：该文明经济机制未计入，使用已支持的基础采集模型。'],
@@ -333,7 +334,7 @@ describe('Issue 1410: 六国同源经济告警去重与窄屏括注渲染', () =
     Sicilians: ['农田升级提供的食物 +125%：该文明经济机制未计入，使用已支持的基础采集模型。'],
   };
 
-  it('六国在全部 4 个时代输出逐字匹配的合并后告警，波兰保留庄园行且顺序不变', () => {
+  it('七国在全部 4 个时代输出逐字匹配的合并后告警，波兰保留庄园行且顺序不变', () => {
     for (const [civ, expected] of Object.entries(expectedMerged)) {
       for (const age of [1, 2, 3, 4]) {
         const res = calculateProduction(ctx, {
@@ -351,7 +352,7 @@ describe('Issue 1410: 六国同源经济告警去重与窄屏括注渲染', () =
   });
 
   it('非同源经济文本文明保留「（已单独列明的基础属性加成除外）」原口径，全站 56 国无同源重复行', () => {
-    for (const civ of ['Danes', 'Dravidians', 'Goths', 'Khitans', 'Mapuche']) {
+    for (const civ of ['Dravidians', 'Goths', 'Khitans', 'Mapuche']) {
       const res = calculateProduction(ctx, {
         civ,
         age: 3,

@@ -37,8 +37,12 @@ interface Mod {
 type Attr = 'workRate' | 'carry' | 'speed';
 const TASK_ZH: Record<Task, string> = { farm: '农田采集', wood: '伐木', gold: '采金', stone: '采石' };
 const ATTR_ZH: Record<Attr, string> = { workRate: '采集速度', carry: '携带量', speed: '村民移速' };
-/** 与采集相关、但模型读不准的 res（取自 UNHANDLED_RES 的同名条目） */
-const GATHER_RES = [69, 237, 238, 239, 241, 267, 276, 502];
+/** 与采集相关、但模型读不准的 res（未在 UNHANDLED_RES 登记的项由 GATHER_RES_ZH 提供本地无数字标签，issue 1521） */
+const GATHER_RES = [69, 237, 238, 239, 241, 267, 276, 299, 502];
+/** 仅用于 realCost 未计入告警的无数字本地标签（避免改动 unhandledRes.ts 及触发 productionWarnings 含数字括注） */
+const GATHER_RES_ZH: Record<number, string> = {
+  299: '食物采集加成',
+};
 
 interface EffectLike {
   kind: string;
@@ -50,7 +54,7 @@ interface EffectLike {
 }
 const relevant = (e: EffectLike): { key: string; zh: string } | null => {
   if (e.kind === 'res' && e.res !== undefined && GATHER_RES.includes(e.res)) {
-    const zh = (UNHANDLED_RES[e.res] ?? '')
+    const zh = (GATHER_RES_ZH[e.res] ?? UNHANDLED_RES[e.res] ?? '')
       .replace(/（.*$/, '')
       .replace(/未建模$/, '')
       .trim();

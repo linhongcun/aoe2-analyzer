@@ -45,6 +45,7 @@ const farm = T.farm!.workRate;
 /** 按加成行单独写原因的行（Steve 定稿：波兰大庄园三行） */
 const LABEL_REASON: Record<string, string> = { 波兰庄园农田加成: '大庄园替代磨坊，未建模' };
 const UNCOUNTED_CASES = [
+  ['Danes', '捕鱼船和村民存放的食物 +5%', '存放食物，未建模'],
   ['Malians', '村民存放的黄金额外 +10%', '存放黄金加成，未建模'],
   ['Poles', '石矿工不仅能产生石料，还能产生黄金', '石矿工兼产黄金，未建模'],
   ['Portuguese', '采果工不仅能产生食物，还能产生木材', '采果兼产木材，未建模'],
@@ -387,6 +388,46 @@ describe('Issue 1473 亚美尼亚正式建模与全 56 文明 civEco 前置/禁�
           expect(exp.applied, `${c.en}@${age}`).toEqual(def.applied);
           expect(exp.unsupported, `${c.en}@${age}`).toEqual(def.unsupported);
         }
+      }
+    }
+  });
+});
+
+describe('issue 1521 丹麦食物存放加成 res:299 未计入提示与非目标隔离', () => {
+  it('丹麦全 4 时代返回 res:299 无数字标签且维持基准速率；RealCostBlock 渲染 UX 定稿文案', () => {
+    for (const age of [1, 2, 3, 4]) {
+      const g = gatherModel(age, 'Danes');
+      expect(g.applied, `age=${age}`).toEqual([]);
+      expect(g.unsupported, `age=${age}`).toEqual([{ label: '食物采集加成', techs: [1494] }]);
+      expect(gatherUnsupportedSources(age, 'Danes'), `age=${age}`).toEqual([{ key: 'res:299', label: '食物采集加成', techs: [1494], fromTree: false }]);
+      expect(g.rate, `age=${age}`).toEqual(gatherModel(age, '', { techIds: defaultGatherEcoTechIds(age, 'Danes') }).rate);
+    }
+
+    const expected = '未计入：丹麦人 食物采集加成（存放食物，未建模）';
+    for (const unitId of [567, 2712]) {
+      const unit = (units as Unit[]).find((u) => u.id === unitId)!;
+      const html = renderToStaticMarkup(
+        createElement(RealCostBlock, {
+          k: 'b',
+          civ: 'Danes',
+          civZh: '丹麦人',
+          age: 4,
+          d: discountedCost(unit, 'Danes', 4),
+          vils: DEFAULT_VILS,
+          min: DEFAULT_MIN,
+        }),
+      );
+      const rows = [...html.matchAll(/data-t="rc-unsupported">.*?<span title="([^"]*)">([^<]*)<\/span>/g)];
+      expect(rows.map((r) => [r[1], r[2]])).toEqual([[expected, expected]]);
+      expect(html).not.toContain('来源：aoe2techtree 文明描述');
+    }
+  });
+
+  it('马普切 res:215 与瓦兰吉人 res:298 不在 GATHER_RES 中，全 4 时代不触发未计入告警', () => {
+    for (const civ of ['Mapuche', 'Varangians'] as const) {
+      for (const age of [1, 2, 3, 4]) {
+        expect(gatherModel(age, civ).unsupported, `${civ}@${age}`).toEqual([]);
+        expect(gatherUnsupportedSources(age, civ), `${civ}@${age}`).toEqual([]);
       }
     }
   });

@@ -184,7 +184,6 @@ export function calculateEcoPayoff(ctx: ProductionContext, config: EcoPayoffConf
   const research = payoffResearch(config, target);
   warnings.push(...research.warnings, ...[...before.unsupported, ...after.unsupported].map((x) => `${x.label}：采集机制未完整计入。`));
   const special: Record<string, string> = {
-    Danes: '丹麦村民存放食物的额外收益未计入，食物劳动量折算不完整。',
     Muisca: '穆伊斯卡自身团队天然黄金机制尚未完整核实。',
     Wei: '魏研究经济科技赠送村民未计入；本模型固定村民人数。',
     Spanish: '西班牙研究科技获得黄金的奖励未计入。',

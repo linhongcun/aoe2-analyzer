@@ -146,6 +146,24 @@ describe('issue 214 固定数据经济科技收益', () => {
     expect(r.complete).toBe(false);
     expect(r.balance).toBeNull();
   });
+  it('issue 1521：丹麦精确仅输出 1 条未计入告警并阻断平衡，马普切与瓦兰吉人仍可计算有限回本平衡', () => {
+    const workers = { Food: '10', Wood: '10', Gold: '0', Stone: '0' };
+    for (const age of [2, 3, 4]) {
+      const r = run({ civ: 'Danes', age, target: 202, known: [], workers, distance: '3', minutes: '10' });
+      expect(r.errors, `Danes@${age}`).toEqual([]);
+      expect(r.warnings, `Danes@${age}`).toEqual(['食物采集加成：采集机制未完整计入。']);
+      expect(r.complete, `Danes@${age}`).toBe(false);
+      expect(r.balance, `Danes@${age}`).toBeNull();
+    }
+    for (const civ of ['Mapuche', 'Varangians'] as const) {
+      const r = run({ civ, age: 4, target: 202, known: [], workers, distance: '3', minutes: '10' });
+      expect(r.errors, civ).toEqual([]);
+      expect(r.warnings, civ).toEqual([]);
+      expect(r.complete, civ).toBe(true);
+      expect(r.balance, civ).not.toBeNull();
+      expect(Number.isFinite(r.balance), civ).toBe(true);
+    }
+  });
   it('推车仅可设置为已有采集条件，不是目标；前置必须满足', () => {
     expect(payoffAvailable(ctx, plan({ age: 3 })).some((t) => t.id === 213)).toBe(true);
     expect(run({ known: [213] }).resources[1]!.beforeRate).toBeGreaterThan(run().resources[1]!.beforeRate);
