@@ -3,6 +3,7 @@
  * 效果数值来自 .dat 生成的 data/game/effects.json（经 effects.ts 合成，手工表仅作回退）。
  */
 import type { Building, Effect, StatSet } from './types';
+import { ballisticsAffectsBuilding } from './ballistics';
 import { DAT } from './datEffects';
 import { getProjectileGuidanceScope, projectileGuidanceBuildingScopeNote } from './duelUnmodeledEco';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
@@ -60,7 +61,7 @@ export function buildingBase(b: Building): StatSet {
 }
 
 /** 仅文本层中的进攻类建筑科技（无攻建筑同样过滤） */
-const OFFENSIVE_TEXT_ONLY = new Set(['Heated Shot', 'Ballistics']);
+const OFFENSIVE_TEXT_ONLY = new Set(['Heated Shot']);
 
 function directBuildingSimTechs(
   ctx: SimContext,
@@ -117,8 +118,16 @@ export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): Sim
       r.push({ t, ef: null });
     }
   });
-  // 投射物剧毒科技（如箭毒 1393，按 DAT.projectilePoison 仅命中具备攻击能力的适用建筑；先于 b.techs 去重）
+  // 弹道学（科技 93）、投射物剧毒与追踪/弹速科技：均按固定 .dat 范围且仅命中具备攻击能力的建筑（先于 b.techs 去重）
   if (canAttack) {
+    // 弹道学（科技 93）：按固定 .dat 派生的 DAT.ballistics.buildings 判定适用攻击建筑，配合运行时 canAttack 双防线（Issue 1510）
+    if (ballisticsAffectsBuilding(b.id)) {
+      const t = has('Ballistics');
+      if (t && !seen.has(t.id)) {
+        seen.add(t.id);
+        r.push({ t, ef: null });
+      }
+    }
     Object.entries(DAT.projectilePoison ?? {}).forEach(([en, scope]) => {
       if (!scope.buildings.includes(b.id)) return;
       const t = has(en);

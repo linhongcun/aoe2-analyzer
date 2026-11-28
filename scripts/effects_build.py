@@ -1039,19 +1039,26 @@ def main():
             validate_pop_space_baselines(ent.get('eco') or (), dat_units, units_by_id, owner=f'civ:{civ_en}:conditional:{ent.get("tech")}')
         validate_pop_space_baselines((cre.get('team') or {}).get('eco') or (), dat_units, units_by_id, owner=f'civ:{civ_en}:team')
     unit_forms = transform_closure(dat_units, [u['id'] for u in units])
+    bld_forms = transform_closure(dat_units, [b['id'] for b in blds])
+    attacking_blds = [b for b in blds if building_can_attack(b)]
     ballistics_eid = AT[93]['EffectID']
     ballistics_cmds = AE[ballistics_eid]['EffectCommands'] if 0 <= ballistics_eid < len(AE) else []
+    ballistics_pids = guided_projectile_ids(ballistics_cmds, attrs=(19,))
     ballistics_units, ballistics_charge_only = split_projectile_units(
         dat_units,
         unit_forms,
         units,
-        guided_projectile_ids(ballistics_cmds, attrs=(19,)),
+        ballistics_pids,
     )
-    out['ballistics'] = {'units': ballistics_units, 'chargeOnly': ballistics_charge_only}
+    ballistics_blds, _ = split_projectile_units(
+        dat_units,
+        bld_forms,
+        attacking_blds,
+        ballistics_pids,
+    )
+    out['ballistics'] = {'units': ballistics_units, 'chargeOnly': ballistics_charge_only, 'buildings': ballistics_blds}
 
     # ---- #1403 投射物剧毒科技（属性 145/146/147，如箭毒 1393）适用单位与有攻建筑（零硬编码 ID，按科技文明取交集） ----
-    bld_forms = transform_closure(dat_units, [b['id'] for b in blds])
-    attacking_blds = [b for b in blds if building_can_attack(b)]
     projectile_poison = {}
     for t in techs:
         tid = t['id']

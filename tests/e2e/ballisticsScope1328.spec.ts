@@ -172,3 +172,65 @@ test('#1328 阵容新增费用：扈从默认未勾选可选弹道学，火枪�
   await expect(targetsIt.locator('.army-research-choice', { hasText: '弹道学' })).toHaveCount(0);
   await assertNoHorizontalOverflow(page);
 });
+
+test('#1510 建筑科技模拟器弹道学（93）：6 新增 + 2 正对照 + 3 负对照（1280 & 390）', async ({ page }) => {
+  test.setTimeout(90000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+
+  const positiveRoutes: [number, string][] = [
+    [236, 'Portuguese'], // 炮塔（新增）
+    [109, 'Portuguese'], // 城镇中心（新增）
+    [45, 'Portuguese'], // 船坞（新增）
+    [1665, 'Sicilians'], // 城楼（新增）
+    [1189, 'Malay'], // 巨港（新增）
+    [1806, 'Armenians'], // 强化教堂（新增）
+    [235, 'Portuguese'], // 大型箭塔（正对照）
+    [82, 'Portuguese'], // 城堡（正对照）
+  ];
+  const negativeRoutes: [number, string][] = [
+    [598, 'Portuguese'], // 哨站（负对照）
+    [1021, 'Portuguese'], // 大商站（负对照）
+    [2556, 'Incas'], // 聚落（负对照）
+  ];
+
+  await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'light'));
+  for (const width of [1280, 390] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const [bid, civ] of positiveRoutes) {
+      await page.goto(`./#/building/${bid}?civ=${civ}&age=4&tab=sim`);
+      await expect(page.locator('#sim')).toBeVisible();
+      await expect(page.locator('#sim label.simt').first()).toBeVisible();
+
+      const uniGroup = page.locator('#sim .simg', { has: page.locator('h4', { hasText: /^大学$/ }) });
+      const row = uniGroup.locator('label.simt', { hasText: '弹道学' });
+      await expect(row).toHaveCount(1);
+      await expect(row.locator('.tag')).toHaveText('仅文本');
+      await expect(row.locator('a.tlink')).toHaveAttribute('href', '#/tech/93');
+      await expect(row.locator('[data-t="sim-scope-note"]')).toHaveCount(0);
+      await expect(row.locator('.note')).toContainText('对移动目标的射击准确度更高');
+      await expect(row).toContainText('60s');
+
+      await assertNoWrapElements(page, '#sim .simc .num.nw');
+      await assertNoHorizontalOverflow(page);
+
+      if (width === 1280 && bid === 109) {
+        await page.locator('#sim .bar').getByRole('button', { name: '满科技', exact: true }).click();
+        await expect(row).not.toHaveClass(/\bon\b/);
+      }
+    }
+
+    for (const [bid, civ] of negativeRoutes) {
+      await page.goto(`./#/building/${bid}?civ=${civ}&age=4&tab=sim`);
+      await expect(page.locator('#sim')).toBeVisible();
+      await expect(page.locator('#sim label.simt').first()).toBeVisible();
+      await expect(page.locator('#sim label.simt', { hasText: '弹道学' })).toHaveCount(0);
+      await assertNoHorizontalOverflow(page);
+    }
+  }
+
+  expect(errors).toEqual([]);
+});

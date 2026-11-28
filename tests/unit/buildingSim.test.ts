@@ -2,13 +2,14 @@ import { describe, expect, it } from 'vitest';
 import raw from '../../data/game/buildings.json';
 import { civs } from '../../src/data';
 import { buildingBase, buildingSimTechs, simulateBuilding } from '../../src/domain/buildingSim';
+import { DAT } from '../../src/domain/datEffects';
 import { matchingGenericFx } from '../../src/domain/effects';
 import { formatHp } from '../../src/domain/hpFormat';
 import { buildingType } from '../../src/domain/buildings';
 import { applicableSimCostTechs, mergeSimCostTechs } from '../../src/domain/simEffectiveCost';
-import { allNumeric, totalCost } from '../../src/domain/simulator';
-import type { Building, Effect } from '../../src/domain/types';
-import { ctx, tech } from './helpers';
+import { allNumeric, makeSimContext, presetUpTo, totalCost } from '../../src/domain/simulator';
+import type { Building, Effect, Trees } from '../../src/domain/types';
+import { ctx, tech, techs, trees } from './helpers';
 
 const bs = (raw as unknown as Building[]).map((b) => ({ ...b, dlc: null, type: buildingType(b.en) }));
 const B = (en: string) => bs.find((b) => b.en === en)!;
@@ -372,5 +373,86 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     expect([frMonasteryFull.hp, frMonasteryFull.ma, frMonasteryFull.pa, frMonasteryFull.atk, frMonasteryFull.rng]).toEqual([2541, 2, 9, 0, 0]);
     expect(buildingSimTechs(ctx, B('Dock'), 'Malay').some((x) => x.t.en === 'Thalassocracy' && x.ef !== null)).toBe(false);
     expect(buildingSimTechs(ctx, B('Watch Tower'), 'Britons').some((x) => x.t.en === 'Guard Tower' && x.ef !== null)).toBe(false);
+  });
+
+  it('全库 38 座建筑弹道学（93）与 DAT.ballistics.buildings 精确一致并保留双防线（#1510）', () => {
+    const byId = new Map(bs.map((b) => [b.id, b]));
+    const datBlds = DAT.ballistics?.buildings ?? [];
+    const expectedBlds = [45, 79, 82, 109, 234, 235, 236, 1189, 1251, 1665, 1806];
+    expect(datBlds).toEqual(expectedBlds);
+    expect(bs).toHaveLength(38);
+
+    // 1. 全库 38 座建筑遍历守恒：11 座命中且为无 scopeNote 的仅文本项，27 座不出现 t93
+    const matchedIds: number[] = [];
+    for (const b of bs) {
+      const civ = b.civs[0]!;
+      const avail = buildingSimTechs(ctx, b, civ);
+      const bRow = avail.find((x) => x.t.id === 93);
+      if (bRow) {
+        matchedIds.push(b.id);
+        expect(bRow.ef, `building ${b.id} ef`).toBeNull();
+        expect(bRow.scopeNote, `building ${b.id} scopeNote`).toBeUndefined();
+        expect(allNumeric(avail).has(93), `building ${b.id} allNumeric`).toBe(false);
+        expect(presetUpTo(avail, 4, civ).has(93), `building ${b.id} presetUpTo`).toBe(false);
+      }
+    }
+    matchedIds.sort((a, b) => a - b);
+    expect(matchedIds).toEqual(datBlds);
+    expect(bs.length - matchedIds.length).toBe(27);
+
+    // 2. 显式覆盖 6 座新增代表文明与 5 座既有正对照
+    const positiveCases: [number, string][] = [
+      [45, 'Portuguese'],
+      [109, 'Portuguese'],
+      [236, 'Portuguese'],
+      [1665, 'Sicilians'],
+      [1189, 'Malay'],
+      [1806, 'Armenians'],
+      [79, 'Portuguese'],
+      [82, 'Portuguese'],
+      [234, 'Portuguese'],
+      [235, 'Portuguese'],
+      [1251, 'Bulgarians'],
+    ];
+    for (const [bid, civ] of positiveCases) {
+      const avail = buildingSimTechs(ctx, byId.get(bid)!, civ);
+      const rows = avail.filter((x) => x.t.id === 93);
+      expect(rows, `${civ}/${bid}`).toHaveLength(1);
+      expect(rows[0]!.ef).toBeNull();
+      expect(rows[0]!.scopeNote).toBeUndefined();
+      expect(allNumeric(avail).has(93)).toBe(false);
+      expect(presetUpTo(avail, 4, civ).has(93)).toBe(false);
+    }
+
+    // 3. 显式覆盖 3 座无攻负对照（哨站 598 / 大商站 1021 / 聚落 2556）
+    for (const [bid, civ] of [
+      [598, 'Portuguese'],
+      [1021, 'Portuguese'],
+      [2556, 'Incas'],
+    ] as const) {
+      expect(
+        buildingSimTechs(ctx, byId.get(bid)!, civ).some((x) => x.t.id === 93),
+        `negative ${civ}/${bid}`,
+      ).toBe(false);
+    }
+
+    // 4. 合成边界 ①：id=79 在 DAT.ballistics.buildings 内但全零攻击属性且 atks=[] → 运行时 canAttack 防线阻断 t93
+    const zeroAtkTower: Building = { ...byId.get(79)!, atk: 0, rng: 0, minr: 0, rof: 0, atks: [] };
+    expect(buildingSimTechs(ctx, zeroAtkTower, 'Portuguese').some((x) => x.t.id === 93)).toBe(false);
+
+    // 5. 合成边界 ②：文明科技树移除 t93 时，即使建筑在 DAT.ballistics.buildings 内也不显示 t93
+    const clonedTrees: Trees = structuredClone(trees);
+    for (const block of clonedTrees.t.Portuguese!) {
+      for (const cell of block[3]) {
+        if (cell[2] === 't' && cell[3] === 93) cell[4] = 0;
+      }
+    }
+    const noBallisticsCtx = makeSimContext(techs, clonedTrees);
+    for (const bid of [45, 79, 82, 109, 234, 235, 236]) {
+      expect(
+        buildingSimTechs(noBallisticsCtx, byId.get(bid)!, 'Portuguese').some((x) => x.t.id === 93),
+        `no-t93 Portuguese/${bid}`,
+      ).toBe(false);
+    }
   });
 });

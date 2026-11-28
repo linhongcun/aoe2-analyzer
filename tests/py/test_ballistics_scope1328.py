@@ -217,6 +217,31 @@ class BallisticsScope1328Tests(unittest.TestCase):
             if 'chargeOnlyCombatUnits' in node:
                 self.assertTrue(set(node['chargeOnlyCombatUnits']).issubset(set(node['combatUnits'])), tid)
 
+    def test_committed_ballistics_buildings_matches_dat_attacking_scope_1510(self):
+        fx = json.loads((ROOT / 'data/game/effects.json').read_text(encoding='utf-8'))
+        blds = json.loads((ROOT / 'data/game/buildings.json').read_text(encoding='utf-8'))
+        b_blds = fx['ballistics']['buildings']
+        expected = [45, 79, 82, 109, 234, 235, 236, 1189, 1251, 1665, 1806]
+
+        # 升序去重且精确等于固定 DE 188329 的 11 座适用攻击建筑
+        self.assertEqual(b_blds, sorted(set(b_blds)))
+        self.assertEqual(b_blds, expected)
+
+        # 全库 38 座建筑精确划分为 11 座命中 + 27 座排除（显式锁定无攻负对照 598/1021/2556）
+        self.assertEqual(len(blds), 38)
+        bld_ids = {b['id'] for b in blds}
+        self.assertTrue(set(b_blds).issubset(bld_ids))
+        excluded = bld_ids - set(b_blds)
+        self.assertEqual(len(excluded), 27)
+        for neg_id in (598, 1021, 2556):
+            self.assertNotIn(neg_id, b_blds, f'non-attacking building {neg_id} must not be in ballistics.buildings')
+
+        # 单位侧 ballistics.units / chargeOnly 与 techs.Ballistics 保持不变
+        self.assertEqual(len(fx['ballistics']['units']), 66)
+        self.assertEqual(fx['ballistics']['chargeOnly'], [2705, 2706])
+        self.assertEqual(fx['techs']['Ballistics']['rules'], [])
+        self.assertEqual(fx['techs']['Ballistics']['eco'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

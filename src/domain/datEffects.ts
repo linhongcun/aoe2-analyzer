@@ -105,6 +105,7 @@ export interface DatCostDiscount {
 export interface DatBallistics {
   units: number[];
   chargeOnly: number[];
+  buildings: number[];
 }
 export interface DatProjectileScope {
   units: number[];

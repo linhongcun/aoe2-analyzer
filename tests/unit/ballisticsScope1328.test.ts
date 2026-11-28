@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { ARMY_RESEARCH } from '../../src/data/armyResearch';
 import { CORE } from '../../src/data/core';
 import { armyResearchChoices, emptyArmyCost, evaluateArmyCost } from '../../src/domain/armyCost';
-import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope, formatMixedBallisticsScope } from '../../src/domain/ballistics';
+import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsAffectsBuilding, ballisticsScope, formatMixedBallisticsScope } from '../../src/domain/ballistics';
 import { DAT } from '../../src/domain/datEffects';
 import { applicableTrainingTechs, selectTrainingIds } from '../../src/domain/duelTrainingCost';
 import { emptyMixedSide, type MixedSideInput } from '../../src/domain/mixedDuelParams';
@@ -110,6 +110,21 @@ describe('#1328 弹道学（科技 93）弹丸适用性与蓄力限定', () => {
     expect(ballisticsScope(100, { units: [100, 200], chargeOnly: [200] })).toBe('normal');
     expect(ballisticsScope(200, { units: [100, 200], chargeOnly: [200] })).toBe('charge-only');
     expect(ballisticsScope(300, { units: [100, 200], chargeOnly: [200] })).toBeNull();
+
+    // 建筑侧 ballisticsAffectsBuilding 默认与注入 source（#1510）
+    const expectedBlds = [45, 79, 82, 109, 234, 235, 236, 1189, 1251, 1665, 1806];
+    expect(DAT.ballistics?.buildings).toEqual(expectedBlds);
+    const expectedBldSet = new Set(expectedBlds);
+    expect(CORE.buildings).toHaveLength(38);
+    for (const b of CORE.buildings) {
+      expect(ballisticsAffectsBuilding(b.id), `building ${b.id} ${b.zh}`).toBe(expectedBldSet.has(b.id));
+    }
+    expect(ballisticsAffectsBuilding(109, null)).toBe(false);
+    expect(ballisticsAffectsBuilding(109, { buildings: [] })).toBe(false);
+    expect(ballisticsAffectsBuilding(109, { buildings: [109, 236] })).toBe(true);
+    expect(ballisticsAffectsBuilding(236, { buildings: [109, 236] })).toBe(true);
+    expect(ballisticsAffectsBuilding(598, { buildings: [109, 236] })).toBe(false);
+    expect(ballisticsAffectsBuilding(82, { buildings: [109, 236] })).toBe(false);
   });
 
   it('文明科技树不可研究弹道学（93）时，即使弹丸命中也不列出弹道学', () => {
