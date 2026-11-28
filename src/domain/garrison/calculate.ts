@@ -1,7 +1,7 @@
 /** Issue 224/1526: garrison free/toggle tech helpers, projectile firepower calculator, explanation, and strict URL parser. */
 import { freeGarrisonTechs } from '../garrisonTechs';
 import { DATA_PATCH_BUILD } from '../../data/meta';
-import type { Building } from '../types';
+import type { Building, Tech } from '../types';
 import { civStatus } from '../simulator';
 import { buildingAge as getGarrisonBuildingAge } from '../availabilityAge';
 import { TC_BY_AGE, VILLAGER_UNIT_ID } from '../gameIds';
@@ -25,6 +25,17 @@ import { computeGarrisonTechs } from './techFilter';
 
 export function getFreeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data = GENERAL_GARRISON_DATA): number[] {
   return freeGarrisonTechs(ctx, b, config, technologyData(data));
+}
+
+export function partitionGarrisonTechs(available: readonly Tech[], freeIds: ReadonlySet<number> | readonly number[]): { manual: Tech[]; automatic: Tech[] } {
+  const free: ReadonlySet<number> = freeIds instanceof Set ? freeIds : new Set(freeIds);
+  const manual: Tech[] = [];
+  const automatic: Tech[] = [];
+  for (const tech of available) {
+    if (free.has(tech.id)) automatic.push(tech);
+    else manual.push(tech);
+  }
+  return { manual, automatic };
 }
 
 export function toggleGeneralGarrisonTech(

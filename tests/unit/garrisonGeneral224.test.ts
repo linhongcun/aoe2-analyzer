@@ -6,10 +6,12 @@ import {
   explainGeneralGarrison,
   GENERAL_GARRISON_DATA,
   getGarrisonCandidates,
+  getGarrisonBuildingAge,
   getGarrisonBuildings,
   getGarrisonTechs,
   getFreeGarrisonTechs,
   garrisonUnitMask,
+  partitionGarrisonTechs,
   readGeneralGarrison,
   toggleGeneralGarrisonTech,
   unitGarrisonPower,
@@ -375,5 +377,113 @@ describe('#224 strict v2 and legacy links', () => {
     'civ=Franks&civ=Britons',
   ])('rejects malformed parameters: %s', (query) => {
     expect(readGeneralGarrison(new URLSearchParams(query), ctx.core.buildingById[109]!).errors.length).toBeGreaterThan(0);
+  });
+});
+
+describe('Issue 1505 garrison display free-tech partition', () => {
+  const autoIds = (bid: number, civ: string, age: number, techs: number[] = []) => {
+    const b = ctx.core.buildingById[bid]!;
+    const c = config({ civ, age, techs });
+    const available = getGarrisonTechs(ctx, b, c);
+    const freeIds = getFreeGarrisonTechs(ctx, b, c);
+    return partitionGarrisonTechs(available, freeIds);
+  };
+
+  it('全矩阵不变量：20 座驻军宿主 × 全可用文明 × 有效时代（空自选与全选）均精确满足 automatic = available ∩ free', () => {
+    const hosts = getGarrisonBuildings(ctx);
+    expect(hosts).toHaveLength(20);
+    const nonGarrisonFreeCivs = new Set(['Slavs', 'Franks', 'Bohemians', 'Vikings', 'Magyars', 'Malay', 'Byzantines', 'Teutons', 'Vietnamese']);
+    let checked = 0;
+
+    for (const b of hosts) {
+      for (const civ of b.civs) {
+        const minAge = getGarrisonBuildingAge(b, civ, ctx.trees);
+        for (let age = minAge; age <= 4; age++) {
+          const emptyCfg = config({ civ, age, techs: [] });
+          const available = getGarrisonTechs(ctx, b, emptyCfg);
+          const freeBase = getFreeGarrisonTechs(ctx, b, emptyCfg);
+          const freeBaseSet = new Set(freeBase);
+          const partBase = partitionGarrisonTechs(available, freeBase);
+
+          const expectedAutoBase = available.filter((t) => freeBaseSet.has(t.id));
+          const expectedManualBase = available.filter((t) => !freeBaseSet.has(t.id));
+          expect(partBase.automatic, `${civ}/${b.id}/age${age} empty auto`).toEqual(expectedAutoBase);
+          expect(partBase.manual, `${civ}/${b.id}/age${age} empty manual`).toEqual(expectedManualBase);
+          expect(partBase.manual.length + partBase.automatic.length).toBe(available.length);
+          expect(new Set([...partBase.manual, ...partBase.automatic].map((t) => t.id)).size).toBe(available.length);
+
+          // Simulate GeneralGarrisonPreview select-all (unlocks conditional free techs such as Koreans 64 on 47)
+          const selectAllRaw = partBase.manual.map((t) => t.id);
+          const freeAfterAll = getFreeGarrisonTechs(ctx, b, config({ civ, age, techs: selectAllRaw }));
+          const freeAfterAllSet = new Set(freeAfterAll);
+          const selectedManual = selectAllRaw.filter((id) => !freeAfterAllSet.has(id));
+          const allCfg = config({ civ, age, techs: selectedManual });
+          const availableAll = getGarrisonTechs(ctx, b, allCfg);
+          const freeAll = getFreeGarrisonTechs(ctx, b, allCfg);
+          const freeAllSet = new Set(freeAll);
+          const partAll = partitionGarrisonTechs(availableAll, freeAllSet);
+
+          expect(partAll.automatic, `${civ}/${b.id}/age${age} select-all auto`).toEqual(availableAll.filter((t) => freeAllSet.has(t.id)));
+          expect(partAll.manual, `${civ}/${b.id}/age${age} select-all manual`).toEqual(availableAll.filter((t) => !freeAllSet.has(t.id)));
+          expect(partAll.manual.length + partAll.automatic.length).toBe(availableAll.length);
+
+          if (nonGarrisonFreeCivs.has(civ)) {
+            expect(partBase.automatic, `${civ}/${b.id}/age${age} must hide non-garrison free techs`).toEqual([]);
+            expect(partAll.automatic, `${civ}/${b.id}/age${age} select-all must hide non-garrison free techs`).toEqual([]);
+          }
+          checked++;
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(2200);
+  }, 30_000);
+
+  it('锁定 11 文明负例清零与土耳其 47 / 高丽 64 正反例边界，同时保持底层 getFreeGarrisonTechs 语义不变', () => {
+    // 9 civs: raw getFreeGarrisonTechs retains shared free techs while display automatic is empty
+    for (const [civ, rawFree] of [
+      ['Slavs', [602, 875]],
+      ['Franks', [12, 13, 14]],
+      ['Bohemians', [55, 182, 278, 279]],
+      ['Vikings', [213, 249]],
+      ['Magyars', [67, 68, 75]],
+      ['Malay', [74, 76, 77]],
+      ['Byzantines', [8, 280]],
+      ['Teutons', [441]],
+      ['Vietnamese', [315]],
+    ] as const) {
+      const castle = ctx.core.buildingById[82]!;
+      expect(getFreeGarrisonTechs(ctx, castle, config({ civ, age: 4 }))).toEqual(expect.arrayContaining([...rawFree]));
+      expect(autoIds(82, civ, 4).automatic).toEqual([]);
+      expect(autoIds(12, civ, 4).automatic).toEqual([]);
+    }
+
+    // Turks (age 4): Chemistry (47) kept on 9 relevant hosts (incl. 87/49 free-only), hidden on 6 non-relevant hosts
+    for (const bid of [45, 49, 79, 82, 87, 109, 234, 235, 236]) {
+      const part = autoIds(bid, 'Turks', 4);
+      expect(
+        part.automatic.map((t) => t.id),
+        `Turks/${bid}`,
+      ).toEqual([47]);
+      if (bid === 87 || bid === 49) expect(part.manual, `Turks/${bid} manual`).toEqual([]);
+    }
+    for (const bid of [12, 68, 70, 84, 101, 104]) {
+      expect(getFreeGarrisonTechs(ctx, ctx.core.buildingById[bid]!, config({ civ: 'Turks', age: 4 }))).toContain(47);
+      expect(autoIds(bid, 'Turks', 4).automatic, `Turks/${bid}`).toEqual([]);
+    }
+
+    // Koreans (age 4): tower shape prereqs 63/140 hidden on 234/235; with 47 selected, only TC 109 shows free 64
+    expect(getFreeGarrisonTechs(ctx, ctx.core.buildingById[235]!, config({ civ: 'Koreans', age: 4 }))).toEqual(expect.arrayContaining([63, 140]));
+    expect(autoIds(234, 'Koreans', 4).automatic).toEqual([]);
+    expect(autoIds(235, 'Koreans', 4).automatic).toEqual([]);
+    const korTcEmpty = autoIds(109, 'Koreans', 4, []);
+    expect(korTcEmpty.automatic).toEqual([]);
+    expect(korTcEmpty.manual.map((t) => t.id)).toContain(64);
+    const korTcWithChem = autoIds(109, 'Koreans', 4, [47]);
+    expect(korTcWithChem.automatic.map((t) => t.id)).toEqual([64]);
+    expect(korTcWithChem.manual.map((t) => t.id)).not.toContain(64);
+    for (const bid of [45, 49, 79, 82, 87, 234, 235, 236]) {
+      expect(getFreeGarrisonTechs(ctx, ctx.core.buildingById[bid]!, config({ civ: 'Koreans', age: 4, techs: [47] }))).toContain(64);
+      expect(autoIds(bid, 'Koreans', 4, [47]).automatic, `Koreans/${bid} with 47`).toEqual([]);
+    }
   });
 });
