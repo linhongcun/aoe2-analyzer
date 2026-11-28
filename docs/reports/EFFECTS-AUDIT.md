@@ -30,7 +30,7 @@
 | 仅经济/费用类 .dat 结构化效果（文本展示） | 0                                   | 117                                  | 141                              |
 | 仅文本                                    | 215                                 | 67                                   | 37                               |
 | 数值编码的科技                            | 32                                  | 98                                   | **106**（.dat 106 + 手工 0）     |
-| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 23                               |
+| 通用隐藏科技（时代自动/组合触发）         | 0                                   | 16                                   | 24                               |
 
 （手工 CivBonus 条目 45 个，按加成文本序号去重后 51 条。）
 
@@ -377,8 +377,9 @@ Andean Sling、Artillery、Atlatl、Bagains、Ballistas、Block Printing、Bogsv
 - 71 `Walls HP castle age`：时代 ≥ 3 → 2 个目标 [{"op":"mul","s":"hp","v":1.666667}]
 - 72 `Palisade Walls HP feudal age`：时代 ≥ 2 → 2 个目标 [{"op":"mul","s":"hp","v":1.66667}]
 - 90 `Tracking`：时代 ≥ 2 → 76 个目标 [{"s":"los","v":2}]
-- 102 `Castle Age`：时代 ≥ 3 → 4 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"atk","v":3},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]；1 个目标 [{"s":"atk","v":3},{"op":"mul","s":"bt","v":0.75},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]
-- 103 `Imperial Age`：时代 ≥ 4 → 4 个目标 [{"s":"los","v":2}]
+- 101 `Feudal Age`：时代 ≥ 2 → 1 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"atk","v":5},{"s":"bonus","v":6,"vs":"船只"},{"s":"bonus","v":2,"vs":"长矛兵"},{"s":"bonus","v":1,"vs":"骆驼"},{"op":"mul","s":"hp","v":2},{"s":"ma","v":1},{"s":"pa","v":1},{"s":"rng","v":8}]
+- 102 `Castle Age`：时代 ≥ 3 → 4 个目标 [{"s":"los","v":2}]；1 个目标 [{"op":"mul","s":"hp","v":1.2}]；1 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"atk","v":3},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]；1 个目标 [{"s":"atk","v":3},{"op":"mul","s":"bt","v":0.75},{"s":"hp","v":25},{"s":"ma","v":2},{"s":"pa","v":1}]；1 个目标 [{"op":"mul","s":"hp","v":1.2},{"s":"ma","v":1},{"s":"pa","v":1}]
+- 103 `Imperial Age`：时代 ≥ 4 → 4 个目标 [{"s":"los","v":2}]；1 个目标 [{"op":"mul","s":"hp","v":1.166667},{"s":"ma","v":1},{"s":"pa","v":1}]；1 个目标 [{"s":"los","v":2}]；1 个目标 [{"s":"bonus","v":1,"vs":"船只"}]；1 个目标 [{"op":"mul","s":"hp","v":1.5},{"s":"ma","v":1},{"s":"pa","v":1}]
 - 387 `Upgrade Eagle in Age3`：时代 ≥ 3，限 Aztecs / Mayans → 1 个目标 [{"s":"atk","v":3},{"s":"bonus","v":1,"vs":"船只"},{"s":"bonus","v":1,"vs":"骆驼"},{"s":"bonus","v":2,"vs":"骑兵"},{"op":"mul","s":"bt","v":0.76}]
 - 610 `Arrowslits (Guard tower)`：时代 ≥ 1，需 Arrowslits + Guard Tower → 4 个目标 [{"s":"atk","v":1}]
 - 611 `Arrowslits (Keep)`：时代 ≥ 1，需 Arrowslits + Keep → 4 个目标 [{"s":"atk","v":1}]

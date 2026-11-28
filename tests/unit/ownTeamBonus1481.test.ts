@@ -170,13 +170,13 @@ describe('#1481 全站统一本方常驻团队加成与 4 国建筑 TEAM_BLD', (
     expect(formatHp(wallImp.rows[1]!.hp)).toBe('333.33');
     expect(wallImp.rows[2]!.civ).toBe('Chinese');
 
-    // 2. 埃塞俄比亚哨站（598）视野 +3（14 -> 17）
+    // 2. 埃塞俄比亚哨站（598）视野 +3（帝王满科技 20 -> 23，含 Tech 101/102/103 跨时代 +6，Issue 1518）
     const outpost = CORE.buildingById[598]!;
     const ethOutpost = simulateBuilding(simCtx, outpost, 'Ethiopians', 4, allNumeric(buildingSimTechs(simCtx, outpost, 'Ethiopians')));
     const ethOutpostDup = simulateBuilding(simCtx, outpost, 'Ethiopians', 4, allNumeric(buildingSimTechs(simCtx, outpost, 'Ethiopians')), new Set([ethIdx]));
     const frOutpost = simulateBuilding(simCtx, outpost, 'Franks', 4, allNumeric(buildingSimTechs(simCtx, outpost, 'Franks')));
-    expect(ethOutpost.los).toBe(17);
-    expect(frOutpost.los).toBe(14);
+    expect(ethOutpost.los).toBe(23);
+    expect(frOutpost.los).toBe(20);
     expect(ethOutpostDup).toEqual(ethOutpost);
 
     // 3. 马来船坞（45）视野 +6（16 -> 22）、巨港（1189）视野 +6（21 -> 27）

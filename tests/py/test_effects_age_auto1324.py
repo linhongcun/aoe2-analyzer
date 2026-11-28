@@ -1,4 +1,4 @@
-"""#1324：时代科技单位属性（102/103）与区域单位解锁隐藏科技（387）导出守卫及已提交 effects.json 校验。"""
+"""#1324 / Issue 1518：时代科技（101/102/103）单位与建筑属性、区域单位解锁隐藏科技（387）导出守卫及已提交 effects.json 校验。"""
 import json
 import sys
 import unittest
@@ -81,9 +81,9 @@ class EffectsAgeAuto1324(unittest.TestCase):
         AT[436] = _tech(civ=-1, loc=-1, eid=436, req=[102], need=1, name='Mayan only unlock')
         AE[436] = {'EffectCommands': [_cmd(2, a=751, b=1)]}
 
-        # 时代科技 101（仅建筑）/ 102（.dat 内部误叫 Feudal Age，含建筑与单位）/ 103（仅单位）
+        # 时代科技 101（仅建筑，含 C=102 箭矢数 _eco 验证不渗入）/ 102（.dat 内部误叫 Feudal Age，含建筑与单位）/ 103（仅单位）
         AT[101] = _tech(civ=-1, loc=109, eid=101, name='Feudal Age')
-        AE[101] = {'EffectCommands': [_cmd(4, a=1665, b=-1, c=0, d=250.0)]}
+        AE[101] = {'EffectCommands': [_cmd(4, a=1665, b=-1, c=0, d=250.0), _cmd(4, a=1665, b=-1, c=102, d=1.0)]}
         AT[102] = _tech(civ=-1, loc=109, eid=102, name='Feudal Age')
         AE[102] = {'EffectCommands': [_cmd(4, a=448, b=-1, c=1, d=2.0), _cmd(4, a=1665, b=-1, c=0, d=500.0)]}
         AT[103] = _tech(civ=-1, loc=109, eid=103, name='Imperial Age')
@@ -110,6 +110,7 @@ class EffectsAgeAuto1324(unittest.TestCase):
 
         def compile_cmds(cmds):
             rules = []
+            eco = []
             for t, a, _b, attr, d in cmds:
                 if t not in (0, 4, 5) or a not in ours:
                     continue
@@ -119,12 +120,15 @@ class EffectsAgeAuto1324(unittest.TestCase):
                     r = {'t': [a], 'fx': [{'s': 'hp', 'v': int(d)}]}
                 elif attr == 101:
                     r = {'t': [a], 'fx': [{'op': 'mul', 's': 'bt', 'v': d}]}
+                elif attr == 102:
+                    eco.append({'a': 102, 'op': 'add', 'v': int(d), 't': [a], 'cls': None, 'unit': a})
+                    continue
                 else:
                     continue
                 if ours[a].get('_b'):
                     r['b'] = 1
                 rules.append(r)
-            return rules, []
+            return rules, eco
 
         return AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds
 
@@ -175,11 +179,28 @@ class EffectsAgeAuto1324(unittest.TestCase):
         entries = build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds)
         by_tech = {e['tech']: e for e in entries}
 
-        # 101 仅建筑命令 → 跳过；102 使用目录英文名 Castle Age 且剥离建筑命令；103 保留单位命令
-        self.assertNotIn(101, by_tech)
+        # Issue 1518：101 导出目录建筑规则且不渗入 _eco；102 使用目录英文名 Castle Age 并同时保留单位与建筑规则；103 保留单位规则
+        self.assertEqual(
+            by_tech[101],
+            {
+                'tech': 101,
+                'name': 'Feudal Age',
+                'age': 2,
+                'req': [],
+                'any': False,
+                'rules': [{'t': [1665], 'fx': [{'s': 'hp', 'v': 250}], 'b': 1}],
+            },
+        )
+        self.assertNotIn('eco', by_tech[101])
         self.assertEqual(by_tech[102]['name'], 'Castle Age')
         self.assertEqual(by_tech[102]['age'], 3)
-        self.assertEqual(by_tech[102]['rules'], [{'t': [448], 'fx': [{'s': 'los', 'v': 2}]}])
+        self.assertEqual(
+            by_tech[102]['rules'],
+            [
+                {'t': [448], 'fx': [{'s': 'los', 'v': 2}]},
+                {'t': [1665], 'fx': [{'s': 'hp', 'v': 500}], 'b': 1},
+            ],
+        )
         self.assertEqual(by_tech[103]['name'], 'Imperial Age')
         self.assertEqual(by_tech[103]['age'], 4)
 
@@ -197,9 +218,35 @@ class EffectsAgeAuto1324(unittest.TestCase):
         generic = fx['generic']
         by_tech = {g['tech']: g for g in generic}
 
-        # 新增 102 / 103 / 387，不导出 101 与建筑解锁 1353
-        self.assertNotIn(101, by_tech)
+        # Issue 1518：导出 101/102/103 单位与目录建筑规则及 387，不导出建筑解锁 1353 且不渗入 _eco
         self.assertNotIn(1353, by_tech)
+        self.assertEqual(
+            by_tech[101],
+            {
+                'tech': 101,
+                'name': 'Feudal Age',
+                'age': 2,
+                'req': [],
+                'any': False,
+                'rules': [
+                    {'t': [598], 'fx': [{'s': 'los', 'v': 2}], 'b': 1},
+                    {
+                        't': [1665],
+                        'fx': [
+                            {'s': 'atk', 'v': 5},
+                            {'s': 'bonus', 'v': 6, 'vs': '船只'},
+                            {'s': 'bonus', 'v': 2, 'vs': '长矛兵'},
+                            {'s': 'bonus', 'v': 1, 'vs': '骆驼'},
+                            {'op': 'mul', 's': 'hp', 'v': 2},
+                            {'s': 'ma', 'v': 1},
+                            {'s': 'pa', 'v': 1},
+                            {'s': 'rng', 'v': 8},
+                        ],
+                        'b': 1,
+                    },
+                ],
+            },
+        )
         self.assertEqual(
             by_tech[102],
             {
@@ -210,8 +257,11 @@ class EffectsAgeAuto1324(unittest.TestCase):
                 'any': False,
                 'rules': [
                     {'t': [441, 448, 546, 1707], 'fx': [{'s': 'los', 'v': 2}]},
+                    {'t': [79], 'fx': [{'op': 'mul', 's': 'hp', 'v': 1.2}], 'b': 1},
+                    {'t': [598], 'fx': [{'s': 'los', 'v': 2}], 'b': 1},
                     {'t': [1658], 'fx': [{'s': 'atk', 'v': 3}, {'s': 'hp', 'v': 25}, {'s': 'ma', 'v': 2}, {'s': 'pa', 'v': 1}]},
                     {'t': [1660], 'fx': [{'s': 'atk', 'v': 3}, {'op': 'mul', 's': 'bt', 'v': 0.75}, {'s': 'hp', 'v': 25}, {'s': 'ma', 'v': 2}, {'s': 'pa', 'v': 1}]},
+                    {'t': [1665], 'fx': [{'op': 'mul', 's': 'hp', 'v': 1.2}, {'s': 'ma', 'v': 1}, {'s': 'pa', 'v': 1}], 'b': 1},
                 ],
             },
         )
@@ -223,7 +273,13 @@ class EffectsAgeAuto1324(unittest.TestCase):
                 'age': 4,
                 'req': [],
                 'any': False,
-                'rules': [{'t': [441, 448, 546, 1707], 'fx': [{'s': 'los', 'v': 2}]}],
+                'rules': [
+                    {'t': [441, 448, 546, 1707], 'fx': [{'s': 'los', 'v': 2}]},
+                    {'t': [49], 'fx': [{'op': 'mul', 's': 'hp', 'v': 1.166667}, {'s': 'ma', 'v': 1}, {'s': 'pa', 'v': 1}], 'b': 1},
+                    {'t': [598], 'fx': [{'s': 'los', 'v': 2}], 'b': 1},
+                    {'t': [1189], 'fx': [{'s': 'bonus', 'v': 1, 'vs': '船只'}], 'b': 1},
+                    {'t': [1665], 'fx': [{'op': 'mul', 's': 'hp', 'v': 1.5}, {'s': 'ma', 'v': 1}, {'s': 'pa', 'v': 1}], 'b': 1},
+                ],
             },
         )
         self.assertEqual(
@@ -249,9 +305,11 @@ class EffectsAgeAuto1324(unittest.TestCase):
                 ],
             },
         )
-        # 102/103/387 不含任何建筑规则
-        for tid in (102, 103, 387):
-            self.assertFalse(any(r.get('b') for r in by_tech[tid]['rules']))
+        # 387 仍不含建筑规则；101/102/103 建筑目标严格限定 5 座目录建筑且 generic 零 eco 渗入
+        self.assertFalse(any(r.get('b') for r in by_tech[387]['rules']))
+        age_blds = sorted({bid for tid in (101, 102, 103) for r in by_tech[tid]['rules'] if r.get('b') for bid in r['t']})
+        self.assertEqual(age_blds, [49, 79, 598, 1189, 1665])
+        self.assertFalse(any('eco' in g for g in generic))
 
         # 既有自动时代条目保留不变
         for existing in (20, 71, 72, 90, 774, 797, 1163, 1164):
@@ -413,7 +471,7 @@ class EffectsAgeAuto1324(unittest.TestCase):
         generic = fx['generic']
         by_tech = {g['tech']: g for g in generic}
 
-        self.assertEqual(len(generic), 23)
+        self.assertEqual(len(generic), 24)
         self.assertEqual([g['tech'] for g in generic], sorted(g['tech'] for g in generic))
 
         expected = {

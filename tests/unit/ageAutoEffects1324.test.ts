@@ -225,7 +225,7 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
     }
   });
 
-  it('不回归详情页自动变化面板与建筑模拟（102/103 建筑命令不渗入 buildingSim）', () => {
+  it('不回归详情页自动变化面板，且 101/102/103 建筑规则精确驱动 5 座建筑自动成长（Issue 1518）', () => {
     const scoutCard = unitAgeChanges(core.unitById[448]!, undefined, { generic: DAT.generic });
     expect(scoutCard?.state).toBe('ready');
     if (scoutCard?.state === 'ready') {
@@ -247,15 +247,25 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
     if (wall72?.state === 'ready') expect(wall72.after).toBeCloseTo(250, 2);
     if (wall117?.state === 'ready') expect(wall117.after).toBeCloseTo(1800, 2);
 
-    // 102/103 中的建筑命令（城楼 1665、哨所 598、瞭望塔 79、港口 1189）不进入 generic，不影响 simulateBuilding
+    // Issue 1518：101/102/103 建筑规则精确生效于 5 座目录建筑（城楼 1665、瞭望箭塔 79、攻城武器厂 49、哨站 598、巨港 1189）
     const donjon = core.buildingById[1665]!;
-    expect(simulateBuilding(simCtx, donjon, 'Sicilians', 3, new Set()).hp).toBe(donjon.hp);
-    expect(simulateBuilding(simCtx, donjon, 'Sicilians', 4, new Set()).hp).toBe(donjon.hp);
+    expect([1, 2, 3, 4].map((age) => simulateBuilding(simCtx, donjon, 'Sicilians', age, new Set()).hp)).toEqual([625, 1250, 1500, 2250]);
+    expect([1, 2, 3, 4].map((age) => simulateBuilding(simCtx, donjon, 'Sicilians', age, new Set()).atk)).toEqual([0, 5, 5, 5]);
+    expect([1, 2, 3, 4].map((age) => simulateBuilding(simCtx, donjon, 'Sicilians', age, new Set()).rng)).toEqual([0, 8, 8, 8]);
+    const watchTower = core.buildingById[79]!;
+    expect([2, 3, 4].map((age) => simulateBuilding(simCtx, watchTower, 'Saracens', age, new Set()).hp)).toEqual([850, 1020, 1020]);
+    const siegeWorkshop = core.buildingById[49]!;
+    const swImp = simulateBuilding(simCtx, siegeWorkshop, 'Saracens', 4, new Set());
+    expect(simulateBuilding(simCtx, siegeWorkshop, 'Saracens', 3, new Set()).hp).toBe(1500);
+    expect(swImp.hp).toBeCloseTo(1750, 2);
+    expect([swImp.ma, swImp.pa]).toEqual([2, 9]);
     const outpost = core.buildingById[598]!;
-    expect(simulateBuilding(simCtx, outpost, 'Franks', 3, new Set()).los).toBe(outpost.los);
-    expect(simulateBuilding(simCtx, outpost, 'Franks', 4, new Set()).los).toBe(outpost.los);
+    expect([1, 2, 3, 4].map((age) => simulateBuilding(simCtx, outpost, 'Franks', age, new Set()).los)).toEqual([6, 8, 10, 12]);
     const harbor = core.buildingById[1189]!;
-    expect(simulateBuilding(simCtx, harbor, 'Malay', 4, new Set()).atk).toBe(harbor.atk);
+    const harborImp = simulateBuilding(simCtx, harbor, 'Malay', 4, new Set());
+    expect(harborImp.atk).toBe(harbor.atk);
+    expect(simulateBuilding(simCtx, harbor, 'Malay', 3, new Set()).bonus['船只']).toBe(3);
+    expect(harborImp.bonus['船只']).toBe(4);
   });
 
   it('#1517 反例 3：全站 56×38 建筑零回归，且无前置建筑时代规则先于 380 加热射击、带 req 组合规则不提前不双算', () => {
@@ -277,7 +287,7 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
 
     const malayHarbor = fullBld(1189, 'Malay');
     expect([malayHarbor.atk, malayHarbor.rng, malayHarbor.los, malayHarbor.minr]).toEqual([8, 10, 27, 0]);
-    expect([malayHarbor.bonus['船只'], malayHarbor.bonus['骆驼']]).toEqual([7, 1]);
+    expect([malayHarbor.bonus['船只'], malayHarbor.bonus['骆驼']]).toEqual([8, 1]);
 
     const mapucheSettlement = fullBld(2556, 'Mapuche');
     expect([mapucheSettlement.ma, mapucheSettlement.pa, mapucheSettlement.atk, mapucheSettlement.rng]).toEqual([3, 10, 0, 0]);
@@ -298,24 +308,25 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
       }
     }
 
-    // 构造无前置建筑时代规则（+6 对船只）叠加 380 加热射击（×2.25）：按 (base + 6) × 2.25 生效，且对无攻建筑受 canAttack 门控
+    // 真实无前置时代规则（Issue 1518 城楼 Tech 101 +6 对船只）与合成规则（-1517）叠加 380 加热射击（×2.25）：按 (base + 6) × 2.25 生效，且受时代与 canAttack 门控
     const donjon = core.buildingById[1665]!;
     const tower = core.buildingById[79]!;
     const house = core.buildingById[70]!;
     const heatedShotId = simCtx.techByEn['Heated Shot']!.id;
     expect(heatedShotId).toBe(380);
+    expect(simulateBuilding(simCtx, donjon, 'Sicilians', 1, new Set([heatedShotId])).bonus['船只']).toBe(0);
+    expect(simulateBuilding(simCtx, donjon, 'Sicilians', 2, new Set()).bonus['船只']).toBe(6);
+    expect(simulateBuilding(simCtx, donjon, 'Sicilians', 4, new Set([heatedShotId])).bonus['船只']).toBe(13.5);
     GENERIC_FX.push({
       tech: -1517,
       name: 'Synthetic Feudal +6 vs Ship',
       age: 2,
       req: [],
-      pred: (x) => x.id === 1665 || x.id === 79 || x.id === 70,
+      pred: (x) => x.id === 79 || x.id === 70,
       fx: [{ s: 'bonus', vs: '船只', v: 6 }],
       b: true,
     });
     try {
-      expect(simulateBuilding(simCtx, donjon, 'Sicilians', 2, new Set()).bonus['船只']).toBe(6);
-      expect(simulateBuilding(simCtx, donjon, 'Sicilians', 4, new Set([heatedShotId])).bonus['船只']).toBe(13.5);
       // 瞭望箭塔基础对船只 5，叠无前置 +6 再乘加热射击 ×2.25 = (5 + 6) × 2.25 = 24.75
       expect(simulateBuilding(simCtx, tower, 'Chinese', 4, new Set([heatedShotId])).bonus['船只']).toBe(24.75);
       // 黑暗时代未触发 age=2 自动规则
