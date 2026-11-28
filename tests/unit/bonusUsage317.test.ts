@@ -6,21 +6,29 @@
 // 平时只抽两条（条顿第 1 条、阿兹特克第 1 条）在记录的开局方案上现场重跑，确认快照与真实计算一致。
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import eco from '../../data/game/eco.json';
 import units from '../../data/game/units.json';
 import { civs, loadCore, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
-import { bonusTechs, bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
+import { bonusLevel, bonusTechs, bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
+import { bonusDiscountCounted } from '../../src/domain/costPolicy';
 import { simSupport } from '../../src/domain/simSupport';
 import { defaultGatherEcoTechIds, gatherModel } from '../../src/domain/realCost';
 import { armenianContext, ARMENIAN_RESEARCH_IDS } from '../../src/domain/armenianEconomy';
 import { discountedCost } from '../../src/domain/costDiscount';
 import { calculateConstruction, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
 import { loadTrees } from '../../src/data';
+import { BonusBodyContent } from '../../src/shared/ui/BonusBody';
+// @ts-expect-error 纯 JS 脚本，没有类型声明
+import { parseImports } from '../../scripts/check-layers.mjs';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
@@ -152,9 +160,12 @@ describe('issue 317 罗马', () => {
 });
 
 describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一致', () => {
-  it('覆盖面：119 条 src = eco、30 条 src = text（非团队；#1403 补齐 8 条被动链接并修正勃艮第-2 归回 text）', () => {
-    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(119);
+  it('覆盖面：121 条 src = eco、30 条 src = text、74 条 src = dat（非团队；Issue 1497 归正 Italians-3 / Huns-0 为 eco）', () => {
+    expect(ALL).toHaveLength(225);
+    expect(ALL.filter((b) => b.src === 'dat')).toHaveLength(74);
+    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(121);
     expect(ECO.filter((b) => b.src === 'text')).toHaveLength(30);
+    expect(ALL.filter((b) => b.src === 'manual')).toHaveLength(0);
   });
   it('src = text 中实际被工具计入的六条：亚美尼亚经济研究、凯尔特伐木、高棉免建筑前置、朝鲜采石、高丽战船木材、突厥采金', () => {
     const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
@@ -257,7 +268,7 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       if (counted) hidden++;
     }
     expect(hidden).toBeGreaterThan(0);
-    expect(hidden).toBeLessThan(119);
+    expect(hidden).toBeLessThan(121);
     // src = text 同样规则：六条被工具计入，不显示；其余 24 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
     for (const b of text)
@@ -266,5 +277,176 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);
+  });
+});
+
+function staticClosure(rootFiles: readonly string[]): Set<string> {
+  const visited = new Set<string>();
+  const queue = [...rootFiles];
+  while (queue.length) {
+    const rel = queue.shift()!;
+    if (visited.has(rel)) continue;
+    visited.add(rel);
+    if (!/\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/u.test(rel)) continue;
+    for (const edge of parseImports(resolve(rel))) {
+      if (edge.to && !edge.dynamic && !edge.typeOnly && !visited.has(edge.to)) queue.push(edge.to);
+    }
+  }
+  return visited;
+}
+
+describe('Issue 1497 零拥有规则归正、全站 225 条非团队对账与 BonusBody 双端展示', () => {
+  const byId = (id: string) => ALL.find((b) => b.id === id)!;
+
+  it('Italians-3 与 Huns-0 归正为 src=eco 并保留原始 rules；Burgundians-3 保持 src=dat', () => {
+    const it3 = byId('Italians-3');
+    expect(it3.src).toBe('eco');
+    expect(it3.encoded).toBe(false);
+    expect(bonusLevel(it3)).toBe('all');
+    expect(showEcoSourceTag(it3)).toBe(false);
+    expect(bonusUsage(it3).map((l) => [l.tool, l.on])).toEqual([['cost', true]]);
+    expect(it3.dat.find((e) => e.tech === 500)?.rulesUnowned).toBe(true);
+    expect(it3.dat.find((e) => e.tech === 500)?.rules[0]?.t).toEqual([1901, 1903, 1904, 1907, 1911]);
+
+    const hu0 = byId('Huns-0');
+    expect(hu0.src).toBe('eco');
+    expect(hu0.encoded).toBe(false);
+    expect(bonusLevel(hu0)).toBe('all');
+    expect(showEcoSourceTag(hu0)).toBe(false);
+    expect(bonusUsage(hu0).map((l) => [l.tool, l.on])).toEqual([['sim', true]]);
+    expect(hu0.dat.find((e) => e.tech === 289)?.rulesUnowned).toBe(true);
+    expect(hu0.dat.find((e) => e.tech === 289)?.rules[0]?.t).toEqual([70]);
+
+    const bu3 = byId('Burgundians-3');
+    expect(bu3.src).toBe('dat');
+    expect(bu3.encoded).toBe(true);
+    expect(bu3.dat.some((e) => e.rulesUnowned)).toBe(false);
+  });
+
+  it('8 条混合 src=dat 补齐真实工具明细；Spanish-3 与其余 59 条纯战斗 src=dat 零误报', () => {
+    const ber0 = byId('Berbers-0');
+    expect(ber0.src).toBe('dat');
+    expect(bonusLevel(ber0)).toBe('all');
+    expect(bonusUsage(ber0).map((l) => [l.tool, l.on])).toEqual([
+      ['sim', true],
+      ['gather', true],
+    ]);
+    expect(line(ber0, 'gather')[0]!.note).toBe('采集速度已计入（村民移速 +10%）');
+
+    for (const id of ['Persians-1', 'Japanese-3', 'Berbers-2', 'Bohemians-3', 'Khitans-2', 'Aztecs-2']) {
+      const b = byId(id);
+      expect(b.src, id).toBe('dat');
+      expect(b.encoded, id).toBe(true);
+      expect(bonusLevel(b), id).toBe('all');
+      expect(
+        bonusUsage(b).map((l) => [l.tool, l.on]),
+        id,
+      ).toEqual([['sim', true]]);
+    }
+
+    const spa0 = byId('Spanish-0');
+    expect(spa0.src).toBe('dat');
+    expect(spa0.encoded).toBe(true);
+    expect(bonusLevel(spa0)).toBe('all');
+    expect(bonusUsage(spa0).map((l) => [l.tool, l.on])).toEqual([
+      ['sim', false],
+      ['construction', true],
+    ]);
+    expect(line(spa0, 'sim')[0]!.note).toBe('未计入：开局模拟暂未套用建筑工施工提速，新造建筑工期仍按通用速度计算');
+    expect(line(spa0, 'construction')[0]!.note).toBe('建造者工作速率已计入');
+
+    // Spanish-2 不得误标 construction；Spanish-3 与其余 58 条纯战斗 dat 返回空
+    expect(line(byId('Spanish-2'), 'construction')).toEqual([]);
+    expect(bonusUsage(byId('Spanish-3'))).toEqual([]);
+    const pureDatEmpty = ALL.filter((b) => b.src === 'dat' && bonusUsage(b).length === 0);
+    expect(pureDatEmpty).toHaveLength(59);
+    expect(pureDatEmpty.map((b) => b.id)).toContain('Spanish-3');
+  });
+
+  it('全站 225 条非团队加成对账：训练费用、真实成本、开局模拟（含 src=dat 反事实）与施工工具零漏报', async () => {
+    for (const b of ALL) {
+      const idx = b.idx as number;
+      expect([b.id, line(b, 'cost').some((l) => l.on === true)]).toEqual([b.id, bonusDiscountCounted(b.civ, idx)]);
+      const text = civs.find((c) => c.en === b.civ)!.bon[idx];
+      const gatherApplied = gatherModel(4, b.civ).applied.some((a) => a.source === text);
+      expect([b.id, line(b, 'gather').some((l) => l.on === true)]).toEqual([b.id, gatherApplied]);
+    }
+    // 全部含正 tech 且命中 eco.civEco 的 src=dat 条目做开局模拟反事实核对
+    const datWithEcoTechs = ALL.filter((b) => {
+      if (b.src !== 'dat' || !simSupport(b.civ)) return false;
+      const ts = techsOf(b);
+      if (!ts.length) return false;
+      return (E.civEco[b.civ] ?? []).some((r) => r.source !== 'team' && ts.includes((r as { tech?: number }).tech ?? NaN));
+    });
+    expect(datWithEcoTechs.length).toBeGreaterThanOrEqual(6);
+    for (const b of datWithEcoTechs) {
+      const changed = firstChanged(b) !== null;
+      const simOn = line(b, 'sim')[0]?.on === true;
+      if (changed) expect(simOn, `${b.id} 改变开局结果却未标 sim:true`).toBe(true);
+    }
+    // 西班牙施工工具真实计算验证（cc.tree 建造者速率 +30%）
+    const ctx = { core, trees: await loadTrees() };
+    const cfg = { ...DEFAULT_CONSTRUCTION, techs: [] };
+    const spa = calculateConstruction(ctx, { ...cfg, civ: 'Spanish' });
+    const base = calculateConstruction(ctx, { ...cfg, civ: 'Britons' });
+    expect(spa.errors).toEqual([]);
+    expect(spa.applied).toContain('文明固定科技树效果');
+    expect(spa.builderRate! / base.builderRate!).toBeCloseTo(1.3, 6);
+  }, 60_000);
+
+  it('分包隔离守卫：effects.ts 静态闭包及 civBonus.ts / CivDetail.tsx 直接导入均不引入 core.ts、units.json 或 buildings.json', () => {
+    const effectsClosure = staticClosure(['src/domain/effects.ts']);
+    expect(effectsClosure.has('src/data/core.ts')).toBe(false);
+    expect(effectsClosure.has('data/game/units.json')).toBe(false);
+    expect(effectsClosure.has('data/game/buildings.json')).toBe(false);
+    for (const file of ['src/domain/civBonus.ts', 'src/features/civs/components/CivDetail.tsx']) {
+      const directStatic = parseImports(resolve(file))
+        .filter((e: { to: string | null; dynamic: boolean; typeOnly: boolean }) => e.to && !e.dynamic && !e.typeOnly)
+        .map((e: { to: string }) => e.to);
+      expect(directStatic, file).not.toContain('src/data/core.ts');
+      expect(directStatic, file).not.toContain('data/game/units.json');
+      expect(directStatic, file).not.toContain('data/game/buildings.json');
+    }
+  });
+
+  it('BonusBody 双端 SSR：零拥有提示、Huns-0 排布与词条说明、.busage 底部附注三态分流', () => {
+    const render = (id: string, variant: 'default' | 'evidence' = 'default') =>
+      renderToStaticMarkup(
+        createElement(StaticRouter, { location: `/civ/${id.split('-')[0]}` }, createElement(BonusBodyContent, { b: byId(id), core, variant })),
+      );
+
+    const it3Def = render('Italians-3', 'default');
+    expect(it3Def).not.toContain('见上方作用对象');
+    expect(it3Def).not.toContain('数值来自游戏数据');
+    expect(it3Def).toContain('属性命令 <span class="num nw">1 条</span>（仅指向本文明不可用对象，未计入战斗属性）');
+    expect(it3Def).toContain('单位模拟器属性面板不计算经济/费用类效果，结构化数值见下方「游戏数据原始效果」。');
+    const it3Ev = render('Italians-3', 'evidence');
+    expect(it3Ev).toContain('data-t="bonus-raw-unowned-note"');
+    expect(it3Ev).toContain('以下属性命令仅指向本文明不可用对象，未计入战斗属性；原始记录保留供核查。');
+    expect(it3Ev).toContain('展开原始记录（<span class="num nw">1 条</span>）');
+
+    const hu0Def = render('Huns-0', 'default');
+    expect(hu0Def).toContain('<h4>作用对象</h4>');
+    expect(hu0Def).not.toContain('匈奴 拥有的');
+    expect(hu0Def).toContain('根据说明文字推断，仅列出说明中提及的词条（含本文明不可建造或训练的对象），非结构化作用名单。');
+    expect(hu0Def.indexOf('根据说明文字推断')).toBeLessThan(hu0Def.indexOf('<details class="datfx">'));
+    expect(hu0Def).not.toContain('见上方作用对象');
+    expect(hu0Def).toContain('属性命令 <span class="num nw">2 条</span>（仅指向本文明不可用对象，未计入战斗属性）');
+    const hu0Ev = render('Huns-0', 'evidence');
+    expect(hu0Ev).toContain('data-t="bonus-raw-unowned-note"');
+    expect(hu0Ev).toContain('含本文明不可建造或训练的对象');
+
+    // Khitans-0 同样命中含本文明不可建造对象（农田）
+    expect(render('Khitans-0', 'default')).toContain('含本文明不可建造或训练的对象');
+
+    // .busage 底部附注三态分流
+    expect(render('Aztecs-2', 'default')).toContain(
+      '已编码的单位/建筑属性计入模拟器；经济/费用类效果不进模拟器属性面板，结构化数值见下方「游戏数据原始效果」。',
+    );
+    expect(render('Berbers-0', 'default')).toContain('已编码的单位/建筑属性计入模拟器；以上列出其他工具的计入情况，各工具沿用各自的计算口径。');
+    expect(render('Berbers-0', 'evidence')).toContain('已编码的单位/建筑属性计入模拟器；以上列出其他工具的计入情况，各工具沿用各自的计算口径。');
+    expect(render('Spanish-0', 'default')).toContain('已编码的单位/建筑属性计入模拟器；以上列出其他工具的计入情况，各工具沿用各自的计算口径。');
+    expect(render('Sicilians-4', 'default')).toContain('普通开局已有首座城镇中心，施工加成从起点计入');
+    expect(render('Mayans-1', 'default')).toContain('开局按连续采集估算，资源储量和耗尽未模拟');
   });
 });

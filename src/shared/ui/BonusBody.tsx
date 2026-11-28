@@ -59,6 +59,17 @@ export function BonusTags({ b, includeTeam = true, includeFresh = true }: { b: C
 }
 const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
 
+function usageFootnote(b: CivBonusEnt): string {
+  if (b.id === 'Sicilians-4')
+    return '普通开局已有首座城镇中心，施工加成从起点计入；新城镇中心按实际施工形态计算。农田储量和续种未模拟，各工具沿用各自的计算口径。';
+  if (b.id === 'Mayans-1') return '开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。';
+  if (!b.encoded) return `单位模拟器属性面板不计算经济/费用类效果${b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「游戏数据原始效果」' : ''}。`;
+  const hasEcoData = b.eco.length > 0 || b.dat.some((e) => e.eco.length > 0);
+  return hasEcoData
+    ? '已编码的单位/建筑属性计入模拟器；经济/费用类效果不进模拟器属性面板，结构化数值见下方「游戏数据原始效果」。'
+    : '已编码的单位/建筑属性计入模拟器；以上列出其他工具的计入情况，各工具沿用各自的计算口径。';
+}
+
 /** Keep the scoped sourced quantity phrases together in both detail and sidebar text. */
 const bengaliQuantity = (text: string, linked: boolean) =>
   text.split(/(\d+\s*(?:个村民|人口|个模板))/g).map((part, index) =>
@@ -122,8 +133,6 @@ export function BonusBodyContent({
   variant?: 'default' | 'evidence';
 }) {
   const groups = bonusAffects(b, core.units, core.buildings);
-  const mayanTimeline = b.id === 'Mayans-1';
-  const sicilianConstruction = b.id === 'Sicilians-4';
   const usage = bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
@@ -138,7 +147,13 @@ export function BonusBodyContent({
     .filter((s) => s.kind === 'building')
     .map((s) => core.buildingById[+s.href.replace(/\D/g, '')]!)
     .filter(Boolean);
-  if (variant === 'evidence') return <BonusEvidenceSections b={b} core={core} compact={compact} groups={groups} usage={usage} ex={ex} mu={mu} mb={mb} />;
+  const hasUnownedMention = !b.team && (mu.some((u) => !u.civs.includes(b.civ)) || mb.some((x) => !x.civs.includes(b.civ)));
+  const mentionNote = hasUnownedMention
+    ? '根据说明文字推断，仅列出说明中提及的词条（含本文明不可建造或训练的对象），非结构化作用名单。'
+    : '根据说明文字推断，非结构化对象名单。';
+  const rawCount = b.dat.length + (b.eco.length ? 1 : 0);
+  if (variant === 'evidence')
+    return <BonusEvidenceSections b={b} core={core} compact={compact} groups={groups} usage={usage} ex={ex} mu={mu} mb={mb} mentionNote={mentionNote} />;
   return (
     <div className={'bonusbody' + (compact ? ' compact' : '')}>
       {head && (
@@ -187,13 +202,7 @@ export function BonusBodyContent({
               </li>
             ))}
           </ul>
-          {sicilianConstruction ? (
-            <p>普通开局已有首座城镇中心，施工加成从起点计入；新城镇中心按实际施工形态计算。农田储量和续种未模拟，各工具沿用各自的计算口径。</p>
-          ) : mayanTimeline ? (
-            <p>开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。</p>
-          ) : (
-            <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「游戏数据原始效果」' : ''}。</p>
-          )}
+          <p>{usageFootnote(b)}</p>
         </div>
       )}
       {!b.encoded && usage.length === 0 && (
@@ -210,7 +219,11 @@ export function BonusBodyContent({
       <p className="note">
         措辞帮助：<Link to="/glossary/rate-and-time">速率与耗时</Link> · <Link to="/glossary/stronger-effect">科技效果更强</Link>
       </p>
-      {(groups.length > 0 || mu.length + mb.length > 0) && <h4>作用对象{b.team ? '（所有拥有该单位的文明）' : `（${civByEn(b.civ)?.zh} 拥有的）`}</h4>}
+      {groups.length > 0 ? (
+        <h4>作用对象{b.team ? '（所有拥有该单位的文明）' : `（${civByEn(b.civ)?.zh} 拥有的）`}</h4>
+      ) : !b.encoded && mu.length + mb.length > 0 ? (
+        <h4>作用对象</h4>
+      ) : null}
       {groups.map((g) => (
         <div className="affg" key={g.group}>
           <h5>{g.group}</h5>
@@ -237,33 +250,55 @@ export function BonusBodyContent({
           ))}
         </div>
       ))}
+      {!b.encoded && mu.length + mb.length > 0 && (
+        <>
+          <p className="note">{mentionNote}</p>
+          <div className="uchips">
+            <UnitLinks list={collapse(mu, core.fam)} />
+            {mb.map((x) => (
+              <BuildingLink key={x.id} b={x} />
+            ))}
+          </div>
+        </>
+      )}
       {(b.dat.length > 0 || b.eco.length > 0) && (
         <details className="datfx">
-          <summary>游戏数据原始效果（{b.dat.length + (b.eco.length ? 1 : 0)} 条）</summary>
+          <summary>
+            游戏数据原始效果（<span className="num nw">{rawCount} 条</span>）
+          </summary>
           <ul>
-            {b.dat.map((e) => (
-              <li key={e.tech}>
-                <code>
-                  #{e.tech} {e.name}
-                </code>
-                {e.age > 1 && <small className="note"> · {AGE_ZH[e.age]}</small>}
-                {e.req.length > 0 && <small className="note"> · 需 {e.req.join(' + ')}</small>}
-                {'condition' in e && e.condition.kind === 'relics' && (
-                  <small className="note">
-                    {' '}
-                    · 条件：驻守圣物 ≥ <span className="num nw">{e.condition.min} 件</span>
-                  </small>
-                )}
-                {e.rules.length > 0 && <small className="note"> · 属性命令 {e.rules.reduce((n, r) => n + r.fx.length, 0)} 条（见上方作用对象）</small>}
-                {e.eco.length > 0 && (
-                  <ul>
-                    {e.eco.map((x, i) => (
-                      <li key={i}>{ecoText(x, (id) => core.unitById[id]?.zh ?? core.buildingById[id]?.zh)}</li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
+            {b.dat.map((e) => {
+              const fxCount = e.rules.reduce((n, r) => n + r.fx.length, 0);
+              return (
+                <li key={e.tech}>
+                  <code>
+                    #{e.tech} {e.name}
+                  </code>
+                  {e.age > 1 && <small className="note"> · {AGE_ZH[e.age]}</small>}
+                  {e.req.length > 0 && <small className="note"> · 需 {e.req.join(' + ')}</small>}
+                  {'condition' in e && e.condition.kind === 'relics' && (
+                    <small className="note">
+                      {' '}
+                      · 条件：驻守圣物 ≥ <span className="num nw">{e.condition.min} 件</span>
+                    </small>
+                  )}
+                  {e.rules.length > 0 && (
+                    <small className="note">
+                      {' '}
+                      · 属性命令 <span className="num nw">{fxCount} 条</span>
+                      {e.rulesUnowned ? '（仅指向本文明不可用对象，未计入战斗属性）' : '（见上方作用对象）'}
+                    </small>
+                  )}
+                  {e.eco.length > 0 && (
+                    <ul>
+                      {e.eco.map((x, i) => (
+                        <li key={i}>{ecoText(x, (id) => core.unitById[id]?.zh ?? core.buildingById[id]?.zh)}</li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
             {b.eco.length > 0 && (
               <li>
                 团队加成经济项
@@ -276,17 +311,6 @@ export function BonusBodyContent({
             )}
           </ul>
         </details>
-      )}
-      {!b.encoded && mu.length + mb.length > 0 && (
-        <>
-          <p className="note">根据说明文字推断：</p>
-          <div className="uchips">
-            <UnitLinks list={collapse(mu, core.fam)} />
-            {mb.map((x) => (
-              <BuildingLink key={x.id} b={x} />
-            ))}
-          </div>
-        </>
       )}
     </div>
   );
@@ -301,9 +325,10 @@ type EvidenceProps = {
   ex: ReturnType<typeof bonusExample>;
   mu: Unit[];
   mb: NonNullable<CoreData['buildingById'][number]>[];
+  mentionNote: string;
 };
 
-function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: EvidenceProps) {
+function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb, mentionNote }: EvidenceProps) {
   const rawEntry = (entry: (typeof b.dat)[number]) => {
     return (
       <article className="bonus-raw-entry" key={entry.tech}>
@@ -336,6 +361,12 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
             </div>
           )}
         </dl>
+        {entry.rules.length > 0 && entry.rulesUnowned && (
+          <p className="bonus-raw-unowned" data-t="bonus-raw-unowned-note">
+            <Icon name="info" className="ic" />
+            <span>以下属性命令仅指向本文明不可用对象，未计入战斗属性；原始记录保留供核查。</span>
+          </p>
+        )}
         {entry.rules.length > 0 && (
           <ul className="bonus-raw-rules">
             {entry.rules.map((rule, ruleIndex) => (
@@ -424,7 +455,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
             ))}
           </div>
         ))}
-        {!b.encoded && mu.length + mb.length > 0 && <p className="note">根据说明文字推断，非结构化对象名单。</p>}
+        {!b.encoded && mu.length + mb.length > 0 && <p className="note">{mentionNote}</p>}
         {!groups.length && !mu.length && !mb.length && <p className="note">暂无结构化对象明细。不代表这条加成没有效果。</p>}
         {!b.encoded && mu.length + mb.length > 0 && (
           <div className="uchips">
@@ -472,13 +503,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
                 </li>
               ))}
             </ul>
-            {b.id === 'Sicilians-4' ? (
-              <p>普通开局已有首座城镇中心，施工加成从起点计入；新城镇中心按实际施工形态计算。农田储量和续种未模拟，各工具沿用各自的计算口径。</p>
-            ) : b.id === 'Mayans-1' ? (
-              <p>开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。</p>
-            ) : (
-              <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length ? '，结构化数值见下方「游戏数据原始效果」' : ''}。</p>
-            )}
+            <p>{usageFootnote(b)}</p>
           </div>
         ) : (
           <p className="note">暂无逐工具明细；以各工具的实际说明为准。</p>
@@ -512,7 +537,9 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb }: 
         <h4>游戏数据原始效果</h4>
         {rawPresent ? (
           <details className="datfx">
-            <summary>展开原始记录（{b.dat.length + (b.eco.length ? 1 : 0)} 条）</summary>
+            <summary>
+              展开原始记录（<span className="num nw">{b.dat.length + (b.eco.length ? 1 : 0)} 条</span>）
+            </summary>
             {b.dat.map(rawEntry)}
             {b.eco.length > 0 && (
               <section>

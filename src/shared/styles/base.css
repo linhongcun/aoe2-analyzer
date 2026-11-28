@@ -1333,7 +1333,8 @@ table.ediff td.dn {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.bonusbody .busage .num {
+.bonusbody .busage .num,
+.bonusbody .datfx .num {
   color: inherit;
   font-weight: inherit;
 }

@@ -82,7 +82,7 @@
   {
     "civ": "Italians",
     "idx": 3,
-    "src": "dat",
+    "src": "eco",
     "zh": "火药单位费用 -20%",
     "realCostGather": false,
     "costDiscount": true

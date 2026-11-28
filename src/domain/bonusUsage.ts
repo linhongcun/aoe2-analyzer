@@ -137,18 +137,20 @@ export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean
   const dat = b.dat.map((d) => d.tech).filter((t) => t > 0);
   const g = gatherLines(b);
   const techs = [...new Set([...dat, ...g.flatMap((l) => l.techs)])];
-  return { techs, treeOnly: techs.length === 0 && (b.dat.length > 0 || g.length > 0) };
+  const hasTreeEcoOrBt = b.dat.some((d) => d.tech < 0 && (d.eco.length > 0 || d.rules.some((r) => r.fx.some((f) => f.s === 'bt'))));
+  return { techs, treeOnly: techs.length === 0 && (hasTreeEcoOrBt || g.length > 0) };
 }
 
 /**
- * issue 332：开局模拟里原先「未逐条核对」的 15 条科技树汇总加成的结论。
- * 键 = CivBonusEnt.id；en = aoe2techtree@3bb43b1 文明加成英文原文（与 b.en 一致，文案变了要重新认定）。
+ * issue 332：开局模拟里原先「未逐条核对」的科技树汇总加成的结论（含 issue 1497 补齐的阿兹特克-2、西班牙-0）。
+ * 键 = CivBonusEnt.id；en = aoe2techtree 文明加成英文原文（与 b.en 一致，文案变了要重新认定）。
  * on = 去掉 eco.json 该文明 source = 'tree' 行里属于本条的效果后，全部开局方案重跑是否变化；
  * on = null 表示 tree 行里没有可去掉的对应效果，note 必须以「无法核实」开头再写具体原因。
  * note 是界面文字：用玩家能懂的话，科技名与站内中文名一致，不写 eco.json、tree 行、科技树汇总等内部说法（Steve 2026-10-22 定稿）。
  */
 const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }> = {
   'Aztecs-1': { en: 'Villagers carry +3', on: true, note: '已计入' },
+  'Aztecs-2': { en: 'Military Units train +15% faster', on: true, note: '已计入' },
   'Bohemians-0': { en: 'Mining Camp technologies free', on: true, note: '已计入' },
   'Bulgarians-1': {
     en: 'Blacksmith and Siege Workshop technologies cost -50% food',
@@ -170,6 +172,11 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
   // Newly supported Slavic military free techs, separate from the historical 15.
   'Slavs-1': { en: 'Arson, Gambesons free', on: false, note: '未计入：纵火、软甲是战斗科技，当前开局不研究，也不影响时间与库存' },
   'Poles-3': { en: 'Bloodlines and Scout Cavalry-line upgrades cost -50% food', on: false, note: '未计入：当前开局方案不研究血统或斥候骑兵系升级' },
+  'Spanish-0': {
+    en: 'Builders work +30% faster',
+    on: false,
+    note: '未计入：开局模拟暂未套用建筑工施工提速，新造建筑工期仍按通用速度计算',
+  },
   'Spanish-2': { en: 'Blacksmith upgrades cost no gold', on: false, note: '未计入：铁匠铺科技免黄金，现有开局方案不研究需花费黄金的铁匠铺科技' },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药不影响开局方案的资源与时间' },
   'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
@@ -361,7 +368,7 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
     const lines = usageLines(nb);
     return lines.some((l) => l.on === true) ? lines : [];
   }
-  if (b.src === 'eco') return usageLines(nb);
+  if (b.src === 'eco' || b.src === 'dat') return usageLines(nb);
   const ac = armyCostLine(nb);
   return ac ? [ac] : [];
 }
@@ -388,7 +395,9 @@ function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
   const rules = (cc?.automatic ?? []).filter((r) => techs.has(r.id) && !commonRules().has(r.id));
   // 与 construction.ts 的 matches 同口径：命令指向普通村民 118，或 A = -1 且类别与 118 相同
   const builder = (c: Cmd) => c.A === 118 || (c.A === -1 && c.B === cc?.units[118]?.class);
-  if (rules.some((r) => r.commands.some((c) => c.C === 13 && builder(c))))
+  const hasTreeBuilderBt = b.dat.some((d) => d.tech < 0 && d.rules.some((r) => r.b === 1 && r.fx.some((f) => f.s === 'bt')));
+  const treeBuilderRate = hasTreeBuilderBt && (cc?.tree ?? []).some((c) => c.C === 13 && builder(c));
+  if (rules.some((r) => r.commands.some((c) => c.C === 13 && builder(c))) || treeBuilderRate)
     out.push({ tool: 'construction', name: USAGE_TOOL_ZH.construction, on: true, note: '建造者工作速率已计入' });
   else if (rules.some((r) => r.commands.some((c) => c.C === 101)))
     out.push({ tool: 'construction', name: USAGE_TOOL_ZH.construction, on: true, note: '施工工期已计入' });
