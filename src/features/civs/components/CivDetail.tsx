@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { Fragment, Suspense, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
@@ -7,9 +7,9 @@ import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
 import { arenaCastleGold } from '../arenaCastleGold';
 import { nomadReveal } from '../nomadReveal';
-import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
+import { civUniqueTechs, civUniqueUnitItems, relatedRegionalUnitItems, type KitUnitItem } from '../../../domain/civKit';
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
-import type { Building, Civ, Unit } from '../../../domain/types';
+import type { Building, Civ } from '../../../domain/types';
 import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -180,7 +180,7 @@ function KitUnits({
   civ: string;
   label: string;
   hint: string;
-  lines: { u: Unit; elite?: Unit }[];
+  lines: readonly KitUnitItem[];
   buildings: readonly Building[] | null;
   testId: string;
 }) {
@@ -191,18 +191,25 @@ function KitUnits({
         <b>{label}</b>
         <span>{hint}</span>
       </p>
-      {lines.map(({ u, elite }) => {
+      {lines.map(({ u, upgrade, upgradeLabel }) => {
         const made = buildingZh(u.b, buildings);
-        const sub = [u.en, elite ? '含精锐' : '', made ? `${made}生产` : ''].filter(Boolean).join(' · ');
+        const parts = [u.en, upgradeLabel, made ? `${made}生产` : ''].filter((part): part is string => Boolean(part));
         return (
           <Link className="kit-row uchips" key={u.id} to={`/unit/${u.id}?civ=${encodeURIComponent(civ)}`}>
             <span className="kit-icons">
               <UnitIcon u={u} />
-              {elite && <UnitIcon u={elite} />}
+              {upgrade && <UnitIcon u={upgrade} />}
             </span>
             <span className="kit-meta">
               <span className="kit-name">{u.zh}</span>
-              <span className="kit-sub">{sub}</span>
+              <span className="kit-sub">
+                {parts.map((part, index) => (
+                  <Fragment key={index}>
+                    {index > 0 ? ' ' : null}
+                    <span className="kit-sub-part nw">{index < parts.length - 1 ? `${part} ·` : part}</span>
+                  </Fragment>
+                ))}
+              </span>
             </span>
             <span className="kit-age">{AGE_ZH[u.age] ?? ''}</span>
           </Link>
@@ -330,16 +337,9 @@ function CivReading({ c, techTree: TechTree }: { c: Civ; techTree: TechTreeCompo
     });
     return () => cancelAnimationFrame(frame);
   }, [c, location.hash, location.key, location.pathname, location.search, location.state, navigate, navigationType, previous, restoreOwner, tab]);
-  const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
+  const uniqueUnits = core ? civUniqueUnitItems(c.en, core.units, core.fam) : [];
   const uniqueTechs = core ? civUniqueTechs(c.en, core.techs) : [];
-  const regional = core
-    ? relatedRegionalLines(c, core.units, core.techs).flatMap((line) => {
-        const base = line[0];
-        if (!base) return [];
-        const tail = line.length > 1 ? line[line.length - 1] : undefined;
-        return [{ u: base, elite: tail && tail.id !== base.id ? tail : undefined }];
-      })
-    : [];
+  const regional = core ? relatedRegionalUnitItems(c, core.units, core.techs, core.fam) : [];
   const tools = [
     ['civ-tool-builds', `/builds?civ=${c.en}`, '开局流程'],
     ['civ-tool-production', `/production?civ=${c.en}`, '持续生产'],

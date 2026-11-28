@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import techCatalog from '../../data/game/techs.json';
 import { civByEn, civs, loadCore, type Core } from '../../src/data';
-import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../src/domain/civKit';
+import { civUniqueTechs, civUniqueUnitItems, civUniqueUnits, kitUpgradeLabel, relatedRegionalLines, relatedRegionalUnitItems } from '../../src/domain/civKit';
 import { regionalUnitLines } from '../../src/domain/civUnits';
 import { strengths } from '../../src/domain/ratings';
 
@@ -69,6 +69,109 @@ describe('文明详情套件装配', () => {
         }
       }
     }
+  });
+
+  it('全站 56 文明套件升级副标题按家族数据规则区分直接精锐与非精锐/多阶终阶（#1490）', () => {
+    const nonDirectElite: { civ: string; base: string; tail: string; label: string }[] = [];
+    const directElite: { civ: string; base: string }[] = [];
+    const singleForm: { civ: string; base: string }[] = [];
+
+    for (const civ of civs) {
+      const lines = relatedRegionalLines(civ, core.units, core.techs);
+      const items = relatedRegionalUnitItems(civ, core.units, core.techs, core.fam);
+      expect(items).toHaveLength(lines.length);
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]!;
+        const item = items[i]!;
+        const base = line[0]!;
+        const tail = line.length > 1 ? line[line.length - 1] : undefined;
+        expect(item.u.id).toBe(base.id);
+
+        if (!tail || tail.id === base.id) {
+          expect(item.upgrade).toBeUndefined();
+          expect(item.upgradeLabel).toBeUndefined();
+          singleForm.push({ civ: civ.en, base: base.zh });
+          continue;
+        }
+
+        expect(item.upgrade?.id).toBe(tail.id);
+        const isDirectElite = core.fam.eliteOf[base.id]?.id === tail.id;
+        expect(item.upgradeLabel).toBe(isDirectElite ? '含精锐' : `含${tail.zh}`);
+        if (isDirectElite) directElite.push({ civ: civ.en, base: base.zh });
+        else nonDirectElite.push({ civ: civ.en, base: base.zh, tail: tail.zh, label: item.upgradeLabel! });
+      }
+
+      const uniquePairs = civUniqueUnits(civ.en, core.units, core.fam);
+      const uniqueItems = civUniqueUnitItems(civ.en, core.units, core.fam);
+      expect(uniqueItems).toHaveLength(uniquePairs.length);
+      for (let i = 0; i < uniquePairs.length; i++) {
+        const pair = uniquePairs[i]!;
+        const item = uniqueItems[i]!;
+        expect(item.u.id).toBe(pair.u.id);
+        if (pair.elite) {
+          expect(core.fam.eliteOf[pair.u.id]?.id).toBe(pair.elite.id);
+          expect(item.upgrade?.id).toBe(pair.elite.id);
+          expect(item.upgradeLabel).toBe('含精锐');
+        } else {
+          expect(item.upgrade).toBeUndefined();
+          expect(item.upgradeLabel).toBeUndefined();
+        }
+      }
+    }
+
+    expect(directElite).toHaveLength(20);
+    expect(nonDirectElite).toHaveLength(18);
+    expect(singleForm.length).toBeGreaterThan(0);
+
+    const byKey = new Map(nonDirectElite.map((row) => [`${row.civ}:${row.base}`, row.label]));
+    for (const civ of ['Berbers', 'Byzantines', 'Ethiopians', 'Gurjaras', 'Hindustanis', 'Malians', 'Saracens']) {
+      expect(byKey.get(`${civ}:骆驼兵`)).toBe('含重装骆驼兵');
+    }
+    for (const civ of ['Chinese', 'Jurchens', 'Koreans']) {
+      expect(byKey.get(`${civ}:火箭推车`)).toBe('含重型火箭推车');
+    }
+    for (const civ of ['Wei', 'Wu']) {
+      expect(byKey.get(`${civ}:黑光铠骑兵`)).toBe('含重装黑光铠骑兵');
+    }
+    expect(byKey.get('Bengalis:装甲战象')).toBe('含攻城战象');
+    expect(byKey.get('Franks:骑马弩兵')).toBe('含重装骑马弩兵');
+    expect(byKey.get('Mayans:鹰斥候')).toBe('含精锐鹰勇士');
+    for (const civ of ['Incas', 'Muisca', 'Tupi']) {
+      expect(byKey.get(`${civ}:蔷琵斥候`)).toBe('含精锐蔷琵战士');
+    }
+
+    // 印度斯坦帝王骆驼兵保留在独特单位区，不混入区域单位
+    const hindustanisUnique = civUniqueUnitItems('Hindustanis', core.units, core.fam);
+    expect(hindustanisUnique.map((item) => [item.u.zh, item.upgradeLabel])).toEqual([
+      ['古拉姆', '含精锐'],
+      ['帝王骆驼兵', undefined],
+    ]);
+    const hindustanisRegional = relatedRegionalUnitItems(civByEn('Hindustanis')!, core.units, core.techs, core.fam);
+    expect(hindustanisRegional.map((item) => [item.u.zh, item.upgradeLabel])).toEqual([['骆驼兵', '含重装骆驼兵']]);
+
+    // 正向直接精锐与单形态对照
+    const bengalisRegional = relatedRegionalUnitItems(civByEn('Bengalis')!, core.units, core.techs, core.fam);
+    expect(bengalisRegional.map((item) => [item.u.zh, item.upgradeLabel])).toEqual(
+      expect.arrayContaining([
+        ['装甲战象', '含攻城战象'],
+        ['骑象射手', '含精锐'],
+        ['象兵', '含精锐'],
+      ]),
+    );
+    const byzantinesRegional = relatedRegionalUnitItems(civByEn('Byzantines')!, core.units, core.techs, core.fam);
+    expect(byzantinesRegional.map((item) => [item.u.zh, item.upgradeLabel])).toEqual(
+      expect.arrayContaining([
+        ['瓦兰吉卫队', '含精锐'],
+        ['德罗蒙战舰', undefined],
+        ['骆驼兵', '含重装骆驼兵'],
+      ]),
+    );
+
+    // 边界：无终阶或同 ID 返回 undefined
+    const camel = core.unitById[329]!;
+    expect(kitUpgradeLabel(camel, undefined, core.fam)).toBeUndefined();
+    expect(kitUpgradeLabel(camel, camel, core.fam)).toBeUndefined();
   });
 
   it('文明详情颜色引用现有主题令牌，不另写一套固定深色', () => {
