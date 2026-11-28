@@ -1,6 +1,8 @@
-import { SIEGE_EVIDENCE, type SiegeCombatEvidence, type SiegeEvidence } from '../data/siege';
+import { SIEGE_EVIDENCE, type SiegeArmorTechEvidence, type SiegeCivModifier, type SiegeCombatEvidence, type SiegeEvidence } from '../data/siege';
 import { damageRows, totalDamage } from './damageCore';
 import type { Building, Unit } from './types';
+
+export const SIEGE_EVIDENCE_SCHEMA_VERSION = 2;
 
 const validClasses = (rows: readonly (readonly number[])[]) =>
   Array.isArray(rows) &&
@@ -24,6 +26,8 @@ const MODIFIER_KEYS = [
 ];
 const validModifiers = (modifiers: Readonly<Record<string, number>>) =>
   !!modifiers && Object.keys(modifiers).length === MODIFIER_KEYS.length && MODIFIER_KEYS.every((key) => Number.isFinite(modifiers[key]));
+
+const sameNumberArray = (a: readonly number[], b: readonly number[]) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 /** Full tables may omit a class: use the recorded base armour, never a guessed 0. */
 export function siegeEvidenceDamage(attacker: SiegeCombatEvidence, defender: SiegeCombatEvidence): number | undefined {
@@ -64,27 +68,96 @@ export function siegeEvidenceDamage(attacker: SiegeCombatEvidence, defender: Sie
   return Number.isFinite(damage) && damage > 0 ? damage : undefined;
 }
 
+function applyCivModifier(
+  attacker: SiegeCombatEvidence,
+  modifier: SiegeCivModifier | undefined,
+): { attacker: SiegeCombatEvidence; interval: number } | undefined {
+  if (!modifier) return { attacker, interval: attacker.reload };
+  if (!Array.isArray(modifier.attackMul) || !Number.isFinite(modifier.reloadMul) || modifier.reloadMul <= 0) return undefined;
+  const baseClassIds = new Set(attacker.attacks.map(([id]) => id));
+  const mulByClass = new Map<number, number>();
+  for (const row of modifier.attackMul) {
+    if (!Array.isArray(row) || row.length !== 2) return undefined;
+    const [cls, mul] = row;
+    if (!Number.isInteger(cls) || !Number.isFinite(mul) || mul <= 0 || mulByClass.has(cls!) || !baseClassIds.has(cls!)) return undefined;
+    mulByClass.set(cls!, mul!);
+  }
+  const attacks =
+    mulByClass.size > 0
+      ? attacker.attacks.map(([id, amount]) => {
+          const mul = mulByClass.get(id!);
+          return mul !== undefined ? [id!, amount! * mul] : [id!, amount!];
+        })
+      : attacker.attacks;
+  const interval = Math.round(attacker.reload * modifier.reloadMul * 1e9) / 1e9;
+  if (!Number.isFinite(interval) || interval <= 0) return undefined;
+  return { attacker: { ...attacker, attacks }, interval };
+}
+
+function applyArmorTechs(
+  defender: SiegeCombatEvidence,
+  armorIds: readonly number[],
+  armorTechs: Readonly<Record<string, SiegeArmorTechEvidence>>,
+): SiegeCombatEvidence | undefined {
+  if (armorIds.length === 0) return defender;
+  if (!Number.isInteger(defender.class) || !validClasses(defender.armors)) return undefined;
+  let hp = defender.hp;
+  const armorMap = new Map(defender.armors.map(([id, amount]) => [id!, amount!]));
+  for (const tid of armorIds) {
+    const key = String(tid);
+    if (!armorTechs || !Object.hasOwn(armorTechs, key)) return undefined;
+    const tech = armorTechs[key];
+    if (
+      !tech ||
+      tech.verified !== true ||
+      !Array.isArray(tech.classes) ||
+      !tech.classes.includes(defender.class) ||
+      !Number.isFinite(tech.hpMul) ||
+      tech.hpMul <= 0 ||
+      !Array.isArray(tech.armorAdd) ||
+      tech.armorAdd.length === 0
+    )
+      return undefined;
+    const seen = new Set<number>();
+    for (const row of tech.armorAdd) {
+      if (!Array.isArray(row) || row.length !== 2) return undefined;
+      const [cls, delta] = row;
+      if (!Number.isInteger(cls) || !Number.isFinite(delta) || seen.has(cls!) || !armorMap.has(cls!)) return undefined;
+      seen.add(cls!);
+      armorMap.set(cls!, armorMap.get(cls!)! + delta!);
+    }
+    hp *= tech.hpMul;
+    if (!Number.isFinite(hp) || hp <= 0) return undefined;
+  }
+  const armors = defender.armors.map(([id]) => [id!, armorMap.get(id!)!]);
+  return { ...defender, hp, armors };
+}
+
 /** Exact configurations plus catalog consistency; legal unsupported selections stay unknown. */
 export function verifiedSiegeInputs(u: Unit, b: Building, civ: string, armor: readonly number[], evidence: SiegeEvidence = SIEGE_EVIDENCE) {
+  if (evidence.schemaVersion !== SIEGE_EVIDENCE_SCHEMA_VERSION) return undefined;
+  if (!Array.isArray(armor) || !armor.every((id) => Number.isInteger(id)) || new Set(armor).size !== armor.length) return undefined;
+  const sortedArmor = [...armor].sort((x, y) => x - y);
   if (
-    evidence.schemaVersion !== 1 ||
+    !Array.isArray(evidence.coverage) ||
     !evidence.coverage.some(
       (c) =>
         c.status === 'verified' &&
         c.unit === u.id &&
         c.building === b.id &&
-        c.civ === civ &&
-        c.armor.length === armor.length &&
-        c.armor.every((id) => armor.includes(id)),
+        Array.isArray(c.civs) &&
+        c.civs.includes(civ) &&
+        Array.isArray(c.armors) &&
+        c.armors.some((allowed: readonly number[]) => Array.isArray(allowed) && sameNumberArray(allowed, sortedArmor)),
     )
   )
     return undefined;
   const a = evidence.attacker;
-  const d = evidence.buildings[String(b.id)];
+  const bKey = String(b.id);
+  const d = evidence.buildings && Object.hasOwn(evidence.buildings, bKey) ? evidence.buildings[bKey] : undefined;
   if (!d || !a || a.id !== u.id) return undefined;
-  const damage = siegeEvidenceDamage(a, d);
-  if (damage === undefined) return undefined;
-  const names = a.attacks.map(([id]) => evidence.classes[String(id)]);
+  if (!validClasses(a.attacks) || !validClasses(d.armors)) return undefined;
+  const names = a.attacks.map(([id]) => (evidence.classes && Object.hasOwn(evidence.classes, String(id)) ? evidence.classes[String(id)] : undefined));
   if (
     names.some((name) => !name) ||
     new Set(names).size !== names.length ||
@@ -99,5 +172,12 @@ export function verifiedSiegeInputs(u: Unit, b: Building, civ: string, armor: re
     b.barm !== d.armors.find(([id]) => id === 11)?.[1]
   )
     return undefined;
-  return { damage, hp: d.hp, interval: a.reload };
+  const civMod = evidence.civModifiers && Object.hasOwn(evidence.civModifiers, civ) ? evidence.civModifiers[civ] : undefined;
+  const modifiedAttacker = applyCivModifier(a, civMod);
+  if (!modifiedAttacker) return undefined;
+  const modifiedDefender = applyArmorTechs(d, sortedArmor, evidence.armorTechs);
+  if (!modifiedDefender) return undefined;
+  const damage = siegeEvidenceDamage(modifiedAttacker.attacker, modifiedDefender);
+  if (damage === undefined) return undefined;
+  return { damage, hp: modifiedDefender.hp, interval: modifiedAttacker.interval };
 }

@@ -3,9 +3,9 @@
   "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-siege.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "meta", "classes", "attacker", "buildings", "coverage", "audit"],
+  "required": ["schemaVersion", "meta", "classes", "attacker", "buildings", "civModifiers", "armorTechs", "coverage", "audit"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "meta": {
       "type": "object",
       "additionalProperties": false,
@@ -79,52 +79,201 @@
         "37": { "const": "重型攻城武器" }
       }
     },
-    "attacker": { "$ref": "#/$defs/combat", "type": "object", "properties": { "id": { "const": 36 } }, "required": ["id"] },
+    "attacker": { "$ref": "#/$defs/attackerCombat" },
     "buildings": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["82", "235"],
-      "properties": { "82": { "$ref": "#/$defs/combat" }, "235": { "$ref": "#/$defs/combat" } }
+      "required": ["79", "82", "109", "117", "155", "234", "235", "236", "487"],
+      "properties": {
+        "79": { "$ref": "#/$defs/buildingCombat" },
+        "82": { "$ref": "#/$defs/buildingCombat" },
+        "109": { "$ref": "#/$defs/buildingCombat" },
+        "117": { "$ref": "#/$defs/buildingCombat" },
+        "155": { "$ref": "#/$defs/buildingCombat" },
+        "234": { "$ref": "#/$defs/buildingCombat" },
+        "235": { "$ref": "#/$defs/buildingCombat" },
+        "236": { "$ref": "#/$defs/buildingCombat" },
+        "487": { "$ref": "#/$defs/buildingCombat" }
+      }
+    },
+    "civModifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Burgundians", "Spanish"],
+      "properties": {
+        "Burgundians": { "$ref": "#/$defs/civModifier" },
+        "Spanish": { "$ref": "#/$defs/civModifier" }
+      }
+    },
+    "armorTechs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["50", "51"],
+      "properties": {
+        "50": { "$ref": "#/$defs/armorTech" },
+        "51": { "$ref": "#/$defs/armorTech" }
+      }
     },
     "coverage": {
       "type": "array",
-      "minItems": 4,
-      "maxItems": 4,
+      "minItems": 9,
+      "maxItems": 9,
       "uniqueItems": true,
       "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["unit", "building", "civ", "armor", "status"],
-        "properties": {
-          "unit": { "const": 36 },
-          "building": { "enum": [82, 235] },
-          "civ": { "enum": ["", "Turks"] },
-          "armor": { "type": "array", "maxItems": 0, "items": { "type": "integer" } },
-          "status": { "const": "verified" }
-        }
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["unit", "building", "civs", "armors", "status"],
+            "properties": {
+              "unit": { "const": 36 },
+              "building": { "enum": [79, 82, 109, 234, 235, 236] },
+              "civs": { "$ref": "#/$defs/coveredCivs" },
+              "armors": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [[], [50], [51], [50, 51]]
+                }
+              },
+              "status": { "const": "verified" }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["unit", "building", "civs", "armors", "status"],
+            "properties": {
+              "unit": { "const": 36 },
+              "building": { "enum": [117, 155, 487] },
+              "civs": { "$ref": "#/$defs/coveredCivs" },
+              "armors": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": { "const": [] }
+              },
+              "status": { "const": "verified" }
+            }
+          }
+        ]
       }
     },
     "audit": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rawCivsCompared", "rawCombatEqual", "turks", "armorTechs", "armorTechCoverage"],
+      "required": ["rawCivsCompared", "rawCombatEqual", "civs", "chemistry", "armorTechs", "armorTechCoverage"],
       "properties": {
-        "rawCivsCompared": { "const": ["Gaia", "British", "Turks"] },
+        "rawCivsCompared": {
+          "const": [
+            "Gaia",
+            "British",
+            "Berbers",
+            "Bohemians",
+            "Burgundians",
+            "Burmese",
+            "Byzantine",
+            "Dravidians",
+            "Ethiopians",
+            "French",
+            "Goths",
+            "Gurjaras",
+            "Hindustanis",
+            "Italians",
+            "Jurchens",
+            "Koreans",
+            "Lithuanians",
+            "Malay",
+            "Malians",
+            "Persians",
+            "Poles",
+            "Portuguese",
+            "Saracens",
+            "Spanish",
+            "Teutons",
+            "Turks",
+            "Vietnamese"
+          ]
+        },
         "rawCombatEqual": { "const": true },
         "armorTechCoverage": { "type": "string", "minLength": 1 },
-        "armorTechs": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/tech" } },
-        "turks": {
+        "civs": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["id", "automaticTechs", "tree", "team", "chemistry", "conclusion"],
+          "required": [
+            "Berbers",
+            "Bohemians",
+            "Burgundians",
+            "Burmese",
+            "Byzantines",
+            "Dravidians",
+            "Ethiopians",
+            "Franks",
+            "Goths",
+            "Gurjaras",
+            "Hindustanis",
+            "Italians",
+            "Jurchens",
+            "Koreans",
+            "Lithuanians",
+            "Malay",
+            "Malians",
+            "Persians",
+            "Poles",
+            "Portuguese",
+            "Saracens",
+            "Spanish",
+            "Teutons",
+            "Turks",
+            "Vietnamese"
+          ],
           "properties": {
-            "id": { "const": 10 },
-            "conclusion": { "type": "string", "minLength": 1 },
-            "automaticTechs": { "type": "array", "items": { "$ref": "#/$defs/tech" } },
-            "tree": { "$ref": "#/$defs/effect" },
-            "team": { "$ref": "#/$defs/effect" },
-            "chemistry": { "$ref": "#/$defs/tech" }
+            "Berbers": { "$ref": "#/$defs/civAudit" },
+            "Bohemians": { "$ref": "#/$defs/civAudit" },
+            "Burgundians": { "$ref": "#/$defs/civAudit" },
+            "Burmese": { "$ref": "#/$defs/civAudit" },
+            "Byzantines": { "$ref": "#/$defs/civAudit" },
+            "Dravidians": { "$ref": "#/$defs/civAudit" },
+            "Ethiopians": { "$ref": "#/$defs/civAudit" },
+            "Franks": { "$ref": "#/$defs/civAudit" },
+            "Goths": { "$ref": "#/$defs/civAudit" },
+            "Gurjaras": { "$ref": "#/$defs/civAudit" },
+            "Hindustanis": { "$ref": "#/$defs/civAudit" },
+            "Italians": { "$ref": "#/$defs/civAudit" },
+            "Jurchens": { "$ref": "#/$defs/civAudit" },
+            "Koreans": { "$ref": "#/$defs/civAudit" },
+            "Lithuanians": { "$ref": "#/$defs/civAudit" },
+            "Malay": { "$ref": "#/$defs/civAudit" },
+            "Malians": { "$ref": "#/$defs/civAudit" },
+            "Persians": { "$ref": "#/$defs/civAudit" },
+            "Poles": { "$ref": "#/$defs/civAudit" },
+            "Portuguese": { "$ref": "#/$defs/civAudit" },
+            "Saracens": { "$ref": "#/$defs/civAudit" },
+            "Spanish": { "$ref": "#/$defs/civAudit" },
+            "Teutons": { "$ref": "#/$defs/civAudit" },
+            "Turks": { "$ref": "#/$defs/civAudit" },
+            "Vietnamese": { "$ref": "#/$defs/civAudit" }
           }
+        },
+        "chemistry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tech", "effect", "name", "relevantCommands", "commandsSha256"],
+          "properties": {
+            "tech": { "const": 47 },
+            "effect": { "type": "integer" },
+            "name": { "type": "string", "minLength": 1 },
+            "relevantCommands": { "type": "array", "maxItems": 0, "items": { "$ref": "#/$defs/command" } },
+            "commandsSha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "armorTechs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/armorTechAudit" }
         }
       }
     }
@@ -132,21 +281,89 @@
   "$defs": {
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
     "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "coveredCivs": {
+      "const": [
+        "",
+        "Berbers",
+        "Bohemians",
+        "Burgundians",
+        "Burmese",
+        "Byzantines",
+        "Dravidians",
+        "Ethiopians",
+        "Franks",
+        "Goths",
+        "Gurjaras",
+        "Hindustanis",
+        "Italians",
+        "Jurchens",
+        "Koreans",
+        "Lithuanians",
+        "Malay",
+        "Malians",
+        "Persians",
+        "Poles",
+        "Portuguese",
+        "Saracens",
+        "Spanish",
+        "Teutons",
+        "Turks",
+        "Vietnamese"
+      ]
+    },
+    "classPair": {
+      "type": "array",
+      "prefixItems": [{ "type": "integer", "minimum": 0 }, { "type": "number" }],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
     "classes": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "type": "array",
-        "prefixItems": [{ "type": "integer", "minimum": 0 }, { "type": "number" }],
-        "items": false,
-        "minItems": 2,
-        "maxItems": 2
-      }
+      "items": { "$ref": "#/$defs/classPair" }
     },
-    "combat": {
+    "optionalClasses": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/classPair" }
+    },
+    "modifiers": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hp", "class", "attacks", "armors", "baseArmor", "reload", "modifiers", "modifiersVerified", "attacksComplete", "armorsComplete"],
+      "required": [
+        "bonusResistance",
+        "reflection",
+        "blastDamage",
+        "accuracy",
+        "projectiles",
+        "maxProjectiles",
+        "secondaryProjectile",
+        "specialAbility",
+        "chargeType",
+        "chargeEvent",
+        "rear",
+        "flank"
+      ],
+      "properties": {
+        "bonusResistance": { "type": "number" },
+        "reflection": { "type": "number" },
+        "blastDamage": { "type": "number" },
+        "accuracy": { "type": "number" },
+        "projectiles": { "type": "number" },
+        "maxProjectiles": { "type": "integer" },
+        "secondaryProjectile": { "type": "integer" },
+        "specialAbility": { "type": "integer" },
+        "chargeType": { "type": "integer" },
+        "chargeEvent": { "type": "integer" },
+        "rear": { "type": "number" },
+        "flank": { "type": "number" }
+      }
+    },
+    "attackerCombat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "hp", "class", "attacks", "armors", "baseArmor", "reload", "modifiers", "modifiersVerified", "attacksComplete", "armorsComplete"],
       "properties": {
         "id": { "const": 36 },
         "class": { "type": "integer", "minimum": 0 },
@@ -158,38 +375,46 @@
         "attacksComplete": { "const": true },
         "armorsComplete": { "const": true },
         "modifiersVerified": { "const": true },
-        "modifiers": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "bonusResistance",
-            "reflection",
-            "blastDamage",
-            "accuracy",
-            "projectiles",
-            "maxProjectiles",
-            "secondaryProjectile",
-            "specialAbility",
-            "chargeType",
-            "chargeEvent",
-            "rear",
-            "flank"
-          ],
-          "properties": {
-            "bonusResistance": { "type": "number" },
-            "reflection": { "type": "number" },
-            "blastDamage": { "type": "number" },
-            "accuracy": { "type": "number" },
-            "projectiles": { "type": "number" },
-            "maxProjectiles": { "type": "integer" },
-            "secondaryProjectile": { "type": "integer" },
-            "specialAbility": { "type": "integer" },
-            "chargeType": { "type": "integer" },
-            "chargeEvent": { "type": "integer" },
-            "rear": { "type": "number" },
-            "flank": { "type": "number" }
-          }
-        }
+        "modifiers": { "$ref": "#/$defs/modifiers" }
+      }
+    },
+    "buildingCombat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hp", "class", "attacks", "armors", "baseArmor", "reload", "modifiers", "modifiersVerified", "attacksComplete", "armorsComplete"],
+      "properties": {
+        "class": { "type": "integer", "minimum": 0 },
+        "hp": { "type": "number", "exclusiveMinimum": 0 },
+        "reload": { "type": "number", "minimum": 0 },
+        "baseArmor": { "type": "number", "minimum": 0 },
+        "attacks": { "$ref": "#/$defs/optionalClasses" },
+        "armors": { "$ref": "#/$defs/classes" },
+        "attacksComplete": { "const": true },
+        "armorsComplete": { "const": true },
+        "modifiersVerified": { "const": true },
+        "modifiers": { "$ref": "#/$defs/modifiers" }
+      }
+    },
+    "civModifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attackMul", "reloadMul", "source"],
+      "properties": {
+        "attackMul": { "$ref": "#/$defs/optionalClasses" },
+        "reloadMul": { "type": "number", "exclusiveMinimum": 0 },
+        "source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "armorTech": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "classes", "hpMul", "armorAdd", "verified"],
+      "properties": {
+        "name": { "enum": ["Masonry", "Architecture"] },
+        "classes": { "const": [3, 52] },
+        "hpMul": { "type": "number", "exclusiveMinimum": 0 },
+        "armorAdd": { "$ref": "#/$defs/classes" },
+        "verified": { "const": true }
       }
     },
     "command": {
@@ -204,12 +429,6 @@
         "D": { "type": "number" }
       }
     },
-    "effect": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["Name", "EffectCommands"],
-      "properties": { "Name": { "type": "string" }, "EffectCommands": { "type": "array", "items": { "$ref": "#/$defs/command" } } }
-    },
     "tech": {
       "type": "object",
       "additionalProperties": false,
@@ -221,6 +440,34 @@
         "location": { "type": "integer" },
         "requires": { "type": "array", "items": { "type": "integer" } },
         "commands": { "type": "array", "items": { "$ref": "#/$defs/command" } }
+      }
+    },
+    "civAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "datName", "combatEffect", "relevantAutoTechs", "relevantTreeCommands", "relevantTeamCommands", "commandsSha256"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "datName": { "type": "string", "minLength": 1 },
+        "combatEffect": { "enum": ["none", "attackMul", "reloadMul"] },
+        "relevantAutoTechs": { "type": "array", "items": { "$ref": "#/$defs/tech" } },
+        "relevantTreeCommands": { "type": "array", "items": { "$ref": "#/$defs/command" } },
+        "relevantTeamCommands": { "type": "array", "items": { "$ref": "#/$defs/command" } },
+        "commandsSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "armorTechAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tech", "effect", "name", "requires", "location", "matchedClasses", "commandsSha256"],
+      "properties": {
+        "tech": { "enum": [50, 51] },
+        "effect": { "type": "integer" },
+        "name": { "enum": ["Masonry", "Architecture"] },
+        "location": { "type": "integer" },
+        "requires": { "type": "array", "items": { "type": "integer" } },
+        "matchedClasses": { "const": [3, 52] },
+        "commandsSha256": { "$ref": "#/$defs/sha256" }
       }
     }
   }

@@ -238,12 +238,14 @@ describe('#1299 九文明驻军满科技与工具数据核实', () => {
     expect(calculateSiege(bc, castle, 1, 'Turks', [])).toMatchObject({ verified: true, damage: 224, hits: 22, gameSeconds: 136.5 });
     expect(calculateSiege(bc, keep, 2, 'Turks', [])).toMatchObject({ verified: true, damage: 277, hits: 5, gameSeconds: 26 });
 
-    for (const unverifiedId of [109, 79, 117, 487]) {
+    // Issue 1489 扩展手推炮至 25 国、9 座核心建筑与石工/建筑学后，仍对未收录建筑、墙门护甲科技与不可训练文明保持未核验边界
+    const stoneWall = core.buildingById[117]!;
+    for (const unverifiedId of [12, 70, 1251, 276]) {
       expect(calculateSiege(bc, core.buildingById[unverifiedId]!, 1, 'Turks', []).verified, `bldg ${unverifiedId}`).toBe(false);
     }
-    expect(calculateSiege(bc, castle, 1, 'Turks', [50]).verified).toBe(false);
-    expect(calculateSiege(bc, castle, 1, 'Turks', [51]).verified).toBe(false);
-    expect(calculateSiege(bc, castle, 1, 'Spanish', []).verified).toBe(false);
+    expect(calculateSiege(bc, stoneWall, 1, 'Turks', [50]).verified).toBe(false);
+    expect(calculateSiege(bc, stoneWall, 1, 'Turks', [51]).verified).toBe(false);
+    expect(calculateSiege(bc, castle, 1, 'Britons', []).verified).toBe(false);
   });
 
   it('法兰克折扣、图皮载具容量与吴卧虎固定数据口径全部可从仓库数据复现', async () => {

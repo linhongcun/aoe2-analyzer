@@ -121,8 +121,8 @@ for (const [id, name, title, reason] of [
   ['36', '手推炮', '数据未核实，暂不计算', BOMBARD_REASON],
 ] as const) {
   test(`#533 ${name}未核实：无用时，有原因，反馈数据缺口可点`, async ({ page }) => {
-    // Keep the cannon feedback/unknown regression on an unaudited target.
-    await page.goto(`./#/siege?unit=${id}&n=1&bldg=${id === '36' ? '109' : '82'}`);
+    // Keep the cannon feedback/unknown regression on an unaudited target (Barracks 12).
+    await page.goto(`./#/siege?unit=${id}&n=1&bldg=${id === '36' ? '12' : '82'}`);
     const root = page.getByTestId('siege-page');
     await expect(root).toBeVisible();
     await expect(page.getByLabel('攻城单位', { exact: true })).toHaveValue(id);
