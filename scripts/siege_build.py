@@ -174,6 +174,8 @@ def audit_armor_techs(d, base):
         rec = effect_record(d, tid)
         cmds = rec['commands']
         require(rec['name'] == ('Masonry' if tid == 50 else 'Architecture'), 'Unexpected armor tech name: %s' % tid)
+        require(not any(c['Type'] in (0, 4, 5, 10, 14, 15) and c['A'] == -1 and c['B'] == -1 for c in cmds),
+                'Armor tech %s contains unreviewed wildcard command' % tid)
         for cls in WALL_GATE_CLASSES:
             require(not any(c['A'] == -1 and c['B'] == cls for c in cmds),
                     'Armor tech %s unexpectedly targets wall/gate class %s' % (tid, cls))

@@ -238,6 +238,12 @@ class Siege1064(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'non-variant direct command'):
             self.generate()
 
+        # Armor tech adding an unreviewed wildcard command
+        self.setUp()
+        self.d['Effects'][50]['EffectCommands'].append({'Type': 5, 'A': -1, 'B': -1, 'C': 0, 'D': 1.1})
+        with self.assertRaisesRegex(ValueError, 'wildcard command'):
+            self.generate()
+
     def test_different_file_cannot_reuse_coverage_or_cached_dump(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'different.dat'
