@@ -141,7 +141,7 @@ export const MANUAL_TECH_EFFECTS: Record<string, EffectRule[]> = {
 export type CivBonus = [UnitPred, (age: number) => Effect[], string, number];
 /** 文明加成（仅编码可靠的数值；按时代 2/3/4） */
 export const MANUAL_CIV_BONUSES: Record<string, CivBonus[]> = {
-  Franks: [[isMounted, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '骑兵单位从封建时代起生命值 +20%', 2]],
+  Franks: [[isMounted, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '骑乘单位从封建时代起生命值 +20%', 2]],
   Vikings: [[isInf, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '步兵从封建时代起生命值 +20%', 1]],
   Britons: [
     [

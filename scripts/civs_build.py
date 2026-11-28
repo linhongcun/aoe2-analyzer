@@ -55,22 +55,39 @@ for k,v in d['civs'].items():
 
     def nm(i):
         text=zz[2][i]
-        correction=corrections.get('ct' if i==0 else 'it')
-        if correction:
+        key='ct' if i==0 else 'it'
+        if key in corrections:
+            correction=corrections[key]
+            if not isinstance(correction,dict) or not isinstance(correction.get('original'),str):
+                raise ValueError(f'{k} unique-tech correction is invalid; review civ_text_corrections.json')
             # 原文明介绍必须完全匹配；上游有更新时须重新审查，不能静默覆盖新文本。
             if text!=correction['original']:
                 raise ValueError(f'{k} unique-tech source changed; review civ_text_corrections.json')
-            name=strip(re.sub(r'<br>\s*','',z[str(correction['name_string_id'])]))
-            if not name:
-                raise ValueError(f'{k} unique-tech name is empty; review civ_text_corrections.json')
-            if correction.get('name_only'):
-                _,separator,description=text.partition(' (')
-                if not separator:
-                    raise ValueError(f'{k} unique-tech description separator changed; review civ_text_corrections.json')
-                text=name+separator+description
+            if 'corrected' in correction:
+                if any(field in correction for field in ('name_string_id','help_string_id','name_only')):
+                    raise ValueError(f'{k} unique-tech correction mode is ambiguous; review civ_text_corrections.json')
+                corrected=correction['corrected']
+                if not isinstance(corrected,str) or not corrected.strip():
+                    raise ValueError(f'{k} unique-tech corrected text is empty; review civ_text_corrections.json')
+                if corrected==correction['original'] or '｜' in corrected or '|' in corrected:
+                    raise ValueError(f'{k} unique-tech correction is invalid; review civ_text_corrections.json')
+                text=corrected
             else:
-                help_text=z[str(correction['help_string_id'])].split('<br>',1)[1]
-                text=name+' ('+strip(help_text).removesuffix('。')+')'
+                if 'name_string_id' not in correction:
+                    raise ValueError(f'{k} unique-tech correction is invalid; review civ_text_corrections.json')
+                name=strip(re.sub(r'<br>\s*','',z[str(correction['name_string_id'])]))
+                if not name:
+                    raise ValueError(f'{k} unique-tech name is empty; review civ_text_corrections.json')
+                if correction.get('name_only'):
+                    _,separator,description=text.partition(' (')
+                    if not separator:
+                        raise ValueError(f'{k} unique-tech description separator changed; review civ_text_corrections.json')
+                    text=name+separator+description
+                else:
+                    if 'help_string_id' not in correction:
+                        raise ValueError(f'{k} unique-tech correction is invalid; review civ_text_corrections.json')
+                    help_text=z[str(correction['help_string_id'])].split('<br>',1)[1]
+                    text=name+' ('+strip(help_text).removesuffix('。')+')'
         return text+'｜'+ez[2][i].split(' (')[0]
     out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=bonuses,bonEn=ez[3],tb=tb,tbEn=tb_en,s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
 json.dump(out,open('data/game/civs.json','w'),ensure_ascii=False);print('civs',len(out))

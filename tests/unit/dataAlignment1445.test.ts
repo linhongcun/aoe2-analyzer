@@ -1,16 +1,20 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { CORE } from '../../src/data/core';
-import { civByEn } from '../../src/data';
+import { civByEn, civs, loadCore, loadTrees } from '../../src/data';
 import { ARMC_CLASS_NOTE, MOUNTED_REDUCTION_CLASS } from '../../src/domain/affects';
 import { civBonuses } from '../../src/domain/civBonus';
 import { damagePerHit, fighterFrom } from '../../src/domain/duel';
-import { MANUAL_TEAM_BONUSES } from '../../src/domain/effects.manual';
+import { MANUAL_CIV_BONUSES, MANUAL_TEAM_BONUSES } from '../../src/domain/effects.manual';
 import { calculateSiege } from '../../src/domain/siege';
 import { simulate } from '../../src/domain/simulator';
 import BonusDetail from '../../src/features/bonuses/components/BonusDetail';
+import CivDetail from '../../src/features/civs/components/CivDetail';
+import Compare from '../../src/features/compare/components/Compare';
+import TechDetail from '../../src/features/techs/components/TechDetail';
+import { filterTechList, techQueryMatches, type TechListFilters } from '../../src/features/techs/components/techQuery';
 import { BonusBodyContent, BonusText } from '../../src/shared/ui/BonusBody';
 import { ProductionTransferBanner } from '../../src/shared/ui/ProductionTransferBanner';
 import SimPanel, { ArmorClasses, BonusTable } from '../../src/shared/ui/sim/SimPanel';
@@ -18,6 +22,13 @@ import { Linked, NumWrappedText } from '../../src/shared/ui/widgets';
 import { ctx, unit, units } from './helpers';
 
 const plainText = (html: string) => html.replace(/<[^>]*>/g, '');
+const EmptyTree = () => null;
+const emptyTechFilters = (query: string): TechListFilters => ({ query, type: '', age: '', building: '', release: '' });
+
+beforeAll(async () => {
+  await loadCore();
+  await loadTrees();
+});
 
 describe('#1445 数据与文案对齐回归', () => {
   it('effects.manual.ts 修复高丽团队加成仅匹配村民 83 且萨拉森回退为 +3', () => {
@@ -202,5 +213,96 @@ describe('#1445 数据与文案对齐回归', () => {
       ),
     );
     expect(bannerHtml).toContain('<span class="num nw">+3</span>');
+  });
+
+  it('#1493 全库 5 项 Mounted Units 科技、3 国独特科技简述与法兰克回退文案统一为「骑乘单位」', () => {
+    expect(MANUAL_CIV_BONUSES.Franks?.[0]?.[2]).toBe('骑乘单位从封建时代起生命值 +20%');
+
+    const expectedTechs: [number, string][] = [
+      [39, '骑乘单位的移动速度 +10%。'],
+      [435, '骑乘单位的生命值 +20。'],
+      [574, '弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3。'],
+      [924, '骑乘单位所占人口空间 -20%。'],
+      [1062, '骑乘单位近战护甲 +4。'],
+    ];
+    for (const [id, desc] of expectedTechs) {
+      const tech = CORE.techById[id]!;
+      expect(tech.desc).toBe(desc);
+      expect(techQueryMatches(tech, '骑乘单位')).toBe(true);
+      expect(techQueryMatches(tech, '骑兵单位')).toBe(false);
+      expect(techQueryMatches(tech, '骑马单位')).toBe(false);
+    }
+
+    const matchedIds = filterTechList(CORE.techs, emptyTechFilters('骑乘单位'))
+      .map((t) => t.id)
+      .sort((a, b) => a - b);
+    expect(matchedIds).toEqual([39, 435, 574, 924, 1062]);
+    expect(filterTechList(CORE.techs, emptyTechFilters('骑兵单位'))).toEqual([]);
+    expect(filterTechList(CORE.techs, emptyTechFilters('骑马单位'))).toEqual([]);
+
+    expect(civByEn('Ethiopians')!.ct).toBe('龙脉 (弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3)｜Royal Heirs');
+    expect(civByEn('Georgians')!.it).toBe('阿兹瑙里骑兵 (骑乘单位所占人口空间 -20%)｜Aznauri Cavalry');
+    expect(civByEn('Wei')!.it).toBe('明光铠 (骑乘单位近战护甲 +4)｜Ming Guang Armor');
+    for (const c of civs) {
+      for (const text of [c.ct, c.it, c.tb, ...c.bon]) {
+        expect(text).not.toContain('骑兵单位');
+        expect(text).not.toContain('骑马单位');
+      }
+    }
+
+    // 消费端 SSR 核验：TechDetail、CivDetail、Compare
+    vi.stubGlobal('window', { history: { state: null }, location: { hash: '' } });
+    try {
+      for (const [id, desc] of expectedTechs) {
+        const techHtml = plainText(
+          renderToStaticMarkup(
+            createElement(
+              MemoryRouter,
+              { initialEntries: [`/tech/${id}`] },
+              createElement(Routes, null, createElement(Route, { path: '/tech/:id', element: createElement(TechDetail) })),
+            ),
+          ),
+        );
+        expect(techHtml).toContain(desc);
+        expect(techHtml).not.toContain('骑兵单位');
+        expect(techHtml).not.toContain('骑马单位');
+      }
+
+      for (const [civEn, expectedDesc] of [
+        ['Ethiopians', '弯刀勇士和骆驼骑兵受到骑乘单位的伤害 -3。'],
+        ['Georgians', '骑乘单位所占人口空间 -20%。'],
+        ['Wei', '骑乘单位近战护甲 +4。'],
+      ] as const) {
+        const civHtml = plainText(
+          renderToStaticMarkup(
+            createElement(
+              MemoryRouter,
+              { initialEntries: [`/civ/${civEn}`] },
+              createElement(Routes, null, createElement(Route, { path: '/civ/:en', element: createElement(CivDetail, { techTree: EmptyTree }) })),
+            ),
+          ),
+        );
+        expect(civHtml).toContain(expectedDesc);
+        expect(civHtml).not.toContain('骑兵单位');
+        expect(civHtml).not.toContain('骑马单位');
+      }
+
+      for (const query of ['/compare?a=Ethiopians&b=Wei', '/compare?a=Georgians&b=Wei']) {
+        const cmpHtml = plainText(
+          renderToStaticMarkup(
+            createElement(
+              MemoryRouter,
+              { initialEntries: [query] },
+              createElement(Routes, null, createElement(Route, { path: '/compare', element: createElement(Compare) })),
+            ),
+          ),
+        );
+        expect(cmpHtml).toContain('骑乘单位');
+        expect(cmpHtml).not.toContain('骑兵单位');
+        expect(cmpHtml).not.toContain('骑马单位');
+      }
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
