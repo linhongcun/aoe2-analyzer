@@ -264,4 +264,16 @@ describe('#227 construction', () => {
     expect(noTask.errors).toEqual([]);
     expect(noTask.warnings.some((w) => w.includes('食物采集加成'))).toBe(false);
   });
+  it('reports Khitans pasture uncounted gather warning on forgone farm calculation (Issue 1532)', () => {
+    const r = calc({ buildingId: 82, civ: 'Khitans', age: 4, builders: '1', baseline: '1', hasTownCenter: true, task: 'farm', walk: '3', farm: '1' });
+    expect(r.errors).toEqual([]);
+    expect(r.warnings).toEqual([
+      '理论同时施工：所有普通村民已到场，不计步行、阻挡、分批到达、战斗或维修。没有在游戏里实测。',
+      '牧场取代农田未计入：停采量采用已支持的采集模型。',
+      '停采量为该方案全部施工者占用的估计损失；基准增量另列，不等于提前完工收益。不计盟友经济加成及特殊存放机制。',
+    ]);
+    const noTask = calc({ buildingId: 82, civ: 'Khitans', age: 4, builders: '1', baseline: '1', hasTownCenter: true, task: '' });
+    expect(noTask.errors).toEqual([]);
+    expect(noTask.warnings.some((w) => w.includes('牧场取代农田'))).toBe(false);
+  });
 });

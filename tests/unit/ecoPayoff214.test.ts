@@ -164,6 +164,20 @@ describe('issue 214 固定数据经济科技收益', () => {
       expect(Number.isFinite(r.balance), civ).toBe(true);
     }
   });
+  it('Issue 1532：契丹全时代精确仅输出 1 条牧场未计入告警（零重复）并阻断有限平衡', () => {
+    const workers = { Food: '10', Wood: '10', Gold: '0', Stone: '0' };
+    for (const [age, target, known] of [
+      [2, 202, []],
+      [3, 203, [202]],
+      [4, 221, [202, 203]],
+    ] as const) {
+      const r = run({ civ: 'Khitans', age, target, known: [...known], workers, distance: '3', minutes: '10' });
+      expect(r.errors, `Khitans@${age}`).toEqual([]);
+      expect(r.warnings, `Khitans@${age}`).toEqual(['牧场取代农田：采集机制未完整计入。']);
+      expect(r.complete, `Khitans@${age}`).toBe(false);
+      expect(r.balance, `Khitans@${age}`).toBeNull();
+    }
+  });
   it('推车仅可设置为已有采集条件，不是目标；前置必须满足', () => {
     expect(payoffAvailable(ctx, plan({ age: 3 })).some((t) => t.id === 213)).toBe(true);
     expect(run({ known: [213] }).resources[1]!.beforeRate).toBeGreaterThan(run().resources[1]!.beforeRate);
