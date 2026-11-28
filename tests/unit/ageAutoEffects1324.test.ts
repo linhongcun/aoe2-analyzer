@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import ecoRaw from '../../data/game/eco.json';
-import { loadCore, loadTrees, type Core } from '../../src/data';
-import { simulateBuilding } from '../../src/domain/buildingSim';
+import { civs, loadCore, loadTrees, type Core } from '../../src/data';
+import { buildingSimTechs, simulateBuilding } from '../../src/domain/buildingSim';
 import { DAT } from '../../src/domain/datEffects';
 import { fighterFrom } from '../../src/domain/duel';
-import { GENERIC_FX, genericFx, matchingGenericFx } from '../../src/domain/effects';
+import { GENERIC_FX, ageAutoGenericFx, conditionalGenericFx, genericFx, matchingGenericFx } from '../../src/domain/effects';
 import { calculateGarrisonHealing, DEFAULT_HEALING_CONFIG, maxHealingHp } from '../../src/domain/garrisonHealing';
 import { calculateProduction, DEFAULT_PRODUCTION, type ProductionConfig, type ProductionContext } from '../../src/domain/production';
-import { makeSimContext, simulate, type SimContext } from '../../src/domain/simulator';
+import { allNumeric, makeSimContext, presetUpTo, simulate, type SimContext } from '../../src/domain/simulator';
 import type { Trees } from '../../src/domain/types';
 import { unitAgeChanges } from '../../src/domain/unitAgeChanges';
 import { wallAgeChange } from '../../src/features/buildings/components/WallAgeChanges';
@@ -256,5 +256,87 @@ describe('#1324 升时代自动效果（斥候线、萨金特卫兵、鹰斥候�
     expect(simulateBuilding(simCtx, outpost, 'Franks', 4, new Set()).los).toBe(outpost.los);
     const harbor = core.buildingById[1189]!;
     expect(simulateBuilding(simCtx, harbor, 'Malay', 4, new Set()).atk).toBe(harbor.atk);
+  });
+
+  it('#1517 反例 3：全站 56×38 建筑零回归，且无前置建筑时代规则先于 380 加热射击、带 req 组合规则不提前不双算', () => {
+    const fullBld = (bid: number, civ: string) => {
+      const b = core.buildingById[bid]!;
+      return simulateBuilding(simCtx, b, civ, 4, allNumeric(buildingSimTechs(simCtx, b, civ)));
+    };
+
+    // 关键建筑零回归：拜占庭木栅栏/石墙、强化教堂、马来巨港、聚落
+    expect(fullBld(72, 'Byzantines').hp).toBeCloseTo(349.9795144, 4);
+    expect(fullBld(117, 'Byzantines').hp).toBeCloseTo(2519.847968, 4);
+
+    const armChurch = fullBld(1806, 'Armenians');
+    expect([armChurch.hp, armChurch.ma, armChurch.pa, armChurch.atk, armChurch.rng, armChurch.minr]).toEqual([2640, 6, 12, 9, 8, 0]);
+    expect([armChurch.bonus['船只'], armChurch.bonus['骆驼']]).toEqual([9, 1]);
+    const geoChurch = fullBld(1806, 'Georgians');
+    expect(geoChurch.hp).toBeCloseTo(2904, 6);
+    expect([geoChurch.atk, geoChurch.rng, geoChurch.minr]).toEqual([11, 8, 0]);
+
+    const malayHarbor = fullBld(1189, 'Malay');
+    expect([malayHarbor.atk, malayHarbor.rng, malayHarbor.los, malayHarbor.minr]).toEqual([8, 10, 27, 0]);
+    expect([malayHarbor.bonus['船只'], malayHarbor.bonus['骆驼']]).toEqual([7, 1]);
+
+    const mapucheSettlement = fullBld(2556, 'Mapuche');
+    expect([mapucheSettlement.ma, mapucheSettlement.pa, mapucheSettlement.atk, mapucheSettlement.rng]).toEqual([3, 10, 0, 0]);
+    expect(mapucheSettlement.bonus).toEqual({});
+
+    // 全站 56 文明 × 38 建筑 × 4 时代守恒检查（有限非负、无攻建筑无进攻属性泄漏）
+    expect(civs).toHaveLength(56);
+    expect(core.buildings).toHaveLength(38);
+    for (const c of civs) {
+      for (const b of core.buildings) {
+        const avail = buildingSimTechs(simCtx, b, c.en);
+        const noAtk = b.atk === 0 && b.rng === 0 && b.minr === 0 && b.rof === 0 && (b.atks?.length ?? 0) === 0;
+        for (const age of [1, 2, 3, 4]) {
+          const s = simulateBuilding(simCtx, b, c.en, age, presetUpTo(avail, age, c.en));
+          expect(Number.isFinite(s.hp) && s.hp > 0, `${c.en}/${b.id}/a${age}`).toBe(true);
+          if (noAtk) expect(s.atk, `no-atk ${c.en}/${b.id}/a${age}`).toBe(0);
+        }
+      }
+    }
+
+    // 构造无前置建筑时代规则（+6 对船只）叠加 380 加热射击（×2.25）：按 (base + 6) × 2.25 生效，且对无攻建筑受 canAttack 门控
+    const donjon = core.buildingById[1665]!;
+    const tower = core.buildingById[79]!;
+    const house = core.buildingById[70]!;
+    const heatedShotId = simCtx.techByEn['Heated Shot']!.id;
+    expect(heatedShotId).toBe(380);
+    GENERIC_FX.push({
+      tech: -1517,
+      name: 'Synthetic Feudal +6 vs Ship',
+      age: 2,
+      req: [],
+      pred: (x) => x.id === 1665 || x.id === 79 || x.id === 70,
+      fx: [{ s: 'bonus', vs: '船只', v: 6 }],
+      b: true,
+    });
+    try {
+      expect(simulateBuilding(simCtx, donjon, 'Sicilians', 2, new Set()).bonus['船只']).toBe(6);
+      expect(simulateBuilding(simCtx, donjon, 'Sicilians', 4, new Set([heatedShotId])).bonus['船只']).toBe(13.5);
+      // 瞭望箭塔基础对船只 5，叠无前置 +6 再乘加热射击 ×2.25 = (5 + 6) × 2.25 = 24.75
+      expect(simulateBuilding(simCtx, tower, 'Chinese', 4, new Set([heatedShotId])).bonus['船只']).toBe(24.75);
+      // 黑暗时代未触发 age=2 自动规则
+      expect(simulateBuilding(simCtx, tower, 'Chinese', 1, new Set([heatedShotId])).bonus['船只']).toBe(11.25);
+      // 无攻建筑（房屋 70）经 canAttack 门控拦截进攻属性
+      expect(simulateBuilding(simCtx, house, 'Chinese', 4, new Set([heatedShotId])).bonus['船只']).toBeUndefined();
+    } finally {
+      GENERIC_FX.pop();
+    }
+
+    // 带 req 的组合规则（如 611/669/943）不进入 ageAutoGenericFx，仅由 conditionalGenericFx 施加一次且无双算
+    const keep = core.buildingById[235]!;
+    const harbor = core.buildingById[1189]!;
+    const church = core.buildingById[1806]!;
+    expect(ageAutoGenericFx(church, true, 1, 'Armenians')).toEqual([]);
+    expect(ageAutoGenericFx(harbor, true, 1, 'Malay')).toEqual([]);
+    expect(ageAutoGenericFx(keep, true, 1, 'Britons')).toEqual([]);
+    expect(conditionalGenericFx(church, true, 4, (n) => n === 'Fletching', 'Armenians').length).toBeGreaterThan(0);
+    expect(conditionalGenericFx(church, true, 4, () => false, 'Armenians')).toEqual([]);
+    const fletchId = simCtx.techByEn['Fletching']!.id;
+    const armFletch = simulateBuilding(simCtx, church, 'Armenians', 4, new Set([fletchId]));
+    expect([armFletch.atk, armFletch.rng]).toEqual([6, 6]);
   });
 });
