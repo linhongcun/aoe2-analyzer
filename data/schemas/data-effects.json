@@ -304,6 +304,58 @@
         "minLength": 1
       }
     },
+    "projectileGuidance": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "units": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uniqueItems": true
+          },
+          "buildings": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uniqueItems": true
+          },
+          "tracking": {
+            "type": "boolean"
+          },
+          "speed": {
+            "type": "boolean"
+          }
+        },
+        "required": ["units", "buildings", "tracking", "speed"],
+        "anyOf": [
+          {
+            "properties": {
+              "tracking": {
+                "const": true
+              }
+            }
+          },
+          {
+            "properties": {
+              "speed": {
+                "const": true
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "combatAbilityBase": {
       "type": "object",
       "additionalProperties": {
@@ -316,7 +368,18 @@
       }
     }
   },
-  "required": ["meta", "techs", "civs", "generic", "costDiscounts", "ballistics", "projectilePoison", "projectilePassThrough", "combatAbilityBase"],
+  "required": [
+    "meta",
+    "techs",
+    "civs",
+    "generic",
+    "costDiscounts",
+    "ballistics",
+    "projectilePoison",
+    "projectilePassThrough",
+    "projectileGuidance",
+    "combatAbilityBase"
+  ],
   "additionalProperties": false,
   "$defs": {
     "fx": {

@@ -8,6 +8,7 @@ import { RELIC_INCOME_RAW } from '../data/relicIncome';
 import { BALLISTICS_TECH_ID } from './accuracyBoundary';
 import { CONVERT_RESIST_MAX_RES, CONVERT_RESIST_MIN_RES, resistDelta } from './conversion';
 import { DAT, type DatEco, type DatFile } from './datEffects';
+import { getProjectileGuidanceScope } from './duelUnmodeledEco';
 import { GARRISON_NUMERIC_EFFECT_TECH_IDS } from './garrisonTechs';
 import { TRADE_FEE_RES, TRIBUTE_TAX_RES } from './marketFeeFacts';
 import type { Building, Tech, Unit } from './types';
@@ -72,7 +73,8 @@ export type TechAdoptedDomain =
   | 'building-civ-rank'
   | 'conversion'
   | 'army-cost';
-export type TechNoticeDomain = 'duel-unmodeled' | 'unit-civ-rank-notice' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
+export type TechNoticeDomain =
+  'unit-sim-notice' | 'duel-unmodeled' | 'unit-civ-rank-notice' | 'ballistics-notice' | 'building-sim-notice' | 'building-combat-notice';
 export type TechConsumedDomain = 'cost-unit' | 'cost-building' | TechAdoptedDomain | TechNoticeDomain;
 
 export interface TechDataConsumption {
@@ -116,6 +118,7 @@ const DOMAIN_LABEL: Record<TechAdoptedDomain | TechNoticeDomain, { label: string
   'building-civ-rank': { label: '建筑满科技对照', isToolName: false },
   conversion: { label: '招降说明与阵容账本', isToolName: false },
   'army-cost': { label: '阵容账本', isToolName: true },
+  'unit-sim-notice': { label: '单位科技模拟器', isToolName: false },
   'duel-unmodeled': { label: '单位 PK', isToolName: false },
   'unit-civ-rank-notice': { label: '单位满科技对照', isToolName: false },
   'ballistics-notice': { label: '单位 PK 与科技模拟器', isToolName: false },
@@ -311,18 +314,27 @@ export function classifyTechDataConsumption(
 
   const poisonScope = dat.projectilePoison?.[tech.en];
   const passThroughScope = dat.projectilePassThrough?.[tech.en];
+  const guidanceScope = getProjectileGuidanceScope(tech.en, dat);
 
-  // 独立科技模拟器仅对弹道学等展示数据驱动 scopeNote；其余单位未建模战斗机制仅由单位 PK（duelUnmodeled）读取提示
+  // 独立科技模拟器仅对弹道学与投射物追踪/弹速科技展示数据驱动 scopeNote；其余单位未建模战斗机制仅由单位 PK（duelUnmodeled）读取提示
   if (tech.id === BALLISTICS_TECH_ID && Boolean(dat.ballistics)) {
     notices.push('ballistics-notice');
+  }
+  if ((guidanceScope?.units.length ?? 0) > 0) {
+    notices.push('unit-sim-notice');
   }
 
   const duelUnmodeledTargetIds = [
     ...datEco.filter((e) => e.a !== undefined && UNIT_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op)).flatMap((e) => e.t ?? []),
     ...(poisonScope?.units ?? []),
     ...(passThroughScope?.units ?? []),
+    ...(guidanceScope?.units ?? []),
   ];
-  const hasDuelUnmodeled = hasUnitTarget(duelUnmodeledTargetIds) || (poisonScope?.units.length ?? 0) > 0 || (passThroughScope?.units.length ?? 0) > 0;
+  const hasDuelUnmodeled =
+    hasUnitTarget(duelUnmodeledTargetIds) ||
+    (poisonScope?.units.length ?? 0) > 0 ||
+    (passThroughScope?.units.length ?? 0) > 0 ||
+    (guidanceScope?.units.length ?? 0) > 0;
   if (hasDuelUnmodeled) {
     notices.push('duel-unmodeled');
     if (hasMultiCivUnitTarget(duelUnmodeledTargetIds)) {
@@ -330,14 +342,19 @@ export function classifyTechDataConsumption(
     }
   }
 
-  if ((poisonScope?.buildings.length ?? 0) > 0) {
+  if ((poisonScope?.buildings.length ?? 0) > 0 || (guidanceScope?.buildings.length ?? 0) > 0) {
     notices.push('building-sim-notice');
   }
 
+  const hasGuidanceBuildingRank =
+    (tech.type === undefined || tech.type === 'UniqueTech') &&
+    (guidanceScope?.buildings.length ?? 0) > 0 &&
+    (deps.buildingById ? hasMultiCivBuildingTarget(guidanceScope!.buildings) : true);
   const hasBuildingCombatNotice =
     datEco.some((e) => e.a !== undefined && BUILDING_COMBAT_NOTICE_ATTRS.has(e.a) && TECH_COST_OPS.has(e.op) && hasBuildingTarget(e.t)) ||
     (poisonScope?.buildings.length ?? 0) > 0 ||
-    (passThroughScope?.buildings.length ?? 0) > 0;
+    (passThroughScope?.buildings.length ?? 0) > 0 ||
+    hasGuidanceBuildingRank;
   if (hasBuildingCombatNotice && !notices.includes('building-combat-notice')) {
     notices.push('building-combat-notice');
   }

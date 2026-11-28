@@ -16,7 +16,13 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dat_source import DAT as DAT_SRC, load as load_dat  # noqa: E402
-from projectile_scope import guided_projectile_ids, pass_through_projectile_ids, split_projectile_units, transform_closure  # noqa: E402
+from projectile_scope import (  # noqa: E402
+    guidance_projectile_scopes,
+    guided_projectile_ids,
+    pass_through_projectile_ids,
+    split_projectile_units,
+    transform_closure,
+)
 from res_names import RES_ZH as RES  # noqa: E402
 SRC_C = ('https://raw.githubusercontent.com/linhongcun/lhc-aoe2/6fdb912e95ce1ce837eb91b6c6ffc2945a74dc90/lib/data/unitTechFx.ts', 'lhc-unitTechFx.ts')
 
@@ -1080,6 +1086,35 @@ def main():
         if pt_units or pt_blds:
             projectile_pass_through[t['en']] = {'units': pt_units, 'buildings': pt_blds}
     out['projectilePassThrough'] = projectile_pass_through
+
+    # ---- #1509 投射物追踪（C=19 bit 0）与弹速提升（Type==60 投射物 C=5 净正增量）科技范围（跳过 93 弹道学，其余零硬编码 ID） ----
+    projectile_guidance = {}
+    for t in techs:
+        tid = t['id']
+        if tid == 93:
+            continue
+        eid = AT[tid]['EffectID'] if 0 <= tid < len(AT) else -1
+        raw_cmds = AE[eid]['EffectCommands'] if 0 <= eid < len(AE) else []
+        track_pids, speed_pids = guidance_projectile_scopes(raw_cmds, dat_units)
+        if not track_pids and not speed_pids:
+            continue
+        tech_civs = set(t.get('civs') or ())
+        scoped_units = [u for u in units if not tech_civs or (set(u.get('civs') or ()) & tech_civs)]
+        scoped_blds = [b for b in attacking_blds if not tech_civs or (set(b.get('civs') or ()) & tech_civs)]
+        t_units, _ = split_projectile_units(dat_units, unit_forms, scoped_units, track_pids) if track_pids else ([], [])
+        t_blds, _ = split_projectile_units(dat_units, bld_forms, scoped_blds, track_pids) if track_pids else ([], [])
+        s_units, _ = split_projectile_units(dat_units, unit_forms, scoped_units, speed_pids) if speed_pids else ([], [])
+        s_blds, _ = split_projectile_units(dat_units, bld_forms, scoped_blds, speed_pids) if speed_pids else ([], [])
+        g_units = sorted(set(t_units) | set(s_units))
+        g_blds = sorted(set(t_blds) | set(s_blds))
+        if g_units or g_blds:
+            projectile_guidance[t['en']] = {
+                'units': g_units,
+                'buildings': g_blds,
+                'tracking': bool(t_units or t_blds),
+                'speed': bool(s_units or s_blds),
+            }
+    out['projectileGuidance'] = projectile_guidance
 
     # ---- #1366 目录单位基础 combatAbility（属性 63 位掩码；全量 248 目录单位，供 effects.ts 零耦合折叠 a:63） ----
     combat_ability_base = {}

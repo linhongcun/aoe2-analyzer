@@ -86,7 +86,9 @@ function currentBlocksTech(id: number, armyUnitIds: ReadonlySet<number>): boolea
   const unclassified =
     data.eco.some((effect) => isUnclassifiedTransferEcoEffect(effect, armyUnitIds, CORE.unitById)) ||
     data.rules.some((rule) => toEffects(rule.fx).length !== rule.fx.length);
-  return unclassified || (!data.rules.length && !data.eco.length && tech.en !== 'Ballistics');
+  const guidance = DAT.projectileGuidance?.[tech.en];
+  const hasGuidance = Boolean(guidance && (guidance.tracking || guidance.speed));
+  return unclassified || (!data.rules.length && !data.eco.length && tech.en !== 'Ballistics' && !hasGuidance);
 }
 
 describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧', () => {
@@ -239,13 +241,16 @@ describe('#1334 混编 PK 训练费用带入对无关科技效果的拦截收紧
       DAT.techs.Kataparuto = originalKata;
     }
 
-    // 真实未核实科技仍拦截：马普切布图马普（res=33）、葡萄牙火绳枪（空 rules/eco）
+    // 真实未核实科技仍拦截：马普切布图马普（res=33）、蒙古游牧（487，真为空 rules/eco 且非投射物引导）
     expect(runTransfer({ civ: 'Mapuche', age: '4', techs: ['1380'], team: [], rows: [{ uid: '2569', qty: '2' }] })).toMatchObject({
       errors: [{ field: 'mix-a-techs', message: '布图马普的条件无法完整换算为训练计价。' }],
     });
-    expect(runTransfer({ civ: 'Portuguese', age: '4', techs: ['573'], team: [], rows: [{ uid: '1004', qty: '2' }] })).toMatchObject({
-      errors: [{ field: 'mix-a-techs', message: '火绳枪有尚未核实的训练条件。' }],
+    expect(runTransfer({ civ: 'Mongols', age: '4', techs: ['487'], team: [], rows: [{ uid: '11', qty: '2' }] })).toMatchObject({
+      errors: [{ field: 'mix-a-techs', message: '游牧有尚未核实的训练条件。' }],
     });
+
+    // #1509：葡萄牙火枪手勾选火绳枪（573）按纯战斗投射物引导放行并归入未带入项（仅影响战斗；化学 47 由 #1468 自动补齐解锁）
+    assertMatchesManualTotal({ civ: 'Portuguese', age: '4', techs: ['573'], team: [], rows: [{ uid: '5', qty: '5' }] }, ['火绳枪（仅影响战斗）']);
   });
 
   it('验收 6：全量 56 文明扫描前后对比——科技分类拦截在帝王（2,291 组合）从 631 降至 0，城堡 391 降至 0，封建 56 降至 0，黑暗 0 降至 0', () => {

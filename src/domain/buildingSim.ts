@@ -4,6 +4,7 @@
  */
 import type { Building, Effect, StatSet } from './types';
 import { DAT } from './datEffects';
+import { getProjectileGuidanceScope, projectileGuidanceBuildingScopeNote } from './duelUnmodeledEco';
 import { applyEffects, civStatus, type SimContext, type SimTech } from './simulator';
 import {
   BUILDING_CIV_BONUSES,
@@ -125,6 +126,17 @@ export function buildingSimTechs(ctx: SimContext, b: Building, civ: string): Sim
       if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
       seen.add(t.id);
       r.push({ t, ef: null, scopeNote: '研究后本建筑的攻击附带中毒持续伤害；面板数值未计入。' });
+    });
+    // 投射物追踪/弹速科技（如火绳枪，按 DAT.projectileGuidance 仅命中具备攻击能力的适用建筑；先于 b.techs 去重）
+    Object.keys(DAT.projectileGuidance ?? {}).forEach((en) => {
+      const scope = getProjectileGuidanceScope(en);
+      if (!scope || !scope.buildings.includes(b.id)) return;
+      const t = has(en);
+      if (!t || seen.has(t.id)) return;
+      if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
+      const scopeNote = projectileGuidanceBuildingScopeNote(scope);
+      seen.add(t.id);
+      r.push(scopeNote ? { t, ef: null, scopeNote } : { t, ef: null });
     });
   }
   // 在该建筑研究的独特科技：仅文本（已由上方效果/文本表纳入的按 t.id 去重）
