@@ -54,8 +54,8 @@ describe('#1401 第一档批 2 五国策略与阵容契约、状态顺序、投�
   it('六国重签固定策略提交 且锚点/sourceLines 合规、其余 27 国零引用、六条新路线状态/保加利亚锁首/图皮重排与降级投影全通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(76);
 
     const EXPECTED_ANCHORS: Record<string, readonly [number, number]> = {
       'muisca-temple-guard-slinger': [1368, 1417],

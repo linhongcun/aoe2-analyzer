@@ -12402,6 +12402,1611 @@
           ]
         }
       ]
+    },
+    {
+      "civ": "Mongols",
+      "routes": [
+        {
+          "id": "mongols-mangudai-steppe-siege",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 561
+            }
+          ],
+          "choices": [
+            {
+              "id": "mongols-main-hussar",
+              "preconditions": ["黄金优先留给突骑与操练攻城器，需要免金高血前排吸收箭雨与清掷矛时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            },
+            {
+              "id": "mongols-main-steppe-lancer",
+              "preconditions": ["黄金充裕、需要正面与重骑或冠军剑士硬换时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1372
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 588
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mongols-main-vs-ca-mirror",
+              "requires": []
+            },
+            {
+              "id": "mongols-main-vs-heavy-cav",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "id": "mongols-main-vs-double-gold",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1828-L1867",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1828, 1830, 1836, 1838, 1839, 1841, 1843, 1849, 1850, 1851, 1852, 1853, 1859, 1860, 1861, 1863, 1865, 1867],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Huns.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Tatars.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=1372.Tatars.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22330%22%2C%22qty%22%3A%2217%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C373&rows=561%3A82%3A2%2C441%3A101%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A561%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A6%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 13,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "index": 15,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-ca-mirror",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                }
+              ],
+              "adjustmentIds": ["mongols-main-vs-ca-mirror"]
+            },
+            {
+              "id": "vs-heavy-cav",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 2
+              },
+              "links": [
+                {
+                  "index": 4
+                },
+                {
+                  "index": 5
+                },
+                {
+                  "index": 6
+                }
+              ],
+              "supplementIndices": [2],
+              "adjustmentIds": ["mongols-main-vs-heavy-cav"]
+            },
+            {
+              "id": "vs-double-gold",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 10
+                },
+                {
+                  "index": 11
+                },
+                {
+                  "index": 12
+                },
+                {
+                  "index": 13,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 2
+                  }
+                },
+                {
+                  "index": 15,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                }
+              ],
+              "supplementIndices": [0, 1],
+              "adjustmentIds": ["mongols-main-vs-double-gold"]
+            }
+          ]
+        },
+        {
+          "id": "mongols-hca-zero-castle",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [
+            {
+              "id": "mongols-zero-steppe-lancer",
+              "preconditions": ["黄金可供双线时优先承担正面接战、反游侠与反冠军职责"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1372
+                }
+              ]
+            },
+            {
+              "id": "mongols-zero-hussar",
+              "preconditions": ["黄金紧张、需把全部黄金留给靶场重装骑射手时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 588
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "mongols-zero-vs-paladins",
+              "requires": []
+            },
+            {
+              "id": "mongols-zero-after-castle",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1828-L1867",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1828, 1830, 1837, 1838, 1839, 1841, 1843, 1850, 1852, 1859, 1863, 1865, 1867],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C373&rows=474%3A87%3A4%2C1372%3A101%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C373&rows=474%3A87%3A4%2C1372%3A101%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A6%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 4,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "index": 6,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-paladins",
+              "group": "opponent",
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                }
+              ],
+              "adjustmentIds": ["mongols-zero-vs-paladins"]
+            },
+            {
+              "id": "zero-castle-siege",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 3
+                },
+                {
+                  "index": 5
+                }
+              ],
+              "supplementIndices": [0]
+            },
+            {
+              "id": "after-castle-drill",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "links": [
+                {
+                  "index": 4,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                },
+                {
+                  "index": 6,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                }
+              ],
+              "supplementIndices": [1],
+              "adjustmentIds": ["mongols-zero-after-castle"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "civ": "Huns",
+      "routes": [
+        {
+          "id": "huns-paladin-hca",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 569
+            },
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 483
+                }
+              ],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 887
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 483
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "huns-main-vs-double-gold",
+              "requires": []
+            },
+            {
+              "id": "huns-main-vs-fortifications",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 483
+                },
+                {
+                  "kind": "unit",
+                  "id": 887
+                }
+              ]
+            },
+            {
+              "id": "huns-main-vs-spears-camels",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1869-L1908",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1869, 1871, 1877, 1878, 1880, 1882, 1884, 1890, 1891, 1892, 1893, 1894, 1900, 1901, 1902, 1904, 1906, 1908],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=887.Huns.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=569%3A101%3A3%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Huns&age=4&acunits=%5B%7B%22unit%22%3A569%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 3,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 887
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-double-gold",
+              "group": "opponent",
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 4
+                },
+                {
+                  "index": 5
+                }
+              ],
+              "adjustmentIds": ["huns-main-vs-double-gold"]
+            },
+            {
+              "id": "vs-fortifications",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "links": [
+                {
+                  "index": 3,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                }
+              ],
+              "supplementIndices": [0, 1, 2],
+              "adjustmentIds": ["huns-main-vs-fortifications"]
+            },
+            {
+              "id": "vs-spears-camels",
+              "group": "opponent",
+              "links": [
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                }
+              ],
+              "adjustmentIds": ["huns-main-vs-spears-camels"]
+            }
+          ]
+        },
+        {
+          "id": "huns-hussar-hca",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 441
+            },
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                },
+                {
+                  "kind": "tech",
+                  "id": 483
+                },
+                {
+                  "kind": "unit",
+                  "id": 887
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "huns-alt-vs-double-gold",
+              "requires": []
+            },
+            {
+              "id": "huns-alt-after-castle",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 483
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1869-L1908",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1869, 1871, 1878, 1879, 1880, 1882, 1884, 1890, 1891, 1892, 1901, 1904, 1906, 1908],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278&rows=441%3A101%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=441%3A101%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Huns&age=4&acunits=%5B%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "scenarios": [
+            {
+              "id": "vs-double-gold",
+              "group": "opponent",
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                }
+              ],
+              "adjustmentIds": ["huns-alt-vs-double-gold"]
+            },
+            {
+              "id": "zero-castle-siege",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 2
+                },
+                {
+                  "index": 4
+                }
+              ],
+              "supplementIndices": [0]
+            },
+            {
+              "id": "after-castle-siege",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "links": [
+                {
+                  "index": 3
+                }
+              ],
+              "supplementIndices": [1],
+              "adjustmentIds": ["huns-alt-after-castle"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "civ": "Tatars",
+      "routes": [
+        {
+          "id": "tatars-keshik-hca-trebuchet",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1230
+            },
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            },
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1263
+                },
+                {
+                  "kind": "unit",
+                  "id": 359
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "tatars-main-vs-ranged-mirror",
+              "requires": []
+            },
+            {
+              "id": "tatars-main-vs-elephants-cav",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1263
+                }
+              ]
+            },
+            {
+              "id": "tatars-main-early-monk-window",
+              "requires": []
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1910-L1949",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1910, 1912, 1918, 1919, 1921, 1923, 1925, 1931, 1932, 1933, 1934, 1935, 1941, 1943, 1945, 1947, 1949],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Huns.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=561.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Khitans.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22687%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221230%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22687%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221230%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C315&rows=1230%3A82%3A2%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1230%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A687%22%2C%22t%3A688%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 8,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-ranged-mirror",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                },
+                {
+                  "index": 3
+                },
+                {
+                  "index": 4
+                },
+                {
+                  "index": 5
+                },
+                {
+                  "index": 6
+                }
+              ],
+              "supplementIndices": [0, 1],
+              "adjustmentIds": ["tatars-main-vs-ranged-mirror"]
+            },
+            {
+              "id": "vs-elephants-cav",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 2
+              },
+              "supplementIndices": [2],
+              "adjustmentIds": ["tatars-main-vs-elephants-cav"]
+            },
+            {
+              "id": "early-monk-window",
+              "group": "condition",
+              "adjustmentIds": ["tatars-main-early-monk-window"]
+            }
+          ]
+        },
+        {
+          "id": "tatars-steppe-hca-zero-castle",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 474
+            }
+          ],
+          "choices": [
+            {
+              "id": "tatars-zero-steppe-lancer",
+              "preconditions": ["黄金充裕、需正面破游侠与冲箭雨时（补城研丝护甲后升 4/7 护甲）"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1372
+                }
+              ]
+            },
+            {
+              "id": "tatars-zero-hussar",
+              "preconditions": ["黄金吃紧、需免金前排清掷矛与掩护骑射时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "tatars-zero-vs-huns-double-gold",
+              "requires": []
+            },
+            {
+              "id": "tatars-zero-after-castle",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1910-L1949",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1910, 1912, 1919, 1920, 1921, 1923, 1925, 1931, 1933, 1942, 1945, 1947, 1949],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=474.Huns.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=474.Mongols.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.39-67-68-75-80-81-82-435.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.39-67-68-75-80-81-82-435.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278&rows=1372%3A101%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C315&rows=1372%3A101%3A4%2C474%3A87%3A4",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A687%22%2C%22t%3A688%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 5,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "index": 6,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "index": 7,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "index": 11,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "index": 13,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-huns-double-gold",
+              "group": "opponent",
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                },
+                {
+                  "index": 3
+                },
+                {
+                  "index": 4
+                },
+                {
+                  "index": 8
+                },
+                {
+                  "index": 9
+                }
+              ],
+              "adjustmentIds": ["tatars-zero-vs-huns-double-gold"]
+            },
+            {
+              "id": "zero-castle-siege",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 10
+                },
+                {
+                  "index": 12
+                }
+              ],
+              "supplementIndices": [0]
+            },
+            {
+              "id": "after-castle-silk",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "links": [
+                {
+                  "index": 5,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                },
+                {
+                  "index": 6,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                },
+                {
+                  "index": 7,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                },
+                {
+                  "index": 11,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                },
+                {
+                  "index": 13,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 1
+                  }
+                }
+              ],
+              "supplementIndices": [1],
+              "adjustmentIds": ["tatars-zero-after-castle"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "civ": "Khitans",
+      "routes": [
+        {
+          "id": "khitans-steppe-mounted-trebuchet",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1923
+            }
+          ],
+          "choices": [
+            {
+              "id": "khitans-main-steppe-lancer",
+              "preconditions": ["城堡期即凭双倍近战攻 13 攻压制骑士，帝王配合斡鲁朵回血持续切阵时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1372
+                }
+              ]
+            },
+            {
+              "id": "khitans-main-hussar",
+              "preconditions": ["黄金紧张、借助斥候系训练与升级 +15% 快速铺免金前排时"],
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 441
+                }
+              ]
+            }
+          ],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 1007
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1907
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "khitans-main-castle-hca-trap",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "id": "khitans-main-vs-heavy-cav",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "id": "khitans-main-vs-archer-blobs",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1907
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1951-L1989",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1951, 1953, 1959, 1960, 1964, 1966, 1972, 1973, 1975, 1981, 1982, 1983, 1985, 1987, 1989],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1370.Khitans.3.f.&b=38.Franks.3.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Khitans.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Khitans.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Japanese.3.f.&m=n&na=30&nb=30",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Mongols.3.f.&m=n&na=30&nb=30",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Tatars.3.f.&m=n&na=30&nb=30",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Huns.3.f.&m=n&na=30&nb=30",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Huns.3.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1372%3A101%3A4%2C1923%3A49%3A1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=1372%3A101%3A4%2C1923%3A49%3A1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1923%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=3&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A437%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 3,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 6,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 7,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 8,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "index": 12,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "castle-hca-trap",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 3
+              },
+              "links": [
+                {
+                  "index": 3,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 4,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 5,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 6,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 7,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 8,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                },
+                {
+                  "index": 12,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                }
+              ],
+              "supplementIndices": [3],
+              "adjustmentIds": ["khitans-main-castle-hca-trap"]
+            },
+            {
+              "id": "vs-heavy-cav",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 2
+              },
+              "links": [
+                {
+                  "index": 0
+                },
+                {
+                  "index": 1
+                },
+                {
+                  "index": 2
+                }
+              ],
+              "supplementIndices": [0, 2],
+              "adjustmentIds": ["khitans-main-vs-heavy-cav"]
+            },
+            {
+              "id": "vs-archer-blobs",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "supplementIndices": [1],
+              "adjustmentIds": ["khitans-main-vs-archer-blobs"]
+            }
+          ]
+        },
+        {
+          "id": "khitans-liaodao-rocket-cart",
+          "status": "approved",
+          "playtest": "pending",
+          "composition": "combined",
+          "age": 4,
+          "required": [
+            {
+              "kind": "unit",
+              "id": 1922
+            },
+            {
+              "kind": "unit",
+              "id": 1907
+            }
+          ],
+          "choices": [],
+          "prerequisites": [],
+          "supplements": [
+            {
+              "mode": "mechanism-support",
+              "entities": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "mode": "as-needed",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 1923
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "mode": "conditional",
+              "entities": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "adjustments": [
+            {
+              "id": "khitans-alt-vs-melee",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "id": "khitans-alt-vs-ranged",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "id": "khitans-alt-vs-castles",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 1923
+                }
+              ]
+            }
+          ],
+          "source": {
+            "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1951-L1989",
+            "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439"
+          },
+          "sourceLines": [1951, 1953, 1960, 1961, 1962, 1964, 1966, 1972, 1974, 1975, 1981, 1983, 1985, 1987, 1989],
+          "evidenceLinks": [
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1922.Khitans.4.67-68-74-76-77-215-602-1006.&b=567.Japanese.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1922.Khitans.4.67-68-74-76-77-215-602-1006.&b=569.Franks.4.f.&m=r&bud=3000",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1922%3A82%3A2%2C1907%3A49%3A1",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1922%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1907%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A377%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1922%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1907%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1006%22%2C%22t%3A215%22%2C%22t%3A377%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D",
+            "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=3&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A437%22%5D"
+          ],
+          "evidenceLinkRequires": [
+            {
+              "index": 0,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "vs-melee",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 0
+              },
+              "links": [
+                {
+                  "index": 0,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 0
+                  }
+                },
+                {
+                  "index": 1,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 0
+                  }
+                },
+                {
+                  "index": 4,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 0
+                  }
+                }
+              ],
+              "supplementIndices": [0],
+              "adjustmentIds": ["khitans-alt-vs-melee"]
+            },
+            {
+              "id": "vs-ranged",
+              "group": "opponent",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 2
+              },
+              "links": [
+                {
+                  "index": 5,
+                  "whenAvailable": {
+                    "kind": "supplement",
+                    "index": 3
+                  }
+                }
+              ],
+              "supplementIndices": [2, 3],
+              "adjustmentIds": ["khitans-alt-vs-ranged"]
+            },
+            {
+              "id": "vs-castles",
+              "group": "condition",
+              "actionHintGate": {
+                "kind": "supplement",
+                "index": 1
+              },
+              "supplementIndices": [1],
+              "adjustmentIds": ["khitans-alt-vs-castles"]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

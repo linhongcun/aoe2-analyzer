@@ -38,9 +38,9 @@ function expectCurrent(view: FormationView): Extract<FormationView, { status: 'c
 }
 
 describe('#1436 推荐阵容分区与契约校验', () => {
-  it('全量 33 国 68 路内容与独立发布契约完全通过', () => {
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.reduce((sum, civ) => sum + civ.routes.length, 0)).toBe(68);
+  it('全量 37 国 76 路内容与独立发布契约完全通过', () => {
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.reduce((sum, civ) => sum + civ.routes.length, 0)).toBe(76);
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
   });
 

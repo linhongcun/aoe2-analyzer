@@ -187,8 +187,8 @@ describe('#1406 第二档六国策略与阵容升级：驻军/生产/研究账�
   it('印度斯坦误标清零、马来升级与边界完整、马里采金口径与土耳其锚点对齐、仅六国重签 DOC_SHA_1406 且去重计数锁死', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(76);
 
     // Scope Hindustanis errata zero-residual check to Hindustanis content & contract (other civs may genuinely have full-tech CA)
     const hindustanisContent = byCiv('Hindustanis');
