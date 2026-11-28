@@ -82,6 +82,12 @@ const EPS = 1e-9;
 const COMBAT_ABILITY_ARMOR_STRIP = 4;
 const COMBAT_ABILITY_AURA = 32 | 64;
 const COMBAT_ABILITY_ON_HIT = 128;
+/** issue 1522：.dat charge_target 位掩码（步/骑/弓/骑射/僧/民/攻城 = 0xBF；船只 = 0x40；护甲类 16 = 船只）。 */
+const CHARGE_TARGET_LAND_UNIT_MASK = 0xbf;
+const CHARGE_TARGET_SHIP_BIT = 0x40;
+const SHIP_ARMOR_CLASS = 16;
+
+const mech = (kind: UnmodeledKind, pill: string, detail: string): UnmodeledMechanism => ({ kind, pill, detail });
 
 /** 将 combatAbility 归约为非负整数位掩码，杜绝负数补码误匹配与非有限值扩散。 */
 export function normalizeCombatAbility(ca?: number): number {
@@ -149,92 +155,47 @@ export function applicableUnmodeledTechIds(avail: readonly SimTech[], unitId: nu
   return ids;
 }
 
-function detectChargeMechanism(unit: Pick<Unit, 'chargeType' | 'chargeEvent' | 'chargeMultiProjectiles'>): UnmodeledMechanism | null {
+function allowsRangedChargeTarget(unit: Pick<Unit, 'chargeTarget' | 'cls'>, opponents?: readonly Unit[]): boolean {
+  const target = unit.chargeTarget;
+  if (typeof target !== 'number' || !Number.isInteger(target) || target <= 0) return true;
+  if ((target & CHARGE_TARGET_LAND_UNIT_MASK) !== 0) return true;
+  if ((target & CHARGE_TARGET_SHIP_BIT) === 0) return false;
+  if (opponents && opponents.length > 0) return opponents.some((o) => o.cls.includes(SHIP_ARMOR_CLASS));
+  return unit.cls.includes(SHIP_ARMOR_CLASS);
+}
+
+function detectChargeMechanism(
+  unit: Pick<Unit, 'chargeType' | 'chargeEvent' | 'chargeMultiProjectiles' | 'chargeTarget' | 'cls'>,
+  opponents?: readonly Unit[],
+): UnmodeledMechanism | null {
   const ct = unit.chargeType ?? 0;
   if (!Number.isFinite(ct) || ct <= 0) return null;
-  if (ct === 4) {
-    return {
-      kind: 'charge',
-      pill: '充能投射物闪避',
-      detail: '当前未计入充能投射物闪避护盾；抗远程生存能力通常高于此处估算。',
-    };
-  }
-  if (ct === 5) {
-    return {
-      kind: 'charge',
-      pill: '充能近战格挡',
-      detail: '当前未计入充能近战格挡护盾；抗近战生存能力通常高于此处估算。',
-    };
-  }
-  if (ct === 2) {
-    return {
-      kind: 'charge',
-      pill: '生命值充能',
-      detail: '当前未计入生命值充能机制；实战生存能力可能高于此处估算。',
-    };
-  }
+  if (ct === 4) return mech('charge', '充能投射物闪避', '当前未计入充能投射物闪避护盾；抗远程生存能力通常高于此处估算。');
+  if (ct === 5) return mech('charge', '充能近战格挡', '当前未计入充能近战格挡护盾；抗近战生存能力通常高于此处估算。');
+  if (ct === 2) return mech('charge', '生命值充能', '当前未计入生命值充能机制；实战生存能力可能高于此处估算。');
   if (ct === 1 || ct === 3) {
     if (unit.chargeEvent === 1) {
-      return {
-        kind: 'charge',
-        pill: '蓄力增伤攻击',
-        detail: '当前仅按基础主攻击逐击结算，未计入蓄力攻击的周期额外增伤；实战爆发输出通常高于此处估算。',
-      };
+      return mech('charge', '蓄力增伤攻击', '当前仅按基础主攻击逐击结算，未计入蓄力攻击的周期额外增伤；实战爆发输出通常高于此处估算。');
     }
-    return {
-      kind: 'charge',
-      pill: '充能特殊机制',
-      detail: '当前未计入该单位的充能特殊机制（非普通攻击增伤）；实战接敌或技能表现可能偏离此处估算。',
-    };
+    return mech('charge', '充能特殊机制', '当前未计入该单位的充能特殊机制（非普通攻击增伤）；实战接敌或技能表现可能偏离此处估算。');
   }
   if (ct === 6 || ct === 7) {
+    if (!allowsRangedChargeTarget(unit, opponents)) return null;
     if (unit.chargeMultiProjectiles === true) {
-      return {
-        kind: 'charge',
-        pill: '充能多箭齐射',
-        detail: '当前仅按基础单次主攻击逐击结算，未计入充能多弹丸齐射；实战爆发输出通常高于此处估算。',
-      };
+      return mech('charge', '充能多箭齐射', '当前仅按基础单次主攻击逐击结算，未计入充能多弹丸齐射；实战爆发输出通常高于此处估算。');
     }
-    return {
-      kind: 'charge',
-      pill: '充能远程攻击',
-      detail: '当前仅按基础主攻击逐击结算，未计入充能远程攻击；实战输出或压制能力可能高于此处估算。',
-    };
+    return mech('charge', '充能远程攻击', '当前仅按基础主攻击逐击结算，未计入充能远程攻击；实战输出或压制能力可能高于此处估算。');
   }
-  return {
-    kind: 'charge',
-    pill: '充能特殊机制',
-    detail: '当前未计入该单位的充能特殊机制；实战表现可能偏离此处估算。',
-  };
+  return mech('charge', '充能特殊机制', '当前未计入该单位的充能特殊机制；实战表现可能偏离此处估算。');
 }
 
 function detectOnHitMechanism(effect: Unit['onHitEffect']): UnmodeledMechanism {
-  if (effect === 'dot') {
-    return {
-      kind: 'on-hit',
-      pill: '命中后持续伤害',
-      detail: '当前未计入命中后的持续伤害；实际输出通常高于此处估算。',
-    };
-  }
-  if (effect === 'slow') {
-    return {
-      kind: 'on-hit',
-      pill: '命中减速',
-      detail: '当前未计入命中后使目标减速；目标更难脱离或追击，实战表现通常高于此处估算。',
-    };
-  }
+  if (effect === 'dot') return mech('on-hit', '命中后持续伤害', '当前未计入命中后的持续伤害；实际输出通常高于此处估算。');
+  if (effect === 'slow') return mech('on-hit', '命中减速', '当前未计入命中后使目标减速；目标更难脱离或追击，实战表现通常高于此处估算。');
   if (effect === 'attack-speed') {
-    return {
-      kind: 'on-hit',
-      pill: '越战越快',
-      detail: '当前按固定攻击间隔结算，未计入持续作战后攻击速度的提升；长时间缠斗时实际输出通常高于此处估算。',
-    };
+    return mech('on-hit', '越战越快', '当前按固定攻击间隔结算，未计入持续作战后攻击速度的提升；长时间缠斗时实际输出通常高于此处估算。');
   }
-  return {
-    kind: 'on-hit',
-    pill: '命中特效',
-    detail: '当前未计入该单位命中时附带的特殊效果；实战表现可能偏离此处估算。',
-  };
+  return mech('on-hit', '命中特效', '当前未计入该单位命中时附带的特殊效果；实战表现可能偏离此处估算。');
 }
 
 function formatTechChargeMechanism(base: UnmodeledMechanism, tech: Tech): UnmodeledMechanism {
@@ -254,8 +215,14 @@ function formatTechChargeMechanism(base: UnmodeledMechanism, tech: Tech): Unmode
  * 检测单个参战单位在给定文明、时代与已选科技下命中的未建模机制。
  * 与 simulate() 同口径：直接遵循传入的 selectedTechs，不做二次隐式时代截断或自动补选。
  */
-export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: number; selectedTechs: readonly Tech[] }): UnmodeledMechanism[] {
-  const { unit, civ, age, selectedTechs } = input;
+export function detectUnitUnmodeled(input: {
+  unit: Unit;
+  civ: string;
+  age: number;
+  selectedTechs: readonly Tech[];
+  opponents?: readonly Unit[];
+}): UnmodeledMechanism[] {
+  const { unit, civ, age, selectedTechs, opponents } = input;
   const out: UnmodeledMechanism[] = [];
   const ranged = unit.rng > 1;
   const selectedEn = new Set(selectedTechs.map((t) => t.en));
@@ -263,8 +230,8 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     (entry) => entry.age <= age && (!entry.req.length || entry.req.every((reqEn) => selectedEn.has(reqEn))),
   );
 
-  // 1. 充能机制（严格按固定源 chargeType / chargeEvent / chargeMultiProjectiles 分型；固有 chargeType === 0 时补充已选科技赋予的 a:62 充能）
-  const charge = detectChargeMechanism(unit);
+  // 1. 充能机制（按固定源 chargeType / chargeEvent / chargeTarget / chargeMultiProjectiles 分型；固有 chargeType === 0 时补充已选科技赋予的 a:62 充能）
+  const charge = detectChargeMechanism(unit, opponents);
   if (charge) out.push(charge);
   const baseChargeType = unit.chargeType ?? 0;
   const techChargeById = new Map<number, TechChargeGrant>();
@@ -272,7 +239,10 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     const grant = resolveTechChargeGrant(DAT.techs[tech.en]?.eco, unit.id, baseChargeType);
     if (!grant) continue;
     techChargeById.set(tech.id, grant);
-    const granted = detectChargeMechanism({ chargeType: grant.chargeType, chargeEvent: grant.chargeEvent, chargeMultiProjectiles: false });
+    const granted = detectChargeMechanism(
+      { chargeType: grant.chargeType, chargeEvent: grant.chargeEvent, chargeMultiProjectiles: false, chargeTarget: unit.chargeTarget, cls: unit.cls },
+      opponents,
+    );
     if (granted) out.push(formatTechChargeMechanism(granted, tech));
   }
 
@@ -480,15 +450,10 @@ export function collectDuelUnmodeled(entries: readonly DuelUnmodeledInput[]): Du
     const key = `${entry.side}:${entry.unit.id}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    const mechanisms = detectUnitUnmodeled(entry);
+    const opponents = entries.filter((e) => e.side !== entry.side).map((e) => e.unit);
+    const mechanisms = detectUnitUnmodeled({ ...entry, opponents });
     if (!mechanisms.length) continue;
-    out.push({
-      side: entry.side,
-      badge: entry.badge,
-      unit: entry.unit,
-      civ: entry.civ,
-      mechanisms,
-    });
+    out.push({ side: entry.side, badge: entry.badge, unit: entry.unit, civ: entry.civ, mechanisms });
   }
   return out;
 }

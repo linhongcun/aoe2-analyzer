@@ -38,7 +38,7 @@ class CombatAbility1366Tests(unittest.TestCase):
     def test_dat_source_exports_combat_ability_and_bumps_cache_to_v22(self):
         self.assertIn("'CombatAbility': t.break_off_combat if t else 0", dat_source._DUMP)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v26.%s.json', parse_src)
+        self.assertIn('dat.v27.%s.json', parse_src)
         self.assertNotIn('dat.v21.%s.json', parse_src)
 
     def test_builders_enforce_strict_non_bool_int_guard(self):

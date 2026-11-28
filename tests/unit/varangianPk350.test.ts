@@ -25,14 +25,13 @@ describe('#350 瓦兰吉卫队 PK 计入标注', () => {
     expect(varangianPkNotes(2703, 'Varangians', 3, 1.6).map((n) => n.id)).toEqual(['vg-rof', 'vg-gold']);
   });
 
-  it('拜占庭、丹麦、撒克逊、维京只列各自常驻/非勾选加成（拜占庭后勤学改由勾选触发）', () => {
+  it('拜占庭、丹麦、撒克逊、维京只列各自常驻文明被动（后勤学/哥瑟砍由勾选触发，哈马思克/盾墙不无条件硬编码）', () => {
     expect(varangianPkNotes(2704, 'Byzantines', 4)).toEqual([]);
     expect(varangianPkNotes(2703, 'Byzantines', 3)).toEqual([]);
-    expect(varangianPkNotes(2704, 'Danes', 4).map((n) => [n.id, n.status])).toEqual([
-      ['danes-spd', 'uncounted'],
-      ['danes-hamask', 'uncounted'],
-    ]);
-    expect(varangianPkNotes(2704, 'Saxons', 4).map((n) => n.id)).toEqual(['sax-shield']);
+    expect(varangianPkNotes(2704, 'Danes', 4).map((n) => [n.id, n.status])).toEqual([['danes-spd', 'uncounted']]);
+    expect(varangianPkNotes(2704, 'Danes', 4, undefined, true).map((n) => [n.id, n.status])).toEqual([['danes-spd', 'counted']]);
+    expect(varangianPkNotes(2703, 'Danes', 3).map((n) => n.id)).toEqual(['danes-spd']);
+    expect(varangianPkNotes(2704, 'Saxons', 4)).toEqual([]);
     expect(varangianPkNotes(2703, 'Saxons', 3)).toEqual([]);
     expect(varangianPkNotes(2704, 'Vikings', 4).map((n) => [n.id, n.status, n.reason])).toEqual([['vik-hp', 'counted', '已反映在生命值']]);
     for (const civ of ['Byzantines', 'Danes', 'Saxons', 'Vikings']) {
@@ -41,6 +40,8 @@ describe('#350 瓦兰吉卫队 PK 计入标注', () => {
       expect(ids).not.toContain('vg-gold');
       expect(ids).not.toContain('vg-gothikon');
       expect(ids).not.toContain('byz-logistica');
+      expect(ids).not.toContain('danes-hamask');
+      expect(ids).not.toContain('sax-shield');
     }
   });
 

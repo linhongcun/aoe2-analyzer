@@ -34,7 +34,7 @@ class TrainBatch1384Tests(unittest.TestCase):
         self.assertIn('def spawn_tasks_sig(u):', dump)
         self.assertIn('!= spawn_tasks_sig(cu)', dump)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v26.%s.json', parse_src)
+        self.assertIn('dat.v27.%s.json', parse_src)
         self.assertNotIn('dat.v23.%s.json', parse_src)
 
     def test_derive_train_count_semantics_and_fail_closed(self):

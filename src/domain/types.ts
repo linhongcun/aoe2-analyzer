@@ -90,6 +90,8 @@ export interface Unit {
   /** 固定源目录充能字段。回复速率单位为每秒，满充时长单位为秒。 */
   chargeType?: number;
   chargeEvent?: number;
+  /** issue 1522：固定 DAT 充能目标位掩码（u.creatable.charge_target，非零整数含 -1 与正整数掩码，0 省略）。 */
+  chargeTarget?: number;
   maxCharge?: number;
   rechargeRate?: number;
   rechargeDuration?: number;

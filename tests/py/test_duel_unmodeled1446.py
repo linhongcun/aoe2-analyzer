@@ -37,7 +37,7 @@ class DuelUnmodeled1446Tests(unittest.TestCase):
         self.assertIn('def regen_rate_sig(u):', dump)
         self.assertIn('!= regen_rate_sig(cu)', dump)
         parse_src = inspect.getsource(dat_source.parse)
-        self.assertIn('dat.v26.%s.json', parse_src)
+        self.assertIn('dat.v27.%s.json', parse_src)
         self.assertNotIn('dat.v24.%s.json', parse_src)
 
     def test_derive_inherent_regen_semantics_r6_boundary_and_fail_closed(self):

@@ -28,7 +28,9 @@ function expectedKindsForBase(u: Unit, civ: string, age: number): UnmodeledKind[
   const bonuses = (DAT.civs[civ]?.bonus ?? []).filter((b) => b.age <= age && b.req.length === 0);
   const civEco = bonuses.flatMap((b) => b.eco);
 
-  if ((u.chargeType ?? 0) > 0) out.push('charge');
+  const ct = u.chargeType ?? 0;
+  const shipOrBldOnly = (ct === 6 || ct === 7) && typeof u.chargeTarget === 'number' && u.chargeTarget > 0 && (u.chargeTarget & 0xbf) === 0;
+  if (ct > 0 && (!shipOrBldOnly || ((u.chargeTarget! & 0x40) !== 0 && u.cls.includes(16)))) out.push('charge');
   if ((u.totalProjectiles ?? 0) > 1 || bonuses.some((b) => hasPositiveEcoAttr(b.eco, u.id, 102, 1) || hasPositiveEcoAttr(b.eco, u.id, 107, 1))) {
     out.push('multi-projectile');
   }
@@ -433,7 +435,8 @@ describe('#1367 单位 PK 补齐 combatAbility 与投射物穿透驱动的未建
     expect(assumeCoexist).toContain('<strong>生命回复：</strong>当前未计入战斗中的生命回复（文明加成）');
 
     // 4) 全库 248 单位 + 典型科技输出文案绝不泄漏任何内部字段名
-    const forbidden = /combatAbility|hit_mode|action_type|a:109|a:24|break_off_combat|rear_attack_modifier|regenRate|projectilePassThrough/i;
+    const forbidden =
+      /combatAbility|hit_mode|action_type|a:109|a:24|break_off_combat|rear_attack_modifier|regenRate|projectilePassThrough|chargeTarget|charge_target/i;
     for (const u of units) {
       const list = detectUnitUnmodeled({ unit: u, civ: u.civs[0]!, age: 4, selectedTechs: [techById[579]!, techById[831]!] });
       for (const m of list) {
