@@ -234,3 +234,152 @@ test.describe('Issue 1429 文明加成接入阵容新增费用', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Issue 1497 零拥有规则归正与混合 dat 工具明细双端验证', () => {
+  test('1280 桌面浅/深色：Italians-3 / Huns-0 / Berbers-0 / Spanish-0 / Aztecs-2 / Spanish-3 双端与防样式穿透', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+
+    // 1) Italians-3 详情页：隐藏来源标签、补齐训练费用、展开原始记录显零拥有未计入说明且无失效「见上方作用对象」
+    await page.goto('./#/civ/Italians/bonus/3');
+    await expect(page.locator('#bonus .dhead .tag.ok')).toHaveText('已计入');
+    await expect(page.locator('#bonus .dhead')).not.toContainText('数值来自游戏数据');
+    await expect(page.locator('main .busage li[data-usage="cost"][data-on="true"]')).toContainText('单位 PK「等资源」与单位详情的真实成本按折后价计算');
+    await page.locator('main details.datfx > summary').click();
+    await expect(page.locator('main details.datfx')).toContainText('属性命令 1 条（仅指向本文明不可用对象，未计入战斗属性）');
+    await expect(page.locator('main details.datfx')).not.toContainText('见上方作用对象');
+    await expect(page.locator('main details.datfx')).toContainText('造价 -20%');
+
+    // 2) Italians-3 证据弹层：.bonus-raw-unowned 提示条、保留 5 个东亚目标、.datfx .num 不被 .civ-read .num 染琥珀加粗、双主题对比度
+    await page.goto('./#/civ/Italians');
+    await page
+      .locator('[data-bonus-id="Italians-3"]')
+      .getByRole('button', { name: /作用与依据/u })
+      .click();
+    const itDialog = page.getByRole('dialog');
+    await expect(itDialog.locator('.busage li[data-usage="cost"][data-on="true"]')).toBeVisible();
+    await expect(itDialog).not.toContainText('数值来自游戏数据');
+    const itRaw = itDialog.locator('details.datfx');
+    const summaryNumStyle = await itRaw.locator('> summary').evaluate((summary) => {
+      const num = summary.querySelector<HTMLElement>('.num')!;
+      return {
+        sColor: getComputedStyle(summary).color,
+        nColor: getComputedStyle(num).color,
+        sWeight: getComputedStyle(summary).fontWeight,
+        nWeight: getComputedStyle(num).fontWeight,
+      };
+    });
+    expect(summaryNumStyle.nColor).toBe(summaryNumStyle.sColor);
+    expect(summaryNumStyle.nWeight).toBe(summaryNumStyle.sWeight);
+    await itRaw.locator('> summary').click();
+    await expect(itDialog.locator('[data-t="bonus-raw-unowned-note"]')).toContainText(
+      '以下属性命令仅指向本文明不可用对象，未计入战斗属性；原始记录保留供核查。',
+    );
+    await expect(itRaw.locator('[data-raw-rule-index="0"][data-raw-target-count="5"]')).toHaveCount(1);
+    for (const theme of ['light', 'dark'] as const) {
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t;
+      }, theme);
+      const res = await new AxeBuilder({ page }).include('[data-t="bonus-raw-unowned-note"]').withRules(['color-contrast']).analyze();
+      expect(res.violations, `Italians-3 unowned note contrast ${theme}`).toEqual([]);
+    }
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'light';
+    });
+    await itDialog.getByRole('button', { name: '关闭作用与依据' }).click();
+
+    // 3) Huns-0 详情页：去「匈奴 拥有的」、房屋推断块在 datfx 之前、#289 零拥有未计入说明
+    await page.goto('./#/civ/Huns/bonus/0');
+    await expect(page.locator('#bonus .dhead')).not.toContainText('数值来自游戏数据');
+    await expect(page.locator('main .busage li[data-usage="sim"][data-on="true"]')).toContainText('开局模拟：已计入');
+    await expect(page.locator('main .bonusbody h4').first()).toHaveText('作用对象');
+    await expect(page.locator('main .bonusbody')).not.toContainText('匈奴 拥有的');
+    await expect(page.locator('main .bonusbody')).toContainText('含本文明不可建造或训练的对象');
+    const hunsOrderOk = await page.evaluate(() => {
+      const body = document.querySelector('main .bonusbody')!;
+      const chips = body.querySelector('.uchips')!;
+      const raw = body.querySelector('details.datfx')!;
+      return Boolean(chips.compareDocumentPosition(raw) & Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+    expect(hunsOrderOk).toBe(true);
+    await page.locator('main details.datfx > summary').click();
+    await expect(page.locator('main details.datfx')).toContainText('属性命令 2 条（仅指向本文明不可用对象，未计入战斗属性）');
+
+    // 4) Berbers-0 详情页 + 弹层深色、Spanish-0、Aztecs-2 与 Spanish-3 反例
+    await page.goto('./#/civ/Berbers/bonus/0');
+    await expect(page.locator('#bonus .dhead')).toContainText('数值来自游戏数据');
+    await expect(page.locator('main .busage li[data-usage="sim"][data-on="true"]')).toBeVisible();
+    await expect(page.locator('main .busage li[data-usage="gather"][data-on="true"]')).toContainText('村民移速 +10%');
+    await expect(page.locator('main .busage')).toContainText('以上列出其他工具的计入情况，各工具沿用各自的计算口径。');
+
+    await page.goto('./#/civ/Spanish/bonus/0');
+    await expect(page.locator('#bonus .dhead')).toContainText('数值来自游戏数据');
+    await expect(page.locator('main .busage li[data-usage="sim"][data-on="false"]')).toContainText(
+      '未计入：开局模拟暂未套用建筑工施工提速，新造建筑工期仍按通用速度计算',
+    );
+    await expect(page.locator('main .busage li[data-usage="construction"][data-on="true"]')).toContainText('建造者工作速率已计入');
+
+    await page.goto('./#/civ/Aztecs/bonus/2');
+    await expect(page.locator('#bonus .dhead')).toContainText('数值来自游戏数据');
+    await expect(page.locator('main .busage li[data-usage="sim"][data-on="true"]')).toBeVisible();
+    await expect(page.locator('main .busage')).toContainText('经济/费用类效果不进模拟器属性面板，结构化数值见下方「游戏数据原始效果」。');
+
+    await page.goto('./#/civ/Spanish');
+    await page
+      .locator('[data-bonus-id="Spanish-3"]')
+      .getByRole('button', { name: /作用与依据/u })
+      .click();
+    const spa3Dialog = page.getByRole('dialog');
+    await expect(spa3Dialog.locator('.busage')).toHaveCount(0);
+    await expect(spa3Dialog).toContainText('暂无逐工具明细；以各工具的实际说明为准。');
+    await spa3Dialog.getByRole('button', { name: '关闭作用与依据' }).click();
+
+    expect(errors).toEqual([]);
+  });
+
+  test('360px 窄屏浅/深色：+10% 与计数 .nw 零折行、无横向溢出、证据弹层零溢出', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+    await page.setViewportSize({ width: 360, height: 844 });
+
+    for (const [route, theme] of [
+      ['#/civ/Italians/bonus/3', 'light'],
+      ['#/civ/Huns/bonus/0', 'light'],
+      ['#/civ/Berbers/bonus/0', 'light'],
+      ['#/civ/Spanish/bonus/0', 'dark'],
+      ['#/civ/Aztecs/bonus/2', 'light'],
+    ] as const) {
+      await page.goto(`./${route}`);
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t;
+      }, theme);
+      await expect(page.locator('main .busage')).toBeVisible();
+      await assertNoWrapsInNw(page.locator('main .busage'));
+      await assertNoHorizontalOverflow(page);
+    }
+
+    // 360 深色意大利-3 证据弹层展开原始记录零溢出且 .datfx .nw 不折行
+    await page.goto('./#/civ/Italians');
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'dark';
+    });
+    await page
+      .locator('[data-bonus-id="Italians-3"]')
+      .getByRole('button', { name: /作用与依据/u })
+      .click();
+    const dlg = page.getByRole('dialog');
+    await dlg.locator('details.datfx > summary').click();
+    await expect(dlg.locator('[data-t="bonus-raw-unowned-note"]')).toBeVisible();
+    await assertNoWrapsInNw(dlg.locator('.busage'));
+    await assertNoWrapsInNw(dlg.locator('details.datfx > summary'));
+    await assertNoHorizontalOverflow(page);
+
+    expect(errors).toEqual([]);
+  });
+});

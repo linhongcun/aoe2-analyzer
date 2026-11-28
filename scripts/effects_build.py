@@ -161,6 +161,17 @@ def is_identity_fx(f):
     return False
 
 
+def rules_have_owned_target(rules, civ_en, ours):
+    """判断 rules 是否至少命中 1 个本文明目录可拥有的单位或建筑。"""
+    for r in rules:
+        is_bld = bool(r.get('b'))
+        for tid in r.get('t') or ():
+            obj = ours.get(tid)
+            if obj is not None and bool(obj.get('_b')) == is_bld and civ_en in (obj.get('civs') or ()):
+                return True
+    return False
+
+
 def building_can_attack(b):
     """判断目录建筑是否具备攻击能力（与 src/domain/buildingSim.ts buildingCanAttack 同口径）。"""
     return (
@@ -925,6 +936,12 @@ def main():
         for tt in TEAM_TECHS.get(en, []):
             cm, _ = merged_cmds(tt); r2, e2 = compile_cmds(cm)
             trules += [r for r in r2 if r not in trules]; teco += [x for x in e2 if x not in teco]
+        for e in entries:
+            if e['rules'] and not rules_have_owned_target(e['rules'], en, ours):
+                e['rulesUnowned'] = True
+        for e in conditional_entries:
+            if e['rules'] and not rules_have_owned_target(e['rules'], en, ours):
+                e['rulesUnowned'] = True
         civ_rec = {'dat': ai is not None, 'bonus': entries, 'team': {'combat': ai is not None, 'rules': trules, 'eco': teco}}
         if conditional_entries:
             civ_rec['conditional'] = conditional_entries
@@ -1215,7 +1232,7 @@ def freshness(text, es):
     # 战斗：按 stat 取首个规则的首个单位，逐时代累计
     stat_series = defaultdict(lambda: {a: None for a in (1, 2, 3, 4)})
     for e in sorted(es, key=lambda e: e['age']):
-        if e.get('req'): continue  # 由科技触发（如「每项寺院科技 +5HP」），单值即可
+        if e.get('req') or e.get('rulesUnowned'): continue  # 由科技触发，或规则目标均为非本文明可拥有对象
         for r in e['rules']:
             for f in r['fx']:
                 k = (f['s'], f.get('op', 'add'), f.get('vs'), r['t'][0])

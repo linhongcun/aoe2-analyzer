@@ -49,6 +49,8 @@ export interface DatEntry {
   req: string[];
   combat: boolean;
   rules: DatRule[];
+  /** true = 全部 rules 目标均为本文明不可拥有的单位/建筑（保留原始 rules 供证据弹层查验，不参与战斗属性编码） */
+  rulesUnowned?: true;
   eco: DatEco[];
   idx: number | null;
   linked: 'auto' | 'manual';

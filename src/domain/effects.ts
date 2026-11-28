@@ -130,7 +130,7 @@ civs.forEach((c) => {
     (byIdx[key] ??= []).push(e);
   });
   const relicTiers: CivRelicTier[] = condEntries
-    .filter((e) => e.combat)
+    .filter((e) => e.combat && !e.rulesUnowned)
     .sort((a, b) => a.condition.min - b.condition.min || a.tech - b.tech)
     .map((e) => ({
       tech: e.tech,
@@ -178,8 +178,8 @@ civs.forEach((c) => {
     const es = byIdxPermanent[k] ?? [];
     const idx = k === 'hidden' ? -1 : +k;
     const label = idx >= 0 ? c.bon[idx]! : '隐藏加成（.dat 中存在、加成文本未列出）';
-    // .dat 为当前固定补丁：不再按文本一致性回退；fresh 仅供审计/页面提示
-    const numeric = es.filter((e) => e.combat && e.rules.some((r) => toEffects(r.fx).length));
+    // .dat 为当前固定补丁：不再按文本一致性回退；fresh 仅供审计/页面提示；零本文明可拥有目标的 rules 不计入战斗属性编码
+    const numeric = es.filter((e) => e.combat && !e.rulesUnowned && e.rules.some((r) => toEffects(r.fx).length));
     if (numeric.length) {
       numeric.forEach((e) =>
         e.rules.forEach((r) => {
@@ -200,6 +200,10 @@ civs.forEach((c) => {
       return;
     }
     if (idx < 0) return;
+    if (es.some((e) => e.combat && e.rulesUnowned)) {
+      src[k] = (byIdx[k] ?? []).some((e) => e.eco.length) ? 'eco' : 'text';
+      return;
+    }
     const mu = (MANUAL_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx),
       mb = (MANUAL_BUILDING_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx);
     if (mu.length || mb.length) {

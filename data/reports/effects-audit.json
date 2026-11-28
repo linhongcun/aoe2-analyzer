@@ -8,9 +8,9 @@
   "missingObjects": 0,
   "coverage": {
     "total": 281,
-    "dat": 103,
+    "dat": 101,
     "manual": 0,
-    "eco": 141,
+    "eco": 143,
     "text": 37
   },
   "encodedTechs": {

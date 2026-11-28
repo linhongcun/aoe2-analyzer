@@ -341,12 +341,28 @@ describe('Issue 1429 全站 56 文明 bonusUsage 接入「阵容新增费用」'
     }
 
     const datNonTeam = ALL.filter((b) => !b.team && b.src === 'dat');
-    expect(datNonTeam).toHaveLength(76);
+    expect(datNonTeam).toHaveLength(74);
     const datWithUsage = datNonTeam
       .filter((b) => bonusUsage(b).length > 0)
       .map((b) => b.id)
       .sort();
-    expect(datWithUsage).toEqual(['Chinese-2', 'Gurjaras-1', 'Mapuche-1', 'Mayans-1', 'Poles-0', 'Sicilians-4', 'Turks-1']);
+    expect(datWithUsage).toEqual([
+      'Aztecs-2',
+      'Berbers-0',
+      'Berbers-2',
+      'Bohemians-3',
+      'Chinese-2',
+      'Gurjaras-1',
+      'Japanese-3',
+      'Khitans-2',
+      'Mapuche-1',
+      'Mayans-1',
+      'Persians-1',
+      'Poles-0',
+      'Sicilians-4',
+      'Spanish-0',
+      'Turks-1',
+    ]);
   });
 
   it('BonusBody SSR：Turks-1 双端展示、Franks-2 保持无 busage、全站 281 条工具说明零裸数字遗漏', () => {

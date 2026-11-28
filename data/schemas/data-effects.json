@@ -524,6 +524,9 @@
             "$ref": "#/$defs/rule"
           }
         },
+        "rulesUnowned": {
+          "const": true
+        },
         "eco": {
           "type": "array",
           "items": {
@@ -590,6 +593,9 @@
           "items": {
             "$ref": "#/$defs/rule"
           }
+        },
+        "rulesUnowned": {
+          "const": true
         },
         "eco": {
           "type": "array",

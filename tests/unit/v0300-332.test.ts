@@ -26,9 +26,10 @@ const free =
   (e: Fx) =>
     e.kind === 'freeTech' && names.includes(e.techName ?? '');
 
-/** 加成 → tree 行里属于它的效果（依据 b.en 游戏原文）；同时记下原文，文案变了就要重新认定（#1403 移除归正为 text 的 Burgundians-2 并纳入 7 条新关联 treeOnly 加成） */
+/** 加成 → tree 行里属于它的效果（依据 b.en 游戏原文）；同时记下原文，文案变了就要重新认定（#1403 纳入 7 条新关联，#1497 纳入阿兹特克-2 与西班牙-0） */
 const EFFECTS: Record<string, { en: string; pick: (e: Fx) => boolean }> = {
   'Aztecs-1': { en: 'Villagers carry +3', pick: (e) => e.kind === 'attr' && e.attr === 'carry' && e.target === 'class:4' },
+  'Aztecs-2': { en: 'Military Units train +15% faster', pick: (e) => e.kind === 'attr' && e.attr === 'trainTime' },
   'Bohemians-0': { en: 'Mining Camp technologies free', pick: free('Gold Mining', 'Gold Shaft Mining', 'Stone Mining', 'Stone Shaft Mining') },
   'Bulgarians-1': {
     en: 'Blacksmith and Siege Workshop technologies cost -50% food',
@@ -49,6 +50,7 @@ const EFFECTS: Record<string, { en: string; pick: (e: Fx) => boolean }> = {
   'Koreans-0': { en: 'Stone miners work +20% faster', pick: (e) => e.kind === 'attr' && e.attr === 'workRate' && e.target === 'task:stone' },
   'Magyars-2': { en: 'Melee attack upgrades free', pick: free('Forging', 'Iron casting', 'Blast Furnace') },
   'Malay-1': { en: 'Infantry armor upgrades free', pick: free('Scale Mail Armor', 'Chain Mail Armor', 'Plate Mail Armor') },
+  'Spanish-0': { en: 'Builders work +30% faster', pick: (e) => e.kind === 'attr' && e.attr === 'workRate' && e.target === 'task:build' },
   'Spanish-2': { en: 'Blacksmith upgrades cost no gold', pick: (e) => e.kind === 'techCost' && e.res === 'Gold' && e.v === 0 },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', pick: free('Murder Holes', 'Herbal Medicine') },
   'Turks-2': {
@@ -84,10 +86,10 @@ const simChanges = (b: CivBonusEnt) => run(b.civ, E) !== run(b.civ, withoutBonus
 const simLine = (b: CivBonusEnt) => bonusUsage(b).find((l) => l.tool === 'sim');
 const GENERIC = '本条属于科技树汇总效果，未逐条核对是否计入';
 
-describe('#332 清单：科技树汇总加成（#1403 扩充为 21 条，Burgundians-2 归回 src = text）', () => {
-  it('共 21 条，就是 EFFECTS 列出的这些；Burgundians-2 归回纯文本（无开局模拟行）', () => {
+describe('#332 清单：科技树汇总加成（#1403 扩充为 21 条，#1497 补齐阿兹特克-2 与西班牙-0 共 23 条）', () => {
+  it('共 23 条，就是 EFFECTS 列出的这些；Burgundians-2 归回纯文本（无开局模拟行）', () => {
     const listed = Object.keys(EFFECTS).sort();
-    expect(listed.length).toBe(21);
+    expect(listed.length).toBe(23);
     for (const id of listed) expect(ALL.find((b) => b.id === id)?.en, `${id} 原文未变`).toBe(EFFECTS[id]!.en);
     const bur2 = ALL.find((b) => b.id === 'Burgundians-2')!;
     expect(bur2.src).toBe('text');
@@ -122,10 +124,10 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
       }
       expect(l!.on, '已计入 当且仅当 去掉这条效果后开局模拟结果变化').toBe(simChanges(b));
     }, 60_000);
-  it('合计 8 条已计入、13 条未计入（#1403 新增 Burgundians-0 与 Vietnamese-1 已计入）', () => {
+  it('合计 9 条已计入、14 条未计入（#1497 新增 Aztecs-2 已计入、Spanish-0 未计入）', () => {
     const ons = Object.keys(EFFECTS).map((id) => simLine(ALL.find((x) => x.id === id)!)!.on);
-    expect(ons.filter((x) => x === true).length).toBe(8);
-    expect(ons.filter((x) => x === false).length).toBe(13);
+    expect(ons.filter((x) => x === true).length).toBe(9);
+    expect(ons.filter((x) => x === false).length).toBe(14);
   });
 });
 

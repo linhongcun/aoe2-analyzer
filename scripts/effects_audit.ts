@@ -140,7 +140,8 @@ export function buildAudit() {
       const prevAll = [...(o?.bonus ?? []), ...(o?.conditional ?? [])];
       const idxs = new Set([...curAll.map((e) => e.idx), ...prevAll.map((e) => e.idx)].filter((x): x is number => x !== null));
       [...idxs].sort().forEach((i) => {
-        const pick = (es: DatEntry[] | undefined) => (es ?? []).filter((e) => e.idx === i && !e.req.length && e.combat).flatMap((e) => e.rules);
+        const pick = (es: DatEntry[] | undefined) =>
+          (es ?? []).filter((e) => e.idx === i && !e.req.length && e.combat && !e.rulesUnowned).flatMap((e) => e.rules);
         nb += cmp(`${c.zh}（${c.en}）#${i}：${c.bon[i]}${!o ? '（更新前无该文明）' : ''}`, pick(prevAll), pick(curAll), c.en);
       });
       nb += cmp(`${c.zh}（${c.en}）团队：${c.tb}`, o?.team.rules, d.team.rules);
@@ -237,7 +238,7 @@ export function buildAudit() {
     const idxs = new Set([...(MANUAL_CIV_BONUSES[c.en] ?? []).map((x) => x[3]), ...(MANUAL_BUILDING_CIV_BONUSES[c.en] ?? []).map((x) => x[3])]);
     const d = DAT.civs[c.en];
     [...idxs].sort().forEach((i) => {
-      const es = [...(d?.bonus ?? []), ...(d?.conditional ?? [])].filter((e) => e.idx === i && !e.req.length && e.combat);
+      const es = [...(d?.bonus ?? []), ...(d?.conditional ?? [])].filter((e) => e.idx === i && !e.req.length && e.combat && !e.rulesUnowned);
       const fresh = d?.fresh[String(i)];
       const used = BONUS_SRC[c.en]?.[String(i)];
       const groups = new Map<string, string[]>();
@@ -377,7 +378,7 @@ export function buildAudit() {
   P();
   civs.forEach((c) =>
     (DAT.civs[c.en]?.bonus ?? [])
-      .filter((e) => e.idx === null && e.rules.length && e.combat)
+      .filter((e) => e.idx === null && e.rules.length && e.combat && !e.rulesUnowned)
       .forEach((e) => P(`- ${c.zh}：${e.tech} \`${e.name}\` → ${e.rules.map((r) => `${r.t.length} 个目标 ${JSON.stringify(r.fx)}`).join('；')}`)),
   );
   P();
