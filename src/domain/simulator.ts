@@ -1,5 +1,5 @@
 /** 科技模拟器效果引擎（纯函数，无 UI 依赖） */
-import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
+import type { Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { militaryTechAge } from './availabilityAge';
 import { BALLISTICS_CHARGE_ONLY_NOTE, ballisticsScope } from './ballistics';
 import { activeRelicBonus, CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
@@ -195,20 +195,20 @@ export const allNumeric = (avail: readonly SimTech[]) => new Set(avail.filter((x
 export const presetUpTo = (avail: readonly SimTech[], age: number, civ: string) =>
   new Set(avail.filter((x) => x.ef && militaryTechAge(civ, x.t.id, x.t.age) <= age).map((x) => x.t.id));
 
-export function totalCost(avail: readonly SimTech[], sel: ReadonlySet<number>): { cost: Cost; time: number } {
-  const cost: Cost = {};
-  let time = 0;
-  avail.forEach(({ t }) => {
-    if (sel.has(t.id)) {
-      Object.entries(t.cost).forEach(([k, v]) => (cost[k] = (cost[k] ?? 0) + v));
-      time += t.rt;
-    }
-  });
-  return { cost, time };
-}
-
 export function simGroup(t: Tech): string {
   return t.type === 'UniqueTech' ? '城堡（独特科技）' : t.bz;
 }
 
+export {
+  detectOrderConflicts,
+  formatBaseCostText,
+  quoteSimTechPrice,
+  summarizeSimResearch,
+  totalCost,
+  type SimOrderConflict,
+  type SimResearchSummary,
+  type SimResearchSummaryState,
+  type SimTechPriceState,
+  type SimTechResearchQuote,
+} from './simResearchCost';
 export { decideSimCanonical, parseUnitPath, routeWithQueryCiv, unitHashLocation, unitPath, type SimCanonical, type SimRoute } from './simRoute';

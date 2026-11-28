@@ -5,12 +5,21 @@
   align-items: center;
   gap: var(--space-2);
 }
+#duel .sim-ordered-cost .res.nw,
+#duel .sim-ordered-cost .res,
 .sim-ordered-cost .res {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
   margin-right: 0;
   font-variant-numeric: tabular-nums;
+}
+.sim-ordered-cost .res[data-zero='true'] {
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-good-soft);
+  color: var(--color-good);
+  font-weight: 700;
 }
 .sim-ordered-cost .si {
   margin-right: 0;
@@ -186,4 +195,173 @@
 .sim-cost-badge.is-warn {
   background: var(--color-warn-soft);
   color: var(--color-warn);
+}
+
+/* 科技模拟器同源研究价四态、汇总卡五态与边界说明（issue 1496）。 */
+.simc {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1) var(--space-2);
+  max-width: 100%;
+}
+.simc-discounted {
+  color: var(--color-text);
+  font-weight: 600;
+}
+#duel .simc .simc-time.nw,
+#duel .simc .simc-time,
+.simc .simc-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.simc .simc-time .si {
+  margin-right: 0;
+}
+#duel .sim-price-pill.nw,
+#duel .sim-price-pill,
+.sim-price-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.sim-price-pill.is-good {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+.sim-price-pill.is-warn {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}
+.sim-summary-main {
+  min-width: 0;
+}
+.sim-summary-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin-bottom: var(--space-1);
+}
+#duel .sim-summary-head .sim-summary-title,
+.sim-summary-head h3,
+.sim-summary-head h4 {
+  margin: 0;
+}
+.sim-summary-cost {
+  margin-top: var(--space-2);
+}
+.sim-summary-free {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sim-summary-zero {
+  color: var(--color-good);
+  font-weight: 700;
+}
+.sim-summary-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-2) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.sim-summary-base s,
+.sim-summary-base s .res {
+  text-decoration: line-through;
+}
+.sim-summary-base .si {
+  width: 14px;
+  height: 14px;
+}
+.sim-summary-time-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+}
+.sim-summary-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+.sim-summary-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+.sim-summary-callout .ic {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.sim-summary-callout.is-warn {
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+}
+.sim-summary-callout.is-warn .ic {
+  color: var(--color-warn);
+}
+.sim-summary-callout.is-info {
+  background: var(--color-link-soft);
+  color: var(--color-text);
+}
+.sim-summary-callout.is-info .ic {
+  color: var(--color-link);
+}
+.sim-summary-link {
+  color: var(--color-link);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sim-summary-time-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+.sim-summary-time-note .ic {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .sim-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sim-summary-time-col {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px dashed var(--color-border);
+  }
 }

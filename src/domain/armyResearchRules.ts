@@ -2,11 +2,11 @@ import { civByEn } from '../data';
 import { ARMY_RESEARCH, type ArmyResearchData, type ResearchCommand, type ResearchNode } from '../data/armyResearch';
 import { AGE_BY_TECH } from './gameIds';
 import { AGE_ZH } from './ratings';
+import { ARMY_RES, addArmyCost, hasDecimalCost, roundArmyCost } from './researchCostMath';
 import type { Cost } from './types';
 
-export const ARMY_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
+export { ARMY_RES, addArmyCost, hasDecimalCost, roundArmyCost };
 export const researchKey = (id: number) => `t:${id}`;
-export const roundArmyCost = (v: number) => Math.round(v * 100) / 100 || 0;
 
 export interface ArmyResearchIndex {
   modsNodes: readonly (readonly [number, ResearchNode])[];
@@ -55,14 +55,6 @@ export function armyResearchIndex(data: ArmyResearchData): ArmyResearchIndex {
     return pinnedIndex;
   }
   return buildArmyResearchIndex(data);
-}
-
-export function hasDecimalCost(cost: Cost | null | undefined): boolean {
-  return !!cost && ARMY_RES.some((r) => cost[r] !== undefined && !Number.isInteger(cost[r]));
-}
-
-export function addArmyCost(to: Cost, from: Cost) {
-  for (const r of ARMY_RES) to[r] = roundArmyCost((to[r] ?? 0) + (from[r] ?? 0));
 }
 
 /** Hidden non-free start-age / scenario placeholders (e.g. Post-Imperial 790/791, Paphos 1138) never auto-trigger in RM. */

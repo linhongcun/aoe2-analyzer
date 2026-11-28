@@ -3,22 +3,25 @@ import { Fragment } from 'react';
 import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
+import type { SimResearchPricesData } from '../../../data/simResearchPrices';
 import { ARMC_CLASS_NOTE, MOUNTED_REDUCTION_CLASS } from '../../../domain/affects';
 import { militaryTechAge } from '../../../domain/availabilityAge';
 import { hasIgnoreArmor } from '../../../domain/damageCore';
 import type { CivRelicBonus } from '../../../domain/effects';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
-import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
+import { allNumeric, presetUpTo, simGroup, type SimTech } from '../../../domain/simulator';
+import { quoteSimTechPrice, summarizeSimResearch } from '../../../domain/simResearchCost';
 import type { SimCostBadgeKind, SimEffectiveCostView } from '../../../domain/simEffectiveCost';
 import type { NumStat, StatSet, Tech } from '../../../domain/types';
-import { CostView, StatIcon, TechIcon } from '../art';
+import { StatIcon, TechIcon } from '../art';
 import { Icon } from '../Icon';
 import { RelicCountSelector } from '../RelicCountSelector';
 import { NumWrappedText } from '../widgets';
 import { fmtStat } from '../../utils/simFormat';
 import { DATA_SOURCES } from '../../utils/dataInfo';
 import { SimEffectiveCost } from './SimEffectiveCost';
+import { SimResearchSummaryCard, SimRowPrice } from './SimResearchSummary';
 import { SimTeamBonusCard, splitSimTeamBonuses, type SimTeamBonusItem } from './SimTeamBonusCard';
 
 export type { SimTeamBonusItem };
@@ -64,6 +67,8 @@ export interface SimPanelProps {
   relicControl?: { value: number; bonus: CivRelicBonus; onChange: (relics: number) => void };
   /** 对比列文明受圣物加攻影响时的 0 圣物基线说明。 */
   cmpRelicNote?: { civZh: string; perRelicAtk: number; maxAtk: number };
+  /** 可选研究价规则索引覆写（仅防御性单测注入使用；默认走内置派生索引）。 */
+  researchPrices?: SimResearchPricesData;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -230,7 +235,7 @@ export default function SimPanel(p: SimPanelProps) {
   const Heading = p.headingLevel === 2 ? 'h2' : 'h3';
   const Subheading = p.headingLevel === 2 ? 'h3' : 'h4';
   const childLevel = p.headingLevel === undefined ? undefined : p.headingLevel === 2 ? 3 : 4;
-  const tot = totalCost(p.avail, p.sel);
+  const tot = summarizeSimResearch(p.avail, p.sel, p.civ, p.age, p.researchPrices);
   const thumbRof = (p.sel.has(437) ? p.avail.find((x) => x.t.id === 437)?.ef : null)?.filter((e) => e.s === 'rof') ?? [];
   const groups: Record<string, SimTech[]> = {};
   p.avail.forEach((x) => (groups[simGroup(x.t)] ??= []).push(x));
@@ -390,13 +395,7 @@ export default function SimPanel(p: SimPanelProps) {
                       </span>
                     )}
                     <small>{AGE_ZH[t.age]!.slice(0, 2)}</small>
-                    <span className="simc">
-                      <CostView c={t.cost} />{' '}
-                      <span className="num nw">
-                        <StatIcon k="time" t="研究时间" />
-                        {t.rt}s
-                      </span>
-                    </span>
+                    <SimRowPrice quote={quoteSimTechPrice(t, p.civ, p.age, p.researchPrices)} rt={t.rt} />
                     {!ef && scopeNote ? (
                       <div className="sim-scope-note" data-t="sim-scope-note">
                         {scopeNote}
@@ -414,27 +413,14 @@ export default function SimPanel(p: SimPanelProps) {
         </div>
         <div>
           {p.effectiveCost && <SimEffectiveCost view={p.effectiveCost} headingLevel={p.headingLevel} />}
-          <section className="sim-summary" aria-label="累计研究">
-            <div>
-              <Subheading className={p.headingLevel === undefined ? undefined : 'sim-summary-title'}>累计研究费用（{p.sel.size} 项）</Subheading>
-              {p.researchCostNote && (
-                <p className="sim-summary-note" data-t="sim-summary-note">
-                  {p.researchCostNote}
-                </p>
-              )}
-              <div className="sim-summary-cost">
-                <CostView c={tot.cost} />
-              </div>
-            </div>
-            <div>
-              <span className="note">累计研究时长</span>
-              <strong className="sim-summary-time">
-                <StatIcon k="time" t="研究时间" />
-                {tot.time}
-                <small>秒</small>
-              </strong>
-            </div>
-          </section>
+          <SimResearchSummaryCard
+            civ={p.civ}
+            age={p.age}
+            selectedCount={p.sel.size}
+            summary={tot}
+            headingLevel={p.headingLevel}
+            researchCostNote={p.researchCostNote}
+          />
           <table className="stat simtab">
             <tbody>
               <tr>
