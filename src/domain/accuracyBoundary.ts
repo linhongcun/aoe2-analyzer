@@ -1,15 +1,20 @@
 /**
- * issue 746 目录准确度与弹道学的边界说明。
- * 目录 `acc` 来自单位数据。是否进入 PK 期望命中，与 duel.ts `fighterFrom` 的 `ranged: rng > 1` 一致。
+ * issue 746 / issue 1507 目录准确度与弹道学的边界说明。
+ * 目录 `acc` 来自单位数据。是否进入 PK 期望命中，与 duelFighter.ts 的 `unitHasNormalAttack && rng > 1` 同源。
  * 弹道学是科技 93。站内效果 rules/eco 为空时，不能量化预判；即使以后有条目，也不在这里换算公式。
  * 本模块不计算命中，也不修改 PK。
  */
 import { DAT, type DatFile } from './datEffects';
+import { unitHasNormalAttack } from './duelFighter';
+import type { Unit } from './types';
 
 export const BALLISTICS_TECH_ID = 93;
 export const DUEL_MODEL_PATH = '/duel#duel-model';
 export const PK_UNSIMULATED = '单位 PK 未模拟弹道和走位。';
 export const CATALOG_DISTINCT = '目录准确度是单位页上的百分比，进入单位 PK 的期望命中；与弹道学不是同一件事。';
+export const BALLISTICS_NOT_APPLICABLE_TITLE = '本单位不适用大学科技「弹道学」';
+export const BALLISTICS_NOT_APPLICABLE_DETAIL =
+  '固定游戏数据中该科技的弹丸跟踪效果未涵盖本单位，同页科技模拟器亦不列入（仅指大学科技「弹道学」，不涵盖其他独特科技）。';
 
 export interface CatalogTech {
   id: number;
@@ -30,18 +35,17 @@ export interface BallisticsBoundary {
   preview: '待确认';
 }
 
-/** 与 `fighterFrom` 相同：只有射程大于 1 时，目录准确度才乘进期望命中。 */
-export function catalogAccuracyFeedsExpectedHit(unit: { rng: number }): boolean {
-  return unit.rng > 1;
+/** 与 `fighterFrom` 同源（issue 1322 / issue 1507）：只有具备普通攻击且基础射程大于 1 时，目录准确度才进入 PK 期望命中说明。 */
+export function catalogAccuracyFeedsExpectedHit(unit: Pick<Unit, 'rng' | 'atks'>): boolean {
+  return unit.rng > 1 && unitHasNormalAttack(unit);
 }
 
 /**
- * issue 1322：有普通攻击、基础射程 > 1 且目录准确度为 0% 的特殊远程单位，
+ * issue 1322 / issue 1507：有普通攻击、基础射程 > 1 且目录准确度为 0% 的特殊远程单位，
  * PK 中不直接乘 0%，改为按每次主弹命中主目标估算（输出上限）。
  */
-export function catalogAccuracyAssumesHit(unit: { rng: number; acc: number; atks?: readonly (readonly [string, number])[] }): boolean {
-  if (!(unit.rng > 1) || unit.acc !== 0) return false;
-  return unit.atks ? unit.atks.some(([, n]) => n > 0) : true;
+export function catalogAccuracyAssumesHit(unit: Pick<Unit, 'rng' | 'acc' | 'atks'>): boolean {
+  return unit.acc === 0 && catalogAccuracyFeedsExpectedHit(unit);
 }
 
 export function ballisticsBoundary(techs: readonly CatalogTech[], dat: DatFile = DAT): BallisticsBoundary {

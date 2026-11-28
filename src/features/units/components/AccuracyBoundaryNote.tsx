@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { DATA_PATCH, SOURCE_PINS } from '../../../data/sources';
 import {
+  BALLISTICS_NOT_APPLICABLE_DETAIL,
+  BALLISTICS_NOT_APPLICABLE_TITLE,
   ballisticsBoundary,
   ballisticsSentence,
   catalogAccuracyAssumesHit,
@@ -9,18 +11,20 @@ import {
   PK_UNSIMULATED,
   type CatalogTech,
 } from '../../../domain/accuracyBoundary';
+import { ballisticsScope } from '../../../domain/ballistics';
 import type { Unit } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import './unit-accuracy.css';
 
-type AccuracyReading = Pick<Unit, 'rng' | 'acc' | 'accuracyDispersion'> & { id?: number; atks?: Unit['atks'] };
+type AccuracyReading = Pick<Unit, 'id' | 'rng' | 'acc' | 'atks' | 'accuracyDispersion'>;
 
 const dat = SOURCE_PINS.dat;
 const datUrl = `https://github.com/${dat.repo}/blob/${dat.commit}/${dat.path}`;
 
 export function AccuracyBoundaryNote({ unit, techs }: { unit: AccuracyReading; techs: readonly CatalogTech[] }) {
   if (!catalogAccuracyFeedsExpectedHit(unit)) return null;
-  const facts = ballisticsBoundary(techs);
+  const ballisticsApplicable = ballisticsScope(unit.id) === 'normal';
+  const facts = ballisticsApplicable ? ballisticsBoundary(techs) : null;
   const known = Number.isFinite(unit.acc) && unit.acc >= 0 && unit.acc <= 100;
   const assumesHit = known && catalogAccuracyAssumesHit(unit);
   const spread = unit.accuracyDispersion;
@@ -79,12 +83,22 @@ export function AccuracyBoundaryNote({ unit, techs }: { unit: AccuracyReading; t
             </dd>
           </div>
         </dl>
+        {!ballisticsApplicable && (
+          <p className="ud-acc-ballistics-na" data-accuracy="ballistics" data-ballistics-applicable="false">
+            <Icon name="info" />
+            <span>
+              <strong>{BALLISTICS_NOT_APPLICABLE_TITLE}</strong>：{BALLISTICS_NOT_APPLICABLE_DETAIL}
+            </span>
+          </p>
+        )}
         <p className="note" data-accuracy="dispersion-boundary">
           落点散布参数的物理单位与实战弹着分布未核实，未接入单位 PK、弹道学或伤害公式。
         </p>
-        <p className="note" data-accuracy="ballistics">
-          {ballisticsSentence(facts)}
-        </p>
+        {facts && (
+          <p className="note" data-accuracy="ballistics" data-ballistics-applicable="true">
+            {ballisticsSentence(facts)}
+          </p>
+        )}
         <p className="note" data-accuracy="pk">
           {PK_UNSIMULATED}
         </p>
@@ -93,7 +107,7 @@ export function AccuracyBoundaryNote({ unit, techs }: { unit: AccuracyReading; t
           <a href={datUrl}>固定版本 DAT</a> · <Link to="/about-data">数据说明</Link>
         </p>
         <p className="community-tool-row">
-          {facts.found && (
+          {facts?.found && (
             <Link className="community-tool-entry" to={`/tech/${facts.id}`}>
               查看弹道学
             </Link>
