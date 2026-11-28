@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { trainingUnitAge } from '../../../domain/availabilityAge';
 import { AGE_ZH } from '../../../domain/ratings';
 import { makeSimContext } from '../../../domain/simulator';
@@ -7,9 +7,8 @@ import type { Tech, Trees, Unit } from '../../../domain/types';
 import {
   buildCivRankDuelHref,
   buildUnitCivRank,
-  DUEL_BUDGET_DEFAULT,
+  computeUnitCivRankSummary,
   filterUnitCivRankRows,
-  NO_NORMAL_ATTACK_REASON,
   RANK_COL_META_BY_KEY,
   RANK_METRIC_COLS,
   sortUnitCivRankRows,
@@ -20,12 +19,22 @@ import {
   type SortDir,
   type UnitCivRankRow,
 } from '../../../domain/unitCivRank';
+import {
+  classifyUnitRankEmptyState,
+  filterRowsByTechs,
+  readUnitRankQuery,
+  reconcilePkOnTechFilter,
+  reconcileTechFilterOnAgeChange,
+  resolveUnitRankUrl,
+  stripUnitRankQuery,
+  withUnitRankQuery,
+} from '../../../domain/unitCivRankFilter';
 import { useNarrowTable } from '../../../shared/hooks/useNarrowTable';
-import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { radioKeyboard } from '../../../shared/ui/radioKeyboard';
 import { SearchInput } from '../../../shared/ui/widgets';
 import { UnitCivRankRelicNotes, UnitCivRankTable } from './UnitCivRankTable';
+import { UnitCivRankChampions, UnitCivRankEmpty, UnitCivRankPkBar, UnitCivRankTechFilter, type UnitCivRankAgeNotice } from './UnitCivRankTechFilter';
 import '../../../shared/styles/civ-rank.css';
 import './unit-civ-rank.css';
 
@@ -63,126 +72,217 @@ interface UnitCivRankProps {
   core: { techs: Tech[] };
   trees: Trees | null;
   treeWaiting: ReactNode;
+  onRankQuerySync?: (nextSearch: string) => void;
 }
 
-export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps) {
+export function UnitCivRank({ unit, core, trees, treeWaiting, onRankQuerySync }: UnitCivRankProps) {
   const loc = useLocation();
+  const nav = useNavigate();
   const narrow = useNarrowTable();
+  const bounds = useMemo(() => unitRankAgeBounds(unit), [unit]);
+  const parsedQuery = useMemo(() => readUnitRankQuery(loc.search, bounds.availableAges), [loc.search, bounds.availableAges]);
   const initialCombat = unitRankCombatKind(unit);
   const initialSortCol: RankMetricCol = initialCombat === 'normal' ? 'dps' : initialCombat === 'suicide' ? 'atk' : 'hp';
-  const [age, setAge] = useState<number>(4);
+
+  const [age, setAge] = useState<number>(() => parsedQuery.rankAge ?? 4);
   const [query, setQuery] = useState('');
   const [sortCol, setSortCol] = useState<RankSortCol>(initialSortCol);
   const [sortDir, setSortDir] = useState<SortDir>(RANK_COL_META_BY_KEY[initialSortCol].bestDir);
   const [selected, setSelected] = useState<string[]>([]);
   const [removedNotice, setRemovedNotice] = useState<string | null>(null);
+  const [ageNotice, setAgeNotice] = useState<UnitCivRankAgeNotice | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [expandedCiv, setExpandedCiv] = useState<string | null>(null);
+  const [localSyncSearch, setLocalSyncSearch] = useState<string | null>(null);
+  const [prevSearch, setPrevSearch] = useState(loc.search);
 
-  const bounds = useMemo(() => unitRankAgeBounds(unit), [unit]);
+  const replaceRankSearch = (nextSearch: string) => {
+    if (nextSearch === loc.search) return;
+    setLocalSyncSearch(nextSearch);
+    onRankQuerySync?.(nextSearch);
+    nav({ pathname: loc.pathname, search: nextSearch, hash: loc.hash }, { replace: true, state: loc.state });
+  };
+
+  if (prevSearch !== loc.search) {
+    setPrevSearch(loc.search);
+    if (localSyncSearch === loc.search) {
+      setLocalSyncSearch(null);
+    } else {
+      if (localSyncSearch !== null) setLocalSyncSearch(null);
+      if (parsedQuery.rankAge !== null) {
+        setAge(parsedQuery.rankAge);
+        setAgeNotice(null);
+      } else if (parsedQuery.hasRankTech) {
+        setAge(4);
+        setAgeNotice(null);
+      }
+    }
+  }
+
   const ctx = useMemo(() => (trees ? makeSimContext(core.techs, trees) : null), [core.techs, trees]);
   const data = useMemo(() => (ctx ? buildUnitCivRank(ctx, unit, age) : null), [ctx, unit, age]);
-
   const rowByCiv = useMemo(() => {
     const map = new Map<string, UnitCivRankRow>();
     if (data) for (const r of data.rows) map.set(r.civ, r);
     return map;
   }, [data]);
 
-  const sortedRows = useMemo(() => {
-    if (!data) return [];
-    return sortUnitCivRankRows(data.rows, sortCol, sortDir);
-  }, [data, sortCol, sortDir]);
+  const urlResolved = useMemo(
+    () => (data ? resolveUnitRankUrl(loc.search, data.filterTechs, bounds.availableAges) : null),
+    [data, loc.search, bounds.availableAges],
+  );
+  const selectedTechIds = useMemo(() => urlResolved?.validTechIds ?? [], [urlResolved]);
+  const urlNotice = urlResolved?.notice ?? null;
+  const hasActiveTechFilter = selectedTechIds.length > 0;
+  const techFilteredRows = useMemo(() => (data ? filterRowsByTechs(data.rows, selectedTechIds) : []), [data, selectedTechIds]);
 
-  const filtered = useMemo(() => {
-    if (!data) return { rows: [] as UnitCivRankRow[], emptyMessage: null };
-    return filterUnitCivRankRows(sortedRows, query, unit, data.age);
-  }, [data, sortedRows, query, unit]);
+  const activeSummary = useMemo(() => {
+    if (!data) return null;
+    return hasActiveTechFilter ? computeUnitCivRankSummary(techFilteredRows, data.applicableCols) : { bestValues: data.bestValues, champions: data.champions };
+  }, [data, hasActiveTechFilter, techFilteredRows]);
+
+  const tableData = useMemo(() => {
+    if (!data || !activeSummary) return null;
+    return hasActiveTechFilter ? { ...data, bestValues: activeSummary.bestValues, champions: activeSummary.champions } : data;
+  }, [data, activeSummary, hasActiveTechFilter]);
+
+  const sortedRows = useMemo(() => (data ? sortUnitCivRankRows(techFilteredRows, sortCol, sortDir) : []), [data, techFilteredRows, sortCol, sortDir]);
+  const filtered = useMemo(
+    () => (data ? filterUnitCivRankRows(sortedRows, query, unit, data.age) : { rows: [] as UnitCivRankRow[], emptyMessage: null }),
+    [data, sortedRows, query, unit],
+  );
+  const selectedFilterTechs = useMemo(() => {
+    if (!data || !hasActiveTechFilter) return [];
+    const selSet = new Set(selectedTechIds);
+    return data.filterTechs.filter((t) => selSet.has(t.id));
+  }, [data, hasActiveTechFilter, selectedTechIds]);
+
+  const emptyState = useMemo(
+    () =>
+      !data
+        ? { kind: 'none' as const }
+        : classifyUnitRankEmptyState({
+            selectedTechs: selectedFilterTechs,
+            techFilteredRows,
+            allAgeRows: data.rows,
+            filteredResult: filtered,
+            rawQuery: query,
+            unit,
+            age: data.age,
+          }),
+    [data, selectedFilterTechs, techFilteredRows, filtered, query, unit],
+  );
+
+  // 外部 / POP 导航改变科技筛选结果时同步裁剪 PK 槽位（纯文本 query 不触发）。
+  const techScopeKey = `${age}:${selectedTechIds.join(',')}`;
+  const [prevTechScopeKey, setPrevTechScopeKey] = useState(techScopeKey);
+  if (data && prevTechScopeKey !== techScopeKey) {
+    setPrevTechScopeKey(techScopeKey);
+    if (hasActiveTechFilter && selected.length > 0) {
+      const { keptCivs, removedNames } = reconcilePkOnTechFilter(selected, techFilteredRows, rowByCiv);
+      if (removedNames.length > 0) {
+        setSelected(keptCivs);
+        setRemovedNotice(`${removedNames.join('、')}不满足所选科技筛选，已从单位 PK 移出。`);
+      }
+    }
+  }
 
   const { visibleRows, hiddenCount, collapsibleCount } = useMemo(() => {
     const list = filtered.rows;
-    if (query.trim() || list.length <= COLLAPSE_LIMIT) {
-      return { visibleRows: list, hiddenCount: 0, collapsibleCount: 0 };
-    }
+    if (hasActiveTechFilter || query.trim() || list.length <= COLLAPSE_LIMIT) return { visibleRows: list, hiddenCount: 0, collapsibleCount: 0 };
     const selSet = new Set(selected);
     const collapsed = list.filter((r, idx) => idx < COLLAPSE_LIMIT || selSet.has(r.civ));
     const collapsible = list.length - collapsed.length;
-    if (showAll || collapsible === 0) {
-      return { visibleRows: list, hiddenCount: 0, collapsibleCount: collapsible };
+    return showAll || collapsible === 0
+      ? { visibleRows: list, hiddenCount: 0, collapsibleCount: collapsible }
+      : { visibleRows: collapsed, hiddenCount: collapsible, collapsibleCount: collapsible };
+  }, [filtered.rows, hasActiveTechFilter, query, showAll, selected]);
+
+  const handleToggleTech = (techId: number) => {
+    const nextIds = selectedTechIds.includes(techId) ? selectedTechIds.filter((id) => id !== techId) : [...selectedTechIds, techId].sort((a, b) => a - b);
+    setAgeNotice(null);
+    if (data && selected.length > 0) {
+      const { keptCivs, removedNames } = reconcilePkOnTechFilter(selected, filterRowsByTechs(data.rows, nextIds), rowByCiv);
+      if (removedNames.length > 0) {
+        setSelected(keptCivs);
+        setRemovedNotice(`${removedNames.join('、')}不满足所选科技筛选，已从单位 PK 移出。`);
+      } else {
+        setRemovedNotice(null);
+      }
+    } else {
+      setRemovedNotice(null);
     }
-    return { visibleRows: collapsed, hiddenCount: collapsible, collapsibleCount: collapsible };
-  }, [filtered.rows, query, showAll, selected]);
+    replaceRankSearch(withUnitRankQuery(loc.search, nextIds, nextIds.length > 0 && age !== 4 ? age : null));
+  };
+
+  const handleClearTechs = () => {
+    setAgeNotice(null);
+    setRemovedNotice(null);
+    replaceRankSearch(stripUnitRankQuery(loc.search));
+  };
+
+  const handleDismissUrlNotice = () => {
+    replaceRankSearch(withUnitRankQuery(loc.search, selectedTechIds, hasActiveTechFilter && age !== 4 ? age : null));
+  };
 
   const handleAgeChange = (nextAge: number) => {
     if (nextAge === age) return;
     setAge(nextAge);
     setExpandedCiv(null);
+    const nextData = ctx ? buildUnitCivRank(ctx, unit, nextAge) : null;
+    const { keptIds, removedTechs } =
+      data && nextData ? reconcileTechFilterOnAgeChange(selectedTechIds, data.filterTechs, nextData.filterTechs) : { keptIds: [], removedTechs: [] };
+    const nextAgeZh = AGE_ZH[nextAge] ?? `${nextAge}时代`;
+    setAgeNotice(removedTechs.length > 0 ? { nextAgeZh, removedNames: removedTechs.map((t) => t.zh) } : null);
+    if (hasActiveTechFilter || parsedQuery.hasRankTech || parsedQuery.hasRankAge) {
+      replaceRankSearch(withUnitRankQuery(loc.search, keptIds, keptIds.length > 0 && nextAge !== 4 ? nextAge : null));
+    }
     if (selected.length === 0) {
       setRemovedNotice(null);
       return;
     }
+    const nextMatchedCivs = nextData ? new Set(filterRowsByTechs(nextData.rows, keptIds).map((r) => r.civ)) : null;
     const kept: string[] = [];
-    const removedNames: string[] = [];
+    const untrainableNames: string[] = [];
+    const mismatchNames: string[] = [];
     for (const civ of selected) {
-      if (trainingUnitAge(civ, unit.id, unit.age) <= nextAge) kept.push(civ);
-      else removedNames.push(rowByCiv.get(civ)?.civZh ?? civ);
+      if (trainingUnitAge(civ, unit.id, unit.age) > nextAge) untrainableNames.push(rowByCiv.get(civ)?.civZh ?? civ);
+      else if (nextMatchedCivs && !nextMatchedCivs.has(civ)) mismatchNames.push(rowByCiv.get(civ)?.civZh ?? civ);
+      else kept.push(civ);
     }
     setSelected(kept);
-    if (removedNames.length > 0) {
-      const nextAgeZh = AGE_ZH[nextAge] ?? `${nextAge}时代`;
-      setRemovedNotice(`${removedNames.join('、')}${nextAgeZh}不能训练，已移出`);
-    } else {
-      setRemovedNotice(null);
-    }
+    const notices: string[] = [];
+    if (untrainableNames.length > 0) notices.push(`${untrainableNames.join('、')}${nextAgeZh}不能训练，已移出`);
+    if (mismatchNames.length > 0) notices.push(`${mismatchNames.join('、')}不满足所选科技筛选，已从单位 PK 移出。`);
+    setRemovedNotice(notices.length > 0 ? notices.join('；') : null);
   };
 
   const handleSort = (col: RankSortCol) => {
-    if (sortCol === col) {
-      setSortDir((prev) => (prev === 'desc' ? 'asc' : 'desc'));
-    } else {
+    if (sortCol === col) setSortDir((prev) => (prev === 'desc' ? 'asc' : 'desc'));
+    else {
       setSortCol(col);
       setSortDir(col === 'civ' ? 'asc' : RANK_COL_META_BY_KEY[col].bestDir);
     }
   };
-
   const handleChampionClick = (col: RankMetricCol, bestDir: SortDir) => {
     setSortCol(col);
     setSortDir(bestDir);
   };
-
   const handleToggleSelect = (civ: string) => {
     setRemovedNotice(null);
-    setSelected((prev) => {
-      if (prev.includes(civ)) return prev.filter((item) => item !== civ);
-      if (prev.length >= 2) return prev;
-      return [...prev, civ];
-    });
+    setSelected((prev) => (prev.includes(civ) ? prev.filter((item) => item !== civ) : prev.length >= 2 ? prev : [...prev, civ]));
   };
-
   const handleClearSelect = () => {
     setRemovedNotice(null);
     setSelected([]);
   };
 
-  const handleToggleExpand = (civ: string) => {
-    setExpandedCiv((prev) => (prev === civ ? null : civ));
-  };
-
   const selectedRows = selected.map((civ) => rowByCiv.get(civ)).filter((r): r is UnitCivRankRow => !!r);
-  const canLaunchDuel = !!data && data.canDuel && data.rows.length >= 2 && selectedRows.length === 2;
+  const allowDuelSelect = !!data && data.canDuel && techFilteredRows.length >= 2;
+  const canLaunchDuel = allowDuelSelect && selectedRows.length === 2;
   const duelHref = canLaunchDuel ? buildCivRankDuelHref(unit.id, selectedRows[0]!, selectedRows[1]!, data.age, data.combatKind) : '';
   const ageLabel = AGE_ZH[data?.age ?? age] ?? `${age}时代`;
-  const duelBtnLabel = narrow ? (
-    '去 PK'
-  ) : data?.combatKind === 'suicide' ? (
-    <>
-      <span className="num nw">1v1</span> 对打
-    </>
-  ) : (
-    <>
-      等资源 <span className="num nw">{DUEL_BUDGET_DEFAULT}</span> 对打
-    </>
-  );
+  const activeChampions = activeSummary?.champions ?? [];
 
   return (
     <section className="ud-section ucr" id="unit-civ-rank" aria-label="各文明满科技对照">
@@ -191,7 +291,7 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
         <p className="ucr-sub">每个文明按单位 PK 的「满科技」自动计入本方常驻团队加成，并研究完本时代能研究的数值科技与造价科技；只列客观数值，不给综合分。</p>
       </div>
 
-      {!data ? (
+      {!data || !tableData ? (
         treeWaiting
       ) : (
         <>
@@ -223,114 +323,54 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
               )}
             </div>
             <p className="ucr-count">
-              {ageLabel}可训练 <span className="num nw">{data.rows.length}</span> / <span className="num nw">{data.totalCivCount}</span> 个文明
+              {hasActiveTechFilter ? (
+                <>
+                  符合科技筛选 <span className="num nw">{techFilteredRows.length}</span> / <span className="num nw">{data.rows.length}</span> 个{ageLabel}
+                  可训练文明
+                </>
+              ) : (
+                <>
+                  {ageLabel}可训练 <span className="num nw">{data.rows.length}</span> / <span className="num nw">{data.totalCivCount}</span> 个文明
+                </>
+              )}
             </p>
           </div>
 
-          {data.rows.length >= 2 && data.champions.length > 0 && (
-            <div className="ucr-champs" role="group" aria-label="各项第一">
-              <span className="ucr-champs-label">各项第一</span>
-              <div className="ucr-champs-list">
-                {data.champions.map((champ) => {
-                  const active = sortCol === champ.col && sortDir === champ.bestDir;
-                  const civNames = champ.civs
-                    .slice(0, 2)
-                    .map((c) => c.civZh)
-                    .join('、');
-                  return (
-                    <button
-                      key={champ.col}
-                      type="button"
-                      className={active ? 'ucr-champ is-on' : 'ucr-champ'}
-                      aria-pressed={active}
-                      onClick={() => handleChampionClick(champ.col, champ.bestDir)}
-                    >
-                      <span>{champ.label}</span>
-                      <strong className="ucr-champ-val num nw">{champ.formattedValue}</strong>
-                      <span className="ucr-champ-sep" aria-hidden="true">
-                        ·
-                      </span>
-                      <span>
-                        {civNames}
-                        {champ.civs.length > 2 && (
-                          <>
-                            {' '}
-                            等 <span className="num nw">{champ.civs.length} 家</span>
-                          </>
-                        )}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          <UnitCivRankTechFilter
+            filterTechs={data.filterTechs}
+            selectedTechIds={selectedTechIds}
+            matchedCount={techFilteredRows.length}
+            totalCount={data.rows.length}
+            ageNotice={ageNotice}
+            urlNotice={urlNotice}
+            onToggleTech={handleToggleTech}
+            onClearTechs={handleClearTechs}
+            onDismissUrlNotice={handleDismissUrlNotice}
+          />
+
+          <UnitCivRankChampions
+            champions={activeChampions}
+            matchedCount={techFilteredRows.length}
+            hasActiveTechFilter={hasActiveTechFilter}
+            sortCol={sortCol}
+            sortDir={sortDir}
+            onSelectChampion={handleChampionClick}
+          />
 
           {data.commonMechanisms.length > 0 && <p className="ucr-common">全部文明都有：{data.commonMechanisms.join('、')}（未计入单位 PK 模拟）</p>}
 
-          <div className="ucr-pk" data-t="ucr-pk-bar">
-            {removedNotice && (
-              <p className="ucr-notice" role="status">
-                {removedNotice}
-              </p>
-            )}
-            {!data.canDuel ? (
-              <p className="ucr-pk-disabled">{NO_NORMAL_ATTACK_REASON}，不适用单位 PK。</p>
-            ) : data.rows.length < 2 ? (
-              <p className="ucr-pk-disabled">
-                {ageLabel}只有 <span className="num nw">1</span> 个文明能训练，没有可对打的另一方。切到{AGE_ZH[data.standardAge]}可选两个文明。
-              </p>
-            ) : (
-              <div className="ucr-pk-row">
-                <div className="ucr-pk-slots">
-                  {selectedRows.length === 0 ? (
-                    <>
-                      <span className="ucr-pk-title">单位 PK</span>
-                      <span className="ucr-pk-hint">{narrow ? '点左侧圆圈选两个文明。' : '点表格左侧的圆圈选两个文明，带入单位 PK 对打。'}</span>
-                    </>
-                  ) : (
-                    <>
-                      {selectedRows.map((row, idx) => (
-                        <span key={row.civ} className="ucr-pk-chip">
-                          <span className={idx === 0 ? 'ucr-slot is-a' : 'ucr-slot is-b'}>{idx === 0 ? 'A' : 'B'}</span>
-                          <CivIcon c={{ en: row.civ }} alt="" />
-                          <span className="ucr-pk-chip-name">{row.civZh}</span>
-                          <button type="button" className="ucr-chip-x" aria-label={`移出${row.civZh}`} onClick={() => handleToggleSelect(row.civ)}>
-                            <Icon name="x" />
-                          </button>
-                        </span>
-                      ))}
-                      {selectedRows.length === 1 && (
-                        <span className="ucr-pk-hint">
-                          再选 <span className="num nw">1</span> 个文明
-                        </span>
-                      )}
-                    </>
-                  )}
-                </div>
-                <div className="ucr-pk-actions">
-                  {selectedRows.length === 2 && (
-                    <button type="button" className="ud-btn ucr-clear-btn" onClick={handleClearSelect}>
-                      清空
-                    </button>
-                  )}
-                  {canLaunchDuel ? (
-                    <Link className="ucr-pk-go" to={duelHref} data-t="ucr-pk-go">
-                      <Icon name="swords" />
-                      <span>{duelBtnLabel}</span>
-                      <Icon name="arrow-right" />
-                    </Link>
-                  ) : (
-                    <button type="button" className="ucr-pk-go is-disabled" aria-disabled="true" data-t="ucr-pk-go" onClick={(e) => e.preventDefault()}>
-                      <Icon name="swords" />
-                      <span>{duelBtnLabel}</span>
-                      <Icon name="arrow-right" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          <UnitCivRankPkBar
+            data={data}
+            techFilteredRows={techFilteredRows}
+            selectedRows={selectedRows}
+            removedNotice={removedNotice}
+            ageLabel={ageLabel}
+            narrow={narrow}
+            canLaunchDuel={canLaunchDuel}
+            duelHref={duelHref}
+            onToggleSelect={handleToggleSelect}
+            onClearSelect={handleClearSelect}
+          />
 
           {narrow && (
             <div className="ucr-mobile-sort">
@@ -361,29 +401,25 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
             </div>
           )}
 
-          {filtered.emptyMessage ? (
-            <div className="ucr-empty" data-t="ucr-empty">
-              <p>{filtered.emptyMessage}</p>
-              <button type="button" className="ud-btn" onClick={() => setQuery('')}>
-                清除搜索
-              </button>
-            </div>
+          {emptyState.kind !== 'none' ? (
+            <UnitCivRankEmpty emptyState={emptyState} ageLabel={ageLabel} unitZh={unit.zh} onClearTechs={handleClearTechs} onClearSearch={() => setQuery('')} />
           ) : (
             <>
               <UnitCivRankTable
-                data={data}
+                data={tableData}
                 rows={visibleRows}
                 narrow={narrow}
                 sortCol={sortCol}
                 sortDir={sortDir}
                 selected={selected}
+                allowSelect={allowDuelSelect}
                 expandedCiv={expandedCiv}
                 preserveSearch={loc.search}
                 onSort={handleSort}
                 onToggleSelect={handleToggleSelect}
-                onToggleExpand={handleToggleExpand}
+                onToggleExpand={(civ) => setExpandedCiv((prev) => (prev === civ ? null : civ))}
               />
-              {!query.trim() && collapsibleCount > 0 && (
+              {!query.trim() && !hasActiveTechFilter && collapsibleCount > 0 && (
                 <div className="ucr-more-wrap">
                   {hiddenCount > 0 ? (
                     <button type="button" className="ud-btn ucr-more-btn" onClick={() => setShowAll(true)}>
@@ -419,6 +455,11 @@ export function UnitCivRank({ unit, core, trees, treeWaiting }: UnitCivRankProps
             {data.hasEstimatedCost && <li>「估算」：含尚未完全解码的造价科技，总价按已解码部分计算。</li>}
             <li>各文明数值与训练时间均已自动计入本方常驻团队加成，未计额外盟友团队加成，也未计征招及建筑工作效率加成（完整产兵周期见「持续生产」）。</li>
             <li>「缺」：本时代其他文明能研究、这个文明研究不了的通用科技。</li>
+            {data.filterTechs.length > 0 && (
+              <li data-t="ucr-tech-filter-note">
+                科技筛选仅列当前时代存在文明差异的通用与区域科技，勾选后按「同时具备（AND）」过滤文明，表内仍显示各文明满科技面板；按修道院非数值科技或独特科技筛选请前往「文明」页。
+              </li>
+            )}
             {data.hasBonusDamageReduction && (
               <li data-t="ucr-bdr-note">
                 「额外伤害减免」：文明常驻减免非基础克制伤害，已计入科技模拟器与单位 PK，不改变上表 <span className="num nw">11</span> 列基础面板与排序。
