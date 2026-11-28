@@ -51,6 +51,52 @@
   min-height: 44px;
   white-space: nowrap;
 }
+.ud-acc-ballistics-na {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-muted);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.ud-acc-ballistics-na .ic {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 3px;
+  color: var(--color-muted);
+}
+.ud-acc-ballistics-na strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.ud-acc-fallback {
+  margin-block: var(--space-3);
+}
+.ud-acc-fallback-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+.ud-acc-na-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-tag);
+  color: var(--color-text-2);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
 @media (max-width: 600px) {
   .ud-acc-card {
     padding: var(--space-2);

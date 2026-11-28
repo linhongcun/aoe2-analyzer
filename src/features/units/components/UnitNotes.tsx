@@ -1,4 +1,5 @@
 import { catalogAccuracyFeedsExpectedHit } from '../../../domain/accuracyBoundary';
+import { NO_NORMAL_ATTACK_REASON, unitHasNormalAttack, unitIsNonAttackingCaster } from '../../../domain/duel';
 import type { Unit, Tech } from '../../../domain/types';
 import { Linked } from '../../../shared/ui/widgets';
 import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
@@ -7,6 +8,7 @@ import { AccuracyBoundaryNote } from './AccuracyBoundaryNote';
 import { UnitBlast } from './UnitBlast';
 import { splashDescription } from './SplashMechanics';
 import { FormDescriptionSource, type FormRelation } from './UnitForms';
+import './unit-accuracy.css';
 
 import { ConversionTarget } from './ConversionTarget';
 
@@ -74,6 +76,18 @@ export function UnitNotes({
       )}
       {!alternate && catalogAccuracyFeedsExpectedHit(u) ? (
         <AccuracyBoundaryNote unit={u} techs={techs} />
+      ) : !alternate && !unitHasNormalAttack(u) ? (
+        <div className="ud-acc-fallback" data-accuracy="no-normal-attack">
+          <p className="ud-acc-fallback-head">
+            <span>
+              准确度 <span className="num nw">{u.acc}%</span>
+            </span>
+            <span className="ud-acc-na-tag nw">{NO_NORMAL_ATTACK_REASON}</span>
+          </p>
+          <p className="ud-kicker">
+            {unitIsNonAttackingCaster(u) ? '目录原始读数，不进入单位 PK 期望命中，也不代表下方招降机制的概率。' : '目录原始读数，不进入单位 PK 期望命中。'}
+          </p>
+        </div>
       ) : (
         <p>
           准确度 <span className="num nw">{u.acc}%</span>
