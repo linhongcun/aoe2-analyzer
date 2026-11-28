@@ -185,7 +185,7 @@
     {
       "id": "siege-1064",
       "script": "scripts/siege_build.py",
-      "reason": "仅认证 DE188329 的固定原始文件与四个配置，不随通用补丁更新自动授予新覆盖。换 pin 时由当前数据更新执行者重新取证并审阅；现有 --check 与数据族校验继续拦截来源漂移。",
+      "reason": "仅认证 DE188329 的固定原始文件与已审计手推炮配置（25 国与不限文明、9 座核心建筑及石工/建筑学），不随通用补丁更新自动授予新覆盖。换 pin 时由当前数据更新执行者重新取证并审阅；现有 --check 与数据族校验继续拦截来源漂移。",
       "owner": "当前数据更新执行者；#1064 的有界证据生成器维护者。",
       "evidenceFile": "scripts/siege_build.py",
       "ownerEvidence": "AUDITED_DAT 锁定实际 SHA-256；data/game/siege.json 记录完整性、来源和精确覆盖；data 检查组保留 --check。",

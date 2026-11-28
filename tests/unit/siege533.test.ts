@@ -40,7 +40,7 @@ describe('攻城情境入口 #533', () => {
 
   it('未核实原因各一句，不改已核实金数', () => {
     expect(calculateSiege(unit('Mangonel'), castle, 1)).toEqual({ verified: false, reason: SIEGE_MANGONEL_REASON });
-    expect(calculateSiege(unit('Bombard Cannon'), building(109), 1)).toMatchObject({ verified: false });
+    expect(calculateSiege(unit('Bombard Cannon'), building(12), 1)).toMatchObject({ verified: false });
     expect(calculateSiege(ram, building(109), 1)).toMatchObject({ verified: true, hits: 16, gameSeconds: 75 });
     expect(calculateSiege(ram, castle, 4)).toMatchObject({ verified: true, hits: 9, gameSeconds: 40 });
   });

@@ -6,7 +6,7 @@
 //   冲车系从 units.json 的升级链读出（攻城锤的后继且中文名含「冲车」）：中型冲车 422、重型冲车 548。
 //   单位详情「算拆建筑」仍只预填攻城锤，本文件不改那条入口（siege533 已锁 unit=1258）。
 //   不扩其它同义词，不测窄屏。
-// #555：#1064 后以未覆盖的 bldg=109 保留「报错/反馈」和「反馈数据缺口」的回归；打开 GitHub 新 issue 时，
+// #555：#1489 扩展核心 9 座建筑后，以未覆盖的兵营 bldg=12 保留「报错/反馈」和「反馈数据缺口」的回归；打开 GitHub 新 issue 时，
 //   标题或正文「类型/ID」行含手推炮与 36。正文仍有完整页面地址、数据版本和构建号。
 //   页面地址里的 unit=36 不算类型/ID。无 unit 的地址会被攻城页收成默认单位，不在这里另加失败用例。
 //   不改未核实计算，不要求登录 GitHub。
@@ -17,7 +17,7 @@ import units from '../../data/game/units.json' with { type: 'json' };
 const ISSUES_NEW = 'https://github.com/linhongcun/aoe2-analyzer/issues/new';
 const BATTERING_RAM_ID = 1258;
 const BOMBARD_ID = 36;
-const SIEGE_QUERY = `./#/siege?unit=${BOMBARD_ID}&n=4&bldg=109`;
+const SIEGE_QUERY = `./#/siege?unit=${BOMBARD_ID}&n=4&bldg=12`;
 
 const batteringRam = units.find((unit) => unit.id === BATTERING_RAM_ID);
 const bombard = units.find((unit) => unit.id === BOMBARD_ID);
