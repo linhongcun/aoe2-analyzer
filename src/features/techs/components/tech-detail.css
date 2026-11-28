@@ -601,3 +601,103 @@
     gap: 6px;
   }
 }
+
+/* Issue 1499：科技详情「人口空间变化」结构化块 */
+.td-cost-pills .td-cost-delta {
+  min-height: 28px;
+}
+.td-pop-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+.td-pop-rule {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.td-pop-rule-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+.td-pop-rule-caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+.td-pop-rule-caption .ic {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.td-pop-subgroups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+.td .td-pop-subhead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--color-text-2);
+  font-size: 14px;
+  font-weight: 700;
+}
+.td-pop-subhead .uico {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.td-pop-subcount {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+.td-pop-units {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.td-pop-unit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.td-pop-unit:hover {
+  border-color: var(--color-link);
+  color: var(--color-link);
+}
+.td-pop-unit .uico {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.td-pop-unit-place {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 500;
+}

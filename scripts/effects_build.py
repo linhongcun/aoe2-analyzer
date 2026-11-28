@@ -44,8 +44,9 @@ TEAM_TECHS = {'Berbers': [599, 601], 'Incas': [730], 'Italians': [522], 'Wu': [1
 # 属性号 → 站内 stat（attribute 号见 genieutils / AGE「Attribute」表）
 ATTR = {0: 'hp', 1: 'los', 2: 'gar', 5: 'spd', 8: 'armor', 9: 'attack', 10: 'reload', 11: 'acc', 12: 'rng', 20: 'minr', 101: 'tt'}
 ECO_ATTR = {10: '信仰恢复时间', 13: '工作效率', 14: '携带量', 100: '造价', 101: '生产/建造时间', 103: '食物造价', 104: '木材造价', 105: '黄金造价', 106: '石料造价',
-            102: '箭矢数', 107: '最大箭矢数', 22: '溅射半径', 24: '克制伤害抗性', 108: '驻扎回血', 109: '生命恢复', 63: '特殊能力', 19: '投射物命中', 23: '搜索半径',
+            102: '箭矢数', 107: '最大箭矢数', 22: '溅射半径', 24: '克制伤害抗性', 108: '驻扎回血', 109: '生命恢复', 110: '人口空间', 63: '特殊能力', 19: '投射物命中', 23: '搜索半径',
             59: '最大充能', 60: '充能速率', 61: '充能触发事件', 62: '充能类型', 118: '近战伤害反弹'}
+POP_SPACE_ATTR = 110
 CL = {1: '步兵', 3: '穿刺', 4: '近战', 5: '战象', 8: '骑兵', 11: '所有建筑', 13: '石质防御', 15: '弓手', 16: '船只', 17: '冲车', 18: '树木', 19: '独特单位', 20: '攻城武器',
       21: '标准建筑', 22: '城墙/城门', 23: '火药单位', 25: '僧侣', 26: '城堡', 27: '长矛兵', 28: '骑射手', 29: '冲击步兵', 30: '骆驼', 32: '雇佣兵', 34: '渔船', 35: '马穆鲁克', 36: '英雄/国王', 39: '骑乘减伤', 2: '重型战舰', 31: '特殊近战', 37: '重型攻城武器', 38: '掷矛手', 41: '喷火船', 60: '远程战船'}
 BUILDER = {118}  # 建造者（男性 id；女性 212 为同值副本，只计一次）
@@ -73,6 +74,22 @@ def r6(x):
     """规范到 6 位小数（接近整数时取 int），供 effects 与 army_research 双管线共用。"""
     x = float(x)
     return int(x) if abs(x - round(x)) < 1e-9 else round(x, 6)
+
+
+def validate_pop_space_baselines(eco, dat_units, units_by_id, owner=''):
+    """#1499：校验全部 C=110 人口空间命令命中的目录单位在固定 .dat 中基线 PopSpace === -1.0（fail-closed）。"""
+    for item in eco:
+        if not isinstance(item, dict) or item.get('a') != POP_SPACE_ATTR:
+            continue
+        for uid in item.get('t') or ():
+            if uid not in units_by_id:
+                continue
+            du = dat_units[uid] if 0 <= uid < len(dat_units) else None
+            if not isinstance(du, dict) or 'PopSpace' not in du:
+                raise ValueError(f'Missing PopSpace baseline for catalog unit {uid} in {owner or "eco"}: {du!r}')
+            ps = du['PopSpace']
+            if not _is_finite_number(ps) or abs(float(ps) - (-1.0)) >= 1e-9:
+                raise ValueError(f'Invalid PopSpace baseline for catalog unit {uid} in {owner or "eco"}: expected -1.0, got {ps!r}')
 
 
 def castle_unique_units(trees, units_by_id, civ_en):
@@ -1005,6 +1022,16 @@ def main():
 
     # ---- #1328 弹道学（科技 93）弹丸适用单位（与 army_research_build.py 共用同一推导模块） ----
     dat_units = AC[1]['Units']
+
+    # ---- #1499 人口空间属性（C=110）命中目录单位的固定 .dat 基线强校验（PopSpace === -1.0，fail-closed） ----
+    for tech_en, rec in out['techs'].items():
+        validate_pop_space_baselines(rec.get('eco') or (), dat_units, units_by_id, owner=f'tech:{tech_en}')
+    for civ_en, cre in out['civs'].items():
+        for ent in cre.get('bonus') or ():
+            validate_pop_space_baselines(ent.get('eco') or (), dat_units, units_by_id, owner=f'civ:{civ_en}:bonus:{ent.get("tech")}')
+        for ent in cre.get('conditional') or ():
+            validate_pop_space_baselines(ent.get('eco') or (), dat_units, units_by_id, owner=f'civ:{civ_en}:conditional:{ent.get("tech")}')
+        validate_pop_space_baselines((cre.get('team') or {}).get('eco') or (), dat_units, units_by_id, owner=f'civ:{civ_en}:team')
     unit_forms = transform_closure(dat_units, [u['id'] for u in units])
     ballistics_eid = AT[93]['EffectID']
     ballistics_cmds = AE[ballistics_eid]['EffectCommands'] if 0 <= ballistics_eid < len(AE) else []

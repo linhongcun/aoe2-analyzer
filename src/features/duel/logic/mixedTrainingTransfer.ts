@@ -21,8 +21,9 @@ const unlockIds: readonly number[] = PRODUCTION_UNLOCK_TECH_IDS;
 const combatAttributes = new Set([10, 22, 24, 59, 60, 61, 62, 63, 102, 107, 108, 109, 118]);
 // Pinned .dat + UGC Guide non-pricing operational attributes:
 // 13 Work Rate (bird.work_rate: pack/unpack, heal, gather, trade, building train/research speed),
-// 14 Carry Capacity (unit.resource_capacity).
-const nonPricingAttributes = new Set([13, 14]);
+// 14 Carry Capacity (unit.resource_capacity),
+// 110 Population Space (unit.resource_storages[type=4]; does not alter unit training price or unlock).
+const nonPricingAttributes = new Set([13, 14, 110]);
 export function hasUnsupportedTransferResourceOrCost(eco: readonly DatEco[]): boolean {
   return eco.some((effect) => (effect.res !== undefined && !NON_PRICING_RESOURCE_SET.has(effect.res)) || (isUnitCostAttribute(effect.a) && !effect.t?.length));
 }

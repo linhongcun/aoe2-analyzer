@@ -81,6 +81,7 @@ d = DatFile.parse(sys.argv[1])
 def unit(u):
     if u is None: return None
     t = u.type_50
+    pop_vals = [r.amount for r in u.resource_storages if r.type == 4]
     return {'Name': u.name, 'Class': u.class_, 'HP': u.hit_points, 'LOS': u.line_of_sight, 'Speed': u.speed, 'Garrison': u.garrison_capacity,
             'CollisionSizeX': u.collision_size_x, 'CollisionSizeY': u.collision_size_y,
             'Attacks': [[a.class_, a.amount] for a in t.attacks] if t else [], 'Armours': [[a.class_, a.amount] for a in t.armours] if t else [],
@@ -110,7 +111,7 @@ def unit(u):
             'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
             'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
             'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
-            'Capacity': u.resource_capacity, 'Food': next((r.amount for r in u.resource_storages if r.type == 0 and r.amount > 0), 0), 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type, 'Bld': 1 if u.building else 0}
+            'Capacity': u.resource_capacity, 'Food': next((r.amount for r in u.resource_storages if r.type == 0 and r.amount > 0), 0), 'PopSpace': pop_vals[0] if len(pop_vals) == 1 else (None if not pop_vals else pop_vals), 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type, 'Bld': 1 if u.building else 0}
 # 产资源（action 151）单位：怯薛、瓜查、瓦兰吉卫队、城堡。任务从文明单位读，不从 unit_headers。
 TASK_UNITS = {83, 293, 118, 212, 592, 590, 122, 216, 120, 354, 259, 214, 56, 57, 123, 218, 579, 581, 124, 220, 13, 2703, 2704, 1228, 1230, 2562, 2564, 82, 2418}
 # Return of Rome 子游戏专有文明。与本文件里的常规/编年史同名文明（Persians、Romans、Macedonians）不是这些实体，不在此列。
@@ -152,11 +153,15 @@ def proj_hit_mode_sig(u):
 def regen_rate_sig(u):
     if u is None: return None
     return u.creatable.rear_attack_modifier if u.creatable else 0
+def pop_space_sig(u):
+    if u is None: return None
+    return tuple(r.amount for r in u.resource_storages if r.type == 4)
 base_ct = [combat_tasks_sig(u) for u in d.civs[1].units]
 base_st = [spawn_tasks_sig(u) for u in d.civs[1].units]
 base_hm = [proj_hit_mode_sig(u) for u in d.civs[1].units]
 base_rr = [regen_rate_sig(u) for u in d.civs[1].units]
-bad_ct, bad_st, bad_hm, bad_rr = [], [], [], []
+base_ps = [pop_space_sig(u) for u in d.civs[1].units]
+bad_ct, bad_st, bad_hm, bad_rr, bad_ps = [], [], [], [], []
 for c in d.civs:
     if c.name == 'Gaia' or c.name in ROR: continue
     n = max(len(base_ct), len(c.units))
@@ -170,7 +175,9 @@ for c in d.civs:
             bad_hm.append('%s #%s' % (c.name, i))
         if (base_rr[i] if i < len(base_rr) else None) != regen_rate_sig(cu) and len(bad_rr) < 12:
             bad_rr.append('%s #%s' % (c.name, i))
-    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12 and len(bad_rr) >= 12: break
+        if (base_ps[i] if i < len(base_ps) else None) != pop_space_sig(cu) and len(bad_ps) < 12:
+            bad_ps.append('%s #%s' % (c.name, i))
+    if len(bad_ct) >= 12 and len(bad_st) >= 12 and len(bad_hm) >= 12 and len(bad_rr) >= 12 and len(bad_ps) >= 12: break
 if bad_ct:
     raise SystemExit('文明单位特殊战斗任务（157/158/160）不一致（RoR 以外）：' + '；'.join(bad_ct))
 if bad_st:
@@ -179,6 +186,8 @@ if bad_hm:
     raise SystemExit('文明投射物穿透标记不一致（RoR 以外）：' + '；'.join(bad_hm))
 if bad_rr:
     raise SystemExit('文明单位固有生命回复不一致（RoR 以外）：' + '；'.join(bad_rr))
+if bad_ps:
+    raise SystemExit('文明单位人口空间存储不一致（RoR 以外）：' + '；'.join(bad_ps))
 out = {
   'Techs': [{'Name': t.name, 'EffectID': t.effect_id, 'Civ': t.civ, 'RequiredTechs': list(t.required_techs), 'RequiredTechCount': t.required_tech_count,
              'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1]),
@@ -229,7 +238,7 @@ def derive_train_count(source_unit, unit_id=None):
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v25.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v26.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

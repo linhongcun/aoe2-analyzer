@@ -20,6 +20,7 @@ export interface ResearchNode {
   mods: ResearchCommand[];
   combatUnits: number[];
   chargeOnlyCombatUnits?: number[];
+  populationUnits?: number[];
 }
 export interface ArmyResearchData {
   meta: { generatedBy: string; patch: string; commit: string; sha256: string };

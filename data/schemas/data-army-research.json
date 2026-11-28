@@ -55,6 +55,7 @@
           "enables": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
           "combatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
           "chargeOnlyCombatUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+          "populationUnits": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
           "mods": { "$ref": "#/$defs/commands" }
         }
       }

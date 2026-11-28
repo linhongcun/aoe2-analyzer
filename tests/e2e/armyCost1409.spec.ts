@@ -205,7 +205,7 @@ test('#1409 喷火船/快速喷火船/中国龙舟恢复核算与土耳其时代
   await expect(uncounted).toContainText('城堡时代');
   await expect(uncounted).toContainText('帝王时代');
   const castleEntry = page.locator('.army-ledger-entry').filter({ has: page.locator('h3', { hasText: '城堡时代' }) });
-  await expect(castleEntry).toContainText('不属于当前阵容的战斗、训练费用或形态研究；未计入');
+  await expect(castleEntry).toContainText('不属于当前阵容的战斗、训练费用、人口空间或形态研究；未计入');
   await castleEntry.getByRole('button', { name: '移除无效研究' }).click();
   const impEntry = page.locator('.army-ledger-entry').filter({ has: page.locator('h3', { hasText: '帝王时代' }) });
   await impEntry.getByRole('button', { name: '移除无效研究' }).click();

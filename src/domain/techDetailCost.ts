@@ -9,10 +9,11 @@ import { encodeArmyCost } from './armyCostConfig';
 import { entityCivLink } from './civRoute';
 import { DAT, type DatEco, type DatFile } from './datEffects';
 import { applyEffectValue } from './numericEffects';
-import { DEFAULT_PRODUCTION, encodeProduction, productionBuildings } from './production';
+import { DEFAULT_PRODUCTION, encodeProduction } from './production';
 import { diffEntityCost, type CostDelta } from './simEffectiveCost';
 import { TECH_COST_OPS, validCostEffectsOf } from './techDataConsumption';
-import type { Cost, Tech, Trees, Unit } from './types';
+import { resolveProductionBuilding } from './techDetailPopulation';
+import type { Cost, Tech, Trees } from './types';
 import { finalizeUnitPrice, isUnitCostAttribute, UNIT_COST_RESOURCES, unitCost, type UnitCostResource } from './unitCost';
 
 export {
@@ -22,6 +23,15 @@ export {
   type TechDataConsumption,
   type TechDataConsumptionKind,
 } from './techDataConsumption';
+export {
+  buildTechPopulationChangeView,
+  TECH_POP_COLLAPSE_THRESHOLD,
+  type TechPopulationAction,
+  type TechPopulationBuildingGroup,
+  type TechPopulationChangeView,
+  type TechPopulationRuleGroup,
+  type TechPopulationUnitItem,
+} from './techDetailPopulation';
 
 const COST_ATTR_RES: Record<number, UnitCostResource | 'all'> = {
   100: 'all',
@@ -213,18 +223,6 @@ function buildTechSubCostRows(
     });
   }
   return out;
-}
-
-function resolveProductionBuilding(unit: Unit, civ: string, age: number, techId: number, core: Core, trees: Trees | null, ecoData: EcoDataView): number | null {
-  if (trees) {
-    const blds = productionBuildings({ core, trees }, { ...DEFAULT_PRODUCTION, civ, age, techs: [techId], rows: [] }, unit);
-    return blds.length > 0 ? blds[0]! : null;
-  }
-  for (const bid of ecoData.units[unit.id]?.at ?? []) {
-    const b = core.buildingById[bid];
-    if (b && b.civs.includes(civ) && b.age <= age) return bid;
-  }
-  return null;
 }
 
 function buildActionsAndBoundary(params: {

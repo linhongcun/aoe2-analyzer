@@ -158,12 +158,15 @@ function unitUnlocks(ctx: ProductionContext, civ: string, age: number, unit: Uni
   return PRODUCTION_UNLOCK_TECH_IDS.filter((id) => productionBuildings(ctx, productionShell(civ, age, [id]), unit).length);
 }
 
+function scopedTechs(sim: ReturnType<typeof makeSimContext>, civ: string, age: number) {
+  const tree = civStatus(sim.trees, civ);
+  return sim.techs.filter((t) => !AGE_BY_TECH[t.id] && militaryTechAge(civ, t.id, t.age) <= age && t.civs.includes(civ) && tree['t' + t.id]);
+}
+
 /** Unit-scoped combat mechanics, including text-only projectile effects; no production speed. */
 function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ: string, age: number, data = ARMY_RESEARCH) {
   const numeric = new Map(simTechs(sim, u, civ).map((entry) => [entry.t.id, entry.ef]));
-  const tree = civStatus(sim.trees, civ);
-  return sim.techs
-    .filter((t) => !AGE_BY_TECH[t.id] && militaryTechAge(civ, t.id, t.age) <= age && t.civs.includes(civ) && tree['t' + t.id])
+  return scopedTechs(sim, civ, age)
     .filter(
       (t) =>
         numeric.get(t.id)?.some((e) => e.s !== 'bt') ||
@@ -180,6 +183,11 @@ function armyCombatResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ
     .map((t) => ({ t, ef: numeric.get(t.id) ?? null }));
 }
 
+/** Unit-scoped population-space mechanics (attribute 110); separate from combat and production speed. */
+function armyPopulationResearch(sim: ReturnType<typeof makeSimContext>, u: Unit, civ: string, age: number, data = ARMY_RESEARCH) {
+  return scopedTechs(sim, civ, age).filter((t) => data.nodes[t.id]?.populationUnits?.includes(u.id));
+}
+
 export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConfig, includeUnverified = true, data = ARMY_RESEARCH): number[] {
   const sim = makeSimContext(ctx.core.techs, ctx.trees);
   const age = Number(config.age);
@@ -190,6 +198,7 @@ export function armyResearchChoices(ctx: ProductionContext, config: ArmyCostConf
     const u = ctx.core.unitById[row.unit];
     if (!u || !u.civs.includes(config.civ)) continue;
     for (const { t } of armyCombatResearch(sim, u, config.civ, age, data)) ids.add(t.id);
+    for (const t of armyPopulationResearch(sim, u, config.civ, age, data)) ids.add(t.id);
     for (const { tech } of applicableTrainingTechs(sim, u, config.civ, age)) ids.add(tech.id);
     for (const id of unitUnlocks(ctx, config.civ, age, u)) ids.add(id);
     // A form upgrade may also be an explicit target, in addition to automatic inference.
@@ -287,7 +296,8 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     if (row === undefined) entry.manual = true;
     if (row !== undefined && !entry.beneficiaries.includes(row)) entry.beneficiaries.push(row);
     const outsideScope = !done && row === undefined && id !== null && !targetScope.has(id);
-    const closure = id === null ? fail('研究身份无法解析') : outsideScope ? fail('不属于当前阵容的战斗、训练费用或形态研究；未计入') : resolver.resolve(id);
+    const closure =
+      id === null ? fail('研究身份无法解析') : outsideScope ? fail('不属于当前阵容的战斗、训练费用、人口空间或形态研究；未计入') : resolver.resolve(id);
     if (closure.error || !data.nodes[id!]?.name) {
       entry.status = 'invalid';
       entry.problem = 'identity';
@@ -418,6 +428,7 @@ export function evaluateArmyCost(ctx: ProductionContext, config: ArmyCostConfig,
     const related = unit
       ? new Set([
           ...armyCombatResearch(sim, unit, config.civ, age, data).map((x) => x.t.id),
+          ...armyPopulationResearch(sim, unit, config.civ, age, data).map((t) => t.id),
           ...applicableTrainingTechs(sim, unit, config.civ, age).map((x) => x.tech.id),
         ])
       : new Set<number>();
