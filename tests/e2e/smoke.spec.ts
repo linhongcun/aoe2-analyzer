@@ -527,7 +527,7 @@ test('rating help: beside 能力评分, opens/closes by click, outside click and
   await expect(pop).not.toContainText('会随版本补丁调整');
   await expect(pop.getByRole('link', { name: /反馈给我们/ })).toHaveAttribute('href', /issues\/new/);
   await expect(btn).toHaveAttribute('aria-expanded', 'true');
-  await page.locator('#compare h2').click();
+  await page.locator('#compare .lhead h1').click();
   await expect(pop).toBeHidden();
   await btn.click();
   await expect(pop).toBeVisible();

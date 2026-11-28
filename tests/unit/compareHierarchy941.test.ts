@@ -5,11 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { RATING_BASIS, RATING_FILE_VERIFIED_AT } from '../../src/data/ratingBasis';
 import { AXES } from '../../src/domain/ratings';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../src/domain/teamBonuses';
-import Compare, {
-  COMPARE_AXIS_NAMES_NOTE,
-  CompareRatingDetail,
-  compareRatingSummary,
-} from '../../src/features/compare/components/Compare';
+import Compare, { COMPARE_AXIS_NAMES_NOTE, CompareRatingDetail, compareRatingSummary } from '../../src/features/compare/components/Compare';
 
 const PAGE_LEDE = '选定两个文明，先对照文明资料，再按需参考开局示例与主观分数。分数不是胜率或精确战力。';
 const FACT_NOTE = '以下四项是文明机制资料，不由主观分数推导。';
@@ -92,5 +88,21 @@ describe('#941 文明对比信息层级', () => {
     expect(text(page('/compare?a=Nope&b=Britons'))).toContain('链接中的文明无效，已整组回退为默认对比。');
     expect(text(page('/compare?a=Britons'))).toContain('链接缺少对手文明，已自动选择「亚美尼亚」，请按实际补选。');
     expect(page('/compare?a=Japanese&b=Mongols')).toContain('players=Japanese%2CMongols');
+  });
+
+  it('Issue 1471 主标题渲染唯一 h1「文明对比」，.lhead 不含 h2 且后续分区层级不变', () => {
+    for (const path of ['/compare', '/compare?a=Franks&b=Britons', '/compare?a=Nope&b=Britons', '/compare?a=Britons', '/compare?a=Franks&b=Franks']) {
+      const html = page(path);
+      expect(html.match(/<h1(?:\s|>)/g) ?? [], path).toHaveLength(1);
+      expect(html, path).toContain('<div class="lhead"><h1>文明对比</h1>');
+      const lhead = html.match(/<div class="lhead">[\s\S]*?<\/div>/)?.[0] ?? '';
+      expect(lhead, path).not.toMatch(/<h2(?:\s|>)/);
+      expect(html, path).toContain('<h2 id="compare-facts-title">资料对照</h2>');
+      expect(html, path).toContain('<h2 class="compare-section-title" id="compare-openings-title">参考开局（打法示例）</h2>');
+      expect(html, path).toContain('<h2 class="compare-section-title">主观评分参考</h2>');
+    }
+    const detailHtml = renderToStaticMarkup(createElement(CompareRatingDetail));
+    expect(detailHtml).not.toMatch(/<h1(?:\s|>)/);
+    expect(detailHtml).toContain('<h4>完整评分口径</h4>');
   });
 });

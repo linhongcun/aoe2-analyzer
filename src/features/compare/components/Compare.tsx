@@ -185,7 +185,7 @@ export default function Compare() {
   const teamSearch = encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]));
   return (
     <section id="compare" className="pane">
-      <ListHead title={comparePage?.label ?? '文明对比'} desc={COMPARE_LEDE} />
+      <ListHead title={comparePage?.label ?? '文明对比'} desc={COMPARE_LEDE} level={1} />
       <div className="compare-toolbar">
         <div className="compare-pickers">
           <div className="compare-field compare-field-a civ-art-host">
