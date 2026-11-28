@@ -585,7 +585,7 @@ def _filter_redundant_building_rules(rules, kept_bids, mine, tech_rules_by_en):
 
 
 def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a_cmds, compile_cmds, build_tech_ids=(), fx_triggered_ids=None, tech_rules_by_en=None):
-    """导出通用与限定文明隐藏科技：时代科技自身单位属性（101/102/103）+ 常规/区域解锁/建筑条件隐藏科技。"""
+    """导出通用与限定文明隐藏科技：时代科技自身单位与建筑属性（101/102/103）+ 常规/区域解锁/建筑条件隐藏科技。"""
     if fx_triggered_ids is None:
         fx_triggered_ids = fx_triggered_techs(AE)
     disabled = global_disabled_techs(AT, AE)
@@ -602,11 +602,10 @@ def build_generic_entries(AT, AE, AC, ours, tech_by_id, adat, catalog_civ_ens, a
                 continue
             cmds = [c for c in a_cmds(t['EffectID']) if c[0] in (0, 4, 5)]
             rules, _eco = compile_cmds(cmds)
-            unit_rules = [r for r in rules if not r.get('b')]
-            if not unit_rules:
+            if not rules:
                 continue
             name = tech_by_id[i]['en'] if i in tech_by_id else t['Name']
-            generic.append({'tech': i, 'name': name, 'age': AGE_TECH[i], 'req': [], 'any': False, 'rules': unit_rules})
+            generic.append({'tech': i, 'name': name, 'age': AGE_TECH[i], 'req': [], 'any': False, 'rules': rules})
             continue
         if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or i in tech_by_id:
             continue
@@ -913,7 +912,7 @@ def main():
 
     adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
 
-    # ---- 通用/限定文明隐藏科技（Civ=-1、不可研究）与时代科技自身单位属性（101/102/103） ----
+    # ---- 通用/限定文明隐藏科技（Civ=-1、不可研究）与时代科技自身单位/建筑属性（101/102/103） ----
     out['generic'] = build_generic_entries(
         AT, AE, AC, ours, tech_by_id, adat, [c['en'] for c in civs], a_cmds, compile_cmds,
         build_tech_ids=build_tech_ids, fx_triggered_ids=fx_triggered_ids, tech_rules_by_en=out['techs'],

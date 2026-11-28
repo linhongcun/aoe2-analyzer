@@ -224,14 +224,14 @@ test('#1453 建筑科技模拟器继承目录基础类别加成并精确计算�
   await expect(bbtRows.nth(2)).toContainText('对 骆驼');
   await expect(bbtRows.nth(2).locator('td').nth(2)).toHaveText('1');
 
-  // 马来巨港 1189（加热射击 380）：船只 3 +4 → 7，保留骆驼 1
+  // 马来巨港 1189（加热射击 380 + 帝王 Tech 103 对船 +1，Issue 1518）：船只 3 +5 → 8，保留骆驼 1
   await open(page, '/building/1189?civ=Malay&age=4&tab=sim&techs=380');
   const harborRows = page.locator('#sim .bonustab tbody tr');
   await expect(harborRows).toHaveCount(3);
   await expect(harborRows.nth(1)).toContainText('对 船只');
   await expect(harborRows.nth(1).locator('td').nth(1)).toContainText('3');
-  await expect(harborRows.nth(1).locator('td').nth(1)).toContainText('+4');
-  await expect(harborRows.nth(1).locator('td').nth(2)).toHaveText('7');
+  await expect(harborRows.nth(1).locator('td').nth(1)).toContainText('+5');
+  await expect(harborRows.nth(1).locator('td').nth(2)).toHaveText('8');
   await expect(harborRows.nth(2)).toContainText('对 骆驼');
   await expect(harborRows.nth(2).locator('td').nth(2)).toHaveText('1');
 
@@ -252,8 +252,22 @@ test('#1453 建筑科技模拟器继承目录基础类别加成并精确计算�
   await expect(page.locator('#sim .bonustab')).toContainText('对 长矛兵');
   await expect(page.locator('#sim .bonustab')).not.toContainText('对 船只');
 
-  // 反例：1665 城楼勾选 380 仍为全 0，BonusTable 过滤后显示「无」
+  // Issue 1518：1665 城楼帝王勾选 380 叠 Tech 101 生效（长矛兵 2、船只 6 × 2.25 = 13.5、骆驼 1，过滤显式 0 所有建筑）
   await open(page, '/building/1665?civ=Sicilians&age=4&tab=sim&techs=380');
+  const donjonRows = page.locator('#sim .bonustab tbody tr');
+  await expect(donjonRows).toHaveCount(4);
+  await expect(donjonRows.nth(1)).toContainText('对 长矛兵');
+  await expect(donjonRows.nth(1).locator('td').nth(2)).toHaveText('2');
+  await expect(donjonRows.nth(2)).toContainText('对 船只');
+  await expect(donjonRows.nth(2).locator('td').nth(1)).toContainText('0');
+  await expect(donjonRows.nth(2).locator('td').nth(1)).toContainText('+13.5');
+  await expect(donjonRows.nth(2).locator('td').nth(2)).toHaveText('13.5');
+  await expect(donjonRows.nth(3)).toContainText('对 骆驼');
+  await expect(donjonRows.nth(3).locator('td').nth(2)).toHaveText('1');
+  await expect(page.locator('#sim .bonustab')).not.toContainText('所有建筑');
+
+  // 黑暗时代反例：age=1（minAge=1 未被钳制）经 UI 过滤超时代 380 且未触发 Tech 101，城楼无时代加成显示「无」（纯函数 0 × 2.25 = 0 无 NaN 由 buildingSim.test.ts 覆盖）
+  await open(page, '/building/1665?civ=Sicilians&age=1&tab=sim&techs=380');
   await expect(page.locator('#sim .bonustab')).toHaveCount(0);
   await expect(page.locator('#sim .bonusbox')).toContainText('无');
 

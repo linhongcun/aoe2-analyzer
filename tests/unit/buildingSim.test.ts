@@ -106,20 +106,20 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     expect(availIds).toEqual([8, 47, 50, 54, 199, 200, 201, 280, 322, 380]);
 
     const matchedHarbor = matchingGenericFx(harbor, true, 4, (n) => ['Fletching', 'Bodkin Arrow', 'Bracer'].includes(n), 'Malay');
-    expect(matchedHarbor.map((g) => g.tech).sort((a, b) => a - b)).toEqual([669, 670, 671]);
+    expect(matchedHarbor.map((g) => g.tech).sort((a, b) => a - b)).toEqual([103, 669, 670, 671]);
 
-    // 未选箭术科技时保持基础攻射并自动计入马来常驻团队视野 +6（10 + 6 = 16）
+    // 未选箭术科技时保持基础攻射并自动计入马来常驻团队视野 +6（10 + 6 = 16）与帝王 Tech 103 对船 +1（3 + 1 = 4）
     const emptyHarbor = simulateBuilding(ctx, harbor, 'Malay', 4, new Set());
-    expect([emptyHarbor.atk, emptyHarbor.rng, emptyHarbor.los]).toEqual([3, 7, 16]);
+    expect([emptyHarbor.atk, emptyHarbor.rng, emptyHarbor.los, emptyHarbor.bonus['船只']]).toEqual([3, 7, 16, 4]);
 
     // 城堡时代：箭羽 + 锥子箭触发 669/670，并计入马来常驻团队视野 +6（12 + 6 = 18）
     const castleHarbor = simulateBuilding(ctx, harbor, 'Malay', 3, ids('Fletching', 'Bodkin Arrow'));
     expect([castleHarbor.atk, castleHarbor.rng, castleHarbor.los]).toEqual([6, 9, 18]);
 
-    // 帝王满科技：atk=8, rng=10, los=27（21 + 马来常驻团队 6）, minr=0, 对船 3 + 4 = 7，保留基础对骆驼 +1（#1453 / #1481）
+    // 帝王满科技：atk=8, rng=10, los=27（21 + 马来常驻团队 6）, minr=0, 对船 3 + 1(Tech 103) + 4(加热射击) = 8，保留基础对骆驼 +1（Issue 1518）
     const fullHarbor = full('Harbor', 'Malay');
     expect([fullHarbor.atk, fullHarbor.rng, fullHarbor.los, fullHarbor.minr]).toEqual([8, 10, 27, 0]);
-    expect(fullHarbor.bonus['船只']).toBe(7);
+    expect(fullHarbor.bonus['船只']).toBe(8);
     expect(fullHarbor.bonus['骆驼']).toBe(1);
 
     // 反例：普通船坞（45）绝不进入 IMPLIED，不误触发海上霸主组合科技 669/670/671（基础 los=8 + 城镇瞭望/巡逻 +8 + 马来常驻团队 +6 = 22）
@@ -180,7 +180,9 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
       .sort((a, b) => a - b);
     expect(donjonIds).toEqual(expect.arrayContaining([47, 199, 200, 201, 322, 380, 608]));
     const fullDonjon = full('Donjon', 'Sicilians');
-    expect([fullDonjon.atk, fullDonjon.rng, fullDonjon.minr, fullDonjon.los]).toEqual([5, 3, 0, 21]);
+    expect(formatHp(fullDonjon.hp)).toBe('3575');
+    expect([fullDonjon.ma, fullDonjon.pa, fullDonjon.barm, fullDonjon.atk, fullDonjon.rng, fullDonjon.minr, fullDonjon.los]).toEqual([4, 10, 3, 10, 11, 0, 21]);
+    expect([fullDonjon.bonus['船只'], fullDonjon.bonus['长矛兵'], fullDonjon.bonus['骆驼']]).toEqual([13.5, 2, 1]);
 
     // 合成边界：仅凭 atks 非空即可判定具备攻击能力；四项为 0 且 atks 为空则过滤进攻文本项（如 Ballistics）
     const atksOnlyDonjon: Building = { ...donjon, atk: 0, rng: 0, minr: 0, rof: 0 };
@@ -270,9 +272,9 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     expect(bbt.bonus['船只']).toBe(90);
     expect(bbt.bonus['骆驼']).toBe(1);
 
-    // 加法 +4 建筑：在目录基础值上累加并保留其他类别
+    // 加法 +4 建筑：在目录基础值与帝王时代自动加成上累加并保留其他类别（Issue 1518）
     const harbor = simulateBuilding(ctx, byId.get(1189)!, 'Malay', 4, hs);
-    expect([harbor.bonus['船只'], harbor.bonus['骆驼']]).toEqual([7, 1]);
+    expect([harbor.bonus['船只'], harbor.bonus['骆驼']]).toEqual([8, 1]);
 
     const church = simulateBuilding(ctx, byId.get(1806)!, 'Armenians', 4, hs);
     expect([church.bonus['船只'], church.bonus['骆驼']]).toEqual([9, 1]);
@@ -293,10 +295,10 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     const persianCastle = simulateBuilding(ctx, byId.get(82)!, 'Persians', 4, ids('Citadels'));
     expect([persianCastle.bonus['长矛兵'], persianCastle.bonus['冲车'], persianCastle.bonus['步兵']]).toEqual([2, 3, 3]);
 
-    // 反例：未勾 380 时城堡船只保持 0；1665 城楼勾选 380 保持 0 × 2.25 = 0 且无 NaN；19 座无攻建筑传 380 不生效
+    // Issue 1518：未勾 380 时城堡船只保持 0；1665 城楼帝王勾 380 叠 Tech 101 得 6 × 2.25 = 13.5，黑暗时代 0 × 2.25 = 0 无 NaN；19 座无攻建筑传 380 不生效
     expect(simulateBuilding(ctx, byId.get(82)!, 'Chinese', 4, new Set()).bonus['船只']).toBe(0);
-    const donjonHs = simulateBuilding(ctx, byId.get(1665)!, 'Sicilians', 4, hs);
-    expect(donjonHs.bonus).toEqual({ 长矛兵: 0, 所有建筑: 0, 船只: 0, 骆驼: 0 });
+    expect(simulateBuilding(ctx, byId.get(1665)!, 'Sicilians', 4, hs).bonus).toEqual({ 长矛兵: 2, 所有建筑: 0, 船只: 13.5, 骆驼: 1 });
+    expect(simulateBuilding(ctx, byId.get(1665)!, 'Sicilians', 1, hs).bonus).toEqual({ 长矛兵: 0, 所有建筑: 0, 船只: 0, 骆驼: 0 });
     for (const id of [12, 49, 68, 70, 84, 87, 101, 103, 104, 209, 276, 562, 584, 598, 1021, 1734, 1754, 1808, 2556]) {
       const b = byId.get(id)!;
       const civ = b.civs.find((c) => buildingSimTechs(ctx, byId.get(82)!, c).some((x) => x.t.id === 380)) ?? b.civs[0]!;
@@ -454,5 +456,30 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
         `no-t93 Portuguese/${bid}`,
       ).toBe(false);
     }
+  });
+
+  it('AGE_TECH（101/102/103）精确驱动 5 座目录建筑跨时代成长与满科技对照（Issue 1518）', () => {
+    const byId = new Map(bs.map((b) => [b.id, b]));
+    // 1665 西西里城楼：四时代空科技成长
+    const dAges = [1, 2, 3, 4].map((a) => simulateBuilding(ctx, byId.get(1665)!, 'Sicilians', a, new Set()));
+    expect(dAges.map((s) => [formatHp(s.hp), s.ma, s.pa, s.atk, s.rng, s.bonus['船只']])).toEqual([
+      ['625', 0, 6, 0, 0, 0],
+      ['1250', 1, 7, 5, 8, 6],
+      ['1500', 2, 8, 5, 8, 6],
+      ['2250', 3, 9, 5, 8, 6],
+    ]);
+    // 79 瞭望箭塔：城堡 ×1.2 及帝王满科技对照（中国 1604.46 / 拜占庭 1427.91 / 萨拉森 1122）
+    expect([2, 3, 4].map((a) => formatHp(simulateBuilding(ctx, byId.get(79)!, 'Saracens', a, new Set()).hp))).toEqual(['850', '1020', '1020']);
+    expect([formatHp(full('Watch Tower', 'Chinese').hp), formatHp(full('Watch Tower', 'Byzantines').hp), formatHp(full('Watch Tower', 'Saracens').hp)]).toEqual(
+      ['1604.46', '1427.91', '1122'],
+    );
+    // 49 攻城武器厂：帝王 ×1.166667 与 +1/+1 甲（空科技 1750 2/9；拜占庭满科技 2449.85 2/9）
+    const sw4 = simulateBuilding(ctx, byId.get(49)!, 'Saracens', 4, new Set());
+    expect([formatHp(sw4.hp), sw4.ma, sw4.pa]).toEqual(['1750', 2, 9]);
+    const byzSw = full('Siege Workshop', 'Byzantines');
+    expect([formatHp(byzSw.hp), byzSw.ma, byzSw.pa]).toEqual(['2449.85', 2, 9]);
+    // 598 哨站：每时代 +2 视野（空科技 6/8/10/12；满科技法兰克 20 / 埃塞 23）
+    expect([1, 2, 3, 4].map((a) => simulateBuilding(ctx, byId.get(598)!, 'Saracens', a, new Set()).los)).toEqual([6, 8, 10, 12]);
+    expect([full('Outpost', 'Franks').los, full('Outpost', 'Ethiopians').los]).toEqual([20, 23]);
   });
 });
