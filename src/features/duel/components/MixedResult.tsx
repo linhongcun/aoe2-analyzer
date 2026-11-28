@@ -1,7 +1,7 @@
-import { useMemo, type RefObject } from 'react';
+import { Fragment, useMemo, type RefObject } from 'react';
 import { civByEn } from '../../../data';
-import { evaluateIgnoreArmor } from '../../../domain/damageCore';
-import { fighterUsesAssumeHit } from '../../../domain/duel';
+import { clampBonusDamageResistance, evaluateBonusDamageReduction, evaluateIgnoreArmor, formatBdrSigned } from '../../../domain/damageCore';
+import { damageByClass, fighterUsesAssumeHit } from '../../../domain/duel';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { formatHp } from '../../../domain/hpFormat';
 import { buildMixedReplay } from '../../../domain/battleReplay';
@@ -62,7 +62,7 @@ export function MixedRules() {
           <li>同刻攻击按本方行顺序逐击结算。清空前排后，仅对还在射程内的下一行继续结算，按新目标计算每击伤害。单击超出的伤害丢弃。</li>
           <li>
             沿用本站伤害类别、护甲和常规远程命中率期望（目录准确度为 <span className="num nw">0%</span>{' '}
-            的特殊远程攻击按每击命中主目标估算），攻击方「无视护甲」时目标的近战、穿刺护甲不扣，目标「抵抗无视护甲」时照扣；占比只是单位数量占比，不是人口、资源或攻击权重。
+            的特殊远程攻击按每击命中主目标估算），攻击方「无视护甲」时目标的近战、穿刺护甲不扣，目标「抵抗无视护甲」时照扣；占比只是单位数量占比，不是人口、资源或攻击权重。目标带「额外伤害减免」时，近战、穿刺之外的每类伤害按比例折减后再合计。
           </li>
           <li>
             达到 <span className="num nw">{FIGHT_TIME} 游戏秒</span>时限或事件、攻击计算上限时停止。双方仍存活时显示存活数量，暂无胜者。
@@ -108,6 +108,44 @@ function buildMixedIgnoreArmorNote(a: MixedSideView, b: MixedSideView): string |
     }
   }
   return clauses.length ? `无视护甲：${clauses.join('；')}。` : null;
+}
+
+interface MixedBdrGroup {
+  defenders: { label: string; rate: number }[];
+  attackers: string[];
+}
+
+function buildMixedBdrGroups(a: MixedSideView, b: MixedSideView): MixedBdrGroup[] {
+  const groups: MixedBdrGroup[] = [];
+  const pairs: readonly [string, MixedSideView, string, MixedSideView][] = [
+    ['A', a, 'B', b],
+    ['B', b, 'A', a],
+  ];
+  for (const [defPrefix, defView, atkPrefix, atkView] of pairs) {
+    const atkRows = atkView.rows.flatMap((row, i) => (row.resolved ? [{ label: `${atkPrefix}${i + 1} ${row.resolved.u.zh}`, fighter: row.resolved.F }] : []));
+    if (!atkRows.length) continue;
+    const byAtkKey = new Map<string, MixedBdrGroup>();
+    for (let i = 0; i < defView.rows.length; i++) {
+      const defResolved = defView.rows[i]?.resolved;
+      if (!defResolved) continue;
+      const rate = clampBonusDamageResistance(defResolved.F.bonusDamageResistance);
+      if (rate <= 0) continue;
+      const matchedAttackers = atkRows
+        .filter((atk) => evaluateBonusDamageReduction(damageByClass(atk.fighter, defResolved.F)).netPositive)
+        .map((atk) => atk.label);
+      if (!matchedAttackers.length) continue;
+      const atkKey = matchedAttackers.join('、');
+      const defender = { label: `${defPrefix}${i + 1} ${defResolved.u.zh}`, rate };
+      const existing = byAtkKey.get(atkKey);
+      if (existing) existing.defenders.push(defender);
+      else {
+        const next: MixedBdrGroup = { defenders: [defender], attackers: matchedAttackers };
+        byAtkKey.set(atkKey, next);
+        groups.push(next);
+      }
+    }
+  }
+  return groups;
 }
 
 export function MixedResult({
@@ -197,6 +235,7 @@ export function MixedResult({
   const aInfo = rangedInfo(a.army!, 'a');
   const bInfo = rangedInfo(b.army!, 'b');
   const ignoreArmorNote = buildMixedIgnoreArmorNote(a, b);
+  const bdrGroups = buildMixedBdrGroups(a, b);
   return (
     <section className="mix-result" data-testid="mixed-result" aria-labelledby="mix-result-title">
       <div className="mix-result-head">
@@ -238,10 +277,32 @@ export function MixedResult({
               : '结果对应本次配置。'}
         </p>
       )}
-      {ignoreArmorNote && (
-        <p className="note" data-t="mixed-ignore-armor-note">
-          {ignoreArmorNote}
-        </p>
+      {(ignoreArmorNote || bdrGroups.length > 0) && (
+        <div className="mix-mech-notes">
+          {ignoreArmorNote && (
+            <p className="note" data-t="mixed-ignore-armor-note">
+              {ignoreArmorNote}
+            </p>
+          )}
+          {bdrGroups.length > 0 && (
+            <p className="note" data-t="mixed-bdr-note">
+              额外伤害减免：
+              {bdrGroups.map((group, gi) => (
+                <Fragment key={gi}>
+                  {gi > 0 && '；'}
+                  {group.defenders.map((def, di) => (
+                    <Fragment key={def.label}>
+                      {di > 0 && '、'}
+                      {def.label}（<span className="num nw">{formatBdrSigned(def.rate)}</span>）
+                    </Fragment>
+                  ))}
+                  受 {group.attackers.join('、')} 克制时额外伤害已折减
+                </Fragment>
+              ))}
+              。
+            </p>
+          )}
+        </div>
       )}
       <DuelUnmodeledNotes mixed group entries={unmodeledEntries} vgSides={vgSides} />
       <MixedContact value={result.contact} status={result.status} a={lines(a, 'a')} b={lines(b, 'b')} standingDeltaVolleys={standingDeltaVolleys} />

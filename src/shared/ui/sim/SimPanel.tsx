@@ -6,7 +6,7 @@ import { civByEn } from '../../../data';
 import type { SimResearchPricesData } from '../../../data/simResearchPrices';
 import { ARMC_CLASS_NOTE, MOUNTED_REDUCTION_CLASS } from '../../../domain/affects';
 import { militaryTechAge } from '../../../domain/availabilityAge';
-import { hasIgnoreArmor } from '../../../domain/damageCore';
+import { clampBonusDamageResistance, formatBdrPercent, formatBdrSigned, hasIgnoreArmor } from '../../../domain/damageCore';
 import type { CivRelicBonus } from '../../../domain/effects';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -83,6 +83,34 @@ function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; 
       {C && <td className="nw">{hasIgnoreArmor(C.ca) ? '是' : '否'}</td>}
     </tr>
   ) : null;
+  const bBdr = clampBonusDamageResistance(B.bdr);
+  const sBdr = clampBonusDamageResistance(S.bdr);
+  const cBdr = C ? clampBonusDamageResistance(C.bdr) : 0;
+  const showBdr = bBdr > 0 || sBdr > 0 || (C !== null && cBdr > 0);
+  const bdrDelta = sBdr - bBdr;
+  const bdrRow = showBdr ? (
+    <tr key="bdr" data-t="sim-bdr">
+      <td>
+        <StatIcon k="" t="额外伤害减免" />
+        额外伤害减免
+      </td>
+      <td className="num nw">
+        {formatBdrSigned(bBdr)}
+        {Math.abs(bdrDelta) > 1e-9 && (
+          <>
+            {' '}
+            <span className={`${bdrDelta > 0 ? 'up' : 'dn'} num nw`}>
+              {bdrDelta > 0 ? `-${formatBdrPercent(bdrDelta)}` : `+${formatBdrPercent(-bdrDelta)}`}
+            </span>
+          </>
+        )}
+      </td>
+      <td className="num nw">
+        <b>{formatBdrSigned(sBdr)}</b>
+      </td>
+      {C && <td className="num nw">{formatBdrSigned(cBdr)}</td>}
+    </tr>
+  ) : null;
   const hasAccRow = rows.some(([k]) => k === 'acc');
   return (
     <>
@@ -110,11 +138,21 @@ function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; 
               </td>
               {C && <td>{fmtStat(k, C[k])}</td>}
             </tr>
-            {k === 'acc' && ignoreArmorRow}
+            {k === 'acc' && (
+              <>
+                {ignoreArmorRow}
+                {bdrRow}
+              </>
+            )}
           </Fragment>
         );
       })}
-      {!hasAccRow && ignoreArmorRow}
+      {!hasAccRow && (
+        <>
+          {ignoreArmorRow}
+          {bdrRow}
+        </>
+      )}
     </>
   );
 }

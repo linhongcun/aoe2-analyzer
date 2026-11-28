@@ -4,7 +4,6 @@
  */
 import { applyCombatAbilityEco, DAT, type DatEco } from './datEffects';
 import {
-  hasPositiveBonusDamageReduction,
   hasPositiveDamageReflection,
   hasPositiveEcoAttr,
   hasPositiveExtraProjectiles,
@@ -21,7 +20,6 @@ import type { SimTech } from './simulator';
 import type { Tech, Unit } from './types';
 
 export {
-  hasPositiveBonusDamageReduction,
   hasPositiveDamageReflection,
   hasPositiveEcoAttr,
   isSingleShotChargeProjectileEco,
@@ -44,7 +42,6 @@ export type UnmodeledKind =
   | 'low-hp-transform'
   | 'regen'
   | 'death-heal'
-  | 'bonus-damage-reduction'
   | 'damage-reflection';
 
 export interface UnmodeledMechanism {
@@ -443,16 +440,7 @@ export function detectUnitUnmodeled(input: { unit: Unit; civ: string; age: numbe
     });
   }
 
-  // 14. 额外伤害减免（文明加成 a:24，覆盖孟加拉象兵系与西西里陆军；建筑科技 Citadels 不进入文明加成）
-  if (hasPositiveBonusDamageReduction(civEco, unit.id)) {
-    out.push({
-      kind: 'bonus-damage-reduction',
-      pill: '额外伤害减免',
-      detail: '当前未计入受到的额外伤害减免（文明加成）；面对克制加成攻击时，实际生存能力通常高于此处估算。',
-    });
-  }
-
-  // 15. 近战伤害反弹（已选科技 a:118 > 0，如契丹札甲）
+  // 14. 近战伤害反弹（已选科技 a:118 > 0，如契丹札甲；额外伤害减免 a:24 已由 Issue 1500 正式接入伤害核心，不再报未建模）
   for (const tech of selectedTechs) {
     if (!hasPositiveDamageReflection(DAT.techs[tech.en]?.eco, unit.id)) continue;
     out.push({

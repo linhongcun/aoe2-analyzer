@@ -32,6 +32,7 @@ function stats(): StatSet {
     bonus: { 步兵: 2 },
     armc: {},
     ca: 0,
+    bdr: 0,
     rofx: 1,
   };
 }

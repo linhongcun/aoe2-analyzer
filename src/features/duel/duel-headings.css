@@ -28,6 +28,16 @@
   font-size: var(--fs-sm);
   font-weight: 400;
 }
+/* issue 1500：结果区战斗机制已计入说明行共享容器（无视护甲与额外伤害减免同场共存时保持紧凑间距） */
+#duel .duel-mech-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+}
+#duel .duel-mech-notes > .note {
+  margin: 0;
+}
 #duel .upgrade-title {
   margin: 1em 0;
   font-size: 1.17em;

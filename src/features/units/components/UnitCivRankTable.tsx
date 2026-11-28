@@ -1,5 +1,6 @@
 import { Fragment, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { formatBdrSigned } from '../../../domain/damageCore';
 import { AGE_ZH } from '../../../domain/ratings';
 import {
   buildCivRankSimHref,
@@ -61,6 +62,18 @@ function CivTags({ row }: { row: UnitCivRankRow }) {
         </span>
       )}
       {row.ignoreArmorTech && <CivRankMechTag text={`无视护甲 · ${row.ignoreArmorTech}（已计入）`} />}
+      {row.bonusDamageReduction !== undefined && row.bonusDamageReduction > 0 && (
+        <span
+          className="ucr-tag is-modeled"
+          data-t="ucr-bdr-tag"
+          title={`文明常驻：受到的额外伤害 ${formatBdrSigned(row.bonusDamageReduction)}，已计入科技模拟器与单位 PK`}
+        >
+          <span className="nw">额外伤害减免</span>{' '}
+          <span className="nw">
+            <span className="num">{formatBdrSigned(row.bonusDamageReduction)}</span>（已计入）
+          </span>
+        </span>
+      )}
       {row.unmodeledPills.map((pill) => (
         <CivRankMechTag key={pill} text={`未计入：${pill}`} />
       ))}

@@ -1,4 +1,11 @@
-import { evaluateIgnoreArmor, hasIgnoreArmor, type DamageRow, type IgnoreArmorEvaluation } from './damageCore';
+import {
+  evaluateBonusDamageReduction,
+  evaluateIgnoreArmor,
+  hasIgnoreArmor,
+  type BonusDamageReductionEvaluation,
+  type DamageRow,
+  type IgnoreArmorEvaluation,
+} from './damageCore';
 import { damageByClass, damagePerHit, expectedHit, fighterCanAttack, fighterFrom } from './duel';
 import { baseStats, simulate, type SimContext, type SimStep } from './simulator';
 import type { Unit } from './types';
@@ -6,7 +13,7 @@ import type { Unit } from './types';
 export interface DamageSource {
   source: string;
   techId?: number;
-  changes: { stat: string; before: number; after: number; kind?: 'boolean' }[];
+  changes: { stat: string; before: number; after: number; kind?: 'boolean' | 'bdr' }[];
 }
 
 /** 按引擎实际施加顺序记录，乘法和覆盖效果也以施加前后的数值呈现。 */
@@ -36,6 +43,9 @@ export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number
     if (beforeIgnore !== afterIgnore) {
       changes.push({ stat: '攻击无视护甲', before: beforeIgnore ? 1 : 0, after: afterIgnore ? 1 : 0, kind: 'boolean' });
     }
+    if (Math.abs(before.bdr - after.bdr) > 1e-9) {
+      changes.push({ stat: '额外伤害减免', before: before.bdr, after: after.bdr, kind: 'bdr' });
+    }
     if (changes.length) sources.push({ source, techId, changes });
   };
   const stats = simulate(ctx, u, civ, age, sel, team, record, relics);
@@ -52,6 +62,7 @@ type DamageBreakdownResult =
       total: number;
       expected: number;
       ignoreArmor: IgnoreArmorEvaluation;
+      bonusDamageReduction: BonusDamageReductionEvaluation;
     };
 
 export function damageBreakdown(a: ReturnType<typeof fighterFrom>, b: ReturnType<typeof fighterFrom>): DamageBreakdownResult {
@@ -66,5 +77,6 @@ export function damageBreakdown(a: ReturnType<typeof fighterFrom>, b: ReturnType
     total: damagePerHit(a, b),
     expected: expectedHit(a, b),
     ignoreArmor: evaluateIgnoreArmor(a, b),
+    bonusDamageReduction: evaluateBonusDamageReduction(rows),
   };
 }

@@ -233,7 +233,7 @@ export function BonusBodyContent({
                 {r.parts.map((p, i) => (
                   <span key={i} className="tag">
                     {p.icon && <StatIcon k={p.icon} t={p.text} />}
-                    {p.text}
+                    <NumWrappedText text={p.text} />
                   </span>
                 ))}
                 {!b.team && b.ages && b.ages.length > 1 && <small className="note">（帝王时代数值）</small>}
@@ -438,7 +438,7 @@ function BonusEvidenceSections({ b, core, compact, groups, usage, ex, mu, mb, me
                   {row.parts.map((part, index) => (
                     <span key={index} className="tag">
                       {part.icon && <StatIcon k={part.icon} t={part.text} />}
-                      {part.text}
+                      <NumWrappedText text={part.text} />
                     </span>
                   ))}
                   {!b.team && b.ages && b.ages.length > 1 && <small className="note">（帝王时代数值）</small>}

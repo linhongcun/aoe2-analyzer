@@ -160,10 +160,10 @@ describe('issue 317 罗马', () => {
 });
 
 describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一致', () => {
-  it('覆盖面：121 条 src = eco、30 条 src = text、74 条 src = dat（非团队；Issue 1497 归正 Italians-3 / Huns-0 为 eco）', () => {
+  it('覆盖面：119 条 src = eco、30 条 src = text、76 条 src = dat（非团队；Issue 1500 将 Bengalis-2 / Sicilians-2 升为 dat）', () => {
     expect(ALL).toHaveLength(225);
-    expect(ALL.filter((b) => b.src === 'dat')).toHaveLength(74);
-    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(121);
+    expect(ALL.filter((b) => b.src === 'dat')).toHaveLength(76);
+    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(119);
     expect(ECO.filter((b) => b.src === 'text')).toHaveLength(30);
     expect(ALL.filter((b) => b.src === 'manual')).toHaveLength(0);
   });
@@ -268,7 +268,7 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       if (counted) hidden++;
     }
     expect(hidden).toBeGreaterThan(0);
-    expect(hidden).toBeLessThan(121);
+    expect(hidden).toBeLessThan(119);
     // src = text 同样规则：六条被工具计入，不显示；其余 24 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
     for (const b of text)
@@ -359,7 +359,7 @@ describe('Issue 1497 零拥有规则归正、全站 225 条非团队对账与 Bo
     expect(line(byId('Spanish-2'), 'construction')).toEqual([]);
     expect(bonusUsage(byId('Spanish-3'))).toEqual([]);
     const pureDatEmpty = ALL.filter((b) => b.src === 'dat' && bonusUsage(b).length === 0);
-    expect(pureDatEmpty).toHaveLength(59);
+    expect(pureDatEmpty).toHaveLength(61);
     expect(pureDatEmpty.map((b) => b.id)).toContain('Spanish-3');
   });
 

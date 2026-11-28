@@ -69,14 +69,6 @@ function hasSequentialPositiveAttr(eco: readonly DatEco[] | undefined, unitId: n
 }
 
 /**
- * issue 1446：检测文明加成中的额外伤害减免（a:24），按命令顺序计算有限数值 set/add/mul 生效结果，
- * 支持后续 set 0 / mul 0 覆盖前序正值，并防御 NaN / Infinity。
- */
-export function hasPositiveBonusDamageReduction(eco: readonly DatEco[] | undefined, unitId: number): boolean {
-  return hasSequentialPositiveAttr(eco, unitId, 24);
-}
-
-/**
  * issue 1482：检测近战伤害反弹（a:118），按命令顺序计算有限数值 set/add/mul 生效结果，
  * 支持后续 set 0 / mul 0 / 负 add 抵消，并防御 NaN / Infinity。
  */

@@ -153,10 +153,10 @@ test.describe('Issue 1429 文明加成接入阵容新增费用', () => {
     await expect(page.locator('#bonus .dhead .tag.txt')).toHaveText('仅文本');
     await expect(page.locator('main .busage li[data-usage="armyCost"]')).toHaveCount(0);
 
-    // #/bonuses 计数 196 / 85
+    // #/bonuses 计数 198 / 83（Issue 1500 补入 Bengalis-2 / Sicilians-2 为已计入）
     await page.goto('./#/bonuses');
-    await expect(page.getByRole('radio', { name: '有计入 196' })).toBeVisible();
-    await expect(page.getByRole('radio', { name: '仅文本 85' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: '有计入 198' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: '仅文本 83' })).toBeVisible();
 
     expect(errors).toEqual([]);
   });

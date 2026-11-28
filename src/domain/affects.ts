@@ -45,6 +45,15 @@ export function effectParts(ef: readonly Effect[]): EffectPart[] {
       if (op === 'mul') return { icon: '', text: `特殊能力标记 ×${e.v}` };
       return { icon: '', text: `特殊能力标记 ${e.v > 0 ? '+' : ''}${e.v}` };
     }
+    if (e.s === 'bdr') {
+      const op = e.op ?? 'add';
+      const pct1 = (x: number) => `${Number((Math.abs(x) * 100).toFixed(1))}%`;
+      if (op === 'set' && e.v > 0) return { icon: '', text: `受到的额外伤害 -${pct1(Math.min(1, e.v))}` };
+      if (op === 'set') return { icon: '', text: `额外伤害减免 → ${Number((e.v * 100).toFixed(1))}%` };
+      if (op === 'mul') return { icon: '', text: `额外伤害减免 ×${Number(e.v.toFixed(2))}` };
+      if (e.v === 0) return { icon: '', text: '额外伤害减免 0%' };
+      return { icon: '', text: `额外伤害减免 ${e.v > 0 ? '+' : '-'}${pct1(e.v)}` };
+    }
     const [n, icon] = STAT_ZH[e.s] ?? [e.s, ''];
     if (e.s === 'rof') return { icon, text: `${n} +${pct(e.v)}` };
     if (e.s === 'bt' && 'op' in e && e.op === 'mul') return { icon, text: `建造速度 +${pct(1 / e.v - 1)}` };
