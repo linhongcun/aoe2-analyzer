@@ -18320,5 +18320,2136 @@
         ]
       }
     ]
+  },
+  {
+    "civ": "Mongols",
+    "lead": "按城堡产能与石料条件择一路线：有城堡走突骑拉扯与操练攻城，严格零城堡走靶场重骑射配马厩前排；两路为条件替代，不必同时开齐。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1828-L1867",
+      "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439",
+      "boundary": "单兵拉扯、真混编、持续生产与研究账本均为站内一维或固定规则模型复核，未含二维包抄、攻城器固有溅射与客户端实战胜率验证。"
+    },
+    "routes": [
+      {
+        "id": "mongols-mangudai-steppe-siege",
+        "title": "精锐蒙古突骑＋翼骑兵／精锐草原枪兵＋按需操练攻城器",
+        "tabHint": "有城堡完全体 · 突骑拉扯与操练攻城",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "已有或能维持城堡产能、可操作远程拉扯且能按对手补出操练攻城器时的默认有城堡路线；前排按黄金库存于翼骑兵与精锐草原枪兵间择一，不必同时满编。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 561,
+            "historicalName": "精锐蒙古突骑",
+            "role": "高攻速机动拉扯输出、优先点杀敌方攻城武器"
+          }
+        ],
+        "choices": [
+          {
+            "id": "mongols-main-hussar",
+            "title": "翼骑兵（免金高血前排）",
+            "preconditions": ["黄金优先留给突骑与操练攻城器，需要免金高血前排吸收箭雨与清掷矛时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "historicalName": "翼骑兵",
+                "role": "帝王血量 117.56，免金承伤、护翼与切后排"
+              }
+            ]
+          },
+          {
+            "id": "mongols-main-steppe-lancer",
+            "title": "精锐草原枪兵（高血双金前排）",
+            "preconditions": ["黄金充裕、需要正面与重骑或冠军剑士硬换时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1372,
+                "historicalName": "精锐草原枪兵",
+                "role": "帝王血量 124.06、射程 1，正面硬拼游侠与冠军"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "蒙古无手推炮，遇双金硬阵或需推进拆防时按目标补重型冲车或重型投石车，不作无目标常驻",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "配合操练高速顶箭拆建筑并吸收远程火力"
+              },
+              {
+                "kind": "unit",
+                "id": 588,
+                "historicalName": "重型投石车",
+                "role": "配合操练高速前压，清密集弓手与强骑射集群"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "有城堡后研究操练（500 木材、450 黄金）令攻城武器厂单位移动速度 +50%，是破双金阵地的关键机制支持",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 6,
+                "historicalName": "操练",
+                "role": "攻城武器厂单位移动速度 +50%，重冲与重投均达 0.90"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "蒙古无长戟兵，仅在对手纯重骑兵高压且突骑拉扯空间受限时条件补重装骆驼兵分担反骑",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "historicalName": "重装骆驼兵",
+                "role": "敌纯重骑高压时条件分担前排反骑"
+              }
+            ]
+          }
+        ],
+        "reason": "骑射攻速 +25%（突骑 1.43 秒）与斥候/草原枪帝王血量 +30% 支撑高机动拉扯体系。预算 3000 下 25 名精锐蒙古突骑开启拉扯对 22 名法兰克游侠由站桩落败（敌剩 1/22）反转为狂胜剩 23/25，对 42 名不列颠劲弩手，站桩剩 4/25；27 名精锐草原枪兵在正面胜 22 名法兰克游侠（3/27）、42 名日本冠军剑士（3/27）与 42 名不列颠劲弩手（6/27），且突骑兼具拆毁一切攻城武器的独门能力。",
+        "limitation": "突骑单价 120 且占城堡队列，缺射手锁甲（4/4 甲）致原地对射负于自家、匈奴与鞑靼重骑射；同时缺骑兵钢甲、长戟兵、双人锯与手推炮，纯骑兵配突骑正面打不穿双金游侠配劲弩，须补操练重冲或重投破阵。重冲与重投固有溅射及突骑拆攻城器多单位实战均未完整模拟。",
+        "attack": "高血翼骑或草原枪在前吸箭并限制敌方远程，突骑边走边射收割近战并优先点掉敌方攻城器；遭遇固定防线或双金远程阵地时以操练高速重冲或重投强行撕开缺口。",
+        "defense": "突骑保持机动拉扯逐批削减来犯敌军，高血前排护住侧面并清理敌方远程攻城器；切忌在缺少射手锁甲与骑兵钢甲的条件下原地与强骑射或长射程弓手站桩互换。",
+        "adjustments": [
+          {
+            "id": "mongols-main-vs-ca-mirror",
+            "when": "匈奴、鞑靼等强骑射文明对射",
+            "text": "切忌拿精锐蒙古突骑原地与强骑射站桩换射：预算 3000 下 25 名突骑站桩负自家 30 名重骑射（敌剩 9/30）、负 37 名匈奴重骑射（敌剩 20/37）、负 30 名鞑靼重骑射（敌剩 17/30）。优先用操练重型投石车压制密集骑射群，或用高血草原枪与自家重骑射协同消耗。"
+          },
+          {
+            "id": "mongols-main-vs-heavy-cav",
+            "when": "游侠、重骑兵成群施压",
+            "text": "突骑必须开启边走边射拉扯（预算 3000 对 22 名法兰克游侠站桩落败、拉扯反胜剩 23/25）；若地形狭窄拉扯受限，蒙古无长戟兵，可条件补重装骆驼兵与高血草原枪协防前排。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 330
+              }
+            ],
+            "fallback": "突骑必须开启边走边射拉扯（预算 3000 对 22 名法兰克游侠拉扯剩 23/25），并由高血草原枪协防前排。"
+          },
+          {
+            "id": "mongols-main-vs-double-gold",
+            "when": "双金硬阵与长射程枪弓（如马扎尔游侠配劲弩、不列颠枪弓）",
+            "text": "真混编实算中 25 名翼骑配 17 名突骑虽胜不列颠 34 名长戟与 35 名劲弩（剩 0 与 17），但面对马扎尔双金 15 名游侠与 28 名劲弩时，翼骑、草原枪与重骆驼配突骑正面均落败（敌剩 4 与 28、4 与 28、6 与 28）；必须靠操练重型冲车吸箭或重型投石车轰碎后排。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 6
+              },
+              {
+                "kind": "unit",
+                "id": 548
+              }
+            ],
+            "fallback": "纯骑兵配突骑正面难以打穿双金游侠配劲弩，须按可用攻城武器厂单位与操练配合破阵，不硬冲正面火力网。"
+          }
+        ],
+        "alternatives": "骑射互射局或城堡产能吃紧时不必硬憋纯突骑，直接切换零城堡靶场重装骑射手路线可绕开城堡队列并提升骑射对射性价比。",
+        "evidence": {
+          "recognition": "经维护者与游戏分析共创确认的有城堡完全体路线；可选攻城器与重装骆驼按对手触发，不视为同时满编。",
+          "playtest": "待实战验证；DE 188329 站内单兵、拉扯、真混编、持续生产与研究账本已全量复核，未经客户端实战确认。",
+          "scope": "覆盖蒙古有城堡完全体（精锐蒙古突骑配翼骑兵或精锐草原枪兵，按需补操练重冲/重投/重骆驼）。预算 3000 下突骑站桩负自家重骑射（敌剩 9/30）、匈奴（20/37）、鞑靼（17/30）与法兰克游侠（1/22），胜不列颠劲弩（4/25），拉扯胜法兰克游侠剩 23/25（后撤 40.0 格触顶）；草原枪 27 名胜游侠（3/27）、日本冠军（3/27）、不列颠劲弩（6/27）且平满配鞑靼草原枪。真混编胜不列颠枪弓（剩 0 与 17），三组配突骑均负马扎尔双金（敌剩 4 与 28 或 6 与 28）。持续生产突骑（城堡 2 座）配翼骑（马厩 4 座，含征招、缺双人锯 221）需 57 名村民；研究账本（561＋441＋548＋操练 6，不含抗招降、征招与弹道学 93）合计 11215（6545 食物、1350 木材、3320 黄金；加选弹道学 93 另计 300 木材、175 黄金）。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1828, 1830, 1836, 1838, 1839, 1841, 1843, 1849, 1850, 1851, 1852, 1853, 1859, 1860, 1861, 1863, 1865, 1867],
+          "links": [
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 30 名蒙古重装骑射手（负，敌剩 9/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 37 名匈奴重装骑射手（负，敌剩 20/37）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Huns.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 30 名鞑靼重装骑射手（负，敌剩 17/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Tatars.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 42 名不列颠劲弩手（胜，剩 4/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 22 名法兰克游侠（负，游侠剩 1/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 拉扯对 22 名法兰克游侠（胜，剩 23/25，40.0 格触顶）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 27 名精锐草原枪兵 对 22 名法兰克游侠（胜，剩 3/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 27 名精锐草原枪兵 对 42 名日本冠军剑士（胜，剩 3/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 27 名精锐草原枪兵 对 42 名不列颠劲弩手（胜，剩 6/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 27 名蒙古精锐草原枪兵 对 27 名鞑靼精锐草原枪兵（平局）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Mongols.4.f.&b=1372.Tatars.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "混编 · 25 名翼骑兵 与 17 名精锐蒙古突骑 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩翼骑 0、突骑 17）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 25 名翼骑兵 与 17 名精锐蒙古突骑 对马扎尔 15 名游侠 与 28 名劲弩手（负，敌剩游侠 4、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 18 名精锐草原枪兵 与 17 名精锐蒙古突骑 对马扎尔 15 名游侠 与 28 名劲弩手（负，敌剩游侠 4、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 17 名重装骆驼兵 与 17 名精锐蒙古突骑 对马扎尔 15 名游侠 与 28 名劲弩手（负，敌剩游侠 6、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22330%22%2C%22qty%22%3A%2217%22%7D%2C%7B%22uid%22%3A%22561%22%2C%22qty%22%3A%2217%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 330
+                }
+              ]
+            },
+            {
+              "label": "持续生产 · 精锐蒙古突骑（城堡 2 座）＋翼骑兵（马厩 4 座）· 57 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C373&rows=561%3A82%3A2%2C441%3A101%3A4"
+            },
+            {
+              "label": "研究账本 · 精锐蒙古突骑＋翼骑兵＋操练重型冲车（未选弹道学 93，不含抗招降，合计 11215）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A561%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A6%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                },
+                {
+                  "kind": "unit",
+                  "id": 548
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-ca-mirror",
+            "chipLabel": "遭遇强骑射文明对射",
+            "actionHint": "改配操练重投",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "opponent",
+            "adjustmentIds": ["mongols-main-vs-ca-mirror"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              }
+            ]
+          },
+          {
+            "id": "vs-heavy-cav",
+            "chipLabel": "游侠与重骑兵成群施压",
+            "actionHint": "拉扯配骆驼",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 2
+            },
+            "group": "opponent",
+            "supplementIndices": [2],
+            "adjustmentIds": ["mongols-main-vs-heavy-cav"],
+            "links": [
+              {
+                "index": 4
+              },
+              {
+                "index": 5
+              },
+              {
+                "index": 6
+              }
+            ]
+          },
+          {
+            "id": "vs-double-gold",
+            "chipLabel": "遇双金硬阵与拆防推进",
+            "actionHint": "补操练攻城器",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "opponent",
+            "supplementIndices": [0, 1],
+            "adjustmentIds": ["mongols-main-vs-double-gold"],
+            "links": [
+              {
+                "index": 10
+              },
+              {
+                "index": 11
+              },
+              {
+                "index": 12
+              },
+              {
+                "index": 13,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 2
+                }
+              },
+              {
+                "index": 15,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "mongols-hca-zero-castle",
+        "title": "重装骑射手＋精锐草原枪兵／翼骑兵（严格零城堡）",
+        "tabHint": "严格零城堡 · 靶场重骑射配马厩前排",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "缺少石料建城堡或需绕开城堡排队快速爆兵时选用的严格零城堡路线；无城堡阶段仅计靶场重骑射、马厩前排与普通重型冲车，不含操练与征招，补建城堡后才追加操练与城堡级攻城器。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "靶场直出高攻速远程主力，无需城堡队列"
+          }
+        ],
+        "choices": [
+          {
+            "id": "mongols-zero-steppe-lancer",
+            "title": "精锐草原枪兵（高血主力前排）",
+            "preconditions": ["黄金可供双线时优先承担正面接战、反游侠与反冠军职责"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1372,
+                "historicalName": "精锐草原枪兵",
+                "role": "高血量射程 1 机动前排，配合重骑射正面压制"
+              }
+            ]
+          },
+          {
+            "id": "mongols-zero-hussar",
+            "title": "翼骑兵（免金前排替换）",
+            "preconditions": ["黄金紧张、需把全部黄金留给靶场重装骑射手时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "historicalName": "翼骑兵",
+                "role": "免金高血前排，吸收箭雨与骚扰经济"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "严格零城堡阶段拆建筑仅配攻城武器厂普通重型冲车（不含操练加速）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "零城堡默认拆防手段，无操练移速按常规估算"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "后续补建城堡后才开放研究操练（6）与征招（315），并按需追加重型投石车或巨型投石机",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 6,
+                "historicalName": "操练",
+                "role": "补建城堡后提速攻城武器厂单位 +50%"
+              },
+              {
+                "kind": "unit",
+                "id": 588,
+                "historicalName": "重型投石车",
+                "role": "补建城堡配操练后用于压制密集远程阵线"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "补建城堡后提供远程安全拆城堡选项"
+              }
+            ]
+          }
+        ],
+        "reason": "靶场重装骑射手同样享受 +25% 攻速（1.44 秒）且单价仅 40 木材、60 黄金，预算 3000 可产 30 名；站桩反胜自家 25 名突骑剩 9/30，拉扯胜 22 名法兰克游侠剩 17/30（后撤 36.8 格）。零城堡真混编 18 名精锐草原枪兵与 20 名重装骑射手在正面击败不列颠 34 名长戟兵与 35 名劲弩手（剩 2 与 20），且完全绕开 650 石料门槛。",
+        "limitation": "无城堡阶段无法研究征招（315）与操练（6），攻城武器厂普通重冲移动较慢；骑射与草原枪同缺 3 级护甲（射手锁甲 219、骑兵钢甲 80），站桩换射不及匈奴折价重骑射与满配鞑靼丝护甲重骑射。",
+        "attack": "以多座靶场与马厩快速铺出重骑射加草原枪或翼骑，借射速拉扯与机动换家打开局面，拆防配普通重冲护航推进；石料到位起城后再补操练与征招提速。",
+        "defense": "无城堡窗口避免原地硬接重型远程阵地，依托高机动重骑射与高血马厩前排在开阔地带逐波拉扯消耗敌军。",
+        "adjustments": [
+          {
+            "id": "mongols-zero-vs-paladins",
+            "when": "游侠与重骑冲阵",
+            "text": "重装骑射手保持边走边射拉扯（预算 3000 对 22 名法兰克游侠拉扯剩 17/30，后撤 36.8 格），由精锐草原枪兵贴身协同接战。"
+          },
+          {
+            "id": "mongols-zero-after-castle",
+            "when": "石料充足补建城堡后",
+            "text": "补建城堡后才将征招（315）与操练（6）纳入产能与账本：重骑射（靶场 4 座）配草原枪（马厩 4 座）持续生产由无征招 78 名村民，升至含征招 103 名村民，研究账本加选操练由 9740 升至 10690（均未选弹道学 93），并可按需补重型投石车或巨型投石机。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 6
+              }
+            ],
+            "fallback": "尚未建城堡前维持无征招 78 名村民与零城堡研究净额 9740，拆防沿用普通重型冲车。"
+          }
+        ],
+        "alternatives": "一旦城堡成型且面对大量攻城武器或需极致拉扯，可平滑转入有城堡精锐蒙古突骑主路。",
+        "evidence": {
+          "recognition": "经产品经理校准为严格零城堡过渡路线，与有城堡突骑主路彻底分离征招与操练口径。",
+          "playtest": "待实战验证；零城堡档与补城档的持续生产及研究账本均已在 DE 188329 分别复核，未经客户端实战确认。",
+          "scope": "严格零城堡路线（靶场重装骑射手配马厩精锐草原枪兵或翼骑兵，零城堡拆防仅用普通重冲，不含操练 6 与征招 315）。预算 3000 下 30 名重骑射站桩胜 25 名突骑剩 9/30、拉扯胜 22 名法兰克游侠剩 17/30（后撤 36.8 格）；混编 18 名草原枪配 20 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 2 与 20）。持续生产重骑射（靶场 4 座）配草原枪（马厩 4 座，缺双人锯 221）：零城堡无征招需 78 名村民，补城含征招需 103 名村民；研究账本（474＋1372＋548，不含抗招降、征招与弹道学 93）：零城堡不含操练为 9740（6295 食物、850 木材、2595 黄金），补城加操练 6 为 10690（加选弹道学 93 另计 300 木材、175 黄金）。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1828, 1830, 1837, 1838, 1839, 1841, 1843, 1850, 1852, 1859, 1863, 1865, 1867],
+          "links": [
+            {
+              "label": "预算 3000 · 30 名蒙古重装骑射手 拉扯对 22 名法兰克游侠（胜，剩 17/30，后撤 36.8 格）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Mongols.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐蒙古突骑 站桩对 30 名蒙古重装骑射手（重骑射胜，剩 9/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=561.Mongols.4.f.&b=474.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "混编 · 零城堡 18 名精锐草原枪兵 与 20 名重装骑射手 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩草原枪 2、骑射 20）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Mongols%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 零城堡 重装骑射手（靶场 4 座）＋精锐草原枪兵（马厩 4 座）· 78 名村民（无征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C373&rows=474%3A87%3A4%2C1372%3A101%3A4"
+            },
+            {
+              "label": "持续生产 · 补城后 重装骑射手（靶场 4 座）＋精锐草原枪兵（马厩 4 座）· 103 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Mongols&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C279%2C315%2C373&rows=474%3A87%3A4%2C1372%3A101%3A4",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            },
+            {
+              "label": "研究账本 · 零城堡 重装骑射手＋精锐草原枪兵＋重型冲车（不含操练 6 与弹道学 93，合计 9740）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            },
+            {
+              "label": "研究账本 · 补城加操练 重装骑射手＋精锐草原枪兵＋操练重冲（未选弹道学 93，合计 10690）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Mongols&age=4&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A6%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 6
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-paladins",
+            "chipLabel": "游侠与重骑冲阵",
+            "actionHint": "骑射拉扯接战",
+            "group": "opponent",
+            "adjustmentIds": ["mongols-zero-vs-paladins"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              }
+            ]
+          },
+          {
+            "id": "zero-castle-siege",
+            "chipLabel": "严格零城堡拆防",
+            "actionHint": "普通重型冲车",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "condition",
+            "supplementIndices": [0],
+            "links": [
+              {
+                "index": 3
+              },
+              {
+                "index": 5
+              }
+            ]
+          },
+          {
+            "id": "after-castle-drill",
+            "chipLabel": "石料充足补建城堡后",
+            "actionHint": "追加操练征招",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "condition",
+            "supplementIndices": [1],
+            "adjustmentIds": ["mongols-zero-after-castle"],
+            "links": [
+              {
+                "index": 4,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              },
+              {
+                "index": 6,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "civ": "Huns",
+    "lead": "按黄金供给在双金游侠主路与省金翼骑路线间二选一；攻城按建筑压力补重冲、巨投或城堡研究掠夺者后马厩出答刺罕。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1869-L1908",
+      "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439",
+      "boundary": "单兵、拉扯、混编与持续生产均为站内一维或固定规则模型复核；匈奴免房屋红利与巨投对单位准确度提升未计入数值。"
+    },
+    "routes": [
+      {
+        "id": "huns-paladin-hca",
+        "title": "游侠＋折价重装骑射手（双金主路）",
+        "tabHint": "双金正面强攻 · 游侠配折价重骑射",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "黄金充足、需要正面击穿双金硬阵或长射程枪弓组合时的默认主力路线；无需城堡即可同时在马厩与靶场快速铺兵，拆防按压力另配攻城器或先研掠夺者出答刺罕。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 569,
+            "historicalName": "游侠",
+            "role": "草原四国唯一满科技游侠，正面抗箭与硬突前排"
+          },
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "帝王费用 -20%（32 木材、48 黄金），数量压制型远程核心"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "匈奴缺攻城技师、重投与手推炮，推进硬建筑时按需补重型冲车或巨型投石机",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "零城堡可用拆防组件"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "有城堡后远程拆防（对单位高准确度未建模）"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "敌方箭塔与建筑密集需要顶箭强拆时，须先在城堡研究掠夺者（483）才开放马厩训练精锐答刺罕骑兵",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 483
+              }
+            ],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 887,
+                "historicalName": "精锐答刺罕骑兵",
+                "role": "170 生命、4/8 护甲，顶箭雨强拆建筑与冲弓群"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "在城堡研究掠夺者（300 木材、200 黄金）后方可由马厩训练答刺罕骑兵",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 483,
+                "historicalName": "掠夺者",
+                "role": "解锁马厩训练答刺罕骑兵，绕开城堡产能瓶颈"
+              }
+            ]
+          }
+        ],
+        "reason": "匈奴独享满科技游侠（180 生命、18 攻击、5/7 护甲）、马厩提速 +20% 与帝王重骑射 -20% 折价（预算 3000 可产 37 名）。37 名重骑射站桩胜 42 名不列颠劲弩手（21/37）与 30 名蒙古重骑射（16/37），拉扯胜 22 名法兰克游侠（22/37）；真混编 15 名游侠配 25 名折价重骑射正面击败不列颠 34 名长戟与 35 名劲弩（剩 8 与 25）并打穿马扎尔双金 15 名游侠与 28 名劲弩（剩 0 与 22）。",
+        "limitation": "双金线路持续黄金消耗高且无草原枪兵；同时缺射手锁甲（重骑射 4/4 护甲）、攻城技师、重型投石车、手推炮与钻井采石法，强推密集防御工事必须配巨投、重冲或先研掠夺者出精锐答刺罕。免房屋省木与巨投对单位准确度提升未计入数值模型。",
+        "attack": "游侠顶住第一轮齐射撕开阵线并威慑后排，数量占优的折价重骑射在后排集火长戟与步兵；建筑压力大时配巨投或先研掠夺者出答刺罕强拆。",
+        "defense": "借马厩提速 +20% 快速补充游侠，重骑射边退边射拦截敌骑与步兵，利用高机动反复截断对手补兵线。",
+        "adjustments": [
+          {
+            "id": "huns-main-vs-double-gold",
+            "when": "双金硬阵与长射程枪弓（马扎尔游侠配劲弩、不列颠枪弓）",
+            "text": "坚持游侠配折价重骑射正面交战：真混编 15 名游侠与 25 名重骑射正面击穿不列颠 34 名长戟与 35 名劲弩（剩 8 与 25）及马扎尔 15 名游侠与 28 名劲弩（剩 0 与 22）。"
+          },
+          {
+            "id": "huns-main-vs-fortifications",
+            "when": "重型建筑、箭塔防线与密集弓群",
+            "text": "按建筑压力补重型冲车或巨型投石机；已有城堡并研究掠夺者（483）后，可由马厩量产 4/8 护甲精锐答刺罕骑兵顶箭强拆（预算 3000 下 25 名站桩胜 42 名不列颠劲弩手，剩 13/25）。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 483
+              },
+              {
+                "kind": "unit",
+                "id": 887
+              }
+            ],
+            "fallback": "匈奴缺攻城技师与手推炮，遇硬防线优先补重型冲车或巨型投石机协同推进。"
+          },
+          {
+            "id": "huns-main-vs-spears-camels",
+            "when": "长戟兵与骆驼兵成群反骑",
+            "text": "游侠避开正面硬撞长戟与骆驼屏障，交给 37 名量级折价重骑射保持射程拉扯清场；面对满配鞑靼丝护甲重骑射时，单兵对射落败（敌剩 9/30），须靠游侠贴身压缩空间。"
+          }
+        ],
+        "alternatives": "黄金枯竭或需优先控图多线骚扰时，直接切换翼骑兵配折价重装骑射手省金路线，不因硬保游侠拖垮补兵节奏。",
+        "evidence": {
+          "recognition": "经维护者与游戏分析共创确认的匈奴双金主力路线；答刺罕马厩产出严格绑定掠夺者前置。",
+          "playtest": "待实战验证；DE 188329 单兵、拉扯、真混编、持续生产与研究账本已全量复核，未经客户端实战确认。",
+          "scope": "覆盖匈奴双金主路（游侠配帝王 -20% 折价重装骑射手，按需补重冲、巨投或先研掠夺者出精锐答刺罕）。预算 3000 下 37 名重骑射站桩胜不列颠劲弩（21/37）与蒙古重骑射（16/37），拉扯胜法兰克游侠（22/37，后撤 40.0 格触顶）；25 名精锐答刺罕站桩胜不列颠劲弩（13/25）。真混编 15 名游侠配 25 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 8 与 25），正面打穿马扎尔 15 名游侠与 28 名劲弩（剩 0 与 22）。持续生产游侠（马厩 3 座）配重骑射（靶场 4 座，含征招与马厩 +20%）需 80 名村民；研究账本（569＋474，不含抗招降、征招与弹道学 93）合计 9390（5845 食物、250 木材、3295 黄金；加选弹道学 93 另计 300 木材、175 黄金）。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1869, 1871, 1877, 1878, 1880, 1882, 1884, 1890, 1891, 1892, 1893, 1894, 1900, 1901, 1902, 1904, 1906, 1908],
+          "links": [
+            {
+              "label": "预算 3000 · 37 名匈奴重装骑射手 站桩对 42 名不列颠劲弩手（胜，剩 21/37）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 37 名匈奴重装骑射手 站桩对 30 名蒙古重装骑射手（胜，剩 16/37）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=474.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 37 名匈奴重装骑射手 拉扯对 22 名法兰克游侠（胜，剩 22/37，40.0 格触顶）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Huns.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1"
+            },
+            {
+              "label": "预算 3000 · 25 名精锐答刺罕骑兵 站桩对 42 名不列颠劲弩手（胜，剩 13/25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=887.Huns.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 887
+                }
+              ]
+            },
+            {
+              "label": "混编 · 15 名游侠 与 25 名折价重装骑射手 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩游侠 8、骑射 25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 15 名游侠 与 25 名折价重装骑射手 对马扎尔 15 名游侠 与 28 名劲弩手（胜，剩游侠 0、骑射 22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 游侠（马厩 3 座）＋重装骑射手（靶场 4 座）· 80 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=569%3A101%3A3%2C474%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 游侠＋重装骑射手（未选弹道学 93，不含抗招降，合计 9390）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Huns&age=4&acunits=%5B%7B%22unit%22%3A569%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-double-gold",
+            "chipLabel": "双金硬阵与长射程枪弓",
+            "actionHint": "游侠配骑射强突",
+            "group": "opponent",
+            "adjustmentIds": ["huns-main-vs-double-gold"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 4
+              },
+              {
+                "index": 5
+              }
+            ]
+          },
+          {
+            "id": "vs-fortifications",
+            "chipLabel": "建筑防线与密集箭塔",
+            "actionHint": "攻城或掠夺答刺罕",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "opponent",
+            "supplementIndices": [0, 1, 2],
+            "adjustmentIds": ["huns-main-vs-fortifications"],
+            "links": [
+              {
+                "index": 3,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "vs-spears-camels",
+            "chipLabel": "长戟与骆驼成群反骑",
+            "actionHint": "折价骑射拉扯",
+            "group": "opponent",
+            "adjustmentIds": ["huns-main-vs-spears-camels"],
+            "links": [
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "huns-hussar-hca",
+        "title": "翼骑兵＋折价重装骑射手（省金机动路线）",
+        "tabHint": "省金机动骚扰 · 翼骑配折价重骑射",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "黄金紧张、无城堡开局或需要高机动多线袭扰时，以翼骑兵替代游侠降低金流压力；零城堡阶段不计征招与掠夺者，拆防默认配重型冲车，补建城堡后再开放巨投或马厩答刺罕。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 441,
+            "historicalName": "翼骑兵",
+            "role": "免金前排，清掷矛手、骚扰经济与掩护骑射"
+          },
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "帝王 -20% 折价主力输出，把全部黄金集中于远程线"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "零城堡窗口拆防默认补攻城武器厂重型冲车",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "不依赖城堡的拆建筑组件"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "补建城堡后按建筑压力追加巨型投石机，或研究掠夺者（483）解锁马厩精锐答刺罕强拆",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "补建城堡后远程拆关键城堡"
+              },
+              {
+                "kind": "tech",
+                "id": 483,
+                "historicalName": "掠夺者",
+                "role": "补建城堡后解锁马厩训练答刺罕骑兵"
+              },
+              {
+                "kind": "unit",
+                "id": 887,
+                "historicalName": "精锐答刺罕骑兵",
+                "role": "研究掠夺者后由马厩训练顶箭拆建筑"
+              }
+            ]
+          }
+        ],
+        "reason": "将游侠换成免金翼骑兵后，研究净额由 9390 降至 8040（省 1350），零城堡无征招无掠夺者下，翼骑（马厩 4 座）配重骑射（靶场 4 座）仅需 50 名村民，补城含征招需 66 名村民。真混编 25 名翼骑配 25 名折价重骑射仍可正面击败不列颠 34 名长戟兵与 35 名劲弩手（剩 6 与 25）。",
+        "limitation": "翼骑兵正面硬换能力远弱于满科技游侠：真混编 25 名翼骑配 25 名重骑射面对马扎尔双金 15 名游侠与 28 名劲弩手时落败（敌剩 3 与 28），遇重装双金阵线不能死守纯翼骑前排。",
+        "attack": "依托免金翼骑持续清掷矛手与多线袭击对手农田，折价重骑射成群拉扯点杀支援部队，配重冲推倒外围防线。",
+        "defense": "马厩 +20% 提速让翼骑可高频补员填补前排，重骑射保持机动退守反击，把稀缺黄金集中保住骑射编队。",
+        "adjustments": [
+          {
+            "id": "huns-alt-vs-double-gold",
+            "when": "遭遇马扎尔等双金游侠配劲弩硬阵",
+            "text": "省金 25 名翼骑配 25 名重骑射正面落败（敌剩游侠 3、劲弩 28）；金流允许时应切回双金游侠主路，否则改为多线分兵避开正面决战。"
+          },
+          {
+            "id": "huns-alt-after-castle",
+            "when": "补建城堡后加强拆防与产能",
+            "text": "补建城堡后才计入征招（315），持续生产由 50 名村民，升至 66 名村民，并开放巨型投石机或研究掠夺者（483）马厩出精锐答刺罕骑兵。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 483
+              }
+            ],
+            "fallback": "零城堡窗口保持无征招无掠夺者 50 名村民，拆防以普通重型冲车为主。"
+          }
+        ],
+        "alternatives": "黄金恢复充裕且正面需要硬破双金重骑阵时，直接升级游侠转入双金主路。",
+        "evidence": {
+          "recognition": "经产品经理确认为匈奴黄金紧张时的平行省金路线，零城堡档严格剔除征招 315 与掠夺者 483。",
+          "playtest": "待实战验证；零城堡与补城两档持续生产、混编与研究账本均已在 DE 188329 复核，未经客户端实战确认。",
+          "scope": "覆盖匈奴省金机动路线（翼骑兵配帝王 -20% 重装骑射手）。真混编 25 名翼骑配 25 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 6 与 25），负马扎尔 15 名游侠与 28 名劲弩（敌剩 3 与 28）。持续生产翼骑（马厩 4 座）配重骑射（靶场 4 座，含马厩 +20%）：零城堡无征招无掠夺者需 50 名村民，补城含征招需 66 名村民；研究账本（441＋474，不含抗招降、征招与弹道学 93）合计 8040（4895 食物、250 木材、2895 黄金；加选弹道学 93 另计 300 木材、175 黄金）。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1869, 1871, 1878, 1879, 1880, 1882, 1884, 1890, 1891, 1892, 1901, 1904, 1906, 1908],
+          "links": [
+            {
+              "label": "混编 · 省金 25 名翼骑兵 与 25 名折价重装骑射手 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩翼骑 6、骑射 25）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 省金 25 名翼骑兵 与 25 名折价重装骑射手 对马扎尔 15 名游侠 与 28 名劲弩手（负，敌剩游侠 3、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Huns%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22441%22%2C%22qty%22%3A%2225%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2225%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 零城堡 翼骑兵（马厩 4 座）＋重装骑射手（靶场 4 座）· 50 名村民（无征招无掠夺者）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278&rows=441%3A101%3A4%2C474%3A87%3A4"
+            },
+            {
+              "label": "持续生产 · 补城后 翼骑兵（马厩 4 座）＋重装骑射手（靶场 4 座）· 66 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Huns&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C221%2C249%2C278%2C315&rows=441%3A101%3A4%2C474%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 翼骑兵＋重装骑射手（未选弹道学 93，不含抗招降，合计 8040）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Huns&age=4&acunits=%5B%7B%22unit%22%3A441%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-double-gold",
+            "chipLabel": "遇双金硬阵与枪弓对比",
+            "actionHint": "转游侠或分兵",
+            "group": "opponent",
+            "adjustmentIds": ["huns-alt-vs-double-gold"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              }
+            ]
+          },
+          {
+            "id": "zero-castle-siege",
+            "chipLabel": "零城堡拆防与低金产能",
+            "actionHint": "重冲配 50 村",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "condition",
+            "supplementIndices": [0],
+            "links": [
+              {
+                "index": 2
+              },
+              {
+                "index": 4
+              }
+            ]
+          },
+          {
+            "id": "after-castle-siege",
+            "chipLabel": "补建城堡后提速强拆",
+            "actionHint": "巨投或掠夺答刺罕",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "condition",
+            "supplementIndices": [1],
+            "adjustmentIds": ["huns-alt-after-castle"],
+            "links": [
+              {
+                "index": 3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "civ": "Tatars",
+    "lead": "有城堡走怯薛配丝护甲重骑射与 19 射程巨投，严格零城堡走马厩草原枪／翼骑配无丝护甲重骑射与重冲；有城档与零城堡档分别核算面板与账本。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1910-L1949",
+      "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439",
+      "boundary": "单兵与混编均为平地一维模型，未计鞑靼高海拔总计 +50% 伤害、精锐怯薛攻击产金与火焰骆驼自爆溅射；抗招降缺口按实战口径仅限城堡至帝王初小规模精锐或竞技场僧侣快攻。"
+    },
+    "routes": [
+      {
+        "id": "tatars-keshik-hca-trebuchet",
+        "title": "精锐怯薛骑兵＋丝护甲重装骑射手＋帖木儿巨投",
+        "tabHint": "有城堡产金推进 · 怯薛配丝护甲骑射与巨投",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "有城堡产能与石料条件时的鞑靼综合上限主路；免费扳指与帕提亚战术加速成型，研究丝护甲与帖木儿攻城术后兼备骑射内战统治力与全游最长 19 射程拆防。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1230,
+            "historicalName": "精锐怯薛骑兵",
+            "role": "60 食物、40 黄金高性价比硬前排，攻击可产金（未建模）"
+          },
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "免费扳指与帕提亚，配丝护甲达 6/7 护甲的骑射内战霸主"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "推进城堡或硬阵地时按需出巨型投石机，配合帖木儿攻城术达 19 射程逼战",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "19 射程远程拆防与逼迫对手出阵"
+              }
+            ]
+          },
+          {
+            "mode": "mechanism-support",
+            "condition": "城堡独科丝护甲（687）赋予斥候、草原枪与骑射 +1/+1 护甲，帝王独科帖木儿攻城术（688）赋予巨投 +2 射程并解锁火焰骆驼",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 687,
+                "historicalName": "丝护甲",
+                "role": "重骑射升至 6/7 护甲，骑射内战全胜关键"
+              },
+              {
+                "kind": "tech",
+                "id": 688,
+                "historicalName": "帖木儿攻城术",
+                "role": "巨型投石机射程升至全游最长 19"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "面对象兵群或纯重骑兵高压冲阵时按需补长戟兵（缺步兵锁甲与钢甲）或帝王火焰骆驼点名反制",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1263,
+                "historicalName": "火焰骆驼",
+                "role": "特化自爆反象与反重骑（固有溅射未建模）"
+              },
+              {
+                "kind": "unit",
+                "id": 359,
+                "historicalName": "长戟兵",
+                "role": "缺步兵护甲，仅作廉价反骑工具兵"
+              }
+            ]
+          }
+        ],
+        "reason": "扳指与帕提亚战术免费省去大量升级投入，丝护甲（687）令重装骑射手达 6/7 护甲：预算 3000 下 30 名站桩通杀 37 名匈奴（剩 9/30）、30 名蒙古重骑射（15/30）、25 名蒙古突骑（17/30）、30 名契丹重骑射（19/30）与 42 名不列颠劲弩（22/30）。真混编 20 名精锐怯薛配 20 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 10 与 20）并正面打穿马扎尔双金 15 名游侠与 28 名劲弩（剩 0 与 15）。",
+        "limitation": "缺步兵锁甲、步兵钢甲、冠军剑士、双人锯、钻井采石法，且缺异教与信念——按实战口径，抗招降缺口主要限于城堡至帝王初期小规模精锐对拼或竞技场僧侣快攻（大后期大规模会战因操作量限制几乎不出僧侣海）。高海拔总计 +50% 伤害与精锐怯薛攻击产金在工具中均无自动提示且未计入数值。",
+        "attack": "抢占高坡架设 19 射程帖木儿巨投逼迫对手出阵，怯薛顶前吸收近战并触发产金，丝护甲重骑射在后排压制所有弓手与骑射。",
+        "defense": "依托高地增伤与 6/7 高远甲重骑射据坡还击，怯薛拦截侧翼切入敌骑；城堡至帝王初防小规模僧侣快攻时用轻骑清僧侣并避免少量怯薛孤军深入。",
+        "adjustments": [
+          {
+            "id": "tatars-main-vs-ranged-mirror",
+            "when": "强骑射与长射程弓手对射（匈奴、蒙古、不列颠）",
+            "text": "完成丝护甲（687）后 30 名鞑靼重骑射站桩通杀匈奴（剩 9/30）、蒙古重骑射（15/30）、蒙古突骑（17/30）、契丹（19/30）与不列颠劲弩（22/30）；配 20 名怯薛可正面击穿不列颠 34 名长戟与 35 名劲弩（剩 10 与 20）及马扎尔双金（剩 0 与 15）。"
+          },
+          {
+            "id": "tatars-main-vs-elephants-cav",
+            "when": "象兵海或纯重骑兵高压冲阵",
+            "text": "鞑靼步兵缺锁甲与钢甲，但必要时可补廉价长戟兵或于帖木儿攻城术后补火焰骆驼点名爆破象兵与重骑（火焰骆驼固有溅射未计入 PK 伤害）。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1263
+              }
+            ],
+            "fallback": "遇纯重骑与象兵高压时可按需补长戟兵配合高地重骑射集火消耗。"
+          },
+          {
+            "id": "tatars-main-early-monk-window",
+            "when": "城堡至帝王初期小规模精锐对拼或竞技场僧侣快攻",
+            "text": "缺异教（439）与信念（45）仅在该小规模窗口或竞技场僧侣快攻期构成风险（大后期大规模会战几乎不出僧侣海）；此窗口避免少量昂贵怯薛孤军进场，优先以轻骑或翼骑清僧侣。"
+          }
+        ],
+        "alternatives": "缺乏石料起城堡或需提前走马厩机动线时，切换严格零城堡精锐草原枪／翼骑配无丝护甲重骑射路线，待起城后再升格丝护甲与巨投。",
+        "evidence": {
+          "recognition": "经维护者与游戏分析共创确认的有城堡产金推进主路；火焰骆驼与长戟兵仅按需补出。",
+          "playtest": "待实战验证；DE 188329 全部单兵、真混编、持续生产与研究账本已复核，高海拔伤害与怯薛产金未建模且未经客户端实战确认。",
+          "scope": "覆盖鞑靼有城堡主路（精锐怯薛配丝护甲重装骑射手，按需帖木儿 19 射程巨投）。有城含丝护甲 687 时重骑射为 6/7 护甲，预算 3000 下 30 名站桩胜匈奴（9/30）、蒙古重骑射（15/30）、蒙古突骑（17/30）、契丹（19/30）与不列颠劲弩（22/30）；真混编 20 名怯薛配 20 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 10 与 20）并打穿马扎尔 15 名游侠与 28 名劲弩（剩 0 与 15）。持续生产怯薛（城堡 2 座）配重骑射（靶场 4 座，含征招、缺双人锯 221）需 79 名村民；研究账本（1230＋474＋331＋687＋688，自动免计免费扳指 437 与帕提亚 436，不含抗招降、征招与弹道学 93）合计 10240（5195 食物、1500 木材、3545 黄金；加选弹道学 93 另计 300 木材、175 黄金）。高海拔 +50% 伤害与怯薛攻击产金均未建模。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1910, 1912, 1918, 1919, 1921, 1923, 1925, 1931, 1932, 1933, 1934, 1935, 1941, 1943, 1945, 1947, 1949],
+          "links": [
+            {
+              "label": "预算 3000 · 30 名丝护甲鞑靼重装骑射手 站桩对 37 名匈奴重装骑射手（胜，剩 9/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Huns.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 名丝护甲鞑靼重装骑射手 站桩对 30 名蒙古重装骑射手（胜，剩 15/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 名丝护甲鞑靼重装骑射手 站桩对 25 名精锐蒙古突骑（胜，剩 17/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=561.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 名丝护甲鞑靼重装骑射手 站桩对 30 名契丹重装骑射手（胜，剩 19/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=474.Khitans.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 30 名丝护甲鞑靼重装骑射手 站桩对 42 名不列颠劲弩手（胜，剩 22/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.f.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "混编 · 20 名精锐怯薛骑兵 与 20 名丝护甲重装骑射手 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩怯薛 10、骑射 20）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22687%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221230%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 20 名精锐怯薛骑兵 与 20 名丝护甲重装骑射手 对马扎尔 15 名游侠 与 28 名劲弩手（胜，剩怯薛 0、骑射 15）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%2C%22687%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221230%22%2C%22qty%22%3A%2220%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 精锐怯薛骑兵（城堡 2 座）＋重装骑射手（靶场 4 座）· 79 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C315&rows=1230%3A82%3A2%2C474%3A87%3A4"
+            },
+            {
+              "label": "研究账本 · 精锐怯薛＋重装骑射手＋巨投＋丝护甲＋帖木儿（免费扳指帕提亚，未选弹道学 93，合计 10240）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1230%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A687%22%2C%22t%3A688%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-ranged-mirror",
+            "chipLabel": "强骑射与弓手对射",
+            "actionHint": "丝护甲骑射压制",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "opponent",
+            "supplementIndices": [0, 1],
+            "adjustmentIds": ["tatars-main-vs-ranged-mirror"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              },
+              {
+                "index": 3
+              },
+              {
+                "index": 4
+              },
+              {
+                "index": 5
+              },
+              {
+                "index": 6
+              }
+            ]
+          },
+          {
+            "id": "vs-elephants-cav",
+            "chipLabel": "象兵与纯重骑冲阵",
+            "actionHint": "火焰骆驼或长戟",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 2
+            },
+            "group": "opponent",
+            "supplementIndices": [2],
+            "adjustmentIds": ["tatars-main-vs-elephants-cav"]
+          },
+          {
+            "id": "early-monk-window",
+            "chipLabel": "城堡至帝王初僧侣快攻",
+            "actionHint": "轻骑清僧防孤军",
+            "group": "condition",
+            "adjustmentIds": ["tatars-main-early-monk-window"]
+          }
+        ]
+      },
+      {
+        "id": "tatars-steppe-hca-zero-castle",
+        "title": "精锐草原枪兵／翼骑兵＋重装骑射手（严格零城堡）",
+        "tabHint": "严格零城堡 · 草原枪／翼骑配无丝护甲骑射",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "严格零城堡阶段绕开 650 石料门槛的马厩机动路线；无城堡时不含丝护甲、征招、帖木儿攻城术与巨投，重骑射按 5/6 护甲、草原枪与翼骑按 3/6 护甲且拆防按重型冲车核算，补建城堡后再切入丝护甲与巨投档。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 474,
+            "historicalName": "重装骑射手",
+            "role": "免费扳指与帕提亚快速成型，零城堡无丝护甲为 5/6 护甲"
+          }
+        ],
+        "choices": [
+          {
+            "id": "tatars-zero-steppe-lancer",
+            "title": "精锐草原枪兵（3/6 护甲机动前排）",
+            "preconditions": ["黄金充裕、需正面破游侠与冲箭雨时（补城研丝护甲后升 4/7 护甲）"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1372,
+                "historicalName": "精锐草原枪兵",
+                "role": "零城堡 100 生命 3/6 护甲，补城丝护甲后 4/7 护甲冲箭雨第一"
+              }
+            ]
+          },
+          {
+            "id": "tatars-zero-hussar",
+            "title": "翼骑兵（免金前排替换）",
+            "preconditions": ["黄金吃紧、需免金前排清掷矛与掩护骑射时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "historicalName": "翼骑兵",
+                "role": "零城堡 95 生命 3/6 护甲，补城丝护甲后升 4/7 护甲"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "as-needed",
+            "condition": "严格零城堡阶段拆防采用攻城武器厂重型冲车，不偷算城堡巨投",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 548,
+                "historicalName": "重型冲车",
+                "role": "零城堡默认拆建筑手段"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "补建城堡后才解锁丝护甲（687）、征招（315）、帖木儿攻城术（688）与巨型投石机（331），兵种面板与账本切至补城档",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 687,
+                "historicalName": "丝护甲",
+                "role": "补城后重骑射升 6/7 护甲、草原枪与翼骑升 4/7 护甲"
+              },
+              {
+                "kind": "tech",
+                "id": 688,
+                "historicalName": "帖木儿攻城术",
+                "role": "补城后巨投射程升至 19"
+              },
+              {
+                "kind": "unit",
+                "id": 331,
+                "historicalName": "巨型投石机",
+                "role": "补城后替代重冲远程拆防"
+              }
+            ]
+          }
+        ],
+        "reason": "凭借免费扳指与帕提亚战术，零城堡阶段即可低研究费直出满射速 5/6 护甲重骑射与 3/6 护甲草原枪：无丝护甲下 30 名重骑射仍胜 30 名蒙古重骑射（剩 8/30）与 42 名不列颠劲弩（18/30），27 名草原枪胜 42 名不列颠劲弩（10/27）与 22 名法兰克游侠（1/27），混编 18 名草原枪配 20 名重骑射胜不列颠 34 名长戟与 35 名劲弩（剩 1 与 20）。",
+        "limitation": "严格零城堡无丝护甲（687）会带来显著实战反差：5/6 护甲重骑射对 37 名匈奴折价重装骑射手，由有城胜 9/30 反转为落败（敌剩 12/37），无丝护甲混编 18 名草原枪配 20 名重骑射亦正面负马扎尔双金（敌剩 4 与 28）。高海拔总计 +50% 伤害同样未建模。",
+        "attack": "借免费扳指与帕提亚抢先在无城堡窗口形成马厩前排加靶场骑射兵力，配重型冲车强推外围防线；待起城补出丝护甲后迅速拉开远甲优势。",
+        "defense": "无城堡窗口切勿拿 5/6 护甲骑射与匈奴折价骑射或双金重骑硬拼对射，依托高地坡位拉扯并优先保护农田与石矿起城。",
+        "adjustments": [
+          {
+            "id": "tatars-zero-vs-huns-double-gold",
+            "when": "无城堡期遭遇匈奴重骑射或马扎尔双金硬阵",
+            "text": "无丝护甲（5/6 护甲）下 30 名鞑靼重骑射对 37 名匈奴重骑射站桩落败（敌剩 12/37），18 名草原枪配 20 名重骑射对马扎尔双金落败（敌剩游侠 4、劲弩 28）；须优先占坡避战、尽快起城补丝护甲或转怯薛。"
+          },
+          {
+            "id": "tatars-zero-after-castle",
+            "when": "补建城堡后切入丝护甲与巨投档",
+            "text": "补城并研丝护甲（687）后，精锐草原枪兵升至 4/7 护甲，冲 42 名不列颠劲弩由 10/27 跃升至 14/27（草原四国第一），对游侠与日本冠军均剩 3/27；持续生产由无征招 78 名村民，升至含征招 103 名村民，研究账本换巨投并含丝护甲/帖木儿由 9790 升至 10090（均未选弹道学 93）。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 687
+              },
+              {
+                "kind": "tech",
+                "id": 688
+              },
+              {
+                "kind": "unit",
+                "id": 331
+              }
+            ],
+            "fallback": "未建城堡前严格维持无丝护甲 5/6 骑射、3/6 草原枪、产能 78 名村民与 9790 零城堡账本。"
+          }
+        ],
+        "alternatives": "起城后若对手转双金游侠硬阵，建议直接切往精锐怯薛主路以获取更强前排抗击打与产金续航。",
+        "evidence": {
+          "recognition": "经产品经理校准为严格零城堡马厩机动路线，明确将无城堡 5/6 与补城 6/7 两档面板、工具参数与账本完全隔离。",
+          "playtest": "待实战验证；两档面板、单兵、混编、持续生产与研究账本均已在 DE 188329 分别实算核验，未经客户端实战确认。",
+          "scope": "覆盖鞑靼严格零城堡马厩机动路线（无 687 丝护甲、无 688 帖木儿、无 315 征招）及补城后对照档。零城堡无 687 实算（5/6 骑射、3/6 草原枪）：30 名重骑射负 37 名匈奴（敌剩 12/37），胜 30 名蒙古（8/30）与 42 名不列颠劲弩（18/30）；27 名草原枪胜不列颠劲弩（10/27）与法兰克游侠（1/27）；混编 18 名草原枪配 20 名重骑射胜不列颠枪弓（剩 1 与 20）、负马扎尔双金（敌剩 4 与 28）。补城含 687 丝护甲后 27 名草原枪兵对不列颠劲弩提至 14/27、胜游侠与日本冠军均剩 3/27。持续生产草原枪（马厩 4 座）配重骑射（靶场 4 座，缺双人锯 221）：零城堡无征招需 78 名村民，补城含征招需 103 名村民；研究账本（免费扳指与帕提亚，未选弹道学 93）：零城堡含重冲为 9790（6395 食物、600 木材、2795 黄金），补城含丝护甲、帖木儿与巨投为 10090（加选弹道学 93 另计 300 木材、175 黄金）。高海拔 +50% 伤害未建模。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1910, 1912, 1919, 1920, 1921, 1923, 1925, 1931, 1933, 1942, 1945, 1947, 1949],
+          "links": [
+            {
+              "label": "预算 3000 · 零城堡无丝护甲 30 名鞑靼重装骑射手 对 37 名匈奴重装骑射手（负，敌剩 12/37）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=474.Huns.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 零城堡无丝护甲 30 名鞑靼重装骑射手 对 30 名蒙古重装骑射手（胜，剩 8/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=474.Mongols.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 零城堡无丝护甲 30 名鞑靼重装骑射手 对 42 名不列颠劲弩手（胜，剩 18/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Tatars.4.39-47-199-200-201-211-212-219-435-436-437.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 零城堡无丝护甲 27 名精锐草原枪兵 对 42 名不列颠劲弩手（胜，剩 10/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.39-67-68-75-80-81-82-435.&b=492.Britons.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 零城堡无丝护甲 27 名精锐草原枪兵 对 22 名法兰克游侠（胜，剩 1/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.39-67-68-75-80-81-82-435.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 补城含丝护甲 27 名精锐草原枪兵 对 42 名不列颠劲弩手（胜，剩 14/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=492.Britons.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "label": "预算 3000 · 补城含丝护甲 27 名精锐草原枪兵 对 22 名法兰克游侠（胜，剩 3/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "label": "预算 3000 · 补城含丝护甲 27 名精锐草原枪兵 对 42 名日本冠军剑士（胜，剩 3/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Tatars.4.f.&b=567.Japanese.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "label": "混编 · 零城堡无丝护甲 18 名精锐草原枪兵 与 20 名重装骑射手 对不列颠 34 名长戟兵 与 35 名劲弩手（胜，剩草原枪 1、骑射 20）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Britons%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%223%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2274%22%2C%2275%22%2C%2276%22%2C%2277%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22215%22%2C%22219%22%2C%22602%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22359%22%2C%22qty%22%3A%2234%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2235%22%7D%5D%7D"
+            },
+            {
+              "label": "混编 · 零城堡无丝护甲 18 名精锐草原枪兵 与 20 名重装骑射手 对马扎尔 15 名游侠 与 28 名劲弩手（负，敌剩游侠 4、劲弩 28）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?m=mix&rule=frontline-v2&data=DE-188329%7Caoe2techtree%3Ae56728e76b7d08301fba7b18d5f16bc8554c109a%7Cdat%3Ad0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f%7Chalfon%3A7f96c37fc5f63c7141ec7d88e91c627beb375b28&ma=%7B%22civ%22%3A%22Tatars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22436%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%221372%22%2C%22qty%22%3A%2218%22%7D%2C%7B%22uid%22%3A%22474%22%2C%22qty%22%3A%2220%22%7D%5D%7D&mb=%7B%22civ%22%3A%22Magyars%22%2C%22age%22%3A%224%22%2C%22techs%22%3A%5B%2239%22%2C%2247%22%2C%2267%22%2C%2268%22%2C%2275%22%2C%2280%22%2C%2281%22%2C%2282%22%2C%22199%22%2C%22200%22%2C%22201%22%2C%22211%22%2C%22212%22%2C%22219%22%2C%22435%22%2C%22437%22%5D%2C%22team%22%3A%5B%5D%2C%22rows%22%3A%5B%7B%22uid%22%3A%22569%22%2C%22qty%22%3A%2215%22%7D%2C%7B%22uid%22%3A%22492%22%2C%22qty%22%3A%2228%22%7D%5D%7D"
+            },
+            {
+              "label": "持续生产 · 零城堡 精锐草原枪兵（马厩 4 座）＋重装骑射手（靶场 4 座）· 78 名村民（无征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278&rows=1372%3A101%3A4%2C474%3A87%3A4"
+            },
+            {
+              "label": "持续生产 · 补城后 精锐草原枪兵（马厩 4 座）＋重装骑射手（靶场 4 座）· 103 名村民（含征招）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Tatars&age=4&walk=3&farm=1&techs=13%2C14%2C47%2C55%2C182%2C202%2C203%2C213%2C249%2C278%2C315&rows=1372%3A101%3A4%2C474%3A87%3A4",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                }
+              ]
+            },
+            {
+              "label": "研究账本 · 零城堡 精锐草原枪兵＋重装骑射手＋重型冲车（无丝护甲与弹道学 93，合计 9790）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A548%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            },
+            {
+              "label": "研究账本 · 补城档 精锐草原枪兵＋重装骑射手＋巨投＋丝护甲＋帖木儿（未选弹道学 93，合计 10090）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Tatars&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A331%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A201%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A219%22%2C%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A435%22%2C%22t%3A436%22%2C%22t%3A437%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A687%22%2C%22t%3A688%22%2C%22t%3A75%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 687
+                },
+                {
+                  "kind": "tech",
+                  "id": 688
+                },
+                {
+                  "kind": "unit",
+                  "id": 331
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-huns-double-gold",
+            "chipLabel": "零城堡遇匈奴骑射或双金",
+            "actionHint": "避对射速起城",
+            "group": "opponent",
+            "adjustmentIds": ["tatars-zero-vs-huns-double-gold"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              },
+              {
+                "index": 3
+              },
+              {
+                "index": 4
+              },
+              {
+                "index": 8
+              },
+              {
+                "index": 9
+              }
+            ]
+          },
+          {
+            "id": "zero-castle-siege",
+            "chipLabel": "零城堡拆防与基础账本",
+            "actionHint": "普通重冲 9790",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "condition",
+            "supplementIndices": [0],
+            "links": [
+              {
+                "index": 10
+              },
+              {
+                "index": 12
+              }
+            ]
+          },
+          {
+            "id": "after-castle-silk",
+            "chipLabel": "补建城堡后切丝护甲档",
+            "actionHint": "丝护甲配巨投",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "condition",
+            "supplementIndices": [1],
+            "adjustmentIds": ["tatars-zero-after-castle"],
+            "links": [
+              {
+                "index": 5,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              },
+              {
+                "index": 6,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              },
+              {
+                "index": 7,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              },
+              {
+                "index": 11,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              },
+              {
+                "index": 13,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "civ": "Khitans",
+    "lead": "契丹无骑士系且缺血统，按近战攻翻倍与独科机制在骑兵回血推进与步兵反伤流血两条主轴间择一；城堡半价重骑射仅作条件选择，切忌硬拼骑射对射。",
+    "source": {
+      "content": "https://github.com/linhongcun/aoe2-analyzer/blob/e9de5773c335e61abced408011361b4e39b94de5/role/game-strategy.md#L1951-L1989",
+      "discussion": "https://github.com/linhongcun/aoe2-analyzer/issues/1439",
+      "boundary": "契丹牧场取代农田、斡鲁朵骑兵交战回血、精锐辽刀兵流血、札甲 25% 近战反伤、骆驼投石机落地燃烧与重型火箭推车多弹丸溅射均未计入战斗或农田产能数值，请勿把纯面板等同实战强弱。"
+    },
+    "routes": [
+      {
+        "id": "khitans-steppe-mounted-trebuchet",
+        "title": "精锐草原枪兵／翼骑兵＋骆驼投石机（骑兵回血主路）",
+        "tabHint": "骑兵回血推进 · 草原枪／翼骑配骆驼投石机",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "依托近战攻击升级翻倍与牧场食物线打高机动推进的主轴路线；前排在精锐草原枪兵与翼骑兵间按金流择一，成型后配斡鲁朵骑兵战斗回血（未建模）与免打包骆驼投石机持续施压。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1923,
+            "historicalName": "骆驼投石机",
+            "role": "11 射程免打包机动攻城，固有溅射与落地燃烧均未建模"
+          }
+        ],
+        "choices": [
+          {
+            "id": "khitans-main-steppe-lancer",
+            "title": "精锐草原枪兵（高攻主力前排）",
+            "preconditions": ["城堡期即凭双倍近战攻 13 攻压制骑士，帝王配合斡鲁朵回血持续切阵时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1372,
+                "historicalName": "精锐草原枪兵",
+                "role": "双倍近战攻补平缺鼓风炉（15 攻），缺血统 80 血须靠回血续航"
+              }
+            ]
+          },
+          {
+            "id": "khitans-main-hussar",
+            "title": "翼骑兵（免金前排替换）",
+            "preconditions": ["黄金紧张、借助斥候系训练与升级 +15% 快速铺免金前排时"],
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 441,
+                "historicalName": "翼骑兵",
+                "role": "缺血统 75 血，免金高攻速补员且同享斡鲁朵战斗回血"
+              }
+            ]
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "mechanism-support",
+            "condition": "帝王独科斡鲁朵骑兵（1007，目录价 600 食物、300 黄金）赋予骑兵战斗中回血；该机制在单位 PK 无自动提示、在阵容费用账本暂不可计入（返回 invalid/partial）",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 1007,
+                "historicalName": "斡鲁朵骑兵",
+                "role": "骑兵交战回血核心（未建模，目录价 900 另列）"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "遇密集步弓或步兵海时按需补重型火箭推车提供多弹丸溅射压制",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1907,
+                "historicalName": "重型火箭推车",
+                "role": "9 射程多弹丸溅射清场（多弹丸与溅射未建模）"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "契丹无长戟兵，敌方重骑兵或游侠高压时条件补重装骆驼兵反骑（同享斡鲁朵回血）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 330,
+                "historicalName": "重装骆驼兵",
+                "role": "无长戟时的反重骑骑兵组件"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "城堡时代半价提前升级重装骑射手（形态升级 450 食物、250 黄金，单线净额 2250）仅作节奏偷袭或清慢速步兵的条件选择，切忌与骑射强国硬拼对射",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 3,
+                "historicalName": "重装骑射手",
+                "role": "缺血统永远 60 血，仅限城堡节奏偷袭或点杀步兵"
+              }
+            ]
+          }
+        ],
+        "reason": "近战攻击升级翻倍令城堡时代草原枪兵即达 13 攻（预算 3000 下 27 名正胜 22 名法兰克骑士，剩 4/27），帝王 15 攻补平缺鼓风炉；免打包骆驼投石机（11 射程）可随骑兵高速转点拆防，基础研究净额仅 4490（不含斡鲁朵目录价 900）即能快速成型。",
+        "limitation": "无骑士系、无长戟兵、缺血统（草原枪 80 血、重骑射 60 血）与钻井采金法；纯面板不含斡鲁朵回血下，27 名帝王精锐草原枪负 22 名游侠（敌剩 2/22）与 42 名日本冠军（敌剩 4/42）。契丹牧场替代农田未计入持续生产（有城 83 名村民、零城堡 67 名村民，均按标准农田估算），斡鲁朵回血与骆驼投石机落地燃烧均未在 PK 结算，且斡鲁朵在 PK 中无自动提示。",
+        "attack": "依托城堡高攻窗口与牧场食物供给，以草原枪配免打包骆驼投石机持续压制并靠斡鲁朵回血滚雪球，建筑被烧拆时防敌重骑反扑。",
+        "defense": "牧场集中布局缩小防线面积，翼骑与重装骆驼快速机动拦截，城堡期半价重骑射仅在敌纯步兵或空窗突袭时小股出动。",
+        "adjustments": [
+          {
+            "id": "khitans-main-castle-hca-trap",
+            "when": "评估城堡半价重装骑射手（面对骑射强国或帝王游侠）",
+            "text": "切忌拿城堡半价重装骑射手（永远 60 血）与骑射强国硬拼对射：城堡 30v30 站桩负日本（敌剩 10/30）、蒙古（12/30）与鞑靼（9/30）；对匈奴时 30v30 虽胜剩 9/30，但按预算 3000（30 名对 33 名匈奴）仍负剩敌 9/33；帝王拉扯负 22 名法兰克游侠（敌剩 2/22）。仅限节奏偷袭或清慢速步兵。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 3
+              }
+            ],
+            "fallback": "缺血统骑射正面换射处于劣势，应以草原枪配骆驼投石机为主轴。"
+          },
+          {
+            "id": "khitans-main-vs-heavy-cav",
+            "when": "敌方游侠与重骑兵成群施压",
+            "text": "契丹无长戟兵，主路按需补重装骆驼兵（同样享受双倍近战攻与斡鲁朵回血）协同精锐草原枪兵反骑，避免纯面板硬换忽略回血条件。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 330
+              }
+            ],
+            "fallback": "主路需依赖草原枪兵高近战攻与斡鲁朵战斗回血缠斗重骑，或按局势切换辽刀兵配札甲路线。"
+          },
+          {
+            "id": "khitans-main-vs-archer-blobs",
+            "when": "密集步弓与步兵集群压线",
+            "text": "按需在攻城武器厂补重型火箭推车（多弹丸与固有溅射未建模）覆盖敌方密集远程，掩护草原枪与骆驼投石机推进。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1907
+              }
+            ],
+            "fallback": "面对密集弓群需借地形包抄，不以缺血统骑兵无掩护长距离直线硬冲。"
+          }
+        ],
+        "alternatives": "遭遇近战步骑硬拼且对手缺少重远程火力时，可切往精锐辽刀兵配札甲反伤流血与重型火箭推车平行路线。",
+        "evidence": {
+          "recognition": "经维护者与游戏分析共创确认的契丹骑兵回血主轴；城堡半价重骑射严格限定为条件选择并附反直觉避坑实算。",
+          "playtest": "待实战验证；DE 188329 单兵纯面板、持续生产（按农田估算）与基础研究净额已复核，牧场、斡鲁朵回血与燃烧未建模且未经客户端实战确认。",
+          "scope": "覆盖契丹骑兵回血主路（精锐草原枪兵或翼骑兵配骆驼投石机，斡鲁朵骑兵 1007 交战回血未建模）。城堡 27 名草原枪胜 22 名法兰克骑士（4/27）；帝王未计回血纯面板下 27 名精锐草原枪负法兰克游侠（敌剩 2/22）与日本冠军（4/42）。城堡半价重骑射 30v30 负日本（10/30）、蒙古（12/30）、鞑靼（9/30），30v30 胜匈奴（9/30）但预算 3000 下 30 名对 33 名匈奴负（敌剩 9/33），帝王拉扯负游侠（2/22）。持续生产草原枪（马厩 4 座）配骆驼投石机（攻城武器厂 1 座，缺钻井采金 182，按标准农田估算、牧场效率尚未计入）：含征招需 83 名村民，零城堡无征招需 67 名村民。基础研究净额（1372＋1923，不含抗招降、征招与暂不可计入的斡鲁朵骑兵 1007）为 4490（2670 食物、600 木材、1220 黄金），另列斡鲁朵骑兵目录价 600 食物、300 黄金（900），勿将基础净额当作完整成型价；城堡条件重骑射单线（474@3，形态升级半价 450 食物、250 黄金，未选弹道学 93）净额 2250（加选弹道学 93 另计 300 木材、175 黄金）。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1951, 1953, 1959, 1960, 1964, 1966, 1972, 1973, 1975, 1981, 1982, 1983, 1985, 1987, 1989],
+          "links": [
+            {
+              "label": "预算 3000 · 城堡 27 名契丹草原枪兵 对 22 名法兰克骑士（胜，剩 4/27）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1370.Khitans.3.f.&b=38.Franks.3.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 27 名契丹精锐草原枪兵 对 22 名法兰克游侠（未计斡鲁朵回血，负，敌剩 2/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Khitans.4.f.&b=569.Franks.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "预算 3000 · 27 名契丹精锐草原枪兵 对 42 名日本冠军剑士（未计斡鲁朵回血，负，敌剩 4/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1372.Khitans.4.f.&b=567.Japanese.4.f.&m=r&bud=3000"
+            },
+            {
+              "label": "30v30 · 城堡契丹重装骑射手 对日本城堡骑射手（负，敌剩 10/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Japanese.3.f.&m=n&na=30&nb=30",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "30v30 · 城堡契丹重装骑射手 对蒙古城堡骑射手（负，敌剩 12/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Mongols.3.f.&m=n&na=30&nb=30",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "30v30 · 城堡契丹重装骑射手 对鞑靼城堡骑射手（负，敌剩 9/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Tatars.3.f.&m=n&na=30&nb=30",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "30v30 · 城堡契丹重装骑射手 对匈奴城堡骑射手（同数量胜，剩 9/30）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Huns.3.f.&m=n&na=30&nb=30",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "预算 3000 · 城堡 30 名契丹重装骑射手 对 33 名匈奴城堡骑射手（等资源负，敌剩 9/33）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.3.f.&b=39.Huns.3.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "预算 3000 · 帝王 30 名契丹重装骑射手 拉扯对 22 名法兰克游侠（负，敌剩 2/22，40.0 格触顶）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=474.Khitans.4.f.&b=569.Franks.4.f.&m=r&bud=3000&ka=1",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            },
+            {
+              "label": "持续生产 · 精锐草原枪兵（马厩 4 座）＋骆驼投石机（攻城武器厂 1 座）· 83 名村民（含征招，按农田未计牧场）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1372%3A101%3A4%2C1923%3A49%3A1"
+            },
+            {
+              "label": "持续生产 · 零城堡 精锐草原枪兵（马厩 4 座）＋骆驼投石机（攻城武器厂 1 座）· 67 名村民（无征招，按农田未计牧场）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279&rows=1372%3A101%3A4%2C1923%3A49%3A1"
+            },
+            {
+              "label": "研究账本 · 精锐草原枪兵＋骆驼投石机基础净额（不含斡鲁朵目录价 900，合计 4490）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1372%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1923%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A377%22%2C%22t%3A39%22%2C%22t%3A47%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A80%22%2C%22t%3A81%22%2C%22t%3A82%22%5D"
+            },
+            {
+              "label": "研究账本 · 城堡半价重装骑射手单线（形态升级 450 食物 250 黄金，未选弹道学 93，合计 2250）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=3&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A437%22%5D",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "castle-hca-trap",
+            "chipLabel": "城堡半价重骑射避坑",
+            "actionHint": "勿拼骑射对射",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 3
+            },
+            "group": "condition",
+            "supplementIndices": [3],
+            "adjustmentIds": ["khitans-main-castle-hca-trap"],
+            "links": [
+              {
+                "index": 3,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 4,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 5,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 6,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 7,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 8,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              },
+              {
+                "index": 12,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              }
+            ]
+          },
+          {
+            "id": "vs-heavy-cav",
+            "chipLabel": "游侠与重骑高压反制",
+            "actionHint": "重骆驼配斡鲁朵",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 2
+            },
+            "group": "opponent",
+            "supplementIndices": [0, 2],
+            "adjustmentIds": ["khitans-main-vs-heavy-cav"],
+            "links": [
+              {
+                "index": 0
+              },
+              {
+                "index": 1
+              },
+              {
+                "index": 2
+              }
+            ]
+          },
+          {
+            "id": "vs-archer-blobs",
+            "chipLabel": "密集步弓与步兵集群",
+            "actionHint": "补重型火箭推车",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "opponent",
+            "supplementIndices": [1],
+            "adjustmentIds": ["khitans-main-vs-archer-blobs"]
+          }
+        ]
+      },
+      {
+        "id": "khitans-liaodao-rocket-cart",
+        "title": "精锐辽刀兵＋重型火箭推车（步兵反伤流血路线）",
+        "tabHint": "步兵反伤流血 · 辽刀兵配重型火箭推车",
+        "status": "approved",
+        "playtest": "pending",
+        "composition": "combined",
+        "age": 4,
+        "patch": {
+          "build": 188329,
+          "date": "2026-10-28"
+        },
+        "revised": "2026-11-28",
+        "condition": "有城堡产能且对手以近战步兵、重骑或成群步弓为主时的特色平行路线；以精锐辽刀兵的持续流血与札甲 25% 近战反伤承担前排换血，重型火箭推车负责范围清场，按对手补精锐掷矛手或换骆驼投石机。",
+        "required": [
+          {
+            "kind": "unit",
+            "id": 1922,
+            "historicalName": "精锐辽刀兵",
+            "role": "85 生命、17 攻击、6/5 护甲，命中附带持续流血伤害（未建模）"
+          },
+          {
+            "kind": "unit",
+            "id": 1907,
+            "historicalName": "重型火箭推车",
+            "role": "9 射程多弹丸溅射范围火力，清远程集群与辅助拆防（未建模）"
+          }
+        ],
+        "prerequisites": [],
+        "supplements": [
+          {
+            "mode": "mechanism-support",
+            "condition": "城堡独科札甲（1006，450 食物、300 黄金）令步兵与掷矛手反弹 25% 近战伤害；单位 PK 手勾 1006 已自动弹出反伤提示，阵容费用账本现已合法计入（partial 为 false）",
+            "entities": [
+              {
+                "kind": "tech",
+                "id": 1006,
+                "historicalName": "札甲",
+                "role": "步兵与掷矛手反弹 25% 近战伤害（未计入 PK 伤害）"
+              }
+            ]
+          },
+          {
+            "mode": "as-needed",
+            "condition": "需要长距离安全烧拆敌方城堡与固定防御时按需换用或追加骆驼投石机",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 1923,
+                "historicalName": "骆驼投石机",
+                "role": "11 射程机动攻城，固有溅射与落地燃烧未建模"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "对手弓手或骑射压力大时补精锐掷矛手（享训练升级 +15% 与札甲 25% 近战反伤）",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 6,
+                "historicalName": "精锐掷矛手",
+                "role": "免金反弓且享札甲 25% 近战反伤"
+              }
+            ]
+          },
+          {
+            "mode": "conditional",
+            "condition": "城堡期仅作低升级费节奏偷袭或清步兵的条件选择，不可拿缺血统重骑射与骑射强国硬对射",
+            "entities": [
+              {
+                "kind": "unit",
+                "id": 474,
+                "age": 3,
+                "historicalName": "重装骑射手",
+                "role": "城堡半价条件过渡，缺血统 60 血忌正面骑射内战"
+              }
+            ]
+          }
+        ],
+        "reason": "精锐辽刀兵（40 食物、40 黄金，17 攻击 6/5 护甲）兼具命中流血与札甲 25% 近战伤害反弹，团队加成更赋予步兵对远程士兵 +2 攻击；配合重型火箭推车的多弹丸范围火力可形成极具威胁的近战反伤加范围清场体系，辽刀（城堡 2 座）配重型火箭推车（攻城武器厂 1 座）仅需 59 名村民（按农田估算）。",
+        "limitation": "精锐辽刀兵流血伤害、札甲 25% 近战反伤、重型火箭推车多弹丸与溅射、骆驼投石机落地燃烧及牧场食物效率均未进入战斗或农田产能结算：未计流血与反伤的纯面板下，37 名辽刀兵在正面微负 42 名日本冠军（敌剩 4/42）与 22 名法兰克游侠（敌剩 2/22），切勿据此误判实战强度。",
+        "attack": "精锐辽刀兵借札甲与流血正面缠住近战兵力，重型火箭推车在后排覆盖密集步弓与步兵集群；遇到关键城堡防线时追加骆驼投石机远程烧拆。",
+        "defense": "在牧场经济圈外以辽刀兵卡位拦截敌方近战强冲，对手切远程压制时补精锐掷矛手（享札甲反伤不怕轻骑贴脸）配重型火箭推车反制。",
+        "adjustments": [
+          {
+            "id": "khitans-alt-vs-melee",
+            "when": "近战步兵与重骑正面硬拼",
+            "text": "务必补出城堡独科札甲（1006，450 食物、300 黄金）放大精锐辽刀兵的近战换血能力；单位 PK 链接显式勾选 1006 可同时查看命中后持续伤害与近战伤害反弹两项未建模提示（纯面板负冠军 4/42、游侠 2/22 仅为不含流血反伤底线）。",
+            "requires": [
+              {
+                "kind": "tech",
+                "id": 1006
+              }
+            ],
+            "fallback": "精锐辽刀兵自带命中后持续流血伤害，纯面板仅作底线参考，须配合重型火箭推车集火。"
+          },
+          {
+            "id": "khitans-alt-vs-ranged",
+            "when": "敌方长射程弓手或骑射手风筝压制",
+            "text": "按需补精锐掷矛手（享训练与升级 +15% 及札甲 25% 近战反伤）掩护重型火箭推车反压远程；城堡期半价重装骑射手仅作条件节奏选择，不与骑射强国正面站桩对射。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 6
+              }
+            ],
+            "fallback": "面对长射程弓手群时用重型火箭推车压制走位，避免辽刀兵在开阔地被白嫖风筝。"
+          },
+          {
+            "id": "khitans-alt-vs-castles",
+            "when": "需拆毁关键城堡或固定防御",
+            "text": "重型火箭推车射程 9 偏近，推核心城堡时按需换用或追加 11 射程骆驼投石机（落地燃烧与固有溅射未建模）。",
+            "requires": [
+              {
+                "kind": "unit",
+                "id": 1923
+              }
+            ],
+            "fallback": "推城堡时优先清光敌方保护部队并保护攻城武器厂单位进场。"
+          }
+        ],
+        "alternatives": "遭遇大开阔图高速多线机动战时，切回精锐草原枪兵／翼骑兵配斡鲁朵回血与骆驼投石机骑兵主路。",
+        "evidence": {
+          "recognition": "经维护者与游戏分析共创确认的契丹步兵反伤流血路线；已按站内最新引擎同步札甲 1006 的可复算账本与 PK 自动提示。",
+          "playtest": "待实战验证；DE 188329 纯面板对照、持续生产（按农田估算）与含/不含札甲双账本均已复核，流血、反伤、多弹丸溅射与牧场未经客户端实战验证。",
+          "scope": "覆盖契丹步兵反伤流血路线（精锐辽刀兵配重型火箭推车，机制支持札甲 1006，按需补精锐掷矛手或骆驼投石机）。预算 3000 下显式勾选札甲 1006 的 37 名精锐辽刀兵在单位 PK 同时弹出命中后持续伤害与近战伤害反弹两项未建模提示（不含流血反伤的纯面板负日本冠军 4/42、法兰克游侠 2/22）。持续生产辽刀（城堡 2 座）配重型火箭推车（攻城武器厂 1 座，含征招、缺钻井采金 182，按标准农田估算、牧场效率尚未计入）需 59 名村民。研究账本（1922＋1907，不含抗招降与征招）：不含札甲基础净额为 5490（2445 食物、1400 木材、1645 黄金），现行引擎已正式接入札甲 1006（450 食物、300 黄金），含札甲可复算全额为 6240（2895 食物、1400 木材、1945 黄金，partial 为 false）。流血、反伤、多弹丸溅射、落地燃烧与牧场效率均未计入战斗或产能数值。",
+          "recordedVersion": "v0.99.100 · DE 188329 · ac6b2162",
+          "sourceLines": [1951, 1953, 1960, 1961, 1962, 1964, 1966, 1972, 1974, 1975, 1981, 1983, 1985, 1987, 1989],
+          "links": [
+            {
+              "label": "预算 3000 · 37 名精锐辽刀兵（含札甲提示）对 42 名日本冠军剑士（未计流血反伤，负，敌剩 4/42）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1922.Khitans.4.67-68-74-76-77-215-602-1006.&b=567.Japanese.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "label": "预算 3000 · 37 名精锐辽刀兵（含札甲提示）对 22 名法兰克游侠（未计流血反伤，负，敌剩 2/22）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=1922.Khitans.4.67-68-74-76-77-215-602-1006.&b=569.Franks.4.f.&m=r&bud=3000",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "label": "持续生产 · 精锐辽刀兵（城堡 2 座）＋重型火箭推车（攻城武器厂 1 座）· 59 名村民（含征招，按农田未计牧场）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?civ=Khitans&age=4&walk=3&farm=1&techs=47%2C55%2C202%2C203%2C213%2C221%2C249%2C278%2C279%2C315&rows=1922%3A82%3A2%2C1907%3A49%3A1"
+            },
+            {
+              "label": "研究账本 · 精锐辽刀兵＋重型火箭推车基础净额（不含札甲与抗招降，合计 5490）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1922%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1907%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A215%22%2C%22t%3A377%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D"
+            },
+            {
+              "label": "研究账本 · 精锐辽刀兵＋重型火箭推车＋札甲 1006（不含抗招降，合法计入合计 6240）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=4&acunits=%5B%7B%22unit%22%3A1922%2C%22qty%22%3A%221%22%7D%2C%7B%22unit%22%3A1907%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A1006%22%2C%22t%3A215%22%2C%22t%3A377%22%2C%22t%3A602%22%2C%22t%3A67%22%2C%22t%3A68%22%2C%22t%3A74%22%2C%22t%3A76%22%2C%22t%3A77%22%5D",
+              "requires": [
+                {
+                  "kind": "tech",
+                  "id": 1006
+                }
+              ]
+            },
+            {
+              "label": "研究账本 · 城堡半价重装骑射手单线（形态升级 450 食物 250 黄金，未选弹道学 93，合计 2250）",
+              "href": "https://linhongcun.github.io/aoe2-analyzer/#/production?mode=army-cost&acv=1&acdata=188329&civ=Khitans&age=3&acunits=%5B%7B%22unit%22%3A474%2C%22qty%22%3A%221%22%7D%5D&acdone=%5B%5D&actargets=%5B%22t%3A199%22%2C%22t%3A200%22%2C%22t%3A211%22%2C%22t%3A212%22%2C%22t%3A39%22%2C%22t%3A437%22%5D",
+              "requires": [
+                {
+                  "kind": "unit",
+                  "id": 474,
+                  "age": 3
+                }
+              ]
+            }
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vs-melee",
+            "chipLabel": "近战步兵与重骑正面硬拼",
+            "actionHint": "辽刀配札甲反伤",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 0
+            },
+            "group": "opponent",
+            "supplementIndices": [0],
+            "adjustmentIds": ["khitans-alt-vs-melee"],
+            "links": [
+              {
+                "index": 0,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 0
+                }
+              },
+              {
+                "index": 1,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 0
+                }
+              },
+              {
+                "index": 4,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 0
+                }
+              }
+            ]
+          },
+          {
+            "id": "vs-ranged",
+            "chipLabel": "弓手与骑射风筝压制",
+            "actionHint": "补札甲精锐掷矛",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 2
+            },
+            "group": "opponent",
+            "supplementIndices": [2, 3],
+            "adjustmentIds": ["khitans-alt-vs-ranged"],
+            "links": [
+              {
+                "index": 5,
+                "whenAvailable": {
+                  "kind": "supplement",
+                  "index": 3
+                }
+              }
+            ]
+          },
+          {
+            "id": "vs-castles",
+            "chipLabel": "拆毁关键城堡与固定防线",
+            "actionHint": "追加骆驼投石机",
+            "actionHintGate": {
+              "kind": "supplement",
+              "index": 1
+            },
+            "group": "condition",
+            "supplementIndices": [1],
+            "adjustmentIds": ["khitans-alt-vs-castles"]
+          }
+        ]
+      }
+    ]
   }
 ]

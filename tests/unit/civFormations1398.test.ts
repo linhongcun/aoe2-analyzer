@@ -323,8 +323,8 @@ describe('#1398 图皮成对黑檀木与立陶宛 0/2/4 圣物同步收口回归
   it('全库过期计价表述清零、仅两国重签 DOC_SHA_1398、其余 31 国不引用本次提交与契约/去重不变量全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(76);
 
     const serialized = JSON.stringify(civFormationContent);
     expect(serialized).not.toMatch(/一只还是一对|计价单位未明|计价单位未核|不折半|每对价格单位/);

@@ -15,8 +15,8 @@
     },
     "civs": {
       "type": "array",
-      "minItems": 33,
-      "maxItems": 33,
+      "minItems": 37,
+      "maxItems": 37,
       "items": {
         "$ref": "#/$defs/civ"
       }

@@ -290,8 +290,8 @@ describe('#1400 第一档批 1 五国策略与阵容升级：驻军/生产/研�
   it('仅五国重签 DOC_SHA_1400 且 sourceLines 落入锚点范围、其余 28 国不引用本次提交、双平行路线投影降级与契约/去重不变量全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
     expect(formationContract.fixedSourceCommit).toBe('8d1adeacc7c97374ee6d95d9cabfceb793d080d3');
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(76);
 
     const EXPECTED_ANCHORS: Record<string, readonly [number, number]> = {
       'byzantines-cataphract': [400, 440],

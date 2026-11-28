@@ -221,8 +221,8 @@ describe('#1386 批 2 · 8 国缺项补齐与全篇残留收口回归', () => {
 
   it('12 国独立重签 DOC_SHA_1386、21 国零漂移、33 文明 59 路线契约与残留收口守卫全部通过', async () => {
     expect(formationProblems(civFormationContent, formationContract)).toEqual([]);
-    expect(civFormationContent).toHaveLength(33);
-    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(68);
+    expect(civFormationContent).toHaveLength(37);
+    expect(civFormationContent.flatMap(({ routes }) => routes)).toHaveLength(76);
 
     // 全库 JSON 与契约零 aoe2insights 外链残留
     expect(JSON.stringify(civFormationContent)).not.toContain('aoe2insights');
