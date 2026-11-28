@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 const civs = JSON.parse(readFileSync(new URL('../../data/game/civs.json', import.meta.url), 'utf8')) as {
@@ -229,4 +230,118 @@ test('#941 复制当前对比链接', async ({ page }) => {
   expect(url.hash).toBe('');
   expect(url.searchParams.get('a')).toBe('Japanese');
   expect(url.searchParams.get('b')).toBe('Mongols');
+});
+
+test('Issue 1471 1280 与 390 下默认与传参对比页均有唯一 h1「文明对比」且视觉基线与运行健康不变', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(`console.error: ${message.text()}`);
+  });
+  page.on('requestfailed', (request) => {
+    errors.push(`requestfailed: ${request.url()} (${request.failure()?.errorText ?? 'unknown'})`);
+  });
+  page.on('response', (response) => {
+    if (response.status() >= 400 && new URL(response.url()).origin === new URL(page.url()).origin) {
+      errors.push(`http ${response.status()}: ${response.url()}`);
+    }
+  });
+
+  for (const theme of ['light', 'dark'] as const) {
+    for (const [width, height] of [
+      [1280, 900],
+      [390, 844],
+    ] as const) {
+      await page.setViewportSize({ width, height });
+      for (const route of ['./#/compare', './#/compare?a=Franks&b=Britons'] as const) {
+        await page.goto(route);
+        await page.evaluate((nextTheme) => {
+          localStorage.setItem('aoe2-theme', nextTheme);
+          document.documentElement.dataset.theme = nextTheme;
+        }, theme);
+        const h1 = page.getByRole('heading', { level: 1, name: '文明对比', exact: true });
+        await expect(h1, `${theme} @${width} ${route}`).toBeVisible();
+        await expect(page.locator('#compare .lhead h2'), `${theme} @${width} ${route}`).toHaveCount(0);
+        const metrics = await page.locator('#compare .lhead h1').evaluate((el) => {
+          const s = getComputedStyle(el);
+          const probe = document.createElement('span');
+          probe.style.color = 'var(--c-gold-hi)';
+          probe.style.fontSize = '28px';
+          probe.style.letterSpacing = '-0.02em';
+          document.body.appendChild(probe);
+          const probeStyle = getComputedStyle(probe);
+          const expectedColor = probeStyle.color;
+          const expectedLetterSpacing = probeStyle.letterSpacing;
+          probe.remove();
+          return {
+            mainH1Count: document.querySelectorAll('main h1').length,
+            docH1Count: document.querySelectorAll('h1').length,
+            fontSize: s.fontSize,
+            lineHeight: s.lineHeight,
+            fontWeight: s.fontWeight,
+            letterSpacing: s.letterSpacing,
+            expectedLetterSpacing,
+            marginTop: s.marginTop,
+            marginBottom: s.marginBottom,
+            color: s.color,
+            expectedColor,
+            overflow: document.documentElement.scrollWidth > window.innerWidth,
+          };
+        });
+        expect(metrics, `${theme} @${width} ${route}`).toEqual({
+          mainH1Count: 1,
+          docH1Count: 1,
+          fontSize: '28px',
+          lineHeight: '37.8px',
+          fontWeight: '700',
+          letterSpacing: metrics.expectedLetterSpacing,
+          expectedLetterSpacing: metrics.expectedLetterSpacing,
+          marginTop: '0px',
+          marginBottom: '0px',
+          color: metrics.expectedColor,
+          expectedColor: metrics.expectedColor,
+          overflow: false,
+        });
+      }
+    }
+  }
+  expect(errors).toEqual([]);
+});
+
+test('Issue 1471 多状态与展开完整评分口径均保持唯一 h1 并通过 axe 大纲检查', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  for (const route of ['./#/compare?a=Nope&b=Britons', './#/compare?a=Britons', './#/compare?a=Franks&b=Franks', './#/compare?a=Franks&b=Britons'] as const) {
+    await page.goto(route);
+    await expect(page.getByRole('heading', { level: 1, name: '文明对比', exact: true }), route).toBeVisible();
+    await expect(page.locator('#compare .lhead h2'), route).toHaveCount(0);
+    expect(
+      await page.evaluate(() => ({
+        mainH1Count: document.querySelectorAll('main h1').length,
+        docH1Count: document.querySelectorAll('h1').length,
+      })),
+      route,
+    ).toEqual({ mainH1Count: 1, docH1Count: 1 });
+  }
+
+  const collapsedAxe = await new AxeBuilder({ page }).withRules(['page-has-heading-one', 'heading-order']).analyze();
+  expect(
+    collapsedAxe.violations.map((v) => v.id),
+    '收起态 axe 大纲检查',
+  ).toEqual([]);
+
+  await page.getByRole('button', { name: '查看完整评分口径', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 4, name: '完整评分口径', exact: true })).toBeVisible();
+  await expect(page.locator('#compare .lhead h2')).toHaveCount(0);
+  expect(
+    await page.evaluate(() => ({
+      mainH1Count: document.querySelectorAll('main h1').length,
+      docH1Count: document.querySelectorAll('h1').length,
+    })),
+  ).toEqual({ mainH1Count: 1, docH1Count: 1 });
+
+  const expandedAxe = await new AxeBuilder({ page }).withRules(['page-has-heading-one', 'heading-order']).analyze();
+  expect(
+    expandedAxe.violations.map((v) => v.id),
+    '展开态 axe 大纲检查',
+  ).toEqual([]);
 });

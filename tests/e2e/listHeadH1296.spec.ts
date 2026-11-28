@@ -1,5 +1,6 @@
 // #296 自测（Linus）：#/builds、#/duel 的主标题改为 h1 后，外观与其它列表页的 h2 标题一致。
 // #770 把 #/civs、#/units、#/techs 等列表页也升级为 h1，参照页改用仍用 h2 的 #/compare。
+// Issue 1471 把 #/compare 也升级为 h1 后，全站活跃登记页已无 .lhead h2；改为断言 #/compare 与活跃 .lhead h1 列表页主标题外观一致且 .lhead h2 为 0。
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -20,14 +21,16 @@ async function go(page: Page, route: string, theme: (typeof THEMES)[number]) {
 
 for (const theme of THEMES)
   for (const w of [360, 1280])
-    test(`${theme} @${w}：#/builds、#/duel 的 h1 与 #/compare 列表标题 h2 外观相同`, async ({ page }) => {
+    test(`${theme} @${w}：#/compare 与活跃 .lhead h1 列表页主标题外观相同`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: 800 });
       await go(page, '/compare', theme);
-      const ref = await look(page, '.lhead h2');
-      for (const route of ['/builds', '/duel']) {
+      await expect(page.locator('.lhead h1'), '/compare').toHaveCount(1);
+      await expect(page.locator('.lhead h2'), '/compare').toHaveCount(0);
+      const ref = await look(page, '.lhead h1');
+      for (const route of ['/duel', '/civs']) {
         await go(page, route, theme);
         expect(await look(page, '.lhead h1'), route).toEqual(ref);
-        await expect(page.locator('.lhead h2')).toHaveCount(0);
+        await expect(page.locator('.lhead h2'), route).toHaveCount(0);
       }
     });
 
